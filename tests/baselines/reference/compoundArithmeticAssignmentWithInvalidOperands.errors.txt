@@ -7,191 +7,191 @@
     var x1: boolean;
     x1 *= a;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x1 *= b;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x1 *= true;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x1 *= 0;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x1 *= ''
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x1 *= E.a;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x1 *= {};
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x1 *= null;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x1 *= undefined;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~~~~~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
     var x2: string;
     x2 *= a;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x2 *= b;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x2 *= true;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x2 *= 0;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x2 *= ''
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x2 *= E.a;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x2 *= {};
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x2 *= null;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x2 *= undefined;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~~~~~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
     var x3: {};
     x3 *= a;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x3 *= b;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x3 *= true;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x3 *= 0;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x3 *= ''
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x3 *= E.a;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x3 *= {};
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x3 *= null;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x3 *= undefined;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~~~~~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
     var x4: void;
     x4 *= a;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x4 *= b;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x4 *= true;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x4 *= 0;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x4 *= ''
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x4 *= E.a;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x4 *= {};
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x4 *= null;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x4 *= undefined;
     ~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~~~~~~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
     var x5: number;
     x5 *= b;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x5 *= true;
           ~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x5 *= ''
           ~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x5 *= {};
           ~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
     var x6: E;
     x6 *= b;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x6 *= true;
           ~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x6 *= ''
           ~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     x6 *= {};
           ~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.

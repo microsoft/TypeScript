@@ -3,47 +3,47 @@
     
     function foo(x: 'hi') { }
     ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
     var f = function foo(x: 'hi') { }
             ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
     var f2 = (x: 'hi', y: 'hi') => { }
              ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
     
     class C {
         foo(x: 'hi') { }
         ~~~~~~~~~~~~~~~~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
     }
     
     interface I {
         (x: 'hi');
         ~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: 'hi', y: 'hi');
         ~~~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     }
     
     var a: {
         (x: 'hi');
         ~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: 'hi');
         ~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     }
     
     var b = {
         foo(x: 'hi') { },
         ~~~~~~~~~~~~~~~~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
         a: function foo(x: 'hi', y: 'hi') { },
            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
         b: (x: 'hi') => { }
            ~~~~~~~~~~~~~~~~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
     }
     

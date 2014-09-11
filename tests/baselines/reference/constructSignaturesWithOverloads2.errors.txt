@@ -32,7 +32,7 @@
     
     interface I<T> {
               ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
         new (x: T, y?: number): C2<T>;
         new (x: T, y: number): C2<T>;
     }

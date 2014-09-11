@@ -2,7 +2,7 @@
     class C {
        get Foo(a: number) { }
            ~~~
-!!! A 'get' accessor cannot have parameters.
+!!! error TS1054: A 'get' accessor cannot have parameters.
            ~~~
-!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
     }

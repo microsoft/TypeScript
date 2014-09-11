@@ -4,54 +4,54 @@
     var a: {
         x()?: number; // error
            ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
             ~
-!!! Property or signature expected.
+!!! error TS1131: Property or signature expected.
     }
     
     interface I {
         x()?: number; // error
            ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
             ~
-!!! Property or signature expected.
+!!! error TS1131: Property or signature expected.
     }
     
     class C {
         x()?: number; // error
            ~
-!!! Block or ';' expected.
+!!! error TS1144: Block or ';' expected.
             ~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
         ~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     }
     
     interface I2<T> {
         x()?: T; // error
            ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
             ~
-!!! Property or signature expected.
+!!! error TS1131: Property or signature expected.
     }
     
     class C2<T> {
         x()?: T; // error
            ~
-!!! Block or ';' expected.
+!!! error TS1144: Block or ';' expected.
             ~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
         ~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     }
     
     
     var b = {
         x()?: 1 // error
            ~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
             ~
-!!! Property assignment expected.
+!!! error TS1136: Property assignment expected.
     }
     ~
-!!! ':' expected.
+!!! error TS1005: ':' expected.

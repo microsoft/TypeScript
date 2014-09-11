@@ -3,35 +3,35 @@
     function y1() { }
     var y1 = 1; // error
         ~~
-!!! Duplicate identifier 'y1'.
+!!! error TS2300: Duplicate identifier 'y1'.
     
     // function then function
     function y2() { }
     function y2() { } // error
     ~~~~~~~~~~~~~~~~~
-!!! Duplicate function implementation.
+!!! error TS2393: Duplicate function implementation.
     
     function y2a() { }
     var y2a = () => { } // error
         ~~~
-!!! Duplicate identifier 'y2a'.
+!!! error TS2300: Duplicate identifier 'y2a'.
     
     // function then class
     function y3() { }
     class y3 { } // error
           ~~
-!!! Duplicate identifier 'y3'.
+!!! error TS2300: Duplicate identifier 'y3'.
     
     function y3a() { }
     class y3a { public foo() { } } // error
           ~~~
-!!! Duplicate identifier 'y3a'.
+!!! error TS2300: Duplicate identifier 'y3a'.
     
     // function then enum
     function y4() { }
     enum y4 { One } // error
          ~~
-!!! Duplicate identifier 'y4'.
+!!! error TS2300: Duplicate identifier 'y4'.
     
     // function then internal module
     function y5() { }

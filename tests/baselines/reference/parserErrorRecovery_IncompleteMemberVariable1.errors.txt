@@ -12,7 +12,7 @@
     
             public con: "hello";
                         ~~~~~~~
-!!! Type expected.
+!!! error TS1110: Type expected.
             // Constructor
             constructor (public x: number, public y: number) { }
     

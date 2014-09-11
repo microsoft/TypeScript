@@ -4,6 +4,6 @@
         var myFn;
         function myFn() {  }
                  ~~~~
-!!! Duplicate identifier 'myFn'.
+!!! error TS2300: Duplicate identifier 'myFn'.
     }
     

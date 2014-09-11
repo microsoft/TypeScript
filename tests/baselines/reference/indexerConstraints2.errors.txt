@@ -9,7 +9,7 @@
     class G extends F {
         [n: number]: A
         ~~~~~~~~~~~~~~
-!!! Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
     }
     
     // Other way
@@ -19,7 +19,7 @@
     class I extends H {
         [s: string]: B
         ~~~~~~~~~~~~~~
-!!! Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
     }
     
     // With hidden indexer
@@ -30,6 +30,6 @@
     class K extends J {
         [n: number]: A;
         ~~~~~~~~~~~~~~~
-!!! Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
         [s: string]: B;
     }

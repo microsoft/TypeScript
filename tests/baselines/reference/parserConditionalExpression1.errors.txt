@@ -1,16 +1,16 @@
 ==== tests/cases/conformance/parser/ecmascript5/Expressions/parserConditionalExpression1.ts (7 errors) ====
     (a=this.R[c])?a.JW||(a.e5(this,c),a.JW=_.l):this.A
      ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
               ~
-!!! Cannot find name 'c'.
+!!! error TS2304: Cannot find name 'c'.
                   ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
                          ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
                                    ~
-!!! Cannot find name 'c'.
+!!! error TS2304: Cannot find name 'c'.
                                       ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
                                            ~
-!!! Cannot find name '_'.
+!!! error TS2304: Cannot find name '_'.

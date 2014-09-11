@@ -3,14 +3,14 @@
     
         export class LoggerAdapter implements ILogger {
                      ~~~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
                                               ~~~~~~~
-!!! Cannot find name 'ILogger'.
+!!! error TS2304: Cannot find name 'ILogger'.
             constructor (public logger: ILogger) { 
                                         ~~~~~~~
-!!! Cannot find name 'ILogger'.
+!!! error TS2304: Cannot find name 'ILogger'.
                 this._information = this.logger.information();
                      ~~~~~~~~~~~~
-!!! Property '_information' does not exist on type 'LoggerAdapter'.
+!!! error TS2339: Property '_information' does not exist on type 'LoggerAdapter'.
             }
         }

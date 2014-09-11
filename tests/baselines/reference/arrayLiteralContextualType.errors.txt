@@ -28,8 +28,8 @@
     var arr = [new Giraffe(), new Elephant()];
     foo(arr); // Error because of no contextual type
         ~~~
-!!! Argument of type '{}[]' is not assignable to parameter of type 'IAnimal[]'.
-!!!   Type '{}' is not assignable to type 'IAnimal'.
+!!! error TS2345: Argument of type '{}[]' is not assignable to parameter of type 'IAnimal[]'.
+!!! error TS2345:   Type '{}' is not assignable to type 'IAnimal'.
     bar(arr); // Error because of no contextual type
         ~~~
-!!! Argument of type '{}[]' is not assignable to parameter of type '{ [x: number]: IAnimal; }'.
+!!! error TS2345: Argument of type '{}[]' is not assignable to parameter of type '{ [x: number]: IAnimal; }'.

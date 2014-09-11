@@ -11,25 +11,25 @@
     module M { }
     M = null; // Error
     ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.
     
     class C { }
     C = null; // Error
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     enum E { A }
     E = null; // Error
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     E.A = null; // OK per spec, Error per implementation (509581)
     ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     function fn() { }
     fn = null; // Should be error
     ~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     var v;
     v = null; // OK
@@ -41,4 +41,4 @@
     interface I { }
     I = null; // Error
     ~
-!!! Cannot find name 'I'.
+!!! error TS2304: Cannot find name 'I'.

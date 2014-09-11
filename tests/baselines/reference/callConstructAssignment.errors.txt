@@ -7,7 +7,7 @@
     
     foo = bar; // error
     ~~~
-!!! Type 'new () => any' is not assignable to type '() => void'.
+!!! error TS2323: Type 'new () => any' is not assignable to type '() => void'.
     bar = foo; // error
     ~~~
-!!! Type '() => void' is not assignable to type 'new () => any'.
+!!! error TS2323: Type '() => void' is not assignable to type 'new () => any'.

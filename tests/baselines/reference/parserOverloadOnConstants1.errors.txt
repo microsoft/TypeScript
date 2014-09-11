@@ -2,14 +2,14 @@
     interface Document {
         createElement(tagName: string): HTMLElement;
                                         ~~~~~~~~~~~
-!!! Cannot find name 'HTMLElement'.
+!!! error TS2304: Cannot find name 'HTMLElement'.
         createElement(tagName: 'canvas'): HTMLCanvasElement;
                                           ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'HTMLCanvasElement'.
+!!! error TS2304: Cannot find name 'HTMLCanvasElement'.
         createElement(tagName: 'div'): HTMLDivElement;
                                        ~~~~~~~~~~~~~~
-!!! Cannot find name 'HTMLDivElement'.
+!!! error TS2304: Cannot find name 'HTMLDivElement'.
         createElement(tagName: 'span'): HTMLSpanElement;
                                         ~~~~~~~~~~~~~~~
-!!! Cannot find name 'HTMLSpanElement'.
+!!! error TS2304: Cannot find name 'HTMLSpanElement'.
     }

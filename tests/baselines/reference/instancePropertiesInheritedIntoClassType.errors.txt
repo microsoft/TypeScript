@@ -4,12 +4,12 @@
             x: string;
             get y() {
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 return 1;
             }
             set y(v) { }
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             fn() { return this; }
             constructor(public a: number, private b: number) { }
         }
@@ -23,7 +23,7 @@
         r.y = 4;
         var r6 = d.y(); // error
                  ~~~~~
-!!! Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
     
     }
     
@@ -32,12 +32,12 @@
             x: T;
             get y() {
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 return null;
             }
             set y(v: U) { }
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             fn() { return this; }
             constructor(public a: T, private b: U) { }
         }
@@ -51,5 +51,5 @@
         r.y = '';
         var r6 = d.y(); // error
                  ~~~~~
-!!! Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
     }

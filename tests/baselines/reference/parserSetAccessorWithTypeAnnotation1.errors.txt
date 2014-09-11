@@ -2,6 +2,6 @@
     class C {
        set foo(v): number {
            ~~~
-!!! A 'set' accessor cannot have a return type annotation.
+!!! error TS1095: A 'set' accessor cannot have a return type annotation.
        }
     }

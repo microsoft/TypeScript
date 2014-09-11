@@ -2,39 +2,39 @@
     module M {
         export export var x = 1;
                ~~~~~~
-!!! 'export' modifier already seen.
+!!! error TS1030: 'export' modifier already seen.
         export export function f() { }
                ~~~~~~
-!!! 'export' modifier already seen.
+!!! error TS1030: 'export' modifier already seen.
     
         export export module N {
                ~~~~~~
-!!! 'export' modifier already seen.
+!!! error TS1030: 'export' modifier already seen.
             export export class C { }
                    ~~~~~~
-!!! 'export' modifier already seen.
+!!! error TS1030: 'export' modifier already seen.
             export export interface I { }
                    ~~~~~~
-!!! 'export' modifier already seen.
+!!! error TS1030: 'export' modifier already seen.
         }  
     }
     
     declare module A {
         export export var x;
                ~~~~~~
-!!! 'export' modifier already seen.
+!!! error TS1030: 'export' modifier already seen.
         export export function f()
                ~~~~~~
-!!! 'export' modifier already seen.
+!!! error TS1030: 'export' modifier already seen.
     
         export export module N {
                ~~~~~~
-!!! 'export' modifier already seen.
+!!! error TS1030: 'export' modifier already seen.
             export export class C { }
                    ~~~~~~
-!!! 'export' modifier already seen.
+!!! error TS1030: 'export' modifier already seen.
             export export interface I { }
                    ~~~~~~
-!!! 'export' modifier already seen.
+!!! error TS1030: 'export' modifier already seen.
         }
     }

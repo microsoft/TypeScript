@@ -5,7 +5,7 @@
         foo: string;
         foo: string;
         ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.
     }
     
     interface String {
@@ -17,53 +17,53 @@
         foo: T;
         foo: T;
         ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.
     }
     
     class C {
         foo: string;
         foo: string;
         ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.
     
         bar(x) { }
         bar(x) { }
         ~~~~~~~~~~
-!!! Duplicate function implementation.
+!!! error TS2393: Duplicate function implementation.
     
         baz = () => { }
         baz = () => { }
         ~~~
-!!! Duplicate identifier 'baz'.
+!!! error TS2300: Duplicate identifier 'baz'.
     }
     
     interface I {
         foo: string;
         foo: string;
         ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.
     }
     
     var a: {
         foo: string;
         foo: string;
         ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.
     
         bar: () => {};
         bar: () => {};
         ~~~
-!!! Duplicate identifier 'bar'.
+!!! error TS2300: Duplicate identifier 'bar'.
     }
     
     var b = {
         foo: '',
         foo: '',
         ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.
         bar: () => { },
         bar: () => { }
         ~~~
-!!! Duplicate identifier 'bar'.
+!!! error TS2300: Duplicate identifier 'bar'.
     }
     

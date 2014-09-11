@@ -7,13 +7,13 @@
         export var z;
         var test1=x;
                   ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
         var test2=y; // y visible because same module
     }
     
     module N {
         var test3=M.y; // nope y private property of M
                     ~
-!!! Property 'y' does not exist on type 'typeof M'.
+!!! error TS2339: Property 'y' does not exist on type 'typeof M'.
         var test4=M.z; // ok public property of M
     }

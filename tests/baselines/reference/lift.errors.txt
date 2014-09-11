@@ -14,13 +14,13 @@
     
         public liftxyz () { return x+z+this.y; }
                                    ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
                                      ~
-!!! Cannot find name 'z'.
+!!! error TS2304: Cannot find name 'z'.
         public liftxylocllz () { return x+z+this.y+this.ll; }
                                         ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
                                           ~
-!!! Cannot find name 'z'.
+!!! error TS2304: Cannot find name 'z'.
     }
     

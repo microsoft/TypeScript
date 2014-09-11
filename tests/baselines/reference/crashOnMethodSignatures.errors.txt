@@ -2,6 +2,6 @@
     class A {
         a(completed: () => any): void;
         ~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     }
     

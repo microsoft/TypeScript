@@ -2,6 +2,6 @@
     Object.prototype; // ok
     new Object().prototype; // error
                  ~~~~~~~~~
-!!! Property 'prototype' does not exist on type 'Object'.
+!!! error TS2339: Property 'prototype' does not exist on type 'Object'.
     function f() {}
     f.prototype;

@@ -12,7 +12,7 @@
     class C {
         x?: number; // error
          ~
-!!! A class member cannot be declared optional.
+!!! error TS1112: A class member cannot be declared optional.
     }
     
     interface I2<T> {
@@ -22,13 +22,13 @@
     class C2<T> {
         x?: T; // error
          ~
-!!! A class member cannot be declared optional.
+!!! error TS1112: A class member cannot be declared optional.
     }
     
     var b = {
         x?: 1 // error
          ~
-!!! ':' expected.
+!!! error TS1005: ':' expected.
           ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     }

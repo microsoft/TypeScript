@@ -5,18 +5,18 @@
     }
     export public import a = x.c;
            ~~~~~~
-!!! 'public' modifier cannot appear on a module element.
+!!! error TS1044: 'public' modifier cannot appear on a module element.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'x' has no exported member 'c'.
+!!! error TS2305: Module 'x' has no exported member 'c'.
     export private import b = x.c;
            ~~~~~~~
-!!! 'private' modifier cannot appear on a module element.
+!!! error TS1044: 'private' modifier cannot appear on a module element.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'x' has no exported member 'c'.
+!!! error TS2305: Module 'x' has no exported member 'c'.
     export static import c = x.c;
            ~~~~~~
-!!! 'static' modifier cannot appear on a module element.
+!!! error TS1044: 'static' modifier cannot appear on a module element.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'x' has no exported member 'c'.
+!!! error TS2305: Module 'x' has no exported member 'c'.
     var b: a;
     

@@ -6,5 +6,5 @@
     i = x;
     x = i;
     ~
-!!! Type 'I3' is not assignable to type '{ one: number; }':
-!!!   Required property 'one' cannot be reimplemented with optional property in 'I3'.
+!!! error TS2322: Type 'I3' is not assignable to type '{ one: number; }':
+!!! error TS2322:   Required property 'one' cannot be reimplemented with optional property in 'I3'.

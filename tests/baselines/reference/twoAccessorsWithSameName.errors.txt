@@ -2,51 +2,51 @@
     class C {
         get x() { return 1; }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         get x() { return 1; } // error
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }
     
     class D {
         set x(v) {  }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         set x(v) {  } // error
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }
     
     class E {
         get x() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 1;
         }
         set x(v) { }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
     
     var x = {
         get x() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 1;
         },
     
         // error
         get x() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~
-!!! An object literal cannot have multiple get/set accessors with the same name.
+!!! error TS1118: An object literal cannot have multiple get/set accessors with the same name.
             ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
             return 1;
         }
     }
@@ -54,10 +54,10 @@
     var y = {
         get x() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 1;
         },
         set x(v) { }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }

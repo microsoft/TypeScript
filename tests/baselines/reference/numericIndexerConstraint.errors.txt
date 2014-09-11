@@ -2,6 +2,6 @@
     class C {
         0: number;
         ~~~~~~~~~~
-!!! Property '0' of type 'number' is not assignable to numeric index type 'RegExp'.
+!!! error TS2412: Property '0' of type 'number' is not assignable to numeric index type 'RegExp'.
         [x: number]: RegExp;
     }

@@ -14,7 +14,7 @@
         constructor() {
             super(this); // error
                   ~~~~
-!!! 'this' cannot be referenced in current location.
+!!! error TS2332: 'this' cannot be referenced in current location.
         }
     }
     
@@ -22,6 +22,6 @@
         constructor(public p) {
             super(this); // error
                   ~~~~
-!!! 'this' cannot be referenced in current location.
+!!! error TS2332: 'this' cannot be referenced in current location.
         }
     }

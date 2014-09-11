@@ -6,146 +6,146 @@
     class C {
         constructor() { this = value; }
                         ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
         foo() { this = value; }
                 ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
         static sfoo() { this = value; }
                         ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     }
     
     function foo() { this = value; }
                      ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     this = value;
     ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     // identifiers: module, class, enum, function
     module M { export var a; }
     M = value;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     C = value;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     enum E { }
     E = value;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     foo = value;
     ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     // literals
     null = value;
     ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     true = value;
     ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     false = value;
     ~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     0 = value;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     '' = value;
     ~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     /d+/ = value;
     ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     // object literals
     { a: 0} = value;
             ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     // array literals
     ['', ''] = value;
     ~~~~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     // super
     class Derived extends C {
         constructor() { super(); super = value; }
                                        ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
                                  ~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
         foo() { super = value }
                       ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
                 ~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
         static sfoo() { super = value; }
                               ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
                         ~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     }
     
     // function expression
     function bar() { } = value;
                        ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     () => { } = value;
               ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
     
     // function calls
     foo() = value;
     ~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     // parentheses, the containted expression is value
     (this) = value;
     ~~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (M) = value;
     ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (C) = value;
     ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (E) = value;
     ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (foo) = value;
     ~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (null) = value;
     ~~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (true) = value;
     ~~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (0) = value;
     ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     ('') = value;
     ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (/d+/) = value;
     ~~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     ({}) = value;
     ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     ([]) = value;
     ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (function baz() { }) = value;
     ~~~~~~~~~~~~~~~~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (foo()) = value;
     ~~~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.

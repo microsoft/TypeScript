@@ -5,8 +5,8 @@
     
     interface I extends Foo { // error
               ~
-!!! Interface 'I' incorrectly extends interface 'Foo':
-!!!   Private property 'x' cannot be reimplemented.
+!!! error TS2429: Interface 'I' incorrectly extends interface 'Foo':
+!!! error TS2429:   Private property 'x' cannot be reimplemented.
         x: string;
     }
     
@@ -18,4 +18,4 @@
     var r = i.y;
     var r2 = i.x; // error
              ~~~
-!!! Property 'Foo.x' is inaccessible.
+!!! error TS2341: Property 'Foo.x' is inaccessible.

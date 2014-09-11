@@ -1,37 +1,37 @@
 ==== tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts (10 errors) ====
     function f<x, x>() { }
                   ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     function f2<X, X>(a: X, b: X): X { return null; }
                    ~
-!!! Duplicate identifier 'X'.
+!!! error TS2300: Duplicate identifier 'X'.
     class C<X, X> {
                ~
-!!! Duplicate identifier 'X'.
+!!! error TS2300: Duplicate identifier 'X'.
         public f<x, x>() {}
                     ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         public f2<X, X>(a: X, b: X): X { return null; }
                      ~
-!!! Duplicate identifier 'X'.
+!!! error TS2300: Duplicate identifier 'X'.
     }
     
     interface I<X, X> {
                    ~
-!!! Duplicate identifier 'X'.
+!!! error TS2300: Duplicate identifier 'X'.
         f<X, X>();
              ~
-!!! Duplicate identifier 'X'.
+!!! error TS2300: Duplicate identifier 'X'.
         f2<X, X>(a: X, b: X): X;
               ~
-!!! Duplicate identifier 'X'.
+!!! error TS2300: Duplicate identifier 'X'.
     }
     
     var m = {
         a: function f<X, X>() {},
                          ~
-!!! Duplicate identifier 'X'.
+!!! error TS2300: Duplicate identifier 'X'.
         b: function f2<X, X>(a: X, b: X): X { return null; }
                           ~
-!!! Duplicate identifier 'X'.
+!!! error TS2300: Duplicate identifier 'X'.
     }

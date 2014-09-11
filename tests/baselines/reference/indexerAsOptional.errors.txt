@@ -3,12 +3,12 @@
         //Index signatures can't be optional
         [idx?: number]: any; //err
          ~~~
-!!! An index signature parameter cannot have a question mark.
+!!! error TS1019: An index signature parameter cannot have a question mark.
     }
     
     class indexSig2 {
         //Index signatures can't be optional
         [idx?: number]: any //err
          ~~~
-!!! An index signature parameter cannot have a question mark.
+!!! error TS1019: An index signature parameter cannot have a question mark.
     }

@@ -1,4 +1,4 @@
 ==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression2.ts (1 errors) ====
     href.match(/:\/\/(.[^/]+)/)[1];
     ~~~~
-!!! Cannot find name 'href'.
+!!! error TS2304: Cannot find name 'href'.

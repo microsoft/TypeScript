@@ -11,7 +11,7 @@
         export function fn<T>(x: T, y: T): number {
             return clodule.sfn('a');
                    ~~~~~~~~~~~
-!!! Property 'clodule.sfn' is inaccessible.
+!!! error TS2341: Property 'clodule.sfn' is inaccessible.
         }
     }
     

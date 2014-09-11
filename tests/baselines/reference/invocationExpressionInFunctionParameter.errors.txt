@@ -3,5 +3,5 @@
     }
     function foo3(x = foo1(123)) { //should error, 123 is not string
                            ~~~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     }

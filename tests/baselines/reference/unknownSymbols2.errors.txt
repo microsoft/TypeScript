@@ -2,20 +2,20 @@
     module M {
         var x: asdf;
                ~~~~
-!!! Cannot find name 'asdf'.
+!!! error TS2304: Cannot find name 'asdf'.
         var y = x + asdf;
                     ~~~~
-!!! Cannot find name 'asdf'.
+!!! error TS2304: Cannot find name 'asdf'.
         var z = <asdf>x; // should be an error
                  ~~~~
-!!! Cannot find name 'asdf'.
+!!! error TS2304: Cannot find name 'asdf'.
         if (asdf) {
             ~~~~
-!!! Cannot find name 'asdf'.
+!!! error TS2304: Cannot find name 'asdf'.
         }
         else if (qwerty) {
                  ~~~~~~
-!!! Cannot find name 'qwerty'.
+!!! error TS2304: Cannot find name 'qwerty'.
         }
     
         try {
@@ -25,10 +25,10 @@
     
         switch (asdf) {
                 ~~~~
-!!! Cannot find name 'asdf'.
+!!! error TS2304: Cannot find name 'asdf'.
             case qwerty:
                  ~~~~~~
-!!! Cannot find name 'qwerty'.
+!!! error TS2304: Cannot find name 'qwerty'.
                 break;
             default:
                 break;
@@ -36,10 +36,10 @@
     
         var a = () => asdf;
                       ~~~~
-!!! Cannot find name 'asdf'.
+!!! error TS2304: Cannot find name 'asdf'.
         var b = (asdf) => { return qwerty };
                                    ~~~~~~
-!!! Cannot find name 'qwerty'.
+!!! error TS2304: Cannot find name 'qwerty'.
     
         module N {
             var x = 1;
@@ -47,5 +47,5 @@
         import c = N;
         import d = asdf;
         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'asdf'.
+!!! error TS2304: Cannot find name 'asdf'.
     }

@@ -2,5 +2,5 @@
     class C {
        export [x: string]: string;
        ~~~~~~
-!!! 'export' modifier cannot appear on a class element.
+!!! error TS1031: 'export' modifier cannot appear on a class element.
     }

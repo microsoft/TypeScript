@@ -15,10 +15,10 @@
         b: B; // ok
         c: number; // error
         ~~~~~~~~~~
-!!! Property 'c' of type 'number' is not assignable to string index type 'A'.
+!!! error TS2411: Property 'c' of type 'number' is not assignable to string index type 'A'.
         d: string; // error
         ~~~~~~~~~~
-!!! Property 'd' of type 'string' is not assignable to string index type 'A'.
+!!! error TS2411: Property 'd' of type 'string' is not assignable to string index type 'A'.
     }
     
     interface Foo2 {
@@ -27,10 +27,10 @@
         b: B; // ok
         c: number; // error
         ~~~~~~~~~~
-!!! Property 'c' of type 'number' is not assignable to string index type 'A'.
+!!! error TS2411: Property 'c' of type 'number' is not assignable to string index type 'A'.
         d: string; // error
         ~~~~~~~~~~
-!!! Property 'd' of type 'string' is not assignable to string index type 'A'.
+!!! error TS2411: Property 'd' of type 'string' is not assignable to string index type 'A'.
     }
     
     var a: {
@@ -39,19 +39,19 @@
         b: B; // ok
         c: number; // error
         ~~~~~~~~~~
-!!! Property 'c' of type 'number' is not assignable to string index type 'A'.
+!!! error TS2411: Property 'c' of type 'number' is not assignable to string index type 'A'.
         d: string; // error
         ~~~~~~~~~~
-!!! Property 'd' of type 'string' is not assignable to string index type 'A'.
+!!! error TS2411: Property 'd' of type 'string' is not assignable to string index type 'A'.
     };
     
     // error
     var b: { [x: string]: A } = {
         ~
-!!! Type '{ [x: string]: typeof A; a: typeof A; b: typeof B; }' is not assignable to type '{ [x: string]: A; }':
-!!!   Index signatures are incompatible:
-!!!     Type 'typeof A' is not assignable to type 'A':
-!!!       Property 'foo' is missing in type 'typeof A'.
+!!! error TS2322: Type '{ [x: string]: typeof A; a: typeof A; b: typeof B; }' is not assignable to type '{ [x: string]: A; }':
+!!! error TS2322:   Index signatures are incompatible:
+!!! error TS2322:     Type 'typeof A' is not assignable to type 'A':
+!!! error TS2322:       Property 'foo' is missing in type 'typeof A'.
         a: A,
         b: B
     }

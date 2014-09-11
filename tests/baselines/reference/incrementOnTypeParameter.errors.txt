@@ -4,10 +4,10 @@
         foo() {
             this.a++; 
             ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
             for (var i: T, j = 0; j < 10; i++) { 
                                           ~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
             }
         }
     }

@@ -1,5 +1,5 @@
 ==== tests/cases/compiler/newMissingIdentifier.ts (1 errors) ====
     var x = new ();
                  ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     

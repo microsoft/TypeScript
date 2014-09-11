@@ -41,7 +41,7 @@
     
     M = x;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     function k<T>(a: T) {
         a = x;

@@ -30,7 +30,7 @@
         // in a getter
         public static get staticGetter() {
                           ~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.staticMethod();
     
             return 0;
@@ -39,7 +39,7 @@
         // in a setter
         public static set staticGetter(value: number) {
                           ~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.staticMethod();
         }
     

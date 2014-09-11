@@ -3,32 +3,32 @@
         "a b": number;
         "a b": number;
         ~~~~~
-!!! Duplicate identifier '"a b"'.
+!!! error TS2300: Duplicate identifier '"a b"'.
         static "c d": number;
         static "c d": number;
                ~~~~~
-!!! Duplicate identifier '"c d"'.
+!!! error TS2300: Duplicate identifier '"c d"'.
     }
     
     interface I {
         "a b": number;
         "a b": number;
         ~~~~~
-!!! Duplicate identifier '"a b"'.
+!!! error TS2300: Duplicate identifier '"a b"'.
     }
     
     var a: {
         "a b": number;
         "a b": number;
         ~~~~~
-!!! Duplicate identifier '"a b"'.
+!!! error TS2300: Duplicate identifier '"a b"'.
     }
     
     var b = {
         "a b": 1
         "a b": 1
         ~~~~~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
         ~~~~~
-!!! Duplicate identifier '"a b"'.
+!!! error TS2300: Duplicate identifier '"a b"'.
     }

@@ -9,9 +9,9 @@
     
     class C extends B1, B2 { // duplicate member
                       ~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                            ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
     }
     
     class D1 extends B1 {
@@ -22,9 +22,9 @@
     
     class E extends D1, D2 { // nope, duplicate member
                       ~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                            ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
     }
     
     class N {
@@ -42,12 +42,12 @@
     
     class Baad extends Good {
           ~~~~
-!!! Class 'Baad' incorrectly extends base class 'Good':
-!!!   Types of property 'g' are incompatible:
-!!!     Type '(n: number) => number' is not assignable to type '() => number'.
+!!! error TS2416: Class 'Baad' incorrectly extends base class 'Good':
+!!! error TS2416:   Types of property 'g' are incompatible:
+!!! error TS2416:     Type '(n: number) => number' is not assignable to type '() => number'.
         public f(): number { return 0; }
                ~
-!!! Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
+!!! error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
         public g(n:number) { return 0; }
     }
     

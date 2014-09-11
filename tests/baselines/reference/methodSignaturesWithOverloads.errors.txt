@@ -5,7 +5,7 @@
         func4?(x: number): number;
         func4(s: string): string; // error, mismatched optionality
         ~~~~~
-!!! Overload signatures must all be optional or required.
+!!! error TS2386: Overload signatures must all be optional or required.
         func5?: {
             (x: number): number;
             (s: string): string;
@@ -16,7 +16,7 @@
         func4<T>(x: T): number;
         func4? <T>(s: T): string; // error, mismatched optionality
         ~~~~~
-!!! Overload signatures must all be optional or required.
+!!! error TS2386: Overload signatures must all be optional or required.
         func5?: {
             <T>(x: T): number;
             <T>(s: T): string;

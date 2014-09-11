@@ -2,33 +2,33 @@
     class C {
         public get Foo() { return "foo";} // ok
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public set Foo(foo:string) {} // ok
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         public Foo = 0; // error - duplicate identifier Foo - confirmed
                ~~~
-!!! Duplicate identifier 'Foo'.
+!!! error TS2300: Duplicate identifier 'Foo'.
         public get Goo(v:string):string {return null;} // error - getters must not have a parameter
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public set Goo(v:string):string {} // error - setters must not specify a return type
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
     
     class E {
         private get Baz():number { return 0; }
                     ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                     ~~~
-!!! Getter and setter accessors do not agree in visibility.
+!!! error TS2379: Getter and setter accessors do not agree in visibility.
         public set Baz(n:number) {} // error - accessors do not agree in visibility
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~
-!!! Getter and setter accessors do not agree in visibility.
+!!! error TS2379: Getter and setter accessors do not agree in visibility.
     }
     
     

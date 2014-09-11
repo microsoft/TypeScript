@@ -3,6 +3,6 @@
     var x: { [index: string]: number; };
     var result: Foo = x["one"]; // error
         ~~~~~~
-!!! Type 'number' is not assignable to type 'Foo':
-!!!   Property 'foo' is missing in type 'Number'.
+!!! error TS2322: Type 'number' is not assignable to type 'Foo':
+!!! error TS2322:   Property 'foo' is missing in type 'Number'.
     

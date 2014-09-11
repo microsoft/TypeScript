@@ -4,7 +4,7 @@
     interface A {
         [x: number]: string; // error
         ~~~~~~~~~~~~~~~~~~~~
-!!! Numeric index type 'string' is not assignable to string index type '{ length: string; }'.
+!!! error TS2413: Numeric index type 'string' is not assignable to string index type '{ length: string; }'.
     }
     
     
@@ -16,7 +16,7 @@
         [x: number]: string;
         'a': number; //error
         ~~~~~~~~~~~~
-!!! Property ''a'' of type 'number' is not assignable to string index type '{ length: number; }'.
+!!! error TS2411: Property ''a'' of type 'number' is not assignable to string index type '{ length: number; }'.
     }
     
     
@@ -24,6 +24,6 @@
         [x: string]: { length: number };
         1: { length: number }; // error
         ~~~~~~~~~~~~~~~~~~~~~~
-!!! Property '1' of type '{ length: number; }' is not assignable to numeric index type 'string'.
+!!! error TS2412: Property '1' of type '{ length: number; }' is not assignable to numeric index type 'string'.
     }
     

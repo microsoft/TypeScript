@@ -2,8 +2,8 @@
     var v: {
        a: B
           ~
-!!! Cannot find name 'B'.
+!!! error TS2304: Cannot find name 'B'.
        [];
        ~~
-!!! An index signature must have exactly one parameter.
+!!! error TS1096: An index signature must have exactly one parameter.
     };

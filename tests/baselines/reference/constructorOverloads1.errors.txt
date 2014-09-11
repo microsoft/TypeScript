@@ -11,7 +11,7 @@
     
         }
     ~~~~~
-!!! Multiple constructor implementations are not allowed.
+!!! error TS2392: Multiple constructor implementations are not allowed.
         bar1() {  /*WScript.Echo("bar1");*/ }
         bar2() {  /*WScript.Echo("bar1");*/ }
     }
@@ -20,10 +20,10 @@
     var f2 = new Foo(0);
     var f3 = new Foo(f1);
                      ~~
-!!! Argument of type 'Foo' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'Foo' is not assignable to parameter of type 'number'.
     var f4 = new Foo([f1,f2,f3]);
                      ~~~~~~~~~~
-!!! Argument of type 'unknown[]' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'unknown[]' is not assignable to parameter of type 'number'.
     
     f1.bar1();
     f1.bar2();

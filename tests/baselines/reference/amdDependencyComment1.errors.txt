@@ -3,5 +3,5 @@
     
     import m1 = require("m2")
                         ~~~~
-!!! Cannot find external module 'm2'.
+!!! error TS2307: Cannot find external module 'm2'.
     m1.f();

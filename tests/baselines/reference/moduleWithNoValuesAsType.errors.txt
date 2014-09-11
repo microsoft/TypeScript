@@ -2,14 +2,14 @@
     module A { }
     var a: A; // error
            ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.
     
     module B {
         interface I {}
     }
     var b: B; // error
            ~
-!!! Cannot find name 'B'.
+!!! error TS2304: Cannot find name 'B'.
     
     module C {
         module M {
@@ -19,4 +19,4 @@
     
     var c: C; // error
            ~
-!!! Cannot find name 'C'.
+!!! error TS2304: Cannot find name 'C'.

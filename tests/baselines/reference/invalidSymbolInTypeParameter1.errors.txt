@@ -2,6 +2,6 @@
     function test() {
         var cats = new Array<WAWA>(); // WAWA is not a valid type
                              ~~~~
-!!! Cannot find name 'WAWA'.
+!!! error TS2304: Cannot find name 'WAWA'.
     }
     

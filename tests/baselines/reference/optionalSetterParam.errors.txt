@@ -3,6 +3,6 @@
     
         public set bar(param?:any) { }
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
     

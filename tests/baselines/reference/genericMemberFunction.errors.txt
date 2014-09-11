@@ -2,37 +2,37 @@
     export class BuildError<A, B, C>{
       public parent<A, B extends A, C>(): FileWithErrors<A, B, C> {
                        ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         return undefined;
       }
     }
     export class FileWithErrors<A, B, C>{
       public errors<A, B extends A, C>(): BuildError<A, B, C>[] {
                        ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         return undefined;
       }
       public parent<A, B extends A, C>(): BuildResult<A, B, C> {
                        ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         return undefined;
       }
     }
     export class BuildResult<A, B, C>{
       public merge<A, B extends A, C>(other: BuildResult<A, B, C>): void {
                       ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         a.b.c.d.e.f.g = 0;
         ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
         removedFiles.forEach(<A, B extends A, C>(each: FileWithErrors<A, B, C>) => {
         ~~~~~~~~~~~~
-!!! Cannot find name 'removedFiles'.
+!!! error TS2304: Cannot find name 'removedFiles'.
                                  ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
           this.removeFile(each);
                ~~~~~~~~~~
-!!! Property 'removeFile' does not exist on type 'BuildResult<A, B, C>'.
+!!! error TS2339: Property 'removeFile' does not exist on type 'BuildResult<A, B, C>'.
         });
       }
     }

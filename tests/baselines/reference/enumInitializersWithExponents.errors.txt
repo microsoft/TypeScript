@@ -5,10 +5,10 @@
         b = 1e25, // ok
         c = 1e-3, // error
         ~
-!!! Ambient enum elements can only have integer literal initializers.
+!!! error TS1066: Ambient enum elements can only have integer literal initializers.
         d = 1e-9, // error
         ~
-!!! Ambient enum elements can only have integer literal initializers.
+!!! error TS1066: Ambient enum elements can only have integer literal initializers.
         e = 1e0, // ok
         f = 1e+25 // ok
     }

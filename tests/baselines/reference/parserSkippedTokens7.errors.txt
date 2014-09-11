@@ -1,4 +1,4 @@
 ==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens7.ts (1 errors) ====
     /*foo*/ \ /*bar*/
             
-!!! Invalid character.
+!!! error TS1127: Invalid character.

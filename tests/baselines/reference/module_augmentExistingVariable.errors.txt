@@ -3,6 +3,6 @@
     
     module console {
            ~~~~~~~
-!!! Duplicate identifier 'console'.
+!!! error TS2300: Duplicate identifier 'console'.
         export var x = 2;
     }

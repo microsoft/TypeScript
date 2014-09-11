@@ -3,10 +3,10 @@
     }
     var exports = 1;
         ~~~~~~~
-!!! Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.
+!!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.
     var require = "require";
         ~~~~~~~
-!!! Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
     module m1 {
         var exports = 0;
         var require = "require";

@@ -2,8 +2,8 @@
     var v: {
        A: B
           ~
-!!! Cannot find name 'B'.
+!!! error TS2304: Cannot find name 'B'.
        <T>;
           ~
-!!! '(' expected.
+!!! error TS1005: '(' expected.
     };

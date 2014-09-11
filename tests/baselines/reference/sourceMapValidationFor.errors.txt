@@ -2,13 +2,13 @@
     for (var i = 0; i < 10; i++) {
         WScript.Echo("i: " + i);
         ~~~~~~~
-!!! Cannot find name 'WScript'.
+!!! error TS2304: Cannot find name 'WScript'.
     }
     for (i = 0; i < 10; i++)
     {
         WScript.Echo("i: " + i);
         ~~~~~~~
-!!! Cannot find name 'WScript'.
+!!! error TS2304: Cannot find name 'WScript'.
     }
     for (var j = 0; j < 10; ) {
         j++;

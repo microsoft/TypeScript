@@ -7,5 +7,5 @@
     }
     export = new Greeter();
              ~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     

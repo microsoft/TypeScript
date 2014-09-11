@@ -6,10 +6,10 @@
     }
     declare class xyz extends abc {
                               ~~~
-!!! Generic type 'abc<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'abc<T>' requires 1 type argument(s).
     }
     
     var bar = new xyz(); // Error: Invalid 'new' expression.
     var r: xyz = bar.foo;
                      ~~~
-!!! Property 'foo' does not exist on type 'xyz'.
+!!! error TS2339: Property 'foo' does not exist on type 'xyz'.

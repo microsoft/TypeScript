@@ -2,9 +2,9 @@
     class test {
         public get p2(){
                    ~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~
-!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
     
         }
     }

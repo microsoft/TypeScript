@@ -4,7 +4,7 @@
     
     ///<reference path='typescript.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'typescript.ts' not found.
+!!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
         export function lastOf(items: any[]): any {
@@ -26,7 +26,7 @@
         export class AstPath {
             public asts: TypeScript.AST[] = [];
                          ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
             public top: number = -1;
     
             static reverseIndexOf(items: any[], index: number): any {
@@ -42,7 +42,7 @@
     
             public pop(): TypeScript.AST {
                           ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                 var head = this.ast();
                 this.up();
     
@@ -54,7 +54,7 @@
     
             public push(ast: TypeScript.AST) {
                              ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                 while (this.asts.length > this.count()) {
                     this.asts.pop();
                 }
@@ -76,24 +76,24 @@
     
             public nodeType(): TypeScript.NodeType {
                                ~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'NodeType'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'NodeType'.
                 if (this.ast() == null)
                     return TypeScript.NodeType.None;
                                       ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                 return this.ast().nodeType;
             }
     
             public ast() {
                 return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1));
                         ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
             }
     
             public parent() {
                 return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - this.top);
                         ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
             }
     
             public count() {
@@ -102,7 +102,7 @@
     
             public get(index: number): TypeScript.AST {
                                        ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                 return this.asts[index];
             }
     
@@ -112,13 +112,13 @@
     
                 return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                                                            ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (this.parent().nodeType === TypeScript.NodeType.ClassDeclaration) &&
                                                            ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast());
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
             }
     
             public isNameOfInterface(): boolean {
@@ -127,13 +127,13 @@
     
                 return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                                                            ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (this.parent().nodeType === TypeScript.NodeType.InterfaceDeclaration) &&
                                                            ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast());
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
             }
     
             public isNameOfArgument(): boolean {
@@ -142,13 +142,13 @@
     
                 return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                                                            ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (this.parent().nodeType === TypeScript.NodeType.ArgDecl) &&
                                                            ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.ArgDecl>this.parent()).id === this.ast());
                        ~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ArgDecl'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ArgDecl'.
             }
     
             public isNameOfVariable(): boolean {
@@ -157,13 +157,13 @@
     
                 return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                                                            ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (this.parent().nodeType === TypeScript.NodeType.VarDecl) &&
                                                            ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.VarDecl>this.parent()).id === this.ast());
                        ~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'VarDecl'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'VarDecl'.
             }
     
             public isNameOfModule(): boolean {
@@ -172,13 +172,13 @@
     
                 return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                                                            ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (this.parent().nodeType === TypeScript.NodeType.ModuleDeclaration) &&
                                                            ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.ModuleDeclaration>this.parent()).name === this.ast());
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ModuleDeclaration'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
             }
     
             public isNameOfFunction(): boolean {
@@ -187,13 +187,13 @@
     
                 return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                                                            ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (this.parent().nodeType === TypeScript.NodeType.FuncDecl) &&
                                                            ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.FuncDecl>this.parent()).name === this.ast());
                        ~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'FuncDecl'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
             }
     
             public isChildOfScript(): boolean {
@@ -202,10 +202,10 @@
                     this.asts[this.top] === ast &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 2].nodeType === TypeScript.NodeType.Script;
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
             }
     
             public isChildOfModule(): boolean {
@@ -214,10 +214,10 @@
                     this.asts[this.top] === ast &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 2].nodeType === TypeScript.NodeType.ModuleDeclaration;
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
             }
     
             public isChildOfClass(): boolean {
@@ -226,10 +226,10 @@
                     this.asts[this.top] === ast &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 2].nodeType === TypeScript.NodeType.ClassDeclaration;
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
             }
     
             public isArgumentOfClassConstructor(): boolean {
@@ -238,25 +238,25 @@
                     this.asts[this.top] === ast &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 2].nodeType === TypeScript.NodeType.FuncDecl &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 3].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 4].nodeType === TypeScript.NodeType.ClassDeclaration &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.FuncDecl>this.asts[this.top - 2]).isConstructor) &&
                        ~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'FuncDecl'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
                     ((<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1]) &&
                        ~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'FuncDecl'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
                     ((<TypeScript.ClassDeclaration>this.asts[this.top - 4]).constructorDecl === this.asts[this.top - 2]);
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ClassDeclaration'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ClassDeclaration'.
             }
     
             public isChildOfInterface(): boolean {
@@ -265,246 +265,246 @@
                     this.asts[this.top] === ast &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 2].nodeType === TypeScript.NodeType.InterfaceDeclaration;
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
             }
     
             public isTopLevelImplicitModule() {
                 return this.count() >= 1 &&
                     this.asts[this.top].nodeType === TypeScript.NodeType.ModuleDeclaration &&
                                                                 ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top]).modFlags, TypeScript.ModuleFlags.IsWholeFile);
                                ~~~~~~~
-!!! Property 'hasFlag' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'hasFlag' does not exist on type 'typeof TypeScript'.
                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ModuleDeclaration'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
                                                                                                                 ~~~~~~~~~~~
-!!! Property 'ModuleFlags' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'ModuleFlags' does not exist on type 'typeof TypeScript'.
             }
     
             public isBodyOfTopLevelImplicitModule() {
                 return this.count() >= 2 &&
                     this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.ModuleDeclaration &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0] &&
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ModuleDeclaration'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
                     TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).modFlags, TypeScript.ModuleFlags.IsWholeFile);
                                ~~~~~~~
-!!! Property 'hasFlag' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'hasFlag' does not exist on type 'typeof TypeScript'.
                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ModuleDeclaration'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
                                                                                                                     ~~~~~~~~~~~
-!!! Property 'ModuleFlags' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'ModuleFlags' does not exist on type 'typeof TypeScript'.
             }
     
             public isBodyOfScript(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.Script &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.Script>this.asts[this.top - 1]).bod == this.asts[this.top - 0];
                        ~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'Script'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'Script'.
             }
     
             public isBodyOfSwitch(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.Switch &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.SwitchStatement>this.asts[this.top - 1]).caseList == this.asts[this.top - 0];
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'SwitchStatement'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
             }
     
             public isBodyOfModule(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.ModuleDeclaration &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ModuleDeclaration'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
             }
     
             public isBodyOfClass(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.ClassDeclaration &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.ClassDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ClassDeclaration'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ClassDeclaration'.
             }
     
             public isBodyOfFunction(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.FuncDecl &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.FuncDecl>this.asts[this.top - 1]).bod == this.asts[this.top - 0];
                        ~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'FuncDecl'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
             }
     
             public isBodyOfInterface(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.InterfaceDeclaration &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.InterfaceDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
             }
     
             public isBodyOfBlock(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.Block &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.Block>this.asts[this.top - 1]).statements == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'Block'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'Block'.
             }
     
             public isBodyOfFor(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.For &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.ForStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ForStatement'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ForStatement'.
             }
     
             public isBodyOfCase(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.Case &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.CaseStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'CaseStatement'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'CaseStatement'.
             }
     
             public isBodyOfTry(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.Try &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.Try>this.asts[this.top - 1]).body == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'Try'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'Try'.
             }
     
             public isBodyOfCatch(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.Catch &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.Catch>this.asts[this.top - 1]).body == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'Catch'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'Catch'.
             }
     
             public isBodyOfDoWhile(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.DoWhile &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.DoWhileStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'DoWhileStatement'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'DoWhileStatement'.
             }
     
             public isBodyOfWhile(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.While &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.WhileStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'WhileStatement'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'WhileStatement'.
             }
     
             public isBodyOfForIn(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.ForIn &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.ForInStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ForInStatement'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ForInStatement'.
             }
     
             public isBodyOfWith(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.With &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.WithStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'WithStatement'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'WithStatement'.
             }
     
             public isBodyOfFinally(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.Finally &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.Finally>this.asts[this.top - 1]).body == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'Finally'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'Finally'.
             }
     
             public isCaseOfSwitch(): boolean {
                 return this.count() >= 3 &&
                     this.asts[this.top - 2].nodeType === TypeScript.NodeType.Switch &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList == this.asts[this.top - 1];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'SwitchStatement'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
             }
     
             public isDefaultCaseOfSwitch(): boolean {
                 return this.count() >= 3 &&
                     this.asts[this.top - 2].nodeType === TypeScript.NodeType.Switch &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList == this.asts[this.top - 1] &&
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'SwitchStatement'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
                     (<TypeScript.SwitchStatement>this.asts[this.top - 2]).defaultCase == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'SwitchStatement'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
             }
     
             public isListOfObjectLit(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.ObjectLit &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'UnaryExpression'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
             }
     
             public isBodyOfObjectLit(): boolean {
@@ -515,91 +515,91 @@
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.ObjectLit &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0] &&
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'UnaryExpression'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
                     (<TypeScript.ASTList>this.asts[this.top - 0]).members.length == 0;
                       ~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ASTList'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ASTList'.
             }
     
             public isMemberOfObjectLit(): boolean {
                 return this.count() >= 3 &&
                     this.asts[this.top - 2].nodeType === TypeScript.NodeType.ObjectLit &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 0].nodeType === TypeScript.NodeType.Member &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.UnaryExpression>this.asts[this.top - 2]).operand == this.asts[this.top - 1];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'UnaryExpression'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
             }
     
             public isNameOfMemberOfObjectLit(): boolean {
                 return this.count() >= 4 &&
                     this.asts[this.top - 3].nodeType === TypeScript.NodeType.ObjectLit &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 2].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 0].nodeType === TypeScript.NodeType.Name &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.UnaryExpression>this.asts[this.top - 3]).operand == this.asts[this.top - 2];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'UnaryExpression'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
             }
     
             public isListOfArrayLit(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.ArrayLit &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'UnaryExpression'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
             }
     
             public isTargetOfMember(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand1 === this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'BinaryExpression'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'BinaryExpression'.
             }
     
             public isMemberOfMember(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand2 === this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'BinaryExpression'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'BinaryExpression'.
             }
     
             public isItemOfList(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.List;
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                 //(<Tools.ASTList>this.asts[this.top - 1]).operand2 === this.asts[this.top - 0];
             }
     
@@ -607,20 +607,20 @@
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.If &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.IfStatement>this.asts[this.top - 1]).thenBod == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'IfStatement'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'IfStatement'.
             }
     
             public isElseOfIf(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.If &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.IfStatement>this.asts[this.top - 1]).elseBod == this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'IfStatement'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'IfStatement'.
             }
     
             public isBodyOfDefaultCase(): boolean {
@@ -631,78 +631,78 @@
                 return this.count() >= 1 &&
                     this.asts[this.top].nodeType === TypeScript.NodeType.List &&
                                                                 ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.ASTList>this.asts[this.top]).members.length === 1;
                       ~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ASTList'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ASTList'.
             }
     
             public isArgumentListOfFunction(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.FuncDecl &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.FuncDecl>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'FuncDecl'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
             }
     
             public isArgumentOfFunction(): boolean {
                 return this.count() >= 3 &&
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 2].nodeType === TypeScript.NodeType.FuncDecl &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1];
                       ~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'FuncDecl'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
             }
     
             public isArgumentListOfCall(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.Call &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.CallExpression>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'CallExpression'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'CallExpression'.
             }
     
             public isArgumentListOfNew(): boolean {
                 return this.count() >= 2 &&
                     this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     this.asts[this.top - 1].nodeType === TypeScript.NodeType.New &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.CallExpression>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
                       ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'CallExpression'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'CallExpression'.
             }
     
             public isSynthesizedBlock(): boolean {
                 return this.count() >= 1 &&
                     this.asts[this.top - 0].nodeType === TypeScript.NodeType.Block &&
                                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.Block>this.asts[this.top - 0]).isStatementBlock === false;
                       ~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'Block'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'Block'.
             }
         }
     
         export function isValidAstNode(ast: TypeScript.ASTSpan): boolean {
                                             ~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'ASTSpan'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'ASTSpan'.
             if (ast === null)
                 return false;
     
@@ -734,10 +734,10 @@
         ///
         export function getAstPathToPosition(script: TypeScript.AST, pos: number, options = GetAstPathOptions.Default): TypeScript.AstPath {
                                                      ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
             var lookInComments = (comments: TypeScript.Comment[]) => {
                                             ~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'Comment'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'Comment'.
                 if (comments && comments.length > 0) {
                     for (var i = 0; i < comments.length; i++) {
                         var minChar = comments[i].minChar;
@@ -754,11 +754,11 @@
     
             var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {
                                      ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                                                              ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                                                                                      ~~~~~~~~~~
-!!! Cannot find name 'IAstWalker'.
+!!! error TS2304: Cannot find name 'IAstWalker'.
                 if (isValidAstNode(cur)) {
     
                     // Add "cur" to the stack if it contains our position
@@ -771,10 +771,10 @@
                     var inclusive =
                         hasFlag(options, GetAstPathOptions.EdgeInclusive) ||
                         ~~~~~~~
-!!! Cannot find name 'hasFlag'.
+!!! error TS2304: Cannot find name 'hasFlag'.
                         cur.nodeType === TypeScript.NodeType.Name ||
                                                     ~~~~~~~~
-!!! Property 'NodeType' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                         pos === script.limChar; // Special "EOF" case
     
                     var minChar = cur.minChar;
@@ -802,7 +802,7 @@
     
                     if (!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition)) {
                          ~~~~~~~
-!!! Cannot find name 'hasFlag'.
+!!! error TS2304: Cannot find name 'hasFlag'.
                         // Don't go further down the tree if pos is outside of [minChar, limChar]
                         walker.options.goChildren = (minChar <= pos && pos <= limChar);
                     }
@@ -813,7 +813,7 @@
             var ctx = new AstPathContext();
             TypeScript.getAstWalkerFactory().walk(script, pre, null, null, ctx);
                        ~~~~~~~~~~~~~~~~~~~
-!!! Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
             return ctx.path;
         }
     
@@ -823,17 +823,17 @@
         //
         export function getTokenizationOffset(script: TypeScript.Script, position: number): number {
                                                       ~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'Script'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'Script'.
             var bestOffset = 0;
             var pre = (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {
                             ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                                                     ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                                                                             ~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'IAstWalker'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
                                                                                                     ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                 if (TypeScript.isValidAstNode(cur)) {
                     // Did we find a closer offset?
                     if (cur.minChar <= position) {
@@ -851,7 +851,7 @@
     
             TypeScript.getAstWalkerFactory().walk(script, pre);
                        ~~~~~~~~~~~~~~~~~~~
-!!! Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
             return bestOffset;
         }
     
@@ -860,16 +860,16 @@
         ///
         export function walkAST(ast: TypeScript.AST, callback: (path: AstPath, walker: TypeScript.IAstWalker) => void ): void {
                                      ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                                                                                        ~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'IAstWalker'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
             var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
                                      ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                                                              ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                                                                                      ~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'IAstWalker'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
                 var path: TypeScript.AstPath = walker.state;
                 path.push(cur);
                 callback(path, walker);
@@ -877,11 +877,11 @@
             }
             var post = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
                                       ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                                                               ~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'AST'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                                                                                       ~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'TypeScript' has no exported member 'IAstWalker'.
+!!! error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
                 var path: TypeScript.AstPath = walker.state;
                 path.pop();
                 return cur;
@@ -890,7 +890,7 @@
             var path = new AstPath();
             TypeScript.getAstWalkerFactory().walk(ast, pre, post, null, path);
                        ~~~~~~~~~~~~~~~~~~~
-!!! Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
         }
     }
     

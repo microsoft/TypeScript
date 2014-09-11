@@ -2,7 +2,7 @@
     class C {
         export get Foo() { }
         ~~~~~~
-!!! 'export' modifier cannot appear on a class element.
+!!! error TS1031: 'export' modifier cannot appear on a class element.
                    ~~~
-!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
     }

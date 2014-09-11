@@ -2,6 +2,6 @@
     "use strict";
     arguments = 1;
     ~~~~~~~~~
-!!! Invalid use of 'arguments' in strict mode.
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
     ~~~~~~~~~
-!!! Cannot find name 'arguments'.
+!!! error TS2304: Cannot find name 'arguments'.

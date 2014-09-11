@@ -5,9 +5,9 @@
     // operand before +
     var result1 = b+;   //expect error
                     ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
     // miss  an operand
     var result2 =+;
                   ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.

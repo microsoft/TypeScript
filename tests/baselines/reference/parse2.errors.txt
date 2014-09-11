@@ -3,4 +3,4 @@
      foo(
     }
     ~
-!!! Argument expression expected.
+!!! error TS1135: Argument expression expected.

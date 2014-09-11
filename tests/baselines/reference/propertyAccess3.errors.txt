@@ -2,4 +2,4 @@
     var foo: boolean;
     foo.toBAZ();
         ~~~~~
-!!! Property 'toBAZ' does not exist on type 'boolean'.
+!!! error TS2339: Property 'toBAZ' does not exist on type 'boolean'.

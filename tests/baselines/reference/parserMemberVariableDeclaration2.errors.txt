@@ -2,5 +2,5 @@
     class C {
       static static Foo;
              ~~~~~~
-!!! 'static' modifier already seen.
+!!! error TS1030: 'static' modifier already seen.
     }

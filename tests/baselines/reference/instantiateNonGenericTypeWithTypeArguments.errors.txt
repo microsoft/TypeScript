@@ -8,24 +8,24 @@
     
     var c = new C<number>();
             ~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     function Foo(): void { }
     var r = new Foo<number>();
             ~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
             ~~~~~~~~~~~~~~~~~
-!!! Only a void function can be called with the 'new' keyword.
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
     
     var f: { (): void };
     var r2 = new f<number>();
              ~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
              ~~~~~~~~~~~~~~~
-!!! Only a void function can be called with the 'new' keyword.
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
     
     var a: any;
     // BUG 790977
     var r2 = new a<number>();
              ~~~~~~~~~~~~~~~
-!!! Untyped function calls may not accept type arguments.
+!!! error TS2347: Untyped function calls may not accept type arguments.

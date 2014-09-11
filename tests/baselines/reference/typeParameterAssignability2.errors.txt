@@ -3,165 +3,165 @@
     
     function foo<T, U extends T>(t: T, u: U) {
                     ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         t = u; // error
         ~
-!!! Type 'U' is not assignable to type 'T'.
+!!! error TS2323: Type 'U' is not assignable to type 'T'.
         u = t; // ok
         ~
-!!! Type 'T' is not assignable to type 'U'.
+!!! error TS2323: Type 'T' is not assignable to type 'U'.
     }
     
     function foo2<T extends U, U>(t: T, u: U) {
                   ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         t = u; // error
         ~
-!!! Type 'U' is not assignable to type 'T'.
+!!! error TS2323: Type 'U' is not assignable to type 'T'.
         u = t; // ok
         ~
-!!! Type 'T' is not assignable to type 'U'.
+!!! error TS2323: Type 'T' is not assignable to type 'U'.
     }
     
     function foo3<T extends U, U extends V, V>(t: T, u: U, v: V) {
                   ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         t = u; // error
         ~
-!!! Type 'U' is not assignable to type 'T'.
+!!! error TS2323: Type 'U' is not assignable to type 'T'.
         u = t;
         ~
-!!! Type 'T' is not assignable to type 'U'.
+!!! error TS2323: Type 'T' is not assignable to type 'U'.
     
         t = v; // error
         ~
-!!! Type 'V' is not assignable to type 'T'.
+!!! error TS2323: Type 'V' is not assignable to type 'T'.
         v = t; // ok
         ~
-!!! Type 'T' is not assignable to type 'V'.
+!!! error TS2323: Type 'T' is not assignable to type 'V'.
     
         u = v; // error
         ~
-!!! Type 'V' is not assignable to type 'U'.
+!!! error TS2323: Type 'V' is not assignable to type 'U'.
         v = u; // ok
         ~
-!!! Type 'U' is not assignable to type 'V'.
+!!! error TS2323: Type 'U' is not assignable to type 'V'.
     }
     
     function foo4<T extends U, U extends V, V extends Date>(t: T, u: U, v: V) {
                   ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         t = u; // error
         ~
-!!! Type 'U' is not assignable to type 'T'.
+!!! error TS2323: Type 'U' is not assignable to type 'T'.
         t = v; // error
         ~
-!!! Type 'V' is not assignable to type 'T'.
+!!! error TS2323: Type 'V' is not assignable to type 'T'.
         t = new Date(); // error
         ~
-!!! Type 'Date' is not assignable to type 'T'.
+!!! error TS2323: Type 'Date' is not assignable to type 'T'.
     
         u = t;
         ~
-!!! Type 'T' is not assignable to type 'U'.
+!!! error TS2323: Type 'T' is not assignable to type 'U'.
         u = v; // error
         ~
-!!! Type 'V' is not assignable to type 'U'.
+!!! error TS2323: Type 'V' is not assignable to type 'U'.
         u = new Date(); // error
         ~
-!!! Type 'Date' is not assignable to type 'U'.
+!!! error TS2323: Type 'Date' is not assignable to type 'U'.
     
         v = t;
         ~
-!!! Type 'T' is not assignable to type 'V'.
+!!! error TS2323: Type 'T' is not assignable to type 'V'.
         v = u;
         ~
-!!! Type 'U' is not assignable to type 'V'.
+!!! error TS2323: Type 'U' is not assignable to type 'V'.
         v = new Date(); // ok
         ~
-!!! Type 'Date' is not assignable to type 'V'.
+!!! error TS2323: Type 'Date' is not assignable to type 'V'.
     
         var d: Date;
         d = t; // ok
         ~
-!!! Type 'T' is not assignable to type 'Date'.
+!!! error TS2323: Type 'T' is not assignable to type 'Date'.
         d = u; // ok
         ~
-!!! Type 'U' is not assignable to type 'Date'.
+!!! error TS2323: Type 'U' is not assignable to type 'Date'.
         d = v; // ok
     }
     
     // same as foo4 with different type parameter ordering
     function foo5<V extends Date, U extends V, T extends U>(t: T, u: U, v: V) {
                                   ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         t = u; // error
         ~
-!!! Type 'U' is not assignable to type 'T'.
+!!! error TS2323: Type 'U' is not assignable to type 'T'.
         t = v; // error
         ~
-!!! Type 'V' is not assignable to type 'T'.
+!!! error TS2323: Type 'V' is not assignable to type 'T'.
         t = new Date(); // error
         ~
-!!! Type 'Date' is not assignable to type 'T'.
+!!! error TS2323: Type 'Date' is not assignable to type 'T'.
     
         u = t;
         ~
-!!! Type 'T' is not assignable to type 'U'.
+!!! error TS2323: Type 'T' is not assignable to type 'U'.
         u = v; // error
         ~
-!!! Type 'V' is not assignable to type 'U'.
+!!! error TS2323: Type 'V' is not assignable to type 'U'.
         u = new Date(); // error
         ~
-!!! Type 'Date' is not assignable to type 'U'.
+!!! error TS2323: Type 'Date' is not assignable to type 'U'.
     
         v = t;
         ~
-!!! Type 'T' is not assignable to type 'V'.
+!!! error TS2323: Type 'T' is not assignable to type 'V'.
         v = u;
         ~
-!!! Type 'U' is not assignable to type 'V'.
+!!! error TS2323: Type 'U' is not assignable to type 'V'.
         v = new Date(); // ok
         ~
-!!! Type 'Date' is not assignable to type 'V'.
+!!! error TS2323: Type 'Date' is not assignable to type 'V'.
     
         var d: Date;
         d = t; // ok
         ~
-!!! Type 'T' is not assignable to type 'Date'.
+!!! error TS2323: Type 'T' is not assignable to type 'Date'.
         d = u; // ok
         ~
-!!! Type 'U' is not assignable to type 'Date'.
+!!! error TS2323: Type 'U' is not assignable to type 'Date'.
         d = v; // ok
     }
     
     function foo6<T extends U, U, V>(t: T, u: U, v: V) {
                   ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         t = u; // error
         ~
-!!! Type 'U' is not assignable to type 'T'.
+!!! error TS2323: Type 'U' is not assignable to type 'T'.
         t = v; // error
         ~
-!!! Type 'V' is not assignable to type 'T'.
+!!! error TS2323: Type 'V' is not assignable to type 'T'.
     
         u = t; // ok
         ~
-!!! Type 'T' is not assignable to type 'U'.
+!!! error TS2323: Type 'T' is not assignable to type 'U'.
         u = v; // error
         ~
-!!! Type 'V' is not assignable to type 'U'.
+!!! error TS2323: Type 'V' is not assignable to type 'U'.
     
         v = t; // error
         ~
-!!! Type 'T' is not assignable to type 'V'.
+!!! error TS2323: Type 'T' is not assignable to type 'V'.
         v = u; // error
         ~
-!!! Type 'U' is not assignable to type 'V'.
+!!! error TS2323: Type 'U' is not assignable to type 'V'.
     }

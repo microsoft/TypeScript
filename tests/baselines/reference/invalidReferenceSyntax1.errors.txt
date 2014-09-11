@@ -1,7 +1,7 @@
 ==== tests/cases/compiler/invalidReferenceSyntax1.ts (1 errors) ====
     /// <reference path="missingquote.ts />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Invalid 'reference' directive syntax.
+!!! error TS1084: Invalid 'reference' directive syntax.
     class C {
     
     }

@@ -16,7 +16,7 @@
         var widths = enabled.map(function (e) {
             return e.xyxyxyx;  // error expected here
                      ~~~~~~~
-!!! Property 'xyxyxyx' does not exist on type 'HTMLElement'.
+!!! error TS2339: Property 'xyxyxyx' does not exist on type 'HTMLElement'.
         });
         var maxWidth = widths.reduce(function (a, b) {
             return a > b ? a : b;

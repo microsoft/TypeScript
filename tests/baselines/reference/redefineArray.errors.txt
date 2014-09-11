@@ -1,5 +1,5 @@
 ==== tests/cases/compiler/redefineArray.ts (1 errors) ====
     Array = function (n:number, s:string) {return n;};
     ~~~~~
-!!! Type '(n: number, s: string) => number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }':
-!!!   Property 'isArray' is missing in type '(n: number, s: string) => number'.
+!!! error TS2322: Type '(n: number, s: string) => number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }':
+!!! error TS2322:   Property 'isArray' is missing in type '(n: number, s: string) => number'.

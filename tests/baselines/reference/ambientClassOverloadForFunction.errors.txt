@@ -2,5 +2,5 @@
     declare class foo{};
     function foo() { return null; }
              ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.
     

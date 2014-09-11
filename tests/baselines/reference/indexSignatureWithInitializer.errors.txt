@@ -2,15 +2,15 @@
     interface I {
         [x = '']: string;
          ~
-!!! An index signature parameter cannot have an initializer.
+!!! error TS1020: An index signature parameter cannot have an initializer.
          ~~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     }
     
     class C {
         [x = 0]: string
          ~
-!!! An index signature parameter cannot have an initializer.
+!!! error TS1020: An index signature parameter cannot have an initializer.
          ~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     }

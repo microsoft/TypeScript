@@ -5,31 +5,31 @@
         x: string;
         class C2 {
         ~~~~~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
         }
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     function foo() {
         class C3 {
         ~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
         }
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     var x = {
         class C4 {
               ~~
-!!! ':' expected.
+!!! error TS1005: ':' expected.
                  ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
               ~~
-!!! Cannot find name 'C4'.
+!!! error TS2304: Cannot find name 'C4'.
         }
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     

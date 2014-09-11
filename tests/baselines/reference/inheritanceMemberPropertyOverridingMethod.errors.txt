@@ -8,5 +8,5 @@
     class b extends a {
         x: () => string;
         ~
-!!! Class 'a' defines instance member function 'x', but extended class 'b' defines it as instance member property.
+!!! error TS2424: Class 'a' defines instance member function 'x', but extended class 'b' defines it as instance member property.
     }

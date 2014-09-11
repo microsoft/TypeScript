@@ -8,11 +8,11 @@
     
     class IntFooBad implements IFoo<number> { // error
           ~~~~~~~~~
-!!! Class 'IntFooBad' incorrectly implements interface 'IFoo<number>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type '(x: string) => string' is not assignable to type '(x: number) => number':
-!!!       Types of parameters 'x' and 'x' are incompatible:
-!!!         Type 'string' is not assignable to type 'number'.
+!!! error TS2421: Class 'IntFooBad' incorrectly implements interface 'IFoo<number>':
+!!! error TS2421:   Types of property 'foo' are incompatible:
+!!! error TS2421:     Type '(x: string) => string' is not assignable to type '(x: number) => number':
+!!! error TS2421:       Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2421:         Type 'string' is not assignable to type 'number'.
         foo(x: string): string { return null; }
     }
     
@@ -34,18 +34,18 @@
     
     intFoo = stringFoo2; // error
     ~~~~~~
-!!! Type 'StringFoo2' is not assignable to type 'IntFoo':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type '(x: string) => string' is not assignable to type '(x: number) => number':
-!!!       Types of parameters 'x' and 'x' are incompatible:
-!!!         Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'StringFoo2' is not assignable to type 'IntFoo':
+!!! error TS2322:   Types of property 'foo' are incompatible:
+!!! error TS2322:     Type '(x: string) => string' is not assignable to type '(x: number) => number':
+!!! error TS2322:       Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2322:         Type 'string' is not assignable to type 'number'.
     stringFoo2 = intFoo; // error
     ~~~~~~~~~~
-!!! Type 'IntFoo' is not assignable to type 'StringFoo2':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type '(x: number) => number' is not assignable to type '(x: string) => string':
-!!!       Types of parameters 'x' and 'x' are incompatible:
-!!!         Type 'number' is not assignable to type 'string'.
+!!! error TS2322: Type 'IntFoo' is not assignable to type 'StringFoo2':
+!!! error TS2322:   Types of property 'foo' are incompatible:
+!!! error TS2322:     Type '(x: number) => number' is not assignable to type '(x: string) => string':
+!!! error TS2322:       Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2322:         Type 'number' is not assignable to type 'string'.
     
     
     class StringFoo3 implements IFoo<string> { // error

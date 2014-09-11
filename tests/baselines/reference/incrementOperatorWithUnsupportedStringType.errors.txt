@@ -18,127 +18,127 @@
     // string type var
     var ResultIsNumber1 = ++STRING;
                             ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber2 = ++STRING1;
                             ~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     var ResultIsNumber3 = STRING++;
                           ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber4 = STRING1++;
                           ~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     // string type literal
     var ResultIsNumber5 = ++"";
                             ~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber6 = ++{ x: "", y: "" };
                             ~~~~~~~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber7 = ++{ x: "", y: (s: string) => { return s; } };
                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     var ResultIsNumber8 = ""++;
                           ~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber9 = { x: "", y: "" }++;
                           ~~~~~~~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber10 = { x: "", y: (s: string) => { return s; } }++;
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     // string type expressions
     var ResultIsNumber11 = ++objA.a;
                              ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber12 = ++M.n;
                              ~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber13 = ++STRING1[0];
                              ~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber14 = ++foo();
                              ~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber15 = ++A.foo();
                              ~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber16 = ++(STRING + STRING);
                              ~~~~~~~~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     var ResultIsNumber17 = objA.a++;
                            ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber18 = M.n++;
                            ~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber19 = STRING1[0]++;
                            ~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber20 = foo()++;
                            ~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber21 = A.foo()++;
                            ~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber22 = (STRING + STRING)++;
                            ~~~~~~~~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     // miss assignment operators
     ++"";
       ~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     ++STRING;
       ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     ++STRING1;
       ~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     ++STRING1[0];
       ~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     ++foo();
       ~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     ++objA.a;
       ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     ++M.n;
       ~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     ++objA.a, M.n;
       ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     ""++;
     ~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     STRING++;
     ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     STRING1++;
     ~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     STRING1[0]++;
     ~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     foo()++;
     ~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     objA.a++;
     ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     M.n++;
     ~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     objA.a++, M.n++;
     ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
               ~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.

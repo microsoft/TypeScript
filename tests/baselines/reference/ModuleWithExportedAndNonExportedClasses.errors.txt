@@ -30,9 +30,9 @@
     // errors expected, these are not exported
     var a2 = new A.A2();
                    ~~
-!!! Property 'A2' does not exist on type 'typeof A'.
+!!! error TS2339: Property 'A2' does not exist on type 'typeof A'.
     var ag2 = new A.A2<string, number>();
                     ~~
-!!! Property 'A2' does not exist on type 'typeof A'.
+!!! error TS2339: Property 'A2' does not exist on type 'typeof A'.
     
     

@@ -6,21 +6,21 @@
     // this should be an error
     var x: { y; z; }             // error at "y,z"
              ~~
-!!! Member 'y' implicitly has an 'any' type.
+!!! error TS7008: Member 'y' implicitly has an 'any' type.
                 ~~
-!!! Member 'z' implicitly has an 'any' type.
+!!! error TS7008: Member 'z' implicitly has an 'any' type.
     var x1: { y1: C; z1; };      // error at "z1" 
                      ~~~
-!!! Member 'z1' implicitly has an 'any' type.
+!!! error TS7008: Member 'z1' implicitly has an 'any' type.
     var x11: { new (); };        // error at "new"
                ~~~~~~~
-!!! Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
     var x2: (y2) => number;      // error at "y2"
              ~~
-!!! Parameter 'y2' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'y2' implicitly has an 'any' type.
     var x3: (x3: string, y3) => void ; // error at "y3"
                          ~~
-!!! Parameter 'y3' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'y3' implicitly has an 'any' type.
     
     // this should not be an error
     var bar: { a: number; b: number };

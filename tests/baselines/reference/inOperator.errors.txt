@@ -7,7 +7,7 @@
     
     var b = '' in 0;
                   ~
-!!! The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
     
     var c: any;
     var y: number;

@@ -2,4 +2,4 @@
     function Point() { this.x = 3; }
     var x: any = new Point();  // error at "new"
                  ~~~~~~~~~~~
-!!! 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.

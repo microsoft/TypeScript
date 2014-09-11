@@ -6,15 +6,15 @@
     
     function foo(name: "SPAN"): Derived1;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function foo(name: "DIV"): Derived2 {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         return null;
     ~~~~~~~~~~~~~~~~
     }
     ~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
     
     foo("HI");
         ~~~~
-!!! Argument of type 'string' is not assignable to parameter of type '"SPAN"'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"SPAN"'.

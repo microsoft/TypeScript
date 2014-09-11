@@ -4,16 +4,16 @@
     
     class C<T> extends T { }
                        ~
-!!! A class may only extend another class.
+!!! error TS2311: A class may only extend another class.
     class C2<T, U> extends U { }
                            ~
-!!! A class may only extend another class.
+!!! error TS2311: A class may only extend another class.
     
     interface I<T> extends T { }
                            ~
-!!! An interface may only extend a class or another interface.
+!!! error TS2312: An interface may only extend a class or another interface.
     interface I2<T, U> extends U { }
                                ~
-!!! An interface may only extend a class or another interface.
+!!! error TS2312: An interface may only extend a class or another interface.
     
     

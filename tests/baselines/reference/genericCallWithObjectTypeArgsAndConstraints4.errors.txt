@@ -12,7 +12,7 @@
     
     function foo<T, U extends T>(t: T, t2: U) {
                     ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         return (x: T) => t2;
     }
     
@@ -30,11 +30,11 @@
     
     function other<T, U extends T>() {
                       ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         var r4 = foo(c, d);
         var r5 = foo<T, U>(c, d); // error
                            ~
-!!! Argument of type 'C' is not assignable to parameter of type 'T'.
+!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'T'.
     }
     
     

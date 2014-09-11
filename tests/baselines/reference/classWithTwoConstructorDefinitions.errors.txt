@@ -3,12 +3,12 @@
         constructor() { }
         constructor(x) { } // error
         ~~~~~~~~~~~~~~~~~~
-!!! Multiple constructor implementations are not allowed.
+!!! error TS2392: Multiple constructor implementations are not allowed.
     }
     
     class D<T> {
         constructor(x: T) { }
         constructor(x: T, y: T) { } // error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Multiple constructor implementations are not allowed.
+!!! error TS2392: Multiple constructor implementations are not allowed.
     }

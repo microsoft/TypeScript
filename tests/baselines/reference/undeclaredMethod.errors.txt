@@ -11,6 +11,6 @@
     c.salt();	// cool
     c.saltbar();	// crash
       ~~~~~~~
-!!! Property 'saltbar' does not exist on type 'C'.
+!!! error TS2339: Property 'saltbar' does not exist on type 'C'.
     
     

@@ -4,41 +4,41 @@
         a: number;
         b: typeof a; // Should yield error (a is not a value)
                   ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
     }
     
     interface I2 {
         c: typeof d; // Should yield error (d is not a value)
                   ~
-!!! Cannot find name 'd'.
+!!! error TS2304: Cannot find name 'd'.
         d: string;
     }
     
     interface I3 {
         e: typeof e; // Should yield error (e is not a value)
                   ~
-!!! Cannot find name 'e'.
+!!! error TS2304: Cannot find name 'e'.
     }
     
     class C1 {
         a: number;
         b: typeof a; // Should yield error (a is not a value)
                   ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
     }
     
     
     class C2 {
         c: typeof d; // Should yield error (d is not a value)
                   ~
-!!! Cannot find name 'd'.
+!!! error TS2304: Cannot find name 'd'.
         d: string;
     }
     
     class C3 {
         e: typeof e; // Should yield error (e is not a value)
                   ~
-!!! Cannot find name 'e'.
+!!! error TS2304: Cannot find name 'e'.
     }
     
     

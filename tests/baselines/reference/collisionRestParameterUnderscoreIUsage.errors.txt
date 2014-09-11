@@ -5,7 +5,7 @@
         constructor(...args: any[]) {
             console.log(_i); // This should result in error
                         ~~
-!!! Expression resolves to variable declaration '_i' that compiler uses to initialize rest parameter.
+!!! error TS2398: Expression resolves to variable declaration '_i' that compiler uses to initialize rest parameter.
         }
     }
     new Foo();

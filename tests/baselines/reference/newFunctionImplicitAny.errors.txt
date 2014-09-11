@@ -4,4 +4,4 @@
     function Test() { }
     var test = new Test();
                ~~~~~~~~~~
-!!! 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.

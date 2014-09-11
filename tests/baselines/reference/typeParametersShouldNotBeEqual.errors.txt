@@ -4,10 +4,10 @@
         x = x;  // Ok
         x = y;  // Error
         ~
-!!! Type 'U' is not assignable to type 'T'.
+!!! error TS2323: Type 'U' is not assignable to type 'T'.
         x = z;  // Error
         ~
-!!! Type 'Object' is not assignable to type 'T'.
+!!! error TS2323: Type 'Object' is not assignable to type 'T'.
         z = x;  // Ok
     }
     

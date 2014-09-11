@@ -2,5 +2,5 @@
     // previously gave no error here
     var x = typeof whatsthis
                    ~~~~~~~~~
-!!! Cannot find name 'whatsthis'.
+!!! error TS2304: Cannot find name 'whatsthis'.
     

@@ -5,18 +5,18 @@
     
       public public() {}
       ~~~~~~~~~~~~~~~~~~
-!!! Duplicate function implementation.
+!!! error TS2393: Duplicate function implementation.
       public static() {}
       ~~~~~~~~~~~~~~~~~~
-!!! Duplicate function implementation.
+!!! error TS2393: Duplicate function implementation.
     
       public static public() {}
       public static static() {}
       
       static public() {}
       ~~~~~~~~~~~~~~~~~~
-!!! Duplicate function implementation.
+!!! error TS2393: Duplicate function implementation.
       static static() {}
       ~~~~~~~~~~~~~~~~~~
-!!! Duplicate function implementation.
+!!! error TS2393: Duplicate function implementation.
     }

@@ -7,10 +7,10 @@
     
     var x: <T extends I2<T>>(z: T) => void
             ~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     var y: <T extends I2<I2<T>>>(z: T) => void
             ~~~~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     
     // These both do not make sense as we would eventually be comparing I2<T> to I2<I2<T>>, and they are self referencing anyway
     x = y 

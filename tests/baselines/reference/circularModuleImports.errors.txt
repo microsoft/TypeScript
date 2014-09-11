@@ -5,7 +5,7 @@
      
         import A = B;
         ~~~~~~~~~~~~~
-!!! Circular definition of import alias 'A'.
+!!! error TS2303: Circular definition of import alias 'A'.
      
         import B = A;
      

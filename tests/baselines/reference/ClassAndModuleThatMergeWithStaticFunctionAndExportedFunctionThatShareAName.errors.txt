@@ -8,7 +8,7 @@
     module Point {
         export function Origin() { return null; } //expected duplicate identifier error
                         ~~~~~~
-!!! Duplicate identifier 'Origin'.
+!!! error TS2300: Duplicate identifier 'Origin'.
     }
     
     
@@ -22,6 +22,6 @@
         export module Point {
             export function Origin() { return ""; }//expected duplicate identifier error
                             ~~~~~~
-!!! Duplicate identifier 'Origin'.
+!!! error TS2300: Duplicate identifier 'Origin'.
         }
     }

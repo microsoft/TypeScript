@@ -6,6 +6,6 @@
         // Should error; imports both a type and a module, which means it conflicts with the 'string' type.
         import string = mi_string;
                ~~~~~~
-!!! Import name cannot be 'string'
+!!! error TS2438: Import name cannot be 'string'
     }
     

@@ -15,17 +15,17 @@
     
     function other3<T extends U, U extends Date>(arg: T) {
                     ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         var b: {
             [x: string]: Object;
             [x: number]: T;
             ~~~~~~~~~~~~~~~
-!!! Numeric index type 'T' is not assignable to string index type 'Object'.
+!!! error TS2413: Numeric index type 'T' is not assignable to string index type 'Object'.
         };
         var r2 = foo(b);
         var d = r2[1];
         var e = r2['1'];
         var u: U = r2[1]; // ok
             ~
-!!! Type 'T' is not assignable to type 'U'.
+!!! error TS2323: Type 'T' is not assignable to type 'U'.
     }

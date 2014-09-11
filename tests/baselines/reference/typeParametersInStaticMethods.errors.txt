@@ -2,8 +2,8 @@
     class foo<T> {
         static M(x: (x: T) => { x: { y: T } }) {
                         ~
-!!! Static members cannot reference class type parameters.
+!!! error TS2302: Static members cannot reference class type parameters.
                                         ~
-!!! Static members cannot reference class type parameters.
+!!! error TS2302: Static members cannot reference class type parameters.
         }
     } 

@@ -2,4 +2,4 @@
     var v = { a: 1,
     return;
           ~
-!!! ':' expected.
+!!! error TS1005: ':' expected.

@@ -1,5 +1,5 @@
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignedToUndefined.ts (1 errors) ====
     var x = undefined = null; // error
             ~~~~~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     var y: typeof undefined = null; // ok, widened

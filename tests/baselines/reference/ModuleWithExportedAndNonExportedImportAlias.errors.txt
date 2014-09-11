@@ -37,6 +37,6 @@
     // not expected to work since non are exported
     var line = Geometry.Lines.Line;
                         ~~~~~
-!!! Property 'Lines' does not exist on type 'typeof Geometry'.
+!!! error TS2339: Property 'Lines' does not exist on type 'typeof Geometry'.
     
     

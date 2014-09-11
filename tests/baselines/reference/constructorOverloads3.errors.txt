@@ -12,7 +12,7 @@
         constructor(a: any);
         constructor(x: any, y?: any) { }
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Constructors for derived classes must contain a 'super' call.
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
         bar1() { /*WScript.Echo("Yo");*/}
     }
     

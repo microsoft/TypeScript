@@ -12,7 +12,7 @@
         a = 0.1,
         b // Error because 0.1 is not a constant
         ~
-!!! Enum member must have initializer.
+!!! error TS1061: Enum member must have initializer.
     }
     
     declare enum E4 {
@@ -20,5 +20,5 @@
         b = -1,
         c = 0.1 // Not a constant
         ~
-!!! Ambient enum elements can only have integer literal initializers.
+!!! error TS1066: Ambient enum elements can only have integer literal initializers.
     }

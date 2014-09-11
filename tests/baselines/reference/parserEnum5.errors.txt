@@ -2,9 +2,9 @@
     enum E2 { a, }
     enum E3 { a: 1, }
                ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
     enum E1 { a, b: 1, c, d: 2 = 3 }
                   ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                            ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.

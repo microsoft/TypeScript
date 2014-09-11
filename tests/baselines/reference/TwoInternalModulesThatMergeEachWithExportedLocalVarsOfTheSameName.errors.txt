@@ -1,7 +1,7 @@
 ==== tests/cases/conformance/internalModules/DeclarationMerging/part1.ts (1 errors) ====
     export module A {
                   ~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
         export interface Point {
             x: number;
             y: number;
@@ -21,15 +21,15 @@
         // collision with 'Origin' var in other part of merged module
         export var Origin: Point = { x: 0, y: 0 };
                            ~~~~~
-!!! Cannot find name 'Point'.
+!!! error TS2304: Cannot find name 'Point'.
     
         export module Utils {
             export class Plane {
                 constructor(public tl: Point, public br: Point) { }
                                        ~~~~~
-!!! Cannot find name 'Point'.
+!!! error TS2304: Cannot find name 'Point'.
                                                          ~~~~~
-!!! Cannot find name 'Point'.
+!!! error TS2304: Cannot find name 'Point'.
             }
         }
     }

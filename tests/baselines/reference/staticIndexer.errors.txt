@@ -2,5 +2,5 @@
     class C {
         static [s: string]: number;
         ~~~~~~
-!!! Modifiers not permitted on index signature members.
+!!! error TS1145: Modifiers not permitted on index signature members.
     }

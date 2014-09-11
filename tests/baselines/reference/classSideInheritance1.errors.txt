@@ -12,9 +12,9 @@
     var c: C2;
     a.bar(); // static off an instance - should be an error
       ~~~
-!!! Property 'bar' does not exist on type 'A'.
+!!! error TS2339: Property 'bar' does not exist on type 'A'.
     c.bar(); // static off an instance - should be an error
       ~~~
-!!! Property 'bar' does not exist on type 'C2'.
+!!! error TS2339: Property 'bar' does not exist on type 'C2'.
     A.bar(); // valid
     C2.bar(); // valid

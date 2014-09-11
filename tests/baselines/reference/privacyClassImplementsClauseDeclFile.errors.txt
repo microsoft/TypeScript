@@ -15,19 +15,19 @@
         }
         export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule { // Should error
                                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Implements clause of exported class 'publicClassImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
+!!! error TS4019: Implements clause of exported class 'publicClassImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
         }
     
         class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
         }
         export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule { // Should error
                                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Implements clause of exported class 'publicClassImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
+!!! error TS4017: Implements clause of exported class 'publicClassImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
         }
     
         export class publicClassImplementingPrivateAndPublicInterface implements privateInterfaceInPublicModule, publicInterfaceInPublicModule { // Should error
                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Implements clause of exported class 'publicClassImplementingPrivateAndPublicInterface' has or is using private name 'privateInterfaceInPublicModule'.
+!!! error TS4019: Implements clause of exported class 'publicClassImplementingPrivateAndPublicInterface' has or is using private name 'privateInterfaceInPublicModule'.
         }
     }
     
@@ -69,14 +69,14 @@
     }
     export class publicClassImplementingPrivateInterface implements privateInterface { // Should error
                                                                     ~~~~~~~~~~~~~~~~
-!!! Implements clause of exported class 'publicClassImplementingPrivateInterface' has or is using private name 'privateInterface'.
+!!! error TS4019: Implements clause of exported class 'publicClassImplementingPrivateInterface' has or is using private name 'privateInterface'.
     }
     
     class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
     }
     export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule { // Should error
                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Implements clause of exported class 'publicClassImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
+!!! error TS4017: Implements clause of exported class 'publicClassImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
     }
     
 ==== tests/cases/compiler/privacyClassImplementsClauseDeclFile_GlobalFile.ts (1 errors) ====
@@ -95,7 +95,7 @@
         }
         export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule { // Should error
                                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Implements clause of exported class 'publicClassImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
+!!! error TS4019: Implements clause of exported class 'publicClassImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
         }
     }
     interface publicInterfaceInGlobal {

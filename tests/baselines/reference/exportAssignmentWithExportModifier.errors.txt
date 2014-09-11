@@ -2,6 +2,6 @@
     var x;
     export export = x;
     ~~~~~~
-!!! An export assignment cannot have modifiers.
+!!! error TS1120: An export assignment cannot have modifiers.
     ~~~~~~~~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.

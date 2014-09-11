@@ -1,6 +1,6 @@
 ==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors7.ts (2 errors) ====
     var v = { get foo(v: number) { } };
                   ~~~
-!!! A 'get' accessor cannot have parameters.
+!!! error TS1054: A 'get' accessor cannot have parameters.
                   ~~~
-!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.

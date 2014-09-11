@@ -2,6 +2,6 @@
     "use strict";
     eval = 1;
     ~~~~
-!!! Invalid use of 'eval' in strict mode.
+!!! error TS1100: Invalid use of 'eval' in strict mode.
     ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.

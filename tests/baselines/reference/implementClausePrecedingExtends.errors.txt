@@ -2,9 +2,9 @@
     class C { foo: number }
     class D implements C extends C { }
                          ~~~~~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                                    ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
           ~
-!!! Class 'D' incorrectly implements interface 'C':
-!!!   Property 'foo' is missing in type 'D'.
+!!! error TS2421: Class 'D' incorrectly implements interface 'C':
+!!! error TS2421:   Property 'foo' is missing in type 'D'.

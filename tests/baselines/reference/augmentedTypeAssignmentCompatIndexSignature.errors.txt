@@ -15,14 +15,14 @@
     
     var v1: {
         ~~
-!!! Type '{}' is not assignable to type '{ [x: number]: Foo; }':
-!!!   Index signature is missing in type '{}'.
+!!! error TS2322: Type '{}' is not assignable to type '{ [x: number]: Foo; }':
+!!! error TS2322:   Index signature is missing in type '{}'.
         [n: number]: Foo
     } = o; // Should be allowed
     
     var v2: {
         ~~
-!!! Type '() => void' is not assignable to type '{ [x: number]: Bar; }':
-!!!   Index signature is missing in type '() => void'.
+!!! error TS2322: Type '() => void' is not assignable to type '{ [x: number]: Bar; }':
+!!! error TS2322:   Index signature is missing in type '() => void'.
         [n: number]: Bar
     } = f; // Should be allowed

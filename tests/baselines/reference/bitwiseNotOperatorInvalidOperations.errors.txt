@@ -5,16 +5,16 @@
     // operand before ~
     var a = q~;  //expect error
              ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
               ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
     // multiple operands after ~
     var mul = ~[1, 2, "abc"], "";  //expect error
                               ~~
-!!! Variable declaration expected.
+!!! error TS1134: Variable declaration expected.
     
     // miss an operand
     var b =~;
             ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.

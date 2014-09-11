@@ -5,5 +5,5 @@
     var f = new Foo();
     f.privProp;
     ~~~~~~~~~~
-!!! Property 'Foo.privProp' is inaccessible.
+!!! error TS2341: Property 'Foo.privProp' is inaccessible.
     

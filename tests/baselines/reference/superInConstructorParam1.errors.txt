@@ -9,8 +9,8 @@
       constructor(a = super.foo()) {
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                       ~~~~~
-!!! 'super' cannot be referenced in constructor arguments.
+!!! error TS2336: 'super' cannot be referenced in constructor arguments.
       }
     ~~~
-!!! Constructors for derived classes must contain a 'super' call.
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }

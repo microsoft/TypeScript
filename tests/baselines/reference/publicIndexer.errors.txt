@@ -4,17 +4,17 @@
     class C {
         public [x: string]: string;
         ~~~~~~
-!!! Modifiers not permitted on index signature members.
+!!! error TS1145: Modifiers not permitted on index signature members.
     }
     
     class D {
         public [x: number]: string;
         ~~~~~~
-!!! Modifiers not permitted on index signature members.
+!!! error TS1145: Modifiers not permitted on index signature members.
     }
     
     class E<T> {
         public [x: string]: T;
         ~~~~~~
-!!! Modifiers not permitted on index signature members.
+!!! error TS1145: Modifiers not permitted on index signature members.
     }

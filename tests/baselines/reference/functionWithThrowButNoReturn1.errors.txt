@@ -1,7 +1,7 @@
 ==== tests/cases/compiler/functionWithThrowButNoReturn1.ts (1 errors) ====
     function fn(): number {
                    ~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
       throw new Error('NYI');
       var t;
     }

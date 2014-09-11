@@ -1,19 +1,19 @@
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts (8 errors) ====
     var s = $.extend< { workItem: any }, { workItem: any, width: string }>({ workItem: this._workItem }, {});
                                          ~
-!!! Variable declaration expected.
+!!! error TS1134: Variable declaration expected.
                                                                ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                                                                          ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
             ~
-!!! Cannot find name '$'.
+!!! error TS2304: Cannot find name '$'.
                                   ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
                                                      ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
                                                           ~~~~~
-!!! Cannot find name 'width'.
+!!! error TS2304: Cannot find name 'width'.
                                                                  ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
     

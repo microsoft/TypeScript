@@ -9,6 +9,6 @@
     }
     __test2__.__val__obj = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~~
-!!! Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: boolean; }':
-!!!   Types of property 'two' are incompatible:
-!!!     Type 'string' is not assignable to type 'boolean'.
+!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: boolean; }':
+!!! error TS2322:   Types of property 'two' are incompatible:
+!!! error TS2322:     Type 'string' is not assignable to type 'boolean'.

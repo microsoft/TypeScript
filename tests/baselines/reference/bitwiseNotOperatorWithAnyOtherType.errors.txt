@@ -46,13 +46,13 @@
     var ResultIsNumber15 = ~(ANY + ANY1);
     var ResultIsNumber16 = ~(null + undefined);
                              ~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
     var ResultIsNumber17 = ~(null + null);
                              ~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'null' and 'null'.
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
     var ResultIsNumber18 = ~(undefined + undefined);
                              ~~~~~~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
     
     // multiple ~ operators
     var ResultIsNumber19 = ~~ANY;

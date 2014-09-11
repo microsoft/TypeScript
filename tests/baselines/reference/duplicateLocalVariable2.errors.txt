@@ -27,7 +27,7 @@
                 var bytes = [];
                 for (var i = 0; i < 14; i++) {
                          ~
-!!! Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
                     bytes.push(fb.readByte());
                 }
                 var expected = [0xEF];

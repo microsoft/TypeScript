@@ -4,7 +4,7 @@
         declare class m3d { constructor(foo); foo(): void ; static bar(); }
         var r = new m3d(); // error
                 ~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     }
     
     module T2 {
@@ -12,7 +12,7 @@
         module m3d { export var y = 2; }
         var r = new m3d(); // error
                 ~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     }
     
     module T3 {
@@ -22,10 +22,10 @@
         r.foo();
         r.bar(); // error
           ~~~
-!!! Property 'bar' does not exist on type 'm3d'.
+!!! error TS2339: Property 'bar' does not exist on type 'm3d'.
         r.y; // error
           ~
-!!! Property 'y' does not exist on type 'm3d'.
+!!! error TS2339: Property 'y' does not exist on type 'm3d'.
     }
     
     module T4 {
@@ -35,19 +35,19 @@
         r.foo();
         r.bar(); // error
           ~~~
-!!! Property 'bar' does not exist on type 'm3d'.
+!!! error TS2339: Property 'bar' does not exist on type 'm3d'.
         r.y; // error
           ~
-!!! Property 'y' does not exist on type 'm3d'.
+!!! error TS2339: Property 'y' does not exist on type 'm3d'.
     }
     
     module m3d { export var y = 2; }
     declare class m3d { constructor(foo); foo(): void; static bar(); }
     var r = new m3d(); // error
             ~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     declare class m4d extends m3d { }
     var r2 = new m4d(); // error
              ~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.

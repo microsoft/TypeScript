@@ -9,18 +9,18 @@
         data: "data" ,
         success: wrapSuccessCallback(requestContext, callback) ,
                  ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'wrapSuccessCallback'.
+!!! error TS2304: Cannot find name 'wrapSuccessCallback'.
                                      ~~~~~~~~~~~~~~
-!!! Cannot find name 'requestContext'.
+!!! error TS2304: Cannot find name 'requestContext'.
                                                      ~~~~~~~~
-!!! Cannot find name 'callback'.
+!!! error TS2304: Cannot find name 'callback'.
         error: wrapErrorCallback(requestContext, errorCallback) ,
                ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'wrapErrorCallback'.
+!!! error TS2304: Cannot find name 'wrapErrorCallback'.
                                  ~~~~~~~~~~~~~~
-!!! Cannot find name 'requestContext'.
+!!! error TS2304: Cannot find name 'requestContext'.
                                                  ~~~~~~~~~~~~~
-!!! Cannot find name 'errorCallback'.
+!!! error TS2304: Cannot find name 'errorCallback'.
         dataType: "json" ,
         converters: { "text json": "" },
         traditional: true ,

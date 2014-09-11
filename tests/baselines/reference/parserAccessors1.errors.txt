@@ -2,5 +2,5 @@
     class C {
         get Foo() { }
             ~~~
-!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
     }

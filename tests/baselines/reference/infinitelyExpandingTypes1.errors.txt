@@ -21,6 +21,6 @@
     
     l == l2; // should error;
     ~~~~~~~
-!!! Operator '==' cannot be applied to types 'List<number>' and 'List<string>'.
+!!! error TS2365: Operator '==' cannot be applied to types 'List<number>' and 'List<string>'.
     
     l == l; // should not error

@@ -3,8 +3,8 @@
       M() {
         super<T>(0);
              ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
         ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
       }
     }

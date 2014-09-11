@@ -5,7 +5,7 @@
      
     class Derived2 extends Base2 {
           ~~~~~~~~
-!!! Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2':
-!!!   Private property 'y' cannot be reimplemented.
+!!! error TS2418: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2':
+!!! error TS2418:   Private property 'y' cannot be reimplemented.
         private static y: { foo: string; bar: string; };
     }

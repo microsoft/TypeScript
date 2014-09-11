@@ -4,7 +4,7 @@
     
         module x { // error
                ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
             export class Bar {
                 test: number;
             }
@@ -15,11 +15,11 @@
         }
         var z; // error
             ~
-!!! Duplicate identifier 'z'.
+!!! error TS2300: Duplicate identifier 'z'.
     
         module y {
                ~
-!!! A module declaration cannot be located prior to a class or function with which it is merged
+!!! error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
             var b;
         }
     
@@ -31,12 +31,12 @@
         var f;
         function f() { } //error
                  ~
-!!! Duplicate identifier 'f'.
+!!! error TS2300: Duplicate identifier 'f'.
     
         function f2() { }
         var f2; // error
             ~~
-!!! Duplicate identifier 'f2'.
+!!! error TS2300: Duplicate identifier 'f2'.
     
         var i;
         interface i { } //ok
@@ -44,12 +44,12 @@
         class C { }
         function C() { } // error
                  ~
-!!! Duplicate identifier 'C'.
+!!! error TS2300: Duplicate identifier 'C'.
     
         function C2() { }
         class C2 { } // error
               ~~
-!!! Duplicate identifier 'C2'.
+!!! error TS2300: Duplicate identifier 'C2'.
     
         function fi() { }
         interface fi { } // ok
@@ -57,10 +57,10 @@
         class cli { }
         interface cli { } // error
                   ~~~
-!!! Duplicate identifier 'cli'.
+!!! error TS2300: Duplicate identifier 'cli'.
     
         interface cli2 { }
         class cli2 { } // error
               ~~~~
-!!! Duplicate identifier 'cli2'.
+!!! error TS2300: Duplicate identifier 'cli2'.
     }

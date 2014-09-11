@@ -1,5 +1,5 @@
 ==== tests/cases/compiler/declarationEmit_invalidReference2.ts (1 errors) ====
     /// <reference path="invalid.ts" />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'invalid.ts' not found.
+!!! error TS6053: File 'invalid.ts' not found.
     var x = 0;

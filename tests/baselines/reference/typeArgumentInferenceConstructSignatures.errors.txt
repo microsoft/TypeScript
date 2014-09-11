@@ -25,7 +25,7 @@
     new someGenerics1(3, 4);
     new someGenerics1<string, number>(3, 4); // Error
                                       ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     new someGenerics1<number, {}>(3, 4);
     
     // Generic call with argument of function type whose parameter is of type parameter type
@@ -53,7 +53,7 @@
     new someGenerics3(() => '');
     new someGenerics3<Window>(() => undefined);
                       ~~~~~~
-!!! Cannot find name 'Window'.
+!!! error TS2304: Cannot find name 'Window'.
     new someGenerics3<number>(() => 3);
     
     // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
@@ -65,7 +65,7 @@
     new someGenerics4<string, number>('', () => 3);
     new someGenerics4<string, number>('', (x: string) => ''); // Error
                                           ~~~~~~~~~~~~~~~~~
-!!! Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
     new someGenerics4<string, number>(null, null);
     
     // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
@@ -77,7 +77,7 @@
     new someGenerics5<number, string>('', () => 3);
     new someGenerics5<number, string>('', (x: string) => ''); // Error
                                           ~~~~~~~~~~~~~~~~~
-!!! Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
     new someGenerics5<string, number>(null, null);
     
     // Generic call with multiple arguments of function types that each have parameters of the same generic type
@@ -89,7 +89,7 @@
     new someGenerics6<number>(n => n, n => n, n => n);
     new someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
                                                 ~~~~~~~~~~~~~~~~
-!!! Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
+!!! error TS2345: Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
     new someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
     
     // Generic call with multiple arguments of function types that each have parameters of different generic type
@@ -128,15 +128,15 @@
         x: number;
         z?: Window;
             ~~~~~~
-!!! Cannot find name 'Window'.
+!!! error TS2304: Cannot find name 'Window'.
     }
     var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
                                                       ~~~~~~
-!!! Cannot find name 'window'.
+!!! error TS2304: Cannot find name 'window'.
     var a9e: {};
     var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
                                                            ~~~~~~
-!!! Cannot find name 'window'.
+!!! error TS2304: Cannot find name 'window'.
     var a9f: A92;
     
     // Generic call with multiple parameters of generic type passed arguments with a single best common type

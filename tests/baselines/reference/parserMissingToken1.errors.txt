@@ -1,8 +1,8 @@
 ==== tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken1.ts (3 errors) ====
     a / finally
         ~~~~~~~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
                
-!!! '{' expected.
+!!! error TS1005: '{' expected.
     ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.

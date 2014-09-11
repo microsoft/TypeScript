@@ -14,63 +14,63 @@
     
     function A1(): One { return null; }
                    ~~~
-!!! Generic type 'One<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'One<T>' requires 1 type argument(s).
     function A2(): Two { return null; }
                    ~~~
-!!! Generic type 'Two<T, U>' requires 2 type argument(s).
+!!! error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
     function A3(): Three { return null; }
                    ~~~~~
-!!! Generic type 'Three<T, U, V>' requires 3 type argument(s).
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
     
     function B1(): Two<number> { return null; }
                    ~~~~~~~~~~~
-!!! Generic type 'Two<T, U>' requires 2 type argument(s).
+!!! error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
     function B2(): Three<string> { return null; }
                    ~~~~~~~~~~~~~
-!!! Generic type 'Three<T, U, V>' requires 3 type argument(s).
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
     function B3(): Three<string, number> { return null; }
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! Generic type 'Three<T, U, V>' requires 3 type argument(s).
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
     
     class C {
         A1(): One { return null; }
               ~~~
-!!! Generic type 'One<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'One<T>' requires 1 type argument(s).
         A2(): Two { return null; }
               ~~~
-!!! Generic type 'Two<T, U>' requires 2 type argument(s).
+!!! error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
         A3(): Three { return null; }
               ~~~~~
-!!! Generic type 'Three<T, U, V>' requires 3 type argument(s).
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
     
         B1(): Two<number> { return null; }
               ~~~~~~~~~~~
-!!! Generic type 'Two<T, U>' requires 2 type argument(s).
+!!! error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
         B2(): Three<string> { return null; }
               ~~~~~~~~~~~~~
-!!! Generic type 'Three<T, U, V>' requires 3 type argument(s).
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
         B3(): Three<string, number> { return null; }
               ~~~~~~~~~~~~~~~~~~~~~
-!!! Generic type 'Three<T, U, V>' requires 3 type argument(s).
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
     }
     
     class D<T> {
         A2(): Two<T> { return null; }
               ~~~~~~
-!!! Generic type 'Two<T, U>' requires 2 type argument(s).
+!!! error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
         A3(): Three<T> { return null; }
               ~~~~~~~~
-!!! Generic type 'Three<T, U, V>' requires 3 type argument(s).
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
     
         B1(): Two<T> { return null; }
               ~~~~~~
-!!! Generic type 'Two<T, U>' requires 2 type argument(s).
+!!! error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
         B2(): Three<T> { return null; }
               ~~~~~~~~
-!!! Generic type 'Three<T, U, V>' requires 3 type argument(s).
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
         B3(): Three<string, T> { return null; }
               ~~~~~~~~~~~~~~~~
-!!! Generic type 'Three<T, U, V>' requires 3 type argument(s).
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
     }
     
     interface I<T> {
@@ -86,66 +86,66 @@
     {
         p1: () => X;
                   ~
-!!! Generic type 'X<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
         p2: { [idx: number]: X }
                              ~
-!!! Generic type 'X<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
         p3: X[]
             ~
-!!! Generic type 'X<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
         p4: I<X>
               ~
-!!! Generic type 'X<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
         p5: X
             ~
-!!! Generic type 'X<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
         p6: () => Y;
                   ~
-!!! Generic type 'Y<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
         p7: { [idx: number]: Y }
                              ~
-!!! Generic type 'Y<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
         p8: Y[]
             ~
-!!! Generic type 'Y<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
         p9: I<Y>
               ~
-!!! Generic type 'Y<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
         pa: Y
             ~
-!!! Generic type 'Y<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
     }
     
     declare var a: {
         p1: () => X;
                   ~
-!!! Generic type 'X<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
         p2: { [idx: number]: X }
                              ~
-!!! Generic type 'X<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
         p3: X[]
             ~
-!!! Generic type 'X<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
         p4: I<X>
               ~
-!!! Generic type 'X<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
         p5: X
             ~
-!!! Generic type 'X<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
         p6: () => Y;
                   ~
-!!! Generic type 'Y<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
         p7: { [idx: number]: Y }
                              ~
-!!! Generic type 'Y<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
         p8: Y[]
             ~
-!!! Generic type 'Y<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
         p9: I<Y>
               ~
-!!! Generic type 'Y<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
         pa: Y
             ~
-!!! Generic type 'Y<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
     };
     

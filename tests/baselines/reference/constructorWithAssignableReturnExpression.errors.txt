@@ -12,7 +12,7 @@
         constructor() {
             return 1; // error
                    ~
-!!! Return type of constructor signature must be assignable to the instance type of the class
+!!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class
         }
     }
     
@@ -28,7 +28,7 @@
         constructor() {
             return { x: 1 }; // error
                    ~~~~~~~~
-!!! Return type of constructor signature must be assignable to the instance type of the class
+!!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class
         }
     }
     

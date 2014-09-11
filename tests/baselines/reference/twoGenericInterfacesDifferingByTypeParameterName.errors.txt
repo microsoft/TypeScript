@@ -7,7 +7,7 @@
     
     interface A<U> { // error
               ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
         y: U;
     }
     
@@ -17,7 +17,7 @@
     
     interface B<T,V> { // error
               ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
         y: V;
     }
     
@@ -28,7 +28,7 @@
     
         interface A<U> { // error
                   ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
             y: U;
         }
     
@@ -38,7 +38,7 @@
     
         interface B<T, V> { // error
                   ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
             y: V;
         }
     }
@@ -64,7 +64,7 @@
     module M3 {
         export interface B<T, V> { // error
                          ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
             y: V;
         }
     }

@@ -3,9 +3,9 @@
     // Arrow function used in with statement
     with (window) {
           ~~~~~~
-!!! Cannot find name 'window'.
+!!! error TS2304: Cannot find name 'window'.
           ~~~~~~
-!!! All symbols within a 'with' block will be resolved to 'any'.
+!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
         var p = () => this;
     }
     
@@ -23,7 +23,7 @@
     // Arrow function as function argument
     window.setTimeout(() => null, 100);
     ~~~~~~
-!!! Cannot find name 'window'.
+!!! error TS2304: Cannot find name 'window'.
     
     // Arrow function as value in array literal
     
@@ -37,10 +37,10 @@
     enum E {
         x = () => 4, // Error expected
             ~~~~~~~
-!!! Type '() => number' is not assignable to type 'E'.
+!!! error TS2323: Type '() => number' is not assignable to type 'E'.
         y = (() => this).length // error, can't use this in enum
                    ~~~~
-!!! 'this' cannot be referenced in current location.
+!!! error TS2332: 'this' cannot be referenced in current location.
     }
     
     // Arrow function as module variable initializer
@@ -54,9 +54,9 @@
         // Arrow function used in with statement
         with (window) {
               ~~~~~~
-!!! Cannot find name 'window'.
+!!! error TS2304: Cannot find name 'window'.
               ~~~~~~
-!!! All symbols within a 'with' block will be resolved to 'any'.
+!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
             var p = () => this;
         }
     
@@ -74,7 +74,7 @@
         // Arrow function as function argument
         window.setTimeout(() => null, 100);
         ~~~~~~
-!!! Cannot find name 'window'.
+!!! error TS2304: Cannot find name 'window'.
     
         // Arrow function as value in array literal
     
@@ -88,10 +88,10 @@
         enum E {
             x = () => 4, // Error expected
                 ~~~~~~~
-!!! Type '() => number' is not assignable to type 'E'.
+!!! error TS2323: Type '() => number' is not assignable to type 'E'.
             y = (() => this).length
                        ~~~~
-!!! 'this' cannot be referenced in current location.
+!!! error TS2332: 'this' cannot be referenced in current location.
         }
     
         // Arrow function as module variable initializer

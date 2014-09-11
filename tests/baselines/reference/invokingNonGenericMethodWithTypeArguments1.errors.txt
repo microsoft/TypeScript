@@ -3,7 +3,7 @@
         constructor() {
             this.foo<string>();
                  ~~~
-!!! Property 'foo' does not exist on type 'Foo'.
+!!! error TS2339: Property 'foo' does not exist on type 'Foo'.
         }
     }
     

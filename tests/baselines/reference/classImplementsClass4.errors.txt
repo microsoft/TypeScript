@@ -5,8 +5,8 @@
     }
     class C implements A {
           ~
-!!! Class 'C' incorrectly implements interface 'A':
-!!!   Property 'x' is missing in type 'C'.
+!!! error TS2421: Class 'C' incorrectly implements interface 'A':
+!!! error TS2421:   Property 'x' is missing in type 'C'.
         foo() {
             return 1;
         }
@@ -19,5 +19,5 @@
     c = c2;
     c2 = c;
     ~~
-!!! Type 'C' is not assignable to type 'C2':
-!!!   Property 'x' is missing in type 'C'.
+!!! error TS2322: Type 'C' is not assignable to type 'C2':
+!!! error TS2322:   Property 'x' is missing in type 'C'.

@@ -5,7 +5,7 @@
     
     class bar {
           ~~~
-!!! Duplicate identifier 'bar'.
+!!! error TS2300: Duplicate identifier 'bar'.
       public f() { return ''; }
       public g() { return {a: <bar>null, b: undefined, c: void 4 }; }
       public h(x = 4, y = null, z = '') { x++; }

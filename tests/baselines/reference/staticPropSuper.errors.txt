@@ -20,7 +20,7 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! Constructors for derived classes must contain a 'super' call.
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }
     
     class D extends A {
@@ -32,7 +32,7 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! Constructors for derived classes must contain a 'super' call.
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }
     
     class E extends A {
@@ -44,5 +44,5 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! Constructors for derived classes must contain a 'super' call.
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }

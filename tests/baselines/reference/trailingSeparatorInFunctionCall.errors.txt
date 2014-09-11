@@ -4,11 +4,11 @@
     
     f(1, 2, );
           ~
-!!! Trailing comma not allowed.
+!!! error TS1009: Trailing comma not allowed.
     
     function f2<T>(x: T, y: T) {
     }
     
     f2(1, 2, );
            ~
-!!! Trailing comma not allowed.
+!!! error TS1009: Trailing comma not allowed.

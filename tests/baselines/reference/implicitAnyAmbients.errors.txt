@@ -3,43 +3,43 @@
     declare module m {
         var x; // error
             ~
-!!! Variable 'x' implicitly has an 'any' type.
+!!! error TS7005: Variable 'x' implicitly has an 'any' type.
         var y: any;
     
         function f(x); // error 
         ~~~~~~~~~~~~~~
-!!! 'f', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'f', which lacks return-type annotation, implicitly has an 'any' return type.
                    ~
-!!! Parameter 'x' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
         function f2(x: any); // error
         ~~~~~~~~~~~~~~~~~~~~
-!!! 'f2', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'f2', which lacks return-type annotation, implicitly has an 'any' return type.
         function f3(x: any): any;
     
         interface I {
             foo(); // error
             ~~~~~~
-!!! 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
             foo2(x: any); // error
             ~~~~~~~~~~~~~
-!!! 'foo2', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'foo2', which lacks return-type annotation, implicitly has an 'any' return type.
             foo3(x: any): any;
         }
     
         class C {
             foo(); // error
             ~~~~~~
-!!! 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
             foo2(x: any); // error
             ~~~~~~~~~~~~~
-!!! 'foo2', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'foo2', which lacks return-type annotation, implicitly has an 'any' return type.
             foo3(x: any): any;
         }
     
         module n {
             var y; // error
                 ~
-!!! Variable 'y' implicitly has an 'any' type.
+!!! error TS7005: Variable 'y' implicitly has an 'any' type.
         }
     
         import m2 = n;

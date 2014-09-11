@@ -16,7 +16,7 @@
             public text(value?: string): any {
                 this._templateStorage.templateSources[this._name] = value;
                                                            ~~~~~
-!!! Property '_name' does not exist on type 'StringTemplate'.
+!!! error TS2339: Property '_name' does not exist on type 'StringTemplate'.
             }
         }
      

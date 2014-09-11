@@ -3,12 +3,12 @@
     class CCC {
         y: number = aaa;
                     ~~~
-!!! Initializer of instance member variable 'y' cannot reference identifier 'aaa' declared in the constructor.
+!!! error TS2301: Initializer of instance member variable 'y' cannot reference identifier 'aaa' declared in the constructor.
         static staticY: number = aaa; // This shouldnt be error
         constructor(aaa) {
             this.y = ''; // was: error, cannot assign string to number
             ~~~~~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2323: Type 'string' is not assignable to type 'number'.
         }
     }
     

@@ -14,22 +14,22 @@
     
     e = E2.A;
     ~
-!!! Type 'E2' is not assignable to type 'E'.
+!!! error TS2323: Type 'E2' is not assignable to type 'E'.
     e2 = E.A;
     ~~
-!!! Type 'E' is not assignable to type 'E2'.
+!!! error TS2323: Type 'E' is not assignable to type 'E2'.
     e = <void>null;
     ~
-!!! Type 'void' is not assignable to type 'E'.
+!!! error TS2323: Type 'void' is not assignable to type 'E'.
     e = {};
     ~
-!!! Type '{}' is not assignable to type 'E'.
+!!! error TS2323: Type '{}' is not assignable to type 'E'.
     e = '';
     ~
-!!! Type 'string' is not assignable to type 'E'.
+!!! error TS2323: Type 'string' is not assignable to type 'E'.
     
     function f<T>(a: T) {
         e = a;
         ~
-!!! Type 'T' is not assignable to type 'E'.
+!!! error TS2323: Type 'T' is not assignable to type 'E'.
     }

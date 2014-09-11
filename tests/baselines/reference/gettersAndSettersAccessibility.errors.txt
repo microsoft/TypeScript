@@ -2,13 +2,13 @@
     class C99 {
     	private get Baz():number { return 0; }
     	            ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     	            ~~~
-!!! Getter and setter accessors do not agree in visibility.
+!!! error TS2379: Getter and setter accessors do not agree in visibility.
     	public set Baz(n:number) {} // error - accessors do not agree in visibility
     	           ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     	           ~~~
-!!! Getter and setter accessors do not agree in visibility.
+!!! error TS2379: Getter and setter accessors do not agree in visibility.
     }
     

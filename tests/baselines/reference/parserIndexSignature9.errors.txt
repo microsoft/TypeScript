@@ -2,5 +2,5 @@
     interface I {
        []: number
        ~~
-!!! An index signature must have exactly one parameter.
+!!! error TS1096: An index signature must have exactly one parameter.
     }

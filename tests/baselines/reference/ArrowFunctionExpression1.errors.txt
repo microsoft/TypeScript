@@ -1,4 +1,4 @@
 ==== tests/cases/compiler/ArrowFunctionExpression1.ts (1 errors) ====
     var v = (public x: string) => { };
              ~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.

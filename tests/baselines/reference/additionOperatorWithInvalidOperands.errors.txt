@@ -15,65 +15,65 @@
     // boolean + every type except any and string
     var r1 = a + a;
              ~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
     var r2 = a + b;
              ~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'number'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'number'.
     var r3 = a + c;
              ~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'Object'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'Object'.
     
     // number + every type except any and string
     var r4 = b + a;
              ~~~~~
-!!! Operator '+' cannot be applied to types 'number' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
     var r5 = b + b; // number + number is valid
     var r6 = b + c;
              ~~~~~
-!!! Operator '+' cannot be applied to types 'number' and 'Object'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'Object'.
     
     // object + every type except any and string
     var r7 = c + a;
              ~~~~~
-!!! Operator '+' cannot be applied to types 'Object' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'Object' and 'boolean'.
     var r8 = c + b;
              ~~~~~
-!!! Operator '+' cannot be applied to types 'Object' and 'number'.
+!!! error TS2365: Operator '+' cannot be applied to types 'Object' and 'number'.
     var r9 = c + c;
              ~~~~~
-!!! Operator '+' cannot be applied to types 'Object' and 'Object'.
+!!! error TS2365: Operator '+' cannot be applied to types 'Object' and 'Object'.
     
     // other cases
     var r10 = a + true;
               ~~~~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
     var r11 = true + false;
               ~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
     var r12 = true + 123;
               ~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'number'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'number'.
     var r13 = {} + {};
               ~~~~~~~
-!!! Operator '+' cannot be applied to types '{}' and '{}'.
+!!! error TS2365: Operator '+' cannot be applied to types '{}' and '{}'.
     var r14 = b + d;
               ~~~~~
-!!! Operator '+' cannot be applied to types 'number' and 'Number'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'Number'.
     var r15 = b + foo;
               ~~~~~~~
-!!! Operator '+' cannot be applied to types 'number' and '() => void'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and '() => void'.
     var r16 = b + foo();
               ~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'number' and 'void'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'void'.
     var r17 = b + C;
               ~~~~~
-!!! Operator '+' cannot be applied to types 'number' and 'typeof C'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'typeof C'.
     var r18 = E.a + new C();
               ~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'E' and 'C'.
+!!! error TS2365: Operator '+' cannot be applied to types 'E' and 'C'.
     var r19 = E.a + C.foo();
               ~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'E' and 'void'.
+!!! error TS2365: Operator '+' cannot be applied to types 'E' and 'void'.
     var r20 = E.a + M;
               ~~~~~~~
-!!! Operator '+' cannot be applied to types 'E' and 'typeof M'.
+!!! error TS2365: Operator '+' cannot be applied to types 'E' and 'typeof M'.

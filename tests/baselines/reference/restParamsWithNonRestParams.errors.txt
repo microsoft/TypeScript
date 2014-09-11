@@ -4,6 +4,6 @@
     function foo2(a:string, ...b:number[]){}
     foo2(); // should be an error
     ~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     function foo3(a?:string, ...b:number[]){}
     foo3(); // error but shouldn't be

@@ -2,11 +2,11 @@
     if (true)
         f();
         ~
-!!! Cannot find name 'f'.
+!!! error TS2304: Cannot find name 'f'.
     else
         f();
         ~
-!!! Cannot find name 'f'.
+!!! error TS2304: Cannot find name 'f'.
     
     function foo(): boolean {
         if (true)

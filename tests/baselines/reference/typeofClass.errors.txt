@@ -8,9 +8,9 @@
     k1.foo;
     k1.bar;
        ~~~
-!!! Property 'bar' does not exist on type 'K'.
+!!! error TS2339: Property 'bar' does not exist on type 'K'.
     var k2: typeof K;
     k2.foo;
        ~~~
-!!! Property 'foo' does not exist on type 'typeof K'.
+!!! error TS2339: Property 'foo' does not exist on type 'typeof K'.
     k2.bar;

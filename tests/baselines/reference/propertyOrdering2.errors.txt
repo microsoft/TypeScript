@@ -5,7 +5,7 @@
             var a = this.x;
             return this.y;
                         ~
-!!! Property 'y' does not exist on type 'Foo'.
+!!! error TS2339: Property 'y' does not exist on type 'Foo'.
         }
     }
     

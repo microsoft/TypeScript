@@ -3,5 +3,5 @@
     var a: Number;
     x = a;
     ~
-!!! Type 'Number' is not assignable to type 'number'.
+!!! error TS2323: Type 'Number' is not assignable to type 'number'.
     a = x;

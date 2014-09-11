@@ -2,7 +2,7 @@
     
     interface Number extends Comparable<number> {
                              ~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Comparable'.
+!!! error TS2304: Cannot find name 'Comparable'.
     
         compareTo(other: number);
     

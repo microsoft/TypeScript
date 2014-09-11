@@ -5,5 +5,5 @@
     
     class Beta extends Alpha.x {
                        ~~~~~~~
-!!! Module 'Alpha' has no exported member 'x'.
+!!! error TS2305: Module 'Alpha' has no exported member 'x'.
     }

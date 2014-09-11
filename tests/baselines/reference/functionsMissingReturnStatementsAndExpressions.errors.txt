@@ -2,7 +2,7 @@
     
     function f1(): string {
                    ~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
         // errors because there are no return statements
     }
     
@@ -66,7 +66,7 @@
     
     function f14(): number {
                     ~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
         // Not fine, since we can *only* consist of a single throw statement
         // if no return statements are present but we are annotated.
         throw undefined;
@@ -98,7 +98,7 @@
     class C {
         public get m1() {
                    ~~
-!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
             // Errors; get accessors must return a value.
         }
     
@@ -118,12 +118,12 @@
     
         public get m5() {
                    ~~
-!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
             // Not fine, since we can *only* consist of a single throw statement
             // if no return statements are present but we are a get accessor.
             throw null;
             throw undefined.
         }
         ~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     }

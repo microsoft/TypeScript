@@ -4,7 +4,7 @@
     class Bar {}
     case
     ~~~~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     function Goo() {return {a:1,b:2};}
     

@@ -2,5 +2,5 @@
     while (true) {
       break target;
       ~~~~~~~~~~~~~
-!!! A 'break' statement can only jump to a label of an enclosing statement.
+!!! error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
     }

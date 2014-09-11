@@ -4,5 +4,5 @@
     }
     var c = C.x;
             ~~~
-!!! Property 'C.x' is inaccessible.
+!!! error TS2341: Property 'C.x' is inaccessible.
     

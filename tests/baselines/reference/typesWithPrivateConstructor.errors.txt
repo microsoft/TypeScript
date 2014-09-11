@@ -4,24 +4,24 @@
     class C {
         private constructor() { }
         ~~~~~~~
-!!! 'private' modifier cannot appear on a constructor declaration.
+!!! error TS1089: 'private' modifier cannot appear on a constructor declaration.
     }
     
     var c = new C();
     var r: () => void = c.constructor;
         ~
-!!! Type 'Function' is not assignable to type '() => void'.
+!!! error TS2323: Type 'Function' is not assignable to type '() => void'.
     
     class C2 {
         private constructor(x: number);
         ~~~~~~~
-!!! 'private' modifier cannot appear on a constructor declaration.
+!!! error TS1089: 'private' modifier cannot appear on a constructor declaration.
         private constructor(x: any) { }
         ~~~~~~~
-!!! 'private' modifier cannot appear on a constructor declaration.
+!!! error TS1089: 'private' modifier cannot appear on a constructor declaration.
     }
     
     var c2 = new C2();
              ~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var r2: (x: number) => void = c2.constructor;

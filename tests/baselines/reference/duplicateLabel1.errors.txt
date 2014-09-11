@@ -2,6 +2,6 @@
     target:
     target:
     ~~~~~~
-!!! Duplicate label 'target'
+!!! error TS1114: Duplicate label 'target'
     while (true) {
     }

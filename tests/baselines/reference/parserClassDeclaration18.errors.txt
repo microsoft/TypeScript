@@ -4,7 +4,7 @@
         constructor(n: number);
         constructor(x: any) {
                             ~
-!!! A constructor implementation cannot be declared in an ambient context.
+!!! error TS1111: A constructor implementation cannot be declared in an ambient context.
         }
         bar1():void;
     }

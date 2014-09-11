@@ -2,5 +2,5 @@
     interface I {
       [a?]
        ~
-!!! An index signature parameter cannot have a question mark.
+!!! error TS1019: An index signature parameter cannot have a question mark.
     }

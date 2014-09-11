@@ -18,7 +18,7 @@
         [x: string]: string;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'string'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'string'.
     }
     
     
@@ -26,7 +26,7 @@
         [x: string]: boolean;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'boolean'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'boolean'.
     }
     
     
@@ -34,7 +34,7 @@
         [x: string]: Date;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'Date'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'Date'.
     }
     
     
@@ -42,7 +42,7 @@
         [x: string]: RegExp;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'RegExp'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'RegExp'.
     }
     
     
@@ -50,7 +50,7 @@
         [x: string]: { bar: number };
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type '{ bar: number; }'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type '{ bar: number; }'.
     }
     
     
@@ -58,7 +58,7 @@
         [x: string]: number[];
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'number[]'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'number[]'.
     }
     
     
@@ -66,7 +66,7 @@
         [x: string]: I8;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'I8'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'I8'.
     }
     
     class A { foo: number; }
@@ -74,7 +74,7 @@
         [x: string]: A;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'A'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'A'.
     }
     
     class A2<T> { foo: T; }
@@ -82,7 +82,7 @@
         [x: string]: A2<number>;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'A2<number>'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'A2<number>'.
     }
     
     
@@ -90,7 +90,7 @@
         [x: string]: (x) => number;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type '(x: any) => number'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type '(x: any) => number'.
     }
     
     
@@ -98,7 +98,7 @@
         [x: string]: <T>(x: T) => T;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type '<T>(x: T) => T'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type '<T>(x: T) => T'.
     }
     
     
@@ -107,7 +107,7 @@
         [x: string]: E2;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'E2'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'E2'.
     }
     
     
@@ -119,7 +119,7 @@
         [x: string]: typeof f;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'typeof f'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'typeof f'.
     }
     
     
@@ -131,7 +131,7 @@
         [x: string]: typeof c;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'typeof c'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'typeof c'.
     }
     
     
@@ -139,17 +139,17 @@
         [x: string]: T;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'T'.
     }
     
     
     interface I18<T, U extends T> {
                      ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: U;
         foo: E;
         ~~~~~~~
-!!! Property 'foo' of type 'E' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'U'.
     }
     
     

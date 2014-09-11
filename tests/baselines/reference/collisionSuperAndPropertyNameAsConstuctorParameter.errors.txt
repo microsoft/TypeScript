@@ -5,7 +5,7 @@
     class b1 extends a {
         constructor(_super: number) { // should be error
                     ~~~~~~~~~~~~~~
-!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+!!! error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
             super();
         }
     }
@@ -13,7 +13,7 @@
     class b2 extends a {
         constructor(private _super: number) { // should be error
                     ~~~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+!!! error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
             super();
         }
     }
@@ -23,7 +23,7 @@
         constructor(_super: string);// no code gen - no error
         constructor(_super: any) { // should be error
                     ~~~~~~~~~~~
-!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+!!! error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
             super();
         }
     }
@@ -33,7 +33,7 @@
         constructor(_super: string);// no code gen - no error
         constructor(private _super: any) { // should be error
                     ~~~~~~~~~~~~~~~~~~~
-!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+!!! error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
             super();
         }
     }

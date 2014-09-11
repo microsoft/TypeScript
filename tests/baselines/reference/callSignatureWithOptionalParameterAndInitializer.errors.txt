@@ -3,13 +3,13 @@
     
     function foo(x?: number = 1) { }
                  ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
     var f = function foo(x?: number = 1) { }
                          ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
     var f2 = (x: number, y? = 1) => { }
                          ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
     
     foo(1);
     foo();
@@ -21,7 +21,7 @@
     class C {
         foo(x?: number = 1) { }
             ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
     }
     
     var c: C;
@@ -31,14 +31,14 @@
     interface I {
         (x? = 1);
          ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
          ~~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
         foo(x: number, y?: number = 1);
                        ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
                        ~~~~~~~~~~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     }
     
     var i: I;
@@ -50,14 +50,14 @@
     var a: {
         (x?: number = 1);
          ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
          ~~~~~~~~~~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
         foo(x? = 1);
             ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
             ~~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     }
     
     a();
@@ -68,15 +68,15 @@
     var b = {
         foo(x?: number = 1) { },
             ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
         a: function foo(x: number, y?: number = '') { },
                                    ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
                                    ~~~~~~~~~~~~~~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2323: Type 'string' is not assignable to type 'number'.
         b: (x?: any = '') => { }
             ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
     }
     
     b.foo();

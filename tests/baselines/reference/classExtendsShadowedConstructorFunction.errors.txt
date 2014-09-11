@@ -5,7 +5,7 @@
         var C = 1;
         class D extends C { // error, C must evaluate to constructor function
                         ~
-!!! Type name 'C' in extends clause does not reference constructor function for 'C'.
+!!! error TS2419: Type name 'C' in extends clause does not reference constructor function for 'C'.
             bar: string;
         }
     }

@@ -3,7 +3,7 @@
     class c2 { public foo() { } }
     function c2() { } // error
              ~~
-!!! Duplicate identifier 'c2'.
+!!! error TS2300: Duplicate identifier 'c2'.
     var c2 = () => { }
         ~~
-!!! Duplicate identifier 'c2'.
+!!! error TS2300: Duplicate identifier 'c2'.

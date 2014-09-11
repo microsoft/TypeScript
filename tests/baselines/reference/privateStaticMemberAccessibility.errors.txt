@@ -6,8 +6,8 @@
     class Derived extends Base {
         static bar = Base.foo; // error
                      ~~~~~~~~
-!!! Property 'Base.foo' is inaccessible.
+!!! error TS2341: Property 'Base.foo' is inaccessible.
         bing = () => Base.foo; // error
                      ~~~~~~~~
-!!! Property 'Base.foo' is inaccessible.
+!!! error TS2341: Property 'Base.foo' is inaccessible.
     }

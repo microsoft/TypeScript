@@ -2,6 +2,6 @@
     // 'public' should be marked unusable, should complain on trailing /*
     a.public /*
                
-!!! '*/' expected.
+!!! error TS1010: '*/' expected.
     ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.

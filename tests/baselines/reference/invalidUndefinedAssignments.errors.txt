@@ -4,31 +4,31 @@
     enum E { A }
     E = x;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     E.A = x;
     ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     class C { foo: string }
     var f: C;
     C = x;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     interface I { foo: string }
     var g: I;
     g = x;
     I = x;
     ~
-!!! Cannot find name 'I'.
+!!! error TS2304: Cannot find name 'I'.
     
     module M { export var x = 1; }
     M = x;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     function i<T>(a: T) { }
     // BUG 767030
     i = x; 
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.

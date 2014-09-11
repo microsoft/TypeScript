@@ -2,6 +2,6 @@
     class C {
        constructor();
        ~~~~~~~~~~~~~~
-!!! Constructor implementation is missing.
+!!! error TS2390: Constructor implementation is missing.
        foo() { }
     }

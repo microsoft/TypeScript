@@ -5,7 +5,7 @@
             b: 10,
             set x(a: number) { this.b = a; }
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         };
     };
     var /*3*/point = makePoint(2);

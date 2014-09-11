@@ -16,26 +16,26 @@
     
     ///<reference path='..\compiler\io.ts'/>
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'io.ts' not found.
+!!! error TS6053: File 'io.ts' not found.
     ///<reference path='..\compiler\typescript.ts'/>
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'typescript.ts' not found.
+!!! error TS6053: File 'typescript.ts' not found.
     ///<reference path='..\services\typescriptServices.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'typescriptServices.ts' not found.
+!!! error TS6053: File 'typescriptServices.ts' not found.
     ///<reference path='diff.ts'/>
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'diff.ts' not found.
+!!! error TS6053: File 'diff.ts' not found.
     
     declare var assert: Harness.Assert;
                         ~~~~~~~~~~~~~~
-!!! Module 'Harness' has no exported member 'Assert'.
+!!! error TS2305: Module 'Harness' has no exported member 'Assert'.
     declare var it;
     declare var describe;
     declare var run;
     declare var IO: IIO;
                     ~~~
-!!! Cannot find name 'IIO'.
+!!! error TS2304: Cannot find name 'IIO'.
     declare var __dirname; // Node-specific
     
     function switchToForwardSlashes(path: string) {
@@ -53,14 +53,14 @@
     var typescriptServiceFile = IO.readFile(typescriptServiceFileName);
     if (typeof ActiveXObject === "function") {
                ~~~~~~~~~~~~~
-!!! Cannot find name 'ActiveXObject'.
+!!! error TS2304: Cannot find name 'ActiveXObject'.
         eval(typescriptServiceFile);
     } else if (typeof require === "function") {
                       ~~~~~~~
-!!! Cannot find name 'require'.
+!!! error TS2304: Cannot find name 'require'.
         var vm = require('vm');
                  ~~~~~~~
-!!! Cannot find name 'require'.
+!!! error TS2304: Cannot find name 'require'.
         vm.runInThisContext(typescriptServiceFile, 'typescriptServices.js');
     } else {
         throw new Error('Unknown context');
@@ -359,7 +359,7 @@
             static pushGlobalErrorHandler(done: IDone) {
                 errorHandlerStack.push(function (e) {
                 ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'errorHandlerStack'.
+!!! error TS2304: Cannot find name 'errorHandlerStack'.
                     done(e);
                 });
             }
@@ -367,20 +367,20 @@
             static popGlobalErrorHandler() {
                 errorHandlerStack.pop();
                 ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'errorHandlerStack'.
+!!! error TS2304: Cannot find name 'errorHandlerStack'.
             }
     
             static handleError(e: Error) {
                 if (errorHandlerStack.length === 0) {
                     ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'errorHandlerStack'.
+!!! error TS2304: Cannot find name 'errorHandlerStack'.
                     IO.printLine('Global error: ' + e);
                 } else {
                     errorHandlerStack[errorHandlerStack.length - 1](e);
                     ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'errorHandlerStack'.
+!!! error TS2304: Cannot find name 'errorHandlerStack'.
                                       ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'errorHandlerStack'.
+!!! error TS2304: Cannot find name 'errorHandlerStack'.
                 }
             }
         }
@@ -719,7 +719,7 @@
              */
             export class WriterAggregator implements ITextWriter {
                                                      ~~~~~~~~~~~
-!!! Cannot find name 'ITextWriter'.
+!!! error TS2304: Cannot find name 'ITextWriter'.
                 public lines: string[] = [];
                 public currentLine = "";
     
@@ -746,19 +746,19 @@
             /** Mimics having multiple files, later concatenated to a single file. */
             export class EmitterIOHost implements TypeScript.EmitterIOHost {
                                                   ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
     
                 private fileCollection = {};
     
                 /** create file gets the whole path to create, so this works as expected with the --out parameter */
                 public createFile(s: string, useUTF8?: boolean): ITextWriter {
                                                                  ~~~~~~~~~~~
-!!! Cannot find name 'ITextWriter'.
+!!! error TS2304: Cannot find name 'ITextWriter'.
     
                     if (this.fileCollection[s]) {
                         return <ITextWriter>this.fileCollection[s];
                                 ~~~~~~~~~~~
-!!! Cannot find name 'ITextWriter'.
+!!! error TS2304: Cannot find name 'ITextWriter'.
                     }
     
                     var writer = new Harness.Compiler.WriterAggregator();
@@ -790,7 +790,7 @@
     
             var libFolder: string = global['WScript'] ? TypeScript.filePath(global['WScript'].ScriptFullName) : (__dirname + '/');
                                                         ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
             export var libText = IO ? IO.readFile(libFolder + "lib.d.ts") : '';
     
             var stdout = new EmitterIOHost();
@@ -802,14 +802,14 @@
     
             export function makeDefaultCompilerForTest(c?: TypeScript.TypeScriptCompiler) {
                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 var compiler = c || new TypeScript.TypeScriptCompiler(stderr);
                                         ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 compiler.parser.errorRecovery = true;
                 compiler.settings.codeGenTarget = TypeScript.CodeGenTarget.ES5;
                                                   ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 compiler.settings.controlFlow = true;
                 compiler.settings.controlFlowUseDef = true;
                 if (Harness.usePull) {
@@ -820,16 +820,16 @@
                 compiler.parseEmitOption(stdout);
                 TypeScript.moduleGenTarget = TypeScript.ModuleGenTarget.Synchronous;
                 ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 compiler.addUnit(Harness.Compiler.libText, "lib.d.ts", true);
                 return compiler;
             }
     
             var compiler: TypeScript.TypeScriptCompiler;
                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
             recreate();
     
             // pullUpdateUnit is sufficient if an existing unit is updated, if a new unit is added we need to do a full typecheck
@@ -844,10 +844,10 @@
                         // requires unit to already exist in the compiler
                         compiler.pullUpdateUnit(new TypeScript.StringSourceText(""), filename, true);
                                                     ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                         compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), filename, true);
                                                     ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                     }
                 }
                 else {
@@ -1041,16 +1041,16 @@
                             var script = compiler.scripts.members[m];
                             var enclosingScopeContext = TypeScript.findEnclosingScopeAt(new TypeScript.NullLogger(), <TypeScript.Script>script, new TypeScript.StringSourceText(code), 0, false);
                                                         ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                                                                                             ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                                                                                                                       ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                                                                                                                                                     ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             var entries = new TypeScript.ScopeTraversal(compiler).getScopeEntries(enclosingScopeContext);
                                               ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
     
                             for (var i = 0; i < entries.length; i++) {
                                 if (entries[i].name === targetIdentifier) {
@@ -1063,7 +1063,7 @@
                         for (var m = 0; m < compiler.scripts.members.length; m++) {
                             var script2 = <TypeScript.Script>compiler.scripts.members[m];
                                            ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             if (script2.locationInfo.filename !== 'lib.d.ts') {
                                 if (targetPosition > -1) {
                                     var tyInfo = compiler.pullGetTypeInfoAtPosition(targetPosition, script2);
@@ -1107,98 +1107,98 @@
     
                 private getTypeInfoName(ast : TypeScript.AST) {
                                               ~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                     var name = '';
                     switch (ast.nodeType) {
                         case TypeScript.NodeType.Name: // Type Name?
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                         case TypeScript.NodeType.Null:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                         case TypeScript.NodeType.List:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                         case TypeScript.NodeType.Empty:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                         case TypeScript.NodeType.EmptyExpr:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                         case TypeScript.NodeType.Asg:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                         case TypeScript.NodeType.True:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                         case TypeScript.NodeType.False:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                         case TypeScript.NodeType.ArrayLit:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                         case TypeScript.NodeType.TypeRef:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         case TypeScript.NodeType.Super:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             name = (<any>ast).text;
                             break;
                         case TypeScript.NodeType.Regex:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             name = (<TypeScript.RegexLiteral>ast).text;
                                      ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         case TypeScript.NodeType.QString:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             name = (<any>ast).text;
                             break;
                         case TypeScript.NodeType.NumberLit:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             name = (<TypeScript.NumberLiteral>ast).text;
                                      ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         case TypeScript.NodeType.Return:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             //name = (<TypeScript.ReturnStatement>tyInfo.ast).returnExpression.actualText; // why is this complaining?
                             break;
                         case TypeScript.NodeType.InterfaceDeclaration:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             name = (<TypeScript.InterfaceDeclaration>ast).name.actualText;
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         case TypeScript.NodeType.ModuleDeclaration:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             name = (<TypeScript.ModuleDeclaration>ast).name.actualText;
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         case TypeScript.NodeType.ClassDeclaration:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             name = (<TypeScript.ClassDeclaration>ast).name.actualText;
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         case TypeScript.NodeType.FuncDecl:
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             name = !(<TypeScript.FuncDecl>ast).name ? "" : (<TypeScript.FuncDecl>ast).name.actualText; // name == null for lambdas
                                       ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                                                                              ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         default:
                             // TODO: is there a reason to mess with all the special cases above and not just do this (ie take whatever property is there and works?)
@@ -1227,7 +1227,7 @@
               */
             export function generateDeclFile(code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]): string {
                                                                                                                                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 reset();
     
                 compiler.settings.generateDeclarationFiles = true;
@@ -1298,7 +1298,7 @@
                 /** @param fileResults an array of strings for the filename and an ITextWriter with its code */
                 constructor(public fileResults: { filename: string; file: WriterAggregator; }[], errorLines: string[], public scripts: TypeScript.Script[]) {
                                                                                                                                        ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                     var lines = [];
                     fileResults.forEach(v => lines = lines.concat(v.file.lines));
                     this.code = lines.join("\n")
@@ -1317,7 +1317,7 @@
                             else {
                                 WScript.Echo("non-match on: " + errorLines[i]);
                                 ~~~~~~~
-!!! Cannot find name 'WScript'.
+!!! error TS2304: Cannot find name 'WScript'.
                             }
                         }
                     }
@@ -1382,10 +1382,10 @@
     
             export function addUnit(code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) {
                                                                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 var script: TypeScript.Script = null;
                             ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 var uName = unitName || '0' + (isDeclareFile ? '.d.ts' : '.ts');
     
                 for (var i = 0; i < compiler.units.length; i++) {
@@ -1393,7 +1393,7 @@
                         updateUnit(code, uName);
                         script = <TypeScript.Script>compiler.scripts.members[i];
                                   ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                     }
                 }
                 if (!script) {
@@ -1412,7 +1412,7 @@
                 if (Harness.usePull) {
                     compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), unitName, setRecovery);
                                                 ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 } else {
                     compiler.updateUnit(code, unitName, setRecovery);
                 }
@@ -1420,9 +1420,9 @@
     
             export function compileFile(path: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
                                                                                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                                                                                                                                                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 path = switchToForwardSlashes(path);
                 var filename = path.match(/[^\/]*$/)[0];
                 var code = readFile(path);
@@ -1432,9 +1432,9 @@
     
             export function compileUnit(code: string, filename: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
                                                                                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                                                                                                                                                                                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 // not recursive
                 function clone/* <T> */(source: any, target: any) {
                     for (var prop in source) {
@@ -1444,22 +1444,22 @@
     
                 var oldCompilerSettings = new TypeScript.CompilationSettings();
                                               ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 clone(compiler.settings, oldCompilerSettings);
                 var oldEmitSettings = new TypeScript.EmitOptions(compiler.settings);
                                           ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 clone(compiler.emitSettings, oldEmitSettings);
     
                 var oldModuleGenTarget = TypeScript.moduleGenTarget;
                                          ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
     
                 if (settingsCallback) {
                     settingsCallback(compiler.settings);
                     compiler.emitSettings = new TypeScript.EmitOptions(compiler.settings);
                                                 ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 }
                 try {
                     compileString(code, filename, callback, context, references);
@@ -1471,7 +1471,7 @@
                         compiler.emitSettings = oldEmitSettings;
                         TypeScript.moduleGenTarget = oldModuleGenTarget;
                         ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                     }
                 }
             }
@@ -1492,16 +1492,16 @@
     
             export function emit(ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) {
                                          ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 compiler.emit(ioHost, usePullEmitter);
             }
     
             export function compileString(code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
                                                                                                                                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 var scripts: TypeScript.Script[] = [];
                              ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
     
                 reset();
     
@@ -1584,15 +1584,15 @@
                 originalFilePath: string;
                 references: TypeScript.IFileReference[];
                             ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
             }
     
             // Regex for parsing options in the format "@Alpha: Value of any sort"
             private optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm;  // multiple matches on multiple lines
             ~~~~~~~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
                     ~~~~~~~~~~~
-!!! Cannot find name 'optionRegex'.
+!!! error TS2304: Cannot find name 'optionRegex'.
     
             // List of allowed metadata names
             var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out"];
@@ -1604,7 +1604,7 @@
                 var match;
                 while ((match = optionRegex.exec(content)) != null) {
                                 ~~~~~~~~~~~
-!!! Cannot find name 'optionRegex'.
+!!! error TS2304: Cannot find name 'optionRegex'.
                     opts.push({ flag: match[1], value: match[2] });
                 }
     
@@ -1627,14 +1627,14 @@
                 var currentFileName = null;
                 var refs: TypeScript.IFileReference[] = [];
                           ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
     
                 for (var i = 0; i < lines.length; i++) {
                     var line = lines[i];
                     var isTripleSlashReference = /[\/]{3}\s*<reference path/.test(line);
                     var testMetaData = optionRegex.exec(line);
                                        ~~~~~~~~~~~
-!!! Cannot find name 'optionRegex'.
+!!! error TS2304: Cannot find name 'optionRegex'.
                     // Triple slash references need to be tracked as they are added to the compiler as an additional parameter to addUnit
                     if (isTripleSlashReference) {
                         var isRef = line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/);
@@ -1654,7 +1654,7 @@
                         // Comment line, check for global/file @options and record them
                         optionRegex.lastIndex = 0;
                         ~~~~~~~~~~~
-!!! Cannot find name 'optionRegex'.
+!!! error TS2304: Cannot find name 'optionRegex'.
                         var fileNameIndex = fileMetadataNames.indexOf(testMetaData[1].toLowerCase());
                         if (fileNameIndex == -1) {
                             throw new Error('Unrecognized metadata name "' + testMetaData[1] + '". Available file metadata names are: ' + fileMetadataNames.join(', '));
@@ -1720,7 +1720,7 @@
             public version: number;
             public editRanges: { length: number; editRange: TypeScript.ScriptEditRange; }[] = [];
                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
     
             constructor(public name: string, public content: string, public isResident: boolean, public maxScriptVersions: number) {
                 this.version = 1;
@@ -1745,7 +1745,7 @@
                     length: this.content.length,
                     editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)
                                    ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 });
     
                 if (this.editRanges.length > this.maxScriptVersions) {
@@ -1758,7 +1758,7 @@
     
             public getEditRangeSinceVersion(version: number): TypeScript.ScriptEditRange {
                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 if (this.version == version) {
                     // No edits!
                     return null;
@@ -1769,7 +1769,7 @@
                     // Too far away from what we know
                     return TypeScript.ScriptEditRange.unknown();
                            ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 }
     
                 var entries = this.editRanges.slice(initialEditRangeIndex);
@@ -1780,16 +1780,16 @@
     
                 return new TypeScript.ScriptEditRange(minDistFromStart, entries[0].length - minDistFromEnd, aggDelta);
                            ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
             }
         }
     
         export class TypeScriptLS implements Services.ILanguageServiceShimHost {
                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
             private ls: Services.ILanguageServiceShim = null;
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
     
             public scripts: ScriptInfo[] = [];
             public maxScriptVersions = 100;
@@ -1891,10 +1891,10 @@
              */
             public getLanguageService(): Services.ILanguageServiceShim {
                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
                 var ls = new Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
                              ~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
                 ls.refresh(true);
                 this.ls = ls;
                 return ls;
@@ -1903,12 +1903,12 @@
             /** Parse file given its source text */
             public parseSourceText(fileName: string, sourceText: TypeScript.ISourceText): TypeScript.Script {
                                                                  ~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                                                                                           ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 var parser = new TypeScript.Parser();
                                  ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 parser.setErrorRecovery(null);
                 parser.errorCallback = (a, b, c, d) => { };
     
@@ -1920,7 +1920,7 @@
             public parseFile(fileName: string) {
                 var sourceText = new TypeScript.StringSourceText(IO.readFile(fileName))
                                      ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 return this.parseSourceText(fileName, sourceText);
             }
             
@@ -1937,7 +1937,7 @@
     
                 return TypeScript.getPositionFromZeroBasedLineColumn(script, line - 1, col - 1);
                        ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
             }
     
             /**
@@ -1946,13 +1946,13 @@
             */
             public positionToZeroBasedLineCol(fileName: string, position: number): TypeScript.ILineCol {
                                                                                    ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 var script = this.ls.languageService.getScriptAST(fileName);
                 assert.notNull(script);
     
                 var result = TypeScript.getZeroBasedLineColumnFromPosition(script, position);
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
     
                 assert.is(result.line >= 0);
                 assert.is(result.col >= 0);
@@ -1962,7 +1962,7 @@
             /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
             public checkEdits(sourceFileName: string, baselineFileName: string, edits: Services.TextEdit[]) {
                                                                                        ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
                 var script = readFile(sourceFileName);
                 var formattedScript = this.applyEdits(script, edits);
                 var baseline = readFile(baselineFileName);
@@ -1975,7 +1975,7 @@
             /** Apply an array of text edits to a string, and return the resulting string. */
             public applyEdits(content: string, edits: Services.TextEdit[]): string {
                                                       ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
                 var result = content;
                 edits = this.normalizeEdits(edits);
     
@@ -1992,18 +1992,18 @@
             /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
             private normalizeEdits(edits: Services.TextEdit[]): Services.TextEdit[] {
                                           ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
                                                                 ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
                 var result: Services.TextEdit[] = [];
                             ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
     
                 function mapEdits(edits: Services.TextEdit[]): { edit: Services.TextEdit; index: number; }[] {
                                          ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
                                                                        ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
                     var result = [];
                     for (var i = 0; i < edits.length; i++) {
                         result.push({ edit: edits[i], index: i });
@@ -2248,7 +2248,7 @@
                     // Append diff to the report
                     var diff = new Diff.StringDiff(expected, actual);
                                    ~~~~
-!!! Cannot find name 'Diff'.
+!!! error TS2304: Cannot find name 'Diff'.
                     var header = '<h2>' + descriptionForDescribe + '</h2>';
                     header += '<h4>Left file: ' + actualFilename + '; Right file: ' + refFilename + '</h4>';
                     var trailer = '<hr>';
@@ -2267,7 +2267,7 @@
                 generateContent: () => string,
                 runImmediately? = false,
                 ~~~~~~~~~~~~~~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
                 opts?: BaselineOptions) {
     
                 var actual = <string>undefined;

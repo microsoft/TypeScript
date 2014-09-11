@@ -7,13 +7,13 @@
     var x = Colors.Red; // type of 'x' should be 'Colors'
     var p = x.Green; // error
               ~~~~~
-!!! Property 'Green' does not exist on type 'Colors'.
+!!! error TS2339: Property 'Green' does not exist on type 'Colors'.
     x.toFixed(); // ok
     
     // Now with generics
     function fill<B extends Colors>(f: B) {
         f.Green; // error
           ~~~~~
-!!! Property 'Green' does not exist on type 'B'.
+!!! error TS2339: Property 'Green' does not exist on type 'B'.
         f.toFixed(); // ok
     }

@@ -4,7 +4,7 @@
     class Test {
         get Property(): Result {
             ~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x = 1;
             return null;
         }
@@ -13,7 +13,7 @@
     class Test2 {
         get Property() {
             ~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x = 1;
             return null;
         }

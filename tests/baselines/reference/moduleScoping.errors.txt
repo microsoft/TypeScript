@@ -8,7 +8,7 @@
 ==== tests/cases/conformance/externalModules/file3.ts (1 errors) ====
     export var v3 = true;
     ~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     var v2 = [1,2,3]; // Module scope. Should not appear in global scope
     
 ==== tests/cases/conformance/externalModules/file4.ts (0 errors) ====

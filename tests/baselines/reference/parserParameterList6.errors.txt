@@ -2,6 +2,6 @@
     class C {
       constructor(C: (public A) => any) {
                       ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
       }
     }

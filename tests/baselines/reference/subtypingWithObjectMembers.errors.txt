@@ -12,10 +12,10 @@
     
     class B extends A {
           ~
-!!! Class 'B' incorrectly extends base class 'A':
-!!!   Types of property 'bar' are incompatible:
-!!!     Type 'string' is not assignable to type 'Base':
-!!!       Property 'foo' is missing in type 'String'.
+!!! error TS2416: Class 'B' incorrectly extends base class 'A':
+!!! error TS2416:   Types of property 'bar' are incompatible:
+!!! error TS2416:     Type 'string' is not assignable to type 'Base':
+!!! error TS2416:       Property 'foo' is missing in type 'String'.
         foo: Derived; // ok
         bar: string; // error
     }
@@ -27,10 +27,10 @@
     
     class B2 extends A2 {
           ~~
-!!! Class 'B2' incorrectly extends base class 'A2':
-!!!   Types of property '2.0' are incompatible:
-!!!     Type 'string' is not assignable to type 'Base':
-!!!       Property 'foo' is missing in type 'String'.
+!!! error TS2416: Class 'B2' incorrectly extends base class 'A2':
+!!! error TS2416:   Types of property '2.0' are incompatible:
+!!! error TS2416:     Type 'string' is not assignable to type 'Base':
+!!! error TS2416:       Property 'foo' is missing in type 'String'.
         1: Derived; // ok
         2: string; // error
     }
@@ -42,10 +42,10 @@
     
     class B3 extends A3 {
           ~~
-!!! Class 'B3' incorrectly extends base class 'A3':
-!!!   Types of property ''2.0'' are incompatible:
-!!!     Type 'string' is not assignable to type 'Base':
-!!!       Property 'foo' is missing in type 'String'.
+!!! error TS2416: Class 'B3' incorrectly extends base class 'A3':
+!!! error TS2416:   Types of property ''2.0'' are incompatible:
+!!! error TS2416:     Type 'string' is not assignable to type 'Base':
+!!! error TS2416:       Property 'foo' is missing in type 'String'.
         '1': Derived; // ok
         '2.0': string; // error
     }
@@ -58,10 +58,10 @@
     
         class B extends A {
               ~
-!!! Class 'B' incorrectly extends base class 'A':
-!!!   Types of property 'bar' are incompatible:
-!!!     Type 'string' is not assignable to type 'Base':
-!!!       Property 'foo' is missing in type 'String'.
+!!! error TS2416: Class 'B' incorrectly extends base class 'A':
+!!! error TS2416:   Types of property 'bar' are incompatible:
+!!! error TS2416:     Type 'string' is not assignable to type 'Base':
+!!! error TS2416:       Property 'foo' is missing in type 'String'.
             foo: Derived2; // ok
             bar: string; // error
         }
@@ -73,10 +73,10 @@
     
         class B2 extends A2 {
               ~~
-!!! Class 'B2' incorrectly extends base class 'A2':
-!!!   Types of property '2.0' are incompatible:
-!!!     Type 'string' is not assignable to type 'Base':
-!!!       Property 'foo' is missing in type 'String'.
+!!! error TS2416: Class 'B2' incorrectly extends base class 'A2':
+!!! error TS2416:   Types of property '2.0' are incompatible:
+!!! error TS2416:     Type 'string' is not assignable to type 'Base':
+!!! error TS2416:       Property 'foo' is missing in type 'String'.
             1: Derived2; // ok
             2: string; // error
         }
@@ -88,10 +88,10 @@
     
         class B3 extends A3 {
               ~~
-!!! Class 'B3' incorrectly extends base class 'A3':
-!!!   Types of property ''2.0'' are incompatible:
-!!!     Type 'string' is not assignable to type 'Base':
-!!!       Property 'foo' is missing in type 'String'.
+!!! error TS2416: Class 'B3' incorrectly extends base class 'A3':
+!!! error TS2416:   Types of property ''2.0'' are incompatible:
+!!! error TS2416:     Type 'string' is not assignable to type 'Base':
+!!! error TS2416:       Property 'foo' is missing in type 'String'.
             '1': Derived2; // ok
             '2.0': string; // error
         }

@@ -16,7 +16,7 @@
       switch(value) {
         case:
             ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
           result += 2;
         default:
           result += 32;

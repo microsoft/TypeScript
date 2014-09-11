@@ -3,26 +3,26 @@
     	
     		if ( top && top.doScroll ) {
     		     ~~~
-!!! Cannot find name 'top'.
+!!! error TS2304: Cannot find name 'top'.
     		            ~~~
-!!! Cannot find name 'top'.
+!!! error TS2304: Cannot find name 'top'.
     			(function doScrollCheck() {
     				if ( false ) {
     
     					try {
     						top.doScroll("left");
     						~~~
-!!! Cannot find name 'top'.
+!!! error TS2304: Cannot find name 'top'.
     					} catch(e) {
     						return setTimeout( doScrollCheck, 50 );
     						       ~~~~~~~~~~
-!!! Cannot find name 'setTimeout'.
+!!! error TS2304: Cannot find name 'setTimeout'.
     					}
     
     					// detach all dom ready events
     					detach();
     					~~~~~~
-!!! Cannot find name 'detach'.
+!!! error TS2304: Cannot find name 'detach'.
     
     				}
     			})();

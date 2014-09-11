@@ -13,7 +13,7 @@
 ==== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType6_moduleE.ts (1 errors) ====
     import self = require("recursiveExportAssignmentAndFindAliasedType6_moduleC");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Circular definition of import alias 'self'.
+!!! error TS2303: Circular definition of import alias 'self'.
     export = self;
     
 ==== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType6_moduleB.ts (0 errors) ====

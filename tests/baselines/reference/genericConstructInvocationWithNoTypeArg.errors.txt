@@ -4,5 +4,5 @@
     }
     var f2: Foo<number> = new Foo(3);
                               ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.
     

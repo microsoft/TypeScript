@@ -1,9 +1,9 @@
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement6.ts (3 errors) ====
     for (foo() in b) {
          ~~~
-!!! Cannot find name 'foo'.
+!!! error TS2304: Cannot find name 'foo'.
          ~~~~~
-!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+!!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
                   ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
     }

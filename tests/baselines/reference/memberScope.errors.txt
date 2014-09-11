@@ -4,7 +4,7 @@
       export module Basil { }
       var z = Basil.Pepper;
               ~~~~~
-!!! Cannot find name 'Basil'.
+!!! error TS2304: Cannot find name 'Basil'.
     }
     
     

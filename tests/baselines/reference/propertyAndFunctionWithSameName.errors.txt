@@ -3,7 +3,7 @@
         x: number;
         x() { // error
         ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
             return 1;
         }
     }
@@ -12,5 +12,5 @@
         x: number;
         x(v) { } // error
         ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }

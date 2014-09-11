@@ -2,16 +2,16 @@
     function foo(a:string, b?:string, c?:number, ...d:number[]){}
     foo('foo', 1); 
                ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     foo('foo'); 
     foo();
     ~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     foo(1, 'bar');
         ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     foo('foo', 1, 3);
                ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     foo('foo', 'bar', 3, 4);
     

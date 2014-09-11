@@ -2,5 +2,5 @@
     class C {
       constructor(): number { }
                      ~~~~~~
-!!! Type annotation cannot appear on a constructor declaration.
+!!! error TS1093: Type annotation cannot appear on a constructor declaration.
     }

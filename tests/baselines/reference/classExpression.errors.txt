@@ -1,27 +1,27 @@
 ==== tests/cases/conformance/classes/classExpression.ts (7 errors) ====
     var x = class C {
             ~~~~~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     }
     
     var y = {
         foo: class C2 {
              ~~~~~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
                    ~~
-!!! ':' expected.
+!!! error TS1005: ':' expected.
                       ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                    ~~
-!!! Cannot find name 'C2'.
+!!! error TS2304: Cannot find name 'C2'.
         }
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     module M {
         var z = class C4 {
                 ~~~~~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
         }
     }

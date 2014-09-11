@@ -2,10 +2,10 @@
     class f {
         set x(value) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return null; // Should be an error
                    ~~~~
-!!! Setters cannot return a value.
+!!! error TS2408: Setters cannot return a value.
         }
     }
     

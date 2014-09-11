@@ -2,5 +2,5 @@
     module foo {
         this.bar = 4;
         ~~~~
-!!! 'this' cannot be referenced in a module body.
+!!! error TS2331: 'this' cannot be referenced in a module body.
     }

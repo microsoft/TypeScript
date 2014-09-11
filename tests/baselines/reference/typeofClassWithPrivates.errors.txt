@@ -5,7 +5,7 @@
         x: T;
         static y: T;
                   ~
-!!! Static members cannot reference class type parameters.
+!!! error TS2302: Static members cannot reference class type parameters.
     }
     
     var c: C<string>;

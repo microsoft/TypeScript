@@ -5,10 +5,10 @@
     }
     import exports = m.c;
            ~~~~~~~
-!!! Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.
+!!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.
     import require = m.c;
            ~~~~~~~
-!!! Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
     new exports();
     new require();
     

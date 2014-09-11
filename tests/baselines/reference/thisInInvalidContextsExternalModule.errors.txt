@@ -3,7 +3,7 @@
     class ErrClass1 {
         static t = this; // Error
                    ~~~~
-!!! 'this' cannot be referenced in a static property initializer.
+!!! error TS2334: 'this' cannot be referenced in a static property initializer.
     }
     
     class BaseErrClass {
@@ -24,7 +24,7 @@
         constructor() {
             super(this); // Error
                   ~~~~
-!!! 'this' cannot be referenced in current location.
+!!! error TS2332: 'this' cannot be referenced in current location.
         }
     }
     
@@ -32,7 +32,7 @@
         //'this' in module variable
         var x = this; // Error
                 ~~~~
-!!! 'this' cannot be referenced in a module body.
+!!! error TS2331: 'this' cannot be referenced in a module body.
     }
     
     //'this' as type parameter constraint
@@ -44,9 +44,9 @@
     
     class ErrClass3 extends this {
                             ~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
                                  ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
     
     }
     
@@ -54,14 +54,14 @@
     enum SomeEnum {
         A = this, // Should not be allowed
             ~~~~
-!!! 'this' cannot be referenced in current location.
+!!! error TS2332: 'this' cannot be referenced in current location.
         B = this.spaaaace // Also should not be allowed
             ~~~~
-!!! 'this' cannot be referenced in current location.
+!!! error TS2332: 'this' cannot be referenced in current location.
     }
     
     export = this; // Should be an error
     ~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
              ~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.

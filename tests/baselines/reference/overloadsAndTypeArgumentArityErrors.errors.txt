@@ -5,9 +5,9 @@
     
     Callbacks<number, string, boolean>('s'); // wrong number of type arguments
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     new Callbacks<number, string, boolean>('s'); // wrong number of type arguments
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Only a void function can be called with the 'new' keyword.
+!!! error TS2350: Only a void function can be called with the 'new' keyword.

@@ -6,51 +6,51 @@
         constructor() {
             var a = super.prototype;
                     ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
             var b = super.hasOwnProperty('');
                     ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         }
     
         fn() {
             var a = super.prototype;
                     ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
             var b = super.hasOwnProperty('');
                     ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         }
     
         m = super.prototype;
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         n = super.hasOwnProperty('');
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
     
         //super static property access in static member function of class with no base type
         //super static property access in static member accessor(get and set) of class with no base type
         public static static1() {
             super.hasOwnProperty('');
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         }
     
         public static get static2() {
                           ~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.hasOwnProperty('');
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
             return '';
         }
     
         public static set static2(n) {
                           ~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.hasOwnProperty('');
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         }
     }
     
@@ -79,40 +79,40 @@
             super();
             super.publicMember = 1;
                   ~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
         }
     
         fn() {
             var x = super.publicMember;
                           ~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
         }
     
         get a() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x = super.publicMember;
                           ~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
             return undefined;
         }
         set a(n) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             n = super.publicMember;
                       ~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
         }
         fn2() {
             function inner() {
                 super.publicFunc();
                 ~~~~~
-!!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
             }
             var x = {
                 test: function () { return super.publicFunc(); }
                                            ~~~~~
-!!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
             }
         }
     }
@@ -125,29 +125,29 @@
             super();
             super.privateMember = 1;
                   ~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
         }
     
         fn() {
             var x = super.privateMember;
                           ~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
         }
     
         get a() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x = super.privateMember;
                           ~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
             return undefined;
         }
         set a(n) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             n = super.privateMember;
                       ~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
         }
     }
     
@@ -159,47 +159,47 @@
         static fn() {
             super.publicStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
             super.privateStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
             super.privateStaticFunc();
             ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Property 'SomeBase.privateStaticFunc' is inaccessible.
+!!! error TS2341: Property 'SomeBase.privateStaticFunc' is inaccessible.
         }
         static get a() {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.publicStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
             super.privateStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
             super.privateStaticFunc();
             ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Property 'SomeBase.privateStaticFunc' is inaccessible.
+!!! error TS2341: Property 'SomeBase.privateStaticFunc' is inaccessible.
             return '';
         }
         static set a(n) {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.publicStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
             super.privateStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
             super.privateStaticFunc();
             ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Property 'SomeBase.privateStaticFunc' is inaccessible.
+!!! error TS2341: Property 'SomeBase.privateStaticFunc' is inaccessible.
         }
     }
     
     // In object literal
     var obj = { n: super.wat, p: super.foo() };
                    ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
                                  ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
     

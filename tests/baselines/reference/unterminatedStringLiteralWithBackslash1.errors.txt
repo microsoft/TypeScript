@@ -1,4 +1,4 @@
 ==== tests/cases/compiler/unterminatedStringLiteralWithBackslash1.ts (1 errors) ====
     "\
       
-!!! Unexpected end of text.
+!!! error TS1126: Unexpected end of text.

@@ -26,7 +26,7 @@
     module M1 {
         export enum E1 { C }
                          ~
-!!! In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+!!! error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
     }
     
     
@@ -40,7 +40,7 @@
     module M2 {
         export enum E1 { C }
                          ~
-!!! In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+!!! error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
     }
     
     

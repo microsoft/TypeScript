@@ -4,13 +4,13 @@
     // naked break not allowed
     break;
     ~~~~~~
-!!! A 'break' statement can only be used within an enclosing iteration or switch statement.
+!!! error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
     
     // non-existent label
     ONE:
     while (true) break TWO;
                  ~~~~~~~~~~
-!!! A 'break' statement can only jump to a label of an enclosing statement.
+!!! error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
     
     // break from inside function
     TWO:
@@ -18,7 +18,7 @@
         var x = () => {
             break TWO;
             ~~~~~~~~~~
-!!! Jump target cannot cross function boundary.
+!!! error TS1107: Jump target cannot cross function boundary.
         }
     }
     
@@ -27,7 +27,7 @@
         var fn = function () {
             break THREE;
             ~~~~~~~~~~~~
-!!! Jump target cannot cross function boundary.
+!!! error TS1107: Jump target cannot cross function boundary.
         }
     }
     
@@ -35,7 +35,7 @@
     while (true) {
         break FIVE;
         ~~~~~~~~~~~
-!!! A 'break' statement can only jump to a label of an enclosing statement.
+!!! error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
         FIVE:
         while (true) { }
     }
@@ -47,5 +47,5 @@
     while (true) {
         break NINE;
         ~~~~~~~~~~~
-!!! A 'break' statement can only jump to a label of an enclosing statement.
+!!! error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
     }

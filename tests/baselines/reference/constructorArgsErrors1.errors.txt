@@ -2,6 +2,6 @@
     class foo {
         constructor (static a: number) {
                      ~~~~~~
-!!! 'static' modifier cannot appear on a parameter.
+!!! error TS1090: 'static' modifier cannot appear on a parameter.
         }
     }

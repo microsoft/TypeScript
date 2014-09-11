@@ -3,17 +3,17 @@
     
     declare class D { constructor (value: number); } // Duplicate identifier
                   ~
-!!! Duplicate identifier 'D'.
+!!! error TS2300: Duplicate identifier 'D'.
     
     var s1: string = D(); // OK
     
     var s2: string = (new D(1))();
                       ~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
                       ~~~~~~~~
-!!! Only a void function can be called with the 'new' keyword.
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
     
     declare class C { constructor(value: number); }
     (new C(1))(); // Error for calling an instance
     ~~~~~~~~~~~~
-!!! Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.

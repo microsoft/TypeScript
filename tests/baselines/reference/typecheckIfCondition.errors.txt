@@ -4,9 +4,9 @@
     {
         if (!module.exports) module.exports = "";
              ~~~~~~
-!!! Cannot find name 'module'.
+!!! error TS2304: Cannot find name 'module'.
                              ~~~~~~
-!!! Cannot find name 'module'.
+!!! error TS2304: Cannot find name 'module'.
         var x = null; // don't want to baseline output
     }
     

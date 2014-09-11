@@ -2,7 +2,7 @@
     module A.B.C {
     	import XYZ = X.Y.Z;
     	~~~~~~~~~~~~~~~~~~~
-!!! Module 'X' has no exported member 'Y'.
+!!! error TS2305: Module 'X' has no exported member 'Y'.
     	export function ping(x: number) {
     		if (x>0) XYZ.pong (x-1);
     	}

@@ -10,7 +10,7 @@
     function f(p: Foo<number>) {
         console.log(p);
         ~~~~~~~
-!!! Cannot find name 'console'.
+!!! error TS2304: Cannot find name 'console'.
     }
     
     var v: Bar<number> = null;

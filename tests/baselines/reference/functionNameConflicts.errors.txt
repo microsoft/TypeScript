@@ -6,35 +6,35 @@
         function fn1() { }
         var fn1;
             ~~~
-!!! Duplicate identifier 'fn1'.
+!!! error TS2300: Duplicate identifier 'fn1'.
     
         var fn2;
         function fn2() { }
                  ~~~
-!!! Duplicate identifier 'fn2'.
+!!! error TS2300: Duplicate identifier 'fn2'.
     }
     
     function fn3() { }
     var fn3;
         ~~~
-!!! Duplicate identifier 'fn3'.
+!!! error TS2300: Duplicate identifier 'fn3'.
     
     function func() {
         var fn4;
         function fn4() { }
                  ~~~
-!!! Duplicate identifier 'fn4'.
+!!! error TS2300: Duplicate identifier 'fn4'.
     
         function fn5() { }
         var fn5;
             ~~~
-!!! Duplicate identifier 'fn5'.
+!!! error TS2300: Duplicate identifier 'fn5'.
     }
     
     function over();
     function overrr() {
              ~~~~~~
-!!! Function implementation name must be 'over'.
+!!! error TS2389: Function implementation name must be 'over'.
     
     }
     

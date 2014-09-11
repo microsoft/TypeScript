@@ -2,9 +2,9 @@
     "use strict";
     with (a) {
     ~~~~
-!!! 'with' statements are not allowed in strict mode.
+!!! error TS1101: 'with' statements are not allowed in strict mode.
           ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
           ~
-!!! All symbols within a 'with' block will be resolved to 'any'.
+!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
     }

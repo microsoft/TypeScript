@@ -3,45 +3,45 @@
     export class publicClassWithWithPrivateParmeterTypes {
         static myPublicStaticMethod(param = exporter.createExportedWidget1()) { // Error
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public static method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4068: Parameter 'param' of public static method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
         }
         private static myPrivateStaticMethod(param = exporter.createExportedWidget1()) {
         }
         myPublicMethod(param  = exporter.createExportedWidget1()) { // Error
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4071: Parameter 'param' of public method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
         }
         private myPrivateMethod(param = exporter.createExportedWidget1()) {
         }
         constructor(param = exporter.createExportedWidget1(), private param1 = exporter.createExportedWidget1(), public param2 = exporter.createExportedWidget1()) { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4061: Parameter 'param' of constructor from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param1' of constructor from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4061: Parameter 'param1' of constructor from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
                                                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param2' of constructor from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4061: Parameter 'param2' of constructor from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
         }
     }
     export class publicClassWithWithPrivateParmeterTypes1 {
         static myPublicStaticMethod(param = exporter.createExportedWidget3()) { // Error
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public static method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4068: Parameter 'param' of public static method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
         }
         private static myPrivateStaticMethod(param = exporter.createExportedWidget3()) {
         }
         myPublicMethod(param  = exporter.createExportedWidget3()) { // Error
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4071: Parameter 'param' of public method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
         }
         private myPrivateMethod(param = exporter.createExportedWidget3()) {
         }
         constructor(param = exporter.createExportedWidget3(), private param1 = exporter.createExportedWidget3(), public param2 = exporter.createExportedWidget3()) { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4061: Parameter 'param' of constructor from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param1' of constructor from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4061: Parameter 'param1' of constructor from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
                                                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param2' of constructor from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4061: Parameter 'param2' of constructor from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
         }
     }
     
@@ -72,13 +72,13 @@
     
     export function publicFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) { // Error
                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4076: Parameter 'param' of exported function has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
     }
     function privateFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) {
     }
     export function publicFunctionWithPrivateParmeterTypes1(param = exporter.createExportedWidget3()) { // Error
                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4076: Parameter 'param' of exported function has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
     }
     function privateFunctionWithPrivateParmeterTypes1(param = exporter.createExportedWidget3()) {
     }
@@ -87,46 +87,46 @@
     export class publicClassWithPrivateModuleParameterTypes {
         static myPublicStaticMethod(param= exporter.createExportedWidget2()) { // Error
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public static method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4068: Parameter 'param' of public static method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
         }
         myPublicMethod(param= exporter.createExportedWidget2()) { // Error
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4071: Parameter 'param' of public method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
         }
         constructor(param= exporter.createExportedWidget2(), private param1= exporter.createExportedWidget2(), public param2= exporter.createExportedWidget2()) { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4061: Parameter 'param' of constructor from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param1' of constructor from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4061: Parameter 'param1' of constructor from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
                                                                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param2' of constructor from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4061: Parameter 'param2' of constructor from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
         }
     }
     export class publicClassWithPrivateModuleParameterTypes2 {
         static myPublicStaticMethod(param= exporter.createExportedWidget4()) { // Error
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public static method from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4068: Parameter 'param' of public static method from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
         }
         myPublicMethod(param= exporter.createExportedWidget4()) { // Error
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public method from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4071: Parameter 'param' of public method from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
         }
         constructor(param= exporter.createExportedWidget4(), private param1= exporter.createExportedWidget4(), public param2= exporter.createExportedWidget4()) { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4061: Parameter 'param' of constructor from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param1' of constructor from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4061: Parameter 'param1' of constructor from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
                                                                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param2' of constructor from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4061: Parameter 'param2' of constructor from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
         }
     }
     export function publicFunctionWithPrivateModuleParameterTypes(param= exporter.createExportedWidget2()) { // Error
                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4076: Parameter 'param' of exported function has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
     }
     export function publicFunctionWithPrivateModuleParameterTypes1(param= exporter.createExportedWidget4()) { // Error
                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4076: Parameter 'param' of exported function has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
     }
     
     

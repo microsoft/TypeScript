@@ -4,108 +4,108 @@
     class Foo<T> { foo: T; }
     function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) {
                ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         // error
         var r1 = true ? t : u;
                  ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'U'.
+!!! error TS2367: No best common type exists between 'T' and 'U'.
         var r1 = true ? u : t;
                  ~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'T'.
+!!! error TS2367: No best common type exists between 'U' and 'T'.
     
         // error
         var r2 = true ? t : v;
                  ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'V'.
+!!! error TS2367: No best common type exists between 'T' and 'V'.
         var r2 = true ? v : t;
                  ~~~~~~~~~~~~
-!!! No best common type exists between 'V' and 'T'.
+!!! error TS2367: No best common type exists between 'V' and 'T'.
     
         // error
         var r3 = true ? v : u;
                  ~~~~~~~~~~~~
-!!! No best common type exists between 'V' and 'U'.
+!!! error TS2367: No best common type exists between 'V' and 'U'.
         var r3 = true ? u : v;
                  ~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'V'.
+!!! error TS2367: No best common type exists between 'U' and 'V'.
     
         // ok?
         var r4 = true ? t : new Foo<T>();
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'Foo<T>'.
+!!! error TS2367: No best common type exists between 'T' and 'Foo<T>'.
         var r4 = true ? new Foo<T>() : t;
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Foo<T>' and 'T'.
+!!! error TS2367: No best common type exists between 'Foo<T>' and 'T'.
     
         // ok?
         var r5 = true ? u : new Foo<T>();
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'Foo<T>'.
+!!! error TS2367: No best common type exists between 'U' and 'Foo<T>'.
         var r5 = true ? new Foo<T>() : u;
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Foo<T>' and 'U'.
+!!! error TS2367: No best common type exists between 'Foo<T>' and 'U'.
     
         // ok?
         var r6 = true ? v : new Foo<T>();
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'V' and 'Foo<T>'.
+!!! error TS2367: No best common type exists between 'V' and 'Foo<T>'.
         var r6 = true ? new Foo<T>() : v;
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Foo<T>' and 'V'.
+!!! error TS2367: No best common type exists between 'Foo<T>' and 'V'.
     
     
         // ok?
         var r7 = true ? t : new Foo<U>();
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'Foo<U>'.
+!!! error TS2367: No best common type exists between 'T' and 'Foo<U>'.
         var r7 = true ? new Foo<U>() : t;
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Foo<U>' and 'T'.
+!!! error TS2367: No best common type exists between 'Foo<U>' and 'T'.
     
         // ok?
         var r8 = true ? u : new Foo<U>();
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'Foo<U>'.
+!!! error TS2367: No best common type exists between 'U' and 'Foo<U>'.
         var r8 = true ? new Foo<U>() : u;
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Foo<U>' and 'U'.
+!!! error TS2367: No best common type exists between 'Foo<U>' and 'U'.
     
         // ok?
         var r9 = true ? v : new Foo<U>();
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'V' and 'Foo<U>'.
+!!! error TS2367: No best common type exists between 'V' and 'Foo<U>'.
         var r9 = true ? new Foo<U>() : v;
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Foo<U>' and 'V'.
+!!! error TS2367: No best common type exists between 'Foo<U>' and 'V'.
     
     
         // ok?
         var r10 = true ? t : new Foo<V>();
                   ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'Foo<V>'.
+!!! error TS2367: No best common type exists between 'T' and 'Foo<V>'.
         var r10 = true ? new Foo<V>() : t;
                   ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Foo<V>' and 'T'.
+!!! error TS2367: No best common type exists between 'Foo<V>' and 'T'.
     
         // ok?
         var r11 = true ? u : new Foo<V>();
                   ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'Foo<V>'.
+!!! error TS2367: No best common type exists between 'U' and 'Foo<V>'.
         var r11 = true ? new Foo<V>() : u;
                   ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Foo<V>' and 'U'.
+!!! error TS2367: No best common type exists between 'Foo<V>' and 'U'.
     
         // ok?
         var r12 = true ? v : new Foo<V>();
                   ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'V' and 'Foo<V>'.
+!!! error TS2367: No best common type exists between 'V' and 'Foo<V>'.
         var r12 = true ? new Foo<V>() : v;
                   ~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Foo<V>' and 'V'.
+!!! error TS2367: No best common type exists between 'Foo<V>' and 'V'.
     }
     
     module M1 {
@@ -115,135 +115,135 @@
     
         class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: T;
             foo: T
         }
     
         class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
               ~~
-!!! Class 'D2<T, U, V>' incorrectly extends base class 'Base<T>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'U' is not assignable to type 'T'.
+!!! error TS2416: Class 'D2<T, U, V>' incorrectly extends base class 'Base<T>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'U' is not assignable to type 'T'.
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: T;
             foo: U
             ~~~~~~
-!!! Property 'foo' of type 'U' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
         }
     
         class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
               ~~
-!!! Class 'D3<T, U, V>' incorrectly extends base class 'Base<T>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'V' is not assignable to type 'T'.
+!!! error TS2416: Class 'D3<T, U, V>' incorrectly extends base class 'Base<T>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'V' is not assignable to type 'T'.
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: T;
             foo: V
             ~~~~~~
-!!! Property 'foo' of type 'V' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
         }
     
         class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
               ~~
-!!! Class 'D4<T, U, V>' incorrectly extends base class 'Base<U>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'T' is not assignable to type 'U'.
+!!! error TS2416: Class 'D4<T, U, V>' incorrectly extends base class 'Base<U>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'T' is not assignable to type 'U'.
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: U;
             foo: T
             ~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
         }
     
         class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: U;
             foo: U
         }
     
         class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
               ~~
-!!! Class 'D6<T, U, V>' incorrectly extends base class 'Base<U>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'V' is not assignable to type 'U'.
+!!! error TS2416: Class 'D6<T, U, V>' incorrectly extends base class 'Base<U>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'V' is not assignable to type 'U'.
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: U;
             foo: V
             ~~~~~~
-!!! Property 'foo' of type 'V' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
         }
     
         class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
               ~~
-!!! Class 'D7<T, U, V>' incorrectly extends base class 'Base<V>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'T' is not assignable to type 'V'.
+!!! error TS2416: Class 'D7<T, U, V>' incorrectly extends base class 'Base<V>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'T' is not assignable to type 'V'.
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: V;
             foo: T
             ~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'V'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'V'.
         }
     
         class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
               ~~
-!!! Class 'D8<T, U, V>' incorrectly extends base class 'Base<V>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'U' is not assignable to type 'V'.
+!!! error TS2416: Class 'D8<T, U, V>' incorrectly extends base class 'Base<V>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'U' is not assignable to type 'V'.
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: V;
             foo: U
             ~~~~~~
-!!! Property 'foo' of type 'U' is not assignable to string index type 'V'.
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'V'.
         }
     
         class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: V;
             foo: V
         }
@@ -257,111 +257,111 @@
     
         class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: T;
             foo: T
         }
     
         class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: T;
             foo: U
             ~~~~~~
-!!! Property 'foo' of type 'U' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
         }
     
         class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: T;
             foo: V
             ~~~~~~
-!!! Property 'foo' of type 'V' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
         }
     
         class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: U;
             foo: T
             ~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
         }
     
         class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: U;
             foo: U
         }
     
         class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: U;
             foo: V
             ~~~~~~
-!!! Property 'foo' of type 'V' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
         }
     
         class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: V;
             foo: T
             ~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'V'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'V'.
         }
     
         class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: V;
             foo: U
             ~~~~~~
-!!! Property 'foo' of type 'U' is not assignable to string index type 'V'.
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'V'.
         }
     
         class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
                  ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                    ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                      ~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: V;
             foo: V
         }

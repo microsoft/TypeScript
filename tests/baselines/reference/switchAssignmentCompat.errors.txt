@@ -4,6 +4,6 @@
     switch (0) {
         case Foo: break; // Error expected
              ~~~
-!!! Type 'typeof Foo' is not assignable to type 'number'.
+!!! error TS2323: Type 'typeof Foo' is not assignable to type 'number'.
     }
     

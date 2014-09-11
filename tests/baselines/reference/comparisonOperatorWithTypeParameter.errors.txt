@@ -6,103 +6,103 @@
         // errors
         var ra1 = t < u;
                   ~~~~~
-!!! Operator '<' cannot be applied to types 'T' and 'U'.
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'U'.
         var ra2 = t > u;
                   ~~~~~
-!!! Operator '>' cannot be applied to types 'T' and 'U'.
+!!! error TS2365: Operator '>' cannot be applied to types 'T' and 'U'.
         var ra3 = t <= u;
                   ~~~~~~
-!!! Operator '<=' cannot be applied to types 'T' and 'U'.
+!!! error TS2365: Operator '<=' cannot be applied to types 'T' and 'U'.
         var ra4 = t >= u;
                   ~~~~~~
-!!! Operator '>=' cannot be applied to types 'T' and 'U'.
+!!! error TS2365: Operator '>=' cannot be applied to types 'T' and 'U'.
         var ra5 = t == u;
                   ~~~~~~
-!!! Operator '==' cannot be applied to types 'T' and 'U'.
+!!! error TS2365: Operator '==' cannot be applied to types 'T' and 'U'.
         var ra6 = t != u;
                   ~~~~~~
-!!! Operator '!=' cannot be applied to types 'T' and 'U'.
+!!! error TS2365: Operator '!=' cannot be applied to types 'T' and 'U'.
         var ra7 = t === u;
                   ~~~~~~~
-!!! Operator '===' cannot be applied to types 'T' and 'U'.
+!!! error TS2365: Operator '===' cannot be applied to types 'T' and 'U'.
         var ra8 = t !== u;
                   ~~~~~~~
-!!! Operator '!==' cannot be applied to types 'T' and 'U'.
+!!! error TS2365: Operator '!==' cannot be applied to types 'T' and 'U'.
     
         var rb1 = u < t;
                   ~~~~~
-!!! Operator '<' cannot be applied to types 'U' and 'T'.
+!!! error TS2365: Operator '<' cannot be applied to types 'U' and 'T'.
         var rb2 = u > t;
                   ~~~~~
-!!! Operator '>' cannot be applied to types 'U' and 'T'.
+!!! error TS2365: Operator '>' cannot be applied to types 'U' and 'T'.
         var rb3 = u <= t;
                   ~~~~~~
-!!! Operator '<=' cannot be applied to types 'U' and 'T'.
+!!! error TS2365: Operator '<=' cannot be applied to types 'U' and 'T'.
         var rb4 = u >= t;
                   ~~~~~~
-!!! Operator '>=' cannot be applied to types 'U' and 'T'.
+!!! error TS2365: Operator '>=' cannot be applied to types 'U' and 'T'.
         var rb5 = u == t;
                   ~~~~~~
-!!! Operator '==' cannot be applied to types 'U' and 'T'.
+!!! error TS2365: Operator '==' cannot be applied to types 'U' and 'T'.
         var rb6 = u != t;
                   ~~~~~~
-!!! Operator '!=' cannot be applied to types 'U' and 'T'.
+!!! error TS2365: Operator '!=' cannot be applied to types 'U' and 'T'.
         var rb7 = u === t;
                   ~~~~~~~
-!!! Operator '===' cannot be applied to types 'U' and 'T'.
+!!! error TS2365: Operator '===' cannot be applied to types 'U' and 'T'.
         var rb8 = u !== t;
                   ~~~~~~~
-!!! Operator '!==' cannot be applied to types 'U' and 'T'.
+!!! error TS2365: Operator '!==' cannot be applied to types 'U' and 'T'.
     
         var rc1 = t < v;
                   ~~~~~
-!!! Operator '<' cannot be applied to types 'T' and 'V'.
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'V'.
         var rc2 = t > v;
                   ~~~~~
-!!! Operator '>' cannot be applied to types 'T' and 'V'.
+!!! error TS2365: Operator '>' cannot be applied to types 'T' and 'V'.
         var rc3 = t <= v;
                   ~~~~~~
-!!! Operator '<=' cannot be applied to types 'T' and 'V'.
+!!! error TS2365: Operator '<=' cannot be applied to types 'T' and 'V'.
         var rc4 = t >= v;
                   ~~~~~~
-!!! Operator '>=' cannot be applied to types 'T' and 'V'.
+!!! error TS2365: Operator '>=' cannot be applied to types 'T' and 'V'.
         var rc5 = t == v;
                   ~~~~~~
-!!! Operator '==' cannot be applied to types 'T' and 'V'.
+!!! error TS2365: Operator '==' cannot be applied to types 'T' and 'V'.
         var rc6 = t != v;
                   ~~~~~~
-!!! Operator '!=' cannot be applied to types 'T' and 'V'.
+!!! error TS2365: Operator '!=' cannot be applied to types 'T' and 'V'.
         var rc7 = t === v;
                   ~~~~~~~
-!!! Operator '===' cannot be applied to types 'T' and 'V'.
+!!! error TS2365: Operator '===' cannot be applied to types 'T' and 'V'.
         var rc8 = t !== v;
                   ~~~~~~~
-!!! Operator '!==' cannot be applied to types 'T' and 'V'.
+!!! error TS2365: Operator '!==' cannot be applied to types 'T' and 'V'.
     
         var rd1 = v < t;
                   ~~~~~
-!!! Operator '<' cannot be applied to types 'V' and 'T'.
+!!! error TS2365: Operator '<' cannot be applied to types 'V' and 'T'.
         var rd2 = v > t;
                   ~~~~~
-!!! Operator '>' cannot be applied to types 'V' and 'T'.
+!!! error TS2365: Operator '>' cannot be applied to types 'V' and 'T'.
         var rd3 = v <= t;
                   ~~~~~~
-!!! Operator '<=' cannot be applied to types 'V' and 'T'.
+!!! error TS2365: Operator '<=' cannot be applied to types 'V' and 'T'.
         var rd4 = v >= t;
                   ~~~~~~
-!!! Operator '>=' cannot be applied to types 'V' and 'T'.
+!!! error TS2365: Operator '>=' cannot be applied to types 'V' and 'T'.
         var rd5 = v == t;
                   ~~~~~~
-!!! Operator '==' cannot be applied to types 'V' and 'T'.
+!!! error TS2365: Operator '==' cannot be applied to types 'V' and 'T'.
         var rd6 = v != t;
                   ~~~~~~
-!!! Operator '!=' cannot be applied to types 'V' and 'T'.
+!!! error TS2365: Operator '!=' cannot be applied to types 'V' and 'T'.
         var rd7 = v === t;
                   ~~~~~~~
-!!! Operator '===' cannot be applied to types 'V' and 'T'.
+!!! error TS2365: Operator '===' cannot be applied to types 'V' and 'T'.
         var rd8 = v !== t;
                   ~~~~~~~
-!!! Operator '!==' cannot be applied to types 'V' and 'T'.
+!!! error TS2365: Operator '!==' cannot be applied to types 'V' and 'T'.
     
         // ok
         var re1 = t < a;

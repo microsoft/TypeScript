@@ -1,4 +1,4 @@
 ==== tests/cases/compiler/undeclaredVarEmit.ts (1 errors) ====
     f: number;
        ~~~~~~
-!!! Cannot find name 'number'.
+!!! error TS2304: Cannot find name 'number'.

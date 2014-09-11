@@ -16,4 +16,4 @@
     var r6 = new r5();
     var r6b = r5();
               ~~~~
-!!! Value of type 'new () => string' is not callable. Did you mean to include 'new'?
+!!! error TS2348: Value of type 'new () => string' is not callable. Did you mean to include 'new'?

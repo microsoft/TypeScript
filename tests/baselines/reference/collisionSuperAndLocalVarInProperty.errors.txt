@@ -13,7 +13,7 @@
             doStuff: () => {
                 var _super = 10; // Should be error 
                     ~~~~~~
-!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+!!! error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
             }
         }
         public _super = 10; // No error

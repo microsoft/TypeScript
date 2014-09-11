@@ -4,30 +4,30 @@
     // operand before -
     var NUMBER1 = var NUMBER-;  //expect error
                   ~~~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
                             ~
-!!! '=' expected.
+!!! error TS1005: '=' expected.
                              ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
     // invalid expressions
     var NUMBER2 = -(null - undefined);
                     ~~~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
                            ~~~~~~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     var NUMBER3 = -(null - null);
                     ~~~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
                            ~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     var NUMBER4 = -(undefined - undefined);
                     ~~~~~~~~~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
                                 ~~~~~~~~~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
     // miss operand
     var NUMBER =-;
                  ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.

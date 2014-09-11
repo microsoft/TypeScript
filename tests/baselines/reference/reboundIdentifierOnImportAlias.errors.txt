@@ -6,5 +6,5 @@
         var Foo = 1;
         import F = Foo;
                    ~~~
-!!! Module 'Foo' is hidden by a local declaration with the same name
+!!! error TS2437: Module 'Foo' is hidden by a local declaration with the same name
     }

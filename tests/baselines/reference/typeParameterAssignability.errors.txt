@@ -4,8 +4,8 @@
     function foo<T, U>(t: T, u: U) {
         t = u; // error
         ~
-!!! Type 'U' is not assignable to type 'T'.
+!!! error TS2323: Type 'U' is not assignable to type 'T'.
         u = t; // error
         ~
-!!! Type 'T' is not assignable to type 'U'.
+!!! error TS2323: Type 'T' is not assignable to type 'U'.
     }

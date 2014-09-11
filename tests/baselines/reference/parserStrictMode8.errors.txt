@@ -2,7 +2,7 @@
     "use strict";
     function eval() {
              ~~~~
-!!! Invalid use of 'eval' in strict mode.
+!!! error TS1100: Invalid use of 'eval' in strict mode.
              ~~~~
-!!! Overload signatures must all be ambient or non-ambient.
+!!! error TS2384: Overload signatures must all be ambient or non-ambient.
     }

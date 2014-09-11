@@ -7,8 +7,8 @@
         static bar(x: number): number {
             C.bar = () => { } // error
             ~~~~~
-!!! Type '() => void' is not assignable to type '(x: number) => number':
-!!!   Type 'void' is not assignable to type 'number'.
+!!! error TS2322: Type '() => void' is not assignable to type '(x: number) => number':
+!!! error TS2322:   Type 'void' is not assignable to type 'number'.
             C.bar = (x) => x; // ok
             C.bar = (x: number) => 1; // ok
             return 1;

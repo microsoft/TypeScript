@@ -5,4 +5,4 @@
     
     var logger = Tools.NullLogger();
                  ~~~~~~~~~~~~~~~~~~
-!!! Value of type 'typeof NullLogger' is not callable. Did you mean to include 'new'?
+!!! error TS2348: Value of type 'typeof NullLogger' is not callable. Did you mean to include 'new'?

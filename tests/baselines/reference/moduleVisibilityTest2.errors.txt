@@ -57,25 +57,25 @@
     module M {
     	export var c = x;
     	               ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
     	export var meb = M.E.B;
     	                   ~
-!!! Property 'E' does not exist on type 'typeof M'.
+!!! error TS2339: Property 'E' does not exist on type 'typeof M'.
     }
     
     var cprime : M.I = <M.I>null;
                  ~~~
-!!! Module 'M' has no exported member 'I'.
+!!! error TS2305: Module 'M' has no exported member 'I'.
                         ~~~
-!!! Module 'M' has no exported member 'I'.
+!!! error TS2305: Module 'M' has no exported member 'I'.
     
     var c = new M.C();
     var z = M.x;
               ~
-!!! Property 'x' does not exist on type 'typeof M'.
+!!! error TS2339: Property 'x' does not exist on type 'typeof M'.
     var alpha = M.E.A;
                   ~
-!!! Property 'E' does not exist on type 'typeof M'.
+!!! error TS2339: Property 'E' does not exist on type 'typeof M'.
     var omega = M.exported_var;
     c.someMethodThatCallsAnOuterMethod();
     

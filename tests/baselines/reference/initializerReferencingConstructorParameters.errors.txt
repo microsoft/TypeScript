@@ -4,20 +4,20 @@
     class C {
         a = x; // error
             ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
         b: typeof x; // error
                   ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
         constructor(x) { }
     }
     
     class D {
         a = x; // error
             ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
         b: typeof x; // error
                   ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
         constructor(public x) { }
     }
     
@@ -25,7 +25,7 @@
         a = this.x; // ok
         b: typeof this.x; // error
                   ~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
         constructor(public x) { }
     }
     
@@ -33,6 +33,6 @@
         a = this.x; // ok
         b = x; // error
             ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
         constructor(public x: T) { }
     }

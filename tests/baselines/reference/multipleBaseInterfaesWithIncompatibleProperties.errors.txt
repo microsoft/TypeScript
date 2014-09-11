@@ -6,6 +6,6 @@
     
     interface C extends A<string>, A<number> { }
               ~
-!!! Interface 'C' cannot simultaneously extend types 'A<string>' and 'A<number>':
-!!!   Named properties 'x' of types 'A<string>' and 'A<number>' are not identical.
+!!! error TS2320: Interface 'C' cannot simultaneously extend types 'A<string>' and 'A<number>':
+!!! error TS2320:   Named properties 'x' of types 'A<string>' and 'A<number>' are not identical.
     

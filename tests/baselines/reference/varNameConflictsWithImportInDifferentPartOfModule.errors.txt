@@ -6,5 +6,5 @@
     module M1 {
         export import q = M1.s; // Should be an error but isn't
         ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declaration conflicts with local declaration of 'q'
+!!! error TS2440: Import declaration conflicts with local declaration of 'q'
     }

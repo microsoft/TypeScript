@@ -4,9 +4,9 @@
     
     x = y;
     ~
-!!! Type '{ [x: string]: any; }' is not assignable to type '{ one: number; }':
-!!!   Property 'one' is missing in type '{ [x: string]: any; }'.
+!!! error TS2322: Type '{ [x: string]: any; }' is not assignable to type '{ one: number; }':
+!!! error TS2322:   Property 'one' is missing in type '{ [x: string]: any; }'.
     y = x;
     ~
-!!! Type '{ one: number; }' is not assignable to type '{ [x: string]: any; }':
-!!!   Index signature is missing in type '{ one: number; }'.
+!!! error TS2322: Type '{ one: number; }' is not assignable to type '{ [x: string]: any; }':
+!!! error TS2322:   Index signature is missing in type '{ one: number; }'.

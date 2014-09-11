@@ -2,13 +2,13 @@
     // this should be an error
     var x;                 // error at "x"
         ~
-!!! Variable 'x' implicitly has an 'any' type.
+!!! error TS7005: Variable 'x' implicitly has an 'any' type.
     declare var foo;       // error at "foo"
                 ~~~
-!!! Variable 'foo' implicitly has an 'any' type.
+!!! error TS7005: Variable 'foo' implicitly has an 'any' type.
     function func(k) { };  //error at "k"
                   ~
-!!! Parameter 'k' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'k' implicitly has an 'any' type.
     func(x);
     
     // this shouldn't be an error

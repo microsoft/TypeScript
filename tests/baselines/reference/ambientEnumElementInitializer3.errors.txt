@@ -2,5 +2,5 @@
     declare enum E {
      e = 3.3 // Decimal
      ~
-!!! Ambient enum elements can only have integer literal initializers.
+!!! error TS1066: Ambient enum elements can only have integer literal initializers.
     }

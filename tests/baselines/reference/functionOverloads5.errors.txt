@@ -2,7 +2,7 @@
     class baz { 
       public foo();
              ~~~
-!!! Overload signatures must all be public or private.
+!!! error TS2385: Overload signatures must all be public or private.
       private foo(bar?:any){ }
     }
     

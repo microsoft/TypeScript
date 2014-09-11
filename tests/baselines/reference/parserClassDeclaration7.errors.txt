@@ -2,6 +2,6 @@
     declare module M {
       declare class C {
       ~~~~~~~
-!!! A 'declare' modifier cannot be used in an already ambient context.
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
       }
     }

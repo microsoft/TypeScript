@@ -4,7 +4,7 @@
     
     obj1.length;
          ~~~~~~
-!!! Property 'length' does not exist on type '{}'.
+!!! error TS2339: Property 'length' does not exist on type '{}'.
      
      
     
@@ -12,7 +12,7 @@
     
     obj2.length;
          ~~~~~~
-!!! Property 'length' does not exist on type 'Object'.
+!!! error TS2339: Property 'length' does not exist on type 'Object'.
      
      
     
@@ -22,5 +22,5 @@
     
     var elementCount = result.length; // would like to get an error by now
                               ~~~~~~
-!!! Property 'length' does not exist on type '{}'.
+!!! error TS2339: Property 'length' does not exist on type '{}'.
     

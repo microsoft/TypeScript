@@ -2,10 +2,10 @@
     module M {}
     class C extends M {}
                     ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.
     interface I extends M { }
                         ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.
     class C2 implements M { }
                         ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.

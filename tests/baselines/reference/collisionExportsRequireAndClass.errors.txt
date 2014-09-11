@@ -1,11 +1,11 @@
 ==== tests/cases/compiler/collisionExportsRequireAndClass_externalmodule.ts (2 errors) ====
     export class require {
                  ~~~~~~~
-!!! Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
     }
     export class exports {
                  ~~~~~~~
-!!! Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.
+!!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.
     }
     module m1 {
         class require {

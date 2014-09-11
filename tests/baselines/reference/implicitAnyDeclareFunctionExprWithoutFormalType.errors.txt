@@ -2,30 +2,30 @@
     // these should be errors for implicit any parameter
     var lambda = (l1) => { };       // Error at "l1"
                   ~~
-!!! Parameter 'l1' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'l1' implicitly has an 'any' type.
     var lambd2 = (ll1, ll2: string) => { }  // Error at "ll1"
                   ~~~
-!!! Parameter 'll1' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'll1' implicitly has an 'any' type.
     var lamda3 = function myLambda3(myParam) { }
                                     ~~~~~~~
-!!! Parameter 'myParam' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'myParam' implicitly has an 'any' type.
     var lamda4 = () => { return null };
                  ~~~~~~~~~~~~~~~~~~~~~
-!!! Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
     
     // these should be error for implicit any return type
     var lambda5 = function temp() { return null; }
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! 'temp', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'temp', which lacks return-type annotation, implicitly has an 'any' return type.
     var lambda6 = () => { return null; }
                   ~~~~~~~~~~~~~~~~~~~~~~
-!!! Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
     var lambda7 = function temp() { return undefined; }
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! 'temp', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'temp', which lacks return-type annotation, implicitly has an 'any' return type.
     var lambda8 = () => { return undefined; }
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
     
     // this shouldn't be an error
     var lambda9 = () => { return 5; }
