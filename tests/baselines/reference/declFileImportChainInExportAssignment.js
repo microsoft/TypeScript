@@ -12,6 +12,7 @@ export = b;
 //// [declFileImportChainInExportAssignment.js]
 var m;
 (function (m) {
+    var c;
     (function (_c) {
         var c = (function () {
             function c() {
@@ -19,8 +20,7 @@ var m;
             return c;
         })();
         _c.c = c;
-    })(m.c || (m.c = {}));
-    var c = m.c;
+    })(c = m.c || (m.c = {}));
 })(m || (m = {}));
 var a = m.c;
 var b = a;

@@ -86,4 +86,4 @@ export declare class A {
     foo: string;
 }
 //// [withImportDecl_1.d.ts]
-/// <reference path='withImportDecl_0.d.ts' />
+/// <reference path="withImportDecl_0.d.ts" />

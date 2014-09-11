@@ -13,9 +13,9 @@ var x: c.b;
 
 //// [internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.js]
 define(["require", "exports"], function (require, exports) {
+    var c;
     (function (c) {
         c.x;
-    })(exports.c || (exports.c = {}));
-    var c = exports.c;
+    })(c = exports.c || (exports.c = {}));
     var x;
 });

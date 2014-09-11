@@ -192,7 +192,7 @@ module ts {
             return false;
         }
 
-        // Perform binary search in one of the unicode range maps
+        // Perform binary search in one of the Unicode range maps
         var lo: number = 0;
         var hi: number = map.length;
         var mid: number;
@@ -281,8 +281,8 @@ module ts {
         if (lineNumber < 0) {
             // If the actual position was not found, 
             // the binary search returns the negative value of the next line start
-            // eg. if line starts at [5, 10, 23, 80] and position requested was 20 
-            // the search will return -2
+            // e.g. if the line starts at [5, 10, 23, 80] and the position requested was 20
+            // then the search will return -2
             lineNumber = (~lineNumber) - 1;
         }
         return {
@@ -369,7 +369,7 @@ module ts {
     // Extract comments from the given source text starting at the given position. If trailing is false, whitespace is skipped until
     // the first line break and comments between that location and the next token are returned. If trailing is true, comments occurring
     // between the given position and the next line break are returned. The return value is an array containing a TextRange for each
-    // comment. Single-line comment ranges include the the beginning '//' characters but not the ending line break. Multi-line comment
+    // comment. Single-line comment ranges include the beginning '//' characters but not the ending line break. Multi-line comment
     // ranges include the beginning '/* and ending '*/' characters. The return value is undefined if no comments were found.
     function getCommentRanges(text: string, pos: number, trailing: boolean): Comment[] {
         var result: Comment[];

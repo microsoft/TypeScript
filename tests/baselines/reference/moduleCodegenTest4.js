@@ -5,9 +5,9 @@ Baz.x = "goodbye";
 void 0;
 
 //// [moduleCodegenTest4.js]
+var Baz;
 (function (Baz) {
     Baz.x = "hello";
-})(exports.Baz || (exports.Baz = {}));
-var Baz = exports.Baz;
+})(Baz = exports.Baz || (exports.Baz = {}));
 Baz.x = "goodbye";
 void 0;

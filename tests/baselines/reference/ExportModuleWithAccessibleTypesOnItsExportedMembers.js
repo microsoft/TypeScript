@@ -31,6 +31,7 @@ var A;
         return Point;
     })();
     A.Point = Point;
+    var B;
     (function (B) {
         B.Origin = new Point(0, 0);
         var Line = (function () {
@@ -42,6 +43,5 @@ var A;
             return Line;
         })();
         B.Line = Line;
-    })(A.B || (A.B = {}));
-    var B = A.B;
+    })(B = A.B || (A.B = {}));
 })(A || (A = {}));

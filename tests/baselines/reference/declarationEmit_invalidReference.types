@@ -1,0 +1,5 @@
+=== tests/cases/compiler/declarationEmit_invalidReference.ts ===
+/// <reference path="invalid.ts" />
+var x = 0;
+>x : number
+

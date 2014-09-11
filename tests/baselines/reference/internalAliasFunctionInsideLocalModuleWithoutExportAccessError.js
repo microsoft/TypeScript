@@ -13,17 +13,17 @@ export module c {
 var d = c.b(11);
 
 //// [internalAliasFunctionInsideLocalModuleWithoutExportAccessError.js]
+var a;
 (function (a) {
     function foo(x) {
         return x;
     }
     a.foo = foo;
-})(exports.a || (exports.a = {}));
-var a = exports.a;
+})(a = exports.a || (exports.a = {}));
+var c;
 (function (c) {
     var b = a.foo;
     var bVal = b(10);
     c.bVal2 = b;
-})(exports.c || (exports.c = {}));
-var c = exports.c;
+})(c = exports.c || (exports.c = {}));
 var d = c.b(11);

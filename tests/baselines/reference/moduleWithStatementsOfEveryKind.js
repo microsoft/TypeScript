@@ -136,14 +136,14 @@ var Y;
         return BB;
     })(A);
     Y.BB = BB;
+    var Module;
     (function (Module) {
         var A = (function () {
             function A() {
             }
             return A;
         })();
-    })(Y.Module || (Y.Module = {}));
-    var Module = Y.Module;
+    })(Module = Y.Module || (Y.Module = {}));
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
