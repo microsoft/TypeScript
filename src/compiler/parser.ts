@@ -1274,7 +1274,18 @@ module ts {
             var typeParameters = parseTypeParameters();
             var parameters = parseParameterList(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken);
             checkParameterList(parameters);
-            var type = parseOptional(returnToken) ? parseType() : undefined;
+
+            var type: TypeNode;
+
+            if (returnToken === SyntaxKind.EqualsGreaterThanToken) {
+                parseExpected(returnToken);
+                type = parseType();
+            }
+            else if (parseOptional(returnToken)) 
+            {
+                type = parseType();
+            }
+
             return {
                 typeParameters: typeParameters,
                 parameters: parameters,

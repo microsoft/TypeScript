@@ -1,0 +1,18 @@
+==== tests/cases/compiler/functionTypesLackingReturnTypes.ts (2 errors) ====
+    
+    // Error (no '=>')
+    function f(x: ()) {
+                    ~
+!!! '=>' expected.
+    }
+    
+    // Error (no '=>')
+    var g: (param);
+                  ~
+!!! '=>' expected.
+    
+    // Okay
+    var h: { () }
+    
+    // Okay
+    var i: { new () }
