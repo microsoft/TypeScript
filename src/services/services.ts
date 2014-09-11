@@ -27,18 +27,18 @@
 module ts {
     export interface Node {
         getSourceFile(): SourceFile;
-        getChildCount(): number;
-        getChildAt(index: number): Node;
-        getChildren(): Node[];
-        getStart(): number;
+        getChildCount(sourceFile?: SourceFile): number;
+        getChildAt(index: number, sourceFile?: SourceFile): Node;
+        getChildren(sourceFile?: SourceFile): Node[];
+        getStart(sourceFile?: SourceFile): number;
         getFullStart(): number;
         getEnd(): number;
-        getWidth(): number;
+        getWidth(sourceFile?: SourceFile): number;
         getFullWidth(): number;
-        getLeadingTriviaWidth(): number;
-        getFullText(): string;
-        getFirstToken(): Node;
-        getLastToken(): Node;
+        getLeadingTriviaWidth(sourceFile?: SourceFile): number;
+        getFullText(sourceFile?: SourceFile): string;
+        getFirstToken(sourceFile?: SourceFile): Node;
+        getLastToken(sourceFile?: SourceFile): Node;
     }
 
     export interface Symbol {
@@ -100,8 +100,8 @@ module ts {
             return <SourceFile>node;
         }
 
-        public getStart(): number {
-            return getTokenPosOfNode(this);
+        public getStart(sourceFile?: SourceFile): number {
+            return getTokenPosOfNode(this, sourceFile);
         }
 
         public getFullStart(): number {
@@ -112,20 +112,20 @@ module ts {
             return this.end;
         }
 
-        public getWidth(): number {
-            return this.getEnd() - this.getStart();
+        public getWidth(sourceFile?: SourceFile): number {
+            return this.getEnd() - this.getStart(sourceFile);
         }
 
         public getFullWidth(): number {
             return this.end - this.getFullStart();
         }
 
-        public getLeadingTriviaWidth(): number {
-            return this.getStart() - this.pos;
+        public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
+            return this.getStart(sourceFile) - this.pos;
         }
 
-        public getFullText(): string {
-            return this.getSourceFile().text.substring(this.pos, this.end);
+        public getFullText(sourceFile?: SourceFile): string {
+            return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
         }
 
         private addSyntheticNodes(nodes: Node[], pos: number, end: number): number {
@@ -157,9 +157,9 @@ module ts {
             return list;
         }
 
-        private createChildren() {
+        private createChildren(sourceFile?: SourceFile) {
             if (this.kind > SyntaxKind.Missing) {
-                scanner.setText(this.getSourceFile().text);
+                scanner.setText((sourceFile || this.getSourceFile()).text);
                 var children: Node[] = [];
                 var pos = this.pos;
                 var processNode = (node: Node) => {
@@ -185,36 +185,36 @@ module ts {
             this._children = children || emptyArray;
         }
 
-        public getChildCount(): number {
-            if (!this._children) this.createChildren();
+        public getChildCount(sourceFile?: SourceFile): number {
+            if (!this._children) this.createChildren(sourceFile);
             return this._children.length;
         }
 
-        public getChildAt(index: number): Node {
-            if (!this._children) this.createChildren();
+        public getChildAt(index: number, sourceFile?: SourceFile): Node {
+            if (!this._children) this.createChildren(sourceFile);
             return this._children[index];
         }
 
-        public getChildren(): Node[] {
-            if (!this._children) this.createChildren();
+        public getChildren(sourceFile?: SourceFile): Node[] {
+            if (!this._children) this.createChildren(sourceFile);
             return this._children;
         }
 
-        public getFirstToken(): Node {
-            var children = this.getChildren();
+        public getFirstToken(sourceFile?: SourceFile): Node {
+            var children = this.getChildren(sourceFile);
             for (var i = 0; i < children.length; i++) {
                 var child = children[i];
                 if (child.kind < SyntaxKind.Missing) return child;
-                if (child.kind > SyntaxKind.Missing) return child.getFirstToken();
+                if (child.kind > SyntaxKind.Missing) return child.getFirstToken(sourceFile);
             }
         }
 
-        public getLastToken(): Node {
-            var children = this.getChildren();
+        public getLastToken(sourceFile?: SourceFile): Node {
+            var children = this.getChildren(sourceFile);
             for (var i = children.length - 1; i >= 0; i--) {
                 var child = children[i];
                 if (child.kind < SyntaxKind.Missing) return child;
-                if (child.kind > SyntaxKind.Missing) return child.getLastToken();
+                if (child.kind > SyntaxKind.Missing) return child.getLastToken(sourceFile);
             }
         }
     }

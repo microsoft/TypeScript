@@ -50,8 +50,8 @@ module ts {
         return node.pos;
     }
 
-    export function getTokenPosOfNode(node: Node): number {
-        return skipTrivia(getSourceFileOfNode(node).text, node.pos);
+    export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
     export function getSourceTextOfNodeFromSourceText(sourceText: string, node: Node): string {
