@@ -2219,6 +2219,11 @@ module ts {
                         return getLoopBreakContinueOccurrences(<IterationStatement>node.parent);
                     }
                     break;
+                case SyntaxKind.ConstructorKeyword:
+                    if (hasKind(node.parent, SyntaxKind.Constructor)) {
+                        return getConstructorOccurrences(<ConstructorDeclaration>node.parent);
+                    }
+                    break;
             }
 
             return undefined;
@@ -2283,7 +2288,7 @@ module ts {
                 return result;
             }
 
-            function getReturnOccurrences(returnStatement: ReturnStatement): ReferenceEntry[]{
+            function getReturnOccurrences(returnStatement: ReturnStatement): ReferenceEntry[] {
                 var func = <FunctionDeclaration>getContainingFunction(returnStatement);
 
                 // If we didn't find a containing function with a block body, bail out.
@@ -2433,6 +2438,20 @@ module ts {
                 }
 
                 return undefined;
+            }
+
+            function getConstructorOccurrences(constructorDeclaration: ConstructorDeclaration): ReferenceEntry[] {
+                var declarations = constructorDeclaration.symbol.getDeclarations()
+
+                var keywords: Node[] = [];
+
+                forEach(declarations, declaration => {
+                    forEach(declaration.getChildren(), token => {
+                        return pushKeywordIf(keywords, token, SyntaxKind.ConstructorKeyword);
+                    });
+                });
+
+                return map(keywords, getReferenceEntryFromNode);
             }
 
             // returns true if 'node' is defined and has a matching 'kind'.
