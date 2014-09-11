@@ -1603,7 +1603,7 @@ module ts {
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
                 forEach(symbols, (symbol) => {
                     var entry = createCompletionEntry(symbol);
-                    if (entry) {
+                    if (entry && !lookUp(session.symbols, entry.name)) {
                         session.entries.push(entry);
                         session.symbols[entry.name] = symbol;
                     }
@@ -1737,6 +1737,11 @@ module ts {
                 return (SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation);
             }
 
+            function isVisibleWithenDeclaration(symbol: Symbol, containingClass: Declaration): boolean {
+                var declaration = symbol.declarations && symbol.declarations[0];
+                return !(declaration && declaration.flags & NodeFlags.Private && containingClass !== declaration.parent);
+            }
+
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -1809,24 +1814,34 @@ module ts {
 
             // Right of dot member completion list
             if (isRightOfDot) {
-                var type = typeInfoResolver.getTypeOfNode(mappedNode);
-                var apparentType: ApparentType = type && typeInfoResolver.getApparentType(type);
-                if (!apparentType) {
-                    return undefined;
+                var symbols: Symbol[] = [];
+                var containingClass = getAncestor(mappedNode, SyntaxKind.ClassDeclaration);
+                isMemberCompletion = true;
+
+
+                if (mappedNode.kind === SyntaxKind.Identifier || mappedNode.kind === SyntaxKind.QualifiedName || mappedNode.kind === SyntaxKind.PropertyAccess) {
+                    var symbol = typeInfoResolver.getSymbolInfo(mappedNode);
+                    if (symbol && symbol.flags & SymbolFlags.HasExports) {
+                        // Extract module or enum members
+                        forEachValue(symbol.exports, symbol => {
+                            if (isVisibleWithenDeclaration(symbol, containingClass)) {
+                                symbols.push(symbol);
+                            }
+                        });
+                    }
                 }
 
-                var containingClass = getAncestor(mappedNode, SyntaxKind.ClassDeclaration);
+                var type = typeInfoResolver.getTypeOfNode(mappedNode);
+                var apparentType: ApparentType = type && typeInfoResolver.getApparentType(type);
+                if (apparentType) {
+                    // Filter private properties
+                    forEach(apparentType.getApparentProperties(), symbol => {
+                        if (isVisibleWithenDeclaration(symbol, containingClass)) {
+                            symbols.push(symbol);
+                        }
+                    });
+                }
 
-                var symbols: Symbol[] = [];
-                // Filter private properties
-                forEach(apparentType.getApparentProperties(), symbol => {
-                    var declaration = symbol.declarations && symbol.declarations[0];
-                    if (declaration && declaration.flags & NodeFlags.Private && containingClass !== declaration.parent)
-                        return;
-
-                    symbols.push(symbol);
-                });
-                isMemberCompletion = true;
                 getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }
             else {
