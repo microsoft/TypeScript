@@ -29,7 +29,7 @@ module ts.formatting {
                 var listStartLine =  getStartLineForNode(precedingListItem.parent, sourceFile);
 
                 if (precedingListItemStartLineAndChar.line !== listStartLine) {
-
+                    return findFirstNonWhitespaceCharacterInLine(precedingListItemStartLineAndChar.line, precedingListItemStartLineAndChar.character, sourceFile);
                     // previous list item starts on the different line with list, find first non-whitespace character in this line and use its position as indentation
                     var lineStartPosition = sourceFile.getPositionFromLineAndCharacter(precedingListItemStartLineAndChar.line, 1);
                     for (var i = 0; i < precedingListItemStartLineAndChar.character; ++i) {
@@ -52,22 +52,23 @@ module ts.formatting {
 
             while (current) {
                 if (isPositionBelongToNode(current, position, sourceFile)) {
-
                     currentStartLine = getStartLineForNode(current, sourceFile);
 
                     if (discardInitialIndentationIfNextTokenIsOpenOrCloseBrace(precedingToken, current, lineAtPosition, sourceFile)) {
                         indentation = 0;
                     }
                     else {
-                        indentation =
-                            isNodeContentIndented(current, previous) && 
-                            lineAtPosition !== currentStartLine
-                                ? options.indentSpaces 
-                                : 0;
+                        indentation = isNodeContentIndented(current, previous) &&  lineAtPosition !== currentStartLine ? options.indentSpaces : 0;
                     }
 
                     break;
                 }
+                var customIndentation = getCustomIndentationForListItem(current, sourceFile);
+                if (customIndentation !== -1) {
+                    return customIndentation;
+                }
+
+                // check if current node is a list item - if yes, take indentation from it
                 var customIndentation = getCustomIndentationForListItem(current, sourceFile);
                 if (customIndentation !== -1) {
                     return customIndentation;
@@ -89,12 +90,15 @@ module ts.formatting {
             // walk upwards and collect indentations for pairs of parent-child nodes
             // indentation is not added if parent and child nodes start on the same line or if parent is IfStatement and child starts on the same line with 'else clause'
             while (parent) {
+
+                // check if current node is a list item - if yes, take indentation from it
                 var customIndentation = getCustomIndentationForListItem(current, sourceFile);
                 if (customIndentation !== -1) {
                     return customIndentation + indentation;
                 }
 
                 parentStartLine = sourceFile.getLineAndCharacterFromPosition(parent.getStart(sourceFile)).line;
+                // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
                 var increaseIndentation = 
                     isNodeContentIndented(parent, current) && 
                     parentStartLine !== currentStartLine && 
@@ -218,22 +222,24 @@ module ts.formatting {
                     for (var i = index - 1; i >= 0; --i) {
                         var prevLineAndCol =  sourceFile.getLineAndCharacterFromPosition(list[i].getStart(sourceFile));
                         if (lineAndCol.line !== prevLineAndCol.line) {
-                            // find the line start position
-                            var lineStart = sourceFile.getPositionFromLineAndCharacter(lineAndCol.line, 1);
-                            for (var i = 0; i <= lineAndCol.character; ++i) {
-                                if (!isWhiteSpace(sourceFile.text.charCodeAt(lineStart + i))) {
-                                    return i;
-                                }
-                            }
-                            // code is unreachable because the range that we check above includes at least one non-whitespace character at the very end
-                            Debug.fail("Unreachable code")
-
+                            return findFirstNonWhitespaceCharacterInLine(lineAndCol.line, lineAndCol.character, sourceFile);
                         }
                         lineAndCol = prevLineAndCol;
                     }
                 }
                 return -1;
             }
+        }
+
+        function findFirstNonWhitespaceCharacterInLine(line: number, maxCharacter: number, sourceFile: SourceFile): number {
+            var lineStart = sourceFile.getPositionFromLineAndCharacter(line, 1);
+            for (var i = 0; i < maxCharacter; ++i) {
+                if (!isWhiteSpace(sourceFile.text.charCodeAt(lineStart + i))) {
+                    return i;
+                }
+            }
+
+            return maxCharacter;
         }
 
         function findNextToken(previousToken: Node, parent: Node): Node {
