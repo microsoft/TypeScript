@@ -2830,8 +2830,7 @@ module ts {
         }
 
         function containErrors(diagnostics: Diagnostic[]): boolean {
-            var hasError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
-            return hasError;
+            return forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
         }
 
         function getEmitOutput(filename: string): EmitOutput {
@@ -2846,14 +2845,16 @@ module ts {
                 emitOutputStatus: undefined,
             };
 
-            // Initialize writer for CompilerHost.writeFile
-            writer = function (fileName: string, data: string, writeByteOrderMark: boolean) {
+            function getEmitOutputWriter(filename: string, data: string, writeByteOrderMark: boolean) {
                 emitOutput.outputFiles.push({
-                    name: fileName,
+                    name: filename,
                     writeByteOrderMark: writeByteOrderMark,
                     text: data
                 });
             }
+
+            // Initialize writer for CompilerHost.writeFile
+            writer = getEmitOutputWriter;
 
             var syntacticDiagnostics: Diagnostic[] = [];  
             if (emitToSingleFile) {
@@ -2873,6 +2874,8 @@ module ts {
             // If there is any syntactic error, terminate the process
             if (containErrors(syntacticDiagnostics)) {
                 emitOutput.emitOutputStatus = EmitReturnStatus.AllOutputGenerationSkipped;
+                // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
+                writer = undefined;
                 return emitOutput;
             }
 
@@ -2890,7 +2893,7 @@ module ts {
             emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
 
             // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
-            this.writer = undefined;
+            writer = undefined;
             return emitOutput;
         }
 
