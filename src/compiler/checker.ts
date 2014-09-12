@@ -3815,6 +3815,11 @@ module ts {
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
         function getContextualType(node: Expression): Type {
+            if (isInsideWithStatementBody(node)) {
+                // We cannot answer semantic questions within a with block, do not proceed any further
+                return undefined;
+            }
+
             if (node.contextualType) {
                 return node.contextualType;
             }
@@ -6681,7 +6686,20 @@ module ts {
             return findChildAtPosition(sourceFile);
         }
 
-        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
+        function isInsideWithStatementBody(node: Node): boolean {
+            if (node) {
+                while (node.parent) {
+                    if (node.parent.kind === SyntaxKind.WithStatement && (<WithStatement>node.parent).statement === node) {
+                        return true;
+                    }
+                    node = node.parent;
+                }
+            }
+
+            return false;
+        }
+
+        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[]{
             var symbols: SymbolTable = {};
             var memberFlags: NodeFlags = 0;
             function copySymbol(symbol: Symbol, meaning: SymbolFlags) {
@@ -6701,6 +6719,12 @@ module ts {
                     }
                 }
             }
+
+            if (isInsideWithStatementBody(location)) {
+                // We cannot answer semantic questions within a with block, do not proceed any further
+                return [];
+            }
+
             while (location) {
                 if (location.locals && !isGlobalSourceFile(location)) {
                     copySymbols(location.locals, meaning);
@@ -6973,6 +6997,11 @@ module ts {
         }
 
         function getSymbolInfo(node: Node) {
+            if (isInsideWithStatementBody(node)) {
+                // We cannot answer semantic questions within a with block, do not proceed any further
+                return undefined;
+            }
+
             if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                 // This is a declaration, call getSymbolOfNode
                 return getSymbolOfNode(node.parent);
@@ -7027,9 +7056,15 @@ module ts {
         }
 
         function getTypeOfNode(node: Node): Type {
+            if (isInsideWithStatementBody(node)) {
+                // We cannot answer semantic questions within a with block, do not proceed any further
+                return unknownType;
+            }
+
             if (isExpression(node)) {
                 return getTypeOfExpression(<Expression>node);
             }
+
             if (isTypeNode(node)) {
                 return getTypeFromTypeNode(<TypeNode>node);
             }
