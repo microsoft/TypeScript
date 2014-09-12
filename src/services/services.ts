@@ -73,6 +73,263 @@ module ts {
         update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
+    export interface TypeQueryNode {
+        typeOfKeyword?: Node;
+    }
+
+    export interface SignatureDeclaration extends HasOpenBracketAndCloseBracket, HasSemicolon {
+    }
+
+    export interface MethodDeclaration extends HasModifiers {
+        getKeyword?: Node;
+        setKeyword?: Node;
+    }
+
+    export interface HasModifiers {
+        publicKeyword?: Node;
+        privateKeyword?: Node;
+        staticKeyword?: Node;
+        exportKeyword?: Node;
+        declareKeyword?: Node;
+    }
+
+    export interface ParsedSignature extends HasOpenParenAndCloseParen, HasLessThanAndGreaterThan {
+        equalsGreaterThanToken?: Node;
+        colonToken?: Node;
+    }
+
+    export interface TypeLiteralNode extends HasOpenBraceAndCloseBrace {
+    }
+
+    export interface NodeArray<T> {
+        commaTokens?: Node[];
+    }
+
+    export interface BinaryExpression {
+        operatorToken: Node;
+    }
+
+    export interface Signature {
+        newKeyword?: Node;
+    }
+
+    export interface ArrayTypeNode extends HasOpenBracketAndCloseBracket{
+    }
+
+    export interface ParameterDeclaration extends HasModifiers {
+        equalsToken?: Node;
+        dotDotDotToken?: Node;
+        questionToken?: Node;
+    }
+
+    export interface HasLessThanAndGreaterThan {
+        lessThanToken?: Node;
+        greaterThanToken?: Node;
+    }
+
+    export interface HasOpenParenAndCloseParen {
+        openParenToken?: Node;
+        closeParenToken?: Node;
+    }
+
+    export interface HasOpenBracketAndCloseBracket {
+        openBracketToken?: Node;
+        closeBracketToken?: Node;
+    }
+
+    export interface HasOpenBraceAndCloseBrace {
+        openBraceToken?: Node;
+        closeBraceToken?: Node;
+    }
+
+    export interface HasSemicolon {
+        semicolonToken?: Node;
+    }
+
+    export interface TypeAssertion extends HasLessThanAndGreaterThan {
+    }
+
+    export interface IndexedAccess extends HasOpenBracketAndCloseBracket {
+    }
+
+    export interface CallExpression extends HasOpenParenAndCloseParen, HasLessThanAndGreaterThan {
+    }
+
+    export interface ParenExpression extends HasOpenParenAndCloseParen {
+    }
+
+    export interface ArrayLiteral extends HasOpenBracketAndCloseBracket {
+    }
+
+    export interface VariableDeclaration {
+        colonToken?: Node;
+    }
+
+    export interface ObjectLiteral extends HasOpenBraceAndCloseBrace {
+    }
+
+    export interface FunctionDeclaration extends HasModifiers {
+        functionKeyword?: Node;
+    }
+
+    export interface ConstructorDeclaration {
+        constructorKeyword?: Node;
+    }
+
+    export interface VariableStatement extends HasModifiers {
+        varKeyword?: Node;
+    }
+
+    export interface DebuggerStatement {
+        debuggerKeyword?: Node;
+    }
+
+    export interface NewExpression extends HasOpenParenAndCloseParen, HasLessThanAndGreaterThan {
+        newKeyword?: Node;
+    }
+
+    export interface LabelledStatement {
+        colonToken?: Node;
+    }
+
+    export interface ExportAssignment {
+        exportKeyword?: Node;
+        equalsToken?: Node;
+    }
+
+    export interface Block extends HasOpenBraceAndCloseBrace {
+    }
+
+    export interface CatchBlock extends HasOpenParenAndCloseParen {
+        catchKeyword?: Node;
+        colonToken?: Node;
+    }
+
+    export interface Statement {
+        semicolonToken?: Node;
+    }
+
+    export interface ModuleDeclaration extends HasModifiers {
+        moduleKeyword?: Node;
+        dotToken?: Node;
+    }
+
+    export interface ImportDeclaration extends HasOpenParenAndCloseParen, HasModifiers {
+        importKeyword?: Node;
+        equalsToken?: Node;
+        requireKeyword?: Node;
+    }
+
+    export interface InterfaceDeclaration extends HasOpenBraceAndCloseBrace, HasModifiers {
+        extendsKeyword?: Node;
+        interfaceKeyword?: Node;
+    }
+
+    export interface ClassDeclaration extends HasOpenBraceAndCloseBrace, HasLessThanAndGreaterThan, HasModifiers {
+        classKeyword?: Node;
+        extendsKeyword?: Node;
+        implementsKeyword?: Node;
+    }
+
+    export interface ThrowStatement {
+        throwKeyword?: Node;
+    }
+
+    export interface SwitchStatement extends HasOpenParenAndCloseParen, HasOpenBraceAndCloseBrace {
+        switchKeyword?: Node;
+    }
+
+    export interface CaseOrDefaultClause {
+        caseKeyword?: Node;
+        defaultKeyword?: Node;
+        colonToken?: Node;
+    }
+
+    export interface ReturnStatement {
+        returnKeyword?: Node;
+    }
+
+    export interface WithStatement extends HasOpenParenAndCloseParen {
+        withKeyword?: Node;
+    }
+
+    export interface BreakOrContinueStatement {
+        breakKeyword?: Node;
+        continueKeyword?: Node;
+    }
+
+    export interface DoStatement extends HasOpenParenAndCloseParen {
+        doKeyword?: Node;
+        whileKeyword?: Node;
+    }
+
+    export interface WhileStatement extends HasOpenParenAndCloseParen {
+        whileKeyword?: Node;
+    }
+
+    export interface IfStatement extends HasOpenParenAndCloseParen {
+        ifKeyword?: Node;
+        elseKeyword?: Node;
+    }
+
+    export interface TypeReferenceNode extends HasLessThanAndGreaterThan {
+    }
+
+    export interface TryStatement {
+        tryKeyword?: Node;
+        finallyKeyword?: Node;
+    }
+
+    export interface ConditionalExpression {
+        questionToken?: Node;
+        colonToken?: Node;
+    }
+
+    export interface EnumMember {
+        equalsToken?: Node;
+    }
+
+    export interface EnumDeclaration extends HasOpenBraceAndCloseBrace, HasModifiers {
+        enumKeyword?: Node;
+    }
+
+    export interface FunctionExpression {
+        equalsGreaterThanToken?: Node;
+    }
+
+    export interface ForStatement extends HasOpenParenAndCloseParen {
+        firstSemicolonToken?: Node;
+        secondSemicolonToken?: Node;
+        forKeyword?: Node;
+        varKeyword?: Node;
+    }
+
+    export interface ForInStatement extends HasOpenParenAndCloseParen {
+        forKeyword?: Node;
+        varKeyword?: Node;
+        inKeyword?: Node;
+    }
+
+    export interface QualifiedName {
+        dotToken?: Node;
+    }
+
+    export interface TypeParameterDeclaration {
+        extendsKeyword?: Node;
+    }
+
+    export interface PropertyDeclaration extends HasSemicolon, HasModifiers {
+        questionToken?: Node;
+    }
+
+    export interface PropertyAccess {
+        dotToken?: Node;
+    }
+
+    export interface UnaryExpression {
+        operatorToken?: Node;
+    }
+
     var scanner: Scanner = createScanner(ScriptTarget.ES5);
 
     var emptyArray: any [] = [];
@@ -395,7 +652,7 @@ module ts {
         }
 
         public static createSourceFileObject(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean, syntaxTree?: TypeScript.SyntaxTree) {
-            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
+            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen, parserHooks);
             newSourceFile.scriptSnapshot = scriptSnapshot;
             newSourceFile.syntaxTree = syntaxTree;
             return newSourceFile;
@@ -3633,6 +3890,8 @@ module ts {
         };
     }
 
+    var parserHooks: ParserHooks;
+
     function initializeServices() {
         objectAllocator = {
             getNodeConstructor: kind => {
@@ -3651,6 +3910,84 @@ module ts {
             getTypeConstructor: () => TypeObject,
             getSignatureConstructor: () => SignatureObject,
         };
+
+        parserHooks = {
+            onParseToken(tokenKind: SyntaxKind, parent: Node, startPos: number, endPos: number, propertyKind: SyntaxKind): void {
+                var node = createNode(tokenKind, startPos, endPos, 0);
+                // perf tests showed that switch + setting explicit property has a better timings than using indexer to set property on object
+                switch (propertyKind) {
+                    case SyntaxKind.OpenBraceToken: (<any>parent).openBraceToken = node; break;
+                    case SyntaxKind.CloseBraceToken: (<any>parent).closeBraceToken = node; break;
+                    case SyntaxKind.OpenParenToken: (<any>parent).openParenToken = node; break;
+                    case SyntaxKind.CloseParenToken: (<any>parent).closeParenToken = node; break;
+                    case SyntaxKind.OpenBracketToken: (<any>parent).openBracketToken = node; break;
+                    case SyntaxKind.CloseBracketToken: (<any>parent).closeBracketToken = node; break;
+                    case SyntaxKind.DotToken: (<any>parent).dotToken = node; break;
+                    case SyntaxKind.DotDotDotToken: (<any>parent).dotDotDotToken = node; break;
+                    case SyntaxKind.SemicolonToken: (<any>parent).semicolonToken = node; break;
+                    case SyntaxKind.CommaToken: (<any>parent).commaToken = node; break;
+                    case SyntaxKind.LessThanToken: (<any>parent).lessThanToken = node; break;
+                    case SyntaxKind.GreaterThanToken: (<any>parent).greaterThanToken = node; break;
+                    case SyntaxKind.GreaterThanEqualsToken: (<any>parent).greaterThanEqualsToken = node; break;
+                    case SyntaxKind.EqualsGreaterThanToken: (<any>parent).equalsGreaterThanToken = node; break;
+                    case SyntaxKind.QuestionToken: (<any>parent).questionToken = node; break;
+                    case SyntaxKind.ColonToken: (<any>parent).colonToken = node; break;
+                    case SyntaxKind.EqualsToken: (<any>parent).equalsToken = node; break;
+                    case SyntaxKind.BreakKeyword: (<any>parent).breakKeyword = node; break;
+                    case SyntaxKind.CaseKeyword: (<any>parent).caseKeyword = node; break;
+                    case SyntaxKind.CatchKeyword: (<any>parent).catchKeyword = node; break;
+                    case SyntaxKind.ClassKeyword: (<any>parent).classKeyword = node; break;
+                    case SyntaxKind.ContinueKeyword: (<any>parent).continueKeyword = node; break;
+                    case SyntaxKind.DebuggerKeyword: (<any>parent).debuggerKeyword = node; break;
+                    case SyntaxKind.DefaultKeyword: (<any>parent).defaultKeyword = node; break;
+                    case SyntaxKind.DeleteKeyword: (<any>parent).deleteKeyword = node; break;
+                    case SyntaxKind.DoKeyword: (<any>parent).doKeyword = node; break;
+                    case SyntaxKind.ElseKeyword: (<any>parent).elseKeyword = node; break;
+                    case SyntaxKind.EnumKeyword: (<any>parent).enumKeyword = node; break;
+                    case SyntaxKind.ExportKeyword: (<any>parent).exportKeyword = node; break;
+                    case SyntaxKind.ExtendsKeyword: (<any>parent).extendsKeyword = node; break;
+                    case SyntaxKind.FalseKeyword: (<any>parent).falseKeyword = node; break;
+                    case SyntaxKind.FinallyKeyword: (<any>parent).finallyKeyword = node; break;
+                    case SyntaxKind.ForKeyword: (<any>parent).forKeyword = node; break;
+                    case SyntaxKind.FunctionKeyword: (<any>parent).functionKeyword = node; break;
+                    case SyntaxKind.IfKeyword: (<any>parent).ifKeyword = node; break;
+                    case SyntaxKind.ImportKeyword: (<any>parent).importKeyword = node; break;
+                    case SyntaxKind.InKeyword: (<any>parent).inKeyword = node; break;
+                    case SyntaxKind.NewKeyword: (<any>parent).newKeyword = node; break;
+                    case SyntaxKind.NullKeyword: (<any>parent).nullKeyword = node; break;
+                    case SyntaxKind.ReturnKeyword: (<any>parent).returnKeyword = node; break;
+                    case SyntaxKind.SuperKeyword: (<any>parent).superKeyword = node; break;
+                    case SyntaxKind.SwitchKeyword: (<any>parent).switchKeyword = node; break;
+                    case SyntaxKind.ThrowKeyword: (<any>parent).throwKeyword = node; break;
+                    case SyntaxKind.TrueKeyword: (<any>parent).trueKeyword = node; break;
+                    case SyntaxKind.TryKeyword: (<any>parent).tryKeyword = node; break;
+                    case SyntaxKind.TypeOfKeyword: (<any>parent).typeOfKeyword = node; break;
+                    case SyntaxKind.VarKeyword: (<any>parent).varKeyword = node; break;
+                    case SyntaxKind.WhileKeyword: (<any>parent).whileKeyword = node; break;
+                    case SyntaxKind.WithKeyword: (<any>parent).withKeyword = node; break;
+                    case SyntaxKind.ImplementsKeyword: (<any>parent).implementsKeyword = node; break;
+                    case SyntaxKind.InterfaceKeyword: (<any>parent).interfaceKeyword = node; break;
+                    case SyntaxKind.PrivateKeyword: (<any>parent).privateKeyword = node; break;
+                    case SyntaxKind.PublicKeyword: (<any>parent).publicKeyword = node; break;
+                    case SyntaxKind.StaticKeyword: (<any>parent).staticKeyword = node; break;
+                    case SyntaxKind.ConstructorKeyword: (<any>parent).constructorKeyword = node; break;
+                    case SyntaxKind.DeclareKeyword: (<any>parent).declareKeyword = node; break;
+                    case SyntaxKind.GetKeyword: (<any>parent).getKeyword = node; break;
+                    case SyntaxKind.ModuleKeyword: (<any>parent).moduleKeyword = node; break;
+                    case SyntaxKind.RequireKeyword: (<any>parent).requireKeyword = node; break;
+                    case SyntaxKind.SetKeyword: (<any>parent).setKeyword = node; break;
+                    case SyntaxKind.OperatorToken: (<any>parent).operatorToken = node; break;
+                    case SyntaxKind.FirstSemicolonToken: (<any>parent).firstSemicolonToken = node; break;
+                    case SyntaxKind.SecondSemicolonToken: (<any>parent).secondSemicolonToken = node; break;
+                    default: Debug.fail(SyntaxKind[propertyKind]);
+                }
+            },
+            onParseComma<T>(parent: NodeArray<T>, startPos: number, endPos: number): void {
+                var commas = parent.commaTokens || (parent.commaTokens = []);
+                var comma = createNode(SyntaxKind.CommaToken, startPos, endPos, 0);
+                commas.push(comma);
+            }
+        }
     }
 
     initializeServices();

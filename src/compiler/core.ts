@@ -535,6 +535,11 @@ module ts {
     function Signature(checker: TypeChecker) {
     }
 
+    export interface ParserHooks {
+        onParseToken(tokenKind: SyntaxKind, parent: Node, startPos: number, endPos: number, propertyKind: SyntaxKind): void;
+        onParseComma<T>(parent: NodeArray<T>, startPos: number, endPos: number): void;
+    }
+
     export var objectAllocator: ObjectAllocator = {
         getNodeConstructor: kind => {
             function Node() {

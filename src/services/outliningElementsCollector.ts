@@ -62,17 +62,13 @@ module ts {
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.CatchBlock:
                     case SyntaxKind.FinallyBlock:
-                        var openBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.OpenBraceToken && c);
-                        var closeBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.CloseBraceToken && c);
-                        addOutlineRange(n.parent, openBrace, closeBrace);
+                        addOutlineRange(n.parent, (<HasOpenBraceAndCloseBrace>n).openBraceToken, (<HasOpenBraceAndCloseBrace>n).closeBraceToken);
                         break;
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ObjectLiteral:
-                        var openBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.OpenBraceToken && c);
-                        var closeBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.CloseBraceToken && c);
-                        addOutlineRange(n, openBrace, closeBrace);
+                        addOutlineRange(n, (<HasOpenBraceAndCloseBrace>n).openBraceToken, (<HasOpenBraceAndCloseBrace>n).closeBraceToken);
                         break;
                 }
                 depth++;
