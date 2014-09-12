@@ -35,7 +35,7 @@ module ts.formatting {
                 }
             }
 
-            // try to find the node that will include 'position' starting from 'precedingToken'
+            // try to find node that can contribute to indentation and includes 'position' starting from 'precedingToken'
             // if such node is found - compute initial indentation for 'position' inside this node
             var previous: Node;
             var current = precedingToken;
@@ -43,14 +43,14 @@ module ts.formatting {
             var indentation: number;
 
             while (current) {
-                if (isPositionBelongToNode(current, position, sourceFile)) {
+                if (isPositionBelongToNode(current, position, sourceFile) && isNodeContentIndented(current, previous)) {
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
                     if (discardInitialIndentationIfNextTokenIsOpenOrCloseBrace(precedingToken, current, lineAtPosition, sourceFile)) {
                         indentation = 0;
                     }
                     else {
-                        indentation = isNodeContentIndented(current, previous) &&  lineAtPosition !== currentStart.line ? options.indentSpaces : 0;
+                        indentation = lineAtPosition !== currentStart.line ? options.indentSpaces : 0;
                     }
 
                     break;
@@ -444,7 +444,6 @@ module ts.formatting {
                 case SyntaxKind.DefaultClause:
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.ParenExpression:
-                case SyntaxKind.BinaryExpression:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.VariableStatement:
