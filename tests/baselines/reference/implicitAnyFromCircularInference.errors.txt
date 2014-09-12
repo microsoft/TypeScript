@@ -1,0 +1,73 @@
+==== tests/cases/compiler/implicitAnyFromCircularInference.ts (9 errors) ====
+    
+    // Error expected
+    var a: typeof a;
+        ~
+!!! 'a' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+    
+    // Error expected on b or c
+    var b: typeof c;
+    var c: typeof b;
+        ~
+!!! 'c' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+    
+    // Error expected
+    var d: Array<typeof d>;
+        ~
+!!! 'd' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+    
+    function f() { return f; }
+    
+    // Error expected
+    function g() { return g(); }
+             ~
+!!! 'g' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    
+    // Error expected
+    var f1 = function () {
+             ~~~~~~~~~~~~~
+        return f1();
+    ~~~~~~~~~~~~~~~~
+    };
+    ~
+!!! Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    
+    // Error expected
+    var f2 = () => f2();
+             ~~~~~~~~~~
+!!! Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    
+    // Error expected
+    function h() {
+             ~
+!!! 'h' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+        return foo();
+        function foo() {
+            return h() || "hello";
+        }
+    }
+    
+    interface A {
+        s: string;
+    }
+    
+    function foo(x: A): string { return "abc"; }
+    
+    class C {
+        // Error expected
+        s = foo(this);
+        ~~~~~~~~~~~~~~
+!!! 's' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.
+    }
+    
+    class D {
+        // Error expected
+        get x() {
+        ~~~~~~~~~
+            return this.x;
+    ~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! 'x' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    }
+    

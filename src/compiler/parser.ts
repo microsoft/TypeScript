@@ -3533,7 +3533,7 @@ module ts {
             return finishNode(node);
         }
 
-        function isDeclaration() {
+        function isDeclaration(): boolean {
             switch (token) {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.FunctionKeyword:

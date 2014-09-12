@@ -1973,7 +1973,7 @@ module ts {
                 }
             }
 
-            function emitNode(node: Node) {
+            function emitNode(node: Node): void {
                 if (!node) {
                     return;
                 }
