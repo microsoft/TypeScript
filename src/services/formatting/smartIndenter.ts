@@ -161,16 +161,6 @@ module ts.formatting {
 
             if (precedingListItemStartLineAndChar.line !== listStart.line) {
                 return findColumnForFirstNonWhitespaceCharacterInLine(precedingListItemStartLineAndChar, sourceFile, options);
-                // previous list item starts on the different line with list, find first non-whitespace character in this line and use its position as indentation
-                var lineStartPosition = sourceFile.getPositionFromLineAndCharacter(precedingListItemStartLineAndChar.line, 1);
-                for (var i = 0; i < precedingListItemStartLineAndChar.character; ++i) {
-                    if (!isWhiteSpace(sourceFile.text.charCodeAt(lineStartPosition + i))) {
-                        return i;
-                    }
-                }
-
-                // seems that this is the first non-whitespace character on the line - return it
-                return precedingListItemStartLineAndChar.character;
             }
 
             return -1;
@@ -290,6 +280,8 @@ module ts.formatting {
             function getActualIndentationFromList(list: Node[]): number {
                 var index = indexOf(list, node);
                 if (index !== -1) {
+                    // walk toward the start of the list starting from current node and check if if line is the same for all items.
+                    // if line for item [i - 1] differs from the line for item [i] - find column of the first non-whitespace character on the line of item [i]
                     var lineAndCharacter =  getStartLineAndCharacterForNode(node, sourceFile);;
                     for (var i = index - 1; i >= 0; --i) {
                         var prevLineAndCharacter =  getStartLineAndCharacterForNode(list[i], sourceFile);
@@ -312,7 +304,7 @@ module ts.formatting {
                     return column;
                 }
 
-                if (charCode === CharacterCodes.tab) {
+                if (charCode === CharacterCodes.tab && !options.useTabs) {
                     column += options.spacesPerTab;
                 }
                 else {
@@ -479,6 +471,7 @@ module ts.formatting {
             return false;
         }
 
+        // this function is alwasy called when position of the cursor is located after the node
         function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
             switch (n.kind) {
                 case SyntaxKind.ClassDeclaration:
@@ -518,17 +511,15 @@ module ts.formatting {
                 case SyntaxKind.DefaultClause:
                     // there is no such thing as terminator token for CaseClause\DefaultClause so for simplicitly always consider them non-completed
                     return false;
-                case SyntaxKind.VariableStatement:
-                    // variable statement is considered completed if it either doesn'not have variable declarations or last variable declaration is completed
-                    var variableDeclarations = (<VariableStatement>n).declarations;
-                    return variableDeclarations.length === 0 || isCompletedNode(variableDeclarations[variableDeclarations.length - 1], sourceFile);
-                case SyntaxKind.VariableDeclaration:
-                    // variable declaration is completed if it either doesn't have initializer or initializer is completed
-                    return !(<VariableDeclaration>n).initializer || isCompletedNode((<VariableDeclaration>n).initializer, sourceFile);
                 case SyntaxKind.WhileStatement:
                     return isCompletedNode((<WhileStatement>n).statement, sourceFile);
                 case SyntaxKind.DoStatement:
-                    return isCompletedNode((<DoStatement>n).statement, sourceFile);
+                    // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
+                    var hasWhileKeyword = forEach(n.getChildren(), c => c.kind === SyntaxKind.WhileKeyword && c);
+                    if(hasWhileKeyword) {
+                        return isNodeEndWith(n, SyntaxKind.CloseParenToken, sourceFile);
+                    }                    
+                    return isCompletedNode((<DoStatement>n).statement, sourceFile);                    
                 default:
                     return true;
             }
