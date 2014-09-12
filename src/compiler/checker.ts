@@ -2888,10 +2888,12 @@ module ts {
                         }
 
                         if (getDeclarationFlagsFromSymbol(sourceProp) & NodeFlags.Private || getDeclarationFlagsFromSymbol(targetProp) & NodeFlags.Private) {
-                            if (reportErrors) {
-                                reportError(Diagnostics.Private_property_0_cannot_be_reimplemented, symbolToString(targetProp));
+                            if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Private_property_0_cannot_be_reimplemented, symbolToString(targetProp));
+                                }
+                                return false;
                             }
-                            return false;
                         }
                         if (!isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors)) {
                             if (reportErrors) {
@@ -4338,7 +4340,7 @@ module ts {
                 var widenedType = getWidenedType(exprType, /*supressNoImplicitAnyErrors*/ true);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
                     checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other_Colon, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
-                }
+                } 
             }
             return targetType;
         }
