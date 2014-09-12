@@ -2704,30 +2704,42 @@ declare var Window: {
     new(): Window;
 }
 
-interface FormData {
-    append(name: any, value: any, blobName?: string): void;
+interface HTMLCollection extends MSHTMLCollectionExtensions {
+    /**
+      * Sets or retrieves the number of objects in a collection.
+      */
+    length: number;
+    /**
+      * Retrieves an object from various collections.
+      */
+    item(nameOrIndex?: any, optionalIndex?: any): Element;
+    /**
+      * Retrieves a select object or an object from an options collection.
+      */
+    namedItem(name: string): Element;
+    // [name: string]: Element;
+    [index: number]: Element;
 }
-declare var FormData: {
-    prototype: FormData;
-    new (form?: HTMLFormElement): FormData;
+declare var HTMLCollection: {
+    prototype: HTMLCollection;
+    new(): HTMLCollection;
 }
 
-interface SourceBuffer extends EventTarget {
-    updating: boolean;
-    appendWindowStart: number;
-    appendWindowEnd: number;
-    buffered: TimeRanges;
-    timestampOffset: number;
-    audioTracks: AudioTrackList;
-    appendBuffer(data: ArrayBufferView): void;
-    appendBuffer(data: ArrayBuffer): void;
-    remove(start: number, end: number): void;
-    abort(): void;
-    appendStream(stream: MSStream, maxSize?: number): void;
+interface BlobPropertyBag {
+    type?: string;
+    endings?: string;
 }
-declare var SourceBuffer: {
-    prototype: SourceBuffer;
-    new(): SourceBuffer;
+
+interface Blob {
+    type: string;
+    size: number;
+    msDetachStream(): any;
+    slice(start?: number, end?: number, contentType?: string): Blob;
+    msClose(): void;
+}
+declare var Blob: {
+    prototype: Blob;
+    new (blobParts?: any[], options?: BlobPropertyBag): Blob;
 }
 
 interface NavigatorID {
@@ -4634,26 +4646,6 @@ interface MSCSSProperties extends CSSStyleDeclaration {
 declare var MSCSSProperties: {
     prototype: MSCSSProperties;
     new(): MSCSSProperties;
-}
-
-interface HTMLCollection extends MSHTMLCollectionExtensions {
-    /**
-      * Sets or retrieves the number of objects in a collection.
-      */
-    length: number;
-    /**
-      * Retrieves an object from various collections.
-      */
-    item(nameOrIndex?: any, optionalIndex?: any): Element;
-    /**
-      * Retrieves a select object or an object from an options collection.
-      */
-    namedItem(name: string): Element;
-    // [name: string]: Element;
-}
-declare var HTMLCollection: {
-    prototype: HTMLCollection;
-    new(): HTMLCollection;
 }
 
 interface SVGExternalResourcesRequired {
@@ -10891,18 +10883,6 @@ declare var FileReader: {
     new(): FileReader;
 }
 
-interface Blob {
-    type: string;
-    size: number;
-    msDetachStream(): any;
-    slice(start?: number, end?: number, contentType?: string): Blob;
-    msClose(): void;
-}
-declare var Blob: {
-    prototype: Blob;
-    new(): Blob;
-}
-
 interface ApplicationCache extends EventTarget {
     status: number;
     ondownloading: (ev: Event) => any;
@@ -11059,6 +11039,14 @@ declare var MSManipulationEvent: {
     MS_MANIPULATION_STATE_PRESELECT: number;
     MS_MANIPULATION_STATE_DRAGGING: number;
     MS_MANIPULATION_STATE_CANCELLED: number;
+}
+
+interface FormData {
+    append(name: any, value: any, blobName?: string): void;
+}
+declare var FormData: {
+    prototype: FormData;
+    new(): FormData;
 }
 
 interface HTMLDataListElement extends HTMLElement {
@@ -11477,6 +11465,23 @@ declare var NavigationEvent: {
 
 interface RandomSource {
     getRandomValues(array: ArrayBufferView): ArrayBufferView;
+}
+
+interface SourceBuffer extends EventTarget {
+    updating: boolean;
+    appendWindowStart: number;
+    appendWindowEnd: number;
+    buffered: TimeRanges;
+    timestampOffset: number;
+    audioTracks: AudioTrackList;
+    appendBuffer(data: ArrayBuffer): void;
+    remove(start: number, end: number): void;
+    abort(): void;
+    appendStream(stream: MSStream, maxSize?: number): void;
+}
+declare var SourceBuffer: {
+    prototype: SourceBuffer;
+    new(): SourceBuffer;
 }
 
 interface MSInputMethodContext extends EventTarget {

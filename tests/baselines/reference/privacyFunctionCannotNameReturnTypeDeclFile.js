@@ -176,6 +176,7 @@ function createWidget1() {
     return new Widget1();
 }
 exports.createWidget1 = createWidget1;
+var SpecializedWidget;
 (function (SpecializedWidget) {
     var Widget2 = (function () {
         function Widget2() {
@@ -188,8 +189,7 @@ exports.createWidget1 = createWidget1;
         return new Widget2();
     }
     SpecializedWidget.createWidget2 = createWidget2;
-})(exports.SpecializedWidget || (exports.SpecializedWidget = {}));
-var SpecializedWidget = exports.SpecializedWidget;
+})(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 //// [privacyFunctionReturnTypeDeclFile_exporter.js]
 ///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("privacyFunctionReturnTypeDeclFile_Widgets");
@@ -373,7 +373,7 @@ export declare module SpecializedWidget {
     function createWidget2(): Widget2;
 }
 //// [privacyFunctionReturnTypeDeclFile_exporter.d.ts]
-/// <reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts' />
+/// <reference path="privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts" />
 import Widgets = require("privacyFunctionReturnTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;

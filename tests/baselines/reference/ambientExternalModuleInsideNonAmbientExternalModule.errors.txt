@@ -1,0 +1,4 @@
+==== tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbientExternalModule.ts (1 errors) ====
+    export declare module "M" { }
+                          ~~~
+!!! Ambient external modules cannot be nested in other modules.

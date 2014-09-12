@@ -144,6 +144,7 @@ var m4 = require("importDecl_require"); // Emit used
 exports.x4 = m4.x;
 exports.d4 = m4.d;
 exports.f4 = m4.foo();
+var m1;
 (function (m1) {
     m1.x2 = m4.x;
     m1.d2 = m4.d;
@@ -151,8 +152,7 @@ exports.f4 = m4.foo();
     var x3 = m4.x;
     var d3 = m4.d;
     var f3 = m4.foo();
-})(exports.m1 || (exports.m1 = {}));
-var m1 = exports.m1;
+})(m1 = exports.m1 || (exports.m1 = {}));
 //Emit global only usage
 var glo_m4 = require("importDecl_require1");
 exports.useGlo_m4_d4 = glo_m4.d;
@@ -162,12 +162,12 @@ var fncOnly_m4 = require("importDecl_require2");
 exports.useFncOnly_m4_f4 = fncOnly_m4.foo();
 // only used privately no need to emit
 var private_m4 = require("importDecl_require3");
+var usePrivate_m4_m1;
 (function (usePrivate_m4_m1) {
     var x3 = private_m4.x;
     var d3 = private_m4.d;
     var f3 = private_m4.foo();
-})(exports.usePrivate_m4_m1 || (exports.usePrivate_m4_m1 = {}));
-var usePrivate_m4_m1 = exports.usePrivate_m4_m1;
+})(usePrivate_m4_m1 = exports.usePrivate_m4_m1 || (exports.usePrivate_m4_m1 = {}));
 // Do not emit unused import
 var m5 = require("importDecl_require4");
 exports.d = m5.foo2();
@@ -205,11 +205,11 @@ export declare function foo(): d;
 import m4 = require("importDecl_require");
 export declare function foo2(): m4.d;
 //// [importDecl_1.d.ts]
-/// <reference path='importDecl_require.d.ts' />
-/// <reference path='importDecl_require1.d.ts' />
-/// <reference path='importDecl_require2.d.ts' />
-/// <reference path='importDecl_require3.d.ts' />
-/// <reference path='importDecl_require4.d.ts' />
+/// <reference path="importDecl_require.d.ts" />
+/// <reference path="importDecl_require1.d.ts" />
+/// <reference path="importDecl_require2.d.ts" />
+/// <reference path="importDecl_require3.d.ts" />
+/// <reference path="importDecl_require4.d.ts" />
 import m4 = require("importDecl_require");
 export declare var x4: m4.d;
 export declare var d4: typeof m4.d;

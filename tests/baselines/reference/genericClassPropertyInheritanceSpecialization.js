@@ -84,7 +84,9 @@ var __extends = this.__extends || function (d, b) {
 };
 var Portal;
 (function (Portal) {
+    var Controls;
     (function (Controls) {
+        var Validators;
         (function (Validators) {
             var Validator = (function () {
                 function Validator(message) {
@@ -97,15 +99,16 @@ var Portal;
                 return Validator;
             })();
             Validators.Validator = Validator;
-        })(Controls.Validators || (Controls.Validators = {}));
-        var Validators = Controls.Validators;
-    })(Portal.Controls || (Portal.Controls = {}));
-    var Controls = Portal.Controls;
+        })(Validators = Controls.Validators || (Controls.Validators = {}));
+    })(Controls = Portal.Controls || (Portal.Controls = {}));
 })(Portal || (Portal = {}));
 var PortalFx;
 (function (PortalFx) {
+    var ViewModels;
     (function (ViewModels) {
+        var Controls;
         (function (Controls) {
+            var Validators;
             (function (Validators) {
                 var Validator = (function (_super) {
                     __extends(Validator, _super);
@@ -115,12 +118,9 @@ var PortalFx;
                     return Validator;
                 })(Portal.Controls.Validators.Validator);
                 Validators.Validator = Validator;
-            })(Controls.Validators || (Controls.Validators = {}));
-            var Validators = Controls.Validators;
-        })(ViewModels.Controls || (ViewModels.Controls = {}));
-        var Controls = ViewModels.Controls;
-    })(PortalFx.ViewModels || (PortalFx.ViewModels = {}));
-    var ViewModels = PortalFx.ViewModels;
+            })(Validators = Controls.Validators || (Controls.Validators = {}));
+        })(Controls = ViewModels.Controls || (ViewModels.Controls = {}));
+    })(ViewModels = PortalFx.ViewModels || (PortalFx.ViewModels = {}));
 })(PortalFx || (PortalFx = {}));
 var ViewModel = (function () {
     function ViewModel() {

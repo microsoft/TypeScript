@@ -20,6 +20,7 @@ module TypeScript {
 //// [moduleMemberWithoutTypeAnnotation2.js]
 var TypeScript;
 (function (TypeScript) {
+    var CompilerDiagnostics;
     (function (CompilerDiagnostics) {
         CompilerDiagnostics.diagnosticWriter = null;
         function Alert(output) {
@@ -28,6 +29,5 @@ var TypeScript;
             }
         }
         CompilerDiagnostics.Alert = Alert;
-    })(TypeScript.CompilerDiagnostics || (TypeScript.CompilerDiagnostics = {}));
-    var CompilerDiagnostics = TypeScript.CompilerDiagnostics;
+    })(CompilerDiagnostics = TypeScript.CompilerDiagnostics || (TypeScript.CompilerDiagnostics = {}));
 })(TypeScript || (TypeScript = {}));

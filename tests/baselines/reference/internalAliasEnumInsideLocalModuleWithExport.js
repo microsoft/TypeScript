@@ -14,6 +14,7 @@ export module c {
 
 
 //// [internalAliasEnumInsideLocalModuleWithExport.js]
+var a;
 (function (a) {
     (function (weekend) {
         weekend[weekend["Friday"] = 0] = "Friday";
@@ -21,13 +22,12 @@ export module c {
         weekend[weekend["Sunday"] = 2] = "Sunday";
     })(a.weekend || (a.weekend = {}));
     var weekend = a.weekend;
-})(exports.a || (exports.a = {}));
-var a = exports.a;
+})(a = exports.a || (exports.a = {}));
+var c;
 (function (c) {
     c.b = a.weekend;
     c.bVal = 2 /* Sunday */;
-})(exports.c || (exports.c = {}));
-var c = exports.c;
+})(c = exports.c || (exports.c = {}));
 
 
 //// [internalAliasEnumInsideLocalModuleWithExport.d.ts]

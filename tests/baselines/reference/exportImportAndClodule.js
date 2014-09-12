@@ -29,10 +29,10 @@ var K;
         return L;
     })();
     K.L = L;
+    var L;
     (function (L) {
         L.y = 12;
-    })(K.L || (K.L = {}));
-    var L = K.L;
+    })(L = K.L || (K.L = {}));
 })(K || (K = {}));
 var M;
 (function (M) {

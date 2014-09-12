@@ -81,7 +81,7 @@ module ts {
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
-        var start = skipTrivia(file.text, node.pos);
+        var start = node.kind === SyntaxKind.Missing ? node.pos : skipTrivia(file.text, node.pos);
         var length = node.end - start;
 
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
@@ -141,11 +141,11 @@ module ts {
     export function getLeadingCommentsOfNode(node: Node, sourceFileOfNode: SourceFile) {
         // If parameter/type parameter, the prev token trailing comments are part of this node too
         if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
-            // eg     (/** blah */ a, /** blah */ b);
+            // e.g.   (/** blah */ a, /** blah */ b);
             return concatenate(getTrailingComments(sourceFileOfNode.text, node.pos),
-                // eg:     (
-                //          /** blah */ a,
-                //          /** blah */ b);
+                // e.g.:     (
+                //            /** blah */ a,
+                //            /** blah */ b);
                 getLeadingComments(sourceFileOfNode.text, node.pos));
         }
         else {
@@ -157,7 +157,7 @@ module ts {
         return filter(getLeadingCommentsOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
 
         function isJsDocComment(comment: Comment) {
-            // js doc is if comment is starting with /** but not if it is /**/
+            // True if the comment starts with '/**' but not if it is '/**/'
             return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
                 sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
                 sourceFileOfNode.text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
@@ -347,6 +347,107 @@ module ts {
                     child((<ImportDeclaration>node).externalModuleName);
             case SyntaxKind.ExportAssignment:
                 return child((<ExportAssignment>node).exportName);
+        }
+    }
+
+    // Warning: This has the same semantics as the forEach family of functions,
+    //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
+    export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
+
+        return traverse(body);
+
+        function traverse(node: Node): T {
+            switch (node.kind) {
+                case SyntaxKind.ReturnStatement:
+                    return visitor(node);
+                case SyntaxKind.Block:
+                case SyntaxKind.FunctionBlock:
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.WithStatement:
+                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
+                case SyntaxKind.LabelledStatement:
+                case SyntaxKind.TryStatement:
+                case SyntaxKind.TryBlock:
+                case SyntaxKind.CatchBlock:
+                case SyntaxKind.FinallyBlock:
+                    return forEachChild(node, traverse);
+            }
+        }
+    }
+
+    export function isAnyFunction(node: Node): boolean {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.Method:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.Constructor:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function getContainingFunction(node: Node): SignatureDeclaration {
+        while (true) {
+            node = node.parent;
+            if (!node || isAnyFunction(node)) {
+                return <SignatureDeclaration>node;
+            }
+        }
+    }
+
+    export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
+        while (true) {
+            node = node.parent;
+            if (!node) {
+                return undefined;
+            }
+            switch (node.kind) {
+                case SyntaxKind.ArrowFunction:
+                    if (!includeArrowFunctions) {
+                        continue;
+                    }
+                // Fall through
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.Property:
+                case SyntaxKind.Method:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.SourceFile:
+                    return node;
+            }
+        }
+    }
+
+    export function getSuperContainer(node: Node): Node {
+        while (true) {
+            node = node.parent;
+            if (!node) {
+                return undefined;
+            }
+            switch (node.kind) {
+                case SyntaxKind.Property:
+                case SyntaxKind.Method:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return node;
+            }
         }
     }
 
@@ -661,7 +762,7 @@ module ts {
         }
 
         function reportInvalidUseInStrictMode(node: Identifier): void {
-            // identifierToString cannot be used here since it uses backreference to 'parent' that is not yet set
+            // identifierToString cannot be used here since it uses a backreference to 'parent' that is not yet set
             var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
             grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
         }
@@ -732,7 +833,7 @@ module ts {
             lookAheadMode = LookAheadMode.NoErrorYet;
             var result = callback();
 
-            // If we switched from 1 to to -1 then a parse error occurred during the callback.
+            // If we switched from 1 to -1 then a parse error occurred during the callback.
             // If that's the case, then we want to act as if we never got any result at all.
             Debug.assert(lookAheadMode === LookAheadMode.Error || lookAheadMode === LookAheadMode.NoErrorYet);
             if (lookAheadMode === LookAheadMode.Error) {
@@ -1674,7 +1775,7 @@ module ts {
             // (i.e. they're both BinaryExpressions with an assignment operator in it).
 
             // First, check if we have an arrow function (production '4') that starts with a parenthesized
-            // parameter list. If we do, we must *not* recurse for productsion 1, 2 or 3. An ArrowFunction is
+            // parameter list. If we do, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
             // not a  LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done 
             // with AssignmentExpression if we see one.
             var arrowExpression = tryParseParenthesizedArrowFunctionExpression();
@@ -1865,7 +1966,7 @@ module ts {
             if (token === SyntaxKind.EqualsGreaterThanToken) {
                 // ERROR RECOVERY TWEAK:
                 // If we see a standalone => try to parse it as an arrow function expression as that's
-                // likely whatthe user intended to write.
+                // likely what the user intended to write.
                 return Tristate.True;
             }
             // Definitely not a parenthesized arrow function.
@@ -2778,8 +2879,8 @@ module ts {
             switch (token) {
                 case SyntaxKind.SemicolonToken:
                     // If we're in error recovery, then we don't want to treat ';' as an empty statement.
-                    // The problem is that ';' can show up in far too many contexts, and if we see one 
-                    // and assume it's a statement, then we may bail out innapropriately from whatever 
+                    // The problem is that ';' can show up in far too many contexts, and if we see one
+                    // and assume it's a statement, then we may bail out inappropriately from whatever
                     // we're parsing.  For example, if we have a semicolon in the middle of a class, then
                     // we really don't want to assume the class is over and we're on a statement in the
                     // outer module.  We just want to consume and move on.
@@ -2932,10 +3033,11 @@ module ts {
             parseExpected(SyntaxKind.VarKeyword, node);
             node.declarations = parseVariableDeclarationList(flags, /*noIn*/false);
             parseSemicolon(node);
+            finishNode(node);
             if (!node.declarations.length && file.syntacticErrors.length === errorCountBeforeVarStatement) {
                 grammarErrorOnNode(node, Diagnostics.Variable_declaration_list_cannot_be_empty);
             }
-            return finishNode(node);
+            return node;
         }
 
         function parseFunctionDeclaration(existingNode: Node, pos?: number, flags?: NodeFlags): FunctionDeclaration {
@@ -3193,7 +3295,7 @@ module ts {
                         }
                         lastPrivateModifierStart = modifierStart;
                         lastPrivateModifierLength = modifierLength;
-                        if (!(flags & NodeFlags.Public)) {
+                        if (!(flags & NodeFlags.Private)) {
                             flags |= NodeFlags.Private;
                             onParseToken(SyntaxKind.PrivateKeyword, parent, modifierStart, scanner.getStartPos());
                         }
@@ -3409,7 +3511,7 @@ module ts {
             function isIntegerLiteral(expression: Expression): boolean {
                 function isInteger(literalExpression: LiteralExpression): boolean {
                     // Allows for scientific notation since literalExpression.text was formed by
-                    // coercing a number to a string. Sometimes this coersion can yield a string
+                    // coercing a number to a string. Sometimes this coercion can yield a string
                     // in scientific notation.
                     // We also don't need special logic for hex because a hex integer is converted
                     // to decimal when it is coerced.
@@ -3431,7 +3533,7 @@ module ts {
 
             var inConstantEnumMemberSection = true;
             // In an ambient declaration, the grammar only allows integer literals as initializers.
-            // In a nonambient declaration, the grammar allows uninitialized members only in a
+            // In a non-ambient declaration, the grammar allows uninitialized members only in a
             // ConstantEnumMemberSection, which starts at the beginning of an enum declaration
             // or any time an integer literal initializer is encountered.
             function parseAndCheckEnumMember(): EnumMember {
@@ -3848,23 +3950,22 @@ module ts {
 
         // Get source file from normalized filename
         function findSourceFile(filename: string, isDefaultLib: boolean, refFile?: SourceFile, refStart?: number, refLength?: number): SourceFile {
-            // Look through existing source files to see if we've encountered it.
             var canonicalName = host.getCanonicalFileName(filename);
-            var file = getSourceFile(filename);
-            if (file) {
-                if (host.useCaseSensitiveFileNames() && canonicalName !== file.filename) {
+            if (hasProperty(filesByName, canonicalName)) {
+                // We've already looked for this file, use cached result
+                var file = filesByName[canonicalName];
+                if (file && host.useCaseSensitiveFileNames() && canonicalName !== file.filename) {
                     errors.push(createFileDiagnostic(refFile, refStart, refLength,
                         Diagnostics.Filename_0_differs_from_already_included_filename_1_only_in_casing, filename, file.filename));
-                } 
+                }
             }
             else {
-                // If we haven't, read the file.
-                file = host.getSourceFile(filename, options.target, hostErrorMessage => {
+                // We haven't looked for this file, do so now and cache result
+                var file = filesByName[canonicalName] = host.getSourceFile(filename, options.target, hostErrorMessage => {
                     errors.push(createFileDiagnostic(refFile, refStart, refLength,
                         Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
                 });
                 if (file) {
-                    filesByName[host.getCanonicalFileName(filename)] = file;
                     seenNoDefaultLib = seenNoDefaultLib || file.hasNoDefaultLib;
                     if (!options.noResolve) {
                         var basePath = getDirectoryPath(filename);
@@ -3882,7 +3983,6 @@ module ts {
                     });
                 }
             }
-
             return file;
         }
 
@@ -4007,7 +4107,7 @@ module ts {
                 commonSourceDirectory = getNormalizedPathFromPathCompoments(commonPathComponents);
                 if (commonSourceDirectory) {
                     // Make sure directory path ends with directory separator so this string can directly 
-                    // used to replace with "" to get the relative path of the source file and the relative path doesnt
+                    // used to replace with "" to get the relative path of the source file and the relative path doesn't
                     // start with / making it rooted path
                     commonSourceDirectory += directorySeparator;
                 }

@@ -47,7 +47,7 @@ var p: Point = { x: 0, y: undefined };
 >Point : Point
 >{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
->y : any
+>y : undefined
 >undefined : undefined
 
 var p = { x: 1, y: <number>undefined };
@@ -73,7 +73,7 @@ var p = <{ x: number; y: number; }>{ x: 0, y: undefined };
 >y : number
 >{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
->y : any
+>y : undefined
 >undefined : undefined
 
 var p: typeof p;

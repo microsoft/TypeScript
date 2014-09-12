@@ -315,7 +315,7 @@
     var obj69: i7 = new obj66;
     var obj70: i7 = <i7>new Base;
                     ~~~~~~~~~~~~
-!!! Neither type 'i7' nor type 'Base' is assignable to the other.
+!!! Neither type 'Base' nor type 'i7' is assignable to the other.
     var obj71: i7 = null;
     var obj72: i7 = function () { };
         ~~~~~

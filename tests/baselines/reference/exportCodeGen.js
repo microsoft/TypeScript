@@ -103,10 +103,10 @@ var E;
         return C;
     })();
     E.C = C;
+    var M;
     (function (M) {
         M.x = 42;
-    })(E.M || (E.M = {}));
-    var M = E.M;
+    })(M = E.M || (E.M = {}));
 })(E || (E = {}));
 // validate all exportable statements,
 // which are not exported

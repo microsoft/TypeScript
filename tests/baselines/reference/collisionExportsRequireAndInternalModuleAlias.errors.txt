@@ -1,0 +1,27 @@
+==== tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts (2 errors) ====
+    export module m {
+        export class c {
+        }
+    }
+    import exports = m.c;
+           ~~~~~~~
+!!! Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.
+    import require = m.c;
+           ~~~~~~~
+!!! Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
+    new exports();
+    new require();
+    
+    module m1 {
+        import exports = m.c;
+        import require = m.c;
+        new exports();
+        new require();
+    }
+    
+    module m2 {
+        export import exports = m.c;
+        export import require = m.c;
+        new exports();
+        new require();
+    }

@@ -124,8 +124,8 @@ var Foo;
 })(Foo || (Foo = {}));
 var N;
 (function (N) {
+    var F;
     (function (F) {
         var t;
-    })(N.F || (N.F = {}));
-    var F = N.F;
+    })(F = N.F || (N.F = {}));
 })(N || (N = {}));

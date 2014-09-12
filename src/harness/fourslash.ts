@@ -1084,6 +1084,8 @@ module FourSlash {
                 // Make the edit
                 var ch = text.charAt(i);
                 this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset, ch);
+                this.languageService.getBraceMatchingAtPosition(this.activeFile.fileName, offset);
+
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, ch);
                 this.editCheckpoint(this.activeFile.fileName);
                 offset++;

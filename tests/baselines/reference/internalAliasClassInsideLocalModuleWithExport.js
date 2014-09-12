@@ -18,6 +18,7 @@ export module m2 {
 export var d = new m2.m3.c();
 
 //// [internalAliasClassInsideLocalModuleWithExport.js]
+var x;
 (function (x) {
     var c = (function () {
         function c() {
@@ -28,17 +29,16 @@ export var d = new m2.m3.c();
         return c;
     })();
     x.c = c;
-})(exports.x || (exports.x = {}));
-var x = exports.x;
+})(x = exports.x || (exports.x = {}));
+var m2;
 (function (m2) {
+    var m3;
     (function (m3) {
         m3.c = x.c;
         m3.cProp = new m3.c();
         var cReturnVal = m3.cProp.foo(10);
-    })(m2.m3 || (m2.m3 = {}));
-    var m3 = m2.m3;
-})(exports.m2 || (exports.m2 = {}));
-var m2 = exports.m2;
+    })(m3 = m2.m3 || (m2.m3 = {}));
+})(m2 = exports.m2 || (exports.m2 = {}));
 exports.d = new m2.m3.c();
 
 

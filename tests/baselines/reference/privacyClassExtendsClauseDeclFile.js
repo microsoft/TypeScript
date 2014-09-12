@@ -104,6 +104,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var publicModule;
 (function (publicModule) {
     var publicClassInPublicModule = (function () {
         function publicClassInPublicModule() {
@@ -163,8 +164,7 @@ var __extends = this.__extends || function (d, b) {
         return publicClassExtendingFromPrivateModuleClass;
     })(privateModule.publicClassInPrivateModule);
     publicModule.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
-})(exports.publicModule || (exports.publicModule = {}));
-var publicModule = exports.publicModule;
+})(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var publicClassInPrivateModule = (function () {

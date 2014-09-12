@@ -55,9 +55,9 @@ foo(a); // shouldn't error
 
 
 class C {
- public e: E;
+    public e: E;
 
- public m(): E { return this.e; } // shouldn't error
+    public m(): E { return this.e; } // shouldn't error
 }
 
 
