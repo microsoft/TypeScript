@@ -1,3 +1,7 @@
+tests/cases/compiler/constraints0.ts(14,9): error TS2343: Type 'B' does not satisfy the constraint 'A':
+  Property 'a' is missing in type 'B'.
+
+
 ==== tests/cases/compiler/constraints0.ts (1 errors) ====
     interface A {
     	a: number;
@@ -14,7 +18,7 @@
     var v1: C<A>; // should work
     var v2: C<B>; // should not work
             ~~~~
-!!! Type 'B' does not satisfy the constraint 'A':
-!!!   Property 'a' is missing in type 'B'.
+!!! error TS2343: Type 'B' does not satisfy the constraint 'A':
+!!! error TS2343:   Property 'a' is missing in type 'B'.
     
     var y = v1.x.a; // 'a' should be of type 'number'

@@ -1,3 +1,15 @@
+tests/cases/compiler/autoLift2.ts(5,17): error TS1005: ';' expected.
+tests/cases/compiler/autoLift2.ts(6,17): error TS1005: ';' expected.
+tests/cases/compiler/autoLift2.ts(5,14): error TS2339: Property 'foo' does not exist on type 'A'.
+tests/cases/compiler/autoLift2.ts(5,19): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/autoLift2.ts(6,14): error TS2339: Property 'bar' does not exist on type 'A'.
+tests/cases/compiler/autoLift2.ts(6,19): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/autoLift2.ts(12,11): error TS2339: Property 'foo' does not exist on type 'A'.
+tests/cases/compiler/autoLift2.ts(14,11): error TS2339: Property 'bar' does not exist on type 'A'.
+tests/cases/compiler/autoLift2.ts(16,33): error TS2339: Property 'foo' does not exist on type 'A'.
+tests/cases/compiler/autoLift2.ts(18,33): error TS2339: Property 'bar' does not exist on type 'A'.
+
+
 ==== tests/cases/compiler/autoLift2.ts (10 errors) ====
     class A
     
@@ -5,18 +17,18 @@
         constructor() {
             this.foo: any;
                     ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                  ~~~
-!!! Property 'foo' does not exist on type 'A'.
+!!! error TS2339: Property 'foo' does not exist on type 'A'.
                       ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
             this.bar: any;
                     ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                  ~~~
-!!! Property 'bar' does not exist on type 'A'.
+!!! error TS2339: Property 'bar' does not exist on type 'A'.
                       ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
         }
     
     
@@ -24,19 +36,19 @@
     
          this.foo = "foo";
               ~~~
-!!! Property 'foo' does not exist on type 'A'.
+!!! error TS2339: Property 'foo' does not exist on type 'A'.
     
          this.bar = "bar";
               ~~~
-!!! Property 'bar' does not exist on type 'A'.
+!!! error TS2339: Property 'bar' does not exist on type 'A'.
     
          [1, 2].forEach((p) => this.foo);
                                     ~~~
-!!! Property 'foo' does not exist on type 'A'.
+!!! error TS2339: Property 'foo' does not exist on type 'A'.
     
          [1, 2].forEach((p) => this.bar);
                                     ~~~
-!!! Property 'bar' does not exist on type 'A'.
+!!! error TS2339: Property 'bar' does not exist on type 'A'.
     
       }
     

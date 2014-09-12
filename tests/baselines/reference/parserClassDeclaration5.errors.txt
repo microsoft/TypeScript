@@ -1,15 +1,23 @@
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration5.ts(1,32): error TS1005: '{' expected.
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration5.ts(1,43): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration5.ts(1,45): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration5.ts(1,17): error TS2304: Cannot find name 'A'.
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration5.ts(1,30): error TS2304: Cannot find name 'B'.
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration5.ts(1,32): error TS2304: Cannot find name 'implements'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration5.ts (6 errors) ====
     class C extends A implements B implements C {
                                    ~~~~~~~~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                                               ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                                                 ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                     ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.
                                  ~
-!!! Cannot find name 'B'.
+!!! error TS2304: Cannot find name 'B'.
                                    ~~~~~~~~~~
-!!! Cannot find name 'implements'.
+!!! error TS2304: Cannot find name 'implements'.
     }

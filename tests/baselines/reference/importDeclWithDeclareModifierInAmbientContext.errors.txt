@@ -1,3 +1,8 @@
+tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts(6,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts(6,5): error TS1079: A 'declare' modifier cannot be used with an import declaration.
+tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts(6,13): error TS1029: 'export' modifier must precede 'declare' modifier.
+
+
 ==== tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts (3 errors) ====
     declare module "m" {
         module x {
@@ -6,11 +11,11 @@
         }
         declare export import a = x.c;
         ~~~~~~~
-!!! A 'declare' modifier cannot be used in an already ambient context.
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
         ~~~~~~~
-!!! A 'declare' modifier cannot be used with an import declaration.
+!!! error TS1079: A 'declare' modifier cannot be used with an import declaration.
                 ~~~~~~
-!!! 'export' modifier must precede 'declare' modifier.
+!!! error TS1029: 'export' modifier must precede 'declare' modifier.
         var b: a;
     }
     

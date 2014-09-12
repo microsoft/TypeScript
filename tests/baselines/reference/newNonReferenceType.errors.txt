@@ -1,8 +1,12 @@
+tests/cases/compiler/newNonReferenceType.ts(1,13): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/newNonReferenceType.ts(2,13): error TS2304: Cannot find name 'boolean'.
+
+
 ==== tests/cases/compiler/newNonReferenceType.ts (2 errors) ====
     var a = new any();
                 ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
     var b = new boolean(); // error
                 ~~~~~~~
-!!! Cannot find name 'boolean'.
+!!! error TS2304: Cannot find name 'boolean'.
     

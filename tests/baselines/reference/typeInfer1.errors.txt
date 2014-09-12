@@ -1,3 +1,7 @@
+tests/cases/compiler/typeInfer1.ts(11,5): error TS2322: Type '{ Moo: () => string; }' is not assignable to type 'ITextWriter2':
+  Property 'Write' is missing in type '{ Moo: () => string; }'.
+
+
 ==== tests/cases/compiler/typeInfer1.ts (1 errors) ====
     interface ITextWriter2 {
         Write(s:string):void;
@@ -11,7 +15,7 @@
     
     var yyyyyyyy: ITextWriter2 = {
         ~~~~~~~~
-!!! Type '{ Moo: () => string; }' is not assignable to type 'ITextWriter2':
-!!!   Property 'Write' is missing in type '{ Moo: () => string; }'.
+!!! error TS2322: Type '{ Moo: () => string; }' is not assignable to type 'ITextWriter2':
+!!! error TS2322:   Property 'Write' is missing in type '{ Moo: () => string; }'.
         Moo: function() { return "cow"; }
     }

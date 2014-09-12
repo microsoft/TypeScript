@@ -1,3 +1,7 @@
+tests/cases/compiler/contextualTypingOfConditionalExpression2.ts(11,5): error TS2323: Type '{}' is not assignable to type '(a: A) => void'.
+tests/cases/compiler/contextualTypingOfConditionalExpression2.ts(11,26): error TS2366: No best common type exists between '(a: A) => void', '(a: C) => number', and '(b: number) => void'.
+
+
 ==== tests/cases/compiler/contextualTypingOfConditionalExpression2.ts (2 errors) ====
     class A {
         foo: number;
@@ -11,7 +15,7 @@
     
     var x2: (a: A) => void = true ? (a: C) => a.foo : (b: number) => { };
         ~~
-!!! Type '{}' is not assignable to type '(a: A) => void'.
+!!! error TS2323: Type '{}' is not assignable to type '(a: A) => void'.
                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between '(a: A) => void', '(a: C) => number', and '(b: number) => void'.
+!!! error TS2366: No best common type exists between '(a: A) => void', '(a: C) => number', and '(b: number) => void'.
     

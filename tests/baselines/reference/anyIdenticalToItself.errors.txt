@@ -1,19 +1,24 @@
+tests/cases/compiler/anyIdenticalToItself.ts(6,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/anyIdenticalToItself.ts(10,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/anyIdenticalToItself.ts(1,1): error TS2394: Overload signature is not compatible with function implementation.
+
+
 ==== tests/cases/compiler/anyIdenticalToItself.ts (3 errors) ====
     function foo(x: any);
     ~~~~~~~~~~~~~~~~~~~~~
-!!! Overload signature is not compatible with function implementation.
+!!! error TS2394: Overload signature is not compatible with function implementation.
     function foo(x: any);
     function foo(x: any, y: number) { }
     
     class C {
         get X(): any {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var y: any;
             return y;
         }
         set X(v: any) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         }
     }

@@ -1,3 +1,34 @@
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(17,25): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(19,23): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(22,25): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(23,25): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(24,25): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(26,23): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(27,23): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(28,23): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(31,25): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(32,26): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(33,26): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(34,26): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(36,24): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(37,24): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(38,24): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(39,24): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(42,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(43,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(44,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(45,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(46,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(47,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(49,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(50,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(51,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(52,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(53,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(54,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(54,11): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+
+
 ==== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts (29 errors) ====
     // -- operator on boolean type
     var BOOLEAN: boolean;
@@ -17,97 +48,97 @@
     // boolean type var
     var ResultIsNumber1 = --BOOLEAN;
                             ~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     var ResultIsNumber2 = BOOLEAN--;
                           ~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     // boolean type literal
     var ResultIsNumber3 = --true;
                             ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber4 = --{ x: true, y: false };
                             ~~~~~~~~~~~~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber5 = --{ x: true, y: (n: boolean) => { return n; } };
                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     var ResultIsNumber6 = true--;
                           ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber7 = { x: true, y: false }--;
                           ~~~~~~~~~~~~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber8 = { x: true, y: (n: boolean) => { return n; } }--;
                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     // boolean type expressions
     var ResultIsNumber9 = --objA.a;
                             ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber10 = --M.n;
                              ~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber11 = --foo();
                              ~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber12 = --A.foo();
                              ~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     var ResultIsNumber13 = foo()--;
                            ~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber14 = A.foo()--;
                            ~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber15 = objA.a--;
                            ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber16 = M.n--;
                            ~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     // miss assignment operators
     --true;
       ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     --BOOLEAN;
       ~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     --foo();
       ~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     --objA.a;
       ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     --M.n;
       ~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     --objA.a, M.n;
       ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     true--;
     ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     BOOLEAN--;
     ~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     foo()--;
     ~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     objA.a--;
     ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     M.n--;
     ~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     objA.a--, M.n--;
     ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
               ~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.

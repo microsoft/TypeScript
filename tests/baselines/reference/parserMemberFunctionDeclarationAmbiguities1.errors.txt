@@ -1,3 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(5,3): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(6,3): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(11,3): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(12,3): error TS2393: Duplicate function implementation.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts (4 errors) ====
     class C {
       public() {}
@@ -5,18 +11,18 @@
     
       public public() {}
       ~~~~~~~~~~~~~~~~~~
-!!! Duplicate function implementation.
+!!! error TS2393: Duplicate function implementation.
       public static() {}
       ~~~~~~~~~~~~~~~~~~
-!!! Duplicate function implementation.
+!!! error TS2393: Duplicate function implementation.
     
       public static public() {}
       public static static() {}
       
       static public() {}
       ~~~~~~~~~~~~~~~~~~
-!!! Duplicate function implementation.
+!!! error TS2393: Duplicate function implementation.
       static static() {}
       ~~~~~~~~~~~~~~~~~~
-!!! Duplicate function implementation.
+!!! error TS2393: Duplicate function implementation.
     }

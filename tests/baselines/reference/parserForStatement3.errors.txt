@@ -1,16 +1,25 @@
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,5): error TS2304: Cannot find name 'd'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,5): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,10): error TS2304: Cannot find name '_'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,15): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,18): error TS2304: Cannot find name '_'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,23): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,30): error TS2304: Cannot find name 'b'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts (7 errors) ====
     for(d in _.jh[a]=_.jh[a]||[],b);
         ~
-!!! Cannot find name 'd'.
+!!! error TS2304: Cannot find name 'd'.
         ~
-!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+!!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
              ~
-!!! Cannot find name '_'.
+!!! error TS2304: Cannot find name '_'.
                   ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
                      ~
-!!! Cannot find name '_'.
+!!! error TS2304: Cannot find name '_'.
                           ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
                                  ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.

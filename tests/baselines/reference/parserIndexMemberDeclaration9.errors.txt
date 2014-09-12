@@ -1,6 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration9.ts(2,4): error TS1031: 'export' modifier cannot appear on a class element.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration9.ts (1 errors) ====
     class C {
        export [x: string]: string;
        ~~~~~~
-!!! 'export' modifier cannot appear on a class element.
+!!! error TS1031: 'export' modifier cannot appear on a class element.
     }

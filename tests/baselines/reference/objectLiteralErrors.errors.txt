@@ -1,169 +1,232 @@
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(17,19): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(23,22): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(24,23): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(25,22): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(26,25): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(27,23): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(28,22): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(29,24): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(30,24): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(31,24): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(32,25): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(33,25): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(34,23): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(35,23): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(36,23): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(37,23): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(37,23): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(38,27): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(39,26): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(40,46): error TS1119: An object literal cannot have property and accessor with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(3,18): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(4,19): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(5,18): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(6,21): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(7,19): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(8,18): error TS2300: Duplicate identifier ''a''.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(9,20): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(10,20): error TS2300: Duplicate identifier '"a"'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(11,20): error TS2300: Duplicate identifier ''a''.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(12,21): error TS2300: Duplicate identifier ''a''.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(13,21): error TS2300: Duplicate identifier ''1''.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(14,19): error TS2300: Duplicate identifier '0'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(15,19): error TS2300: Duplicate identifier '0'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(16,19): error TS2300: Duplicate identifier '0x0'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(17,19): error TS2300: Duplicate identifier '000'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(18,23): error TS2300: Duplicate identifier '1e2'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(19,22): error TS2300: Duplicate identifier '3.2e1'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(20,25): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(23,22): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(24,23): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(25,22): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(26,25): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(27,23): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(28,22): error TS2300: Duplicate identifier ''a''.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(29,24): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(30,24): error TS2300: Duplicate identifier '"a"'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(31,24): error TS2300: Duplicate identifier ''a''.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(32,25): error TS2300: Duplicate identifier ''a''.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(33,25): error TS2300: Duplicate identifier ''1''.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(34,23): error TS2300: Duplicate identifier '0'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(35,23): error TS2300: Duplicate identifier '0'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(36,23): error TS2300: Duplicate identifier '0x0'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(37,23): error TS2300: Duplicate identifier '000'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(38,27): error TS2300: Duplicate identifier '1e2'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(39,26): error TS2300: Duplicate identifier '3.2e1'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(40,46): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(43,12): error TS2380: 'get' and 'set' accessor must have the same type.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(43,43): error TS2380: 'get' and 'set' accessor must have the same type.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(44,29): error TS2323: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(45,12): error TS2380: 'get' and 'set' accessor must have the same type.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(45,51): error TS2380: 'get' and 'set' accessor must have the same type.
+
+
 ==== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts (61 errors) ====
     
     // Multiple properties with the same name
     var e1 = { a: 0, a: 0 };
                      ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     var e2 = { a: '', a: '' };
                       ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     var e3 = { a: 0, a: '' };
                      ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     var e4 = { a: true, a: false };
                         ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     var e5 = { a: {}, a: {} };
                       ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     var e6 = { a: 0, 'a': 0 };
                      ~~~
-!!! Duplicate identifier ''a''.
+!!! error TS2300: Duplicate identifier ''a''.
     var e7 = { 'a': 0, a: 0 };
                        ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     var e8 = { 'a': 0, "a": 0 };
                        ~~~
-!!! Duplicate identifier '"a"'.
+!!! error TS2300: Duplicate identifier '"a"'.
     var e9 = { 'a': 0, 'a': 0 };
                        ~~~
-!!! Duplicate identifier ''a''.
+!!! error TS2300: Duplicate identifier ''a''.
     var e10 = { "a": 0, 'a': 0 };
                         ~~~
-!!! Duplicate identifier ''a''.
+!!! error TS2300: Duplicate identifier ''a''.
     var e11 = { 1.0: 0, '1': 0 };
                         ~~~
-!!! Duplicate identifier ''1''.
+!!! error TS2300: Duplicate identifier ''1''.
     var e12 = { 0: 0, 0: 0 };
                       ~
-!!! Duplicate identifier '0'.
+!!! error TS2300: Duplicate identifier '0'.
     var e13 = { 0: 0, 0: 0 };
                       ~
-!!! Duplicate identifier '0'.
+!!! error TS2300: Duplicate identifier '0'.
     var e14 = { 0: 0, 0x0: 0 };
                       ~~~
-!!! Duplicate identifier '0x0'.
+!!! error TS2300: Duplicate identifier '0x0'.
     var e14 = { 0: 0, 000: 0 };
                       ~~~
-!!! Octal literals are not available when targeting ECMAScript 5 and higher.
+!!! error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
                       ~~~
-!!! Duplicate identifier '000'.
+!!! error TS2300: Duplicate identifier '000'.
     var e15 = { "100": 0, 1e2: 0 };
                           ~~~
-!!! Duplicate identifier '1e2'.
+!!! error TS2300: Duplicate identifier '1e2'.
     var e16 = { 0x20: 0, 3.2e1: 0 };
                          ~~~~~
-!!! Duplicate identifier '3.2e1'.
+!!! error TS2300: Duplicate identifier '3.2e1'.
     var e17 = { a: 0, b: 1, a: 0 };
                             ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     
     // Accessor and property with the same name
     var f1 = { a: 0, get a() { return 0; } };
                          ~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                          ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     var f2 = { a: '', get a() { return ''; } };
                           ~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                           ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     var f3 = { a: 0, get a() { return ''; } };
                          ~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                          ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     var f4 = { a: true, get a() { return false; } };
                             ~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                             ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     var f5 = { a: {}, get a() { return {}; } };
                           ~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                           ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     var f6 = { a: 0, get 'a'() { return 0; } };
                          ~~~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                          ~~~
-!!! Duplicate identifier ''a''.
+!!! error TS2300: Duplicate identifier ''a''.
     var f7 = { 'a': 0, get a() { return 0; } };
                            ~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                            ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     var f8 = { 'a': 0, get "a"() { return 0; } };
                            ~~~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                            ~~~
-!!! Duplicate identifier '"a"'.
+!!! error TS2300: Duplicate identifier '"a"'.
     var f9 = { 'a': 0, get 'a'() { return 0; } };
                            ~~~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                            ~~~
-!!! Duplicate identifier ''a''.
+!!! error TS2300: Duplicate identifier ''a''.
     var f10 = { "a": 0, get 'a'() { return 0; } };
                             ~~~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                             ~~~
-!!! Duplicate identifier ''a''.
+!!! error TS2300: Duplicate identifier ''a''.
     var f11 = { 1.0: 0, get '1'() { return 0; } };
                             ~~~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                             ~~~
-!!! Duplicate identifier ''1''.
+!!! error TS2300: Duplicate identifier ''1''.
     var f12 = { 0: 0, get 0() { return 0; } };
                           ~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                           ~
-!!! Duplicate identifier '0'.
+!!! error TS2300: Duplicate identifier '0'.
     var f13 = { 0: 0, get 0() { return 0; } };
                           ~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                           ~
-!!! Duplicate identifier '0'.
+!!! error TS2300: Duplicate identifier '0'.
     var f14 = { 0: 0, get 0x0() { return 0; } };
                           ~~~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                           ~~~
-!!! Duplicate identifier '0x0'.
+!!! error TS2300: Duplicate identifier '0x0'.
     var f14 = { 0: 0, get 000() { return 0; } };
                           ~~~
-!!! Octal literals are not available when targeting ECMAScript 5 and higher.
+!!! error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
                           ~~~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                           ~~~
-!!! Duplicate identifier '000'.
+!!! error TS2300: Duplicate identifier '000'.
     var f15 = { "100": 0, get 1e2() { return 0; } };
                               ~~~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                               ~~~
-!!! Duplicate identifier '1e2'.
+!!! error TS2300: Duplicate identifier '1e2'.
     var f16 = { 0x20: 0, get 3.2e1() { return 0; } };
                              ~~~~~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                              ~~~~~
-!!! Duplicate identifier '3.2e1'.
+!!! error TS2300: Duplicate identifier '3.2e1'.
     var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
                                                  ~
-!!! An object literal cannot have property and accessor with the same name.
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
                                                  ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     
     // Get and set accessor with mismatched type annotations
     var g1 = { get a(): number { return 4; }, set a(n: string) { } };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! 'get' and 'set' accessor must have the same type.
+!!! error TS2380: 'get' and 'set' accessor must have the same type.
                                               ~~~~~~~~~~~~~~~~~~~~
-!!! 'get' and 'set' accessor must have the same type.
+!!! error TS2380: 'get' and 'set' accessor must have the same type.
     var g2 = { get a() { return 4; }, set a(n: string) { } };
                                 ~
-!!! Type 'number' is not assignable to type 'string'.
+!!! error TS2323: Type 'number' is not assignable to type 'string'.
     var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! 'get' and 'set' accessor must have the same type.
+!!! error TS2380: 'get' and 'set' accessor must have the same type.
                                                       ~~~~~~~~~~~~~~~~~~~~
-!!! 'get' and 'set' accessor must have the same type.
+!!! error TS2380: 'get' and 'set' accessor must have the same type.
     

@@ -1,3 +1,9 @@
+tests/cases/compiler/overloadsWithProvisionalErrors.ts(6,6): error TS2345: Argument of type '(s: string) => {}' is not assignable to parameter of type '(s: string) => { a: number; b: number; }'.
+tests/cases/compiler/overloadsWithProvisionalErrors.ts(7,17): error TS2304: Cannot find name 'blah'.
+tests/cases/compiler/overloadsWithProvisionalErrors.ts(8,6): error TS2345: Argument of type '(s: string) => { a: unknown; }' is not assignable to parameter of type '(s: string) => { a: number; b: number; }'.
+tests/cases/compiler/overloadsWithProvisionalErrors.ts(8,17): error TS2304: Cannot find name 'blah'.
+
+
 ==== tests/cases/compiler/overloadsWithProvisionalErrors.ts (4 errors) ====
     var func: {
         (s: string): number;
@@ -6,12 +12,12 @@
     
     func(s => ({})); // Error for no applicable overload (object type is missing a and b)
          ~~~~~~~~~
-!!! Argument of type '(s: string) => {}' is not assignable to parameter of type '(s: string) => { a: number; b: number; }'.
+!!! error TS2345: Argument of type '(s: string) => {}' is not assignable to parameter of type '(s: string) => { a: number; b: number; }'.
     func(s => ({ a: blah, b: 3 })); // Only error inside the function, but not outside (since it would be applicable if not for the provisional error)
                     ~~~~
-!!! Cannot find name 'blah'.
+!!! error TS2304: Cannot find name 'blah'.
     func(s => ({ a: blah })); // Two errors here, one for blah not being defined, and one for the overload since it would not be applicable anyway
          ~~~~~~~~~~~~~~~~~~
-!!! Argument of type '(s: string) => { a: unknown; }' is not assignable to parameter of type '(s: string) => { a: number; b: number; }'.
+!!! error TS2345: Argument of type '(s: string) => { a: unknown; }' is not assignable to parameter of type '(s: string) => { a: number; b: number; }'.
                     ~~~~
-!!! Cannot find name 'blah'.
+!!! error TS2304: Cannot find name 'blah'.

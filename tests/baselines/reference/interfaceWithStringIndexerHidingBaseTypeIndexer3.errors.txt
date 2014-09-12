@@ -1,3 +1,6 @@
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringIndexerHidingBaseTypeIndexer3.ts(13,5): error TS2412: Property '2' of type '{ a: number; }' is not assignable to numeric index type '{ a: number; b: number; }'.
+
+
 ==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringIndexerHidingBaseTypeIndexer3.ts (1 errors) ====
     interface Base {
         [x: number]: { a: number }
@@ -17,5 +20,5 @@
     ~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! Property '2' of type '{ a: number; }' is not assignable to numeric index type '{ a: number; b: number; }'.
+!!! error TS2412: Property '2' of type '{ a: number; }' is not assignable to numeric index type '{ a: number; b: number; }'.
     }

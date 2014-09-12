@@ -1,3 +1,19 @@
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(12,1): error TS2367: No best common type exists between 'A' and 'B'.
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(13,15): error TS2367: No best common type exists between 'A' and 'B'.
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(16,5): error TS2322: Type '{}' is not assignable to type 'A':
+  Property 'propertyA' is missing in type '{}'.
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(16,18): error TS2366: No best common type exists between 'A', 'A', and 'B'.
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(17,5): error TS2322: Type '{}' is not assignable to type 'B':
+  Property 'propertyB' is missing in type '{}'.
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(17,18): error TS2366: No best common type exists between 'B', 'A', and 'B'.
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(19,5): error TS2323: Type '{}' is not assignable to type '(t: X) => number'.
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(19,33): error TS2366: No best common type exists between '(t: X) => number', '(m: X) => number', and '(n: X) => string'.
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(20,5): error TS2323: Type '{}' is not assignable to type '(t: X) => string'.
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(20,33): error TS2366: No best common type exists between '(t: X) => string', '(m: X) => number', and '(n: X) => string'.
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(21,5): error TS2323: Type '{}' is not assignable to type '(t: X) => boolean'.
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(21,34): error TS2366: No best common type exists between '(t: X) => boolean', '(m: X) => number', and '(n: X) => string'.
+
+
 ==== tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts (12 errors) ====
     //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
     class X { propertyX: any; propertyX1: number; propertyX2: string };
@@ -12,37 +28,37 @@
     //Be not contextually typed
     true ? a : b;
     ~~~~~~~~~~~~
-!!! No best common type exists between 'A' and 'B'.
+!!! error TS2367: No best common type exists between 'A' and 'B'.
     var result1 = true ? a : b;
                   ~~~~~~~~~~~~
-!!! No best common type exists between 'A' and 'B'.
+!!! error TS2367: No best common type exists between 'A' and 'B'.
     
     //Be contextually typed and and bct is not identical
     var result2: A = true ? a : b;
         ~~~~~~~
-!!! Type '{}' is not assignable to type 'A':
-!!!   Property 'propertyA' is missing in type '{}'.
+!!! error TS2322: Type '{}' is not assignable to type 'A':
+!!! error TS2322:   Property 'propertyA' is missing in type '{}'.
                      ~~~~~~~~~~~~
-!!! No best common type exists between 'A', 'A', and 'B'.
+!!! error TS2366: No best common type exists between 'A', 'A', and 'B'.
     var result3: B = true ? a : b;
         ~~~~~~~
-!!! Type '{}' is not assignable to type 'B':
-!!!   Property 'propertyB' is missing in type '{}'.
+!!! error TS2322: Type '{}' is not assignable to type 'B':
+!!! error TS2322:   Property 'propertyB' is missing in type '{}'.
                      ~~~~~~~~~~~~
-!!! No best common type exists between 'B', 'A', and 'B'.
+!!! error TS2366: No best common type exists between 'B', 'A', and 'B'.
     
     var result4: (t: X) => number = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
         ~~~~~~~
-!!! Type '{}' is not assignable to type '(t: X) => number'.
+!!! error TS2323: Type '{}' is not assignable to type '(t: X) => number'.
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between '(t: X) => number', '(m: X) => number', and '(n: X) => string'.
+!!! error TS2366: No best common type exists between '(t: X) => number', '(m: X) => number', and '(n: X) => string'.
     var result5: (t: X) => string = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
         ~~~~~~~
-!!! Type '{}' is not assignable to type '(t: X) => string'.
+!!! error TS2323: Type '{}' is not assignable to type '(t: X) => string'.
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between '(t: X) => string', '(m: X) => number', and '(n: X) => string'.
+!!! error TS2366: No best common type exists between '(t: X) => string', '(m: X) => number', and '(n: X) => string'.
     var result6: (t: X) => boolean = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
         ~~~~~~~
-!!! Type '{}' is not assignable to type '(t: X) => boolean'.
+!!! error TS2323: Type '{}' is not assignable to type '(t: X) => boolean'.
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between '(t: X) => boolean', '(m: X) => number', and '(n: X) => string'.
+!!! error TS2366: No best common type exists between '(t: X) => boolean', '(m: X) => number', and '(n: X) => string'.

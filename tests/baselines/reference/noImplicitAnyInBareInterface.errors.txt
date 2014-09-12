@@ -1,12 +1,16 @@
+tests/cases/compiler/noImplicitAnyInBareInterface.ts(4,5): error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/compiler/noImplicitAnyInBareInterface.ts(6,5): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
+
+
 ==== tests/cases/compiler/noImplicitAnyInBareInterface.ts (2 errors) ====
     
     interface Entry {
         // Should return error for implicit any on `new` and `foo`.
         new ();
         ~~~~~~~
-!!! Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
         few() : any;
         foo();
         ~~~~~~
-!!! 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
     }

@@ -1,11 +1,16 @@
+tests/cases/compiler/moduleAsBaseType.ts(2,17): error TS2304: Cannot find name 'M'.
+tests/cases/compiler/moduleAsBaseType.ts(3,21): error TS2304: Cannot find name 'M'.
+tests/cases/compiler/moduleAsBaseType.ts(4,21): error TS2304: Cannot find name 'M'.
+
+
 ==== tests/cases/compiler/moduleAsBaseType.ts (3 errors) ====
     module M {}
     class C extends M {}
                     ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.
     interface I extends M { }
                         ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.
     class C2 implements M { }
                         ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.

@@ -807,9 +807,7 @@ module Harness {
             return errorOutput;
         }
 
-        export function getErrorBaseline(inputFiles: { unitName: string; content: string }[],
-            diagnostics: HarnessDiagnostic[]
-            ) {
+        export function getErrorBaseline(inputFiles: { unitName: string; content: string }[], diagnostics: HarnessDiagnostic[]) {
 
             var outputLines: string[] = [];
             // Count up all the errors we find so we don't miss any
@@ -820,13 +818,13 @@ module Harness {
                     .split('\n')
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === '\r' ? s.substr(0, s.length - 1) : s)
                     .filter(s => s.length > 0)
-                    .map(s => '!!! ' + s);
+                    .map(s => '!!! ' + error.category + " TS" + error.code + ": " + s);
                 errLines.forEach(e => outputLines.push(e));
 
                 totalErrorsReported++;
             }
 
-            // Report glovbal errors:
+            // Report global errors
             var globalErrors = diagnostics.filter(err => !err.filename);
             globalErrors.forEach(err => outputErrorText(err));
 
@@ -896,7 +894,8 @@ module Harness {
             // Verify we didn't miss any errors in total
             assert.equal(totalErrorsReported, diagnostics.length, 'total number of errors');
 
-            return outputLines.join('\r\n');
+            return minimalDiagnosticsToString(diagnostics) +
+                sys.newLine + sys.newLine + outputLines.join('\r\n');
         }
 
         /* TODO: Delete?
@@ -917,7 +916,7 @@ module Harness {
         export function recreate(options?: { useMinimalDefaultLib: boolean; noImplicitAny: boolean; }) {
         }
 
-        /** The harness' compiler instance used when tests are actually run. Reseting or changing settings of this compiler instance must be done within a testcase (i.e., describe/it) */
+        /** The harness' compiler instance used when tests are actually run. Reseting or changing settings of this compiler instance must be done within a test case (i.e., describe/it) */
         var harnessCompiler: HarnessCompiler;
 
         /** Returns the singleton harness compiler instance for generating and running tests.

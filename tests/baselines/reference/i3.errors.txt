@@ -1,3 +1,7 @@
+tests/cases/compiler/i3.ts(6,1): error TS2322: Type 'I3' is not assignable to type '{ one: number; }':
+  Required property 'one' cannot be reimplemented with optional property in 'I3'.
+
+
 ==== tests/cases/compiler/i3.ts (1 errors) ====
     interface I3 { one?: number; }; 
     var x: {one: number};
@@ -6,5 +10,5 @@
     i = x;
     x = i;
     ~
-!!! Type 'I3' is not assignable to type '{ one: number; }':
-!!!   Required property 'one' cannot be reimplemented with optional property in 'I3'.
+!!! error TS2322: Type 'I3' is not assignable to type '{ one: number; }':
+!!! error TS2322:   Required property 'one' cannot be reimplemented with optional property in 'I3'.

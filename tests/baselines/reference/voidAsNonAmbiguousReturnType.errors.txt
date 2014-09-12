@@ -1,3 +1,6 @@
+tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts(1,1): error TS2394: Overload signature is not compatible with function implementation.
+
+
 ==== tests/cases/compiler/voidAsNonAmbiguousReturnType_1.ts (0 errors) ====
     ///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>
     import fs = require("voidAsNonAmbiguousReturnType_0");
@@ -9,6 +12,6 @@
 ==== tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts (1 errors) ====
     export function mkdirSync(path: string, mode?: number): void;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Overload signature is not compatible with function implementation.
+!!! error TS2394: Overload signature is not compatible with function implementation.
     export function mkdirSync(path: string, mode?: string): void {}
     

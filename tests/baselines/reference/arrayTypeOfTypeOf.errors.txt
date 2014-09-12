@@ -1,3 +1,12 @@
+tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(6,22): error TS1005: '=' expected.
+tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(6,30): error TS1109: Expression expected.
+tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(7,22): error TS1005: '=' expected.
+tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(7,32): error TS1109: Expression expected.
+tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(6,5): error TS2322: Type 'number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }':
+  Property 'isArray' is missing in type 'Number'.
+tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(7,5): error TS2323: Type 'number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }'.
+
+
 ==== tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts (6 errors) ====
     // array type cannot use typeof.
     
@@ -6,16 +15,16 @@
     var xs2: typeof Array;
     var xs3: typeof Array<number>;
                          ~
-!!! '=' expected.
+!!! error TS1005: '=' expected.
                                  ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
         ~~~
-!!! Type 'number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }':
-!!!   Property 'isArray' is missing in type 'Number'.
+!!! error TS2322: Type 'number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }':
+!!! error TS2322:   Property 'isArray' is missing in type 'Number'.
     var xs4: typeof Array<typeof x>;
                          ~
-!!! '=' expected.
+!!! error TS1005: '=' expected.
                                    ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
         ~~~
-!!! Type 'number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }'.
+!!! error TS2323: Type 'number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }'.

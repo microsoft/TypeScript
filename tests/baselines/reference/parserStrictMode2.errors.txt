@@ -1,16 +1,23 @@
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode2.ts(5,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode2.ts(5,8): error TS1109: Expression expected.
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode2.ts(2,1): error TS2304: Cannot find name 'foo1'.
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode2.ts(3,1): error TS2304: Cannot find name 'foo1'.
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode2.ts(4,1): error TS2304: Cannot find name 'foo1'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode2.ts (5 errors) ====
     "use strict";
     foo1();
     ~~~~
-!!! Cannot find name 'foo1'.
+!!! error TS2304: Cannot find name 'foo1'.
     foo1();
     ~~~~
-!!! Cannot find name 'foo1'.
+!!! error TS2304: Cannot find name 'foo1'.
     foo1();
     ~~~~
-!!! Cannot find name 'foo1'.
+!!! error TS2304: Cannot find name 'foo1'.
     static();
     ~~~~~~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
            ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.

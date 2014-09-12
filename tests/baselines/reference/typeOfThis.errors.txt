@@ -1,3 +1,13 @@
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(22,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(27,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(53,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(61,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(91,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(96,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(122,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(130,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts (8 errors) ====
     class MyTestClass {
         private canary: number;
@@ -22,14 +32,14 @@
         //type of 'this' in member accessor(get and set) body is the class instance type
         get prop() {
             ~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var p = this;
             var p: MyTestClass;
             return this;
         }
         set prop(v) {
             ~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var p = this;
             var p: MyTestClass;
             p = v;
@@ -57,7 +67,7 @@
     
         static get staticProp() {
                    ~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             //type of 'this' in static accessor body is constructor function type
             var p = this;
             var p: typeof MyTestClass;
@@ -67,7 +77,7 @@
         }
         static set staticProp(v: typeof MyTestClass) {
                    ~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             //type of 'this' in static accessor body is constructor function type
             var p = this;
             var p: typeof MyTestClass;
@@ -99,14 +109,14 @@
         //type of 'this' in member accessor(get and set) body is the class instance type
         get prop() {
             ~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var p = this;
             var p: MyGenericTestClass<T, U>;
             return this;
         }
         set prop(v) {
             ~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var p = this;
             var p: MyGenericTestClass<T, U>;
             p = v;
@@ -134,7 +144,7 @@
     
         static get staticProp() {
                    ~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             //type of 'this' in static accessor body is constructor function type
             var p = this;
             var p: typeof MyGenericTestClass;
@@ -144,7 +154,7 @@
         }
         static set staticProp(v: typeof MyGenericTestClass) {
                    ~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             //type of 'this' in static accessor body is constructor function type
             var p = this;
             var p: typeof MyGenericTestClass;

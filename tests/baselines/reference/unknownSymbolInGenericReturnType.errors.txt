@@ -1,8 +1,11 @@
+tests/cases/compiler/unknownSymbolInGenericReturnType.ts(2,61): error TS2304: Cannot find name 'A'.
+
+
 ==== tests/cases/compiler/unknownSymbolInGenericReturnType.ts (1 errors) ====
     class Linq {
         public static select<T, S>(values: T[], func: (v: T) => A): any[] {
                                                                 ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.
             var result = new Array(values.length);
      
             for (var i = 0; i < values.length; i++) {

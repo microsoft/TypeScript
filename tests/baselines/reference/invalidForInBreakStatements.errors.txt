@@ -1,16 +1,24 @@
+tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(4,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
+tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(8,19): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(27,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(37,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+
+
 ==== tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts (6 errors) ====
     // All errors
     
     // naked break not allowed
     break;
     ~~~~~~
-!!! A 'break' statement can only be used within an enclosing iteration or switch statement.
+!!! error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
     
     // non-existent label
     ONE:
     for (var x in {}) break TWO;
                       ~~~~~~~~~~
-!!! A 'break' statement can only jump to a label of an enclosing statement.
+!!! error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
     
     // break from inside function
     TWO:
@@ -18,7 +26,7 @@
         var fn = () => {
             break TWO;
             ~~~~~~~~~~
-!!! Jump target cannot cross function boundary.
+!!! error TS1107: Jump target cannot cross function boundary.
         }
     }
     
@@ -27,7 +35,7 @@
         var fn = function () {
             break THREE;
             ~~~~~~~~~~~~
-!!! Jump target cannot cross function boundary.
+!!! error TS1107: Jump target cannot cross function boundary.
         }
     }
     
@@ -35,7 +43,7 @@
     for (var x in {}) {
         break FIVE;
         ~~~~~~~~~~~
-!!! A 'break' statement can only jump to a label of an enclosing statement.
+!!! error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
         FIVE:
         for (var x in {}) { }
     }
@@ -47,5 +55,5 @@
     for (var x in {}) {
         break NINE;
         ~~~~~~~~~~~
-!!! A 'break' statement can only jump to a label of an enclosing statement.
+!!! error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
     }

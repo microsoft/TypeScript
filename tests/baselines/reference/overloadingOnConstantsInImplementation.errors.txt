@@ -1,12 +1,17 @@
+tests/cases/compiler/overloadingOnConstantsInImplementation.ts(1,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadingOnConstantsInImplementation.ts(2,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadingOnConstantsInImplementation.ts(3,1): error TS2381: A signature with an implementation cannot use a string literal type.
+
+
 ==== tests/cases/compiler/overloadingOnConstantsInImplementation.ts (3 errors) ====
     function foo(a: 'hi', x: string);
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function foo(a: 'hi', x: string);
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function foo(a: 'hi', x: any) {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
     ~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.

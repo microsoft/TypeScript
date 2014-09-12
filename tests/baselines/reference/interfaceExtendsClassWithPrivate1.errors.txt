@@ -1,3 +1,11 @@
+tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(21,1): error TS2322: Type 'C' is not assignable to type 'I':
+  Property 'other' is missing in type 'C'.
+tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(24,1): error TS2322: Type 'I' is not assignable to type 'D':
+  Property 'bar' is missing in type 'I'.
+tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(27,1): error TS2322: Type 'C' is not assignable to type 'D':
+  Property 'other' is missing in type 'C'.
+
+
 ==== tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts (3 errors) ====
     class C {
         public foo(x: any) { return x; }
@@ -21,17 +29,17 @@
     c = i;
     i = c; // error
     ~
-!!! Type 'C' is not assignable to type 'I':
-!!!   Property 'other' is missing in type 'C'.
+!!! error TS2322: Type 'C' is not assignable to type 'I':
+!!! error TS2322:   Property 'other' is missing in type 'C'.
     
     i = d;
     d = i; // error
     ~
-!!! Type 'I' is not assignable to type 'D':
-!!!   Property 'bar' is missing in type 'I'.
+!!! error TS2322: Type 'I' is not assignable to type 'D':
+!!! error TS2322:   Property 'bar' is missing in type 'I'.
     
     c = d;
     d = c; // error
     ~
-!!! Type 'C' is not assignable to type 'D':
-!!!   Property 'other' is missing in type 'C'.
+!!! error TS2322: Type 'C' is not assignable to type 'D':
+!!! error TS2322:   Property 'other' is missing in type 'C'.

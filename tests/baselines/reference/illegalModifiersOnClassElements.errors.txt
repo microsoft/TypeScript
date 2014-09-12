@@ -1,9 +1,13 @@
+tests/cases/compiler/illegalModifiersOnClassElements.ts(2,5): error TS1031: 'declare' modifier cannot appear on a class element.
+tests/cases/compiler/illegalModifiersOnClassElements.ts(3,5): error TS1031: 'export' modifier cannot appear on a class element.
+
+
 ==== tests/cases/compiler/illegalModifiersOnClassElements.ts (2 errors) ====
     class C {
         declare foo = 1;
         ~~~~~~~
-!!! 'declare' modifier cannot appear on a class element.
+!!! error TS1031: 'declare' modifier cannot appear on a class element.
         export bar = 1;
         ~~~~~~
-!!! 'export' modifier cannot appear on a class element.
+!!! error TS1031: 'export' modifier cannot appear on a class element.
     }

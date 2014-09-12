@@ -1,3 +1,6 @@
+tests/cases/compiler/sourceMapSample.ts(14,37): error TS2305: Module 'Foo.Bar' has no exported member 'Greeter'.
+
+
 ==== tests/cases/compiler/sourceMapSample.ts (1 errors) ====
     module Foo.Bar {
         "use strict";
@@ -14,7 +17,7 @@
     
         function foo(greeting: string): Foo.Bar.Greeter {
                                         ~~~~~~~~~~~~~~~
-!!! Module 'Foo.Bar' has no exported member 'Greeter'.
+!!! error TS2305: Module 'Foo.Bar' has no exported member 'Greeter'.
             return new Greeter(greeting);
         }
     

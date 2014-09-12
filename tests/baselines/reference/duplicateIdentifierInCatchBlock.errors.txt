@@ -1,26 +1,32 @@
+tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(3,14): error TS2300: Duplicate identifier 'v'.
+tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(8,9): error TS2300: Duplicate identifier 'w'.
+tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(13,14): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(16,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'string', but here has type 'number'.
+
+
 ==== tests/cases/compiler/duplicateIdentifierInCatchBlock.ts (4 errors) ====
     var v;
     try { } catch (e) {
         function v() { }
                  ~
-!!! Duplicate identifier 'v'.
+!!! error TS2300: Duplicate identifier 'v'.
     }
     
     function w() { }
     try { } catch (e) {
         var w;
             ~
-!!! Duplicate identifier 'w'.
+!!! error TS2300: Duplicate identifier 'w'.
     }
     
     try { } catch (e) {
         var x;
         function x() { } // error
                  ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         function e() { } // error
         var p: string;
         var p: number; // error
             ~
-!!! Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'string', but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'string', but here has type 'number'.
     }

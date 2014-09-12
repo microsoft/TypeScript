@@ -1,3 +1,18 @@
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(11,17): error TS2344: Type '{}' does not satisfy the constraint 'number'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(14,27): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(16,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(32,34): error TS2304: Cannot find name 'Window'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(34,15): error TS2304: Cannot find name 'Window'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(41,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(48,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(49,15): error TS2344: Type 'string' does not satisfy the constraint 'number'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(55,41): error TS2345: Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(66,31): error TS2345: Argument of type '<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(85,9): error TS2304: Cannot find name 'Window'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(87,47): error TS2304: Cannot find name 'window'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(89,52): error TS2304: Cannot find name 'window'.
+
+
 ==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts (13 errors) ====
     // Generic call with no parameters
     function noParams<T extends {}>() { }
@@ -11,16 +26,16 @@
     noGenericParams<number>('');
     noGenericParams<{}>(''); // Error
                     ~~
-!!! Type '{}' does not satisfy the constraint 'number'.
+!!! error TS2344: Type '{}' does not satisfy the constraint 'number'.
     
     // Generic call with multiple type parameters and only one used in parameter type annotation
     function someGenerics1<T, U extends T>(n: T, m: number) { }
                               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     someGenerics1(3, 4); // Valid
     someGenerics1<string, number>(3, 4); // Error
                                   ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     someGenerics1<number, {}>(3, 4); // Error
     someGenerics1<number, number>(3, 4);
     
@@ -38,11 +53,11 @@
     // Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
     function someGenerics3<T extends Window>(producer: () => T) { }
                                      ~~~~~~
-!!! Cannot find name 'Window'.
+!!! error TS2304: Cannot find name 'Window'.
     someGenerics3(() => ''); // Error
     someGenerics3<Window>(() => undefined);
                   ~~~~~~
-!!! Cannot find name 'Window'.
+!!! error TS2304: Cannot find name 'Window'.
     someGenerics3<number>(() => 3); // Error
     
     // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
@@ -51,7 +66,7 @@
     someGenerics4<string, number>('', () => 3);
     someGenerics4<string, number>('', (x: string) => ''); // Error
                                       ~~~~~~~~~~~~~~~~~
-!!! Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
     someGenerics4<string, number>(null, null);
     
     // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
@@ -60,10 +75,10 @@
     someGenerics5<number, string>('', () => 3);
     someGenerics5<number, string>('', (x: string) => ''); // Error
                                       ~~~~~~~~~~~~~~~~~
-!!! Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
     someGenerics5<string, number>(null, null); // Error
                   ~~~~~~
-!!! Type 'string' does not satisfy the constraint 'number'.
+!!! error TS2344: Type 'string' does not satisfy the constraint 'number'.
     
     // Generic call with multiple arguments of function types that each have parameters of the same generic type
     function someGenerics6<A extends number>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
@@ -71,7 +86,7 @@
     someGenerics6<number>(n => n, n => n, n => n);
     someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
                                             ~~~~~~~~~~~~~~~~
-!!! Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
+!!! error TS2345: Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
     someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
     
     // Generic call with multiple arguments of function types that each have parameters of different generic type
@@ -84,7 +99,7 @@
     function someGenerics8<T extends string>(n: T): T { return n; }
     var x = someGenerics8<string>(someGenerics7); // Error
                                   ~~~~~~~~~~~~~
-!!! Argument of type '<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type '<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void' is not assignable to parameter of type 'string'.
     x<string, string, string>(null, null, null); // Error
     
     // Generic call with multiple parameters of generic type passed arguments with no best common type
@@ -105,15 +120,15 @@
         x: number;
         z?: Window;
             ~~~~~~
-!!! Cannot find name 'Window'.
+!!! error TS2304: Cannot find name 'Window'.
     }
     var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
                                                   ~~~~~~
-!!! Cannot find name 'window'.
+!!! error TS2304: Cannot find name 'window'.
     var a9e: {};
     var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
                                                        ~~~~~~
-!!! Cannot find name 'window'.
+!!! error TS2304: Cannot find name 'window'.
     var a9f: A92;
     
     // Generic call with multiple parameters of generic type passed arguments with a single best common type

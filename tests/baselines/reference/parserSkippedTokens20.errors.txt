@@ -1,8 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens20.ts(1,12): error TS1127: Invalid character.
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens20.ts(1,13): error TS1005: '>' expected.
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens20.ts(1,8): error TS2304: Cannot find name 'X'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens20.ts (3 errors) ====
     var v: X<T \
                
-!!! Invalid character.
+!!! error TS1127: Invalid character.
                 
-!!! '>' expected.
+!!! error TS1005: '>' expected.
            ~~~~~
-!!! Cannot find name 'X'.
+!!! error TS2304: Cannot find name 'X'.

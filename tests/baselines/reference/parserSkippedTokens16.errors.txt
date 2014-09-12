@@ -1,27 +1,38 @@
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(1,6): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(1,12): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(2,22): error TS1127: Invalid character.
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(3,3): error TS1109: Expression expected.
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(6,5): error TS1138: Parameter declaration expected.
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(8,14): error TS1109: Expression expected.
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(1,1): error TS2304: Cannot find name 'foo'.
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(1,8): error TS2304: Cannot find name 'Bar'.
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(2,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts (9 errors) ====
     foo(): Bar { }
          ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
     ~~~
-!!! Cannot find name 'foo'.
+!!! error TS2304: Cannot find name 'foo'.
            ~~~
-!!! Cannot find name 'Bar'.
+!!! error TS2304: Cannot find name 'Bar'.
     function Foo      () #   { }
                          
-!!! Invalid character.
+!!! error TS1127: Invalid character.
              ~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     4+:5
       ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     module M {
     function a(
         : T) { }
         ~
-!!! Parameter declaration expected.
+!!! error TS1138: Parameter declaration expected.
     }
     var x       =
                  
-!!! Expression expected.
+!!! error TS1109: Expression expected.

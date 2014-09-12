@@ -1,5 +1,8 @@
+tests/cases/compiler/collisionThisExpressionAndVarInGlobal.ts(1,5): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+
+
 ==== tests/cases/compiler/collisionThisExpressionAndVarInGlobal.ts (1 errors) ====
     var _this = 1;
         ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
     var f = () => this;
