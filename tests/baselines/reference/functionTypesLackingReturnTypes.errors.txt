@@ -1,15 +1,19 @@
+tests/cases/compiler/functionTypesLackingReturnTypes.ts(3,17): error TS1005: '=>' expected.
+tests/cases/compiler/functionTypesLackingReturnTypes.ts(7,15): error TS1005: '=>' expected.
+
+
 ==== tests/cases/compiler/functionTypesLackingReturnTypes.ts (2 errors) ====
     
     // Error (no '=>')
     function f(x: ()) {
                     ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
     }
     
     // Error (no '=>')
     var g: (param);
                   ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
     
     // Okay
     var h: { () }
