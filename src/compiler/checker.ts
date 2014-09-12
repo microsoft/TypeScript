@@ -1421,7 +1421,10 @@ module ts {
             else if (links.type === resolvingType) {
                 links.type = anyType;
                 if (compilerOptions.noImplicitAny) {
-                    error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_type_inference_encountered_a_circularity, symbolToString(symbol));
+                    var diagnostic = (<VariableDeclaration>symbol.valueDeclaration).type ?
+                        Diagnostics._0_implicitly_has_type_any_because_it_is_referenced_directly_or_indirectly_in_its_own_type_annotation :
+                        Diagnostics._0_implicitly_has_type_any_because_it_is_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer;
+                    error(symbol.valueDeclaration, diagnostic, symbolToString(symbol));
                 }
             }
             return links.type;
@@ -1494,7 +1497,7 @@ module ts {
                 links.type = anyType;
                 if (compilerOptions.noImplicitAny) {
                     var getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
-                    error(getter, Diagnostics._0_implicitly_has_type_any_because_type_inference_encountered_a_circularity, symbolToString(symbol));
+                    error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
                 }
             }
         }
@@ -2046,10 +2049,10 @@ module ts {
                 if (compilerOptions.noImplicitAny) {
                     var declaration = <Declaration>signature.declaration;
                     if (declaration.name) {
-                        error(declaration.name, Diagnostics._0_implicitly_has_return_type_any_because_type_inference_encountered_a_circularity, identifierToString(declaration.name));
+                        error(declaration.name, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, identifierToString(declaration.name));
                     }
                     else {
-                        error(declaration, Diagnostics.Function_implicitly_has_return_type_any_because_type_inference_encountered_a_circularity);
+                        error(declaration, Diagnostics.Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions);
                     }
                 }
             }

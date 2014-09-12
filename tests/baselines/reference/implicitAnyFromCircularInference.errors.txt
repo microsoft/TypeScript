@@ -3,25 +3,25 @@
     // Error expected
     var a: typeof a;
         ~
-!!! 'a' implicitly has type 'any' because type inference encountered a circularity.
+!!! 'a' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
     
     // Error expected on b or c
     var b: typeof c;
     var c: typeof b;
         ~
-!!! 'c' implicitly has type 'any' because type inference encountered a circularity.
+!!! 'c' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
     
     // Error expected
     var d: Array<typeof d>;
         ~
-!!! 'd' implicitly has type 'any' because type inference encountered a circularity.
+!!! 'd' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
     
     function f() { return f; }
     
     // Error expected
     function g() { return g(); }
              ~
-!!! 'g' implicitly has return type 'any' because type inference encountered a circularity.
+!!! 'g' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
     
     // Error expected
     var f1 = function () {
@@ -30,17 +30,17 @@
     ~~~~~~~~~~~~~~~~
     };
     ~
-!!! Function implicitly has return type 'any' because type inference encountered a circularity.
+!!! Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
     
     // Error expected
     var f2 = () => f2();
              ~~~~~~~~~~
-!!! Function implicitly has return type 'any' because type inference encountered a circularity.
+!!! Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
     
     // Error expected
     function h() {
              ~
-!!! 'h' implicitly has return type 'any' because type inference encountered a circularity.
+!!! 'h' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
         return foo();
         function foo() {
             return h() || "hello";
@@ -57,7 +57,7 @@
         // Error expected
         s = foo(this);
         ~~~~~~~~~~~~~~
-!!! 's' implicitly has type 'any' because type inference encountered a circularity.
+!!! 's' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.
     }
     
     class D {
@@ -68,6 +68,6 @@
     ~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! 'x' implicitly has type 'any' because type inference encountered a circularity.
+!!! 'x' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
     }
     
