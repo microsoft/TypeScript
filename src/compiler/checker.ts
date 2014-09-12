@@ -413,7 +413,7 @@ module ts {
             }
         }
 
-        function getFullyQualifiedName(symbol: Symbol) {
+        function getFullyQualifiedName(symbol: Symbol): string {
             return symbol.parent ? getFullyQualifiedName(symbol.parent) + "." + symbolToString(symbol) : symbolToString(symbol);
         }
 
@@ -1420,6 +1420,9 @@ module ts {
             }
             else if (links.type === resolvingType) {
                 links.type = anyType;
+                if (compilerOptions.noImplicitAny) {
+                    error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_type_inference_encountered_a_circularity, symbolToString(symbol));
+                }
             }
             return links.type;
         }
@@ -1475,7 +1478,7 @@ module ts {
                         // Otherwise, fall back to 'any'.
                         else {
                             if (compilerOptions.noImplicitAny) {
-                                error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_type_annotation, symbol.name);
+                                error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_type_annotation, symbolToString(symbol));
                             }
 
                             type = anyType;
@@ -1489,6 +1492,10 @@ module ts {
             }
             else if (links.type === resolvingType) {
                 links.type = anyType;
+                if (compilerOptions.noImplicitAny) {
+                    var getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
+                    error(getter, Diagnostics._0_implicitly_has_type_any_because_type_inference_encountered_a_circularity, symbolToString(symbol));
+                }
             }
         }
 
@@ -1552,7 +1559,7 @@ module ts {
 
         function hasBaseType(type: InterfaceType, checkBase: InterfaceType) {
             return check(type);
-            function check(type: InterfaceType) {
+            function check(type: InterfaceType): boolean {
                 var target = <InterfaceType>getTargetType(type);
                 return target === checkBase || forEach(target.baseTypes, check);
             }
@@ -2036,6 +2043,15 @@ module ts {
             }
             else if (signature.resolvedReturnType === resolvingType) {
                 signature.resolvedReturnType = anyType;
+                if (compilerOptions.noImplicitAny) {
+                    var declaration = <Declaration>signature.declaration;
+                    if (declaration.name) {
+                        error(declaration.name, Diagnostics._0_implicitly_has_return_type_any_because_type_inference_encountered_a_circularity, identifierToString(declaration.name));
+                    }
+                    else {
+                        error(declaration, Diagnostics.Function_implicitly_has_return_type_any_because_type_inference_encountered_a_circularity);
+                    }
+                }
             }
             return signature.resolvedReturnType;
         }
@@ -6587,7 +6603,7 @@ module ts {
         // Language service support
 
         function getNodeAtPosition(sourceFile: SourceFile, position: number): Node {
-            function findChildAtPosition(parent: Node) {
+            function findChildAtPosition(parent: Node): Node {
                 var child = forEachChild(parent, node => {
                     if (position >= node.pos && position <= node.end && position >= getTokenPosOfNode(node)) {
                         return findChildAtPosition(node);

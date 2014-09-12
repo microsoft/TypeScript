@@ -1,0 +1,73 @@
+==== tests/cases/compiler/implicitAnyFromCircularInference.ts (9 errors) ====
+    
+    // Error expected
+    var a: typeof a;
+        ~
+!!! 'a' implicitly has type 'any' because type inference encountered a circularity.
+    
+    // Error expected on b or c
+    var b: typeof c;
+    var c: typeof b;
+        ~
+!!! 'c' implicitly has type 'any' because type inference encountered a circularity.
+    
+    // Error expected
+    var d: Array<typeof d>;
+        ~
+!!! 'd' implicitly has type 'any' because type inference encountered a circularity.
+    
+    function f() { return f; }
+    
+    // Error expected
+    function g() { return g(); }
+             ~
+!!! 'g' implicitly has return type 'any' because type inference encountered a circularity.
+    
+    // Error expected
+    var f1 = function () {
+             ~~~~~~~~~~~~~
+        return f1();
+    ~~~~~~~~~~~~~~~~
+    };
+    ~
+!!! Function implicitly has return type 'any' because type inference encountered a circularity.
+    
+    // Error expected
+    var f2 = () => f2();
+             ~~~~~~~~~~
+!!! Function implicitly has return type 'any' because type inference encountered a circularity.
+    
+    // Error expected
+    function h() {
+             ~
+!!! 'h' implicitly has return type 'any' because type inference encountered a circularity.
+        return foo();
+        function foo() {
+            return h() || "hello";
+        }
+    }
+    
+    interface A {
+        s: string;
+    }
+    
+    function foo(x: A): string { return "abc"; }
+    
+    class C {
+        // Error expected
+        s = foo(this);
+        ~~~~~~~~~~~~~~
+!!! 's' implicitly has type 'any' because type inference encountered a circularity.
+    }
+    
+    class D {
+        // Error expected
+        get x() {
+        ~~~~~~~~~
+            return this.x;
+    ~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! 'x' implicitly has type 'any' because type inference encountered a circularity.
+    }
+    

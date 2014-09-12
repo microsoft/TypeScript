@@ -390,6 +390,9 @@ module ts {
         Object_literal_s_property_0_implicitly_has_an_1_type: { code: 7018, category: DiagnosticCategory.Error, key: "Object literal's property '{0}' implicitly has an '{1}' type." },
         Rest_parameter_0_implicitly_has_an_any_type: { code: 7019, category: DiagnosticCategory.Error, key: "Rest parameter '{0}' implicitly has an 'any[]' type." },
         Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type: { code: 7020, category: DiagnosticCategory.Error, key: "Call signature, which lacks return-type annotation, implicitly has an 'any' return type." },
+        _0_implicitly_has_type_any_because_type_inference_encountered_a_circularity: { code: 7021, category: DiagnosticCategory.Error, key: "'{0}' implicitly has type 'any' because type inference encountered a circularity." },
+        _0_implicitly_has_return_type_any_because_type_inference_encountered_a_circularity: { code: 7022, category: DiagnosticCategory.Error, key: "'{0}' implicitly has return type 'any' because type inference encountered a circularity." },
+        Function_implicitly_has_return_type_any_because_type_inference_encountered_a_circularity: { code: 7023, category: DiagnosticCategory.Error, key: "Function implicitly has return type 'any' because type inference encountered a circularity." },
         You_cannot_rename_this_element: { code: 8000, category: DiagnosticCategory.Error, key: "You cannot rename this element." },
     };
 }

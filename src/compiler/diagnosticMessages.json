@@ -1557,6 +1557,18 @@
         "category": "Error",
         "code": 7020
     },
+    "'{0}' implicitly has type 'any' because type inference encountered a circularity.": {
+        "category": "Error",
+        "code": 7021
+    },
+    "'{0}' implicitly has return type 'any' because type inference encountered a circularity.": {
+        "category": "Error",
+        "code": 7022
+    },
+    "Function implicitly has return type 'any' because type inference encountered a circularity.": {
+        "category": "Error",
+        "code": 7023
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
