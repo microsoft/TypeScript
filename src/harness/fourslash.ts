@@ -122,49 +122,41 @@ module FourSlash {
         return s.replace(/[&<>"'\/]/g, ch => entityMap[ch]);
     }
 
-    // Name of ts.CompilerOptions properties that will be used by globalOptions
-    // To add additional option, add property into the compilerOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
+    // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
+    // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
     // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
-    var compilerOptMetadataNames = {
-      out: 'out',
-      outDir: 'outDir',
-      declaration: 'declaration',
-      sourceMap: 'sourceMap',
-      sourceRoot: 'sourceRoot',
-      mapRoot: 'mapRoot',
-      module: 'module',
+    var testOptMetadataNames = {
+       baselineFile: 'BaselineFile',  
+       declaration: 'declaration',
+       emitThisFile: 'emitThisFile',  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
+       filename: 'Filename',
+       mapRoot: 'mapRoot',
+       module: 'module',
+       out: 'out',
+       outDir: 'outDir',
+       sourceMap: 'sourceMap',
+       sourceRoot: 'sourceRoot',
     };
 
     // List of allowed metadata names
-    var fileMetadataNames = ['Filename'];
-    var globalMetadataNames = ['BaselineFile', compilerOptMetadataNames.out, compilerOptMetadataNames.outDir, compilerOptMetadataNames.declaration, compilerOptMetadataNames.outDir,
-                               compilerOptMetadataNames.declaration, compilerOptMetadataNames.sourceMap, compilerOptMetadataNames.sourceRoot, compilerOptMetadataNames.mapRoot, compilerOptMetadataNames.module]
+    var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile];
+    var globalMetadataNames = [testOptMetadataNames.baselineFile,  testOptMetadataNames.declaration,
+        testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
+        testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
 
     function convertGlobalOptionsToCompilationSettings(globalOptions: { [idx: string]: string }): ts.CompilationSettings {
         var settings: ts.CompilationSettings = {};
-        // Convert all property in globalOptions into ts.CompilationSettings
+    // Convert all property in globalOptions into ts.CompilationSettings
         for (var prop in globalOptions) {
             if (globalOptions.hasOwnProperty(prop)) {
                 switch (prop) {
-                    case compilerOptMetadataNames.out:
-                      settings.outFileOption = globalOptions[prop];
-                      break;
-                    case compilerOptMetadataNames.outDir:
-                      settings.outDirOption = globalOptions[prop];
-                      break;
-                    case compilerOptMetadataNames.declaration:
-                      settings.generateDeclarationFiles = true;
-                      break;
-                    case compilerOptMetadataNames.sourceMap:
-                      settings.mapSourceFiles = true;
-                      break;
-                    case compilerOptMetadataNames.sourceRoot:
-                      settings.sourceRoot = globalOptions[prop];
-                      break;
-                    case compilerOptMetadataNames.mapRoot:
-                      settings.mapRoot = globalOptions[prop];
-                      break;
-                    case compilerOptMetadataNames.module:
+                    case testOptMetadataNames.declaration:
+                        settings.generateDeclarationFiles = true;
+                        break;
+                    case testOptMetadataNames.mapRoot:
+                        settings.mapRoot = globalOptions[prop];
+                        break;
+                    case testOptMetadataNames.module:
                         // create appropriate external module target for CompilationSettings
                         switch (globalOptions[prop]) {
                           case "AMD":
@@ -177,7 +169,20 @@ module FourSlash {
                             settings.moduleGenTarget = ts.ModuleGenTarget.Unspecified;
                             break;
                         }
-                      break;
+                        break;
+                    case testOptMetadataNames.out:
+                        settings.outFileOption = globalOptions[prop];
+                        break;
+                    case testOptMetadataNames.outDir:
+                        settings.outDirOption = globalOptions[prop];
+                        break;
+                    case testOptMetadataNames.sourceMap:
+                        settings.mapSourceFiles = true;
+                        break;
+                    case testOptMetadataNames.sourceRoot:
+                        settings.sourceRoot = globalOptions[prop];
+                        break;
+                    
                 }
             }
         }
@@ -938,7 +943,7 @@ module FourSlash {
 
             Harness.Baseline.runBaseline(
                 "Breakpoint Locations for " + this.activeFile.fileName,
-                this.testData.globalOptions['BaselineFile'],
+                this.testData.globalOptions[testOptMetadataNames.baselineFile],
                 () => {
                     var fileLength = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
                     var resultString = "";
@@ -951,47 +956,61 @@ module FourSlash {
         }
 
         public baselineGetEmitOutput() {
-            this.taoInvalidReason = 'baselineCurrentFileBreakpointLocations impossible';
+            this.taoInvalidReason = 'baselineGetEmitOutput impossible';
+            // Find file to be emitted
+            var emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
+
+            var allFourSlashFiles = this.testData.files;
+            for (var idx = 0; idx < allFourSlashFiles.length; ++idx) {
+                var file = allFourSlashFiles[idx];
+                if (file.fileOptions[testOptMetadataNames.emitThisFile]) {
+                    // Find a file with the flag emitThisFile turned on
+                    emitFiles.push(file);
+                }
+            }
+
+            // If there is not emiThisFile flag specified in the test file, throw an error
+            if (emitFiles.length === 0) {
+                throw new Error("No emitThisFile is specified in the test file");
+            }
 
             Harness.Baseline.runBaseline(
-                "Breakpoint Locations for " + this.activeFile.fileName,
-                this.testData.globalOptions['BaselineFile'],
+                "Generate getEmitOutput baseline : " + emitFiles.join(" "),
+                this.testData.globalOptions[testOptMetadataNames.baselineFile],
                 () => {
-                    var emitOutput = this.languageService.getEmitOutput(this.activeFile.fileName);
-                    var emitOutputStatus = emitOutput.emitOutputStatus;
                     var resultString = "";
+                    // Loop through all the emittedFiles and emit them one by one
+                    emitFiles.forEach(emitFile => {
+                        var emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
+                        var emitOutputStatus = emitOutput.emitOutputStatus;
 
-                    // Print emitOutputStatus in readable format
-                    switch (emitOutputStatus) {
-                        case ts.EmitReturnStatus.Succeeded:
-                            resultString += "EmitOutputStatus : Succeeded\n";
-                            break;
-                        case ts.EmitReturnStatus.AllOutputGenerationSkipped:
-                            resultString += "EmitOutputStatus : AllOutputGenerationSkipped\n";
-                            break;
-                        case ts.EmitReturnStatus.JSGeneratedWithSemanticErrors:
-                            resultString += "EmitOutputStatus : JSGeneratedWithSemanticErrors\n";
-                            break;
-                        case ts.EmitReturnStatus.DeclarationGenerationSkipped:
-                            resultString += "EmitOutputStatus : DeclaratiionGenerationSkipped\n";
-                            break;
-                        case ts.EmitReturnStatus.EmitErrorsEncountered:
-                            resultString += "EmitOutputStatus : EmitErrorEncountered\n";
-                            break;
-                        default:
-                            resultString += "Invalid EmitOutputStatus\n";
-                            break;
-                    }
+                        // Print emitOutputStatus in readable format
+                        switch (emitOutputStatus) {
+                            case ts.EmitReturnStatus.Succeeded:
+                                resultString += "EmitOutputStatus : Succeeded\n";
+                                break;
+                            case ts.EmitReturnStatus.AllOutputGenerationSkipped:
+                                resultString += "EmitOutputStatus : AllOutputGenerationSkipped\n";
+                                break;
+                            case ts.EmitReturnStatus.JSGeneratedWithSemanticErrors:
+                                resultString += "EmitOutputStatus : JSGeneratedWithSemanticErrors\n";
+                                break;
+                            case ts.EmitReturnStatus.DeclarationGenerationSkipped:
+                                resultString += "EmitOutputStatus : DeclaratiionGenerationSkipped\n";
+                                break;
+                            case ts.EmitReturnStatus.EmitErrorsEncountered:
+                                resultString += "EmitOutputStatus : EmitErrorEncountered\n";
+                                break;
+                            default:
+                                resultString += "Invalid EmitOutputStatus\n";
+                                break;
+                        }
 
-                    emitOutput.outputFiles.forEach((outputFile, idx, array) => {
-                        var filename = "Filename : " + outputFile.name + "\n";
-                        if (filename.match("/*.js.map/") === undefined) {
-                            var content = outputFile.text;
-                        }
-                        else {
-                            var content = outputFile.text + "\n";
-                        }
-                        resultString = resultString + filename + content + "\n";
+                        emitOutput.outputFiles.forEach((outputFile, idx, array) => {
+                            var filename = "Filename : " + outputFile.name + "\n";
+                            resultString = resultString + filename + outputFile.text;
+                        });
+                        resultString += "\n";
                     });
                     return resultString;
                 },
@@ -1522,7 +1541,7 @@ module FourSlash {
 
             Harness.Baseline.runBaseline(
                 "Name OrDottedNameSpans for " + this.activeFile.fileName,
-                this.testData.globalOptions['BaselineFile'],
+                this.testData.globalOptions[testOptMetadataNames.baselineFile],
                 () => {
                     var fileLength = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
                     var resultString = "";
@@ -2123,12 +2142,12 @@ module FourSlash {
                 // Comment line, check for global/file @options and record them
                 var match = optionRegex.exec(line.substr(2));
                 if (match) {
-                    var globalNameIndex = globalMetadataNames.indexOf(match[1]);
-                    var fileNameIndex = fileMetadataNames.indexOf(match[1]);
-                    if (globalNameIndex === -1) {
-                        if (fileNameIndex === -1) {
+                    var globalMetadataNamesIndex = globalMetadataNames.indexOf(match[1]);
+                    var fileMetadataNamesIndex = fileMetadataNames.indexOf(match[1]);
+                    if (globalMetadataNamesIndex === -1) {
+                        if (fileMetadataNamesIndex === -1) {
                             throw new Error('Unrecognized metadata name "' + match[1] + '". Available global metadata names are: ' + globalMetadataNames.join(', ') + '; file metadata names are: ' + fileMetadataNames.join(', '));
-                        } else {
+                        } else if (fileMetadataNamesIndex === fileMetadataNames.indexOf(testOptMetadataNames.filename)) {
                             // Found an @Filename directive, if this is not the first then create a new subfile
                             if (currentFileContent) {
                                 var file = parseFileContent(currentFileContent, currentFileName, markerMap, markers, ranges);
@@ -2144,6 +2163,9 @@ module FourSlash {
                             }
 
                             currentFileName = 'tests/cases/fourslash/' + match[2];
+                            currentFileOptions[match[1]] = match[2];
+                        } else {
+                            // Add other fileMetadata flag
                             currentFileOptions[match[1]] = match[2];
                         }
                     } else {

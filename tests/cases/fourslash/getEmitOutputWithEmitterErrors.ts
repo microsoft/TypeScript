@@ -2,7 +2,9 @@
 
 // @BaselineFile: getEmitOutputWithEmitterErrors.baseline
 // @declaration: true
+
 // @Filename: inputFile.ts
+// @emitThisFile: true
 ////module M {
 ////  class C { }
 ////  export var foo = new C();

@@ -2,9 +2,10 @@
 
 // @BaselineFile: getEmitOutputSingleFile2.baseline
 // @declaration: true
-// @Filename: inputFile1.ts
 // @out: declSingleFile.js
 // @outDir: tests/cases/fourslash/
+
+// @Filename: inputFile1.ts
 //// var x: number = 5;
 //// class Bar {
 ////    x : string;
@@ -19,14 +20,8 @@
 //// }
 
 // @Filename: inputFile3.ts
+// @emitThisFile: true
 ////export var foo = 10;
 ////export var bar = "hello world"
 
-var singleFilename = "declSingleFile";
-var jsFilename = singleFilename + ".js";
-var declFilename = singleFilename + ".d.ts";
-var exportFilename = "tests/cases/fourslash/inputFile3"
-var exportJSFilename = exportFilename + ".js";
-var exportDeclFilename = exportFilename + ".d.ts";
-var outputFilenames = jsFilename + " " + declFilename + " " + exportJSFilename + " " + exportDeclFilename;
 verify.baselineGetEmitOutput();

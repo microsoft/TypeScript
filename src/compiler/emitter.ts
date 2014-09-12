@@ -25,15 +25,21 @@ module ts {
         return indentStrings[1].length;
     }
 
-    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
+    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!(sourceFile.flags & NodeFlags.DeclarationFile)) {
             if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
                 return true;
             }
+            return false;
         }
+        return false;
+    }
+    export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
+        return isExternalModule(sourceFile) || (sourceFile.flags & NodeFlags.DeclarationFile) !== 0;
     }
 
-    export function emitFiles(resolver: EmitResolver): EmitResult {
+    // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
+    export function emitFiles(resolver: EmitResolver, targetSourceFile?: SourceFile): EmitResult {
         var program = resolver.getProgram();
         var compilerHost = program.getCompilerHost();
         var compilerOptions = program.getCompilerOptions();
@@ -56,10 +62,6 @@ module ts {
             }
 
             return emitOutputFilePathWithoutExtension + extension;
-        }
-
-        function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
-            return isExternalModule(sourceFile) || (sourceFile.flags & NodeFlags.DeclarationFile) !== 0;
         }
 
         function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
@@ -3161,44 +3163,50 @@ module ts {
             }
         }
 
-        var shouldEmitDeclarations = resolver.shouldEmitDeclarations();
+        var hasSemanticErros = resolver.hasSemanticErrors();
+        var returnCode = EmitReturnStatus.Succeeded;
+
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             emitJavaScript(jsFilePath, sourceFile);
-            if (shouldEmitDeclarations) {
+            // Update the returnCode with appropriate value depended on whether we have semantic errors 
+            if (!hasSemanticErros && compilerOptions.declaration) {
+                returnCode = EmitReturnStatus.Succeeded;
                 emitDeclarations(jsFilePath, sourceFile);
+            }
+            else if (hasSemanticErros && compilerOptions.declaration) {
+                returnCode = EmitReturnStatus.DeclarationGenerationSkipped;
+            }
+            else if (hasSemanticErros && !compilerOptions.declaration) {
+                returnCode = EmitReturnStatus.JSGeneratedWithSemanticErrors;
             }
         }
 
-        forEach(program.getSourceFiles(), sourceFile => {
-            if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                var jsFilePath = getOwnEmitOutputFilePath(sourceFile, ".js");
-                emitFile(jsFilePath, sourceFile);
-            }
-        });
+        if (targetSourceFile === undefined) {
+            forEach(program.getSourceFiles(), sourceFile => {
+                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
+                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, ".js");
+                    emitFile(jsFilePath, sourceFile);
+                }
+            });
+        }
+        else {
+            // Emit only one file specified in targetFilename. This is mainly used in compilerOnSave feature
+            var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, ".js");
+            emitFile(jsFilePath, targetSourceFile);
+        }
+
         if (compilerOptions.out) {
             emitFile(compilerOptions.out);
         }
-
+       
         // Sort and make the unique list of diagnostics
         diagnostics.sort(compareDiagnostics);
         diagnostics = deduplicateSortedDiagnostics(diagnostics);
 
-        var returnCode = EmitReturnStatus.Succeeded;
-
-        // Check if there is any diagnostic in an error category; if so, there is an emitter error
+        // Update returnCode if there is any EmitterError
         var hasEmitterError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
 
-        if (resolver.hasSemanticErrors() && !compilerOptions.declaration) {
-            // There is an semantic errror when output javascript file
-            // Output JS file with semantic error
-            returnCode = EmitReturnStatus.JSGeneratedWithSemanticErrors;
-        }
-        else if (resolver.hasSemanticErrors() && compilerOptions.declaration) {
-            // There is an semantic errror when output javascript and declaration file
-            // Output JS file with semantic error, not output declaration file
-            returnCode = EmitReturnStatus.DeclarationGenerationSkipped;
-        }
-        else if (hasEmitterError) {
+        if (hasEmitterError) {
             returnCode = EmitReturnStatus.EmitErrorsEncountered;
         }
 

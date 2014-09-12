@@ -1,22 +1,20 @@
 ﻿/// <reference path="fourslash.ts" />
 
-// @BaselineFile: getEmitOutputDeclarationSingleFile.baseline
-// @declaration: true
-// @out: declSingleFile.js
+// @BaselineFile: getEmitOutputOnlyOneFile.baseline
 
 // @Filename: inputFile1.ts
-// @emitThisFile: true
-//// var x: number = 5;
+//// var x: any;
 //// class Bar {
 ////    x : string;
 ////    y : number
 //// }
 
 // @Filename: inputFile2.ts
-//// var x1: string = "hello world";
+// @emitThisFile: true
+//// var x: any;
 //// class Foo{
 ////    x : string;
-////    y : number;
+////    y : number
 //// }
 
 verify.baselineGetEmitOutput();

@@ -2,6 +2,7 @@
 
 // @BaselineFile: getEmitOutputNoErrors.baseline
 // @Filename: inputFile.ts
+// @emitThisFile: true
 //// var x;
 //// class M {
 ////   x: number;

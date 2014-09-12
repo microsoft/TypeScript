@@ -2837,9 +2837,9 @@ module ts {
         function getEmitOutput(filename: string): EmitOutput {
             synchronizeHostData();
             filename = TypeScript.switchToForwardSlashes(filename);
-            var sourceFile = program.getSourceFile(filename);
             var compilerOptions = program.getCompilerOptions();
-            var emitToSingleFile = ts.shouldEmitToOwnFile(sourceFile, compilerOptions);
+            var targetSourceFile = program.getSourceFile(filename);  // Current selected file to be output
+            var emitToSingleFile = ts.shouldEmitToOwnFile(targetSourceFile, compilerOptions);
             var emitDeclaration = compilerOptions.declaration;
             var emitOutput: EmitOutput = {
                 outputFiles: [],
@@ -2855,10 +2855,20 @@ module ts {
                 });
             }
 
-            var syntacticDiagnostics = emitToSingleFile
-                ? program.getDiagnostics(sourceFile)
-                : program.getDiagnostics();
-            var globalSyntacticDiagnostics = program.getGlobalDiagnostics();
+            var syntacticDiagnostics: Diagnostic[] = [];  
+            if (emitToSingleFile) {
+                // Check only the file we want to emit
+                syntacticDiagnostics = program.getDiagnostics(targetSourceFile);
+            }
+            else {
+                // Only check the syntactic of only sourceFiles that will get emitted into single output
+                forEach(program.getSourceFiles(), sourceFile => {
+                    // Emit to a single file then we will check all files that do not have external module
+                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                        syntacticDiagnostics = syntacticDiagnostics.concat(program.getDiagnostics(sourceFile));
+                    }
+                });
+            }
 
             // If there is any syntactic error, terminate the process
             if (containErrors(syntacticDiagnostics)) {
@@ -2868,7 +2878,15 @@ module ts {
 
             // Perform semantic and force a type check before emit to ensure that all symbols are updated
             // EmitFiles will report if there is an error from TypeChecker and Emitter
-            var emitFilesResult = getFullTypeCheckChecker().emitFiles();
+            if (emitToSingleFile) {
+                // Emit only selected file in the project
+                var emitFilesResult = getFullTypeCheckChecker().emitFiles(targetSourceFile);
+            }
+            else {
+                // Emit all files into single file
+                var emitFilesResult = getFullTypeCheckChecker().emitFiles();
+            }
+
             emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
 
             // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput

@@ -2,8 +2,10 @@
 
 // @BaselineFile: getEmitOutputSourceRoot.baseline
 // @sourceMap: true
-// @Filename: inputFile.ts
 // @sourceRoot: sourceRootDir/
+
+// @Filename: inputFile.ts
+// @emitThisFile: true
 //// var x = 109;
 //// var foo = "hello world";
 //// class M {
