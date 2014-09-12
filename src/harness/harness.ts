@@ -807,9 +807,7 @@ module Harness {
             return errorOutput;
         }
 
-        export function getErrorBaseline(inputFiles: { unitName: string; content: string }[],
-            diagnostics: HarnessDiagnostic[]
-            ) {
+        export function getErrorBaseline(inputFiles: { unitName: string; content: string }[], diagnostics: HarnessDiagnostic[]) {
 
             var outputLines: string[] = [];
             // Count up all the errors we find so we don't miss any
@@ -826,7 +824,7 @@ module Harness {
                 totalErrorsReported++;
             }
 
-            // Report global errors:
+            // Report global errors
             var globalErrors = diagnostics.filter(err => !err.filename);
             globalErrors.forEach(err => outputErrorText(err));
 
@@ -896,7 +894,8 @@ module Harness {
             // Verify we didn't miss any errors in total
             assert.equal(totalErrorsReported, diagnostics.length, 'total number of errors');
 
-            return outputLines.join('\r\n');
+            return minimalDiagnosticsToString(diagnostics) +
+                sys.newLine + sys.newLine + outputLines.join('\r\n');
         }
 
         /* TODO: Delete?

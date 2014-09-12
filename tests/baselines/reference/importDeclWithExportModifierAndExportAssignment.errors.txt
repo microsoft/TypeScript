@@ -1,3 +1,7 @@
+tests/cases/compiler/importDeclWithExportModifierAndExportAssignment.ts(5,1): error TS2305: Module 'x' has no exported member 'c'.
+tests/cases/compiler/importDeclWithExportModifierAndExportAssignment.ts(6,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
 ==== tests/cases/compiler/importDeclWithExportModifierAndExportAssignment.ts (2 errors) ====
     module x {
         interface c {

@@ -1,3 +1,12 @@
+tests/cases/compiler/staticVisibility.ts(31,12): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/staticVisibility.ts(33,12): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/staticVisibility.ts(10,9): error TS2304: Cannot find name 's'.
+tests/cases/compiler/staticVisibility.ts(13,9): error TS2304: Cannot find name 'b'.
+tests/cases/compiler/staticVisibility.ts(18,9): error TS2304: Cannot find name 'v'.
+tests/cases/compiler/staticVisibility.ts(19,14): error TS2339: Property 'p' does not exist on type 'typeof C1'.
+tests/cases/compiler/staticVisibility.ts(33,29): error TS2304: Cannot find name 'barback'.
+
+
 ==== tests/cases/compiler/staticVisibility.ts (7 errors) ====
     
     class C1 {

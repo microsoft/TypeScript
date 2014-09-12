@@ -1,3 +1,6 @@
+tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts(11,16): error TS2341: Property 'clodule.sfn' is inaccessible.
+
+
 ==== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts (1 errors) ====
     class clodule<T> {
         id: string;

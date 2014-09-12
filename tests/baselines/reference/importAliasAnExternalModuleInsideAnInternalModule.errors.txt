@@ -1,3 +1,6 @@
+tests/cases/compiler/importAliasAnExternalModuleInsideAnInternalModule_file0.ts(1,15): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+
+
 ==== tests/cases/compiler/importAliasAnExternalModuleInsideAnInternalModule_file1.ts (0 errors) ====
     import r = require('importAliasAnExternalModuleInsideAnInternalModule_file0');
     module m_private {

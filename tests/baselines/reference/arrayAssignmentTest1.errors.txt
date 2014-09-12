@@ -1,3 +1,52 @@
+tests/cases/compiler/arrayAssignmentTest1.ts(46,5): error TS2322: Type 'undefined[]' is not assignable to type 'I1':
+  Property 'IM1' is missing in type 'undefined[]'.
+tests/cases/compiler/arrayAssignmentTest1.ts(47,5): error TS2322: Type 'undefined[]' is not assignable to type 'C1':
+  Property 'IM1' is missing in type 'undefined[]'.
+tests/cases/compiler/arrayAssignmentTest1.ts(48,5): error TS2322: Type 'undefined[]' is not assignable to type 'C2':
+  Property 'C2M1' is missing in type 'undefined[]'.
+tests/cases/compiler/arrayAssignmentTest1.ts(49,5): error TS2322: Type 'undefined[]' is not assignable to type 'C3':
+  Property 'CM3M1' is missing in type 'undefined[]'.
+tests/cases/compiler/arrayAssignmentTest1.ts(60,1): error TS2322: Type 'C3[]' is not assignable to type 'I1[]':
+  Type 'C3' is not assignable to type 'I1':
+    Property 'IM1' is missing in type 'C3'.
+tests/cases/compiler/arrayAssignmentTest1.ts(64,1): error TS2322: Type 'I1[]' is not assignable to type 'C1[]':
+  Type 'I1' is not assignable to type 'C1':
+    Property 'C1M1' is missing in type 'I1'.
+tests/cases/compiler/arrayAssignmentTest1.ts(65,1): error TS2322: Type 'C3[]' is not assignable to type 'C1[]':
+  Type 'C3' is not assignable to type 'C1':
+    Property 'IM1' is missing in type 'C3'.
+tests/cases/compiler/arrayAssignmentTest1.ts(68,1): error TS2322: Type 'C1[]' is not assignable to type 'C2[]':
+  Type 'C1' is not assignable to type 'C2':
+    Property 'C2M1' is missing in type 'C1'.
+tests/cases/compiler/arrayAssignmentTest1.ts(69,1): error TS2322: Type 'I1[]' is not assignable to type 'C2[]':
+  Type 'I1' is not assignable to type 'C2':
+    Property 'C2M1' is missing in type 'I1'.
+tests/cases/compiler/arrayAssignmentTest1.ts(70,1): error TS2322: Type 'C3[]' is not assignable to type 'C2[]':
+  Type 'C3' is not assignable to type 'C2':
+    Property 'C2M1' is missing in type 'C3'.
+tests/cases/compiler/arrayAssignmentTest1.ts(75,1): error TS2322: Type 'C2[]' is not assignable to type 'C3[]':
+  Type 'C2' is not assignable to type 'C3':
+    Property 'CM3M1' is missing in type 'C2'.
+tests/cases/compiler/arrayAssignmentTest1.ts(76,1): error TS2322: Type 'C1[]' is not assignable to type 'C3[]':
+  Type 'C1' is not assignable to type 'C3':
+    Property 'CM3M1' is missing in type 'C1'.
+tests/cases/compiler/arrayAssignmentTest1.ts(77,1): error TS2322: Type 'I1[]' is not assignable to type 'C3[]':
+  Type 'I1' is not assignable to type 'C3':
+    Property 'CM3M1' is missing in type 'I1'.
+tests/cases/compiler/arrayAssignmentTest1.ts(79,1): error TS2322: Type '() => C1' is not assignable to type 'any[]':
+  Property 'push' is missing in type '() => C1'.
+tests/cases/compiler/arrayAssignmentTest1.ts(80,1): error TS2322: Type '{ one: number; }' is not assignable to type 'any[]':
+  Property 'length' is missing in type '{ one: number; }'.
+tests/cases/compiler/arrayAssignmentTest1.ts(82,1): error TS2322: Type 'C1' is not assignable to type 'any[]':
+  Property 'length' is missing in type 'C1'.
+tests/cases/compiler/arrayAssignmentTest1.ts(83,1): error TS2322: Type 'C2' is not assignable to type 'any[]':
+  Property 'length' is missing in type 'C2'.
+tests/cases/compiler/arrayAssignmentTest1.ts(84,1): error TS2322: Type 'C3' is not assignable to type 'any[]':
+  Property 'length' is missing in type 'C3'.
+tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2322: Type 'I1' is not assignable to type 'any[]':
+  Property 'length' is missing in type 'I1'.
+
+
 ==== tests/cases/compiler/arrayAssignmentTest1.ts (19 errors) ====
     interface I1 {
     	IM1():void[];

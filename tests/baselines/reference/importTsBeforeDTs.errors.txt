@@ -1,3 +1,6 @@
+tests/cases/conformance/externalModules/foo_1.ts(2,14): error TS2339: Property 'x' does not exist on type 'typeof "tests/cases/conformance/externalModules/foo_0"'.
+
+
 ==== tests/cases/conformance/externalModules/foo_1.ts (1 errors) ====
     import foo = require("./foo_0");
     var z1 = foo.x + 10;   // Should error, as .ts preferred over .d.ts

@@ -1,3 +1,7 @@
+tests/cases/compiler/exportAssignmentWithDeclareAndExportModifiers.ts(2,1): error TS1120: An export assignment cannot have modifiers.
+tests/cases/compiler/exportAssignmentWithDeclareAndExportModifiers.ts(2,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+
+
 ==== tests/cases/compiler/exportAssignmentWithDeclareAndExportModifiers.ts (2 errors) ====
     var x;
     export declare export = x;

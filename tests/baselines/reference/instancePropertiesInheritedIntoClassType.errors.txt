@@ -1,3 +1,11 @@
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(4,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(7,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(26,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(29,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(19,14): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(41,14): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+
+
 ==== tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts (6 errors) ====
     module NonGeneric {
         class C {

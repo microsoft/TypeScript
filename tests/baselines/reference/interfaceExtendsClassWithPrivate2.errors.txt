@@ -1,3 +1,13 @@
+tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(10,7): error TS2416: Class 'D' incorrectly extends base class 'C':
+  Private property 'x' cannot be reimplemented.
+tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(10,7): error TS2421: Class 'D' incorrectly implements interface 'I':
+  Private property 'x' cannot be reimplemented.
+tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(18,7): error TS2416: Class 'D2' incorrectly extends base class 'C':
+  Private property 'x' cannot be reimplemented.
+tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(18,7): error TS2421: Class 'D2' incorrectly implements interface 'I':
+  Private property 'x' cannot be reimplemented.
+
+
 ==== tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts (4 errors) ====
     class C {
         public foo(x: any) { return x; }

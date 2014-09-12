@@ -1,3 +1,8 @@
+tests/cases/compiler/collisionRestParameterClassConstructor.ts(3,17): error TS2397: Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.
+tests/cases/compiler/collisionRestParameterClassConstructor.ts(25,17): error TS2397: Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.
+tests/cases/compiler/collisionRestParameterClassConstructor.ts(45,17): error TS2397: Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.
+
+
 ==== tests/cases/compiler/collisionRestParameterClassConstructor.ts (3 errors) ====
     // Constructors
     class c1 {

@@ -1,3 +1,11 @@
+tests/cases/compiler/augmentedTypesModules.ts(6,5): error TS2300: Duplicate identifier 'm1a'.
+tests/cases/compiler/augmentedTypesModules.ts(9,5): error TS2300: Duplicate identifier 'm1b'.
+tests/cases/compiler/augmentedTypesModules.ts(19,5): error TS2300: Duplicate identifier 'm1d'.
+tests/cases/compiler/augmentedTypesModules.ts(25,8): error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
+tests/cases/compiler/augmentedTypesModules.ts(28,8): error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
+tests/cases/compiler/augmentedTypesModules.ts(51,8): error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
+
+
 ==== tests/cases/compiler/augmentedTypesModules.ts (6 errors) ====
     // module then var
     module m1 { }

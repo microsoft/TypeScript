@@ -1,3 +1,7 @@
+tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts(7,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts(15,10): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts (2 errors) ====
     class C {
         x = 1

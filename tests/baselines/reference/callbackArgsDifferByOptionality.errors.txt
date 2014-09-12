@@ -1,3 +1,7 @@
+tests/cases/compiler/callbackArgsDifferByOptionality.ts(1,23): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/callbackArgsDifferByOptionality.ts(4,5): error TS2304: Cannot find name 'cb'.
+
+
 ==== tests/cases/compiler/callbackArgsDifferByOptionality.ts (2 errors) ====
     function x3(callback: (x?: 'hi') => number);
                           ~~~~~~~~~~~~~~~~~~~~

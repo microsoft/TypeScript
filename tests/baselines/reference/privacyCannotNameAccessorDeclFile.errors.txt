@@ -1,3 +1,13 @@
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(3,16): error TS4038: Return type of public static property getter from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(9,9): error TS4041: Return type of public property getter from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(15,16): error TS4038: Return type of public static property getter from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(21,9): error TS4041: Return type of public property getter from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(57,16): error TS4038: Return type of public static property getter from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(60,9): error TS4041: Return type of public property getter from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(63,16): error TS4038: Return type of public static property getter from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(66,9): error TS4041: Return type of public property getter from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+
+
 ==== tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts (8 errors) ====
     import exporter = require("privacyCannotNameAccessorDeclFile_exporter");
     export class publicClassWithWithPrivateGetAccessorTypes {

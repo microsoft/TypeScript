@@ -1,3 +1,7 @@
+tests/cases/compiler/privacyImport.ts(49,5): error TS4000: Import declaration 'm1_im2_private' is using private name 'm1_M2_private'.
+tests/cases/compiler/privacyImport.ts(80,5): error TS4000: Import declaration 'm1_im2_public' is using private name 'm1_M2_private'.
+
+
 ==== tests/cases/compiler/privacyImport.ts (2 errors) ====
     export module m1 {
         export module m1_M1_public {

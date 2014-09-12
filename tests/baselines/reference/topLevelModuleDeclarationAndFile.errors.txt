@@ -1,3 +1,6 @@
+tests/cases/conformance/externalModules/foo_2.ts(3,14): error TS2339: Property 'x' does not exist on type 'typeof "vs/foo_0"'.
+
+
 ==== tests/cases/conformance/externalModules/foo_2.ts (1 errors) ====
     /// <reference path="foo_1.ts"/>
     import foo = require("vs/foo_0");

@@ -1,3 +1,16 @@
+tests/cases/conformance/enums/enumErrors.ts(2,6): error TS2431: Enum name cannot be 'any'
+tests/cases/conformance/enums/enumErrors.ts(3,6): error TS2431: Enum name cannot be 'number'
+tests/cases/conformance/enums/enumErrors.ts(4,6): error TS2431: Enum name cannot be 'string'
+tests/cases/conformance/enums/enumErrors.ts(5,6): error TS2431: Enum name cannot be 'boolean'
+tests/cases/conformance/enums/enumErrors.ts(9,9): error TS2323: Type 'Number' is not assignable to type 'E5'.
+tests/cases/conformance/enums/enumErrors.ts(20,9): error TS2323: Type 'E9' is not assignable to type 'E10'.
+tests/cases/conformance/enums/enumErrors.ts(21,9): error TS2323: Type 'E9' is not assignable to type 'E10'.
+tests/cases/conformance/enums/enumErrors.ts(26,9): error TS2323: Type 'string' is not assignable to type 'E11'.
+tests/cases/conformance/enums/enumErrors.ts(27,9): error TS2323: Type 'Date' is not assignable to type 'E11'.
+tests/cases/conformance/enums/enumErrors.ts(28,9): error TS2304: Cannot find name 'window'.
+tests/cases/conformance/enums/enumErrors.ts(29,9): error TS2323: Type '{}' is not assignable to type 'E11'.
+
+
 ==== tests/cases/conformance/enums/enumErrors.ts (11 errors) ====
     // Enum named with PredefinedTypes
     enum any { }

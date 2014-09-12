@@ -1,3 +1,7 @@
+tests/cases/compiler/badArrayIndex.ts(1,22): error TS1109: Expression expected.
+tests/cases/compiler/badArrayIndex.ts(1,15): error TS2304: Cannot find name 'number'.
+
+
 ==== tests/cases/compiler/badArrayIndex.ts (2 errors) ====
     var results = number[];
                          ~

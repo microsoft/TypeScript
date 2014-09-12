@@ -1,3 +1,6 @@
+tests/cases/conformance/externalModules/foo1.ts(1,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+
+
 ==== tests/cases/conformance/externalModules/foo3.ts (0 errors) ====
     import foo2 = require('./foo2');
     var x = foo2(); // should be boolean

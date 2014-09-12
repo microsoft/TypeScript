@@ -1,3 +1,9 @@
+tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(2,29): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(6,29): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(17,9): error TS2381: A signature with an implementation cannot use a string literal type.
+tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(18,9): error TS2381: A signature with an implementation cannot use a string literal type.
+
+
 ==== tests/cases/compiler/overloadOnConstNoStringImplementation2.ts (4 errors) ====
     interface I {
         x1(a: number, callback: (x: 'hi') => number);

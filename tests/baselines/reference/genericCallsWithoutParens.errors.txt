@@ -1,3 +1,9 @@
+tests/cases/compiler/genericCallsWithoutParens.ts(2,18): error TS1109: Expression expected.
+tests/cases/compiler/genericCallsWithoutParens.ts(7,22): error TS1109: Expression expected.
+tests/cases/compiler/genericCallsWithoutParens.ts(2,11): error TS2304: Cannot find name 'number'.
+tests/cases/compiler/genericCallsWithoutParens.ts(7,15): error TS2304: Cannot find name 'number'.
+
+
 ==== tests/cases/compiler/genericCallsWithoutParens.ts (4 errors) ====
     function f<T>() { }
     var r = f<number>; // parse error

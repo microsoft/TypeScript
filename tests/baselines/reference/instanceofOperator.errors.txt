@@ -1,3 +1,11 @@
+tests/cases/compiler/instanceofOperator.ts(6,7): error TS2300: Duplicate identifier 'Object'.
+tests/cases/compiler/instanceofOperator.ts(11,1): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+tests/cases/compiler/instanceofOperator.ts(14,16): error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+tests/cases/compiler/instanceofOperator.ts(15,19): error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+tests/cases/compiler/instanceofOperator.ts(18,1): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+tests/cases/compiler/instanceofOperator.ts(20,1): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+
+
 ==== tests/cases/compiler/instanceofOperator.ts (6 errors) ====
     // Spec:
     // The instanceof operator requires the left operand to be of type Any or an object type, and the right 

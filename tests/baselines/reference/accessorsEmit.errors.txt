@@ -1,3 +1,7 @@
+tests/cases/compiler/accessorsEmit.ts(4,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessorsEmit.ts(11,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/accessorsEmit.ts (2 errors) ====
     class Result { }
     

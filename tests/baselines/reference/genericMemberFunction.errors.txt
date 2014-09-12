@@ -1,3 +1,13 @@
+tests/cases/compiler/genericMemberFunction.ts(2,20): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/genericMemberFunction.ts(7,20): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/genericMemberFunction.ts(10,20): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/genericMemberFunction.ts(15,19): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/genericMemberFunction.ts(16,5): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/genericMemberFunction.ts(17,5): error TS2304: Cannot find name 'removedFiles'.
+tests/cases/compiler/genericMemberFunction.ts(17,30): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/genericMemberFunction.ts(18,12): error TS2339: Property 'removeFile' does not exist on type 'BuildResult<A, B, C>'.
+
+
 ==== tests/cases/compiler/genericMemberFunction.ts (8 errors) ====
     export class BuildError<A, B, C>{
       public parent<A, B extends A, C>(): FileWithErrors<A, B, C> {

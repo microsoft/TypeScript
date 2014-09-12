@@ -1,3 +1,7 @@
+tests/cases/compiler/typecheckIfCondition.ts(4,10): error TS2304: Cannot find name 'module'.
+tests/cases/compiler/typecheckIfCondition.ts(4,26): error TS2304: Cannot find name 'module'.
+
+
 ==== tests/cases/compiler/typecheckIfCondition.ts (2 errors) ====
     // both uses of module should be an undefined symbol
     function myWrapper()

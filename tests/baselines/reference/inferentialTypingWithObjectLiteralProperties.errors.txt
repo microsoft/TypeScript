@@ -1,3 +1,7 @@
+tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts(4,1): error TS2323: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts(5,1): error TS2323: Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts (2 errors) ====
     function f<T>(x: T, y: T): T {
     return x;

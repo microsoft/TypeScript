@@ -1,3 +1,7 @@
+tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts(13,20): error TS2437: Module 'A' is hidden by a local declaration with the same name
+tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts(30,5): error TS2440: Import declaration conflicts with local declaration of 'Y'
+
+
 ==== tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts (2 errors) ====
     // all errors imported modules conflict with local variables
     

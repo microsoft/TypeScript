@@ -1,3 +1,8 @@
+tests/cases/compiler/arrayLiteralContextualType.ts(28,5): error TS2345: Argument of type '{}[]' is not assignable to parameter of type 'IAnimal[]'.
+  Type '{}' is not assignable to type 'IAnimal'.
+tests/cases/compiler/arrayLiteralContextualType.ts(29,5): error TS2345: Argument of type '{}[]' is not assignable to parameter of type '{ [x: number]: IAnimal; }'.
+
+
 ==== tests/cases/compiler/arrayLiteralContextualType.ts (2 errors) ====
     interface IAnimal {
         name: string;

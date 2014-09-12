@@ -1,3 +1,9 @@
+tests/cases/compiler/newExpressionWithCast.ts(8,17): error TS1109: Expression expected.
+tests/cases/compiler/newExpressionWithCast.ts(4,12): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+tests/cases/compiler/newExpressionWithCast.ts(8,13): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'void'.
+tests/cases/compiler/newExpressionWithCast.ts(8,18): error TS2304: Cannot find name 'any'.
+
+
 ==== tests/cases/compiler/newExpressionWithCast.ts (4 errors) ====
     
     function Test() { }

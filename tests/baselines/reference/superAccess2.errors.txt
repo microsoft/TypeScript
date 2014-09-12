@@ -1,3 +1,18 @@
+tests/cases/compiler/superAccess2.ts(7,15): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(8,22): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(11,33): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(11,45): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(11,64): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(15,19): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(20,26): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(8,17): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+tests/cases/compiler/superAccess2.ts(11,28): error TS2336: 'super' cannot be referenced in constructor arguments.
+tests/cases/compiler/superAccess2.ts(11,40): error TS2336: 'super' cannot be referenced in constructor arguments.
+tests/cases/compiler/superAccess2.ts(11,59): error TS2336: 'super' cannot be referenced in constructor arguments.
+tests/cases/compiler/superAccess2.ts(17,15): error TS2339: Property 'y' does not exist on type 'P'.
+tests/cases/compiler/superAccess2.ts(21,15): error TS2339: Property 'x' does not exist on type 'typeof P'.
+
+
 ==== tests/cases/compiler/superAccess2.ts (13 errors) ====
     class P {
         x() { }

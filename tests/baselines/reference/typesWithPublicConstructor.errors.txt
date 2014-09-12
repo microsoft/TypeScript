@@ -1,3 +1,7 @@
+tests/cases/conformance/types/members/typesWithPublicConstructor.ts(8,5): error TS2323: Type 'Function' is not assignable to type '() => void'.
+tests/cases/conformance/types/members/typesWithPublicConstructor.ts(15,10): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/conformance/types/members/typesWithPublicConstructor.ts (2 errors) ====
     // public is allowed on a constructor but is not meaningful
     

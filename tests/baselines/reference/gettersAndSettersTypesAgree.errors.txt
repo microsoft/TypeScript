@@ -1,3 +1,13 @@
+tests/cases/compiler/gettersAndSettersTypesAgree.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersTypesAgree.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersTypesAgree.ts(5,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersTypesAgree.ts(6,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersTypesAgree.ts(9,15): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersTypesAgree.ts(9,37): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersTypesAgree.ts(10,15): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersTypesAgree.ts(10,37): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/gettersAndSettersTypesAgree.ts (8 errors) ====
     class C {
         public get Foo() { return "foo";} // ok

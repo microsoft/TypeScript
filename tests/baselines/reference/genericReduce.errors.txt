@@ -1,3 +1,8 @@
+tests/cases/compiler/genericReduce.ts(6,4): error TS2339: Property 'x' does not exist on type 'number'.
+tests/cases/compiler/genericReduce.ts(8,4): error TS2339: Property 'x' does not exist on type 'number'.
+tests/cases/compiler/genericReduce.ts(12,4): error TS2339: Property 'toExponential' does not exist on type 'string'.
+
+
 ==== tests/cases/compiler/genericReduce.ts (3 errors) ====
     var a = ["An", "array", "of", "strings"];
     var b = a.map(s => s.length);

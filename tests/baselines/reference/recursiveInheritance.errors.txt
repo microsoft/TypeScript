@@ -1,3 +1,7 @@
+tests/cases/compiler/recursiveInheritance.ts(2,11): error TS2310: Type 'I5' recursively references itself as a base type.
+tests/cases/compiler/recursiveInheritance.ts(6,11): error TS2310: Type 'i8' recursively references itself as a base type.
+
+
 ==== tests/cases/compiler/recursiveInheritance.ts (2 errors) ====
     
     interface I5 extends I5 { // error

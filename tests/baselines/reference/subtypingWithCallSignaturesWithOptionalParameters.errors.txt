@@ -1,3 +1,11 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts(19,11): error TS2429: Interface 'I3' incorrectly extends interface 'Base':
+  Types of property 'a' are incompatible:
+    Type '(x: number) => number' is not assignable to type '() => number'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts(49,11): error TS2429: Interface 'I10' incorrectly extends interface 'Base':
+  Types of property 'a3' are incompatible:
+    Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts (2 errors) ====
     // call signatures in derived types must have the same or fewer optional parameters as the base type
     

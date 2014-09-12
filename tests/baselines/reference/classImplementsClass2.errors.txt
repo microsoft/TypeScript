@@ -1,3 +1,9 @@
+tests/cases/compiler/classImplementsClass2.ts(2,7): error TS2421: Class 'C' incorrectly implements interface 'A':
+  Property 'foo' is missing in type 'C'.
+tests/cases/compiler/classImplementsClass2.ts(13,1): error TS2322: Type 'C' is not assignable to type 'C2':
+  Property 'foo' is missing in type 'C'.
+
+
 ==== tests/cases/compiler/classImplementsClass2.ts (2 errors) ====
     class A { foo(): number { return 1; } }
     class C implements A {} // error

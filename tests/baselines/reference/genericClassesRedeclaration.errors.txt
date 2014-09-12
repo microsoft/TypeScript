@@ -1,3 +1,8 @@
+tests/cases/compiler/genericClassesRedeclaration.ts(42,9): error TS2374: Duplicate string index signature.
+tests/cases/compiler/genericClassesRedeclaration.ts(55,11): error TS2300: Duplicate identifier 'StringHashTable'.
+tests/cases/compiler/genericClassesRedeclaration.ts(68,11): error TS2300: Duplicate identifier 'IdentiferNameHashTable'.
+
+
 ==== tests/cases/compiler/genericClassesRedeclaration.ts (3 errors) ====
     declare module TypeScript {
         interface IIndexable<T> {

@@ -1,3 +1,7 @@
+tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor.ts(11,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor.ts(24,9): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor.ts (2 errors) ====
     class Base {
         a = 1;

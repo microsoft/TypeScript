@@ -1,3 +1,53 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(31,5): error TS2322: Type 'E' is not assignable to type '{ foo: string; }':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(36,5): error TS2322: Type 'E' is not assignable to type 'Base':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(41,5): error TS2322: Type 'E' is not assignable to type 'I':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(46,5): error TS2322: Type 'E' is not assignable to type 'D':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(48,5): error TS2322: Type '{ foo: string; }' is not assignable to type 'E':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(49,5): error TS2322: Type 'Base' is not assignable to type 'E':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(50,5): error TS2322: Type 'I' is not assignable to type 'E':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(51,5): error TS2322: Type 'D' is not assignable to type 'E':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(81,5): error TS2322: Type 'Base' is not assignable to type '{ foo: string; }':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(82,5): error TS2322: Type 'I' is not assignable to type '{ foo: string; }':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(84,5): error TS2322: Type 'E' is not assignable to type '{ foo: string; }':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(86,5): error TS2322: Type '{ foo: string; }' is not assignable to type 'Base':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(88,5): error TS2322: Type 'D' is not assignable to type 'Base':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(89,5): error TS2322: Type 'E' is not assignable to type 'Base':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(92,5): error TS2322: Type '{ foo: string; }' is not assignable to type 'I':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(94,5): error TS2322: Type 'D' is not assignable to type 'I':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(95,5): error TS2322: Type 'E' is not assignable to type 'I':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(99,5): error TS2322: Type 'Base' is not assignable to type 'D':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(100,5): error TS2322: Type 'I' is not assignable to type 'D':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(101,5): error TS2322: Type 'E' is not assignable to type 'D':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(103,5): error TS2322: Type '{ foo: string; }' is not assignable to type 'E':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(104,5): error TS2322: Type 'Base' is not assignable to type 'E':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(105,5): error TS2322: Type 'I' is not assignable to type 'E':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts(106,5): error TS2322: Type 'D' is not assignable to type 'E':
+  Private property 'foo' cannot be reimplemented.
+
+
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts (24 errors) ====
     // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
     

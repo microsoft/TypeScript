@@ -1,3 +1,11 @@
+tests/cases/compiler/derivedTypeIncompatibleSignatures.ts(21,11): error TS2429: Interface 'F' incorrectly extends interface 'E':
+  Index signatures are incompatible:
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/derivedTypeIncompatibleSignatures.ts(29,11): error TS2429: Interface 'H' incorrectly extends interface 'G':
+  Index signatures are incompatible:
+    Type 'number' is not assignable to type 'string'.
+
+
 ==== tests/cases/compiler/derivedTypeIncompatibleSignatures.ts (2 errors) ====
     interface A {
         (a: string): string;

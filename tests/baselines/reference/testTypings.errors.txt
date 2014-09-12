@@ -1,3 +1,6 @@
+tests/cases/compiler/testTypings.ts(5,23): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/compiler/testTypings.ts (1 errors) ====
     interface IComparable<T> {
        compareTo(other: T);

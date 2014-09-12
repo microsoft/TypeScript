@@ -1,3 +1,9 @@
+tests/cases/compiler/recursiveClassReferenceTest.ts(16,19): error TS2304: Cannot find name 'Element'.
+tests/cases/compiler/recursiveClassReferenceTest.ts(56,11): error TS2304: Cannot find name 'domNode'.
+tests/cases/compiler/recursiveClassReferenceTest.ts(88,36): error TS2304: Cannot find name 'mode'.
+tests/cases/compiler/recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' is not assignable to parameter of type 'IMode'.
+
+
 ==== tests/cases/compiler/recursiveClassReferenceTest.ts (4 errors) ====
     // Scenario 1: Test reqursive function call with "this" parameter
     // Scenario 2: Test recursive function call with cast and "this" parameter

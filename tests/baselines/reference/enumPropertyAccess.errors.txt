@@ -1,3 +1,7 @@
+tests/cases/compiler/enumPropertyAccess.ts(7,11): error TS2339: Property 'Green' does not exist on type 'Colors'.
+tests/cases/compiler/enumPropertyAccess.ts(12,7): error TS2339: Property 'Green' does not exist on type 'B'.
+
+
 ==== tests/cases/compiler/enumPropertyAccess.ts (2 errors) ====
     enum Colors {
         Red,

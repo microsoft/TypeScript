@@ -1,3 +1,9 @@
+tests/cases/compiler/objectLiteralIndexerErrors.ts(13,5): error TS2322: Type '{ [x: string]: A; [x: number]: A; 0: A; x: B; }' is not assignable to type '{ [x: string]: A; [x: number]: B; }':
+  Index signatures are incompatible:
+    Type 'A' is not assignable to type 'B':
+      Property 'y' is missing in type 'A'.
+
+
 ==== tests/cases/compiler/objectLiteralIndexerErrors.ts (1 errors) ====
     interface A {
         x: number;

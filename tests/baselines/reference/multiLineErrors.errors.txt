@@ -1,3 +1,11 @@
+tests/cases/compiler/multiLineErrors.ts(3,22): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+tests/cases/compiler/multiLineErrors.ts(21,1): error TS2322: Type 'A2' is not assignable to type 'A1':
+  Types of property 'x' are incompatible:
+    Type '{ y: string; }' is not assignable to type '{ y: number; }':
+      Types of property 'y' are incompatible:
+        Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/multiLineErrors.ts (2 errors) ====
     var t = 32;
     

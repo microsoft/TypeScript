@@ -1,3 +1,8 @@
+tests/cases/compiler/inheritanceStaticFuncOverridingProperty.ts(5,7): error TS2418: Class static side 'typeof b' incorrectly extends base class static side 'typeof a':
+  Types of property 'x' are incompatible:
+    Type '() => string' is not assignable to type 'string'.
+
+
 ==== tests/cases/compiler/inheritanceStaticFuncOverridingProperty.ts (1 errors) ====
     class a {
         static x: string;

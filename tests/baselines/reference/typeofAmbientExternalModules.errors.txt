@@ -1,3 +1,9 @@
+tests/cases/compiler/typeofAmbientExternalModules_2.ts(7,1): error TS2322: Type 'typeof D' is not assignable to type 'typeof "tests/cases/compiler/typeofAmbientExternalModules_0"':
+  Property 'C' is missing in type 'typeof D'.
+tests/cases/compiler/typeofAmbientExternalModules_2.ts(9,1): error TS2322: Type 'typeof "tests/cases/compiler/typeofAmbientExternalModules_0"' is not assignable to type 'typeof D':
+  Property 'prototype' is missing in type 'typeof "tests/cases/compiler/typeofAmbientExternalModules_0"'.
+
+
 ==== tests/cases/compiler/typeofAmbientExternalModules_2.ts (2 errors) ====
     ///<reference path='typeofAmbientExternalModules_0.ts'/>
     ///<reference path='typeofAmbientExternalModules_1.ts'/>

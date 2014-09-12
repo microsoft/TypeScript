@@ -1,3 +1,9 @@
+tests/cases/compiler/duplicateVarsAcrossFileBoundaries_1.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'number', but here has type 'boolean'.
+tests/cases/compiler/duplicateVarsAcrossFileBoundaries_2.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'number', but here has type 'string'.
+tests/cases/compiler/duplicateVarsAcrossFileBoundaries_2.ts(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'number'.
+tests/cases/compiler/duplicateVarsAcrossFileBoundaries_2.ts(3,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'number', but here has type 'boolean'.
+
+
 ==== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_0.ts (0 errors) ====
     var x = 3;
     var y = "";

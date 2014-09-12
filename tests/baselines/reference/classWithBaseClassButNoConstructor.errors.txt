@@ -1,3 +1,9 @@
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts(10,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts(22,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts(31,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts(39,10): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts (4 errors) ====
     class Base {
         constructor(x: number) { }

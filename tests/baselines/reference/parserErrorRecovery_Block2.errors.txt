@@ -1,3 +1,6 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Blocks/parserErrorRecovery_Block2.ts(2,5): error TS1129: Statement expected.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Blocks/parserErrorRecovery_Block2.ts (1 errors) ====
     function f() {
         |

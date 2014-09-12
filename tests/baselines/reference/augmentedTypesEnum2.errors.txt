@@ -1,3 +1,7 @@
+tests/cases/compiler/augmentedTypesEnum2.ts(4,11): error TS2300: Duplicate identifier 'e1'.
+tests/cases/compiler/augmentedTypesEnum2.ts(12,7): error TS2300: Duplicate identifier 'e2'.
+
+
 ==== tests/cases/compiler/augmentedTypesEnum2.ts (2 errors) ====
     // enum then interface
     enum e1 { One }

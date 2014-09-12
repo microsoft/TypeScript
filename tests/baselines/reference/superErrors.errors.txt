@@ -1,3 +1,21 @@
+tests/cases/compiler/superErrors.ts(3,18): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superErrors.ts(4,24): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superErrors.ts(5,36): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superErrors.ts(31,41): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superErrors.ts(43,41): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superErrors.ts(47,22): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superErrors.ts(48,28): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superErrors.ts(49,40): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superErrors.ts(3,13): error TS2335: 'super' can only be referenced in a derived class.
+tests/cases/compiler/superErrors.ts(4,19): error TS2335: 'super' can only be referenced in a derived class.
+tests/cases/compiler/superErrors.ts(5,31): error TS2335: 'super' can only be referenced in a derived class.
+tests/cases/compiler/superErrors.ts(22,13): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+tests/cases/compiler/superErrors.ts(27,27): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+tests/cases/compiler/superErrors.ts(31,36): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+tests/cases/compiler/superErrors.ts(39,27): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+tests/cases/compiler/superErrors.ts(43,36): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+
+
 ==== tests/cases/compiler/superErrors.ts (16 errors) ====
     function foo() {
         // super in a non class context

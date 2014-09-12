@@ -1,3 +1,9 @@
+tests/cases/compiler/noImplicitAnyIndexing.ts(13,26): error TS7017: Index signature of object type implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyIndexing.ts(20,9): error TS7017: Index signature of object type implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyIndexing.ts(23,9): error TS7017: Index signature of object type implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyIndexing.ts(31,10): error TS7017: Index signature of object type implicitly has an 'any' type.
+
+
 ==== tests/cases/compiler/noImplicitAnyIndexing.ts (4 errors) ====
     
     enum MyEmusEnum {

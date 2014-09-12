@@ -1,3 +1,13 @@
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(15,18): error TS2341: Property 'C.x' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(16,18): error TS2341: Property 'C.a' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(17,18): error TS2341: Property 'C.b' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(18,18): error TS2341: Property 'C.c' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(19,18): error TS2341: Property 'C.d' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(20,18): error TS2341: Property 'C.e' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(21,18): error TS2341: Property 'C.f' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(22,18): error TS2341: Property 'C.g' is inaccessible.
+
+
 ==== tests/cases/conformance/types/members/classWithPrivateProperty.ts (8 errors) ====
     // accessing any private outside the class is an error
     

@@ -1,3 +1,10 @@
+tests/cases/compiler/interfaceMemberValidation.ts(2,11): error TS2429: Interface 'i2' incorrectly extends interface 'i1':
+  Types of property 'name' are incompatible:
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/interfaceMemberValidation.ts(5,2): error TS2411: Property 'bar' of type '{ (): any; (): any; }' is not assignable to string index type 'number'.
+tests/cases/compiler/interfaceMemberValidation.ts(10,2): error TS2374: Duplicate string index signature.
+
+
 ==== tests/cases/compiler/interfaceMemberValidation.ts (3 errors) ====
     interface i1 { name: string; }
     interface i2 extends i1 { name: number; yo: string; }

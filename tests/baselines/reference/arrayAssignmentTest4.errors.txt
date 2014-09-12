@@ -1,3 +1,9 @@
+tests/cases/compiler/arrayAssignmentTest4.ts(24,1): error TS2322: Type '() => any' is not assignable to type 'any[]':
+  Property 'push' is missing in type '() => any'.
+tests/cases/compiler/arrayAssignmentTest4.ts(25,1): error TS2322: Type 'C3' is not assignable to type 'any[]':
+  Property 'length' is missing in type 'C3'.
+
+
 ==== tests/cases/compiler/arrayAssignmentTest4.ts (2 errors) ====
     
     

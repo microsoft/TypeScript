@@ -1,3 +1,13 @@
+tests/cases/compiler/overloadingOnConstants1.ts(22,5): error TS2322: Type 'Base' is not assignable to type 'Derived1':
+  Property 'bar' is missing in type 'Base'.
+tests/cases/compiler/overloadingOnConstants1.ts(23,5): error TS2322: Type 'Derived1' is not assignable to type 'Derived3':
+  Property 'biz' is missing in type 'Derived1'.
+tests/cases/compiler/overloadingOnConstants1.ts(24,5): error TS2322: Type 'Derived2' is not assignable to type 'Derived1':
+  Property 'bar' is missing in type 'Derived2'.
+tests/cases/compiler/overloadingOnConstants1.ts(25,5): error TS2322: Type 'Derived3' is not assignable to type 'Derived1':
+  Property 'bar' is missing in type 'Derived3'.
+
+
 ==== tests/cases/compiler/overloadingOnConstants1.ts (4 errors) ====
     class Base { foo() { } }
     class Derived1 extends Base { bar() { } }

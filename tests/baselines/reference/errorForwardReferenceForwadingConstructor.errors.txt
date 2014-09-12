@@ -1,3 +1,6 @@
+tests/cases/compiler/errorForwardReferenceForwadingConstructor.ts(4,14): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/compiler/errorForwardReferenceForwadingConstructor.ts (1 errors) ====
     // Error forward referencing derived class with forwarding constructor
     

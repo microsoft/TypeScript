@@ -1,3 +1,9 @@
+tests/cases/compiler/callOnInstance.ts(3,15): error TS2300: Duplicate identifier 'D'.
+tests/cases/compiler/callOnInstance.ts(7,19): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/callOnInstance.ts(7,19): error TS2350: Only a void function can be called with the 'new' keyword.
+tests/cases/compiler/callOnInstance.ts(10,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+
+
 ==== tests/cases/compiler/callOnInstance.ts (4 errors) ====
     declare function D(): string;
     

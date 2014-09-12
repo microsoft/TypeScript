@@ -1,3 +1,12 @@
+tests/cases/compiler/createArray.ts(1,18): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/createArray.ts(6,6): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/createArray.ts(7,19): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/createArray.ts(8,18): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/createArray.ts(1,12): error TS2304: Cannot find name 'number'.
+tests/cases/compiler/createArray.ts(7,12): error TS2304: Cannot find name 'boolean'.
+tests/cases/compiler/createArray.ts(8,12): error TS2304: Cannot find name 'string'.
+
+
 ==== tests/cases/compiler/createArray.ts (7 errors) ====
     var na=new number[];
                      ~~

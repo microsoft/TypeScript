@@ -1,3 +1,15 @@
+tests/cases/compiler/overloadResolutionTest1.ts(8,16): error TS2345: Argument of type '{ a: string; }[]' is not assignable to parameter of type '{ a: boolean; }[]'.
+  Type '{ a: string; }' is not assignable to type '{ a: boolean; }':
+    Types of property 'a' are incompatible:
+      Type 'string' is not assignable to type 'boolean'.
+tests/cases/compiler/overloadResolutionTest1.ts(19,15): error TS2345: Argument of type '{ a: string; }' is not assignable to parameter of type '{ a: boolean; }'.
+  Types of property 'a' are incompatible:
+    Type 'string' is not assignable to type 'boolean'.
+tests/cases/compiler/overloadResolutionTest1.ts(25,14): error TS2345: Argument of type '{ a: boolean; }' is not assignable to parameter of type '{ a: string; }'.
+  Types of property 'a' are incompatible:
+    Type 'boolean' is not assignable to type 'string'.
+
+
 ==== tests/cases/compiler/overloadResolutionTest1.ts (3 errors) ====
     
     function foo(bar:{a:number;}[]):string;

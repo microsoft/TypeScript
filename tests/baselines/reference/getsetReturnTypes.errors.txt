@@ -1,3 +1,6 @@
+tests/cases/compiler/getsetReturnTypes.ts(3,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/getsetReturnTypes.ts (1 errors) ====
     function makePoint(x: number) { 
      return { 

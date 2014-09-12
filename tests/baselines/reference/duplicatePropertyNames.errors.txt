@@ -1,3 +1,15 @@
+tests/cases/conformance/types/members/duplicatePropertyNames.ts(5,5): error TS2300: Duplicate identifier 'foo'.
+tests/cases/conformance/types/members/duplicatePropertyNames.ts(15,5): error TS2300: Duplicate identifier 'foo'.
+tests/cases/conformance/types/members/duplicatePropertyNames.ts(20,5): error TS2300: Duplicate identifier 'foo'.
+tests/cases/conformance/types/members/duplicatePropertyNames.ts(23,5): error TS2393: Duplicate function implementation.
+tests/cases/conformance/types/members/duplicatePropertyNames.ts(26,5): error TS2300: Duplicate identifier 'baz'.
+tests/cases/conformance/types/members/duplicatePropertyNames.ts(31,5): error TS2300: Duplicate identifier 'foo'.
+tests/cases/conformance/types/members/duplicatePropertyNames.ts(36,5): error TS2300: Duplicate identifier 'foo'.
+tests/cases/conformance/types/members/duplicatePropertyNames.ts(39,5): error TS2300: Duplicate identifier 'bar'.
+tests/cases/conformance/types/members/duplicatePropertyNames.ts(44,5): error TS2300: Duplicate identifier 'foo'.
+tests/cases/conformance/types/members/duplicatePropertyNames.ts(46,5): error TS2300: Duplicate identifier 'bar'.
+
+
 ==== tests/cases/conformance/types/members/duplicatePropertyNames.ts (10 errors) ====
     // duplicate property names are an error in all types
     

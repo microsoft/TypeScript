@@ -1,3 +1,8 @@
+tests/cases/compiler/arrayCast.ts(3,1): error TS2353: Neither type '{ foo: string; }[]' nor type '{ id: number; }[]' is assignable to the other:
+  Type '{ foo: string; }' is not assignable to type '{ id: number; }':
+    Property 'id' is missing in type '{ foo: string; }'.
+
+
 ==== tests/cases/compiler/arrayCast.ts (1 errors) ====
     // Should fail. Even though the array is contextually typed with { id: number }[], it still
     // has type { foo: string }[], which is not assignable to { id: number }[].

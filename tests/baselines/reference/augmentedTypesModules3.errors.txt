@@ -1,3 +1,6 @@
+tests/cases/compiler/augmentedTypesModules3.ts(5,8): error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
+
+
 ==== tests/cases/compiler/augmentedTypesModules3.ts (1 errors) ====
     //// module then class
     module m3 { }

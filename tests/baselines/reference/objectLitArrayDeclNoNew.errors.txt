@@ -1,3 +1,7 @@
+tests/cases/compiler/objectLitArrayDeclNoNew.ts(22,20): error TS1109: Expression expected.
+tests/cases/compiler/objectLitArrayDeclNoNew.ts(27,1): error TS1128: Declaration or statement expected.
+
+
 ==== tests/cases/compiler/objectLitArrayDeclNoNew.ts (2 errors) ====
     declare var console;
     "use strict";

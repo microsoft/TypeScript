@@ -1,3 +1,9 @@
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType2.ts(5,11): error TS2429: Interface 'Foo' incorrectly extends interface 'Base':
+  Private property 'x' cannot be reimplemented.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType2.ts(13,11): error TS2429: Interface 'Foo2<T>' incorrectly extends interface 'Base2<T>':
+  Private property 'x' cannot be reimplemented.
+
+
 ==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType2.ts (2 errors) ====
     class Base {
         private x() {}

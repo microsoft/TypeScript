@@ -1,3 +1,7 @@
+tests/cases/compiler/callConstructAssignment.ts(7,1): error TS2323: Type 'new () => any' is not assignable to type '() => void'.
+tests/cases/compiler/callConstructAssignment.ts(8,1): error TS2323: Type '() => void' is not assignable to type 'new () => any'.
+
+
 ==== tests/cases/compiler/callConstructAssignment.ts (2 errors) ====
     
     

@@ -1,3 +1,29 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(12,7): error TS2416: Class 'B' incorrectly extends base class 'A':
+  Types of property 'bar' are incompatible:
+    Type 'string' is not assignable to type 'Base':
+      Property 'foo' is missing in type 'String'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(22,7): error TS2416: Class 'B2' incorrectly extends base class 'A2':
+  Types of property '2.0' are incompatible:
+    Type 'string' is not assignable to type 'Base':
+      Property 'foo' is missing in type 'String'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(32,7): error TS2416: Class 'B3' incorrectly extends base class 'A3':
+  Types of property ''2.0'' are incompatible:
+    Type 'string' is not assignable to type 'Base':
+      Property 'foo' is missing in type 'String'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(43,11): error TS2416: Class 'B' incorrectly extends base class 'A':
+  Types of property 'bar' are incompatible:
+    Type 'string' is not assignable to type 'Base':
+      Property 'foo' is missing in type 'String'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(53,11): error TS2416: Class 'B2' incorrectly extends base class 'A2':
+  Types of property '2.0' are incompatible:
+    Type 'string' is not assignable to type 'Base':
+      Property 'foo' is missing in type 'String'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(63,11): error TS2416: Class 'B3' incorrectly extends base class 'A3':
+  Types of property ''2.0'' are incompatible:
+    Type 'string' is not assignable to type 'Base':
+      Property 'foo' is missing in type 'String'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts (6 errors) ====
     class Base { foo: string; }
     class Derived extends Base { bar: string; }

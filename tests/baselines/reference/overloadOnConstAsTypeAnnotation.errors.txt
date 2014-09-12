@@ -1,3 +1,8 @@
+tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts(1,37): error TS1005: ';' expected.
+tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts(1,42): error TS1108: A 'return' statement can only be used within a function body.
+tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts(1,8): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+
+
 ==== tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts (3 errors) ====
     var f: (x: 'hi') => number = ('hi') => { return 1; };
                                         ~~

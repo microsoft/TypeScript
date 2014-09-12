@@ -1,3 +1,19 @@
+tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(4,7): error TS2421: Class 'X<T>' incorrectly implements interface 'I':
+  Types of property 'f' are incompatible:
+    Type '(a: T) => void' is not assignable to type '(a: { a: number; }) => void':
+      Types of parameters 'a' and 'a' are incompatible:
+        Type 'T' is not assignable to type '{ a: number; }':
+          Types of property 'a' are incompatible:
+            Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(8,5): error TS2322: Type 'X<{ a: string; }>' is not assignable to type 'I':
+  Types of property 'f' are incompatible:
+    Type '(a: { a: string; }) => void' is not assignable to type '(a: { a: number; }) => void':
+      Types of parameters 'a' and 'a' are incompatible:
+        Type '{ a: string; }' is not assignable to type '{ a: number; }':
+          Types of property 'a' are incompatible:
+            Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts (2 errors) ====
     interface I {
     	f: (a: { a: number }) => void

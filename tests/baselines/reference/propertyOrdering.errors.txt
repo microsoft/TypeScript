@@ -1,3 +1,9 @@
+tests/cases/compiler/propertyOrdering.ts(6,23): error TS2304: Cannot find name 'store'.
+tests/cases/compiler/propertyOrdering.ts(9,34): error TS2339: Property 'store' does not exist on type 'Foo'.
+tests/cases/compiler/propertyOrdering.ts(16,25): error TS2339: Property '_store' does not exist on type 'Bar'.
+tests/cases/compiler/propertyOrdering.ts(20,14): error TS2339: Property '_store' does not exist on type 'Bar'.
+
+
 ==== tests/cases/compiler/propertyOrdering.ts (4 errors) ====
     class Foo {
         constructor(store: string) { }

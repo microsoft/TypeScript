@@ -1,3 +1,7 @@
+tests/cases/compiler/functionAndInterfaceWithSeparateErrors.ts(1,1): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/compiler/functionAndInterfaceWithSeparateErrors.ts(6,5): error TS2411: Property 'prop' of type 'number' is not assignable to string index type 'string'.
+
+
 ==== tests/cases/compiler/functionAndInterfaceWithSeparateErrors.ts (2 errors) ====
     function Foo(s: string);
     ~~~~~~~~~~~~~~~~~~~~~~~~

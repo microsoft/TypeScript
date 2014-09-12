@@ -1,3 +1,8 @@
+tests/cases/compiler/overloadOnConstInheritance4.ts(2,29): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadOnConstInheritance4.ts(5,29): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadOnConstInheritance4.ts(6,29): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+
+
 ==== tests/cases/compiler/overloadOnConstInheritance4.ts (3 errors) ====
     interface I {
         x1(a: number, callback: (x: 'hi') => number);

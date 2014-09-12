@@ -156,10 +156,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 return file.writeByteOrderMark ? "\u00EF\u00BB\u00BF" : "";
             }
 
-            function getErrorBaseline(toBeCompiled: { unitName: string; content: string }[],
-                otherFiles: { unitName: string; content: string }[],
-                result: Harness.Compiler.CompilerResult
-                ) {
+            function getErrorBaseline(toBeCompiled: { unitName: string; content: string }[], otherFiles: { unitName: string; content: string }[], result: Harness.Compiler.CompilerResult) {
                 return Harness.Compiler.getErrorBaseline(toBeCompiled.concat(otherFiles), result.errors);
             }
 
@@ -168,7 +165,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 if (this.errors) {
                     Harness.Baseline.runBaseline('Correct errors for ' + fileName, justName.replace(/\.ts$/, '.errors.txt'), (): string => {
                         if (result.errors.length === 0) return null;
-
+                        
                         return getErrorBaseline(toBeCompiled, otherFiles, result);
                     });
                 }

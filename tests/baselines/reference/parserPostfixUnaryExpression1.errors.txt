@@ -1,3 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/Expressions/parserPostfixUnaryExpression1.ts(1,8): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/Expressions/parserPostfixUnaryExpression1.ts(1,10): error TS1109: Expression expected.
+tests/cases/conformance/parser/ecmascript5/Expressions/parserPostfixUnaryExpression1.ts(1,1): error TS2304: Cannot find name 'foo'.
+tests/cases/conformance/parser/ecmascript5/Expressions/parserPostfixUnaryExpression1.ts(1,10): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/Expressions/parserPostfixUnaryExpression1.ts (4 errors) ====
     foo ++ ++;
            ~~

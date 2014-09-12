@@ -1,3 +1,20 @@
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(3,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(5,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(5,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(7,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(9,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(9,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(11,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(16,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(18,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(20,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(22,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(24,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(29,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(34,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(36,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/compiler/interfaceWithMultipleDeclarations.ts (15 errors) ====
     interface I1<V> {
     }

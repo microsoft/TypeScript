@@ -1,3 +1,11 @@
+tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,5): error TS2323: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,37): error TS2345: Argument of type 'D' is not assignable to parameter of type 'A'.
+tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,27): error TS2345: Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
+tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,38): error TS2344: Type 'D' does not satisfy the constraint 'A'.
+tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(18,27): error TS2345: Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
+tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,12): error TS2344: Type 'D' does not satisfy the constraint 'A'.
+
+
 ==== tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts (6 errors) ====
     interface A { x }
     interface B { x; y }

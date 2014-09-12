@@ -1,3 +1,27 @@
+tests/cases/compiler/optionalParamArgsTest.ts(35,47): error TS1016: A required parameter cannot follow an optional parameter.
+tests/cases/compiler/optionalParamArgsTest.ts(35,5): error TS2393: Duplicate function implementation.
+tests/cases/compiler/optionalParamArgsTest.ts(99,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(100,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(101,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(102,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(103,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(104,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(105,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(106,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(107,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(108,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(109,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(110,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(111,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(112,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(113,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(114,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(115,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(116,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(118,1): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/compiler/optionalParamArgsTest.ts (22 errors) ====
     // Optional parameter and default argument tests
     

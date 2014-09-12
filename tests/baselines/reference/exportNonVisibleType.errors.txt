@@ -1,3 +1,6 @@
+tests/cases/conformance/externalModules/foo1.ts(7,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+
+
 ==== tests/cases/conformance/externalModules/foo1.ts (1 errors) ====
     interface I1 {
     	a: string;

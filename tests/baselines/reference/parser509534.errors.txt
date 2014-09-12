@@ -1,3 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509534.ts(2,14): error TS2304: Cannot find name 'require'.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509534.ts(3,1): error TS2304: Cannot find name 'module'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509534.ts (2 errors) ====
     "use strict";
     var config = require("../config");

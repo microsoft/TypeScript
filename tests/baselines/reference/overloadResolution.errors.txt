@@ -1,3 +1,22 @@
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(27,5): error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(41,11): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(63,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(70,5): error TS2344: Type 'string' does not satisfy the constraint 'number'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(70,13): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(70,21): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(71,5): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(71,13): error TS2344: Type 'string' does not satisfy the constraint 'number'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(71,21): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(72,5): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(72,13): error TS2344: Type 'string' does not satisfy the constraint 'number'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(81,5): error TS2344: Type 'boolean' does not satisfy the constraint 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(81,14): error TS2344: Type 'Date' does not satisfy the constraint 'number'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(84,5): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(85,11): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(91,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(91,22): error TS2339: Property 'toFixed' does not exist on type 'string'.
+
+
 ==== tests/cases/conformance/expressions/functionCalls/overloadResolution.ts (17 errors) ====
     class SomeBase {
         private n;

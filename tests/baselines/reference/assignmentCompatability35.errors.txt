@@ -1,3 +1,7 @@
+tests/cases/compiler/assignmentCompatability35.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ [x: number]: number; }':
+  Index signature is missing in type 'interfaceWithPublicAndOptional<number, string>'.
+
+
 ==== tests/cases/compiler/assignmentCompatability35.ts (1 errors) ====
     module __test1__ {
         export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;

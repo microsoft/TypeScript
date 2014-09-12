@@ -1,3 +1,6 @@
+tests/cases/compiler/reassignStaticProp.ts(5,12): error TS2300: Duplicate identifier 'bar'.
+
+
 ==== tests/cases/compiler/reassignStaticProp.ts (1 errors) ====
     class foo {
      

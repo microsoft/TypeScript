@@ -1,3 +1,9 @@
+tests/cases/compiler/assignmentToReferenceTypes.ts(5,1): error TS2304: Cannot find name 'M'.
+tests/cases/compiler/assignmentToReferenceTypes.ts(9,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/assignmentToReferenceTypes.ts(13,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/assignmentToReferenceTypes.ts(16,1): error TS2364: Invalid left-hand side of assignment expression.
+
+
 ==== tests/cases/compiler/assignmentToReferenceTypes.ts (4 errors) ====
     // Should all be allowed
     

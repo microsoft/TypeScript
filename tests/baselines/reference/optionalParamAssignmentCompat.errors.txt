@@ -1,3 +1,8 @@
+tests/cases/compiler/optionalParamAssignmentCompat.ts(10,5): error TS2322: Type '(p1?: string) => I1' is not assignable to type 'I1':
+  Types of parameters 'p1' and 'p1' are incompatible:
+    Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/optionalParamAssignmentCompat.ts (1 errors) ====
     interface I1 {
         (p1: number, p2: string): void;

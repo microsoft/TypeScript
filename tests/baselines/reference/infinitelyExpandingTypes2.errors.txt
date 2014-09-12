@@ -1,3 +1,6 @@
+tests/cases/compiler/infinitelyExpandingTypes2.ts(10,5): error TS2304: Cannot find name 'console'.
+
+
 ==== tests/cases/compiler/infinitelyExpandingTypes2.ts (1 errors) ====
     interface Foo<T> {
         x: Foo<Foo<T>>;

@@ -1,3 +1,7 @@
+tests/cases/compiler/ambientGetters.ts(3,9): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/ambientGetters.ts(7,9): error TS1086: An accessor cannot be declared in an ambient context.
+
+
 ==== tests/cases/compiler/ambientGetters.ts (2 errors) ====
     
     declare class A {

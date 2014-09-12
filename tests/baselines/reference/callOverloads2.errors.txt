@@ -1,3 +1,10 @@
+tests/cases/compiler/callOverloads2.ts(11,10): error TS2300: Duplicate identifier 'Foo'.
+tests/cases/compiler/callOverloads2.ts(13,10): error TS2389: Function implementation name must be 'Foo'.
+tests/cases/compiler/callOverloads2.ts(14,1): error TS2393: Duplicate function implementation.
+tests/cases/compiler/callOverloads2.ts(16,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/callOverloads2.ts(24,1): error TS2348: Value of type 'typeof Foo' is not callable. Did you mean to include 'new'?
+
+
 ==== tests/cases/compiler/callOverloads2.ts (5 errors) ====
     
     

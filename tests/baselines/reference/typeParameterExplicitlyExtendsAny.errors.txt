@@ -1,3 +1,8 @@
+tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts(3,7): error TS2339: Property 'blah' does not exist on type 'T'.
+tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts(9,7): error TS2339: Property 'blah' does not exist on type 'T'.
+tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts(10,7): error TS2339: Property 'toString' does not exist on type 'T'.
+
+
 ==== tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts (3 errors) ====
     function fee<T>() {
         var t: T;

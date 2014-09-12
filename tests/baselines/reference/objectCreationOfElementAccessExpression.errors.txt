@@ -1,3 +1,9 @@
+tests/cases/compiler/objectCreationOfElementAccessExpression.ts(53,17): error TS2342: An index expression argument must be of type 'string', 'number', or 'any'.
+tests/cases/compiler/objectCreationOfElementAccessExpression.ts(53,63): error TS2348: Value of type 'typeof Cookie' is not callable. Did you mean to include 'new'?
+tests/cases/compiler/objectCreationOfElementAccessExpression.ts(54,33): error TS2342: An index expression argument must be of type 'string', 'number', or 'any'.
+tests/cases/compiler/objectCreationOfElementAccessExpression.ts(54,79): error TS2348: Value of type 'typeof Cookie' is not callable. Did you mean to include 'new'?
+
+
 ==== tests/cases/compiler/objectCreationOfElementAccessExpression.ts (4 errors) ====
     class Food {
         private amount: number;

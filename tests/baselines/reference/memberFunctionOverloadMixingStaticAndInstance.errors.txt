@@ -1,3 +1,13 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts(3,12): error TS2388: Function overload must not be static.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts(3,12): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts(8,5): error TS2387: Function overload must be static.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts(8,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts(13,12): error TS2388: Function overload must not be static.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts(13,12): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts(18,5): error TS2387: Function overload must be static.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts(18,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts (8 errors) ====
     class C {
         foo();

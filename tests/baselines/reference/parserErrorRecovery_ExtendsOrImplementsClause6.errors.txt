@@ -1,3 +1,6 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause6.ts(1,13): error TS1097: 'extends' list cannot be empty.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause6.ts (1 errors) ====
     interface I extends { }
                 ~~~~~~~

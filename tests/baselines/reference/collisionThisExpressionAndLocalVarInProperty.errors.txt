@@ -1,3 +1,7 @@
+tests/cases/compiler/collisionThisExpressionAndLocalVarInProperty.ts(4,17): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndLocalVarInProperty.ts(12,13): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+
+
 ==== tests/cases/compiler/collisionThisExpressionAndLocalVarInProperty.ts (2 errors) ====
     class class1 {
         public prop1 = {

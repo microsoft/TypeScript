@@ -1,3 +1,6 @@
+tests/cases/compiler/noImplicitAnyReferencingDeclaredInterface.ts(4,5): error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
+
+
 ==== tests/cases/compiler/noImplicitAnyReferencingDeclaredInterface.ts (1 errors) ====
     
     interface Entry {

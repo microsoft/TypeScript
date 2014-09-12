@@ -1,3 +1,6 @@
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts(2,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+
+
 ==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts (1 errors) ====
     var x = 1;
     export var r1: typeof x;

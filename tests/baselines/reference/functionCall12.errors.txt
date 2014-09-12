@@ -1,3 +1,8 @@
+tests/cases/compiler/functionCall12.ts(4,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/functionCall12.ts(5,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/compiler/functionCall12.ts(7,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+
+
 ==== tests/cases/compiler/functionCall12.ts (3 errors) ====
     function foo(a:string, b?:number, c?:string){}
     foo('foo', 1); 

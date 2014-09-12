@@ -1,3 +1,15 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(3,12): error TS2385: Overload signatures must all be public or private.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(7,12): error TS2385: Overload signatures must all be public or private.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(12,19): error TS2385: Overload signatures must all be public or private.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(16,19): error TS2385: Overload signatures must all be public or private.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(23,12): error TS2385: Overload signatures must all be public or private.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(27,12): error TS2385: Overload signatures must all be public or private.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(32,19): error TS2385: Overload signatures must all be public or private.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(36,19): error TS2385: Overload signatures must all be public or private.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(42,9): error TS2341: Property 'C.foo' is inaccessible.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(45,10): error TS2341: Property 'D.foo' is inaccessible.
+
+
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts (10 errors) ====
     class C {
         private foo(x: number);

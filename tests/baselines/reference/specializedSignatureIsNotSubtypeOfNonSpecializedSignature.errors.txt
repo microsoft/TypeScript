@@ -1,3 +1,17 @@
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(4,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(8,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(14,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(20,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(26,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(28,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(33,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(35,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(40,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(42,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(47,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(49,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+
+
 ==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts (12 errors) ====
     // Specialized signatures must be a subtype of a non-specialized signature
     // All the below should be errors

@@ -1,3 +1,9 @@
+tests/cases/compiler/propertyParameterWithQuestionMark.ts(6,5): error TS2322: Type '{}' is not assignable to type 'C':
+  Property 'x' is missing in type '{}'.
+tests/cases/compiler/propertyParameterWithQuestionMark.ts(8,1): error TS2322: Type '{ x?: any; }' is not assignable to type 'C':
+  Required property 'x' cannot be reimplemented with optional property in '{ x?: any; }'.
+
+
 ==== tests/cases/compiler/propertyParameterWithQuestionMark.ts (2 errors) ====
     class C {
         constructor(public x?) { }

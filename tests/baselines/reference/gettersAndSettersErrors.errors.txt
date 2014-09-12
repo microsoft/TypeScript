@@ -1,3 +1,14 @@
+tests/cases/compiler/gettersAndSettersErrors.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersErrors.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersErrors.ts(6,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersErrors.ts(7,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersErrors.ts(11,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersErrors.ts(12,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersErrors.ts(5,12): error TS2300: Duplicate identifier 'Foo'.
+tests/cases/compiler/gettersAndSettersErrors.ts(11,17): error TS2379: Getter and setter accessors do not agree in visibility.
+tests/cases/compiler/gettersAndSettersErrors.ts(12,16): error TS2379: Getter and setter accessors do not agree in visibility.
+
+
 ==== tests/cases/compiler/gettersAndSettersErrors.ts (9 errors) ====
     class C {
         public get Foo() { return "foo";} // ok

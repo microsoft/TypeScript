@@ -1,3 +1,11 @@
+tests/cases/compiler/typeofProperty.ts(4,15): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/typeofProperty.ts(8,15): error TS2304: Cannot find name 'd'.
+tests/cases/compiler/typeofProperty.ts(13,15): error TS2304: Cannot find name 'e'.
+tests/cases/compiler/typeofProperty.ts(18,15): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/typeofProperty.ts(23,15): error TS2304: Cannot find name 'd'.
+tests/cases/compiler/typeofProperty.ts(28,15): error TS2304: Cannot find name 'e'.
+
+
 ==== tests/cases/compiler/typeofProperty.ts (6 errors) ====
     
     interface I1 {

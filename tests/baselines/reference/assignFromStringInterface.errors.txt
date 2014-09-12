@@ -1,3 +1,6 @@
+tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts(3,1): error TS2323: Type 'String' is not assignable to type 'string'.
+
+
 ==== tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts (1 errors) ====
     var x = '';
     var a: String;

@@ -1,3 +1,7 @@
+tests/cases/compiler/staticsInConstructorBodies.ts(3,3): error TS1129: Statement expected.
+tests/cases/compiler/staticsInConstructorBodies.ts(6,1): error TS1128: Declaration or statement expected.
+
+
 ==== tests/cases/compiler/staticsInConstructorBodies.ts (2 errors) ====
     class C {
     	constructor() {

@@ -1,3 +1,7 @@
+tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_1.ts(3,13): error TS2304: Cannot find name 'Sammy'.
+tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_1.ts(4,9): error TS2304: Cannot find name 'Sammy'.
+
+
 ==== tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_1.ts (2 errors) ====
     ///<reference path='exportAssignmentOfDeclaredExternalModule_0.ts'/>
     import Sammy = require('exportAssignmentOfDeclaredExternalModule_0');

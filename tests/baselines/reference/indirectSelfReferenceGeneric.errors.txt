@@ -1,3 +1,6 @@
+tests/cases/compiler/indirectSelfReferenceGeneric.ts(1,7): error TS2310: Type 'a<T>' recursively references itself as a base type.
+
+
 ==== tests/cases/compiler/indirectSelfReferenceGeneric.ts (1 errors) ====
     class a<T> extends b<T> { }
           ~

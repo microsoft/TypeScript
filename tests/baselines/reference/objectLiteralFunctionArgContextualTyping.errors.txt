@@ -1,3 +1,12 @@
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts(8,4): error TS2345: Argument of type '{ hello: number; }' is not assignable to parameter of type 'I'.
+  Property 'value' is missing in type '{ hello: number; }'.
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts(11,4): error TS2345: Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I'.
+  Property 'value' is missing in type '{ toString: (s: string) => string; }'.
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts(12,4): error TS2345: Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I'.
+  Property 'value' is missing in type '{ toString: (s: string) => string; }'.
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts(13,36): error TS2339: Property 'uhhh' does not exist on type 'string'.
+
+
 ==== tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts (4 errors) ====
     interface I {
         value: string;

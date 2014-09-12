@@ -1,3 +1,13 @@
+tests/cases/conformance/types/witness/witness.ts(8,21): error TS2372: Parameter 'pInit' cannot be referenced in its initializer.
+tests/cases/conformance/types/witness/witness.ts(33,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/types/witness/witness.ts(37,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/types/witness/witness.ts(41,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/types/witness/witness.ts(43,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/types/witness/witness.ts(47,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/types/witness/witness.ts(61,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' must be of type 'any', but here has type 'string'.
+tests/cases/conformance/types/witness/witness.ts(114,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
+
+
 ==== tests/cases/conformance/types/witness/witness.ts (8 errors) ====
     
     

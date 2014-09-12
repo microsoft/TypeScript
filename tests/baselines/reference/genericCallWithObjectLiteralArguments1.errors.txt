@@ -1,3 +1,17 @@
+tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(4,22): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type '{ x: number; y: number; }'.
+  Types of property 'y' are incompatible:
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(5,22): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type '{ x: string; y: string; }'.
+  Types of property 'x' are incompatible:
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(6,22): error TS2345: Argument of type '{ x: string; y: number; }' is not assignable to parameter of type '{ x: number; y: number; }'.
+  Types of property 'x' are incompatible:
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(7,22): error TS2345: Argument of type '{ x: string; y: number; }' is not assignable to parameter of type '{ x: string; y: string; }'.
+  Types of property 'y' are incompatible:
+    Type 'number' is not assignable to type 'string'.
+
+
 ==== tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts (4 errors) ====
     function foo<T>(n: { x: T; y: T }, m: T) { return m; }
     var x = foo({ x: 3, y: "" }, 4); // no error, x is Object, the best common type

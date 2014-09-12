@@ -1,3 +1,8 @@
+tests/cases/compiler/staticMemberExportAccess.ts(14,35): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/staticMemberExportAccess.ts(17,18): error TS2339: Property 'bar' does not exist on type 'Sammy'.
+tests/cases/compiler/staticMemberExportAccess.ts(18,18): error TS2339: Property 'x' does not exist on type 'Sammy'.
+
+
 ==== tests/cases/compiler/staticMemberExportAccess.ts (3 errors) ====
     class Sammy {
        foo() { return "hi"; }

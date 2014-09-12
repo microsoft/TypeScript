@@ -1,3 +1,7 @@
+tests/cases/compiler/recursiveBaseCheck4.ts(1,7): error TS2310: Type 'M<T>' recursively references itself as a base type.
+tests/cases/compiler/recursiveBaseCheck4.ts(2,9): error TS2339: Property 'blah' does not exist on type 'M<{}>'.
+
+
 ==== tests/cases/compiler/recursiveBaseCheck4.ts (2 errors) ====
     class M<T> extends M<string> { }
           ~

@@ -1,3 +1,7 @@
+tests/cases/compiler/genericMergedDeclarationUsingTypeParameter2.ts(3,19): error TS2304: Cannot find name 'T'.
+tests/cases/compiler/genericMergedDeclarationUsingTypeParameter2.ts(4,14): error TS2304: Cannot find name 'T'.
+
+
 ==== tests/cases/compiler/genericMergedDeclarationUsingTypeParameter2.ts (2 errors) ====
     class foo<T> { constructor(x: T) { } }
     module foo {

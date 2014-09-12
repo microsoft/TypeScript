@@ -1,3 +1,6 @@
+tests/cases/compiler/lambdaPropSelf.ts(21,13): error TS2331: 'this' cannot be referenced in a module body.
+
+
 ==== tests/cases/compiler/lambdaPropSelf.ts (1 errors) ====
     declare var ko: any;
     

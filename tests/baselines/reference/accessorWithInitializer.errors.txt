@@ -1,3 +1,7 @@
+tests/cases/compiler/accessorWithInitializer.ts(3,9): error TS1052: A 'set' accessor parameter cannot have an initializer.
+tests/cases/compiler/accessorWithInitializer.ts(4,16): error TS1052: A 'set' accessor parameter cannot have an initializer.
+
+
 ==== tests/cases/compiler/accessorWithInitializer.ts (2 errors) ====
     
     class C {

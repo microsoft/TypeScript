@@ -1,3 +1,7 @@
+tests/cases/compiler/typeParameterOrderReversal.ts(6,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/typeParameterOrderReversal.ts(7,20): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/compiler/typeParameterOrderReversal.ts (2 errors) ====
     interface X<T> {
         n: T;

@@ -1,3 +1,9 @@
+tests/cases/compiler/overloadingOnConstants2.ts(8,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadingOnConstants2.ts(9,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadingOnConstants2.ts(15,13): error TS2345: Argument of type 'string' is not assignable to parameter of type '"bye"'.
+tests/cases/compiler/overloadingOnConstants2.ts(19,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+
+
 ==== tests/cases/compiler/overloadingOnConstants2.ts (4 errors) ====
     class C {
        private x = 1;

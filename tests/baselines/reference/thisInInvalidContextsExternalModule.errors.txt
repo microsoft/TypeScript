@@ -1,3 +1,14 @@
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(38,25): error TS1003: Identifier expected.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(38,30): error TS1005: ';' expected.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(48,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(48,10): error TS1003: Identifier expected.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(3,16): error TS2334: 'this' cannot be referenced in a static property initializer.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(22,15): error TS2332: 'this' cannot be referenced in current location.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(28,13): error TS2331: 'this' cannot be referenced in a module body.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(44,9): error TS2332: 'this' cannot be referenced in current location.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(45,9): error TS2332: 'this' cannot be referenced in current location.
+
+
 ==== tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts (9 errors) ====
     //'this' in static member initializer
     class ErrClass1 {

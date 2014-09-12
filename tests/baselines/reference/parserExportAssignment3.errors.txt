@@ -1,3 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment3.ts(1,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment3.ts(1,9): error TS1003: Identifier expected.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment3.ts (2 errors) ====
     export =
     ~~~~~~~~

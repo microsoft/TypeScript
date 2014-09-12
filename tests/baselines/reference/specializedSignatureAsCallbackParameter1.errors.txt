@@ -1,3 +1,8 @@
+tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts(7,4): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts(8,4): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts(8,7): error TS2381: A signature with an implementation cannot use a string literal type.
+
+
 ==== tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts (3 errors) ====
     function x3(a: number, cb: (x: number) => number);
     function x3(a: string, cb: (x: number) => number);

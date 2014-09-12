@@ -1,3 +1,6 @@
+tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts(10,41): error TS2375: Duplicate number index signature.
+
+
 ==== tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts (1 errors) ====
     enum E {
         a

@@ -1,3 +1,39 @@
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(9,14): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(17,12): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(27,24): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(36,14): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(44,12): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(54,24): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(7,14): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(8,22): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(9,11): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(9,26): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(12,9): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(16,6): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(17,9): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(17,24): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(21,6): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(22,9): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(26,9): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(27,21): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(27,36): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(28,9): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(34,15): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(35,23): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(36,11): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(36,35): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(39,9): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(43,6): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(44,9): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(44,33): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(48,6): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(49,9): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(53,9): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(54,21): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(54,45): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(55,9): error TS2370: A rest parameter must be of an array type.
+
+
 ==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts (34 errors) ====
     // Rest parameters must be an array type if they have a type annotation, 
     // user defined subtypes of array do not count, all of these are errors

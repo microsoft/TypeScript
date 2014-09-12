@@ -1,3 +1,11 @@
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(11,1): error TS2304: Cannot find name 'M'.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(14,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(17,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(18,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(21,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(31,1): error TS2304: Cannot find name 'I'.
+
+
 ==== tests/cases/conformance/expressions/valuesAndReferences/assignments.ts (6 errors) ====
     // In this file:
     //  Assign to a module

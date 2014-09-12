@@ -1,3 +1,7 @@
+tests/cases/compiler/implicitAnyGenericTypeInference.ts(7,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyGenericTypeInference.ts(7,22): error TS7006: Parameter 'y' implicitly has an 'any' type.
+
+
 ==== tests/cases/compiler/implicitAnyGenericTypeInference.ts (2 errors) ====
     
     interface Comparer<T> {

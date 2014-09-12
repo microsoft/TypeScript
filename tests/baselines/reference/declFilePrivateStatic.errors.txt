@@ -1,3 +1,9 @@
+tests/cases/compiler/declFilePrivateStatic.ts(9,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/declFilePrivateStatic.ts(10,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/declFilePrivateStatic.ts(12,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/declFilePrivateStatic.ts(13,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/declFilePrivateStatic.ts (4 errors) ====
     
     class C {

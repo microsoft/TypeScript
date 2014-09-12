@@ -1,3 +1,14 @@
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(1,16): error TS1003: Identifier expected.
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(2,16): error TS1003: Identifier expected.
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(2,24): error TS1005: '=>' expected.
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(3,16): error TS1003: Identifier expected.
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(4,16): error TS1003: Identifier expected.
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(5,16): error TS1003: Identifier expected.
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(6,16): error TS1003: Identifier expected.
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(7,16): error TS1003: Identifier expected.
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(8,16): error TS1003: Identifier expected.
+
+
 ==== tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts (9 errors) ====
     var x1: typeof {};
                    ~

@@ -1,3 +1,6 @@
+tests/cases/compiler/recursiveBaseCheck.ts(2,11): error TS2310: Type 'C' recursively references itself as a base type.
+
+
 ==== tests/cases/compiler/recursiveBaseCheck.ts (1 errors) ====
     declare module Module {
         class C extends D {

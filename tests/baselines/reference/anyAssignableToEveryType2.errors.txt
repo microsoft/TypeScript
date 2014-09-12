@@ -1,3 +1,6 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/anyAssignableToEveryType2.ts(114,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/anyAssignableToEveryType2.ts (1 errors) ====
     // any is not a subtype of any other types, but is assignable, all the below should work
     

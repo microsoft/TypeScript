@@ -1,3 +1,6 @@
+tests/cases/conformance/externalModules/foo_1.ts(1,22): error TS2306: File 'tests/cases/conformance/externalModules/foo_0.ts' is not an external module.
+
+
 ==== tests/cases/conformance/externalModules/foo_1.ts (1 errors) ====
     import foo = require("./foo_0");
                          ~~~~~~~~~

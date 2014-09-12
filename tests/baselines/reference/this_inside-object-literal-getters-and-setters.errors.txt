@@ -1,3 +1,7 @@
+tests/cases/compiler/this_inside-object-literal-getters-and-setters.ts(4,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/this_inside-object-literal-getters-and-setters.ts(7,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/this_inside-object-literal-getters-and-setters.ts (2 errors) ====
     module ObjectLiteral {
         var ThisInObjectLiteral = {

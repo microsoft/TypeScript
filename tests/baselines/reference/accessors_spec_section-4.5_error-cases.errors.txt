@@ -1,3 +1,17 @@
+tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(5,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(6,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(8,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(9,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(11,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(12,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(3,55): error TS2323: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(5,54): error TS2323: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(9,52): error TS2323: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(11,51): error TS2323: Type 'number' is not assignable to type 'string'.
+
+
 ==== tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts (12 errors) ====
     class LanguageSpec_section_4_5_error_cases {
         public set AnnotatedSetter_SetterFirst(a: number) { }

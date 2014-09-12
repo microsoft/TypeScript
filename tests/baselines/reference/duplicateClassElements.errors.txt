@@ -1,3 +1,23 @@
+tests/cases/compiler/duplicateClassElements.ts(9,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(12,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(15,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(18,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(23,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(26,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(29,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(32,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(36,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(39,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(3,12): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/duplicateClassElements.ts(6,5): error TS2393: Duplicate function implementation.
+tests/cases/compiler/duplicateClassElements.ts(9,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/duplicateClassElements.ts(12,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/duplicateClassElements.ts(23,9): error TS2300: Duplicate identifier 'z'.
+tests/cases/compiler/duplicateClassElements.ts(26,9): error TS2300: Duplicate identifier 'z'.
+tests/cases/compiler/duplicateClassElements.ts(34,12): error TS2300: Duplicate identifier 'x2'.
+tests/cases/compiler/duplicateClassElements.ts(41,12): error TS2300: Duplicate identifier 'z2'.
+
+
 ==== tests/cases/compiler/duplicateClassElements.ts (18 errors) ====
     class a {
         public a;

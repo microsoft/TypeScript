@@ -1,3 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantEqualsGreaterThanAfterFunction1.ts(1,14): error TS1144: Block or ';' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantEqualsGreaterThanAfterFunction1.ts(1,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantEqualsGreaterThanAfterFunction1.ts (2 errors) ====
     function f() => 4;
                  ~~

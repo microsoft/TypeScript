@@ -1,3 +1,12 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts(10,11): error TS2429: Interface 'S' incorrectly extends interface 'T':
+  Required property 'Foo' cannot be reimplemented with optional property in 'S'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts(18,11): error TS2429: Interface 'S2' incorrectly extends interface 'T2':
+  Required property '1' cannot be reimplemented with optional property in 'S2'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts(26,11): error TS2429: Interface 'S3' incorrectly extends interface 'T3':
+  Required property '1' cannot be reimplemented with optional property in 'S3'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts(33,9): error TS2367: No best common type exists between '{ Foo: Base; }' and '{ Foo?: Derived; }'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts (4 errors) ====
     // Derived member is optional but base member is not, should be an error
     

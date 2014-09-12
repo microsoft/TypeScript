@@ -1,3 +1,19 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures4.ts(52,9): error TS2322: Type '<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U' is not assignable to type '(x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived':
+  Types of parameters 'y' and 'y' are incompatible:
+    Type '(arg2: { foo: number; }) => any' is not assignable to type '(arg2: Base) => Derived':
+      Types of parameters 'arg2' and 'arg2' are incompatible:
+        Type '{ foo: number; }' is not assignable to type 'Base':
+          Types of property 'foo' are incompatible:
+            Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures4.ts(53,9): error TS2322: Type '(x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived' is not assignable to type '<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U':
+  Types of parameters 'y' and 'y' are incompatible:
+    Type '(arg2: Base) => Derived' is not assignable to type '(arg2: { foo: number; }) => any':
+      Types of parameters 'arg2' and 'arg2' are incompatible:
+        Type 'Base' is not assignable to type '{ foo: number; }':
+          Types of property 'foo' are incompatible:
+            Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures4.ts (2 errors) ====
     // These are mostly permitted with the current loose rules. All ok unless otherwise noted.
     

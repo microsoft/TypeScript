@@ -1,3 +1,7 @@
+tests/cases/conformance/enums/enumConstantMembers.ts(12,5): error TS1061: Enum member must have initializer.
+tests/cases/conformance/enums/enumConstantMembers.ts(18,5): error TS1066: Ambient enum elements can only have integer literal initializers.
+
+
 ==== tests/cases/conformance/enums/enumConstantMembers.ts (2 errors) ====
     // Constant members allow negatives, but not decimals. Also hex literals are allowed
     enum E1 {

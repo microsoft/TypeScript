@@ -1,3 +1,13 @@
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(17,7): error TS2421: Class 'D' incorrectly implements interface 'A':
+  Private property 'w' cannot be reimplemented.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2416: Class 'E' incorrectly extends base class 'C2':
+  Private property 'w' cannot be reimplemented.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2421: Class 'E' incorrectly implements interface 'A':
+  Property 'x' is missing in type 'E'.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(30,9): error TS2341: Property 'C.x' is inaccessible.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(31,10): error TS2341: Property 'C2.w' is inaccessible.
+
+
 ==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts (5 errors) ====
     class C {
         private x: number;

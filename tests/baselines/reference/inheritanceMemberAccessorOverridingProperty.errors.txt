@@ -1,3 +1,7 @@
+tests/cases/compiler/inheritanceMemberAccessorOverridingProperty.ts(6,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/inheritanceMemberAccessorOverridingProperty.ts(9,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/inheritanceMemberAccessorOverridingProperty.ts (2 errors) ====
     class a {
         x: string;

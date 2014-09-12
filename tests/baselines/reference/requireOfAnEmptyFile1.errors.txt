@@ -1,3 +1,6 @@
+tests/cases/compiler/requireOfAnEmptyFile1_a.ts(3,21): error TS2306: File 'tests/cases/compiler/requireOfAnEmptyFile1_b.ts' is not an external module.
+
+
 ==== tests/cases/compiler/requireOfAnEmptyFile1_a.ts (1 errors) ====
     //requireOfAnEmptyFile1
     

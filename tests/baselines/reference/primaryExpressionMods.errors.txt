@@ -1,3 +1,7 @@
+tests/cases/compiler/primaryExpressionMods.ts(7,8): error TS2304: Cannot find name 'M'.
+tests/cases/compiler/primaryExpressionMods.ts(11,8): error TS2304: Cannot find name 'm'.
+
+
 ==== tests/cases/compiler/primaryExpressionMods.ts (2 errors) ====
     module M
     {

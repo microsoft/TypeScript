@@ -1,3 +1,13 @@
+tests/cases/compiler/defaultArgsInFunctionExpressions.ts(4,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/compiler/defaultArgsInFunctionExpressions.ts(5,1): error TS2323: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/defaultArgsInFunctionExpressions.ts(8,20): error TS2323: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/defaultArgsInFunctionExpressions.ts(11,1): error TS2323: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/defaultArgsInFunctionExpressions.ts(14,51): error TS2352: Neither type 'string' nor type 'number' is assignable to the other.
+tests/cases/compiler/defaultArgsInFunctionExpressions.ts(17,41): error TS2323: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/defaultArgsInFunctionExpressions.ts(20,62): error TS2352: Neither type 'string' nor type 'number' is assignable to the other.
+tests/cases/compiler/defaultArgsInFunctionExpressions.ts(28,15): error TS2304: Cannot find name 'T'.
+
+
 ==== tests/cases/compiler/defaultArgsInFunctionExpressions.ts (8 errors) ====
     var f = function (a = 3) { return a; }; // Type should be (a?: number) => number
     var n: number = f(4);

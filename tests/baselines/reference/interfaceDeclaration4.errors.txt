@@ -1,3 +1,15 @@
+tests/cases/compiler/interfaceDeclaration4.ts(39,14): error TS1005: '{' expected.
+tests/cases/compiler/interfaceDeclaration4.ts(39,18): error TS1005: ';' expected.
+tests/cases/compiler/interfaceDeclaration4.ts(18,11): error TS2429: Interface 'I3' incorrectly extends interface 'I1':
+  Types of property 'item' are incompatible:
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/interfaceDeclaration4.ts(27,7): error TS2421: Class 'C2' incorrectly implements interface 'I4':
+  Property 'item' is missing in type 'C2'.
+tests/cases/compiler/interfaceDeclaration4.ts(36,7): error TS2421: Class 'C3' incorrectly implements interface 'I1':
+  Property 'item' is missing in type 'C3'.
+tests/cases/compiler/interfaceDeclaration4.ts(39,15): error TS2304: Cannot find name 'I1'.
+
+
 ==== tests/cases/compiler/interfaceDeclaration4.ts (6 errors) ====
     // Import this module when test harness supports external modules. Also remove the internal module below.
     // import Foo = require("interfaceDeclaration5")

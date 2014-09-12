@@ -1,3 +1,11 @@
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(6,13): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(15,14): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(21,13): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(31,13): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(40,14): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(46,13): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts (6 errors) ====
     module NonGeneric {
         class C {

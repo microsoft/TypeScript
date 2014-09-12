@@ -1,3 +1,7 @@
+tests/cases/compiler/couldNotSelectGenericOverload.ts(3,11): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/couldNotSelectGenericOverload.ts(7,11): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/compiler/couldNotSelectGenericOverload.ts (2 errors) ====
     function makeArray<T>(items: T[]): T[] { return items; }
     var b = [1, ""];

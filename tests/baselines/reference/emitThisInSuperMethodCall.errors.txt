@@ -1,3 +1,8 @@
+tests/cases/compiler/emitThisInSuperMethodCall.ts(10,17): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+tests/cases/compiler/emitThisInSuperMethodCall.ts(17,17): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+tests/cases/compiler/emitThisInSuperMethodCall.ts(23,13): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+
+
 ==== tests/cases/compiler/emitThisInSuperMethodCall.ts (3 errors) ====
     class User {
         sayHello() {

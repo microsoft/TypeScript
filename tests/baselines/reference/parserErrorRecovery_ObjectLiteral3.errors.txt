@@ -1,3 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral3.ts(2,1): error TS1109: Expression expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral3.ts(2,7): error TS1005: ':' expected.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral3.ts (2 errors) ====
     var v = { a: 
     return;

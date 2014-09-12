@@ -1,3 +1,6 @@
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember2.ts(14,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember2.ts (1 errors) ====
     class C<T> {
         x = this;

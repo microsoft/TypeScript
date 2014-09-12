@@ -1,3 +1,9 @@
+tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(3,14): error TS2300: Duplicate identifier 'v'.
+tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(8,9): error TS2300: Duplicate identifier 'w'.
+tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(13,14): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(16,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'string', but here has type 'number'.
+
+
 ==== tests/cases/compiler/duplicateIdentifierInCatchBlock.ts (4 errors) ====
     var v;
     try { } catch (e) {

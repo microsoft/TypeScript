@@ -1,3 +1,19 @@
+tests/cases/conformance/functions/functionOverloadErrors.ts(2,14): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(44,25): error TS2304: Cannot find name 'Window'.
+tests/cases/conformance/functions/functionOverloadErrors.ts(50,25): error TS2304: Cannot find name 'Window'.
+tests/cases/conformance/functions/functionOverloadErrors.ts(51,32): error TS2304: Cannot find name 'window'.
+tests/cases/conformance/functions/functionOverloadErrors.ts(65,13): error TS2385: Overload signatures must all be public or private.
+tests/cases/conformance/functions/functionOverloadErrors.ts(68,13): error TS2385: Overload signatures must all be public or private.
+tests/cases/conformance/functions/functionOverloadErrors.ts(75,21): error TS2383: Overload signatures must all be exported or not exported.
+tests/cases/conformance/functions/functionOverloadErrors.ts(79,14): error TS2383: Overload signatures must all be exported or not exported.
+tests/cases/conformance/functions/functionOverloadErrors.ts(85,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+tests/cases/conformance/functions/functionOverloadErrors.ts(90,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+tests/cases/conformance/functions/functionOverloadErrors.ts(94,1): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(99,1): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(103,1): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+
+
 ==== tests/cases/conformance/functions/functionOverloadErrors.ts (14 errors) ====
     //Function overload signature with initializer
     function fn1(x = 3);

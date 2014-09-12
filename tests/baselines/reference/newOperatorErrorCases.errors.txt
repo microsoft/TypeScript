@@ -1,3 +1,9 @@
+tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(27,16): error TS1005: ',' expected.
+tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(32,23): error TS1109: Expression expected.
+tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(32,16): error TS2304: Cannot find name 'string'.
+tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(37,9): error TS2350: Only a void function can be called with the 'new' keyword.
+
+
 ==== tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts (4 errors) ====
     
     class C0 {

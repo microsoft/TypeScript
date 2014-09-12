@@ -1,3 +1,8 @@
+tests/cases/compiler/assignmentCompatBug3.ts(3,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/assignmentCompatBug3.ts(4,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/assignmentCompatBug3.ts(14,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/assignmentCompatBug3.ts (3 errors) ====
     function makePoint(x: number, y: number) {
         return {

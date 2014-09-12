@@ -1,3 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserInvalidIdentifiersInVariableStatements1.ts(1,5): error TS1134: Variable declaration expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserInvalidIdentifiersInVariableStatements1.ts(3,5): error TS1134: Variable declaration expected.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserInvalidIdentifiersInVariableStatements1.ts (2 errors) ====
     var export;
         ~~~~~~

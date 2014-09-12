@@ -1,3 +1,6 @@
+tests/cases/compiler/staticIndexer.ts(2,5): error TS1145: Modifiers not permitted on index signature members.
+
+
 ==== tests/cases/compiler/staticIndexer.ts (1 errors) ====
     class C {
         static [s: string]: number;

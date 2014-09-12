@@ -1,3 +1,7 @@
+tests/cases/compiler/collisionSuperAndLocalFunctionInConstructor.ts(12,9): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+tests/cases/compiler/collisionSuperAndLocalFunctionInConstructor.ts(20,13): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+
+
 ==== tests/cases/compiler/collisionSuperAndLocalFunctionInConstructor.ts (2 errors) ====
     function _super() { // No error
     }

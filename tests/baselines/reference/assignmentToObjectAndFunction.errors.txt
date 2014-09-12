@@ -1,3 +1,13 @@
+tests/cases/compiler/assignmentToObjectAndFunction.ts(1,5): error TS2322: Type '{ toString: number; }' is not assignable to type 'Object':
+  Types of property 'toString' are incompatible:
+    Type 'number' is not assignable to type '() => string'.
+tests/cases/compiler/assignmentToObjectAndFunction.ts(8,5): error TS2322: Type '{}' is not assignable to type 'Function':
+  Property 'apply' is missing in type '{}'.
+tests/cases/compiler/assignmentToObjectAndFunction.ts(29,5): error TS2322: Type 'typeof bad' is not assignable to type 'Function':
+  Types of property 'apply' are incompatible:
+    Type 'number' is not assignable to type '(thisArg: any, argArray?: any) => any'.
+
+
 ==== tests/cases/compiler/assignmentToObjectAndFunction.ts (3 errors) ====
     var errObj: Object = { toString: 0 }; // Error, incompatible toString
         ~~~~~~

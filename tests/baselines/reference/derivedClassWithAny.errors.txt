@@ -1,3 +1,14 @@
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(9,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(19,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(27,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(38,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(44,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(57,1): error TS2322: Type 'E' is not assignable to type 'C':
+  Types of property 'x' are incompatible:
+    Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts (7 errors) ====
     class C {
         x: number;

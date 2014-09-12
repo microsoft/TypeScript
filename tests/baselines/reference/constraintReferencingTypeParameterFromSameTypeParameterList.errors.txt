@@ -1,3 +1,11 @@
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(5,15): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(8,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(10,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(13,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(21,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(21,28): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts (6 errors) ====
     // used to be valid, now an error to do this
     

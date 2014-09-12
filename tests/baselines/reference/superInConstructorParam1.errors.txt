@@ -1,3 +1,7 @@
+tests/cases/compiler/superInConstructorParam1.ts(8,3): error TS2377: Constructors for derived classes must contain a 'super' call.
+tests/cases/compiler/superInConstructorParam1.ts(8,19): error TS2336: 'super' cannot be referenced in constructor arguments.
+
+
 ==== tests/cases/compiler/superInConstructorParam1.ts (2 errors) ====
     class B {
       public foo(): number {

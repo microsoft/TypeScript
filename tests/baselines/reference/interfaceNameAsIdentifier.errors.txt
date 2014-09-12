@@ -1,3 +1,7 @@
+tests/cases/compiler/interfaceNameAsIdentifier.ts(4,1): error TS2304: Cannot find name 'C'.
+tests/cases/compiler/interfaceNameAsIdentifier.ts(12,1): error TS2304: Cannot find name 'm2'.
+
+
 ==== tests/cases/compiler/interfaceNameAsIdentifier.ts (2 errors) ====
     interface C {
         (): void;

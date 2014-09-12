@@ -1,3 +1,15 @@
+tests/cases/compiler/defaultArgsForwardReferencing.ts(6,20): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/compiler/defaultArgsForwardReferencing.ts(11,21): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/compiler/defaultArgsForwardReferencing.ts(11,28): error TS2373: Initializer of parameter 'b' cannot reference identifier 'c' declared after it.
+tests/cases/compiler/defaultArgsForwardReferencing.ts(17,21): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/compiler/defaultArgsForwardReferencing.ts(23,25): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/compiler/defaultArgsForwardReferencing.ts(32,21): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/compiler/defaultArgsForwardReferencing.ts(33,16): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/compiler/defaultArgsForwardReferencing.ts(37,14): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/compiler/defaultArgsForwardReferencing.ts(37,21): error TS2373: Initializer of parameter 'b' cannot reference identifier 'c' declared after it.
+tests/cases/compiler/defaultArgsForwardReferencing.ts(37,28): error TS2373: Initializer of parameter 'c' cannot reference identifier 'd' declared after it.
+
+
 ==== tests/cases/compiler/defaultArgsForwardReferencing.ts (10 errors) ====
     function left(a, b = a, c = b) {
         a;

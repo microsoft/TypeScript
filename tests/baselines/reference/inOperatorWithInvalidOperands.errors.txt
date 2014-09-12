@@ -1,3 +1,25 @@
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(12,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(13,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(14,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(15,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(16,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(17,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(18,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(19,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(20,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(29,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(30,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(31,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(32,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(33,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(34,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(35,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(36,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(37,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(40,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(40,17): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+
+
 ==== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts (20 errors) ====
     enum E { a }
     

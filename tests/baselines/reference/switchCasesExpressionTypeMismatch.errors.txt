@@ -1,3 +1,8 @@
+tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(4,10): error TS2323: Type 'typeof Foo' is not assignable to type 'number'.
+tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(5,10): error TS2323: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(7,10): error TS2323: Type 'boolean' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/switchCasesExpressionTypeMismatch.ts (3 errors) ====
     class Foo { }
     

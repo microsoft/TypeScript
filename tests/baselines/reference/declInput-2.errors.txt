@@ -1,3 +1,10 @@
+tests/cases/compiler/declInput-2.ts(10,9): error TS4031: Public property 'm22' of exported class has or is using private name 'C'.
+tests/cases/compiler/declInput-2.ts(13,9): error TS4031: Public property 'm25' of exported class has or is using private name 'I2'.
+tests/cases/compiler/declInput-2.ts(16,16): error TS4055: Return type of public method from exported class has or is using private name 'I2'.
+tests/cases/compiler/declInput-2.ts(18,21): error TS4073: Parameter 'i' of public method from exported class has or is using private name 'I2'.
+tests/cases/compiler/declInput-2.ts(19,16): error TS4055: Return type of public method from exported class has or is using private name 'C'.
+
+
 ==== tests/cases/compiler/declInput-2.ts (5 errors) ====
     module M {
         class C { }

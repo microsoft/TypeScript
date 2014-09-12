@@ -1,3 +1,7 @@
+tests/cases/compiler/primitiveConstraints1.ts(1,15): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/primitiveConstraints1.ts(4,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/compiler/primitiveConstraints1.ts (2 errors) ====
     function foo1<T extends U, U>(t: T, u: U) { }
                   ~~~~~~~~~~~

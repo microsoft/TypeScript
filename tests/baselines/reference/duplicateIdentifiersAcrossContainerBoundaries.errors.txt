@@ -1,3 +1,8 @@
+tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(5,18): error TS2300: Duplicate identifier 'I'.
+tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(12,18): error TS2300: Duplicate identifier 'f'.
+tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): error TS2300: Duplicate identifier 'x'.
+
+
 ==== tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts (3 errors) ====
     module M {
         export interface I { }

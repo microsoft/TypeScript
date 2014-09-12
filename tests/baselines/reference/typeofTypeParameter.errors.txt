@@ -1,3 +1,6 @@
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts(3,19): error TS2304: Cannot find name 'T'.
+
+
 ==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts (1 errors) ====
     function f<T>(x: T): T {
         var a: typeof x;

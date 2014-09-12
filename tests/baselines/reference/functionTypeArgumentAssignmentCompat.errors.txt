@@ -1,3 +1,6 @@
+tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts(12,1): error TS2304: Cannot find name 'console'.
+
+
 ==== tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts (1 errors) ====
     var f : {
      <T>(x:T): T;

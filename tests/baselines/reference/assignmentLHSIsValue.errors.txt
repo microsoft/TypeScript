@@ -1,3 +1,45 @@
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(35,9): error TS1128: Declaration or statement expected.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(42,36): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(44,19): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(46,27): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(50,20): error TS1128: Declaration or statement expected.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(51,11): error TS1005: ';' expected.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(6,21): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(7,13): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(8,21): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(11,18): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(13,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(17,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(19,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(22,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(24,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(27,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(28,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(29,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(30,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(31,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(32,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(38,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(42,30): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(44,13): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(46,21): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(54,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(57,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(58,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(59,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(60,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(61,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(62,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(63,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(64,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(65,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(66,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(67,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(68,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(69,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(70,1): error TS2364: Invalid left-hand side of assignment expression.
+
+
 ==== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts (40 errors) ====
     // expected error for all the LHS of assignments
     var value;

@@ -1,3 +1,8 @@
+tests/cases/compiler/privateVisibility.ts(9,1): error TS2341: Property 'Foo.privMeth' is inaccessible.
+tests/cases/compiler/privateVisibility.ts(10,1): error TS2341: Property 'Foo.privProp' is inaccessible.
+tests/cases/compiler/privateVisibility.ts(24,1): error TS2341: Property 'M.C.priv' is inaccessible.
+
+
 ==== tests/cases/compiler/privateVisibility.ts (3 errors) ====
     class Foo {
     	public pubMeth() {this.privMeth();}

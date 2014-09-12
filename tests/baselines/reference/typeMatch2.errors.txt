@@ -1,3 +1,20 @@
+tests/cases/compiler/typeMatch2.ts(3,2): error TS2322: Type '{}' is not assignable to type '{ x: number; y: number; }':
+  Property 'x' is missing in type '{}'.
+tests/cases/compiler/typeMatch2.ts(4,5): error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }':
+  Property 'y' is missing in type '{ x: number; }'.
+tests/cases/compiler/typeMatch2.ts(6,5): error TS2322: Type '{ x: number; z: number; }' is not assignable to type '{ x: number; y: number; }':
+  Property 'y' is missing in type '{ x: number; z: number; }'.
+tests/cases/compiler/typeMatch2.ts(18,5): error TS2322: Type 'Animal[]' is not assignable to type 'Giraffe[]':
+  Type 'Animal' is not assignable to type 'Giraffe':
+    Property 'g' is missing in type 'Animal'.
+tests/cases/compiler/typeMatch2.ts(22,5): error TS2322: Type '{ f1: number; f2: Animal[]; }' is not assignable to type '{ f1: number; f2: Giraffe[]; }':
+  Types of property 'f2' are incompatible:
+    Type 'Animal[]' is not assignable to type 'Giraffe[]':
+      Type 'Animal' is not assignable to type 'Giraffe'.
+tests/cases/compiler/typeMatch2.ts(35,5): error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }':
+  Property 'y' is missing in type '{ x: number; }'.
+
+
 ==== tests/cases/compiler/typeMatch2.ts (6 errors) ====
     function f1() {
     	var a = { x: 1, y: 2 };

@@ -1,3 +1,7 @@
+tests/cases/compiler/recursiveTypes1.ts(1,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/recursiveTypes1.ts(6,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/compiler/recursiveTypes1.ts (2 errors) ====
     interface Entity<T extends Entity<T>> {
                      ~~~~~~~~~~~~~~~~~~~

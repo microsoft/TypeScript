@@ -1,3 +1,7 @@
+tests/cases/compiler/inheritFromGenericTypeParameter.ts(1,20): error TS2311: A class may only extend another class.
+tests/cases/compiler/inheritFromGenericTypeParameter.ts(2,24): error TS2312: An interface may only extend a class or another interface.
+
+
 ==== tests/cases/compiler/inheritFromGenericTypeParameter.ts (2 errors) ====
     class C<T> extends T { }
                        ~

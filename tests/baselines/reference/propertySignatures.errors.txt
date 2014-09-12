@@ -1,3 +1,7 @@
+tests/cases/compiler/propertySignatures.ts(2,23): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/propertySignatures.ts(14,12): error TS2304: Cannot find name 'foo'.
+
+
 ==== tests/cases/compiler/propertySignatures.ts (2 errors) ====
     // Should be error - duplicate identifiers
     var foo1: { a:string; a: string; };

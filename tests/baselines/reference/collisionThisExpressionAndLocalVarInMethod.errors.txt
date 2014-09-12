@@ -1,3 +1,7 @@
+tests/cases/compiler/collisionThisExpressionAndLocalVarInMethod.ts(5,21): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndLocalVarInMethod.ts(11,13): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+
+
 ==== tests/cases/compiler/collisionThisExpressionAndLocalVarInMethod.ts (2 errors) ====
     class a {
         method1() {

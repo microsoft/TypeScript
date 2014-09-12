@@ -1,3 +1,21 @@
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(23,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(26,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(36,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(90,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(93,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(18,5): error TS2412: Property '2.0' of type 'number' is not assignable to numeric index type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(20,5): error TS2412: Property '"4.0"' of type 'number' is not assignable to numeric index type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(21,5): error TS2412: Property '3.0' of type 'MyNumber' is not assignable to numeric index type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(50,5): error TS2412: Property '2.0' of type 'number' is not assignable to numeric index type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(55,5): error TS2412: Property '"4.0"' of type 'number' is not assignable to numeric index type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(68,5): error TS2412: Property '2.0' of type 'number' is not assignable to numeric index type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(73,5): error TS2412: Property '"4.0"' of type 'number' is not assignable to numeric index type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(78,5): error TS2322: Type '{ [x: number]: {}; 1.0: string; 2.0: number; a: string; b: number; c: () => void; "d": string; "e": number; "3.0": string; "4.0": number; f: unknown; X: string; foo: () => string; }' is not assignable to type '{ [x: number]: string; }':
+  Index signatures are incompatible:
+    Type '{}' is not assignable to type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(88,9): error TS2304: Cannot find name 'Myn'.
+
+
 ==== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts (14 errors) ====
     // String indexer types constrain the types of named properties in their containing type
     

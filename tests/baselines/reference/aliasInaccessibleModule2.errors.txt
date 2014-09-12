@@ -1,3 +1,6 @@
+tests/cases/compiler/aliasInaccessibleModule2.ts(7,5): error TS4000: Import declaration 'R' is using private name 'N'.
+
+
 ==== tests/cases/compiler/aliasInaccessibleModule2.ts (1 errors) ====
     module M {
         module N {

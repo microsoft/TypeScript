@@ -1,3 +1,11 @@
+tests/cases/compiler/typeParameterArgumentEquivalence2.ts(4,5): error TS2322: Type '(item: T) => boolean' is not assignable to type '(item: U) => boolean':
+  Types of parameters 'item' and 'item' are incompatible:
+    Type 'T' is not assignable to type 'U'.
+tests/cases/compiler/typeParameterArgumentEquivalence2.ts(5,5): error TS2322: Type '(item: U) => boolean' is not assignable to type '(item: T) => boolean':
+  Types of parameters 'item' and 'item' are incompatible:
+    Type 'U' is not assignable to type 'T'.
+
+
 ==== tests/cases/compiler/typeParameterArgumentEquivalence2.ts (2 errors) ====
     function foo<T,U>() {
         var x: (item: U) => boolean;

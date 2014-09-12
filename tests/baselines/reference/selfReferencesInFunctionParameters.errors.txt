@@ -1,3 +1,9 @@
+tests/cases/compiler/selfReferencesInFunctionParameters.ts(1,26): error TS2372: Parameter 'x' cannot be referenced in its initializer.
+tests/cases/compiler/selfReferencesInFunctionParameters.ts(4,35): error TS2372: Parameter 'x' cannot be referenced in its initializer.
+tests/cases/compiler/selfReferencesInFunctionParameters.ts(8,28): error TS2372: Parameter 'y' cannot be referenced in its initializer.
+tests/cases/compiler/selfReferencesInFunctionParameters.ts(11,29): error TS2372: Parameter 'b' cannot be referenced in its initializer.
+
+
 ==== tests/cases/compiler/selfReferencesInFunctionParameters.ts (4 errors) ====
     function foo(x: number = x) {
                              ~

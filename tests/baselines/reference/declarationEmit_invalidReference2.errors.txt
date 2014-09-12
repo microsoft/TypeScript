@@ -1,3 +1,6 @@
+tests/cases/compiler/declarationEmit_invalidReference2.ts(1,1): error TS6053: File 'tests/cases/compiler/invalid.ts' not found.
+
+
 ==== tests/cases/compiler/declarationEmit_invalidReference2.ts (1 errors) ====
     /// <reference path="invalid.ts" />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

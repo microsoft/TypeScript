@@ -1,3 +1,8 @@
+error TS2318: Cannot find global type 'Boolean'.
+error TS2318: Cannot find global type 'IArguments'.
+tests/cases/compiler/noDefaultLib.ts(4,11): error TS2317: Global type 'Array' must have 1 type parameter(s).
+
+
 !!! error TS2318: Cannot find global type 'Boolean'.
 !!! error TS2318: Cannot find global type 'IArguments'.
 ==== tests/cases/compiler/noDefaultLib.ts (1 errors) ====

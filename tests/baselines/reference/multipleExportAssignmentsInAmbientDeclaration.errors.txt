@@ -1,3 +1,7 @@
+tests/cases/compiler/multipleExportAssignmentsInAmbientDeclaration.ts(4,5): error TS2308: A module cannot have more than one export assignment.
+tests/cases/compiler/multipleExportAssignmentsInAmbientDeclaration.ts(5,5): error TS2308: A module cannot have more than one export assignment.
+
+
 ==== tests/cases/compiler/multipleExportAssignmentsInAmbientDeclaration.ts (2 errors) ====
     declare module "m1" {
         var a: number

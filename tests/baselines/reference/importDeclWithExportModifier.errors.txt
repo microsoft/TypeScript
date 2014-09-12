@@ -1,3 +1,6 @@
+tests/cases/compiler/importDeclWithExportModifier.ts(5,1): error TS2305: Module 'x' has no exported member 'c'.
+
+
 ==== tests/cases/compiler/importDeclWithExportModifier.ts (1 errors) ====
     module x {
         interface c {

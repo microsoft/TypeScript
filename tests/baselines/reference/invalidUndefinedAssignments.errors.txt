@@ -1,3 +1,11 @@
+tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(4,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(5,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(9,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(14,1): error TS2304: Cannot find name 'I'.
+tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(17,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(21,1): error TS2364: Invalid left-hand side of assignment expression.
+
+
 ==== tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts (6 errors) ====
     var x: typeof undefined;
     

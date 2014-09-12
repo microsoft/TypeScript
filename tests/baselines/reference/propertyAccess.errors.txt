@@ -1,3 +1,15 @@
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(9,22): error TS2304: Cannot find name 'HTMLElement'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(10,22): error TS2304: Cannot find name 'HTMLDivElement'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(37,14): error TS2339: Property 'qqq' does not exist on type '{ 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(72,19): error TS2304: Cannot find name 'window'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(109,18): error TS2304: Cannot find name 'window'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(117,9): error TS2304: Cannot find name 'HTMLDivElement'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(121,9): error TS2304: Cannot find name 'HTMLDivElement'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(125,9): error TS2304: Cannot find name 'HTMLElement'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(129,9): error TS2304: Cannot find name 'HTMLElement'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(132,22): error TS2304: Cannot find name 'window'.
+
+
 ==== tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts (10 errors) ====
     enum Compass {
         North, South, East, West

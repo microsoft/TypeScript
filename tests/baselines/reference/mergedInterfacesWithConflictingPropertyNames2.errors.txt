@@ -1,3 +1,8 @@
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts(6,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts(15,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts(39,9): error TS2300: Duplicate identifier 'x'.
+
+
 ==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts (3 errors) ====
     interface A {
         x: string; // error

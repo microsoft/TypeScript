@@ -1,3 +1,15 @@
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(15,5): error TS2411: Property 'c' of type 'number' is not assignable to string index type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(16,5): error TS2411: Property 'd' of type 'string' is not assignable to string index type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(23,5): error TS2411: Property 'c' of type 'number' is not assignable to string index type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(24,5): error TS2411: Property 'd' of type 'string' is not assignable to string index type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(31,5): error TS2411: Property 'c' of type 'number' is not assignable to string index type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(32,5): error TS2411: Property 'd' of type 'string' is not assignable to string index type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(36,5): error TS2322: Type '{ [x: string]: typeof A; a: typeof A; b: typeof B; }' is not assignable to type '{ [x: string]: A; }':
+  Index signatures are incompatible:
+    Type 'typeof A' is not assignable to type 'A':
+      Property 'foo' is missing in type 'typeof A'.
+
+
 ==== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts (7 errors) ====
     // String indexer providing a constraint of a user defined type
     

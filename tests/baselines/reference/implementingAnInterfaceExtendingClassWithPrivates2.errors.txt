@@ -1,3 +1,33 @@
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(13,7): error TS2416: Class 'Bar2' incorrectly extends base class 'Foo':
+  Private property 'x' cannot be reimplemented.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(13,7): error TS2421: Class 'Bar2' incorrectly implements interface 'I':
+  Private property 'x' cannot be reimplemented.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(18,7): error TS2416: Class 'Bar3' incorrectly extends base class 'Foo':
+  Private property 'x' cannot be reimplemented.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(18,7): error TS2421: Class 'Bar3' incorrectly implements interface 'I':
+  Private property 'x' cannot be reimplemented.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(42,11): error TS2416: Class 'Bar2' incorrectly extends base class 'Foo':
+  Private property 'x' cannot be reimplemented.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(42,11): error TS2421: Class 'Bar2' incorrectly implements interface 'I':
+  Property 'z' is missing in type 'Bar2'.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(47,11): error TS2416: Class 'Bar3' incorrectly extends base class 'Foo':
+  Private property 'x' cannot be reimplemented.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(47,11): error TS2421: Class 'Bar3' incorrectly implements interface 'I':
+  Property 'z' is missing in type 'Bar3'.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(67,11): error TS2421: Class 'Bar' incorrectly implements interface 'I':
+  Property 'y' is missing in type 'Bar'.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(73,14): error TS2341: Property 'Foo.x' is inaccessible.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(74,16): error TS2339: Property 'y' does not exist on type 'Bar'.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(76,11): error TS2416: Class 'Bar2' incorrectly extends base class 'Foo':
+  Private property 'x' cannot be reimplemented.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(76,11): error TS2421: Class 'Bar2' incorrectly implements interface 'I':
+  Property 'y' is missing in type 'Bar2'.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2416: Class 'Bar3' incorrectly extends base class 'Foo':
+  Private property 'x' cannot be reimplemented.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2421: Class 'Bar3' incorrectly implements interface 'I':
+  Property 'y' is missing in type 'Bar3'.
+
+
 ==== tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts (15 errors) ====
     class Foo {
         private x: string;

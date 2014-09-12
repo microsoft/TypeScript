@@ -1,3 +1,10 @@
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(7,43): error TS2345: Argument of type '(ss: S) => T' is not assignable to parameter of type '(x: S) => S'.
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(10,29): error TS2345: Argument of type '(ss: S) => T' is not assignable to parameter of type '(x: S) => S'.
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(32,9): error TS2323: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(36,9): error TS2323: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(37,9): error TS2323: Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts (5 errors) ====
     class Chain<T> {
         constructor(public value: T) { }

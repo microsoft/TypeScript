@@ -1,3 +1,13 @@
+tests/cases/compiler/accessorsInAmbientContext.ts(4,13): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/accessorsInAmbientContext.ts(5,13): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/accessorsInAmbientContext.ts(7,20): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/accessorsInAmbientContext.ts(8,20): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/accessorsInAmbientContext.ts(13,9): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/accessorsInAmbientContext.ts(14,9): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/accessorsInAmbientContext.ts(16,16): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/accessorsInAmbientContext.ts(17,16): error TS1086: An accessor cannot be declared in an ambient context.
+
+
 ==== tests/cases/compiler/accessorsInAmbientContext.ts (8 errors) ====
     
     declare module M {

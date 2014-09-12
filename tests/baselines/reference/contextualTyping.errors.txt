@@ -1,3 +1,8 @@
+tests/cases/compiler/contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+tests/cases/compiler/contextualTyping.ts(207,10): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not assignable to type 'B':\n  Property 'x' is missing in type '{}'.
+
+
 ==== tests/cases/compiler/contextualTyping.ts (3 errors) ====
     // DEFAULT INTERFACES
     interface IFoo {

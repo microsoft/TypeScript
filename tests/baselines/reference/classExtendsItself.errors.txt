@@ -1,3 +1,8 @@
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItself.ts(1,7): error TS2310: Type 'C' recursively references itself as a base type.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItself.ts(3,7): error TS2310: Type 'D<T>' recursively references itself as a base type.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItself.ts(5,7): error TS2310: Type 'E<T>' recursively references itself as a base type.
+
+
 ==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItself.ts (3 errors) ====
     class C extends C { } // error
           ~

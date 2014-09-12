@@ -1,3 +1,8 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock3.ts(1,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock3.ts(2,4): error TS1129: Statement expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock3.ts(4,1): error TS1128: Declaration or statement expected.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock3.ts (3 errors) ====
     export function foo() {
     ~~~~~~~~~~~~~~~~~~~~~~~

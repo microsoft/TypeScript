@@ -1,3 +1,12 @@
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(5,5): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(31,12): error TS2353: Neither type 'SomeOther' nor type 'SomeBase' is assignable to the other:
+  Property 'p' is missing in type 'SomeOther'.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(35,15): error TS2353: Neither type 'SomeOther' nor type 'SomeDerived' is assignable to the other:
+  Property 'x' is missing in type 'SomeOther'.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(37,13): error TS2352: Neither type 'SomeDerived' nor type 'SomeOther' is assignable to the other.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(38,13): error TS2352: Neither type 'SomeBase' nor type 'SomeOther' is assignable to the other.
+
+
 ==== tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts (5 errors) ====
     // Function call whose argument is a 1 arg generic function call with explicit type arguments
     function fn1<T>(t: T) { }

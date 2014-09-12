@@ -1,3 +1,16 @@
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts(3,1): error TS2381: A signature with an implementation cannot use a string literal type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts(4,9): error TS2381: A signature with an implementation cannot use a string literal type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts(5,10): error TS2381: A signature with an implementation cannot use a string literal type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts(8,5): error TS2381: A signature with an implementation cannot use a string literal type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts(12,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts(13,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts(17,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts(18,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts(22,5): error TS2381: A signature with an implementation cannot use a string literal type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts(23,8): error TS2381: A signature with an implementation cannot use a string literal type.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts(24,8): error TS2381: A signature with an implementation cannot use a string literal type.
+
+
 ==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts (11 errors) ====
     // String literal types are only valid in overload signatures
     

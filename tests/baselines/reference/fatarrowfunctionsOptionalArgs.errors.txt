@@ -1,3 +1,14 @@
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(60,10): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(70,11): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(80,17): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(88,23): error TS1005: ';' expected.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(88,38): error TS1005: ';' expected.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(106,3): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(106,35): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(126,6): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(128,9): error TS1015: Parameter cannot have question mark and initializer.
+
+
 ==== tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts (9 errors) ====
     // valid
     

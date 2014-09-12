@@ -1,3 +1,33 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(9,1): error TS2323: Type 'F' is not assignable to type 'E'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(10,1): error TS2323: Type 'E' is not assignable to type 'F'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(29,9): error TS2323: Type 'E' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(30,9): error TS2323: Type 'E' is not assignable to type 'boolean'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(31,9): error TS2322: Type 'E' is not assignable to type 'Date':
+  Property 'toDateString' is missing in type 'Number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(33,9): error TS2323: Type 'E' is not assignable to type 'void'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(36,9): error TS2323: Type 'E' is not assignable to type '() => {}'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(37,9): error TS2322: Type 'E' is not assignable to type 'Function':
+  Property 'apply' is missing in type 'Number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(38,9): error TS2323: Type 'E' is not assignable to type '(x: number) => string'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(39,5): error TS2322: Type 'E' is not assignable to type 'C':
+  Property 'foo' is missing in type 'Number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(40,5): error TS2322: Type 'E' is not assignable to type 'I':
+  Property 'foo' is missing in type 'Number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(41,9): error TS2322: Type 'E' is not assignable to type 'number[]':
+  Property 'length' is missing in type 'Number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(42,9): error TS2322: Type 'E' is not assignable to type '{ foo: string; }':
+  Property 'foo' is missing in type 'Number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(43,9): error TS2323: Type 'E' is not assignable to type '<T>(x: T) => T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(45,9): error TS2322: Type 'E' is not assignable to type 'String':
+  Property 'charAt' is missing in type 'Number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(47,21): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(48,9): error TS2323: Type 'E' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(49,9): error TS2323: Type 'E' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(50,9): error TS2323: Type 'E' is not assignable to type 'V'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(51,13): error TS2323: Type 'E' is not assignable to type 'A'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(52,13): error TS2323: Type 'E' is not assignable to type 'B'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts (21 errors) ====
     // enums assignable to number, any, Object, errors unless otherwise noted
     

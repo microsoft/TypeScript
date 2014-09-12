@@ -1,3 +1,7 @@
+tests/cases/compiler/privateInterfaceProperties.ts(4,7): error TS2421: Class 'c1' incorrectly implements interface 'i1':
+  Private property 'name' cannot be reimplemented.
+
+
 ==== tests/cases/compiler/privateInterfaceProperties.ts (1 errors) ====
     interface i1 { name:string; }
      

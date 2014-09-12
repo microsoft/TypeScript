@@ -1,3 +1,9 @@
+tests/cases/compiler/operatorAddNullUndefined.ts(2,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+tests/cases/compiler/operatorAddNullUndefined.ts(3,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+tests/cases/compiler/operatorAddNullUndefined.ts(4,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+tests/cases/compiler/operatorAddNullUndefined.ts(5,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+
+
 ==== tests/cases/compiler/operatorAddNullUndefined.ts (4 errors) ====
     enum E { x }
     var x1 = null + null;

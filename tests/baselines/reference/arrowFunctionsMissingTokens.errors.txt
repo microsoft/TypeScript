@@ -1,3 +1,29 @@
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(3,16): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(5,22): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(7,17): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(9,36): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(11,42): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(16,23): error TS1005: '{' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(18,29): error TS1005: '{' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(20,24): error TS1005: '{' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(22,43): error TS1005: '{' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(24,49): error TS1005: '{' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(26,23): error TS1005: '{' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(30,23): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(32,29): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(34,24): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(36,43): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(38,49): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(40,23): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(41,5): error TS1128: Declaration or statement expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(42,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(45,14): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(47,21): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(51,35): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(53,41): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(49,14): error TS2304: Cannot find name 'x'.
+
+
 ==== tests/cases/compiler/arrowFunctionsMissingTokens.ts (24 errors) ====
     
     module missingArrowsWithCurly {

@@ -1,3 +1,17 @@
+tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(9,7): error TS1109: Expression expected.
+tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(10,11): error TS1109: Expression expected.
+tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(11,10): error TS1109: Expression expected.
+tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(12,10): error TS1109: Expression expected.
+tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(13,10): error TS1109: Expression expected.
+tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(16,2): error TS1109: Expression expected.
+tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(17,2): error TS1109: Expression expected.
+tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(18,2): error TS1109: Expression expected.
+tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(19,2): error TS1109: Expression expected.
+tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(20,2): error TS1109: Expression expected.
+tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(23,3): error TS1109: Expression expected.
+tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(23,5): error TS1109: Expression expected.
+
+
 ==== tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts (12 errors) ====
     var ANY: any;
     var BOOLEAN: boolean;

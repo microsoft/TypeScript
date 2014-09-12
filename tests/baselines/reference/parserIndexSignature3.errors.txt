@@ -1,3 +1,6 @@
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature3.ts(2,4): error TS1019: An index signature parameter cannot have a question mark.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature3.ts (1 errors) ====
     interface I {
       [a?]

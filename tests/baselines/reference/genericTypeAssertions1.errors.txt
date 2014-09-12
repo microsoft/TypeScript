@@ -1,3 +1,12 @@
+tests/cases/compiler/genericTypeAssertions1.ts(3,5): error TS2322: Type 'A<number>' is not assignable to type 'A<string>':
+  Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/genericTypeAssertions1.ts(4,5): error TS2322: Type 'A<A<number>>' is not assignable to type 'A<number>':
+  Type 'A<number>' is not assignable to type 'number'.
+tests/cases/compiler/genericTypeAssertions1.ts(4,21): error TS2353: Neither type 'A<number>' nor type 'A<A<number>>' is assignable to the other:
+  Type 'number' is not assignable to type 'A<number>':
+    Property 'foo' is missing in type 'Number'.
+
+
 ==== tests/cases/compiler/genericTypeAssertions1.ts (3 errors) ====
     class A<T> { foo(x: T) { }}
     var foo = new A<number>();

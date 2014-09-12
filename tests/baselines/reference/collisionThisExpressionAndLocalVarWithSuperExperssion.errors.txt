@@ -1,3 +1,7 @@
+tests/cases/compiler/collisionThisExpressionAndLocalVarWithSuperExperssion.ts(7,13): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndLocalVarWithSuperExperssion.ts(14,17): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+
+
 ==== tests/cases/compiler/collisionThisExpressionAndLocalVarWithSuperExperssion.ts (2 errors) ====
     class a {
         public foo() {

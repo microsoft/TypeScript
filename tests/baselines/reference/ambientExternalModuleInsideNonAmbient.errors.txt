@@ -1,3 +1,6 @@
+tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbient.ts(2,27): error TS2435: Ambient external modules cannot be nested in other modules.
+
+
 ==== tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbient.ts (1 errors) ====
     module M {
         export declare module "M" { }

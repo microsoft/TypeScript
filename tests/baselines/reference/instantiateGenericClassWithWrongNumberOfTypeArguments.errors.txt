@@ -1,3 +1,7 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithWrongNumberOfTypeArguments.ts(8,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithWrongNumberOfTypeArguments.ts(16,9): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithWrongNumberOfTypeArguments.ts (2 errors) ====
     // it is always an error to provide a type argument list whose count does not match the type parameter list
     // both of these attempts to construct a type is an error

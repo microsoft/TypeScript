@@ -1,3 +1,11 @@
+tests/cases/compiler/interfaceImplementation8.ts(12,7): error TS2421: Class 'C2' incorrectly implements interface 'i1':
+  Private property 'name' cannot be reimplemented.
+tests/cases/compiler/interfaceImplementation8.ts(21,7): error TS2421: Class 'C5' incorrectly implements interface 'i1':
+  Private property 'name' cannot be reimplemented.
+tests/cases/compiler/interfaceImplementation8.ts(22,7): error TS2421: Class 'C6' incorrectly implements interface 'i1':
+  Private property 'name' cannot be reimplemented.
+
+
 ==== tests/cases/compiler/interfaceImplementation8.ts (3 errors) ====
     /*
         1

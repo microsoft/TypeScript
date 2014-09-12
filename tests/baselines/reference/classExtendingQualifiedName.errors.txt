@@ -1,3 +1,6 @@
+tests/cases/compiler/classExtendingQualifiedName.ts(5,21): error TS2305: Module 'M' has no exported member 'C'.
+
+
 ==== tests/cases/compiler/classExtendingQualifiedName.ts (1 errors) ====
     module M {
         class C {

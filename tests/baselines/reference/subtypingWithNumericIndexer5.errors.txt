@@ -1,3 +1,18 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts(11,7): error TS2421: Class 'B' incorrectly implements interface 'A':
+  Index signatures are incompatible:
+    Type 'Base' is not assignable to type 'Derived':
+      Property 'bar' is missing in type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts(32,11): error TS2421: Class 'B3<T>' incorrectly implements interface 'A<T>':
+  Index signatures are incompatible:
+    Type 'Base' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts(36,11): error TS2421: Class 'B4<T>' incorrectly implements interface 'A<T>':
+  Index signatures are incompatible:
+    Type 'Derived' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts(40,11): error TS2421: Class 'B5<T>' incorrectly implements interface 'A<T>':
+  Index signatures are incompatible:
+    Type 'Derived2' is not assignable to type 'T'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts (4 errors) ====
     // Derived type indexer must be subtype of base type indexer
     

@@ -1,3 +1,10 @@
+tests/cases/compiler/privacyTopLevelInternalReferenceImportWithoutExport.ts(51,1): error TS4000: Import declaration 'im_private_c_private' is using private name 'm_private'.
+tests/cases/compiler/privacyTopLevelInternalReferenceImportWithoutExport.ts(52,1): error TS4000: Import declaration 'im_private_e_private' is using private name 'm_private'.
+tests/cases/compiler/privacyTopLevelInternalReferenceImportWithoutExport.ts(55,1): error TS4000: Import declaration 'im_private_i_private' is using private name 'm_private'.
+tests/cases/compiler/privacyTopLevelInternalReferenceImportWithoutExport.ts(56,1): error TS4000: Import declaration 'im_private_mi_private' is using private name 'm_private'.
+tests/cases/compiler/privacyTopLevelInternalReferenceImportWithoutExport.ts(57,1): error TS4000: Import declaration 'im_private_mu_private' is using private name 'm_private'.
+
+
 ==== tests/cases/compiler/privacyTopLevelInternalReferenceImportWithoutExport.ts (5 errors) ====
     
     // private elements

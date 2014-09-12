@@ -1,3 +1,11 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer.ts(32,11): error TS2416: Class 'B3<T>' incorrectly extends base class 'A<T>':
+  Index signatures are incompatible:
+    Type 'Derived' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer.ts(36,11): error TS2416: Class 'B4<T>' incorrectly extends base class 'A<T>':
+  Index signatures are incompatible:
+    Type 'Derived2' is not assignable to type 'T'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer.ts (2 errors) ====
     // Derived type indexer must be subtype of base type indexer
     

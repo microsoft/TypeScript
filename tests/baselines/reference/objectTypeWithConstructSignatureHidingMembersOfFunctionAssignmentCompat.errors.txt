@@ -1,3 +1,7 @@
+tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts(8,1): error TS2323: Type 'Object' is not assignable to type 'I'.
+tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts(14,1): error TS2323: Type 'Object' is not assignable to type 'new () => any'.
+
+
 ==== tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts (2 errors) ====
     interface I {
         new(): any;

@@ -1,3 +1,6 @@
+tests/cases/compiler/staticInstanceResolution5_1.ts(1,24): error TS2307: Cannot find external module 'staticInstanceResolution5_0.ts'.
+
+
 ==== tests/cases/compiler/staticInstanceResolution5_1.ts (1 errors) ====
     import WinJS = require('staticInstanceResolution5_0.ts');
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

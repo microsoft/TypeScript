@@ -1,3 +1,7 @@
+tests/cases/compiler/extendArray.ts(7,19): error TS2304: Cannot find name '_element'.
+tests/cases/compiler/extendArray.ts(7,32): error TS2304: Cannot find name '_element'.
+
+
 ==== tests/cases/compiler/extendArray.ts (2 errors) ====
     var a = [1,2];
     a.forEach(function (v,i,a) {});

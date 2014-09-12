@@ -1,3 +1,13 @@
+tests/cases/compiler/cloduleTest2.ts(4,13): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/cloduleTest2.ts(10,13): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/cloduleTest2.ts(18,7): error TS2339: Property 'bar' does not exist on type 'm3d'.
+tests/cases/compiler/cloduleTest2.ts(19,7): error TS2339: Property 'y' does not exist on type 'm3d'.
+tests/cases/compiler/cloduleTest2.ts(27,7): error TS2339: Property 'bar' does not exist on type 'm3d'.
+tests/cases/compiler/cloduleTest2.ts(28,7): error TS2339: Property 'y' does not exist on type 'm3d'.
+tests/cases/compiler/cloduleTest2.ts(33,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/cloduleTest2.ts(36,10): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/compiler/cloduleTest2.ts (8 errors) ====
     module T1 {
         module m3d { export var y = 2; }

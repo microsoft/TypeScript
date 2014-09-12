@@ -1,3 +1,10 @@
+tests/cases/compiler/interfaceWithImplements1.ts(3,16): error TS1005: '{' expected.
+tests/cases/compiler/interfaceWithImplements1.ts(3,27): error TS1005: ';' expected.
+tests/cases/compiler/interfaceWithImplements1.ts(3,32): error TS1005: ';' expected.
+tests/cases/compiler/interfaceWithImplements1.ts(3,16): error TS2304: Cannot find name 'implements'.
+tests/cases/compiler/interfaceWithImplements1.ts(3,27): error TS2304: Cannot find name 'IFoo'.
+
+
 ==== tests/cases/compiler/interfaceWithImplements1.ts (5 errors) ====
     interface IFoo { }
     

@@ -1,3 +1,8 @@
+tests/cases/compiler/implicitAnyDeclareVariablesWithoutTypeAndInit.ts(2,5): error TS7005: Variable 'x' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyDeclareVariablesWithoutTypeAndInit.ts(3,13): error TS7005: Variable 'foo' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyDeclareVariablesWithoutTypeAndInit.ts(4,15): error TS7006: Parameter 'k' implicitly has an 'any' type.
+
+
 ==== tests/cases/compiler/implicitAnyDeclareVariablesWithoutTypeAndInit.ts (3 errors) ====
     // this should be an error
     var x;                 // error at "x"

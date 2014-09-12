@@ -1,3 +1,7 @@
+tests/cases/compiler/moduleExports1.ts(13,6): error TS2304: Cannot find name 'module'.
+tests/cases/compiler/moduleExports1.ts(13,22): error TS2304: Cannot find name 'module'.
+
+
 ==== tests/cases/compiler/moduleExports1.ts (2 errors) ====
     export module TypeScript.Strasse.Street {
     	export class Rue {

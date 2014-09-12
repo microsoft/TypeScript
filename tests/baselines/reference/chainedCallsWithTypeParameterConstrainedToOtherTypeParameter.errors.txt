@@ -1,3 +1,6 @@
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts(19,59): error TS2345: Argument of type '(c: C) => B' is not assignable to parameter of type '(x: C) => C'.
+
+
 ==== tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts (1 errors) ====
     class Chain<T extends A> {
         constructor(public value: T) { }

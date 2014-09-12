@@ -1,3 +1,6 @@
+tests/cases/conformance/internalModules/DeclarationMerging/module.ts(2,19): error TS2433: A module declaration cannot be in a different file from a class or function with which it is merged
+
+
 ==== tests/cases/conformance/internalModules/DeclarationMerging/class.ts (0 errors) ====
     module X.Y {
         export class Point {

@@ -1,3 +1,6 @@
+tests/cases/compiler/es6MemberScoping.ts(9,21): error TS2304: Cannot find name 'store'.
+
+
 ==== tests/cases/compiler/es6MemberScoping.ts (1 errors) ====
     
     

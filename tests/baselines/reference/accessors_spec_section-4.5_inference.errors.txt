@@ -1,3 +1,17 @@
+tests/cases/compiler/accessors_spec_section-4.5_inference.ts(6,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_inference.ts(7,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_inference.ts(9,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_inference.ts(10,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_inference.ts(13,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_inference.ts(14,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_inference.ts(16,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_inference.ts(17,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_inference.ts(19,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_inference.ts(20,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_inference.ts(22,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/accessors_spec_section-4.5_inference.ts(23,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/accessors_spec_section-4.5_inference.ts (12 errors) ====
     class A { }
     class B extends A { }

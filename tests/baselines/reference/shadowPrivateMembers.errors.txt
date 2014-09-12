@@ -1,3 +1,7 @@
+tests/cases/compiler/shadowPrivateMembers.ts(2,7): error TS2416: Class 'derived' incorrectly extends base class 'base':
+  Private property 'n' cannot be reimplemented.
+
+
 ==== tests/cases/compiler/shadowPrivateMembers.ts (1 errors) ====
     class base { private n() {} }
     class derived extends base { private n() {} }

@@ -1,3 +1,9 @@
+tests/cases/conformance/scanner/ecmascript5/scannerClass2.ts(3,18): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+tests/cases/conformance/scanner/ecmascript5/scannerClass2.ts(3,43): error TS2304: Cannot find name 'ILogger'.
+tests/cases/conformance/scanner/ecmascript5/scannerClass2.ts(4,37): error TS2304: Cannot find name 'ILogger'.
+tests/cases/conformance/scanner/ecmascript5/scannerClass2.ts(5,18): error TS2339: Property '_information' does not exist on type 'LoggerAdapter'.
+
+
 ==== tests/cases/conformance/scanner/ecmascript5/scannerClass2.ts (4 errors) ====
     
     

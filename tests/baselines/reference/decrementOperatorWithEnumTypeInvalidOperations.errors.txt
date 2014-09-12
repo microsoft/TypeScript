@@ -1,3 +1,15 @@
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(7,25): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(8,25): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(10,23): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(11,23): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(14,25): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(15,23): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(18,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(19,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(21,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(22,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+
+
 ==== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts (10 errors) ====
     // -- operator on enum type
     

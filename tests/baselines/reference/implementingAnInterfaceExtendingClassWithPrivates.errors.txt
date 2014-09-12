@@ -1,3 +1,13 @@
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts(9,7): error TS2421: Class 'Bar' incorrectly implements interface 'I':
+  Property 'y' is missing in type 'Bar'.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts(12,7): error TS2421: Class 'Bar2' incorrectly implements interface 'I':
+  Property 'x' is missing in type 'Bar2'.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts(16,7): error TS2421: Class 'Bar3' incorrectly implements interface 'I':
+  Private property 'x' cannot be reimplemented.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts(21,7): error TS2421: Class 'Bar4' incorrectly implements interface 'I':
+  Private property 'x' cannot be reimplemented.
+
+
 ==== tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts (4 errors) ====
     class Foo {
         private x: string;

@@ -1,3 +1,8 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement2.ts(7,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement2.ts(8,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement2.ts(4,1): error TS2393: Duplicate function implementation.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement2.ts (3 errors) ====
     function foo() {
     }

@@ -1,3 +1,27 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer2.ts(14,1): error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived; }':
+  Index signatures are incompatible:
+    Type 'Base' is not assignable to type 'Derived':
+      Property 'bar' is missing in type 'Base'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer2.ts(18,1): error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived2; }':
+  Index signatures are incompatible:
+    Type 'Base' is not assignable to type 'Derived2':
+      Property 'baz' is missing in type 'Base'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer2.ts(32,9): error TS2322: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>':
+  Index signatures are incompatible:
+    Type 'Derived' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer2.ts(33,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: number]: Derived; }':
+  Index signatures are incompatible:
+    Type 'T' is not assignable to type 'Derived':
+      Property 'bar' is missing in type 'Base'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer2.ts(36,9): error TS2322: Type '{ [x: number]: Derived2; }' is not assignable to type 'A<T>':
+  Index signatures are incompatible:
+    Type 'Derived2' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer2.ts(37,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: number]: Derived2; }':
+  Index signatures are incompatible:
+    Type 'T' is not assignable to type 'Derived2':
+      Property 'baz' is missing in type 'Base'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer2.ts (6 errors) ====
     // Derived type indexer must be subtype of base type indexer
     

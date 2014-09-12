@@ -1,3 +1,8 @@
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parserTernaryAndCommaOperators1.ts(1,1): error TS2304: Cannot find name 'b'.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parserTernaryAndCommaOperators1.ts(1,16): error TS2304: Cannot find name 'c'.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parserTernaryAndCommaOperators1.ts(1,21): error TS2304: Cannot find name 'd'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parserTernaryAndCommaOperators1.ts (3 errors) ====
     b.src ? 1 : 2, c && d;
     ~

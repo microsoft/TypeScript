@@ -1,3 +1,8 @@
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(8,21): error TS1013: Catch clause parameter cannot have a type annotation.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(9,21): error TS1013: Catch clause parameter cannot have a type annotation.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(10,21): error TS1013: Catch clause parameter cannot have a type annotation.
+
+
 ==== tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts (3 errors) ====
     function fn() {
         try {

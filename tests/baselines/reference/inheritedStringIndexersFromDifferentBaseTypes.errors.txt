@@ -1,3 +1,11 @@
+tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes.ts(13,11): error TS2429: Interface 'E' incorrectly extends interface 'D':
+  Index signatures are incompatible:
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes.ts(28,11): error TS2429: Interface 'E2' incorrectly extends interface 'D2':
+  Index signatures are incompatible:
+    Type 'number' is not assignable to type 'string'.
+
+
 ==== tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes.ts (2 errors) ====
     // string indexer tests
     interface A {

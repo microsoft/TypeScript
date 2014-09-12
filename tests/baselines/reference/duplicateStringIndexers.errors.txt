@@ -1,3 +1,11 @@
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(6,9): error TS2374: Duplicate string index signature.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(11,9): error TS2374: Duplicate string index signature.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(16,9): error TS2374: Duplicate string index signature.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(21,9): error TS2374: Duplicate string index signature.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(26,9): error TS2374: Duplicate string index signature.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(31,9): error TS2374: Duplicate string index signature.
+
+
 ==== tests/cases/conformance/types/members/duplicateStringIndexers.ts (6 errors) ====
     // it is an error to have duplicate index signatures of the same kind in a type
     

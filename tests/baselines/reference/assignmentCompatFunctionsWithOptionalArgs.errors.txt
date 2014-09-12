@@ -1,3 +1,11 @@
+tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts(1,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts(4,5): error TS2345: Argument of type '{ id: number; name: boolean; }' is not assignable to parameter of type '{ id: number; name?: string; }'.
+  Types of property 'name' are incompatible:
+    Type 'boolean' is not assignable to type 'string'.
+tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts(5,5): error TS2345: Argument of type '{ name: string; }' is not assignable to parameter of type '{ id: number; name?: string; }'.
+  Property 'id' is missing in type '{ name: string; }'.
+
+
 ==== tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts (3 errors) ====
     function foo(x: { id: number; name?: string; }): void;
              ~~~

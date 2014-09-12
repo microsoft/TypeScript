@@ -1,3 +1,6 @@
+tests/cases/compiler/collisionThisExpressionAndNameResolution.ts(8,25): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+
+
 ==== tests/cases/compiler/collisionThisExpressionAndNameResolution.ts (1 errors) ====
     var console : {
         log(message: any);

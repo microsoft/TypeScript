@@ -1,3 +1,7 @@
+tests/cases/compiler/publicMemberImplementedAsPrivateInDerivedClass.ts(4,7): error TS2421: Class 'Foo' incorrectly implements interface 'Qux':
+  Private property 'Bar' cannot be reimplemented.
+
+
 ==== tests/cases/compiler/publicMemberImplementedAsPrivateInDerivedClass.ts (1 errors) ====
     interface Qux {
      Bar: number;

@@ -1,3 +1,125 @@
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(12,14): error TS2365: Operator '<' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(13,14): error TS2365: Operator '>' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(14,14): error TS2365: Operator '<=' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(15,14): error TS2365: Operator '>=' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(16,14): error TS2365: Operator '==' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(17,14): error TS2365: Operator '!=' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(18,14): error TS2365: Operator '===' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(19,14): error TS2365: Operator '!==' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(22,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(23,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(24,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'string'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(25,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(26,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(27,16): error TS2365: Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(28,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'any[]'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(30,16): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(31,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(32,16): error TS2365: Operator '<' cannot be applied to types 'string' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(33,16): error TS2365: Operator '<' cannot be applied to types 'void' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(34,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(35,16): error TS2365: Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(36,16): error TS2365: Operator '<' cannot be applied to types 'any[]' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(39,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(40,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(41,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'string'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(42,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(43,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(44,16): error TS2365: Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(45,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'any[]'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(47,16): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(48,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(49,16): error TS2365: Operator '<' cannot be applied to types 'string' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(50,16): error TS2365: Operator '<' cannot be applied to types 'void' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(51,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(52,16): error TS2365: Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(53,16): error TS2365: Operator '<' cannot be applied to types 'any[]' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(56,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(57,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(58,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'string'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(59,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(60,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(61,16): error TS2365: Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(62,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'any[]'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(64,16): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(65,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(66,16): error TS2365: Operator '<' cannot be applied to types 'string' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(67,16): error TS2365: Operator '<' cannot be applied to types 'void' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(68,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(69,16): error TS2365: Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(70,16): error TS2365: Operator '<' cannot be applied to types 'any[]' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(73,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(74,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(75,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'string'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(76,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(77,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(78,16): error TS2365: Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(79,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'any[]'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(81,16): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(82,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(83,16): error TS2365: Operator '<' cannot be applied to types 'string' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(84,16): error TS2365: Operator '<' cannot be applied to types 'void' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(85,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(86,16): error TS2365: Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(87,16): error TS2365: Operator '<' cannot be applied to types 'any[]' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(90,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(91,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(92,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'string'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(93,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(94,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(95,16): error TS2365: Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(96,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'any[]'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(98,16): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(99,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(100,16): error TS2365: Operator '<' cannot be applied to types 'string' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(101,16): error TS2365: Operator '<' cannot be applied to types 'void' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(102,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(103,16): error TS2365: Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(104,16): error TS2365: Operator '<' cannot be applied to types 'any[]' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(107,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(108,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(109,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'string'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(110,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(111,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(112,16): error TS2365: Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(113,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'any[]'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(115,16): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(116,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(117,16): error TS2365: Operator '<' cannot be applied to types 'string' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(118,16): error TS2365: Operator '<' cannot be applied to types 'void' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(119,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(120,16): error TS2365: Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(121,16): error TS2365: Operator '<' cannot be applied to types 'any[]' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(124,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(125,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(126,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'string'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(127,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(128,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(129,16): error TS2365: Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(130,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'any[]'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(132,16): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(133,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(134,16): error TS2365: Operator '<' cannot be applied to types 'string' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(135,16): error TS2365: Operator '<' cannot be applied to types 'void' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(136,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(137,16): error TS2365: Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(138,16): error TS2365: Operator '<' cannot be applied to types 'any[]' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(141,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(142,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(143,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'string'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(144,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(145,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(146,16): error TS2365: Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(147,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'any[]'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(149,16): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(150,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(151,16): error TS2365: Operator '<' cannot be applied to types 'string' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(152,16): error TS2365: Operator '<' cannot be applied to types 'void' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(153,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(154,16): error TS2365: Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(155,16): error TS2365: Operator '<' cannot be applied to types 'any[]' and 'T'.
+
+
 ==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts (120 errors) ====
     enum E { a, b, c }
     

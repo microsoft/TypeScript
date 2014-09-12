@@ -1,3 +1,13 @@
+tests/cases/compiler/superPropertyAccess.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/superPropertyAccess.ts(9,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/superPropertyAccess.ts(22,15): error TS2340: Only public methods of the base class are accessible via the 'super' keyword
+tests/cases/compiler/superPropertyAccess.ts(24,9): error TS2341: Property 'MyBase.p1' is inaccessible.
+tests/cases/compiler/superPropertyAccess.ts(26,24): error TS2340: Only public methods of the base class are accessible via the 'super' keyword
+tests/cases/compiler/superPropertyAccess.ts(28,24): error TS2340: Only public methods of the base class are accessible via the 'super' keyword
+tests/cases/compiler/superPropertyAccess.ts(32,15): error TS2340: Only public methods of the base class are accessible via the 'super' keyword
+tests/cases/compiler/superPropertyAccess.ts(34,23): error TS2340: Only public methods of the base class are accessible via the 'super' keyword
+
+
 ==== tests/cases/compiler/superPropertyAccess.ts (8 errors) ====
     
     class MyBase {

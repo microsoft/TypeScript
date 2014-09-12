@@ -1,3 +1,8 @@
+tests/cases/conformance/internalModules/DeclarationMerging/module.ts(2,19): error TS2433: A module declaration cannot be in a different file from a class or function with which it is merged
+tests/cases/conformance/internalModules/DeclarationMerging/simple.ts(13,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
+tests/cases/conformance/internalModules/DeclarationMerging/test.ts(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
+
+
 ==== tests/cases/conformance/internalModules/DeclarationMerging/function.ts (0 errors) ====
     module A {
         export function Point() {

@@ -1,3 +1,13 @@
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(22,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(27,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(53,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(61,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(91,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(96,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(122,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(130,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts (8 errors) ====
     class MyTestClass {
         private canary: number;

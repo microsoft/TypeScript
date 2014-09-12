@@ -1,3 +1,10 @@
+tests/cases/compiler/interfaceImplementation1.ts(12,7): error TS2421: Class 'C1' incorrectly implements interface 'I1':
+  Private property 'iObj' cannot be reimplemented.
+tests/cases/compiler/interfaceImplementation1.ts(12,7): error TS2421: Class 'C1' incorrectly implements interface 'I2':
+  Private property 'iFn' cannot be reimplemented.
+tests/cases/compiler/interfaceImplementation1.ts(34,5): error TS2323: Type '() => C2' is not assignable to type 'I4'.
+
+
 ==== tests/cases/compiler/interfaceImplementation1.ts (3 errors) ====
     interface I1 {
         iObj:{ };

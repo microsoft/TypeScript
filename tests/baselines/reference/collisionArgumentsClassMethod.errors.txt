@@ -1,3 +1,9 @@
+tests/cases/compiler/collisionArgumentsClassMethod.ts(2,27): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+tests/cases/compiler/collisionArgumentsClassMethod.ts(5,17): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+tests/cases/compiler/collisionArgumentsClassMethod.ts(13,23): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+tests/cases/compiler/collisionArgumentsClassMethod.ts(18,16): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+
+
 ==== tests/cases/compiler/collisionArgumentsClassMethod.ts (4 errors) ====
     class c1 {
         public foo(i: number, ...arguments) { //arguments is error

@@ -1,3 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parserNotHexLiteral1.ts(2,1): error TS2304: Cannot find name 'console'.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parserNotHexLiteral1.ts(5,1): error TS2304: Cannot find name 'console'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parserNotHexLiteral1.ts (2 errors) ====
     var x = {e0: 'cat', x0: 'dog'};
     console.info (x.x0);

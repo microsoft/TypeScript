@@ -1,3 +1,9 @@
+tests/cases/compiler/inheritedModuleMembersForClodule.ts(7,7): error TS2418: Class static side 'typeof D' incorrectly extends base class static side 'typeof C':
+  Types of property 'foo' are incompatible:
+    Type '() => number' is not assignable to type '() => string':
+      Type 'number' is not assignable to type 'string'.
+
+
 ==== tests/cases/compiler/inheritedModuleMembersForClodule.ts (1 errors) ====
     class C {
         static foo(): string {

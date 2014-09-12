@@ -1,3 +1,6 @@
+tests/cases/compiler/thisInModule.ts(3,5): error TS2331: 'this' cannot be referenced in a module body.
+
+
 ==== tests/cases/compiler/thisInModule.ts (1 errors) ====
     module myMod {
         var x;

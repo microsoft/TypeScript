@@ -1,3 +1,34 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(6,13): error TS2367: No best common type exists between 'T' and 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(7,13): error TS2367: No best common type exists between 'U' and 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(10,14): error TS2367: No best common type exists between 'T' and 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(11,14): error TS2367: No best common type exists between 'V' and 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(14,14): error TS2367: No best common type exists between 'V' and 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(15,14): error TS2367: No best common type exists between 'U' and 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(26,14): error TS2367: No best common type exists between 'V' and 'Foo'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(27,14): error TS2367: No best common type exists between 'Foo' and 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(45,7): error TS2416: Class 'D3<T, U, V>' incorrectly extends base class 'B1<Foo>':
+  Types of property 'foo' are incompatible:
+    Type 'V' is not assignable to type 'Foo':
+      Property 'foo' is missing in type '{}'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(47,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'Foo'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(55,7): error TS2416: Class 'D5<T, U, V>' incorrectly extends base class 'B1<T>':
+  Types of property 'foo' are incompatible:
+    Type 'U' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(57,5): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(60,7): error TS2416: Class 'D6<T, U, V>' incorrectly extends base class 'B1<T>':
+  Types of property 'foo' are incompatible:
+    Type 'V' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(62,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(65,7): error TS2416: Class 'D7<T, U, V>' incorrectly extends base class 'B1<U>':
+  Types of property 'foo' are incompatible:
+    Type 'T' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(67,5): error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(75,7): error TS2416: Class 'D9<T, U, V>' incorrectly extends base class 'B1<U>':
+  Types of property 'foo' are incompatible:
+    Type 'V' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(77,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts (18 errors) ====
     // checking whether other types are subtypes of type parameters with constraints
     

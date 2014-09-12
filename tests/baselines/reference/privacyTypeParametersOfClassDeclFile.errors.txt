@@ -1,3 +1,9 @@
+tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(7,51): error TS4002: Type parameter 'T' of exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(43,61): error TS4001: Type parameter 'T' of exported class has or is using name 'privateModule.publicClassInPrivateModule' from private module 'privateModule'.
+tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(62,55): error TS4002: Type parameter 'T' of exported class has or is using private name 'privateClassInPublicModule'.
+tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(98,65): error TS4001: Type parameter 'T' of exported class has or is using name 'privateModule.publicClassInPrivateModule' from private module 'privateModule'.
+
+
 ==== tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts (4 errors) ====
     class privateClass {
     }

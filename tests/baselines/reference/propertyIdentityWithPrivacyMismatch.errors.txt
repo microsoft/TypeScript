@@ -1,3 +1,7 @@
+tests/cases/compiler/propertyIdentityWithPrivacyMismatch_1.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'Foo', but here has type 'Foo'.
+tests/cases/compiler/propertyIdentityWithPrivacyMismatch_1.ts(13,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'Foo1', but here has type 'Foo2'.
+
+
 ==== tests/cases/compiler/propertyIdentityWithPrivacyMismatch_1.ts (2 errors) ====
     ///<reference path='propertyIdentityWithPrivacyMismatch_0.ts'/>
     import m1 = require('mod1');

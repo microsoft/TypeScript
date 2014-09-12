@@ -1,3 +1,6 @@
+tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModule1.ts(1,19): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModule1.ts (1 errors) ====
         export module CompilerDiagnostics {
                       ~~~~~~~~~~~~~~~~~~~

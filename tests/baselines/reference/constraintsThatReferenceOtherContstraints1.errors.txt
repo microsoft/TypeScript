@@ -1,3 +1,7 @@
+tests/cases/compiler/constraintsThatReferenceOtherContstraints1.ts(3,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/constraintsThatReferenceOtherContstraints1.ts(4,29): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/compiler/constraintsThatReferenceOtherContstraints1.ts (2 errors) ====
     interface Object { }
     

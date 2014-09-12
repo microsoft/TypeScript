@@ -1,3 +1,7 @@
+tests/cases/compiler/classOverloadForFunction2.ts(1,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/classOverloadForFunction2.ts(2,7): error TS2300: Duplicate identifier 'bar'.
+
+
 ==== tests/cases/compiler/classOverloadForFunction2.ts (2 errors) ====
     function bar(): string;
              ~~~

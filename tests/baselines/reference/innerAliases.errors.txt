@@ -1,3 +1,7 @@
+tests/cases/compiler/innerAliases.ts(19,8): error TS2305: Module 'D' has no exported member 'inner'.
+tests/cases/compiler/innerAliases.ts(21,11): error TS2339: Property 'inner' does not exist on type 'typeof D'.
+
+
 ==== tests/cases/compiler/innerAliases.ts (2 errors) ====
     module A {
         export module B {

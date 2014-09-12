@@ -1,3 +1,6 @@
+tests/cases/conformance/externalModules/foo_1.ts(2,17): error TS2345: Argument of type 'boolean' is not assignable to parameter of type '{ a: string; b: number; }'.
+
+
 ==== tests/cases/conformance/externalModules/foo_1.ts (1 errors) ====
     import foo = require("./foo_0");
     var x = new foo(true); // Should error

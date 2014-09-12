@@ -1,3 +1,11 @@
+tests/cases/compiler/implementsClauseAlreadySeen.ts(4,22): error TS1005: '{' expected.
+tests/cases/compiler/implementsClauseAlreadySeen.ts(4,33): error TS1005: ';' expected.
+tests/cases/compiler/implementsClauseAlreadySeen.ts(4,35): error TS1005: ';' expected.
+tests/cases/compiler/implementsClauseAlreadySeen.ts(5,11): error TS1005: ';' expected.
+tests/cases/compiler/implementsClauseAlreadySeen.ts(4,22): error TS2304: Cannot find name 'implements'.
+tests/cases/compiler/implementsClauseAlreadySeen.ts(5,5): error TS2304: Cannot find name 'baz'.
+
+
 ==== tests/cases/compiler/implementsClauseAlreadySeen.ts (6 errors) ====
     class C {
         

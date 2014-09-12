@@ -1,3 +1,9 @@
+tests/cases/compiler/declareAlreadySeen.ts(2,13): error TS1030: 'declare' modifier already seen.
+tests/cases/compiler/declareAlreadySeen.ts(3,13): error TS1030: 'declare' modifier already seen.
+tests/cases/compiler/declareAlreadySeen.ts(5,13): error TS1030: 'declare' modifier already seen.
+tests/cases/compiler/declareAlreadySeen.ts(7,13): error TS1030: 'declare' modifier already seen.
+
+
 ==== tests/cases/compiler/declareAlreadySeen.ts (4 errors) ====
     module M {
         declare declare var x;

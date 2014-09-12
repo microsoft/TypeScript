@@ -1,3 +1,7 @@
+tests/cases/compiler/recursiveBaseCheck3.ts(1,7): error TS2310: Type 'A<T>' recursively references itself as a base type.
+tests/cases/compiler/recursiveBaseCheck3.ts(4,9): error TS2339: Property 'blah' does not exist on type 'C<{}>'.
+
+
 ==== tests/cases/compiler/recursiveBaseCheck3.ts (2 errors) ====
     class A<T> extends C<T> { }
           ~

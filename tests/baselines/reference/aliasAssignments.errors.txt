@@ -1,3 +1,8 @@
+tests/cases/compiler/aliasAssignments_1.ts(3,1): error TS2322: Type 'number' is not assignable to type 'typeof "tests/cases/compiler/aliasAssignments_moduleA"':
+  Property 'someClass' is missing in type 'Number'.
+tests/cases/compiler/aliasAssignments_1.ts(5,1): error TS2323: Type 'typeof "tests/cases/compiler/aliasAssignments_moduleA"' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/aliasAssignments_1.ts (2 errors) ====
     import moduleA = require("aliasAssignments_moduleA");
     var x = moduleA;

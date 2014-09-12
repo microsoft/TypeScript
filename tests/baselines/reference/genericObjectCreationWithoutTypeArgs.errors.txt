@@ -1,3 +1,7 @@
+tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts(6,26): error TS1109: Expression expected.
+tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts(6,19): error TS2304: Cannot find name 'number'.
+
+
 ==== tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts (2 errors) ====
     class SS<T>{
     

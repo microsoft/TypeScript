@@ -1,3 +1,11 @@
+tests/cases/compiler/indexerAssignability.ts(5,1): error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: string]: string; }':
+  Index signature is missing in type '{ [x: number]: string; }'.
+tests/cases/compiler/indexerAssignability.ts(6,1): error TS2322: Type '{}' is not assignable to type '{ [x: string]: string; }':
+  Index signature is missing in type '{}'.
+tests/cases/compiler/indexerAssignability.ts(8,1): error TS2322: Type '{}' is not assignable to type '{ [x: number]: string; }':
+  Index signature is missing in type '{}'.
+
+
 ==== tests/cases/compiler/indexerAssignability.ts (3 errors) ====
     var a: { [s: string]: string; };
     var b: { [n: number]: string; };

@@ -1,3 +1,9 @@
+tests/cases/compiler/assignToEnum.ts(2,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/assignToEnum.ts(3,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/assignToEnum.ts(4,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/assignToEnum.ts(5,1): error TS2364: Invalid left-hand side of assignment expression.
+
+
 ==== tests/cases/compiler/assignToEnum.ts (4 errors) ====
     enum A { foo, bar }
     A = undefined;  // invalid LHS

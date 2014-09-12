@@ -1,3 +1,14 @@
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(9,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(10,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(11,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(26,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(27,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(28,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(33,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(34,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(35,1): error TS2347: Untyped function calls may not accept type arguments.
+
+
 ==== tests/cases/conformance/expressions/functionCalls/functionCalls.ts (9 errors) ====
     
     // Invoke function call on value of type 'any' with no type arguments

@@ -1,3 +1,7 @@
+tests/cases/compiler/interfaceMayNotBeExtendedWitACall.ts(3,29): error TS1005: ',' expected.
+tests/cases/compiler/interfaceMayNotBeExtendedWitACall.ts(3,32): error TS1005: '=>' expected.
+
+
 ==== tests/cases/compiler/interfaceMayNotBeExtendedWitACall.ts (2 errors) ====
     interface color {}
     

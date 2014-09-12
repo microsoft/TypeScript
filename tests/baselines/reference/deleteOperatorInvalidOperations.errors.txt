@@ -1,3 +1,8 @@
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts(5,20): error TS1005: ',' expected.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts(5,27): error TS1109: Expression expected.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts(8,23): error TS1109: Expression expected.
+
+
 ==== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts (3 errors) ====
     // Unary operator delete
     var ANY;

@@ -1,3 +1,11 @@
+tests/cases/compiler/augmentedTypesFunction.ts(3,5): error TS2300: Duplicate identifier 'y1'.
+tests/cases/compiler/augmentedTypesFunction.ts(7,1): error TS2393: Duplicate function implementation.
+tests/cases/compiler/augmentedTypesFunction.ts(10,5): error TS2300: Duplicate identifier 'y2a'.
+tests/cases/compiler/augmentedTypesFunction.ts(14,7): error TS2300: Duplicate identifier 'y3'.
+tests/cases/compiler/augmentedTypesFunction.ts(17,7): error TS2300: Duplicate identifier 'y3a'.
+tests/cases/compiler/augmentedTypesFunction.ts(21,6): error TS2300: Duplicate identifier 'y4'.
+
+
 ==== tests/cases/compiler/augmentedTypesFunction.ts (6 errors) ====
     // function then var
     function y1() { }

@@ -1,3 +1,7 @@
+tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts(3,16): error TS2300: Duplicate identifier 'Point'.
+tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts(12,8): error TS2304: Cannot find name 'm'.
+
+
 ==== tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts (2 errors) ====
     module M {
         export class Point { x: number; y: number }

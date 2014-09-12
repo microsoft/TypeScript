@@ -1,3 +1,7 @@
+tests/cases/compiler/augmentedTypesInterface.ts(16,7): error TS2300: Duplicate identifier 'i2'.
+tests/cases/compiler/augmentedTypesInterface.ts(26,6): error TS2300: Duplicate identifier 'i3'.
+
+
 ==== tests/cases/compiler/augmentedTypesInterface.ts (2 errors) ====
     // interface then interface
     

@@ -1,3 +1,9 @@
+tests/cases/compiler/unspecializedConstraints.ts(84,44): error TS2304: Cannot find name 'TypeParameter'.
+tests/cases/compiler/unspecializedConstraints.ts(127,28): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/unspecializedConstraints.ts(135,26): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/unspecializedConstraints.ts(144,24): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/compiler/unspecializedConstraints.ts (4 errors) ====
     module ts {
         interface Map<T> {

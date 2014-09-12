@@ -1,3 +1,6 @@
+tests/cases/compiler/declFileObjectLiteralWithOnlySetter.ts(5,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/declFileObjectLiteralWithOnlySetter.ts (1 errors) ====
     
     function /*1*/makePoint(x: number) { 

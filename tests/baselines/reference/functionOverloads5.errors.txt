@@ -1,3 +1,6 @@
+tests/cases/compiler/functionOverloads5.ts(2,10): error TS2385: Overload signatures must all be public or private.
+
+
 ==== tests/cases/compiler/functionOverloads5.ts (1 errors) ====
     class baz { 
       public foo();

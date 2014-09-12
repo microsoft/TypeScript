@@ -1,3 +1,29 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts(17,15): error TS2429: Interface 'B' incorrectly extends interface 'A':
+  Types of property 'bar' are incompatible:
+    Type 'Base' is not assignable to type 'Derived':
+      Property 'bar' is missing in type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts(27,15): error TS2429: Interface 'B2' incorrectly extends interface 'A2':
+  Types of property '2.0' are incompatible:
+    Type 'Base' is not assignable to type 'Derived':
+      Property 'bar' is missing in type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts(37,15): error TS2429: Interface 'B3' incorrectly extends interface 'A3':
+  Types of property ''2.0'' are incompatible:
+    Type 'Base' is not assignable to type 'Derived':
+      Property 'bar' is missing in type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts(49,15): error TS2429: Interface 'B' incorrectly extends interface 'A':
+  Types of property 'bar' are incompatible:
+    Type 'Base' is not assignable to type 'Derived':
+      Property 'bar' is missing in type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts(59,15): error TS2429: Interface 'B2' incorrectly extends interface 'A2':
+  Types of property '2.0' are incompatible:
+    Type 'Base' is not assignable to type 'Derived':
+      Property 'bar' is missing in type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts(69,15): error TS2429: Interface 'B3' incorrectly extends interface 'A3':
+  Types of property ''2.0'' are incompatible:
+    Type 'Base' is not assignable to type 'Derived':
+      Property 'bar' is missing in type 'Base'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts (6 errors) ====
     interface Base {
         foo: string;

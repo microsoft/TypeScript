@@ -1,3 +1,12 @@
+tests/cases/compiler/augmentedTypesEnum.ts(3,5): error TS2300: Duplicate identifier 'e1111'.
+tests/cases/compiler/augmentedTypesEnum.ts(7,10): error TS2300: Duplicate identifier 'e2'.
+tests/cases/compiler/augmentedTypesEnum.ts(10,5): error TS2300: Duplicate identifier 'e3'.
+tests/cases/compiler/augmentedTypesEnum.ts(14,7): error TS2300: Duplicate identifier 'e4'.
+tests/cases/compiler/augmentedTypesEnum.ts(18,11): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+tests/cases/compiler/augmentedTypesEnum.ts(21,12): error TS2300: Duplicate identifier 'One'.
+tests/cases/compiler/augmentedTypesEnum.ts(21,12): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+
+
 ==== tests/cases/compiler/augmentedTypesEnum.ts (7 errors) ====
     // enum then var
     enum e1111 { One }
