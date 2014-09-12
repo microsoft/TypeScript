@@ -4340,7 +4340,7 @@ module ts {
                 var widenedType = getWidenedType(exprType, /*supressNoImplicitAnyErrors*/ true);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
                     checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other_Colon, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
-                } 
+                }
             }
             return targetType;
         }
