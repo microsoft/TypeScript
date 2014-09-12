@@ -692,7 +692,6 @@ module ts {
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
         InDoubleQuoteStringLiteral,
-        EndingWithDotToken,
     }
 
     export enum TokenClass {
@@ -3502,9 +3501,6 @@ module ts {
                     text = "/*\n" + text;
                     offset = 3;
                     break;
-                case EndOfLineState.EndingWithDotToken:
-                    lastToken = SyntaxKind.DotToken;
-                    break;
             }
 
             var result: ClassificationResult = {
@@ -3571,9 +3567,6 @@ module ts {
                                 ? EndOfLineState.InDoubleQuoteStringLiteral
                                 : EndOfLineState.InSingleQuoteStringLiteral;
                         }
-                    }
-                    else if (token === SyntaxKind.DotToken) {
-                        result.finalLexState = EndOfLineState.EndingWithDotToken;
                     }
                 }
             }
