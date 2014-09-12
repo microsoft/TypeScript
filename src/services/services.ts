@@ -1574,7 +1574,7 @@ module ts {
                     // invalid identifer name. We need to check if whatever was inside the quotes is actually a valid identifier name.
                     displayName = displayName.substring(1, displayName.length - 1);
                 }
-
+                
                 var isValid = isIdentifierStart(displayName.charCodeAt(0), target);
                 for (var i = 1, n = displayName.length; isValid && i < n; i++) {
                     isValid = isValid && isIdentifierPart(displayName.charCodeAt(i), target);
@@ -1748,6 +1748,36 @@ module ts {
                 return !(declaration && declaration.flags & NodeFlags.Private && containingClass !== declaration.parent);
             }
 
+            function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
+                if (!existingMembers || existingMembers.length === 0) {
+                    return contextualMemberSymbols;
+                }
+
+                var existingMemberNames: Map<boolean> = {};
+                forEach(existingMembers, m => {
+                    if (m.kind !== SyntaxKind.PropertyAssignment) {
+                        // Ignore ommited expressions for missing members in the object literal
+                        return;
+                    }
+
+                    if (position <= m.getEnd() && position >= m.getStart()) {
+                        // If this is the current item we are editing right now, do not filter it out
+                        return;
+                    }
+
+                    existingMemberNames[m.name.text] = true;
+                });
+
+                var filteredMembers: Symbol[] = [];
+                forEach(contextualMemberSymbols, s=> {
+                    if (!existingMemberNames[s.name]) {
+                        filteredMembers.push(s);
+                    }
+                });
+
+                return filteredMembers;
+            }
+
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -1855,34 +1885,23 @@ module ts {
 
                 // Object literal expression, look up possible property names from contextual type
                 if (containingObjectLiteral) {
-                    var searchPosition = Math.min(position, TypeScript.end(containingObjectLiteral));
-                    var path = TypeScript.ASTHelpers.getAstAtPosition(sourceUnit, searchPosition);
-                    // Get the object literal node
+                    var objectLiteral = mappedNode.kind === SyntaxKind.ObjectLiteral ? <ObjectLiteral>mappedNode : <ObjectLiteral>getAncestor(mappedNode, SyntaxKind.ObjectLiteral);
 
-                    while (node && node.kind() !== TypeScript.SyntaxKind.ObjectLiteralExpression) {
-                        node = node.parent;
-                    }
-
-                    if (!node || node.kind() !== TypeScript.SyntaxKind.ObjectLiteralExpression) {
-                        // AST Path look up did not result in the same node as Fidelity Syntax Tree look up.
-                        // Once we remove AST this will no longer be a problem.
-                        return null;
-                    }
+                    Debug.assert(objectLiteral);
 
                     isMemberCompletion = true;
 
-                    //// Try to get the object members form contextual typing
-                    //var contextualMembers = compiler.getContextualMembersFromAST(node, document);
-                    //if (contextualMembers && contextualMembers.symbols && contextualMembers.symbols.length > 0) {
-                    //    // get existing members
-                    //    var existingMembers = compiler.getVisibleMemberSymbolsFromAST(node, document);
+                    var contextualType = typeInfoResolver.getContextualType(objectLiteral);
+                    if (!contextualType) {
+                        return undefined;
+                    }
 
-                    //    // Add filtterd items to the completion list
-                    //    getCompletionEntriesFromSymbols({
-                    //        symbols: filterContextualMembersList(contextualMembers.symbols, existingMembers, filename, position),
-                    //        enclosingScopeSymbol: contextualMembers.enclosingScopeSymbol
-                    //    }, entries);
-                    //}
+                    var contextualTypeMembers = typeInfoResolver.getPropertiesOfType(contextualType);
+                    if (contextualTypeMembers && contextualTypeMembers.length > 0) {
+                        // Add filtterd items to the completion list
+                        var filteredMembers = filterContextualMembersList(contextualTypeMembers, objectLiteral.properties);
+                        getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
+                    }
                 }
                 // Get scope memebers
                 else {
