@@ -51,7 +51,7 @@ module ts.formatting {
             var indentation: number;
 
             while (current) {
-                if (!isToken(current) && isPositionBelongToNode(current, position, sourceFile)) {
+                if (isPositionBelongToNode(current, position, sourceFile)) {
 
                     currentStartLine = getStartLineForNode(current, sourceFile);
 
@@ -67,6 +67,10 @@ module ts.formatting {
                     }
 
                     break;
+                }
+                var customIndentation = getCustomIndentationForListItem(current, sourceFile);
+                if (customIndentation !== -1) {
+                    return customIndentation;
                 }
 
                 previous = current;
@@ -85,6 +89,11 @@ module ts.formatting {
             // walk upwards and collect indentations for pairs of parent-child nodes
             // indentation is not added if parent and child nodes start on the same line or if parent is IfStatement and child starts on the same line with 'else clause'
             while (parent) {
+                var customIndentation = getCustomIndentationForListItem(current, sourceFile);
+                if (customIndentation !== -1) {
+                    return customIndentation + indentation;
+                }
+
                 parentStartLine = sourceFile.getLineAndCharacterFromPosition(parent.getStart(sourceFile)).line;
                 var increaseIndentation = 
                     isNodeContentIndented(parent, current) && 
@@ -166,45 +175,34 @@ module ts.formatting {
             }
         }
 
-        // preserve indentation for list items
-        // - first list item is either on the same line with the parent: foo(a... . (in this case it is not indented) or on the different line (then it is indented with base level + delta)
-        // - subsequent list items inherit indentation for its sibling on the left when these siblings are also on the new line.
-        // 1. foo(a, b
-        //        $ - indentation = base level + delta 
-        // 2. foo (a,
-        //           b, c, d,
-        //           $ - same indentation with first child node on the previous line
-        // NOTE: indentation for list items spans from the beginning of the line to the first non-whitespace character
-        //        /*test*/ x,
-        //        $  <-- indentation for a new item will be here
-        function getCustomIndentationForListItem(leftSibling: Node, sourceFile: SourceFile): number {
-            if (leftSibling.parent) {
-                switch (leftSibling.parent.kind) {
+        function getCustomIndentationForListItem(node: Node, sourceFile: SourceFile): number {
+            if (node.parent) {
+                switch (node.parent.kind) {
                     case SyntaxKind.ObjectLiteral:
-                        return getCustomIndentationFromList((<ObjectLiteral>leftSibling.parent).properties);
+                        return getCustomIndentationFromList((<ObjectLiteral>node.parent).properties);
                     case SyntaxKind.TypeLiteral:
-                        return getCustomIndentationFromList((<TypeLiteralNode>leftSibling.parent).members);
+                        return getCustomIndentationFromList((<TypeLiteralNode>node.parent).members);
                     case SyntaxKind.ArrayLiteral:
-                        return getCustomIndentationFromList((<ArrayLiteral>leftSibling.parent).elements);
+                        return getCustomIndentationFromList((<ArrayLiteral>node.parent).elements);
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
                     case SyntaxKind.Method:
                     case SyntaxKind.CallSignature:
                     case SyntaxKind.ConstructSignature:
-                        if ((<SignatureDeclaration>leftSibling.parent).typeParameters && leftSibling.end < (<SignatureDeclaration>leftSibling.parent).typeParameters.end) {
-                            return getCustomIndentationFromList((<SignatureDeclaration>leftSibling.parent).typeParameters);
+                        if ((<SignatureDeclaration>node.parent).typeParameters && node.end < (<SignatureDeclaration>node.parent).typeParameters.end) {
+                            return getCustomIndentationFromList((<SignatureDeclaration>node.parent).typeParameters);
                         }
                         else {
-                            return getCustomIndentationFromList((<SignatureDeclaration>leftSibling.parent).parameters);
+                            return getCustomIndentationFromList((<SignatureDeclaration>node.parent).parameters);
                         }
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.CallExpression:
-                        if ((<CallExpression>leftSibling.parent).typeArguments && leftSibling.end < (<CallExpression>leftSibling.parent).typeArguments.end) {
-                            return getCustomIndentationFromList((<CallExpression>leftSibling.parent).typeArguments);
+                        if ((<CallExpression>node.parent).typeArguments && node.end < (<CallExpression>node.parent).typeArguments.end) {
+                            return getCustomIndentationFromList((<CallExpression>node.parent).typeArguments);
                         }
                         else {
-                            return getCustomIndentationFromList((<CallExpression>leftSibling.parent).arguments);
+                            return getCustomIndentationFromList((<CallExpression>node.parent).arguments);
                         }
 
                         break;
@@ -214,9 +212,9 @@ module ts.formatting {
             return -1;
 
             function getCustomIndentationFromList(list: Node[]): number {
-                var index = indexOf(list, leftSibling);
+                var index = indexOf(list, node);
                 if (index !== -1) {
-                    var lineAndCol = sourceFile.getLineAndCharacterFromPosition(leftSibling.getStart(sourceFile));
+                    var lineAndCol = sourceFile.getLineAndCharacterFromPosition(node.getStart(sourceFile));
                     for (var i = index - 1; i >= 0; --i) {
                         var prevLineAndCol =  sourceFile.getLineAndCharacterFromPosition(list[i].getStart(sourceFile));
                         if (lineAndCol.line !== prevLineAndCol.line) {
@@ -227,7 +225,7 @@ module ts.formatting {
                                     return i;
                                 }
                             }
-                            // code is unreachable because the rance that we check above includes at least one non-whitespace character at the very end
+                            // code is unreachable because the range that we check above includes at least one non-whitespace character at the very end
                             Debug.fail("Unreachable code")
 
                         }
