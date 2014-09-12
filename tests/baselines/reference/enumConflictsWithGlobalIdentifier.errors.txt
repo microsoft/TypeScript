@@ -3,9 +3,9 @@
         IgnoreRulesSpecific = 0,
     }
     var x = IgnoreRulesSpecific.
+                               ~
+!!! Identifier expected.
             ~~~~~~~~~~~~~~~~~~~
 !!! Cannot find name 'IgnoreRulesSpecific'.
     var y = Position.IgnoreRulesSpecific;
-        ~
-!!! ',' expected.
     

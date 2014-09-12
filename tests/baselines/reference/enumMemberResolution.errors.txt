@@ -3,10 +3,10 @@
         IgnoreRulesSpecific = 0
     }
     var x = IgnoreRulesSpecific. // error
+                               ~
+!!! Identifier expected.
             ~~~~~~~~~~~~~~~~~~~
 !!! Cannot find name 'IgnoreRulesSpecific'.
     var y = 1;
-        ~
-!!! ',' expected.
     var z = Position2.IgnoreRulesSpecific; // no error
     
