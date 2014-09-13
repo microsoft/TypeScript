@@ -75,7 +75,7 @@ module ts {
 
     var scanner: Scanner = createScanner(ScriptTarget.ES5);
 
-    var emptyArray: any [] = [];
+    var emptyArray: any[] = [];
 
     function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
         var node = <NodeObject> new (getNodeConstructor(kind))();
@@ -259,7 +259,7 @@ module ts {
         getProperty(propertyName: string): Symbol {
             return this.checker.getPropertyOfType(this, propertyName);
         }
-        getApparentProperties(): Symbol[]{
+        getApparentProperties(): Symbol[] {
             return this.checker.getAugmentedPropertiesOfApparentType(this);
         }
         getCallSignatures(): Signature[] {
@@ -302,7 +302,7 @@ module ts {
         }
     }
 
-     var incrementalParse: IncrementalParse = TypeScript.IncrementalParser.parse;
+    var incrementalParse: IncrementalParse = TypeScript.IncrementalParser.parse;
 
     class SourceFileObject extends NodeObject implements SourceFile {
         public filename: string;
@@ -430,6 +430,8 @@ module ts {
         getSemanticDiagnostics(fileName: string): Diagnostic[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
+        getSyntacticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[];
+
         getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
@@ -465,6 +467,32 @@ module ts {
         //getSyntaxTree(fileName: string): TypeScript.SyntaxTree;
 
         dispose(): void;
+    }
+
+    class ClassificationTypeNames {
+        public static comment = "comment";
+        public static identifier = "identifier";
+        public static keyword = "keyword";
+        public static numericLiteral = "number";
+        public static operator = "operator";
+        public static stringLiteral = "string";
+        public static whiteSpace = "whitespace";
+        public static text = "text";
+
+        public static punctuation = "punctuation";
+
+        public static className = "class name";
+        public static enumName = "enum name";
+        public static interfaceName = "interface name";
+        public static moduleName = "module name";
+        public static typeParameterName = "type parameter name";
+    }
+
+    export class ClassifiedSpan {
+        constructor(public textSpan: TypeScript.TextSpan,
+                    public classificationType: string) {
+
+        }
     }
 
     export class NavigationBarItem {
@@ -3124,6 +3152,140 @@ module ts {
             return new TypeScript.Services.NavigationBarItemGetter().getItems(syntaxTree.sourceUnit());
         }
 
+        function getSyntacticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[] {
+            // doesn't use compiler - no need to synchronize with host
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getCurrentSourceFile(fileName);
+
+            var result: ClassifiedSpan[] = [];
+            processElement(sourceFile.getSourceUnit());
+
+            return result;
+
+            function classifyTrivia(trivia: TypeScript.ISyntaxTrivia) {
+                if (span.intersectsWith(trivia.fullStart(), trivia.fullWidth())) {
+                    result.push(new ClassifiedSpan(
+                        new TypeScript.TextSpan(trivia.fullStart(), trivia.fullWidth()),
+                        ClassificationTypeNames.comment));
+                }
+            }
+
+            function classifyTriviaList(trivia: TypeScript.ISyntaxTriviaList) {
+                for (var i = 0, n = trivia.count(); i < n; i++) {
+                    classifyTrivia(trivia.syntaxTriviaAt(i));
+                }
+            }
+
+            function classifyToken(token: TypeScript.ISyntaxToken) {
+                if (token.hasLeadingComment()) {
+                    classifyTriviaList(token.leadingTrivia());
+                }
+
+                if (TypeScript.width(token) > 0) {
+                    var span = new TypeScript.TextSpan(TypeScript.start(token), TypeScript.width(token));
+                    var type = classifyTokenType(token);
+
+                    result.push(new ClassifiedSpan(span, type));
+                }
+
+                if (token.hasTrailingComment()) {
+                    classifyTriviaList(token.trailingTrivia());
+                }
+            }
+
+            function classifyTokenType(token: TypeScript.ISyntaxToken): string {
+                var tokenKind = token.kind();
+                if (TypeScript.SyntaxFacts.isAnyKeyword(token.kind())) {
+                    return ClassificationTypeNames.keyword;
+                }
+
+                // Special case < and >  If they appear in a generic context they are punctation,
+                // not operators.
+                if (tokenKind === TypeScript.SyntaxKind.LessThanToken || tokenKind === TypeScript.SyntaxKind.GreaterThanToken) {
+                    var tokenParentKind = token.parent.kind();
+                    if (tokenParentKind === TypeScript.SyntaxKind.TypeArgumentList ||
+                        tokenParentKind === TypeScript.SyntaxKind.TypeParameterList) {
+
+                        return ClassificationTypeNames.punctuation;
+                    }
+                }
+
+                if (TypeScript.SyntaxFacts.isBinaryExpressionOperatorToken(tokenKind) ||
+                    TypeScript.SyntaxFacts.isPrefixUnaryExpressionOperatorToken(tokenKind)) {
+                    return ClassificationTypeNames.operator;
+                }
+                else if (TypeScript.SyntaxFacts.isAnyPunctuation(tokenKind)) {
+                    return ClassificationTypeNames.punctuation;
+                }
+                else if (tokenKind === TypeScript.SyntaxKind.NumericLiteral) {
+                    return ClassificationTypeNames.numericLiteral;
+                }
+                else if (tokenKind === TypeScript.SyntaxKind.StringLiteral) {
+                    return ClassificationTypeNames.stringLiteral;
+                }
+                else if (tokenKind === TypeScript.SyntaxKind.RegularExpressionLiteral) {
+                    // TODO: we shoudl get another classification type for these literals.
+                    return ClassificationTypeNames.stringLiteral;
+                }
+                else if (tokenKind === TypeScript.SyntaxKind.IdentifierName) {
+                    var current: TypeScript.ISyntaxNodeOrToken = token;
+                    var parent = token.parent;
+                    while (parent.kind() === TypeScript.SyntaxKind.QualifiedName) {
+                        current = parent;
+                        parent = parent.parent;
+                    }
+
+                    switch (parent.kind()) {
+                        case TypeScript.SyntaxKind.ClassDeclaration:
+                            if ((<TypeScript.ClassDeclarationSyntax>parent).identifier === token) {
+                                return ClassificationTypeNames.className;
+                            }
+                            return;
+                        case TypeScript.SyntaxKind.TypeParameter:
+                            if ((<TypeScript.TypeParameterSyntax>parent).identifier === token) {
+                                return ClassificationTypeNames.typeParameterName;
+                            }
+                            return;
+                        case TypeScript.SyntaxKind.InterfaceDeclaration:
+                            if ((<TypeScript.InterfaceDeclarationSyntax>parent).identifier === token) {
+                                return ClassificationTypeNames.interfaceName;
+                            }
+                            return;
+                        case TypeScript.SyntaxKind.EnumDeclaration:
+                            if ((<TypeScript.EnumDeclarationSyntax>parent).identifier === token) {
+                                return ClassificationTypeNames.enumName;
+                            }
+                            return;
+                        case TypeScript.SyntaxKind.ModuleDeclaration:
+                            if ((<TypeScript.ModuleDeclarationSyntax>parent).name === current) {
+                                return ClassificationTypeNames.moduleName;
+                            }
+                            return;
+                        default:
+                            return ClassificationTypeNames.text;
+                    }
+                }
+            }
+
+            function processElement(element: TypeScript.ISyntaxElement) {
+                // Ignore nodes that don't intersect the original span to classify.
+                if (!TypeScript.isShared(element) && span.intersectsWith(TypeScript.fullStart(element), TypeScript.fullWidth(element))) {
+                    for (var i = 0, n = TypeScript.childCount(element); i < n; i++) {
+                        var child = TypeScript.childAt(element, i);
+                        if (child) {
+                            if (TypeScript.isToken(child)) {
+                                classifyToken(<TypeScript.ISyntaxToken>child);
+                            }
+                            else {
+                                // Recurse into our child nodes.
+                                processElement(child);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         function getOutliningSpans(filename: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -3371,6 +3533,7 @@ module ts {
             getSyntacticDiagnostics: getSyntacticDiagnostics,
             getSemanticDiagnostics: getSemanticDiagnostics,
             getCompilerOptionsDiagnostics: getCompilerOptionsDiagnostics,
+            getSyntacticClassifications: getSyntacticClassifications,
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
