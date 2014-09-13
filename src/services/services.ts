@@ -431,6 +431,7 @@ module ts {
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
         getSyntacticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[];
+        getSemanticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[];
 
         getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
@@ -3152,6 +3153,55 @@ module ts {
             return new TypeScript.Services.NavigationBarItemGetter().getItems(syntaxTree.sourceUnit());
         }
 
+        function getSemanticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[] {
+            synchronizeHostData();
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+
+            var sourceFile = getSourceFile(fileName);
+
+            var result: ClassifiedSpan[] = [];
+            processNode(sourceFile.getSourceFile());
+
+            return result;
+
+            function classifySymbol(symbol: Symbol) {
+                var flags = symbol.getFlags();
+
+                if (flags & SymbolFlags.Class) {
+                    return ClassificationTypeNames.className;
+                }
+                else if (flags & SymbolFlags.Enum) {
+                    return ClassificationTypeNames.enumName;
+                }
+                else if (flags & SymbolFlags.Interface) {
+                    return ClassificationTypeNames.interfaceName;
+                }
+                else if (flags & SymbolFlags.Module) {
+                    return ClassificationTypeNames.moduleName;
+                }
+                else if (flags & SymbolFlags.TypeParameter) {
+                    return ClassificationTypeNames.typeParameterName;
+                }
+            }
+
+            function processNode(node: Node) {
+                if (span.intersectsWith(node.getStart(), node.getWidth())) {
+                    if (node.kind === SyntaxKind.Identifier && node.getWidth()) {
+                        var symbol = typeInfoResolver.getSymbolInfo(node);
+                        if (symbol) {
+                            var span = new TypeScript.TextSpan(node.getStart(), node.getWidth());
+                            var type = classifySymbol(symbol);
+                            if (type) {
+                                result.push(new ClassifiedSpan(span, type));
+                            }
+                        }
+                    }
+
+                    forEachChild(node, processNode);
+                }
+            }
+        }
+
         function getSyntacticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[] {
             // doesn't use compiler - no need to synchronize with host
             fileName = TypeScript.switchToForwardSlashes(fileName);
@@ -3184,8 +3234,9 @@ module ts {
                 if (TypeScript.width(token) > 0) {
                     var span = new TypeScript.TextSpan(TypeScript.start(token), TypeScript.width(token));
                     var type = classifyTokenType(token);
-
-                    result.push(new ClassifiedSpan(span, type));
+                    if (type) {
+                        result.push(new ClassifiedSpan(span, type));
+                    }
                 }
 
                 if (token.hasTrailingComment()) {
@@ -3534,6 +3585,7 @@ module ts {
             getSemanticDiagnostics: getSemanticDiagnostics,
             getCompilerOptionsDiagnostics: getCompilerOptionsDiagnostics,
             getSyntacticClassifications: getSyntacticClassifications,
+            getSemanticClassifications: getSemanticClassifications,
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,

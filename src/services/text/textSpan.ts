@@ -1,7 +1,6 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
-
     export interface ISpan {
         start(): number;
         end(): number;

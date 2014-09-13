@@ -488,6 +488,15 @@ module ts {
                 });
         }
 
+        public getSemanticClassifications(fileName: string, start: number, length: number): string {
+            return this.forwardJSONCall(
+                "getSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                () => {
+                    var classifications = this.languageService.getSemanticClassifications(fileName, new TypeScript.TextSpan(start, length));
+                    return classifications;
+                });
+        }
+
         public getSyntacticDiagnostics(fileName: string): string {
             return this.forwardJSONCall(
                 "getSyntacticDiagnostics('" + fileName + "')",
