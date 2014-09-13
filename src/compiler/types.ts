@@ -221,7 +221,9 @@ module ts {
         FirstTypeNode = TypeReference,
         LastTypeNode = ArrayType,
         FirstPunctuation= OpenBraceToken,
-        LastPunctuation = CaretEqualsToken
+        LastPunctuation = CaretEqualsToken,
+        FirstToken = EndOfFileToken,
+        LastToken = StringKeyword
     }
 
     export enum NodeFlags {

@@ -43,7 +43,7 @@ module ts.formatting {
             var indentation: number;
 
             while (current) {
-                if (isPositionBelongToNode(current, position, sourceFile) && isNodeContentIndented(current, previous)) {
+                if (positionBelongsToNode(current, position, sourceFile) && nodeContentIsIndented(current, previous)) {
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
                     if (discardInitialIndentationIfNextTokenIsOpenOrCloseBrace(precedingToken, current, lineAtPosition, sourceFile)) {
@@ -88,7 +88,7 @@ module ts.formatting {
                 parentStart = sourceFile.getLineAndCharacterFromPosition(parent.getStart(sourceFile));
                 var parentAndChildShareLine = 
                     parentStart.line === currentStart.line || 
-                    isChildStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
+                    childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
 
                 // try to fetch actual indentation for current node from source text
                 var actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
@@ -97,7 +97,7 @@ module ts.formatting {
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                var increaseIndentation = isNodeContentIndented(parent, current) && !parentAndChildShareLine;
+                var increaseIndentation = nodeContentIsIndented(parent, current) && !parentAndChildShareLine;
 
                 if (increaseIndentation) {
                     indentation += options.indentSpaces;
@@ -153,6 +153,7 @@ module ts.formatting {
             }
         }
 
+        // function returns -1 if indentation cannot be determined
         function getActualIndentationForListItemBeforeComma(commaToken: Node, sourceFile: SourceFile, options: TypeScript.FormattingOptions): number {
             // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
             var precedingListItem = findPrecedingListItem(commaToken);
@@ -166,6 +167,7 @@ module ts.formatting {
             return -1;
         }
 
+        // function returns -1 if actual indentation for node should not be used (i.e because node is nested expression)
         function getActualIndentationForNode(current: Node, parent: Node, currentLineAndChar: LineAndCharacter, parentAndChildShareLine: boolean, sourceFile: SourceFile, options: TypeScript.FormattingOptions): number {
             var useActualIndentation = 
                 (isDeclaration(current) || isStatement(current)) &&
@@ -227,11 +229,11 @@ module ts.formatting {
             return children[commaIndex - 1];
         }
 
-        function isPositionBelongToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
+        function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
             return candidate.end > position || !isCompletedNode(candidate, sourceFile);
         }
 
-        function isChildStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: Node, childStartLine: number, sourceFile: SourceFile): boolean {
+        function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: Node, childStartLine: number, sourceFile: SourceFile): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
                 var elseKeyword = forEach(parent.getChildren(), c => c.kind === SyntaxKind.ElseKeyword && c);
                 Debug.assert(elseKeyword);
@@ -404,10 +406,10 @@ module ts.formatting {
         }
 
         function isToken(n: Node): boolean {
-            return n.kind < SyntaxKind.Missing;
+            return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
         }
 
-        function isNodeContentIndented(parent: Node, child: Node): boolean {
+        function nodeContentIsIndented(parent: Node, child: Node): boolean {
             switch (parent.kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
@@ -456,7 +458,7 @@ module ts.formatting {
 
         /// checks if node ends with 'expectedLastToken'.
         /// If child at position 'length - 1' is 'SemicolonToken' it is skipped and 'expectedLastToken' is compared with child at position 'length - 2'.
-        function isNodeEndWith(n: Node, expectedLastToken: SyntaxKind, sourceFile: SourceFile): boolean {
+        function nodeEndsWith(n: Node, expectedLastToken: SyntaxKind, sourceFile: SourceFile): boolean {
             var children = n.getChildren(sourceFile);
             if (children.length) {
                 var last = children[children.length - 1];
@@ -470,7 +472,7 @@ module ts.formatting {
             return false;
         }
 
-        // this function is alwasy called when position of the cursor is located after the node
+        // this function is always called when position of the cursor is located after the node
         function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
             switch (n.kind) {
                 case SyntaxKind.ClassDeclaration:
@@ -483,11 +485,11 @@ module ts.formatting {
                 case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.SwitchStatement:
-                    return isNodeEndWith(n, SyntaxKind.CloseBraceToken, sourceFile);
+                    return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);
                 case SyntaxKind.ParenExpression:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.CallExpression:
-                    return isNodeEndWith(n, SyntaxKind.CloseParenToken, sourceFile);
+                    return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.Method:
@@ -503,7 +505,7 @@ module ts.formatting {
                 case SyntaxKind.ExpressionStatement:
                     return isCompletedNode((<ExpressionStatement>n).expression, sourceFile);
                 case SyntaxKind.ArrayLiteral:
-                    return isNodeEndWith(n, SyntaxKind.CloseBracketToken, sourceFile);
+                    return nodeEndsWith(n, SyntaxKind.CloseBracketToken, sourceFile);
                 case SyntaxKind.Missing:
                     return false;
                 case SyntaxKind.CaseClause:
@@ -516,8 +518,8 @@ module ts.formatting {
                     // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
                     var hasWhileKeyword = forEach(n.getChildren(), c => c.kind === SyntaxKind.WhileKeyword && c);
                     if(hasWhileKeyword) {
-                        return isNodeEndWith(n, SyntaxKind.CloseParenToken, sourceFile);
-                    }                    
+                        return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
+                    }
                     return isCompletedNode((<DoStatement>n).statement, sourceFile);                    
                 default:
                     return true;
