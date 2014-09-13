@@ -10,7 +10,6 @@
 ////f./**/
 
 goTo.marker();
-debug.printCompletionListMembers();
 verify.memberListCount(2);
 verify.memberListContains('pubMeth', '() => void');
 verify.memberListContains('pubProp', 'number');

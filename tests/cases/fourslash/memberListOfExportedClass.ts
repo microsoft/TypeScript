@@ -11,6 +11,5 @@
 ////c./**/ // test on c.
 
 goTo.marker();
-debug.printCompletionListMembers();
 verify.memberListCount(1);
 verify.memberListContains('pub', 'number');
