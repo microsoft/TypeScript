@@ -28,7 +28,9 @@ module MsPortal.Util.TemplateEngine {
 //// [crashRegressionTest.js]
 var MsPortal;
 (function (MsPortal) {
+    var Util;
     (function (Util) {
+        var TemplateEngine;
         (function (TemplateEngine) {
             "use strict";
             var StringTemplate = (function () {
@@ -48,8 +50,6 @@ var MsPortal;
                 return TemplateStorage;
             })();
             TemplateEngine.TemplateStorage = TemplateStorage;
-        })(Util.TemplateEngine || (Util.TemplateEngine = {}));
-        var TemplateEngine = Util.TemplateEngine;
-    })(MsPortal.Util || (MsPortal.Util = {}));
-    var Util = MsPortal.Util;
+        })(TemplateEngine = Util.TemplateEngine || (Util.TemplateEngine = {}));
+    })(Util = MsPortal.Util || (MsPortal.Util = {}));
 })(MsPortal || (MsPortal = {}));

@@ -4,7 +4,7 @@
 var n = { w: null, x: '', y: () => { }, z: 32 };
 >n : { w: any; x: string; y: () => void; z: number; }
 >{ w: null, x: '', y: () => { }, z: 32 } : { w: null; x: string; y: () => void; z: number; }
->w : any
+>w : null
 >x : string
 >y : () => void
 >() => { } : () => void

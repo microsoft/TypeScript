@@ -1,4 +1,4 @@
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserStatementIsNotAMemberVariableDeclaration1.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserStatementIsNotAMemberVariableDeclaration1.ts (2 errors) ====
     return {
     ~~~~~~
 !!! A 'return' statement can only be used within a function body.
@@ -7,6 +7,8 @@
     
         // 'private' should not be considered a member variable here.
         private[key] = value;
+        ~~~~~~~
+!!! Cannot find name 'private'.
     
       }
     

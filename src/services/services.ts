@@ -1312,20 +1312,6 @@ module ts {
         return node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).func === node;
     }
 
-    function isAnyFunction(node: Node): boolean {
-        switch (node.kind) {
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.ArrowFunction:
-            case SyntaxKind.Method:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.Constructor:
-                return true;
-        }
-        return false;
-    }
-
     function isNameOfFunctionDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
             isAnyFunction(node.parent) && (<FunctionDeclaration>node.parent).name === node;
@@ -2148,7 +2134,6 @@ module ts {
             return result;
         }
 
-        /// Find references
         function getOccurrencesAtPosition(filename: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
@@ -2160,11 +2145,23 @@ module ts {
                 return undefined;
             }
 
-            if (node.kind === SyntaxKind.Identifier || isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
+            if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
+                isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
                 return getReferencesForNode(node, [sourceFile]);
             }
 
             switch (node.kind) {
+                case SyntaxKind.IfKeyword:
+                case SyntaxKind.ElseKeyword:
+                    if (hasKind(node.parent, SyntaxKind.IfStatement)) {
+                        return getIfElseOccurrences(<IfStatement>node.parent);
+                    }
+                    break;
+                case SyntaxKind.ReturnKeyword:
+                    if (hasKind(node.parent, SyntaxKind.ReturnStatement)) {
+                        return getReturnOccurrences(<ReturnStatement>node.parent);
+                    }
+                    break;
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
@@ -2188,9 +2185,90 @@ module ts {
                         return getBreakStatementOccurences(<BreakOrContinueStatement>node.parent);
                     }
                     break;
+                case SyntaxKind.ConstructorKeyword:
+                    if (hasKind(node.parent, SyntaxKind.Constructor)) {
+                        return getConstructorOccurrences(<ConstructorDeclaration>node.parent);
+                    }
+                    break;
             }
 
             return undefined;
+
+            function getIfElseOccurrences(ifStatement: IfStatement): ReferenceEntry[] {
+                var keywords: Node[] = [];
+
+                // Traverse upwards through all parent if-statements linked by their else-branches.
+                while (hasKind(ifStatement.parent, SyntaxKind.IfStatement) && (<IfStatement>ifStatement.parent).elseStatement === ifStatement) {
+                    ifStatement = <IfStatement>ifStatement.parent;
+                }
+
+                // Now traverse back down through the else branches, aggregating if/else keywords of if-statements.
+                while (ifStatement) {
+                    var children = ifStatement.getChildren();
+                    pushKeywordIf(keywords, children[0], SyntaxKind.IfKeyword);
+
+                    // Generally the 'else' keyword is second-to-last, so we traverse backwards.
+                    for (var i = children.length - 1; i >= 0; i--) {
+                        if (pushKeywordIf(keywords, children[i], SyntaxKind.ElseKeyword)) {
+                            break;
+                        }
+                    }
+
+                    if (!hasKind(ifStatement.elseStatement, SyntaxKind.IfStatement)) {
+                        break
+                    }
+                    
+                    ifStatement = <IfStatement>ifStatement.elseStatement;
+                }
+
+                var result: ReferenceEntry[] = [];
+
+                // We'd like to highlight else/ifs together if they are only separated by whitespace
+                // (i.e. the keywords are separated by no comments, no newlines).
+                for (var i = 0; i < keywords.length; i++) {
+                    if (keywords[i].kind === SyntaxKind.ElseKeyword && i < keywords.length - 1) {
+                        var elseKeyword = keywords[i];
+                        var ifKeyword = keywords[i + 1]; // this *should* always be an 'if' keyword.
+
+                        var shouldHighlightNextKeyword = true;
+
+                        // Avoid recalculating getStart() by iterating backwards.
+                        for (var j = ifKeyword.getStart() - 1; j >= elseKeyword.end; j--) {
+                            if (!isWhiteSpace(sourceFile.text.charCodeAt(j))) {
+                                shouldHighlightNextKeyword = false;
+                                break;
+                            }
+                        }
+
+                        if (shouldHighlightNextKeyword) {
+                            result.push(new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(elseKeyword.getStart(), ifKeyword.end), /* isWriteAccess */ false));
+                            i++; // skip the next keyword
+                            continue;
+                        }
+                    }
+
+                    // Ordinary case: just highlight the keyword.
+                    result.push(getReferenceEntryFromNode(keywords[i]));
+                }
+
+                return result;
+            }
+
+            function getReturnOccurrences(returnStatement: ReturnStatement): ReferenceEntry[] {
+                var func = <FunctionDeclaration>getContainingFunction(returnStatement);
+
+                // If we didn't find a containing function with a block body, bail out.
+                if (!(func && hasKind(func.body, SyntaxKind.FunctionBlock))) {
+                    return undefined;
+                }
+
+                var keywords: Node[] = []
+                forEachReturnStatement(<Block>(<FunctionDeclaration>func).body, returnStatement => {
+                    pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
+                });
+
+                return map(keywords, getReferenceEntryFromNode);
+            }
 
             function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
                 var keywords: Node[] = [];
@@ -2205,7 +2283,7 @@ module ts {
                     pushKeywordIf(keywords, tryStatement.finallyBlock.getFirstToken(), SyntaxKind.FinallyKeyword);
                 }
 
-                return keywordsToReferenceEntries(keywords);
+                return map(keywords, getReferenceEntryFromNode);
             }
 
             function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
@@ -2241,10 +2319,10 @@ module ts {
                     });
                 });
 
-                return keywordsToReferenceEntries(keywords);
+                return map(keywords, getReferenceEntryFromNode);
             }
 
-            function getBreakStatementOccurences(breakStatement: BreakOrContinueStatement): ReferenceEntry[]{
+            function getBreakStatementOccurences(breakStatement: BreakOrContinueStatement): ReferenceEntry[] {
                 // TODO (drosen): Deal with labeled statements.
                 if (breakStatement.label) {
                     return undefined;
@@ -2272,6 +2350,20 @@ module ts {
                 return undefined;
             }
 
+            function getConstructorOccurrences(constructorDeclaration: ConstructorDeclaration): ReferenceEntry[] {
+                var declarations = constructorDeclaration.symbol.getDeclarations()
+
+                var keywords: Node[] = [];
+
+                forEach(declarations, declaration => {
+                    forEach(declaration.getChildren(), token => {
+                        return pushKeywordIf(keywords, token, SyntaxKind.ConstructorKeyword);
+                    });
+                });
+
+                return map(keywords, getReferenceEntryFromNode);
+            }
+
             // returns true if 'node' is defined and has a matching 'kind'.
             function hasKind(node: Node, kind: SyntaxKind) {
                 return !!(node && node.kind === kind);
@@ -2282,20 +2374,13 @@ module ts {
                 return node && node.parent;
             }
 
-            function pushKeywordIf(keywordList: Node[], token: Node, ...expected: SyntaxKind[]): void {
-                if (!token) {
-                    return;
-                }
-
-                if (contains(<SyntaxKind[]>expected, token.kind)) {
+            function pushKeywordIf(keywordList: Node[], token: Node, ...expected: SyntaxKind[]): boolean {
+                if (token && contains(expected, token.kind)) {
                     keywordList.push(token);
+                    return true;
                 }
-            }
 
-            function keywordsToReferenceEntries(keywords: Node[]): ReferenceEntry[]{
-                return map(keywords, keyword =>
-                    new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(keyword.getStart(), keyword.end), /* isWriteAccess */ false)
-                );
+                return false;
             }
         }
 
@@ -2311,6 +2396,9 @@ module ts {
             }
 
             if (node.kind !== SyntaxKind.Identifier &&
+                // TODO (drosen): This should be enabled in a later release - currently breaks rename.
+                //node.kind !== SyntaxKind.ThisKeyword &&
+                //node.kind !== SyntaxKind.SuperKeyword &&
                 !isLiteralNameOfPropertyDeclarationOrIndexAccess(node) &&
                 !isNameOfExternalModuleImportOrDeclaration(node)) {
                 return undefined;
@@ -2326,7 +2414,7 @@ module ts {
                     var labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
                     // if we have a label definition, look within its statement for references, if not, then
                     // the label is undefined, just return a set of one for the current node.
-                    return labelDefinition ? getLabelReferencesInNode(labelDefinition.parent, labelDefinition) : [getReferenceEntry(node)];
+                    return labelDefinition ? getLabelReferencesInNode(labelDefinition.parent, labelDefinition) : [getReferenceEntryFromNode(node)];
                 }
                 else {
                     // it is a label definition and not a target, search within the parent labeledStatement
@@ -2334,13 +2422,21 @@ module ts {
                 }
             }
 
+            if (node.kind === SyntaxKind.ThisKeyword) {
+                return getReferencesForThisKeyword(node, sourceFiles);
+            }
+
+            if (node.kind === SyntaxKind.SuperKeyword) {
+                return getReferencesForSuperKeyword(node);
+            }
+
             var symbol = typeInfoResolver.getSymbolInfo(node);
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
                 // Even if we did not find a symbol, we have an identifer, so there is at least
-                // one reference that we know of. return than instead of undefined.
-                return [getReferenceEntry(node)];
+                // one reference that we know of. return that instead of undefined.
+                return [getReferenceEntryFromNode(node)];
             }
 
             // the symbol was an internal symbol and does not have a declaration e.g.undefined symbol
@@ -2484,7 +2580,7 @@ module ts {
                     // Only pick labels that are either the target label, or have a target that is the target label
                     if (node === targetLabel ||
                         (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel)) {
-                        result.push(getReferenceEntry(node));
+                        result.push(getReferenceEntryFromNode(node));
                     }
                 });
                 return result;
@@ -2549,7 +2645,132 @@ module ts {
                         }
 
                         if (isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
-                            result.push(getReferenceEntry(referenceLocation));
+                            result.push(getReferenceEntryFromNode(referenceLocation));
+                        }
+                    });
+                }
+            }
+
+            function getReferencesForSuperKeyword(superKeyword: Node): ReferenceEntry[]{
+                var searchSpaceNode = getSuperContainer(superKeyword);
+                if (!searchSpaceNode) {
+                    return undefined;
+                }
+                // Whether 'super' occurs in a static context within a class.
+                var staticFlag = NodeFlags.Static;
+
+                switch (searchSpaceNode.kind) {
+                    case SyntaxKind.Property:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        staticFlag &= searchSpaceNode.flags;
+                        searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
+                        break;
+                    default:
+                        return undefined;
+                }
+
+                var result: ReferenceEntry[] = [];
+
+                var sourceFile = searchSpaceNode.getSourceFile();
+                var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
+                forEach(possiblePositions, position => {
+                    cancellationToken.throwIfCancellationRequested();
+
+                    var node = getNodeAtPosition(sourceFile, position);
+
+                    if (!node || node.kind !== SyntaxKind.SuperKeyword) {
+                        return;
+                    }
+
+                    var container = getSuperContainer(node);
+
+                    // If we have a 'super' container, we must have an enclosing class.
+                    // Now make sure the owning class is the same as the search-space
+                    // and has the same static qualifier as the original 'super's owner.
+                    if (container && (NodeFlags.Static & container.flags) === staticFlag && container.parent.symbol === searchSpaceNode.symbol) {
+                        result.push(getReferenceEntryFromNode(node));
+                    }
+                });
+
+                return result;
+            }
+
+            function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: SourceFile[]): ReferenceEntry[] {
+                var searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
+
+                // Whether 'this' occurs in a static context within a class.
+                var staticFlag = NodeFlags.Static;
+
+                switch (searchSpaceNode.kind) {
+                    case SyntaxKind.Property:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        staticFlag &= searchSpaceNode.flags
+                        searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
+                        break;
+                    case SyntaxKind.SourceFile:
+                        if (isExternalModule(<SourceFile>searchSpaceNode)) {
+                            return undefined;
+                        }
+                    // Fall through
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.FunctionExpression:
+                        break;
+                    default:
+                        return undefined;
+                }
+
+                var result: ReferenceEntry[] = [];
+
+                if (searchSpaceNode.kind === SyntaxKind.SourceFile) {
+                    forEach(sourceFiles, sourceFile => {
+                        var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", sourceFile.getStart(), sourceFile.getEnd());
+                        getThisReferencesInFile(sourceFile, sourceFile, possiblePositions, result);
+                    });
+                }
+                else {
+                    var sourceFile = searchSpaceNode.getSourceFile();
+                    var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
+                    getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, result);
+                }
+
+                return result;
+
+                function getThisReferencesInFile(sourceFile: SourceFile, searchSpaceNode: Node, possiblePositions: number[], result: ReferenceEntry[]): void {
+                    forEach(possiblePositions, position => {
+                        cancellationToken.throwIfCancellationRequested();
+
+                        var node = getNodeAtPosition(sourceFile, position);
+                        if (!node || node.kind !== SyntaxKind.ThisKeyword) {
+                            return;
+                        }
+
+                        var container = getThisContainer(node, /* includeArrowFunctions */ false);
+
+                        switch (searchSpaceNode.kind) {
+                            case SyntaxKind.FunctionExpression:
+                            case SyntaxKind.FunctionDeclaration:
+                                if (searchSpaceNode.symbol === container.symbol) {
+                                    result.push(getReferenceEntryFromNode(node));
+                                }
+                                break;
+                            case SyntaxKind.ClassDeclaration:
+                                // Make sure the container belongs to the same class
+                                // and has the appropriate static modifier from the original container.
+                                if (container.parent && searchSpaceNode.symbol === container.parent.symbol && (container.flags & NodeFlags.Static) === staticFlag) {
+                                    result.push(getReferenceEntryFromNode(node));
+                                }
+                                break;
+                            case SyntaxKind.SourceFile:
+                                if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
+                                    result.push(getReferenceEntryFromNode(node));
+                                }
+                                break;
                         }
                     });
                 }
@@ -2649,18 +2870,6 @@ module ts {
                     }
                 }
                 return undefined;
-            }
-
-            function getReferenceEntry(node: Node): ReferenceEntry {
-                var start = node.getStart();
-                var end = node.getEnd();
-
-                if (node.kind === SyntaxKind.StringLiteral) {
-                    start += 1;
-                    end -= 1;
-                } 
-
-                return new ReferenceEntry(node.getSourceFile().filename, TypeScript.TextSpan.fromBounds(start, end), isWriteAccess(node));
             }
 
             function getMeaningFromDeclaration(node: Declaration): SearchMeaning {
@@ -2799,40 +3008,38 @@ module ts {
                 }
                 return meaning;
             }
+        }
 
-            /// A node is considedered a writeAccess iff it is a name of a declaration or a target of an assignment
-            function isWriteAccess(node: Node): boolean {
-                if (node.kind === SyntaxKind.Identifier && isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+        function getReferenceEntryFromNode(node: Node): ReferenceEntry {
+            var start = node.getStart();
+            var end = node.getEnd();
+
+            if (node.kind === SyntaxKind.StringLiteral) {
+                start += 1;
+                end -= 1;
+            }
+
+            return new ReferenceEntry(node.getSourceFile().filename, TypeScript.TextSpan.fromBounds(start, end), isWriteAccess(node));
+        }
+
+        /// A node is considedered a writeAccess iff it is a name of a declaration or a target of an assignment
+        function isWriteAccess(node: Node): boolean {
+            if (node.kind === SyntaxKind.Identifier && isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+                return true;
+            }
+
+            var parent = node.parent;
+            if (parent) {
+                if (parent.kind === SyntaxKind.PostfixOperator || parent.kind === SyntaxKind.PrefixOperator) {
                     return true;
                 }
-
-                var parent = node.parent;
-                if (parent) {
-                    if (parent.kind === SyntaxKind.PostfixOperator || parent.kind === SyntaxKind.PrefixOperator) {
-                        return true;
-                    }
-                    else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
-                        var operator = (<BinaryExpression>parent).operator;
-                        switch (operator) {
-                            case SyntaxKind.AsteriskEqualsToken:
-                            case SyntaxKind.SlashEqualsToken:
-                            case SyntaxKind.PercentEqualsToken:
-                            case SyntaxKind.MinusEqualsToken:
-                            case SyntaxKind.LessThanLessThanEqualsToken:
-                            case SyntaxKind.GreaterThanGreaterThanEqualsToken:
-                            case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
-                            case SyntaxKind.BarEqualsToken:
-                            case SyntaxKind.CaretEqualsToken:
-                            case SyntaxKind.AmpersandEqualsToken:
-                            case SyntaxKind.PlusEqualsToken:
-                            case SyntaxKind.EqualsToken:
-                                return true;
-                        }
-                    }
-
-                    return false;
+                else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
+                    var operator = (<BinaryExpression>parent).operator;
+                    return SyntaxKind.FirstAssignment <= operator && operator <= SyntaxKind.LastAssignment;
                 }
             }
+
+            return false;
         }
 
         /// Syntactic features

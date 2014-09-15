@@ -50,10 +50,10 @@ var M;
 })(M || (M = {}));
 var M;
 (function (M) {
+    var Color;
     (function (Color) {
         Color.Blue = 4;
-    })(M.Color || (M.Color = {}));
-    var Color = M.Color;
+    })(Color = M.Color || (M.Color = {}));
 })(M || (M = {}));
 var p = M.Color.Blue; // ok
 var M;
@@ -71,10 +71,10 @@ var M;
 })(M || (M = {}));
 var M;
 (function (M) {
+    var foo;
     (function (foo) {
         foo.y = 2;
-    })(M.foo || (M.foo = {}));
-    var foo = M.foo;
+    })(foo = M.foo || (M.foo = {}));
 })(M || (M = {}));
 var M;
 (function (M) {

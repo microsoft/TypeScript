@@ -532,6 +532,7 @@ export function f12_public(): C5_private { //error
 
 //// [privacyGloFunc.js]
 define(["require", "exports"], function (require, exports) {
+    var m1;
     (function (m1) {
         var C1_public = (function () {
             function C1_public() {
@@ -681,8 +682,7 @@ define(["require", "exports"], function (require, exports) {
             return new C2_private(); //error
         }
         m1.f12_public = f12_public;
-    })(exports.m1 || (exports.m1 = {}));
-    var m1 = exports.m1;
+    })(m1 = exports.m1 || (exports.m1 = {}));
     var m2;
     (function (m2) {
         var m2_C1_public = (function () {

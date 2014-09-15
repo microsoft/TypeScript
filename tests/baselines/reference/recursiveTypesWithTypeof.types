@@ -1,0 +1,196 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts ===
+// None of these declarations should have any errors!
+// Using typeof directly, these should be any
+var c: typeof c;
+>c : any
+>c : any
+
+var c: any;
+>c : any
+
+var d: typeof e;
+>d : any
+>e : any
+
+var d: any;
+>d : any
+
+var e: typeof d;
+>e : any
+>d : any
+
+var e: any;
+>e : any
+
+// In type arguments, these should be any
+interface Foo<T> { }
+>Foo : Foo<T>
+>T : T
+
+var f: Array<typeof f>;
+>f : any
+>Array : T[]
+>f : any
+
+var f: any;
+>f : any
+
+var f2: Foo<typeof f2>;
+>f2 : any
+>Foo : Foo<T>
+>f2 : any
+
+var f2: any;
+>f2 : any
+
+var f3: Foo<typeof f3>[];
+>f3 : any
+>Foo : Foo<T>
+>f3 : any
+
+var f3: any;
+>f3 : any
+
+// Truly recursive types
+var g: { x: typeof g; };
+>g : { x: any; }
+>x : { x: any; }
+>g : { x: any; }
+
+var g: typeof g.x;
+>g : { x: any; }
+>g : { x: any; }
+>x : { x: any; }
+
+var h: () => typeof h;
+>h : () => any
+>h : () => any
+
+var h = h();
+>h : () => any
+>h() : () => any
+>h : () => any
+
+var i: (x: typeof i) => typeof x;
+>i : (x: any) => any
+>x : (x: any) => any
+>i : (x: any) => any
+>x : (x: any) => any
+
+var i = i(i);
+>i : (x: any) => any
+>i(i) : (x: any) => any
+>i : (x: any) => any
+>i : (x: any) => any
+
+var j: <T extends typeof j>(x: T) => T;
+>j : <T extends any>(x: T) => T
+>T : T
+>j : <T extends any>(x: T) => T
+>x : T
+>T : T
+>T : T
+
+var j = j(j);
+>j : <T extends any>(x: T) => T
+>j(j) : <T extends any>(x: T) => T
+>j : <T extends any>(x: T) => T
+>j : <T extends any>(x: T) => T
+
+// Same as h, i, j with construct signatures
+var h2: new () => typeof h2;
+>h2 : new () => any
+>h2 : new () => any
+
+var h2 = new h2();
+>h2 : new () => any
+>new h2() : new () => any
+>h2 : new () => any
+
+var i2: new (x: typeof i2) => typeof x;
+>i2 : new (x: any) => any
+>x : new (x: any) => any
+>i2 : new (x: any) => any
+>x : new (x: any) => any
+
+var i2 = new i2(i2);
+>i2 : new (x: any) => any
+>new i2(i2) : new (x: any) => any
+>i2 : new (x: any) => any
+>i2 : new (x: any) => any
+
+var j2: new <T extends typeof j2>(x: T) => T;
+>j2 : new <T extends any>(x: T) => T
+>T : T
+>j2 : new <T extends any>(x: T) => T
+>x : T
+>T : T
+>T : T
+
+var j2 = new j2(j2);
+>j2 : new <T extends any>(x: T) => T
+>new j2(j2) : new <T extends any>(x: T) => T
+>j2 : new <T extends any>(x: T) => T
+>j2 : new <T extends any>(x: T) => T
+
+// Indexers
+var k: { [n: number]: typeof k;[s: string]: typeof k };
+>k : { [x: string]: any; [x: number]: any; }
+>n : number
+>k : { [x: string]: any; [x: number]: any; }
+>s : string
+>k : { [x: string]: any; [x: number]: any; }
+
+var k = k[0];
+>k : { [x: string]: any; [x: number]: any; }
+>k[0] : { [x: string]: any; [x: number]: any; }
+>k : { [x: string]: any; [x: number]: any; }
+
+var k = k[''];
+>k : { [x: string]: any; [x: number]: any; }
+>k[''] : { [x: string]: any; [x: number]: any; }
+>k : { [x: string]: any; [x: number]: any; }
+
+// Hybrid - contains type literals as well as type arguments
+// These two are recursive
+var hy1: { x: typeof hy1 }[];
+>hy1 : { x: any[]; }[]
+>x : { x: any[]; }[]
+>hy1 : { x: any[]; }[]
+
+var hy1 = hy1[0].x;
+>hy1 : { x: any[]; }[]
+>hy1[0].x : { x: any[]; }[]
+>hy1[0] : { x: any[]; }
+>hy1 : { x: any[]; }[]
+>x : { x: any[]; }[]
+
+var hy2: { x: Array<typeof hy2> };
+>hy2 : { x: any[]; }
+>x : { x: any[]; }[]
+>Array : T[]
+>hy2 : { x: any[]; }
+
+var hy2 = hy2.x[0];
+>hy2 : { x: any[]; }
+>hy2.x[0] : { x: any[]; }
+>hy2.x : { x: any[]; }[]
+>hy2 : { x: any[]; }
+>x : { x: any[]; }[]
+
+interface Foo2<T, U> { }
+>Foo2 : Foo2<T, U>
+>T : T
+>U : U
+
+// This one should be any because the first type argument is not contained inside a type literal
+var hy3: Foo2<typeof hy3, { x: typeof hy3 }>;
+>hy3 : any
+>Foo2 : Foo2<T, U>
+>hy3 : any
+>x : any
+>hy3 : any
+
+var hy3: any;
+>hy3 : any
+

@@ -149,6 +149,7 @@ function createWidget1() {
     return new Widget1();
 }
 exports.createWidget1 = createWidget1;
+var SpecializedWidget;
 (function (SpecializedWidget) {
     var Widget2 = (function () {
         function Widget2() {
@@ -161,8 +162,7 @@ exports.createWidget1 = createWidget1;
         return new Widget2();
     }
     SpecializedWidget.createWidget2 = createWidget2;
-})(exports.SpecializedWidget || (exports.SpecializedWidget = {}));
-var SpecializedWidget = exports.SpecializedWidget;
+})(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 //// [privacyCannotNameAccessorDeclFile_exporter.js]
 ///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("privacyCannotNameAccessorDeclFile_Widgets");

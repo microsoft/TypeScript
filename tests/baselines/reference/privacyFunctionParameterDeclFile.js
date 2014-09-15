@@ -798,6 +798,7 @@ var privateClassWithPrivateModuleParameterTypes = (function () {
 })();
 function privateFunctionWithPrivateModuleParameterTypes(param) {
 }
+var publicModule;
 (function (publicModule) {
     var privateClass = (function () {
         function privateClass() {
@@ -910,8 +911,7 @@ function privateFunctionWithPrivateModuleParameterTypes(param) {
     })();
     function privateFunctionWithPrivateModuleParameterTypes(param) {
     }
-})(exports.publicModule || (exports.publicModule = {}));
-var publicModule = exports.publicModule;
+})(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClass = (function () {

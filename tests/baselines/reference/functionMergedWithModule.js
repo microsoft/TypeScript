@@ -20,20 +20,20 @@ function foo(title) {
 }
 var foo;
 (function (foo) {
+    var Bar;
     (function (Bar) {
         function f() {
         }
         Bar.f = f;
-    })(foo.Bar || (foo.Bar = {}));
-    var Bar = foo.Bar;
+    })(Bar = foo.Bar || (foo.Bar = {}));
 })(foo || (foo = {}));
 var foo;
 (function (foo) {
+    var Baz;
     (function (Baz) {
         function g() {
             foo.Bar.f();
         }
         Baz.g = g;
-    })(foo.Baz || (foo.Baz = {}));
-    var Baz = foo.Baz;
+    })(Baz = foo.Baz || (foo.Baz = {}));
 })(foo || (foo = {}));

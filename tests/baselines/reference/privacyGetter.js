@@ -209,6 +209,7 @@ class C8_private {
 
 //// [privacyGetter.js]
 define(["require", "exports"], function (require, exports) {
+    var m1;
     (function (m1) {
         var C1_public = (function () {
             function C1_public() {
@@ -306,8 +307,7 @@ define(["require", "exports"], function (require, exports) {
             });
             return C4_private;
         })();
-    })(exports.m1 || (exports.m1 = {}));
-    var m1 = exports.m1;
+    })(m1 = exports.m1 || (exports.m1 = {}));
     var m2;
     (function (m2) {
         var m2_C1_public = (function () {

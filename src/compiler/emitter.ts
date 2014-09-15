@@ -266,7 +266,7 @@ module ts {
                 }
             }
             else {
-                // Single line comment of styly //....
+                // Single line comment of style //....
                 writer.write(currentSourceFile.text.substring(comment.pos, comment.end));
             }
 
@@ -393,7 +393,7 @@ module ts {
                     }
 
                     var prevEncodedEmittedColumn = lastEncodedSourceMapSpan.emittedColumn;
-                    // Line/Comma deliminators
+                    // Line/Comma delimiters
                     if (lastEncodedSourceMapSpan.emittedLine == lastRecordedSourceMapSpan.emittedLine) {
                         // Emit comma to separate the entry
                         if (sourceMapData.sourceMapMappings) {
@@ -401,7 +401,7 @@ module ts {
                         }
                     }
                     else {
-                        // Emit line deliminators
+                        // Emit line delimiters
                         for (var encodedLine = lastEncodedSourceMapSpan.emittedLine; encodedLine < lastRecordedSourceMapSpan.emittedLine; encodedLine++) {
                             sourceMapData.sourceMapMappings += ";";
                         }
@@ -470,7 +470,7 @@ module ts {
                     var emittedLine = writer.getLine();
                     var emittedColumn = writer.getColumn();
 
-                    // If this location wasnt recorded or the location in source is going backwards, record the span
+                    // If this location wasn't recorded or the location in source is going backwards, record the span
                     if (!lastRecordedSourceMapSpan ||
                         lastRecordedSourceMapSpan.emittedLine != emittedLine ||
                         lastRecordedSourceMapSpan.emittedColumn != emittedColumn ||
@@ -516,7 +516,7 @@ module ts {
                 }
 
                 function recordNewSourceFileStart(node: SourceFile) {
-                    // Add the the file to tsFilePaths
+                    // Add the file to tsFilePaths
                     // If sourceroot option: Use the relative path corresponding to the common directory path 
                     // otherwise source locations relative to map file location
                     var sourcesDirectoryPath = compilerOptions.sourceRoot ? program.getCommonSourceDirectory() : sourceMapDir;
@@ -953,7 +953,7 @@ module ts {
                     write(tokenToString(node.operator));
                 }
                 // In some cases, we need to emit a space between the operator and the operand. One obvious case
-                // is when the operator is an identifer, like delete or typeof. We also need to do this for plus
+                // is when the operator is an identifier, like delete or typeof. We also need to do this for plus
                 // and minus expressions in certain cases. Specifically, consider the following two cases (parens
                 // are just for clarity of exposition, and not part of the source code):
                 //
@@ -1755,16 +1755,13 @@ module ts {
                 if (!isInstantiated(node)) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
-
                 emitLeadingComments(node);
-                if (!(node.flags & NodeFlags.Export)) {
-                    emitStart(node);
-                    write("var ");
-                    emit(node.name);
-                    write(";");
-                    emitEnd(node);
-                    writeLine();
-                }
+                emitStart(node);
+                write("var ");
+                emit(node.name);
+                write(";");
+                emitEnd(node);
+                writeLine();
                 emitStart(node);
                 write("(function (");
                 emitStart(node.name);
@@ -1788,21 +1785,15 @@ module ts {
                     scopeEmitEnd();
                 }
                 write(")(");
+                if (node.flags & NodeFlags.Export) {
+                    emit(node.name);
+                    write(" = ");
+                }
                 emitModuleMemberName(node);
                 write(" || (");
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (node.flags & NodeFlags.Export) {
-                    writeLine();
-                    emitStart(node);
-                    write("var ");
-                    emit(node.name);
-                    write(" = ");
-                    emitModuleMemberName(node);
-                    emitEnd(node);
-                    write(";");
-                }
                 emitTrailingComments(node);
             }
 
@@ -1982,7 +1973,7 @@ module ts {
                 }
             }
 
-            function emitNode(node: Node) {
+            function emitNode(node: Node): void {
                 if (!node) {
                     return;
                 }
@@ -2125,7 +2116,7 @@ module ts {
             }
 
             function getLeadingCommentsToEmit(node: Node) {
-                // Emit the leading comments only if the parent's pos doesnt match because parent should take care of emitting these comments
+                // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
                     var leadingComments: Comment[];
                     if (hasDetachedComments(node.pos)) {
@@ -2148,7 +2139,7 @@ module ts {
             }
 
             function emitTrailingDeclarationComments(node: Node) {
-                // Emit the trailing comments only if the parent's end doesnt match
+                // Emit the trailing comments only if the parent's end doesn't match
                 if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
                     var trailingComments = getTrailingComments(currentSourceFile.text, node.end);
                     // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
@@ -2224,7 +2215,7 @@ module ts {
                         return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
                     }
                     // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text 
-                    // so that we dont end up computing comment string and doing match for all // comments
+                    // so that we don't end up computing comment string and doing match for all // comments
                     else if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
                         comment.pos + 2 < comment.end &&
                         currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.slash &&
@@ -2700,7 +2691,7 @@ module ts {
             }
 
             function emitVariableDeclaration(node: VariableDeclaration) {
-                // If we are emitting property it isnt moduleElement and hence we already know it needs to be emitted
+                // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
                 // so there is no check needed to see if declaration is visible
                 if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
                     emitSourceTextOfNode(node.name);
@@ -2724,7 +2715,7 @@ module ts {
                         Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_private_module_2 :
                         Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
                     }
-                    // This check is to ensure we dont report error on constructor parameter property as that error would be reported during parameter emit
+                    // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
                     else if (node.kind === SyntaxKind.Property) {
                         if (node.flags & NodeFlags.Static) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
@@ -2829,7 +2820,7 @@ module ts {
             }
 
             function emitFunctionDeclaration(node: FunctionDeclaration) {
-                // If we are emitting Method/Constructor it isnt moduleElement and hence already determined to be emitting
+                // If we are emitting Method/Constructor it isn't moduleElement and hence already determined to be emitting
                 // so no need to verify if the declaration is visible
                 if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
                     !resolver.isImplementationOfOverload(node)) {
@@ -3080,9 +3071,7 @@ module ts {
             }
 
             function resolveScriptReference(sourceFile: SourceFile, reference: FileReference) {
-                var referenceFileName = compilerOptions.noResolve
-                    ? reference.filename
-                    : normalizePath(combinePaths(getDirectoryPath(sourceFile.filename), reference.filename));
+                var referenceFileName = normalizePath(combinePaths(getDirectoryPath(sourceFile.filename), reference.filename));
                 return program.getSourceFile(referenceFileName);
             }
 
@@ -3107,22 +3096,24 @@ module ts {
             }
 
             if (root) {
-                // Emiting single file so emit references in this file only
-                var addedGlobalFileReference = false;
-                forEach(root.referencedFiles, fileReference => {
-                    var referencedFile = resolveScriptReference(root, fileReference);
+                // Emitting just a single file, so emit references in this file only
+                if (!compilerOptions.noResolve) {
+                    var addedGlobalFileReference = false;
+                    forEach(root.referencedFiles, fileReference => {
+                        var referencedFile = resolveScriptReference(root, fileReference);
 
-                    // All the references that are not going to be part of same file
-                    if ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
-                        shouldEmitToOwnFile(referencedFile) || // This is referenced file is emitting its own js file
-                        !addedGlobalFileReference) { // Or the global out file corresponding to this reference was not added
+                        // All the references that are not going to be part of same file
+                        if ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
+                            shouldEmitToOwnFile(referencedFile) || // This is referenced file is emitting its own js file
+                            !addedGlobalFileReference) { // Or the global out file corresponding to this reference was not added
 
-                        writeReferencePath(referencedFile);
-                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
-                            addedGlobalFileReference = true;
+                            writeReferencePath(referencedFile);
+                            if (!isExternalModuleOrDeclarationFile(referencedFile)) {
+                                addedGlobalFileReference = true;
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
                 emitNode(root);
             }
@@ -3132,17 +3123,19 @@ module ts {
                 forEach(program.getSourceFiles(), sourceFile => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         // Check what references need to be added
-                        forEach(sourceFile.referencedFiles, fileReference => {
-                            var referencedFile = resolveScriptReference(sourceFile, fileReference);
+                        if (!compilerOptions.noResolve) {
+                            forEach(sourceFile.referencedFiles, fileReference => {
+                                var referencedFile = resolveScriptReference(sourceFile, fileReference);
 
-                            // If the reference file is declaration file or external module emit that reference
-                            if (isExternalModuleOrDeclarationFile(referencedFile) &&
-                                !contains(emittedReferencedFiles, referencedFile)) { // If the file refernece was not already emitted
+                                // If the reference file is a declaration file or an external module, emit that reference
+                                if (isExternalModuleOrDeclarationFile(referencedFile) &&
+                                    !contains(emittedReferencedFiles, referencedFile)) { // If the file reference was not already emitted
 
-                                writeReferencePath(referencedFile);
-                                emittedReferencedFiles.push(referencedFile);
-                            }
-                        });
+                                    writeReferencePath(referencedFile);
+                                    emittedReferencedFiles.push(referencedFile);
+                                }
+                            });
+                        }
 
                         emitNode(sourceFile);
                     }

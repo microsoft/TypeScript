@@ -204,6 +204,9 @@ module ts {
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
+        Debug.assert(start >= 0, "start must be non-negative, is " + start);
+        Debug.assert(length >= 0, "length must be non-negative, is " + length);
+
         var text = getLocaleSpecificMessage(message.key);
         
         if (arguments.length > 4) {
@@ -258,6 +261,9 @@ module ts {
     }
 
     export function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain, newLine: string): Diagnostic {
+        Debug.assert(start >= 0, "start must be non-negative, is " + start);
+        Debug.assert(length >= 0, "length must be non-negative, is " + length);
+
         var code = diagnosticChain.code;
         var category = diagnosticChain.category;
         var messageText = "";

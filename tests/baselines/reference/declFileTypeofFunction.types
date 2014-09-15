@@ -54,18 +54,18 @@ var foo2 = foo;
 >foo : () => typeof foo
 
 var foo3 = function () {
->foo3 : any
+>foo3 : () => any
 >function () {    return foo3;} : () => any
 
     return foo3;
->foo3 : any
+>foo3 : () => any
 }
 var x = () => {
->x : any
+>x : () => any
 >() => {    return x;} : () => any
 
     return x;
->x : any
+>x : () => any
 }
 
 function foo5(x: number) {

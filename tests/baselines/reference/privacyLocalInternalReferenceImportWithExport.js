@@ -172,6 +172,7 @@ var m_private;
     }
     m_private.f_private = f_private;
     m_private.v_private = new c_private();
+    var mi_private;
     (function (mi_private) {
         var c = (function () {
             function c() {
@@ -179,10 +180,10 @@ var m_private;
             return c;
         })();
         mi_private.c = c;
-    })(m_private.mi_private || (m_private.mi_private = {}));
-    var mi_private = m_private.mi_private;
+    })(mi_private = m_private.mi_private || (m_private.mi_private = {}));
 })(m_private || (m_private = {}));
 // Public elements
+var m_public;
 (function (m_public) {
     var c_public = (function () {
         function c_public() {
@@ -200,6 +201,7 @@ var m_private;
     }
     m_public.f_public = f_public;
     m_public.v_public = 10;
+    var mi_public;
     (function (mi_public) {
         var c = (function () {
             function c() {
@@ -207,10 +209,9 @@ var m_private;
             return c;
         })();
         mi_public.c = c;
-    })(m_public.mi_public || (m_public.mi_public = {}));
-    var mi_public = m_public.mi_public;
-})(exports.m_public || (exports.m_public = {}));
-var m_public = exports.m_public;
+    })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
+})(m_public = exports.m_public || (exports.m_public = {}));
+var import_public;
 (function (import_public) {
     // Privacy errors - importing private elements
     import_public.im_public_c_private = m_private.c_private;
@@ -254,8 +255,7 @@ var m_public = exports.m_public;
     import_public.publicUse_im_public_mi_public = new import_public.im_public_mi_public.c();
     var privateUse_im_public_mu_public;
     import_public.publicUse_im_public_mu_public;
-})(exports.import_public || (exports.import_public = {}));
-var import_public = exports.import_public;
+})(import_public = exports.import_public || (exports.import_public = {}));
 var import_private;
 (function (import_private) {
     // No Privacy errors - importing private elements

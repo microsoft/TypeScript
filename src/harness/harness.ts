@@ -622,6 +622,7 @@ module Harness {
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
                 options.module = options.module || ts.ModuleKind.None;
+                options.noErrorTruncation = true;
 
                 if (settingsCallback) {
                     settingsCallback(null);
@@ -723,6 +724,10 @@ module Harness {
 
                         case 'emitbom':
                             options.emitBOM = !!setting.value;
+                            break;
+
+                        case 'errortruncation':
+                            options.noErrorTruncation = setting.value === 'false';
                             break;
 
                         default:
@@ -1030,7 +1035,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

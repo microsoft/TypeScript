@@ -18,12 +18,12 @@ var x: A.B = A.B.createB();
 //// [interMixingModulesInterfaces0.js]
 var A;
 (function (A) {
+    var B;
     (function (B) {
         function createB() {
             return null;
         }
         B.createB = createB;
-    })(A.B || (A.B = {}));
-    var B = A.B;
+    })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 var x = A.B.createB();

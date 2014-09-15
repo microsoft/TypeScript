@@ -14,8 +14,11 @@ module X.A.B.C {
 //// [declFileWithInternalModuleNameConflictsInExtendsClause1.js]
 var X;
 (function (X) {
+    var A;
     (function (A) {
+        var B;
         (function (B) {
+            var C;
             (function (C) {
                 var W = (function () {
                     function W() {
@@ -23,12 +26,9 @@ var X;
                     return W;
                 })();
                 C.W = W;
-            })(B.C || (B.C = {}));
-            var C = B.C;
-        })(A.B || (A.B = {}));
-        var B = A.B;
-    })(X.A || (X.A = {}));
-    var A = X.A;
+            })(C = B.C || (B.C = {}));
+        })(B = A.B || (A.B = {}));
+    })(A = X.A || (X.A = {}));
 })(X || (X = {}));
 
 
