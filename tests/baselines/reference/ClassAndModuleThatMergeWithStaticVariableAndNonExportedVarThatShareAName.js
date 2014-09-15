@@ -46,8 +46,8 @@ var A;
         return Point;
     })();
     A.Point = Point;
+    var Point;
     (function (Point) {
         var Origin = ""; // not an error since not exported
-    })(A.Point || (A.Point = {}));
-    var Point = A.Point;
+    })(Point = A.Point || (A.Point = {}));
 })(A || (A = {}));

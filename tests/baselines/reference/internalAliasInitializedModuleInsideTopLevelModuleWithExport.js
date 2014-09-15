@@ -10,7 +10,9 @@ export import b = a.b;
 export var x: b.c = new b.c();
 
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithExport.js]
+var a;
 (function (a) {
+    var b;
     (function (b) {
         var c = (function () {
             function c() {
@@ -18,10 +20,8 @@ export var x: b.c = new b.c();
             return c;
         })();
         b.c = c;
-    })(a.b || (a.b = {}));
-    var b = a.b;
-})(exports.a || (exports.a = {}));
-var a = exports.a;
+    })(b = a.b || (a.b = {}));
+})(a = exports.a || (exports.a = {}));
 exports.b = a.b;
 exports.x = new exports.b.c();
 

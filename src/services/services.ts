@@ -362,7 +362,7 @@ module ts {
         public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
             // See if we are currently holding onto a syntax tree.  We may not be because we're 
             // either a closed file, or we've just been lazy and haven't had to create the syntax
-            // tree yet.  Access the field instead of the method so we don't accidently realize
+            // tree yet.  Access the field instead of the method so we don't accidentally realize
             // the old syntax tree.
             var oldSyntaxTree = this.syntaxTree;
 
@@ -1393,7 +1393,7 @@ module ts {
         var program: Program;
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
-        // the sole purpose of this checkes is to reutrn semantic diagnostics
+        // the sole purpose of this check is to return semantic diagnostics
         // creation is deferred - use getFullTypeCheckChecker to get instance
         var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
         var useCaseSensitivefilenames = false;
@@ -1537,7 +1537,7 @@ module ts {
                     sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version, isOpen);
                 }
 
-                // Remeber the new sourceFile
+                // Remember the new sourceFile
                 sourceFilesByName[filename] = sourceFile;
             }
 
@@ -1592,7 +1592,7 @@ module ts {
                 var firstChar = displayName.charCodeAt(0);
                 if (firstChar === TypeScript.CharacterCodes.singleQuote || firstChar === TypeScript.CharacterCodes.doubleQuote) {
                     // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
-                    // invalid identifer name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+                    // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
                     displayName = TypeScript.stripStartAndEndQuotes(displayName);
                 }
 
@@ -1634,9 +1634,9 @@ module ts {
             }
 
             function isCompletionListBlocker(sourceUnit: TypeScript.SourceUnitSyntax, position: number): boolean {
-                // We shouldn't be getting a possition that is outside the file because
+                // We shouldn't be getting a position that is outside the file because
                 // isEntirelyInsideComment can't handle when the position is out of bounds, 
-                // callers should be fixed, however we should be resiliant to bad inputs
+                // callers should be fixed, however we should be resilient to bad inputs
                 // so we return true (this position is a blocker for getting completions)
                 if (position < 0 || position > TypeScript.fullWidth(sourceUnit)) {
                     return true;
@@ -1726,12 +1726,12 @@ module ts {
                 var positionedToken = TypeScript.Syntax.findCompleteTokenOnLeft(sourceUnit, position, /*includeSkippedTokens*/true);
 
                 if (positionedToken && position === TypeScript.end(positionedToken) && positionedToken.kind() == TypeScript.SyntaxKind.EndOfFileToken) {
-                    // EndOfFile token is not intresting, get the one before it
+                    // EndOfFile token is not interesting, get the one before it
                     positionedToken = TypeScript. previousToken(positionedToken, /*includeSkippedTokens*/true);
                 }
 
                 if (positionedToken && position === TypeScript.end(positionedToken) && positionedToken.kind() === TypeScript.SyntaxKind.IdentifierName) {
-                    // The caret is at the end of an identifier, the decession to provide completion depends on the previous token
+                    // The caret is at the end of an identifier, the decision to provide completion depends on the previous token
                     positionedToken = TypeScript.previousToken(positionedToken, /*includeSkippedTokens*/true);
                 }
 
@@ -1861,14 +1861,14 @@ module ts {
                     //    // get existing members
                     //    var existingMembers = compiler.getVisibleMemberSymbolsFromAST(node, document);
 
-                    //    // Add filtterd items to the completion list
+                    //    // Add filtered items to the completion list
                     //    getCompletionEntriesFromSymbols({
                     //        symbols: filterContextualMembersList(contextualMembers.symbols, existingMembers, filename, position),
                     //        enclosingScopeSymbol: contextualMembers.enclosingScopeSymbol
                     //    }, entries);
                     //}
                 }
-                // Get scope memebers
+                // Get scope members
                 else {
                     isMemberCompletion = false;
                     /// TODO filter meaning based on the current context
@@ -1892,7 +1892,7 @@ module ts {
 
         function getCompletionEntryDetails(filename: string, position: number, entryName: string) {
             // Note: No need to call synchronizeHostData, as we have captured all the data we need
-            //       in the getCompletionsAtPosition erlier
+            //       in the getCompletionsAtPosition earlier
             filename = TypeScript.switchToForwardSlashes(filename);
 
             var session = activeCompletionSession;
@@ -2524,7 +2524,7 @@ module ts {
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
-                // Even if we did not find a symbol, we have an identifer, so there is at least
+                // Even if we did not find a symbol, we have an identifier, so there is at least
                 // one reference that we know of. return that instead of undefined.
                 return [getReferenceEntryFromNode(node)];
             }
@@ -2914,7 +2914,7 @@ module ts {
                             var propertySymbol = typeReferenceSymbol.members[propertyName];
                             if (propertySymbol) result.push(typeReferenceSymbol.members[propertyName]);
 
-                            // Visit the typeReference as well to see if it directelly or indirectelly use that property
+                            // Visit the typeReference as well to see if it directly or indirectly use that property
                             getPropertySymbolsFromBaseTypes(typeReferenceSymbol, propertyName, result);
                         }
                     }
@@ -2922,7 +2922,7 @@ module ts {
             }
 
             function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
-                // Unwrap symbols to get to the root (e.g. triansient symbols as a result of widenning)
+                // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
                 var referenceSymbolTarget = typeInfoResolver.getRootSymbol(referenceSymbol);
 
                 // if it is in the list, then we are done
@@ -2940,7 +2940,7 @@ module ts {
                     }
                 }
 
-                // Finally, try all properties with the same name in any type the containing type extened or implemented, and 
+                // Finally, try all properties with the same name in any type the containing type extend or implemented, and 
                 // see if any is in the list
                 if (referenceSymbol.parent && referenceSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     var result: Symbol[] = [];
@@ -3003,7 +3003,7 @@ module ts {
                     case SyntaxKind.ImportDeclaration:
                         return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
                 }
-                Debug.fail("Unkown declaration type");
+                Debug.fail("Unknown declaration type");
             }
 
             function isTypeReference(node: Node): boolean {
@@ -3084,7 +3084,7 @@ module ts {
                         // intersects with the class in the value space.
                         // To achieve that we will keep iterating until the result stabilizes.
 
-                        // Remeber the last meaning
+                        // Remember the last meaning
                         var lastIterationMeaning = meaning;
 
                         for (var i = 0, n = declarations.length; i < n; i++) {
@@ -3112,7 +3112,7 @@ module ts {
             return new ReferenceEntry(node.getSourceFile().filename, TypeScript.TextSpan.fromBounds(start, end), isWriteAccess(node));
         }
 
-        /// A node is considedered a writeAccess iff it is a name of a declaration or a target of an assignment
+        /// A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment
         function isWriteAccess(node: Node): boolean {
             if (node.kind === SyntaxKind.Identifier && isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                 return true;
@@ -3398,7 +3398,7 @@ module ts {
                     var preamble = matchArray[1];
                     var matchPosition = matchArray.index + preamble.length;
 
-                    // Ok, we have found a match in the file.  This is ony an acceptable match if
+                    // Ok, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
                     var token = TypeScript.findToken(syntaxTree.sourceUnit(), matchPosition);
 
@@ -3408,7 +3408,7 @@ module ts {
                         continue;
                     }
 
-                    // Looks to be within the trivia.  See if we can find hte comment containing it.
+                    // Looks to be within the trivia.  See if we can find the comment containing it.
                     var triviaList = matchPosition < TypeScript.start(token) ? token.leadingTrivia(syntaxTree.text) : token.trailingTrivia(syntaxTree.text);
                     var trivia = findContainingComment(triviaList, matchPosition);
                     if (trivia === null) {
@@ -3616,7 +3616,7 @@ module ts {
                     addResult(start - lastTokenOrCommentEnd, TokenClass.Whitespace);
                 }
 
-                // Remeber the end of the last token
+                // Remember the end of the last token
                 lastTokenOrCommentEnd = end;
             }
 

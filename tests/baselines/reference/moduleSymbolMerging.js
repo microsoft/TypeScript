@@ -35,7 +35,7 @@ declare module A {
     }
 }
 //// [B.d.ts]
-/// <reference path='A.d.ts' />
+/// <reference path="A.d.ts" />
 declare module A {
 }
 declare module B {

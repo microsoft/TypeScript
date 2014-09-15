@@ -1,4 +1,4 @@
-==== tests/cases/compiler/augmentedTypeAssignmentCompatIndexSignature.ts (2 errors) ====
+==== tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts (2 errors) ====
     interface Foo { a }
     interface Bar { b }
     

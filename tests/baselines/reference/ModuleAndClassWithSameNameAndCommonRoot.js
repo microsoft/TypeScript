@@ -34,17 +34,18 @@ class A {
 //// [module.js]
 var X;
 (function (X) {
+    var Y;
     (function (Y) {
+        var Point;
         (function (Point) {
             Point.Origin = new Point(0, 0);
-        })(Y.Point || (Y.Point = {}));
-        var Point = Y.Point;
-    })(X.Y || (X.Y = {}));
-    var Y = X.Y;
+        })(Point = Y.Point || (Y.Point = {}));
+    })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 //// [classPoint.js]
 var X;
 (function (X) {
+    var Y;
     (function (Y) {
         // duplicate identifier
         var Point = (function () {
@@ -55,8 +56,7 @@ var X;
             return Point;
         })();
         Y.Point = Point;
-    })(X.Y || (X.Y = {}));
-    var Y = X.Y;
+    })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 //// [simple.js]
 var A;

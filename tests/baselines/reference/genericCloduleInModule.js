@@ -25,10 +25,10 @@ var A;
         return B;
     })();
     A.B = B;
+    var B;
     (function (B) {
         B.x = 1;
-    })(A.B || (A.B = {}));
-    var B = A.B;
+    })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 var b;
 b.foo();

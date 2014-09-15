@@ -81,7 +81,7 @@ module ts {
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
-        var start = skipTrivia(file.text, node.pos);
+        var start = node.kind === SyntaxKind.Missing ? node.pos : skipTrivia(file.text, node.pos);
         var length = node.end - start;
 
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
@@ -141,11 +141,11 @@ module ts {
     export function getLeadingCommentsOfNode(node: Node, sourceFileOfNode: SourceFile) {
         // If parameter/type parameter, the prev token trailing comments are part of this node too
         if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
-            // eg     (/** blah */ a, /** blah */ b);
+            // e.g.   (/** blah */ a, /** blah */ b);
             return concatenate(getTrailingComments(sourceFileOfNode.text, node.pos),
-                // eg:     (
-                //          /** blah */ a,
-                //          /** blah */ b);
+                // e.g.:     (
+                //            /** blah */ a,
+                //            /** blah */ b);
                 getLeadingComments(sourceFileOfNode.text, node.pos));
         }
         else {
@@ -157,7 +157,7 @@ module ts {
         return filter(getLeadingCommentsOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
 
         function isJsDocComment(comment: Comment) {
-            // js doc is if comment is starting with /** but not if it is /**/
+            // True if the comment starts with '/**' but not if it is '/**/'
             return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
                 sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
                 sourceFileOfNode.text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
@@ -228,6 +228,8 @@ module ts {
                 return children((<TypeLiteralNode>node).members);
             case SyntaxKind.ArrayType:
                 return child((<ArrayTypeNode>node).elementType);
+            case SyntaxKind.TupleType:
+                return children((<TupleTypeNode>node).elementTypes);
             case SyntaxKind.ArrayLiteral:
                 return children((<ArrayLiteral>node).elements);
             case SyntaxKind.ObjectLiteral:
@@ -520,6 +522,7 @@ module ts {
         Parameters,              // Parameters in parameter list
         TypeParameters,          // Type parameters in type parameter list
         TypeArguments,           // Type arguments in type argument list
+        TupleElementTypes,       // Element types in tuple element type list
         Count                    // Number of parsing contexts
     }
 
@@ -547,6 +550,7 @@ module ts {
             case ParsingContext.Parameters:             return Diagnostics.Parameter_declaration_expected;
             case ParsingContext.TypeParameters:         return Diagnostics.Type_parameter_declaration_expected;
             case ParsingContext.TypeArguments:          return Diagnostics.Type_argument_expected;
+            case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
         }
     };
 
@@ -762,7 +766,7 @@ module ts {
         }
 
         function reportInvalidUseInStrictMode(node: Identifier): void {
-            // identifierToString cannot be used here since it uses backreference to 'parent' that is not yet set
+            // identifierToString cannot be used here since it uses a backreference to 'parent' that is not yet set
             var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
             grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
         }
@@ -833,7 +837,7 @@ module ts {
             lookAheadMode = LookAheadMode.NoErrorYet;
             var result = callback();
 
-            // If we switched from 1 to to -1 then a parse error occurred during the callback.
+            // If we switched from 1 to -1 then a parse error occurred during the callback.
             // If that's the case, then we want to act as if we never got any result at all.
             Debug.assert(lookAheadMode === LookAheadMode.Error || lookAheadMode === LookAheadMode.NoErrorYet);
             if (lookAheadMode === LookAheadMode.Error) {
@@ -1015,6 +1019,7 @@ module ts {
                 case ParsingContext.Parameters:
                     return isParameter();
                 case ParsingContext.TypeArguments:
+                case ParsingContext.TupleElementTypes:
                     return isType();
             }
 
@@ -1050,6 +1055,7 @@ module ts {
                     // Tokens other than ')' are here for better error recovery
                     return token === SyntaxKind.CloseParenToken || token === SyntaxKind.SemicolonToken;
                 case ParsingContext.ArrayLiteralMembers:
+                case ParsingContext.TupleElementTypes:
                     return token === SyntaxKind.CloseBracketToken;
                 case ParsingContext.Parameters:
                     // Tokens other than ')' and ']' (the latter for index signatures) are here for better error recovery
@@ -1570,6 +1576,17 @@ module ts {
             return finishNode(node);
         }
 
+        function parseTupleType(): TupleTypeNode {
+            var node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
+            var startTokenPos = scanner.getTokenPos();
+            var startErrorCount = file.syntacticErrors.length;
+            node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
+            if (!node.elementTypes.length && file.syntacticErrors.length === startErrorCount) {
+                grammarErrorAtPos(startTokenPos, scanner.getStartPos() - startTokenPos, Diagnostics.A_tuple_type_element_list_cannot_be_empty);
+            }
+            return finishNode(node);
+        }
+
         function parseFunctionType(signatureKind: SyntaxKind): TypeLiteralNode {
             var node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
             var member = <SignatureDeclaration>createNode(signatureKind);
@@ -1600,6 +1617,8 @@ module ts {
                     return parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
                     return parseTypeLiteral();
+                case SyntaxKind.OpenBracketToken:
+                    return parseTupleType();
                 case SyntaxKind.OpenParenToken:
                 case SyntaxKind.LessThanToken:
                     return parseFunctionType(SyntaxKind.CallSignature);
@@ -1623,6 +1642,7 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.OpenBraceToken:
+                case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.NewKeyword:
                     return true;
@@ -1735,7 +1755,7 @@ module ts {
             // (i.e. they're both BinaryExpressions with an assignment operator in it).
 
             // First, check if we have an arrow function (production '4') that starts with a parenthesized
-            // parameter list. If we do, we must *not* recurse for productsion 1, 2 or 3. An ArrowFunction is
+            // parameter list. If we do, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
             // not a  LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done 
             // with AssignmentExpression if we see one.
             var arrowExpression = tryParseParenthesizedArrowFunctionExpression();
@@ -1923,7 +1943,7 @@ module ts {
             if (token === SyntaxKind.EqualsGreaterThanToken) {
                 // ERROR RECOVERY TWEAK:
                 // If we see a standalone => try to parse it as an arrow function expression as that's
-                // likely whatthe user intended to write.
+                // likely what the user intended to write.
                 return Tristate.True;
             }
             // Definitely not a parenthesized arrow function.
@@ -2826,8 +2846,8 @@ module ts {
             switch (token) {
                 case SyntaxKind.SemicolonToken:
                     // If we're in error recovery, then we don't want to treat ';' as an empty statement.
-                    // The problem is that ';' can show up in far too many contexts, and if we see one 
-                    // and assume it's a statement, then we may bail out innapropriately from whatever 
+                    // The problem is that ';' can show up in far too many contexts, and if we see one
+                    // and assume it's a statement, then we may bail out inappropriately from whatever
                     // we're parsing.  For example, if we have a semicolon in the middle of a class, then
                     // we really don't want to assume the class is over and we're on a statement in the
                     // outer module.  We just want to consume and move on.
@@ -2977,10 +2997,11 @@ module ts {
             parseExpected(SyntaxKind.VarKeyword);
             node.declarations = parseVariableDeclarationList(flags, /*noIn*/false);
             parseSemicolon();
+            finishNode(node);
             if (!node.declarations.length && file.syntacticErrors.length === errorCountBeforeVarStatement) {
                 grammarErrorOnNode(node, Diagnostics.Variable_declaration_list_cannot_be_empty);
             }
-            return finishNode(node);
+            return node;
         }
 
         function parseFunctionDeclaration(pos?: number, flags?: NodeFlags): FunctionDeclaration {
@@ -3387,7 +3408,7 @@ module ts {
             function isIntegerLiteral(expression: Expression): boolean {
                 function isInteger(literalExpression: LiteralExpression): boolean {
                     // Allows for scientific notation since literalExpression.text was formed by
-                    // coercing a number to a string. Sometimes this coersion can yield a string
+                    // coercing a number to a string. Sometimes this coercion can yield a string
                     // in scientific notation.
                     // We also don't need special logic for hex because a hex integer is converted
                     // to decimal when it is coerced.
@@ -3409,7 +3430,7 @@ module ts {
 
             var inConstantEnumMemberSection = true;
             // In an ambient declaration, the grammar only allows integer literals as initializers.
-            // In a nonambient declaration, the grammar allows uninitialized members only in a
+            // In a non-ambient declaration, the grammar allows uninitialized members only in a
             // ConstantEnumMemberSection, which starts at the beginning of an enum declaration
             // or any time an integer literal initializer is encountered.
             function parseAndCheckEnumMember(): EnumMember {
@@ -3532,7 +3553,7 @@ module ts {
             return finishNode(node);
         }
 
-        function isDeclaration() {
+        function isDeclaration(): boolean {
             switch (token) {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.FunctionKeyword:
@@ -3949,7 +3970,7 @@ module ts {
                 commonSourceDirectory = getNormalizedPathFromPathCompoments(commonPathComponents);
                 if (commonSourceDirectory) {
                     // Make sure directory path ends with directory separator so this string can directly 
-                    // used to replace with "" to get the relative path of the source file and the relative path doesnt
+                    // used to replace with "" to get the relative path of the source file and the relative path doesn't
                     // start with / making it rooted path
                     commonSourceDirectory += directorySeparator;
                 }
