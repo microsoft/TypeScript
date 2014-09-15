@@ -384,6 +384,32 @@ module ts {
         return false;
     }
 
+    export function isStatement(n: Node): boolean {
+        switch(n.kind) {
+            case SyntaxKind.BreakStatement:
+            case SyntaxKind.ContinueStatement:
+            case SyntaxKind.DebuggerStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.ExpressionStatement:
+            case SyntaxKind.EmptyStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.LabelledStatement:
+            case SyntaxKind.ReturnStatement:
+            case SyntaxKind.SwitchStatement:
+            case SyntaxKind.ThrowKeyword:
+            case SyntaxKind.TryStatement:
+            case SyntaxKind.VariableStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.WithStatement:
+            case SyntaxKind.ExportAssignment:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     // True if the given identifier, string literal, or number literal is the name of a declaration node
     export function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean {
         if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
