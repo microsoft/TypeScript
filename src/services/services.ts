@@ -1742,7 +1742,7 @@ module ts {
                 return (SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation);
             }
 
-            function isVisibleWithenDeclaration(symbol: Symbol, containingClass: Declaration): boolean {
+            function isVisibleWithinDeclaration(symbol: Symbol, containingClass: Declaration): boolean {
                 var declaration = symbol.declarations && symbol.declarations[0];
                 return !(declaration && declaration.flags & NodeFlags.Private && containingClass !== declaration.parent);
             }
@@ -1859,7 +1859,7 @@ module ts {
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
                         forEachValue(symbol.exports, symbol => {
-                            if (isVisibleWithenDeclaration(symbol, containingClass)) {
+                            if (isVisibleWithinDeclaration(symbol, containingClass)) {
                                 symbols.push(symbol);
                             }
                         });
@@ -1871,7 +1871,7 @@ module ts {
                 if (apparentType) {
                     // Filter private properties
                     forEach(apparentType.getApparentProperties(), symbol => {
-                        if (isVisibleWithenDeclaration(symbol, containingClass)) {
+                        if (isVisibleWithinDeclaration(symbol, containingClass)) {
                             symbols.push(symbol);
                         }
                     });
