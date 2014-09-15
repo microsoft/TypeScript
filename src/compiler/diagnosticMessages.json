@@ -327,6 +327,10 @@
         "category": "Error",
         "code": 1121
     },
+    "A tuple type element list cannot be empty.": {
+        "category": "Error",
+        "code": 1122
+    },
     "Variable declaration list cannot be empty.": {
         "category": "Error",
         "code": 1123

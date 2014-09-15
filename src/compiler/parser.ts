@@ -228,6 +228,8 @@ module ts {
                 return children((<TypeLiteralNode>node).members);
             case SyntaxKind.ArrayType:
                 return child((<ArrayTypeNode>node).elementType);
+            case SyntaxKind.TupleType:
+                return children((<TupleTypeNode>node).elementTypes);
             case SyntaxKind.ArrayLiteral:
                 return children((<ArrayLiteral>node).elements);
             case SyntaxKind.ObjectLiteral:
@@ -520,6 +522,7 @@ module ts {
         Parameters,              // Parameters in parameter list
         TypeParameters,          // Type parameters in type parameter list
         TypeArguments,           // Type arguments in type argument list
+        TupleElementTypes,       // Element types in tuple element type list
         Count                    // Number of parsing contexts
     }
 
@@ -547,6 +550,7 @@ module ts {
             case ParsingContext.Parameters:             return Diagnostics.Parameter_declaration_expected;
             case ParsingContext.TypeParameters:         return Diagnostics.Type_parameter_declaration_expected;
             case ParsingContext.TypeArguments:          return Diagnostics.Type_argument_expected;
+            case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
         }
     };
 
@@ -1015,6 +1019,7 @@ module ts {
                 case ParsingContext.Parameters:
                     return isParameter();
                 case ParsingContext.TypeArguments:
+                case ParsingContext.TupleElementTypes:
                     return isType();
             }
 
@@ -1050,6 +1055,7 @@ module ts {
                     // Tokens other than ')' are here for better error recovery
                     return token === SyntaxKind.CloseParenToken || token === SyntaxKind.SemicolonToken;
                 case ParsingContext.ArrayLiteralMembers:
+                case ParsingContext.TupleElementTypes:
                     return token === SyntaxKind.CloseBracketToken;
                 case ParsingContext.Parameters:
                     // Tokens other than ')' and ']' (the latter for index signatures) are here for better error recovery
@@ -1570,6 +1576,17 @@ module ts {
             return finishNode(node);
         }
 
+        function parseTupleType(): TupleTypeNode {
+            var node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
+            var startTokenPos = scanner.getTokenPos();
+            var startErrorCount = file.syntacticErrors.length;
+            node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
+            if (!node.elementTypes.length && file.syntacticErrors.length === startErrorCount) {
+                grammarErrorAtPos(startTokenPos, scanner.getStartPos() - startTokenPos, Diagnostics.A_tuple_type_element_list_cannot_be_empty);
+            }
+            return finishNode(node);
+        }
+
         function parseFunctionType(signatureKind: SyntaxKind): TypeLiteralNode {
             var node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
             var member = <SignatureDeclaration>createNode(signatureKind);
@@ -1600,6 +1617,8 @@ module ts {
                     return parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
                     return parseTypeLiteral();
+                case SyntaxKind.OpenBracketToken:
+                    return parseTupleType();
                 case SyntaxKind.OpenParenToken:
                 case SyntaxKind.LessThanToken:
                     return parseFunctionType(SyntaxKind.CallSignature);
@@ -1623,6 +1642,7 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.OpenBraceToken:
+                case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.NewKeyword:
                     return true;

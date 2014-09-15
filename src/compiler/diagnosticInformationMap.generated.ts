@@ -84,6 +84,7 @@ module ts {
         An_object_literal_cannot_have_property_and_accessor_with_the_same_name: { code: 1119, category: DiagnosticCategory.Error, key: "An object literal cannot have property and accessor with the same name." },
         An_export_assignment_cannot_have_modifiers: { code: 1120, category: DiagnosticCategory.Error, key: "An export assignment cannot have modifiers." },
         Octal_literals_are_not_allowed_in_strict_mode: { code: 1121, category: DiagnosticCategory.Error, key: "Octal literals are not allowed in strict mode." },
+        A_tuple_type_element_list_cannot_be_empty: { code: 1122, category: DiagnosticCategory.Error, key: "A tuple type element list cannot be empty." },
         Variable_declaration_list_cannot_be_empty: { code: 1123, category: DiagnosticCategory.Error, key: "Variable declaration list cannot be empty." },
         Digit_expected: { code: 1124, category: DiagnosticCategory.Error, key: "Digit expected." },
         Hexadecimal_digit_expected: { code: 1125, category: DiagnosticCategory.Error, key: "Hexadecimal digit expected." },
