@@ -979,6 +979,15 @@ module ts {
         AMD,
     }
 
+    export interface LineAndCharacter {
+        line: number;
+        /*
+         * This value denotes the character position in line and is different from the 'column' because of tab characters.
+         */
+        character: number;
+    }
+
+
     export enum ScriptTarget {
         ES3,
         ES5,

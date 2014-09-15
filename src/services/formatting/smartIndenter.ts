@@ -3,11 +3,6 @@
 module ts.formatting {
     export module SmartIndenter {
 
-        interface LineAndCharacter {
-            line: number;
-            character: number;
-        }
-
         export function getIndentation(position: number, sourceFile: SourceFile, options: TypeScript.FormattingOptions): number {
             if (position > sourceFile.text.length) {
                 return 0; // past EOF
@@ -111,23 +106,6 @@ module ts.formatting {
             return indentation;
         }
 
-        function isDeclaration(n: Node): boolean {
-            switch(n.kind) {
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.ImportDeclaration:
-                case SyntaxKind.Method:
-                case SyntaxKind.Property:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.VariableDeclaration:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
         function isStatement(n: Node): boolean {
             switch(n.kind) {
                 case SyntaxKind.BreakStatement:
@@ -153,7 +131,9 @@ module ts.formatting {
             }
         }
 
-        // function returns -1 if indentation cannot be determined
+        /*
+         * Function returns -1 if indentation cannot be determined
+         */ 
         function getActualIndentationForListItemBeforeComma(commaToken: Node, sourceFile: SourceFile, options: TypeScript.FormattingOptions): number {
             // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
             var precedingListItem = findPrecedingListItem(commaToken);
@@ -167,7 +147,9 @@ module ts.formatting {
             return -1;
         }
 
-        // function returns -1 if actual indentation for node should not be used (i.e because node is nested expression)
+        /*
+         * Function returns -1 if actual indentation for node should not be used (i.e because node is nested expression)
+         */
         function getActualIndentationForNode(current: Node, parent: Node, currentLineAndChar: LineAndCharacter, parentAndChildShareLine: boolean, sourceFile: SourceFile, options: TypeScript.FormattingOptions): number {
             var useActualIndentation = 
                 (isDeclaration(current) || isStatement(current)) &&
@@ -306,7 +288,7 @@ module ts.formatting {
                     return column;
                 }
 
-                if (charCode === CharacterCodes.tab && !options.useTabs) {
+                if (charCode === CharacterCodes.tab) {
                     column += options.spacesPerTab;
                 }
                 else {
@@ -391,7 +373,9 @@ module ts.formatting {
             }
         }
 
-        /// checks if node is something that can contain tokens (except EOF) - filters out EOF tokens, Missing\Omitted expressions, empty SyntaxLists and expression statements that wrap any of listed nodes.
+        /*
+         * Checks if node is something that can contain tokens (except EOF) - filters out EOF tokens, Missing\Omitted expressions, empty SyntaxLists and expression statements that wrap any of listed nodes.
+         */
         function isCandidateNode(n: Node): boolean {
             if (n.kind === SyntaxKind.ExpressionStatement) {
                 return isCandidateNode((<ExpressionStatement>n).expression);
@@ -456,8 +440,10 @@ module ts.formatting {
             }
         }
 
-        /// checks if node ends with 'expectedLastToken'.
-        /// If child at position 'length - 1' is 'SemicolonToken' it is skipped and 'expectedLastToken' is compared with child at position 'length - 2'.
+        /*
+         * Checks if node ends with 'expectedLastToken'.
+         * If child at position 'length - 1' is 'SemicolonToken' it is skipped and 'expectedLastToken' is compared with child at position 'length - 2'.
+         */
         function nodeEndsWith(n: Node, expectedLastToken: SyntaxKind, sourceFile: SourceFile): boolean {
             var children = n.getChildren(sourceFile);
             if (children.length) {
@@ -472,7 +458,9 @@ module ts.formatting {
             return false;
         }
 
-        // this function is always called when position of the cursor is located after the node
+        /*
+         * This function is always called when position of the cursor is located after the node
+         */
         function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
             switch (n.kind) {
                 case SyntaxKind.ClassDeclaration:
