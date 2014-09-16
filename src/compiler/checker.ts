@@ -7145,7 +7145,7 @@ module ts {
         }
 
         function getRootSymbol(symbol: Symbol) {
-            return (symbol.flags & SymbolFlags.Transient) && getSymbolLinks(symbol).target || symbol;
+            return ((symbol.flags & SymbolFlags.Transient) && getSymbolLinks(symbol).target) || symbol;
         }
 
         // Emitter support

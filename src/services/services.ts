@@ -1576,7 +1576,7 @@ module ts {
                 
                 var isValid = isIdentifierStart(displayName.charCodeAt(0), target);
                 for (var i = 1, n = displayName.length; isValid && i < n; i++) {
-                    isValid = isValid && isIdentifierPart(displayName.charCodeAt(i), target);
+                    isValid = isIdentifierPart(displayName.charCodeAt(i), target);
                 }
 
                 if (isValid) {
@@ -1742,9 +1742,9 @@ module ts {
                 return (SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation);
             }
 
-            function isVisibleWithinDeclaration(symbol: Symbol, containingClass: Declaration): boolean {
+            function isVisibleWithinClassDeclaration(symbol: Symbol, containingClass: Declaration): boolean {
                 var declaration = symbol.declarations && symbol.declarations[0];
-                return !(declaration && declaration.flags & NodeFlags.Private && containingClass !== declaration.parent);
+                return !(declaration && (declaration.flags & NodeFlags.Private) && containingClass !== declaration.parent);
             }
 
             function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
@@ -1755,11 +1755,11 @@ module ts {
                 var existingMemberNames: Map<boolean> = {};
                 forEach(existingMembers, m => {
                     if (m.kind !== SyntaxKind.PropertyAssignment) {
-                        // Ignore ommited expressions for missing members in the object literal
+                        // Ignore omitted expressions for missing members in the object literal
                         return;
                     }
 
-                    if (position <= m.getEnd() && position >= m.getStart()) {
+                    if (m.getStart() <= position && position <= m.getEnd()) {
                         // If this is the current item we are editing right now, do not filter it out
                         return;
                     }
@@ -1768,7 +1768,7 @@ module ts {
                 });
 
                 var filteredMembers: Symbol[] = [];
-                forEach(contextualMemberSymbols, s=> {
+                forEach(contextualMemberSymbols, s => {
                     if (!existingMemberNames[s.name]) {
                         filteredMembers.push(s);
                     }
@@ -1859,7 +1859,7 @@ module ts {
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
                         forEachValue(symbol.exports, symbol => {
-                            if (isVisibleWithinDeclaration(symbol, containingClass)) {
+                            if (isVisibleWithinClassDeclaration(symbol, containingClass)) {
                                 symbols.push(symbol);
                             }
                         });
@@ -1871,7 +1871,7 @@ module ts {
                 if (apparentType) {
                     // Filter private properties
                     forEach(apparentType.getApparentProperties(), symbol => {
-                        if (isVisibleWithinDeclaration(symbol, containingClass)) {
+                        if (isVisibleWithinClassDeclaration(symbol, containingClass)) {
                             symbols.push(symbol);
                         }
                     });
@@ -1884,7 +1884,7 @@ module ts {
 
                 // Object literal expression, look up possible property names from contextual type
                 if (containingObjectLiteral) {
-                    var objectLiteral = mappedNode.kind === SyntaxKind.ObjectLiteral ? <ObjectLiteral>mappedNode : <ObjectLiteral>getAncestor(mappedNode, SyntaxKind.ObjectLiteral);
+                    var objectLiteral = <ObjectLiteral>(mappedNode.kind === SyntaxKind.ObjectLiteral ? mappedNode : getAncestor(mappedNode, SyntaxKind.ObjectLiteral));
 
                     Debug.assert(objectLiteral);
 
@@ -1897,7 +1897,7 @@ module ts {
 
                     var contextualTypeMembers = typeInfoResolver.getPropertiesOfType(contextualType);
                     if (contextualTypeMembers && contextualTypeMembers.length > 0) {
-                        // Add filtterd items to the completion list
+                        // Add filtered items to the completion list
                         var filteredMembers = filterContextualMembersList(contextualTypeMembers, objectLiteral.properties);
                         getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
                     }
