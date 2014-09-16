@@ -84,6 +84,7 @@ module ts {
         An_object_literal_cannot_have_property_and_accessor_with_the_same_name: { code: 1119, category: DiagnosticCategory.Error, key: "An object literal cannot have property and accessor with the same name." },
         An_export_assignment_cannot_have_modifiers: { code: 1120, category: DiagnosticCategory.Error, key: "An export assignment cannot have modifiers." },
         Octal_literals_are_not_allowed_in_strict_mode: { code: 1121, category: DiagnosticCategory.Error, key: "Octal literals are not allowed in strict mode." },
+        A_tuple_type_element_list_cannot_be_empty: { code: 1122, category: DiagnosticCategory.Error, key: "A tuple type element list cannot be empty." },
         Variable_declaration_list_cannot_be_empty: { code: 1123, category: DiagnosticCategory.Error, key: "Variable declaration list cannot be empty." },
         Digit_expected: { code: 1124, category: DiagnosticCategory.Error, key: "Digit expected." },
         Hexadecimal_digit_expected: { code: 1125, category: DiagnosticCategory.Error, key: "Hexadecimal digit expected." },
@@ -390,6 +391,10 @@ module ts {
         Object_literal_s_property_0_implicitly_has_an_1_type: { code: 7018, category: DiagnosticCategory.Error, key: "Object literal's property '{0}' implicitly has an '{1}' type." },
         Rest_parameter_0_implicitly_has_an_any_type: { code: 7019, category: DiagnosticCategory.Error, key: "Rest parameter '{0}' implicitly has an 'any[]' type." },
         Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type: { code: 7020, category: DiagnosticCategory.Error, key: "Call signature, which lacks return-type annotation, implicitly has an 'any' return type." },
+        _0_implicitly_has_type_any_because_it_is_referenced_directly_or_indirectly_in_its_own_type_annotation: { code: 7021, category: DiagnosticCategory.Error, key: "'{0}' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation." },
+        _0_implicitly_has_type_any_because_it_is_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer: { code: 7022, category: DiagnosticCategory.Error, key: "'{0}' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer." },
+        _0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions: { code: 7023, category: DiagnosticCategory.Error, key: "'{0}' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions." },
+        Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions: { code: 7024, category: DiagnosticCategory.Error, key: "Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions." },
         You_cannot_rename_this_element: { code: 8000, category: DiagnosticCategory.Error, key: "You cannot rename this element." },
     };
 }

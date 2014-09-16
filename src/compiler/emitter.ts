@@ -781,8 +781,8 @@ module ts {
                     case SyntaxKind.ContinueStatement:
                     case SyntaxKind.ExportAssignment:
                         return false;
-                    case SyntaxKind.LabelledStatement:
-                        return (<LabelledStatement>node.parent).label === node;
+                    case SyntaxKind.LabeledStatement:
+                        return (<LabeledStatement>node.parent).label === node;
                     case SyntaxKind.CatchBlock:
                         return (<CatchBlock>node.parent).variable === node;
                 }
@@ -1200,7 +1200,7 @@ module ts {
                 write(";");
             }
 
-            function emitLabelledStatement(node: LabelledStatement) {
+            function emitLabelledStatement(node: LabeledStatement) {
                 emit(node.label);
                 write(": ");
                 emit(node.statement);
@@ -1973,7 +1973,7 @@ module ts {
                 }
             }
 
-            function emitNode(node: Node) {
+            function emitNode(node: Node): void {
                 if (!node) {
                     return;
                 }
@@ -2071,8 +2071,8 @@ module ts {
                     case SyntaxKind.CaseClause:
                     case SyntaxKind.DefaultClause:
                         return emitCaseOrDefaultClause(<CaseOrDefaultClause>node);
-                    case SyntaxKind.LabelledStatement:
-                        return emitLabelledStatement(<LabelledStatement>node);
+                    case SyntaxKind.LabeledStatement:
+                        return emitLabelledStatement(<LabeledStatement>node);
                     case SyntaxKind.ThrowStatement:
                         return emitThrowStatement(<ThrowStatement>node);
                     case SyntaxKind.TryStatement:

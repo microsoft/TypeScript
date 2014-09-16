@@ -19,8 +19,7 @@ module ts {
 
     export function contains<T>(array: T[], value: T): boolean {
         if (array) {
-            var len = array.length;
-            for (var i = 0; i < len; i++) {
+            for (var i = 0, len = array.length; i < len; i++) {
                 if (array[i] === value) {
                     return true;
                 }
@@ -31,8 +30,7 @@ module ts {
 
     export function indexOf<T>(array: T[], value: T): number {
         if (array) {
-            var len = array.length;
-            for (var i = 0; i < len; i++) {
+            for (var i = 0, len = array.length; i < len; i++) {
                 if (array[i] === value) {
                     return i;
                 }
@@ -42,9 +40,8 @@ module ts {
     }
 
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
-        var result: T[];
         if (array) {
-            result = [];
+            var result: T[] = [];
             for (var i = 0, len = array.length; i < len; i++) {
                 var item = array[i];
                 if (f(item)) {
@@ -56,11 +53,9 @@ module ts {
     }
 
     export function map<T, U>(array: T[], f: (x: T) => U): U[] {
-        var result: U[];
         if (array) {
-            result = [];
-            var len = array.length;
-            for (var i = 0; i < len; i++) {
+            var result: U[] = [];
+            for (var i = 0, len = array.length; i < len; i++) {
                 result.push(f(array[i]));
             }
         }
@@ -71,6 +66,17 @@ module ts {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
         return array1.concat(array2);
+    }
+
+    export function uniqueElements<T>(array: T[]): T[] {
+        if (array) {
+            var result: T[] = [];
+            for (var i = 0, len = array.length; i < len; i++) {
+                var item = array[i];
+                if (!contains(result, item)) result.push(item);
+            }
+        }
+        return result;
     }
 
     export function sum(array: any[], prop: string): number {

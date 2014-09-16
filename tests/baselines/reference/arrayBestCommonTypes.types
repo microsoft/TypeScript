@@ -222,7 +222,7 @@ class f {
 >base : base
 >[ { x: undefined, y: new base() }, { x: '', y: new derived() } ] : { x: string; y: base; }[]
 >{ x: undefined, y: new base() } : { x: undefined; y: base; }
->x : any
+>x : undefined
 >undefined : undefined
 >y : base
 >new base() : base

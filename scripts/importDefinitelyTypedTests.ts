@@ -36,8 +36,8 @@ function importDefinitelyTypedTest(testCaseName: string, testFiles: string[], re
         maxBuffer: 1 * 1024 * 1024,
         cwd: testDirectoryPath
     }, (error, stdout, stderr) => {
-            //console.log("importing " + testCaseName + " ...");
-            //console.log(cmd);
+            console.log("importing " + testCaseName + " ...");
+            console.log(cmd);
 
             if (error) {
                 console.log("importing " + testCaseName + " ...");
@@ -79,7 +79,8 @@ function importDefinitelyTypedTests(definitelyTypedRoot: string): void {
         if (err) throw err;
 
         subDirectorys
-            .filter(d => ["_infrastructure", "node_modules", ".git"].indexOf(d) >= 0)
+            .filter(d => ["_infrastructure", "node_modules", ".git"].indexOf(d) < 0)
+            .filter(i => i.indexOf("sipml") >=0 )
             .filter(i => fs.statSync(path.join(definitelyTypedRoot, i)).isDirectory())
             .forEach(d => {
                 var directoryPath = path.join(definitelyTypedRoot, d);
