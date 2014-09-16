@@ -3542,6 +3542,15 @@ module ts {
                 return undefined;
             }
 
+            function getSignatureHelpItemsFromCandidateInfo(candidates: Signature[], bestSignature: Signature): SignatureHelpItems {
+                var items = map(candidates, candidateSignature => {
+                    return new SignatureHelpItem(false, "", "", "", new Array<SignatureHelpParameter>(candidateSignature.parameters.length), "");
+                });
+                var selectedItemIndex = candidates.indexOf(bestSignature);
+                Debug.assert(selectedItemIndex >= 0);
+                return new SignatureHelpItems(items, undefined, selectedItemIndex);
+            }
+
             synchronizeHostData();
 
             // Decide whether to show signature help
@@ -3556,7 +3565,7 @@ module ts {
                 var candidates = <Signature[]>[];
                 var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
                 return candidates.length
-                    ? new SignatureHelpItems(new Array<SignatureHelpItem>(candidates.length), undefined, undefined)
+                    ? getSignatureHelpItemsFromCandidateInfo(candidates, resolvedSignature)
                     : undefined;
             }
 
