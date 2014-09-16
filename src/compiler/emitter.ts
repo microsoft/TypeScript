@@ -179,7 +179,7 @@ module ts {
             });
         }
 
-        function emitComments(comments: Comment[], trailingSeparator: boolean, writer: EmitTextWriter, writeComment: (comment: Comment, writer: EmitTextWriter) => void) {
+        function emitComments(comments: CommentRange[], trailingSeparator: boolean, writer: EmitTextWriter, writeComment: (comment: CommentRange, writer: EmitTextWriter) => void) {
             var emitLeadingSpace = !trailingSeparator;
             forEach(comments, comment => {
                 if (emitLeadingSpace) {
@@ -200,7 +200,7 @@ module ts {
             });
         }
 
-        function emitNewLineBeforeLeadingComments(node: TextRange, leadingComments: Comment[], writer: EmitTextWriter) {
+        function emitNewLineBeforeLeadingComments(node: TextRange, leadingComments: CommentRange[], writer: EmitTextWriter) {
             // If the leading comments start on different line than the start of node, write new line
             if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
                 getLineOfLocalPosition(node.pos) !== getLineOfLocalPosition(leadingComments[0].pos)) {
@@ -208,7 +208,7 @@ module ts {
             }
         }
 
-        function writeCommentRange(comment: Comment, writer: EmitTextWriter) {
+        function writeCommentRange(comment: CommentRange, writer: EmitTextWriter) {
             if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
                 var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
                 var firstCommentLineIndent: number;
@@ -582,7 +582,7 @@ module ts {
                     sourceMapNameIndices.pop();
                 };
 
-                function writeCommentRangeWithMap(comment: Comment, writer: EmitTextWriter) {
+                function writeCommentRangeWithMap(comment: CommentRange, writer: EmitTextWriter) {
                     recordSourceMapSpan(comment.pos);
                     writeCommentRange(comment, writer);
                     recordSourceMapSpan(comment.end);
@@ -2118,7 +2118,7 @@ module ts {
             function getLeadingCommentsToEmit(node: Node) {
                 // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
-                    var leadingComments: Comment[];
+                    var leadingComments: CommentRange[];
                     if (hasDetachedComments(node.pos)) {
                         // get comments without detached comments
                         leadingComments = getLeadingCommentsWithoutDetachedComments();
@@ -2148,7 +2148,7 @@ module ts {
             }
 
             function emitLeadingCommentsOfLocalPosition(pos: number) {
-                var leadingComments: Comment[];
+                var leadingComments: CommentRange[];
                 if (hasDetachedComments(pos)) {
                     // get comments without detached comments
                     leadingComments = getLeadingCommentsWithoutDetachedComments();
@@ -2165,8 +2165,8 @@ module ts {
             function emitDetachedCommentsAtPosition(node: TextRange) {
                 var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
                 if (leadingComments) {
-                    var detachedComments: Comment[] = [];
-                    var lastComment: Comment;
+                    var detachedComments: CommentRange[] = [];
+                    var lastComment: CommentRange;
 
                     forEach(leadingComments, comment => {
                         if (lastComment) {
@@ -2210,7 +2210,7 @@ module ts {
             function emitPinnedOrTripleSlashCommentsOfNode(node: Node) {
                 var pinnedComments = ts.filter(getLeadingCommentsToEmit(node), isPinnedOrTripleSlashComment);
 
-                function isPinnedOrTripleSlashComment(comment: Comment) {
+                function isPinnedOrTripleSlashComment(comment: CommentRange) {
                     if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
                         return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
                     }

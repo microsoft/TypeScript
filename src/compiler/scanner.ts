@@ -374,7 +374,7 @@ module ts {
     // between the given position and the next line break are returned. The return value is an array containing a TextRange for each
     // comment. Single-line comment ranges include the beginning '//' characters but not the ending line break. Multi-line comment
     // ranges include the beginning '/* and ending '*/' characters. The return value is undefined if no comments were found.
-    function getCommentRanges(text: string, pos: number, trailing: boolean): Comment[] {
+    function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         commentScanner.setText(text);
         commentScanner.setTextPos(pos);
         var comments = getCommentRangesWorker(commentScanner);
@@ -382,8 +382,8 @@ module ts {
 
         return comments;
 
-        function getCommentRangesWorker(scanner: Scanner): Comment[] {
-            var result: Comment[];
+        function getCommentRangesWorker(scanner: Scanner): CommentRange[] {
+            var result: CommentRange[];
             var collecting = trailing || scanner.getTextPos() === 0;
             var lastCommentIsSingleLine = false;
             while(true) {
@@ -420,11 +420,11 @@ module ts {
     }
 
 
-    export function getLeadingComments(text: string, pos: number): Comment[] {
+    export function getLeadingComments(text: string, pos: number): CommentRange[] {
         return getCommentRanges(text, pos, /*trailing*/ false);
     }
 
-    export function getTrailingComments(text: string, pos: number): Comment[] {
+    export function getTrailingComments(text: string, pos: number): CommentRange[] {
         return getCommentRanges(text, pos, /*trailing*/ true);
     }
 

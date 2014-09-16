@@ -527,7 +527,7 @@ module ts {
         filename: string;
     }
 
-    export interface Comment extends TextRange {
+    export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
     }
 
