@@ -8,5 +8,4 @@
 
 goTo.marker("1");
 edit.insert("\r\n");
-// Won't-fixed: Disable SmartIndent inside multiline string in TS. Should be 0
-verify.indentationIs(8);
+verify.indentationIs(0);

@@ -153,6 +153,7 @@ module ts {
         TypeQuery,
         TypeLiteral,
         ArrayType,
+        TupleType,
         // Expression
         ArrayLiteral,
         ObjectLiteral,
@@ -187,7 +188,7 @@ module ts {
         SwitchStatement,
         CaseClause,
         DefaultClause,
-        LabelledStatement,
+        LabeledStatement,
         ThrowStatement,
         TryStatement,
         TryBlock,
@@ -223,9 +224,11 @@ module ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
-        LastTypeNode = ArrayType,
+        LastTypeNode = TupleType,
         FirstPunctuation = OpenBraceToken,
-        LastPunctuation = CaretEqualsToken
+        LastPunctuation = CaretEqualsToken,
+        FirstToken = EndOfFileToken,
+        LastToken = StringKeyword
     }
 
     export enum NodeFlags {
@@ -322,6 +325,10 @@ module ts {
 
     export interface ArrayTypeNode extends TypeNode {
         elementType: TypeNode;
+    }
+
+    export interface TupleTypeNode extends TypeNode {
+        elementTypes: NodeArray<TypeNode>;
     }
 
     export interface StringLiteralTypeNode extends TypeNode {
@@ -463,7 +470,7 @@ module ts {
         statements: NodeArray<Statement>;
     }
 
-    export interface LabelledStatement extends Statement {
+    export interface LabeledStatement extends Statement {
         label: Identifier;
         statement: Statement;
     }
@@ -807,13 +814,14 @@ module ts {
         Class              = 0x00000400,  // Class
         Interface          = 0x00000800,  // Interface
         Reference          = 0x00001000,  // Generic type reference
-        Anonymous          = 0x00002000,  // Anonymous
-        FromSignature      = 0x00004000,  // Created for signature assignment check
+        Tuple              = 0x00002000,  // Tuple
+        Anonymous          = 0x00004000,  // Anonymous
+        FromSignature      = 0x00008000,  // Created for signature assignment check
 
         Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
-        ObjectType = Class | Interface | Reference | Anonymous
+        ObjectType = Class | Interface | Reference | Tuple | Anonymous
     }
 
     // Properties common to all types
@@ -864,6 +872,11 @@ module ts {
         instantiations: Map<TypeReference>;   // Generic instantiation cache
         openReferenceTargets: GenericType[];  // Open type reference targets
         openReferenceChecks: Map<boolean>;    // Open type reference check cache
+    }
+
+    export interface TupleType extends ObjectType {
+        elementTypes: Type[];          // Element types
+        baseArrayType: TypeReference;  // Array<T> where T is best common type of element types
     }
 
     // Resolved object type
@@ -980,6 +993,15 @@ module ts {
         CommonJS,
         AMD,
     }
+
+    export interface LineAndCharacter {
+        line: number;
+        /*
+         * This value denotes the character position in line and is different from the 'column' because of tab characters.
+         */
+        character: number;
+    }
+
 
     export enum ScriptTarget {
         ES3,
