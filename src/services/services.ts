@@ -1412,16 +1412,12 @@ module ts {
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
                 getNewLine: () => "\r\n",
                 getDefaultLibFilename: (): string => {
-                    // In the case there is no host (such as in fourslash test), return ""
                     return host.getDefaultLibFilename();
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
-                    if (writer !== undefined) {
-                        writer(filename, data, writeByteOrderMark);
-                    }
+                    writer(filename, data, writeByteOrderMark);
                 },
                 getCurrentDirectory: (): string => {
-                    // In the case there is no host (such as in fourslash test), return ""
                     return host.getCurrentDirectory();
                 }
             };
