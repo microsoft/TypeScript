@@ -1,23 +1,20 @@
 /// <reference path='fourslash.ts' />
 
-////switch (10) {
-////    case 1:
-////    case 2:
-////    case 4:
-////    case 8:
-////        foo: [|switch|] (20) {
-////            [|case|] 1:
-////            [|case|] 2:
-////                [|break|];
-////            [|default|]:
+////foo: [|switch|] (1) {
+////    [|case|] 1:
+////    [|case|] 2:
+////        [|break|];
+////    [|case|] 3:
+////        switch (2) {
+////            case 1:
 ////                [|break|] foo;
+////                continue; // invalid
+////            default:
+////                break;
 ////        }
-////    case 0xBEEF:
-////    default:
-////        break;
-////    case 16:
+////    [|default|]:
+////        [|break|];
 ////}
-
 
 test.ranges().forEach(r => {
     goTo.position(r.start);

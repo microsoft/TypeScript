@@ -1,23 +1,14 @@
 /// <reference path='fourslash.ts' />
 
-////[|switch|] (10) {
+////foo: [|switch|] (10) {
 ////    [|case|] 1:
 ////    [|case|] 2:
-////    [|case|] 4:
-////    [|case|] 8:
-////        foo: switch (20) {
-////            case 1:
-////            case 2:
-////                break;
-////            default:
-////                break foo;
-////        }
-////    [|case|] 0xBEEF:
-////    [|default|]:
+////    [|case|] 3:
 ////        [|break|];
-////    [|case|] 16:
+////        [|break|] foo;
+////        co/*1*/ntinue;
+////        contin/*2*/ue foo;
 ////}
-
 
 test.ranges().forEach(r => {
     goTo.position(r.start);
@@ -26,4 +17,9 @@ test.ranges().forEach(r => {
     test.ranges().forEach(range => {
         verify.occurrencesAtPositionContains(range, false);
     });
+});
+
+test.markers().forEach(m => {
+    goTo.position(m.position);
+    verify.occurrencesAtPositionCount(0);
 });

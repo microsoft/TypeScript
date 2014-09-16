@@ -5976,7 +5976,7 @@ module ts {
             });
         }
 
-        function checkLabelledStatement(node: LabelledStatement) {
+        function checkLabeledStatement(node: LabeledStatement) {
             checkSourceElement(node.statement);
         }
 
@@ -6546,8 +6546,8 @@ module ts {
                     return checkWithStatement(<WithStatement>node);
                 case SyntaxKind.SwitchStatement:
                     return checkSwitchStatement(<SwitchStatement>node);
-                case SyntaxKind.LabelledStatement:
-                    return checkLabelledStatement(<LabelledStatement>node);
+                case SyntaxKind.LabeledStatement:
+                    return checkLabeledStatement(<LabeledStatement>node);
                 case SyntaxKind.ThrowStatement:
                     return checkThrowStatement(<ThrowStatement>node);
                 case SyntaxKind.TryStatement:
@@ -6626,7 +6626,7 @@ module ts {
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.DefaultClause:
-                case SyntaxKind.LabelledStatement:
+                case SyntaxKind.LabeledStatement:
                 case SyntaxKind.ThrowStatement:
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.TryBlock:
