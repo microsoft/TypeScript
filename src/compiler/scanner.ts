@@ -366,48 +366,59 @@ module ts {
         }
     }
 
+    // scanner instance that is solely used to scan comments
+    var commentScanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false);
+
     // Extract comments from the given source text starting at the given position. If trailing is false, whitespace is skipped until
     // the first line break and comments between that location and the next token are returned. If trailing is true, comments occurring
     // between the given position and the next line break are returned. The return value is an array containing a TextRange for each
     // comment. Single-line comment ranges include the beginning '//' characters but not the ending line break. Multi-line comment
     // ranges include the beginning '/* and ending '*/' characters. The return value is undefined if no comments were found.
     function getCommentRanges(text: string, pos: number, trailing: boolean): Comment[] {
-        var scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false, text);
-        scanner.setTextPos(pos);
-        var result: Comment[];
-        var collecting = trailing || pos === 0;
-        var lastCommentIsSingleLine = false;
-        while(true) {
-            var token = scanner.scan();
-            switch (token) {
-                case SyntaxKind.NewLineTrivia:
-                    if (result && result.length && (!trailing || lastCommentIsSingleLine)) {
-                        result[result.length - 1].hasTrailingNewLine = true;
-                    }
+        commentScanner.setText(text);
+        commentScanner.setTextPos(pos);
+        var comments = getCommentRangesWorker(commentScanner);
+        commentScanner.setText(undefined);
 
-                    if (trailing) {
-                        return result;
-                    }
-                    collecting = true;
-                    break;
-                case SyntaxKind.SingleLineCommentTrivia:
-                case SyntaxKind.MultiLineCommentTrivia:
-                    if (collecting) {
-                        if (!result) {
-                            result = [];
+        return comments;
+
+        function getCommentRangesWorker(scanner: Scanner): Comment[] {
+            var result: Comment[];
+            var collecting = trailing || scanner.getTextPos() === 0;
+            var lastCommentIsSingleLine = false;
+            while(true) {
+                var token = scanner.scan();
+                switch (token) {
+                    case SyntaxKind.NewLineTrivia:
+                        if (result && result.length && (!trailing || lastCommentIsSingleLine)) {
+                            result[result.length - 1].hasTrailingNewLine = true;
                         }
-                        result.push( {pos: scanner.getTokenPos(), end: scanner.getTextPos() });
-                        lastCommentIsSingleLine = token === SyntaxKind.SingleLineCommentTrivia;
-                    }
-                    break;
-                case SyntaxKind.WhitespaceTrivia:
-                    // skip whitespaces
-                    break;
-                default:
-                    return result;
+
+                        if (trailing) {
+                            return result;
+                        }
+                        collecting = true;
+                        break;
+                    case SyntaxKind.SingleLineCommentTrivia:
+                    case SyntaxKind.MultiLineCommentTrivia:
+                        if (collecting) {
+                            if (!result) {
+                                result = [];
+                            }
+                            result.push( {pos: scanner.getTokenPos(), end: scanner.getTextPos() });
+                            lastCommentIsSingleLine = token === SyntaxKind.SingleLineCommentTrivia;
+                        }
+                        break;
+                    case SyntaxKind.WhitespaceTrivia:
+                        // skip whitespaces
+                        break;
+                    default:
+                        return result;
+                }
             }
         }
     }
+
 
     export function getLeadingComments(text: string, pos: number): Comment[] {
         return getCommentRanges(text, pos, /*trailing*/ false);
