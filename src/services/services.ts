@@ -3160,7 +3160,7 @@ module ts {
             var sourceFile = getSourceFile(fileName);
 
             var result: ClassifiedSpan[] = [];
-            processNode(sourceFile.getSourceFile());
+            processNode(sourceFile);
 
             return result;
 
