@@ -223,6 +223,8 @@ module ts {
         LastTypeNode = TupleType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
+        FirstToken = EndOfFileToken,
+        LastToken = StringKeyword
     }
 
     export enum NodeFlags {
@@ -987,6 +989,15 @@ module ts {
         CommonJS,
         AMD,
     }
+
+    export interface LineAndCharacter {
+        line: number;
+        /*
+         * This value denotes the character position in line and is different from the 'column' because of tab characters.
+         */
+        character: number;
+    }
+
 
     export enum ScriptTarget {
         ES3,

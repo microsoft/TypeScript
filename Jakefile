@@ -318,7 +318,7 @@ function exec(cmd, completeHandler) {
         complete();
     })
     try{
-        ex.run();	
+        ex.run();   
     } catch(e) {
         console.log('Exception: ' + e)
     }
@@ -385,7 +385,7 @@ desc("Generates code coverage data via instanbul")
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
     console.log(cmd);
-    exec(cmd);	
+    exec(cmd);  
 }, { async: true });
 
 // Browser tests

@@ -36,5 +36,4 @@
 ///<reference path='indentationNodeContextPool.ts' /> 
 ///<reference path='indentationTrackingWalker.ts' /> 
 ///<reference path='multipleTokenIndenter.ts' /> 
-///<reference path='singleTokenIndenter.ts' /> 
 ///<reference path='formatter.ts' /> 
