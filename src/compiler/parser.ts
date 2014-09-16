@@ -498,7 +498,7 @@ module ts {
             case SyntaxKind.ForInStatement:
             case SyntaxKind.ForStatement:
             case SyntaxKind.IfStatement:
-            case SyntaxKind.LabelledStatement:
+            case SyntaxKind.LabeledStatement:
             case SyntaxKind.ReturnStatement:
             case SyntaxKind.SwitchStatement:
             case SyntaxKind.ThrowKeyword:

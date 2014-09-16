@@ -209,6 +209,7 @@ module ts.formatting {
                         if ((<TypeReferenceNode>node.parent).typeArguments) {
                             return getActualIndentationFromList((<TypeReferenceNode>node.parent).typeArguments);
                         }
+                        break;
                     case SyntaxKind.ObjectLiteral:
                         return getActualIndentationFromList((<ObjectLiteral>node.parent).properties);
                     case SyntaxKind.TypeLiteral:
