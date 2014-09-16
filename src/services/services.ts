@@ -11,6 +11,7 @@
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='signatureInfoHelpers.ts' />
+/// <reference path='servicesSyntaxUtilities.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 
@@ -3533,7 +3534,7 @@ module ts {
                 if (!isToken || position <= node.getStart() || position >= node.getEnd()) {
                     // This is a temporary hack until we figure out our token story.
                     // The correct solution is to get the previous token
-                    node = SignatureInfoHelpers.findPrecedingToken(position, sourceFile);
+                    node = ServicesSyntaxUtilities.findPrecedingToken(position, sourceFile);
 
                     if (!node) {
                         return undefined;
