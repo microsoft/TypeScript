@@ -3118,10 +3118,12 @@ module ts {
             return TypeScript.Services.Breakpoints.getBreakpointLocation(syntaxtree, position);
         }
 
-        function getNavigationBarItems(filename: string) {
+        function getNavigationBarItems(filename: string): NavigationBarItem[] {
             filename = TypeScript.switchToForwardSlashes(filename);
+
+
             var syntaxTree = getSyntaxTree(filename);
-            return new TypeScript.Services.NavigationBarItemGetter().getItems(syntaxTree.sourceUnit());
+            return TypeScript.Services.getNavigationBarItemsHelper(syntaxTree.sourceUnit());
         }
 
         function getOutliningSpans(filename: string): OutliningSpan[] {
