@@ -1,4 +1,4 @@
-EmitOutputStatus : DeclaratiionGenerationSkipped
+EmitOutputStatus : DeclarationGenerationSkipped
 Filename : tests/cases/fourslash/inputFile.js
 var x = "hello world";
 

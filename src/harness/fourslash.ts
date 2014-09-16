@@ -182,7 +182,6 @@ module FourSlash {
                     case testOptMetadataNames.sourceRoot:
                         settings.sourceRoot = globalOptions[prop];
                         break;
-                    
                 }
             }
         }
@@ -983,29 +982,9 @@ module FourSlash {
                     emitFiles.forEach(emitFile => {
                         var emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
                         var emitOutputStatus = emitOutput.emitOutputStatus;
-
                         // Print emitOutputStatus in readable format
-                        switch (emitOutputStatus) {
-                            case ts.EmitReturnStatus.Succeeded:
-                                resultString += "EmitOutputStatus : Succeeded\n";
-                                break;
-                            case ts.EmitReturnStatus.AllOutputGenerationSkipped:
-                                resultString += "EmitOutputStatus : AllOutputGenerationSkipped\n";
-                                break;
-                            case ts.EmitReturnStatus.JSGeneratedWithSemanticErrors:
-                                resultString += "EmitOutputStatus : JSGeneratedWithSemanticErrors\n";
-                                break;
-                            case ts.EmitReturnStatus.DeclarationGenerationSkipped:
-                                resultString += "EmitOutputStatus : DeclaratiionGenerationSkipped\n";
-                                break;
-                            case ts.EmitReturnStatus.EmitErrorsEncountered:
-                                resultString += "EmitOutputStatus : EmitErrorEncountered\n";
-                                break;
-                            default:
-                                resultString += "Invalid EmitOutputStatus\n";
-                                break;
-                        }
-
+                        resultString += "EmitOutputStatus : " + ts.EmitReturnStatus[emitOutputStatus];
+                        resultString += "\n";
                         emitOutput.outputFiles.forEach((outputFile, idx, array) => {
                             var filename = "Filename : " + outputFile.name + "\n";
                             resultString = resultString + filename + outputFile.text;

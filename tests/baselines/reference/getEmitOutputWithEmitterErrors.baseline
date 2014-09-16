@@ -1,4 +1,4 @@
-EmitOutputStatus : EmitErrorEncountered
+EmitOutputStatus : EmitErrorsEncountered
 Filename : tests/cases/fourslash/inputFile.js
 var M;
 (function (M) {

@@ -1413,7 +1413,7 @@ module ts {
                 getNewLine: () => "\r\n",
                 getDefaultLibFilename: (): string => {
                     // In the case there is no host (such as in fourslash test), return ""
-                    return this.host !== undefined ? this.host.getDefaultLibFilename() : "";
+                    return host.getDefaultLibFilename();
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
                     if (writer !== undefined) {
@@ -1422,7 +1422,7 @@ module ts {
                 },
                 getCurrentDirectory: (): string => {
                     // In the case there is no host (such as in fourslash test), return ""
-                    return this.host !== undefined ? this.host.getCurrentDirectory() : "";
+                    return host.getCurrentDirectory();
                 }
             };
         }
@@ -2869,11 +2869,12 @@ module ts {
             } else {
                 // Check the syntactic of only sourceFiles that will get emitted into single output
                 // Terminate the process immediately if we encounter a syntax error from one of the sourceFiles
-                containSyntacticErrors = program.getSourceFiles().some((sourceFile) => {
+                containSyntacticErrors = forEach(program.getSourceFiles(), sourceFile => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         // If emit to a single file then we will check all files that do not have external module
                         return containErrors(program.getDiagnostics(sourceFile));
                     }
+                    return false;
                 });
             }
 
