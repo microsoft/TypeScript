@@ -5211,8 +5211,7 @@ module ts {
                 var otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
                 var otherAccessor = <AccessorDeclaration>getDeclarationOfKind(node.symbol, otherKind);
                 if (otherAccessor) {
-                    var visibilityFlags = NodeFlags.Private | NodeFlags.Public;
-                    if (((node.flags & visibilityFlags) !== (otherAccessor.flags & visibilityFlags))) {
+                    if (((node.flags & NodeFlags.AccessibilityModifier) !== (otherAccessor.flags & NodeFlags.AccessibilityModifier))) {
                         error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
                     }
 
