@@ -3164,8 +3164,10 @@ module ts {
             return items;
 
             function hasAnyUpperCaseCharacter(s: string): boolean {
-                for (var i = 0; i < s.length; ++i) {
-                    if (s.charAt(i).toLocaleLowerCase() !== s.charAt(i)) {
+                for (var i = 0, n = s.length; i < n; i++) {
+                    var c = s.charCodeAt(i);
+                    if ((CharacterCodes.A <= c && c <= CharacterCodes.Z) ||
+                        (c >= CharacterCodes.maxAsciiCharacter && s.charAt(i).toLocaleLowerCase() !== s.charAt(i))) {
                         return true;
                     }
                 }
