@@ -3163,21 +3163,12 @@ module ts {
             }
         }
 
-        var hasSemanticErros = resolver.hasSemanticErrors();
-        var returnCode = EmitReturnStatus.Succeeded;
+        var hasSemanticErrors = resolver.hasSemanticErrors();
 
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             emitJavaScript(jsFilePath, sourceFile);
-            // Update the returnCode with appropriate value depended on whether we have semantic errors 
-            if (!hasSemanticErros && compilerOptions.declaration) {
-                returnCode = EmitReturnStatus.Succeeded;
+            if (!hasSemanticErrors && compilerOptions.declaration) {
                 emitDeclarations(jsFilePath, sourceFile);
-            }
-            else if (hasSemanticErros && compilerOptions.declaration) {
-                returnCode = EmitReturnStatus.DeclarationGenerationSkipped;
-            }
-            else if (hasSemanticErros && !compilerOptions.declaration) {
-                returnCode = EmitReturnStatus.JSGeneratedWithSemanticErrors;
             }
         }
 
@@ -3206,8 +3197,16 @@ module ts {
         // Update returnCode if there is any EmitterError
         var hasEmitterError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
 
+        // Check and update returnCode for syntactic and semantic
+        var returnCode: EmitReturnStatus;
         if (hasEmitterError) {
             returnCode = EmitReturnStatus.EmitErrorsEncountered;
+        } else if (hasSemanticErrors && compilerOptions.declaration) {
+            returnCode = EmitReturnStatus.DeclarationGenerationSkipped;
+        } else if (hasSemanticErrors && !compilerOptions.declaration) {
+            returnCode = EmitReturnStatus.JSGeneratedWithSemanticErrors;
+        } else {
+            returnCode = EmitReturnStatus.Succeeded;
         }
 
         return {
