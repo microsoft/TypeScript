@@ -470,7 +470,7 @@ module ts {
         dispose(): void;
     }
 
-    class ClassificationTypeNames {
+    export class ClassificationTypeNames {
         public static comment = "comment";
         public static identifier = "identifier";
         public static keyword = "keyword";
@@ -3185,14 +3185,16 @@ module ts {
             }
 
             function processNode(node: Node) {
-                if (span.intersectsWith(node.getStart(), node.getWidth())) {
-                    if (node.kind === SyntaxKind.Identifier && node.getWidth()) {
+                // Only walk into nodes that intersect the requested span.
+                if (node && span.intersectsWith(node.getStart(), node.getWidth())) {
+                    if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
                         var symbol = typeInfoResolver.getSymbolInfo(node);
                         if (symbol) {
-                            var span = new TypeScript.TextSpan(node.getStart(), node.getWidth());
                             var type = classifySymbol(symbol);
                             if (type) {
-                                result.push(new ClassifiedSpan(span, type));
+                                result.push(new ClassifiedSpan(
+                                    new TypeScript.TextSpan(node.getStart(), node.getWidth()),
+                                    type));
                             }
                         }
                     }
@@ -3213,7 +3215,7 @@ module ts {
             return result;
 
             function classifyTrivia(trivia: TypeScript.ISyntaxTrivia) {
-                if (span.intersectsWith(trivia.fullStart(), trivia.fullWidth())) {
+                if (trivia.isComment() && span.intersectsWith(trivia.fullStart(), trivia.fullWidth())) {
                     result.push(new ClassifiedSpan(
                         new TypeScript.TextSpan(trivia.fullStart(), trivia.fullWidth()),
                         ClassificationTypeNames.comment));
@@ -3232,10 +3234,11 @@ module ts {
                 }
 
                 if (TypeScript.width(token) > 0) {
-                    var span = new TypeScript.TextSpan(TypeScript.start(token), TypeScript.width(token));
                     var type = classifyTokenType(token);
                     if (type) {
-                        result.push(new ClassifiedSpan(span, type));
+                        result.push(new ClassifiedSpan(
+                            new TypeScript.TextSpan(TypeScript.start(token), TypeScript.width(token)),
+                            type));
                     }
                 }
 
@@ -3287,6 +3290,11 @@ module ts {
                     }
 
                     switch (parent.kind()) {
+                        case TypeScript.SyntaxKind.SimplePropertyAssignment:
+                            if ((<TypeScript.SimplePropertyAssignmentSyntax>parent).propertyName === token) {
+                                return ClassificationTypeNames.identifier;
+                            }
+                            return;
                         case TypeScript.SyntaxKind.ClassDeclaration:
                             if ((<TypeScript.ClassDeclarationSyntax>parent).identifier === token) {
                                 return ClassificationTypeNames.className;

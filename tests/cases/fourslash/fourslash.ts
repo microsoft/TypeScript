@@ -382,6 +382,10 @@ module FourSlashInterface {
         public completionEntryDetailIs(entryName: string, type: string, docComment?: string, fullSymbolName?: string, kind?: string) {
             FourSlash.currentTestState.verifyCompletionEntryDetails(entryName, type, docComment, fullSymbolName, kind);
         }
+
+        public syntacticClassificationsAre(...classifications: { classificationType: string; text: string }[]) {
+            FourSlash.currentTestState.verifySyntacticClassifications(classifications);
+        }
     }
 
     export class edit {
@@ -524,6 +528,64 @@ module FourSlashInterface {
             FourSlash.currentTestState.cancellationToken.setCancelled(numberOfCalls);
         }
     }
+
+    export class classification {
+        public static comment(text: string): { classificationType: string; text: string } {
+            return { classificationType: "comment", text: text };
+        }
+
+        public static identifier(text: string): { classificationType: string; text: string } {
+            return { classificationType: "identifier", text: text };
+        }
+
+        public static keyword(text: string): { classificationType: string; text: string } {
+            return { classificationType: "keyword", text: text };
+        }
+
+        public static numericLiteral(text: string): { classificationType: string; text: string } {
+            return { classificationType: "numericLiteral", text: text };
+        }
+
+        public static operator(text: string): { classificationType: string; text: string } {
+            return { classificationType: "operator", text: text };
+        }
+
+        public static stringLiteral(text: string): { classificationType: string; text: string } {
+            return { classificationType: "stringLiteral", text: text };
+        }
+
+        public static whiteSpace(text: string): { classificationType: string; text: string } {
+            return { classificationType: "whiteSpace", text: text };
+        }
+
+        public static text(text: string): { classificationType: string; text: string } {
+            return { classificationType: "text", text: text };
+        }
+
+        public static punctuation(text: string): { classificationType: string; text: string } {
+            return { classificationType: "punctuation", text: text };
+        }
+
+        public static className(text: string): { classificationType: string; text: string } {
+            return { classificationType: "className", text: text };
+        }
+
+        public static enumName(text: string): { classificationType: string; text: string } {
+            return { classificationType: "enumName", text: text };
+        }
+
+        public static interfaceName(text: string): { classificationType: string; text: string } {
+            return { classificationType: "interfaceName", text: text };
+        }
+
+        public static moduleName(text: string): { classificationType: string; text: string } {
+            return { classificationType: "moduleName", text: text };
+        }
+
+        public static typeParameterName(text: string): { classificationType: string; text: string } {
+            return { classificationType: "typeParameterName", text: text };
+        }
+    }
 }
 
 module fs {
@@ -547,3 +609,4 @@ var debug = new FourSlashInterface.debug();
 var format = new FourSlashInterface.format();
 var diagnostics = new FourSlashInterface.diagnostics();
 var cancellation = new FourSlashInterface.cancellation();
+var classification = FourSlashInterface.classification;
