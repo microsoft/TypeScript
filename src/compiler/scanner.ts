@@ -372,71 +372,40 @@ module ts {
     // comment. Single-line comment ranges include the beginning '//' characters but not the ending line break. Multi-line comment
     // ranges include the beginning '/* and ending '*/' characters. The return value is undefined if no comments were found.
     function getCommentRanges(text: string, pos: number, trailing: boolean): Comment[] {
+        var scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false, text);
+        scanner.setTextPos(pos);
         var result: Comment[];
         var collecting = trailing || pos === 0;
-        while (true) {
-            var ch = text.charCodeAt(pos);
-            switch (ch) {
-                case CharacterCodes.carriageReturn:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) pos++;
-                case CharacterCodes.lineFeed:
-                    pos++;
+        var lastCommentIsSingleLine = false;
+        while(true) {
+            var token = scanner.scan();
+            switch (token) {
+                case SyntaxKind.NewLineTrivia:
+                    if (result && result.length && (!trailing || lastCommentIsSingleLine)) {
+                        result[result.length - 1].hasTrailingNewLine = true;
+                    }
+
                     if (trailing) {
                         return result;
                     }
                     collecting = true;
-                    if (result && result.length) {
-                        result[result.length - 1].hasTrailingNewLine = true;
+                    break;
+                case SyntaxKind.SingleLineCommentTrivia:
+                case SyntaxKind.MultiLineCommentTrivia:
+                    if (collecting) {
+                        if (!result) {
+                            result = [];
+                        }
+                        result.push( {pos: scanner.getTokenPos(), end: scanner.getTextPos() });
+                        lastCommentIsSingleLine = token === SyntaxKind.SingleLineCommentTrivia;
                     }
-                    continue;
-                case CharacterCodes.tab:
-                case CharacterCodes.verticalTab:
-                case CharacterCodes.formFeed:
-                case CharacterCodes.space:
-                    pos++;
-                    continue;
-                case CharacterCodes.slash:
-                    var nextChar = text.charCodeAt(pos + 1);
-                    var hasTrailingNewLine = false;
-                    if (nextChar === CharacterCodes.slash || nextChar === CharacterCodes.asterisk) {
-                        var startPos = pos;
-                        pos += 2;
-                        if (nextChar === CharacterCodes.slash) {
-                            while (pos < text.length) {
-                                if (isLineBreak(text.charCodeAt(pos))) {
-                                    hasTrailingNewLine = true;
-                                    break;
-                                }
-                                pos++;
-                            }
-                        }
-                        else {
-                            while (pos < text.length) {
-                                if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                                    pos += 2;
-                                    break;
-                                }
-                                pos++;
-                            }
-                        }
-                        if (collecting) {
-                            if (!result) result = [];
-                            result.push({ pos: startPos, end: pos, hasTrailingNewLine: hasTrailingNewLine });
-                        }
-                        continue;
-                    }
+                    break;
+                case SyntaxKind.WhitespaceTrivia:
+                    // skip whitespaces
                     break;
                 default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
-                        if (result && result.length && isLineBreak(ch)) {
-                            result[result.length - 1].hasTrailingNewLine = true;
-                        }
-                        pos++;
-                        continue;
-                    }
-                    break;
+                    return result;
             }
-            return result;
         }
     }
 
@@ -717,7 +686,7 @@ module ts {
                             continue;
                         }
                         else {
-                            while (pos < len && isWhiteSpace(pos)) {
+                            while (pos < len && isWhiteSpace(text.charCodeAt(pos))) {
                                 pos++;
                             }
                             return token = SyntaxKind.WhitespaceTrivia;
