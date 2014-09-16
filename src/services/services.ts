@@ -3495,32 +3495,13 @@ module ts {
                     return 0;
                 }
 
-                var argumentListOrTypeArgumentList: NodeArray<Node>;
-                if (parent.typeArguments && node.pos >= parent.typeArguments.pos && node.end <= parent.typeArguments.end) {
-                    argumentListOrTypeArgumentList = parent.typeArguments;
-                }
-                else if (parent.arguments && node.pos >= parent.arguments.pos && node.end <= parent.arguments.end) {
-                    argumentListOrTypeArgumentList = parent.arguments;
+                if (node.kind === SyntaxKind.GreaterThanToken 
+                    || node.kind === SyntaxKind.CloseParenToken
+                    || node === parent.func) {
+                    return -1;
                 }
 
-                return argumentListOrTypeArgumentList ? argumentListOrTypeArgumentList.indexOf(node) : -1;
-
-                // if (parent.kind === SyntaxKind.SyntaxList) {
-                //     var grandparent = parent.parent;
-                //     if (grandparent.kind === SyntaxKind.CallExpression || grandparent.kind === SyntaxKind.NewExpression) {
-                //         var index = (<NodeObject>parent).getIndexOfChild(node);
-                //         Debug.assert(index >= 0);
-                //         return index;
-                //     }
-                // }
-
-                // if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
-                //     return parent.kind === SyntaxKind.CallExpression || parent.kind === SyntaxKind.NewExpression
-                //         ? 0
-                //         : -1;
-                // }
-                
-                // TODO: Handle close paren or close angle bracket on nonempty list
+                return ServicesSyntaxUtilities.findListItemInfo(node).listItemIndex;
             }
 
             function getSignatureHelpArgumentContext(node: Node): {
@@ -3532,17 +3513,10 @@ module ts {
                 // Otherwise we want the previous token
                 var isToken = node.kind < SyntaxKind.Missing;
                 if (!isToken || position <= node.getStart() || position >= node.getEnd()) {
-                    // This is a temporary hack until we figure out our token story.
-                    // The correct solution is to get the previous token
                     node = ServicesSyntaxUtilities.findPrecedingToken(position, sourceFile);
 
                     if (!node) {
                         return undefined;
-                    }
-                    if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
-                        if (node === (<CallExpression>node.parent).func) {
-                            node = node.parent.getChildAt(1);
-                        }
                     }
                 }
 

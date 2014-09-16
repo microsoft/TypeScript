@@ -107,8 +107,10 @@ module ts.formatting {
          */ 
         function getActualIndentationForListItemBeforeComma(commaToken: Node, sourceFile: SourceFile, options: TypeScript.FormattingOptions): number {
             // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
-            var itemInfo = findPrecedingListItem(commaToken);
-            return deriveActualIndentationFromList(itemInfo.list.getChildren(), itemInfo.listItemIndex, sourceFile, options);
+            var commaItemInfo = ServicesSyntaxUtilities.findListItemInfo(commaToken);
+            Debug.assert(commaItemInfo.listItemIndex > 0);
+            // The item we're interested in is right before the comma
+            return deriveActualIndentationFromList(commaItemInfo.list.getChildren(), commaItemInfo.listItemIndex - 1, sourceFile, options);
         }
 
         /*
@@ -164,27 +166,6 @@ module ts.formatting {
 
         function getStartLineAndCharacterForNode(n: Node, sourceFile: SourceFile): LineAndCharacter {
             return sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile));
-        }
-
-        function findPrecedingListItem(commaToken: Node): { listItemIndex: number; list: Node } {
-            // CommaToken node is synthetic and thus will be stored in SyntaxList, however parent of the CommaToken points to the container of the SyntaxList skipping the list.
-            // In order to find the preceding list item we first need to locate SyntaxList itself and then search for the position of CommaToken
-            var syntaxList = forEach(commaToken.parent.getChildren(), c => {
-                // find syntax list that covers the span of CommaToken
-                if (c.kind == SyntaxKind.SyntaxList && c.pos <= commaToken.end && c.end >= commaToken.end) {
-                    return c;
-                }
-            });
-            Debug.assert(syntaxList);
-
-            var children = syntaxList.getChildren();
-            var commaIndex = indexOf(children, commaToken);
-            Debug.assert(commaIndex !== -1 && commaIndex !== 0);
-
-            return {
-                listItemIndex: commaIndex - 1,
-                list: syntaxList
-            };
         }
 
         function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {

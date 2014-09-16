@@ -1,5 +1,26 @@
 // These utilities are common to multiple language service features.
 module ts.ServicesSyntaxUtilities {
+    export function findListItemInfo(node: Node): { listItemIndex: number; list: Node } {
+        // The node might be a list element (nonsynthetic) or a comma (synthetic). Either way, it will
+        // be parented by the container of the SyntaxList, not the SyntaxList itself.
+        // In order to find the list item index, we first need to locate SyntaxList itself and then search
+        // for the position of the relevant node (or comma).
+        var syntaxList = forEach(node.parent.getChildren(), c => {
+            // find syntax list that covers the span of the node
+            if (c.kind == SyntaxKind.SyntaxList && c.pos <= node.pos && c.end >= node.end) {
+                return c;
+            }
+        });
+
+        var children = syntaxList.getChildren();
+        var index = indexOf(children, node);
+
+        return {
+            listItemIndex: index,
+            list: syntaxList
+        };
+    }
+
     export function findNextToken(previousToken: Node, parent: Node): Node {
         return find(parent);
 
