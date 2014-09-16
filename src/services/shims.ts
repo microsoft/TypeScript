@@ -53,6 +53,8 @@ module ts {
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): CancellationToken;
+        getCurrentDirectory(): string;
+        getDefaultLibFilename(): string;
     }
 
     //
@@ -364,6 +366,14 @@ module ts {
 
         public getCancellationToken(): CancellationToken {
             return this.shimHost.getCancellationToken();
+        }
+
+        public getDefaultLibFilename(): string {
+            return this.shimHost.getDefaultLibFilename();
+        }
+
+        public getCurrentDirectory(): string {
+            return this.shimHost.getCurrentDirectory();
         }
     }
 
