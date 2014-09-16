@@ -222,7 +222,7 @@ module ts {
         FirstTypeNode = TypeReference,
         LastTypeNode = TupleType,
         FirstPunctuation = OpenBraceToken,
-        LastPunctuation = CaretEqualsToken
+        LastPunctuation = CaretEqualsToken,
     }
 
     export enum NodeFlags {

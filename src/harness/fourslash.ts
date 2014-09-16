@@ -1428,6 +1428,46 @@ module FourSlash {
             Harness.IO.log(this.getNameOrDottedNameSpan(pos));
         }
 
+        private verifyClassifications(expected: { classificationType: string; text: string }[], actual: ts.ClassifiedSpan[]) {
+            if (actual.length !== expected.length) {
+                throw new Error('verifySyntacticClassification failed - expected total classifications to be ' + expected.length + ', but was ' + actual.length);
+            }
+
+            for (var i = 0; i < expected.length; i++) {
+                var expectedClassification = expected[i];
+                var actualClassification = actual[i];
+
+                var expectedType: string = (<any>ts.ClassificationTypeNames)[expectedClassification.classificationType];
+                if (expectedType !== actualClassification.classificationType) {
+                    throw new Error('verifySyntacticClassification failed - expected classifications type to be ' +
+                        expectedType + ', but was ' +
+                        actualClassification.classificationType);
+                }
+
+                var actualSpan = actualClassification.textSpan;
+                var actualText = this.activeFile.content.substr(actualSpan.start(), actualSpan.length());
+                if (expectedClassification.text !== actualText) {
+                    throw new Error('verifySyntacticClassification failed - expected classificatied text to be ' +
+                        expectedClassification.text + ', but was ' +
+                        actualText);
+                }
+            }
+        }
+
+        public verifySemanticClassifications(expected: { classificationType: string; text: string }[]) {
+            var actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
+                new TypeScript.TextSpan(0, this.activeFile.content.length));
+
+            this.verifyClassifications(expected, actual);
+        }
+
+        public verifySyntacticClassifications(expected: { classificationType: string; text: string }[]) {
+            var actual = this.languageService.getSyntacticClassifications(this.activeFile.fileName, 
+                new TypeScript.TextSpan(0, this.activeFile.content.length));
+
+            this.verifyClassifications(expected, actual);
+        }
+
         public verifyOutliningSpans(spans: TextSpan[]) {
             this.taoInvalidReason = 'verifyOutliningSpans NYI';
 
