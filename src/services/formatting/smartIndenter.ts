@@ -315,46 +315,56 @@ module ts.formatting {
         }
 
         function findPrecedingToken(position: number, sourceFile: SourceFile): Node {
-            return find(sourceFile, /*diveIntoLastChild*/ false);
+            return find(sourceFile);
 
-            function find(n: Node, diveIntoLastChild: boolean): Node {
+            function findRightmostToken(n: Node): Node {
                 if (isToken(n)) {
                     return n;
                 }
 
                 var children = n.getChildren();
-                if (diveIntoLastChild) {
-                    var candidate = findLastChildNodeCandidate(children, /*exclusiveStartPosition*/ children.length);
-                    return candidate && find(candidate, /*diveIntoLastChild*/ true);
+                var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+                return candidate && findRightmostToken(candidate);
+
+            }
+
+            function find(n: Node): Node {
+                if (isToken(n)) {
+                    return n;
                 }
 
+                var children = n.getChildren();
                 for (var i = 0, len = children.length; i < len; ++i) {
                     var child = children[i];
                     if (nodeHasTokens(child)) {
                         if (position < child.end) {
                             if (child.getStart(sourceFile) >= position) {
                                 // actual start of the node is past the position - previous token should be at the end of previous child
-                                var candidate = findLastChildNodeCandidate(children, /*exclusiveStartPosition*/ i);
-                                return candidate && find(candidate, /*diveIntoLastChild*/ true)
+                                var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
+                                return candidate && findRightmostToken(candidate)
                             }
                             else {
                                 // candidate should be in this node
-                                return find(child, diveIntoLastChild);
+                                return find(child);
                             }
                         }
                     }
                 }
 
-                // here we know that none of child token nodes embrace the position
-                // try to find the closest token on the left 
+                Debug.assert(n.kind === SyntaxKind.SourceFile);
+
+                // Here we know that none of child token nodes embrace the position, 
+                // the only known case is when position is at the end of the file.
+                // Try to find the rightmost token in the file without filtering.
+                // Namely we are skipping the check: 'position < node.end'
                 if (children.length) {
-                    var candidate = findLastChildNodeCandidate(children, /*exclusiveStartPosition*/ children.length);
-                    return candidate && find(candidate, /*diveIntoLastChild*/ true);
+                    var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+                    return candidate && findRightmostToken(candidate);
                 }
             }
 
             /// finds last node that is considered as candidate for search (isCandidate(node) === true) starting from 'exclusiveStartPosition'
-            function findLastChildNodeCandidate(children: Node[], exclusiveStartPosition: number): Node {
+            function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node {
                 for (var i = exclusiveStartPosition - 1; i >= 0; --i) {
                     if (nodeHasTokens(children[i])) {
                         return children[i];
