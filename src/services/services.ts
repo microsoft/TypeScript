@@ -96,7 +96,6 @@ module ts {
         public flags: NodeFlags;
         public parent: Node;
         private _children: Node[];
-        private _syntheticParent: Node;
 
         public getSourceFile(): SourceFile {
             var node: Node = this;
@@ -152,9 +151,6 @@ module ts {
                 if (pos < node.pos) {
                     pos = this.addSyntheticNodes(list._children, pos, node.pos);
                 }
-                else {
-                    (<NodeObject>node)._syntheticParent = list;
-                }
                 list._children.push(node);
                 pos = node.end;
             }
@@ -207,11 +203,6 @@ module ts {
             return this._children;
         }
 
-        public getIndexOfChild(child: Node): number {
-            if (!this._children) this.createChildren();
-            return this._children.indexOf(child);
-        }
-
         public getFirstToken(sourceFile?: SourceFile): Node {
             var children = this.getChildren();
             for (var i = 0; i < children.length; i++) {
@@ -228,10 +219,6 @@ module ts {
                 if (child.kind < SyntaxKind.Missing) return child;
                 if (child.kind > SyntaxKind.Missing) return child.getLastToken(sourceFile);
             }
-        }
-
-        public getSyntheticParentOrParent(): Node {
-            return this._syntheticParent || this.parent;
         }
     }
 
@@ -3496,26 +3483,43 @@ module ts {
             // If node is an argument, returns its index in the argument list
             // If not, returns -1
             function getArgumentIndex(node: Node): number {
-                // Treat the open paren / angle bracket of a call as the introduction of parameter slot 0
-                var parent = (<NodeObject>node).getSyntheticParentOrParent();
-                if (parent.kind === SyntaxKind.SyntaxList) {
-                    var grandparent = parent.parent;
-                    if (grandparent.kind === SyntaxKind.CallExpression || grandparent.kind === SyntaxKind.NewExpression) {
-                        var index = (<NodeObject>parent).getIndexOfChild(node);
-                        Debug.assert(index >= 0);
-                        return index;
-                    }
+                if (node.parent.kind !== SyntaxKind.CallExpression && node.parent.kind !== SyntaxKind.NewExpression) {
+                    return -1;
                 }
 
+                var parent = <CallExpression>node.parent;
+                // Find out if 'node' is an argument, a type argument, or neither
+                // Treat the open paren / angle bracket of a call as the introduction of parameter slot 0
                 if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
-                    return parent.kind === SyntaxKind.CallExpression || parent.kind === SyntaxKind.NewExpression
-                        ? 0
-                        : -1;
+                    return 0;
                 }
+
+                var argumentListOrTypeArgumentList: NodeArray<Node>;
+                if (parent.typeArguments && node.pos >= parent.typeArguments.pos && node.end <= parent.typeArguments.end) {
+                    argumentListOrTypeArgumentList = parent.typeArguments;
+                }
+                else if (parent.arguments && node.pos >= parent.arguments.pos && node.end <= parent.arguments.end) {
+                    argumentListOrTypeArgumentList = parent.arguments;
+                }
+
+                return argumentListOrTypeArgumentList ? argumentListOrTypeArgumentList.indexOf(node) : -1;
+
+                // if (parent.kind === SyntaxKind.SyntaxList) {
+                //     var grandparent = parent.parent;
+                //     if (grandparent.kind === SyntaxKind.CallExpression || grandparent.kind === SyntaxKind.NewExpression) {
+                //         var index = (<NodeObject>parent).getIndexOfChild(node);
+                //         Debug.assert(index >= 0);
+                //         return index;
+                //     }
+                // }
+
+                // if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
+                //     return parent.kind === SyntaxKind.CallExpression || parent.kind === SyntaxKind.NewExpression
+                //         ? 0
+                //         : -1;
+                // }
                 
                 // TODO: Handle close paren or close angle bracket on nonempty list
-
-                return -1;
             }
 
             function getSignatureHelpArgumentContext(node: Node): {
@@ -3529,7 +3533,7 @@ module ts {
                 if (!isToken || position <= node.getStart() || position >= node.getEnd()) {
                     // This is a temporary hack until we figure out our token story.
                     // The correct solution is to get the previous token
-                    node = SignatureInfoHelpers.findClosestRightmostSiblingFromLeft(position, sourceFile);
+                    node = SignatureInfoHelpers.findPrecedingToken(position, sourceFile);
 
                     if (!node) {
                         return undefined;
@@ -3559,9 +3563,8 @@ module ts {
 
                     // TODO: Handle previous token logic
                     // TODO: Handle generic call with incomplete 
-
-                    return undefined;
                 }
+                return undefined;
             }
 
             synchronizeHostData();
@@ -3578,7 +3581,7 @@ module ts {
                 var candidates = <Signature[]>[];
                 var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
                 return candidates.length
-                    ? new SignatureHelpItems(undefined, undefined, undefined)
+                    ? new SignatureHelpItems(new Array<SignatureHelpItem>(candidates.length), undefined, undefined)
                     : undefined;
             }
 

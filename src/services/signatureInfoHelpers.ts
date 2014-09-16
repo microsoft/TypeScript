@@ -345,82 +345,70 @@ module ts {
         //    return null;
         //}
 
-        export function findClosestRightmostSiblingFromLeft(position: number, sourceFile: SourceFile): Node {
-            return search(sourceFile);
+        export function findPrecedingToken(position: number, sourceFile: SourceFile): Node {
+            return find(sourceFile, /*diveIntoLastChild*/ false);
 
-            function search(n: Node): Node {
+            function find(n: Node, diveIntoLastChild: boolean): Node {
+                if (isToken(n)) {
+                    return n;
+                }
 
-                var childCandidate: Node;
-                forEachChild(n, c => {
-                    if (c.kind === SyntaxKind.OmittedExpression || c.kind === SyntaxKind.Missing) {
-                        return;
-                    }
-                    if (c.end <= position || c.getStart() < position) {
-                        childCandidate = c;
-                    }
-                    return c.end > position;
-                });
+                var children = n.getChildren();
+                if (diveIntoLastChild) {
+                    var candidate = findLastChildNodeCandidate(children, /*exclusiveStartPosition*/ children.length);
+                    return candidate && find(candidate, /*diveIntoLastChild*/ true);
+                }
 
-                if (childCandidate) {
-                    if (childCandidate.end > position || !isCompletedNode(childCandidate, position, sourceFile)) {
-                        return search(childCandidate) || childCandidate;
+                for (var i = 0, len = children.length; i < len; ++i) {
+                    var child = children[i];
+                    if (nodeHasTokens(child)) {
+                        if (position < child.end) {
+                            if (child.getStart() >= position) {
+                                // actual start of the node is past the position - previous token should be at the end of previous child
+                                var candidate = findLastChildNodeCandidate(children, /*exclusiveStartPosition*/ i);
+                                return candidate && find(candidate, /*diveIntoLastChild*/ true)
+                            }
+                            else {
+                                // candidate should be in this node
+                                return find(child, diveIntoLastChild);
+                            }
+                        }
                     }
-                    else {
-                        return childCandidate;
+                }
+
+                // here we know that none of child token nodes embrace the position
+                // try to find the closest token on the left 
+                if (children.length) {
+                    var candidate = findLastChildNodeCandidate(children, /*exclusiveStartPosition*/ children.length);
+                    return candidate && find(candidate, /*diveIntoLastChild*/ true);
+                }
+            }
+
+            /// finds last node that is considered as candidate for search (isCandidate(node) === true) starting from 'exclusiveStartPosition'
+            function findLastChildNodeCandidate(children: Node[], exclusiveStartPosition: number): Node {
+                for (var i = exclusiveStartPosition - 1; i >= 0; --i) {
+                    if (nodeHasTokens(children[i])) {
+                        return children[i];
                     }
                 }
             }
-        }
 
-        function isCompletedNode(n: Node, position: number, sourceFile: SourceFile): boolean {
-            switch (n.kind) {
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ObjectLiteral:
-                case SyntaxKind.Block:
-                case SyntaxKind.CatchBlock:
-                case SyntaxKind.FinallyBlock:
-                case SyntaxKind.FunctionBlock:
-                case SyntaxKind.ModuleBlock:
-                    return isNodeEndWith(n, sourceFile, CharacterCodes.closeBrace);
-                case SyntaxKind.ParenExpression:
-                case SyntaxKind.CallSignature:
-                case SyntaxKind.CallExpression:
-                    return isNodeEndWith(n, sourceFile, CharacterCodes.closeParen);
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.Method:
-                case SyntaxKind.ArrowFunction:
-                    return !(<FunctionDeclaration>n).body || isCompletedNode((<FunctionDeclaration>n).body, position, sourceFile);
-                case SyntaxKind.ModuleDeclaration:
-                    return (<ModuleDeclaration>n).body && isCompletedNode((<ModuleDeclaration>n).body, position, sourceFile);
-                case SyntaxKind.IfStatement:
-                    if ((<IfStatement>n).thenStatement && (<IfStatement>n).thenStatement.end > position) {
-                        return isCompletedNode((<IfStatement>n).thenStatement, position, sourceFile);
-                    }
-                    else if ((<IfStatement>n).elseStatement) {
-                        return isCompletedNode((<IfStatement>n).elseStatement, position, sourceFile);
-                    }
-                    else {
-                        return true;
-                    }
-                    break;
-                case SyntaxKind.ExpressionStatement:
-                    return isCompletedNode((<ExpressionStatement>n).expression, position, sourceFile);
-                case SyntaxKind.ArrayLiteral:
-                    return isNodeEndWith(n, sourceFile, CharacterCodes.closeBracket);
-                case SyntaxKind.Missing:
+            function isToken(n: Node): boolean {
+                return n.kind < SyntaxKind.Missing;
+            } 
+            
+            function nodeHasTokens(n: Node): boolean {
+                if (n.kind === SyntaxKind.ExpressionStatement) {
+                    return nodeHasTokens((<ExpressionStatement>n).expression);
+                }
+
+                if (n.kind === SyntaxKind.EndOfFileToken || n.kind === SyntaxKind.OmittedExpression || n.kind === SyntaxKind.Missing) {
                     return false;
-                default:
-                    return true;
+                }
+
+                // SyntaxList is already realized so getChildCount should be fast and non-expensive
+                return n.kind !== SyntaxKind.SyntaxList || n.getChildCount() !== 0;
             }
         }
-
-        function isNodeEndWith(n: Node, sourceFile: SourceFile, charCode: CharacterCodes): boolean {
-            var pos = n.end - 1; // Node.end is exclusive
-            return pos < sourceFile.text.length && sourceFile.text.charCodeAt(pos) === charCode;
-        }
-
     }
 }

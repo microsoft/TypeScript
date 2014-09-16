@@ -4435,7 +4435,11 @@ module ts {
         // must fill it up with the appropriate candidate signatures
         function getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature {
             var links = getNodeLinks(node);
-            if (!links.resolvedSignature) {
+            // If getResolvedSignature has already been called, we will have cached the resolvedSignature.
+            // However, it is possible that either candidatesOutArray was not passed in the first time,
+            // or that a different candidatesOutArray was passed in. Therefore, we need to redo the work
+            // to correctly fill the candidatesOutArray.
+            if (!links.resolvedSignature || candidatesOutArray) {
                 links.resolvedSignature = anySignature;
                 links.resolvedSignature = node.kind === SyntaxKind.CallExpression
                     ? resolveCallExpression(node, candidatesOutArray)

@@ -291,7 +291,7 @@ module FourSlashInterface {
         }
 
         public signatureHelpCountIs(expected: number) {
-      //      FourSlash.currentTestState.verifySignatureHelpCount(expected);
+            FourSlash.currentTestState.verifySignatureHelpCount(expected);
         }
 
         public currentSignatureParamterCountIs(expected: number) {
