@@ -386,6 +386,10 @@ module FourSlashInterface {
         public syntacticClassificationsAre(...classifications: { classificationType: string; text: string }[]) {
             FourSlash.currentTestState.verifySyntacticClassifications(classifications);
         }
+
+        public semanticClassificationsAre(...classifications: { classificationType: string; text: string }[]) {
+            FourSlash.currentTestState.verifySemanticClassifications(classifications);
+        }
     }
 
     export class edit {
