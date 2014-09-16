@@ -1409,16 +1409,18 @@ module ts {
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
                 getNewLine: () => "\r\n",
-                // Need something that doesn't depend on sys.ts here
                 getDefaultLibFilename: (): string => {
-                    return "";
+                    // In the case there is no host (such as in fourslash test), return ""
+                    return this.host !== undefined ? this.host.getDefaultLibFilename() : "";
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
-                    writer(filename, data, writeByteOrderMark);
+                    if (writer !== undefined) {
+                        writer(filename, data, writeByteOrderMark);
+                    }
                 },
                 getCurrentDirectory: (): string => {
-                    // Return empty string as in compilerHost using with Visual Studio should not need to getCurrentDirectory since CompilerHost should have absolute path already
-                    return "";
+                    // In the case there is no host (such as in fourslash test), return ""
+                    return this.host !== undefined ? this.host.getCurrentDirectory() : "";
                 }
             };
         }
@@ -2856,40 +2858,36 @@ module ts {
             // Initialize writer for CompilerHost.writeFile
             writer = getEmitOutputWriter;
 
-            var syntacticDiagnostics: Diagnostic[] = [];  
+            var syntacticDiagnostics: Diagnostic[] = [];
+            var containSyntacticErrors = false;
+
             if (emitToSingleFile) {
                 // Check only the file we want to emit
-                syntacticDiagnostics = program.getDiagnostics(targetSourceFile);
-            }
-            else {
-                // Only check the syntactic of only sourceFiles that will get emitted into single output
-                forEach(program.getSourceFiles(), sourceFile => {
-                    // Emit to a single file then we will check all files that do not have external module
+                containSyntacticErrors = containErrors(program.getDiagnostics(targetSourceFile));
+            } else {
+                // Check the syntactic of only sourceFiles that will get emitted into single output
+                // Terminate the process immediately if we encounter a syntax error from one of the sourceFiles
+                containSyntacticErrors = program.getSourceFiles().some((sourceFile) => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        syntacticDiagnostics = syntacticDiagnostics.concat(program.getDiagnostics(sourceFile));
+                        // If emit to a single file then we will check all files that do not have external module
+                        return containErrors(program.getDiagnostics(sourceFile));
                     }
                 });
             }
 
-            // If there is any syntactic error, terminate the process
-            if (containErrors(syntacticDiagnostics)) {
+            if (containSyntacticErrors) {
+                // If there is a syntax error, terminate the process and report outputStatus
                 emitOutput.emitOutputStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-                // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
+                // Reset writer back to undefined to make sure that we produce an error message
+                // if CompilerHost.writeFile is called when we are not in getEmitOutput
                 writer = undefined;
                 return emitOutput;
             }
 
             // Perform semantic and force a type check before emit to ensure that all symbols are updated
             // EmitFiles will report if there is an error from TypeChecker and Emitter
-            if (emitToSingleFile) {
-                // Emit only selected file in the project
-                var emitFilesResult = getFullTypeCheckChecker().emitFiles(targetSourceFile);
-            }
-            else {
-                // Emit all files into single file
-                var emitFilesResult = getFullTypeCheckChecker().emitFiles();
-            }
-
+            // Depend whether we will have to emit into a single file or not either emit only selected file in the project, emit all files into a single file
+            var emitFilesResult = emitToSingleFile ? getFullTypeCheckChecker().emitFiles(targetSourceFile) : getFullTypeCheckChecker().emitFiles();
             emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
 
             // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
