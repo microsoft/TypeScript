@@ -1431,7 +1431,7 @@ module ts {
 
             function emitParameterPropertyAssignments(node: ConstructorDeclaration) {
                 forEach(node.parameters, param => {
-                    if (param.flags & (NodeFlags.Public | NodeFlags.Private)) {
+                    if (param.flags & NodeFlags.AccessibilityModifier) {
                         writeLine();
                         emitStart(param);
                         emitStart(param.name);
@@ -2630,7 +2630,7 @@ module ts {
                 function emitParameterProperties(constructorDeclaration: ConstructorDeclaration) {
                     if (constructorDeclaration) {
                         forEach(constructorDeclaration.parameters, param => {
-                            if (param.flags & (NodeFlags.Public | NodeFlags.Private)) {
+                            if (param.flags & NodeFlags.AccessibilityModifier) {
                                 emitPropertyDeclaration(param);
                             }
                         });

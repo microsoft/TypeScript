@@ -6,10 +6,10 @@
 ////    // Class
 ////    {| "itemName": "Point", "kind": "class", "parentName": "Shapes", "matchKind": "substring" |}export class Point {
 ////        // Instance member
-////        {| "itemName": "originPointAttheHorizon", "kind": "property", "parentName": "Shapes.Point", "matchKind": "substring"|}private originPointAttheHorizon = 0.0;
+////        {| "itemName": "originPointAttheHorizon", "kind": "property", "parentName": "Point", "matchKind": "substring"|}private originPointAttheHorizon = 0.0;
 ////
 ////        // Getter
-////        {| "itemName": "distanceFromOrigin", "kind": "getter", "parentName": "Shapes.Point", "matchKind": "substring" |}get distanceFromOrigin(): number { return 0; }
+////        {| "itemName": "distanceFromOrigin", "kind": "getter", "parentName": "Point", "matchKind": "substring" |}get distanceFromOrigin(): number { return 0; }
 ////
 ////    }
 ////}
