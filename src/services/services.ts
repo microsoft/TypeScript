@@ -3673,6 +3673,93 @@ module ts {
             return null;
         }
 
+        function getRenameInfo(fileName: string, position: number): RenameInfo {
+            synchronizeHostData();
+
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
+
+            var node = getNodeAtPosition(sourceFile, position);
+
+            // Can only rename an identifier.
+            if (node && node.kind === SyntaxKind.Identifier) {
+                var symbol = typeInfoResolver.getSymbolInfo(node);
+
+                // Only allow a symbol to be renamed if it actually has at least one declaration.
+                if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
+                    var kind = getKind(symbol);
+                    if (kind) {
+                        return RenameInfo.Create(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind, getKindModifiers(symbol),
+                            new TypeScript.TextSpan(node.getStart(), node.getWidth()));
+                    }
+                }
+            }
+
+            function getKindModifiers(symbol: Symbol): string {
+                var modifiers: string[] = [];
+                var decl = symbol.getDeclarations()[0];
+
+                if (decl.flags & NodeFlags.Ambient) {
+                    modifiers.push(ScriptElementKindModifier.ambientModifier);
+                }
+                if (decl.flags & NodeFlags.Export) {
+                    modifiers.push(ScriptElementKindModifier.exportedModifier);
+                }
+                if (decl.flags & NodeFlags.Private) {
+                    modifiers.push(ScriptElementKindModifier.privateMemberModifier);
+                }
+                if (decl.flags & NodeFlags.Public) {
+                    modifiers.push(ScriptElementKindModifier.publicMemberModifier);
+                }
+                if (decl.flags & NodeFlags.Static) {
+                    modifiers.push(ScriptElementKindModifier.staticModifier);
+                }
+
+                return modifiers.length == 0 ? ScriptElementKindModifier.none : modifiers.join(',');
+            }
+
+            function getKind(symbol: Symbol): string {
+                if (symbol.flags & SymbolFlags.Module) {
+                    return ScriptElementKind.moduleElement;
+                }
+                else if (symbol.flags & SymbolFlags.Class) {
+                    return ScriptElementKind.classElement;
+                }
+                else if (symbol.flags & SymbolFlags.Interface) {
+                    return ScriptElementKind.interfaceElement;
+                }
+                else if (symbol.flags & SymbolFlags.Enum) {
+                    return ScriptElementKind.enumElement;
+                }
+                else if (symbol.flags & SymbolFlags.Variable) {
+                    return ScriptElementKind.variableElement;
+                }
+                else if (symbol.flags & SymbolFlags.Function) {
+                    return ScriptElementKind.functionElement;
+                }
+                else if (symbol.flags & SymbolFlags.Method) {
+                    return ScriptElementKind.memberFunctionElement;
+                }
+                else if (symbol.flags & SymbolFlags.GetAccessor) {
+                    return ScriptElementKind.memberGetAccessorElement;
+                }
+                else if (symbol.flags & SymbolFlags.SetAccessor) {
+                    return ScriptElementKind.memberSetAccessorElement;
+                }
+                else if (symbol.flags & SymbolFlags.Property) {
+                    return ScriptElementKind.memberVariableElement;
+                }
+                else if (symbol.flags & SymbolFlags.TypeParameter) {
+                    return ScriptElementKind.typeParameterElement;
+                }
+                else if (symbol.flags & SymbolFlags.EnumMember) {
+                    return ScriptElementKind.memberVariableElement;
+                }
+            }
+
+            return RenameInfo.CreateError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
+        }
+
         return {
             dispose: dispose,
             cleanupSemanticCache: cleanupSemanticCache,
@@ -3693,7 +3780,7 @@ module ts {
             getNameOrDottedNameSpan: getNameOrDottedNameSpan,
             getBreakpointStatementAtPosition: getBreakpointStatementAtPosition,
             getNavigateToItems: (searchValue) => [],
-            getRenameInfo: (fileName, position): RenameInfo => RenameInfo.CreateError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key)),
+            getRenameInfo: getRenameInfo,
             getNavigationBarItems: getNavigationBarItems,
             getOutliningSpans: getOutliningSpans,
             getTodoComments: getTodoComments,
