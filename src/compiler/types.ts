@@ -237,7 +237,8 @@ module ts {
         Synthetic        = 0x00000100,  // Synthetic node (for full fidelity)
         DeclarationFile  = 0x00000200,  // Node is a .d.ts file
 
-        Modifier = Export | Ambient | Public | Private | Static
+        Modifier = Export | Ambient | Public | Private | Static,
+        AccessibilityModifier = Public | Private
     }
 
     export interface Node extends TextRange {
