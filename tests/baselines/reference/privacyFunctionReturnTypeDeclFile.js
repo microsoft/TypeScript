@@ -1400,6 +1400,7 @@ function privateFunctionWithPrivateModuleParameterTypes() {
 function privateFunctionWithPrivateModuleParameterTypes1() {
     return new privateModule.publicClass();
 }
+var publicModule;
 (function (publicModule) {
     var privateClass = (function () {
         function privateClass() {
@@ -1607,8 +1608,7 @@ function privateFunctionWithPrivateModuleParameterTypes1() {
     function privateFunctionWithPrivateModuleParameterTypes1() {
         return new privateModule.publicClass();
     }
-})(exports.publicModule || (exports.publicModule = {}));
-var publicModule = exports.publicModule;
+})(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClass = (function () {

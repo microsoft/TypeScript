@@ -113,8 +113,11 @@ var __extends = this.__extends || function (d, b) {
 };
 var Sample;
 (function (Sample) {
+    var Actions;
     (function (Actions) {
+        var Thing;
         (function (_Thing) {
+            var Find;
             (function (Find) {
                 var StartFindAction = (function () {
                     function StartFindAction() {
@@ -128,16 +131,15 @@ var Sample;
                     return StartFindAction;
                 })();
                 Find.StartFindAction = StartFindAction;
-            })(_Thing.Find || (_Thing.Find = {}));
-            var Find = _Thing.Find;
-        })(Actions.Thing || (Actions.Thing = {}));
-        var Thing = Actions.Thing;
-    })(Sample.Actions || (Sample.Actions = {}));
-    var Actions = Sample.Actions;
+            })(Find = _Thing.Find || (_Thing.Find = {}));
+        })(Thing = Actions.Thing || (Actions.Thing = {}));
+    })(Actions = Sample.Actions || (Sample.Actions = {}));
 })(Sample || (Sample = {}));
 var Sample;
 (function (Sample) {
+    var Thing;
     (function (Thing) {
+        var Widgets;
         (function (Widgets) {
             var FindWidget = (function () {
                 function FindWidget(codeThing) {
@@ -159,10 +161,8 @@ var Sample;
                 return FindWidget;
             })();
             Widgets.FindWidget = FindWidget;
-        })(Thing.Widgets || (Thing.Widgets = {}));
-        var Widgets = Thing.Widgets;
-    })(Sample.Thing || (Sample.Thing = {}));
-    var Thing = Sample.Thing;
+        })(Widgets = Thing.Widgets || (Thing.Widgets = {}));
+    })(Thing = Sample.Thing || (Sample.Thing = {}));
 })(Sample || (Sample = {}));
 var AbstractMode = (function () {
     function AbstractMode() {
@@ -174,8 +174,11 @@ var AbstractMode = (function () {
 })();
 var Sample;
 (function (Sample) {
+    var Thing;
     (function (Thing) {
+        var Languages;
         (function (Languages) {
+            var PlainText;
             (function (PlainText) {
                 var State = (function () {
                     function State(mode) {
@@ -205,11 +208,8 @@ var Sample;
                     return Mode;
                 })(AbstractMode);
                 PlainText.Mode = Mode;
-            })(Languages.PlainText || (Languages.PlainText = {}));
-            var PlainText = Languages.PlainText;
-        })(Thing.Languages || (Thing.Languages = {}));
-        var Languages = Thing.Languages;
-    })(Sample.Thing || (Sample.Thing = {}));
-    var Thing = Sample.Thing;
+            })(PlainText = Languages.PlainText || (Languages.PlainText = {}));
+        })(Languages = Thing.Languages || (Thing.Languages = {}));
+    })(Thing = Sample.Thing || (Sample.Thing = {}));
 })(Sample || (Sample = {}));
 //# sourceMappingURL=recursiveClassReferenceTest.js.map

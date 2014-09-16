@@ -1537,6 +1537,7 @@ var privateClassWithPrivateModuleSetAccessorTypes = (function () {
     });
     return privateClassWithPrivateModuleSetAccessorTypes;
 })();
+var publicModule;
 (function (publicModule) {
     var privateClass = (function () {
         function privateClass() {
@@ -2015,8 +2016,7 @@ var privateClassWithPrivateModuleSetAccessorTypes = (function () {
         });
         return privateClassWithPrivateModuleSetAccessorTypes;
     })();
-})(exports.publicModule || (exports.publicModule = {}));
-var publicModule = exports.publicModule;
+})(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClass = (function () {

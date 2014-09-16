@@ -8,10 +8,10 @@
         f(x: T, y: U) {
             x = <T>y;
                 ~~~~
-!!! Neither type 'T' nor type 'U' is assignable to the other.
+!!! Neither type 'U' nor type 'T' is assignable to the other.
             y = <U>x;
                 ~~~~
-!!! Neither type 'U' nor type 'T' is assignable to the other.
+!!! Neither type 'T' nor type 'U' is assignable to the other.
         }
     }
     
@@ -23,7 +23,7 @@
             var d = <U>new Date();
             var e = <T><U>new Date();
                     ~~~~~~~~~~~~~~~~
-!!! Neither type 'T' nor type 'U' is assignable to the other.
+!!! Neither type 'U' nor type 'T' is assignable to the other.
         }
     }
     

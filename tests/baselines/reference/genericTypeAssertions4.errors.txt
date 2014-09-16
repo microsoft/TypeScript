@@ -29,8 +29,8 @@
         y = <T>a;
         y = <T>b; // error: cannot convert B to T
             ~~~~
-!!! Neither type 'T' nor type 'B' is assignable to the other.
+!!! Neither type 'B' nor type 'T' is assignable to the other.
         y = <T>c; // error: cannot convert C to T
             ~~~~
-!!! Neither type 'T' nor type 'C' is assignable to the other.
+!!! Neither type 'C' nor type 'T' is assignable to the other.
     }

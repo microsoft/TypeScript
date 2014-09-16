@@ -9,13 +9,13 @@ var b = undefined;
 var c = {x: null};
 >c : { x: any; }
 >{x: null} : { x: null; }
->x : any
+>x : null
 
 var d = [{x: null}];
 >d : { x: any; }[]
 >[{x: null}] : { x: null; }[]
 >{x: null} : { x: null; }
->x : any
+>x : null
 
 var f = [null, null];
 >f : any[]
@@ -31,6 +31,6 @@ var h = [{x: undefined}];
 >h : { x: any; }[]
 >[{x: undefined}] : { x: undefined; }[]
 >{x: undefined} : { x: undefined; }
->x : any
+>x : undefined
 >undefined : undefined
 

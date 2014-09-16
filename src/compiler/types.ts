@@ -224,7 +224,7 @@ module ts {
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
         LastTypeNode = ArrayType,
-        FirstPunctuation= OpenBraceToken,
+        FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken
     }
 
@@ -635,12 +635,10 @@ module ts {
     }
 
     export enum TypeFormatFlags {
-        None                        = 0x00000000, 
-
-        /** writes Array<T> instead T[]  */
-        WriteArrayAsGenericType     = 0x00000001,  // Declarations
-
-        UseTypeOfFunction           = 0x00000002,  // instead of writing signature type of function use typeof
+        None                    = 0x00000000, 
+        WriteArrayAsGenericType = 0x00000001,  // Write Array<T> instead T[]
+        UseTypeOfFunction       = 0x00000002,  // Write typeof instead of function type literal
+        NoTruncation            = 0x00000004,  // Don't truncate typeToString result
     }
 
     export enum SymbolAccessibility {
@@ -652,7 +650,7 @@ module ts {
     export interface SymbolAccessiblityResult {
         accessibility: SymbolAccessibility;
         errorSymbolName?: string // Optional symbol name that results in error
-        errorModuleName?: string // If the symbol is not visibile from module, module's name
+        errorModuleName?: string // If the symbol is not visible from module, module's name
         aliasesToMakeVisible?: ImportDeclaration[]; // aliases that need to have this symbol visible
     }
 
@@ -961,6 +959,7 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
         noLib?: boolean;
         noLibCheck?: boolean;
@@ -973,7 +972,6 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-
         [option: string]: any;
     }
 
@@ -1011,9 +1009,6 @@ module ts {
         carriageReturn = 0x0D,        // \r
         lineSeparator = 0x2028,
         paragraphSeparator = 0x2029,
-
-        // REVIEW: do we need to support this?  The scanner doesn't, but our IText does.  This seems 
-        // like an odd disparity?  (Or maybe it's completely fine for them to be different).
         nextLine = 0x0085,
 
         // Unicode 3.0 space characters

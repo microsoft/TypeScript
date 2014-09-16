@@ -601,7 +601,7 @@ $('#underscore_button').bind('click', buttonView.onClick);
 >onClick : () => void
 
 var fibonacci = _.memoize(function (n) {
->fibonacci : any
+>fibonacci : (n: any) => any
 >_.memoize(function (n) {    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);}) : (n: any) => any
 >_.memoize : <T extends Function>(func: T, hashFunction?: Function) => T
 >_ : Underscore.Static
@@ -616,11 +616,11 @@ var fibonacci = _.memoize(function (n) {
 >n : any
 >fibonacci(n - 1) + fibonacci(n - 2) : any
 >fibonacci(n - 1) : any
->fibonacci : any
+>fibonacci : (n: any) => any
 >n - 1 : number
 >n : any
 >fibonacci(n - 2) : any
->fibonacci : any
+>fibonacci : (n: any) => any
 >n - 2 : number
 >n : any
 

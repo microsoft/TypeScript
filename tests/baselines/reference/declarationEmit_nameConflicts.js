@@ -62,6 +62,7 @@ var f;
 module.exports = f;
 //// [declarationEmit_nameConflicts_0.js]
 var im = require('declarationEmit_nameConflicts_1');
+var M;
 (function (M) {
     function f() {
     }
@@ -72,20 +73,21 @@ var im = require('declarationEmit_nameConflicts_1');
         return C;
     })();
     M.C = C;
+    var N;
     (function (N) {
         function g() {
         }
         N.g = g;
         ;
-    })(M.N || (M.N = {}));
-    var N = M.N;
+    })(N = M.N || (M.N = {}));
     M.a = M.f;
     M.b = M.C;
     M.c = N;
     M.d = im;
-})(exports.M || (exports.M = {}));
-var M = exports.M;
+})(M = exports.M || (exports.M = {}));
+var M;
 (function (M) {
+    var P;
     (function (P) {
         function f() {
         }
@@ -96,24 +98,24 @@ var M = exports.M;
             return C;
         })();
         P.C = C;
+        var N;
         (function (N) {
             function g() {
             }
             N.g = g;
             ;
-        })(P.N || (P.N = {}));
-        var N = P.N;
+        })(N = P.N || (P.N = {}));
         P.im = M.P.f;
         P.a = M.a; // emitted incorrectly as typeof f
         P.b = M.b; // ok
         P.c = M.c; // ok
         P.g = M.c.g; // ok
         P.d = M.d; // emitted incorrectly as typeof im
-    })(M.P || (M.P = {}));
-    var P = M.P;
-})(exports.M || (exports.M = {}));
-var M = exports.M;
+    })(P = M.P || (M.P = {}));
+})(M = exports.M || (exports.M = {}));
+var M;
 (function (M) {
+    var Q;
     (function (Q) {
         function f() {
         }
@@ -124,17 +126,15 @@ var M = exports.M;
             return C;
         })();
         Q.C = C;
+        var N;
         (function (N) {
             function g() {
             }
             N.g = g;
             ;
-        })(Q.N || (Q.N = {}));
-        var N = Q.N;
-    })(M.Q || (M.Q = {}));
-    var Q = M.Q;
-})(exports.M || (exports.M = {}));
-var M = exports.M;
+        })(N = Q.N || (Q.N = {}));
+    })(Q = M.Q || (M.Q = {}));
+})(M = exports.M || (exports.M = {}));
 
 
 //// [declarationEmit_nameConflicts_1.d.ts]

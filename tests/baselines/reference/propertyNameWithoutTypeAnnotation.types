@@ -25,7 +25,7 @@ var b = {
 >{    foo: null} : { foo: null; }
 
     foo: null
->foo : any
+>foo : null
 }
 
 // These should all be of type 'any'

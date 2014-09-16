@@ -74,10 +74,10 @@ define(["require", "exports"], function (require, exports) {
         (function (inst) {
             var t;
         })(inst || (inst = {}));
+        var inst;
         (function (inst) {
             var t;
-        })(M.inst || (M.inst = {}));
-        var inst = M.inst;
+        })(inst = M.inst || (M.inst = {}));
     })(M || (M = {}));
     // Variables of the same / different type
     var M2;
@@ -104,9 +104,9 @@ define(["require", "exports"], function (require, exports) {
             }
             return C;
         })();
+        var C;
         (function (C) {
             var t;
-        })(M.C || (M.C = {}));
-        var C = M.C;
+        })(C = M.C || (M.C = {}));
     })(M || (M = {}));
 });

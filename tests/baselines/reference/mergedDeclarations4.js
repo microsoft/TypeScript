@@ -30,10 +30,10 @@ var M;
 })(M || (M = {}));
 var M;
 (function (M) {
+    var f;
     (function (f) {
         f.hello = 1;
-    })(M.f || (M.f = {}));
-    var f = M.f;
+    })(f = M.f || (M.f = {}));
     f();
     M.f();
     var r = f.hello;

@@ -9,6 +9,7 @@ var x = new a();
 var y = new b();
 
 //// [sourceMapValidationImport.js]
+var m;
 (function (m) {
     var c = (function () {
         function c() {
@@ -16,8 +17,7 @@ var y = new b();
         return c;
     })();
     m.c = c;
-})(exports.m || (exports.m = {}));
-var m = exports.m;
+})(m = exports.m || (exports.m = {}));
 var a = m.c;
 exports.b = m.c;
 var x = new a();

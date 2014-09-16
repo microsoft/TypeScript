@@ -1,5 +1,5 @@
 node_modules/
-built/
+built/*
 tests/cases/*.js
 tests/cases/*/*.js
 tests/cases/*/*/*.js
@@ -23,6 +23,7 @@ tests/services/baselines/prototyping/local/*
 tests/services/browser/typescriptServices.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
+scripts/importDefinitelyTypedTests.js
 src/harness/*.js
 rwc-report.html
 *.swp

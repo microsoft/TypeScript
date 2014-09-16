@@ -41,7 +41,7 @@ var w:I={x:null,y:3};
 >w : I
 >I : I
 >{x:null,y:3} : { x: null; y: number; }
->x : any
+>x : null
 >y : number
 
 

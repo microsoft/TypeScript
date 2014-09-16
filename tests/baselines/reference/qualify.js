@@ -64,35 +64,36 @@ var x:T.I=y;
 var M;
 (function (M) {
     M.m = 0;
+    var N;
     (function (N) {
         N.n = 1;
-    })(M.N || (M.N = {}));
-    var N = M.N;
+    })(N = M.N || (M.N = {}));
 })(M || (M = {}));
 var M;
 (function (M) {
+    var N;
     (function (N) {
         var y = M.m;
         var x = N.n + y;
-    })(M.N || (M.N = {}));
-    var N = M.N;
+    })(N = M.N || (M.N = {}));
 })(M || (M = {}));
 var T;
 (function (T) {
+    var U;
     (function (U) {
         var z = 3;
-    })(T.U || (T.U = {}));
-    var U = T.U;
+    })(U = T.U || (T.U = {}));
 })(T || (T = {}));
 var Peer;
 (function (Peer) {
+    var U2;
     (function (U2) {
         var z = 3;
-    })(Peer.U2 || (Peer.U2 = {}));
-    var U2 = Peer.U2;
+    })(U2 = Peer.U2 || (Peer.U2 = {}));
 })(Peer || (Peer = {}));
 var Everest;
 (function (Everest) {
+    var K2;
     (function (K2) {
         var v1;
         var v2 = v1;
@@ -100,8 +101,7 @@ var Everest;
         var v4 = v1;
         var v5 = v1;
         var v6 = v1;
-    })(Everest.K2 || (Everest.K2 = {}));
-    var K2 = Everest.K2;
+    })(K2 = Everest.K2 || (Everest.K2 = {}));
 })(Everest || (Everest = {}));
 var y;
 var x = y;
