@@ -50,8 +50,8 @@ module ts {
         return node.pos;
     }
 
-    export function getTokenPosOfNode(node: Node): number {
-        return skipTrivia(getSourceFileOfNode(node).text, node.pos);
+    export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
     export function getSourceTextOfNodeFromSourceText(sourceText: string, node: Node): string {
@@ -307,9 +307,9 @@ module ts {
             case SyntaxKind.DefaultClause:
                 return child((<CaseOrDefaultClause>node).expression) ||
                     children((<CaseOrDefaultClause>node).statements);
-            case SyntaxKind.LabelledStatement:
-                return child((<LabelledStatement>node).label) ||
-                    child((<LabelledStatement>node).statement);
+            case SyntaxKind.LabeledStatement:
+                return child((<LabeledStatement>node).label) ||
+                    child((<LabeledStatement>node).statement);
             case SyntaxKind.ThrowStatement:
                 return child((<ThrowStatement>node).expression);
             case SyntaxKind.TryStatement:
@@ -373,7 +373,7 @@ module ts {
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.DefaultClause:
-                case SyntaxKind.LabelledStatement:
+                case SyntaxKind.LabeledStatement:
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.TryBlock:
                 case SyntaxKind.CatchBlock:
@@ -485,6 +485,32 @@ module ts {
                 return true;
         }
         return false;
+    }
+
+    export function isStatement(n: Node): boolean {
+        switch(n.kind) {
+            case SyntaxKind.BreakStatement:
+            case SyntaxKind.ContinueStatement:
+            case SyntaxKind.DebuggerStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.ExpressionStatement:
+            case SyntaxKind.EmptyStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.LabeledStatement:
+            case SyntaxKind.ReturnStatement:
+            case SyntaxKind.SwitchStatement:
+            case SyntaxKind.ThrowKeyword:
+            case SyntaxKind.TryStatement:
+            case SyntaxKind.VariableStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.WithStatement:
+            case SyntaxKind.ExportAssignment:
+                return true;
+            default:
+                return false;
+        }
     }
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
@@ -2882,8 +2908,8 @@ module ts {
             return isIdentifier() && lookAhead(() => nextToken() === SyntaxKind.ColonToken);
         }
 
-        function parseLabelledStatement(): LabelledStatement {
-            var node = <LabelledStatement>createNode(SyntaxKind.LabelledStatement);
+        function parseLabelledStatement(): LabeledStatement {
+            var node = <LabeledStatement>createNode(SyntaxKind.LabeledStatement);
             node.label = parseIdentifier();
             parseExpected(SyntaxKind.ColonToken);
 

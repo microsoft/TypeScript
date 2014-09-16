@@ -11,6 +11,7 @@
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='formatting\formatting.ts' />
+/// <reference path='formatting\smartIndenter.ts' />
 
 /// <reference path='core\references.ts' />
 /// <reference path='resources\references.ts' />
@@ -27,18 +28,18 @@
 module ts {
     export interface Node {
         getSourceFile(): SourceFile;
-        getChildCount(): number;
-        getChildAt(index: number): Node;
-        getChildren(): Node[];
-        getStart(): number;
+        getChildCount(sourceFile?: SourceFile): number;
+        getChildAt(index: number, sourceFile?: SourceFile): Node;
+        getChildren(sourceFile?: SourceFile): Node[];
+        getStart(sourceFile?: SourceFile): number;
         getFullStart(): number;
         getEnd(): number;
-        getWidth(): number;
+        getWidth(sourceFile?: SourceFile): number;
         getFullWidth(): number;
-        getLeadingTriviaWidth(): number;
-        getFullText(): string;
-        getFirstToken(): Node;
-        getLastToken(): Node;
+        getLeadingTriviaWidth(sourceFile?: SourceFile): number;
+        getFullText(sourceFile?: SourceFile): string;
+        getFirstToken(sourceFile?: SourceFile): Node;
+        getLastToken(sourceFile?: SourceFile): Node;
     }
 
     export interface Symbol {
@@ -75,7 +76,7 @@ module ts {
 
     var scanner: Scanner = createScanner(ScriptTarget.ES5);
 
-    var emptyArray: any [] = [];
+    var emptyArray: any[] = [];
 
     function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
         var node = <NodeObject> new (getNodeConstructor(kind))();
@@ -100,8 +101,8 @@ module ts {
             return <SourceFile>node;
         }
 
-        public getStart(): number {
-            return getTokenPosOfNode(this);
+        public getStart(sourceFile?: SourceFile): number {
+            return getTokenPosOfNode(this, sourceFile);
         }
 
         public getFullStart(): number {
@@ -112,20 +113,20 @@ module ts {
             return this.end;
         }
 
-        public getWidth(): number {
-            return this.getEnd() - this.getStart();
+        public getWidth(sourceFile?: SourceFile): number {
+            return this.getEnd() - this.getStart(sourceFile);
         }
 
         public getFullWidth(): number {
             return this.end - this.getFullStart();
         }
 
-        public getLeadingTriviaWidth(): number {
-            return this.getStart() - this.pos;
+        public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
+            return this.getStart(sourceFile) - this.pos;
         }
 
-        public getFullText(): string {
-            return this.getSourceFile().text.substring(this.pos, this.end);
+        public getFullText(sourceFile?: SourceFile): string {
+            return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
         }
 
         private addSyntheticNodes(nodes: Node[], pos: number, end: number): number {
@@ -157,9 +158,9 @@ module ts {
             return list;
         }
 
-        private createChildren() {
+        private createChildren(sourceFile?: SourceFile) {
             if (this.kind > SyntaxKind.Missing) {
-                scanner.setText(this.getSourceFile().text);
+                scanner.setText((sourceFile || this.getSourceFile()).text);
                 var children: Node[] = [];
                 var pos = this.pos;
                 var processNode = (node: Node) => {
@@ -185,36 +186,36 @@ module ts {
             this._children = children || emptyArray;
         }
 
-        public getChildCount(): number {
-            if (!this._children) this.createChildren();
+        public getChildCount(sourceFile?: SourceFile): number {
+            if (!this._children) this.createChildren(sourceFile);
             return this._children.length;
         }
 
-        public getChildAt(index: number): Node {
-            if (!this._children) this.createChildren();
+        public getChildAt(index: number, sourceFile?: SourceFile): Node {
+            if (!this._children) this.createChildren(sourceFile);
             return this._children[index];
         }
 
-        public getChildren(): Node[] {
-            if (!this._children) this.createChildren();
+        public getChildren(sourceFile?: SourceFile): Node[] {
+            if (!this._children) this.createChildren(sourceFile);
             return this._children;
         }
 
-        public getFirstToken(): Node {
-            var children = this.getChildren();
+        public getFirstToken(sourceFile?: SourceFile): Node {
+            var children = this.getChildren(sourceFile);
             for (var i = 0; i < children.length; i++) {
                 var child = children[i];
                 if (child.kind < SyntaxKind.Missing) return child;
-                if (child.kind > SyntaxKind.Missing) return child.getFirstToken();
+                if (child.kind > SyntaxKind.Missing) return child.getFirstToken(sourceFile);
             }
         }
 
-        public getLastToken(): Node {
-            var children = this.getChildren();
+        public getLastToken(sourceFile?: SourceFile): Node {
+            var children = this.getChildren(sourceFile);
             for (var i = children.length - 1; i >= 0; i--) {
                 var child = children[i];
                 if (child.kind < SyntaxKind.Missing) return child;
-                if (child.kind > SyntaxKind.Missing) return child.getLastToken();
+                if (child.kind > SyntaxKind.Missing) return child.getLastToken(sourceFile);
             }
         }
     }
@@ -259,7 +260,7 @@ module ts {
         getProperty(propertyName: string): Symbol {
             return this.checker.getPropertyOfType(this, propertyName);
         }
-        getApparentProperties(): Symbol[]{
+        getApparentProperties(): Symbol[] {
             return this.checker.getAugmentedPropertiesOfApparentType(this);
         }
         getCallSignatures(): Signature[] {
@@ -302,7 +303,7 @@ module ts {
         }
     }
 
-     var incrementalParse: IncrementalParse = TypeScript.IncrementalParser.parse;
+    var incrementalParse: IncrementalParse = TypeScript.IncrementalParser.parse;
 
     class SourceFileObject extends NodeObject implements SourceFile {
         public filename: string;
@@ -362,7 +363,7 @@ module ts {
         public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
             // See if we are currently holding onto a syntax tree.  We may not be because we're 
             // either a closed file, or we've just been lazy and haven't had to create the syntax
-            // tree yet.  Access the field instead of the method so we don't accidently realize
+            // tree yet.  Access the field instead of the method so we don't accidentally realize
             // the old syntax tree.
             var oldSyntaxTree = this.syntaxTree;
 
@@ -430,6 +431,9 @@ module ts {
         getSemanticDiagnostics(fileName: string): Diagnostic[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
+        getSyntacticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[];
+        getSemanticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[];
+
         getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
@@ -465,6 +469,32 @@ module ts {
         //getSyntaxTree(fileName: string): TypeScript.SyntaxTree;
 
         dispose(): void;
+    }
+
+    export class ClassificationTypeNames {
+        public static comment = "comment";
+        public static identifier = "identifier";
+        public static keyword = "keyword";
+        public static numericLiteral = "number";
+        public static operator = "operator";
+        public static stringLiteral = "string";
+        public static whiteSpace = "whitespace";
+        public static text = "text";
+
+        public static punctuation = "punctuation";
+
+        public static className = "class name";
+        public static enumName = "enum name";
+        public static interfaceName = "interface name";
+        public static moduleName = "module name";
+        public static typeParameterName = "type parameter name";
+    }
+
+    export class ClassifiedSpan {
+        constructor(public textSpan: TypeScript.TextSpan,
+                    public classificationType: string) {
+
+        }
     }
 
     export class NavigationBarItem {
@@ -1275,8 +1305,8 @@ module ts {
     /// Helpers
     function getTargetLabel(referenceNode: Node, labelName: string): Identifier {
         while (referenceNode) {
-            if (referenceNode.kind === SyntaxKind.LabelledStatement && (<LabelledStatement>referenceNode).label.text === labelName) {
-                return (<LabelledStatement>referenceNode).label;
+            if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.text === labelName) {
+                return (<LabeledStatement>referenceNode).label;
             }
             referenceNode = referenceNode.parent;
         }
@@ -1291,8 +1321,22 @@ module ts {
 
     function isLabelOfLabeledStatement(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
-            node.parent.kind === SyntaxKind.LabelledStatement &&
-            (<LabelledStatement>node.parent).label === node;
+            node.parent.kind === SyntaxKind.LabeledStatement &&
+            (<LabeledStatement>node.parent).label === node;
+    }
+
+    /**
+     * Whether or not a 'node' is preceded by a label of the given string.
+     * Note: 'node' cannot be a SourceFile.
+     */
+    function isLabeledBy(node: Node, labelName: string) {
+        for (var owner = node.parent; owner.kind === SyntaxKind.LabeledStatement; owner = owner.parent) {
+            if ((<LabeledStatement>owner).label.text === labelName) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     function isLabelName(node: Node): boolean {
@@ -1348,9 +1392,17 @@ module ts {
     }
 
     enum SearchMeaning {
+        None = 0x0,
         Value = 0x1,
         Type = 0x2,
         Namespace = 0x4
+    }
+
+    enum BreakContinueSearchType {
+        None = 0x0,
+        Unlabeled = 0x1,
+        Labeled = 0x2,
+        All = Unlabeled | Labeled
     }
 
     // A cache of completion entries for keywords, these do not change between sessions
@@ -1370,7 +1422,7 @@ module ts {
         var program: Program;
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
-        // the sole purpose of this checkes is to reutrn semantic diagnostics
+        // the sole purpose of this check is to return semantic diagnostics
         // creation is deferred - use getFullTypeCheckChecker to get instance
         var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
         var useCaseSensitivefilenames = false;
@@ -1514,7 +1566,7 @@ module ts {
                     sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version, isOpen);
                 }
 
-                // Remeber the new sourceFile
+                // Remember the new sourceFile
                 sourceFilesByName[filename] = sourceFile;
             }
 
@@ -1616,9 +1668,9 @@ module ts {
             }
 
             function isCompletionListBlocker(sourceUnit: TypeScript.SourceUnitSyntax, position: number): boolean {
-                // We shouldn't be getting a possition that is outside the file because
+                // We shouldn't be getting a position that is outside the file because
                 // isEntirelyInsideComment can't handle when the position is out of bounds, 
-                // callers should be fixed, however we should be resiliant to bad inputs
+                // callers should be fixed, however we should be resilient to bad inputs
                 // so we return true (this position is a blocker for getting completions)
                 if (position < 0 || position > TypeScript.fullWidth(sourceUnit)) {
                     return true;
@@ -1708,12 +1760,12 @@ module ts {
                 var positionedToken = TypeScript.Syntax.findCompleteTokenOnLeft(sourceUnit, position, /*includeSkippedTokens*/true);
 
                 if (positionedToken && position === TypeScript.end(positionedToken) && positionedToken.kind() == TypeScript.SyntaxKind.EndOfFileToken) {
-                    // EndOfFile token is not intresting, get the one before it
+                    // EndOfFile token is not interesting, get the one before it
                     positionedToken = TypeScript. previousToken(positionedToken, /*includeSkippedTokens*/true);
                 }
 
                 if (positionedToken && position === TypeScript.end(positionedToken) && positionedToken.kind() === TypeScript.SyntaxKind.IdentifierName) {
-                    // The caret is at the end of an identifier, the decession to provide completion depends on the previous token
+                    // The caret is at the end of an identifier, the decision to provide completion depends on the previous token
                     positionedToken = TypeScript.previousToken(positionedToken, /*includeSkippedTokens*/true);
                 }
 
@@ -1902,7 +1954,7 @@ module ts {
                         getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
                     }
                 }
-                // Get scope memebers
+                // Get scope members
                 else {
                     isMemberCompletion = false;
                     /// TODO filter meaning based on the current context
@@ -1926,7 +1978,7 @@ module ts {
 
         function getCompletionEntryDetails(filename: string, position: number, entryName: string) {
             // Note: No need to call synchronizeHostData, as we have captured all the data we need
-            //       in the getCompletionsAtPosition erlier
+            //       in the getCompletionsAtPosition earlier
             filename = TypeScript.switchToForwardSlashes(filename);
 
             var session = activeCompletionSession;
@@ -2237,8 +2289,20 @@ module ts {
                     }
                     break;
                 case SyntaxKind.BreakKeyword:
-                    if (hasKind(node.parent, SyntaxKind.BreakStatement)) {
-                        return getBreakStatementOccurences(<BreakOrContinueStatement>node.parent);
+                case SyntaxKind.ContinueKeyword:
+                    if (hasKind(node.parent, SyntaxKind.BreakStatement) || hasKind(node.parent, SyntaxKind.ContinueStatement)) {
+                        return getBreakOrContinueStatementOccurences(<BreakOrContinueStatement>node.parent);
+                    }
+                    break;
+                case SyntaxKind.ForKeyword:
+                    if (hasKind(node.parent, SyntaxKind.ForStatement) || hasKind(node.parent, SyntaxKind.ForInStatement)) {
+                        return getLoopBreakContinueOccurrences(<IterationStatement>node.parent);
+                    }
+                    break;
+                case SyntaxKind.WhileKeyword:
+                case SyntaxKind.DoKeyword:
+                    if (hasKind(node.parent, SyntaxKind.WhileStatement) || hasKind(node.parent, SyntaxKind.DoStatement)) {
+                        return getLoopBreakContinueOccurrences(<IterationStatement>node.parent);
                     }
                     break;
                 case SyntaxKind.ConstructorKeyword:
@@ -2342,35 +2406,50 @@ module ts {
                 return map(keywords, getReferenceEntryFromNode);
             }
 
+            function getLoopBreakContinueOccurrences(loopNode: IterationStatement): ReferenceEntry[] {
+                var keywords: Node[] = [];
+
+                if (pushKeywordIf(keywords, loopNode.getFirstToken(), SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
+                    // If we succeeded and got a do-while loop, then start looking for a 'while' keyword.
+                    if (loopNode.kind === SyntaxKind.DoStatement) {
+                        var loopTokens = loopNode.getChildren();
+
+                        for (var i = loopTokens.length - 1; i >= 0; i--) {
+                            if (pushKeywordIf(keywords, loopTokens[i], SyntaxKind.WhileKeyword)) {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                var breaksAndContinues = aggregateAllBreakAndContinueStatements(loopNode.statement);
+
+                forEach(breaksAndContinues, statement => {
+                    if (ownsBreakOrContinueStatement(loopNode, statement)) {
+                        pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
+                    }
+                });
+
+                return map(keywords, getReferenceEntryFromNode);
+            }
+
             function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
                 var keywords: Node[] = [];
 
                 pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
-                // Go through each clause in the switch statement, collecting the clause keywords.
+                // Types of break statements we can grab on to.
+                var breakSearchType = BreakContinueSearchType.All;
+
+                // Go through each clause in the switch statement, collecting the 'case'/'default' keywords.
                 forEach(switchStatement.clauses, clause => {
                     pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
 
-                    // For each clause, also recursively traverse the statements where we can find analogous breaks.
-                    forEachChild(clause, function aggregateBreakKeywords(node: Node): void {
-                        switch (node.kind) {
-                            case SyntaxKind.BreakStatement:
-                                // If the break statement has a label, it cannot be part of a switch block.
-                                if (!(<BreakOrContinueStatement>node).label) {
-                                    pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword);
-                                }
-                            // Fall through
-                            case SyntaxKind.ForStatement:
-                            case SyntaxKind.ForInStatement:
-                            case SyntaxKind.DoStatement:
-                            case SyntaxKind.WhileStatement:
-                            case SyntaxKind.SwitchStatement:
-                                return;
-                        }
+                    var breaksAndContinues = aggregateAllBreakAndContinueStatements(clause);
 
-                        // Do not cross function boundaries.
-                        if (!isAnyFunction(node)) {
-                            forEachChild(node, aggregateBreakKeywords);
+                    forEach(breaksAndContinues, statement => {
+                        if (ownsBreakOrContinueStatement(switchStatement, statement)) {
+                            pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword);
                         }
                     });
                 });
@@ -2378,28 +2457,69 @@ module ts {
                 return map(keywords, getReferenceEntryFromNode);
             }
 
-            function getBreakStatementOccurences(breakStatement: BreakOrContinueStatement): ReferenceEntry[] {
-                // TODO (drosen): Deal with labeled statements.
-                if (breakStatement.label) {
-                    return undefined;
-                }
-                
-                for (var owner = node.parent; owner; owner = owner.parent) {
+            function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): ReferenceEntry[]{
+                var owner = getBreakOrContinueOwner(breakOrContinueStatement);
+
+                if (owner) {
                     switch (owner.kind) {
                         case SyntaxKind.ForStatement:
                         case SyntaxKind.ForInStatement:
                         case SyntaxKind.DoStatement:
                         case SyntaxKind.WhileStatement:
-                            // TODO (drosen): Handle loops!
-                            return undefined;
-
+                            return getLoopBreakContinueOccurrences(<IterationStatement>owner)
                         case SyntaxKind.SwitchStatement:
                             return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
 
+                    }
+                }
+
+                return undefined;
+            }
+
+            function aggregateAllBreakAndContinueStatements(node: Node): BreakOrContinueStatement[] {
+                var statementAccumulator: BreakOrContinueStatement[] = []
+                aggregate(node);
+                return statementAccumulator;
+
+                function aggregate(node: Node): void {
+                    if (node.kind === SyntaxKind.BreakStatement || node.kind === SyntaxKind.ContinueStatement) {
+                        statementAccumulator.push(node);
+                    }
+                    // Do not cross function boundaries.
+                    else if (!isAnyFunction(node)) {
+                        forEachChild(node, aggregate);
+                    }
+                };
+            }
+
+            function ownsBreakOrContinueStatement(owner: Node, statement: BreakOrContinueStatement): boolean {
+                var actualOwner = getBreakOrContinueOwner(statement);
+
+                return actualOwner && actualOwner === owner;
+            }
+
+            function getBreakOrContinueOwner(statement: BreakOrContinueStatement): Node {
+                for (var node = statement.parent; node; node = node.parent) {
+                    switch (node.kind) {
+                        case SyntaxKind.SwitchStatement:
+                            if (statement.kind === SyntaxKind.ContinueStatement) {
+                                continue;
+                            }
+                            // Fall through.
+                        case SyntaxKind.ForStatement:
+                        case SyntaxKind.ForInStatement:
+                        case SyntaxKind.WhileStatement:
+                        case SyntaxKind.DoStatement:
+                            if (!statement.label || isLabeledBy(node, statement.label.text)) {
+                                return node;
+                            }
+                            break;
                         default:
-                            if (isAnyFunction(owner)) {
+                            // Don't cross function boundaries.
+                            if (isAnyFunction(node)) {
                                 return undefined;
                             }
+                            break;
                     }
                 }
 
@@ -2422,7 +2542,7 @@ module ts {
 
             // returns true if 'node' is defined and has a matching 'kind'.
             function hasKind(node: Node, kind: SyntaxKind) {
-                return !!(node && node.kind === kind);
+                return node !== undefined && node.kind === kind;
             }
 
             // Null-propagating 'parent' function.
@@ -2490,7 +2610,7 @@ module ts {
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
-                // Even if we did not find a symbol, we have an identifer, so there is at least
+                // Even if we did not find a symbol, we have an identifier, so there is at least
                 // one reference that we know of. return that instead of undefined.
                 return [getReferenceEntryFromNode(node)];
             }
@@ -2773,7 +2893,7 @@ module ts {
                         if (isExternalModule(<SourceFile>searchSpaceNode)) {
                             return undefined;
                         }
-                    // Fall through
+                        // Fall through
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                         break;
@@ -2880,7 +3000,7 @@ module ts {
                             var propertySymbol = typeReferenceSymbol.members[propertyName];
                             if (propertySymbol) result.push(typeReferenceSymbol.members[propertyName]);
 
-                            // Visit the typeReference as well to see if it directelly or indirectelly use that property
+                            // Visit the typeReference as well to see if it directly or indirectly use that property
                             getPropertySymbolsFromBaseTypes(typeReferenceSymbol, propertyName, result);
                         }
                     }
@@ -2888,7 +3008,7 @@ module ts {
             }
 
             function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
-                // Unwrap symbols to get to the root (e.g. triansient symbols as a result of widenning)
+                // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
                 var referenceSymbolTarget = typeInfoResolver.getRootSymbol(referenceSymbol);
 
                 // if it is in the list, then we are done
@@ -2906,7 +3026,7 @@ module ts {
                     }
                 }
 
-                // Finally, try all properties with the same name in any type the containing type extened or implemented, and 
+                // Finally, try all properties with the same name in any type the containing type extend or implemented, and 
                 // see if any is in the list
                 if (referenceSymbol.parent && referenceSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     var result: Symbol[] = [];
@@ -2969,7 +3089,7 @@ module ts {
                     case SyntaxKind.ImportDeclaration:
                         return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
                 }
-                Debug.fail("Unkown declaration type");
+                Debug.fail("Unknown declaration type");
             }
 
             function isTypeReference(node: Node): boolean {
@@ -3050,7 +3170,7 @@ module ts {
                         // intersects with the class in the value space.
                         // To achieve that we will keep iterating until the result stabilizes.
 
-                        // Remeber the last meaning
+                        // Remember the last meaning
                         var lastIterationMeaning = meaning;
 
                         for (var i = 0, n = declarations.length; i < n; i++) {
@@ -3078,7 +3198,7 @@ module ts {
             return new ReferenceEntry(node.getSourceFile().filename, TypeScript.TextSpan.fromBounds(start, end), isWriteAccess(node));
         }
 
-        /// A node is considedered a writeAccess iff it is a name of a declaration or a target of an assignment
+        /// A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment
         function isWriteAccess(node: Node): boolean {
             if (node.kind === SyntaxKind.Identifier && isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                 return true;
@@ -3180,6 +3300,198 @@ module ts {
             return new TypeScript.Services.NavigationBarItemGetter().getItems(syntaxTree.sourceUnit());
         }
 
+        function getSemanticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[] {
+            synchronizeHostData();
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+
+            var sourceFile = getSourceFile(fileName);
+
+            var result: ClassifiedSpan[] = [];
+            processNode(sourceFile);
+
+            return result;
+
+            function classifySymbol(symbol: Symbol) {
+                var flags = symbol.getFlags();
+
+                if (flags & SymbolFlags.Class) {
+                    return ClassificationTypeNames.className;
+                }
+                else if (flags & SymbolFlags.Enum) {
+                    return ClassificationTypeNames.enumName;
+                }
+                else if (flags & SymbolFlags.Interface) {
+                    return ClassificationTypeNames.interfaceName;
+                }
+                else if (flags & SymbolFlags.Module) {
+                    return ClassificationTypeNames.moduleName;
+                }
+                else if (flags & SymbolFlags.TypeParameter) {
+                    return ClassificationTypeNames.typeParameterName;
+                }
+            }
+
+            function processNode(node: Node) {
+                // Only walk into nodes that intersect the requested span.
+                if (node && span.intersectsWith(node.getStart(), node.getWidth())) {
+                    if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
+                        var symbol = typeInfoResolver.getSymbolInfo(node);
+                        if (symbol) {
+                            var type = classifySymbol(symbol);
+                            if (type) {
+                                result.push(new ClassifiedSpan(
+                                    new TypeScript.TextSpan(node.getStart(), node.getWidth()),
+                                    type));
+                            }
+                        }
+                    }
+
+                    forEachChild(node, processNode);
+                }
+            }
+        }
+
+        function getSyntacticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[] {
+            // doesn't use compiler - no need to synchronize with host
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getCurrentSourceFile(fileName);
+
+            var result: ClassifiedSpan[] = [];
+            processElement(sourceFile.getSourceUnit());
+
+            return result;
+
+            function classifyTrivia(trivia: TypeScript.ISyntaxTrivia) {
+                if (trivia.isComment() && span.intersectsWith(trivia.fullStart(), trivia.fullWidth())) {
+                    result.push(new ClassifiedSpan(
+                        new TypeScript.TextSpan(trivia.fullStart(), trivia.fullWidth()),
+                        ClassificationTypeNames.comment));
+                }
+            }
+
+            function classifyTriviaList(trivia: TypeScript.ISyntaxTriviaList) {
+                for (var i = 0, n = trivia.count(); i < n; i++) {
+                    classifyTrivia(trivia.syntaxTriviaAt(i));
+                }
+            }
+
+            function classifyToken(token: TypeScript.ISyntaxToken) {
+                if (token.hasLeadingComment()) {
+                    classifyTriviaList(token.leadingTrivia());
+                }
+
+                if (TypeScript.width(token) > 0) {
+                    var type = classifyTokenType(token);
+                    if (type) {
+                        result.push(new ClassifiedSpan(
+                            new TypeScript.TextSpan(TypeScript.start(token), TypeScript.width(token)),
+                            type));
+                    }
+                }
+
+                if (token.hasTrailingComment()) {
+                    classifyTriviaList(token.trailingTrivia());
+                }
+            }
+
+            function classifyTokenType(token: TypeScript.ISyntaxToken): string {
+                var tokenKind = token.kind();
+                if (TypeScript.SyntaxFacts.isAnyKeyword(token.kind())) {
+                    return ClassificationTypeNames.keyword;
+                }
+
+                // Special case < and >  If they appear in a generic context they are punctation,
+                // not operators.
+                if (tokenKind === TypeScript.SyntaxKind.LessThanToken || tokenKind === TypeScript.SyntaxKind.GreaterThanToken) {
+                    var tokenParentKind = token.parent.kind();
+                    if (tokenParentKind === TypeScript.SyntaxKind.TypeArgumentList ||
+                        tokenParentKind === TypeScript.SyntaxKind.TypeParameterList) {
+
+                        return ClassificationTypeNames.punctuation;
+                    }
+                }
+
+                if (TypeScript.SyntaxFacts.isBinaryExpressionOperatorToken(tokenKind) ||
+                    TypeScript.SyntaxFacts.isPrefixUnaryExpressionOperatorToken(tokenKind)) {
+                    return ClassificationTypeNames.operator;
+                }
+                else if (TypeScript.SyntaxFacts.isAnyPunctuation(tokenKind)) {
+                    return ClassificationTypeNames.punctuation;
+                }
+                else if (tokenKind === TypeScript.SyntaxKind.NumericLiteral) {
+                    return ClassificationTypeNames.numericLiteral;
+                }
+                else if (tokenKind === TypeScript.SyntaxKind.StringLiteral) {
+                    return ClassificationTypeNames.stringLiteral;
+                }
+                else if (tokenKind === TypeScript.SyntaxKind.RegularExpressionLiteral) {
+                    // TODO: we shoudl get another classification type for these literals.
+                    return ClassificationTypeNames.stringLiteral;
+                }
+                else if (tokenKind === TypeScript.SyntaxKind.IdentifierName) {
+                    var current: TypeScript.ISyntaxNodeOrToken = token;
+                    var parent = token.parent;
+                    while (parent.kind() === TypeScript.SyntaxKind.QualifiedName) {
+                        current = parent;
+                        parent = parent.parent;
+                    }
+
+                    switch (parent.kind()) {
+                        case TypeScript.SyntaxKind.SimplePropertyAssignment:
+                            if ((<TypeScript.SimplePropertyAssignmentSyntax>parent).propertyName === token) {
+                                return ClassificationTypeNames.identifier;
+                            }
+                            return;
+                        case TypeScript.SyntaxKind.ClassDeclaration:
+                            if ((<TypeScript.ClassDeclarationSyntax>parent).identifier === token) {
+                                return ClassificationTypeNames.className;
+                            }
+                            return;
+                        case TypeScript.SyntaxKind.TypeParameter:
+                            if ((<TypeScript.TypeParameterSyntax>parent).identifier === token) {
+                                return ClassificationTypeNames.typeParameterName;
+                            }
+                            return;
+                        case TypeScript.SyntaxKind.InterfaceDeclaration:
+                            if ((<TypeScript.InterfaceDeclarationSyntax>parent).identifier === token) {
+                                return ClassificationTypeNames.interfaceName;
+                            }
+                            return;
+                        case TypeScript.SyntaxKind.EnumDeclaration:
+                            if ((<TypeScript.EnumDeclarationSyntax>parent).identifier === token) {
+                                return ClassificationTypeNames.enumName;
+                            }
+                            return;
+                        case TypeScript.SyntaxKind.ModuleDeclaration:
+                            if ((<TypeScript.ModuleDeclarationSyntax>parent).name === current) {
+                                return ClassificationTypeNames.moduleName;
+                            }
+                            return;
+                        default:
+                            return ClassificationTypeNames.text;
+                    }
+                }
+            }
+
+            function processElement(element: TypeScript.ISyntaxElement) {
+                // Ignore nodes that don't intersect the original span to classify.
+                if (!TypeScript.isShared(element) && span.intersectsWith(TypeScript.fullStart(element), TypeScript.fullWidth(element))) {
+                    for (var i = 0, n = TypeScript.childCount(element); i < n; i++) {
+                        var child = TypeScript.childAt(element, i);
+                        if (child) {
+                            if (TypeScript.isToken(child)) {
+                                classifyToken(<TypeScript.ISyntaxToken>child);
+                            }
+                            else {
+                                // Recurse into our child nodes.
+                                processElement(child);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         function getOutliningSpans(filename: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -3195,15 +3507,11 @@ module ts {
 
         function getIndentationAtPosition(filename: string, position: number, editorOptions: EditorOptions) {
             filename = TypeScript.switchToForwardSlashes(filename);
-
-            var syntaxTree = getSyntaxTree(filename);
-
-            var scriptSnapshot = syntaxTreeCache.getCurrentScriptSnapshot(filename);
-            var scriptText = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
-            var textSnapshot = new TypeScript.Services.Formatting.TextSnapshot(scriptText);
+            
+            var sourceFile = getCurrentSourceFile(filename);
             var options = new TypeScript.FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
 
-            return TypeScript.Services.Formatting.SingleTokenIndenter.getIndentationAmount(position, syntaxTree.sourceUnit(), textSnapshot, options);
+            return formatting.SmartIndenter.getIndentation(position, sourceFile, options);
         }
 
         function getFormattingManager(filename: string, options: FormatCodeOptions) {
@@ -3364,7 +3672,7 @@ module ts {
                     var preamble = matchArray[1];
                     var matchPosition = matchArray.index + preamble.length;
 
-                    // Ok, we have found a match in the file.  This is ony an acceptable match if
+                    // Ok, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
                     var token = TypeScript.findToken(syntaxTree.sourceUnit(), matchPosition);
 
@@ -3374,7 +3682,7 @@ module ts {
                         continue;
                     }
 
-                    // Looks to be within the trivia.  See if we can find hte comment containing it.
+                    // Looks to be within the trivia.  See if we can find the comment containing it.
                     var triviaList = matchPosition < TypeScript.start(token) ? token.leadingTrivia(syntaxTree.text) : token.trailingTrivia(syntaxTree.text);
                     var trivia = findContainingComment(triviaList, matchPosition);
                     if (trivia === null) {
@@ -3427,6 +3735,8 @@ module ts {
             getSyntacticDiagnostics: getSyntacticDiagnostics,
             getSemanticDiagnostics: getSemanticDiagnostics,
             getCompilerOptionsDiagnostics: getCompilerOptionsDiagnostics,
+            getSyntacticClassifications: getSyntacticClassifications,
+            getSemanticClassifications: getSemanticClassifications,
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
@@ -3576,7 +3886,7 @@ module ts {
                     addResult(start - lastTokenOrCommentEnd, TokenClass.Whitespace);
                 }
 
-                // Remeber the end of the last token
+                // Remember the end of the last token
                 lastTokenOrCommentEnd = end;
             }
 
