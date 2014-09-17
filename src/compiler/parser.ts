@@ -556,9 +556,7 @@ module ts {
                     if (node.kind === kind) {
                         return node;
                     }
-                    else {
-                        node = node.parent;
-                    }
+                    node = node.parent;
                 }
                 break;
         }

@@ -1790,7 +1790,7 @@ module ts {
                 return false;
             }
 
-            function isToken(kind: SyntaxKind) {
+            function isPunctuation(kind: SyntaxKind) {
                 return (SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation);
             }
 
@@ -1883,7 +1883,7 @@ module ts {
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
             var mappedNode = getNodeAtPosition(sourceFile, TypeScript.end(node) - 1);
-            if (isToken(mappedNode.kind)) {
+            if (isPunctuation(mappedNode.kind)) {
                 mappedNode = mappedNode.parent;
             }
 
@@ -1904,7 +1904,6 @@ module ts {
                 var symbols: Symbol[] = [];
                 var containingClass = getAncestor(mappedNode, SyntaxKind.ClassDeclaration);
                 isMemberCompletion = true;
-
 
                 if (mappedNode.kind === SyntaxKind.Identifier || mappedNode.kind === SyntaxKind.QualifiedName || mappedNode.kind === SyntaxKind.PropertyAccess) {
                     var symbol = typeInfoResolver.getSymbolInfo(mappedNode);
