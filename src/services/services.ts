@@ -3687,73 +3687,12 @@ module ts {
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
                 if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
-                    var kind = getKind(symbol);
+                    var kind = getSymbolKind(symbol);
                     if (kind) {
-                        return RenameInfo.Create(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind, getKindModifiers(symbol),
+                        return RenameInfo.Create(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
+                            getNodeModifiers(symbol.getDeclarations()[0]),
                             new TypeScript.TextSpan(node.getStart(), node.getWidth()));
                     }
-                }
-            }
-
-            function getKindModifiers(symbol: Symbol): string {
-                var modifiers: string[] = [];
-                var decl = symbol.getDeclarations()[0];
-
-                if (decl.flags & NodeFlags.Ambient) {
-                    modifiers.push(ScriptElementKindModifier.ambientModifier);
-                }
-                if (decl.flags & NodeFlags.Export) {
-                    modifiers.push(ScriptElementKindModifier.exportedModifier);
-                }
-                if (decl.flags & NodeFlags.Private) {
-                    modifiers.push(ScriptElementKindModifier.privateMemberModifier);
-                }
-                if (decl.flags & NodeFlags.Public) {
-                    modifiers.push(ScriptElementKindModifier.publicMemberModifier);
-                }
-                if (decl.flags & NodeFlags.Static) {
-                    modifiers.push(ScriptElementKindModifier.staticModifier);
-                }
-
-                return modifiers.length == 0 ? ScriptElementKindModifier.none : modifiers.join(',');
-            }
-
-            function getKind(symbol: Symbol): string {
-                if (symbol.flags & SymbolFlags.Module) {
-                    return ScriptElementKind.moduleElement;
-                }
-                else if (symbol.flags & SymbolFlags.Class) {
-                    return ScriptElementKind.classElement;
-                }
-                else if (symbol.flags & SymbolFlags.Interface) {
-                    return ScriptElementKind.interfaceElement;
-                }
-                else if (symbol.flags & SymbolFlags.Enum) {
-                    return ScriptElementKind.enumElement;
-                }
-                else if (symbol.flags & SymbolFlags.Variable) {
-                    return ScriptElementKind.variableElement;
-                }
-                else if (symbol.flags & SymbolFlags.Function) {
-                    return ScriptElementKind.functionElement;
-                }
-                else if (symbol.flags & SymbolFlags.Method) {
-                    return ScriptElementKind.memberFunctionElement;
-                }
-                else if (symbol.flags & SymbolFlags.GetAccessor) {
-                    return ScriptElementKind.memberGetAccessorElement;
-                }
-                else if (symbol.flags & SymbolFlags.SetAccessor) {
-                    return ScriptElementKind.memberSetAccessorElement;
-                }
-                else if (symbol.flags & SymbolFlags.Property) {
-                    return ScriptElementKind.memberVariableElement;
-                }
-                else if (symbol.flags & SymbolFlags.TypeParameter) {
-                    return ScriptElementKind.typeParameterElement;
-                }
-                else if (symbol.flags & SymbolFlags.EnumMember) {
-                    return ScriptElementKind.memberVariableElement;
                 }
             }
 
