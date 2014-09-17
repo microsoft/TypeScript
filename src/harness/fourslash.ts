@@ -898,6 +898,44 @@ module FourSlash {
             }
         }
 
+        private validate(name: string, expected: string, actual: string) {
+            if (expected && expected !== actual) {
+                throw new Error("Expected " + name + " '" + expected + "'.  Got '" + actual + "' instead.");
+            }
+        }
+
+        public verifyRenameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string) {
+            var renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
+            if (!renameInfo.canRename) {
+                throw new Error("Rename did not succeed");
+            }
+
+            this.validate("displayName", displayName, renameInfo.displayName);
+            this.validate("fullDisplayName", fullDisplayName, renameInfo.fullDisplayName);
+            this.validate("kind", kind, renameInfo.kind);
+            this.validate("kindModifiers", kindModifiers, renameInfo.kindModifiers);
+
+            if (this.getRanges().length !== 1) {
+                throw new Error("Expected a single range to be selected in the test file.");
+            }
+
+            var expectedRange = this.getRanges()[0];
+            if (renameInfo.triggerSpan.start() !== expectedRange.start ||
+                renameInfo.triggerSpan.end() !== expectedRange.end) {
+                throw new Error("Expected triggerSpan [" + expectedRange.start + "," + expectedRange.end + ").  Got [" +
+                    renameInfo.triggerSpan.start() + "," + renameInfo.triggerSpan.end() + ") instead.");
+            }
+        }
+
+        public verifyRenameInfoFailed(message?: string) {
+            var renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
+            if (renameInfo.canRename) {
+                throw new Error("Rename was expected to fail");
+            }
+
+            this.validate("error", message, renameInfo.localizedErrorMessage);
+        }
+
         //private getFormalParameter() {
         //    var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
         //    return help.formal;

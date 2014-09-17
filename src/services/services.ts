@@ -3896,6 +3896,32 @@ module ts {
             return null;
         }
 
+        function getRenameInfo(fileName: string, position: number): RenameInfo {
+            synchronizeHostData();
+
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
+
+            var node = getNodeAtPosition(sourceFile, position);
+
+            // Can only rename an identifier.
+            if (node && node.kind === SyntaxKind.Identifier) {
+                var symbol = typeInfoResolver.getSymbolInfo(node);
+
+                // Only allow a symbol to be renamed if it actually has at least one declaration.
+                if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
+                    var kind = getSymbolKind(symbol);
+                    if (kind) {
+                        return RenameInfo.Create(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
+                            getNodeModifiers(symbol.getDeclarations()[0]),
+                            new TypeScript.TextSpan(node.getStart(), node.getWidth()));
+                    }
+                }
+            }
+
+            return RenameInfo.CreateError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
+        }
+
         return {
             dispose: dispose,
             cleanupSemanticCache: cleanupSemanticCache,
@@ -3916,7 +3942,7 @@ module ts {
             getNameOrDottedNameSpan: getNameOrDottedNameSpan,
             getBreakpointStatementAtPosition: getBreakpointStatementAtPosition,
             getNavigateToItems: getNavigateToItems,
-            getRenameInfo: (fileName, position): RenameInfo => RenameInfo.CreateError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key)),
+            getRenameInfo: getRenameInfo,
             getNavigationBarItems: getNavigationBarItems,
             getOutliningSpans: getOutliningSpans,
             getTodoComments: getTodoComments,

@@ -404,6 +404,14 @@ module FourSlashInterface {
         public semanticClassificationsAre(...classifications: { classificationType: string; text: string }[]) {
             FourSlash.currentTestState.verifySemanticClassifications(classifications);
         }
+
+        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string) {
+            FourSlash.currentTestState.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers)
+        }
+
+        public renameInfoFailed(message?: string) {
+            FourSlash.currentTestState.verifyRenameInfoFailed(message)
+        }
     }
 
     export class edit {
