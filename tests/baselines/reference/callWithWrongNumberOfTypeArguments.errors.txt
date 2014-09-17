@@ -1,10 +1,14 @@
+tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts(3,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts(5,1): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts (2 errors) ====
     function f<T, U>() { }
     
     f<number>();
     ~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     f<number, string>();
     f<number, string, number>();
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.

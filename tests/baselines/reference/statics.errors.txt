@@ -1,3 +1,7 @@
+tests/cases/compiler/statics.ts(6,18): error TS2339: Property 'g' does not exist on type 'C'.
+tests/cases/compiler/statics.ts(23,33): error TS2339: Property 'g' does not exist on type 'C'.
+
+
 ==== tests/cases/compiler/statics.ts (2 errors) ====
     module M {
         export class C {
@@ -6,7 +10,7 @@
                 this.x = C.y+this.c1+this.c2+c3;
                 this.g = (v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub);
                      ~
-!!! Property 'g' does not exist on type 'C'.
+!!! error TS2339: Property 'g' does not exist on type 'C'.
             }
     
             static priv=2;
@@ -25,7 +29,7 @@
             result+=(C.f(10));
             result+=(new C(5,10,20).g(C.y));
                                     ~
-!!! Property 'g' does not exist on type 'C'.
+!!! error TS2339: Property 'g' does not exist on type 'C'.
             return result;
         }
     }

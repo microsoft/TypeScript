@@ -1,3 +1,9 @@
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(14,17): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(15,18): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(24,19): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(36,32): error TS2345: Argument of type '(x: E) => F' is not assignable to parameter of type '(x: E) => E'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts (4 errors) ====
     // When a function expression is inferentially typed (section 4.9.3) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, 
     // the corresponding inferred type arguments to become fixed and no further candidate inferences are made for them.
@@ -14,10 +20,10 @@
         // BUG 835518
         var r9 = r7(new Date()); // should be ok
                     ~~~~~~~~~~
-!!! Argument of type 'Date' is not assignable to parameter of type 'T'.
+!!! error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
         var r10 = r7(1); // error
                      ~
-!!! Argument of type 'number' is not assignable to parameter of type 'T'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
     }
     
     function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
@@ -28,7 +34,7 @@
     function other3<T extends RegExp>(x: T) {
         var r7 = foo2((a: T) => a, (b: T) => b); // error
                       ~~~~~~~~~~~
-!!! Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
+!!! error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
         var r7b = foo2((a) => a, (b) => b); // valid, T is inferred to be Date
     }
     
@@ -42,4 +48,4 @@
     
     var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
                                    ~~~~~~~~~~
-!!! Argument of type '(x: E) => F' is not assignable to parameter of type '(x: E) => E'.
+!!! error TS2345: Argument of type '(x: E) => F' is not assignable to parameter of type '(x: E) => E'.

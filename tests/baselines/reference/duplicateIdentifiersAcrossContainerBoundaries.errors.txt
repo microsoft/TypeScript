@@ -1,3 +1,8 @@
+tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(5,18): error TS2300: Duplicate identifier 'I'.
+tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(12,18): error TS2300: Duplicate identifier 'f'.
+tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): error TS2300: Duplicate identifier 'x'.
+
+
 ==== tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts (3 errors) ====
     module M {
         export interface I { }
@@ -5,7 +10,7 @@
     module M {
         export class I { } // error
                      ~
-!!! Duplicate identifier 'I'.
+!!! error TS2300: Duplicate identifier 'I'.
     }
     
     module M {
@@ -14,7 +19,7 @@
     module M {
         export class f { } // error
                      ~
-!!! Duplicate identifier 'f'.
+!!! error TS2300: Duplicate identifier 'f'.
     }
     
     module M {
@@ -45,7 +50,7 @@
     module Foo {
         export var x: number; // error for redeclaring var in a different parent
                    ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }
     
     module N {

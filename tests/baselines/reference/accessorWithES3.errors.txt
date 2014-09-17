@@ -1,3 +1,9 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES3.ts(5,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES3.ts(11,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES3.ts(16,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES3.ts(20,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES3.ts (4 errors) ====
     
     // error to use accessors in ES3 mode
@@ -5,7 +11,7 @@
     class C {
         get x() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 1;
         }
     }
@@ -13,18 +19,18 @@
     class D {
         set x(v) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         }
     }
     
     var x = {
         get a() { return 1 }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
     
     var y = {
         set b(v) { }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }

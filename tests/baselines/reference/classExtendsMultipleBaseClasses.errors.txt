@@ -1,8 +1,12 @@
+tests/cases/compiler/classExtendsMultipleBaseClasses.ts(3,18): error TS1005: '{' expected.
+tests/cases/compiler/classExtendsMultipleBaseClasses.ts(3,21): error TS1005: ';' expected.
+
+
 ==== tests/cases/compiler/classExtendsMultipleBaseClasses.ts (2 errors) ====
     class A { }
     class B { }
     class C extends A,B { }
                      ~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                         ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.

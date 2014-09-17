@@ -798,7 +798,6 @@ module TypeScript.Services.Breakpoints {
             var container = Syntax.containingNode(varDeclarationNode);
             var varDeclarationSyntax = <TypeScript.VariableDeclarationSyntax>varDeclarationNode;
             var varDeclarators = varDeclarationSyntax.variableDeclarators;
-            var varDeclaratorsCount = childCount(varDeclarators); // varDeclarators has to be non null because its checked in canHaveBreakpoint
 
             if (container && container.kind() == TypeScript.SyntaxKind.VariableStatement) {
                 return this.breakpointSpanOfVariableStatement(container);

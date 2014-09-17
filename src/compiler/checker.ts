@@ -2967,10 +2967,12 @@ module ts {
                         }
 
                         if (getDeclarationFlagsFromSymbol(sourceProp) & NodeFlags.Private || getDeclarationFlagsFromSymbol(targetProp) & NodeFlags.Private) {
-                            if (reportErrors) {
-                                reportError(Diagnostics.Private_property_0_cannot_be_reimplemented, symbolToString(targetProp));
+                            if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Private_property_0_cannot_be_reimplemented, symbolToString(targetProp));
+                                }
+                                return false;
                             }
-                            return false;
                         }
                         if (!isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors)) {
                             if (reportErrors) {
@@ -5181,8 +5183,7 @@ module ts {
                 var otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
                 var otherAccessor = <AccessorDeclaration>getDeclarationOfKind(node.symbol, otherKind);
                 if (otherAccessor) {
-                    var visibilityFlags = NodeFlags.Private | NodeFlags.Public;
-                    if (((node.flags & visibilityFlags) !== (otherAccessor.flags & visibilityFlags))) {
+                    if (((node.flags & NodeFlags.AccessibilityModifier) !== (otherAccessor.flags & NodeFlags.AccessibilityModifier))) {
                         error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
                     }
 
@@ -7239,12 +7240,9 @@ module ts {
             return target !== unknownSymbol && ((target.flags & SymbolFlags.Value) !== 0);
         }
 
-        function shouldEmitDeclarations() {
-            // If the declaration emit and there are no errors being reported in program or by checker
-            // declarations can be emitted
-            return compilerOptions.declaration &&
-                !program.getDiagnostics().length &&
-                !getDiagnostics().length;
+        function hasSemanticErrors() {
+            // Return true if there is any semantic error in a file or globally
+            return getDiagnostics().length > 0 || getGlobalDiagnostics().length > 0;
         }
 
         function isReferencedImportDeclaration(node: ImportDeclaration): boolean {
@@ -7305,7 +7303,7 @@ module ts {
             writeTypeToTextWriter(getReturnTypeOfSignature(signature), enclosingDeclaration, flags , writer);
         }
 
-        function invokeEmitter() {
+        function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver: EmitResolver = {
                 getProgram: () => program,
                 getLocalNameOfContainer: getLocalNameOfContainer,
@@ -7316,7 +7314,7 @@ module ts {
                 getNodeCheckFlags: getNodeCheckFlags,
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
-                shouldEmitDeclarations: shouldEmitDeclarations,
+                hasSemanticErrors: hasSemanticErrors,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
                 writeTypeAtLocation: writeTypeAtLocation,
@@ -7326,7 +7324,7 @@ module ts {
                 isImportDeclarationEntityNameReferenceDeclarationVisibile: isImportDeclarationEntityNameReferenceDeclarationVisibile
             };
             checkProgram();
-            return emitFiles(resolver);
+            return emitFiles(resolver, targetSourceFile);
         }
 
         function initializeTypeChecker() {

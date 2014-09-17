@@ -1,10 +1,16 @@
+tests/cases/compiler/overloadOnConstNoAnyImplementation.ts(1,28): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadOnConstNoAnyImplementation.ts(2,28): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadOnConstNoAnyImplementation.ts(9,8): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/compiler/overloadOnConstNoAnyImplementation.ts(14,7): error TS2381: A signature with an implementation cannot use a string literal type.
+
+
 ==== tests/cases/compiler/overloadOnConstNoAnyImplementation.ts (4 errors) ====
     function x1(a: number, cb: (x: 'hi') => number);
                                ~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function x1(a: number, cb: (x: 'bye') => number);
                                ~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function x1(a: number, cb: (x: string) => number) {
         cb('hi');
         cb('bye');
@@ -13,12 +19,12 @@
         cb('uh');
         cb(1); // error
            ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     }
     
     var cb: (number) => number = (x: number) => 1;
     x1(1, cb);
     x1(1, (x: 'hi') => 1); // error
           ~~~~~~~~~~~~~~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
     x1(1, (x: string) => 1);

@@ -1,6 +1,10 @@
+tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts(1,1): error TS1109: Expression expected.
+tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts(1,3): error TS2304: Cannot find name 'b'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts (2 errors) ====
     / b;
     ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
       ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.

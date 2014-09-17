@@ -1,3 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/parserUnicode1.ts(6,5): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserUnicode1.ts(10,5): error TS2304: Cannot find name '$ERROR'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/parserUnicode1.ts (2 errors) ====
     try {
       var \u0078x = 6;
@@ -6,12 +10,12 @@
     
         $ERROR('#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
         ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
       }
     }
     catch (e) {
         $ERROR('#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
         ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     
     }

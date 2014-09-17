@@ -1,3 +1,7 @@
+tests/cases/compiler/interfaceImplementation3.ts(8,7): error TS2421: Class 'C4' incorrectly implements interface 'I1':
+  Property 'iAny' is missing in type 'C4'.
+
+
 ==== tests/cases/compiler/interfaceImplementation3.ts (1 errors) ====
     interface I1 {
         iObj:{ };
@@ -8,8 +12,8 @@
     
     class C4 implements I1 {
           ~~
-!!! Class 'C4' incorrectly implements interface 'I1':
-!!!   Property 'iAny' is missing in type 'C4'.
+!!! error TS2421: Class 'C4' incorrectly implements interface 'I1':
+!!! error TS2421:   Property 'iAny' is missing in type 'C4'.
         public iObj:{ };
         public iNum:number;
         public iFn() { }

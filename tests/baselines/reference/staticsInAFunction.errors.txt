@@ -1,35 +1,51 @@
+tests/cases/compiler/staticsInAFunction.ts(1,13): error TS1005: '(' expected.
+tests/cases/compiler/staticsInAFunction.ts(2,4): error TS1129: Statement expected.
+tests/cases/compiler/staticsInAFunction.ts(3,4): error TS1129: Statement expected.
+tests/cases/compiler/staticsInAFunction.ts(3,20): error TS1005: ',' expected.
+tests/cases/compiler/staticsInAFunction.ts(4,4): error TS1129: Statement expected.
+tests/cases/compiler/staticsInAFunction.ts(4,21): error TS1109: Expression expected.
+tests/cases/compiler/staticsInAFunction.ts(4,26): error TS1005: ';' expected.
+tests/cases/compiler/staticsInAFunction.ts(2,11): error TS2304: Cannot find name 'test'.
+tests/cases/compiler/staticsInAFunction.ts(3,11): error TS2304: Cannot find name 'test'.
+tests/cases/compiler/staticsInAFunction.ts(3,16): error TS2304: Cannot find name 'name'.
+tests/cases/compiler/staticsInAFunction.ts(3,21): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/staticsInAFunction.ts(4,11): error TS2304: Cannot find name 'test'.
+tests/cases/compiler/staticsInAFunction.ts(4,16): error TS2304: Cannot find name 'name'.
+tests/cases/compiler/staticsInAFunction.ts(4,22): error TS2304: Cannot find name 'any'.
+
+
 ==== tests/cases/compiler/staticsInAFunction.ts (14 errors) ====
     function boo{
                 ~
-!!! '(' expected.
+!!! error TS1005: '(' expected.
        static test()
        ~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
               ~~~~
-!!! Cannot find name 'test'.
+!!! error TS2304: Cannot find name 'test'.
        static test(name:string)
        ~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
                        ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
               ~~~~
-!!! Cannot find name 'test'.
+!!! error TS2304: Cannot find name 'test'.
                    ~~~~
-!!! Cannot find name 'name'.
+!!! error TS2304: Cannot find name 'name'.
                         ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
        static test(name?:any){}
        ~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
                         ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
                              ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
               ~~~~
-!!! Cannot find name 'test'.
+!!! error TS2304: Cannot find name 'test'.
                    ~~~~
-!!! Cannot find name 'name'.
+!!! error TS2304: Cannot find name 'name'.
                          ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
     }
     

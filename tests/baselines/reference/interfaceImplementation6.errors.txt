@@ -1,3 +1,9 @@
+tests/cases/compiler/interfaceImplementation6.ts(9,7): error TS2421: Class 'C2' incorrectly implements interface 'I1':
+  Private property 'item' cannot be reimplemented.
+tests/cases/compiler/interfaceImplementation6.ts(13,7): error TS2421: Class 'C3' incorrectly implements interface 'I1':
+  Property 'item' is missing in type 'C3'.
+
+
 ==== tests/cases/compiler/interfaceImplementation6.ts (2 errors) ====
     interface I1 {
         item:number;
@@ -9,15 +15,15 @@
     
     class C2 implements I1 {
           ~~
-!!! Class 'C2' incorrectly implements interface 'I1':
-!!!   Private property 'item' cannot be reimplemented.
+!!! error TS2421: Class 'C2' incorrectly implements interface 'I1':
+!!! error TS2421:   Private property 'item' cannot be reimplemented.
         private item:number;
     }
     
     class C3 implements I1 {
           ~~
-!!! Class 'C3' incorrectly implements interface 'I1':
-!!!   Property 'item' is missing in type 'C3'.
+!!! error TS2421: Class 'C3' incorrectly implements interface 'I1':
+!!! error TS2421:   Property 'item' is missing in type 'C3'.
         constructor() {
            var item: number;
         }

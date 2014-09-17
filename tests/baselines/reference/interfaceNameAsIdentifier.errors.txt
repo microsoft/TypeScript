@@ -1,10 +1,14 @@
+tests/cases/compiler/interfaceNameAsIdentifier.ts(4,1): error TS2304: Cannot find name 'C'.
+tests/cases/compiler/interfaceNameAsIdentifier.ts(12,1): error TS2304: Cannot find name 'm2'.
+
+
 ==== tests/cases/compiler/interfaceNameAsIdentifier.ts (2 errors) ====
     interface C {
         (): void;
     }
     C();
     ~
-!!! Cannot find name 'C'.
+!!! error TS2304: Cannot find name 'C'.
     
     module m2 {
         export interface C {
@@ -14,5 +18,5 @@
     
     m2.C();
     ~~
-!!! Cannot find name 'm2'.
+!!! error TS2304: Cannot find name 'm2'.
     

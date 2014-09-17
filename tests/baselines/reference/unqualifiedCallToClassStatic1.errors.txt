@@ -1,9 +1,12 @@
+tests/cases/compiler/unqualifiedCallToClassStatic1.ts(4,3): error TS2304: Cannot find name 'foo'.
+
+
 ==== tests/cases/compiler/unqualifiedCallToClassStatic1.ts (1 errors) ====
     class Vector {
      static foo = () => {
       // 'foo' cannot be called in an unqualified manner.
       foo();
       ~~~
-!!! Cannot find name 'foo'.
+!!! error TS2304: Cannot find name 'foo'.
      }
     }

@@ -211,8 +211,6 @@ module TypeScript.Services {
             signatureGroupInfo.signatureInfo = TypeScript.MemberName.memberNameToString(symbolName, paramIndexInfo);
             signatureGroupInfo.docComment = symbol.docComments();
 
-            var parameterMarkerIndex = 0;
-
             var typeSymbol = symbol.type;
 
             var typeParameters = typeSymbol.getTypeParameters();

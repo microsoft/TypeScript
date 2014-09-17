@@ -1,5 +1,8 @@
+tests/cases/compiler/overloadResolutionOverCTLambda.ts(2,5): error TS2345: Argument of type '(a: number) => number' is not assignable to parameter of type '(item: number) => boolean'.
+
+
 ==== tests/cases/compiler/overloadResolutionOverCTLambda.ts (1 errors) ====
     function foo(b: (item: number) => boolean) { }
     foo(a => a); // can not convert (number)=>bool to (number)=>number
         ~~~~~~
-!!! Argument of type '(a: number) => number' is not assignable to parameter of type '(item: number) => boolean'.
+!!! error TS2345: Argument of type '(a: number) => number' is not assignable to parameter of type '(item: number) => boolean'.

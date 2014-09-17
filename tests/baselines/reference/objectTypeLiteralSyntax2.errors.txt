@@ -1,8 +1,12 @@
+tests/cases/conformance/types/objectTypeLiteral/objectTypeLiteralSyntax2.ts(2,16): error TS1005: ';' expected.
+tests/cases/conformance/types/objectTypeLiteral/objectTypeLiteralSyntax2.ts(12,22): error TS1005: ';' expected.
+
+
 ==== tests/cases/conformance/types/objectTypeLiteral/objectTypeLiteralSyntax2.ts (2 errors) ====
     var x: {
         foo: string,
                    ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
         bar: string
     }
     
@@ -14,4 +18,4 @@
     
     var z: { foo: string bar: string }
                          ~~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.

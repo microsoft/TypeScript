@@ -1,3 +1,6 @@
+tests/cases/compiler/duplicateLocalVariable3.ts(11,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'number', but here has type 'string'.
+
+
 ==== tests/cases/compiler/duplicateLocalVariable3.ts (1 errors) ====
     var x = 1;
     var x = 2; 
@@ -11,5 +14,5 @@
         var z = 3;
         var z = "";
             ~
-!!! Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'number', but here has type 'string'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'number', but here has type 'string'.
     }

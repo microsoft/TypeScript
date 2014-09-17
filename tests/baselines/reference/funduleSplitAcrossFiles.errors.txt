@@ -1,10 +1,13 @@
+tests/cases/compiler/funduleSplitAcrossFiles_module.ts(1,8): error TS2433: A module declaration cannot be in a different file from a class or function with which it is merged
+
+
 ==== tests/cases/compiler/funduleSplitAcrossFiles_function.ts (0 errors) ====
     function D() { }
     
 ==== tests/cases/compiler/funduleSplitAcrossFiles_module.ts (1 errors) ====
     module D {
            ~
-!!! A module declaration cannot be in a different file from a class or function with which it is merged
+!!! error TS2433: A module declaration cannot be in a different file from a class or function with which it is merged
         export var y = "hi";
     }
     D.y;

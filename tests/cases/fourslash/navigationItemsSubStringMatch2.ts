@@ -14,7 +14,7 @@
 ////
 ////var myPointThatIJustInitiated = new Shapes.Point();
 ////interface IDistance{
-////    var INITIATED123;
+////    INITIATED123;
 ////    public horizon(): void;
 ////}
 

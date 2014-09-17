@@ -1,3 +1,8 @@
+tests/cases/compiler/genericTypeAssertions6.ts(8,13): error TS2352: Neither type 'U' nor type 'T' is assignable to the other.
+tests/cases/compiler/genericTypeAssertions6.ts(9,13): error TS2352: Neither type 'T' nor type 'U' is assignable to the other.
+tests/cases/compiler/genericTypeAssertions6.ts(19,17): error TS2352: Neither type 'U' nor type 'T' is assignable to the other.
+
+
 ==== tests/cases/compiler/genericTypeAssertions6.ts (3 errors) ====
     class A<T,U> {
         constructor(x) {
@@ -8,10 +13,10 @@
         f(x: T, y: U) {
             x = <T>y;
                 ~~~~
-!!! Neither type 'U' nor type 'T' is assignable to the other.
+!!! error TS2352: Neither type 'U' nor type 'T' is assignable to the other.
             y = <U>x;
                 ~~~~
-!!! Neither type 'T' nor type 'U' is assignable to the other.
+!!! error TS2352: Neither type 'T' nor type 'U' is assignable to the other.
         }
     }
     
@@ -23,7 +28,7 @@
             var d = <U>new Date();
             var e = <T><U>new Date();
                     ~~~~~~~~~~~~~~~~
-!!! Neither type 'U' nor type 'T' is assignable to the other.
+!!! error TS2352: Neither type 'U' nor type 'T' is assignable to the other.
         }
     }
     

@@ -1,3 +1,11 @@
+tests/cases/compiler/moduleVisibilityTest2.ts(57,17): error TS2304: Cannot find name 'x'.
+tests/cases/compiler/moduleVisibilityTest2.ts(58,21): error TS2339: Property 'E' does not exist on type 'typeof M'.
+tests/cases/compiler/moduleVisibilityTest2.ts(61,14): error TS2305: Module 'M' has no exported member 'I'.
+tests/cases/compiler/moduleVisibilityTest2.ts(61,21): error TS2305: Module 'M' has no exported member 'I'.
+tests/cases/compiler/moduleVisibilityTest2.ts(64,11): error TS2339: Property 'x' does not exist on type 'typeof M'.
+tests/cases/compiler/moduleVisibilityTest2.ts(65,15): error TS2339: Property 'E' does not exist on type 'typeof M'.
+
+
 ==== tests/cases/compiler/moduleVisibilityTest2.ts (6 errors) ====
     
     
@@ -57,25 +65,25 @@
     module M {
     	export var c = x;
     	               ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
     	export var meb = M.E.B;
     	                   ~
-!!! Property 'E' does not exist on type 'typeof M'.
+!!! error TS2339: Property 'E' does not exist on type 'typeof M'.
     }
     
     var cprime : M.I = <M.I>null;
                  ~~~
-!!! Module 'M' has no exported member 'I'.
+!!! error TS2305: Module 'M' has no exported member 'I'.
                         ~~~
-!!! Module 'M' has no exported member 'I'.
+!!! error TS2305: Module 'M' has no exported member 'I'.
     
     var c = new M.C();
     var z = M.x;
               ~
-!!! Property 'x' does not exist on type 'typeof M'.
+!!! error TS2339: Property 'x' does not exist on type 'typeof M'.
     var alpha = M.E.A;
                   ~
-!!! Property 'E' does not exist on type 'typeof M'.
+!!! error TS2339: Property 'E' does not exist on type 'typeof M'.
     var omega = M.exported_var;
     c.someMethodThatCallsAnOuterMethod();
     

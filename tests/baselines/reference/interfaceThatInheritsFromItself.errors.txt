@@ -1,30 +1,40 @@
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(10,15): error TS1005: '{' expected.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(10,26): error TS1005: ';' expected.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(10,30): error TS1005: ';' expected.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(1,11): error TS2310: Type 'Foo' recursively references itself as a base type.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(4,11): error TS2310: Type 'Foo2<T>' recursively references itself as a base type.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(7,11): error TS2310: Type 'Foo3<T>' recursively references itself as a base type.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(10,15): error TS2304: Cannot find name 'implements'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(10,26): error TS2304: Cannot find name 'Bar'.
+
+
 ==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts (8 errors) ====
     interface Foo extends Foo { // error
               ~~~
-!!! Type 'Foo' recursively references itself as a base type.
+!!! error TS2310: Type 'Foo' recursively references itself as a base type.
     }
     
     interface Foo2<T> extends Foo2<T> { // error
               ~~~~
-!!! Type 'Foo2<T>' recursively references itself as a base type.
+!!! error TS2310: Type 'Foo2<T>' recursively references itself as a base type.
     }
     
     interface Foo3<T> extends Foo3<string> { // error
               ~~~~
-!!! Type 'Foo3<T>' recursively references itself as a base type.
+!!! error TS2310: Type 'Foo3<T>' recursively references itself as a base type.
     }
     
     interface Bar implements Bar { // error
                   ~~~~~~~~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                              ~~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                                  ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                   ~~~~~~~~~~
-!!! Cannot find name 'implements'.
+!!! error TS2304: Cannot find name 'implements'.
                              ~~~
-!!! Cannot find name 'Bar'.
+!!! error TS2304: Cannot find name 'Bar'.
     }
     
     

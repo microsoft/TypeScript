@@ -1,3 +1,7 @@
+tests/cases/compiler/ClassDeclaration25.ts(6,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/ClassDeclaration25.ts(7,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
 ==== tests/cases/compiler/ClassDeclaration25.ts (2 errors) ====
     interface IList<T> {
         data(): T;
@@ -6,9 +10,9 @@
     class List<U> implements IList<U> {
         data(): U;
         ~~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
         next(): string;
         ~~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     }
     

@@ -1,3 +1,14 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(5,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(8,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(11,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(18,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(24,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(31,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(37,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(40,10): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(43,10): error TS2347: Untyped function calls may not accept type arguments.
+
+
 ==== tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts (9 errors) ====
     // it is always illegal to provide type arguments to a non-generic function
     // all invocations here are illegal
@@ -5,17 +16,17 @@
     function f(x: number) { return null; }
     var r = f<string>(1);
             ~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     var f2 = (x: number) => { return null; }
     var r2 = f2<string>(1);
              ~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     var f3: { (x: number): any; }
     var r3 = f3<string>(1);
              ~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     class C {
         f(x: number) {
@@ -24,7 +35,7 @@
     }
     var r4 = (new C()).f<string>(1);
              ~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     interface I {
         f(x: number): any;
@@ -32,7 +43,7 @@
     var i: I;
     var r5 = i.f<string>(1);
              ~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     class C2 {
         f(x: number) {
@@ -41,7 +52,7 @@
     }
     var r6 = (new C2()).f<string>(1);
              ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     interface I2 {
         f(x: number);
@@ -49,14 +60,14 @@
     var i2: I2;
     var r7 = i2.f<string>(1);
              ~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     var a;
     var r8 = a<number>();
              ~~~~~~~~~~~
-!!! Untyped function calls may not accept type arguments.
+!!! error TS2347: Untyped function calls may not accept type arguments.
     
     var a2: any;
     var r8 = a2<number>();
              ~~~~~~~~~~~~
-!!! Untyped function calls may not accept type arguments.
+!!! error TS2347: Untyped function calls may not accept type arguments.

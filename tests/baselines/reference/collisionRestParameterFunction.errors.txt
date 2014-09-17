@@ -1,8 +1,12 @@
+tests/cases/compiler/collisionRestParameterFunction.ts(2,13): error TS2397: Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.
+tests/cases/compiler/collisionRestParameterFunction.ts(21,13): error TS2397: Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.
+
+
 ==== tests/cases/compiler/collisionRestParameterFunction.ts (2 errors) ====
     // Functions
     function f1(_i: number, ...restParameters) { //_i is error
                 ~~~~~~~~~~
-!!! Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.
+!!! error TS2397: Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.
         var _i = 10; // no error
     }
     function f1NoError(_i: number) { // no error
@@ -23,7 +27,7 @@
     function f4(_i: string, ...rest); // no codegen no error
     function f4(_i: any, ...rest) { // error
                 ~~~~~~~
-!!! Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.
+!!! error TS2397: Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.
     }
     
     function f4NoError(_i: number); // no error
