@@ -316,58 +316,37 @@ module ts {
         return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
     }
 
+    // scanner instance that is solely used to scan trivia
+    var triviaScanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false);
+    
     export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
-        while (true) {
-            var ch = text.charCodeAt(pos);
-            switch (ch) {
-                case CharacterCodes.carriageReturn:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) pos++;
-                case CharacterCodes.lineFeed:
-                    pos++;
-                    if (stopAfterLineBreak) return pos;
-                    continue;
-                case CharacterCodes.tab:
-                case CharacterCodes.verticalTab:
-                case CharacterCodes.formFeed:
-                case CharacterCodes.space:
-                    pos++;
-                    continue;
-                case CharacterCodes.slash:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                        pos += 2;
-                        while (pos < text.length) {
-                            if (isLineBreak(text.charCodeAt(pos))) {
-                                break;
-                            }
-                            pos++;
+        triviaScanner.setText(text);
+        triviaScanner.setTextPos(pos);
+        var result = skipTriviaWorker(triviaScanner);
+        triviaScanner.setText(undefined);
+
+        return result;
+
+        function skipTriviaWorker(scanner: Scanner): number {
+            while (true) {
+                var token = scanner.scan();
+                switch(token) {
+                    case SyntaxKind.NewLineTrivia:
+                        if (stopAfterLineBreak) {
+                            return scanner.getTextPos();
                         }
-                        continue;
-                    }
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
-                        pos += 2;
-                        while (pos < text.length) {
-                            if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                                pos += 2;
-                                break;
-                            }
-                            pos++;
-                        }
-                        continue;
-                    }
-                    break;
-                default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
-                        pos++;
-                        continue;
-                    }
-                    break;
+                        break;
+                    case SyntaxKind.SingleLineCommentTrivia:
+                    case SyntaxKind.MultiLineCommentTrivia:
+                    case SyntaxKind.WhitespaceTrivia:
+                        // skip trivia
+                        break;
+                    default:
+                        return scanner.getTokenPos();
+                }
             }
-            return pos;
         }
     }
-
-    // scanner instance that is solely used to scan comments
-    var commentScanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false);
 
     // Extract comments from the given source text starting at the given position. If trailing is false, whitespace is skipped until
     // the first line break and comments between that location and the next token are returned. If trailing is true, comments occurring
@@ -375,10 +354,10 @@ module ts {
     // comment. Single-line comment ranges include the beginning '//' characters but not the ending line break. Multi-line comment
     // ranges include the beginning '/* and ending '*/' characters. The return value is undefined if no comments were found.
     function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
-        commentScanner.setText(text);
-        commentScanner.setTextPos(pos);
-        var comments = getCommentRangesWorker(commentScanner);
-        commentScanner.setText(undefined);
+        triviaScanner.setText(text);
+        triviaScanner.setTextPos(pos);
+        var comments = getCommentRangesWorker(triviaScanner);
+        triviaScanner.setText(undefined);
 
         return comments;
 
