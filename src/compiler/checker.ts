@@ -2713,12 +2713,12 @@ module ts {
             if (sourceProp === targetProp) {
                 return true;
             }
-            var sourcePropVisibility = getDeclarationFlagsFromSymbol(sourceProp) & (NodeFlags.Private || NodeFlags.Protected);
-            var targetPropVisibility = getDeclarationFlagsFromSymbol(targetProp) & (NodeFlags.Private || NodeFlags.Protected);
-            if (sourcePropVisibility !== targetPropVisibility) {
+            var sourcePropAccessibility = getDeclarationFlagsFromSymbol(sourceProp) & (NodeFlags.Private | NodeFlags.Protected);
+            var targetPropAccessibility = getDeclarationFlagsFromSymbol(targetProp) & (NodeFlags.Private | NodeFlags.Protected);
+            if (sourcePropAccessibility !== targetPropAccessibility) {
                 return false;
             }
-            if (sourcePropVisibility) {
+            if (sourcePropAccessibility) {
                 return getTargetSymbol(sourceProp) === getTargetSymbol(targetProp) && relate(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
             }
             else {
@@ -4011,26 +4011,35 @@ module ts {
 
         function isClassPropertyAccessible(node: PropertyAccess, type: Type, prop: Symbol): boolean {
             var flags = getDeclarationFlagsFromSymbol(prop);
+            // Public properties are always accessible
             if (!(flags & (NodeFlags.Private | NodeFlags.Protected))) {
                 return true;
             }
+            // Property is known to be private or protected at this point
+            // Private and protected properties are never accessible outside a class declaration
             var enclosingClassDeclaration = getAncestor(node, SyntaxKind.ClassDeclaration);
             if (!enclosingClassDeclaration) {
                 return false;
             }
+            // Get the declaring and enclosing class instance types
             var declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
             var enclosingClass = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration));
+            // Private property is accessible if declaring and enclosing class are the same
             if (flags & NodeFlags.Private) {
                 return declaringClass === enclosingClass;
             }
+            // Property is known to be protected at this point
+            // All protected properties of a supertype are accessible in a super access
             if (node.left.kind === SyntaxKind.SuperKeyword) {
                 return true;
             }
+            // An instance property must be accessed through an instance of the enclosing class
             if (!(flags & NodeFlags.Static)) {
                 if (!(getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
                     return false;
                 }
             }
+            // A protected property is accessible in the declaring class and classes derived from it
             return hasBaseType(enclosingClass, declaringClass);
         }
 

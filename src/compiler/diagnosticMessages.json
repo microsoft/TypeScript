@@ -1012,18 +1012,18 @@
         "category": "Error",
         "code": 2441
     },
-	"Types have separate declarations of a private property '{0}'.": {
+    "Types have separate declarations of a private property '{0}'.": {
         "category": "Error",
         "code": 2442
-	},
-	"Property '{0}' is protected but type '{1}' is not derived from type '{2}'.": {
+    },
+    "Property '{0}' is protected but type '{1}' is not a class derived from type '{2}'.": {
         "category": "Error",
         "code": 2443
-	},
-	"Property '{0}' is protected in type '{1}' but public in type '{2}'.": {
+    },
+    "Property '{0}' is protected in type '{1}' but public in type '{2}'.": {
         "category": "Error",
         "code": 2444
-	},
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
