@@ -74,33 +74,33 @@
         c = d; // error
         ~
 !!! Type 'D' is not assignable to type 'C':
-!!!   Required property 'opt' cannot be reimplemented with optional property in 'D'.
+!!!   Property 'opt' is optional in type 'D' but required in type 'C'.
         c = e; // error
         ~
 !!! Type 'E' is not assignable to type 'C':
-!!!   Required property 'opt' cannot be reimplemented with optional property in 'E'.
+!!!   Property 'opt' is optional in type 'E' but required in type 'C'.
         c = f; // ok
         c = a; // ok
     
         a = d; // error
         ~
 !!! Type 'D' is not assignable to type '{ opt: Base; }':
-!!!   Required property 'opt' cannot be reimplemented with optional property in 'D'.
+!!!   Property 'opt' is optional in type 'D' but required in type '{ opt: Base; }'.
         a = e; // error
         ~
 !!! Type 'E' is not assignable to type '{ opt: Base; }':
-!!!   Required property 'opt' cannot be reimplemented with optional property in 'E'.
+!!!   Property 'opt' is optional in type 'E' but required in type '{ opt: Base; }'.
         a = f; // ok
         a = c; // ok
     
         b = d; // error
         ~
 !!! Type 'D' is not assignable to type '{ opt: Base; }':
-!!!   Required property 'opt' cannot be reimplemented with optional property in 'D'.
+!!!   Property 'opt' is optional in type 'D' but required in type '{ opt: Base; }'.
         b = e; // error
         ~
 !!! Type 'E' is not assignable to type '{ opt: Base; }':
-!!!   Required property 'opt' cannot be reimplemented with optional property in 'E'.
+!!!   Property 'opt' is optional in type 'E' but required in type '{ opt: Base; }'.
         b = f; // ok
         b = a; // ok
         b = c; // ok

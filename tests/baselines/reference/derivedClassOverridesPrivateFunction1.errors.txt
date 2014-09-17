@@ -9,7 +9,7 @@
     class DerivedClass extends BaseClass {
           ~~~~~~~~~~~~
 !!! Class 'DerivedClass' incorrectly extends base class 'BaseClass':
-!!!   Private property '_init' cannot be reimplemented.
+!!!   Types have separate declarations of a private property '_init'.
         constructor() {
             super();
         }

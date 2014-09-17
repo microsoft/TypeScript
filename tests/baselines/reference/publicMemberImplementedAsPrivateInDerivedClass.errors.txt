@@ -5,7 +5,7 @@
     class Foo implements Qux {
           ~~~
 !!! Class 'Foo' incorrectly implements interface 'Qux':
-!!!   Private property 'Bar' cannot be reimplemented.
+!!!   Property 'Bar' is private in type 'Foo' but not in type 'Qux'.
      private Bar: number;
     }
     

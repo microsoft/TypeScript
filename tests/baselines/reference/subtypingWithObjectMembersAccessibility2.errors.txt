@@ -17,7 +17,7 @@
         class B extends A {
               ~
 !!! Class 'B' incorrectly extends base class 'A':
-!!!   Private property 'foo' cannot be reimplemented.
+!!!   Property 'foo' is private in type 'A' but not in type 'B'.
             public foo: Derived; // error
         }
     
@@ -28,7 +28,7 @@
         class B2 extends A2 {
               ~~
 !!! Class 'B2' incorrectly extends base class 'A2':
-!!!   Private property '1' cannot be reimplemented.
+!!!   Property '1' is private in type 'A2' but not in type 'B2'.
             public 1: Derived; // error
         }
     
@@ -39,7 +39,7 @@
         class B3 extends A3 {
               ~~
 !!! Class 'B3' incorrectly extends base class 'A3':
-!!!   Private property ''1'' cannot be reimplemented.
+!!!   Property ''1'' is private in type 'A3' but not in type 'B3'.
             public '1': Derived; // error
         }
     }
@@ -52,7 +52,7 @@
         class B extends A {
               ~
 !!! Class 'B' incorrectly extends base class 'A':
-!!!   Private property 'foo' cannot be reimplemented.
+!!!   Property 'foo' is private in type 'A' but not in type 'B'.
             foo: Derived; // error
         }
     
@@ -63,7 +63,7 @@
         class B2 extends A2 {
               ~~
 !!! Class 'B2' incorrectly extends base class 'A2':
-!!!   Private property '1' cannot be reimplemented.
+!!!   Property '1' is private in type 'A2' but not in type 'B2'.
             1: Derived; // error
         }
     
@@ -74,7 +74,7 @@
         class B3 extends A3 {
               ~~
 !!! Class 'B3' incorrectly extends base class 'A3':
-!!!   Private property ''1'' cannot be reimplemented.
+!!!   Property ''1'' is private in type 'A3' but not in type 'B3'.
             '1': Derived; // error
         }
     }

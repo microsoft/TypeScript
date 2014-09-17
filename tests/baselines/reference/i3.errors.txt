@@ -7,4 +7,4 @@
     x = i;
     ~
 !!! Type 'I3' is not assignable to type '{ one: number; }':
-!!!   Required property 'one' cannot be reimplemented with optional property in 'I3'.
+!!!   Property 'one' is optional in type 'I3' but required in type '{ one: number; }'.

@@ -3,7 +3,7 @@
     class D extends C {
           ~
 !!! Class 'D' incorrectly extends base class 'C':
-!!!   Private property 'v' cannot be reimplemented.
+!!!   Property 'v' is private in type 'C' but not in type 'D'.
       public v: number;
       public p: number
       constructor() {

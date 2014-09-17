@@ -19,7 +19,7 @@
     x6 = x7;
     ~~
 !!! Type 'D' is not assignable to type 'C':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Types have separate declarations of a private property 'x'.
     x6=C;
     ~~
 !!! Type 'typeof C' is not assignable to type 'C':

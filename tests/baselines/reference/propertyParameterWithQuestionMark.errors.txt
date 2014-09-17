@@ -12,5 +12,5 @@
     v = v2; // Should fail
     ~
 !!! Type '{ x?: any; }' is not assignable to type 'C':
-!!!   Required property 'x' cannot be reimplemented with optional property in '{ x?: any; }'.
+!!!   Property 'x' is optional in type '{ x?: any; }' but required in type 'C'.
     var v3: { x } = new C; // Should succeed

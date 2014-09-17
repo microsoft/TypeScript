@@ -6,7 +6,7 @@
     interface Foo extends Base { // error
               ~~~
 !!! Interface 'Foo' incorrectly extends interface 'Base':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Property 'x' is private in type 'Base' but not in type 'Foo'.
         x: number;
     }
     
@@ -17,6 +17,6 @@
     interface Foo2<T> extends Base2<T> { // error
               ~~~~
 !!! Interface 'Foo2<T>' incorrectly extends interface 'Base2<T>':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Property 'x' is private in type 'Base2<T>' but not in type 'Foo2<T>'.
         x: number;
     }

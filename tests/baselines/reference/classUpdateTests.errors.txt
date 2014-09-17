@@ -77,7 +77,7 @@
     class L extends G {
           ~
 !!! Class 'L' incorrectly extends base class 'G':
-!!!   Private property 'p1' cannot be reimplemented.
+!!!   Property 'p1' is private in type 'L' but not in type 'G'.
     	constructor(private p1:number) {
     		super(); // NO ERROR
     	}
@@ -86,7 +86,7 @@
     class M extends G {
           ~
 !!! Class 'M' incorrectly extends base class 'G':
-!!!   Private property 'p1' cannot be reimplemented.
+!!!   Property 'p1' is private in type 'M' but not in type 'G'.
     	constructor(private p1:number) { // ERROR
     	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     		var i = 0;

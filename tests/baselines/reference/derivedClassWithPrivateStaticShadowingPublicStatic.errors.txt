@@ -18,7 +18,7 @@
     class Derived extends Base {
           ~~~~~~~
 !!! Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Property 'x' is private in type 'typeof Derived' but not in type 'typeof Base'.
         private static x: string; 
         private static fn(): string {
             return '';

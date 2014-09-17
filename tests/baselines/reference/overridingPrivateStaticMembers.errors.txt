@@ -6,6 +6,6 @@
     class Derived2 extends Base2 {
           ~~~~~~~~
 !!! Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2':
-!!!   Private property 'y' cannot be reimplemented.
+!!!   Types have separate declarations of a private property 'y'.
         private static y: { foo: string; bar: string; };
     }

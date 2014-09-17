@@ -73,12 +73,12 @@
         public f();
         private f(s: string);
                 ~
-!!! Overload signatures must all be public or private.
+!!! Overload signatures must all be public, private or protected.
         f() { }
     
         private g(s: string);
                 ~
-!!! Overload signatures must all be public or private.
+!!! Overload signatures must all be public, private or protected.
         public g();
         g() { }
     }

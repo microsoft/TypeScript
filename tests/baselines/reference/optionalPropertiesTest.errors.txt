@@ -50,4 +50,4 @@
     test10_1 = test10_2;
     ~~~~~~~~
 !!! Type 'i2' is not assignable to type 'i1':
-!!!   Required property 'M' cannot be reimplemented with optional property in 'i2'.
+!!!   Property 'M' is optional in type 'i2' but required in type 'i1'.

@@ -18,7 +18,7 @@
     class D extends C implements A { // error
           ~
 !!! Class 'D' incorrectly implements interface 'A':
-!!!   Private property 'w' cannot be reimplemented.
+!!!   Types have separate declarations of a private property 'w'.
         private w: number;
         y: string;
         z: string;
@@ -27,7 +27,7 @@
     class E extends C2 implements A { // error
           ~
 !!! Class 'E' incorrectly extends base class 'C2':
-!!!   Private property 'w' cannot be reimplemented.
+!!!   Property 'w' is private in type 'C2' but not in type 'E'.
           ~
 !!! Class 'E' incorrectly implements interface 'A':
 !!!   Property 'x' is missing in type 'E'.

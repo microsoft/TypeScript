@@ -8,7 +8,7 @@
     class C extends B {
           ~
 !!! Class 'C' incorrectly extends base class 'B':
-!!!   Private property 'myMethod' cannot be reimplemented.
+!!!   Property 'myMethod' is private in type 'C' but not in type 'B'.
         private myMethod() { }
     }
     

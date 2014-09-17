@@ -6,7 +6,7 @@
     interface I extends Foo { // error
               ~
 !!! Interface 'I' incorrectly extends interface 'Foo':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Property 'x' is private in type 'Foo' but not in type 'I'.
         x: string;
     }
     

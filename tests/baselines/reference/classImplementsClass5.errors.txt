@@ -6,7 +6,7 @@
     class C implements A {
           ~
 !!! Class 'C' incorrectly implements interface 'A':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Types have separate declarations of a private property 'x'.
         private x = 1;
         foo() {
             return 1;
@@ -20,8 +20,8 @@
     c = c2;
     ~
 !!! Type 'C2' is not assignable to type 'C':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Types have separate declarations of a private property 'x'.
     c2 = c;
     ~~
 !!! Type 'C' is not assignable to type 'C2':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Types have separate declarations of a private property 'x'.

@@ -16,10 +16,10 @@
     interface I4 extends Foo, Bar { // error
               ~~
 !!! Interface 'I4' incorrectly extends interface 'Bar':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Property 'x' is private in type 'Bar' but not in type 'I4'.
               ~~
 !!! Interface 'I4' incorrectly extends interface 'Foo':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Property 'x' is private in type 'Foo' but not in type 'I4'.
         x: string;
     }
     

@@ -79,13 +79,13 @@
             super();
             super.publicMember = 1;
                   ~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
         }
     
         fn() {
             var x = super.publicMember;
                           ~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
         }
     
         get a() {
@@ -93,7 +93,7 @@
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             var x = super.publicMember;
                           ~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
             return undefined;
         }
         set a(n) {
@@ -101,7 +101,7 @@
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             n = super.publicMember;
                       ~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
         }
         fn2() {
             function inner() {
@@ -125,13 +125,13 @@
             super();
             super.privateMember = 1;
                   ~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
         }
     
         fn() {
             var x = super.privateMember;
                           ~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
         }
     
         get a() {
@@ -139,7 +139,7 @@
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             var x = super.privateMember;
                           ~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
             return undefined;
         }
         set a(n) {
@@ -147,7 +147,7 @@
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             n = super.privateMember;
                       ~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
         }
     }
     
@@ -159,10 +159,10 @@
         static fn() {
             super.publicStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
             super.privateStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
             super.privateStaticFunc();
             ~~~~~~~~~~~~~~~~~~~~~~~
 !!! Property 'SomeBase.privateStaticFunc' is inaccessible.
@@ -172,10 +172,10 @@
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             super.publicStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
             super.privateStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
             super.privateStaticFunc();
             ~~~~~~~~~~~~~~~~~~~~~~~
 !!! Property 'SomeBase.privateStaticFunc' is inaccessible.
@@ -186,10 +186,10 @@
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             super.publicStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
             super.privateStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
             super.privateStaticFunc();
             ~~~~~~~~~~~~~~~~~~~~~~~
 !!! Property 'SomeBase.privateStaticFunc' is inaccessible.

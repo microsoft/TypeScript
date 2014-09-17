@@ -13,10 +13,10 @@
     class C1 implements I1,I2 {
           ~~
 !!! Class 'C1' incorrectly implements interface 'I1':
-!!!   Private property 'iObj' cannot be reimplemented.
+!!!   Property 'iObj' is private in type 'C1' but not in type 'I1'.
           ~~
 !!! Class 'C1' incorrectly implements interface 'I2':
-!!!   Private property 'iFn' cannot be reimplemented.
+!!!   Property 'iFn' is private in type 'C1' but not in type 'I2'.
         private iFn();
     	private iFn(n?:number, s?:string) { }
         private iAny:any;

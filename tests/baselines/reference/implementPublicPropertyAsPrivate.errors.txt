@@ -5,6 +5,6 @@
     class C implements I {
           ~
 !!! Class 'C' incorrectly implements interface 'I':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Property 'x' is private in type 'C' but not in type 'I'.
         private x = 0; // should raise error at class decl
     }

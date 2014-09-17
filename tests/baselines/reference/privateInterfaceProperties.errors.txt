@@ -5,7 +5,7 @@
     class c1 implements i1 { private name:string; }
           ~~
 !!! Class 'c1' incorrectly implements interface 'i1':
-!!!   Private property 'name' cannot be reimplemented.
+!!!   Property 'name' is private in type 'c1' but not in type 'i1'.
      
     // should be ok 
     class c2 implements i1 { public name:string; }

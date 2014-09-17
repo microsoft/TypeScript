@@ -2,7 +2,7 @@
     class baz {
         public foo();
                ~~~
-!!! Overload signatures must all be public or private.
+!!! Overload signatures must all be public, private or protected.
         private foo(bar?: any) { } // error - access modifiers do not agree
     }
     

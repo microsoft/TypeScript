@@ -23,7 +23,7 @@
     class Bar3 implements I { // error
           ~~~~
 !!! Class 'Bar3' incorrectly implements interface 'I':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Property 'x' is private in type 'I' but not in type 'Bar3'.
         x: string;
         y: number;
     }
@@ -31,7 +31,7 @@
     class Bar4 implements I { // error
           ~~~~
 !!! Class 'Bar4' incorrectly implements interface 'I':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Types have separate declarations of a private property 'x'.
         private x: string;
         y: number;
     }

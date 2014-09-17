@@ -17,7 +17,7 @@
     class Derived extends Base {
           ~~~~~~~
 !!! Class 'Derived' incorrectly extends base class 'Base':
-!!!   Private property 'x' cannot be reimplemented.
+!!!   Property 'x' is private in type 'Derived' but not in type 'Base'.
         private x: string; 
         private fn(): string {
             return '';

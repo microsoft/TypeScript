@@ -3,5 +3,5 @@
     class derived extends base { private n() {} }
           ~~~~~~~
 !!! Class 'derived' incorrectly extends base class 'base':
-!!!   Private property 'n' cannot be reimplemented.
+!!!   Types have separate declarations of a private property 'n'.
     

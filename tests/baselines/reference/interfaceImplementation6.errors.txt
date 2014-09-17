@@ -10,7 +10,7 @@
     class C2 implements I1 {
           ~~
 !!! Class 'C2' incorrectly implements interface 'I1':
-!!!   Private property 'item' cannot be reimplemented.
+!!!   Property 'item' is private in type 'C2' but not in type 'I1'.
         private item:number;
     }
     

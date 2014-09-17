@@ -47,13 +47,13 @@
             // super property in a nested lambda in a constructor 
             var superName = () => () => () => super.name;
                                                     ~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
         }
         sayHello(): void {
             // super property in a nested lambda in a method
             var superName = () => () => () => super.name;
                                                     ~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
         }
     }
     

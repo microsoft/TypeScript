@@ -10,4 +10,4 @@
     __test2__.__val__x2 = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~
 !!! Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithTwoPublic<number, string>':
-!!!   Required property 'two' cannot be reimplemented with optional property in 'interfaceWithPublicAndOptional<number, string>'.
+!!!   Property 'two' is optional in type 'interfaceWithPublicAndOptional<number, string>' but required in type 'classWithTwoPublic<number, string>'.

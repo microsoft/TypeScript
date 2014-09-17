@@ -26,7 +26,7 @@
     
             super.m2.bind(this);                                // Should error, instance property, not a public instance member function
                   ~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
     
             super.p1();                                         // Should error, private not public instance member function
             ~~~~~~~~
@@ -34,20 +34,20 @@
     
             var l1 = super.d1;                                  // Should error, instance data property not a public instance member function
                            ~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
     
             var l1 = super.d2;                                  // Should error, instance data property not a public instance member function
                            ~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
     
             super.m1 = function (a: string) { return ""; };     // Should be allowed, we will not restrict assignment
     
             super.value = 0;                                    // Should error, instance data property not a public instance member function
                   ~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
             
             var z = super.value;                                // Should error, instance data property not a public instance member function
                           ~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! Only public and protected methods of the base class are accessible via the 'super' keyword
         }
     }

@@ -31,7 +31,7 @@
     a2 = b2; // should error
     ~~
 !!! Type 'X_1' is not assignable to type 'Y_1':
-!!!   Private property 'name' cannot be reimplemented.
+!!!   Types have separate declarations of a private property 'name'.
     foo2(a2); // should error
          ~~
 !!! Argument of type 'Y_1' is not assignable to parameter of type 'X_1'.

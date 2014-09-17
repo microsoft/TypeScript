@@ -226,7 +226,7 @@ module ts {
         function bindConstructorDeclaration(node: ConstructorDeclaration) {
             bindDeclaration(node, SymbolFlags.Constructor, 0);
             forEach(node.parameters, p => {
-                if (p.flags & (NodeFlags.Public | NodeFlags.Private)) {
+                if (p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected)) {
                     bindDeclaration(p, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
                 }
             });

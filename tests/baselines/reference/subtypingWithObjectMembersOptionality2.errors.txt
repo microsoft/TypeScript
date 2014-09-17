@@ -11,7 +11,7 @@
     interface S extends T {
               ~
 !!! Interface 'S' incorrectly extends interface 'T':
-!!!   Required property 'Foo' cannot be reimplemented with optional property in 'S'.
+!!!   Property 'Foo' is optional in type 'S' but required in type 'T'.
         Foo?: Derived // error
     }
     
@@ -22,7 +22,7 @@
     interface S2 extends T2 {
               ~~
 !!! Interface 'S2' incorrectly extends interface 'T2':
-!!!   Required property '1' cannot be reimplemented with optional property in 'S2'.
+!!!   Property '1' is optional in type 'S2' but required in type 'T2'.
         1?: Derived; // error
     }
     
@@ -33,7 +33,7 @@
     interface S3 extends T3 {
               ~~
 !!! Interface 'S3' incorrectly extends interface 'T3':
-!!!   Required property '1' cannot be reimplemented with optional property in 'S3'.
+!!!   Property ''1'' is optional in type 'S3' but required in type 'T3'.
         '1'?: Derived; // error
     }
     
