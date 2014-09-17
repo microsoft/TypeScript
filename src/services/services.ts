@@ -3483,32 +3483,43 @@ module ts {
         function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
             // If node is an argument, returns its index in the argument list
             // If not, returns -1
-            function getArgumentIndex(node: Node): number {
+            function getArgumentIndexInfo(node: Node): ServicesSyntaxUtilities.ListItemInfo {
                 if (node.parent.kind !== SyntaxKind.CallExpression && node.parent.kind !== SyntaxKind.NewExpression) {
-                    return -1;
+                    return undefined;
                 }
 
                 var parent = <CallExpression>node.parent;
                 // Find out if 'node' is an argument, a type argument, or neither
-                // Treat the open paren / angle bracket of a call as the introduction of parameter slot 0
                 if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
-                    return 0;
+                    // Find the list that starts right *after* the < or ( token
+                    var seenRelevantOpenerToken = false;
+                    var list = forEach(parent.getChildren(), c => {
+                        if (seenRelevantOpenerToken) {
+                            Debug.assert(c.kind === SyntaxKind.SyntaxList);
+                            return c;
+                        }
+                        if (c.kind === node.kind /*node is the relevant opener token we are looking for*/) {
+                            seenRelevantOpenerToken = true;
+                        }
+                    });
+                    Debug.assert(list);
+                    // Treat the open paren / angle bracket of a call as the introduction of parameter slot 0
+                    return {
+                        listItemIndex: 0,
+                        list: list
+                    };
                 }
 
                 if (node.kind === SyntaxKind.GreaterThanToken 
                     || node.kind === SyntaxKind.CloseParenToken
                     || node === parent.func) {
-                    return -1;
+                    return undefined;
                 }
 
-                return ServicesSyntaxUtilities.findListItemInfo(node).listItemIndex;
+                return ServicesSyntaxUtilities.findListItemInfo(node);
             }
 
-            function getSignatureHelpArgumentContext(node: Node): {
-                argumentNode: Node;
-                argumentIndex: number;
-                isTypeArgument: boolean;
-            } {
+            function getSignatureHelpArgumentContext(node: Node): ServicesSyntaxUtilities.ListItemInfo {
                 // We only want this node if it is a token and it strictly contains the current position.
                 // Otherwise we want the previous token
                 var isToken = node.kind < SyntaxKind.Missing;
@@ -3526,13 +3537,9 @@ module ts {
                         return undefined;
                     }
 
-                    var index = getArgumentIndex(n);
-                    if (index >= 0) {
-                        return {
-                            argumentNode: n,
-                            argumentIndex: index,
-                            isTypeArgument: false
-                        }
+                    var argumentInfo = getArgumentIndexInfo(n);
+                    if (argumentInfo) {
+                        return argumentInfo;
                     }
 
 
@@ -3542,13 +3549,17 @@ module ts {
                 return undefined;
             }
 
-            function getSignatureHelpItemsFromCandidateInfo(candidates: Signature[], bestSignature: Signature): SignatureHelpItems {
+            function getSignatureHelpItemsFromCandidateInfo(candidates: Signature[], bestSignature: Signature, argumentListOrTypeArgumentList: Node): SignatureHelpItems {
                 var items = map(candidates, candidateSignature => {
                     return new SignatureHelpItem(false, "", "", "", new Array<SignatureHelpParameter>(candidateSignature.parameters.length), "");
                 });
                 var selectedItemIndex = candidates.indexOf(bestSignature);
-                Debug.assert(selectedItemIndex >= 0);
-                return new SignatureHelpItems(items, undefined, selectedItemIndex);
+                if (selectedItemIndex < 0) {
+                    selectedItemIndex = 0;
+                }
+
+                var applicableSpan = new TypeScript.TextSpan(argumentListOrTypeArgumentList.getFullStart(), argumentListOrTypeArgumentList.end);
+                return new SignatureHelpItems(items, applicableSpan, selectedItemIndex);
             }
 
             synchronizeHostData();
@@ -3561,11 +3572,11 @@ module ts {
             // Semantic filtering of signature help
             var signatureHelpContext = getSignatureHelpArgumentContext(node);
             if (signatureHelpContext) {
-                var call = <CallExpression>signatureHelpContext.argumentNode.parent;
+                var call = <CallExpression>signatureHelpContext.list.parent;
                 var candidates = <Signature[]>[];
                 var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
                 return candidates.length
-                    ? getSignatureHelpItemsFromCandidateInfo(candidates, resolvedSignature)
+                    ? getSignatureHelpItemsFromCandidateInfo(candidates, resolvedSignature, signatureHelpContext.list)
                     : undefined;
             }
 

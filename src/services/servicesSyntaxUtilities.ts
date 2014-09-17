@@ -1,6 +1,11 @@
 // These utilities are common to multiple language service features.
 module ts.ServicesSyntaxUtilities {
-    export function findListItemInfo(node: Node): { listItemIndex: number; list: Node } {
+    export interface ListItemInfo {
+        listItemIndex: number;
+        list: Node;
+    }
+
+    export function findListItemInfo(node: Node): ListItemInfo {
         // The node might be a list element (nonsynthetic) or a comma (synthetic). Either way, it will
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
         // In order to find the list item index, we first need to locate SyntaxList itself and then search

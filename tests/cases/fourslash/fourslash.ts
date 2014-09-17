@@ -275,7 +275,7 @@ module FourSlashInterface {
         }
 
         public currentParameterHelpArgumentNameIs(name: string) {
-    //        FourSlash.currentTestState.verifyCurrentParameterHelpName(name);
+            FourSlash.currentTestState.verifyCurrentParameterHelpName(name);
         }
 
         public currentParameterSpanIs(parameter: string) {
