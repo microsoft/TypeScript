@@ -31,7 +31,7 @@ var z3 = foo({ name: null });         // { name: any }
 >foo({ name: null }) : { name: any; }
 >foo : <T extends Item>(x?: T, y?: T) => T
 >{ name: null } : { name: null; }
->name : any
+>name : null
 
 var z4 = foo({ name: "abc" });        // { name: string }
 >z4 : { name: string; }

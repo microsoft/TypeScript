@@ -253,8 +253,8 @@ function opt2(n = { x: null, y: undefined }) {
 >opt2 : (n?: { x: any; y: any; }) => void
 >n : { x: any; y: any; }
 >{ x: null, y: undefined } : { x: null; y: undefined; }
->x : any
->y : any
+>x : null
+>y : undefined
 >undefined : undefined
 
     var m = n;

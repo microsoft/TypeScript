@@ -6,10 +6,10 @@ var x = {
 >{    foo: null,    bar: undefined} : { foo: null; bar: undefined; }
 
     foo: null,
->foo : any
+>foo : null
 
     bar: undefined
->bar : any
+>bar : undefined
 >undefined : undefined
 }
 
@@ -18,17 +18,17 @@ var y = {
 >{    foo: null,    bar: {        baz: null,        boo: undefined    }} : { foo: null; bar: { baz: null; boo: undefined; }; }
 
     foo: null,
->foo : any
+>foo : null
 
     bar: {
->bar : { baz: any; boo: any; }
+>bar : { baz: null; boo: undefined; }
 >{        baz: null,        boo: undefined    } : { baz: null; boo: undefined; }
 
         baz: null,
->baz : any
+>baz : null
 
         boo: undefined
->boo : any
+>boo : undefined
 >undefined : undefined
     }
 }

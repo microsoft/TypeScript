@@ -50,8 +50,8 @@ module ts {
         return node.pos;
     }
 
-    export function getTokenPosOfNode(node: Node): number {
-        return skipTrivia(getSourceFileOfNode(node).text, node.pos);
+    export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
     export function getSourceTextOfNodeFromSourceText(sourceText: string, node: Node): string {
@@ -81,7 +81,7 @@ module ts {
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
-        var start = skipTrivia(file.text, node.pos);
+        var start = node.kind === SyntaxKind.Missing ? node.pos : skipTrivia(file.text, node.pos);
         var length = node.end - start;
 
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
@@ -228,6 +228,8 @@ module ts {
                 return children((<TypeLiteralNode>node).members);
             case SyntaxKind.ArrayType:
                 return child((<ArrayTypeNode>node).elementType);
+            case SyntaxKind.TupleType:
+                return children((<TupleTypeNode>node).elementTypes);
             case SyntaxKind.ArrayLiteral:
                 return children((<ArrayLiteral>node).elements);
             case SyntaxKind.ObjectLiteral:
@@ -305,9 +307,9 @@ module ts {
             case SyntaxKind.DefaultClause:
                 return child((<CaseOrDefaultClause>node).expression) ||
                     children((<CaseOrDefaultClause>node).statements);
-            case SyntaxKind.LabelledStatement:
-                return child((<LabelledStatement>node).label) ||
-                    child((<LabelledStatement>node).statement);
+            case SyntaxKind.LabeledStatement:
+                return child((<LabeledStatement>node).label) ||
+                    child((<LabeledStatement>node).statement);
             case SyntaxKind.ThrowStatement:
                 return child((<ThrowStatement>node).expression);
             case SyntaxKind.TryStatement:
@@ -350,6 +352,107 @@ module ts {
         }
     }
 
+    // Warning: This has the same semantics as the forEach family of functions,
+    //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
+    export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
+
+        return traverse(body);
+
+        function traverse(node: Node): T {
+            switch (node.kind) {
+                case SyntaxKind.ReturnStatement:
+                    return visitor(node);
+                case SyntaxKind.Block:
+                case SyntaxKind.FunctionBlock:
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.WithStatement:
+                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
+                case SyntaxKind.LabeledStatement:
+                case SyntaxKind.TryStatement:
+                case SyntaxKind.TryBlock:
+                case SyntaxKind.CatchBlock:
+                case SyntaxKind.FinallyBlock:
+                    return forEachChild(node, traverse);
+            }
+        }
+    }
+
+    export function isAnyFunction(node: Node): boolean {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.Method:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.Constructor:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function getContainingFunction(node: Node): SignatureDeclaration {
+        while (true) {
+            node = node.parent;
+            if (!node || isAnyFunction(node)) {
+                return <SignatureDeclaration>node;
+            }
+        }
+    }
+
+    export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
+        while (true) {
+            node = node.parent;
+            if (!node) {
+                return undefined;
+            }
+            switch (node.kind) {
+                case SyntaxKind.ArrowFunction:
+                    if (!includeArrowFunctions) {
+                        continue;
+                    }
+                // Fall through
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.Property:
+                case SyntaxKind.Method:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.SourceFile:
+                    return node;
+            }
+        }
+    }
+
+    export function getSuperContainer(node: Node): Node {
+        while (true) {
+            node = node.parent;
+            if (!node) {
+                return undefined;
+            }
+            switch (node.kind) {
+                case SyntaxKind.Property:
+                case SyntaxKind.Method:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return node;
+            }
+        }
+    }
+
     export function hasRestParameters(s: SignatureDeclaration): boolean {
         return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
     }
@@ -382,6 +485,32 @@ module ts {
                 return true;
         }
         return false;
+    }
+
+    export function isStatement(n: Node): boolean {
+        switch(n.kind) {
+            case SyntaxKind.BreakStatement:
+            case SyntaxKind.ContinueStatement:
+            case SyntaxKind.DebuggerStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.ExpressionStatement:
+            case SyntaxKind.EmptyStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.LabeledStatement:
+            case SyntaxKind.ReturnStatement:
+            case SyntaxKind.SwitchStatement:
+            case SyntaxKind.ThrowKeyword:
+            case SyntaxKind.TryStatement:
+            case SyntaxKind.VariableStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.WithStatement:
+            case SyntaxKind.ExportAssignment:
+                return true;
+            default:
+                return false;
+        }
     }
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
@@ -419,6 +548,7 @@ module ts {
         Parameters,              // Parameters in parameter list
         TypeParameters,          // Type parameters in type parameter list
         TypeArguments,           // Type arguments in type argument list
+        TupleElementTypes,       // Element types in tuple element type list
         Count                    // Number of parsing contexts
     }
 
@@ -446,6 +576,7 @@ module ts {
             case ParsingContext.Parameters:             return Diagnostics.Parameter_declaration_expected;
             case ParsingContext.TypeParameters:         return Diagnostics.Type_parameter_declaration_expected;
             case ParsingContext.TypeArguments:          return Diagnostics.Type_argument_expected;
+            case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
         }
     };
 
@@ -914,6 +1045,7 @@ module ts {
                 case ParsingContext.Parameters:
                     return isParameter();
                 case ParsingContext.TypeArguments:
+                case ParsingContext.TupleElementTypes:
                     return isType();
             }
 
@@ -949,6 +1081,7 @@ module ts {
                     // Tokens other than ')' are here for better error recovery
                     return token === SyntaxKind.CloseParenToken || token === SyntaxKind.SemicolonToken;
                 case ParsingContext.ArrayLiteralMembers:
+                case ParsingContext.TupleElementTypes:
                     return token === SyntaxKind.CloseBracketToken;
                 case ParsingContext.Parameters:
                     // Tokens other than ')' and ']' (the latter for index signatures) are here for better error recovery
@@ -1469,6 +1602,17 @@ module ts {
             return finishNode(node);
         }
 
+        function parseTupleType(): TupleTypeNode {
+            var node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
+            var startTokenPos = scanner.getTokenPos();
+            var startErrorCount = file.syntacticErrors.length;
+            node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
+            if (!node.elementTypes.length && file.syntacticErrors.length === startErrorCount) {
+                grammarErrorAtPos(startTokenPos, scanner.getStartPos() - startTokenPos, Diagnostics.A_tuple_type_element_list_cannot_be_empty);
+            }
+            return finishNode(node);
+        }
+
         function parseFunctionType(signatureKind: SyntaxKind): TypeLiteralNode {
             var node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
             var member = <SignatureDeclaration>createNode(signatureKind);
@@ -1499,6 +1643,8 @@ module ts {
                     return parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
                     return parseTypeLiteral();
+                case SyntaxKind.OpenBracketToken:
+                    return parseTupleType();
                 case SyntaxKind.OpenParenToken:
                 case SyntaxKind.LessThanToken:
                     return parseFunctionType(SyntaxKind.CallSignature);
@@ -1522,6 +1668,7 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.OpenBraceToken:
+                case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.NewKeyword:
                     return true;
@@ -2698,8 +2845,8 @@ module ts {
             return isIdentifier() && lookAhead(() => nextToken() === SyntaxKind.ColonToken);
         }
 
-        function parseLabelledStatement(): LabelledStatement {
-            var node = <LabelledStatement>createNode(SyntaxKind.LabelledStatement);
+        function parseLabelledStatement(): LabeledStatement {
+            var node = <LabeledStatement>createNode(SyntaxKind.LabeledStatement);
             node.label = parseIdentifier();
             parseExpected(SyntaxKind.ColonToken);
 
@@ -2876,10 +3023,11 @@ module ts {
             parseExpected(SyntaxKind.VarKeyword);
             node.declarations = parseVariableDeclarationList(flags, /*noIn*/false);
             parseSemicolon();
+            finishNode(node);
             if (!node.declarations.length && file.syntacticErrors.length === errorCountBeforeVarStatement) {
                 grammarErrorOnNode(node, Diagnostics.Variable_declaration_list_cannot_be_empty);
             }
-            return finishNode(node);
+            return node;
         }
 
         function parseFunctionDeclaration(pos?: number, flags?: NodeFlags): FunctionDeclaration {
@@ -3091,7 +3239,7 @@ module ts {
 
                 switch (modifierToken) {
                     case SyntaxKind.PublicKeyword:
-                        if (flags & NodeFlags.Private || flags & NodeFlags.Public) {
+                        if (flags & NodeFlags.AccessibilityModifier) {
                             grammarErrorAtPos(modifierStart, modifierLength, Diagnostics.Accessibility_modifier_already_seen);
                         }
                         else if (flags & NodeFlags.Static) {
@@ -3104,7 +3252,7 @@ module ts {
                         break;
 
                     case SyntaxKind.PrivateKeyword:
-                        if (flags & NodeFlags.Private || flags & NodeFlags.Public) {
+                        if (flags & NodeFlags.AccessibilityModifier) {
                             grammarErrorAtPos(modifierStart, modifierLength, Diagnostics.Accessibility_modifier_already_seen);
                         }
                         else if (flags & NodeFlags.Static) {
@@ -3431,7 +3579,7 @@ module ts {
             return finishNode(node);
         }
 
-        function isDeclaration() {
+        function isDeclaration(): boolean {
             switch (token) {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.FunctionKeyword:

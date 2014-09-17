@@ -25,7 +25,7 @@ var notFoundSearchValue = "mPointThatIJustInitiated wrongKeyWord";
 
 goTo.marker("file1");
 verify.navigationItemsListCount(3, "origin", "prefix");
-verify.navigationItemsListCount(2, "distance", "prefix");
+verify.navigationItemsListCount(3, "distance", "prefix");
 
 verify.navigationItemsListCount(0, notFoundSearchValue, "exact");
 verify.navigationItemsListCount(0, notFoundSearchValue, "prefix");

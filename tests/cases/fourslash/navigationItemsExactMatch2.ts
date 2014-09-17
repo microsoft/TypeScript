@@ -20,7 +20,7 @@
 
 goTo.marker("file1");
 verify.navigationItemsListCount(2, "point", "exact");
-verify.navigationItemsListCount(3, "distance", "prefix");
+verify.navigationItemsListCount(5, "distance", "prefix");
 verify.navigationItemsListCount(1, "origin", "substring");
 
 verify.navigationItemsListCount(0, "square", "exact");

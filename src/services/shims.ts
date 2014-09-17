@@ -82,6 +82,8 @@ module ts {
         getSemanticDiagnostics(fileName: string): string;
         getCompilerOptionsDiagnostics(): string;
 
+        getSyntacticClassifications(fileName: string, start: number, length: number): string;
+
         getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
 
@@ -488,6 +490,24 @@ module ts {
                 /// TODO: no need for the tolowerCase call
                 category: DiagnosticCategory[diagnostic.category].toLowerCase()
             };
+        }
+
+        public getSyntacticClassifications(fileName: string, start: number, length: number): string {
+            return this.forwardJSONCall(
+                "getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                () => {
+                    var classifications = this.languageService.getSyntacticClassifications(fileName, new TypeScript.TextSpan(start, length));
+                    return classifications;
+                });
+        }
+
+        public getSemanticClassifications(fileName: string, start: number, length: number): string {
+            return this.forwardJSONCall(
+                "getSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                () => {
+                    var classifications = this.languageService.getSemanticClassifications(fileName, new TypeScript.TextSpan(start, length));
+                    return classifications;
+                });
         }
 
         public getSyntacticDiagnostics(fileName: string): string {

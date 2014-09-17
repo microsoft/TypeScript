@@ -8,6 +8,4 @@
 goTo.marker();
 edit.insert('case 1:\n');
 
-// ideally would be 8
-//verify.indentationIs(8);
-verify.indentationIs(4);
+verify.indentationIs(8);
