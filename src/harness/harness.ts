@@ -826,7 +826,7 @@ module Harness {
                 totalErrorsReported++;
             }
 
-            // Report glovbal errors:
+            // Report global errors:
             var globalErrors = diagnostics.filter(err => !err.filename);
             globalErrors.forEach(err => outputErrorText(err));
 
@@ -1016,7 +1016,7 @@ module Harness {
     }
 
     export module TestCaseParser {
-        /** all the necesarry information to set the right compiler settings */
+        /** all the necessary information to set the right compiler settings */
         export interface CompilerSetting {
             flag: string;
             value: string;

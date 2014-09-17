@@ -473,6 +473,8 @@ module ts {
         getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot;
         getLocalizedDiagnosticMessages(): any;
         getCancellationToken(): CancellationToken;
+        getCurrentDirectory(): string;
+        getDefaultLibFilename(): string;
     }
 
     //
@@ -746,16 +748,9 @@ module ts {
         docComment: string;
     }
 
-    export enum EmitOutputResult {
-        Succeeded,
-        FailedBecauseOfSyntaxErrors,
-        FailedBecauseOfCompilerOptionsErrors,
-        FailedToGenerateDeclarationsBecauseOfSemanticErrors
-    }
-
     export interface EmitOutput {
         outputFiles: OutputFile[];
-        emitOutputResult: EmitOutputResult;
+        emitOutputStatus: EmitReturnStatus;
     }
 
     export enum OutputFileType {
@@ -768,8 +763,6 @@ module ts {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
-        fileType: OutputFileType;
-        sourceMapOutput: any;
     }
 
     export enum EndOfLineState {
@@ -1478,7 +1471,7 @@ module ts {
         var program: Program;
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
-        // the sole purpose of this check is to return semantic diagnostics
+        // the sole purpose of this checker is to return semantic diagnostics
         // creation is deferred - use getFullTypeCheckChecker to get instance
         var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
         var useCaseSensitivefilenames = false;
@@ -1486,6 +1479,7 @@ module ts {
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
+        var writer: (filename: string, data: string, writeByteOrderMark: boolean) => void = undefined;
 
         // Check if the localized messages json is set, otherwise query the host for it
         if (!TypeScript.LocalizedDiagnosticMessages) {
@@ -1510,15 +1504,14 @@ module ts {
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
                 getNewLine: () => "\r\n",
-                // Need something that doesn't depend on sys.ts here
                 getDefaultLibFilename: (): string => {
-                    throw Error("TOD:: getDefaultLibfilename");
+                    return host.getDefaultLibFilename();
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
-                    throw Error("TODO: write file");
+                    writer(filename, data, writeByteOrderMark);
                 },
                 getCurrentDirectory: (): string => {
-                    throw Error("TODO: getCurrentDirectory");
+                    return host.getCurrentDirectory();
                 }
             };
         }
@@ -2606,7 +2599,7 @@ module ts {
             return getReferencesForNode(node, program.getSourceFiles());
         }
 
-        function getReferencesForNode(node: Node, sourceFiles : SourceFile[]): ReferenceEntry[] {
+        function getReferencesForNode(node: Node, sourceFiles: SourceFile[]): ReferenceEntry[] {
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
@@ -2649,8 +2642,9 @@ module ts {
             var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.getDeclarations());
 
             // Get the text to search for, we need to normalize it as external module names will have quote
-            var symbolName = getNormalizedSymbolName(symbol);                
+            var symbolName = getNormalizedSymbolName(symbol);
 
+            // Get syntactic diagnostics
             var scope = getSymbolScope(symbol);
 
             if (scope) {
@@ -2680,7 +2674,7 @@ module ts {
                 else {
                     var name = symbol.name;
                 }
-                
+
                 var length = name.length;
                 if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
                     return name.substring(1, length - 1);
@@ -3219,7 +3213,6 @@ module ts {
                 start += 1;
                 end -= 1;
             }
-
             return new ReferenceEntry(node.getSourceFile().filename, TypeScript.TextSpan.fromBounds(start, end), isWriteAccess(node));
         }
 
@@ -3325,6 +3318,71 @@ module ts {
 
                 return matchKind;
             }
+        }
+
+        function containErrors(diagnostics: Diagnostic[]): boolean {
+            return forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
+        }
+
+        function getEmitOutput(filename: string): EmitOutput {
+            synchronizeHostData();
+            filename = TypeScript.switchToForwardSlashes(filename);
+            var compilerOptions = program.getCompilerOptions();
+            var targetSourceFile = program.getSourceFile(filename);  // Current selected file to be output
+            var emitToSingleFile = ts.shouldEmitToOwnFile(targetSourceFile, compilerOptions);
+            var emitDeclaration = compilerOptions.declaration;
+            var emitOutput: EmitOutput = {
+                outputFiles: [],
+                emitOutputStatus: undefined,
+            };
+
+            function getEmitOutputWriter(filename: string, data: string, writeByteOrderMark: boolean) {
+                emitOutput.outputFiles.push({
+                    name: filename,
+                    writeByteOrderMark: writeByteOrderMark,
+                    text: data
+                });
+            }
+
+            // Initialize writer for CompilerHost.writeFile
+            writer = getEmitOutputWriter;
+
+            var syntacticDiagnostics: Diagnostic[] = [];
+            var containSyntacticErrors = false;
+
+            if (emitToSingleFile) {
+                // Check only the file we want to emit
+                containSyntacticErrors = containErrors(program.getDiagnostics(targetSourceFile));
+            } else {
+                // Check the syntactic of only sourceFiles that will get emitted into single output
+                // Terminate the process immediately if we encounter a syntax error from one of the sourceFiles
+                containSyntacticErrors = forEach(program.getSourceFiles(), sourceFile => {
+                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                        // If emit to a single file then we will check all files that do not have external module
+                        return containErrors(program.getDiagnostics(sourceFile));
+                    }
+                    return false;
+                });
+            }
+
+            if (containSyntacticErrors) {
+                // If there is a syntax error, terminate the process and report outputStatus
+                emitOutput.emitOutputStatus = EmitReturnStatus.AllOutputGenerationSkipped;
+                // Reset writer back to undefined to make sure that we produce an error message
+                // if CompilerHost.writeFile is called when we are not in getEmitOutput
+                writer = undefined;
+                return emitOutput;
+            }
+
+            // Perform semantic and force a type check before emit to ensure that all symbols are updated
+            // EmitFiles will report if there is an error from TypeChecker and Emitter
+            // Depend whether we will have to emit into a single file or not either emit only selected file in the project, emit all files into a single file
+            var emitFilesResult = emitToSingleFile ? getFullTypeCheckChecker().emitFiles(targetSourceFile) : getFullTypeCheckChecker().emitFiles();
+            emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
+
+            // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
+            writer = undefined;
+            return emitOutput;
         }
 
         /// Syntactic features
@@ -3867,7 +3925,7 @@ module ts {
             getFormattingEditsForRange: getFormattingEditsForRange,
             getFormattingEditsForDocument: getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
-            getEmitOutput: (filename): EmitOutput => null,
+            getEmitOutput: getEmitOutput,
         };
     }
 

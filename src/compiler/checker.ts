@@ -7238,12 +7238,9 @@ module ts {
             return target !== unknownSymbol && ((target.flags & SymbolFlags.Value) !== 0);
         }
 
-        function shouldEmitDeclarations() {
-            // If the declaration emit and there are no errors being reported in program or by checker
-            // declarations can be emitted
-            return compilerOptions.declaration &&
-                !program.getDiagnostics().length &&
-                !getDiagnostics().length;
+        function hasSemanticErrors() {
+            // Return true if there is any semantic error in a file or globally
+            return getDiagnostics().length > 0 || getGlobalDiagnostics().length > 0;
         }
 
         function isReferencedImportDeclaration(node: ImportDeclaration): boolean {
@@ -7304,7 +7301,7 @@ module ts {
             writeTypeToTextWriter(getReturnTypeOfSignature(signature), enclosingDeclaration, flags , writer);
         }
 
-        function invokeEmitter() {
+        function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver: EmitResolver = {
                 getProgram: () => program,
                 getLocalNameOfContainer: getLocalNameOfContainer,
@@ -7315,7 +7312,7 @@ module ts {
                 getNodeCheckFlags: getNodeCheckFlags,
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
-                shouldEmitDeclarations: shouldEmitDeclarations,
+                hasSemanticErrors: hasSemanticErrors,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
                 writeTypeAtLocation: writeTypeAtLocation,
@@ -7325,7 +7322,7 @@ module ts {
                 isImportDeclarationEntityNameReferenceDeclarationVisibile: isImportDeclarationEntityNameReferenceDeclarationVisibile
             };
             checkProgram();
-            return emitFiles(resolver);
+            return emitFiles(resolver, targetSourceFile);
         }
 
         function initializeTypeChecker() {

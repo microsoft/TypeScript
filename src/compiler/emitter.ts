@@ -25,7 +25,22 @@ module ts {
         return indentStrings[1].length;
     }
 
-    export function emitFiles(resolver: EmitResolver): EmitResult {
+    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
+        if (!(sourceFile.flags & NodeFlags.DeclarationFile)) {
+            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
+        return isExternalModule(sourceFile) || (sourceFile.flags & NodeFlags.DeclarationFile) !== 0;
+    }
+
+    // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
+    export function emitFiles(resolver: EmitResolver, targetSourceFile?: SourceFile): EmitResult {
         var program = resolver.getProgram();
         var compilerHost = program.getCompilerHost();
         var compilerOptions = program.getCompilerOptions();
@@ -34,32 +49,20 @@ module ts {
         var newLine = program.getCompilerHost().getNewLine();
 
         function getSourceFilePathInNewDir(newDirPath: string, sourceFile: SourceFile) {
-            var sourceFilePath = getNormalizedPathFromPathCompoments(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory()));
+            var sourceFilePath = getNormalizedPathFromPathComponents(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory()));
             sourceFilePath = sourceFilePath.replace(program.getCommonSourceDirectory(), "");
             return combinePaths(newDirPath, sourceFilePath);
         }
 
-        function shouldEmitToOwnFile(sourceFile: SourceFile) {
-            if (!(sourceFile.flags & NodeFlags.DeclarationFile)) {
-                if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
-                    return true;
-                }
-            }
-        }
-
         function getOwnEmitOutputFilePath(sourceFile: SourceFile, extension: string) {
-            if (program.getCompilerOptions().outDir) {
-                var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(getSourceFilePathInNewDir(program.getCompilerOptions().outDir, sourceFile));
+            if (compilerOptions.outDir) {
+                var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(getSourceFilePathInNewDir(compilerOptions.outDir, sourceFile));
             }
             else {
                 var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(sourceFile.filename);
             }
 
             return emitOutputFilePathWithoutExtension + extension;
-        }
-
-        function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
-            return isExternalModule(sourceFile) || (sourceFile.flags & NodeFlags.DeclarationFile) !== 0;
         }
 
         function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
@@ -3082,7 +3085,7 @@ module ts {
             function writeReferencePath(referencedFile: SourceFile) {
                 var declFileName = referencedFile.flags & NodeFlags.DeclarationFile
                     ? referencedFile.filename // Declaration file, use declaration file name
-                    : shouldEmitToOwnFile(referencedFile)
+                    : shouldEmitToOwnFile(referencedFile, compilerOptions)
                     ? getOwnEmitOutputFilePath(referencedFile, ".d.ts") // Own output file so get the .d.ts file
                     : getModuleNameFromFilename(compilerOptions.out) + ".d.ts";// Global out file
 
@@ -3104,7 +3107,7 @@ module ts {
 
                         // All the references that are not going to be part of same file
                         if ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
-                            shouldEmitToOwnFile(referencedFile) || // This is referenced file is emitting its own js file
+                            shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
                             !addedGlobalFileReference) { // Or the global out file corresponding to this reference was not added
 
                             writeReferencePath(referencedFile);
@@ -3161,29 +3164,54 @@ module ts {
             }
         }
 
-        var shouldEmitDeclarations = resolver.shouldEmitDeclarations();
+        var hasSemanticErrors = resolver.hasSemanticErrors();
+
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             emitJavaScript(jsFilePath, sourceFile);
-            if (shouldEmitDeclarations) {
+            if (!hasSemanticErrors && compilerOptions.declaration) {
                 emitDeclarations(jsFilePath, sourceFile);
             }
         }
 
-        forEach(program.getSourceFiles(), sourceFile => {
-            if (shouldEmitToOwnFile(sourceFile)) {
-                var jsFilePath = getOwnEmitOutputFilePath(sourceFile, ".js");
-                emitFile(jsFilePath, sourceFile);
-            }
-        });
+        if (targetSourceFile === undefined) {
+            forEach(program.getSourceFiles(), sourceFile => {
+                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
+                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, ".js");
+                    emitFile(jsFilePath, sourceFile);
+                }
+            });
+        }
+        else {
+            // Emit only one file specified in targetFilename. This is mainly used in compilerOnSave feature
+            var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, ".js");
+            emitFile(jsFilePath, targetSourceFile);
+        }
+
         if (compilerOptions.out) {
             emitFile(compilerOptions.out);
         }
-
+       
         // Sort and make the unique list of diagnostics
         diagnostics.sort(compareDiagnostics);
         diagnostics = deduplicateSortedDiagnostics(diagnostics);
 
+        // Update returnCode if there is any EmitterError
+        var hasEmitterError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
+
+        // Check and update returnCode for syntactic and semantic
+        var returnCode: EmitReturnStatus;
+        if (hasEmitterError) {
+            returnCode = EmitReturnStatus.EmitErrorsEncountered;
+        } else if (hasSemanticErrors && compilerOptions.declaration) {
+            returnCode = EmitReturnStatus.DeclarationGenerationSkipped;
+        } else if (hasSemanticErrors && !compilerOptions.declaration) {
+            returnCode = EmitReturnStatus.JSGeneratedWithSemanticErrors;
+        } else {
+            returnCode = EmitReturnStatus.Succeeded;
+        }
+
         return {
+            emitResultStatus: returnCode,
             errors: diagnostics,
             sourceMaps: sourceMapDataList
         };
