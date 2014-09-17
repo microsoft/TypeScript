@@ -12,11 +12,11 @@ module ts {
         if (array) {
             for (var i = 0, len = array.length; i < len; i++) {
                 if (result = callback(array[i])) {
-                    return result;
+                    break;
                 }
             }
         }
-        return undefined;
+        return result;
     }
 
     export function contains<T>(array: T[], value: T): boolean {
