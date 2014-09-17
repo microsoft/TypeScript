@@ -3822,17 +3822,28 @@ module ts {
                 var start = refPos;
                 var length = refEnd - refPos;
             }
+            var diagnostic: DiagnosticMessage;
             if (hasExtension(filename)) {
                 if (!fileExtensionIs(filename, ".ts")) {
-                    errors.push(createFileDiagnostic(refFile, start, length, Diagnostics.File_0_must_have_extension_ts_or_d_ts, filename));
+                    diagnostic = Diagnostics.File_0_must_have_extension_ts_or_d_ts;
                 }
                 else if (!findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
-                    errors.push(createFileDiagnostic(refFile, start, length, Diagnostics.File_0_not_found, filename));
+                    diagnostic = Diagnostics.File_0_not_found;
                 }
             }
             else {
                 if (!(findSourceFile(filename + ".ts", isDefaultLib, refFile, refPos, refEnd) || findSourceFile(filename + ".d.ts", isDefaultLib, refFile, refPos, refEnd))) {
-                    errors.push(createFileDiagnostic(refFile, start, length, Diagnostics.File_0_not_found, filename + ".ts"));
+                    diagnostic = Diagnostics.File_0_not_found;
+                    filename += ".ts";
+                }
+            }
+
+            if (diagnostic) {
+                if (refFile) {
+                    errors.push(createFileDiagnostic(refFile, start, length, diagnostic, filename));
+                }
+                else {
+                    errors.push(createCompilerDiagnostic(diagnostic, filename));
                 }
             }
         }
