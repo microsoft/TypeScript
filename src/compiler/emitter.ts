@@ -34,6 +34,7 @@ module ts {
         }
         return false;
     }
+
     export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
         return isExternalModule(sourceFile) || (sourceFile.flags & NodeFlags.DeclarationFile) !== 0;
     }
