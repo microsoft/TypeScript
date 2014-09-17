@@ -317,7 +317,7 @@ module ts {
     }
 
     // scanner instance that is solely used to scan trivia
-    var triviaScanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false);
+    var triviaScanner = createScanner(ScriptTarget.ES5, ScanMode.ReturnTriviaStopOnTokens);
     
     export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
         triviaScanner.setText(text);
@@ -419,7 +419,13 @@ module ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
-    export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback, onComment?: CommentCallback): Scanner {
+    export enum ScanMode {
+        ReturnTokensSkipTrivia,
+        ReturnTriviaStopOnTokens,
+        ReturnTokensAndTrivia
+    }
+
+    export function createScanner(languageVersion: ScriptTarget, scanMode: ScanMode, text?: string, onError?: ErrorCallback, onComment?: CommentCallback): Scanner {
         var pos: number;       // Current position (end position of text of current token)
         var len: number;       // Length of text
         var startPos: number;  // Start position of whitespace before current token
@@ -653,7 +659,7 @@ module ts {
                     case CharacterCodes.lineFeed:
                     case CharacterCodes.carriageReturn:
                         precedingLineBreak = true;
-                        if (skipTrivia) {
+                        if (scanMode === ScanMode.ReturnTokensSkipTrivia) {
                             pos++;
                             continue;
                         }
@@ -671,7 +677,7 @@ module ts {
                     case CharacterCodes.verticalTab:
                     case CharacterCodes.formFeed:
                     case CharacterCodes.space:
-                        if (skipTrivia) {
+                        if (scanMode === ScanMode.ReturnTokensSkipTrivia) {
                             pos++;
                             continue;
                         }
@@ -682,6 +688,8 @@ module ts {
                             return token = SyntaxKind.WhitespaceTrivia;
                         }
                     case CharacterCodes.exclamation:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
                                 return pos += 3, token = SyntaxKind.ExclamationEqualsEqualsToken;
@@ -691,14 +699,20 @@ module ts {
                         return pos++, token = SyntaxKind.ExclamationToken;
                     case CharacterCodes.doubleQuote:
                     case CharacterCodes.singleQuote:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         tokenValue = scanString();
                         return token = SyntaxKind.StringLiteral;
                     case CharacterCodes.percent:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.PercentEqualsToken;
                         }
                         return pos++, token = SyntaxKind.PercentToken;
                     case CharacterCodes.ampersand:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.ampersand) {
                             return pos += 2, token = SyntaxKind.AmpersandAmpersandToken;
                         }
@@ -707,15 +721,23 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.AmpersandToken;
                     case CharacterCodes.openParen:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.OpenParenToken;
                     case CharacterCodes.closeParen:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.CloseParenToken;
                     case CharacterCodes.asterisk:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.AsteriskEqualsToken;
                         }
                         return pos++, token = SyntaxKind.AsteriskToken;
                     case CharacterCodes.plus:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.plus) {
                             return pos += 2, token = SyntaxKind.PlusPlusToken;
                         }
@@ -724,8 +746,12 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.PlusToken;
                     case CharacterCodes.comma:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.CommaToken;
                     case CharacterCodes.minus:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.minus) {
                             return pos += 2, token = SyntaxKind.MinusMinusToken;
                         }
@@ -734,6 +760,8 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.MinusToken;
                     case CharacterCodes.dot:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (isDigit(text.charCodeAt(pos + 1))) {
                             tokenValue = "" + scanNumber();
                             return token = SyntaxKind.NumericLiteral;
@@ -758,7 +786,7 @@ module ts {
                                 onComment(tokenPos, pos);
                             }
 
-                            if (skipTrivia) {
+                            if (scanMode === ScanMode.ReturnTokensSkipTrivia) {
                                 continue;
                             }
                             else {
@@ -793,13 +821,15 @@ module ts {
                                 onComment(tokenPos, pos);
                             }
 
-                            if (skipTrivia) {
+                            if (scanMode === ScanMode.ReturnTokensSkipTrivia) {
                                 continue;
                             }
                             else {
                                 return token = SyntaxKind.MultiLineCommentTrivia;
                             }
                         }
+
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
 
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.SlashEqualsToken;
@@ -808,6 +838,8 @@ module ts {
                         return pos++, token = SyntaxKind.SlashToken;
 
                     case CharacterCodes._0:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
                             pos += 2;
                             var value = scanHexDigits(1, false);
@@ -835,13 +867,21 @@ module ts {
                     case CharacterCodes._7:
                     case CharacterCodes._8:
                     case CharacterCodes._9:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         tokenValue = "" + scanNumber();
                         return token = SyntaxKind.NumericLiteral;
                     case CharacterCodes.colon:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.ColonToken;
                     case CharacterCodes.semicolon:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.SemicolonToken;
                     case CharacterCodes.lessThan:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.lessThan) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
                                 return pos += 3, token = SyntaxKind.LessThanLessThanEqualsToken;
@@ -853,6 +893,8 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.LessThanToken;
                     case CharacterCodes.equals:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
                                 return pos += 3, token = SyntaxKind.EqualsEqualsEqualsToken;
@@ -864,21 +906,35 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.EqualsToken;
                     case CharacterCodes.greaterThan:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.GreaterThanToken;
                     case CharacterCodes.question:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.QuestionToken;
                     case CharacterCodes.openBracket:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.OpenBracketToken;
                     case CharacterCodes.closeBracket:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.CloseBracketToken;
                     case CharacterCodes.caret:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.CaretEqualsToken;
                         }
                         return pos++, token = SyntaxKind.CaretToken;
                     case CharacterCodes.openBrace:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.OpenBraceToken;
                     case CharacterCodes.bar:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.bar) {
                             return pos += 2, token = SyntaxKind.BarBarToken;
                         }
@@ -887,10 +943,16 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.BarToken;
                     case CharacterCodes.closeBrace:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.CloseBraceToken;
                     case CharacterCodes.tilde:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.TildeToken;
                     case CharacterCodes.backslash:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         var ch = peekUnicodeEscape();
                         if (ch >= 0 && isIdentifierStart(ch)) {
                             pos += 6;
@@ -901,6 +963,8 @@ module ts {
                         return pos++, token = SyntaxKind.Unknown;
                     default:
                         if (isIdentifierStart(ch)) {
+                            if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                             pos++;
                             while (pos < len && isIdentifierPart(ch = text.charCodeAt(pos))) pos++;
                             tokenValue = text.substring(tokenPos, pos);
@@ -918,6 +982,8 @@ module ts {
                             pos++;
                             continue;
                         }
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         error(Diagnostics.Invalid_character);
                         return pos++, token = SyntaxKind.Unknown;
                 }

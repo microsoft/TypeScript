@@ -3743,7 +3743,7 @@ module ts {
                 : undefined);
         }
 
-        scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError, onComment);
+        scanner = createScanner(languageVersion, ScanMode.ReturnTokensSkipTrivia, sourceText, scanError, onComment);
         var rootNodeFlags: NodeFlags = 0;
         if (fileExtensionIs(filename, ".d.ts")) {
             rootNodeFlags = NodeFlags.DeclarationFile;
