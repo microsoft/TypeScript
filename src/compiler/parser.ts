@@ -3936,10 +3936,10 @@ module ts {
             if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
                 // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
                 if (options.mapRoot) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Option_mapRoot_cannot_be_specified_without_specifying_sourcemap_option));
+                    errors.push(createCompilerDiagnostic(Diagnostics.mapRoot_option_cannot_be_specified_without_specifying_sourcemap_option));
                 }
                 if (options.sourceRoot) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Option_sourceRoot_cannot_be_specified_without_specifying_sourcemap_option));
+                    errors.push(createCompilerDiagnostic(Diagnostics.sourceRoot_option_cannot_be_specified_without_specifying_sourcemap_option));
                 }
                 return;
             }

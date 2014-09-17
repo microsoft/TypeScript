@@ -183,7 +183,7 @@
         "category": "Error",
         "code": 1066
     },
-    "Unexpected token. A constructor, method, accessor, or property was expected." : {
+    "Unexpected token. A constructor, method, accessor, or property was expected.": {
         "category": "Error",
         "code": 1068
     },
@@ -440,9 +440,9 @@
         "code": 1149
     },
     "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
-       "category": "Error",
-       "code": 1150
-   },
+        "category": "Error",
+        "code": 1150
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1331,7 +1331,7 @@
         "code": 4078
     },
 
-    
+
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -1356,11 +1356,11 @@
         "category": "Error",
         "code": 5033
     },
-    "Option mapRoot cannot be specified without specifying sourcemap option.": {
+    "'--mapRoot' option cannot be specified without specifying '--sourcemap' option.": {
         "category": "Error",
         "code": 5038
     },
-    "Option sourceRoot cannot be specified without specifying sourcemap option.": {
+    "'--sourceRoot' option cannot be specified without specifying '--sourcemap' option.": {
         "category": "Error",
         "code": 5039
     },
@@ -1511,6 +1511,14 @@
     "File '{0}' must have extension '.ts' or '.d.ts'.": {
         "category": "Error",
         "code": 6054
+    },
+    "The '--codepage' option has been deprecated. Please use '--charset'.": {
+        "category": "Warning",
+        "code": 6055
+    },
+    "The '--codepage' option cannot be used with '--charset'. Please use '--charset' only.": {
+        "category": "Error",
+        "code": 6056
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
