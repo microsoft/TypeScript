@@ -1228,7 +1228,9 @@ module ts {
                                 grammarErrorAtPos(commaStart, scanner.getStartPos() - commaStart, Diagnostics.Trailing_comma_not_allowed);
                             }
                         }
-                        else if (preserveTrailingComma) {
+                        // Even if we reported an error because of a disallowed trailing comma, we still may
+                        // need to preserve it for the checker so that signature help can work well.
+                        if (preserveTrailingComma) {
                             result.push(<T>createNode(SyntaxKind.OmittedExpression));
                         }
                     }
@@ -2301,8 +2303,11 @@ module ts {
                     else {
                         parseExpected(SyntaxKind.OpenParenToken);
                     }
+                    // It is an error to have a trailing comma in an argument list. However, the checker
+                    // needs evidence of a trailing comma in order to give good results for signature help.
+                    // That is why we do not allow a trailing comma, but we "preserve" a trailing comma.
                     callExpr.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions,
-                        parseAssignmentExpression, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ false);
+                        parseAssignmentExpression, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ true);
                     parseExpected(SyntaxKind.CloseParenToken);
                     expr = finishNode(callExpr);
                     continue;
@@ -2514,8 +2519,11 @@ module ts {
             parseExpected(SyntaxKind.NewKeyword);
             node.func = parseCallAndAccess(parsePrimaryExpression(), /* inNewExpression */ true);
             if (parseOptional(SyntaxKind.OpenParenToken) || token === SyntaxKind.LessThanToken && (node.typeArguments = tryParse(parseTypeArgumentsAndOpenParen))) {
+                // It is an error to have a trailing comma in an argument list. However, the checker
+                // needs evidence of a trailing comma in order to give good results for signature help.
+                // That is why we do not allow a trailing comma, but we "preserve" a trailing comma.
                 node.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions,
-                    parseAssignmentExpression, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ false);
+                    parseAssignmentExpression, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ true);
                 parseExpected(SyntaxKind.CloseParenToken);
             }
             return finishNode(node);
