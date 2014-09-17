@@ -953,7 +953,10 @@ module ts {
                 return finishNode(node);
             }
             error(Diagnostics.Identifier_expected);
-            return <Identifier>createMissingNode();
+
+            var node = <Identifier>createMissingNode();
+            node.text = "";
+            return node;
         }
 
         function parseIdentifier(): Identifier {
