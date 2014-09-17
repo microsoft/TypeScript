@@ -1977,6 +1977,24 @@ module ts {
             }
         }
 
+        function getTokenAtPosition(sourceFile: SourceFile, position: number) {
+            var current: Node = sourceFile;
+            outer: while (true) {
+                // find the child that has this
+                for (var i = 0, n = current.getChildCount(); i < n; i++) {
+                    var child = current.getChildAt(i);
+                    if (child.getFullStart() <= position && position < child.getEnd()) {
+                        current = child;
+                        continue outer;
+                    }
+                    if (child.end > position) {
+                        break;
+                    }
+                }
+                return current;
+            }
+        }
+
         function getContainerNode(node: Node): Node {
             while (true) {
                 node = node.parent;
@@ -3569,19 +3587,19 @@ module ts {
             //
             //  'i' is for case insensitivity (We do this to match C# TODO comment code).
             //
-            //  'm' is so we can find matches in a multiline input.
+            //  'm' is so we can find matches in a multi-line input.
             return new RegExp(regExpString, "gim");
         }
 
-        function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
-            fileName = TypeScript.switchToForwardSlashes(fileName);
+        function getTodoComments(filename: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
+            filename = TypeScript.switchToForwardSlashes(filename);
 
-            var sourceFile = getCurrentSourceFile(fileName);
-            var syntaxTree = sourceFile.getSyntaxTree();
+            var sourceFile = getCurrentSourceFile(filename);
+
             cancellationToken.throwIfCancellationRequested();
 
-            var text = syntaxTree.text;
-            var fileContents = text.substr(0, text.length());
+            var fileContents = sourceFile.text;
+
             cancellationToken.throwIfCancellationRequested();
 
             var result: TodoComment[] = [];
@@ -3602,7 +3620,7 @@ module ts {
                     //      ["// hack   1", "// ", "hack   1", undefined, "hack"]
                     //
                     // Here are the relevant capture groups:
-                    //  0) The full match for the entire regex.
+                    //  0) The full match for the entire regexp.
                     //  1) The preamble to the message portion.
                     //  2) The message portion.
                     //  3...N) The descriptor that was matched - by index.  'undefined' for each 
@@ -3616,20 +3634,18 @@ module ts {
                     var preamble = matchArray[1];
                     var matchPosition = matchArray.index + preamble.length;
 
-                    // Ok, we have found a match in the file.  This is only an acceptable match if
+                    // OK, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
-                    var token = TypeScript.findToken(syntaxTree.sourceUnit(), matchPosition);
+                    var token = getTokenAtPosition(sourceFile, matchPosition);
 
-                    if (matchPosition >= TypeScript.start(token) && matchPosition < TypeScript.end(token)) {
-                        // match was within the token itself.  Not in the comment.  Keep searching
-                        // descriptor.
+                    if (token.getStart() <= matchPosition && matchPosition < token.getEnd()) {
+                        // match was within the token itself.  Not in the comment.  Keep searching                        // descriptor.
                         continue;
                     }
 
-                    // Looks to be within the trivia.  See if we can find the comment containing it.
-                    var triviaList = matchPosition < TypeScript.start(token) ? token.leadingTrivia(syntaxTree.text) : token.trailingTrivia(syntaxTree.text);
-                    var trivia = findContainingComment(triviaList, matchPosition);
-                    if (trivia === null) {
+                    // Looks to be within the trivia. See if we can find the comment containing it.
+                    if (!getContainingComment(getTrailingComments(fileContents, token.getFullStart()), matchPosition) &&
+                        !getContainingComment(getLeadingComments(fileContents, token.getFullStart()), matchPosition)) {
                         continue;
                     }
 
@@ -3653,25 +3669,27 @@ module ts {
             }
 
             return result;
-        }
 
-        function isLetterOrDigit(char: number): boolean {
-            return (char >= TypeScript.CharacterCodes.a && char <= TypeScript.CharacterCodes.z) ||
-                (char >= TypeScript.CharacterCodes.A && char <= TypeScript.CharacterCodes.Z) ||
-                (char >= TypeScript.CharacterCodes._0 && char <= TypeScript.CharacterCodes._9);
-        }
-
-        function findContainingComment(triviaList: TypeScript.ISyntaxTriviaList, position: number): TypeScript.ISyntaxTrivia {
-            for (var i = 0, n = triviaList.count(); i < n; i++) {
-                var trivia = triviaList.syntaxTriviaAt(i);
-                var fullEnd = trivia.fullStart() + trivia.fullWidth();
-                if (trivia.isComment() && trivia.fullStart() <= position && position < fullEnd) {
-                    return trivia;
+            function getContainingComment(comments: Comment[], position: number): Comment {
+                if (comments) {
+                    for (var i = 0, n = comments.length; i < n; i++) {
+                        var comment = comments[i];
+                        if (comment.pos <= position && position < comment.end) {
+                            return comment;
+                        }
+                    }
                 }
+
+                return undefined;
             }
 
-            return null;
+            function isLetterOrDigit(char: number): boolean {
+                return (char >= TypeScript.CharacterCodes.a && char <= TypeScript.CharacterCodes.z) ||
+                    (char >= TypeScript.CharacterCodes.A && char <= TypeScript.CharacterCodes.Z) ||
+                    (char >= TypeScript.CharacterCodes._0 && char <= TypeScript.CharacterCodes._9);
+            }
         }
+      
 
         return {
             dispose: dispose,
