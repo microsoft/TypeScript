@@ -3551,7 +3551,10 @@ module ts {
 
             function getSignatureHelpItemsFromCandidateInfo(candidates: Signature[], bestSignature: Signature, argumentListOrTypeArgumentList: Node): SignatureHelpItems {
                 var items = map(candidates, candidateSignature => {
-                    return new SignatureHelpItem(false, "", "", "", new Array<SignatureHelpParameter>(candidateSignature.parameters.length), "");
+                    var parameterHelpItems = candidateSignature.parameters.length === 0 ? emptyArray : map(candidateSignature.parameters, p => {
+                        return new SignatureHelpParameter(p.name, "", "", false);
+                    });
+                    return new SignatureHelpItem(false, "", "", "", parameterHelpItems, "");
                 });
                 var selectedItemIndex = candidates.indexOf(bestSignature);
                 if (selectedItemIndex < 0) {
