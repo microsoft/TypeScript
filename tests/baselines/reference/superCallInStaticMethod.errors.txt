@@ -1,3 +1,7 @@
+tests/cases/compiler/superCallInStaticMethod.ts(30,23): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/superCallInStaticMethod.ts(37,23): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/superCallInStaticMethod.ts (2 errors) ====
     class Doing {
         public static staticMethod() {
@@ -30,7 +34,7 @@
         // in a getter
         public static get staticGetter() {
                           ~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.staticMethod();
     
             return 0;
@@ -39,7 +43,7 @@
         // in a setter
         public static set staticGetter(value: number) {
                           ~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.staticMethod();
         }
     

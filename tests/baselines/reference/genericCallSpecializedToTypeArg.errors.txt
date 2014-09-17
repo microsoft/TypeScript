@@ -1,3 +1,6 @@
+tests/cases/compiler/genericCallSpecializedToTypeArg.ts(6,5): error TS2339: Property 'getDist' does not exist on type 'U'.
+
+
 ==== tests/cases/compiler/genericCallSpecializedToTypeArg.ts (1 errors) ====
     function dupe<T>(x: T): T {
       return x;
@@ -6,7 +9,7 @@
       var y = dupe(x); //<-- dupe has incorrect type here
       y.getDist();     //<-- this requires a missing constraint, but it's not caught
         ~~~~~~~
-!!! Property 'getDist' does not exist on type 'U'.
+!!! error TS2339: Property 'getDist' does not exist on type 'U'.
       return y;
     }
     

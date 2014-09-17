@@ -1,3 +1,6 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement1.ts(5,1): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement1.ts (1 errors) ====
     class C {
     
@@ -5,5 +8,5 @@
     // this as a source unit element.
     class D {
     ~~~~~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
     }

@@ -1,5 +1,8 @@
+tests/cases/compiler/classAndInterface1.ts(2,11): error TS2300: Duplicate identifier 'cli'.
+
+
 ==== tests/cases/compiler/classAndInterface1.ts (1 errors) ====
     class cli { }
     interface cli { } // error
               ~~~
-!!! Duplicate identifier 'cli'.
+!!! error TS2300: Duplicate identifier 'cli'.

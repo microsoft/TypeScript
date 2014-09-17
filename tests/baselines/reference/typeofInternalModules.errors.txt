@@ -1,3 +1,12 @@
+tests/cases/compiler/typeofInternalModules.ts(15,16): error TS2304: Cannot find name 'importUninst'.
+tests/cases/compiler/typeofInternalModules.ts(17,9): error TS2304: Cannot find name 'Outer'.
+tests/cases/compiler/typeofInternalModules.ts(19,1): error TS2322: Type 'typeof Outer' is not assignable to type 'typeof instantiated':
+  Property 'C' is missing in type 'typeof Outer'.
+tests/cases/compiler/typeofInternalModules.ts(21,16): error TS2304: Cannot find name 'importUninst'.
+tests/cases/compiler/typeofInternalModules.ts(23,1): error TS2322: Type 'typeof instantiated' is not assignable to type 'typeof Outer':
+  Property 'instantiated' is missing in type 'typeof instantiated'.
+
+
 ==== tests/cases/compiler/typeofInternalModules.ts (5 errors) ====
     module Outer {
         export module instantiated {
@@ -15,23 +24,23 @@
     var x2: importInst.C = new x1();
     var x3: typeof importUninst.P; // Error again
                    ~~~~~~~~~~~~
-!!! Cannot find name 'importUninst'.
+!!! error TS2304: Cannot find name 'importUninst'.
     
     var x4: Outer = Outer;
             ~~~~~
-!!! Cannot find name 'Outer'.
+!!! error TS2304: Cannot find name 'Outer'.
     var x5: typeof importInst;
     x5 = Outer;
     ~~
-!!! Type 'typeof Outer' is not assignable to type 'typeof instantiated':
-!!!   Property 'C' is missing in type 'typeof Outer'.
+!!! error TS2322: Type 'typeof Outer' is not assignable to type 'typeof instantiated':
+!!! error TS2322:   Property 'C' is missing in type 'typeof Outer'.
     x5 = Outer.instantiated;
     var x6: typeof importUninst;
                    ~~~~~~~~~~~~
-!!! Cannot find name 'importUninst'.
+!!! error TS2304: Cannot find name 'importUninst'.
     var x7: typeof Outer = Outer;
     x7 = importInst;
     ~~
-!!! Type 'typeof instantiated' is not assignable to type 'typeof Outer':
-!!!   Property 'instantiated' is missing in type 'typeof instantiated'.
+!!! error TS2322: Type 'typeof instantiated' is not assignable to type 'typeof Outer':
+!!! error TS2322:   Property 'instantiated' is missing in type 'typeof instantiated'.
     

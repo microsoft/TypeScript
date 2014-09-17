@@ -1,10 +1,13 @@
+tests/cases/compiler/constructorOverloads6.ts(4,25): error TS1111: A constructor implementation cannot be declared in an ambient context.
+
+
 ==== tests/cases/compiler/constructorOverloads6.ts (1 errors) ====
     declare class FooBase {
         constructor(s: string);
         constructor(n: number);
         constructor(x: any) {
                             ~
-!!! A constructor implementation cannot be declared in an ambient context.
+!!! error TS1111: A constructor implementation cannot be declared in an ambient context.
     
         }
     	bar1():void;

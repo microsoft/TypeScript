@@ -1,3 +1,6 @@
+tests/cases/compiler/for.ts(29,6): error TS1109: Expression expected.
+
+
 ==== tests/cases/compiler/for.ts (1 errors) ====
     for (var i = 0; i < 10; i++) { // ok
         var x1 = i;
@@ -29,5 +32,5 @@
     
     for () { // error
          ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     }

@@ -1,9 +1,12 @@
+tests/cases/compiler/functionTypeArgumentArrayAssignment.ts(3,2): error TS2300: Duplicate identifier 'length'.
+
+
 ==== tests/cases/compiler/functionTypeArgumentArrayAssignment.ts (1 errors) ====
     interface Array<T> {
     	foo: T;
     	length: number;
     	~~~~~~
-!!! Duplicate identifier 'length'.
+!!! error TS2300: Duplicate identifier 'length'.
     }
     
     function map<U>() {

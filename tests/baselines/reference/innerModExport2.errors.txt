@@ -1,3 +1,11 @@
+tests/cases/compiler/innerModExport2.ts(5,12): error TS1005: ';' expected.
+tests/cases/compiler/innerModExport2.ts(7,9): error TS1129: Statement expected.
+tests/cases/compiler/innerModExport2.ts(15,5): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+tests/cases/compiler/innerModExport2.ts(18,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/innerModExport2.ts(5,5): error TS2304: Cannot find name 'module'.
+tests/cases/compiler/innerModExport2.ts(20,7): error TS2339: Property 'NonExportFunc' does not exist on type 'typeof Outer'.
+
+
 ==== tests/cases/compiler/innerModExport2.ts (6 errors) ====
     module Outer {
     
@@ -5,13 +13,13 @@
         var non_export_var: number;
         module {
                ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
         ~~~~~~
-!!! Cannot find name 'module'.
+!!! error TS2304: Cannot find name 'module'.
             var non_export_var = 0;
             export var export_var = 1;
             ~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
     
             function NonExportFunc() { return 0; }
     
@@ -21,13 +29,13 @@
     
         export var outer_var_export = 0;
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
         export function outerFuncExport() { return 0; }
     
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     Outer.NonExportFunc();
           ~~~~~~~~~~~~~
-!!! Property 'NonExportFunc' does not exist on type 'typeof Outer'.
+!!! error TS2339: Property 'NonExportFunc' does not exist on type 'typeof Outer'.

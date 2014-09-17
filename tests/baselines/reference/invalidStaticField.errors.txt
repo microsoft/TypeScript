@@ -1,5 +1,8 @@
+tests/cases/compiler/invalidStaticField.ts(1,28): error TS2339: Property 'NULL' does not exist on type 'typeof B'.
+
+
 ==== tests/cases/compiler/invalidStaticField.ts (1 errors) ====
     class A { foo() { return B.NULL; } }
                                ~~~~
-!!! Property 'NULL' does not exist on type 'typeof B'.
+!!! error TS2339: Property 'NULL' does not exist on type 'typeof B'.
     class B { static NOT_NULL = new B(); }

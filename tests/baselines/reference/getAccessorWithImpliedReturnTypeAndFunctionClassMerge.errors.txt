@@ -1,10 +1,16 @@
+tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(21,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(1,41): error TS2304: Cannot find name '_'.
+tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(2,34): error TS2304: Cannot find name '_'.
+tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(15,15): error TS2300: Duplicate identifier '_'.
+
+
 ==== tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts (4 errors) ====
     declare function _<T>(value: Array<T>): _<T>;
                                             ~~~~
-!!! Cannot find name '_'.
+!!! error TS2304: Cannot find name '_'.
     declare function _<T>(value: T): _<T>;
                                      ~~~~
-!!! Cannot find name '_'.
+!!! error TS2304: Cannot find name '_'.
     
     declare module _ {
         export function each<T>(
@@ -19,7 +25,7 @@
     
     declare class _<T> {
                   ~
-!!! Duplicate identifier '_'.
+!!! error TS2300: Duplicate identifier '_'.
         each(iterator: _.ListIterator<T, void>, context?: any): void;
     }
     
@@ -27,7 +33,7 @@
         export class MyClass {
             public get myGetter() {
                        ~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 var obj:any = {};
                 
                 return obj;

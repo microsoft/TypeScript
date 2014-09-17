@@ -1,11 +1,16 @@
+tests/cases/compiler/typeArgumentConstraintResolution1.ts(4,6): error TS2343: Type 'Date' does not satisfy the constraint 'Number':
+  Property 'toFixed' is missing in type 'Date'.
+tests/cases/compiler/typeArgumentConstraintResolution1.ts(11,6): error TS2344: Type 'Date' does not satisfy the constraint 'Number'.
+
+
 ==== tests/cases/compiler/typeArgumentConstraintResolution1.ts (2 errors) ====
     function foo1<T extends Date>(test: T);
     function foo1<T extends Number>(test: string);
     function foo1<T extends String>(test: any) { }
     foo1<Date>(""); // should error
          ~~~~
-!!! Type 'Date' does not satisfy the constraint 'Number':
-!!!   Property 'toFixed' is missing in type 'Date'.
+!!! error TS2343: Type 'Date' does not satisfy the constraint 'Number':
+!!! error TS2343:   Property 'toFixed' is missing in type 'Date'.
     
     
     
@@ -14,5 +19,5 @@
     function foo2<T extends String>(test: any): any { return null; }
     foo2<Date>(""); // Type Date does not satisfy the constraint 'Number' for type parameter 'T extends Number'
          ~~~~
-!!! Type 'Date' does not satisfy the constraint 'Number'.
+!!! error TS2344: Type 'Date' does not satisfy the constraint 'Number'.
     

@@ -1,27 +1,38 @@
+tests/cases/compiler/implicitAnyFromCircularInference.ts(3,5): error TS7021: 'a' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/implicitAnyFromCircularInference.ts(7,5): error TS7021: 'c' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/implicitAnyFromCircularInference.ts(10,5): error TS7021: 'd' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/implicitAnyFromCircularInference.ts(15,10): error TS7023: 'g' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+tests/cases/compiler/implicitAnyFromCircularInference.ts(18,10): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+tests/cases/compiler/implicitAnyFromCircularInference.ts(23,10): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+tests/cases/compiler/implicitAnyFromCircularInference.ts(26,10): error TS7023: 'h' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+tests/cases/compiler/implicitAnyFromCircularInference.ts(41,5): error TS7022: 's' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.
+tests/cases/compiler/implicitAnyFromCircularInference.ts(46,5): error TS7023: 'x' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+
+
 ==== tests/cases/compiler/implicitAnyFromCircularInference.ts (9 errors) ====
     
     // Error expected
     var a: typeof a;
         ~
-!!! 'a' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+!!! error TS7021: 'a' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
     
     // Error expected on b or c
     var b: typeof c;
     var c: typeof b;
         ~
-!!! 'c' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+!!! error TS7021: 'c' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
     
     // Error expected
     var d: Array<typeof d>;
         ~
-!!! 'd' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+!!! error TS7021: 'd' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
     
     function f() { return f; }
     
     // Error expected
     function g() { return g(); }
              ~
-!!! 'g' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+!!! error TS7023: 'g' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
     
     // Error expected
     var f1 = function () {
@@ -30,17 +41,17 @@
     ~~~~~~~~~~~~~~~~
     };
     ~
-!!! Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+!!! error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
     
     // Error expected
     var f2 = () => f2();
              ~~~~~~~~~~
-!!! Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+!!! error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
     
     // Error expected
     function h() {
              ~
-!!! 'h' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+!!! error TS7023: 'h' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
         return foo();
         function foo() {
             return h() || "hello";
@@ -57,7 +68,7 @@
         // Error expected
         s = foo(this);
         ~~~~~~~~~~~~~~
-!!! 's' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.
+!!! error TS7022: 's' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.
     }
     
     class D {
@@ -68,6 +79,6 @@
     ~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! 'x' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+!!! error TS7023: 'x' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
     }
     

@@ -1,3 +1,11 @@
+tests/cases/compiler/getAndSetNotIdenticalType3.ts(5,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/getAndSetNotIdenticalType3.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/getAndSetNotIdenticalType3.ts(5,5): error TS2380: 'get' and 'set' accessor must have the same type.
+tests/cases/compiler/getAndSetNotIdenticalType3.ts(8,5): error TS2380: 'get' and 'set' accessor must have the same type.
+tests/cases/compiler/getAndSetNotIdenticalType3.ts(9,9): error TS2322: Type 'A<string>' is not assignable to type 'A<number>':
+  Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/getAndSetNotIdenticalType3.ts (5 errors) ====
     class A<T> { foo: T; }
     
@@ -5,25 +13,25 @@
         data: A<number>;
         get x(): A<number> {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         ~~~~~~~~~~~~~~~~~~~~
             return this.data;
     ~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! 'get' and 'set' accessor must have the same type.
+!!! error TS2380: 'get' and 'set' accessor must have the same type.
         set x(v: A<string>) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         ~~~~~~~~~~~~~~~~~~~~~
             this.data = v;
     ~~~~~~~~~~~~~~~~~~~~~~
             ~~~~~~~~~
-!!! Type 'A<string>' is not assignable to type 'A<number>':
-!!!   Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'A<string>' is not assignable to type 'A<number>':
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
         }
     ~~~~~
-!!! 'get' and 'set' accessor must have the same type.
+!!! error TS2380: 'get' and 'set' accessor must have the same type.
     }
     
     var x = new C();

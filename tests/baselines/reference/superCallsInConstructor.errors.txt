@@ -1,3 +1,6 @@
+tests/cases/compiler/superCallsInConstructor.ts(12,14): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+
+
 ==== tests/cases/compiler/superCallsInConstructor.ts (1 errors) ====
     class C {
         foo() {}
@@ -12,7 +15,7 @@
         constructor() {
             with(new C()) {
                  ~~~~~~~
-!!! All symbols within a 'with' block will be resolved to 'any'.
+!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
                 foo();
                 super();
                 bar();

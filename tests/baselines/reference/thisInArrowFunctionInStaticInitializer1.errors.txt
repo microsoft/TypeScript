@@ -1,3 +1,6 @@
+tests/cases/compiler/thisInArrowFunctionInStaticInitializer1.ts(6,7): error TS2334: 'this' cannot be referenced in a static property initializer.
+
+
 ==== tests/cases/compiler/thisInArrowFunctionInStaticInitializer1.ts (1 errors) ====
     function log(a) { }
     
@@ -6,6 +9,6 @@
       // 'this' should not be available in a static initializer.
       log(this);
           ~~~~
-!!! 'this' cannot be referenced in a static property initializer.
+!!! error TS2334: 'this' cannot be referenced in a static property initializer.
      }
     }

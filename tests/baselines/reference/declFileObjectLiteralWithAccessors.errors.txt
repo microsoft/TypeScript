@@ -1,3 +1,7 @@
+tests/cases/compiler/declFileObjectLiteralWithAccessors.ts(5,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/declFileObjectLiteralWithAccessors.ts(6,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/declFileObjectLiteralWithAccessors.ts (2 errors) ====
     
     function /*1*/makePoint(x: number) { 
@@ -5,10 +9,10 @@
             b: 10,
             get x() { return x; },
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             set x(a: number) { this.b = a; }
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         };
     };
     var /*4*/point = makePoint(2);

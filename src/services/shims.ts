@@ -53,6 +53,8 @@ module ts {
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): CancellationToken;
+        getCurrentDirectory(): string;
+        getDefaultLibFilename(): string;
     }
 
     //
@@ -147,19 +149,19 @@ module ts {
         getDefaultCompilationSettings(): string;
     }
 
-    /// TODO: delete this, it is only needed untill the VS interface is updated
+    /// TODO: delete this, it is only needed until the VS interface is updated
     enum LanguageVersion {
         EcmaScript3 = 0,
         EcmaScript5 = 1,
     }
 
-    enum ModuleGenTarget {
+    export enum ModuleGenTarget {
         Unspecified = 0,
         Synchronous = 1,
         Asynchronous = 2,
     }
 
-    interface CompilationSettings {
+    export interface CompilationSettings {
         propagateEnumConstants?: boolean;
         removeComments?: boolean;
         watch?: boolean;
@@ -179,15 +181,18 @@ module ts {
         gatherDiagnostics?: boolean;
         codepage?: number;
         emitBOM?: boolean;
+
+        // Declare indexer signature
+        [index: string]: any;
     }
 
     function languageVersionToScriptTarget(languageVersion: LanguageVersion): ScriptTarget {
         if (typeof languageVersion === "undefined") return undefined;
 
         switch (languageVersion) {
-            case LanguageVersion.EcmaScript3: return ScriptTarget.ES3;
+            case LanguageVersion.EcmaScript3: return ScriptTarget.ES3
             case LanguageVersion.EcmaScript5: return ScriptTarget.ES5;
-            default: throw Error("unsuported LanguageVersion value: " + languageVersion);
+            default: throw Error("unsupported LanguageVersion value: " + languageVersion);
         }
     }
 
@@ -198,7 +203,7 @@ module ts {
             case ModuleGenTarget.Asynchronous: return ModuleKind.AMD;
             case ModuleGenTarget.Synchronous: return ModuleKind.CommonJS;
             case ModuleGenTarget.Unspecified: return ModuleKind.None;
-            default: throw Error("unsuported ModuleGenTarget value: " + moduleGenTarget);
+            default: throw Error("unsupported ModuleGenTarget value: " + moduleGenTarget);
         }
     }
 
@@ -208,7 +213,7 @@ module ts {
         switch (scriptTarget) {
             case ScriptTarget.ES3: return LanguageVersion.EcmaScript3;
             case ScriptTarget.ES5: return LanguageVersion.EcmaScript5;
-            default: throw Error("unsuported ScriptTarget value: " + scriptTarget);
+            default: throw Error("unsupported ScriptTarget value: " + scriptTarget);
         }
     }
 
@@ -219,7 +224,7 @@ module ts {
             case ModuleKind.AMD: return ModuleGenTarget.Asynchronous;
             case ModuleKind.CommonJS: return ModuleGenTarget.Synchronous;
             case ModuleKind.None: return ModuleGenTarget.Unspecified;
-            default: throw Error("unsuported ModuleKind value: " + moduleKind);
+            default: throw Error("unsupported ModuleKind value: " + moduleKind);
         }
     }
 
@@ -323,8 +328,8 @@ module ts {
 
             /// TODO: this should be pushed into VS.
             /// We can not ask the LS instance to resolve, as this will lead to asking the host about files it does not know about,
-            /// something it is not desinged to handle. for now make sure we never get a "noresolve == false".
-            /// This value should not matter, as the host runs resolution logic independentlly
+            /// something it is not designed to handle. for now make sure we never get a "noresolve == false".
+            /// This value should not matter, as the host runs resolution logic independently
             options.noResolve = true;
 
             return options;
@@ -363,6 +368,14 @@ module ts {
 
         public getCancellationToken(): CancellationToken {
             return this.shimHost.getCancellationToken();
+        }
+
+        public getDefaultLibFilename(): string {
+            return this.shimHost.getDefaultLibFilename();
+        }
+
+        public getCurrentDirectory(): string {
+            return this.shimHost.getCurrentDirectory();
         }
     }
 
@@ -421,7 +434,7 @@ module ts {
         }
 
         // DISPOSE
-        // Ensure (almost) determinstic release of internal Javascript resources when 
+        // Ensure (almost) deterministic release of internal Javascript resources when
         // some external native objects holds onto us (e.g. Com/Interop).
         public dispose(dummy: any): void {
             this.logger.log("dispose()");
@@ -866,7 +879,7 @@ module ts {
 }
 
 
-/// TODO: this is used by VS, clean this up on both sides of the interfrace
+/// TODO: this is used by VS, clean this up on both sides of the interface
 module TypeScript.Services {
     export var TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }

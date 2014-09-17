@@ -1,3 +1,12 @@
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts(8,4): error TS2345: Argument of type '{ hello: number; }' is not assignable to parameter of type 'I'.
+  Property 'value' is missing in type '{ hello: number; }'.
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts(11,4): error TS2345: Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I'.
+  Property 'value' is missing in type '{ toString: (s: string) => string; }'.
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts(12,4): error TS2345: Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I'.
+  Property 'value' is missing in type '{ toString: (s: string) => string; }'.
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts(13,36): error TS2339: Property 'uhhh' does not exist on type 'string'.
+
+
 ==== tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts (4 errors) ====
     interface I {
         value: string;
@@ -8,18 +17,18 @@
     
     f2({ hello: 1 }) // error 
        ~~~~~~~~~~~~
-!!! Argument of type '{ hello: number; }' is not assignable to parameter of type 'I'.
-!!!   Property 'value' is missing in type '{ hello: number; }'.
+!!! error TS2345: Argument of type '{ hello: number; }' is not assignable to parameter of type 'I'.
+!!! error TS2345:   Property 'value' is missing in type '{ hello: number; }'.
     f2({ value: '' }) // missing toString satisfied by Object's member
     f2({ value: '', what: 1 }) // missing toString satisfied by Object's member
     f2({ toString: (s) => s }) // error, missing property value from ArgsString
        ~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I'.
-!!!   Property 'value' is missing in type '{ toString: (s: string) => string; }'.
+!!! error TS2345: Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I'.
+!!! error TS2345:   Property 'value' is missing in type '{ toString: (s: string) => string; }'.
     f2({ toString: (s: string) => s }) // error, missing property value from ArgsString
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I'.
-!!!   Property 'value' is missing in type '{ toString: (s: string) => string; }'.
+!!! error TS2345: Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I'.
+!!! error TS2345:   Property 'value' is missing in type '{ toString: (s: string) => string; }'.
     f2({ value: '', toString: (s) => s.uhhh }) // error
                                        ~~~~
-!!! Property 'uhhh' does not exist on type 'string'.
+!!! error TS2339: Property 'uhhh' does not exist on type 'string'.

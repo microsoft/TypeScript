@@ -1,6 +1,9 @@
+tests/cases/compiler/enumGenericTypeClash.ts(2,6): error TS2300: Duplicate identifier 'X'.
+
+
 ==== tests/cases/compiler/enumGenericTypeClash.ts (1 errors) ====
     class X<A,B,C> { }
     enum X { MyVal }
          ~
-!!! Duplicate identifier 'X'.
+!!! error TS2300: Duplicate identifier 'X'.
     

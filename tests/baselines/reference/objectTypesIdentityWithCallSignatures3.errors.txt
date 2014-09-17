@@ -1,3 +1,7 @@
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignatures3.ts(21,25): error TS2304: Cannot find name 'b'.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignatures3.ts(22,25): error TS2304: Cannot find name 'b'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignatures3.ts (2 errors) ====
     // object types are identical structurally
     
@@ -21,10 +25,10 @@
     
     function foo4(x: typeof b);
                             ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
     function foo4(x: typeof b); // error
                             ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
     function foo4(x: any) { }
     
     function foo13(x: I);

@@ -1,3 +1,11 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts(15,7): error TS2416: Class 'B' incorrectly extends base class 'A':
+  Private property 'foo' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts(23,7): error TS2416: Class 'B2' incorrectly extends base class 'A2':
+  Private property '1' cannot be reimplemented.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts(31,7): error TS2416: Class 'B3' incorrectly extends base class 'A3':
+  Private property ''1'' cannot be reimplemented.
+
+
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts (3 errors) ====
     // Derived member is private, base member is not causes errors
     
@@ -15,8 +23,8 @@
     
     class B extends A {
           ~
-!!! Class 'B' incorrectly extends base class 'A':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2416: Class 'B' incorrectly extends base class 'A':
+!!! error TS2416:   Private property 'foo' cannot be reimplemented.
         private foo: Derived; // error
     }
     
@@ -26,8 +34,8 @@
     
     class B2 extends A2 {
           ~~
-!!! Class 'B2' incorrectly extends base class 'A2':
-!!!   Private property '1' cannot be reimplemented.
+!!! error TS2416: Class 'B2' incorrectly extends base class 'A2':
+!!! error TS2416:   Private property '1' cannot be reimplemented.
         private 1: Derived; // error
     }
     
@@ -37,7 +45,7 @@
     
     class B3 extends A3 {
           ~~
-!!! Class 'B3' incorrectly extends base class 'A3':
-!!!   Private property ''1'' cannot be reimplemented.
+!!! error TS2416: Class 'B3' incorrectly extends base class 'A3':
+!!! error TS2416:   Private property ''1'' cannot be reimplemented.
         private '1': Derived; // error
     }

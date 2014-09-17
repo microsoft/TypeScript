@@ -1,3 +1,7 @@
+tests/cases/compiler/contextualTypingOfAccessors.ts(8,8): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/contextualTypingOfAccessors.ts(11,8): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/contextualTypingOfAccessors.ts (2 errors) ====
     // not contextually typing accessors
     
@@ -8,11 +12,11 @@
     x = {
        get foo() {
            ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
           return (n)=>n
        },
        set foo(x) {}
            ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
     

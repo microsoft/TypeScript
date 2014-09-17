@@ -1,3 +1,6 @@
+tests/cases/compiler/typeOfThisInStatics.ts(5,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/typeOfThisInStatics.ts (1 errors) ====
     class C {
         static foo() {
@@ -5,7 +8,7 @@
         }
         static get x() {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var r = this;
             return 1;
         }

@@ -1,3 +1,7 @@
+tests/cases/compiler/copyrightWithNewLine1.ts(5,24): error TS2307: Cannot find external module './greeter'.
+tests/cases/compiler/copyrightWithNewLine1.ts(6,10): error TS2304: Cannot find name 'document'.
+
+
 ==== tests/cases/compiler/copyrightWithNewLine1.ts (2 errors) ====
     /*****************************
     * (c) Copyright - Important
@@ -5,10 +9,10 @@
     
     import model = require("./greeter")
                            ~~~~~~~~~~~
-!!! Cannot find external module './greeter'.
+!!! error TS2307: Cannot find external module './greeter'.
     var el = document.getElementById('content');
              ~~~~~~~~
-!!! Cannot find name 'document'.
+!!! error TS2304: Cannot find name 'document'.
     var greeter = new model.Greeter(el);
     /** things */
     greeter.start();

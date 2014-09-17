@@ -1,11 +1,16 @@
+tests/cases/compiler/ExportAssignment7.ts(1,14): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+tests/cases/compiler/ExportAssignment7.ts(4,1): error TS2304: Cannot find name 'B'.
+tests/cases/compiler/ExportAssignment7.ts(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
 ==== tests/cases/compiler/ExportAssignment7.ts (3 errors) ====
     export class C {
                  ~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     }
     
     export = B;
     ~~~~~~~~~~~
-!!! Cannot find name 'B'.
+!!! error TS2304: Cannot find name 'B'.
     ~~~~~~~~~~~
-!!! An export assignment cannot be used in a module with other exported elements.
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.

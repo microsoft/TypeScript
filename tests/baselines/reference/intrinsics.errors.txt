@@ -1,8 +1,12 @@
+tests/cases/compiler/intrinsics.ts(2,21): error TS2304: Cannot find name 'hasOwnProperty'.
+tests/cases/compiler/intrinsics.ts(11,1): error TS2304: Cannot find name '__proto__'.
+
+
 ==== tests/cases/compiler/intrinsics.ts (2 errors) ====
     
     var hasOwnProperty: hasOwnProperty; // Error
                         ~~~~~~~~~~~~~~
-!!! Cannot find name 'hasOwnProperty'.
+!!! error TS2304: Cannot find name 'hasOwnProperty'.
     
     module m1 {
         export var __proto__;
@@ -13,7 +17,7 @@
     
     __proto__ = 0; // Error, __proto__ not defined
     ~~~~~~~~~
-!!! Cannot find name '__proto__'.
+!!! error TS2304: Cannot find name '__proto__'.
     m1.__proto__ = 0;
     
     class Foo<__proto__> { }

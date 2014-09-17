@@ -1,3 +1,7 @@
+tests/cases/compiler/genericCloneReturnTypes.ts(25,1): error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<number>':
+  Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/genericCloneReturnTypes.ts (1 errors) ====
     class Bar<T> {
     
@@ -25,5 +29,5 @@
     b = b2;
     b = b3;
     ~
-!!! Type 'Bar<string>' is not assignable to type 'Bar<number>':
-!!!   Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<number>':
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.

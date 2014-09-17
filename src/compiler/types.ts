@@ -239,7 +239,8 @@ module ts {
         Synthetic        = 0x00000100,  // Synthetic node (for full fidelity)
         DeclarationFile  = 0x00000200,  // Node is a .d.ts file
 
-        Modifier = Export | Ambient | Public | Private | Static
+        Modifier = Export | Ambient | Public | Private | Static,
+        AccessibilityModifier = Public | Private
     }
 
     export interface Node extends TextRange {
@@ -576,7 +577,7 @@ module ts {
     export interface SourceMapData {
         /** Where the sourcemap file is written */
         sourceMapFilePath: string;
-        /** source map url written in the js file */
+        /** source map URL written in the js file */
         jsSourceMappingURL: string;
         /** Source map's file field - js file name*/
         sourceMapFile: string;
@@ -595,7 +596,17 @@ module ts {
         sourceMapDecodedMappings: SourceMapSpan[];
     }
 
+    // Return code used by getEmitOutput function to indicate status of the function
+    export enum EmitReturnStatus {
+        Succeeded = 0,                      // All outputs generated as requested (.js, .map, .d.ts), no errors reported
+        AllOutputGenerationSkipped = 1,     // No .js generated because of syntax errors, or compiler options errors, nothing generated
+        JSGeneratedWithSemanticErrors = 2,  // .js and .map generated with semantic errors
+        DeclarationGenerationSkipped = 3,   // .d.ts generation skipped because of semantic errors or declaration emitter specific errors; Output .js with semantic errors
+        EmitErrorsEncountered = 4           // Emitter errors occurred during emitting process
+    }
+
     export interface EmitResult {
+        emitResultStatus: EmitReturnStatus;
         errors: Diagnostic[];
         sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
@@ -609,7 +620,7 @@ module ts {
         getSymbolCount(): number;
         getTypeCount(): number;
         checkProgram(): void;
-        emitFiles(): EmitResult;
+        emitFiles(targetSourceFile?: SourceFile): EmitResult;
         getParentOfSymbol(symbol: Symbol): Symbol;
         getTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
@@ -668,7 +679,7 @@ module ts {
         isTopLevelValueImportedViaEntityName(node: ImportDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
-        shouldEmitDeclarations(): boolean;
+        hasSemanticErrors(): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
         writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;

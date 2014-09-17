@@ -1,3 +1,9 @@
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts(10,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts(22,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts(31,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts(39,10): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts (4 errors) ====
     class Base {
         constructor(x: number) { }
@@ -10,7 +16,7 @@
     var r = C;
     var c = new C(); // error
             ~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var c2 = new C(1); // ok
     
     class Base2<T,U> {
@@ -24,7 +30,7 @@
     var r2 = D;
     var d = new D(); // error
             ~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var d2 = new D(1); // ok
     
     // specialized base class
@@ -35,7 +41,7 @@
     var r3 = D2;
     var d3 = new D(); // error
              ~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var d4 = new D(1); // ok
     
     class D3 extends Base2<string, number> {
@@ -45,5 +51,5 @@
     var r4 = D3;
     var d5 = new D(); // error
              ~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var d6 = new D(1); // ok

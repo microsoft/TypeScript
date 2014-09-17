@@ -1,3 +1,13 @@
+tests/cases/conformance/classes/members/accessibility/privateClassPropertyAccessibleWithinClass.ts(5,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/privateClassPropertyAccessibleWithinClass.ts(6,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/privateClassPropertyAccessibleWithinClass.ts(10,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/privateClassPropertyAccessibleWithinClass.ts(11,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/privateClassPropertyAccessibleWithinClass.ts(19,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/privateClassPropertyAccessibleWithinClass.ts(20,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/privateClassPropertyAccessibleWithinClass.ts(24,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/privateClassPropertyAccessibleWithinClass.ts(25,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/conformance/classes/members/accessibility/privateClassPropertyAccessibleWithinClass.ts (8 errors) ====
     // no errors
     
@@ -5,19 +15,19 @@
         private x: string;
         private get y() { return this.x; }
                     ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private set y(x) { this.y = this.x; }
                     ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private foo() { return this.foo; }
     
         private static x: string;
         private static get y() { return this.x; }
                            ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private static set y(x) { this.y = this.x; }
                            ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private static foo() { return this.foo; }
         private static bar() { this.foo(); }
     }
@@ -27,19 +37,19 @@
         private x: string;
         private get y() { () => this.x; return null; }
                     ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private set y(x) { () => { this.y = this.x; } }
                     ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private foo() { () => this.foo; }
     
         private static x: string;
         private static get y() { () => this.x; return null; }
                            ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private static set y(x) {
                            ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             () => { this.y = this.x; }
          }
         private static foo() { () => this.foo; }

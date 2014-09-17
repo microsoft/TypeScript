@@ -1,3 +1,10 @@
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts(13,7): error TS2421: Class 'D' incorrectly implements interface 'A':
+  Private property 'x' cannot be reimplemented.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts(19,7): error TS2421: Class 'E' incorrectly implements interface 'A':
+  Private property 'x' cannot be reimplemented.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts(26,9): error TS2341: Property 'C.x' is inaccessible.
+
+
 ==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts (3 errors) ====
     class C {
         private x: number;
@@ -13,8 +20,8 @@
     
     class D implements A { // error
           ~
-!!! Class 'D' incorrectly implements interface 'A':
-!!!   Private property 'x' cannot be reimplemented.
+!!! error TS2421: Class 'D' incorrectly implements interface 'A':
+!!! error TS2421:   Private property 'x' cannot be reimplemented.
         private x: number;
         y: string;
         z: string;
@@ -22,8 +29,8 @@
     
     class E implements A { // error
           ~
-!!! Class 'E' incorrectly implements interface 'A':
-!!!   Private property 'x' cannot be reimplemented.
+!!! error TS2421: Class 'E' incorrectly implements interface 'A':
+!!! error TS2421:   Private property 'x' cannot be reimplemented.
         x: number;
         y: string;
         z: string;
@@ -32,4 +39,4 @@
     var a: A;
     var r = a.x; // error
             ~~~
-!!! Property 'C.x' is inaccessible.
+!!! error TS2341: Property 'C.x' is inaccessible.

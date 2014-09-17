@@ -1,7 +1,10 @@
+tests/cases/compiler/augmentedTypesClass4.ts(3,7): error TS2300: Duplicate identifier 'c3'.
+
+
 ==== tests/cases/compiler/augmentedTypesClass4.ts (1 errors) ====
     //// class then class
     class c3 { public foo() { } }
     class c3 { public bar() { } } // error
           ~~
-!!! Duplicate identifier 'c3'.
+!!! error TS2300: Duplicate identifier 'c3'.
     

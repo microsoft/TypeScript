@@ -1,16 +1,30 @@
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(4,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(8,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(14,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(20,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(26,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(28,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(33,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(35,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(40,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(42,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(47,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(49,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+
+
 ==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts (12 errors) ====
     // Specialized signatures must be a subtype of a non-specialized signature
     // All the below should be errors
     
     function foo(x: 'a');
     ~~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function foo(x: number) { }
     
     class C {
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: number);
         foo(x: any) { }
     }
@@ -18,7 +32,7 @@
     class C2<T> {
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: T);
         foo(x: any) { }
     }
@@ -26,7 +40,7 @@
     class C3<T extends String> {
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: T);
         foo(x: any) { }
     }
@@ -34,44 +48,44 @@
     interface I {
         (x: 'a');
         ~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         (x: number);
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: number);
     }
     
     interface I2<T> {
         (x: 'a');
         ~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         (x: T);
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: T);
     }
     
     interface I3<T extends String> {
         (x: 'a');
         ~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         (x: T);
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: T);
     }
     
     var a: {
         (x: 'a');
         ~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         (x: number);
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: number);
     }
     

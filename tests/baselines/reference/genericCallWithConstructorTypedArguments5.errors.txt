@@ -1,3 +1,7 @@
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstructorTypedArguments5.ts(11,14): error TS2345: Argument of type '{ cb: new <T>(x: T, y: T) => string; }' is not assignable to parameter of type '{ cb: new (t: any) => string; }'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstructorTypedArguments5.ts(13,14): error TS2345: Argument of type '{ cb: new (x: string, y: number) => string; }' is not assignable to parameter of type '{ cb: new (t: string) => string; }'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstructorTypedArguments5.ts (2 errors) ====
     // Generic call with parameter of object type with member of function type of n args passed object whose associated member is call signature with n+1 args
     
@@ -11,11 +15,11 @@
     var arg2: { cb: new <T>(x: T, y: T) => string };
     var r2 = foo(arg2); // error
                  ~~~~
-!!! Argument of type '{ cb: new <T>(x: T, y: T) => string; }' is not assignable to parameter of type '{ cb: new (t: any) => string; }'.
+!!! error TS2345: Argument of type '{ cb: new <T>(x: T, y: T) => string; }' is not assignable to parameter of type '{ cb: new (t: any) => string; }'.
     var arg3: { cb: new (x: string, y: number) => string };
     var r3 = foo(arg3); // error
                  ~~~~
-!!! Argument of type '{ cb: new (x: string, y: number) => string; }' is not assignable to parameter of type '{ cb: new (t: string) => string; }'.
+!!! error TS2345: Argument of type '{ cb: new (x: string, y: number) => string; }' is not assignable to parameter of type '{ cb: new (t: string) => string; }'.
     
     function foo2<T, U>(arg: { cb: new(t: T, t2: T) => U }) {
         return new arg.cb(null, null);

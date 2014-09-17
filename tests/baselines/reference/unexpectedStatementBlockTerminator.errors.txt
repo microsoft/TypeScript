@@ -1,10 +1,13 @@
+tests/cases/compiler/unexpectedStatementBlockTerminator.ts(4,1): error TS1128: Declaration or statement expected.
+
+
 ==== tests/cases/compiler/unexpectedStatementBlockTerminator.ts (1 errors) ====
     class Foo {}
     
     class Bar {}
     case
     ~~~~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     function Goo() {return {a:1,b:2};}
     

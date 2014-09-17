@@ -1,7 +1,11 @@
+tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts(1,12): error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
+tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
+
+
 ==== tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts (2 errors) ====
     module A.B.C {
                ~
-!!! A module declaration cannot be located prior to a class or function with which it is merged
+!!! error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
         export class Point {
             x: number;
             y: number;
@@ -26,7 +30,7 @@
         export module X {
             export var Point: number; // Error
                        ~~~~~
-!!! Duplicate identifier 'Point'.
+!!! error TS2300: Duplicate identifier 'Point'.
         }
     }
     

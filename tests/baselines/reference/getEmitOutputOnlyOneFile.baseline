@@ -1,0 +1,9 @@
+EmitOutputStatus : Succeeded
+Filename : tests/cases/fourslash/inputFile2.js
+var x;
+var Foo = (function () {
+    function Foo() {
+    }
+    return Foo;
+})();
+

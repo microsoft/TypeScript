@@ -71,6 +71,7 @@ module ts {
         getSourceUnit(): TypeScript.SourceUnitSyntax;
         getSyntaxTree(): TypeScript.SyntaxTree;
         getScriptSnapshot(): TypeScript.IScriptSnapshot;
+        getNamedDeclarations(): Declaration[];
         update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
@@ -327,6 +328,7 @@ module ts {
 
         private syntaxTree: TypeScript.SyntaxTree;
         private scriptSnapshot: TypeScript.IScriptSnapshot;
+        private namedDeclarations: Declaration[];
 
         public getSourceUnit(): TypeScript.SourceUnitSyntax {
             // If we don't have a script, create one from our parse tree.
@@ -339,6 +341,59 @@ module ts {
 
         public getLineMap(): TypeScript.LineMap {
             return this.getSyntaxTree().lineMap();
+        }
+
+        public getNamedDeclarations() {
+            if (!this.namedDeclarations) {
+                var sourceFile = this;
+                var namedDeclarations: Declaration[] = [];
+                var isExternalModule = ts.isExternalModule(sourceFile);
+
+                forEachChild(sourceFile, function visit(node: Node): boolean {
+                    switch (node.kind) {
+                        case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.InterfaceDeclaration:
+                        case SyntaxKind.EnumDeclaration:
+                        case SyntaxKind.ModuleDeclaration:
+                        case SyntaxKind.ImportDeclaration:
+                        case SyntaxKind.Method:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                        case SyntaxKind.TypeLiteral:
+                            if ((<Declaration>node).name) {
+                                namedDeclarations.push(<Declaration>node);
+                            }
+                            forEachChild(node, visit);
+                            break;
+
+                        case SyntaxKind.VariableStatement:
+                        case SyntaxKind.ModuleBlock:
+                        case SyntaxKind.FunctionBlock:
+                            forEachChild(node, visit);
+                            break;
+
+                        case SyntaxKind.Parameter:
+                            if (!(node.flags & NodeFlags.AccessibilityModifier)) {
+                                // Only consider properties defined as constructor parameters
+                                break;
+                            }
+                        case SyntaxKind.VariableDeclaration:
+                        case SyntaxKind.EnumMember:
+                        case SyntaxKind.Property:
+                            namedDeclarations.push(<Declaration>node);
+                            break;
+                    }
+
+                    // do not go any deeper
+                    return undefined;
+                });
+
+                this.namedDeclarations = namedDeclarations;
+            }
+
+            return this.namedDeclarations;
         }
 
         public getSyntaxTree(): TypeScript.SyntaxTree {
@@ -418,6 +473,8 @@ module ts {
         getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot;
         getLocalizedDiagnosticMessages(): any;
         getCancellationToken(): CancellationToken;
+        getCurrentDirectory(): string;
+        getDefaultLibFilename(): string;
     }
 
     //
@@ -691,16 +748,9 @@ module ts {
         docComment: string;
     }
 
-    export enum EmitOutputResult {
-        Succeeded,
-        FailedBecauseOfSyntaxErrors,
-        FailedBecauseOfCompilerOptionsErrors,
-        FailedToGenerateDeclarationsBecauseOfSemanticErrors
-    }
-
     export interface EmitOutput {
         outputFiles: OutputFile[];
-        emitOutputResult: EmitOutputResult;
+        emitOutputStatus: EmitReturnStatus;
     }
 
     export enum OutputFileType {
@@ -713,8 +763,6 @@ module ts {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
-        fileType: OutputFileType;
-        sourceMapOutput: any;
     }
 
     export enum EndOfLineState {
@@ -850,11 +898,11 @@ module ts {
         static staticModifier = "static";
     }
 
-    export class MatchKind {
-        static none: string = null;
-        static exact = "exact";
-        static subString = "substring";
-        static prefix = "prefix";
+    enum MatchKind {
+        none = 0,
+        exact = 1,
+        substring = 2,
+        prefix = 3
     }
 
     interface IncrementalParse {
@@ -1423,7 +1471,7 @@ module ts {
         var program: Program;
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
-        // the sole purpose of this check is to return semantic diagnostics
+        // the sole purpose of this checker is to return semantic diagnostics
         // creation is deferred - use getFullTypeCheckChecker to get instance
         var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
         var useCaseSensitivefilenames = false;
@@ -1431,6 +1479,7 @@ module ts {
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
+        var writer: (filename: string, data: string, writeByteOrderMark: boolean) => void = undefined;
 
         // Check if the localized messages json is set, otherwise query the host for it
         if (!TypeScript.LocalizedDiagnosticMessages) {
@@ -1455,15 +1504,14 @@ module ts {
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
                 getNewLine: () => "\r\n",
-                // Need something that doesn't depend on sys.ts here
                 getDefaultLibFilename: (): string => {
-                    throw Error("TOD:: getDefaultLibfilename");
+                    return host.getDefaultLibFilename();
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
-                    throw Error("TODO: write file");
+                    writer(filename, data, writeByteOrderMark);
                 },
                 getCurrentDirectory: (): string => {
-                    throw Error("TODO: getCurrentDirectory");
+                    return host.getCurrentDirectory();
                 }
             };
         }
@@ -2035,6 +2083,29 @@ module ts {
             return ScriptElementKind.unknown;
         }
 
+        function getNodeKind(node: Node): string {
+            switch (node.kind) {
+                case SyntaxKind.ModuleDeclaration: return ScriptElementKind.moduleElement;
+                case SyntaxKind.ClassDeclaration: return ScriptElementKind.classElement;
+                case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
+                case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
+                case SyntaxKind.VariableDeclaration: return ScriptElementKind.variableElement;
+                case SyntaxKind.FunctionDeclaration: return ScriptElementKind.functionElement;
+                case SyntaxKind.GetAccessor: return ScriptElementKind.memberGetAccessorElement;
+                case SyntaxKind.SetAccessor: return ScriptElementKind.memberSetAccessorElement;
+                case SyntaxKind.Method: return ScriptElementKind.memberFunctionElement;
+                case SyntaxKind.Property: return ScriptElementKind.memberVariableElement;
+                case SyntaxKind.IndexSignature: return ScriptElementKind.indexSignatureElement;
+                case SyntaxKind.ConstructSignature: return ScriptElementKind.constructSignatureElement;
+                case SyntaxKind.CallSignature: return ScriptElementKind.callSignatureElement;
+                case SyntaxKind.Constructor: return ScriptElementKind.constructorImplementationElement;
+                case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
+                case SyntaxKind.EnumMember: return ScriptElementKind.variableElement;
+                case SyntaxKind.Parameter: return (node.flags & NodeFlags.AccessibilityModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
+                    return ScriptElementKind.unknown;
+            }
+        }
+
         function getNodeModifiers(node: Node): string {
             var flags = node.flags;
             var result: string[] = [];
@@ -2186,6 +2257,7 @@ module ts {
             return result;
         }
 
+        /// References and Occurances
         function getOccurrencesAtPosition(filename: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
@@ -2527,7 +2599,7 @@ module ts {
             return getReferencesForNode(node, program.getSourceFiles());
         }
 
-        function getReferencesForNode(node: Node, sourceFiles : SourceFile[]): ReferenceEntry[] {
+        function getReferencesForNode(node: Node, sourceFiles: SourceFile[]): ReferenceEntry[] {
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
@@ -2570,8 +2642,9 @@ module ts {
             var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.getDeclarations());
 
             // Get the text to search for, we need to normalize it as external module names will have quote
-            var symbolName = getNormalizedSymbolName(symbol);                
+            var symbolName = getNormalizedSymbolName(symbol);
 
+            // Get syntactic diagnostics
             var scope = getSymbolScope(symbol);
 
             if (scope) {
@@ -2601,7 +2674,7 @@ module ts {
                 else {
                     var name = symbol.name;
                 }
-                
+
                 var length = name.length;
                 if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
                     return name.substring(1, length - 1);
@@ -2732,9 +2805,10 @@ module ts {
                 return false;
             }
 
-            /// Search within node "container" for references for a search value, where the search value is defined as a 
-            /// tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
-            /// searchLocation: a node where the search value 
+            /** Search within node "container" for references for a search value, where the search value is defined as a 
+              * tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
+              * searchLocation: a node where the search value 
+              */
             function getReferencesInNode(container: Node, searchSymbol: Symbol, searchText: string, searchLocation: Node, searchMeaning: SearchMeaning, result: ReferenceEntry[]): void {
                 var sourceFile = container.getSourceFile();
 
@@ -3100,12 +3174,13 @@ module ts {
                 }
             }
 
-            /// Given an initial searchMeaning, extracted from a location, widen the search scope based on the declarations
-            /// of the corresponding symbol. e.g. if we are searching for "Foo" in value position, but "Foo" references a class
-            /// then we need to widen the search to include type positions as well.
-            /// On the contrary, if we are searching for "Bar" in type position and we trace bar to an interface, and an uninstantiated
-            /// module, we want to keep the search limited to only types, as the two declarations (interface and uninstantiated module)
-            /// do not intersect in any of the three spaces.
+            /** Given an initial searchMeaning, extracted from a location, widen the search scope based on the declarations
+              * of the corresponding symbol. e.g. if we are searching for "Foo" in value position, but "Foo" references a class
+              * then we need to widen the search to include type positions as well.
+              * On the contrary, if we are searching for "Bar" in type position and we trace bar to an interface, and an uninstantiated
+              * module, we want to keep the search limited to only types, as the two declarations (interface and uninstantiated module)
+              * do not intersect in any of the three spaces.
+              */
             function getIntersectingMeaningFromDeclarations(meaning: SearchMeaning, declarations: Declaration[]): SearchMeaning {
                 if (declarations) {
                     do {
@@ -3138,11 +3213,10 @@ module ts {
                 start += 1;
                 end -= 1;
             }
-
             return new ReferenceEntry(node.getSourceFile().filename, TypeScript.TextSpan.fromBounds(start, end), isWriteAccess(node));
         }
 
-        /// A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment
+        /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
         function isWriteAccess(node: Node): boolean {
             if (node.kind === SyntaxKind.Identifier && isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                 return true;
@@ -3160,6 +3234,155 @@ module ts {
             }
 
             return false;
+        }
+
+        /// NavigateTo
+        function getNavigateToItems(searchValue: string): NavigateToItem[] {
+            synchronizeHostData();
+
+            // Split search value in terms array
+            var terms = searchValue.split(" ");
+
+            // default NavigateTo approach: if search term contains only lower-case chars - use case-insensitive search, otherwise switch to case-sensitive version
+            var searchTerms = map(terms, t => ({ caseSensitive: hasAnyUpperCaseCharacter(t), term: t }));
+
+            var items: NavigateToItem[] = [];
+
+            // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[] 
+            forEach(program.getSourceFiles(), sourceFile => {
+                cancellationToken.throwIfCancellationRequested();
+
+                var filename = sourceFile.filename;
+                var declarations = sourceFile.getNamedDeclarations();
+                for (var i = 0, n = declarations.length; i < n; i++) {
+                    var declaration = declarations[i];
+                    var name = declaration.name.text;
+                    var matchKind = getMatchKind(searchTerms, name);
+                    if (matchKind !== MatchKind.none) {
+                        var container = <Declaration>getContainerNode(declaration);
+                        items.push({
+                            name: name,
+                            kind: getNodeKind(declaration),
+                            kindModifiers: getNodeModifiers(declaration),
+                            matchKind: MatchKind[matchKind],
+                            fileName: filename,
+                            textSpan: TypeScript.TextSpan.fromBounds(declaration.getStart(), declaration.getEnd()),
+                            containerName: container.name ? container.name.text : "",
+                            containerKind: container.name ? getNodeKind(container) : ""
+                        });
+                    }
+                }
+            });
+
+            return items;
+
+            function hasAnyUpperCaseCharacter(s: string): boolean {
+                for (var i = 0, n = s.length; i < n; i++) {
+                    var c = s.charCodeAt(i);
+                    if ((CharacterCodes.A <= c && c <= CharacterCodes.Z) ||
+                        (c >= CharacterCodes.maxAsciiCharacter && s.charAt(i).toLocaleLowerCase() !== s.charAt(i))) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            function getMatchKind(searchTerms: { caseSensitive: boolean; term: string }[], name: string): MatchKind {
+                var matchKind = MatchKind.none;
+
+                if (name) {
+                    for (var j = 0, n = searchTerms.length; j < n; j++) {
+                        var searchTerm = searchTerms[j];
+                        var nameToSearch = searchTerm.caseSensitive ? name : name.toLocaleLowerCase();
+                        // in case of case-insensitive search searchTerm.term will already be lower-cased
+                        var index = nameToSearch.indexOf(searchTerm.term);
+                        if (index < 0) {
+                            // Didn't match.
+                            return MatchKind.none;
+                        }
+
+                        var termKind = MatchKind.substring;
+                        if (index === 0) {
+                            // here we know that match occur at the beginning of the string.
+                            // if search term and declName has the same length - we have an exact match, otherwise declName have longer length and this will be prefix match
+                            termKind = name.length === searchTerm.term.length ? MatchKind.exact : MatchKind.prefix;
+                        }
+
+                        // Update our match kind if we don't have one, or if this match is better.
+                        if (matchKind === MatchKind.none || termKind < matchKind) {
+                            matchKind = termKind;
+                        }
+                    }
+                }
+
+                return matchKind;
+            }
+        }
+
+        function containErrors(diagnostics: Diagnostic[]): boolean {
+            return forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
+        }
+
+        function getEmitOutput(filename: string): EmitOutput {
+            synchronizeHostData();
+            filename = TypeScript.switchToForwardSlashes(filename);
+            var compilerOptions = program.getCompilerOptions();
+            var targetSourceFile = program.getSourceFile(filename);  // Current selected file to be output
+            var emitToSingleFile = ts.shouldEmitToOwnFile(targetSourceFile, compilerOptions);
+            var emitDeclaration = compilerOptions.declaration;
+            var emitOutput: EmitOutput = {
+                outputFiles: [],
+                emitOutputStatus: undefined,
+            };
+
+            function getEmitOutputWriter(filename: string, data: string, writeByteOrderMark: boolean) {
+                emitOutput.outputFiles.push({
+                    name: filename,
+                    writeByteOrderMark: writeByteOrderMark,
+                    text: data
+                });
+            }
+
+            // Initialize writer for CompilerHost.writeFile
+            writer = getEmitOutputWriter;
+
+            var syntacticDiagnostics: Diagnostic[] = [];
+            var containSyntacticErrors = false;
+
+            if (emitToSingleFile) {
+                // Check only the file we want to emit
+                containSyntacticErrors = containErrors(program.getDiagnostics(targetSourceFile));
+            } else {
+                // Check the syntactic of only sourceFiles that will get emitted into single output
+                // Terminate the process immediately if we encounter a syntax error from one of the sourceFiles
+                containSyntacticErrors = forEach(program.getSourceFiles(), sourceFile => {
+                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                        // If emit to a single file then we will check all files that do not have external module
+                        return containErrors(program.getDiagnostics(sourceFile));
+                    }
+                    return false;
+                });
+            }
+
+            if (containSyntacticErrors) {
+                // If there is a syntax error, terminate the process and report outputStatus
+                emitOutput.emitOutputStatus = EmitReturnStatus.AllOutputGenerationSkipped;
+                // Reset writer back to undefined to make sure that we produce an error message
+                // if CompilerHost.writeFile is called when we are not in getEmitOutput
+                writer = undefined;
+                return emitOutput;
+            }
+
+            // Perform semantic and force a type check before emit to ensure that all symbols are updated
+            // EmitFiles will report if there is an error from TypeChecker and Emitter
+            // Depend whether we will have to emit into a single file or not either emit only selected file in the project, emit all files into a single file
+            var emitFilesResult = emitToSingleFile ? getFullTypeCheckChecker().emitFiles(targetSourceFile) : getFullTypeCheckChecker().emitFiles();
+            emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
+
+            // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
+            writer = undefined;
+            return emitOutput;
         }
 
         /// Syntactic features
@@ -3718,7 +3941,7 @@ module ts {
             getImplementorsAtPosition: (filename, position) => [],
             getNameOrDottedNameSpan: getNameOrDottedNameSpan,
             getBreakpointStatementAtPosition: getBreakpointStatementAtPosition,
-            getNavigateToItems: (searchValue) => [],
+            getNavigateToItems: getNavigateToItems,
             getRenameInfo: getRenameInfo,
             getNavigationBarItems: getNavigationBarItems,
             getOutliningSpans: getOutliningSpans,
@@ -3728,7 +3951,7 @@ module ts {
             getFormattingEditsForRange: getFormattingEditsForRange,
             getFormattingEditsForDocument: getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
-            getEmitOutput: (filename): EmitOutput => null,
+            getEmitOutput: getEmitOutput,
         };
     }
 

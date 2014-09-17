@@ -122,9 +122,71 @@ module FourSlash {
         return s.replace(/[&<>"'\/]/g, ch => entityMap[ch]);
     }
 
+    // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
+    // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
+    // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
+    var testOptMetadataNames = {
+       baselineFile: 'BaselineFile',  
+       declaration: 'declaration',
+       emitThisFile: 'emitThisFile',  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
+       filename: 'Filename',
+       mapRoot: 'mapRoot',
+       module: 'module',
+       out: 'out',
+       outDir: 'outDir',
+       sourceMap: 'sourceMap',
+       sourceRoot: 'sourceRoot',
+    };
+
     // List of allowed metadata names
-    var fileMetadataNames = ['Filename'];
-    var globalMetadataNames = ['Module', 'Target', 'BaselineFile']; // Note: Only BaselineFile is actually supported at the moment
+    var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile];
+    var globalMetadataNames = [testOptMetadataNames.baselineFile,  testOptMetadataNames.declaration,
+        testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
+        testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
+
+    function convertGlobalOptionsToCompilationSettings(globalOptions: { [idx: string]: string }): ts.CompilationSettings {
+        var settings: ts.CompilationSettings = {};
+    // Convert all property in globalOptions into ts.CompilationSettings
+        for (var prop in globalOptions) {
+            if (globalOptions.hasOwnProperty(prop)) {
+                switch (prop) {
+                    case testOptMetadataNames.declaration:
+                        settings.generateDeclarationFiles = true;
+                        break;
+                    case testOptMetadataNames.mapRoot:
+                        settings.mapRoot = globalOptions[prop];
+                        break;
+                    case testOptMetadataNames.module:
+                        // create appropriate external module target for CompilationSettings
+                        switch (globalOptions[prop]) {
+                          case "AMD":
+                            settings.moduleGenTarget = ts.ModuleGenTarget.Asynchronous;
+                            break;
+                          case "CommonJS":
+                            settings.moduleGenTarget = ts.ModuleGenTarget.Synchronous;
+                            break;
+                          default:
+                            settings.moduleGenTarget = ts.ModuleGenTarget.Unspecified;
+                            break;
+                        }
+                        break;
+                    case testOptMetadataNames.out:
+                        settings.outFileOption = globalOptions[prop];
+                        break;
+                    case testOptMetadataNames.outDir:
+                        settings.outDirOption = globalOptions[prop];
+                        break;
+                    case testOptMetadataNames.sourceMap:
+                        settings.mapSourceFiles = true;
+                        break;
+                    case testOptMetadataNames.sourceRoot:
+                        settings.sourceRoot = globalOptions[prop];
+                        break;
+                }
+            }
+        }
+        return settings;
+    }
 
     export var currentTestState: TestState = null;
 
@@ -199,10 +261,14 @@ module FourSlash {
         private scenarioActions: string[] = [];
         private taoInvalidReason: string = null;
 
+
         constructor(public testData: FourSlashData) {
             // Initialize the language service with all the scripts
             this.cancellationToken = new TestCancellationToken();
             this.languageServiceShimHost = new Harness.LanguageService.TypeScriptLS(this.cancellationToken);
+
+            var compilationSettings = convertGlobalOptionsToCompilationSettings(this.testData.globalOptions);
+            this.languageServiceShimHost.setCompilationSettings(compilationSettings);
 
             var inputFiles: { unitName: string; content: string }[] = [];
 
@@ -220,9 +286,9 @@ module FourSlash {
             //if (/require\(/.test(lastFile.content) || /reference\spath/.test(lastFile.content)) {
             //    inputFiles.push({ unitName: lastFile.fileName, content: lastFile.content });
             //} else {
-                inputFiles = testData.files.map(file => {
-                    return { unitName: file.fileName, content: file.content };
-                });
+            inputFiles = testData.files.map(file => {
+                return { unitName: file.fileName, content: file.content };
+            });
             //}
 
 
@@ -914,13 +980,55 @@ module FourSlash {
 
             Harness.Baseline.runBaseline(
                 "Breakpoint Locations for " + this.activeFile.fileName,
-                this.testData.globalOptions['BaselineFile'],
+                this.testData.globalOptions[testOptMetadataNames.baselineFile],
                 () => {
                     var fileLength = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
                     var resultString = "";
                     for (var pos = 0; pos < fileLength; pos++) {
                         resultString = resultString + this.getBreakpointStatementLocation(pos);
                     }
+                    return resultString;
+                },
+                true /* run immediately */);
+        }
+
+        public baselineGetEmitOutput() {
+            this.taoInvalidReason = 'baselineGetEmitOutput impossible';
+            // Find file to be emitted
+            var emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
+
+            var allFourSlashFiles = this.testData.files;
+            for (var idx = 0; idx < allFourSlashFiles.length; ++idx) {
+                var file = allFourSlashFiles[idx];
+                if (file.fileOptions[testOptMetadataNames.emitThisFile]) {
+                    // Find a file with the flag emitThisFile turned on
+                    emitFiles.push(file);
+                }
+            }
+
+            // If there is not emiThisFile flag specified in the test file, throw an error
+            if (emitFiles.length === 0) {
+                throw new Error("No emitThisFile is specified in the test file");
+            }
+
+            Harness.Baseline.runBaseline(
+                "Generate getEmitOutput baseline : " + emitFiles.join(" "),
+                this.testData.globalOptions[testOptMetadataNames.baselineFile],
+                () => {
+                    var resultString = "";
+                    // Loop through all the emittedFiles and emit them one by one
+                    emitFiles.forEach(emitFile => {
+                        var emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
+                        var emitOutputStatus = emitOutput.emitOutputStatus;
+                        // Print emitOutputStatus in readable format
+                        resultString += "EmitOutputStatus : " + ts.EmitReturnStatus[emitOutputStatus];
+                        resultString += "\n";
+                        emitOutput.outputFiles.forEach((outputFile, idx, array) => {
+                            var filename = "Filename : " + outputFile.name + "\n";
+                            resultString = resultString + filename + outputFile.text;
+                        });
+                        resultString += "\n";
+                    });
                     return resultString;
                 },
                 true /* run immediately */);
@@ -1236,7 +1344,7 @@ module FourSlash {
 
         private applyEdits(fileName: string, edits: ts.TextChange[], isFormattingEdit = false): number {
             // We get back a set of edits, but langSvc.editScript only accepts one at a time. Use this to keep track
-            // of the incremental offest from each edit to the next. Assumption is that these edit ranges don't overlap
+            // of the incremental offset from each edit to the next. Assumption is that these edit ranges don't overlap
             var runningOffset = 0;
             edits = edits.sort((a, b) => a.span.start() - b.span.start());
             // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
@@ -1313,7 +1421,7 @@ module FourSlash {
 
             var definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (!definitions || !definitions.length) {
-                throw new Error('goToDefinition failed - expected to at least one defintion location but got 0');
+                throw new Error('goToDefinition failed - expected to at least one definition location but got 0');
             }
 
             if (definitionIndex >= definitions.length) {
@@ -1333,10 +1441,10 @@ module FourSlash {
             var foundDefinitions = definitions && definitions.length;
 
             if (foundDefinitions && negative) {
-                throw new Error('goToDefinition - expected to 0 defintion locations but got ' + definitions.length);
+                throw new Error('goToDefinition - expected to 0 definition locations but got ' + definitions.length);
             }
             else if (!foundDefinitions && !negative) {
-                throw new Error('goToDefinition - expected to at least one defintion location but got 0');
+                throw new Error('goToDefinition - expected to at least one definition location but got 0');
             }
         }
 
@@ -1450,7 +1558,7 @@ module FourSlash {
 
             Harness.Baseline.runBaseline(
                 "Name OrDottedNameSpans for " + this.activeFile.fileName,
-                this.testData.globalOptions['BaselineFile'],
+                this.testData.globalOptions[testOptMetadataNames.baselineFile],
                 () => {
                     var fileLength = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
                     var resultString = "";
@@ -2091,12 +2199,12 @@ module FourSlash {
                 // Comment line, check for global/file @options and record them
                 var match = optionRegex.exec(line.substr(2));
                 if (match) {
-                    var globalNameIndex = globalMetadataNames.indexOf(match[1]);
-                    var fileNameIndex = fileMetadataNames.indexOf(match[1]);
-                    if (globalNameIndex === -1) {
-                        if (fileNameIndex === -1) {
+                    var globalMetadataNamesIndex = globalMetadataNames.indexOf(match[1]);
+                    var fileMetadataNamesIndex = fileMetadataNames.indexOf(match[1]);
+                    if (globalMetadataNamesIndex === -1) {
+                        if (fileMetadataNamesIndex === -1) {
                             throw new Error('Unrecognized metadata name "' + match[1] + '". Available global metadata names are: ' + globalMetadataNames.join(', ') + '; file metadata names are: ' + fileMetadataNames.join(', '));
-                        } else {
+                        } else if (fileMetadataNamesIndex === fileMetadataNames.indexOf(testOptMetadataNames.filename)) {
                             // Found an @Filename directive, if this is not the first then create a new subfile
                             if (currentFileContent) {
                                 var file = parseFileContent(currentFileContent, currentFileName, markerMap, markers, ranges);
@@ -2113,8 +2221,15 @@ module FourSlash {
 
                             currentFileName = 'tests/cases/fourslash/' + match[2];
                             currentFileOptions[match[1]] = match[2];
+                        } else {
+                            // Add other fileMetadata flag
+                            currentFileOptions[match[1]] = match[2];
                         }
                     } else {
+                        // Check if the match is already existed in the global options
+                        if (opts[match[1]] !== undefined) {
+                            throw new Error("Global Option : '" + match[1] + "' is already existed");
+                        }
                         opts[match[1]] = match[2];
                     }
                 }
@@ -2224,7 +2339,7 @@ module FourSlash {
         /// A list of ranges we've collected so far */
         var localRanges: Range[] = [];
 
-        /// The latest position of the start of an unflushed plaintext area
+        /// The latest position of the start of an unflushed plain text area
         var lastNormalCharPosition: number = 0;
 
         /// The total number of metacharacters removed from the file (so far)

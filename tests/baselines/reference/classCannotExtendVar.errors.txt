@@ -1,9 +1,12 @@
+tests/cases/compiler/classCannotExtendVar.ts(3,7): error TS2300: Duplicate identifier 'Markup'.
+
+
 ==== tests/cases/compiler/classCannotExtendVar.ts (1 errors) ====
     var Markup;
     
     class Markup {
           ~~~~~~
-!!! Duplicate identifier 'Markup'.
+!!! error TS2300: Duplicate identifier 'Markup'.
         constructor() {
         }
     }

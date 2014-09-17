@@ -1,14 +1,37 @@
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(4,5): error TS1044: 'public' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(6,5): error TS1044: 'public' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(12,5): error TS1044: 'public' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(13,5): error TS1044: 'public' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(15,5): error TS1044: 'public' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(19,5): error TS1044: 'public' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(25,5): error TS1044: 'public' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(29,5): error TS1044: 'private' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(31,5): error TS1044: 'private' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(37,5): error TS1044: 'private' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(38,5): error TS1044: 'private' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(40,5): error TS1044: 'private' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(44,5): error TS1044: 'private' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(50,5): error TS1044: 'private' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(55,5): error TS1044: 'static' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(57,5): error TS1044: 'static' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(63,5): error TS1044: 'static' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(64,5): error TS1044: 'static' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(66,5): error TS1044: 'static' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(70,5): error TS1044: 'static' modifier cannot appear on a module element.
+tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier cannot appear on a module element.
+
+
 ==== tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts (21 errors) ====
     // All of these should be an error
     
     module Y {
         public class A { s: string }
         ~~~~~~
-!!! 'public' modifier cannot appear on a module element.
+!!! error TS1044: 'public' modifier cannot appear on a module element.
     
         public class BB<T> extends A {
         ~~~~~~
-!!! 'public' modifier cannot appear on a module element.
+!!! error TS1044: 'public' modifier cannot appear on a module element.
             id: number;
         }
     }
@@ -16,20 +39,20 @@
     module Y2 {
         public class AA<T> { s: T }
         ~~~~~~
-!!! 'public' modifier cannot appear on a module element.
+!!! error TS1044: 'public' modifier cannot appear on a module element.
         public interface I { id: number }
         ~~~~~~
-!!! 'public' modifier cannot appear on a module element.
+!!! error TS1044: 'public' modifier cannot appear on a module element.
     
         public class B extends AA<string> implements I { id: number }
         ~~~~~~
-!!! 'public' modifier cannot appear on a module element.
+!!! error TS1044: 'public' modifier cannot appear on a module element.
     }
     
     module Y3 {
         public module Module {
         ~~~~~~
-!!! 'public' modifier cannot appear on a module element.
+!!! error TS1044: 'public' modifier cannot appear on a module element.
             class A { s: string }
         }
     }
@@ -37,17 +60,17 @@
     module Y4 {
         public enum Color { Blue, Red }
         ~~~~~~
-!!! 'public' modifier cannot appear on a module element.
+!!! error TS1044: 'public' modifier cannot appear on a module element.
     }
     
     module YY {
         private class A { s: string }
         ~~~~~~~
-!!! 'private' modifier cannot appear on a module element.
+!!! error TS1044: 'private' modifier cannot appear on a module element.
     
         private class BB<T> extends A {
         ~~~~~~~
-!!! 'private' modifier cannot appear on a module element.
+!!! error TS1044: 'private' modifier cannot appear on a module element.
             id: number;
         }
     }
@@ -55,20 +78,20 @@
     module YY2 {
         private class AA<T> { s: T }
         ~~~~~~~
-!!! 'private' modifier cannot appear on a module element.
+!!! error TS1044: 'private' modifier cannot appear on a module element.
         private interface I { id: number }
         ~~~~~~~
-!!! 'private' modifier cannot appear on a module element.
+!!! error TS1044: 'private' modifier cannot appear on a module element.
     
         private class B extends AA<string> implements I { id: number }
         ~~~~~~~
-!!! 'private' modifier cannot appear on a module element.
+!!! error TS1044: 'private' modifier cannot appear on a module element.
     }
     
     module YY3 {
         private module Module {
         ~~~~~~~
-!!! 'private' modifier cannot appear on a module element.
+!!! error TS1044: 'private' modifier cannot appear on a module element.
             class A { s: string }
         }
     }
@@ -76,18 +99,18 @@
     module YY4 {
         private enum Color { Blue, Red }
         ~~~~~~~
-!!! 'private' modifier cannot appear on a module element.
+!!! error TS1044: 'private' modifier cannot appear on a module element.
     }
     
     
     module YYY {
         static class A { s: string }
         ~~~~~~
-!!! 'static' modifier cannot appear on a module element.
+!!! error TS1044: 'static' modifier cannot appear on a module element.
     
         static class BB<T> extends A {
         ~~~~~~
-!!! 'static' modifier cannot appear on a module element.
+!!! error TS1044: 'static' modifier cannot appear on a module element.
             id: number;
         }
     }
@@ -95,20 +118,20 @@
     module YYY2 {
         static class AA<T> { s: T }
         ~~~~~~
-!!! 'static' modifier cannot appear on a module element.
+!!! error TS1044: 'static' modifier cannot appear on a module element.
         static interface I { id: number }
         ~~~~~~
-!!! 'static' modifier cannot appear on a module element.
+!!! error TS1044: 'static' modifier cannot appear on a module element.
     
         static class B extends AA<string> implements I { id: number }
         ~~~~~~
-!!! 'static' modifier cannot appear on a module element.
+!!! error TS1044: 'static' modifier cannot appear on a module element.
     }
     
     module YYY3 {
         static module Module {
         ~~~~~~
-!!! 'static' modifier cannot appear on a module element.
+!!! error TS1044: 'static' modifier cannot appear on a module element.
             class A { s: string }
         }
     }
@@ -116,6 +139,6 @@
     module YYY4 {
         static enum Color { Blue, Red }
         ~~~~~~
-!!! 'static' modifier cannot appear on a module element.
+!!! error TS1044: 'static' modifier cannot appear on a module element.
     }
     
