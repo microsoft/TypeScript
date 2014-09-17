@@ -1,3 +1,14 @@
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(60,10): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(70,11): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(80,17): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(88,23): error TS1005: ';' expected.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(88,38): error TS1005: ';' expected.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(106,3): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(106,35): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(126,6): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(128,9): error TS1015: Parameter cannot have question mark and initializer.
+
+
 ==== tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts (9 errors) ====
     // valid
     
@@ -60,7 +71,7 @@
     false ? (arg?: number) => 46 : null;
     false ? (arg?: number = 0) => 47 : null;
              ~~~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
     false ? (...arg: number[]) => 48 : null;
     
     // in ternary exression within paren
@@ -72,7 +83,7 @@
     false ? ((arg?: number) => 56) : null;
     false ? ((arg?: number = 0) => 57) : null;
               ~~~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
     false ? ((...arg: number[]) => 58) : null;
     
     // ternary exression's else clause
@@ -84,7 +95,7 @@
     false ? null : (arg?: number) => 66;
     false ? null : (arg?: number = 0) => 67;
                     ~~~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
     false ? null : (...arg: number[]) => 68;
     
     
@@ -94,9 +105,9 @@
     //multiple levels
     (a?) => { return a; } ? (b)=>(c)=>81 : (c)=>(d)=>82;
                           ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                                          ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
     
     
     // In Expressions
@@ -116,9 +127,9 @@
     ((arg:number = 1) => 0) + '' + ((arg:number = 2) => 105);
     ((arg?:number = 1) => 0) + '' + ((arg?:number = 2) => 106);
       ~~~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
                                       ~~~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
     ((...arg:number[]) => 0) + '' + ((...arg:number[]) => 107);
     ((arg1, arg2?) => 0) + '' + ((arg1,arg2?) => 108);
     ((arg1, ...arg2:number[]) => 0) + '' + ((arg1, ...arg2:number[]) => 108);
@@ -140,11 +151,11 @@
         (a = 0) => 117, 
         (a?: number = 0) => 118, 
          ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
         (...a: number[]) => 119, 
         (a, b? = 0, ...c: number[]) => 120,
             ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
         (a) => (b) => (c) => 121,
         false? (a) => 0 : (b) => 122
     );

@@ -1,5 +1,8 @@
+tests/cases/compiler/assignmentToParenthesizedExpression1.ts(2,1): error TS2364: Invalid left-hand side of assignment expression.
+
+
 ==== tests/cases/compiler/assignmentToParenthesizedExpression1.ts (1 errors) ====
     var x;
     (1, x)=0;
     ~~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.

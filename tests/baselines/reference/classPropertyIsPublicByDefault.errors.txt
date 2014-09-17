@@ -1,21 +1,27 @@
+tests/cases/conformance/classes/members/accessibility/classPropertyIsPublicByDefault.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/classPropertyIsPublicByDefault.ts(4,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/classPropertyIsPublicByDefault.ts(8,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/classPropertyIsPublicByDefault.ts(9,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/conformance/classes/members/accessibility/classPropertyIsPublicByDefault.ts (4 errors) ====
     class C {
         x: string;
         get y() { return null; }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         set y(x) { }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         foo() { }
     
         static a: string;
         static get b() { return null; }
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         static set b(x) { }
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         static foo() { }
     }
     

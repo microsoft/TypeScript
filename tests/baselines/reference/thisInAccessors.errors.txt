@@ -1,15 +1,23 @@
+tests/cases/compiler/thisInAccessors.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/thisInAccessors.ts(7,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/thisInAccessors.ts(13,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/thisInAccessors.ts(16,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/thisInAccessors.ts(23,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/thisInAccessors.ts(27,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/thisInAccessors.ts (6 errors) ====
     // this capture only in getter
     class GetterOnly {
         get Value() {
             ~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var fn = () => this;
             return '';
         }
         set Value(val) {
             ~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         }
     }
     
@@ -17,12 +25,12 @@
     class SetterOnly {
         get Value() {
             ~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return '';
         }
         set Value(val) {
             ~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var fn = () => this;
         }
     }
@@ -31,13 +39,13 @@
     class GetterAndSetter {
         get Value() {
             ~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var fn = () => this;
             return '';
         }
         set Value(val) {
             ~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var fn = () => this;
         }
     }

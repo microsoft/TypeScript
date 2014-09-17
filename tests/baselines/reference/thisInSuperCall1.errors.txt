@@ -1,3 +1,6 @@
+tests/cases/compiler/thisInSuperCall1.ts(7,15): error TS2332: 'this' cannot be referenced in current location.
+
+
 ==== tests/cases/compiler/thisInSuperCall1.ts (1 errors) ====
     class Base { 
         constructor(a: any) {}
@@ -7,7 +10,7 @@
         constructor(public x: number) {
             super(this);
                   ~~~~
-!!! 'this' cannot be referenced in current location.
+!!! error TS2332: 'this' cannot be referenced in current location.
         }
     }
     

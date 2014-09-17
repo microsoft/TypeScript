@@ -1,9 +1,12 @@
+tests/cases/compiler/anyDeclare.ts(4,14): error TS2300: Duplicate identifier 'myFn'.
+
+
 ==== tests/cases/compiler/anyDeclare.ts (1 errors) ====
     declare var x: any;
     module myMod {
         var myFn;
         function myFn() {  }
                  ~~~~
-!!! Duplicate identifier 'myFn'.
+!!! error TS2300: Duplicate identifier 'myFn'.
     }
     

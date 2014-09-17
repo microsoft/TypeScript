@@ -1,3 +1,6 @@
+tests/cases/compiler/qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts(5,20): error TS2305: Module 'Alpha' has no exported member 'x'.
+
+
 ==== tests/cases/compiler/qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts (1 errors) ====
     module Alpha {
         export var x = 100;
@@ -5,5 +8,5 @@
     
     class Beta extends Alpha.x {
                        ~~~~~~~
-!!! Module 'Alpha' has no exported member 'x'.
+!!! error TS2305: Module 'Alpha' has no exported member 'x'.
     }

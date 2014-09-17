@@ -1,3 +1,9 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithSpecializedSignatures.ts(70,15): error TS2429: Interface 'I2' incorrectly extends interface 'Base2':
+  Types of property 'a' are incompatible:
+    Type '(x: string) => string' is not assignable to type '{ (x: 'a'): number; (x: string): number; }':
+      Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithSpecializedSignatures.ts (1 errors) ====
     // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results
     
@@ -70,10 +76,10 @@
         // S's
         interface I2 extends Base2 {
                   ~~
-!!! Interface 'I2' incorrectly extends interface 'Base2':
-!!!   Types of property 'a' are incompatible:
-!!!     Type '(x: string) => string' is not assignable to type '{ (x: 'a'): number; (x: string): number; }':
-!!!       Type 'string' is not assignable to type 'number'.
+!!! error TS2429: Interface 'I2' incorrectly extends interface 'Base2':
+!!! error TS2429:   Types of property 'a' are incompatible:
+!!! error TS2429:     Type '(x: string) => string' is not assignable to type '{ (x: 'a'): number; (x: string): number; }':
+!!! error TS2429:       Type 'string' is not assignable to type 'number'.
             // N's
             a: (x: string) => string; // error because base returns non-void;
         }

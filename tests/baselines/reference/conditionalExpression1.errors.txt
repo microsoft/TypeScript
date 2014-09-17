@@ -1,6 +1,10 @@
+tests/cases/compiler/conditionalExpression1.ts(1,5): error TS2323: Type '{}' is not assignable to type 'boolean'.
+tests/cases/compiler/conditionalExpression1.ts(1,19): error TS2367: No best common type exists between 'number' and 'string'.
+
+
 ==== tests/cases/compiler/conditionalExpression1.ts (2 errors) ====
     var x: boolean = (true ? 1 : ""); // should be an error
         ~
-!!! Type '{}' is not assignable to type 'boolean'.
+!!! error TS2323: Type '{}' is not assignable to type 'boolean'.
                       ~~~~~~~~~~~~~
-!!! No best common type exists between 'number' and 'string'.
+!!! error TS2367: No best common type exists between 'number' and 'string'.

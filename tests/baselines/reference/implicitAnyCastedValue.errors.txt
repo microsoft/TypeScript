@@ -1,3 +1,14 @@
+tests/cases/compiler/implicitAnyCastedValue.ts(12,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/implicitAnyCastedValue.ts(28,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/implicitAnyCastedValue.ts(32,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/implicitAnyCastedValue.ts(10,5): error TS7008: Member 'bar' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyCastedValue.ts(11,5): error TS7008: Member 'foo' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyCastedValue.ts(26,5): error TS7008: Member 'getValue' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyCastedValue.ts(41,1): error TS7010: 'notCastedNull', which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/compiler/implicitAnyCastedValue.ts(53,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyCastedValue.ts(62,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
+
+
 ==== tests/cases/compiler/implicitAnyCastedValue.ts (9 errors) ====
     var x = function () {
         return <any>0;  // this should not be an error
@@ -10,13 +21,13 @@
     class C {
         bar = null;  // this should be an error
         ~~~~~~~~~~~
-!!! Member 'bar' implicitly has an 'any' type.
+!!! error TS7008: Member 'bar' implicitly has an 'any' type.
         foo = undefined;  // this should be an error
         ~~~~~~~~~~~~~~~~
-!!! Member 'foo' implicitly has an 'any' type.
+!!! error TS7008: Member 'foo' implicitly has an 'any' type.
         public get tempVar() {
                    ~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return <any>0;  // this should not be an error
         }
     
@@ -32,17 +43,17 @@
     class C1 {
         getValue = null;  // this should be an error
         ~~~~~~~~~~~~~~~~
-!!! Member 'getValue' implicitly has an 'any' type.
+!!! error TS7008: Member 'getValue' implicitly has an 'any' type.
     
         public get castedGet() {
                    ~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return <any>this.getValue;  // this should not be an error
         }
     
         public get notCastedGet() {
                    ~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return this.getValue;  // this should not be an error
         }
     }
@@ -57,7 +68,7 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
     ~
-!!! 'notCastedNull', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'notCastedNull', which lacks return-type annotation, implicitly has an 'any' return type.
     
     function returnTypeBar(): any {
         return null;  // this should not be an error
@@ -69,7 +80,7 @@
     
     function multipleRets1(x) {    // this should not be an error
                            ~
-!!! Parameter 'x' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
         if (x) {
             return <any>0;
         }
@@ -80,7 +91,7 @@
     
     function multipleRets2(x) {    // this should not be an error
                            ~
-!!! Parameter 'x' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
         if (x) {
             return null;
         }

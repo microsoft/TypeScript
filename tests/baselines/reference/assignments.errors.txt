@@ -1,3 +1,11 @@
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(11,1): error TS2304: Cannot find name 'M'.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(14,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(17,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(18,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(21,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(31,1): error TS2304: Cannot find name 'I'.
+
+
 ==== tests/cases/conformance/expressions/valuesAndReferences/assignments.ts (6 errors) ====
     // In this file:
     //  Assign to a module
@@ -11,25 +19,25 @@
     module M { }
     M = null; // Error
     ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.
     
     class C { }
     C = null; // Error
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     enum E { A }
     E = null; // Error
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     E.A = null; // OK per spec, Error per implementation (509581)
     ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     function fn() { }
     fn = null; // Should be error
     ~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     var v;
     v = null; // OK
@@ -41,4 +49,4 @@
     interface I { }
     I = null; // Error
     ~
-!!! Cannot find name 'I'.
+!!! error TS2304: Cannot find name 'I'.

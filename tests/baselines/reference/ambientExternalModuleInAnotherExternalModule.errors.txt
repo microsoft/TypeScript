@@ -1,3 +1,7 @@
+tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(5,16): error TS2435: Ambient external modules cannot be nested in other modules.
+tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(10,22): error TS2307: Cannot find external module 'ext'.
+
+
 ==== tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts (2 errors) ====
     
     class D { }
@@ -5,12 +9,12 @@
     
     declare module "ext" {
                    ~~~~~
-!!! Ambient external modules cannot be nested in other modules.
+!!! error TS2435: Ambient external modules cannot be nested in other modules.
         export class C { }
     }
     
     // Cannot resolve this ext module reference
     import ext = require("ext");
                          ~~~~~
-!!! Cannot find external module 'ext'.
+!!! error TS2307: Cannot find external module 'ext'.
     var x = ext;

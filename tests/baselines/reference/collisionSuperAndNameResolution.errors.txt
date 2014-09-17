@@ -1,3 +1,6 @@
+tests/cases/compiler/collisionSuperAndNameResolution.ts(9,21): error TS2402: Expression resolves to '_super' that compiler uses to capture base class reference.
+
+
 ==== tests/cases/compiler/collisionSuperAndNameResolution.ts (1 errors) ====
     var console: {
         log(message: any);
@@ -9,6 +12,6 @@
         x() {
             console.log(_super); // Error as this doesnt not resolve to user defined _super
                         ~~~~~~
-!!! Expression resolves to '_super' that compiler uses to capture base class reference.
+!!! error TS2402: Expression resolves to '_super' that compiler uses to capture base class reference.
         }
     }

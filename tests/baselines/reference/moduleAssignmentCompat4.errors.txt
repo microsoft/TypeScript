@@ -1,3 +1,7 @@
+tests/cases/compiler/moduleAssignmentCompat4.ts(12,8): error TS2304: Cannot find name 'A'.
+tests/cases/compiler/moduleAssignmentCompat4.ts(13,8): error TS2304: Cannot find name 'B'.
+
+
 ==== tests/cases/compiler/moduleAssignmentCompat4.ts (2 errors) ====
     module A {
        export module M {
@@ -12,10 +16,10 @@
     
     var a: A;
            ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.
     var b: B;
            ~
-!!! Cannot find name 'B'.
+!!! error TS2304: Cannot find name 'B'.
     
     a = b;
     b = a; // error

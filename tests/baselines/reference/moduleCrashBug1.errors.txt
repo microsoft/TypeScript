@@ -1,3 +1,6 @@
+tests/cases/compiler/moduleCrashBug1.ts(18,9): error TS2304: Cannot find name '_modes'.
+
+
 ==== tests/cases/compiler/moduleCrashBug1.ts (1 errors) ====
     module _modes {
      export interface IMode {
@@ -18,7 +21,7 @@
     
     var m : _modes;
             ~~~~~~
-!!! Cannot find name '_modes'.
+!!! error TS2304: Cannot find name '_modes'.
     
     
     

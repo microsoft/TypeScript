@@ -1,3 +1,6 @@
+tests/cases/compiler/moduleNewExportBug.ts(10,9): error TS2305: Module 'mod1' has no exported member 'C'.
+
+
 ==== tests/cases/compiler/moduleNewExportBug.ts (1 errors) ====
     module mod1 {
     	interface mInt {
@@ -10,7 +13,7 @@
     
     var c : mod1.C; // ERROR: C should not be visible
             ~~~~~~
-!!! Module 'mod1' has no exported member 'C'.
+!!! error TS2305: Module 'mod1' has no exported member 'C'.
     
     
     

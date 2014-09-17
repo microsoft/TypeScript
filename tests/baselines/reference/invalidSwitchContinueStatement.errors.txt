@@ -1,3 +1,6 @@
+tests/cases/conformance/statements/continueStatements/invalidSwitchContinueStatement.ts(5,9): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+
+
 ==== tests/cases/conformance/statements/continueStatements/invalidSwitchContinueStatement.ts (1 errors) ====
     // continue is not allowed in a switch statement
     
@@ -5,6 +8,6 @@
         case 5:
             continue;
             ~~~~~~~~~
-!!! A 'continue' statement can only be used within an enclosing iteration statement.
+!!! error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
     }
     

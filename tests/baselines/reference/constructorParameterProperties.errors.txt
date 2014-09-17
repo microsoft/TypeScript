@@ -1,3 +1,8 @@
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(8,10): error TS2341: Property 'C.x' is inaccessible.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(17,10): error TS2341: Property 'D.x' is inaccessible.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(18,12): error TS2339: Property 'a' does not exist on type 'D<string>'.
+
+
 ==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts (3 errors) ====
     class C {
         y: string;
@@ -8,7 +13,7 @@
     var r = c.y;
     var r2 = c.x; // error
              ~~~
-!!! Property 'C.x' is inaccessible.
+!!! error TS2341: Property 'C.x' is inaccessible.
     
     class D<T> {
         y: T;
@@ -19,7 +24,7 @@
     var r = d.y;
     var r2 = d.x; // error
              ~~~
-!!! Property 'D.x' is inaccessible.
+!!! error TS2341: Property 'D.x' is inaccessible.
     var r3 = d.a; // error
                ~
-!!! Property 'a' does not exist on type 'D<string>'.
+!!! error TS2339: Property 'a' does not exist on type 'D<string>'.

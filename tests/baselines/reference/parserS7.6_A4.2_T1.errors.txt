@@ -1,3 +1,38 @@
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(14,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(18,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(22,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(26,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(30,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(34,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(38,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(42,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(46,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(50,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(54,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(58,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(62,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(66,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(70,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(74,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(78,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(82,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(86,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(90,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(94,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(98,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(102,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(106,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(110,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(114,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(118,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(122,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(126,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(130,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(134,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(138,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(142,3): error TS2304: Cannot find name '$ERROR'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts (33 errors) ====
     // Copyright 2009 the Sputnik authors.  All rights reserved.
     // This code is governed by the BSD license found in the LICENSE file.
@@ -14,199 +49,199 @@
     if (А !== 1) {
       $ERROR('#А');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0411 = 1;
     if (Б !== 1) {
       $ERROR('#Б');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0412 = 1;
     if (В !== 1) {
       $ERROR('#В');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0413 = 1;
     if (Г !== 1) {
       $ERROR('#Г');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0414 = 1;
     if (Д !== 1) {
       $ERROR('#Д');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0415 = 1;
     if (Е !== 1) {
       $ERROR('#Е');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0416 = 1;
     if (Ж !== 1) {
       $ERROR('#Ж');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0417 = 1;
     if (З !== 1) {
       $ERROR('#З');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0418 = 1;
     if (И !== 1) {
       $ERROR('#И');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0419 = 1;
     if (Й !== 1) {
       $ERROR('#Й');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u041A = 1;
     if (К !== 1) {
       $ERROR('#К');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u041B = 1;
     if (Л !== 1) {
       $ERROR('#Л');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u041C = 1;
     if (М !== 1) {
       $ERROR('#М');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u041D = 1;
     if (Н !== 1) {
       $ERROR('#Н');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u041E = 1;
     if (О !== 1) {
       $ERROR('#О');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u041F = 1;
     if (П !== 1) {
       $ERROR('#П');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0420 = 1;
     if (Р !== 1) {
       $ERROR('#Р');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0421 = 1;
     if (С !== 1) {
       $ERROR('#С');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0422 = 1;
     if (Т !== 1) {
       $ERROR('#Т');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0423 = 1;
     if (У !== 1) {
       $ERROR('#У');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0424 = 1;
     if (Ф !== 1) {
       $ERROR('#Ф');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0425 = 1;
     if (Х !== 1) {
       $ERROR('#Х');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0426 = 1;
     if (Ц !== 1) {
       $ERROR('#Ц');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0427 = 1;
     if (Ч !== 1) {
       $ERROR('#Ч');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0428 = 1;
     if (Ш !== 1) {
       $ERROR('#Ш');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0429 = 1;
     if (Щ !== 1) {
       $ERROR('#Щ');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u042A = 1;
     if (Ъ !== 1) {
       $ERROR('#Ъ');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u042B = 1;
     if (Ы !== 1) {
       $ERROR('#Ы');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u042C = 1;
     if (Ь !== 1) {
       $ERROR('#Ь');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u042D = 1;
     if (Э !== 1) {
       $ERROR('#Э');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u042E = 1;
     if (Ю !== 1) {
       $ERROR('#Ю');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u042F = 1;
     if (Я !== 1) {
       $ERROR('#Я');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     var \u0401 = 1;
     if (Ё !== 1) {
       $ERROR('#Ё');
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     
     

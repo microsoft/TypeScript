@@ -1,3 +1,7 @@
+tests/cases/compiler/superWithTypeArgument.ts(7,14): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superWithTypeArgument.ts(7,9): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/compiler/superWithTypeArgument.ts (2 errors) ====
     class C {
         
@@ -7,8 +11,8 @@
         constructor() {
             super<T>();
                  ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
             ~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
         }
     }

@@ -1,3 +1,7 @@
+tests/cases/compiler/genericSpecializations2.ts(8,9): error TS2368: Type parameter name cannot be 'string'
+tests/cases/compiler/genericSpecializations2.ts(12,9): error TS2368: Type parameter name cannot be 'string'
+
+
 ==== tests/cases/compiler/genericSpecializations2.ts (2 errors) ====
     class IFoo<T> {
         foo<T>(x: T): T { // no error on implementors because IFoo's T is different from foo's T
@@ -8,13 +12,13 @@
     class IntFooBad implements IFoo<number> {
         foo<string>(x: string): string { return null; }
             ~~~~~~
-!!! Type parameter name cannot be 'string'
+!!! error TS2368: Type parameter name cannot be 'string'
     }
     
     class StringFoo2 implements IFoo<string> {
         foo<string>(x: string): string { return null; }
             ~~~~~~
-!!! Type parameter name cannot be 'string'
+!!! error TS2368: Type parameter name cannot be 'string'
     }
     
     class StringFoo3 implements IFoo<string> {

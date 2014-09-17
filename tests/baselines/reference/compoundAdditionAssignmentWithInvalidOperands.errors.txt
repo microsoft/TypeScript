@@ -1,3 +1,32 @@
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(6,1): error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'void'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(7,1): error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'boolean'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(8,1): error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'number'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(9,1): error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'E'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(10,1): error TS2365: Operator '+=' cannot be applied to types 'boolean' and '{}'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(11,1): error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'boolean'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(12,1): error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'boolean'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(15,1): error TS2365: Operator '+=' cannot be applied to types '{}' and 'void'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(16,1): error TS2365: Operator '+=' cannot be applied to types '{}' and 'boolean'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(17,1): error TS2365: Operator '+=' cannot be applied to types '{}' and 'number'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(18,1): error TS2365: Operator '+=' cannot be applied to types '{}' and 'E'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(19,1): error TS2365: Operator '+=' cannot be applied to types '{}' and '{}'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(20,1): error TS2365: Operator '+=' cannot be applied to types '{}' and '{}'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(21,1): error TS2365: Operator '+=' cannot be applied to types '{}' and '{}'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(24,1): error TS2365: Operator '+=' cannot be applied to types 'void' and 'void'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(25,1): error TS2365: Operator '+=' cannot be applied to types 'void' and 'boolean'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(26,1): error TS2365: Operator '+=' cannot be applied to types 'void' and 'number'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(27,1): error TS2365: Operator '+=' cannot be applied to types 'void' and 'E'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(28,1): error TS2365: Operator '+=' cannot be applied to types 'void' and '{}'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(29,1): error TS2365: Operator '+=' cannot be applied to types 'void' and 'void'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(30,1): error TS2365: Operator '+=' cannot be applied to types 'void' and 'void'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(33,1): error TS2365: Operator '+=' cannot be applied to types 'number' and 'void'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(34,1): error TS2365: Operator '+=' cannot be applied to types 'number' and 'boolean'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(35,1): error TS2365: Operator '+=' cannot be applied to types 'number' and '{}'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(38,1): error TS2365: Operator '+=' cannot be applied to types 'E' and 'void'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(39,1): error TS2365: Operator '+=' cannot be applied to types 'E' and 'boolean'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts(40,1): error TS2365: Operator '+=' cannot be applied to types 'E' and '{}'.
+
+
 ==== tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts (27 errors) ====
     enum E { a, b }
     
@@ -6,90 +35,90 @@
     var x1: boolean;
     x1 += a;
     ~~~~~~~
-!!! Operator '+=' cannot be applied to types 'boolean' and 'void'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'void'.
     x1 += true;
     ~~~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'boolean' and 'boolean'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'boolean'.
     x1 += 0;
     ~~~~~~~
-!!! Operator '+=' cannot be applied to types 'boolean' and 'number'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'number'.
     x1 += E.a;
     ~~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'boolean' and 'E'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'E'.
     x1 += {};
     ~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'boolean' and '{}'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'boolean' and '{}'.
     x1 += null;
     ~~~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'boolean' and 'boolean'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'boolean'.
     x1 += undefined;
     ~~~~~~~~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'boolean' and 'boolean'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'boolean'.
     
     var x2: {};
     x2 += a;
     ~~~~~~~
-!!! Operator '+=' cannot be applied to types '{}' and 'void'.
+!!! error TS2365: Operator '+=' cannot be applied to types '{}' and 'void'.
     x2 += true;
     ~~~~~~~~~~
-!!! Operator '+=' cannot be applied to types '{}' and 'boolean'.
+!!! error TS2365: Operator '+=' cannot be applied to types '{}' and 'boolean'.
     x2 += 0;
     ~~~~~~~
-!!! Operator '+=' cannot be applied to types '{}' and 'number'.
+!!! error TS2365: Operator '+=' cannot be applied to types '{}' and 'number'.
     x2 += E.a;
     ~~~~~~~~~
-!!! Operator '+=' cannot be applied to types '{}' and 'E'.
+!!! error TS2365: Operator '+=' cannot be applied to types '{}' and 'E'.
     x2 += {};
     ~~~~~~~~
-!!! Operator '+=' cannot be applied to types '{}' and '{}'.
+!!! error TS2365: Operator '+=' cannot be applied to types '{}' and '{}'.
     x2 += null;
     ~~~~~~~~~~
-!!! Operator '+=' cannot be applied to types '{}' and '{}'.
+!!! error TS2365: Operator '+=' cannot be applied to types '{}' and '{}'.
     x2 += undefined;
     ~~~~~~~~~~~~~~~
-!!! Operator '+=' cannot be applied to types '{}' and '{}'.
+!!! error TS2365: Operator '+=' cannot be applied to types '{}' and '{}'.
     
     var x3: void;
     x3 += a;
     ~~~~~~~
-!!! Operator '+=' cannot be applied to types 'void' and 'void'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'void' and 'void'.
     x3 += true;
     ~~~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'void' and 'boolean'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'void' and 'boolean'.
     x3 += 0;
     ~~~~~~~
-!!! Operator '+=' cannot be applied to types 'void' and 'number'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'void' and 'number'.
     x3 += E.a;
     ~~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'void' and 'E'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'void' and 'E'.
     x3 += {};
     ~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'void' and '{}'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'void' and '{}'.
     x3 += null;
     ~~~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'void' and 'void'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'void' and 'void'.
     x3 += undefined;
     ~~~~~~~~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'void' and 'void'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'void' and 'void'.
     
     var x4: number;
     x4 += a;
     ~~~~~~~
-!!! Operator '+=' cannot be applied to types 'number' and 'void'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'number' and 'void'.
     x4 += true;
     ~~~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'number' and 'boolean'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'number' and 'boolean'.
     x4 += {};
     ~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'number' and '{}'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'number' and '{}'.
     
     var x5: E;
     x5 += a;
     ~~~~~~~
-!!! Operator '+=' cannot be applied to types 'E' and 'void'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'E' and 'void'.
     x5 += true;
     ~~~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'E' and 'boolean'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'E' and 'boolean'.
     x5 += {};
     ~~~~~~~~
-!!! Operator '+=' cannot be applied to types 'E' and '{}'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'E' and '{}'.

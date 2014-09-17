@@ -1,3 +1,6 @@
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments2.ts(31,20): error TS2345: Argument of type 'new <T>(x: T, y: T) => string' is not assignable to parameter of type '{ new (x: any): string; new (x: any, y?: any): string; }'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments2.ts (1 errors) ====
     // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
     // Inferences are made quadratic-pairwise to and from these overload sets
@@ -31,7 +34,7 @@
         var b: { new <T>(x: T, y: T): string };
         var r10 = foo6(b); // error
                        ~
-!!! Argument of type 'new <T>(x: T, y: T) => string' is not assignable to parameter of type '{ new (x: any): string; new (x: any, y?: any): string; }'.
+!!! error TS2345: Argument of type 'new <T>(x: T, y: T) => string' is not assignable to parameter of type '{ new (x: any): string; new (x: any, y?: any): string; }'.
     
         function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
             return cb;

@@ -1,3 +1,7 @@
+tests/cases/conformance/internalModules/moduleDeclarations/InvalidNonInstantiatedModule.ts(5,9): error TS2304: Cannot find name 'M'.
+tests/cases/conformance/internalModules/moduleDeclarations/InvalidNonInstantiatedModule.ts(7,15): error TS2304: Cannot find name 'M'.
+
+
 ==== tests/cases/conformance/internalModules/moduleDeclarations/InvalidNonInstantiatedModule.ts (2 errors) ====
     module M {
         export interface Point { x: number; y: number }
@@ -5,9 +9,9 @@
     
     var m = M; // Error, not instantiated can not be used as var
             ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.
     
     var x: typeof M; // Error only a namespace
                   ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.
     

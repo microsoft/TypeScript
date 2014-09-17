@@ -1,8 +1,12 @@
+tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration8.ts(2,12): error TS1030: 'static' modifier already seen.
+tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration8.ts(2,23): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration8.ts (2 errors) ====
     class C {
         static static get Foo() { }
                ~~~~~~
-!!! 'static' modifier already seen.
+!!! error TS1030: 'static' modifier already seen.
                           ~~~
-!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
     }

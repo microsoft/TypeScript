@@ -1,8 +1,11 @@
+tests/cases/compiler/module_augmentExistingAmbientVariable.ts(3,8): error TS2300: Duplicate identifier 'console'.
+
+
 ==== tests/cases/compiler/module_augmentExistingAmbientVariable.ts (1 errors) ====
     declare var console: any;
     
     module console {
            ~~~~~~~
-!!! Duplicate identifier 'console'.
+!!! error TS2300: Duplicate identifier 'console'.
         export var x = 2;
     }

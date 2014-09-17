@@ -1,3 +1,7 @@
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts(14,15): error TS2332: 'this' cannot be referenced in current location.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts(20,21): error TS2332: 'this' cannot be referenced in current location.
+
+
 ==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts (2 errors) ====
     class Base {
         x: string;
@@ -14,7 +18,7 @@
         constructor(public a: string) {
             super(this); // error
                   ~~~~
-!!! 'this' cannot be referenced in current location.
+!!! error TS2332: 'this' cannot be referenced in current location.
         }
     }
     
@@ -22,7 +26,7 @@
         constructor(public a: string) {
             super(() => this); // error
                         ~~~~
-!!! 'this' cannot be referenced in current location.
+!!! error TS2332: 'this' cannot be referenced in current location.
         }
     }
     

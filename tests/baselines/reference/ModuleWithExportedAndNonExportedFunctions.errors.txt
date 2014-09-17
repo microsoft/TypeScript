@@ -1,3 +1,7 @@
+tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts(28,13): error TS2339: Property 'fn2' does not exist on type 'typeof A'.
+tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts(29,14): error TS2339: Property 'fng2' does not exist on type 'typeof A'.
+
+
 ==== tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts (2 errors) ====
     module A {
     
@@ -28,7 +32,7 @@
     // these should be errors since the functions are not exported
     var fn2 = A.fn2;
                 ~~~
-!!! Property 'fn2' does not exist on type 'typeof A'.
+!!! error TS2339: Property 'fn2' does not exist on type 'typeof A'.
     var fng2 = A.fng2;
                  ~~~~
-!!! Property 'fng2' does not exist on type 'typeof A'.
+!!! error TS2339: Property 'fng2' does not exist on type 'typeof A'.

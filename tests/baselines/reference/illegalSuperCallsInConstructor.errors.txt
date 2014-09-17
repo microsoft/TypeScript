@@ -1,3 +1,13 @@
+tests/cases/compiler/illegalSuperCallsInConstructor.ts(11,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/illegalSuperCallsInConstructor.ts(15,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/illegalSuperCallsInConstructor.ts(6,5): error TS2377: Constructors for derived classes must contain a 'super' call.
+tests/cases/compiler/illegalSuperCallsInConstructor.ts(7,24): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
+tests/cases/compiler/illegalSuperCallsInConstructor.ts(8,26): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
+tests/cases/compiler/illegalSuperCallsInConstructor.ts(9,32): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
+tests/cases/compiler/illegalSuperCallsInConstructor.ts(12,17): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
+tests/cases/compiler/illegalSuperCallsInConstructor.ts(16,17): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
+
+
 ==== tests/cases/compiler/illegalSuperCallsInConstructor.ts (8 errors) ====
     class Base {
         x: string;
@@ -9,42 +19,42 @@
             var r2 = () => super();
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                            ~~~~~
-!!! Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
             var r3 = () => { super(); }
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                              ~~~~~
-!!! Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
             var r4 = function () { super(); }
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                    ~~~~~
-!!! Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
             var r5 = {
     ~~~~~~~~~~~~~~~~~~
                 get foo() {
                     ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     ~~~~~~~~~~~~~~~~~~~~~~~
                     super();
     ~~~~~~~~~~~~~~~~~~~~~~~~
                     ~~~~~
-!!! Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
                     return 1;
     ~~~~~~~~~~~~~~~~~~~~~~~~~
                 },
     ~~~~~~~~~~~~~~
                 set foo(v: number) {
                     ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     super();
     ~~~~~~~~~~~~~~~~~~~~~~~~
                     ~~~~~
-!!! Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
                 }
     ~~~~~~~~~~~~~
             }
     ~~~~~~~~~
         }
     ~~~~~
-!!! Constructors for derived classes must contain a 'super' call.
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }

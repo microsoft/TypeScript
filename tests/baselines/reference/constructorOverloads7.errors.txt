@@ -1,3 +1,7 @@
+tests/cases/compiler/constructorOverloads7.ts(15,10): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/constructorOverloads7.ts(22,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+
+
 ==== tests/cases/compiler/constructorOverloads7.ts (2 errors) ====
     declare class Point
     {
@@ -15,7 +19,7 @@
     // to be Point and return type is inferred to be void
     function Point(x, y) {
              ~~~~~
-!!! Duplicate identifier 'Point'.
+!!! error TS2300: Duplicate identifier 'Point'.
         this.x = x;
         this.y = y;
     
@@ -24,7 +28,7 @@
     
     declare function EF1(a:number, b:number):number;
                      ~~~
-!!! Overload signatures must all be ambient or non-ambient.
+!!! error TS2384: Overload signatures must all be ambient or non-ambient.
     
     function EF1(a,b) { return a+b; }
     

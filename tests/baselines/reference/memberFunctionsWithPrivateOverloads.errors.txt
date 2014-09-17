@@ -1,3 +1,9 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts(43,9): error TS2341: Property 'C.foo' is inaccessible.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts(46,10): error TS2341: Property 'D.foo' is inaccessible.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts(48,10): error TS2341: Property 'C.foo' is inaccessible.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts(49,10): error TS2341: Property 'D.bar' is inaccessible.
+
+
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts (4 errors) ====
     class C {
         private foo(x: number);
@@ -43,16 +49,16 @@
     var c: C;
     var r = c.foo(1); // error
             ~~~~~
-!!! Property 'C.foo' is inaccessible.
+!!! error TS2341: Property 'C.foo' is inaccessible.
     
     var d: D<number>;
     var r2 = d.foo(2); // error
              ~~~~~
-!!! Property 'D.foo' is inaccessible.
+!!! error TS2341: Property 'D.foo' is inaccessible.
     
     var r3 = C.foo(1); // error
              ~~~~~
-!!! Property 'C.foo' is inaccessible.
+!!! error TS2341: Property 'C.foo' is inaccessible.
     var r4 = D.bar(''); // error
              ~~~~~
-!!! Property 'D.bar' is inaccessible.
+!!! error TS2341: Property 'D.bar' is inaccessible.

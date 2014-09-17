@@ -1,3 +1,8 @@
+tests/cases/compiler/inheritanceStaticMembersIncompatible.ts(5,7): error TS2418: Class static side 'typeof b' incorrectly extends base class static side 'typeof a':
+  Types of property 'x' are incompatible:
+    Type 'number' is not assignable to type 'string'.
+
+
 ==== tests/cases/compiler/inheritanceStaticMembersIncompatible.ts (1 errors) ====
     class a {
         static x: string;
@@ -5,8 +10,8 @@
     
     class b extends a {
           ~
-!!! Class static side 'typeof b' incorrectly extends base class static side 'typeof a':
-!!!   Types of property 'x' are incompatible:
-!!!     Type 'number' is not assignable to type 'string'.
+!!! error TS2418: Class static side 'typeof b' incorrectly extends base class static side 'typeof a':
+!!! error TS2418:   Types of property 'x' are incompatible:
+!!! error TS2418:     Type 'number' is not assignable to type 'string'.
         static x: number;
     }
