@@ -154,53 +154,57 @@ module ts {
                     if ((node.flags & NodeFlags.Modifier) === 0) {
                         return undefined;
                     }
-                    return new ts.NavigationBarItem(parameter.name.text, ts.ScriptElementKind.memberVariableElement, getNodeModifiers(node), [getNodeSpan(node)]);
+                    return basicChildItem(node, parameter.name.text, ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.Method:
                     var memberFunction = <MethodDeclaration>node;
-                    return new ts.NavigationBarItem(memberFunction.name.text, ts.ScriptElementKind.memberFunctionElement, getNodeModifiers(node), [getNodeSpan(node)]);
+                    return basicChildItem(node, memberFunction.name.text, ts.ScriptElementKind.memberFunctionElement);
 
                 case SyntaxKind.GetAccessor:
                     var getAccessor = <AccessorDeclaration>node;
-                    return new ts.NavigationBarItem(getAccessor.name.text, ts.ScriptElementKind.memberGetAccessorElement, getNodeModifiers(node), [getNodeSpan(node)]);
+                    return basicChildItem(node, getAccessor.name.text,  ts.ScriptElementKind.memberGetAccessorElement);
 
                 case SyntaxKind.SetAccessor:
                     var setAccessor = <AccessorDeclaration>node;
-                    return new ts.NavigationBarItem(setAccessor.name.text, ts.ScriptElementKind.memberSetAccessorElement, getNodeModifiers(node), [getNodeSpan(node)]);
+                    return basicChildItem(node, setAccessor.name.text,  ts.ScriptElementKind.memberSetAccessorElement);
 
                 case SyntaxKind.IndexSignature:
-                    return new ts.NavigationBarItem("[]", ts.ScriptElementKind.indexSignatureElement, ts.ScriptElementKindModifier.none, [getNodeSpan(node)]);
+                    return basicChildItem(node, "[]",  ts.ScriptElementKind.indexSignatureElement);
 
                 case SyntaxKind.EnumMember:
                     var enumElement = <EnumMember>node;
-                    return new ts.NavigationBarItem(enumElement.name.text, ts.ScriptElementKind.memberVariableElement, ts.ScriptElementKindModifier.none, [getNodeSpan(node)]);
+                    return basicChildItem(node, enumElement.name.text,  ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.CallSignature:
-                    return new ts.NavigationBarItem("()", ts.ScriptElementKind.callSignatureElement, ts.ScriptElementKindModifier.none, []);
+                    return basicChildItem(node, "()",  ts.ScriptElementKind.callSignatureElement);
 
                 case SyntaxKind.ConstructSignature:
-                    return new ts.NavigationBarItem("new()", ts.ScriptElementKind.constructSignatureElement, ts.ScriptElementKindModifier.none, [getNodeSpan(node)]);
+                    return basicChildItem(node, "new()",  ts.ScriptElementKind.constructSignatureElement);
 
                 case SyntaxKind.Property:
                     var propertySignature = <PropertyDeclaration>node;
-                    return new ts.NavigationBarItem(propertySignature.name.text, ts.ScriptElementKind.memberVariableElement, getNodeModifiers(node), [getNodeSpan(node)]);
+                    return basicChildItem(node, propertySignature.name.text,  ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.FunctionDeclaration:
                     var functionDeclaration = <FunctionDeclaration>node;
                     if (!isTopLevelFunctionDeclaration(functionDeclaration)) {
-                        return new ts.NavigationBarItem(functionDeclaration.name.text, ts.ScriptElementKind.functionElement, getNodeModifiers(node), [getNodeSpan(node)]);
+                        return basicChildItem(node, functionDeclaration.name.text,  ts.ScriptElementKind.functionElement);
                     }
                     break;
 
                 case SyntaxKind.VariableDeclaration:
                     var variableDeclaration = <VariableDeclaration>node;
-                    return new ts.NavigationBarItem(variableDeclaration.name.text, ts.ScriptElementKind.variableElement, ts.ScriptElementKindModifier.none, [getNodeSpan(node)]);
+                    return basicChildItem(node, variableDeclaration.name.text,  ts.ScriptElementKind.variableElement);
 
                 case SyntaxKind.Constructor:
-                    return new ts.NavigationBarItem("constructor", ts.ScriptElementKind.constructorImplementationElement, ts.ScriptElementKindModifier.none, [getNodeSpan(node)]);
+                    return basicChildItem(node, "constructor", ts.ScriptElementKind.constructorImplementationElement);
             }
 
             return undefined;
+        }
+
+        function basicChildItem(node: Node, name: string, scriptElementKind: string): NavigationBarItem {
+            return new NavigationBarItem(name, scriptElementKind, getNodeModifiers(node), [getNodeSpan(node)]);
         }
 
         function createTopLevelItem(node: Node): ts.NavigationBarItem {
