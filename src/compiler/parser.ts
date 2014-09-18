@@ -156,7 +156,7 @@ module ts {
     export function getJsDocComments(node: Declaration, sourceFileOfNode: SourceFile) {
         return filter(getLeadingCommentsOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
 
-        function isJsDocComment(comment: Comment) {
+        function isJsDocComment(comment: CommentRange) {
             // True if the comment starts with '/**' but not if it is '/**/'
             return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
                 sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
@@ -3815,7 +3815,7 @@ module ts {
                 : undefined);
         }
 
-        scanner = createScanner(languageVersion, sourceText, scanError, onComment);
+        scanner = createScanner(languageVersion, ScanMode.ReturnTokensSkipTrivia, sourceText, scanError, onComment);
         var rootNodeFlags: NodeFlags = 0;
         if (fileExtensionIs(filename, ".d.ts")) {
             rootNodeFlags = NodeFlags.DeclarationFile;

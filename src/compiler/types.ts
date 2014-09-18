@@ -12,6 +12,10 @@ module ts {
     export enum SyntaxKind {
         Unknown,
         EndOfFileToken,
+        WhitespaceTrivia,
+        NewLineTrivia,
+        SingleLineCommentTrivia,
+        MultiLineCommentTrivia,
         // Literals
         NumericLiteral,
         StringLiteral,
@@ -524,7 +528,7 @@ module ts {
         filename: string;
     }
 
-    export interface Comment extends TextRange {
+    export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
     }
 

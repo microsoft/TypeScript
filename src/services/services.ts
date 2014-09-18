@@ -75,7 +75,7 @@ module ts {
         update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
-    var scanner: Scanner = createScanner(ScriptTarget.ES5);
+    var scanner: Scanner = createScanner(ScriptTarget.ES5, ScanMode.ReturnTokensSkipTrivia);
 
     var emptyArray: any[] = [];
 
@@ -4070,7 +4070,7 @@ module ts {
                 entries: []
             };
 
-            scanner = createScanner(ScriptTarget.ES5, text, onError, processComment);
+            scanner = createScanner(ScriptTarget.ES5, ScanMode.ReturnTokensSkipTrivia, text, onError, processComment);
 
             var token = SyntaxKind.Unknown;
             do {

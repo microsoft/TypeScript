@@ -316,53 +316,35 @@ module ts {
         return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
     }
 
+    // scanner instance that is solely used to scan trivia
+    var triviaScanner = createScanner(ScriptTarget.ES5, ScanMode.ReturnTriviaStopOnTokens);
+    
     export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
-        while (true) {
-            var ch = text.charCodeAt(pos);
-            switch (ch) {
-                case CharacterCodes.carriageReturn:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) pos++;
-                case CharacterCodes.lineFeed:
-                    pos++;
-                    if (stopAfterLineBreak) return pos;
-                    continue;
-                case CharacterCodes.tab:
-                case CharacterCodes.verticalTab:
-                case CharacterCodes.formFeed:
-                case CharacterCodes.space:
-                    pos++;
-                    continue;
-                case CharacterCodes.slash:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                        pos += 2;
-                        while (pos < text.length) {
-                            if (isLineBreak(text.charCodeAt(pos))) {
-                                break;
-                            }
-                            pos++;
+        triviaScanner.setText(text);
+        triviaScanner.setTextPos(pos);
+        var result = skipTriviaWorker(triviaScanner);
+        triviaScanner.setText(undefined);
+
+        return result;
+
+        function skipTriviaWorker(scanner: Scanner): number {
+            while (true) {
+                var token = scanner.scan();
+                switch(token) {
+                    case SyntaxKind.NewLineTrivia:
+                        if (stopAfterLineBreak) {
+                            return scanner.getTextPos();
                         }
-                        continue;
-                    }
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
-                        pos += 2;
-                        while (pos < text.length) {
-                            if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                                pos += 2;
-                                break;
-                            }
-                            pos++;
-                        }
-                        continue;
-                    }
-                    break;
-                default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
-                        pos++;
-                        continue;
-                    }
-                    break;
+                        break;
+                    case SyntaxKind.SingleLineCommentTrivia:
+                    case SyntaxKind.MultiLineCommentTrivia:
+                    case SyntaxKind.WhitespaceTrivia:
+                        // skip trivia
+                        break;
+                    default:
+                        return scanner.getTokenPos();
+                }
             }
-            return pos;
         }
     }
 
@@ -371,80 +353,57 @@ module ts {
     // between the given position and the next line break are returned. The return value is an array containing a TextRange for each
     // comment. Single-line comment ranges include the beginning '//' characters but not the ending line break. Multi-line comment
     // ranges include the beginning '/* and ending '*/' characters. The return value is undefined if no comments were found.
-    function getCommentRanges(text: string, pos: number, trailing: boolean): Comment[] {
-        var result: Comment[];
-        var collecting = trailing || pos === 0;
-        while (true) {
-            var ch = text.charCodeAt(pos);
-            switch (ch) {
-                case CharacterCodes.carriageReturn:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) pos++;
-                case CharacterCodes.lineFeed:
-                    pos++;
-                    if (trailing) {
-                        return result;
-                    }
-                    collecting = true;
-                    if (result && result.length) {
-                        result[result.length - 1].hasTrailingNewLine = true;
-                    }
-                    continue;
-                case CharacterCodes.tab:
-                case CharacterCodes.verticalTab:
-                case CharacterCodes.formFeed:
-                case CharacterCodes.space:
-                    pos++;
-                    continue;
-                case CharacterCodes.slash:
-                    var nextChar = text.charCodeAt(pos + 1);
-                    var hasTrailingNewLine = false;
-                    if (nextChar === CharacterCodes.slash || nextChar === CharacterCodes.asterisk) {
-                        var startPos = pos;
-                        pos += 2;
-                        if (nextChar === CharacterCodes.slash) {
-                            while (pos < text.length) {
-                                if (isLineBreak(text.charCodeAt(pos))) {
-                                    hasTrailingNewLine = true;
-                                    break;
-                                }
-                                pos++;
-                            }
-                        }
-                        else {
-                            while (pos < text.length) {
-                                if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                                    pos += 2;
-                                    break;
-                                }
-                                pos++;
-                            }
-                        }
-                        if (collecting) {
-                            if (!result) result = [];
-                            result.push({ pos: startPos, end: pos, hasTrailingNewLine: hasTrailingNewLine });
-                        }
-                        continue;
-                    }
-                    break;
-                default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
-                        if (result && result.length && isLineBreak(ch)) {
+    function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
+        triviaScanner.setText(text);
+        triviaScanner.setTextPos(pos);
+        var comments = getCommentRangesWorker(triviaScanner);
+        triviaScanner.setText(undefined);
+
+        return comments;
+
+        function getCommentRangesWorker(scanner: Scanner): CommentRange[] {
+            var result: CommentRange[];
+            var collecting = trailing || scanner.getTextPos() === 0;
+            var lastCommentIsSingleLine = false;
+            while(true) {
+                var token = scanner.scan();
+                switch (token) {
+                    case SyntaxKind.NewLineTrivia:
+                        if (result && result.length && (!trailing || lastCommentIsSingleLine)) {
                             result[result.length - 1].hasTrailingNewLine = true;
                         }
-                        pos++;
-                        continue;
-                    }
-                    break;
+
+                        if (trailing) {
+                            return result;
+                        }
+                        collecting = true;
+                        break;
+                    case SyntaxKind.SingleLineCommentTrivia:
+                    case SyntaxKind.MultiLineCommentTrivia:
+                        if (collecting) {
+                            if (!result) {
+                                result = [];
+                            }
+                            result.push( {pos: scanner.getTokenPos(), end: scanner.getTextPos() });
+                            lastCommentIsSingleLine = token === SyntaxKind.SingleLineCommentTrivia;
+                        }
+                        break;
+                    case SyntaxKind.WhitespaceTrivia:
+                        // skip whitespaces
+                        break;
+                    default:
+                        return result;
+                }
             }
-            return result;
         }
     }
 
-    export function getLeadingComments(text: string, pos: number): Comment[] {
+
+    export function getLeadingComments(text: string, pos: number): CommentRange[] {
         return getCommentRanges(text, pos, /*trailing*/ false);
     }
 
-    export function getTrailingComments(text: string, pos: number): Comment[] {
+    export function getTrailingComments(text: string, pos: number): CommentRange[] {
         return getCommentRanges(text, pos, /*trailing*/ true);
     }
 
@@ -460,7 +419,13 @@ module ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
-    export function createScanner(languageVersion: ScriptTarget, text?: string, onError?: ErrorCallback, onComment?: CommentCallback): Scanner {
+    export enum ScanMode {
+        ReturnTokensSkipTrivia,
+        ReturnTriviaStopOnTokens,
+        ReturnTokensAndTrivia
+    }
+
+    export function createScanner(languageVersion: ScriptTarget, scanMode: ScanMode, text?: string, onError?: ErrorCallback, onComment?: CommentCallback): Scanner {
         var pos: number;       // Current position (end position of text of current token)
         var len: number;       // Length of text
         var startPos: number;  // Start position of whitespace before current token
@@ -694,13 +659,37 @@ module ts {
                     case CharacterCodes.lineFeed:
                     case CharacterCodes.carriageReturn:
                         precedingLineBreak = true;
+                        if (scanMode === ScanMode.ReturnTokensSkipTrivia) {
+                            pos++;
+                            continue;
+                        }
+                        else {
+                            if (ch === CharacterCodes.carriageReturn && pos + 1 < len && text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
+                                // consume both CR and LF
+                                pos += 2;
+                            }
+                            else {
+                                pos++;
+                            }
+                            return token = SyntaxKind.NewLineTrivia;
+                        }
                     case CharacterCodes.tab:
                     case CharacterCodes.verticalTab:
                     case CharacterCodes.formFeed:
                     case CharacterCodes.space:
-                        pos++;
-                        continue;
+                        if (scanMode === ScanMode.ReturnTokensSkipTrivia) {
+                            pos++;
+                            continue;
+                        }
+                        else {
+                            while (pos < len && isWhiteSpace(text.charCodeAt(pos))) {
+                                pos++;
+                            }
+                            return token = SyntaxKind.WhitespaceTrivia;
+                        }
                     case CharacterCodes.exclamation:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
                                 return pos += 3, token = SyntaxKind.ExclamationEqualsEqualsToken;
@@ -710,14 +699,20 @@ module ts {
                         return pos++, token = SyntaxKind.ExclamationToken;
                     case CharacterCodes.doubleQuote:
                     case CharacterCodes.singleQuote:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         tokenValue = scanString();
                         return token = SyntaxKind.StringLiteral;
                     case CharacterCodes.percent:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.PercentEqualsToken;
                         }
                         return pos++, token = SyntaxKind.PercentToken;
                     case CharacterCodes.ampersand:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.ampersand) {
                             return pos += 2, token = SyntaxKind.AmpersandAmpersandToken;
                         }
@@ -726,15 +721,23 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.AmpersandToken;
                     case CharacterCodes.openParen:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.OpenParenToken;
                     case CharacterCodes.closeParen:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.CloseParenToken;
                     case CharacterCodes.asterisk:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.AsteriskEqualsToken;
                         }
                         return pos++, token = SyntaxKind.AsteriskToken;
                     case CharacterCodes.plus:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.plus) {
                             return pos += 2, token = SyntaxKind.PlusPlusToken;
                         }
@@ -743,8 +746,12 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.PlusToken;
                     case CharacterCodes.comma:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.CommaToken;
                     case CharacterCodes.minus:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.minus) {
                             return pos += 2, token = SyntaxKind.MinusMinusToken;
                         }
@@ -753,6 +760,8 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.MinusToken;
                     case CharacterCodes.dot:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (isDigit(text.charCodeAt(pos + 1))) {
                             tokenValue = "" + scanNumber();
                             return token = SyntaxKind.NumericLiteral;
@@ -776,7 +785,13 @@ module ts {
                             if (onComment) {
                                 onComment(tokenPos, pos);
                             }
-                            continue;
+
+                            if (scanMode === ScanMode.ReturnTokensSkipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.SingleLineCommentTrivia;
+                            }
                         }
                         // Multi-line comment
                         if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
@@ -806,8 +821,15 @@ module ts {
                                 onComment(tokenPos, pos);
                             }
 
-                            continue;
+                            if (scanMode === ScanMode.ReturnTokensSkipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.MultiLineCommentTrivia;
+                            }
                         }
+
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
 
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.SlashEqualsToken;
@@ -816,6 +838,8 @@ module ts {
                         return pos++, token = SyntaxKind.SlashToken;
 
                     case CharacterCodes._0:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
                             pos += 2;
                             var value = scanHexDigits(1, false);
@@ -843,13 +867,21 @@ module ts {
                     case CharacterCodes._7:
                     case CharacterCodes._8:
                     case CharacterCodes._9:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         tokenValue = "" + scanNumber();
                         return token = SyntaxKind.NumericLiteral;
                     case CharacterCodes.colon:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.ColonToken;
                     case CharacterCodes.semicolon:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.SemicolonToken;
                     case CharacterCodes.lessThan:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.lessThan) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
                                 return pos += 3, token = SyntaxKind.LessThanLessThanEqualsToken;
@@ -861,6 +893,8 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.LessThanToken;
                     case CharacterCodes.equals:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
                                 return pos += 3, token = SyntaxKind.EqualsEqualsEqualsToken;
@@ -872,21 +906,35 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.EqualsToken;
                     case CharacterCodes.greaterThan:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.GreaterThanToken;
                     case CharacterCodes.question:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.QuestionToken;
                     case CharacterCodes.openBracket:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.OpenBracketToken;
                     case CharacterCodes.closeBracket:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.CloseBracketToken;
                     case CharacterCodes.caret:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.CaretEqualsToken;
                         }
                         return pos++, token = SyntaxKind.CaretToken;
                     case CharacterCodes.openBrace:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.OpenBraceToken;
                     case CharacterCodes.bar:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.bar) {
                             return pos += 2, token = SyntaxKind.BarBarToken;
                         }
@@ -895,10 +943,16 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.BarToken;
                     case CharacterCodes.closeBrace:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.CloseBraceToken;
                     case CharacterCodes.tilde:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         return pos++, token = SyntaxKind.TildeToken;
                     case CharacterCodes.backslash:
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         var ch = peekUnicodeEscape();
                         if (ch >= 0 && isIdentifierStart(ch)) {
                             pos += 6;
@@ -909,6 +963,8 @@ module ts {
                         return pos++, token = SyntaxKind.Unknown;
                     default:
                         if (isIdentifierStart(ch)) {
+                            if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                             pos++;
                             while (pos < len && isIdentifierPart(ch = text.charCodeAt(pos))) pos++;
                             tokenValue = text.substring(tokenPos, pos);
@@ -926,6 +982,8 @@ module ts {
                             pos++;
                             continue;
                         }
+                        if (scanMode === ScanMode.ReturnTriviaStopOnTokens) return token = SyntaxKind.Unknown;
+
                         error(Diagnostics.Invalid_character);
                         return pos++, token = SyntaxKind.Unknown;
                 }
