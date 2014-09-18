@@ -85,7 +85,7 @@ module ts {
         return diagnostic.messageText;
     }
 
-    function reportDiagnostic(diagnostic: Diagnostic) {
+    function reportDiagnostic(diagnostic: Diagnostic, options: CompilerOptions) {
         var output = "";
         
         if (diagnostic.file) {
@@ -95,14 +95,20 @@ module ts {
         }
 
         var category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += category + " TS" + diagnostic.code + ": " + diagnostic.messageText + sys.newLine;
+        output += category;
+
+        if (options.printErrorCodes) {
+            output += " TS" + diagnostic.code;
+        }
+
+        output += ": " + diagnostic.messageText + sys.newLine;
 
         sys.write(output);
     }
 
-    function reportDiagnostics(diagnostics: Diagnostic[]) {
+    function reportDiagnostics(diagnostics: Diagnostic[], options: CompilerOptions) {
         for (var i = 0; i < diagnostics.length; i++) {
-            reportDiagnostic(diagnostics[i]);
+            reportDiagnostic(diagnostics[i], options);
         }
     }
 
@@ -207,12 +213,12 @@ module ts {
         // If there are any errors due to command line parsing and/or
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
-            reportDiagnostics(commandLine.errors);
+            reportDiagnostics(commandLine.errors, commandLine.options);
             return sys.exit(1);
         }
 
         if (commandLine.options.version) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version), commandLine.options);
             return sys.exit(0);
         }
 
@@ -226,7 +232,7 @@ module ts {
         
         if (commandLine.options.watch) {
             if (!sys.watchFile) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), commandLine.options);
                 return sys.exit(1);
             }
 
@@ -250,7 +256,7 @@ module ts {
 
         // Compile the program the first time and watch all given/referenced files.
         var program = compile(commandLine, compilerHost).program;
-        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes), commandLine.options);
         addWatchers(program);
         return;
 
@@ -290,7 +296,7 @@ module ts {
         }
 
         function recompile(changedFiles: Map<boolean>) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Compiling));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Compiling), commandLine.options);
             // Remove all the watchers, as we may not be watching every file
             // specified since the last compilation cycle.
             removeWatchers(program);
@@ -317,7 +323,7 @@ module ts {
             };
 
             program = compile(commandLine, newCompilerHost).program;
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes), commandLine.options);
             addWatchers(program);
         }
 
@@ -347,7 +353,7 @@ module ts {
             errors = concatenate(semanticErrors, emitErrors);
         }
 
-        reportDiagnostics(errors);
+        reportDiagnostics(errors, commandLine.options);
         if (commandLine.options.diagnostics) {
             var memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);

@@ -987,6 +987,7 @@ module ts {
         noResolve?: boolean;
         out?: string;
         outDir?: string;
+        printErrorCodes?: boolean;
         removeComments?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;

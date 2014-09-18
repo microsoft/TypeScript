@@ -84,6 +84,10 @@ module ts {
             paramType: Diagnostics.DIRECTORY,
         },
         {
+            name: "printErrorCodes",
+            type: "boolean",
+        },
+        {
             name: "removeComments",
             type: "boolean",
             description: Diagnostics.Do_not_emit_comments_to_output,
