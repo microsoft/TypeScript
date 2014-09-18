@@ -1351,6 +1351,19 @@ module ts {
     }
 
     /// Helpers
+    export function getNodeModifiers(node: Node): string {
+        var flags = node.flags;
+        var result: string[] = [];
+
+        if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
+        if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
+        if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
+        if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
+
+        return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
+    }
+
     function getTargetLabel(referenceNode: Node, labelName: string): Identifier {
         while (referenceNode) {
             if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.text === labelName) {
@@ -2196,19 +2209,6 @@ module ts {
                 case SyntaxKind.Parameter: return (node.flags & NodeFlags.AccessibilityModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
                     return ScriptElementKind.unknown;
             }
-        }
-
-        function getNodeModifiers(node: Node): string {
-            var flags = node.flags;
-            var result: string[] = [];
-
-            if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
-            if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
-            if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
-            if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
-            if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
-
-            return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
         }
 
         /// QuickInfo

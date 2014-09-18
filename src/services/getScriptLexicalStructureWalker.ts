@@ -85,7 +85,7 @@ module ts {
                forEach((<Block>functionDeclaration.body).statements, s => s.kind === SyntaxKind.FunctionDeclaration);
         }
 
-        function getItemsWorker(nodes: Node[], createItem: (n: Node) => ts.NavigationBarItem): ts.NavigationBarItem[]{
+        function getItemsWorker(nodes: Node[], createItem: (n: Node) => ts.NavigationBarItem): ts.NavigationBarItem[] {
             var items: ts.NavigationBarItem[] = [];
 
             if (!nodes) {
@@ -339,20 +339,6 @@ module ts {
                     childItems,
                     getIndent(node));
             }
-        }
-
-        // TODO: use implementation in services.ts
-        function getNodeModifiers(node: Node): string {
-            var flags = node.flags;
-            var result: string[] = [];
-
-            if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
-            if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
-            if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
-            if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
-            if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
-
-            return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
         }
 
         function getInnermostModule(node: ModuleDeclaration): ModuleDeclaration {
