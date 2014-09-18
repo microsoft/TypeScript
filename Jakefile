@@ -63,7 +63,6 @@ var harnessSources = [
     "sourceMapRecorder.ts",
     "harnessLanguageService.ts",
     "fourslash.ts",
-    "external/json2.ts",
     "runnerbase.ts",
     "compilerRunner.ts",
     "typeWriter.ts",
@@ -318,7 +317,7 @@ function exec(cmd, completeHandler) {
         complete();
     })
     try{
-        ex.run();	
+        ex.run();
     } catch(e) {
         console.log('Exception: ' + e)
     }
@@ -342,7 +341,7 @@ function cleanTestDirs() {
 function writeTestConfigFile(tests, testConfigFile) {
     console.log('Running test(s): ' + tests);
     var testConfigContents = '{\n' + '\ttest: [\'' + tests + '\']\n}';
-    fs.writeFileSync('test.config', testConfigContents);    
+    fs.writeFileSync('test.config', testConfigContents);
 }
 
 function deleteTemporaryProjectOutput() {
@@ -385,7 +384,7 @@ desc("Generates code coverage data via instanbul")
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
     console.log(cmd);
-    exec(cmd);	
+    exec(cmd);
 }, { async: true });
 
 // Browser tests
