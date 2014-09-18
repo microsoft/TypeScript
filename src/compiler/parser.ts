@@ -3815,7 +3815,7 @@ module ts {
                 : undefined);
         }
 
-        scanner = createScanner(languageVersion, sourceText, scanError, onComment);
+        scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError, onComment);
         var rootNodeFlags: NodeFlags = 0;
         if (fileExtensionIs(filename, ".d.ts")) {
             rootNodeFlags = NodeFlags.DeclarationFile;
