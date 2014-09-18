@@ -3121,9 +3121,7 @@ module ts {
         function getNavigationBarItems(filename: string): NavigationBarItem[] {
             filename = TypeScript.switchToForwardSlashes(filename);
 
-
-            var syntaxTree = getSyntaxTree(filename);
-            return TypeScript.Services.getNavigationBarItemsHelper(syntaxTree.sourceUnit());
+            return getNavigationBarItemsHelper(getCurrentSourceFile(filename));
         }
 
         function getOutliningSpans(filename: string): OutliningSpan[] {
