@@ -1651,7 +1651,7 @@ module ts {
             return program.getDiagnostics(getSourceFile(filename).getSourceFile());
         }
 
-        // In a case when '-d' is not enabled, only report semantic errors
+        // getSemanticDiagnostiscs return array of Diagnostics. If '-d' is not enabled, only report semantic errors
         // If '-d' enabled, report both semantic and emitter errors 
         function getSemanticDiagnostics(filename: string) {
             synchronizeHostData();
@@ -1661,16 +1661,17 @@ module ts {
             var checker = getFullTypeCheckChecker();
             var targetSourceFile = getSourceFile(filename);
 
-            // Only perform the action per file regardless off '-out' flag
-            // As an errors message in Visual Studio will maintain an error message life-time per file
+            // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
+            // Therefore only get diagnostics for given file.
 
             var allDiagnostics = checker.getDiagnostics(targetSourceFile);
             if (compilerOptions.declaration) {
-                // If '-d' is enabled, check for emitter error which requires calling to TypeChecker.emitFiles
-                // Define CompilerHost.writer which does nothing as this is a side effect of emitFiles
+                // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
+                // Get emitter-diagnostics requires calling TypeChecker.emitFiles so define CompilerHost.writer which does nothing as this is a side effect of emitFiles
+                var savedWriter = writer;
                 writer = (filename: string, data: string, writeByteOrderMark: boolean) => { };
                 allDiagnostics = allDiagnostics.concat(checker.emitFiles(targetSourceFile).errors);
-                writer = undefined;
+                writer = savedWriter;
             }
             return allDiagnostics
         }
