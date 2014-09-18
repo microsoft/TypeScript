@@ -97,7 +97,7 @@ module ts {
         var category = DiagnosticCategory[diagnostic.category].toLowerCase();
         output += category;
 
-        if (options.printErrorCodes) {
+        if (options.showDiagnosticCodes) {
             output += " TS" + diagnostic.code;
         }
 
