@@ -3644,7 +3644,7 @@ module ts {
                 // Note that the outermost group is *not* a capture group, but the innermost groups
                 // *are* capture groups.  By capturing the inner literals we can determine after 
                 // matching which descriptor we are dealing with.
-                var literals = "(?:" + descriptors.map(d => "(" + escapeRegExp(d.text) + ")").join("|") + ")";
+                var literals = "(?:" + map(descriptors, d => "(" + escapeRegExp(d.text) + ")").join("|") + ")";
 
                 // After matching a descriptor literal, the following regexp matches the rest of the 
                 // text up to the end of the line (or */).
