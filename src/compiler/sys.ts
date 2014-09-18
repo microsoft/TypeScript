@@ -22,6 +22,14 @@ interface FileWatcher {
     close(): void;
 }
 
+enum ExitCode {
+    Success,
+    ParseError,
+    SemanticError,
+    EmitError,
+    CommandLineError
+}
+
 declare var require: any;
 declare var module: any;
 declare var process: any;

@@ -208,18 +208,18 @@ module ts {
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
-            return sys.exit(1);
+            return sys.exit(ExitCode.CommandLineError);
         }
 
         if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            return sys.exit(0);
+            return sys.exit(ExitCode.Success);
         }
 
         if (commandLine.options.help || commandLine.filenames.length === 0) {
             printVersion();
             printHelp();
-            return sys.exit(0);
+            return sys.exit(ExitCode.Success);
         }
 
         var defaultCompilerHost = createCompilerHost(commandLine.options);
@@ -227,13 +227,13 @@ module ts {
         if (commandLine.options.watch) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
-                return sys.exit(1);
+                return sys.exit(ExitCode.CommandLineError);
             }
 
             watchProgram(commandLine, defaultCompilerHost);
         }
         else {
-            var result = compile(commandLine, defaultCompilerHost).errors.length > 0 ? 1 : 0;
+            var result = compile(commandLine, defaultCompilerHost).exitCode;
             return sys.exit(result);
         }
     }
@@ -332,10 +332,12 @@ module ts {
 
         var bindStart = new Date().getTime();
         var errors = program.getDiagnostics();
+        var exitCode = ExitCode.Success;
         if (errors.length) {
             var checkStart = bindStart;
             var emitStart = bindStart;
             var reportStart = bindStart;
+            exitCode = ExitCode.ParseError;
         }
         else {
             var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
@@ -344,6 +346,8 @@ module ts {
             var emitStart = new Date().getTime();
             var emitErrors = checker.emitFiles().errors;
             var reportStart = new Date().getTime();
+            exitCode = semanticErrors.length ? ExitCode.SemanticError : exitCode;
+            exitCode = emitErrors.length ? ExitCode.EmitError : exitCode;
             errors = concatenate(semanticErrors, emitErrors);
         }
 
@@ -366,7 +370,7 @@ module ts {
             reportTimeStatistic("Total time", reportStart - parseStart);
         }
 
-        return { program: program, errors: errors };
+        return { program: program, errors: errors, exitCode: exitCode };
 
     }
 
