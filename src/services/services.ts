@@ -1599,9 +1599,9 @@ module ts {
                     }
 
                     // Only perform incremental parsing on open files that are being edited.  If a file was
-                    // open, but is now closed, we want to reparse entirely so we don't have any tokens that
+                    // open, but is now closed, we want to re-parse entirely so we don't have any tokens that
                     // are holding onto expensive script snapshot instances on the host.  Similarly, if a 
-                    // file was closed, then we always want to reparse.  This is so our tree doesn't keep 
+                    // file was closed, then we always want to re-parse.  This is so our tree doesn't keep 
                     // the old buffer alive that represented the file on disk (as the host has moved to a 
                     // new text buffer).
                     var textChangeRange: TypeScript.TextChangeRange = null;
@@ -1651,12 +1651,28 @@ module ts {
             return program.getDiagnostics(getSourceFile(filename).getSourceFile());
         }
 
+        // In a case when '-d' is not enabled, only report semantic errors
+        // If '-d' enabled, report both semantic and emitter errors 
         function getSemanticDiagnostics(filename: string) {
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename)
+            var compilerOptions = program.getCompilerOptions();
+            var checker = getFullTypeCheckChecker();
+            var targetSourceFile = getSourceFile(filename);
 
-            return getFullTypeCheckChecker().getDiagnostics(getSourceFile(filename));
+            // Only perform the action per file regardless off '-out' flag
+            // As an errors message in Visual Studio will maintain an error message life-time per file
+
+            var allDiagnostics = checker.getDiagnostics(targetSourceFile);
+            if (compilerOptions.declaration) {
+                // If '-d' is enabled, check for emitter error which requires calling to TypeChecker.emitFiles
+                // Define CompilerHost.writer which does nothing as this is a side effect of emitFiles
+                writer = (filename: string, data: string, writeByteOrderMark: boolean) => { };
+                allDiagnostics = allDiagnostics.concat(checker.emitFiles(targetSourceFile).errors);
+                writer = undefined;
+            }
+            return allDiagnostics
         }
 
         function getCompilerOptionsDiagnostics() {
