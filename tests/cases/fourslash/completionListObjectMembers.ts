@@ -11,4 +11,4 @@
 
 goTo.marker();
 verify.memberListContains("bar", 'any');
-verify.memberListContains("foo", '(bar: any): any');
+verify.memberListContains("foo", '(bar: any) => any');

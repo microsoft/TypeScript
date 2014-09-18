@@ -5,7 +5,7 @@
 ////    y: string;
 ////}
 ////
-////function foo<S, T extends IFoo, U extends T, V extends U>() {
+////function foo<S, T extends IFoo, U extends Object, V extends IFoo>() {
 ////    var s:S, t: T, u: U, v: V;
 ////    s./*S*/;    // no constraint, no completion
 ////    t./*T*/;    // IFoo
@@ -22,9 +22,8 @@ verify.memberListContains("y", "string");
 verify.memberListCount(2);
 
 goTo.marker("U");
-verify.memberListContains("x", "number");
-verify.memberListContains("y", "string");
-verify.memberListCount(2);
+verify.memberListContains("toString", "() => string");
+verify.memberListCount(7); // constructor, toString, toLocaleString, valueOf, hasOwnProperty, isPrototypeOf, propertyIsEnumerable
 
 goTo.marker("V");
 verify.memberListContains("x", "number");

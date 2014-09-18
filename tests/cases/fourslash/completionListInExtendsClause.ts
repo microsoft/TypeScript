@@ -18,8 +18,15 @@
 
 ////interface test4 implements Foo./*4*/ {}
 
-test.markers().forEach((marker) => {
-    goTo.position(marker.position, marker.fileName);
+goTo.marker("1");
+verify.completionListIsEmpty();
 
-    verify.completionListIsEmpty();
-});
+goTo.marker("2");
+verify.completionListIsEmpty();
+
+goTo.marker("3");
+verify.completionListIsEmpty();
+
+// This needs comletion list filtering based on location to work
+goTo.marker("4");
+verify.not.completionListIsEmpty();

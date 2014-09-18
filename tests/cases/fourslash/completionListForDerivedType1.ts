@@ -12,10 +12,10 @@
 ////f2./*2*/ // here bar has return type any, but bar2 is Foo2
 
 goTo.marker('1');
-verify.completionListContains('bar', '(): IFoo');
+verify.completionListContains('bar', '() => IFoo');
 verify.not.completionListContains('bar2');
 edit.insert('bar();'); // just to make the file valid before checking next completion location
 
 goTo.marker('2');
-verify.completionListContains('bar', '(): IFoo');
-verify.completionListContains('bar2', '(): IFoo2');
+verify.completionListContains('bar', '() => IFoo');
+verify.completionListContains('bar2', '() => IFoo2');

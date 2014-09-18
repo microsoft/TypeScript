@@ -770,7 +770,6 @@ module ts {
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
         InDoubleQuoteStringLiteral,
-        EndingWithDotToken,
     }
 
     export enum TokenClass {
@@ -1667,14 +1666,20 @@ module ts {
         /// Completion
         function getValidCompletionEntryDisplayName(displayName: string, target: ScriptTarget): string {
             if (displayName && displayName.length > 0) {
-                var firstChar = displayName.charCodeAt(0);
-                if (firstChar === TypeScript.CharacterCodes.singleQuote || firstChar === TypeScript.CharacterCodes.doubleQuote) {
+                var firstCharCode = displayName.charCodeAt(0);
+                if (displayName && displayName.length >= 2 && firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
+                    (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
                     // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
-                    // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
-                    displayName = TypeScript.stripStartAndEndQuotes(displayName);
+                    // invalid identifer name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+                    displayName = displayName.substring(1, displayName.length - 1);
+                }
+                
+                var isValid = isIdentifierStart(displayName.charCodeAt(0), target);
+                for (var i = 1, n = displayName.length; isValid && i < n; i++) {
+                    isValid = isIdentifierPart(displayName.charCodeAt(i), target);
                 }
 
-                if (TypeScript.Scanner.isValidIdentifier(TypeScript.SimpleText.fromString(displayName), target)) {
+                if (isValid) {
                     return displayName;
                 }
             }
@@ -1692,7 +1697,6 @@ module ts {
             }
 
             var declarations = symbol.getDeclarations();
-            var firstDeclaration = [0];
             return {
                 name: displayName,
                 kind: getSymbolKind(symbol),
@@ -1704,7 +1708,7 @@ module ts {
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
                 forEach(symbols, (symbol) => {
                     var entry = createCompletionEntry(symbol);
-                    if (entry) {
+                    if (entry && !lookUp(session.symbols, entry.name)) {
                         session.entries.push(entry);
                         session.symbols[entry.name] = symbol;
                     }
@@ -1834,6 +1838,49 @@ module ts {
                 return false;
             }
 
+            function isPunctuation(kind: SyntaxKind) {
+                return (SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation);
+            }
+
+            function isVisibleWithinClassDeclaration(symbol: Symbol, containingClass: Declaration): boolean {
+                var declaration = symbol.declarations && symbol.declarations[0];
+                if (declaration && (declaration.flags & NodeFlags.Private)) {
+                    var declarationClass = getAncestor(declaration, SyntaxKind.ClassDeclaration);
+                    return containingClass === declarationClass;
+                }
+                return true;
+            }
+
+            function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
+                if (!existingMembers || existingMembers.length === 0) {
+                    return contextualMemberSymbols;
+                }
+
+                var existingMemberNames: Map<boolean> = {};
+                forEach(existingMembers, m => {
+                    if (m.kind !== SyntaxKind.PropertyAssignment) {
+                        // Ignore omitted expressions for missing members in the object literal
+                        return;
+                    }
+
+                    if (m.getStart() <= position && position <= m.getEnd()) {
+                        // If this is the current item we are editing right now, do not filter it out
+                        return;
+                    }
+
+                    existingMemberNames[m.name.text] = true;
+                });
+
+                var filteredMembers: Symbol[] = [];
+                forEach(contextualMemberSymbols, s => {
+                    if (!existingMemberNames[s.name]) {
+                        filteredMembers.push(s);
+                    }
+                });
+
+                return filteredMembers;
+            }
+
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -1888,6 +1935,9 @@ module ts {
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
             var mappedNode = getNodeAtPosition(sourceFile, TypeScript.end(node) - 1);
+            if (isPunctuation(mappedNode.kind)) {
+                mappedNode = mappedNode.parent;
+            }
 
             Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
 
@@ -1903,13 +1953,33 @@ module ts {
 
             // Right of dot member completion list
             if (isRightOfDot) {
-                var type: ApparentType = typeInfoResolver.getApparentType(typeInfoResolver.getTypeOfNode(mappedNode));
-                if (!type) {
-                    return undefined;
+                var symbols: Symbol[] = [];
+                var containingClass = getAncestor(mappedNode, SyntaxKind.ClassDeclaration);
+                isMemberCompletion = true;
+
+                if (mappedNode.kind === SyntaxKind.Identifier || mappedNode.kind === SyntaxKind.QualifiedName || mappedNode.kind === SyntaxKind.PropertyAccess) {
+                    var symbol = typeInfoResolver.getSymbolInfo(mappedNode);
+                    if (symbol && symbol.flags & SymbolFlags.HasExports) {
+                        // Extract module or enum members
+                        forEachValue(symbol.exports, symbol => {
+                            if (isVisibleWithinClassDeclaration(symbol, containingClass)) {
+                                symbols.push(symbol);
+                            }
+                        });
+                    }
                 }
 
-                var symbols = type.getApparentProperties();
-                isMemberCompletion = true;
+                var type = typeInfoResolver.getTypeOfNode(mappedNode);
+                var apparentType = type && typeInfoResolver.getApparentType(type);
+                if (apparentType) {
+                    // Filter private properties
+                    forEach(apparentType.getApparentProperties(), symbol => {
+                        if (isVisibleWithinClassDeclaration(symbol, containingClass)) {
+                            symbols.push(symbol);
+                        }
+                    });
+                }
+
                 getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }
             else {
@@ -1917,34 +1987,23 @@ module ts {
 
                 // Object literal expression, look up possible property names from contextual type
                 if (containingObjectLiteral) {
-                    var searchPosition = Math.min(position, TypeScript.end(containingObjectLiteral));
-                    var path = TypeScript.ASTHelpers.getAstAtPosition(sourceUnit, searchPosition);
-                    // Get the object literal node
+                    var objectLiteral = <ObjectLiteral>(mappedNode.kind === SyntaxKind.ObjectLiteral ? mappedNode : getAncestor(mappedNode, SyntaxKind.ObjectLiteral));
 
-                    while (node && node.kind() !== TypeScript.SyntaxKind.ObjectLiteralExpression) {
-                        node = node.parent;
-                    }
-
-                    if (!node || node.kind() !== TypeScript.SyntaxKind.ObjectLiteralExpression) {
-                        // AST Path look up did not result in the same node as Fidelity Syntax Tree look up.
-                        // Once we remove AST this will no longer be a problem.
-                        return null;
-                    }
+                    Debug.assert(objectLiteral);
 
                     isMemberCompletion = true;
 
-                    //// Try to get the object members form contextual typing
-                    //var contextualMembers = compiler.getContextualMembersFromAST(node, document);
-                    //if (contextualMembers && contextualMembers.symbols && contextualMembers.symbols.length > 0) {
-                    //    // get existing members
-                    //    var existingMembers = compiler.getVisibleMemberSymbolsFromAST(node, document);
+                    var contextualType = typeInfoResolver.getContextualType(objectLiteral);
+                    if (!contextualType) {
+                        return undefined;
+                    }
 
-                    //    // Add filtered items to the completion list
-                    //    getCompletionEntriesFromSymbols({
-                    //        symbols: filterContextualMembersList(contextualMembers.symbols, existingMembers, filename, position),
-                    //        enclosingScopeSymbol: contextualMembers.enclosingScopeSymbol
-                    //    }, entries);
-                    //}
+                    var contextualTypeMembers = typeInfoResolver.getPropertiesOfType(contextualType);
+                    if (contextualTypeMembers && contextualTypeMembers.length > 0) {
+                        // Add filtered items to the completion list
+                        var filteredMembers = filterContextualMembersList(contextualTypeMembers, objectLiteral.properties);
+                        getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
+                    }
                 }
                 // Get scope members
                 else {
@@ -2048,7 +2107,7 @@ module ts {
         }
 
         function getSymbolKind(symbol: Symbol): string {
-            var flags = symbol.getFlags();
+            var flags = typeInfoResolver.getRootSymbol(symbol).getFlags();
 
             if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
@@ -4004,9 +4063,6 @@ module ts {
                     text = "/*\n" + text;
                     offset = 3;
                     break;
-                case EndOfLineState.EndingWithDotToken:
-                    lastToken = SyntaxKind.DotToken;
-                    break;
             }
 
             var result: ClassificationResult = {
@@ -4073,9 +4129,6 @@ module ts {
                                 ? EndOfLineState.InDoubleQuoteStringLiteral
                                 : EndOfLineState.InSingleQuoteStringLiteral;
                         }
-                    }
-                    else if (token === SyntaxKind.DotToken) {
-                        result.finalLexState = EndOfLineState.EndingWithDotToken;
                     }
                 }
             }
