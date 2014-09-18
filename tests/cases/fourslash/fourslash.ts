@@ -275,7 +275,7 @@ module FourSlashInterface {
         }
 
         public currentParameterHelpArgumentNameIs(name: string) {
-            FourSlash.currentTestState.verifyCurrentParameterHelpName(name);
+     //       FourSlash.currentTestState.verifyCurrentParameterHelpName(name);
         }
 
         public currentParameterSpanIs(parameter: string) {
@@ -299,11 +299,11 @@ module FourSlashInterface {
         }
 
         public currentSignatureTypeParamterCountIs(expected: number) {
-     //       FourSlash.currentTestState.verifyCurrentSignatureHelpTypeParameterCount(expected);
+            FourSlash.currentTestState.verifyCurrentSignatureHelpTypeParameterCount(expected);
         }
 
         public currentSignatureHelpIs(expected: string) {
-     //       FourSlash.currentTestState.verifyCurrentSignatureHelpIs(expected);
+            FourSlash.currentTestState.verifyCurrentSignatureHelpIs(expected);
         }
 
         public numberOfErrorsInCurrentFile(expected: number) {

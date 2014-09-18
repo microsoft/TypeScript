@@ -3551,10 +3551,22 @@ module ts {
 
             function getSignatureHelpItemsFromCandidateInfo(candidates: Signature[], bestSignature: Signature, argumentListOrTypeArgumentList: Node): SignatureHelpItems {
                 var items = map(candidates, candidateSignature => {
-                    var parameterHelpItems = candidateSignature.parameters.length === 0 ? emptyArray : map(candidateSignature.parameters, p => {
-                        return new SignatureHelpParameter(p.name, "", "", false);
+                    var parameters = candidateSignature.parameters;
+                    var parameterHelpItems = parameters.length === 0 ? emptyArray : map(parameters, p => {
+                        var display = p.name;
+                        if (candidateSignature.hasRestParameter && parameters[parameters.length - 1] === p) {
+                            display = "..." + display;
+                        }
+                        var isOptional = !!(p.valueDeclaration.flags & NodeFlags.QuestionMark);
+                        if (isOptional) {
+                            display += "?";
+                        }
+                        display += ": " + typeInfoResolver.typeToString(typeInfoResolver.getTypeOfSymbol(p));
+                        return new SignatureHelpParameter(p.name, "", display, isOptional);
                     });
-                    return new SignatureHelpItem(false, "", "", "", parameterHelpItems, "");
+                    var prefix = (candidateSignature.declaration.name.text || "") + "(";
+                    var suffix = "): " + typeInfoResolver.typeToString(candidateSignature.getReturnType());
+                    return new SignatureHelpItem(candidateSignature.hasRestParameter, prefix, suffix, ", ", parameterHelpItems, "");
                 });
                 var selectedItemIndex = candidates.indexOf(bestSignature);
                 if (selectedItemIndex < 0) {
