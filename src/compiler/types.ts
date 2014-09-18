@@ -923,7 +923,7 @@ module ts {
         resolvedReturnType: Type;           // Resolved return type
         minArgumentCount: number;           // Number of non-optional parameters
         hasRestParameter: boolean;          // True if last parameter is rest parameter
-        hasStringLiterals: boolean;         // True if instantiated
+        hasStringLiterals: boolean;         // True if specialized
         target?: Signature;                 // Instantiation target
         mapper?: TypeMapper;                // Instantiation mapper
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)

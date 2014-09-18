@@ -3561,11 +3561,13 @@ module ts {
                         if (isOptional) {
                             display += "?";
                         }
-                        display += ": " + typeInfoResolver.typeToString(typeInfoResolver.getTypeOfSymbol(p));
+                        display += ": " + typeInfoResolver.typeToString(typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
                         return new SignatureHelpParameter(p.name, "", display, isOptional);
                     });
-                    var prefix = (candidateSignature.declaration.name.text || "") + "(";
-                    var suffix = "): " + typeInfoResolver.typeToString(candidateSignature.getReturnType());
+                    var callTarget = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
+                    var signatureName = typeInfoResolver.symbolToString(typeInfoResolver.getSymbolInfo(callTarget), /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
+                    var prefix = signatureName + "(";
+                    var suffix = "): " + typeInfoResolver.typeToString(candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
                     return new SignatureHelpItem(candidateSignature.hasRestParameter, prefix, suffix, ", ", parameterHelpItems, "");
                 });
                 var selectedItemIndex = candidates.indexOf(bestSignature);
