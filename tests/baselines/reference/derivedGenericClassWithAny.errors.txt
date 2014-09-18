@@ -1,9 +1,20 @@
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(11,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(19,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,25): error TS2323: Type 'string' is not assignable to type 'T'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(32,16): error TS2323: Type 'string' is not assignable to type 'T'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(41,1): error TS2322: Type 'E<string>' is not assignable to type 'C<number>':
+  Types of property 'x' are incompatible:
+    Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts (7 errors) ====
     class C<T extends number> {
         x: T;
         get X(): T { return null; }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         foo(): T {
             return null;
         }
@@ -13,7 +24,7 @@
         x: any;
         get X(): any {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return null;
         }
         foo(): any {
@@ -23,7 +34,7 @@
         static y: any;
         static get Y(): any {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return null;
         }
         static bar(): any {
@@ -36,13 +47,13 @@
         x: T;
         get X(): T { return ''; } // error
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                             ~~
-!!! Type 'string' is not assignable to type 'T'.
+!!! error TS2323: Type 'string' is not assignable to type 'T'.
         foo(): T {
             return ''; // error
                    ~~
-!!! Type 'string' is not assignable to type 'T'.
+!!! error TS2323: Type 'string' is not assignable to type 'T'.
         }
     }
     
@@ -53,7 +64,7 @@
     c = d;
     c = e;
     ~
-!!! Type 'E<string>' is not assignable to type 'C<number>':
-!!!   Types of property 'x' are incompatible:
-!!!     Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'E<string>' is not assignable to type 'C<number>':
+!!! error TS2322:   Types of property 'x' are incompatible:
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
     var r = c.foo(); // e.foo would return string

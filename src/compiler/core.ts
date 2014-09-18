@@ -407,7 +407,7 @@ module ts {
         return normalizedPathComponents(path, rootLength);
     }
 
-    export function getNormalizedPathFromPathCompoments(pathComponents: string[]) {
+    export function getNormalizedPathFromPathComponents(pathComponents: string[]) {
         if (pathComponents && pathComponents.length) {
             return pathComponents[0] + pathComponents.slice(1).join(directorySeparator);
         }
@@ -468,7 +468,7 @@ module ts {
         var pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
         var directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
         if (directoryComponents.length > 1 && directoryComponents[directoryComponents.length - 1] === "") {
-            // If the directory path given was of type test/cases/ then we really need components of directry to be only till its name 
+            // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
             // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
             directoryComponents.length--;
         }
@@ -494,7 +494,7 @@ module ts {
         }
 
         // Cant find the relative path, get the absolute path
-        var absolutePath = getNormalizedPathFromPathCompoments(pathComponents);
+        var absolutePath = getNormalizedPathFromPathComponents(pathComponents);
         if (isAbsolutePathAnUrl && isRootedDiskPath(absolutePath)) {
             absolutePath = "file:///" + absolutePath;
         }

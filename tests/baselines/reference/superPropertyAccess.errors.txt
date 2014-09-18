@@ -1,3 +1,13 @@
+tests/cases/compiler/superPropertyAccess.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/superPropertyAccess.ts(9,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/superPropertyAccess.ts(22,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/compiler/superPropertyAccess.ts(24,9): error TS2341: Property 'MyBase.p1' is inaccessible.
+tests/cases/compiler/superPropertyAccess.ts(26,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/compiler/superPropertyAccess.ts(28,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/compiler/superPropertyAccess.ts(32,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/compiler/superPropertyAccess.ts(34,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+
+
 ==== tests/cases/compiler/superPropertyAccess.ts (8 errors) ====
     
     class MyBase {
@@ -8,10 +18,10 @@
         private d2: number = 42;
         get value() {return 0 }
             ~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         set value(v: number) { }
             ~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
     
     
@@ -26,28 +36,28 @@
     
             super.m2.bind(this);                                // Should error, instance property, not a public instance member function
                   ~~
-!!! Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
     
             super.p1();                                         // Should error, private not public instance member function
             ~~~~~~~~
-!!! Property 'MyBase.p1' is inaccessible.
+!!! error TS2341: Property 'MyBase.p1' is inaccessible.
     
             var l1 = super.d1;                                  // Should error, instance data property not a public instance member function
                            ~~
-!!! Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
     
             var l1 = super.d2;                                  // Should error, instance data property not a public instance member function
                            ~~
-!!! Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
     
             super.m1 = function (a: string) { return ""; };     // Should be allowed, we will not restrict assignment
     
             super.value = 0;                                    // Should error, instance data property not a public instance member function
                   ~~~~~
-!!! Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
             
             var z = super.value;                                // Should error, instance data property not a public instance member function
                           ~~~~~
-!!! Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
         }
     }

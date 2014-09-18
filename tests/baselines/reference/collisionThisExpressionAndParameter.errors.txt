@@ -1,23 +1,33 @@
+tests/cases/compiler/collisionThisExpressionAndParameter.ts(4,24): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndParameter.ts(9,22): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndParameter.ts(13,7): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndParameter.ts(34,17): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndParameter.ts(46,13): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndParameter.ts(59,17): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndParameter.ts(69,7): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndParameter.ts(81,13): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+
+
 ==== tests/cases/compiler/collisionThisExpressionAndParameter.ts (8 errors) ====
     class Foo {
         x() {
             var _this = 10; // Local var. No this capture in x(), so no conflict.
             function inner(_this: number) { // Error 
                            ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
                 return x => this;   // New scope.  So should inject new _this capture into function inner
             }
         }
         y() {
             var lamda = (_this: number) => { // Error 
                          ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
                 return x => this;   // New scope.  So should inject new _this capture
             }
         }
         z(_this: number) { // Error 
           ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var lambda = () => {
                 return x => this;   // New scope.  So should inject new _this capture
             }
@@ -40,7 +50,7 @@
     class Foo1 {
         constructor(_this: number) { // Error
                     ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var x2 = {
                 doStuff: (callback) => () => {
                     return callback(this);
@@ -54,7 +64,7 @@
     
     function f1(_this: number) {
                 ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
         x => { console.log(this.x); };
     }
     
@@ -69,7 +79,7 @@
         constructor(_this: number); // no code gen - no error
         constructor(_this: any) { // Error
                     ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var x2 = {
                 doStuff: (callback) => () => {
                     return callback(this);
@@ -81,7 +91,7 @@
         z(_this: number); // no code gen - no error
         z(_this: any) { // Error 
           ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var lambda = () => {
                 return x => this;   // New scope.  So should inject new _this capture
             }
@@ -95,7 +105,7 @@
     function f3(_this: string); // no code gen - no error
     function f3(_this: any) {
                 ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
         x => { console.log(this.x); };
     }
     

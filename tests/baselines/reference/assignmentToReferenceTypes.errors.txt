@@ -1,3 +1,9 @@
+tests/cases/compiler/assignmentToReferenceTypes.ts(5,1): error TS2304: Cannot find name 'M'.
+tests/cases/compiler/assignmentToReferenceTypes.ts(9,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/assignmentToReferenceTypes.ts(13,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/assignmentToReferenceTypes.ts(16,1): error TS2364: Invalid left-hand side of assignment expression.
+
+
 ==== tests/cases/compiler/assignmentToReferenceTypes.ts (4 errors) ====
     // Should all be allowed
     
@@ -5,24 +11,24 @@
     }
     M = null;
     ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.
     
     class C {
     }
     C = null;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     enum E {
     }
     E = null;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     function f() { }
     f = null;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     var x = 1;
     x = null;

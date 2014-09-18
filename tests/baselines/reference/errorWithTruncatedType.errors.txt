@@ -1,3 +1,6 @@
+tests/cases/compiler/errorWithTruncatedType.ts(11,5): error TS2323: Type '{ propertyWithAnExceedinglyLongName1: string; propertyWithAnExceedinglyLongName2: string; propert...' is not assignable to type 'string'.
+
+
 ==== tests/cases/compiler/errorWithTruncatedType.ts (1 errors) ====
     
     var x: {
@@ -11,5 +14,5 @@
     // String representation of type of 'x' should be truncated in error message
     var s: string = x;
         ~
-!!! Type '{ propertyWithAnExceedinglyLongName1: string; propertyWithAnExceedinglyLongName2: string; propert...' is not assignable to type 'string'.
+!!! error TS2323: Type '{ propertyWithAnExceedinglyLongName1: string; propertyWithAnExceedinglyLongName2: string; propert...' is not assignable to type 'string'.
     

@@ -1,7 +1,10 @@
+tests/cases/compiler/functionOverloads22.ts(2,1): error TS2394: Overload signature is not compatible with function implementation.
+
+
 ==== tests/cases/compiler/functionOverloads22.ts (1 errors) ====
     function foo(bar:number):{a:number;}[];
     function foo(bar:string):{a:number; b:string;}[];
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Overload signature is not compatible with function implementation.
+!!! error TS2394: Overload signature is not compatible with function implementation.
     function foo(bar:any):{a:any;b?:any;}[] { return [{a:""}] }
     

@@ -1,3 +1,10 @@
+tests/cases/compiler/typeMatch1.ts(18,1): error TS2322: Type 'D' is not assignable to type 'C':
+  Types have separate declarations of a private property 'x'.
+tests/cases/compiler/typeMatch1.ts(19,1): error TS2322: Type 'typeof C' is not assignable to type 'C':
+  Property 'x' is missing in type 'typeof C'.
+tests/cases/compiler/typeMatch1.ts(20,1): error TS2365: Operator '==' cannot be applied to types 'typeof C' and 'typeof D'.
+
+
 ==== tests/cases/compiler/typeMatch1.ts (3 errors) ====
     interface I { z; }
     interface I2 { z; }
@@ -18,15 +25,15 @@
     
     x6 = x7;
     ~~
-!!! Type 'D' is not assignable to type 'C':
-!!!   Types have separate declarations of a private property 'x'.
+!!! error TS2322: Type 'D' is not assignable to type 'C':
+!!! error TS2322:   Types have separate declarations of a private property 'x'.
     x6=C;
     ~~
-!!! Type 'typeof C' is not assignable to type 'C':
-!!!   Property 'x' is missing in type 'typeof C'.
+!!! error TS2322: Type 'typeof C' is not assignable to type 'C':
+!!! error TS2322:   Property 'x' is missing in type 'typeof C'.
     C==D;
     ~~~~
-!!! Operator '==' cannot be applied to types 'typeof C' and 'typeof D'.
+!!! error TS2365: Operator '==' cannot be applied to types 'typeof C' and 'typeof D'.
     C==C;
     
     

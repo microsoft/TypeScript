@@ -1,3 +1,7 @@
+tests/cases/compiler/superCallInNonStaticMethod.ts(30,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/superCallInNonStaticMethod.ts(37,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/superCallInNonStaticMethod.ts (2 errors) ====
     class Doing {
         public instanceMethod() {
@@ -30,7 +34,7 @@
         // in a getter
         public get accessor() {
                    ~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.instanceMethod();
     
             return 0;
@@ -39,7 +43,7 @@
         // in a setter
         public set accessor(value: number) {
                    ~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.instanceMethod();
         }
         

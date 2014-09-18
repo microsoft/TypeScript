@@ -1,3 +1,6 @@
+tests/cases/compiler/nonContextuallyTypedLogicalOr.ts(16,10): error TS2339: Property 'dummy' does not exist on type '{}'.
+
+
 ==== tests/cases/compiler/nonContextuallyTypedLogicalOr.ts (1 errors) ====
     interface Contextual {
         dummy;
@@ -16,4 +19,4 @@
     // needs to be a supertype of the LHS to win as the best common type.
     (c || e).dummy;
              ~~~~~
-!!! Property 'dummy' does not exist on type '{}'.
+!!! error TS2339: Property 'dummy' does not exist on type '{}'.

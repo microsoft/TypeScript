@@ -1,21 +1,35 @@
+tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(3,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(4,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(8,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(9,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(15,1): error TS2341: Property 'C.x' is inaccessible.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(16,1): error TS2341: Property 'C.y' is inaccessible.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(17,1): error TS2341: Property 'C.y' is inaccessible.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(18,1): error TS2341: Property 'C.foo' is inaccessible.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(20,1): error TS2341: Property 'C.a' is inaccessible.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(21,1): error TS2341: Property 'C.b' is inaccessible.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(22,1): error TS2341: Property 'C.b' is inaccessible.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(23,1): error TS2341: Property 'C.foo' is inaccessible.
+
+
 ==== tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts (12 errors) ====
     class C {
         private x: string;
         private get y() { return null; }
                     ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private set y(x) { }
                     ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private foo() { }
     
         private static a: string;
         private static get b() { return null; }
                            ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private static set b(x) { }
                            ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private static foo() { }
     }
     
@@ -23,26 +37,26 @@
     // all errors
     c.x;
     ~~~
-!!! Property 'C.x' is inaccessible.
+!!! error TS2341: Property 'C.x' is inaccessible.
     c.y;
     ~~~
-!!! Property 'C.y' is inaccessible.
+!!! error TS2341: Property 'C.y' is inaccessible.
     c.y = 1;
     ~~~
-!!! Property 'C.y' is inaccessible.
+!!! error TS2341: Property 'C.y' is inaccessible.
     c.foo();
     ~~~~~
-!!! Property 'C.foo' is inaccessible.
+!!! error TS2341: Property 'C.foo' is inaccessible.
     
     C.a;
     ~~~
-!!! Property 'C.a' is inaccessible.
+!!! error TS2341: Property 'C.a' is inaccessible.
     C.b();
     ~~~
-!!! Property 'C.b' is inaccessible.
+!!! error TS2341: Property 'C.b' is inaccessible.
     C.b = 1;
     ~~~
-!!! Property 'C.b' is inaccessible.
+!!! error TS2341: Property 'C.b' is inaccessible.
     C.foo();
     ~~~~~
-!!! Property 'C.foo' is inaccessible.
+!!! error TS2341: Property 'C.foo' is inaccessible.

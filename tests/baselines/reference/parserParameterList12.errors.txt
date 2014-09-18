@@ -1,5 +1,8 @@
+tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList12.ts(1,13): error TS1009: Trailing comma not allowed.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList12.ts (1 errors) ====
     function F(a,) {
                 ~
-!!! Trailing comma not allowed.
+!!! error TS1009: Trailing comma not allowed.
     }

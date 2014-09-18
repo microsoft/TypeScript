@@ -1,3 +1,9 @@
+tests/cases/compiler/classdecl.ts(12,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/classdecl.ts(15,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/classdecl.ts(18,23): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/classdecl.ts(24,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/classdecl.ts (4 errors) ====
     class a {
         //constructor ();
@@ -12,17 +18,17 @@
         public pv;
         public get d() {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 30;
         }
         public set d() {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         }
     
         public static get p2() {
                           ~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return { x: 30, y: 40 };
         }
     
@@ -30,7 +36,7 @@
         }
         private static get p3() {
                            ~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return "string";
         }
         private pv3;

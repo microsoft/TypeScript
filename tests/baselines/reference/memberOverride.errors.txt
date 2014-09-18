@@ -1,3 +1,7 @@
+tests/cases/compiler/memberOverride.ts(5,5): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/memberOverride.ts(8,5): error TS2323: Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/memberOverride.ts (2 errors) ====
     // An object initialiser accepts the first definition for the same property with a different type signature
     // Should compile, since the second declaration of a overrides the first
@@ -5,9 +9,9 @@
         a: "", 
         a: 5
         ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     }
     
     var n: number = x.a;
         ~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2323: Type 'string' is not assignable to type 'number'.

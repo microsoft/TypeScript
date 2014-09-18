@@ -1,15 +1,21 @@
+tests/cases/compiler/extendsClauseAlreadySeen.ts(4,19): error TS1005: '{' expected.
+tests/cases/compiler/extendsClauseAlreadySeen.ts(4,29): error TS1005: ';' expected.
+tests/cases/compiler/extendsClauseAlreadySeen.ts(5,11): error TS1005: ';' expected.
+tests/cases/compiler/extendsClauseAlreadySeen.ts(5,5): error TS2304: Cannot find name 'baz'.
+
+
 ==== tests/cases/compiler/extendsClauseAlreadySeen.ts (4 errors) ====
     class C {
     
     }
     class D extends C extends C {
                       ~~~~~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                                 ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
         baz() { }
               ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
         ~~~
-!!! Cannot find name 'baz'.
+!!! error TS2304: Cannot find name 'baz'.
     }

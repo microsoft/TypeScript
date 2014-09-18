@@ -1,3 +1,35 @@
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(105,9): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(121,9): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(123,9): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(148,16): error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(153,24): error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(159,9): error TS4032: Property 'myProperty' of exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(162,9): error TS4027: Public static property 'myPublicStaticProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(163,9): error TS4030: Public property 'myPublicProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(165,16): error TS4024: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(166,24): error TS4024: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(9,5): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(25,5): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(27,5): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(52,12): error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(57,20): error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(63,5): error TS4032: Property 'myProperty' of exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(66,5): error TS4027: Public static property 'myPublicStaticProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(67,5): error TS4030: Public property 'myPublicProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(69,12): error TS4024: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(70,20): error TS4024: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(90,9): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(106,9): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(108,9): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(133,16): error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(138,24): error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(144,9): error TS4032: Property 'myProperty' of exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(147,9): error TS4027: Public static property 'myPublicStaticProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(148,9): error TS4030: Public property 'myPublicProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(150,16): error TS4024: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,24): error TS4024: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+
+
 ==== tests/cases/compiler/privacyVarDeclFile_externalModule.ts (20 errors) ====
     
     class privateClass {
@@ -9,7 +41,7 @@
     export interface publicInterfaceWithPrivatePropertyTypes {
         myProperty: privateClass;  // Error
         ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Property 'myProperty' of exported interface has or is using private name 'privateClass'.
+!!! error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
     }
     
     export interface publicInterfaceWithPublicPropertyTypes {
@@ -27,11 +59,11 @@
     export class publicClassWithWithPrivatePropertyTypes {
         static myPublicStaticProperty: privateClass; // Error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
+!!! error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
         private static myPrivateStaticProperty: privateClass;
         myPublicProperty: privateClass; // Error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
+!!! error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
         private myPrivateProperty: privateClass;
     }
     
@@ -58,14 +90,14 @@
     
     export var publicVarWithPrivatePropertyTypes: privateClass; // Error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+!!! error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
     export var publicVarWithPublicPropertyTypes: publicClass;
     var privateVarWithPrivatePropertyTypes: privateClass;
     var privateVarWithPublicPropertyTypes: publicClass;
     
     export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass; // Error
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+!!! error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
     export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
     declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
     declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
@@ -73,22 +105,22 @@
     export interface publicInterfaceWithPrivateModulePropertyTypes {
         myProperty: privateModule.publicClass; // Error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Property 'myProperty' of exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4032: Property 'myProperty' of exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     }
     export class publicClassWithPrivateModulePropertyTypes {
         static myPublicStaticProperty: privateModule.publicClass; // Error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Public static property 'myPublicStaticProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4027: Public static property 'myPublicStaticProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         myPublicProperty: privateModule.publicClass; // Error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Public property 'myPublicProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4030: Public property 'myPublicProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     }
     export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4024: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4024: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     
     interface privateInterfaceWithPrivateModulePropertyTypes {
         myProperty: privateModule.publicClass;
@@ -110,7 +142,7 @@
         export interface publicInterfaceWithPrivatePropertyTypes {
             myProperty: privateClass;  // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Property 'myProperty' of exported interface has or is using private name 'privateClass'.
+!!! error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
         }
     
         export interface publicInterfaceWithPublicPropertyTypes {
@@ -128,11 +160,11 @@
         export class publicClassWithWithPrivatePropertyTypes {
             static myPublicStaticProperty: privateClass; // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
+!!! error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
             private static myPrivateStaticProperty: privateClass;
             myPublicProperty: privateClass; // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
+!!! error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
             private myPrivateProperty: privateClass;
         }
     
@@ -159,14 +191,14 @@
     
         export var publicVarWithPrivatePropertyTypes: privateClass; // Error
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+!!! error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
         export var publicVarWithPublicPropertyTypes: publicClass;
         var privateVarWithPrivatePropertyTypes: privateClass;
         var privateVarWithPublicPropertyTypes: publicClass;
     
         export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass; // Error
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+!!! error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
         export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
         declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
         declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
@@ -174,22 +206,22 @@
         export interface publicInterfaceWithPrivateModulePropertyTypes {
             myProperty: privateModule.publicClass; // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Property 'myProperty' of exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4032: Property 'myProperty' of exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         export class publicClassWithPrivateModulePropertyTypes {
             static myPublicStaticProperty: privateModule.publicClass; // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Public static property 'myPublicStaticProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4027: Public static property 'myPublicStaticProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             myPublicProperty: privateModule.publicClass; // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Public property 'myPublicProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4030: Public property 'myPublicProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4024: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4024: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     
         interface privateInterfaceWithPrivateModulePropertyTypes {
             myProperty: privateModule.publicClass;
@@ -391,7 +423,7 @@
         export interface publicInterfaceWithPrivatePropertyTypes {
             myProperty: privateClass;  // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Property 'myProperty' of exported interface has or is using private name 'privateClass'.
+!!! error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
         }
     
         export interface publicInterfaceWithPublicPropertyTypes {
@@ -409,11 +441,11 @@
         export class publicClassWithWithPrivatePropertyTypes {
             static myPublicStaticProperty: privateClass; // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
+!!! error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
             private static myPrivateStaticProperty: privateClass;
             myPublicProperty: privateClass; // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
+!!! error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
             private myPrivateProperty: privateClass;
         }
     
@@ -440,14 +472,14 @@
     
         export var publicVarWithPrivatePropertyTypes: privateClass; // Error
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+!!! error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
         export var publicVarWithPublicPropertyTypes: publicClass;
         var privateVarWithPrivatePropertyTypes: privateClass;
         var privateVarWithPublicPropertyTypes: publicClass;
     
         export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass; // Error
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+!!! error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
         export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
         declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
         declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
@@ -455,22 +487,22 @@
         export interface publicInterfaceWithPrivateModulePropertyTypes {
             myProperty: privateModule.publicClass; // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Property 'myProperty' of exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4032: Property 'myProperty' of exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         export class publicClassWithPrivateModulePropertyTypes {
             static myPublicStaticProperty: privateModule.publicClass; // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Public static property 'myPublicStaticProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4027: Public static property 'myPublicStaticProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             myPublicProperty: privateModule.publicClass; // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Public property 'myPublicProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4030: Public property 'myPublicProperty' of exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4024: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4024: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     
         interface privateInterfaceWithPrivateModulePropertyTypes {
             myProperty: privateModule.publicClass;

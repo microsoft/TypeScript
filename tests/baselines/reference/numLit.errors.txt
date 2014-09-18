@@ -1,9 +1,13 @@
+tests/cases/compiler/numLit.ts(3,3): error TS1005: ';' expected.
+tests/cases/compiler/numLit.ts(3,3): error TS2304: Cannot find name 'toString'.
+
+
 ==== tests/cases/compiler/numLit.ts (2 errors) ====
     1..toString();
     1.0.toString();
     1.toString();
       ~~~~~~~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
       ~~~~~~~~
-!!! Cannot find name 'toString'.
+!!! error TS2304: Cannot find name 'toString'.
     1.+2.0 + 3. ;

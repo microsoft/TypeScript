@@ -1,3 +1,6 @@
+tests/cases/compiler/moduleWithValuesAsType.ts(5,8): error TS2304: Cannot find name 'A'.
+
+
 ==== tests/cases/compiler/moduleWithValuesAsType.ts (1 errors) ====
     module A {
         var b = 1;
@@ -5,4 +8,4 @@
     
     var a: A; // no error
            ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.

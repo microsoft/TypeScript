@@ -1,3 +1,9 @@
+tests/cases/compiler/propertyParameterWithQuestionMark.ts(6,5): error TS2322: Type '{}' is not assignable to type 'C':
+  Property 'x' is missing in type '{}'.
+tests/cases/compiler/propertyParameterWithQuestionMark.ts(8,1): error TS2322: Type '{ x?: any; }' is not assignable to type 'C':
+  Property 'x' is optional in type '{ x?: any; }' but required in type 'C'.
+
+
 ==== tests/cases/compiler/propertyParameterWithQuestionMark.ts (2 errors) ====
     class C {
         constructor(public x?) { }
@@ -6,11 +12,11 @@
     // x should not be an optional property
     var v: C = {}; // Should fail
         ~
-!!! Type '{}' is not assignable to type 'C':
-!!!   Property 'x' is missing in type '{}'.
+!!! error TS2322: Type '{}' is not assignable to type 'C':
+!!! error TS2322:   Property 'x' is missing in type '{}'.
     var v2: { x? }
     v = v2; // Should fail
     ~
-!!! Type '{ x?: any; }' is not assignable to type 'C':
-!!!   Property 'x' is optional in type '{ x?: any; }' but required in type 'C'.
+!!! error TS2322: Type '{ x?: any; }' is not assignable to type 'C':
+!!! error TS2322:   Property 'x' is optional in type '{ x?: any; }' but required in type 'C'.
     var v3: { x } = new C; // Should succeed

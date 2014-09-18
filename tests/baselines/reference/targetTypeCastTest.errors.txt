@@ -1,9 +1,12 @@
+tests/cases/compiler/targetTypeCastTest.ts(3,10): error TS2300: Duplicate identifier 'Point'.
+
+
 ==== tests/cases/compiler/targetTypeCastTest.ts (1 errors) ====
     declare var Point: { new(x:number, y:number): {x: number; y: number; }; }
     
     function Point(x, y) {
              ~~~~~
-!!! Duplicate identifier 'Point'.
+!!! error TS2300: Duplicate identifier 'Point'.
         this.x = x;
         this.y = y;   
     }

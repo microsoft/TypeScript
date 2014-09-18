@@ -1,13 +1,17 @@
+tests/cases/compiler/scopeCheckExtendedClassInsidePublicMethod2.ts(4,7): error TS2304: Cannot find name 'v'.
+tests/cases/compiler/scopeCheckExtendedClassInsidePublicMethod2.ts(6,7): error TS2304: Cannot find name 's'.
+
+
 ==== tests/cases/compiler/scopeCheckExtendedClassInsidePublicMethod2.ts (2 errors) ====
     class C { private v; public p; static s; }
     class D extends C {
        public c() {
           v = 1;
           ~
-!!! Cannot find name 'v'.
+!!! error TS2304: Cannot find name 'v'.
           this.p = 1;
           s = 1;
           ~
-!!! Cannot find name 's'.
+!!! error TS2304: Cannot find name 's'.
        }
     }

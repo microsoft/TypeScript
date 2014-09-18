@@ -1,3 +1,6 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable1.ts(12,21): error TS1110: Type expected.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable1.ts (1 errors) ====
     // Interface
     interface IPoint {
@@ -12,7 +15,7 @@
     
             public con: "hello";
                         ~~~~~~~
-!!! Type expected.
+!!! error TS1110: Type expected.
             // Constructor
             constructor (public x: number, public y: number) { }
     

@@ -1,3 +1,6 @@
+tests/cases/compiler/collisionThisExpressionAndLocalVarInFunction.ts(5,9): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+
+
 ==== tests/cases/compiler/collisionThisExpressionAndLocalVarInFunction.ts (1 errors) ====
     var console: {
         log(val: any);
@@ -5,6 +8,6 @@
     function x() {
         var _this = 5;
             ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
         x => { console.log(this.x); };
     }

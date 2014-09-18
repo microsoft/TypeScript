@@ -1,3 +1,22 @@
+tests/cases/compiler/protectedMembers.ts(86,5): error TS1089: 'protected' modifier cannot appear on a constructor declaration.
+tests/cases/compiler/protectedMembers.ts(40,1): error TS2341: Property 'C1.x' is inaccessible.
+tests/cases/compiler/protectedMembers.ts(41,1): error TS2341: Property 'C1.f' is inaccessible.
+tests/cases/compiler/protectedMembers.ts(42,1): error TS2341: Property 'C1.sx' is inaccessible.
+tests/cases/compiler/protectedMembers.ts(43,1): error TS2341: Property 'C1.sf' is inaccessible.
+tests/cases/compiler/protectedMembers.ts(46,1): error TS2341: Property 'C1.x' is inaccessible.
+tests/cases/compiler/protectedMembers.ts(47,1): error TS2341: Property 'C2.f' is inaccessible.
+tests/cases/compiler/protectedMembers.ts(48,1): error TS2341: Property 'C1.sx' is inaccessible.
+tests/cases/compiler/protectedMembers.ts(49,1): error TS2341: Property 'C2.sf' is inaccessible.
+tests/cases/compiler/protectedMembers.ts(68,9): error TS2341: Property 'A.x' is inaccessible.
+tests/cases/compiler/protectedMembers.ts(69,9): error TS2341: Property 'A.x' is inaccessible.
+tests/cases/compiler/protectedMembers.ts(98,1): error TS2322: Type 'B1' is not assignable to type 'A1':
+  Property 'x' is protected but type 'B1' is not derived from type 'A1'.
+tests/cases/compiler/protectedMembers.ts(99,1): error TS2322: Type 'A1' is not assignable to type 'B1':
+  Property 'x' is protected in type 'A1' but public in type 'B1'.
+tests/cases/compiler/protectedMembers.ts(112,7): error TS2416: Class 'B3' incorrectly extends base class 'A3':
+  Property 'x' is protected in type 'B3' but public in type 'A3'.
+
+
 ==== tests/cases/compiler/protectedMembers.ts (14 errors) ====
     // Class with protected members
     class C1 {
@@ -40,30 +59,30 @@
     // All of these should be errors
     c1.x;
     ~~~~
-!!! Property 'C1.x' is inaccessible.
+!!! error TS2341: Property 'C1.x' is inaccessible.
     c1.f();
     ~~~~
-!!! Property 'C1.f' is inaccessible.
+!!! error TS2341: Property 'C1.f' is inaccessible.
     C1.sx;
     ~~~~~
-!!! Property 'C1.sx' is inaccessible.
+!!! error TS2341: Property 'C1.sx' is inaccessible.
     C1.sf();
     ~~~~~
-!!! Property 'C1.sf' is inaccessible.
+!!! error TS2341: Property 'C1.sf' is inaccessible.
     
     // All of these should be errors
     c2.x;
     ~~~~
-!!! Property 'C1.x' is inaccessible.
+!!! error TS2341: Property 'C1.x' is inaccessible.
     c2.f();
     ~~~~
-!!! Property 'C2.f' is inaccessible.
+!!! error TS2341: Property 'C2.f' is inaccessible.
     C2.sx;
     ~~~~~
-!!! Property 'C1.sx' is inaccessible.
+!!! error TS2341: Property 'C1.sx' is inaccessible.
     C2.sf();
     ~~~~~
-!!! Property 'C2.sf' is inaccessible.
+!!! error TS2341: Property 'C2.sf' is inaccessible.
     
     // All of these should be ok
     c3.x;
@@ -84,10 +103,10 @@
         static foo(a: A, b: B, c: C, d: D, e: E) {
             a.x = 1;  // Error, access must be through C or type derived from C
             ~~~
-!!! Property 'A.x' is inaccessible.
+!!! error TS2341: Property 'A.x' is inaccessible.
             b.x = 1;  // Error, access must be through C or type derived from C
             ~~~
-!!! Property 'A.x' is inaccessible.
+!!! error TS2341: Property 'A.x' is inaccessible.
             c.x = 1;
             d.x = 1;
             e.x = 1;
@@ -106,7 +125,7 @@
         // Error, constructor cannot be protected
         protected constructor() {
         ~~~~~~~~~
-!!! 'protected' modifier cannot appear on a constructor declaration.
+!!! error TS1089: 'protected' modifier cannot appear on a constructor declaration.
         }
     }
     
@@ -120,12 +139,12 @@
     var b1: B1;
     a1 = b1;  // Error, B1 doesn't derive from A1
     ~~
-!!! Type 'B1' is not assignable to type 'A1':
-!!!   Property 'x' is protected but type 'B1' is not derived from type 'A1'.
+!!! error TS2322: Type 'B1' is not assignable to type 'A1':
+!!! error TS2322:   Property 'x' is protected but type 'B1' is not derived from type 'A1'.
     b1 = a1;  // Error, x is protected in A1 but public in B1
     ~~
-!!! Type 'A1' is not assignable to type 'B1':
-!!!   Property 'x' is protected in type 'A1' but public in type 'B1'.
+!!! error TS2322: Type 'A1' is not assignable to type 'B1':
+!!! error TS2322:   Property 'x' is protected in type 'A1' but public in type 'B1'.
     
     class A2 {
         protected x;
@@ -140,8 +159,8 @@
     // Error x is protected in B3 but public in A3
     class B3 extends A3 {
           ~~
-!!! Class 'B3' incorrectly extends base class 'A3':
-!!!   Property 'x' is protected in type 'B3' but public in type 'A3'.
+!!! error TS2416: Class 'B3' incorrectly extends base class 'A3':
+!!! error TS2416:   Property 'x' is protected in type 'B3' but public in type 'A3'.
         protected x;
     }
     

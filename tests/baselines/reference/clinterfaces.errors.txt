@@ -1,13 +1,19 @@
+tests/cases/compiler/clinterfaces.ts(3,15): error TS2300: Duplicate identifier 'C'.
+tests/cases/compiler/clinterfaces.ts(5,11): error TS2300: Duplicate identifier 'D'.
+tests/cases/compiler/clinterfaces.ts(12,7): error TS2300: Duplicate identifier 'Foo'.
+tests/cases/compiler/clinterfaces.ts(20,11): error TS2300: Duplicate identifier 'Bar'.
+
+
 ==== tests/cases/compiler/clinterfaces.ts (4 errors) ====
     module M {
         class C { }
         interface C { }
                   ~
-!!! Duplicate identifier 'C'.
+!!! error TS2300: Duplicate identifier 'C'.
         interface D { }
         class D { }
               ~
-!!! Duplicate identifier 'D'.
+!!! error TS2300: Duplicate identifier 'D'.
     }
     
     interface Foo<T> {
@@ -16,7 +22,7 @@
     
     class Foo<T>{
           ~~~
-!!! Duplicate identifier 'Foo'.
+!!! error TS2300: Duplicate identifier 'Foo'.
         b: number;
     }
     
@@ -26,7 +32,7 @@
     
     interface Bar<T> {
               ~~~
-!!! Duplicate identifier 'Bar'.
+!!! error TS2300: Duplicate identifier 'Bar'.
         a: string;
     }
     

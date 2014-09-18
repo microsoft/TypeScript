@@ -1,3 +1,12 @@
+tests/cases/conformance/externalModules/initializersInDeclarations.ts(5,7): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/initializersInDeclarations.ts(6,14): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/initializersInDeclarations.ts(7,16): error TS1037: A function implementation cannot be declared in an ambient context.
+tests/cases/conformance/externalModules/initializersInDeclarations.ts(12,15): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/initializersInDeclarations.ts(13,15): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/initializersInDeclarations.ts(16,2): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/initializersInDeclarations.ts(18,16): error TS1039: Initializers are not allowed in ambient contexts.
+
+
 ==== tests/cases/conformance/externalModules/initializersInDeclarations.ts (7 errors) ====
     
     // Errors: Initializers & statements in declaration file
@@ -5,30 +14,30 @@
     declare class Foo {
     	name = "test";
     	     ~
-!!! Initializers are not allowed in ambient contexts.
+!!! error TS1039: Initializers are not allowed in ambient contexts.
     	"some prop" = 42;
     	            ~
-!!! Initializers are not allowed in ambient contexts.
+!!! error TS1039: Initializers are not allowed in ambient contexts.
     	fn(): boolean {
     	              ~
-!!! A function implementation cannot be declared in an ambient context.
+!!! error TS1037: A function implementation cannot be declared in an ambient context.
     		return false;
     	}
     }
     
     declare var x = [];
                   ~
-!!! Initializers are not allowed in ambient contexts.
+!!! error TS1039: Initializers are not allowed in ambient contexts.
     declare var y = {};
                   ~
-!!! Initializers are not allowed in ambient contexts.
+!!! error TS1039: Initializers are not allowed in ambient contexts.
     
     declare module M1 {
     	while(true);
     	~~~~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
     
     	export var v1 = () => false;
     	              ~
-!!! Initializers are not allowed in ambient contexts.
+!!! error TS1039: Initializers are not allowed in ambient contexts.
     }

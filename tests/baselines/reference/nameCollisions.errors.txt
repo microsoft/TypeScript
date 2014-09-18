@@ -1,10 +1,21 @@
+tests/cases/compiler/nameCollisions.ts(4,12): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/nameCollisions.ts(13,9): error TS2300: Duplicate identifier 'z'.
+tests/cases/compiler/nameCollisions.ts(15,12): error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
+tests/cases/compiler/nameCollisions.ts(25,14): error TS2300: Duplicate identifier 'f'.
+tests/cases/compiler/nameCollisions.ts(28,9): error TS2300: Duplicate identifier 'f2'.
+tests/cases/compiler/nameCollisions.ts(34,14): error TS2300: Duplicate identifier 'C'.
+tests/cases/compiler/nameCollisions.ts(37,11): error TS2300: Duplicate identifier 'C2'.
+tests/cases/compiler/nameCollisions.ts(43,15): error TS2300: Duplicate identifier 'cli'.
+tests/cases/compiler/nameCollisions.ts(46,11): error TS2300: Duplicate identifier 'cli2'.
+
+
 ==== tests/cases/compiler/nameCollisions.ts (9 errors) ====
     module T {
         var x = 2;
     
         module x { // error
                ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
             export class Bar {
                 test: number;
             }
@@ -15,11 +26,11 @@
         }
         var z; // error
             ~
-!!! Duplicate identifier 'z'.
+!!! error TS2300: Duplicate identifier 'z'.
     
         module y {
                ~
-!!! A module declaration cannot be located prior to a class or function with which it is merged
+!!! error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
             var b;
         }
     
@@ -31,12 +42,12 @@
         var f;
         function f() { } //error
                  ~
-!!! Duplicate identifier 'f'.
+!!! error TS2300: Duplicate identifier 'f'.
     
         function f2() { }
         var f2; // error
             ~~
-!!! Duplicate identifier 'f2'.
+!!! error TS2300: Duplicate identifier 'f2'.
     
         var i;
         interface i { } //ok
@@ -44,12 +55,12 @@
         class C { }
         function C() { } // error
                  ~
-!!! Duplicate identifier 'C'.
+!!! error TS2300: Duplicate identifier 'C'.
     
         function C2() { }
         class C2 { } // error
               ~~
-!!! Duplicate identifier 'C2'.
+!!! error TS2300: Duplicate identifier 'C2'.
     
         function fi() { }
         interface fi { } // ok
@@ -57,10 +68,10 @@
         class cli { }
         interface cli { } // error
                   ~~~
-!!! Duplicate identifier 'cli'.
+!!! error TS2300: Duplicate identifier 'cli'.
     
         interface cli2 { }
         class cli2 { } // error
               ~~~~
-!!! Duplicate identifier 'cli2'.
+!!! error TS2300: Duplicate identifier 'cli2'.
     }

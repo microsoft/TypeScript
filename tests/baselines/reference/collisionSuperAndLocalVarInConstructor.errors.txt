@@ -1,3 +1,7 @@
+tests/cases/compiler/collisionSuperAndLocalVarInConstructor.ts(10,13): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+tests/cases/compiler/collisionSuperAndLocalVarInConstructor.ts(17,17): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+
+
 ==== tests/cases/compiler/collisionSuperAndLocalVarInConstructor.ts (2 errors) ====
     var _super = 10; // No Error
     class Foo {
@@ -10,7 +14,7 @@
             super();
             var _super = 10; // Should be error 
                 ~~~~~~
-!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+!!! error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
         }
     }
     class c extends Foo {
@@ -19,7 +23,7 @@
             var x = () => {
                 var _super = 10; // Should be error
                     ~~~~~~
-!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+!!! error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
             }
         }
     }

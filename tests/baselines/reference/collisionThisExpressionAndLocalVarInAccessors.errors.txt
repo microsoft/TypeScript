@@ -1,13 +1,23 @@
+tests/cases/compiler/collisionThisExpressionAndLocalVarInAccessors.ts(2,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/collisionThisExpressionAndLocalVarInAccessors.ts(12,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/collisionThisExpressionAndLocalVarInAccessors.ts(24,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/collisionThisExpressionAndLocalVarInAccessors.ts(34,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/collisionThisExpressionAndLocalVarInAccessors.ts(5,21): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndLocalVarInAccessors.ts(15,21): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndLocalVarInAccessors.ts(25,13): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndLocalVarInAccessors.ts(35,13): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+
+
 ==== tests/cases/compiler/collisionThisExpressionAndLocalVarInAccessors.ts (8 errors) ====
     class class1 {
         get a(): number {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x2 = {
                 doStuff: (callback) => () => {
                     var _this = 2;
                         ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
                     return callback(this);
                 }
             }
@@ -16,12 +26,12 @@
         }
         set a(val: number) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x2 = {
                 doStuff: (callback) => () => {
                     var _this = 2;
                         ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
                     return callback(this);
                 }
             }
@@ -32,10 +42,10 @@
     class class2 {
         get a(): number {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var _this = 2;
                 ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var x2 = {
                 doStuff: (callback) => () => {
                     return callback(this);
@@ -46,10 +56,10 @@
         }
         set a(val: number) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var _this = 2;
                 ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var x2 = {
                 doStuff: (callback) => () => {
                     return callback(this);

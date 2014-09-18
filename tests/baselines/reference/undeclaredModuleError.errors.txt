@@ -1,7 +1,12 @@
+tests/cases/compiler/undeclaredModuleError.ts(1,21): error TS2307: Cannot find external module 'fs'.
+tests/cases/compiler/undeclaredModuleError.ts(8,29): error TS2345: Argument of type '() => void' is not assignable to parameter of type '(stat: unknown, name: string) => boolean'.
+tests/cases/compiler/undeclaredModuleError.ts(11,41): error TS2304: Cannot find name 'IDoNotExist'.
+
+
 ==== tests/cases/compiler/undeclaredModuleError.ts (3 errors) ====
     import fs = require('fs');
                         ~~~~
-!!! Cannot find external module 'fs'.
+!!! error TS2307: Cannot find external module 'fs'.
     function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void ) {}
     
     function join(...paths: string[]) {}
@@ -12,11 +17,11 @@
                                 ~~~~~~~
             } , (error: Error, files: {}[]) => {
     ~~~~~~~~~
-!!! Argument of type '() => void' is not assignable to parameter of type '(stat: unknown, name: string) => boolean'.
+!!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '(stat: unknown, name: string) => boolean'.
                     files.forEach((file) => {
                         var fullPath = join(IDoNotExist);
                                             ~~~~~~~~~~~
-!!! Cannot find name 'IDoNotExist'.
+!!! error TS2304: Cannot find name 'IDoNotExist'.
                     } );
                 } );
         } );

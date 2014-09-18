@@ -1,3 +1,9 @@
+tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(27,16): error TS1005: ',' expected.
+tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(32,23): error TS1109: Expression expected.
+tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(32,16): error TS2304: Cannot find name 'string'.
+tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(37,9): error TS2350: Only a void function can be called with the 'new' keyword.
+
+
 ==== tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts (4 errors) ====
     
     class C0 {
@@ -27,21 +33,21 @@
     // Construct expression with no parentheses for construct signature with > 0 parameters
     var b = new C0 32, ''; // Parse error
                    ~~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
     
     // Generic construct expression with no parentheses
     var c1 = new T;
     var c1: T<{}>;
     var c2 = new T<string>; // Parse error
                           ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
                    ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
     
     
     // Construct expression of non-void returning function
     function fnNumber(): number { return 32; }
     var s = new fnNumber(); // Error
             ~~~~~~~~~~~~~~
-!!! Only a void function can be called with the 'new' keyword.
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
     

@@ -1,14 +1,19 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts(2,4): error TS1128: Declaration or statement expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts(5,4): error TS1128: Declaration or statement expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts(7,5): error TS1005: '}' expected.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts (3 errors) ====
     module M {
        |
        ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
        class C {
        }
        |
        ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
        enum E {
        }
         
-!!! '}' expected.
+!!! error TS1005: '}' expected.

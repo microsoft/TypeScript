@@ -1,3 +1,6 @@
+tests/cases/compiler/mergedDeclarations2.ts(9,20): error TS2304: Cannot find name 'b'.
+
+
 ==== tests/cases/compiler/mergedDeclarations2.ts (1 errors) ====
     enum Foo {
         b
@@ -9,5 +12,5 @@
     module Foo {
         export var x = b
                        ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
     }

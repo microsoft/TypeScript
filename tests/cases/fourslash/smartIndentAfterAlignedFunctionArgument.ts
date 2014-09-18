@@ -1,9 +1,10 @@
 /// <reference path='fourslash.ts'/>
 
 ////function foo(bar,
-////             blah,
+////             blah, baz,
 ////             /**/
 ////) { };
 
 goTo.marker();
-verify.indentationIs(0);
+// keep indentation of 'blah'
+verify.indentationIs(13);

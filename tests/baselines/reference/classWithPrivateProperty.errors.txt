@@ -1,3 +1,13 @@
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(15,18): error TS2341: Property 'C.x' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(16,18): error TS2341: Property 'C.a' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(17,18): error TS2341: Property 'C.b' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(18,18): error TS2341: Property 'C.c' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(19,18): error TS2341: Property 'C.d' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(20,18): error TS2341: Property 'C.e' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(21,18): error TS2341: Property 'C.f' is inaccessible.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(22,18): error TS2341: Property 'C.g' is inaccessible.
+
+
 ==== tests/cases/conformance/types/members/classWithPrivateProperty.ts (8 errors) ====
     // accessing any private outside the class is an error
     
@@ -15,25 +25,25 @@
     var c = new C();
     var r1: string = c.x;
                      ~~~
-!!! Property 'C.x' is inaccessible.
+!!! error TS2341: Property 'C.x' is inaccessible.
     var r2: string = c.a;
                      ~~~
-!!! Property 'C.a' is inaccessible.
+!!! error TS2341: Property 'C.a' is inaccessible.
     var r3: string = c.b;
                      ~~~
-!!! Property 'C.b' is inaccessible.
+!!! error TS2341: Property 'C.b' is inaccessible.
     var r4: string = c.c();
                      ~~~
-!!! Property 'C.c' is inaccessible.
+!!! error TS2341: Property 'C.c' is inaccessible.
     var r5: string = c.d();
                      ~~~
-!!! Property 'C.d' is inaccessible.
+!!! error TS2341: Property 'C.d' is inaccessible.
     var r6: string = C.e;
                      ~~~
-!!! Property 'C.e' is inaccessible.
+!!! error TS2341: Property 'C.e' is inaccessible.
     var r7: string = C.f();
                      ~~~
-!!! Property 'C.f' is inaccessible.
+!!! error TS2341: Property 'C.f' is inaccessible.
     var r8: string = C.g();
                      ~~~
-!!! Property 'C.g' is inaccessible.
+!!! error TS2341: Property 'C.g' is inaccessible.
