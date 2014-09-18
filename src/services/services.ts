@@ -1598,9 +1598,9 @@ module ts {
                     }
 
                     // Only perform incremental parsing on open files that are being edited.  If a file was
-                    // open, but is now closed, we want to reparse entirely so we don't have any tokens that
+                    // open, but is now closed, we want to re-parse entirely so we don't have any tokens that
                     // are holding onto expensive script snapshot instances on the host.  Similarly, if a 
-                    // file was closed, then we always want to reparse.  This is so our tree doesn't keep 
+                    // file was closed, then we always want to re-parse.  This is so our tree doesn't keep 
                     // the old buffer alive that represented the file on disk (as the host has moved to a 
                     // new text buffer).
                     var textChangeRange: TypeScript.TextChangeRange = null;
@@ -1650,12 +1650,29 @@ module ts {
             return program.getDiagnostics(getSourceFile(filename).getSourceFile());
         }
 
+        // getSemanticDiagnostiscs return array of Diagnostics. If '-d' is not enabled, only report semantic errors
+        // If '-d' enabled, report both semantic and emitter errors 
         function getSemanticDiagnostics(filename: string) {
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename)
+            var compilerOptions = program.getCompilerOptions();
+            var checker = getFullTypeCheckChecker();
+            var targetSourceFile = getSourceFile(filename);
 
-            return getFullTypeCheckChecker().getDiagnostics(getSourceFile(filename));
+            // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
+            // Therefore only get diagnostics for given file.
+
+            var allDiagnostics = checker.getDiagnostics(targetSourceFile);
+            if (compilerOptions.declaration) {
+                // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
+                // Get emitter-diagnostics requires calling TypeChecker.emitFiles so we have to define CompilerHost.writer which does nothing because emitFiles function has side effects defined by CompilerHost.writer
+                var savedWriter = writer;
+                writer = (filename: string, data: string, writeByteOrderMark: boolean) => { };
+                allDiagnostics = allDiagnostics.concat(checker.emitFiles(targetSourceFile).errors);
+                writer = savedWriter;
+            }
+            return allDiagnostics
         }
 
         function getCompilerOptionsDiagnostics() {
