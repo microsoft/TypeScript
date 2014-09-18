@@ -2066,6 +2066,7 @@ module ts {
             }
         }
 
+        /** Get the token whose text contains the position, or the containing node. */
         function getNodeAtPosition(sourceFile: SourceFile, position: number) {
             var current: Node = sourceFile;
             outer: while (true) {
@@ -2076,9 +2077,24 @@ module ts {
                         current = child;
                         continue outer;
                     }
-                    if (child.end > position) {
-                        break;
-                    }
+                }
+                return current;
+            }
+        }
+
+        /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
+          * leading trivia or within the token text.
+          */
+        function getTokenAtPosition(sourceFile: SourceFile, position: number) {
+            var current: Node = sourceFile;
+            outer: while (true) {
+                // find the child that has this
+                for (var i = 0, n = current.getChildCount(); i < n; i++) {
+                    var child = current.getChildAt(i);
+                    if (child.getFullStart() <= position && position < child.getEnd()) {
+                        current = child;
+                        continue outer;
+                    }                  
                 }
                 return current;
             }
@@ -3793,83 +3809,21 @@ module ts {
             return [];
         }
 
-        function escapeRegExp(str: string): string {
-            return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-        }
+        function getTodoComments(filename: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
+            filename = TypeScript.switchToForwardSlashes(filename);
 
-        function getTodoCommentsRegExp(descriptors: TodoCommentDescriptor[]): RegExp {
-            // NOTE: ?:  means 'non-capture group'.  It allows us to have groups without having to
-            // filter them out later in the final result array.
+            var sourceFile = getCurrentSourceFile(filename);
 
-            // TODO comments can appear in one of the following forms:
-            //
-            //  1)      // TODO     or  /////////// TODO
-            //
-            //  2)      /* TODO     or  /********** TODO
-            //
-            //  3)      /*
-            //           *   TODO
-            //           */
-            //
-            // The following three regexps are used to match the start of the text up to the TODO
-            // comment portion.
-            var singleLineCommentStart = /(?:\/\/+\s*)/.source;
-            var multiLineCommentStart = /(?:\/\*+\s*)/.source;
-            var anyNumberOfSpacesAndAsterixesAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
-
-            // Match any of the above three TODO comment start regexps.
-            // Note that the outermost group *is* a capture group.  We want to capture the preamble
-            // so that we can determine the starting position of the TODO comment match.
-            var preamble = "(" + anyNumberOfSpacesAndAsterixesAtStartOfLine + "|" + singleLineCommentStart + "|" + multiLineCommentStart + ")";
-
-            // Takes the descriptors and forms a regexp that matches them as if they were literals.
-            // For example, if the descriptors are "TODO(jason)" and "HACK", then this will be:
-            //
-            //      (?:(TODO\(jason\))|(HACK))
-            //
-            // Note that the outermost group is *not* a capture group, but the innermost groups
-            // *are* capture groups.  By capturing the inner literals we can determine after 
-            // matching which descriptor we are dealing with.
-            var literals = "(?:" + descriptors.map(d => "(" + escapeRegExp(d.text) + ")").join("|") + ")";
-
-            // After matching a descriptor literal, the following regexp matches the rest of the 
-            // text up to the end of the line (or */).
-            var endOfLineOrEndOfComment = /(?:$|\*\/)/.source
-            var messageRemainder = /(?:.*?)/.source
-
-            // This is the portion of the match we'll return as part of the TODO comment result. We
-            // match the literal portion up to the end of the line or end of comment.
-            var messagePortion = "(" + literals + messageRemainder + ")";
-            var regExpString = preamble + messagePortion + endOfLineOrEndOfComment;
-
-            // The final regexp will look like this:
-            // /((?:\/\/+\s*)|(?:\/\*+\s*)|(?:^(?:\s|\*)*))((?:(TODO\(jason\))|(HACK))(?:.*?))(?:$|\*\/)/gim
-
-            // The flags of the regexp are important here.
-            //  'g' is so that we are doing a global search and can find matches several times
-            //  in the input.
-            //
-            //  'i' is for case insensitivity (We do this to match C# TODO comment code).
-            //
-            //  'm' is so we can find matches in a multiline input.
-            return new RegExp(regExpString, "gim");
-        }
-
-        function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
-            fileName = TypeScript.switchToForwardSlashes(fileName);
-
-            var sourceFile = getCurrentSourceFile(fileName);
-            var syntaxTree = sourceFile.getSyntaxTree();
             cancellationToken.throwIfCancellationRequested();
 
-            var text = syntaxTree.text;
-            var fileContents = text.substr(0, text.length());
+            var fileContents = sourceFile.text;
+
             cancellationToken.throwIfCancellationRequested();
 
             var result: TodoComment[] = [];
 
             if (descriptors.length > 0) {
-                var regExp = getTodoCommentsRegExp(descriptors);
+                var regExp = getTodoCommentsRegExp();
 
                 var matchArray: RegExpExecArray;
                 while (matchArray = regExp.exec(fileContents)) {
@@ -3884,7 +3838,7 @@ module ts {
                     //      ["// hack   1", "// ", "hack   1", undefined, "hack"]
                     //
                     // Here are the relevant capture groups:
-                    //  0) The full match for the entire regex.
+                    //  0) The full match for the entire regexp.
                     //  1) The preamble to the message portion.
                     //  2) The message portion.
                     //  3...N) The descriptor that was matched - by index.  'undefined' for each 
@@ -3898,20 +3852,19 @@ module ts {
                     var preamble = matchArray[1];
                     var matchPosition = matchArray.index + preamble.length;
 
-                    // Ok, we have found a match in the file.  This is only an acceptable match if
+                    // OK, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
-                    var token = TypeScript.findToken(syntaxTree.sourceUnit(), matchPosition);
+                    var token = getTokenAtPosition(sourceFile, matchPosition);
 
-                    if (matchPosition >= TypeScript.start(token) && matchPosition < TypeScript.end(token)) {
+                    if (token.getStart() <= matchPosition && matchPosition < token.getEnd()) {
                         // match was within the token itself.  Not in the comment.  Keep searching
                         // descriptor.
                         continue;
                     }
 
-                    // Looks to be within the trivia.  See if we can find the comment containing it.
-                    var triviaList = matchPosition < TypeScript.start(token) ? token.leadingTrivia(syntaxTree.text) : token.trailingTrivia(syntaxTree.text);
-                    var trivia = findContainingComment(triviaList, matchPosition);
-                    if (trivia === null) {
+                    // Looks to be within the trivia. See if we can find the comment containing it.
+                    if (!getContainingComment(getTrailingComments(fileContents, token.getFullStart()), matchPosition) &&
+                        !getContainingComment(getLeadingComments(fileContents, token.getFullStart()), matchPosition)) {
                         continue;
                     }
 
@@ -3935,25 +3888,89 @@ module ts {
             }
 
             return result;
-        }
 
-        function isLetterOrDigit(char: number): boolean {
-            return (char >= TypeScript.CharacterCodes.a && char <= TypeScript.CharacterCodes.z) ||
-                (char >= TypeScript.CharacterCodes.A && char <= TypeScript.CharacterCodes.Z) ||
-                (char >= TypeScript.CharacterCodes._0 && char <= TypeScript.CharacterCodes._9);
-        }
-
-        function findContainingComment(triviaList: TypeScript.ISyntaxTriviaList, position: number): TypeScript.ISyntaxTrivia {
-            for (var i = 0, n = triviaList.count(); i < n; i++) {
-                var trivia = triviaList.syntaxTriviaAt(i);
-                var fullEnd = trivia.fullStart() + trivia.fullWidth();
-                if (trivia.isComment() && trivia.fullStart() <= position && position < fullEnd) {
-                    return trivia;
-                }
+            function escapeRegExp(str: string): string {
+                return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
             }
 
-            return null;
+            function getTodoCommentsRegExp(): RegExp {
+                // NOTE: ?:  means 'non-capture group'.  It allows us to have groups without having to
+                // filter them out later in the final result array.
+
+                // TODO comments can appear in one of the following forms:
+                //
+                //  1)      // TODO     or  /////////// TODO
+                //
+                //  2)      /* TODO     or  /********** TODO
+                //
+                //  3)      /*
+                //           *   TODO
+                //           */
+                //
+                // The following three regexps are used to match the start of the text up to the TODO
+                // comment portion.
+                var singleLineCommentStart = /(?:\/\/+\s*)/.source;
+                var multiLineCommentStart = /(?:\/\*+\s*)/.source;
+                var anyNumberOfSpacesAndAsterixesAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
+
+                // Match any of the above three TODO comment start regexps.
+                // Note that the outermost group *is* a capture group.  We want to capture the preamble
+                // so that we can determine the starting position of the TODO comment match.
+                var preamble = "(" + anyNumberOfSpacesAndAsterixesAtStartOfLine + "|" + singleLineCommentStart + "|" + multiLineCommentStart + ")";
+
+                // Takes the descriptors and forms a regexp that matches them as if they were literals.
+                // For example, if the descriptors are "TODO(jason)" and "HACK", then this will be:
+                //
+                //      (?:(TODO\(jason\))|(HACK))
+                //
+                // Note that the outermost group is *not* a capture group, but the innermost groups
+                // *are* capture groups.  By capturing the inner literals we can determine after 
+                // matching which descriptor we are dealing with.
+                var literals = "(?:" + map(descriptors, d => "(" + escapeRegExp(d.text) + ")").join("|") + ")";
+
+                // After matching a descriptor literal, the following regexp matches the rest of the 
+                // text up to the end of the line (or */).
+                var endOfLineOrEndOfComment = /(?:$|\*\/)/.source
+                var messageRemainder = /(?:.*?)/.source
+
+                // This is the portion of the match we'll return as part of the TODO comment result. We
+                // match the literal portion up to the end of the line or end of comment.
+                var messagePortion = "(" + literals + messageRemainder + ")";
+                var regExpString = preamble + messagePortion + endOfLineOrEndOfComment;
+
+                // The final regexp will look like this:
+                // /((?:\/\/+\s*)|(?:\/\*+\s*)|(?:^(?:\s|\*)*))((?:(TODO\(jason\))|(HACK))(?:.*?))(?:$|\*\/)/gim
+
+                // The flags of the regexp are important here.
+                //  'g' is so that we are doing a global search and can find matches several times
+                //  in the input.
+                //
+                //  'i' is for case insensitivity (We do this to match C# TODO comment code).
+                //
+                //  'm' is so we can find matches in a multi-line input.
+                return new RegExp(regExpString, "gim");
+            }
+
+            function getContainingComment(comments: Comment[], position: number): Comment {
+                if (comments) {
+                    for (var i = 0, n = comments.length; i < n; i++) {
+                        var comment = comments[i];
+                        if (comment.pos <= position && position < comment.end) {
+                            return comment;
+                        }
+                    }
+                }
+
+                return undefined;
+            }
+
+            function isLetterOrDigit(char: number): boolean {
+                return (char >= TypeScript.CharacterCodes.a && char <= TypeScript.CharacterCodes.z) ||
+                    (char >= TypeScript.CharacterCodes.A && char <= TypeScript.CharacterCodes.Z) ||
+                    (char >= TypeScript.CharacterCodes._0 && char <= TypeScript.CharacterCodes._9);
+            }
         }
+      
 
         function getRenameInfo(fileName: string, position: number): RenameInfo {
             synchronizeHostData();
