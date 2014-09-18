@@ -1,11 +1,15 @@
+tests/cases/compiler/returnValueInSetter.ts(2,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/returnValueInSetter.ts(3,16): error TS2408: Setters cannot return a value.
+
+
 ==== tests/cases/compiler/returnValueInSetter.ts (2 errors) ====
     class f {
         set x(value) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return null; // Should be an error
                    ~~~~
-!!! Setters cannot return a value.
+!!! error TS2408: Setters cannot return a value.
         }
     }
     

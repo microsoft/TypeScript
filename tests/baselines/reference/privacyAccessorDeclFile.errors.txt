@@ -1,3 +1,41 @@
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(253,20): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(259,13): error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(265,20): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(271,13): error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(361,41): error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(365,28): error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(405,20): error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(408,13): error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(411,20): error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(414,13): error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(420,41): error TS4036: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(422,28): error TS4036: Parameter 'myPublicMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(9,16): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(15,9): error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(21,16): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(27,9): error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(117,37): error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(121,24): error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(161,16): error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(164,9): error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(167,16): error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(170,9): error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(176,37): error TS4036: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(178,24): error TS4036: Parameter 'myPublicMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(211,20): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(217,13): error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(223,20): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(229,13): error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(319,41): error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(323,28): error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(363,20): error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(366,13): error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(369,20): error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(372,13): error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(378,41): error TS4036: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,28): error TS4036: Parameter 'myPublicMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+
+
 ==== tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts (24 errors) ====
     
     class privateClass {
@@ -9,7 +47,7 @@
     export class publicClassWithWithPrivateGetAccessorTypes {
         static get myPublicStaticMethod(): privateClass { // Error
                    ~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
             return null;
         }
         private static get myPrivateStaticMethod(): privateClass {
@@ -17,7 +55,7 @@
         }
         get myPublicMethod(): privateClass { // Error
             ~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
             return null;
         }
         private get myPrivateMethod(): privateClass {
@@ -25,7 +63,7 @@
         }
         static get myPublicStaticMethod1() { // Error
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
             return new privateClass();
         }
         private static get myPrivateStaticMethod1() {
@@ -33,7 +71,7 @@
         }
         get myPublicMethod1() { // Error
             ~~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
             return new privateClass();
         }
         private get myPrivateMethod1() {
@@ -125,13 +163,13 @@
     export class publicClassWithWithPrivateSetAccessorTypes {
         static set myPublicStaticMethod(param: privateClass) { // Error
                                         ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
+!!! error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
         }
         private static set myPrivateStaticMethod(param: privateClass) {
         }
         set myPublicMethod(param: privateClass) { // Error
                            ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
+!!! error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
         }
         private set myPrivateMethod(param: privateClass) {
         }
@@ -173,22 +211,22 @@
     export class publicClassWithPrivateModuleGetAccessorTypes {
         static get myPublicStaticMethod(): privateModule.publicClass { // Error
                    ~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             return null;
         }
         get myPublicMethod(): privateModule.publicClass { // Error
             ~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             return null;
         }
         static get myPublicStaticMethod1() { // Error
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             return new privateModule.publicClass();
         }
         get myPublicMethod1() { // Error
             ~~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             return new privateModule.publicClass();
         }
     }
@@ -196,11 +234,11 @@
     export class publicClassWithPrivateModuleSetAccessorTypes {
         static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4036: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         set myPublicMethod(param: privateModule.publicClass) { // Error
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'myPublicMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4036: Parameter 'myPublicMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
     }
     
@@ -235,7 +273,7 @@
         export class publicClassWithWithPrivateGetAccessorTypes {
             static get myPublicStaticMethod(): privateClass { // Error
                        ~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
                 return null;
             }
             private static get myPrivateStaticMethod(): privateClass {
@@ -243,7 +281,7 @@
             }
             get myPublicMethod(): privateClass { // Error
                 ~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
                 return null;
             }
             private get myPrivateMethod(): privateClass {
@@ -251,7 +289,7 @@
             }
             static get myPublicStaticMethod1() { // Error
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
                 return new privateClass();
             }
             private static get myPrivateStaticMethod1() {
@@ -259,7 +297,7 @@
             }
             get myPublicMethod1() { // Error
                 ~~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
                 return new privateClass();
             }
             private get myPrivateMethod1() {
@@ -351,13 +389,13 @@
         export class publicClassWithWithPrivateSetAccessorTypes {
             static set myPublicStaticMethod(param: privateClass) { // Error
                                             ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
+!!! error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
             }
             private static set myPrivateStaticMethod(param: privateClass) {
             }
             set myPublicMethod(param: privateClass) { // Error
                                ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
+!!! error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
             }
             private set myPrivateMethod(param: privateClass) {
             }
@@ -399,22 +437,22 @@
         export class publicClassWithPrivateModuleGetAccessorTypes {
             static get myPublicStaticMethod(): privateModule.publicClass { // Error
                        ~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                 return null;
             }
             get myPublicMethod(): privateModule.publicClass { // Error
                 ~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                 return null;
             }
             static get myPublicStaticMethod1() { // Error
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                 return new privateModule.publicClass();
             }
             get myPublicMethod1() { // Error
                 ~~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                 return new privateModule.publicClass();
             }
         }
@@ -422,11 +460,11 @@
         export class publicClassWithPrivateModuleSetAccessorTypes {
             static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4036: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             }
             set myPublicMethod(param: privateModule.publicClass) { // Error
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'myPublicMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4036: Parameter 'myPublicMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             }
         }
     
@@ -911,7 +949,7 @@
         export class publicClassWithWithPrivateGetAccessorTypes {
             static get myPublicStaticMethod(): privateClass { // Error
                        ~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
                 return null;
             }
             private static get myPrivateStaticMethod(): privateClass {
@@ -919,7 +957,7 @@
             }
             get myPublicMethod(): privateClass { // Error
                 ~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
                 return null;
             }
             private get myPrivateMethod(): privateClass {
@@ -927,7 +965,7 @@
             }
             static get myPublicStaticMethod1() { // Error
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
                 return new privateClass();
             }
             private static get myPrivateStaticMethod1() {
@@ -935,7 +973,7 @@
             }
             get myPublicMethod1() { // Error
                 ~~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
                 return new privateClass();
             }
             private get myPrivateMethod1() {
@@ -1027,13 +1065,13 @@
         export class publicClassWithWithPrivateSetAccessorTypes {
             static set myPublicStaticMethod(param: privateClass) { // Error
                                             ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
+!!! error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
             }
             private static set myPrivateStaticMethod(param: privateClass) {
             }
             set myPublicMethod(param: privateClass) { // Error
                                ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
+!!! error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
             }
             private set myPrivateMethod(param: privateClass) {
             }
@@ -1075,22 +1113,22 @@
         export class publicClassWithPrivateModuleGetAccessorTypes {
             static get myPublicStaticMethod(): privateModule.publicClass { // Error
                        ~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                 return null;
             }
             get myPublicMethod(): privateModule.publicClass { // Error
                 ~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                 return null;
             }
             static get myPublicStaticMethod1() { // Error
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                 return new privateModule.publicClass();
             }
             get myPublicMethod1() { // Error
                 ~~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                 return new privateModule.publicClass();
             }
         }
@@ -1098,11 +1136,11 @@
         export class publicClassWithPrivateModuleSetAccessorTypes {
             static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4036: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             }
             set myPublicMethod(param: privateModule.publicClass) { // Error
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'myPublicMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4036: Parameter 'myPublicMethod' of public property setter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             }
         }
     

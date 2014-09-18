@@ -1,3 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(79,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(85,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(94,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(100,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(119,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(125,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(111,25): error TS2340: Only public methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(217,24): error TS2340: Only public methods of the base class are accessible via the 'super' keyword
+
+
 ==== tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts (8 errors) ====
     /** i1 is interface with properties*/
     interface i1 {
@@ -79,7 +89,7 @@
         /** c2 c2_prop*/
         public get c2_prop() {
                    ~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 10;
         }
         public c2_nc_p1: number;
@@ -87,7 +97,7 @@
         }
         public get c2_nc_prop() {
                    ~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 10;
         }
         /** c2 p1*/
@@ -98,7 +108,7 @@
         /** c2 prop*/
         public get prop() {
                    ~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 10;
         }
         public nc_p1: number;
@@ -106,7 +116,7 @@
         }
         public get nc_prop() {
                    ~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 10;
         }
         /** c2 constructor*/
@@ -119,7 +129,7 @@
             super(10);
             this.p1 = super.c2_p1;
                             ~~~~~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
         }
         /** c3 p1*/
         public p1: number;
@@ -129,7 +139,7 @@
         /** c3 prop*/
         public get prop() {
                    ~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 10;
         }
         public nc_p1: number;
@@ -137,7 +147,7 @@
         }
         public get nc_prop() {
                    ~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 10;
         }
     }
@@ -231,6 +241,6 @@
             super();
             this.d = super.b;
                            ~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
         }
     }

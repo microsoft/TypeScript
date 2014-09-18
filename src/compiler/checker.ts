@@ -65,7 +65,8 @@ module ts {
             symbolToString: symbolToString,
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
             getRootSymbol: getRootSymbol,
-            getContextualType: getContextualType
+            getContextualType: getContextualType,
+            getFullyQualifiedName: getFullyQualifiedName
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -2431,7 +2432,7 @@ module ts {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.QualifiedName:
                     var symbol = getSymbolInfo(node);
-                    return getDeclaredTypeOfSymbol(symbol);
+                    return symbol && getDeclaredTypeOfSymbol(symbol);
                 default:
                     return unknownType;
             }
@@ -2967,10 +2968,12 @@ module ts {
                         }
 
                         if (getDeclarationFlagsFromSymbol(sourceProp) & NodeFlags.Private || getDeclarationFlagsFromSymbol(targetProp) & NodeFlags.Private) {
-                            if (reportErrors) {
-                                reportError(Diagnostics.Private_property_0_cannot_be_reimplemented, symbolToString(targetProp));
+                            if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Private_property_0_cannot_be_reimplemented, symbolToString(targetProp));
+                                }
+                                return false;
                             }
-                            return false;
                         }
                         if (!isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors)) {
                             if (reportErrors) {
@@ -3469,41 +3472,6 @@ module ts {
             return getAncestor(node, kind) !== undefined;
         }
 
-        function getAncestor(node: Node, kind: SyntaxKind): Node {
-            switch (kind) {
-                // special-cases that can be come first
-                case SyntaxKind.ClassDeclaration:
-                    while (node) {
-                        switch (node.kind) {
-                            case SyntaxKind.ClassDeclaration:
-                                return <ClassDeclaration>node;
-                            case SyntaxKind.EnumDeclaration:
-                            case SyntaxKind.InterfaceDeclaration:
-                            case SyntaxKind.ModuleDeclaration:
-                            case SyntaxKind.ImportDeclaration:
-                                // early exit cases - declarations cannot be nested in classes
-                                return undefined;
-                            default:
-                                node = node.parent;
-                                continue;
-                        }
-                    }
-                    break;
-                default:
-                    while (node) {
-                        if (node.kind === kind) {
-                            return node;
-                        }
-                        else {
-                            node = node.parent;
-                        }
-                    }
-                    break;
-            }
-
-            return undefined;
-        }
-
         // EXPRESSION TYPE CHECKING
 
         function checkIdentifier(node: Identifier): Type {
@@ -3850,6 +3818,11 @@ module ts {
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
         function getContextualType(node: Expression): Type {
+            if (isInsideWithStatementBody(node)) {
+                // We cannot answer semantic questions within a with block, do not proceed any further
+                return undefined;
+            }
+
             if (node.contextualType) {
                 return node.contextualType;
             }
@@ -5211,8 +5184,7 @@ module ts {
                 var otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
                 var otherAccessor = <AccessorDeclaration>getDeclarationOfKind(node.symbol, otherKind);
                 if (otherAccessor) {
-                    var visibilityFlags = NodeFlags.Private | NodeFlags.Public;
-                    if (((node.flags & visibilityFlags) !== (otherAccessor.flags & visibilityFlags))) {
+                    if (((node.flags & NodeFlags.AccessibilityModifier) !== (otherAccessor.flags & NodeFlags.AccessibilityModifier))) {
                         error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
                     }
 
@@ -5981,7 +5953,7 @@ module ts {
             });
         }
 
-        function checkLabelledStatement(node: LabelledStatement) {
+        function checkLabeledStatement(node: LabeledStatement) {
             checkSourceElement(node.statement);
         }
 
@@ -6551,8 +6523,8 @@ module ts {
                     return checkWithStatement(<WithStatement>node);
                 case SyntaxKind.SwitchStatement:
                     return checkSwitchStatement(<SwitchStatement>node);
-                case SyntaxKind.LabelledStatement:
-                    return checkLabelledStatement(<LabelledStatement>node);
+                case SyntaxKind.LabeledStatement:
+                    return checkLabeledStatement(<LabeledStatement>node);
                 case SyntaxKind.ThrowStatement:
                     return checkThrowStatement(<ThrowStatement>node);
                 case SyntaxKind.TryStatement:
@@ -6631,7 +6603,7 @@ module ts {
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.DefaultClause:
-                case SyntaxKind.LabelledStatement:
+                case SyntaxKind.LabeledStatement:
                 case SyntaxKind.ThrowStatement:
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.TryBlock:
@@ -6720,7 +6692,20 @@ module ts {
             return findChildAtPosition(sourceFile);
         }
 
-        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
+        function isInsideWithStatementBody(node: Node): boolean {
+            if (node) {
+                while (node.parent) {
+                    if (node.parent.kind === SyntaxKind.WithStatement && (<WithStatement>node.parent).statement === node) {
+                        return true;
+                    }
+                    node = node.parent;
+                }
+            }
+
+            return false;
+        }
+
+        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[]{
             var symbols: SymbolTable = {};
             var memberFlags: NodeFlags = 0;
             function copySymbol(symbol: Symbol, meaning: SymbolFlags) {
@@ -6740,6 +6725,12 @@ module ts {
                     }
                 }
             }
+
+            if (isInsideWithStatementBody(location)) {
+                // We cannot answer semantic questions within a with block, do not proceed any further
+                return [];
+            }
+
             while (location) {
                 if (location.locals && !isGlobalSourceFile(location)) {
                     copySymbols(location.locals, meaning);
@@ -7012,6 +7003,11 @@ module ts {
         }
 
         function getSymbolInfo(node: Node) {
+            if (isInsideWithStatementBody(node)) {
+                // We cannot answer semantic questions within a with block, do not proceed any further
+                return undefined;
+            }
+
             if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                 // This is a declaration, call getSymbolOfNode
                 return getSymbolOfNode(node.parent);
@@ -7066,9 +7062,15 @@ module ts {
         }
 
         function getTypeOfNode(node: Node): Type {
+            if (isInsideWithStatementBody(node)) {
+                // We cannot answer semantic questions within a with block, do not proceed any further
+                return unknownType;
+            }
+
             if (isExpression(node)) {
                 return getTypeOfExpression(<Expression>node);
             }
+
             if (isTypeNode(node)) {
                 return getTypeFromTypeNode(<TypeNode>node);
             }
@@ -7081,7 +7083,7 @@ module ts {
 
             if (isTypeDeclarationName(node)) {
                 var symbol = getSymbolInfo(node);
-                return getDeclaredTypeOfSymbol(symbol);
+                return symbol && getDeclaredTypeOfSymbol(symbol);
             }
 
             if (isDeclaration(node)) {
@@ -7092,12 +7094,12 @@ module ts {
 
             if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                 var symbol = getSymbolInfo(node);
-                return getTypeOfSymbol(symbol);
+                return symbol && getTypeOfSymbol(symbol);
             }
 
             if (isInRightSideOfImportOrExportAssignment(node)) {
                 var symbol = getSymbolInfo(node);
-                var declaredType = getDeclaredTypeOfSymbol(symbol);
+                var declaredType = symbol && getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
             }
 
@@ -7149,7 +7151,7 @@ module ts {
         }
 
         function getRootSymbol(symbol: Symbol) {
-            return (symbol.flags & SymbolFlags.Transient) ? getSymbolLinks(symbol).target : symbol;
+            return ((symbol.flags & SymbolFlags.Transient) && getSymbolLinks(symbol).target) || symbol;
         }
 
         // Emitter support
@@ -7243,12 +7245,9 @@ module ts {
             return target !== unknownSymbol && ((target.flags & SymbolFlags.Value) !== 0);
         }
 
-        function shouldEmitDeclarations() {
-            // If the declaration emit and there are no errors being reported in program or by checker
-            // declarations can be emitted
-            return compilerOptions.declaration &&
-                !program.getDiagnostics().length &&
-                !getDiagnostics().length;
+        function hasSemanticErrors() {
+            // Return true if there is any semantic error in a file or globally
+            return getDiagnostics().length > 0 || getGlobalDiagnostics().length > 0;
         }
 
         function isReferencedImportDeclaration(node: ImportDeclaration): boolean {
@@ -7309,7 +7308,7 @@ module ts {
             writeTypeToTextWriter(getReturnTypeOfSignature(signature), enclosingDeclaration, flags , writer);
         }
 
-        function invokeEmitter() {
+        function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver: EmitResolver = {
                 getProgram: () => program,
                 getLocalNameOfContainer: getLocalNameOfContainer,
@@ -7320,7 +7319,7 @@ module ts {
                 getNodeCheckFlags: getNodeCheckFlags,
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
-                shouldEmitDeclarations: shouldEmitDeclarations,
+                hasSemanticErrors: hasSemanticErrors,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
                 writeTypeAtLocation: writeTypeAtLocation,
@@ -7330,7 +7329,7 @@ module ts {
                 isImportDeclarationEntityNameReferenceDeclarationVisibile: isImportDeclarationEntityNameReferenceDeclarationVisibile
             };
             checkProgram();
-            return emitFiles(resolver);
+            return emitFiles(resolver, targetSourceFile);
         }
 
         function initializeTypeChecker() {

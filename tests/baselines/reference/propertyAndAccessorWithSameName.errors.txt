@@ -1,11 +1,21 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(10,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(15,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(18,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(3,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(10,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(15,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(18,9): error TS2300: Duplicate identifier 'x'.
+
+
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts (8 errors) ====
     class C {
         x: number;
         get x() { // error
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
             return 1;
         }
     }
@@ -14,23 +24,23 @@
         x: number;
         set x(v) { } // error
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }
     
     class E {
         private x: number;
         get x() { // error
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
             return 1;
         }
         set x(v) { }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }

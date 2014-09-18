@@ -3263,14 +3263,21 @@ var ts;
             node.initializer = parseInitializer(true);
             return finishNode(node);
         }
-        function parseSignature(kind, returnToken) {
+        function parseSignature(kind, returnToken, returnTokenRequired) {
             if (kind === 121 /* ConstructSignature */) {
                 parseExpected(78 /* NewKeyword */);
             }
             var typeParameters = parseTypeParameters();
             var parameters = parseParameterList(7 /* OpenParenToken */, 8 /* CloseParenToken */);
             checkParameterList(parameters);
-            var type = parseOptional(returnToken) ? parseType() : undefined;
+            var type;
+            if (returnTokenRequired) {
+                parseExpected(returnToken);
+                type = parseType();
+            }
+            else if (parseOptional(returnToken)) {
+                type = parseType();
+            }
             return {
                 typeParameters: typeParameters,
                 parameters: parameters,
@@ -3320,7 +3327,7 @@ var ts;
         }
         function parseSignatureMember(kind, returnToken) {
             var node = createNode(kind);
-            var sig = parseSignature(kind, returnToken);
+            var sig = parseSignature(kind, returnToken, false);
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
             node.type = sig.type;
@@ -3389,7 +3396,7 @@ var ts;
             }
             if (token === 7 /* OpenParenToken */ || token === 15 /* LessThanToken */) {
                 node.kind = 116 /* Method */;
-                var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */);
+                var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */, false);
                 node.typeParameters = sig.typeParameters;
                 node.parameters = sig.parameters;
                 node.type = sig.type;
@@ -3445,7 +3452,7 @@ var ts;
         function parseFunctionType(signatureKind) {
             var node = createNode(125 /* TypeLiteral */);
             var member = createNode(signatureKind);
-            var sig = parseSignature(signatureKind, 23 /* EqualsGreaterThanToken */);
+            var sig = parseSignature(signatureKind, 23 /* EqualsGreaterThanToken */, true);
             member.typeParameters = sig.typeParameters;
             member.parameters = sig.parameters;
             member.type = sig.type;
@@ -3633,7 +3640,7 @@ var ts;
             }
             var pos = getNodePos();
             if (triState === 1 /* True */) {
-                var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */);
+                var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */, false);
                 if (parseExpected(23 /* EqualsGreaterThanToken */) || token === 5 /* OpenBraceToken */) {
                     return parseArrowExpressionTail(pos, sig, false);
                 }
@@ -3694,7 +3701,7 @@ var ts;
         }
         function tryParseSignatureIfArrowOrBraceFollows() {
             return tryParse(function () {
-                var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */);
+                var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */, false);
                 if (token === 23 /* EqualsGreaterThanToken */ || token === 5 /* OpenBraceToken */) {
                     return sig;
                 }
@@ -3966,7 +3973,7 @@ var ts;
             var node = createNode(129 /* PropertyAssignment */);
             node.name = parsePropertyName();
             if (token === 7 /* OpenParenToken */ || token === 15 /* LessThanToken */) {
-                var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */);
+                var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */, false);
                 var body = parseBody(false);
                 node.initializer = makeFunctionExpression(136 /* FunctionExpression */, node.pos, undefined, sig, body);
             }
@@ -4045,7 +4052,7 @@ var ts;
             var pos = getNodePos();
             parseExpected(73 /* FunctionKeyword */);
             var name = isIdentifier() ? parseIdentifier() : undefined;
-            var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */);
+            var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */, false);
             var body = parseBody(false);
             if (name && isInStrictMode && isEvalOrArgumentsIdentifier(name)) {
                 reportInvalidUseInStrictMode(name);
@@ -4557,7 +4564,7 @@ var ts;
                 node.flags = flags;
             parseExpected(73 /* FunctionKeyword */);
             node.name = parseIdentifier();
-            var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */);
+            var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */, false);
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
             node.type = sig.type;
@@ -4571,7 +4578,7 @@ var ts;
             var node = createNode(117 /* Constructor */, pos);
             node.flags = flags;
             parseExpected(103 /* ConstructorKeyword */);
-            var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */);
+            var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */, false);
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
             node.type = sig.type;
@@ -4595,7 +4602,7 @@ var ts;
                 var method = createNode(116 /* Method */, pos);
                 method.flags = flags;
                 method.name = name;
-                var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */);
+                var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */, false);
                 method.typeParameters = sig.typeParameters;
                 method.parameters = sig.parameters;
                 method.type = sig.type;
@@ -4663,7 +4670,7 @@ var ts;
             var node = createNode(kind, pos);
             node.flags = flags;
             node.name = parsePropertyName();
-            var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */);
+            var sig = parseSignature(120 /* CallSignature */, 42 /* ColonToken */, false);
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
             node.type = sig.type;
@@ -5226,17 +5233,27 @@ var ts;
                 var start = refPos;
                 var length = refEnd - refPos;
             }
+            var diagnostic;
             if (hasExtension(filename)) {
                 if (!ts.fileExtensionIs(filename, ".ts")) {
-                    errors.push(ts.createFileDiagnostic(refFile, start, length, ts.Diagnostics.File_0_must_have_extension_ts_or_d_ts, filename));
+                    diagnostic = ts.Diagnostics.File_0_must_have_extension_ts_or_d_ts;
                 }
                 else if (!findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
-                    errors.push(ts.createFileDiagnostic(refFile, start, length, ts.Diagnostics.File_0_not_found, filename));
+                    diagnostic = ts.Diagnostics.File_0_not_found;
                 }
             }
             else {
                 if (!(findSourceFile(filename + ".ts", isDefaultLib, refFile, refPos, refEnd) || findSourceFile(filename + ".d.ts", isDefaultLib, refFile, refPos, refEnd))) {
-                    errors.push(ts.createFileDiagnostic(refFile, start, length, ts.Diagnostics.File_0_not_found, filename + ".ts"));
+                    diagnostic = ts.Diagnostics.File_0_not_found;
+                    filename += ".ts";
+                }
+            }
+            if (diagnostic) {
+                if (refFile) {
+                    errors.push(ts.createFileDiagnostic(refFile, start, length, diagnostic, filename));
+                }
+                else {
+                    errors.push(ts.createCompilerDiagnostic(diagnostic, filename));
                 }
             }
         }
@@ -10702,10 +10719,12 @@ var ts;
                             continue;
                         }
                         if (getDeclarationFlagsFromSymbol(sourceProp) & 32 /* Private */ || getDeclarationFlagsFromSymbol(targetProp) & 32 /* Private */) {
-                            if (reportErrors) {
-                                reportError(ts.Diagnostics.Private_property_0_cannot_be_reimplemented, symbolToString(targetProp));
+                            if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
+                                if (reportErrors) {
+                                    reportError(ts.Diagnostics.Private_property_0_cannot_be_reimplemented, symbolToString(targetProp));
+                                }
+                                return false;
                             }
-                            return false;
                         }
                         if (!isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors)) {
                             if (reportErrors) {

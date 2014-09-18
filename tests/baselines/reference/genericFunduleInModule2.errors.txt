@@ -1,3 +1,6 @@
+tests/cases/compiler/genericFunduleInModule2.ts(11,8): error TS2305: Module 'A' has no exported member 'B'.
+
+
 ==== tests/cases/compiler/genericFunduleInModule2.ts (1 errors) ====
     module A {
         export function B<T>(x: T) { return x; }
@@ -11,5 +14,5 @@
     
     var b: A.B;
            ~~~
-!!! Module 'A' has no exported member 'B'.
+!!! error TS2305: Module 'A' has no exported member 'B'.
     A.B(1);

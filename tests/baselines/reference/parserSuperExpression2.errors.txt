@@ -1,10 +1,14 @@
+tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts(3,10): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts(3,5): error TS2335: 'super' can only be referenced in a derived class.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts (2 errors) ====
     class C {
       M() {
         super<T>(0);
              ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
         ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
       }
     }

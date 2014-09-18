@@ -44,6 +44,16 @@ enum TypingFidelity {
     High = FourSlash.TypingFidelity.High
 }
 
+// Return code used by getEmitOutput function to indicate status of the function
+// It is a duplicate of the one in types.ts to expose it to testcases in fourslash
+enum EmitReturnStatus {
+    Succeeded = 0,                      // All outputs generated as requested (.js, .map, .d.ts), no errors reported
+    AllOutputGenerationSkipped = 1,     // No .js generated because of syntax errors, or compiler options errors, nothing generated
+    JSGeneratedWithSemanticErrors = 2,  // .js and .map generated with semantic errors
+    DeclarationGenerationSkipped = 3,   // .d.ts generation skipped because of semantic errors or declaration emitter specific errors; Output .js with semantic errors
+    EmitErrorsEncountered = 4           // Emitter errors occurred during emitting process
+}
+
 module FourSlashInterface {
     declare var FourSlash;
 
@@ -307,6 +317,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.baselineCurrentFileNameOrDottedNameSpans();
         }
 
+        public baselineGetEmitOutput() {
+            FourSlash.currentTestState.baselineGetEmitOutput();
+        }
+
         public nameOrDottedNameSpanTextIs(text: string) {
             FourSlash.currentTestState.verifyCurrentNameOrDottedNameSpanText(text);
         }
@@ -381,6 +395,22 @@ module FourSlashInterface {
 
         public completionEntryDetailIs(entryName: string, type: string, docComment?: string, fullSymbolName?: string, kind?: string) {
             FourSlash.currentTestState.verifyCompletionEntryDetails(entryName, type, docComment, fullSymbolName, kind);
+        }
+
+        public syntacticClassificationsAre(...classifications: { classificationType: string; text: string }[]) {
+            FourSlash.currentTestState.verifySyntacticClassifications(classifications);
+        }
+
+        public semanticClassificationsAre(...classifications: { classificationType: string; text: string }[]) {
+            FourSlash.currentTestState.verifySemanticClassifications(classifications);
+        }
+
+        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string) {
+            FourSlash.currentTestState.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers)
+        }
+
+        public renameInfoFailed(message?: string) {
+            FourSlash.currentTestState.verifyRenameInfoFailed(message)
         }
     }
 
@@ -524,6 +554,64 @@ module FourSlashInterface {
             FourSlash.currentTestState.cancellationToken.setCancelled(numberOfCalls);
         }
     }
+
+    export class classification {
+        public static comment(text: string): { classificationType: string; text: string } {
+            return { classificationType: "comment", text: text };
+        }
+
+        public static identifier(text: string): { classificationType: string; text: string } {
+            return { classificationType: "identifier", text: text };
+        }
+
+        public static keyword(text: string): { classificationType: string; text: string } {
+            return { classificationType: "keyword", text: text };
+        }
+
+        public static numericLiteral(text: string): { classificationType: string; text: string } {
+            return { classificationType: "numericLiteral", text: text };
+        }
+
+        public static operator(text: string): { classificationType: string; text: string } {
+            return { classificationType: "operator", text: text };
+        }
+
+        public static stringLiteral(text: string): { classificationType: string; text: string } {
+            return { classificationType: "stringLiteral", text: text };
+        }
+
+        public static whiteSpace(text: string): { classificationType: string; text: string } {
+            return { classificationType: "whiteSpace", text: text };
+        }
+
+        public static text(text: string): { classificationType: string; text: string } {
+            return { classificationType: "text", text: text };
+        }
+
+        public static punctuation(text: string): { classificationType: string; text: string } {
+            return { classificationType: "punctuation", text: text };
+        }
+
+        public static className(text: string): { classificationType: string; text: string } {
+            return { classificationType: "className", text: text };
+        }
+
+        public static enumName(text: string): { classificationType: string; text: string } {
+            return { classificationType: "enumName", text: text };
+        }
+
+        public static interfaceName(text: string): { classificationType: string; text: string } {
+            return { classificationType: "interfaceName", text: text };
+        }
+
+        public static moduleName(text: string): { classificationType: string; text: string } {
+            return { classificationType: "moduleName", text: text };
+        }
+
+        public static typeParameterName(text: string): { classificationType: string; text: string } {
+            return { classificationType: "typeParameterName", text: text };
+        }
+    }
 }
 
 module fs {
@@ -547,3 +635,4 @@ var debug = new FourSlashInterface.debug();
 var format = new FourSlashInterface.format();
 var diagnostics = new FourSlashInterface.diagnostics();
 var cancellation = new FourSlashInterface.cancellation();
+var classification = FourSlashInterface.classification;

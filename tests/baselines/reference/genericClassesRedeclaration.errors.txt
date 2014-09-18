@@ -1,3 +1,8 @@
+tests/cases/compiler/genericClassesRedeclaration.ts(42,9): error TS2374: Duplicate string index signature.
+tests/cases/compiler/genericClassesRedeclaration.ts(55,11): error TS2300: Duplicate identifier 'StringHashTable'.
+tests/cases/compiler/genericClassesRedeclaration.ts(68,11): error TS2300: Duplicate identifier 'IdentiferNameHashTable'.
+
+
 ==== tests/cases/compiler/genericClassesRedeclaration.ts (3 errors) ====
     declare module TypeScript {
         interface IIndexable<T> {
@@ -42,7 +47,7 @@
         interface IIndexable<T> {
             [s: string]: T;
             ~~~~~~~~~~~~~~~
-!!! Duplicate string index signature.
+!!! error TS2374: Duplicate string index signature.
         }
         function createIntrinsicsObject<T>(): IIndexable<T>;
         interface IHashTable<T> {
@@ -57,7 +62,7 @@
         }
         class StringHashTable<T> implements IHashTable<T> {
               ~~~~~~~~~~~~~~~
-!!! Duplicate identifier 'StringHashTable'.
+!!! error TS2300: Duplicate identifier 'StringHashTable'.
             private itemCount;
             private table;
             public getAllKeys(): string[];
@@ -72,7 +77,7 @@
         }
         class IdentiferNameHashTable<T> extends StringHashTable<T> {
               ~~~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate identifier 'IdentiferNameHashTable'.
+!!! error TS2300: Duplicate identifier 'IdentiferNameHashTable'.
             public getAllKeys(): string[];
             public add(key: string, data: T): boolean;
             public addOrUpdate(key: string, data: T): boolean;

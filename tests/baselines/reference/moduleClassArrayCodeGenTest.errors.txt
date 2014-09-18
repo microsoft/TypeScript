@@ -1,3 +1,6 @@
+tests/cases/compiler/moduleClassArrayCodeGenTest.ts(10,9): error TS2305: Module 'M' has no exported member 'B'.
+
+
 ==== tests/cases/compiler/moduleClassArrayCodeGenTest.ts (1 errors) ====
     // Invalid code gen for Array of Module class
     
@@ -10,4 +13,4 @@
     var t: M.A[] = [];
     var t2: M.B[] = [];
             ~~~
-!!! Module 'M' has no exported member 'B'.
+!!! error TS2305: Module 'M' has no exported member 'B'.

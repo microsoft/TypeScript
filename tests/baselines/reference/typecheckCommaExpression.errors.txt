@@ -1,6 +1,10 @@
+tests/cases/compiler/typecheckCommaExpression.ts(1,2): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/typecheckCommaExpression.ts(1,5): error TS2304: Cannot find name 'b'.
+
+
 ==== tests/cases/compiler/typecheckCommaExpression.ts (2 errors) ====
     (a, b)
      ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
         ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.

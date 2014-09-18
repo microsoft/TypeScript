@@ -1,3 +1,6 @@
+tests/cases/compiler/unknownTypeArgOnCall.ts(7,17): error TS2304: Cannot find name 'Uhhhh'.
+
+
 ==== tests/cases/compiler/unknownTypeArgOnCall.ts (1 errors) ====
     class Foo<T> {
       public clone<U>() {
@@ -7,5 +10,5 @@
     var f = new Foo<number>();
     var r = f.clone<Uhhhh>()
                     ~~~~~
-!!! Cannot find name 'Uhhhh'.
+!!! error TS2304: Cannot find name 'Uhhhh'.
     

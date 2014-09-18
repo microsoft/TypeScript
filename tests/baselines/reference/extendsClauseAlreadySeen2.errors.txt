@@ -1,15 +1,20 @@
+tests/cases/compiler/extendsClauseAlreadySeen2.ts(4,30): error TS1005: '{' expected.
+tests/cases/compiler/extendsClauseAlreadySeen2.ts(4,38): error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ baz: () => void; }'.
+tests/cases/compiler/extendsClauseAlreadySeen2.ts(4,40): error TS2304: Cannot find name 'string'.
+
+
 ==== tests/cases/compiler/extendsClauseAlreadySeen2.ts (3 errors) ====
     class C<T> {
     
     }
     class D<T> extends C<number> extends C<string> {
                                  ~~~~~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                                          ~~~~~~~~~~~
                                            ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
         baz() { }
     ~~~~~~~~~~~~~
     }
     ~
-!!! Operator '>' cannot be applied to types 'boolean' and '{ baz: () => void; }'.
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ baz: () => void; }'.

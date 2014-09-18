@@ -1,3 +1,8 @@
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(5,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(14,15): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(38,22): error TS2428: All declarations of an interface must have identical type parameters.
+
+
 ==== tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts (3 errors) ====
     interface A<T extends Date> {
         x: T;
@@ -5,7 +10,7 @@
     
     interface A<T extends Number> { // error
               ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
         y: T;
     }
     
@@ -16,7 +21,7 @@
     
         interface B<T extends A<any>> { // error
                   ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
             y: T;
         }
     }
@@ -42,7 +47,7 @@
     module M3 {
         export interface A<T extends Number> { // error
                          ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
             y: T;
         }
     }

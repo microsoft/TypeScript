@@ -150,7 +150,6 @@ module TypeScript.Syntax {
 
             // When we run into a newline for the first time, create the string builder and copy
             // all the values up to this newline into it.
-            var isCarriageReturnLineFeed = false;
             switch (ch) {
                 case CharacterCodes.carriageReturn:
                     if (i < triviaText.length - 1 && triviaText.charCodeAt(i + 1) === CharacterCodes.lineFeed) {

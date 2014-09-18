@@ -1,3 +1,7 @@
+tests/cases/compiler/strictModeInConstructor.ts(9,5): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+tests/cases/compiler/strictModeInConstructor.ts(27,5): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+
+
 ==== tests/cases/compiler/strictModeInConstructor.ts (2 errors) ====
     class A {
     }
@@ -15,7 +19,7 @@
     ~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
     }
     
     class C extends A {
@@ -40,7 +44,7 @@
     ~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
     }
     
     class Bs extends A {

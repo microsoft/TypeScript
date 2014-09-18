@@ -1,5 +1,8 @@
+tests/cases/compiler/assignToModule.ts(2,1): error TS2304: Cannot find name 'A'.
+
+
 ==== tests/cases/compiler/assignToModule.ts (1 errors) ====
     module A {}
     A = undefined; // invalid LHS
     ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.

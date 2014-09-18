@@ -1,3 +1,7 @@
+tests/cases/compiler/implicitAnyGenericTypeInference.ts(7,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyGenericTypeInference.ts(7,22): error TS7006: Parameter 'y' implicitly has an 'any' type.
+
+
 ==== tests/cases/compiler/implicitAnyGenericTypeInference.ts (2 errors) ====
     
     interface Comparer<T> {
@@ -7,7 +11,7 @@
     var c: Comparer<any>;
     c = { compareTo: (x, y) => { return y; } };
                       ~
-!!! Parameter 'x' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
                          ~
-!!! Parameter 'y' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
     var r = c.compareTo(1, '');

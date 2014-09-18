@@ -1,10 +1,15 @@
+tests/cases/compiler/overloadOnConstNoStringImplementation.ts(1,28): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadOnConstNoStringImplementation.ts(2,28): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadOnConstNoStringImplementation.ts(14,7): error TS2381: A signature with an implementation cannot use a string literal type.
+
+
 ==== tests/cases/compiler/overloadOnConstNoStringImplementation.ts (3 errors) ====
     function x2(a: number, cb: (x: 'hi') => number);
                                ~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function x2(a: number, cb: (x: 'bye') => number);
                                ~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function x2(a: number, cb: (x: any) => number) {
         cb('hi');
         cb('bye');
@@ -18,5 +23,5 @@
     x2(1, cb); // error
     x2(1, (x: 'hi') => 1); // error
           ~~~~~~~~~~~~~~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
     x2(1, (x: string) => 1);

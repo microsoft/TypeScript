@@ -1,3 +1,21 @@
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(15,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(16,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(18,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'Object'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(19,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(20,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(24,14): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(25,15): error TS2365: Operator '+' cannot be applied to types 'number' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(27,15): error TS2365: Operator '+' cannot be applied to types 'Object' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(28,15): error TS2365: Operator '+' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(29,15): error TS2365: Operator '+' cannot be applied to types 'void' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(32,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(33,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(34,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(35,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(36,15): error TS2365: Operator '+' cannot be applied to types 'T' and '() => void'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(37,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'undefined[]'.
+
+
 ==== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts (16 errors) ====
     // type parameter type is not a valid operand of addition operator
     enum E { a, b }
@@ -15,57 +33,57 @@
         var r1: any = t + a; // ok, one operand is any
         var r2 = t + b;
                  ~~~~~
-!!! Operator '+' cannot be applied to types 'T' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'boolean'.
         var r3 = t + c;
                  ~~~~~
-!!! Operator '+' cannot be applied to types 'T' and 'number'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'number'.
         var r4 = t + d; // ok, one operand is string
         var r5 = t + e;
                  ~~~~~
-!!! Operator '+' cannot be applied to types 'T' and 'Object'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'Object'.
         var r6 = t + g;
                  ~~~~~
-!!! Operator '+' cannot be applied to types 'T' and 'E'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'E'.
         var r7 = t + f;
                  ~~~~~
-!!! Operator '+' cannot be applied to types 'T' and 'void'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'void'.
     
         // type parameter as right operand
         var r8 = a + t; // ok, one operand is any
         var r9 = b + t;
                  ~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'T'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'T'.
         var r10 = c + t;
                   ~~~~~
-!!! Operator '+' cannot be applied to types 'number' and 'T'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'T'.
         var r11 = d + t; // ok, one operand is string
         var r12 = e + t;
                   ~~~~~
-!!! Operator '+' cannot be applied to types 'Object' and 'T'.
+!!! error TS2365: Operator '+' cannot be applied to types 'Object' and 'T'.
         var r13 = g + t;
                   ~~~~~
-!!! Operator '+' cannot be applied to types 'E' and 'T'.
+!!! error TS2365: Operator '+' cannot be applied to types 'E' and 'T'.
         var r14 = f + t;
                   ~~~~~
-!!! Operator '+' cannot be applied to types 'void' and 'T'.
+!!! error TS2365: Operator '+' cannot be applied to types 'void' and 'T'.
     
         // other cases
         var r15 = t + null;
                   ~~~~~~~~
-!!! Operator '+' cannot be applied to types 'T' and 'T'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
         var r16 = t + undefined;
                   ~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'T' and 'T'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
         var r17 = t + t;
                   ~~~~~
-!!! Operator '+' cannot be applied to types 'T' and 'T'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
         var r18 = t + u;
                   ~~~~~
-!!! Operator '+' cannot be applied to types 'T' and 'U'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'U'.
         var r19 = t + (() => { });
                   ~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'T' and '() => void'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and '() => void'.
         var r20 = t + [];
                   ~~~~~~
-!!! Operator '+' cannot be applied to types 'T' and 'undefined[]'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'undefined[]'.
     }

@@ -21,15 +21,11 @@
 ////    }
 ////}
 
-// Behavior below is not ideal, ideal is in comments
 goTo.marker("1");
-//verify.indentationIs(0);
-verify.indentationIs(8);
+verify.indentationIs(0);
 
 goTo.marker("2");
-//verify.indentationIs(0);
-verify.indentationIs(4);
+verify.indentationIs(0);
 
 goTo.marker("3");
-//verify.indentationIs(0);
-verify.indentationIs(12);
+verify.indentationIs(0);

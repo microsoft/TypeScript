@@ -1,12 +1,16 @@
+tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_1.ts(3,13): error TS2304: Cannot find name 'Sammy'.
+tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_1.ts(4,9): error TS2304: Cannot find name 'Sammy'.
+
+
 ==== tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_1.ts (2 errors) ====
     ///<reference path='exportAssignmentOfDeclaredExternalModule_0.ts'/>
     import Sammy = require('exportAssignmentOfDeclaredExternalModule_0');
     var x = new Sammy(); // error to use as constructor as there is not constructor symbol
                 ~~~~~
-!!! Cannot find name 'Sammy'.
+!!! error TS2304: Cannot find name 'Sammy'.
     var y = Sammy(); // error to use interface name as call target
             ~~~~~
-!!! Cannot find name 'Sammy'.
+!!! error TS2304: Cannot find name 'Sammy'.
     var z: Sammy; // no error - z is of type interface Sammy from module 'M'
     var a = new z(); // constructor - no error
     var b = z(); // call signature - no error

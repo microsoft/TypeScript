@@ -1,3 +1,7 @@
+tests/cases/compiler/genericCombinators2.ts(15,43): error TS2345: Argument of type '(x: number, y: string) => string' is not assignable to parameter of type '(x: number, y: string) => Date'.
+tests/cases/compiler/genericCombinators2.ts(16,43): error TS2345: Argument of type '(x: number, y: string) => string' is not assignable to parameter of type '(x: number, y: string) => Date'.
+
+
 ==== tests/cases/compiler/genericCombinators2.ts (2 errors) ====
     interface Collection<T, U> {
         length: number;
@@ -15,7 +19,7 @@
     var rf1 = (x: number, y: string) => { return x.toFixed() };
     var r5a = _.map<number, string, Date>(c2, (x, y) => { return x.toFixed() });
                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument of type '(x: number, y: string) => string' is not assignable to parameter of type '(x: number, y: string) => Date'.
+!!! error TS2345: Argument of type '(x: number, y: string) => string' is not assignable to parameter of type '(x: number, y: string) => Date'.
     var r5b = _.map<number, string, Date>(c2, rf1);
                                               ~~~
-!!! Argument of type '(x: number, y: string) => string' is not assignable to parameter of type '(x: number, y: string) => Date'.
+!!! error TS2345: Argument of type '(x: number, y: string) => string' is not assignable to parameter of type '(x: number, y: string) => Date'.

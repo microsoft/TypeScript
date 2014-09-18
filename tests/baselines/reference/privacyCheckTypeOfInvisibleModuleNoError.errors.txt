@@ -1,3 +1,6 @@
+tests/cases/compiler/privacyCheckTypeOfInvisibleModuleNoError.ts(6,16): error TS4025: Exported variable 'f' has or is using private name 'Inner'.
+
+
 ==== tests/cases/compiler/privacyCheckTypeOfInvisibleModuleNoError.ts (1 errors) ====
     module Outer {
         module Inner {
@@ -6,6 +9,6 @@
     
         export var f: typeof Inner; // Since we dont unwind inner any more, it is error here
                    ~
-!!! Exported variable 'f' has or is using private name 'Inner'.
+!!! error TS4025: Exported variable 'f' has or is using private name 'Inner'.
     }
     

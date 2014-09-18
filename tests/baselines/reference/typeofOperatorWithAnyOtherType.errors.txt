@@ -1,3 +1,8 @@
+tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(46,32): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(47,32): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(48,32): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+
+
 ==== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts (3 errors) ====
     // typeof  operator on any type
     
@@ -46,13 +51,13 @@
     var ResultIsString16 = typeof (ANY + ANY1);
     var ResultIsString17 = typeof (null + undefined);
                                    ~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
     var ResultIsString18 = typeof (null + null);
                                    ~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'null' and 'null'.
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
     var ResultIsString19 = typeof (undefined + undefined);
                                    ~~~~~~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
     
     // multiple typeof  operators
     var ResultIsString20 = typeof typeof ANY;

@@ -1,20 +1,31 @@
+tests/cases/compiler/duplicateObjectLiteralProperty.ts(14,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateObjectLiteralProperty.ts(15,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateObjectLiteralProperty.ts(16,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateObjectLiteralProperty.ts(16,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+tests/cases/compiler/duplicateObjectLiteralProperty.ts(4,5): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/duplicateObjectLiteralProperty.ts(5,5): error TS2300: Duplicate identifier '\u0061'.
+tests/cases/compiler/duplicateObjectLiteralProperty.ts(6,5): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/duplicateObjectLiteralProperty.ts(8,9): error TS2300: Duplicate identifier '"c"'.
+tests/cases/compiler/duplicateObjectLiteralProperty.ts(16,9): error TS2300: Duplicate identifier 'a'.
+
+
 ==== tests/cases/compiler/duplicateObjectLiteralProperty.ts (9 errors) ====
     var x = {
         a: 1,
         b: true, // OK
         a: 56,   // Duplicate
         ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
         \u0061: "ss", // Duplicate
         ~~~~~~
-!!! Duplicate identifier '\u0061'.
+!!! error TS2300: Duplicate identifier '\u0061'.
         a: {
         ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
             c: 1,
             "c": 56, // Duplicate
             ~~~
-!!! Duplicate identifier '"c"'.
+!!! error TS2300: Duplicate identifier '"c"'.
         }
     };
     
@@ -22,16 +33,16 @@
     var y = {
         get a() { return 0; },
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         set a(v: number) { },
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         get a() { return 0; }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~
-!!! An object literal cannot have multiple get/set accessors with the same name.
+!!! error TS1118: An object literal cannot have multiple get/set accessors with the same name.
             ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     };
     

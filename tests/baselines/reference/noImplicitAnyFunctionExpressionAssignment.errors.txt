@@ -1,3 +1,7 @@
+tests/cases/compiler/noImplicitAnyFunctionExpressionAssignment.ts(2,27): error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/compiler/noImplicitAnyFunctionExpressionAssignment.ts(6,28): error TS7010: 'f', which lacks return-type annotation, implicitly has an 'any' return type.
+
+
 ==== tests/cases/compiler/noImplicitAnyFunctionExpressionAssignment.ts (2 errors) ====
     
     var x: (a: any) => void = function <T>(x: T) {
@@ -6,7 +10,7 @@
     ~~~~~~~~~~~~~~~~
     };
     ~
-!!! Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
     
     var x2: (a: any) => void = function f<T>(x: T) {
                                ~~~~~~~~~~~~~~~~~~~~~
@@ -14,4 +18,4 @@
     ~~~~~~~~~~~~~~~~
     };
     ~
-!!! 'f', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'f', which lacks return-type annotation, implicitly has an 'any' return type.

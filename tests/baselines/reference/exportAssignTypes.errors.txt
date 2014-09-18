@@ -1,3 +1,6 @@
+tests/cases/conformance/externalModules/expString.ts(2,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+
+
 ==== tests/cases/conformance/externalModules/consumer.ts (0 errors) ====
     import iString = require('./expString');
     var v1: string = iString;
@@ -24,7 +27,7 @@
     var x = "test";
     export = x;
     ~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     
 ==== tests/cases/conformance/externalModules/expNumber.ts (0 errors) ====
     var x = 42;

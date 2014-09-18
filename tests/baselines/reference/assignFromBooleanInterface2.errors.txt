@@ -1,3 +1,7 @@
+tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(19,1): error TS2323: Type 'Boolean' is not assignable to type 'boolean'.
+tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(20,1): error TS2323: Type 'NotBoolean' is not assignable to type 'boolean'.
+
+
 ==== tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts (2 errors) ====
     interface Boolean {
         doStuff(): string;
@@ -19,9 +23,9 @@
     
     x = a; // expected error
     ~
-!!! Type 'Boolean' is not assignable to type 'boolean'.
+!!! error TS2323: Type 'Boolean' is not assignable to type 'boolean'.
     x = b; // expected error
     ~
-!!! Type 'NotBoolean' is not assignable to type 'boolean'.
+!!! error TS2323: Type 'NotBoolean' is not assignable to type 'boolean'.
     
     

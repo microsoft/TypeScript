@@ -1,3 +1,6 @@
+tests/cases/conformance/statements/for-inStatements/for-inStatements.ts(79,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+
+
 ==== tests/cases/conformance/statements/for-inStatements/for-inStatements.ts (1 errors) ====
     var aString: string;
     for (aString in {}) { }
@@ -79,5 +82,5 @@
     for (var x in Color) { }
     for (var x in Color.Blue) { }
                   ~~~~~~~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     

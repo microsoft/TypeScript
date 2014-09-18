@@ -1,7 +1,10 @@
+tests/cases/compiler/parameterPropertyOutsideConstructor.ts(2,9): error TS2369: A parameter property is only allowed in a constructor implementation.
+
+
 ==== tests/cases/compiler/parameterPropertyOutsideConstructor.ts (1 errors) ====
     class C {
         foo(public x) {
             ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         }
     }

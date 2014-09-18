@@ -1,7 +1,10 @@
+tests/cases/compiler/invalidConstraint1.ts(1,15): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/compiler/invalidConstraint1.ts (1 errors) ====
     function f<T, U extends { a: T }>() {
                   ~~~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         return undefined;
     }
     f<string, { a: number }>(); // should error

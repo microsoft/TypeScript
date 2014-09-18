@@ -1,3 +1,11 @@
+tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts(17,11): error TS2411: Property 'm' of type '{}' is not assignable to string index type '{ a: any; }'.
+tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts(23,11): error TS2411: Property '0' of type '{}' is not assignable to string index type '{ a: any; }'.
+tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts(23,11): error TS2412: Property '0' of type '{}' is not assignable to numeric index type '{ a: any; b: any; }'.
+tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts(25,11): error TS2411: Property '0' of type '{}' is not assignable to string index type '{ a: any; }'.
+tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts(25,11): error TS2411: Property 'm' of type '{}' is not assignable to string index type '{ a: any; }'.
+tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts(25,11): error TS2412: Property '0' of type '{}' is not assignable to numeric index type '{ a: any; b: any; }'.
+
+
 ==== tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts (6 errors) ====
     // indexer in B is a subtype of indexer in A
     interface A {
@@ -17,7 +25,7 @@
     
     interface D extends A, B, C { } // error because m is not a subtype of {a;}
               ~
-!!! Property 'm' of type '{}' is not assignable to string index type '{ a: any; }'.
+!!! error TS2411: Property 'm' of type '{}' is not assignable to string index type '{ a: any; }'.
     
     interface E {
         0: {};
@@ -25,16 +33,16 @@
     
     interface F extends A, B, E { } // error because 0 is not a subtype of {a; b;}
               ~
-!!! Property '0' of type '{}' is not assignable to string index type '{ a: any; }'.
+!!! error TS2411: Property '0' of type '{}' is not assignable to string index type '{ a: any; }'.
               ~
-!!! Property '0' of type '{}' is not assignable to numeric index type '{ a: any; b: any; }'.
+!!! error TS2412: Property '0' of type '{}' is not assignable to numeric index type '{ a: any; b: any; }'.
     
     interface G extends A, B, C, E { } // should only report one error
               ~
-!!! Property '0' of type '{}' is not assignable to string index type '{ a: any; }'.
+!!! error TS2411: Property '0' of type '{}' is not assignable to string index type '{ a: any; }'.
               ~
-!!! Property 'm' of type '{}' is not assignable to string index type '{ a: any; }'.
+!!! error TS2411: Property 'm' of type '{}' is not assignable to string index type '{ a: any; }'.
               ~
-!!! Property '0' of type '{}' is not assignable to numeric index type '{ a: any; b: any; }'.
+!!! error TS2412: Property '0' of type '{}' is not assignable to numeric index type '{ a: any; b: any; }'.
     
     interface H extends A, F { } // Should report no error at all because error is internal to F

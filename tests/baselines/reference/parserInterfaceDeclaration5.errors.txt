@@ -1,5 +1,8 @@
+tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration5.ts(1,1): error TS1045: A 'declare' modifier cannot be used with an interface declaration.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration5.ts (1 errors) ====
     declare interface I {
     ~~~~~~~
-!!! A 'declare' modifier cannot be used with an interface declaration.
+!!! error TS1045: A 'declare' modifier cannot be used with an interface declaration.
     }

@@ -1,13 +1,26 @@
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(4,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(5,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(24,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(25,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(16,16): error TS2339: Property 'foo' does not exist on type 'C'.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(17,16): error TS2339: Property 'bar' does not exist on type 'C'.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(18,16): error TS2339: Property 'x' does not exist on type 'C'.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(27,21): error TS2302: Static members cannot reference class type parameters.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(36,16): error TS2339: Property 'foo' does not exist on type 'C<number, string>'.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(37,16): error TS2339: Property 'bar' does not exist on type 'C<number, string>'.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(38,16): error TS2339: Property 'x' does not exist on type 'C<number, string>'.
+
+
 ==== tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts (11 errors) ====
     module NonGeneric {
         class C {
             fn() { return this; }
             static get x() { return 1; }
                        ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             static set x(v) { }
                        ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             constructor(public a: number, private b: number) { }
             static foo: string; // not reflected in class type
         }
@@ -20,13 +33,13 @@
         var r = c.fn();
         var r4 = c.foo; // error
                    ~~~
-!!! Property 'foo' does not exist on type 'C'.
+!!! error TS2339: Property 'foo' does not exist on type 'C'.
         var r5 = c.bar; // error
                    ~~~
-!!! Property 'bar' does not exist on type 'C'.
+!!! error TS2339: Property 'bar' does not exist on type 'C'.
         var r6 = c.x; // error
                    ~
-!!! Property 'x' does not exist on type 'C'.
+!!! error TS2339: Property 'x' does not exist on type 'C'.
     }
     
     module Generic {
@@ -34,14 +47,14 @@
             fn() { return this; }
             static get x() { return 1; }
                        ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             static set x(v) { }
                        ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             constructor(public a: T, private b: U) { }
             static foo: T; // not reflected in class type
                         ~
-!!! Static members cannot reference class type parameters.
+!!! error TS2302: Static members cannot reference class type parameters.
         }
     
         module C {
@@ -52,11 +65,11 @@
         var r = c.fn();
         var r4 = c.foo; // error
                    ~~~
-!!! Property 'foo' does not exist on type 'C<number, string>'.
+!!! error TS2339: Property 'foo' does not exist on type 'C<number, string>'.
         var r5 = c.bar; // error
                    ~~~
-!!! Property 'bar' does not exist on type 'C<number, string>'.
+!!! error TS2339: Property 'bar' does not exist on type 'C<number, string>'.
         var r6 = c.x; // error
                    ~
-!!! Property 'x' does not exist on type 'C<number, string>'.
+!!! error TS2339: Property 'x' does not exist on type 'C<number, string>'.
     }
