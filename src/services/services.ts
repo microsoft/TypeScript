@@ -1959,6 +1959,7 @@ module ts {
             }
         }
 
+        /** Get the token whose text contains the position, or the containing node. */
         function getNodeAtPosition(sourceFile: SourceFile, position: number) {
             var current: Node = sourceFile;
             outer: while (true) {
@@ -1969,14 +1970,14 @@ module ts {
                         current = child;
                         continue outer;
                     }
-                    if (child.end > position) {
-                        break;
-                    }
                 }
                 return current;
             }
         }
 
+        /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
+          * leading trivia or within the token text.
+          */
         function getTokenAtPosition(sourceFile: SourceFile, position: number) {
             var current: Node = sourceFile;
             outer: while (true) {
@@ -1986,10 +1987,7 @@ module ts {
                     if (child.getFullStart() <= position && position < child.getEnd()) {
                         current = child;
                         continue outer;
-                    }
-                    if (child.end > position) {
-                        break;
-                    }
+                    }                  
                 }
                 return current;
             }
@@ -3577,7 +3575,8 @@ module ts {
                     var token = getTokenAtPosition(sourceFile, matchPosition);
 
                     if (token.getStart() <= matchPosition && matchPosition < token.getEnd()) {
-                        // match was within the token itself.  Not in the comment.  Keep searching                        // descriptor.
+                        // match was within the token itself.  Not in the comment.  Keep searching
+                        // descriptor.
                         continue;
                     }
 
