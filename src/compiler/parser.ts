@@ -531,6 +531,39 @@ module ts {
         return false;
     }
 
+    export function getAncestor(node: Node, kind: SyntaxKind): Node {
+        switch (kind) {
+            // special-cases that can be come first
+            case SyntaxKind.ClassDeclaration:
+                while (node) {
+                    switch (node.kind) {
+                        case SyntaxKind.ClassDeclaration:
+                            return <ClassDeclaration>node;
+                        case SyntaxKind.EnumDeclaration:
+                        case SyntaxKind.InterfaceDeclaration:
+                        case SyntaxKind.ModuleDeclaration:
+                        case SyntaxKind.ImportDeclaration:
+                            // early exit cases - declarations cannot be nested in classes
+                            return undefined;
+                        default:
+                            node = node.parent;
+                            continue;
+                    }
+                }
+                break;
+            default:
+                while (node) {
+                    if (node.kind === kind) {
+                        return node;
+                    }
+                    node = node.parent;
+                }
+                break;
+        }
+
+        return undefined;
+    }
+
     enum ParsingContext {
         SourceElements,          // Elements in source file
         ModuleElements,          // Elements in module declaration
@@ -2200,10 +2233,38 @@ module ts {
 
         function parseCallAndAccess(expr: Expression, inNewExpression: boolean): Expression {
             while (true) {
+                var dotStart = scanner.getTokenPos();
                 if (parseOptional(SyntaxKind.DotToken)) {
                     var propertyAccess = <PropertyAccess>createNode(SyntaxKind.PropertyAccess, expr.pos);
+                    // Technically a keyword is valid here as all keywords are identifier names.
+                    // However, often we'll encounter this in error situations when the keyword
+                    // is actually starting another valid construct.
+                    //
+                    // So, we check for the following specific case:
+                    //
+                    //      name.
+                    //      keyword identifierNameOrKeyword
+                    //
+                    // Note: the newlines are important here.  For example, if that above code 
+                    // were rewritten into:
+                    //
+                    //      name.keyword
+                    //      identifierNameOrKeyword
+                    //
+                    // Then we would consider it valid.  That's because ASI would take effect and
+                    // the code would be implicitly: "name.keyword; identifierNameOrKeyword".  
+                    // In the first case though, ASI will not take effect because there is not a
+                    // line terminator after the keyword.
+                    if (scanner.hasPrecedingLineBreak() && scanner.isReservedWord() && lookAhead(() => scanner.isReservedWord())) {
+                        grammarErrorAtPos(dotStart, scanner.getStartPos() - dotStart, Diagnostics.Identifier_expected);
+                        var id = <Identifier>createMissingNode();
+                    }
+                    else {
+                        var id = parseIdentifierName();
+                    }
+
                     propertyAccess.left = expr;
-                    propertyAccess.right = parseIdentifierName();
+                    propertyAccess.right = id;
                     expr = finishNode(propertyAccess);
                     continue;
                 }
@@ -3754,7 +3815,7 @@ module ts {
                 : undefined);
         }
 
-        scanner = createScanner(languageVersion, sourceText, scanError, onComment);
+        scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError, onComment);
         var rootNodeFlags: NodeFlags = 0;
         if (fileExtensionIs(filename, ".d.ts")) {
             rootNodeFlags = NodeFlags.DeclarationFile;

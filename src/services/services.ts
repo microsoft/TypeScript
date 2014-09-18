@@ -75,7 +75,7 @@ module ts {
         update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
-    var scanner: Scanner = createScanner(ScriptTarget.ES5);
+    var scanner: Scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ true);
 
     var emptyArray: any[] = [];
 
@@ -770,7 +770,6 @@ module ts {
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
         InDoubleQuoteStringLiteral,
-        EndingWithDotToken,
     }
 
     export enum TokenClass {
@@ -1684,14 +1683,20 @@ module ts {
         /// Completion
         function getValidCompletionEntryDisplayName(displayName: string, target: ScriptTarget): string {
             if (displayName && displayName.length > 0) {
-                var firstChar = displayName.charCodeAt(0);
-                if (firstChar === TypeScript.CharacterCodes.singleQuote || firstChar === TypeScript.CharacterCodes.doubleQuote) {
+                var firstCharCode = displayName.charCodeAt(0);
+                if (displayName && displayName.length >= 2 && firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
+                    (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
                     // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
-                    // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
-                    displayName = TypeScript.stripStartAndEndQuotes(displayName);
+                    // invalid identifer name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+                    displayName = displayName.substring(1, displayName.length - 1);
+                }
+                
+                var isValid = isIdentifierStart(displayName.charCodeAt(0), target);
+                for (var i = 1, n = displayName.length; isValid && i < n; i++) {
+                    isValid = isIdentifierPart(displayName.charCodeAt(i), target);
                 }
 
-                if (TypeScript.Scanner.isValidIdentifier(TypeScript.SimpleText.fromString(displayName), target)) {
+                if (isValid) {
                     return displayName;
                 }
             }
@@ -1709,7 +1714,6 @@ module ts {
             }
 
             var declarations = symbol.getDeclarations();
-            var firstDeclaration = [0];
             return {
                 name: displayName,
                 kind: getSymbolKind(symbol),
@@ -1721,7 +1725,7 @@ module ts {
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
                 forEach(symbols, (symbol) => {
                     var entry = createCompletionEntry(symbol);
-                    if (entry) {
+                    if (entry && !lookUp(session.symbols, entry.name)) {
                         session.entries.push(entry);
                         session.symbols[entry.name] = symbol;
                     }
@@ -1851,6 +1855,49 @@ module ts {
                 return false;
             }
 
+            function isPunctuation(kind: SyntaxKind) {
+                return (SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation);
+            }
+
+            function isVisibleWithinClassDeclaration(symbol: Symbol, containingClass: Declaration): boolean {
+                var declaration = symbol.declarations && symbol.declarations[0];
+                if (declaration && (declaration.flags & NodeFlags.Private)) {
+                    var declarationClass = getAncestor(declaration, SyntaxKind.ClassDeclaration);
+                    return containingClass === declarationClass;
+                }
+                return true;
+            }
+
+            function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
+                if (!existingMembers || existingMembers.length === 0) {
+                    return contextualMemberSymbols;
+                }
+
+                var existingMemberNames: Map<boolean> = {};
+                forEach(existingMembers, m => {
+                    if (m.kind !== SyntaxKind.PropertyAssignment) {
+                        // Ignore omitted expressions for missing members in the object literal
+                        return;
+                    }
+
+                    if (m.getStart() <= position && position <= m.getEnd()) {
+                        // If this is the current item we are editing right now, do not filter it out
+                        return;
+                    }
+
+                    existingMemberNames[m.name.text] = true;
+                });
+
+                var filteredMembers: Symbol[] = [];
+                forEach(contextualMemberSymbols, s => {
+                    if (!existingMemberNames[s.name]) {
+                        filteredMembers.push(s);
+                    }
+                });
+
+                return filteredMembers;
+            }
+
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -1905,6 +1952,9 @@ module ts {
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
             var mappedNode = getNodeAtPosition(sourceFile, TypeScript.end(node) - 1);
+            if (isPunctuation(mappedNode.kind)) {
+                mappedNode = mappedNode.parent;
+            }
 
             Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
 
@@ -1920,13 +1970,33 @@ module ts {
 
             // Right of dot member completion list
             if (isRightOfDot) {
-                var type: ApparentType = typeInfoResolver.getApparentType(typeInfoResolver.getTypeOfNode(mappedNode));
-                if (!type) {
-                    return undefined;
+                var symbols: Symbol[] = [];
+                var containingClass = getAncestor(mappedNode, SyntaxKind.ClassDeclaration);
+                isMemberCompletion = true;
+
+                if (mappedNode.kind === SyntaxKind.Identifier || mappedNode.kind === SyntaxKind.QualifiedName || mappedNode.kind === SyntaxKind.PropertyAccess) {
+                    var symbol = typeInfoResolver.getSymbolInfo(mappedNode);
+                    if (symbol && symbol.flags & SymbolFlags.HasExports) {
+                        // Extract module or enum members
+                        forEachValue(symbol.exports, symbol => {
+                            if (isVisibleWithinClassDeclaration(symbol, containingClass)) {
+                                symbols.push(symbol);
+                            }
+                        });
+                    }
                 }
 
-                var symbols = type.getApparentProperties();
-                isMemberCompletion = true;
+                var type = typeInfoResolver.getTypeOfNode(mappedNode);
+                var apparentType = type && typeInfoResolver.getApparentType(type);
+                if (apparentType) {
+                    // Filter private properties
+                    forEach(apparentType.getApparentProperties(), symbol => {
+                        if (isVisibleWithinClassDeclaration(symbol, containingClass)) {
+                            symbols.push(symbol);
+                        }
+                    });
+                }
+
                 getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }
             else {
@@ -1934,34 +2004,23 @@ module ts {
 
                 // Object literal expression, look up possible property names from contextual type
                 if (containingObjectLiteral) {
-                    var searchPosition = Math.min(position, TypeScript.end(containingObjectLiteral));
-                    var path = TypeScript.ASTHelpers.getAstAtPosition(sourceUnit, searchPosition);
-                    // Get the object literal node
+                    var objectLiteral = <ObjectLiteral>(mappedNode.kind === SyntaxKind.ObjectLiteral ? mappedNode : getAncestor(mappedNode, SyntaxKind.ObjectLiteral));
 
-                    while (node && node.kind() !== TypeScript.SyntaxKind.ObjectLiteralExpression) {
-                        node = node.parent;
-                    }
-
-                    if (!node || node.kind() !== TypeScript.SyntaxKind.ObjectLiteralExpression) {
-                        // AST Path look up did not result in the same node as Fidelity Syntax Tree look up.
-                        // Once we remove AST this will no longer be a problem.
-                        return null;
-                    }
+                    Debug.assert(objectLiteral);
 
                     isMemberCompletion = true;
 
-                    //// Try to get the object members form contextual typing
-                    //var contextualMembers = compiler.getContextualMembersFromAST(node, document);
-                    //if (contextualMembers && contextualMembers.symbols && contextualMembers.symbols.length > 0) {
-                    //    // get existing members
-                    //    var existingMembers = compiler.getVisibleMemberSymbolsFromAST(node, document);
+                    var contextualType = typeInfoResolver.getContextualType(objectLiteral);
+                    if (!contextualType) {
+                        return undefined;
+                    }
 
-                    //    // Add filtered items to the completion list
-                    //    getCompletionEntriesFromSymbols({
-                    //        symbols: filterContextualMembersList(contextualMembers.symbols, existingMembers, filename, position),
-                    //        enclosingScopeSymbol: contextualMembers.enclosingScopeSymbol
-                    //    }, entries);
-                    //}
+                    var contextualTypeMembers = typeInfoResolver.getPropertiesOfType(contextualType);
+                    if (contextualTypeMembers && contextualTypeMembers.length > 0) {
+                        // Add filtered items to the completion list
+                        var filteredMembers = filterContextualMembersList(contextualTypeMembers, objectLiteral.properties);
+                        getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
+                    }
                 }
                 // Get scope members
                 else {
@@ -2024,6 +2083,7 @@ module ts {
             }
         }
 
+        /** Get the token whose text contains the position, or the containing node. */
         function getNodeAtPosition(sourceFile: SourceFile, position: number) {
             var current: Node = sourceFile;
             outer: while (true) {
@@ -2034,9 +2094,24 @@ module ts {
                         current = child;
                         continue outer;
                     }
-                    if (child.end > position) {
-                        break;
-                    }
+                }
+                return current;
+            }
+        }
+
+        /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
+          * leading trivia or within the token text.
+          */
+        function getTokenAtPosition(sourceFile: SourceFile, position: number) {
+            var current: Node = sourceFile;
+            outer: while (true) {
+                // find the child that has this
+                for (var i = 0, n = current.getChildCount(); i < n; i++) {
+                    var child = current.getChildAt(i);
+                    if (child.getFullStart() <= position && position < child.getEnd()) {
+                        current = child;
+                        continue outer;
+                    }                  
                 }
                 return current;
             }
@@ -2065,7 +2140,7 @@ module ts {
         }
 
         function getSymbolKind(symbol: Symbol): string {
-            var flags = symbol.getFlags();
+            var flags = typeInfoResolver.getRootSymbol(symbol).getFlags();
 
             if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
@@ -3751,83 +3826,21 @@ module ts {
             return [];
         }
 
-        function escapeRegExp(str: string): string {
-            return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-        }
+        function getTodoComments(filename: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
+            filename = TypeScript.switchToForwardSlashes(filename);
 
-        function getTodoCommentsRegExp(descriptors: TodoCommentDescriptor[]): RegExp {
-            // NOTE: ?:  means 'non-capture group'.  It allows us to have groups without having to
-            // filter them out later in the final result array.
+            var sourceFile = getCurrentSourceFile(filename);
 
-            // TODO comments can appear in one of the following forms:
-            //
-            //  1)      // TODO     or  /////////// TODO
-            //
-            //  2)      /* TODO     or  /********** TODO
-            //
-            //  3)      /*
-            //           *   TODO
-            //           */
-            //
-            // The following three regexps are used to match the start of the text up to the TODO
-            // comment portion.
-            var singleLineCommentStart = /(?:\/\/+\s*)/.source;
-            var multiLineCommentStart = /(?:\/\*+\s*)/.source;
-            var anyNumberOfSpacesAndAsterixesAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
-
-            // Match any of the above three TODO comment start regexps.
-            // Note that the outermost group *is* a capture group.  We want to capture the preamble
-            // so that we can determine the starting position of the TODO comment match.
-            var preamble = "(" + anyNumberOfSpacesAndAsterixesAtStartOfLine + "|" + singleLineCommentStart + "|" + multiLineCommentStart + ")";
-
-            // Takes the descriptors and forms a regexp that matches them as if they were literals.
-            // For example, if the descriptors are "TODO(jason)" and "HACK", then this will be:
-            //
-            //      (?:(TODO\(jason\))|(HACK))
-            //
-            // Note that the outermost group is *not* a capture group, but the innermost groups
-            // *are* capture groups.  By capturing the inner literals we can determine after 
-            // matching which descriptor we are dealing with.
-            var literals = "(?:" + descriptors.map(d => "(" + escapeRegExp(d.text) + ")").join("|") + ")";
-
-            // After matching a descriptor literal, the following regexp matches the rest of the 
-            // text up to the end of the line (or */).
-            var endOfLineOrEndOfComment = /(?:$|\*\/)/.source
-            var messageRemainder = /(?:.*?)/.source
-
-            // This is the portion of the match we'll return as part of the TODO comment result. We
-            // match the literal portion up to the end of the line or end of comment.
-            var messagePortion = "(" + literals + messageRemainder + ")";
-            var regExpString = preamble + messagePortion + endOfLineOrEndOfComment;
-
-            // The final regexp will look like this:
-            // /((?:\/\/+\s*)|(?:\/\*+\s*)|(?:^(?:\s|\*)*))((?:(TODO\(jason\))|(HACK))(?:.*?))(?:$|\*\/)/gim
-
-            // The flags of the regexp are important here.
-            //  'g' is so that we are doing a global search and can find matches several times
-            //  in the input.
-            //
-            //  'i' is for case insensitivity (We do this to match C# TODO comment code).
-            //
-            //  'm' is so we can find matches in a multiline input.
-            return new RegExp(regExpString, "gim");
-        }
-
-        function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
-            fileName = TypeScript.switchToForwardSlashes(fileName);
-
-            var sourceFile = getCurrentSourceFile(fileName);
-            var syntaxTree = sourceFile.getSyntaxTree();
             cancellationToken.throwIfCancellationRequested();
 
-            var text = syntaxTree.text;
-            var fileContents = text.substr(0, text.length());
+            var fileContents = sourceFile.text;
+
             cancellationToken.throwIfCancellationRequested();
 
             var result: TodoComment[] = [];
 
             if (descriptors.length > 0) {
-                var regExp = getTodoCommentsRegExp(descriptors);
+                var regExp = getTodoCommentsRegExp();
 
                 var matchArray: RegExpExecArray;
                 while (matchArray = regExp.exec(fileContents)) {
@@ -3842,7 +3855,7 @@ module ts {
                     //      ["// hack   1", "// ", "hack   1", undefined, "hack"]
                     //
                     // Here are the relevant capture groups:
-                    //  0) The full match for the entire regex.
+                    //  0) The full match for the entire regexp.
                     //  1) The preamble to the message portion.
                     //  2) The message portion.
                     //  3...N) The descriptor that was matched - by index.  'undefined' for each 
@@ -3856,20 +3869,19 @@ module ts {
                     var preamble = matchArray[1];
                     var matchPosition = matchArray.index + preamble.length;
 
-                    // Ok, we have found a match in the file.  This is only an acceptable match if
+                    // OK, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
-                    var token = TypeScript.findToken(syntaxTree.sourceUnit(), matchPosition);
+                    var token = getTokenAtPosition(sourceFile, matchPosition);
 
-                    if (matchPosition >= TypeScript.start(token) && matchPosition < TypeScript.end(token)) {
+                    if (token.getStart() <= matchPosition && matchPosition < token.getEnd()) {
                         // match was within the token itself.  Not in the comment.  Keep searching
                         // descriptor.
                         continue;
                     }
 
-                    // Looks to be within the trivia.  See if we can find the comment containing it.
-                    var triviaList = matchPosition < TypeScript.start(token) ? token.leadingTrivia(syntaxTree.text) : token.trailingTrivia(syntaxTree.text);
-                    var trivia = findContainingComment(triviaList, matchPosition);
-                    if (trivia === null) {
+                    // Looks to be within the trivia. See if we can find the comment containing it.
+                    if (!getContainingComment(getTrailingComments(fileContents, token.getFullStart()), matchPosition) &&
+                        !getContainingComment(getLeadingComments(fileContents, token.getFullStart()), matchPosition)) {
                         continue;
                     }
 
@@ -3893,24 +3905,114 @@ module ts {
             }
 
             return result;
-        }
 
-        function isLetterOrDigit(char: number): boolean {
-            return (char >= TypeScript.CharacterCodes.a && char <= TypeScript.CharacterCodes.z) ||
-                (char >= TypeScript.CharacterCodes.A && char <= TypeScript.CharacterCodes.Z) ||
-                (char >= TypeScript.CharacterCodes._0 && char <= TypeScript.CharacterCodes._9);
-        }
+            function escapeRegExp(str: string): string {
+                return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+            }
 
-        function findContainingComment(triviaList: TypeScript.ISyntaxTriviaList, position: number): TypeScript.ISyntaxTrivia {
-            for (var i = 0, n = triviaList.count(); i < n; i++) {
-                var trivia = triviaList.syntaxTriviaAt(i);
-                var fullEnd = trivia.fullStart() + trivia.fullWidth();
-                if (trivia.isComment() && trivia.fullStart() <= position && position < fullEnd) {
-                    return trivia;
+            function getTodoCommentsRegExp(): RegExp {
+                // NOTE: ?:  means 'non-capture group'.  It allows us to have groups without having to
+                // filter them out later in the final result array.
+
+                // TODO comments can appear in one of the following forms:
+                //
+                //  1)      // TODO     or  /////////// TODO
+                //
+                //  2)      /* TODO     or  /********** TODO
+                //
+                //  3)      /*
+                //           *   TODO
+                //           */
+                //
+                // The following three regexps are used to match the start of the text up to the TODO
+                // comment portion.
+                var singleLineCommentStart = /(?:\/\/+\s*)/.source;
+                var multiLineCommentStart = /(?:\/\*+\s*)/.source;
+                var anyNumberOfSpacesAndAsterixesAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
+
+                // Match any of the above three TODO comment start regexps.
+                // Note that the outermost group *is* a capture group.  We want to capture the preamble
+                // so that we can determine the starting position of the TODO comment match.
+                var preamble = "(" + anyNumberOfSpacesAndAsterixesAtStartOfLine + "|" + singleLineCommentStart + "|" + multiLineCommentStart + ")";
+
+                // Takes the descriptors and forms a regexp that matches them as if they were literals.
+                // For example, if the descriptors are "TODO(jason)" and "HACK", then this will be:
+                //
+                //      (?:(TODO\(jason\))|(HACK))
+                //
+                // Note that the outermost group is *not* a capture group, but the innermost groups
+                // *are* capture groups.  By capturing the inner literals we can determine after 
+                // matching which descriptor we are dealing with.
+                var literals = "(?:" + map(descriptors, d => "(" + escapeRegExp(d.text) + ")").join("|") + ")";
+
+                // After matching a descriptor literal, the following regexp matches the rest of the 
+                // text up to the end of the line (or */).
+                var endOfLineOrEndOfComment = /(?:$|\*\/)/.source
+                var messageRemainder = /(?:.*?)/.source
+
+                // This is the portion of the match we'll return as part of the TODO comment result. We
+                // match the literal portion up to the end of the line or end of comment.
+                var messagePortion = "(" + literals + messageRemainder + ")";
+                var regExpString = preamble + messagePortion + endOfLineOrEndOfComment;
+
+                // The final regexp will look like this:
+                // /((?:\/\/+\s*)|(?:\/\*+\s*)|(?:^(?:\s|\*)*))((?:(TODO\(jason\))|(HACK))(?:.*?))(?:$|\*\/)/gim
+
+                // The flags of the regexp are important here.
+                //  'g' is so that we are doing a global search and can find matches several times
+                //  in the input.
+                //
+                //  'i' is for case insensitivity (We do this to match C# TODO comment code).
+                //
+                //  'm' is so we can find matches in a multi-line input.
+                return new RegExp(regExpString, "gim");
+            }
+
+            function getContainingComment(comments: Comment[], position: number): Comment {
+                if (comments) {
+                    for (var i = 0, n = comments.length; i < n; i++) {
+                        var comment = comments[i];
+                        if (comment.pos <= position && position < comment.end) {
+                            return comment;
+                        }
+                    }
+                }
+
+                return undefined;
+            }
+
+            function isLetterOrDigit(char: number): boolean {
+                return (char >= TypeScript.CharacterCodes.a && char <= TypeScript.CharacterCodes.z) ||
+                    (char >= TypeScript.CharacterCodes.A && char <= TypeScript.CharacterCodes.Z) ||
+                    (char >= TypeScript.CharacterCodes._0 && char <= TypeScript.CharacterCodes._9);
+            }
+        }
+      
+
+        function getRenameInfo(fileName: string, position: number): RenameInfo {
+            synchronizeHostData();
+
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
+
+            var node = getNodeAtPosition(sourceFile, position);
+
+            // Can only rename an identifier.
+            if (node && node.kind === SyntaxKind.Identifier) {
+                var symbol = typeInfoResolver.getSymbolInfo(node);
+
+                // Only allow a symbol to be renamed if it actually has at least one declaration.
+                if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
+                    var kind = getSymbolKind(symbol);
+                    if (kind) {
+                        return RenameInfo.Create(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
+                            getNodeModifiers(symbol.getDeclarations()[0]),
+                            new TypeScript.TextSpan(node.getStart(), node.getWidth()));
+                    }
                 }
             }
 
-            return null;
+            return RenameInfo.CreateError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
         }
 
         return {
@@ -3933,7 +4035,7 @@ module ts {
             getNameOrDottedNameSpan: getNameOrDottedNameSpan,
             getBreakpointStatementAtPosition: getBreakpointStatementAtPosition,
             getNavigateToItems: getNavigateToItems,
-            getRenameInfo: (fileName, position): RenameInfo => RenameInfo.CreateError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key)),
+            getRenameInfo: getRenameInfo,
             getNavigationBarItems: getNavigationBarItems,
             getOutliningSpans: getOutliningSpans,
             getTodoComments: getTodoComments,
@@ -3995,9 +4097,6 @@ module ts {
                     text = "/*\n" + text;
                     offset = 3;
                     break;
-                case EndOfLineState.EndingWithDotToken:
-                    lastToken = SyntaxKind.DotToken;
-                    break;
             }
 
             var result: ClassificationResult = {
@@ -4005,7 +4104,7 @@ module ts {
                 entries: []
             };
 
-            scanner = createScanner(ScriptTarget.ES5, text, onError, processComment);
+            scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ true, text, onError, processComment);
 
             var token = SyntaxKind.Unknown;
             do {
@@ -4064,9 +4163,6 @@ module ts {
                                 ? EndOfLineState.InDoubleQuoteStringLiteral
                                 : EndOfLineState.InSingleQuoteStringLiteral;
                         }
-                    }
-                    else if (token === SyntaxKind.DotToken) {
-                        result.finalLexState = EndOfLineState.EndingWithDotToken;
                     }
                 }
             }

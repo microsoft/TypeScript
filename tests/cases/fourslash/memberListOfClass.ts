@@ -11,5 +11,5 @@
 
 goTo.marker();
 verify.memberListCount(2);
-verify.memberListContains('pubMeth', '(): void');
+verify.memberListContains('pubMeth', '() => void');
 verify.memberListContains('pubProp', 'number');

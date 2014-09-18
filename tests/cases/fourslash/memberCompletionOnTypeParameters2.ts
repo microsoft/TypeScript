@@ -10,7 +10,7 @@
 ////    }
 ////}
 ////
-////class C<U extends T, T extends A> {
+////class C<U extends A, T extends A> {
 ////    x: U;
 ////    y = this.x./**/ // completion list here
 ////}

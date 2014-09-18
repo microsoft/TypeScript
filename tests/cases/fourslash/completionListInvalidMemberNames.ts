@@ -19,7 +19,7 @@ verify.completionListContains("bar");
 verify.completionListContains("break");
 verify.completionListContains("any");
 verify.completionListContains("$");
-verify.completionListContains("\\u0062");
+verify.completionListContains("b");
 
 // Nothing else should show up
 verify.memberListCount(5);

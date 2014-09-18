@@ -170,8 +170,8 @@ describe('Colorization', function () {
 
         it("classifies keyword after a dot on previous line", function () {
             test("var",
-                ts.EndOfLineState.EndingWithDotToken,
-                identifier("var"),
+                ts.EndOfLineState.Start,
+                keyword("var"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
         });
     });

@@ -12,6 +12,10 @@ module ts {
     export enum SyntaxKind {
         Unknown,
         EndOfFileToken,
+        SingleLineCommentTrivia,
+        MultiLineCommentTrivia,
+        NewLineTrivia,
+        WhitespaceTrivia,
         // Literals
         NumericLiteral,
         StringLiteral,
@@ -634,6 +638,7 @@ module ts {
         getApparentType(type: Type): ApparentType;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
+        getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
         getRootSymbol(symbol: Symbol): Symbol;
         getContextualType(node: Node): Type;
