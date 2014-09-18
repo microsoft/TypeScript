@@ -1844,7 +1844,11 @@ module ts {
 
             function isVisibleWithinClassDeclaration(symbol: Symbol, containingClass: Declaration): boolean {
                 var declaration = symbol.declarations && symbol.declarations[0];
-                return !(declaration && (declaration.flags & NodeFlags.Private) && containingClass !== declaration.parent);
+                if (declaration && (declaration.flags & NodeFlags.Private)) {
+                    var declarationClass = getAncestor(declaration, SyntaxKind.ClassDeclaration);
+                    return containingClass === declarationClass;
+                }
+                return true;
             }
 
             function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
@@ -1966,7 +1970,7 @@ module ts {
                 }
 
                 var type = typeInfoResolver.getTypeOfNode(mappedNode);
-                var apparentType: ApparentType = type && typeInfoResolver.getApparentType(type);
+                var apparentType = type && typeInfoResolver.getApparentType(type);
                 if (apparentType) {
                     // Filter private properties
                     forEach(apparentType.getApparentProperties(), symbol => {
