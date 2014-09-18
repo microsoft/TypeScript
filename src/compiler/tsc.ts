@@ -94,14 +94,12 @@ module ts {
             output += diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): ";
         }
 
-        var category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += category;
-
         if (options.showDiagnosticCodes) {
-            output += " TS" + diagnostic.code;
+            var category = DiagnosticCategory[diagnostic.category].toLowerCase();
+            output += category + " TS" + diagnostic.code + ": ";
         }
 
-        output += ": " + diagnostic.messageText + sys.newLine;
+        output += diagnostic.messageText + sys.newLine;
 
         sys.write(output);
     }
