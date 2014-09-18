@@ -1,0 +1,24 @@
+tests/cases/conformance/parser/ecmascript5/Protected/Protected4.ts(2,3): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/conformance/parser/ecmascript5/Protected/Protected4.ts(2,13): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/Protected/Protected4.ts(2,24): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/Protected/Protected4.ts(3,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/parser/ecmascript5/Protected/Protected4.ts(2,3): error TS2304: Cannot find name 'protected'.
+tests/cases/conformance/parser/ecmascript5/Protected/Protected4.ts(2,20): error TS2304: Cannot find name 'm'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Protected/Protected4.ts (6 errors) ====
+    class C {
+      protected public m() { }
+      ~~~~~~~~~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+                ~~~~~~
+!!! error TS1005: ';' expected.
+                           ~
+!!! error TS1005: ';' expected.
+      ~~~~~~~~~
+!!! error TS2304: Cannot find name 'protected'.
+                       ~
+!!! error TS2304: Cannot find name 'm'.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.

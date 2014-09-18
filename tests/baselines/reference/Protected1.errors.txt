@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/Protected/Protected1.ts(1,11): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/Protected/Protected1.ts(1,1): error TS2304: Cannot find name 'protected'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Protected/Protected1.ts (2 errors) ====
+    protected class C {
+              ~~~~~
+!!! error TS1005: ';' expected.
+    ~~~~~~~~~
+!!! error TS2304: Cannot find name 'protected'.
+    }
