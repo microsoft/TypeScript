@@ -2307,7 +2307,7 @@ module ts {
                     // needs evidence of a trailing comma in order to give good results for signature help.
                     // That is why we do not allow a trailing comma, but we "preserve" a trailing comma.
                     callExpr.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions,
-                        parseAssignmentExpression, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ true);
+                        parseArgumentExpression, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ true);
                     parseExpected(SyntaxKind.CloseParenToken);
                     expr = finishNode(callExpr);
                     continue;
@@ -2376,8 +2376,25 @@ module ts {
             return finishNode(node);
         }
 
+        function parseAssignmentExpressionOrOmittedExpression(omittedExpressionDiagnostic: DiagnosticMessage): Expression {
+            if (token === SyntaxKind.CommaToken) {
+                if (omittedExpressionDiagnostic) {
+                    var errorStart = scanner.getTokenPos();
+                    var errorLength = scanner.getTextPos() - errorStart;
+                    grammarErrorAtPos(errorStart, errorLength, omittedExpressionDiagnostic);
+                }
+                return createNode(SyntaxKind.OmittedExpression);
+            }
+            
+            return parseAssignmentExpression();
+        }
+
         function parseArrayLiteralElement(): Expression {
-            return token === SyntaxKind.CommaToken ? createNode(SyntaxKind.OmittedExpression) : parseAssignmentExpression();
+            return parseAssignmentExpressionOrOmittedExpression(/*omittedExpressionDiagnostic*/ undefined);
+        }
+
+        function parseArgumentExpression(): Expression {
+            return parseAssignmentExpressionOrOmittedExpression(Diagnostics.Argument_expression_expected);
         }
 
         function parseArrayLiteral(): ArrayLiteral {
@@ -2523,7 +2540,7 @@ module ts {
                 // needs evidence of a trailing comma in order to give good results for signature help.
                 // That is why we do not allow a trailing comma, but we "preserve" a trailing comma.
                 node.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions,
-                    parseAssignmentExpression, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ true);
+                    parseArgumentExpression, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ true);
                 parseExpected(SyntaxKind.CloseParenToken);
             }
             return finishNode(node);

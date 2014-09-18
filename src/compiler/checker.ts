@@ -4129,11 +4129,18 @@ module ts {
             return unknownSignature;
         }
 
-        function signatureHasCorrectArity(node: CallExpression, signature: Signature) {
+        function signatureHasCorrectArity(node: CallExpression, signature: Signature): boolean {
             var args = node.arguments || emptyArray;
-            return args.length >= signature.minArgumentCount &&
+            var isCorrect = args.length >= signature.minArgumentCount &&
                 (signature.hasRestParameter || args.length <= signature.parameters.length) &&
                 (!node.typeArguments || signature.typeParameters && node.typeArguments.length === signature.typeParameters.length);
+
+            // For error recovery, since we have parsed OmittedExpressions for any extra commas
+            // in the argument list, if we see any OmittedExpressions, just return true.
+            if (!isCorrect && forEach(node.arguments, arg => arg.kind === SyntaxKind.OmittedExpression)) {
+                return true;
+            }
+            return isCorrect;
         }
 
         // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
@@ -4208,6 +4215,9 @@ module ts {
             var mapper = createInferenceMapper(context);
             // First infer from arguments that are not context sensitive
             for (var i = 0; i < args.length; i++) {
+                if (args[i].kind === SyntaxKind.OmittedExpression) {
+                    continue;
+                }
                 if (!excludeArgument || excludeArgument[i] === undefined) {
                     var parameterType = getTypeAtPosition(signature, i);
                     inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
@@ -4216,6 +4226,9 @@ module ts {
             // Next, infer from those context sensitive arguments that are no longer excluded
             if (excludeArgument) {
                 for (var i = 0; i < args.length; i++) {
+                    if (args[i].kind === SyntaxKind.OmittedExpression) {
+                        continue;
+                    }
                     if (excludeArgument[i] === false) {
                         var parameterType = getTypeAtPosition(signature, i);
                         inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
@@ -4244,6 +4257,10 @@ module ts {
             if (node.arguments) {
                 for (var i = 0; i < node.arguments.length; i++) {
                     var arg = node.arguments[i];
+                    if (arg.kind === SyntaxKind.OmittedExpression) {
+                        continue;
+                    }
+
                     var paramType = getTypeAtPosition(signature, i);
                     // String literals get string literal types unless we're reporting errors
                     var argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors ?
