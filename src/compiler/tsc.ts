@@ -333,9 +333,8 @@ module ts {
 
         var bindStart = new Date().getTime();
         var syntacticErrors = program.getDiagnostics();
-        var emitErrors: Diagnostic[];
-        var semanticErrors: Diagnostic[];
         var errors: Diagnostic[];
+        var exitStatus: EmitReturnStatus;
 
         if (syntacticErrors.length) {
             var checkStart = bindStart;
@@ -345,9 +344,11 @@ module ts {
         else {
             var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
-            semanticErrors = checker.getDiagnostics();
+            var semanticErrors = checker.getDiagnostics();
             var emitStart = new Date().getTime();
-            emitErrors = checker.emitFiles().errors;
+            var emitOutput = checker.emitFiles();
+            var emitErrors = emitOutput.errors;
+            exitStatus = emitOutput.emitResultStatus;
             var reportStart = new Date().getTime();
             errors = concatenate(syntacticErrors, concatenate(semanticErrors, emitErrors));
         }
@@ -371,22 +372,11 @@ module ts {
             reportTimeStatistic("Total time", reportStart - parseStart);
         }
 
-        // Check types of diagnostics and return associated exit code 
+        // Check if there exists syntactic errors
         if (syntacticErrors.length > 0) {
-            return { program: program, exitStatus: EmitReturnStatus.AllOutputGenerationSkipped };
-        } else if (semanticErrors.length > 0 && !compilerOptions.declaration) {
-            // No '-d' is specified; javascript file is generated with semantic errors
-            return { program: program, exitStatus: EmitReturnStatus.JSGeneratedWithSemanticErrors };
-        } else if (semanticErrors.length > 0 && compilerOptions.declaration) {
-            // '-d' is specified; javascript file will be emitted with semantic errors but declaration file will be skipped
-            return { program: program, exitStatus: EmitReturnStatus.DeclarationGenerationSkipped };
-        } else if (emitErrors.length > 0 && compilerOptions.declaration) {
-            return { program: program, exitStatus: EmitReturnStatus.EmitErrorsEncountered };
-        } else {
-            // There is no error message
-            return { program: program, exitStatus: EmitReturnStatus.Succeeded };
-        }
-
+            exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
+        } 
+        return { program: program, exitStatus: exitStatus }
     }
 
     function printVersion() {
