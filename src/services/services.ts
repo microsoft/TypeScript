@@ -495,7 +495,7 @@ module ts {
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
         getTypeAtPosition(fileName: string, position: number): TypeInfo;
-        getQuickInfo(fileName: string, position: number): SymbolDisplayPart[];
+        getQuickInfo(fileName: string, position: number): QuickInfo;
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TypeScript.TextSpan;
 
@@ -1722,11 +1722,10 @@ module ts {
                 return undefined;
             }
 
-            var declarations = symbol.getDeclarations();
             return {
                 name: displayName,
                 kind: getSymbolKind(symbol),
-                kindModifiers: declarations ? getNodeModifiers(declarations[0]) : ScriptElementKindModifier.none
+                kindModifiers: getSymbolModifiers(symbol)
             };
         }
 
@@ -2207,6 +2206,12 @@ module ts {
             }
         }
 
+        function getSymbolModifiers(symbol: Symbol): string {
+            return symbol && symbol.declarations && symbol.declarations.length > 0
+                ? getNodeModifiers(symbol.declarations[0])
+                : ScriptElementKindModifier.none;
+        }
+
         function getNodeModifiers(node: Node): string {
             var flags = node.flags;
             var result: string[] = [];
@@ -2221,7 +2226,7 @@ module ts {
         }
 
         /// QuickInfo
-        function getQuickInfo(fileName: string, position: number): SymbolDisplayPart[] {
+        function getQuickInfo(fileName: string, position: number): QuickInfo {
             synchronizeHostData();
 
             fileName = TypeScript.switchToForwardSlashes(fileName);
@@ -2232,16 +2237,15 @@ module ts {
             }
 
             var symbol = typeInfoResolver.getSymbolInfo(node);
-            return symbol ? typeInfoResolver.symbolToDisplayParts(symbol) : [];
-            //var type = symbol && typeInfoResolver.getTypeOfSymbol(symbol);
-            //if (type) {
-            //    return new TypeInfo(
-            //        new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
-            //        "", typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
-            //        getSymbolKind(symbol), TypeScript.TextSpan.fromBounds(node.pos, node.end));
-            //}
+            if (!symbol) {
+                return undefined;
+            }
 
-            //return undefined;
+            return new QuickInfo(
+                getSymbolKind(symbol),
+                getSymbolModifiers(symbol),
+                new TypeScript.TextSpan(node.getStart(), node.getWidth()),
+                typeInfoResolver.symbolToDisplayParts(symbol));
         }
 
         function getTypeAtPosition(fileName: string, position: number): TypeInfo {
@@ -4038,7 +4042,7 @@ module ts {
                     var kind = getSymbolKind(symbol);
                     if (kind) {
                         return RenameInfo.Create(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
-                            getNodeModifiers(symbol.getDeclarations()[0]),
+                            getSymbolModifiers(symbol),
                             new TypeScript.TextSpan(node.getStart(), node.getWidth()));
                     }
                 }
