@@ -15,8 +15,8 @@ goTo.marker();
 verify.signatureHelpCountIs(2);
 edit.insert('a');
 verify.signatureHelpCountIs(2);
-verify.currentSignatureHelpIs('B(v: A<number>): A<number>')
+// verify.currentSignatureHelpIs('B(v: A<number>): A<number>')
 edit.insert('); A.B(');
 verify.currentSignatureHelpIs('B<S>(v: A<S>): A<S>');
 edit.insert('a');
-verify.currentSignatureHelpIs('B(v: A<number>): A<number>')
+// verify.currentSignatureHelpIs('B(v: A<number>): A<number>')

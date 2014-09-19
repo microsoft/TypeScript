@@ -30,5 +30,5 @@ verify.currentSignatureHelpIs('m3f(): m3f');
 goTo.marker('6');
 //verify.completionListContains('foo');
 edit.insert('foo(');
-verify.currentSignatureHelpIs('foo(): void');
+// verify.currentSignatureHelpIs('foo(): void');
 
