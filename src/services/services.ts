@@ -495,7 +495,7 @@ module ts {
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
         getTypeAtPosition(fileName: string, position: number): TypeInfo;
-        getQuickInfo(fileName: string, position: number): QuickInfo;
+        getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TypeScript.TextSpan;
 
@@ -658,6 +658,20 @@ module ts {
                     public kindModifiers: string,
                     public textSpan: TypeScript.TextSpan,
                     public displayParts: SymbolDisplayPart[]) {
+        }
+
+        public toJSON() {
+            return {
+                kind: this.kind,
+                kindModifiers: this.kindModifiers,
+                textSpan: this.textSpan,
+                displayParts: this.displayParts.forEach(d => {
+                    return {
+                        text: d.text,
+                        kind: SymbolDisplayPartKind[d.kind]
+                    };
+                })
+            };
         }
     }
 
@@ -2226,7 +2240,7 @@ module ts {
         }
 
         /// QuickInfo
-        function getQuickInfo(fileName: string, position: number): QuickInfo {
+        function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             synchronizeHostData();
 
             fileName = TypeScript.switchToForwardSlashes(fileName);
@@ -4062,7 +4076,7 @@ module ts {
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
-            getQuickInfo: getQuickInfo,
+            getQuickInfoAtPosition: getQuickInfoAtPosition,
             getSignatureHelpItems: (filename, position): SignatureHelpItems => null,
             getSignatureHelpCurrentArgumentState: (fileName, position, applicableSpanStart): SignatureHelpState => null,
             getDefinitionAtPosition: getDefinitionAtPosition,
