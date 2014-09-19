@@ -84,7 +84,7 @@ module ts {
             getTypeOfNode: getTypeOfNode,
             getApparentType: getApparentType,
             typeToString: typeToString,
-            typeToDisplayParts: undefined,
+            typeToDisplayParts: typeToDisplayParts,
             symbolToString: symbolToString,
             symbolToDisplayParts: symbolToDisplayParts,
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,

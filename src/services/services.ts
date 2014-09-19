@@ -665,7 +665,7 @@ module ts {
                 kind: this.kind,
                 kindModifiers: this.kindModifiers,
                 textSpan: this.textSpan,
-                displayParts: this.displayParts.forEach(d => {
+                displayParts: this.displayParts.map(d => {
                     return {
                         text: d.text,
                         kind: SymbolDisplayPartKind[d.kind]
@@ -2255,11 +2255,33 @@ module ts {
                 return undefined;
             }
 
+            var totalParts: SymbolDisplayPart[] = [];
+            if (symbol.flags & SymbolFlags.Class) {
+                totalParts.push({ text: "class", kind: SymbolDisplayPartKind.keyword, symbol: undefined });
+            }
+            else if (symbol.flags & SymbolFlags.Interface) {
+                totalParts.push({ text: "interface", kind: SymbolDisplayPartKind.keyword, symbol: undefined });
+            }
+            else if (symbol.flags & SymbolFlags.Enum) {
+                totalParts.push({ text: "enum", kind: SymbolDisplayPartKind.keyword, symbol: undefined });
+            }
+            else if (symbol.flags & SymbolFlags.Module) {
+                totalParts.push({ text: "module", kind: SymbolDisplayPartKind.keyword, symbol: undefined });
+            }
+
+            totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+            totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, getContainerNode(node)));
+
+            var type = typeInfoResolver.getTypeOfSymbol(symbol);
+            if (type) {
+                totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type));
+            }
+
             return new QuickInfo(
                 getSymbolKind(symbol),
                 getSymbolModifiers(symbol),
                 new TypeScript.TextSpan(node.getStart(), node.getWidth()),
-                typeInfoResolver.symbolToDisplayParts(symbol));
+                totalParts);
         }
 
         function getTypeAtPosition(fileName: string, position: number): TypeInfo {
