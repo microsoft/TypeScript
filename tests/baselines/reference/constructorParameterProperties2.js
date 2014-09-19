@@ -23,6 +23,15 @@ class E {
 var e: E;
 var r3 = e.y; // error
 
+class F {
+    y: number;
+    constructor(protected y: number) { } // error
+}
+
+var f: F;
+var r4 = f.y; // error
+
+
 //// [constructorParameterProperties2.js]
 var C = (function () {
     function C(y) {
@@ -47,3 +56,11 @@ var E = (function () {
 })();
 var e;
 var r3 = e.y; // error
+var F = (function () {
+    function F(y) {
+        this.y = y;
+    } // error
+    return F;
+})();
+var f;
+var r4 = f.y; // error
