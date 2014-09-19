@@ -928,20 +928,20 @@ module ts {
 
             if (flags & SymbolFlags.Variable) {
                 return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter
-                    ? SymbolDisplayPartKind.ParameterName
-                    : SymbolDisplayPartKind.LocalName;
+                    ? SymbolDisplayPartKind.parameterName
+                    : SymbolDisplayPartKind.localName;
             }
-            else if (flags & SymbolFlags.Property)      { return SymbolDisplayPartKind.PropertyName; }
-            else if (flags & SymbolFlags.EnumMember)    { return SymbolDisplayPartKind.EnumMemberName; }
-            else if (flags & SymbolFlags.Function)      { return SymbolDisplayPartKind.FunctionName; }
-            else if (flags & SymbolFlags.Class)         { return SymbolDisplayPartKind.ClassName; }
-            else if (flags & SymbolFlags.Interface)     { return SymbolDisplayPartKind.InterfaceName; }
-            else if (flags & SymbolFlags.Enum)          { return SymbolDisplayPartKind.EnumName; }
-            else if (flags & SymbolFlags.Module)        { return SymbolDisplayPartKind.ModuleName; }
-            else if (flags & SymbolFlags.Method)        { return SymbolDisplayPartKind.MethodName; }
-            else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.TypeParameterName; }
+            else if (flags & SymbolFlags.Property)      { return SymbolDisplayPartKind.propertyName; }
+            else if (flags & SymbolFlags.EnumMember)    { return SymbolDisplayPartKind.enumMemberName; }
+            else if (flags & SymbolFlags.Function)      { return SymbolDisplayPartKind.functionName; }
+            else if (flags & SymbolFlags.Class)         { return SymbolDisplayPartKind.className; }
+            else if (flags & SymbolFlags.Interface)     { return SymbolDisplayPartKind.interfaceName; }
+            else if (flags & SymbolFlags.Enum)          { return SymbolDisplayPartKind.enumName; }
+            else if (flags & SymbolFlags.Module)        { return SymbolDisplayPartKind.moduleName; }
+            else if (flags & SymbolFlags.Method)        { return SymbolDisplayPartKind.methodName; }
+            else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
             
-            return SymbolDisplayPartKind.Text;
+            return SymbolDisplayPartKind.text;
         }
 
         function getDisplayPartWriter(): DisplayPartsSymbolWriter {
@@ -954,7 +954,7 @@ module ts {
 
                     // Completely ignore indentation for display part writers.  And map newlines to
                     // a single space.
-                    writeLine: () => displayParts.push({ text: " ", kind: SymbolDisplayPartKind.Space, symbol: undefined }),
+                    writeLine: () => displayParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined }),
                     increaseIndent: () => { },
                     decreaseIndent: () => { },
                     clear: () => displayParts = [],
@@ -1058,7 +1058,7 @@ module ts {
                     if (accessibleSymbolChain) {
                         for (var i = 0, n = accessibleSymbolChain.length; i < n; i++) {
                             if (needsDot) {
-                                writer.writeKind(".", SymbolDisplayPartKind.Punctuation);
+                                writer.writeKind(".", SymbolDisplayPartKind.punctuation);
                             }
 
                             writeSymbolName(accessibleSymbolChain[i]);
@@ -1072,7 +1072,7 @@ module ts {
                         }
 
                         if (needsDot) {
-                            writer.writeKind(".", SymbolDisplayPartKind.Punctuation);
+                            writer.writeKind(".", SymbolDisplayPartKind.punctuation);
                         }
 
                         writeSymbolName(symbol);
@@ -1135,7 +1135,7 @@ module ts {
 
             function writeType(type: Type, allowFunctionOrConstructorTypeLiteral: boolean) {
                 if (type.flags & TypeFlags.Intrinsic) {
-                    writer.writeKind((<IntrinsicType>type).intrinsicName, SymbolDisplayPartKind.Keyword);
+                    writer.writeKind((<IntrinsicType>type).intrinsicName, SymbolDisplayPartKind.keyword);
                 }
                 else if (type.flags & TypeFlags.Reference) {
                     writeTypeReference(<TypeReference>type);
@@ -1150,24 +1150,24 @@ module ts {
                     writeAnonymousType(<ObjectType>type, allowFunctionOrConstructorTypeLiteral);
                 }
                 else if (type.flags & TypeFlags.StringLiteral) {
-                    writer.writeKind((<StringLiteralType>type).text, SymbolDisplayPartKind.StringLiteral);
+                    writer.writeKind((<StringLiteralType>type).text, SymbolDisplayPartKind.stringLiteral);
                 }
                 else {
                     // Should never get here
                     // { ... }
-                    writer.writeKind("{", SymbolDisplayPartKind.Punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.Space);
-                    writer.writeKind("...", SymbolDisplayPartKind.Punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.Space);
-                    writer.writeKind("}", SymbolDisplayPartKind.Punctuation);
+                    writer.writeKind("{", SymbolDisplayPartKind.punctuation);
+                    writer.writeKind(" ", SymbolDisplayPartKind.space);
+                    writer.writeKind("...", SymbolDisplayPartKind.punctuation);
+                    writer.writeKind(" ", SymbolDisplayPartKind.space);
+                    writer.writeKind("}", SymbolDisplayPartKind.punctuation);
                 }
             }
 
             function writeTypeList(types: Type[]) {
                 for (var i = 0; i < types.length; i++) {
                     if (i > 0) {
-                        writer.writeKind(",", SymbolDisplayPartKind.Punctuation);
-                        writer.writeKind(" ", SymbolDisplayPartKind.Space);
+                        writer.writeKind(",", SymbolDisplayPartKind.punctuation);
+                        writer.writeKind(" ", SymbolDisplayPartKind.space);
                     }
                     writeType(types[i], /*allowFunctionOrConstructorTypeLiteral*/ true);
                 }
@@ -1178,20 +1178,20 @@ module ts {
                     // If we are writing array element type the arrow style signatures are not allowed as 
                     // we need to surround it by curlies, e.g. { (): T; }[]; as () => T[] would mean something different
                     writeType(type.typeArguments[0], /*allowFunctionOrConstructorTypeLiteral*/ false);
-                    writer.writeKind("[]", SymbolDisplayPartKind.Punctuation);
+                    writer.writeKind("[]", SymbolDisplayPartKind.punctuation);
                 }
                 else {
                     writeSymbol(type.target.symbol, writer, enclosingDeclaration, SymbolFlags.Type);
-                    writer.writeKind("<", SymbolDisplayPartKind.Punctuation);
+                    writer.writeKind("<", SymbolDisplayPartKind.punctuation);
                     writeTypeList(type.typeArguments);
-                    writer.writeKind(">", SymbolDisplayPartKind.Punctuation);
+                    writer.writeKind(">", SymbolDisplayPartKind.punctuation);
                 }
             }
 
             function writeTupleType(type: TupleType) {
-                writer.writeKind("[", SymbolDisplayPartKind.Punctuation);
+                writer.writeKind("[", SymbolDisplayPartKind.punctuation);
                 writeTypeList(type.elementTypes);
-                writer.writeKind("]", SymbolDisplayPartKind.Punctuation);
+                writer.writeKind("]", SymbolDisplayPartKind.punctuation);
             }
 
             function writeAnonymousType(type: ObjectType, allowFunctionOrConstructorTypeLiteral: boolean) {
@@ -1205,7 +1205,7 @@ module ts {
                 }
                 else if (typeStack && contains(typeStack, type)) {
                     // Recursive usage, use any
-                    writer.writeKind("any", SymbolDisplayPartKind.Keyword);
+                    writer.writeKind("any", SymbolDisplayPartKind.keyword);
                 }
                 else {
                     if (!typeStack) {
@@ -1235,8 +1235,8 @@ module ts {
             }
 
             function writeTypeofSymbol(type: ObjectType) {
-                writer.writeKind("typeof", SymbolDisplayPartKind.Keyword);
-                writer.writeKind(" ", SymbolDisplayPartKind.Space);
+                writer.writeKind("typeof", SymbolDisplayPartKind.keyword);
+                writer.writeKind(" ", SymbolDisplayPartKind.space);
                 writeSymbol(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value);
             }
 
@@ -1244,7 +1244,7 @@ module ts {
                 var resolved = resolveObjectTypeMembers(type);
                 if (!resolved.properties.length && !resolved.stringIndexType && !resolved.numberIndexType) {
                     if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
-                        writer.writeKind("{}", SymbolDisplayPartKind.Punctuation);
+                        writer.writeKind("{}", SymbolDisplayPartKind.punctuation);
                         return;
                     }
 
@@ -1254,54 +1254,54 @@ module ts {
                             return;
                         }
                         if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
-                            writer.writeKind("new", SymbolDisplayPartKind.Keyword);
-                            writer.writeKind(" ", SymbolDisplayPartKind.Space);
+                            writer.writeKind("new", SymbolDisplayPartKind.keyword);
+                            writer.writeKind(" ", SymbolDisplayPartKind.space);
                             writeSignature(resolved.constructSignatures[0], /*arrowStyle*/ true);
                             return;
                         }
                     }
                 }
 
-                writer.writeKind("{", SymbolDisplayPartKind.Punctuation);
+                writer.writeKind("{", SymbolDisplayPartKind.punctuation);
                 writer.writeLine();
                 writer.increaseIndent();
                 for (var i = 0; i < resolved.callSignatures.length; i++) {
                     writeSignature(resolved.callSignatures[i]);
-                    writer.writeKind(";", SymbolDisplayPartKind.Punctuation);
+                    writer.writeKind(";", SymbolDisplayPartKind.punctuation);
                     writer.writeLine();
                 }
                 for (var i = 0; i < resolved.constructSignatures.length; i++) {
-                    writer.writeKind("new", SymbolDisplayPartKind.Keyword);
-                    writer.writeKind(" ", SymbolDisplayPartKind.Space);
+                    writer.writeKind("new", SymbolDisplayPartKind.keyword);
+                    writer.writeKind(" ", SymbolDisplayPartKind.space);
 
                     writeSignature(resolved.constructSignatures[i]);
-                    writer.writeKind(";", SymbolDisplayPartKind.Punctuation);
+                    writer.writeKind(";", SymbolDisplayPartKind.punctuation);
                     writer.writeLine();
                 }
                 if (resolved.stringIndexType) {
                     // [x: string]: 
-                    writer.writeKind("[", SymbolDisplayPartKind.Punctuation);
-                    writer.writeKind("x", SymbolDisplayPartKind.ParameterName);
-                    writer.writeKind(":", SymbolDisplayPartKind.Punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.Space);
-                    writer.writeKind("string", SymbolDisplayPartKind.Keyword);
-                    writer.writeKind("]:", SymbolDisplayPartKind.Punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.Space);
+                    writer.writeKind("[", SymbolDisplayPartKind.punctuation);
+                    writer.writeKind("x", SymbolDisplayPartKind.parameterName);
+                    writer.writeKind(":", SymbolDisplayPartKind.punctuation);
+                    writer.writeKind(" ", SymbolDisplayPartKind.space);
+                    writer.writeKind("string", SymbolDisplayPartKind.keyword);
+                    writer.writeKind("]:", SymbolDisplayPartKind.punctuation);
+                    writer.writeKind(" ", SymbolDisplayPartKind.space);
                     writeType(resolved.stringIndexType, /*allowFunctionOrConstructorTypeLiteral*/ true);
-                    writer.writeKind(";", SymbolDisplayPartKind.Punctuation);
+                    writer.writeKind(";", SymbolDisplayPartKind.punctuation);
                     writer.writeLine();
                 }
                 if (resolved.numberIndexType) {
                     // [x: number]: 
-                    writer.writeKind("[", SymbolDisplayPartKind.Punctuation);
-                    writer.writeKind("x", SymbolDisplayPartKind.ParameterName);
-                    writer.writeKind(":", SymbolDisplayPartKind.Punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.Space);
-                    writer.writeKind("number", SymbolDisplayPartKind.Keyword);
-                    writer.writeKind("]:", SymbolDisplayPartKind.Punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.Space);
+                    writer.writeKind("[", SymbolDisplayPartKind.punctuation);
+                    writer.writeKind("x", SymbolDisplayPartKind.parameterName);
+                    writer.writeKind(":", SymbolDisplayPartKind.punctuation);
+                    writer.writeKind(" ", SymbolDisplayPartKind.space);
+                    writer.writeKind("number", SymbolDisplayPartKind.keyword);
+                    writer.writeKind("]:", SymbolDisplayPartKind.punctuation);
+                    writer.writeKind(" ", SymbolDisplayPartKind.space);
                     writeType(resolved.numberIndexType, /*allowFunctionOrConstructorTypeLiteral*/ true);
-                    writer.writeKind(";", SymbolDisplayPartKind.Punctuation);
+                    writer.writeKind(";", SymbolDisplayPartKind.punctuation);
                     writer.writeLine();
                 }
                 for (var i = 0; i < resolved.properties.length; i++) {
@@ -1312,78 +1312,78 @@ module ts {
                         for (var j = 0; j < signatures.length; j++) {
                             writeSymbol(p, writer);
                             if (isOptionalProperty(p)) {
-                                writer.writeKind("?", SymbolDisplayPartKind.Punctuation);
+                                writer.writeKind("?", SymbolDisplayPartKind.punctuation);
                             }
                             writeSignature(signatures[j]);
-                            writer.writeKind(";", SymbolDisplayPartKind.Punctuation);
+                            writer.writeKind(";", SymbolDisplayPartKind.punctuation);
                             writer.writeLine();
                         }
                     }
                     else {
                         writeSymbol(p, writer);
                         if (isOptionalProperty(p)) {
-                            writer.writeKind("?", SymbolDisplayPartKind.Punctuation);
+                            writer.writeKind("?", SymbolDisplayPartKind.punctuation);
                         }
-                        writer.writeKind(":", SymbolDisplayPartKind.Punctuation);
-                        writer.writeKind(" ", SymbolDisplayPartKind.Space);
+                        writer.writeKind(":", SymbolDisplayPartKind.punctuation);
+                        writer.writeKind(" ", SymbolDisplayPartKind.space);
                         writeType(t, /*allowFunctionOrConstructorTypeLiteral*/ true);
-                        writer.writeKind(";", SymbolDisplayPartKind.Punctuation);
+                        writer.writeKind(";", SymbolDisplayPartKind.punctuation);
                         writer.writeLine();
                     }
                 }
                 writer.decreaseIndent();
-                writer.writeKind("}", SymbolDisplayPartKind.Punctuation);
+                writer.writeKind("}", SymbolDisplayPartKind.punctuation);
             }
 
             function writeSignature(signature: Signature, arrowStyle?: boolean) {
                 if (signature.typeParameters) {
-                    writer.writeKind("<", SymbolDisplayPartKind.Punctuation);
+                    writer.writeKind("<", SymbolDisplayPartKind.punctuation);
                     for (var i = 0; i < signature.typeParameters.length; i++) {
                         if (i > 0) {
-                            writer.writeKind(",", SymbolDisplayPartKind.Punctuation);
-                            writer.writeKind(" ", SymbolDisplayPartKind.Space);
+                            writer.writeKind(",", SymbolDisplayPartKind.punctuation);
+                            writer.writeKind(" ", SymbolDisplayPartKind.space);
                         }
                         var tp = signature.typeParameters[i];
                         writeSymbol(tp.symbol, writer);
                         var constraint = getConstraintOfTypeParameter(tp);
                         if (constraint) {
-                            writer.writeKind(" ", SymbolDisplayPartKind.Space);
-                            writer.writeKind("extends", SymbolDisplayPartKind.Keyword);
-                            writer.writeKind(" ", SymbolDisplayPartKind.Space);
+                            writer.writeKind(" ", SymbolDisplayPartKind.space);
+                            writer.writeKind("extends", SymbolDisplayPartKind.keyword);
+                            writer.writeKind(" ", SymbolDisplayPartKind.space);
                             writeType(constraint, /*allowFunctionOrConstructorTypeLiteral*/ true);
                         }
                     }
-                    writer.writeKind(">", SymbolDisplayPartKind.Punctuation);
+                    writer.writeKind(">", SymbolDisplayPartKind.punctuation);
                 }
-                writer.writeKind("(", SymbolDisplayPartKind.Punctuation);
+                writer.writeKind("(", SymbolDisplayPartKind.punctuation);
                 for (var i = 0; i < signature.parameters.length; i++) {
                     if (i > 0) {
-                        writer.writeKind(",", SymbolDisplayPartKind.Punctuation);
-                        writer.writeKind(" ", SymbolDisplayPartKind.Space);
+                        writer.writeKind(",", SymbolDisplayPartKind.punctuation);
+                        writer.writeKind(" ", SymbolDisplayPartKind.space);
                     }
                     var p = signature.parameters[i];
                     if (getDeclarationFlagsFromSymbol(p) & NodeFlags.Rest) {
-                        writer.writeKind("...", SymbolDisplayPartKind.Punctuation);
+                        writer.writeKind("...", SymbolDisplayPartKind.punctuation);
                     }
                     writeSymbol(p, writer);
                     if (p.valueDeclaration.flags & NodeFlags.QuestionMark || (<VariableDeclaration>p.valueDeclaration).initializer) {
-                        writer.writeKind("?", SymbolDisplayPartKind.Punctuation);
+                        writer.writeKind("?", SymbolDisplayPartKind.punctuation);
                     }
-                    writer.writeKind(":", SymbolDisplayPartKind.Punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.Space);
+                    writer.writeKind(":", SymbolDisplayPartKind.punctuation);
+                    writer.writeKind(" ", SymbolDisplayPartKind.space);
 
                     writeType(getTypeOfSymbol(p), /*allowFunctionOrConstructorTypeLiteral*/ true);
                 }
 
-                writer.writeKind(")", SymbolDisplayPartKind.Punctuation);
+                writer.writeKind(")", SymbolDisplayPartKind.punctuation);
                 if (arrowStyle) {
-                    writer.writeKind(" ", SymbolDisplayPartKind.Space);
-                    writer.writeKind("=>", SymbolDisplayPartKind.Punctuation);
+                    writer.writeKind(" ", SymbolDisplayPartKind.space);
+                    writer.writeKind("=>", SymbolDisplayPartKind.punctuation);
                 }
                 else {
-                    writer.writeKind(":", SymbolDisplayPartKind.Punctuation);
+                    writer.writeKind(":", SymbolDisplayPartKind.punctuation);
                 }
-                writer.writeKind(" ", SymbolDisplayPartKind.Space);
+                writer.writeKind(" ", SymbolDisplayPartKind.space);
 
                 writeType(getReturnTypeOfSignature(signature), /*allowFunctionOrConstructorTypeLiteral*/ true);
             }
