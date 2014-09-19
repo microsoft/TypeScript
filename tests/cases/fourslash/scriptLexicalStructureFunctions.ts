@@ -12,7 +12,7 @@
 ////    }
 ////}
 ////
-////{| "itemName": "baz", "kind": "function" |}function baz() {
+////{| "itemName": "baz", "kind": "function", "parentName": "<global>" |}function baz() {
 ////    var v = 10;
 ////}
 
