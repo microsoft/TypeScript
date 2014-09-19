@@ -4143,50 +4143,6 @@ module ts {
             return isCorrect;
         }
 
-        // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
-        // A nit here is that we reorder only signatures that belong to the same symbol,
-        // so order how inherited signatures are processed is still preserved.
-        // interface A { (x: string): void }
-        // interface B extends A { (x: 'foo'): string }
-        // var b: B;
-        // b('foo') // <- here overloads should be processed as [(x:'foo'): string, (x: string): void]
-        function collectCandidates(node: CallExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature[]{
-            var result: Signature[] = candidatesOutArray || [];
-            var lastParent: Node;
-            var lastSymbol: Symbol;
-            var cutoffPos: number = 0;
-            var pos: number;
-            for (var i = 0; i < signatures.length; i++) {
-                var signature = signatures[i];
-                if (true) {
-                    var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
-                    var parent = signature.declaration && signature.declaration.parent;
-                    if (!lastSymbol || symbol === lastSymbol) {                        
-                        if (lastParent && parent === lastParent) {
-                            pos++;
-                        }
-                        else {
-                            lastParent = parent;
-                            pos = cutoffPos;
-                        }
-                    }
-                    else {
-                        // current declaration belongs to a different symbol
-                        // set cutoffPos so re-orderings in the future won't change result set from 0 to cutoffPos
-                        pos = cutoffPos = result.length;
-                        lastParent = parent;
-                    }
-                    lastSymbol = symbol;
-
-                    for (var j = result.length; j > pos; j--) {
-                        result[j] = result[j - 1];
-                    }
-                    result[pos] = signature;
-                }
-            }
-            return result;
-        }
-
         // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
         function getSingleCallSignature(type: Type): Signature {
             if (type.flags & TypeFlags.ObjectType) {
@@ -4280,7 +4236,9 @@ module ts {
 
         function resolveCall(node: CallExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature {
             forEach(node.typeArguments, checkSourceElement);
-            var candidates = collectCandidates(node, signatures, candidatesOutArray);
+            var candidates = candidatesOutArray || [];
+            // collectCandidates fills up the candidates array directly
+            collectCandidates();
             if (!candidates.length) {
                 error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
                 return resolveErrorCall(node);
@@ -4336,6 +4294,50 @@ module ts {
                 return resolveErrorCall(node);
             }
             return resolveErrorCall(node);
+
+            // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
+            // A nit here is that we reorder only signatures that belong to the same symbol,
+            // so order how inherited signatures are processed is still preserved.
+            // interface A { (x: string): void }
+            // interface B extends A { (x: 'foo'): string }
+            // var b: B;
+            // b('foo') // <- here overloads should be processed as [(x:'foo'): string, (x: string): void]
+            function collectCandidates(): void {
+                var result = candidates;
+                var lastParent: Node;
+                var lastSymbol: Symbol;
+                var cutoffPos: number = 0;
+                var pos: number;
+                Debug.assert(!result.length);
+                for (var i = 0; i < signatures.length; i++) {
+                    var signature = signatures[i];
+                    if (true) {
+                        var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
+                        var parent = signature.declaration && signature.declaration.parent;
+                        if (!lastSymbol || symbol === lastSymbol) {
+                            if (lastParent && parent === lastParent) {
+                                pos++;
+                            }
+                            else {
+                                lastParent = parent;
+                                pos = cutoffPos;
+                            }
+                        }
+                        else {
+                            // current declaration belongs to a different symbol
+                            // set cutoffPos so re-orderings in the future won't change result set from 0 to cutoffPos
+                            pos = cutoffPos = result.length;
+                            lastParent = parent;
+                        }
+                        lastSymbol = symbol;
+
+                        for (var j = result.length; j > pos; j--) {
+                            result[j] = result[j - 1];
+                        }
+                        result[pos] = signature;
+                    }
+                }
+            }
         }
 
         function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[]): Signature {

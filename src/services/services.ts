@@ -3564,9 +3564,15 @@ module ts {
                         display += ": " + typeInfoResolver.typeToString(typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
                         return new SignatureHelpParameter(p.name, "", display, isOptional);
                     });
-                    var callTarget = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
-                    var signatureName = typeInfoResolver.symbolToString(typeInfoResolver.getSymbolInfo(callTarget), /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
-                    var prefix = signatureName + "(";
+                    var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
+                    var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
+                    var signatureName = callTargetSymbol ? typeInfoResolver.symbolToString(callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined) : "";
+                    var prefix = signatureName;
+                    // TODO(jfreeman): Constraints?
+                    if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
+                        prefix += "<" + map(candidateSignature.typeParameters, tp => tp.symbol.name).join(", ") + ">";
+                    }
+                    prefix += "(";
                     var suffix = "): " + typeInfoResolver.typeToString(candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
                     return new SignatureHelpItem(candidateSignature.hasRestParameter, prefix, suffix, ", ", parameterHelpItems, "");
                 });
