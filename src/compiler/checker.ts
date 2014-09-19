@@ -24,8 +24,8 @@ module ts {
     }
 
     interface SymbolWriter {
-        write(text: string, kind: SymbolDisplayPartKind, symbol: Symbol): void;
-        displayPartKind(symbol: Symbol): SymbolDisplayPartKind;
+        writeKind(text: string, kind: SymbolDisplayPartKind): void;
+        writeSymbol(text: string, symbol: Symbol): void;
         clear(): void;
     }
 
@@ -911,6 +911,7 @@ module ts {
                 { accessibility: SymbolAccessibility.NotAccessible, errorSymbolName: firstIdentifierName };
         }
 
+        // Pool writers to avoid needing to allocate them for every symbol we write.
         var displayPartWriters: DisplayPartsSymbolWriter[] = [];
         var stringWriters: StringSymbolWriter[] = [];
 
@@ -940,9 +941,9 @@ module ts {
                 var displayParts: SymbolDisplayPart[] = [];
                 return {
                     displayParts: () => displayParts,
-                    write: (text, kind, symbol) => displayParts.push({ text: text, kind: kind, symbol: symbol }),
+                    writeKind: (text, kind) => displayParts.push({ text: text, kind: kind, symbol: undefined }),
+                    writeSymbol: (text, symbol) => displayParts.push({ text: text, kind: displayPartKind(symbol), symbol: symbol }),
                     clear: () => displayParts = [],
-                    displayPartKind: displayPartKind
                 };
             }
 
@@ -955,9 +956,9 @@ module ts {
 
                 return {
                     string: () => str,
-                    write: text => str += text,
+                    writeKind: (text, kind) => str += text,
+                    writeSymbol: (text, symbol) => str += text,
                     clear: () => str = "",
-                    displayPartKind: (symbol: Symbol): SymbolDisplayPartKind => undefined
                 };
             }
 
@@ -1001,12 +1002,12 @@ module ts {
                 if (symbol.declarations && symbol.declarations.length > 0) {
                     var declaration = symbol.declarations[0];
                     if (declaration.name) {
-                        writer.write(identifierToString(declaration.name), writer.displayPartKind(symbol), symbol);
+                        writer.writeSymbol(identifierToString(declaration.name), symbol);
                         return;
                     }
                 }
 
-                writer.write(symbol.name, writer.displayPartKind(symbol), symbol);
+                writer.writeSymbol(symbol.name, symbol);
             }
 
             var needsDot = false;
@@ -1026,7 +1027,7 @@ module ts {
                     if (accessibleSymbolChain) {
                         for (var i = 0, n = accessibleSymbolChain.length; i < n; i++) {
                             if (needsDot) {
-                                writer.write(".", SymbolDisplayPartKind.Punctuation, /*symbol:*/ undefined);
+                                writer.writeKind(".", SymbolDisplayPartKind.Punctuation);
                             }
 
                             writeSymbolName(accessibleSymbolChain[i]);
@@ -1040,7 +1041,7 @@ module ts {
                         }
 
                         if (needsDot) {
-                            writer.write(".", SymbolDisplayPartKind.Punctuation, /*symbol:*/ undefined);
+                            writer.writeKind(".", SymbolDisplayPartKind.Punctuation);
                         }
 
                         writeSymbolName(symbol);
