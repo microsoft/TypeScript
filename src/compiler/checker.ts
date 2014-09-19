@@ -23,6 +23,20 @@ module ts {
         return undefined;
     }
 
+    interface SymbolWriter {
+        write(text: string, kind: SymbolDisplayPartKind, symbol: Symbol): void;
+        displayPartKind(symbol: Symbol): SymbolDisplayPartKind;
+        clear(): void;
+    }
+
+    interface DisplayPartsSymbolWriter extends SymbolWriter {
+        displayParts(): SymbolDisplayPart[];
+    }
+
+    interface StringSymbolWriter extends SymbolWriter {
+        string(): string;
+    }
+
     /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
     /// If fullTypeCheck === true,  then the typechecker should do every possible check to produce all errors
     /// If fullTypeCheck === false, the typechecker can take shortcuts and skip checks that only produce errors.
@@ -62,7 +76,9 @@ module ts {
             getTypeOfNode: getTypeOfNode,
             getApparentType: getApparentType,
             typeToString: typeToString,
+            typeToDisplayParts: undefined,
             symbolToString: symbolToString,
+            symbolToDisplayParts: symbolToDisplayParts,
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
             getRootSymbol: getRootSymbol,
             getContextualType: getContextualType,
@@ -895,51 +911,154 @@ module ts {
                 { accessibility: SymbolAccessibility.NotAccessible, errorSymbolName: firstIdentifierName };
         }
 
+        var displayPartWriters: DisplayPartsSymbolWriter[] = [];
+        var stringWriters: StringSymbolWriter[] = [];
+
+        function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
+            var flags = symbol.flags;
+
+            if (flags & SymbolFlags.Variable) {
+                return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter
+                    ? SymbolDisplayPartKind.ParameterName
+                    : SymbolDisplayPartKind.LocalName;
+            }
+            else if (flags & SymbolFlags.Property)      { return SymbolDisplayPartKind.PropertyName; }
+            else if (flags & SymbolFlags.EnumMember)    { return SymbolDisplayPartKind.EnumMemberName; }
+            else if (flags & SymbolFlags.Function)      { return SymbolDisplayPartKind.FunctionName; }
+            else if (flags & SymbolFlags.Class)         { return SymbolDisplayPartKind.ClassName; }
+            else if (flags & SymbolFlags.Interface)     { return SymbolDisplayPartKind.InterfaceName; }
+            else if (flags & SymbolFlags.Enum)          { return SymbolDisplayPartKind.EnumName; }
+            else if (flags & SymbolFlags.Module)        { return SymbolDisplayPartKind.ModuleName; }
+            else if (flags & SymbolFlags.Method)        { return SymbolDisplayPartKind.MethodName; }
+            else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.TypeParameterName; }
+            
+            return SymbolDisplayPartKind.Text;
+        }
+
+        function getDisplayPartWriter(): DisplayPartsSymbolWriter {
+            if (displayPartWriters.length == 0) {
+                var displayParts: SymbolDisplayPart[] = [];
+                return {
+                    displayParts: () => displayParts,
+                    write: (text, kind, symbol) => displayParts.push({ text: text, kind: kind, symbol: symbol }),
+                    clear: () => displayParts = [],
+                    displayPartKind: displayPartKind
+                };
+            }
+
+            return displayPartWriters.pop();
+        }
+
+        function getStringWriter(): StringSymbolWriter {
+            if (stringWriters.length == 0) {
+                var str = "";
+
+                return {
+                    string: () => str,
+                    write: text => str += text,
+                    clear: () => str = "",
+                    displayPartKind: (symbol: Symbol): SymbolDisplayPartKind => undefined
+                };
+            }
+
+            return stringWriters.pop();
+        }
+
+        function releaseDisplayPartWriter(writer: DisplayPartsSymbolWriter) {
+            writer.clear();
+            displayPartWriters.push(writer);
+        }
+
+        function releaseStringWriter(writer: StringSymbolWriter) {
+            writer.clear()
+            stringWriters.push(writer);
+        }
+
+        function symbolToDisplayParts(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): SymbolDisplayPart[] {
+            var writer = getDisplayPartWriter();
+            writeSymbol(symbol, enclosingDeclaration, meaning, writer);
+
+            var result = writer.displayParts();
+            releaseDisplayPartWriter(writer);
+
+            return result;
+        }
+
+        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
+            var writer = getStringWriter();
+            writeSymbol(symbol, enclosingDeclaration, meaning, writer);
+
+            var result = writer.string();
+            releaseStringWriter(writer);
+
+            return result;
+        }
+
         // Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
         // Meaning needs to be specified if the enclosing declaration is given
-        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
-            function getSymbolName(symbol: Symbol) {
+        function writeSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, writer: SymbolWriter): void {
+            function writeSymbolName(symbol: Symbol): void {
                 if (symbol.declarations && symbol.declarations.length > 0) {
                     var declaration = symbol.declarations[0];
                     if (declaration.name) {
-                        return identifierToString(declaration.name);
+                        writer.write(identifierToString(declaration.name), writer.displayPartKind(symbol), symbol);
+                        return;
                     }
                 }
-                return symbol.name;
+
+                writer.write(symbol.name, writer.displayPartKind(symbol), symbol);
+            }
+
+            var needsDot = false;
+            function walkSymbol(symbol: Symbol, meaning: SymbolFlags): void {
+                if (symbol) {
+                    var accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning);
+
+                    if (!accessibleSymbolChain ||
+                        needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
+
+                        // Go up and add our parent.
+                        walkSymbol(
+                            getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol),
+                            getQualifiedLeftMeaning(meaning));
+                    }
+
+                    if (accessibleSymbolChain) {
+                        for (var i = 0, n = accessibleSymbolChain.length; i < n; i++) {
+                            if (needsDot) {
+                                writer.write(".", SymbolDisplayPartKind.Punctuation, /*symbol:*/ undefined);
+                            }
+
+                            writeSymbolName(accessibleSymbolChain[i]);
+                            needsDot = true;
+                        }
+                    }
+                    else {
+                        // If we didn't find accessible symbol chain for this symbol, break if this is external module
+                        if (!needsDot && ts.forEach(symbol.declarations, declaration => hasExternalModuleSymbol(declaration))) {
+                            return;
+                        }
+
+                        if (needsDot) {
+                            writer.write(".", SymbolDisplayPartKind.Punctuation, /*symbol:*/ undefined);
+                        }
+
+                        writeSymbolName(symbol);
+                        needsDot = true;
+                    }
+                }
             }
 
             // Get qualified name 
             if (enclosingDeclaration &&
                 // TypeParameters do not need qualification
                 !(symbol.flags & SymbolFlags.TypeParameter)) {
-                var symbolName: string;
-                while (symbol) {
-                    var isFirstName = !symbolName;
-                    var accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning);
 
-                    var currentSymbolName: string;
-                    if (accessibleSymbolChain) {
-                        currentSymbolName = ts.map(accessibleSymbolChain, accessibleSymbol => getSymbolName(accessibleSymbol)).join(".");
-                    }
-                    else {
-                        // If we didn't find accessible symbol chain for this symbol, break if this is external module
-                        if (!isFirstName && ts.forEach(symbol.declarations, declaration => hasExternalModuleSymbol(declaration))) {
-                            break;
-                        }
-                        currentSymbolName = getSymbolName(symbol);
-                    }
-                    symbolName = currentSymbolName + (isFirstName ? "" : ("." + symbolName));
-                    if (accessibleSymbolChain && !needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
-                        break;
-                    }
-                    symbol = getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
-                    meaning = getQualifiedLeftMeaning(meaning);
-                }
-
-                return symbolName;
+                walkSymbol(symbol, meaning);
+                return;
             }
 
-            return getSymbolName(symbol);
+            return writeSymbolName(symbol);
         }
 
         function writeSymbolToTextWriter(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, writer: TextWriter) {

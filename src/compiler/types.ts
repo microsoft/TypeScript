@@ -638,6 +638,8 @@ module ts {
         getApparentType(type: Type): ApparentType;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
+        typeToDisplayParts(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[];
+        symbolToDisplayParts(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): SymbolDisplayPart[];
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
         getRootSymbol(symbol: Symbol): Symbol;
@@ -1167,6 +1169,42 @@ module ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
+    }
+
+    export class SymbolDisplayPart {
+        constructor(public text: string,
+                    public kind: SymbolDisplayPartKind,
+                    public symbol: Symbol) {
+        }
+    }
+
+    export enum SymbolDisplayPartKind {
+        AliasName,
+        ClassName,
+        EnumName,
+        EventName,
+        FieldName,
+        InterfaceName,
+        Keyword,
+        LabelName,
+        LineBreak,
+        NumericLiteral,
+        StringLiteral,
+        LocalName,
+        MethodName,
+        ModuleName,
+        NamespaceName,
+        Operator,
+        ParameterName,
+        PropertyName,
+        Punctuation,
+        Space,
+        AnonymousTypeIndicator,
+        Text,
+        TypeParameterName,
+        EnumMemberName,
+        FunctionName,
+        RegularExpressionLiteral,
     }
 
     export interface CancellationToken {

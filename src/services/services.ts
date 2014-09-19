@@ -495,6 +495,7 @@ module ts {
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
         getTypeAtPosition(fileName: string, position: number): TypeInfo;
+        getQuickInfo(fileName: string, position: number): SymbolDisplayPart[];
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TypeScript.TextSpan;
 
@@ -650,6 +651,14 @@ module ts {
         prefix: string;
         suffix: string;
         text: string;
+    }
+
+    export class QuickInfo {
+        constructor(public kind: string,
+                    public kindModifiers: string,
+                    public textSpan: TypeScript.TextSpan,
+                    public displayParts: SymbolDisplayPart[]) {
+        }
     }
 
     export class TypeInfo {
@@ -2212,6 +2221,29 @@ module ts {
         }
 
         /// QuickInfo
+        function getQuickInfo(fileName: string, position: number): SymbolDisplayPart[] {
+            synchronizeHostData();
+
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
+            var node = getNodeAtPosition(sourceFile, position);
+            if (!node) {
+                return undefined;
+            }
+
+            var symbol = typeInfoResolver.getSymbolInfo(node);
+            return symbol ? typeInfoResolver.symbolToDisplayParts(symbol) : [];
+            //var type = symbol && typeInfoResolver.getTypeOfSymbol(symbol);
+            //if (type) {
+            //    return new TypeInfo(
+            //        new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
+            //        "", typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
+            //        getSymbolKind(symbol), TypeScript.TextSpan.fromBounds(node.pos, node.end));
+            //}
+
+            //return undefined;
+        }
+
         function getTypeAtPosition(fileName: string, position: number): TypeInfo {
             synchronizeHostData();
 
@@ -4026,6 +4058,7 @@ module ts {
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
+            getQuickInfo: getQuickInfo,
             getSignatureHelpItems: (filename, position): SignatureHelpItems => null,
             getSignatureHelpCurrentArgumentState: (fileName, position, applicableSpanStart): SignatureHelpState => null,
             getDefinitionAtPosition: getDefinitionAtPosition,
