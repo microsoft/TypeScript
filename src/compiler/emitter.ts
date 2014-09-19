@@ -593,12 +593,6 @@ module ts {
                         return "\"" + list.join("\",\"") + "\"";
                     }
                     return "";
-                    //var output = "";
-                    //for (var i = 0, n = list.length; i < n; i++) {
-                    //    if (i) output += ",";
-                    //    output += "\"" + list[i] + "\"";
-                    //}
-                    //return output;
                 }
 
                 function serializeSourceMapContents(version: number, file: string, sourceRoot: string, sources: string[], names: string[], mappings: string) {
