@@ -195,7 +195,7 @@ module ts {
                 case SyntaxKind.VariableDeclaration:
                     var variableDeclaration = <VariableDeclaration>node;
                     return basicChildItem(node, variableDeclaration.name.text,  ts.ScriptElementKind.variableElement);
-
+                
                 case SyntaxKind.Constructor:
                     return basicChildItem(node, "constructor", ts.ScriptElementKind.constructorImplementationElement);
             }
@@ -286,7 +286,11 @@ module ts {
                 }
 
                 hasGlobalNode = true;
-                return new ts.NavigationBarItem("<global>",
+                var rootName = isExternalModule(node) ?
+                    "\"" + getBaseFilename(removeFileExtension(normalizePath(node.filename))) + "\"" :
+                    "<global>"
+
+                return new ts.NavigationBarItem(rootName,
                     ts.ScriptElementKind.moduleElement,
                     ts.ScriptElementKindModifier.none,
                     [getNodeSpan(node)],

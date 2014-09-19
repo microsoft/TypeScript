@@ -521,6 +521,20 @@ module ts {
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
 
+    var supportedExtensions = [".d.ts", ".ts", ".js"];
+    export function removeFileExtension(path: string): string {
+
+        for (var i = 0; i < supportedExtensions.length; i++) {
+            var ext = supportedExtensions[i];
+
+            if (fileExtensionIs(path, ext)) {
+                return path.substr(0, path.length - ext.length);
+            }
+        }
+
+        return path;
+    }
+
     export interface ObjectAllocator {
         getNodeConstructor(kind: SyntaxKind): new () => Node;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;

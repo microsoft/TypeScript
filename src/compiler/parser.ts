@@ -17,20 +17,13 @@ module ts {
         return node;
     }
 
-    var moduleExtensions = [".d.ts", ".ts", ".js"];
-
     interface ReferenceComments {
         referencedFiles: FileReference[];
         amdDependencies: string[];
     }
 
     export function getModuleNameFromFilename(filename: string) {
-        for (var i = 0; i < moduleExtensions.length; i++) {
-            var ext = moduleExtensions[i];
-            var len = filename.length - ext.length;
-            if (len > 0 && filename.substr(len) === ext) return filename.substr(0, len);
-        }
-        return filename;
+        return removeFileExtension(filename);
     }
 
     export function getSourceFileOfNode(node: Node): SourceFile {
