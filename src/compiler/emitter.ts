@@ -101,7 +101,7 @@ module ts {
             };
         }
 
-        function createTextWriter(writeSymbol: (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags)=> void): EmitTextWriter {
+        function createTextWriter(trackSymbol: (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags)=> void): EmitTextWriter {
             var output = "";
             var indent = 0;
             var lineStart = true;
@@ -149,7 +149,7 @@ module ts {
 
             return {
                 write: write,
-                writeSymbol: writeSymbol,
+                trackSymbol: trackSymbol,
                 rawWrite: rawWrite,
                 writeLiteral: writeLiteral,
                 writeLine: writeLine,
@@ -307,7 +307,7 @@ module ts {
         }
 
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
-            var writer = createTextWriter(writeSymbol);
+            var writer = createTextWriter(trackSymbol);
             var write = writer.write;
             var writeLine = writer.writeLine;
             var increaseIndent = writer.increaseIndent;
@@ -363,7 +363,7 @@ module ts {
             /** Sourcemap data that will get encoded */
             var sourceMapData: SourceMapData;
 
-            function writeSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) { }
+            function trackSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) { }
 
             function initializeEmitterWithSourceMaps() {
                 var sourceMapDir: string; // The directory in which sourcemap will be
@@ -2252,7 +2252,7 @@ module ts {
         }
 
         function emitDeclarations(jsFilePath: string, root?: SourceFile) {
-            var writer = createTextWriter(writeSymbol);
+            var writer = createTextWriter(trackSymbol);
             var write = writer.write;
             var writeLine = writer.writeLine;
             var increaseIndent = writer.increaseIndent;
@@ -2280,7 +2280,7 @@ module ts {
                 var oldWriter = writer;
                 forEach(importDeclarations, aliasToWrite => {
                     var aliasEmitInfo = forEach(aliasDeclarationEmitInfo, declEmitInfo => declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined);
-                    writer = createTextWriter(writeSymbol);
+                    writer = createTextWriter(trackSymbol);
                     for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
                         writer.increaseIndent();
                     }
@@ -2291,10 +2291,9 @@ module ts {
                 writer = oldWriter;
             }
 
-            function writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
+            function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
                 var symbolAccesibilityResult = resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning);
                 if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
-                    resolver.writeSymbol(symbol, enclosingDeclaration, meaning, writer);
 
                     // write the aliases
                     if (symbolAccesibilityResult && symbolAccesibilityResult.aliasesToMakeVisible) {
