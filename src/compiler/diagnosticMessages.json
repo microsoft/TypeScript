@@ -608,7 +608,7 @@
         "category": "Error",
         "code": 2340
     },
-    "Property '{0}' is inaccessible.": {
+    "Property '{0}' is private and only accessible within class '{1}'.": {
         "category": "Error",
         "code": 2341
     },
@@ -1016,13 +1016,21 @@
         "category": "Error",
         "code": 2442
     },
-    "Property '{0}' is protected but type '{1}' is not a class derived from type '{2}'.": {
+    "Property '{0}' is protected but type '{1}' is not a class derived from '{2}'.": {
         "category": "Error",
         "code": 2443
     },
     "Property '{0}' is protected in type '{1}' but public in type '{2}'.": {
         "category": "Error",
         "code": 2444
+    },
+    "Property '{0}' is protected and only accessible within class '{1}' and its subclasses.": {
+        "category": "Error",
+        "code": 2445
+    },
+    "Property '{0}' is protected and only accessible through an instance of class '{1}'.": {
+        "category": "Error",
+        "code": 2446
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

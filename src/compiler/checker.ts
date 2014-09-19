@@ -2972,7 +2972,7 @@ module ts {
                                 var targetClass = <InterfaceType>getDeclaredTypeOfSymbol(targetProp.parent);
                                 if (!sourceClass || !hasBaseType(sourceClass, targetClass)) {
                                     if (reportErrors) {
-                                        reportError(Diagnostics.Property_0_is_protected_but_type_1_is_not_derived_from_type_2,
+                                        reportError(Diagnostics.Property_0_is_protected_but_type_1_is_not_a_class_derived_from_2,
                                             symbolToString(targetProp), typeToString(sourceClass || source), typeToString(targetClass));
                                     }
                                     return false;
@@ -4012,38 +4012,42 @@ module ts {
             return s.valueDeclaration ? s.valueDeclaration.flags : s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : 0;
         }
 
-        function isClassPropertyAccessible(node: PropertyAccess, type: Type, prop: Symbol): boolean {
+        function checkClassPropertyAccess(node: PropertyAccess, type: Type, prop: Symbol) {
             var flags = getDeclarationFlagsFromSymbol(prop);
             // Public properties are always accessible
             if (!(flags & (NodeFlags.Private | NodeFlags.Protected))) {
-                return true;
+                return;
             }
             // Property is known to be private or protected at this point
-            // Private and protected properties are never accessible outside a class declaration
-            var enclosingClassDeclaration = getAncestor(node, SyntaxKind.ClassDeclaration);
-            if (!enclosingClassDeclaration) {
-                return false;
-            }
             // Get the declaring and enclosing class instance types
+            var enclosingClassDeclaration = getAncestor(node, SyntaxKind.ClassDeclaration);
+            var enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
             var declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
-            var enclosingClass = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration));
             // Private property is accessible if declaring and enclosing class are the same
             if (flags & NodeFlags.Private) {
-                return declaringClass === enclosingClass;
+                if (declaringClass !== enclosingClass) {
+                    error(node, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(declaringClass));
+                }
+                return;
             }
             // Property is known to be protected at this point
             // All protected properties of a supertype are accessible in a super access
             if (node.left.kind === SyntaxKind.SuperKeyword) {
-                return true;
-            }
-            // An instance property must be accessed through an instance of the enclosing class
-            if (!(flags & NodeFlags.Static)) {
-                if (!(getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
-                    return false;
-                }
+                return;
             }
             // A protected property is accessible in the declaring class and classes derived from it
-            return hasBaseType(enclosingClass, declaringClass);
+            if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
+                error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
+                return;
+            }
+            // No further restrictions for static properties
+            if (flags & NodeFlags.Static) {
+                return;
+            }
+            // An instance property must be accessed through an instance of the enclosing class
+            if (!(getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
+                error(node, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
+            }
         }
 
         function checkPropertyAccess(node: PropertyAccess) {
@@ -4074,8 +4078,8 @@ module ts {
                     if (node.left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.Method) {
                         error(node.right, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                     }
-                    else if (!isClassPropertyAccessible(node, type, prop)) {
-                        error(node, Diagnostics.Property_0_is_inaccessible, getFullyQualifiedName(prop));
+                    else {
+                        checkClassPropertyAccess(node, type, prop);
                     }
                 }
                 return getTypeOfSymbol(prop);
