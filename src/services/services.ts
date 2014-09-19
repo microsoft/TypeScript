@@ -2268,7 +2268,7 @@ module ts {
                     result.push(getDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
                     return true;
                 }
-
+                
                 return false;
             }
 
@@ -2469,7 +2469,7 @@ module ts {
                                 break;
                             }
                         }
-
+                        
                         if (shouldHighlightNextKeyword) {
                             result.push(new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(elseKeyword.getStart(), ifKeyword.end), /* isWriteAccess */ false));
                             i++; // skip the next keyword
@@ -3581,13 +3581,16 @@ module ts {
                     selectedItemIndex = 0;
                 }
 
-                var applicableSpan = new TypeScript.TextSpan(argumentListOrTypeArgumentList.getFullStart(), argumentListOrTypeArgumentList.end);
+                var applicableSpanStart = argumentListOrTypeArgumentList.getFullStart();
+                var applicableSpanEnd = skipTrivia(sourceFile.text, argumentListOrTypeArgumentList.end, /*stopAfterLineBreak*/ false);
+                var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
                 return new SignatureHelpItems(items, applicableSpan, selectedItemIndex);
             }
 
             synchronizeHostData();
 
             // Decide whether to show signature help
+            fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
             var node = getNodeAtPosition(sourceFile, position);
 
