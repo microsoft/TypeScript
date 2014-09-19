@@ -1,9 +1,9 @@
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts(10,11): error TS2429: Interface 'S' incorrectly extends interface 'T':
-  Required property 'Foo' cannot be reimplemented with optional property in 'S'.
+  Property 'Foo' is optional in type 'S' but required in type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts(18,11): error TS2429: Interface 'S2' incorrectly extends interface 'T2':
-  Required property '1' cannot be reimplemented with optional property in 'S2'.
+  Property '1' is optional in type 'S2' but required in type 'T2'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts(26,11): error TS2429: Interface 'S3' incorrectly extends interface 'T3':
-  Required property '1' cannot be reimplemented with optional property in 'S3'.
+  Property ''1'' is optional in type 'S3' but required in type 'T3'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts(33,9): error TS2367: No best common type exists between '{ Foo: Base; }' and '{ Foo?: Derived; }'.
 
 
@@ -20,7 +20,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     interface S extends T {
               ~
 !!! error TS2429: Interface 'S' incorrectly extends interface 'T':
-!!! error TS2429:   Required property 'Foo' cannot be reimplemented with optional property in 'S'.
+!!! error TS2429:   Property 'Foo' is optional in type 'S' but required in type 'T'.
         Foo?: Derived // error
     }
     
@@ -31,7 +31,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     interface S2 extends T2 {
               ~~
 !!! error TS2429: Interface 'S2' incorrectly extends interface 'T2':
-!!! error TS2429:   Required property '1' cannot be reimplemented with optional property in 'S2'.
+!!! error TS2429:   Property '1' is optional in type 'S2' but required in type 'T2'.
         1?: Derived; // error
     }
     
@@ -42,7 +42,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     interface S3 extends T3 {
               ~~
 !!! error TS2429: Interface 'S3' incorrectly extends interface 'T3':
-!!! error TS2429:   Required property '1' cannot be reimplemented with optional property in 'S3'.
+!!! error TS2429:   Property ''1'' is optional in type 'S3' but required in type 'T3'.
         '1'?: Derived; // error
     }
     

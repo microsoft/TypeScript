@@ -1,15 +1,15 @@
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts(16,11): error TS2416: Class 'B' incorrectly extends base class 'A':
-  Private property 'foo' cannot be reimplemented.
+  Property 'foo' is private in type 'A' but not in type 'B'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts(24,11): error TS2416: Class 'B2' incorrectly extends base class 'A2':
-  Private property '1' cannot be reimplemented.
+  Property '1' is private in type 'A2' but not in type 'B2'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts(32,11): error TS2416: Class 'B3' incorrectly extends base class 'A3':
-  Private property ''1'' cannot be reimplemented.
+  Property ''1'' is private in type 'A3' but not in type 'B3'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts(42,11): error TS2416: Class 'B' incorrectly extends base class 'A':
-  Private property 'foo' cannot be reimplemented.
+  Property 'foo' is private in type 'A' but not in type 'B'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts(50,11): error TS2416: Class 'B2' incorrectly extends base class 'A2':
-  Private property '1' cannot be reimplemented.
+  Property '1' is private in type 'A2' but not in type 'B2'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts(58,11): error TS2416: Class 'B3' incorrectly extends base class 'A3':
-  Private property ''1'' cannot be reimplemented.
+  Property ''1'' is private in type 'A3' but not in type 'B3'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts (6 errors) ====
@@ -31,7 +31,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B extends A {
               ~
 !!! error TS2416: Class 'B' incorrectly extends base class 'A':
-!!! error TS2416:   Private property 'foo' cannot be reimplemented.
+!!! error TS2416:   Property 'foo' is private in type 'A' but not in type 'B'.
             public foo: Derived; // error
         }
     
@@ -42,7 +42,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B2 extends A2 {
               ~~
 !!! error TS2416: Class 'B2' incorrectly extends base class 'A2':
-!!! error TS2416:   Private property '1' cannot be reimplemented.
+!!! error TS2416:   Property '1' is private in type 'A2' but not in type 'B2'.
             public 1: Derived; // error
         }
     
@@ -53,7 +53,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B3 extends A3 {
               ~~
 !!! error TS2416: Class 'B3' incorrectly extends base class 'A3':
-!!! error TS2416:   Private property ''1'' cannot be reimplemented.
+!!! error TS2416:   Property ''1'' is private in type 'A3' but not in type 'B3'.
             public '1': Derived; // error
         }
     }
@@ -66,7 +66,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B extends A {
               ~
 !!! error TS2416: Class 'B' incorrectly extends base class 'A':
-!!! error TS2416:   Private property 'foo' cannot be reimplemented.
+!!! error TS2416:   Property 'foo' is private in type 'A' but not in type 'B'.
             foo: Derived; // error
         }
     
@@ -77,7 +77,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B2 extends A2 {
               ~~
 !!! error TS2416: Class 'B2' incorrectly extends base class 'A2':
-!!! error TS2416:   Private property '1' cannot be reimplemented.
+!!! error TS2416:   Property '1' is private in type 'A2' but not in type 'B2'.
             1: Derived; // error
         }
     
@@ -88,7 +88,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B3 extends A3 {
               ~~
 !!! error TS2416: Class 'B3' incorrectly extends base class 'A3':
-!!! error TS2416:   Private property ''1'' cannot be reimplemented.
+!!! error TS2416:   Property ''1'' is private in type 'A3' but not in type 'B3'.
             '1': Derived; // error
         }
     }

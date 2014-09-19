@@ -656,6 +656,7 @@ module ts {
         switch (token) {
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.StaticKeyword:
             case SyntaxKind.ExportKeyword:
             case SyntaxKind.DeclareKeyword:
@@ -2981,6 +2982,7 @@ module ts {
                     }
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
                     // When followed by an identifier or keyword, these do not start a statement but
                     // might instead be following type members
@@ -3299,6 +3301,8 @@ module ts {
             var lastDeclareModifierLength: number;
             var lastPrivateModifierStart: number;
             var lastPrivateModifierLength: number;
+            var lastProtectedModifierStart: number;
+            var lastProtectedModifierLength: number;
 
             while (true) {
                 var modifierStart = scanner.getTokenPos();
@@ -3336,6 +3340,21 @@ module ts {
                         lastPrivateModifierStart = modifierStart;
                         lastPrivateModifierLength = modifierLength;
                         flags |= NodeFlags.Private;
+                        break;
+
+                    case SyntaxKind.ProtectedKeyword:
+                        if (flags & NodeFlags.Public || flags & NodeFlags.Private || flags & NodeFlags.Protected) {
+                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics.Accessibility_modifier_already_seen);
+                        }
+                        else if (flags & NodeFlags.Static) {
+                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_must_precede_1_modifier, "protected", "static");
+                        }
+                        else if (context === ModifierContext.ModuleElements || context === ModifierContext.SourceElements) {
+                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "protected");
+                        }
+                        lastProtectedModifierStart = modifierStart;
+                        lastProtectedModifierLength = modifierLength;
+                        flags |= NodeFlags.Protected;
                         break;
 
                     case SyntaxKind.StaticKeyword:
@@ -3394,6 +3413,9 @@ module ts {
             }
             else if (token === SyntaxKind.ConstructorKeyword && flags & NodeFlags.Private) {
                 grammarErrorAtPos(lastPrivateModifierStart, lastPrivateModifierLength, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
+            }
+            else if (token === SyntaxKind.ConstructorKeyword && flags & NodeFlags.Protected) {
+                grammarErrorAtPos(lastProtectedModifierStart, lastProtectedModifierLength, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "protected");
             }
             else if (token === SyntaxKind.ImportKeyword) {
                 if (flags & NodeFlags.Ambient) {
@@ -3671,6 +3693,7 @@ module ts {
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
                     // Check for modifier on source element
                     return lookAhead(() => { nextToken(); return isDeclaration(); });

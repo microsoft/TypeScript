@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/members/accessibility/privateStaticNotAccessibleInClodule.ts(9,20): error TS2341: Property 'C.bar' is inaccessible.
+tests/cases/conformance/classes/members/accessibility/privateStaticNotAccessibleInClodule.ts(9,20): error TS2341: Property 'bar' is private and only accessible within class 'C'.
 
 
 ==== tests/cases/conformance/classes/members/accessibility/privateStaticNotAccessibleInClodule.ts (1 errors) ====
@@ -12,5 +12,5 @@ tests/cases/conformance/classes/members/accessibility/privateStaticNotAccessible
     module C {
         export var y = C.bar; // error
                        ~~~~~
-!!! error TS2341: Property 'C.bar' is inaccessible.
+!!! error TS2341: Property 'bar' is private and only accessible within class 'C'.
     }

@@ -1,4 +1,4 @@
-tests/cases/compiler/cloduleStaticMembers.ts(6,13): error TS2341: Property 'Clod.x' is inaccessible.
+tests/cases/compiler/cloduleStaticMembers.ts(6,13): error TS2341: Property 'x' is private and only accessible within class 'Clod'.
 tests/cases/compiler/cloduleStaticMembers.ts(7,13): error TS2304: Cannot find name 'x'.
 tests/cases/compiler/cloduleStaticMembers.ts(10,13): error TS2304: Cannot find name 'y'.
 
@@ -11,7 +11,7 @@ tests/cases/compiler/cloduleStaticMembers.ts(10,13): error TS2304: Cannot find n
     module Clod {
         var p = Clod.x;
                 ~~~~~~
-!!! error TS2341: Property 'Clod.x' is inaccessible.
+!!! error TS2341: Property 'x' is private and only accessible within class 'Clod'.
         var q = x;
                 ~
 !!! error TS2304: Cannot find name 'x'.

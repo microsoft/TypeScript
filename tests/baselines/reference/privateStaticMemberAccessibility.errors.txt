@@ -1,5 +1,5 @@
-tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts(6,18): error TS2341: Property 'Base.foo' is inaccessible.
-tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts(7,18): error TS2341: Property 'Base.foo' is inaccessible.
+tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts(6,18): error TS2341: Property 'foo' is private and only accessible within class 'Base'.
+tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts(7,18): error TS2341: Property 'foo' is private and only accessible within class 'Base'.
 
 
 ==== tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts (2 errors) ====
@@ -10,8 +10,8 @@ tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessi
     class Derived extends Base {
         static bar = Base.foo; // error
                      ~~~~~~~~
-!!! error TS2341: Property 'Base.foo' is inaccessible.
+!!! error TS2341: Property 'foo' is private and only accessible within class 'Base'.
         bing = () => Base.foo; // error
                      ~~~~~~~~
-!!! error TS2341: Property 'Base.foo' is inaccessible.
+!!! error TS2341: Property 'foo' is private and only accessible within class 'Base'.
     }

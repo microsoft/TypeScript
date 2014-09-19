@@ -1,7 +1,7 @@
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts(5,7): error TS2416: Class 'Derived' incorrectly extends base class 'Base':
-  Private property 'x' cannot be reimplemented.
+  Types have separate declarations of a private property 'x'.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts(13,7): error TS2418: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2':
-  Private property 'y' cannot be reimplemented.
+  Types have separate declarations of a private property 'y'.
 
 
 ==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts (2 errors) ====
@@ -12,7 +12,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
     class Derived extends Base {
           ~~~~~~~
 !!! error TS2416: Class 'Derived' incorrectly extends base class 'Base':
-!!! error TS2416:   Private property 'x' cannot be reimplemented.
+!!! error TS2416:   Types have separate declarations of a private property 'x'.
         private x: { foo: string; bar: string; }; // error
     }
     
@@ -23,6 +23,6 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
     class Derived2 extends Base2 {
           ~~~~~~~~
 !!! error TS2418: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2':
-!!! error TS2418:   Private property 'y' cannot be reimplemented.
+!!! error TS2418:   Types have separate declarations of a private property 'y'.
         private static y: { foo: string; bar: string; }; // error
     }
