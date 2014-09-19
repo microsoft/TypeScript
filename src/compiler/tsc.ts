@@ -208,18 +208,18 @@ module ts {
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
-            return sys.exit(1);
+            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
         }
 
         if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            return sys.exit(0);
+            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
         }
 
         if (commandLine.options.help || commandLine.filenames.length === 0) {
             printVersion();
             printHelp();
-            return sys.exit(0);
+            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
         }
 
         var defaultCompilerHost = createCompilerHost(commandLine.options);
@@ -227,13 +227,13 @@ module ts {
         if (commandLine.options.watch) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
-                return sys.exit(1);
+                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
             }
 
             watchProgram(commandLine, defaultCompilerHost);
         }
         else {
-            var result = compile(commandLine, defaultCompilerHost).errors.length > 0 ? 1 : 0;
+            var result = compile(commandLine, defaultCompilerHost).exitStatus
             return sys.exit(result);
         }
     }
@@ -328,11 +328,16 @@ module ts {
 
     function compile(commandLine: ParsedCommandLine, compilerHost: CompilerHost) {
         var parseStart = new Date().getTime();
-        var program = createProgram(commandLine.filenames, commandLine.options, compilerHost);
+        var compilerOptions = commandLine.options;
+        var program = createProgram(commandLine.filenames, compilerOptions, compilerHost);
 
         var bindStart = new Date().getTime();
-        var errors = program.getDiagnostics();
-        if (errors.length) {
+        var syntacticErrors = program.getDiagnostics();
+        var emitErrors: Diagnostic[];
+        var semanticErrors: Diagnostic[];
+        var errors: Diagnostic[];
+
+        if (syntacticErrors.length) {
             var checkStart = bindStart;
             var emitStart = bindStart;
             var reportStart = bindStart;
@@ -340,11 +345,11 @@ module ts {
         else {
             var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
-            var semanticErrors = checker.getDiagnostics();
+            semanticErrors = checker.getDiagnostics();
             var emitStart = new Date().getTime();
-            var emitErrors = checker.emitFiles().errors;
+            emitErrors = checker.emitFiles().errors;
             var reportStart = new Date().getTime();
-            errors = concatenate(semanticErrors, emitErrors);
+            errors = concatenate(syntacticErrors, concatenate(semanticErrors, emitErrors));
         }
 
         reportDiagnostics(errors);
@@ -366,7 +371,21 @@ module ts {
             reportTimeStatistic("Total time", reportStart - parseStart);
         }
 
-        return { program: program, errors: errors };
+        // Check types of diagnostics and return associated exit code 
+        if (syntacticErrors.length > 0) {
+            return { program: program, exitStatus: EmitReturnStatus.AllOutputGenerationSkipped };
+        } else if (semanticErrors.length > 0 && !compilerOptions.declaration) {
+            // No '-d' is specified; javascript file is generated with semantic errors
+            return { program: program, exitStatus: EmitReturnStatus.JSGeneratedWithSemanticErrors };
+        } else if (semanticErrors.length > 0 && compilerOptions.declaration) {
+            // '-d' is specified; javascript file will be emitted with semantic errors but declaration file will be skipped
+            return { program: program, exitStatus: EmitReturnStatus.DeclarationGenerationSkipped };
+        } else if (emitErrors.length > 0 && compilerOptions.declaration) {
+            return { program: program, exitStatus: EmitReturnStatus.EmitErrorsEncountered };
+        } else {
+            // There is no error message
+            return { program: program, exitStatus: EmitReturnStatus.Succeeded };
+        }
 
     }
 
