@@ -16,7 +16,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
   Property 'z' is missing in type 'Bar3'.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(67,11): error TS2421: Class 'Bar' incorrectly implements interface 'I':
   Property 'y' is missing in type 'Bar'.
-tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(73,14): error TS2341: Property 'Foo.x' is inaccessible.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(73,14): error TS2341: Property 'x' is private and only accessible within class 'Foo'.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(74,16): error TS2339: Property 'y' does not exist on type 'Bar'.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts(76,11): error TS2416: Class 'Bar2' incorrectly extends base class 'Foo':
   Property 'x' is private in type 'Foo' but not in type 'Bar2'.
@@ -130,7 +130,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
         var r1 = b.z;
         var r2 = b.x; // error
                  ~~~
-!!! error TS2341: Property 'Foo.x' is inaccessible.
+!!! error TS2341: Property 'x' is private and only accessible within class 'Foo'.
         var r3 = b.y; // error
                    ~
 !!! error TS2339: Property 'y' does not exist on type 'Bar'.

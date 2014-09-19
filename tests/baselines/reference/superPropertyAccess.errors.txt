@@ -1,7 +1,7 @@
 tests/cases/compiler/superPropertyAccess.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/superPropertyAccess.ts(9,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/superPropertyAccess.ts(22,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
-tests/cases/compiler/superPropertyAccess.ts(24,9): error TS2341: Property 'MyBase.p1' is inaccessible.
+tests/cases/compiler/superPropertyAccess.ts(24,9): error TS2341: Property 'p1' is private and only accessible within class 'MyBase'.
 tests/cases/compiler/superPropertyAccess.ts(26,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
 tests/cases/compiler/superPropertyAccess.ts(28,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
 tests/cases/compiler/superPropertyAccess.ts(32,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
@@ -40,7 +40,7 @@ tests/cases/compiler/superPropertyAccess.ts(34,23): error TS2340: Only public an
     
             super.p1();                                         // Should error, private not public instance member function
             ~~~~~~~~
-!!! error TS2341: Property 'MyBase.p1' is inaccessible.
+!!! error TS2341: Property 'p1' is private and only accessible within class 'MyBase'.
     
             var l1 = super.d1;                                  // Should error, instance data property not a public instance member function
                            ~~

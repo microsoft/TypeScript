@@ -1,5 +1,5 @@
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(8,10): error TS2341: Property 'C.x' is inaccessible.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(17,10): error TS2341: Property 'D.x' is inaccessible.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(8,10): error TS2341: Property 'x' is private and only accessible within class 'C'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(17,10): error TS2341: Property 'x' is private and only accessible within class 'D<T>'.
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(18,12): error TS2339: Property 'a' does not exist on type 'D<string>'.
 
 
@@ -13,7 +13,7 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/co
     var r = c.y;
     var r2 = c.x; // error
              ~~~
-!!! error TS2341: Property 'C.x' is inaccessible.
+!!! error TS2341: Property 'x' is private and only accessible within class 'C'.
     
     class D<T> {
         y: T;
@@ -24,7 +24,7 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/co
     var r = d.y;
     var r2 = d.x; // error
              ~~~
-!!! error TS2341: Property 'D.x' is inaccessible.
+!!! error TS2341: Property 'x' is private and only accessible within class 'D<T>'.
     var r3 = d.a; // error
                ~
 !!! error TS2339: Property 'a' does not exist on type 'D<string>'.

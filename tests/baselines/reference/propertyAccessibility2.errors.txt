@@ -1,4 +1,4 @@
-tests/cases/compiler/propertyAccessibility2.ts(4,9): error TS2341: Property 'C.x' is inaccessible.
+tests/cases/compiler/propertyAccessibility2.ts(4,9): error TS2341: Property 'x' is private and only accessible within class 'C'.
 
 
 ==== tests/cases/compiler/propertyAccessibility2.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/compiler/propertyAccessibility2.ts(4,9): error TS2341: Property 'C.x
     }
     var c = C.x;
             ~~~
-!!! error TS2341: Property 'C.x' is inaccessible.
+!!! error TS2341: Property 'x' is private and only accessible within class 'C'.
     

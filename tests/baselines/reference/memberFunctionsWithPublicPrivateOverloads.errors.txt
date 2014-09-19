@@ -6,8 +6,8 @@ tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclara
 tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(27,12): error TS2385: Overload signatures must all be public, private or protected.
 tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(32,19): error TS2385: Overload signatures must all be public, private or protected.
 tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(36,19): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(42,9): error TS2341: Property 'C.foo' is inaccessible.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(45,10): error TS2341: Property 'D.foo' is inaccessible.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(42,9): error TS2341: Property 'foo' is private and only accessible within class 'C'.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(45,10): error TS2341: Property 'foo' is private and only accessible within class 'D<T>'.
 
 
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts (10 errors) ====
@@ -70,9 +70,9 @@ tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclara
     var c: C;
     var r = c.foo(1); // error
             ~~~~~
-!!! error TS2341: Property 'C.foo' is inaccessible.
+!!! error TS2341: Property 'foo' is private and only accessible within class 'C'.
     
     var d: D<number>;
     var r2 = d.foo(2); // error
              ~~~~~
-!!! error TS2341: Property 'D.foo' is inaccessible.
+!!! error TS2341: Property 'foo' is private and only accessible within class 'D<T>'.
