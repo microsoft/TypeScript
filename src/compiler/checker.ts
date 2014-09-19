@@ -975,22 +975,22 @@ module ts {
             stringWriters.push(writer);
         }
 
-        function symbolToDisplayParts(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): SymbolDisplayPart[] {
-            var writer = getDisplayPartWriter();
-            writeSymbol(symbol, enclosingDeclaration, meaning, writer);
-
-            var result = writer.displayParts();
-            releaseDisplayPartWriter(writer);
-
-            return result;
-        }
-
         function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
             var writer = getStringWriter();
             writeSymbol(symbol, enclosingDeclaration, meaning, writer);
 
             var result = writer.string();
             releaseStringWriter(writer);
+
+            return result;
+        }
+
+        function symbolToDisplayParts(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): SymbolDisplayPart[] {
+            var writer = getDisplayPartWriter();
+            writeSymbol(symbol, enclosingDeclaration, meaning, writer);
+
+            var result = writer.displayParts();
+            releaseDisplayPartWriter(writer);
 
             return result;
         }
