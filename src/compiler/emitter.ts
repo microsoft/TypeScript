@@ -588,17 +588,33 @@ module ts {
                     recordSourceMapSpan(comment.end);
                 }
 
+                function serializeStringArray(list: string[]): string {
+                    if (list && list.length) {
+                        return "\"" + list.join("\",\"") + "\"";
+                    }
+                    return "";
+                    //var output = "";
+                    //for (var i = 0, n = list.length; i < n; i++) {
+                    //    if (i) output += ",";
+                    //    output += "\"" + list[i] + "\"";
+                    //}
+                    //return output;
+                }
+
+                function serializeSourceMapContents(version: number, file: string, sourceRoot: string, sources: string[], names: string[], mappings: string) {
+                    return "{\"version\":" + version + ",\"file\":\"" + file + "\",\"sourceRoot\":\"" + sourceRoot + "\",\"sources\":[" + serializeStringArray(sources) + "],\"names\":[" + serializeStringArray(names) + "],\"mappings\":\"" + mappings + "\"}";
+                }
+
                 function writeJavaScriptAndSourceMapFile(emitOutput: string, writeByteOrderMark: boolean) {
                     // Write source map file
                     encodeLastRecordedSourceMapSpan();
-                    writeFile(sourceMapData.sourceMapFilePath, JSON.stringify({
-                        version: 3,
-                        file: sourceMapData.sourceMapFile,
-                        sourceRoot: sourceMapData.sourceMapSourceRoot,
-                        sources: sourceMapData.sourceMapSources,
-                        names: sourceMapData.sourceMapNames,
-                        mappings: sourceMapData.sourceMapMappings
-                    }), /*writeByteOrderMark*/ false);
+                    writeFile(sourceMapData.sourceMapFilePath, serializeSourceMapContents(
+                        3,
+                        sourceMapData.sourceMapFile,
+                        sourceMapData.sourceMapSourceRoot,
+                        sourceMapData.sourceMapSources,
+                        sourceMapData.sourceMapNames,
+                        sourceMapData.sourceMapMappings), /*writeByteOrderMark*/ false);
                     sourceMapDataList.push(sourceMapData);
 
                     // Write sourcemap url to the js file and write the js file
