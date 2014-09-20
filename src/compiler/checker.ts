@@ -1282,8 +1282,8 @@ module ts {
 
                     case SyntaxKind.Property:
                     case SyntaxKind.Method:
-                        if (node.flags & NodeFlags.Private) {
-                            // Private properties/methods are not visible
+                        if (node.flags & (NodeFlags.Private | NodeFlags.Protected)) {
+                            // Private/protected properties/methods are not visible
                             return false;
                         }
                     // Public properties/methods are visible if its parents are visible, so let it fall into next case statement
@@ -2708,22 +2708,19 @@ module ts {
         }
 
         function isPropertyIdenticalToRecursive(sourceProp: Symbol, targetProp: Symbol, reportErrors: boolean, relate: (source: Type, target: Type, reportErrors: boolean) => boolean): boolean {
-            Debug.assert(sourceProp);
-            if (!targetProp) {
-                return false;
-            }
-
             // Two members are considered identical when
             // - they are public properties with identical names, optionality, and types,
-            // - they are private properties originating in the same declaration and having identical types
-            var sourcePropIsPrivate = getDeclarationFlagsFromSymbol(sourceProp) & NodeFlags.Private;
-            var targetPropIsPrivate = getDeclarationFlagsFromSymbol(targetProp) & NodeFlags.Private;
-            if (sourcePropIsPrivate !== targetPropIsPrivate) {
+            // - they are private or protected properties originating in the same declaration and having identical types
+            if (sourceProp === targetProp) {
+                return true;
+            }
+            var sourcePropAccessibility = getDeclarationFlagsFromSymbol(sourceProp) & (NodeFlags.Private | NodeFlags.Protected);
+            var targetPropAccessibility = getDeclarationFlagsFromSymbol(targetProp) & (NodeFlags.Private | NodeFlags.Protected);
+            if (sourcePropAccessibility !== targetPropAccessibility) {
                 return false;
             }
-
-            if (sourcePropIsPrivate) {
-                return (getTargetSymbol(sourceProp).parent === getTargetSymbol(targetProp).parent) && relate(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
+            if (sourcePropAccessibility) {
+                return getTargetSymbol(sourceProp) === getTargetSymbol(targetProp) && relate(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
             }
             else {
                 return isOptionalProperty(sourceProp) === isOptionalProperty(targetProp) && relate(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
@@ -2749,8 +2746,8 @@ module ts {
             }
             return result;
 
-            function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string): void {
-                errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1);
+            function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
+                errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
             }
 
             function isRelatedTo(source: Type, target: Type, reportErrors: boolean): boolean {
@@ -2922,25 +2919,18 @@ module ts {
             }
 
             function propertiesAreIdenticalTo(source: ObjectType, target: ObjectType, reportErrors: boolean): boolean {
-                if (source === target) {
-                    return true;
-                }
-
                 var sourceProperties = getPropertiesOfType(source);
                 var targetProperties = getPropertiesOfType(target);
                 if (sourceProperties.length !== targetProperties.length) {
                     return false;
                 }
-
                 for (var i = 0, len = sourceProperties.length; i < len; ++i) {
                     var sourceProp = sourceProperties[i];
                     var targetProp = getPropertyOfType(target, sourceProp.name);
-
-                    if (!isPropertyIdenticalToRecursive(sourceProp, targetProp, reportErrors, isRelatedTo)) {
+                    if (!targetProp || !isPropertyIdenticalToRecursive(sourceProp, targetProp, reportErrors, isRelatedTo)) {
                         return false;
                     }
                 }
-
                 return true;
             }
 
@@ -2949,50 +2939,72 @@ module ts {
                 for (var i = 0; i < properties.length; i++) {
                     var targetProp = properties[i];
                     var sourceProp = getPropertyOfApparentType(source, targetProp.name);
-                    if (sourceProp === targetProp) {
-                        continue;
-                    }
-
-                    var targetPropIsOptional = isOptionalProperty(targetProp);
-                    if (!sourceProp) {
-                        if (!targetPropIsOptional) {
-                            if (reportErrors) {
-                                reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(targetProp), typeToString(source));
-                            }
-                            return false;
-                        }
-                    }
-                    else if (sourceProp !== targetProp) {
-                        if (targetProp.flags & SymbolFlags.Prototype) {
-                            continue;
-                        }
-
-                        if (getDeclarationFlagsFromSymbol(sourceProp) & NodeFlags.Private || getDeclarationFlagsFromSymbol(targetProp) & NodeFlags.Private) {
-                            if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
+                    if (sourceProp !== targetProp) {
+                        if (!sourceProp) {
+                            if (!isOptionalProperty(targetProp)) {
                                 if (reportErrors) {
-                                    reportError(Diagnostics.Private_property_0_cannot_be_reimplemented, symbolToString(targetProp));
+                                    reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(targetProp), typeToString(source));
                                 }
                                 return false;
                             }
                         }
-                        if (!isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors)) {
-                            if (reportErrors) {
-                                reportError(Diagnostics.Types_of_property_0_are_incompatible_Colon, symbolToString(targetProp));
+                        else if (!(targetProp.flags & SymbolFlags.Prototype)) {
+                            var sourceFlags = getDeclarationFlagsFromSymbol(sourceProp);
+                            var targetFlags = getDeclarationFlagsFromSymbol(targetProp);
+                            if (sourceFlags & NodeFlags.Private || targetFlags & NodeFlags.Private) {
+                                if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
+                                    if (reportErrors) {
+                                        if (sourceFlags & NodeFlags.Private && targetFlags & NodeFlags.Private) {
+                                            reportError(Diagnostics.Types_have_separate_declarations_of_a_private_property_0, symbolToString(targetProp));
+                                        }
+                                        else {
+                                            reportError(Diagnostics.Property_0_is_private_in_type_1_but_not_in_type_2, symbolToString(targetProp),
+                                                typeToString(sourceFlags & NodeFlags.Private ? source : target),
+                                                typeToString(sourceFlags & NodeFlags.Private ? target : source));
+                                        }
+                                    }
+                                    return false;
+                                }
                             }
-                            return false;
-                        }
-                        else if (isOptionalProperty(sourceProp) && !targetPropIsOptional) {
-                            // TypeScript 1.0 spec (April 2014): 3.8.3
-                            // S is a subtype of a type T, and T is a supertype of S if ...
-                            // S' and T are object types and, for each member M in T..
-                            // M is a property and S' contains a property N where
-                            // if M is a required property, N is also a required property 
-                            // (M - property in T)
-                            // (N - property in S)
-                            if (reportErrors) {
-                                reportError(Diagnostics.Required_property_0_cannot_be_reimplemented_with_optional_property_in_1, targetProp.name, typeToString(source));
+                            else if (targetFlags & NodeFlags.Protected) {
+                                var sourceDeclaredInClass = sourceProp.parent && sourceProp.parent.flags & SymbolFlags.Class;
+                                var sourceClass = sourceDeclaredInClass ? <InterfaceType>getDeclaredTypeOfSymbol(sourceProp.parent) : undefined;
+                                var targetClass = <InterfaceType>getDeclaredTypeOfSymbol(targetProp.parent);
+                                if (!sourceClass || !hasBaseType(sourceClass, targetClass)) {
+                                    if (reportErrors) {
+                                        reportError(Diagnostics.Property_0_is_protected_but_type_1_is_not_a_class_derived_from_2,
+                                            symbolToString(targetProp), typeToString(sourceClass || source), typeToString(targetClass));
+                                    }
+                                    return false;
+                                }
                             }
-                            return false;
+                            else if (sourceFlags & NodeFlags.Protected) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Property_0_is_protected_in_type_1_but_public_in_type_2,
+                                        symbolToString(targetProp), typeToString(source), typeToString(target));
+                                }
+                                return false;
+                            }
+                            if (!isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors)) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Types_of_property_0_are_incompatible_Colon, symbolToString(targetProp));
+                                }
+                                return false;
+                            }
+                            if (isOptionalProperty(sourceProp) && !isOptionalProperty(targetProp)) {
+                                // TypeScript 1.0 spec (April 2014): 3.8.3
+                                // S is a subtype of a type T, and T is a supertype of S if ...
+                                // S' and T are object types and, for each member M in T..
+                                // M is a property and S' contains a property N where
+                                // if M is a required property, N is also a required property 
+                                // (M - property in T)
+                                // (N - property in S)
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Property_0_is_optional_in_type_1_but_required_in_type_2,
+                                        symbolToString(targetProp), typeToString(source), typeToString(target));
+                                }
+                                return false;
+                            }
                         }
                     }
                 }
@@ -3970,6 +3982,44 @@ module ts {
             return s.valueDeclaration ? s.valueDeclaration.flags : s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : 0;
         }
 
+        function checkClassPropertyAccess(node: PropertyAccess, type: Type, prop: Symbol) {
+            var flags = getDeclarationFlagsFromSymbol(prop);
+            // Public properties are always accessible
+            if (!(flags & (NodeFlags.Private | NodeFlags.Protected))) {
+                return;
+            }
+            // Property is known to be private or protected at this point
+            // Get the declaring and enclosing class instance types
+            var enclosingClassDeclaration = getAncestor(node, SyntaxKind.ClassDeclaration);
+            var enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
+            var declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
+            // Private property is accessible if declaring and enclosing class are the same
+            if (flags & NodeFlags.Private) {
+                if (declaringClass !== enclosingClass) {
+                    error(node, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(declaringClass));
+                }
+                return;
+            }
+            // Property is known to be protected at this point
+            // All protected properties of a supertype are accessible in a super access
+            if (node.left.kind === SyntaxKind.SuperKeyword) {
+                return;
+            }
+            // A protected property is accessible in the declaring class and classes derived from it
+            if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
+                error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
+                return;
+            }
+            // No further restrictions for static properties
+            if (flags & NodeFlags.Static) {
+                return;
+            }
+            // An instance property must be accessed through an instance of the enclosing class
+            if (!(getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
+                error(node, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
+            }
+        }
+
         function checkPropertyAccess(node: PropertyAccess) {
             var type = checkExpression(node.left);
             if (type === unknownType) return type;
@@ -3988,7 +4038,6 @@ module ts {
                 }
                 getNodeLinks(node).resolvedSymbol = prop;
                 if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
-
                     // TS 1.0 spec (April 2014): 4.8.2
                     // - In a constructor, instance member function, instance member accessor, or 
                     //   instance member variable initializer where this references a derived class instance, 
@@ -3997,13 +4046,10 @@ module ts {
                     //   where this references the constructor function object of a derived class, 
                     //   a super property access is permitted and must specify a public static member function of the base class.
                     if (node.left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.Method) {
-                        error(node.right, Diagnostics.Only_public_methods_of_the_base_class_are_accessible_via_the_super_keyword);
+                        error(node.right, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                     }
-                    else if (getDeclarationFlagsFromSymbol(prop) & NodeFlags.Private) {
-                        var classDeclaration = getAncestor(node, SyntaxKind.ClassDeclaration);
-                        if (!classDeclaration || !contains(prop.parent.declarations, classDeclaration)) {
-                            error(node, Diagnostics.Property_0_is_inaccessible, getFullyQualifiedName(prop));
-                        }
+                    else {
+                        checkClassPropertyAccess(node, type, prop);
                     }
                 }
                 return getTypeOfSymbol(prop);
@@ -4959,7 +5005,8 @@ module ts {
             if (fullTypeCheck) {
                 checkCollisionWithIndexVariableInGeneratedCode(parameterDeclaration, parameterDeclaration.name);
 
-                if (parameterDeclaration.flags & (NodeFlags.Public | NodeFlags.Private) && !(parameterDeclaration.parent.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>parameterDeclaration.parent).body)) {
+                if (parameterDeclaration.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected) &&
+                    !(parameterDeclaration.parent.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>parameterDeclaration.parent).body)) {
                     error(parameterDeclaration, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                 }
                 if (parameterDeclaration.flags & NodeFlags.Rest) {
@@ -5152,7 +5199,7 @@ module ts {
                     //   or the containing class declares instance member variables with initializers.
                     var superCallShouldBeFirst =
                         forEach((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializer) ||
-                        forEach(node.parameters, p => p.flags & (NodeFlags.Public | NodeFlags.Private));
+                        forEach(node.parameters, p => p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected));
 
                     if (superCallShouldBeFirst) {
                         var statements = (<Block>node.body).statements;
@@ -5329,8 +5376,8 @@ module ts {
                         else if (deviation & NodeFlags.Ambient) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
                         }
-                        else if (deviation & NodeFlags.Private) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_public_or_private);
+                        else if (deviation & (NodeFlags.Private | NodeFlags.Protected)) {
+                            error(o.name, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
                         }
                         else if (deviation & NodeFlags.QuestionMark) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_optional_or_required);
@@ -5339,7 +5386,7 @@ module ts {
                 }
             }
 
-            var flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.QuestionMark;
+            var flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.Protected | NodeFlags.QuestionMark;
             var someNodeFlags: NodeFlags = 0;
             var allNodeFlags = flagsToCheck;
             var hasOverloads = false;
@@ -6119,7 +6166,7 @@ module ts {
         }
 
         function getTargetSymbol(s: Symbol) {
-            // if symbol is instantiated it's flags are not copied from the 'target'
+            // if symbol is instantiated its flags are not copied from the 'target'
             // so we'll need to get back original 'target' symbol to work with correct set of flags
             return s.flags & SymbolFlags.Instantiated ? getSymbolLinks(s).target : s;
         }

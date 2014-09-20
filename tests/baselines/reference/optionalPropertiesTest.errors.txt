@@ -5,7 +5,7 @@ tests/cases/compiler/optionalPropertiesTest.ts(25,5): error TS2322: Type '{}' is
 tests/cases/compiler/optionalPropertiesTest.ts(26,5): error TS2322: Type '{}' is not assignable to type 'i3':
   Property 'M' is missing in type '{}'.
 tests/cases/compiler/optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is not assignable to type 'i1':
-  Required property 'M' cannot be reimplemented with optional property in 'i2'.
+  Property 'M' is optional in type 'i2' but required in type 'i1'.
 
 
 ==== tests/cases/compiler/optionalPropertiesTest.ts (4 errors) ====
@@ -60,4 +60,4 @@ tests/cases/compiler/optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is
     test10_1 = test10_2;
     ~~~~~~~~
 !!! error TS2322: Type 'i2' is not assignable to type 'i1':
-!!! error TS2322:   Required property 'M' cannot be reimplemented with optional property in 'i2'.
+!!! error TS2322:   Property 'M' is optional in type 'i2' but required in type 'i1'.

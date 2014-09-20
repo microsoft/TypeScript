@@ -1,5 +1,5 @@
 tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts(7,7): error TS2416: Class 'C' incorrectly extends base class 'B':
-  Private property 'myMethod' cannot be reimplemented.
+  Types have separate declarations of a private property 'myMethod'.
 
 
 ==== tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts (1 errors) ====
@@ -12,7 +12,7 @@ tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts(7,7): error
     class C extends B {
           ~
 !!! error TS2416: Class 'C' incorrectly extends base class 'B':
-!!! error TS2416:   Private property 'myMethod' cannot be reimplemented.
+!!! error TS2416:   Types have separate declarations of a private property 'myMethod'.
         private myMethod() { }
     }
     
