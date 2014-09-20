@@ -1,27 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts(2,3): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts(2,10): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts(2,20): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts(2,24): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts(3,1): error TS1128: Declaration or statement expected.
-tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts(2,10): error TS2304: Cannot find name 'protected'.
-tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts(2,20): error TS2304: Cannot find name 'm'.
+tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts(2,10): error TS1029: 'protected' modifier must precede 'static' modifier.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts (7 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts (1 errors) ====
     class C {
       static protected m() { }
-      ~~~~~~
-!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
              ~~~~~~~~~
-!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-                       ~
-!!! error TS1005: ';' expected.
-                           ~
-!!! error TS1005: ';' expected.
-             ~~~~~~~~~
-!!! error TS2304: Cannot find name 'protected'.
-                       ~
-!!! error TS2304: Cannot find name 'm'.
+!!! error TS1029: 'protected' modifier must precede 'static' modifier.
     }
-    ~
-!!! error TS1128: Declaration or statement expected.
