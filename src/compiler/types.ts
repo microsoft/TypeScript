@@ -993,6 +993,7 @@ module ts {
         out?: string;
         outDir?: string;
         removeComments?: boolean;
+        showDiagnosticCodes?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
         target?: ScriptTarget;

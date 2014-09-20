@@ -89,6 +89,10 @@ module ts {
             description: Diagnostics.Do_not_emit_comments_to_output,
         },
         {
+            name: "showDiagnosticCodes",
+            type: "boolean",
+        },
+        {
             name: "sourceMap",
             type: "boolean",
             description: Diagnostics.Generates_corresponding_map_file,
