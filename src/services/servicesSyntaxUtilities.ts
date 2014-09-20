@@ -26,6 +26,19 @@ module ts.ServicesSyntaxUtilities {
         };
     }
 
+    // Includes the start position of each child, but excludes the end
+    export function findListItemIndexContainingPosition(list: Node, position: number): number {
+        Debug.assert(list.kind === SyntaxKind.SyntaxList);
+        var children = list.getChildren();
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].pos <= position && children[i].end > position) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     export function findNextToken(previousToken: Node, parent: Node): Node {
         return find(parent);
 

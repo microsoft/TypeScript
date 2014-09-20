@@ -587,8 +587,8 @@ module ts {
             return this.forwardJSONCall(
                 "getSignatureHelpCurrentArgumentState('" + fileName + "', " + position + ", " + applicableSpanStart + ")",
                 () => {
-                    var signatureInfo = this.languageService.getSignatureHelpItems(fileName, position);
-                    return signatureInfo;
+                    var signatureHelpState = this.languageService.getSignatureHelpCurrentArgumentState(fileName, position, applicableSpanStart);
+                    return signatureHelpState;
                 });
         }
 

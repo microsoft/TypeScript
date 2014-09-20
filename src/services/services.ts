@@ -3479,8 +3479,36 @@ module ts {
             return emitOutput;
         }
 
+        function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {
+            var children = parent.getChildren(sourceFile);
+            var indexOfOpenerToken = children.indexOf(openerToken);
+            return children[indexOfOpenerToken + 1];
+        }
+
         // Signature help
         function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
+            synchronizeHostData();
+
+            // Decide whether to show signature help
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
+            var node = getNodeAtPosition(sourceFile, position);
+
+
+            // Semantic filtering of signature help
+            var signatureHelpContext = getSignatureHelpArgumentContext(node);
+            if (signatureHelpContext) {
+                var call = <CallExpression>signatureHelpContext.list.parent;
+                var candidates = <Signature[]>[];
+                var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
+                return candidates.length
+                    ? createSignatureHelpItems(candidates, resolvedSignature, signatureHelpContext.list)
+                    : undefined;
+            }
+
+            return undefined;
+
+
             // If node is an argument, returns its index in the argument list
             // If not, returns -1
             function getArgumentIndexInfo(node: Node): ServicesSyntaxUtilities.ListItemInfo {
@@ -3492,16 +3520,7 @@ module ts {
                 // Find out if 'node' is an argument, a type argument, or neither
                 if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
                     // Find the list that starts right *after* the < or ( token
-                    var seenRelevantOpenerToken = false;
-                    var list = forEach(parent.getChildren(), c => {
-                        if (seenRelevantOpenerToken) {
-                            Debug.assert(c.kind === SyntaxKind.SyntaxList);
-                            return c;
-                        }
-                        if (c.kind === node.kind /*node is the relevant opener token we are looking for*/) {
-                            seenRelevantOpenerToken = true;
-                        }
-                    });
+                    var list = getChildListThatStartsWithOpenerToken(parent, node, sourceFile);
                     Debug.assert(list);
                     // Treat the open paren / angle bracket of a call as the introduction of parameter slot 0
                     return {
@@ -3549,7 +3568,7 @@ module ts {
                 return undefined;
             }
 
-            function getSignatureHelpItemsFromCandidateInfo(candidates: Signature[], bestSignature: Signature, argumentListOrTypeArgumentList: Node): SignatureHelpItems {
+            function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentListOrTypeArgumentList: Node): SignatureHelpItems {
                 var items = map(candidates, candidateSignature => {
                     var parameters = candidateSignature.parameters;
                     var parameterHelpItems = parameters.length === 0 ? emptyArray : map(parameters, p => {
@@ -3586,32 +3605,49 @@ module ts {
                 var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
                 return new SignatureHelpItems(items, applicableSpan, selectedItemIndex);
             }
-
-            synchronizeHostData();
-
-            // Decide whether to show signature help
-            fileName = TypeScript.switchToForwardSlashes(fileName);
-            var sourceFile = getSourceFile(fileName);
-            var node = getNodeAtPosition(sourceFile, position);
-
-
-            // Semantic filtering of signature help
-            var signatureHelpContext = getSignatureHelpArgumentContext(node);
-            if (signatureHelpContext) {
-                var call = <CallExpression>signatureHelpContext.list.parent;
-                var candidates = <Signature[]>[];
-                var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
-                return candidates.length
-                    ? getSignatureHelpItemsFromCandidateInfo(candidates, resolvedSignature, signatureHelpContext.list)
-                    : undefined;
-            }
-
-            return undefined;
         }
 
         function getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState {
-            synchronizeHostData();
-            return null;
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getCurrentSourceFile(fileName);
+            var tokenPrecedingSpanStart = ServicesSyntaxUtilities.findPrecedingToken(applicableSpanStart, sourceFile);
+            if (tokenPrecedingSpanStart.kind !== SyntaxKind.OpenParenToken && tokenPrecedingSpanStart.kind !== SyntaxKind.LessThanToken) {
+                // The span start must have moved backward in the file (for example if the open paren was backspaced)
+                return undefined;
+            }
+
+            var tokenPrecedingCurrentPosition = ServicesSyntaxUtilities.findPrecedingToken(position, sourceFile);
+            var call = <CallExpression>tokenPrecedingSpanStart.parent;
+            if (tokenPrecedingCurrentPosition.kind === SyntaxKind.CloseParenToken || tokenPrecedingCurrentPosition.kind === SyntaxKind.GreaterThanToken) {
+                if (tokenPrecedingCurrentPosition.parent === call) {
+                    // This call expression is complete. Stop signature help.
+                    return undefined;
+                }
+                // TODO(jfreeman): handle other (incorrect) ways that a call expression can end
+            }
+
+            Debug.assert(call.kind === SyntaxKind.CallExpression || call.kind === SyntaxKind.NewExpression, "wrong call kind " + SyntaxKind[call.kind]);
+
+            var argumentListOrTypeArgumentList = getChildListThatStartsWithOpenerToken(call, tokenPrecedingSpanStart, sourceFile);
+            // Debug.assert(argumentListOrTypeArgumentList.getChildCount() === 0 || argumentListOrTypeArgumentList.getChildCount() % 2 === 1, "Even number of children");
+
+            var numberOfCommas = countWhere(argumentListOrTypeArgumentList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
+            var argumentCount = numberOfCommas + 1;
+                
+            
+            if (argumentCount <= 1) {
+                return new SignatureHelpState(/*argumentIndex*/ 0, argumentCount);
+            }
+
+            var indexOfNodeContainingPosition = ServicesSyntaxUtilities.findListItemIndexContainingPosition(argumentListOrTypeArgumentList, position);
+
+            // indexOfNodeContainingPosition checks that position is between pos and end of each child, so it is
+            // possible that we are to the right of all children. Assume that we are still within
+            // the applicable span and that we are typing the last argument
+            // Alternatively, we could be in range of one of the arguments, in which case we need to divide
+            // by 2 to exclude commas
+            var argumentIndex = indexOfNodeContainingPosition < 0 ? argumentCount - 1 : indexOfNodeContainingPosition / 2;
+            return new SignatureHelpState(argumentIndex, argumentCount);
         }
 
         /// Syntactic features

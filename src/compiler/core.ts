@@ -41,6 +41,18 @@ module ts {
         return -1;
     }
 
+    export function countWhere<T>(array: T[], predicate: (x: T) => boolean): number {
+        var count = 0;
+        if (array) {
+            for (var i = 0, len = array.length; i < len; i++) {
+                if (predicate(array[i])) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
         if (array) {
             var result: T[] = [];
