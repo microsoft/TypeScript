@@ -2277,6 +2277,9 @@ module ts {
                 totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
             }
             else if (symbol.flags & SymbolFlags.TypeParameter) {
+                totalParts.push({ text: "(", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
+                totalParts.push({ text: "type parameter", kind: SymbolDisplayPartKind.text, symbol: undefined });
+                totalParts.push({ text: ")", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
             }
             else {
                 addType = true;
@@ -2304,7 +2307,8 @@ module ts {
                 symbol.flags & SymbolFlags.EnumMember ||
                 symbol.flags & SymbolFlags.Variable) {
 
-                totalParts.push({ text: ".", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
+                totalParts.push({ text: ":", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
+                totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
             }
 
             if (addType) {
