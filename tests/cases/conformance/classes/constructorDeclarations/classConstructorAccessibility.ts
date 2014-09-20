@@ -6,8 +6,13 @@ class D {
     private constructor(public x: number) { } // error
 }
 
+class E {
+    protected constructor(public x: number) { } // error
+}
+
 var c = new C(1);
 var d = new D(1);
+var e = new E(1);
 
 module Generic {
     class C<T> {
@@ -18,6 +23,11 @@ module Generic {
         private constructor(public x: T) { } // error
     }
 
+    class E<T> {
+        protected constructor(public x: T) { } // error
+    }
+
     var c = new C(1);
     var d = new D(1);
+    var e = new E(1);
 }

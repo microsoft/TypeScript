@@ -42,6 +42,10 @@ module TypeScript {
             return this.defaultVisit(node);
         }
 
+        public visitTupleType(node: TupleTypeSyntax): any {
+            return this.defaultVisit(node);
+        }
+
         public visitInterfaceDeclaration(node: InterfaceDeclarationSyntax): any {
             return this.defaultVisit(node);
         }

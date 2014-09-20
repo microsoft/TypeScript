@@ -1,8 +1,10 @@
 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(6,5): error TS1089: 'private' modifier cannot appear on a constructor declaration.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(18,9): error TS1089: 'private' modifier cannot appear on a constructor declaration.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(10,5): error TS1089: 'protected' modifier cannot appear on a constructor declaration.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(23,9): error TS1089: 'private' modifier cannot appear on a constructor declaration.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(27,9): error TS1089: 'protected' modifier cannot appear on a constructor declaration.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts (2 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts (4 errors) ====
     class C {
         public constructor(public x: number) { }
     }
@@ -13,8 +15,15 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
 !!! error TS1089: 'private' modifier cannot appear on a constructor declaration.
     }
     
+    class E {
+        protected constructor(public x: number) { } // error
+        ~~~~~~~~~
+!!! error TS1089: 'protected' modifier cannot appear on a constructor declaration.
+    }
+    
     var c = new C(1);
     var d = new D(1);
+    var e = new E(1);
     
     module Generic {
         class C<T> {
@@ -27,7 +36,14 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
 !!! error TS1089: 'private' modifier cannot appear on a constructor declaration.
         }
     
+        class E<T> {
+            protected constructor(public x: T) { } // error
+            ~~~~~~~~~
+!!! error TS1089: 'protected' modifier cannot appear on a constructor declaration.
+        }
+    
         var c = new C(1);
         var d = new D(1);
+        var e = new E(1);
     }
     

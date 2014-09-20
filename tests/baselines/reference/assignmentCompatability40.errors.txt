@@ -1,5 +1,5 @@
 tests/cases/compiler/assignmentCompatability40.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithPrivate<number>':
-  Private property 'one' cannot be reimplemented.
+  Property 'one' is private in type 'classWithPrivate<number>' but not in type 'interfaceWithPublicAndOptional<number, string>'.
 
 
 ==== tests/cases/compiler/assignmentCompatability40.ts (1 errors) ====
@@ -14,4 +14,4 @@ tests/cases/compiler/assignmentCompatability40.ts(9,1): error TS2322: Type 'inte
     __test2__.__val__x5 = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithPrivate<number>':
-!!! error TS2322:   Private property 'one' cannot be reimplemented.
+!!! error TS2322:   Property 'one' is private in type 'classWithPrivate<number>' but not in type 'interfaceWithPublicAndOptional<number, string>'.

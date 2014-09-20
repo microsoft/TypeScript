@@ -1,5 +1,5 @@
 tests/cases/compiler/typeMatch1.ts(18,1): error TS2322: Type 'D' is not assignable to type 'C':
-  Private property 'x' cannot be reimplemented.
+  Types have separate declarations of a private property 'x'.
 tests/cases/compiler/typeMatch1.ts(19,1): error TS2322: Type 'typeof C' is not assignable to type 'C':
   Property 'x' is missing in type 'typeof C'.
 tests/cases/compiler/typeMatch1.ts(20,1): error TS2365: Operator '==' cannot be applied to types 'typeof C' and 'typeof D'.
@@ -26,7 +26,7 @@ tests/cases/compiler/typeMatch1.ts(20,1): error TS2365: Operator '==' cannot be 
     x6 = x7;
     ~~
 !!! error TS2322: Type 'D' is not assignable to type 'C':
-!!! error TS2322:   Private property 'x' cannot be reimplemented.
+!!! error TS2322:   Types have separate declarations of a private property 'x'.
     x6=C;
     ~~
 !!! error TS2322: Type 'typeof C' is not assignable to type 'C':

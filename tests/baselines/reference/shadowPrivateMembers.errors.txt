@@ -1,5 +1,5 @@
 tests/cases/compiler/shadowPrivateMembers.ts(2,7): error TS2416: Class 'derived' incorrectly extends base class 'base':
-  Private property 'n' cannot be reimplemented.
+  Types have separate declarations of a private property 'n'.
 
 
 ==== tests/cases/compiler/shadowPrivateMembers.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/compiler/shadowPrivateMembers.ts(2,7): error TS2416: Class 'derived'
     class derived extends base { private n() {} }
           ~~~~~~~
 !!! error TS2416: Class 'derived' incorrectly extends base class 'base':
-!!! error TS2416:   Private property 'n' cannot be reimplemented.
+!!! error TS2416:   Types have separate declarations of a private property 'n'.
     

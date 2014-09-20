@@ -10,9 +10,9 @@ tests/cases/compiler/classUpdateTests.ts(46,17): error TS2311: A class may only 
 tests/cases/compiler/classUpdateTests.ts(47,18): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/compiler/classUpdateTests.ts(57,2): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
 tests/cases/compiler/classUpdateTests.ts(63,7): error TS2416: Class 'L' incorrectly extends base class 'G':
-  Private property 'p1' cannot be reimplemented.
+  Property 'p1' is private in type 'L' but not in type 'G'.
 tests/cases/compiler/classUpdateTests.ts(69,7): error TS2416: Class 'M' incorrectly extends base class 'G':
-  Private property 'p1' cannot be reimplemented.
+  Property 'p1' is private in type 'M' but not in type 'G'.
 tests/cases/compiler/classUpdateTests.ts(70,2): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
 tests/cases/compiler/classUpdateTests.ts(105,15): error TS2339: Property 'p1' does not exist on type 'Q'.
 tests/cases/compiler/classUpdateTests.ts(111,16): error TS2339: Property 'p1' does not exist on type 'R'.
@@ -97,7 +97,7 @@ tests/cases/compiler/classUpdateTests.ts(111,16): error TS2339: Property 'p1' do
     class L extends G {
           ~
 !!! error TS2416: Class 'L' incorrectly extends base class 'G':
-!!! error TS2416:   Private property 'p1' cannot be reimplemented.
+!!! error TS2416:   Property 'p1' is private in type 'L' but not in type 'G'.
     	constructor(private p1:number) {
     		super(); // NO ERROR
     	}
@@ -106,7 +106,7 @@ tests/cases/compiler/classUpdateTests.ts(111,16): error TS2339: Property 'p1' do
     class M extends G {
           ~
 !!! error TS2416: Class 'M' incorrectly extends base class 'G':
-!!! error TS2416:   Private property 'p1' cannot be reimplemented.
+!!! error TS2416:   Property 'p1' is private in type 'M' but not in type 'G'.
     	constructor(private p1:number) { // ERROR
     	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     		var i = 0;

@@ -13,6 +13,7 @@ module TypeScript {
             case SyntaxKind.ConstructorType: return visitor.visitConstructorType(<ConstructorTypeSyntax>element);
             case SyntaxKind.GenericType: return visitor.visitGenericType(<GenericTypeSyntax>element);
             case SyntaxKind.TypeQuery: return visitor.visitTypeQuery(<TypeQuerySyntax>element);
+            case SyntaxKind.TupleType: return visitor.visitTupleType(<TupleTypeSyntax>element);
             case SyntaxKind.InterfaceDeclaration: return visitor.visitInterfaceDeclaration(<InterfaceDeclarationSyntax>element);
             case SyntaxKind.FunctionDeclaration: return visitor.visitFunctionDeclaration(<FunctionDeclarationSyntax>element);
             case SyntaxKind.ModuleDeclaration: return visitor.visitModuleDeclaration(<ModuleDeclarationSyntax>element);
@@ -109,6 +110,7 @@ module TypeScript {
         visitConstructorType(node: ConstructorTypeSyntax): any;
         visitGenericType(node: GenericTypeSyntax): any;
         visitTypeQuery(node: TypeQuerySyntax): any;
+        visitTupleType(node: TupleTypeSyntax): any;
         visitInterfaceDeclaration(node: InterfaceDeclarationSyntax): any;
         visitFunctionDeclaration(node: FunctionDeclarationSyntax): any;
         visitModuleDeclaration(node: ModuleDeclarationSyntax): any;
