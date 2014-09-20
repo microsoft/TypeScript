@@ -4217,7 +4217,7 @@ module TypeScript.Parser {
                 case ListParsingState.TypeArgumentList_Types:                               return isType();
                 case ListParsingState.TypeParameterList_TypeParameters:                     return isTypeParameter();
                 case ListParsingState.TupleType_Types:                                      return isType();
-                    default: throw Errors.invalidOperation();
+                default: throw Errors.invalidOperation();
             }
         }
 
