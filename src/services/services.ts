@@ -97,9 +97,7 @@ module ts {
         private _children: Node[];
 
         public getSourceFile(): SourceFile {
-            var node: Node = this;
-            while (node.kind !== SyntaxKind.SourceFile) node = node.parent;
-            return <SourceFile>node;
+            return getSourceFileOfNode(this);
         }
 
         public getStart(sourceFile?: SourceFile): number {
@@ -225,19 +223,44 @@ module ts {
         flags: SymbolFlags;
         name: string;
         declarations: Declaration[];
+        documentationComment: string;
+
         constructor(flags: SymbolFlags, name: string) {
             this.flags = flags;
             this.name = name;
         }
+
         getFlags(): SymbolFlags {
             return this.flags;
         }
+
         getName(): string {
             return this.name;
         }
+
         getDeclarations(): Declaration[] {
             return this.declarations;
         }
+
+        //getDocumentationComment(): string {
+        //    if (this.documentationComment === undefined) {
+        //        var result = "";
+
+        //        var declarations = this.getDeclarations();
+        //        if (declarations) {
+        //            for (var i = 0, n = declarations.length; i < n; i++) {
+        //                var declaration = declarations[0];
+
+        //                var commentRanges = getLeadingCommentRangesOfNode(declaration);
+
+        //            }
+        //        }
+
+        //        this.documentationComment = result;
+        //    }
+
+        //    return this.documentationComment;
+        //}
     }
 
     class TypeObject implements Type {
@@ -657,7 +680,8 @@ module ts {
         constructor(public kind: string,
                     public kindModifiers: string,
                     public textSpan: TypeScript.TextSpan,
-                    public displayParts: SymbolDisplayPart[]) {
+                    public displayParts: SymbolDisplayPart[],
+                    public documentation: SymbolDisplayPart[]) {
         }
 
         public toJSON() {
@@ -2344,7 +2368,8 @@ module ts {
                 getSymbolKind(symbol),
                 getSymbolModifiers(symbol),
                 new TypeScript.TextSpan(node.getStart(), node.getWidth()),
-                totalParts);
+                totalParts,
+                []/*convertDocumentation(symbol)*/);
         }
 
         function getTypeAtPosition(fileName: string, position: number): TypeInfo {
@@ -4015,8 +4040,8 @@ module ts {
                     }
 
                     // Looks to be within the trivia. See if we can find the comment containing it.
-                    if (!getContainingComment(getTrailingComments(fileContents, token.getFullStart()), matchPosition) &&
-                        !getContainingComment(getLeadingComments(fileContents, token.getFullStart()), matchPosition)) {
+                    if (!getContainingComment(getTrailingCommentRanges(fileContents, token.getFullStart()), matchPosition) &&
+                        !getContainingComment(getLeadingCommentRanges(fileContents, token.getFullStart()), matchPosition)) {
                         continue;
                     }
 
@@ -4103,7 +4128,7 @@ module ts {
                 return new RegExp(regExpString, "gim");
             }
 
-            function getContainingComment(comments: Comment[], position: number): Comment {
+            function getContainingComment(comments: CommentRange[], position: number): CommentRange {
                 if (comments) {
                     for (var i = 0, n = comments.length; i < n; i++) {
                         var comment = comments[i];
