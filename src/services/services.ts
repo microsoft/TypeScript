@@ -2304,11 +2304,13 @@ module ts {
             totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, getContainerNode(node)));
 
             if (symbol.flags & SymbolFlags.Property ||
-                symbol.flags & SymbolFlags.EnumMember ||
                 symbol.flags & SymbolFlags.Variable) {
 
                 totalParts.push({ text: ":", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
                 totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+            }
+            else if (symbol.flags & SymbolFlags.EnumMember) {
+
             }
 
             if (addType) {

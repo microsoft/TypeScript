@@ -645,6 +645,10 @@ module ts {
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
         getRootSymbol(symbol: Symbol): Symbol;
         getContextualType(node: Node): Type;
+
+        // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
+        // computed value.
+        getEnumMemberValue(node: EnumMember): number;
     }
 
     export interface TextWriter {
@@ -680,7 +684,6 @@ module ts {
         getProgram(): Program;
         getLocalNameOfContainer(container: Declaration): string;
         getExpressionNamePrefix(node: Identifier): string;
-        getPropertyAccessSubstitution(node: PropertyAccess): string;
         getExportAssignmentName(node: SourceFile): string;
         isReferencedImportDeclaration(node: ImportDeclaration): boolean;
         isTopLevelValueImportedViaEntityName(node: ImportDeclaration): boolean;
@@ -693,6 +696,10 @@ module ts {
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult;
+
+        // Returns the constant value this property access resolves to, or 'undefined' if it does 
+        // resolve to a constant.
+        getConstantValue(node: PropertyAccess): number;
     }
 
     export enum SymbolFlags {
@@ -794,13 +801,16 @@ module ts {
     }
 
     export enum NodeCheckFlags {
-        TypeChecked    = 0x00000001,  // Node has been type checked
-        LexicalThis    = 0x00000002,  // Lexical 'this' reference
-        CaptureThis    = 0x00000004,  // Lexical 'this' used in body
-        EmitExtends    = 0x00000008,  // Emit __extends
-        SuperInstance  = 0x00000010,  // Instance 'super' reference
-        SuperStatic    = 0x00000020,  // Static 'super' reference
-        ContextChecked = 0x00000040,  // Contextual types have been assigned
+        TypeChecked                  = 0x00000001,  // Node has been type checked
+        LexicalThis                  = 0x00000002,  // Lexical 'this' reference
+        CaptureThis                  = 0x00000004,  // Lexical 'this' used in body
+        EmitExtends                  = 0x00000008,  // Emit __extends
+        SuperInstance                = 0x00000010,  // Instance 'super' reference
+        SuperStatic                  = 0x00000020,  // Static 'super' reference
+        ContextChecked               = 0x00000040,  // Contextual types have been assigned
+
+        // Values for enum members have been computed, and any errors have been reported for them.
+        EnumValuesComputedAndChecked = 0x00000080,
     }
 
     export interface NodeLinks {

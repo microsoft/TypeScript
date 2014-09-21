@@ -90,7 +90,8 @@ module ts {
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
             getRootSymbol: getRootSymbol,
             getContextualType: getContextualType,
-            getFullyQualifiedName: getFullyQualifiedName
+            getFullyQualifiedName: getFullyQualifiedName,
+            getEnumMemberValue: getEnumMemberValue
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -6495,7 +6496,7 @@ module ts {
             }
         }
 
-        function getConstantValue(node: Expression): number {
+        function getConstantValueForExpression(node: Expression): number {
             var isNegative = false;
             if (node.kind === SyntaxKind.PrefixOperator) {
                 var unaryExpression = <UnaryExpression>node;
@@ -6512,38 +6513,55 @@ module ts {
             return undefined;
         }
 
+        function computeEnumMemberValues(node: EnumDeclaration, reportErrors: boolean) {
+            var nodeLinks = getNodeLinks(node);
+
+            if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputedAndChecked)) {
+                var enumSymbol = getSymbolOfNode(node);
+                var enumType = getDeclaredTypeOfSymbol(enumSymbol);
+                var autoValue = 0;
+                var ambient = isInAmbientContext(node);
+
+                forEach(node.members, member => {
+                    var initializer = member.initializer;
+                    if (initializer) {
+                        autoValue = getConstantValueForExpression(initializer);
+                        if (autoValue === undefined && !ambient) {
+                            // Only here do we need to check that the initializer is assignable to the enum type.
+                            // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
+                            // Also, we do not need to check this for ambients because there is already
+                            // a syntax error if it is not a constant.
+                            if (reportErrors) {
+                                checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                            }
+                        }
+                    }
+                    else if (ambient) {
+                        autoValue = undefined;
+                    }
+
+                    if (autoValue !== undefined) {
+                        getNodeLinks(member).enumMemberValue = autoValue++;
+                    }
+                });
+
+                if (reportErrors) {
+                    nodeLinks.flags |= NodeCheckFlags.EnumValuesComputedAndChecked;
+                }
+            }
+        }
+
         function checkEnumDeclaration(node: EnumDeclaration) {
             if (!fullTypeCheck) {
                 return;
             }
+
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
-            var enumSymbol = getSymbolOfNode(node);
-            var enumType = getDeclaredTypeOfSymbol(enumSymbol);
-            var autoValue = 0;
-            var ambient = isInAmbientContext(node);
-            forEach(node.members, member => {
-                var initializer = member.initializer;
-                if (initializer) {
-                    autoValue = getConstantValue(initializer);
-                    if (autoValue === undefined && !ambient) {
-                        // Only here do we need to check that the initializer is assignable to the enum type.
-                        // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
-                        // Also, we do not need to check this for ambients because there is already
-                        // a syntax error if it is not a constant.
-                        checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
-                    }
-                }
-                else if (ambient) {
-                    autoValue = undefined;
-                }
 
-                if (autoValue !== undefined) {
-                    getNodeLinks(member).enumMemberValue = autoValue++;
-                }
-            });
+            computeEnumMemberValues(node, /*reportErrors:*/ true);
 
             // Spec 2014 - Section 9.3:
             // It isn't possible for one enum declaration to continue the automatic numbering sequence of another,
@@ -6551,6 +6569,7 @@ module ts {
             // for the first member.
             //
             // Only perform this check once per symbol
+            var enumSymbol = getSymbolOfNode(node);
             var firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
             if (node === firstDeclaration) {
                 var seenEnumMissingInitialInitializer = false;
@@ -7450,17 +7469,6 @@ module ts {
             }
         }
 
-        function getPropertyAccessSubstitution(node: PropertyAccess): string {
-            var symbol = getNodeLinks(node).resolvedSymbol;
-            if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
-                var declaration = symbol.valueDeclaration;
-                var constantValue: number;
-                if (declaration.kind === SyntaxKind.EnumMember && (constantValue = getNodeLinks(declaration).enumMemberValue) !== undefined) {
-                    return constantValue.toString() + " /* " + identifierToString(declaration.name) + " */";
-                }
-            }
-        }
-
         function getExportAssignmentName(node: SourceFile): string {
             var symbol = getExportAssignmentSymbol(getSymbolOfNode(node));
             return symbol && symbolIsValue(symbol) ? symbolToString(symbol): undefined;
@@ -7523,7 +7531,21 @@ module ts {
         }
 
         function getEnumMemberValue(node: EnumMember): number {
+            computeEnumMemberValues(<EnumDeclaration>node.parent, /*reportErrors:*/ false);
             return getNodeLinks(node).enumMemberValue;
+        }
+
+        function getConstantValue(node: PropertyAccess): number {
+            var symbol = getNodeLinks(node).resolvedSymbol;
+            if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
+                var declaration = symbol.valueDeclaration;
+                var constantValue: number;
+                if (declaration.kind === SyntaxKind.EnumMember && (constantValue = getNodeLinks(declaration).enumMemberValue) !== undefined) {
+                    return constantValue;
+                }
+            }
+
+            return undefined;
         }
 
         // Create a single instance that we can wrap the underlying emitter TextWriter with.  That
@@ -7561,7 +7583,6 @@ module ts {
                 getProgram: () => program,
                 getLocalNameOfContainer: getLocalNameOfContainer,
                 getExpressionNamePrefix: getExpressionNamePrefix,
-                getPropertyAccessSubstitution: getPropertyAccessSubstitution,
                 getExportAssignmentName: getExportAssignmentName,
                 isReferencedImportDeclaration: isReferencedImportDeclaration,
                 getNodeCheckFlags: getNodeCheckFlags,
@@ -7573,7 +7594,8 @@ module ts {
                 writeTypeAtLocation: writeTypeAtLocation,
                 writeReturnTypeOfSignatureDeclaration: writeReturnTypeOfSignatureDeclaration,
                 isSymbolAccessible: isSymbolAccessible,
-                isImportDeclarationEntityNameReferenceDeclarationVisibile: isImportDeclarationEntityNameReferenceDeclarationVisibile
+                isImportDeclarationEntityNameReferenceDeclarationVisibile: isImportDeclarationEntityNameReferenceDeclarationVisibile,
+                getConstantValue: getConstantValue,
             };
             checkProgram();
             return emitFiles(resolver, targetSourceFile);
