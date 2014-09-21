@@ -1491,11 +1491,14 @@ module ts {
         var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.
         var program: Program;
+
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
+
         // the sole purpose of this checker is to return semantic diagnostics
         // creation is deferred - use getFullTypeCheckChecker to get instance
         var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
+
         var useCaseSensitivefilenames = false;
         var sourceFilesByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
@@ -2258,31 +2261,35 @@ module ts {
             // Having all this logic here is pretty unclean.  Consider moving to the roslyn model
             // where all symbol display logic is encapsulated into visitors and options.
             var totalParts: SymbolDisplayPart[] = [];
-            var addType = false;
 
             if (symbol.flags & SymbolFlags.Class) {
                 totalParts.push({ text: "class", kind: SymbolDisplayPartKind.keyword, symbol: undefined });
                 totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Interface) {
                 totalParts.push({ text: "interface", kind: SymbolDisplayPartKind.keyword, symbol: undefined });
                 totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Enum) {
                 totalParts.push({ text: "enum", kind: SymbolDisplayPartKind.keyword, symbol: undefined });
                 totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Module) {
                 totalParts.push({ text: "module", kind: SymbolDisplayPartKind.keyword, symbol: undefined });
                 totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.TypeParameter) {
                 totalParts.push({ text: "(", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
                 totalParts.push({ text: "type parameter", kind: SymbolDisplayPartKind.text, symbol: undefined });
                 totalParts.push({ text: ")", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
+                totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol));
             }
             else {
-                addType = true;
                 totalParts.push({ text: "(", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
                 var text: string;
 
@@ -2299,24 +2306,37 @@ module ts {
                 totalParts.push({ text: text, kind: SymbolDisplayPartKind.text, symbol: undefined });
                 totalParts.push({ text: ")", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
                 totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
-            }
 
-            totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, getContainerNode(node)));
+                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, getContainerNode(node)));
 
-            if (symbol.flags & SymbolFlags.Property ||
-                symbol.flags & SymbolFlags.Variable) {
-
-                totalParts.push({ text: ":", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
-                totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
-            }
-            else if (symbol.flags & SymbolFlags.EnumMember) {
-
-            }
-
-            if (addType) {
                 var type = typeInfoResolver.getTypeOfSymbol(symbol);
-                if (type) {
-                    totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type));
+
+                if (symbol.flags & SymbolFlags.Property ||
+                    symbol.flags & SymbolFlags.Variable) {
+
+                    if (type) {
+                        totalParts.push({ text: ":", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
+                        totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                        totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type, getContainerNode(node)));
+                    }
+                }
+                else if (symbol.flags & SymbolFlags.Function ||
+                    symbol.flags & SymbolFlags.Method) {
+                    if (type) {
+                        totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type, getContainerNode(node)));
+                    }
+                }
+                else if (symbol.flags & SymbolFlags.EnumMember) {
+                    var declaration = symbol.declarations[0];
+                    if (declaration.kind === SyntaxKind.EnumMember) {
+                        var constantValue = typeInfoResolver.getEnumMemberValue(<EnumMember>declaration);
+                        if (constantValue !== undefined) {
+                            totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                            totalParts.push({ text: "=", kind: SymbolDisplayPartKind.operator, symbol: undefined });
+                            totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                            totalParts.push({ text: constantValue.toString(), kind: SymbolDisplayPartKind.numericLiteral, symbol: undefined });
+                        }
+                    }
                 }
             }
 
