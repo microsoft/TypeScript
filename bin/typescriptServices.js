@@ -2808,7 +2808,7 @@ var ts;
         }
         function grammarErrorOnNode(node, message, arg0, arg1, arg2) {
             var span = getErrorSpanForNode(node);
-            var start = ts.skipTrivia(file.text, span.pos);
+            var start = span.end > span.pos ? ts.skipTrivia(file.text, span.pos) : span.pos;
             var length = span.end - start;
             file.syntacticErrors.push(ts.createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
         }
@@ -6102,16 +6102,51 @@ var ts;
                     writeCommentRange(comment, writer);
                     recordSourceMapSpan(comment.end);
                 }
+                var escapedCharsRegExp = /[\t\v\f\b\0\r\n\"\u2028\u2029\u0085]/g;
+                var escapedCharsMap = {
+                    "\t": "\\t",
+                    "\v": "\\v",
+                    "\f": "\\f",
+                    "\b": "\\b",
+                    "\0": "\\0",
+                    "\r": "\\r",
+                    "\n": "\\n",
+                    "\"": "\\\"",
+                    "\u2028": "\\u2028",
+                    "\u2029": "\\u2029",
+                    "\u0085": "\\u0085"
+                };
+                function serializeSourceMapContents(version, file, sourceRoot, sources, names, mappings) {
+                    if (typeof JSON !== "undefined") {
+                        return JSON.stringify({
+                            version: version,
+                            file: file,
+                            sourceRoot: sourceRoot,
+                            sources: sources,
+                            names: names,
+                            mappings: mappings
+                        });
+                    }
+                    return "{\"version\":" + version + ",\"file\":\"" + escapeString(file) + "\",\"sourceRoot\":\"" + escapeString(sourceRoot) + "\",\"sources\":[" + serializeStringArray(sources) + "],\"names\":[" + serializeStringArray(names) + "],\"mappings\":\"" + escapeString(mappings) + "\"}";
+                    function escapeString(s) {
+                        return escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, function (c) {
+                            return escapedCharsMap[c] || c;
+                        }) : s;
+                    }
+                    function serializeStringArray(list) {
+                        var output = "";
+                        for (var i = 0, n = list.length; i < n; i++) {
+                            if (i) {
+                                output += ",";
+                            }
+                            output += "\"" + escapeString(list[i]) + "\"";
+                        }
+                        return output;
+                    }
+                }
                 function writeJavaScriptAndSourceMapFile(emitOutput, writeByteOrderMark) {
                     encodeLastRecordedSourceMapSpan();
-                    writeFile(sourceMapData.sourceMapFilePath, JSON.stringify({
-                        version: 3,
-                        file: sourceMapData.sourceMapFile,
-                        sourceRoot: sourceMapData.sourceMapSourceRoot,
-                        sources: sourceMapData.sourceMapSources,
-                        names: sourceMapData.sourceMapNames,
-                        mappings: sourceMapData.sourceMapMappings
-                    }), false);
+                    writeFile(sourceMapData.sourceMapFilePath, serializeSourceMapContents(3, sourceMapData.sourceMapFile, sourceMapData.sourceMapSourceRoot, sourceMapData.sourceMapSources, sourceMapData.sourceMapNames, sourceMapData.sourceMapMappings), false);
                     sourceMapDataList.push(sourceMapData);
                     writeJavaScriptFile(emitOutput + "//# sourceMappingURL=" + sourceMapData.jsSourceMappingURL, writeByteOrderMark);
                 }

@@ -591,17 +591,65 @@ module ts {
                     recordSourceMapSpan(comment.end);
                 }
 
+                var escapedCharsRegExp = /[\t\v\f\b\0\r\n\"\u2028\u2029\u0085]/g;
+                var escapedCharsMap: Map<string> = {
+                    "\t": "\\t",
+                    "\v": "\\v",
+                    "\f": "\\f",
+                    "\b": "\\b",
+                    "\0": "\\0",
+                    "\r": "\\r",
+                    "\n": "\\n",
+                    "\"": "\\\"",
+                    "\u2028": "\\u2028", // lineSeparator
+                    "\u2029": "\\u2029", // paragraphSeparator
+                    "\u0085": "\\u0085"  // nextLine
+                };
+
+                function serializeSourceMapContents(version: number, file: string, sourceRoot: string, sources: string[], names: string[], mappings: string) {
+                    if (typeof JSON !== "undefined") {
+                        return JSON.stringify({
+                            version: version,
+                            file: file,
+                            sourceRoot: sourceRoot,
+                            sources: sources,
+                            names: names,
+                            mappings: mappings
+                        });
+                    }
+
+                    return "{\"version\":" + version + ",\"file\":\"" + escapeString(file) + "\",\"sourceRoot\":\"" + escapeString(sourceRoot) + "\",\"sources\":[" + serializeStringArray(sources) + "],\"names\":[" + serializeStringArray(names) + "],\"mappings\":\"" + escapeString(mappings) + "\"}";
+
+                    /** This does not support the full escape characters, it only supports the subset that can be used in file names
+                      * or string literals. If the information encoded in the map changes, this needs to be revisited. */
+                    function escapeString(s: string): string {
+                        return escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, c => {
+                            return escapedCharsMap[c] || c;
+                        }) : s;
+                    }
+
+                    function serializeStringArray(list: string[]): string {
+                        var output = "";
+                        for (var i = 0, n = list.length; i < n; i++) {
+                            if (i) {
+                                output += ",";
+                            }
+                            output += "\"" + escapeString(list[i]) + "\"";
+                        }
+                        return output;
+                    }
+                }
+
                 function writeJavaScriptAndSourceMapFile(emitOutput: string, writeByteOrderMark: boolean) {
                     // Write source map file
                     encodeLastRecordedSourceMapSpan();
-                    writeFile(sourceMapData.sourceMapFilePath, JSON.stringify({
-                        version: 3,
-                        file: sourceMapData.sourceMapFile,
-                        sourceRoot: sourceMapData.sourceMapSourceRoot,
-                        sources: sourceMapData.sourceMapSources,
-                        names: sourceMapData.sourceMapNames,
-                        mappings: sourceMapData.sourceMapMappings
-                    }), /*writeByteOrderMark*/ false);
+                    writeFile(sourceMapData.sourceMapFilePath, serializeSourceMapContents(
+                        3,
+                        sourceMapData.sourceMapFile,
+                        sourceMapData.sourceMapSourceRoot,
+                        sourceMapData.sourceMapSources,
+                        sourceMapData.sourceMapNames,
+                        sourceMapData.sourceMapMappings), /*writeByteOrderMark*/ false);
                     sourceMapDataList.push(sourceMapData);
 
                     // Write sourcemap url to the js file and write the js file
