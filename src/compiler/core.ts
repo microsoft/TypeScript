@@ -121,6 +121,10 @@ module ts {
         }
 
         return ~low;
+    } 
+    
+    export function integerDivide(numerator: number, denominator: number): number {
+        return (numerator / denominator) >> 0;
     }
 
     var hasOwnProperty = Object.prototype.hasOwnProperty;

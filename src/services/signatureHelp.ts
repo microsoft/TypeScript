@@ -487,7 +487,7 @@ module ts.SignatureHelp {
         // the applicable span and that we are typing the last argument
         // Alternatively, we could be in range of one of the arguments, in which case we need to divide
         // by 2 to exclude commas
-        var argumentIndex = indexOfNodeContainingPosition < 0 ? argumentCount - 1 : indexOfNodeContainingPosition / 2;
+        var argumentIndex = indexOfNodeContainingPosition < 0 ? argumentCount - 1 : integerDivide(indexOfNodeContainingPosition, 2);
         return new SignatureHelpState(argumentIndex, argumentCount);
     }
 
