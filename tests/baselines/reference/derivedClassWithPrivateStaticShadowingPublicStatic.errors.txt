@@ -3,11 +3,11 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(19,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(20,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(13,7): error TS2418: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base':
-  Private property 'x' cannot be reimplemented.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(24,10): error TS2341: Property 'Derived.x' is inaccessible.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(27,10): error TS2341: Property 'Derived.fn' is inaccessible.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(32,10): error TS2341: Property 'Derived.a' is inaccessible.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(33,1): error TS2341: Property 'Derived.a' is inaccessible.
+  Property 'x' is private in type 'typeof Derived' but not in type 'typeof Base'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(24,10): error TS2341: Property 'x' is private and only accessible within class 'Derived'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(27,10): error TS2341: Property 'fn' is private and only accessible within class 'Derived'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(32,10): error TS2341: Property 'a' is private and only accessible within class 'Derived'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(33,1): error TS2341: Property 'a' is private and only accessible within class 'Derived'.
 
 
 ==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts (9 errors) ====
@@ -30,7 +30,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     class Derived extends Base {
           ~~~~~~~
 !!! error TS2418: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base':
-!!! error TS2418:   Private property 'x' cannot be reimplemented.
+!!! error TS2418:   Property 'x' is private in type 'typeof Derived' but not in type 'typeof Base'.
         private static x: string; 
         private static fn(): string {
             return '';
@@ -47,19 +47,19 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     var r = Base.x; // ok
     var r2 = Derived.x; // error
              ~~~~~~~~~
-!!! error TS2341: Property 'Derived.x' is inaccessible.
+!!! error TS2341: Property 'x' is private and only accessible within class 'Derived'.
     
     var r3 = Base.fn(); // ok
     var r4 = Derived.fn(); // error
              ~~~~~~~~~~
-!!! error TS2341: Property 'Derived.fn' is inaccessible.
+!!! error TS2341: Property 'fn' is private and only accessible within class 'Derived'.
     
     var r5 = Base.a; // ok
     Base.a = 2; // ok
     
     var r6 = Derived.a; // error
              ~~~~~~~~~
-!!! error TS2341: Property 'Derived.a' is inaccessible.
+!!! error TS2341: Property 'a' is private and only accessible within class 'Derived'.
     Derived.a = 2; // error
     ~~~~~~~~~
-!!! error TS2341: Property 'Derived.a' is inaccessible.
+!!! error TS2341: Property 'a' is private and only accessible within class 'Derived'.

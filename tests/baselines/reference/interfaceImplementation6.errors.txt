@@ -1,5 +1,5 @@
 tests/cases/compiler/interfaceImplementation6.ts(9,7): error TS2421: Class 'C2' incorrectly implements interface 'I1':
-  Private property 'item' cannot be reimplemented.
+  Property 'item' is private in type 'C2' but not in type 'I1'.
 tests/cases/compiler/interfaceImplementation6.ts(13,7): error TS2421: Class 'C3' incorrectly implements interface 'I1':
   Property 'item' is missing in type 'C3'.
 
@@ -16,7 +16,7 @@ tests/cases/compiler/interfaceImplementation6.ts(13,7): error TS2421: Class 'C3'
     class C2 implements I1 {
           ~~
 !!! error TS2421: Class 'C2' incorrectly implements interface 'I1':
-!!! error TS2421:   Private property 'item' cannot be reimplemented.
+!!! error TS2421:   Property 'item' is private in type 'C2' but not in type 'I1'.
         private item:number;
     }
     

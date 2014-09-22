@@ -1,9 +1,9 @@
 tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(10,15): error TS1003: Identifier expected.
 tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(12,8): error TS1110: Type expected.
-tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(6,15): error TS2340: Only public methods of the base class are accessible via the 'super' keyword
-tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(8,22): error TS2340: Only public methods of the base class are accessible via the 'super' keyword
-tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(10,21): error TS2340: Only public methods of the base class are accessible via the 'super' keyword
-tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(12,8): error TS2341: Property 'Base.foo' is inaccessible.
+tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(6,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(8,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(10,21): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(12,8): error TS2341: Property 'foo' is private and only accessible within class 'Base'.
 
 
 ==== tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts (6 errors) ====
@@ -14,21 +14,21 @@ tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAcces
     class Derived extends Base {
         x = super.foo; // error
                   ~~~
-!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
         y() {
             return super.foo; // error
                          ~~~
-!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
         }
         z: typeof super.foo; // error
                   ~~~~~
 !!! error TS1003: Identifier expected.
                         ~~~
-!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
     
         a: this.foo; // error
            ~~~~
 !!! error TS1110: Type expected.
            ~~~~~~~~
-!!! error TS2341: Property 'Base.foo' is inaccessible.
+!!! error TS2341: Property 'foo' is private and only accessible within class 'Base'.
     }

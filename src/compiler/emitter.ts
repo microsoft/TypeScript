@@ -2371,11 +2371,17 @@ module ts {
                     if (node.flags & NodeFlags.Private) {
                         write("private ");
                     }
+                    else if (node.flags & NodeFlags.Protected) {
+                        write("protected ");
+                    }
                     write("static ");
                 }
                 else {
                     if (node.flags & NodeFlags.Private) {
                         write("private ");
+                    }
+                    else if (node.flags & NodeFlags.Protected) {
+                        write("protected ");
                     }
                     // If the node is parented in the current source file we need to emit export declare or just export
                     else if (node.parent === currentSourceFile) {

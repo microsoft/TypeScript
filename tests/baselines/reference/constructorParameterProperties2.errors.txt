@@ -1,8 +1,9 @@
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(11,24): error TS2300: Duplicate identifier 'y'.
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(19,25): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(27,27): error TS2300: Duplicate identifier 'y'.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts (2 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts (3 errors) ====
     class C {
         y: number;
         constructor(y: number) { } // ok
@@ -30,3 +31,14 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/co
     
     var e: E;
     var r3 = e.y; // error
+    
+    class F {
+        y: number;
+        constructor(protected y: number) { } // error
+                              ~
+!!! error TS2300: Duplicate identifier 'y'.
+    }
+    
+    var f: F;
+    var r4 = f.y; // error
+    

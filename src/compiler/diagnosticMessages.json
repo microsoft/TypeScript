@@ -544,7 +544,7 @@
         "category": "Error",
         "code": 2324
     },
-    "Private property '{0}' cannot be reimplemented.": {
+    "Property '{0}' is private in type '{1}' but not in type '{2}'.": {
         "category": "Error",
         "code": 2325
     },
@@ -552,7 +552,7 @@
         "category": "Error",
         "code": 2326
     },
-    "Required property '{0}' cannot be reimplemented with optional property in '{1}'.": {
+	"Property '{0}' is optional in type '{1}' but required in type '{2}'.": {
         "category": "Error",
         "code": 2327
     },
@@ -604,11 +604,11 @@
         "category": "Error",
         "code": 2339
     },
-    "Only public methods of the base class are accessible via the 'super' keyword": {
+    "Only public and protected methods of the base class are accessible via the 'super' keyword": {
         "category": "Error",
         "code": 2340
     },
-    "Property '{0}' is inaccessible.": {
+    "Property '{0}' is private and only accessible within class '{1}'.": {
         "category": "Error",
         "code": 2341
     },
@@ -784,7 +784,7 @@
         "category": "Error",
         "code": 2384
     },
-    "Overload signatures must all be public or private.": {
+    "Overload signatures must all be public, private or protected.": {
         "category": "Error",
         "code": 2385
     },
@@ -1012,7 +1012,26 @@
         "category": "Error",
         "code": 2441
     },
-
+    "Types have separate declarations of a private property '{0}'.": {
+        "category": "Error",
+        "code": 2442
+    },
+    "Property '{0}' is protected but type '{1}' is not a class derived from '{2}'.": {
+        "category": "Error",
+        "code": 2443
+    },
+    "Property '{0}' is protected in type '{1}' but public in type '{2}'.": {
+        "category": "Error",
+        "code": 2444
+    },
+    "Property '{0}' is protected and only accessible within class '{1}' and its subclasses.": {
+        "category": "Error",
+        "code": 2445
+    },
+    "Property '{0}' is protected and only accessible through an instance of class '{1}'.": {
+        "category": "Error",
+        "code": 2446
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -238,13 +238,14 @@ module ts {
         Rest             = 0x00000008,  // Parameter
         Public           = 0x00000010,  // Property/Method
         Private          = 0x00000020,  // Property/Method
-        Static           = 0x00000040,  // Property/Method
-        MultiLine        = 0x00000080,  // Multi-line array or object literal
-        Synthetic        = 0x00000100,  // Synthetic node (for full fidelity)
-        DeclarationFile  = 0x00000200,  // Node is a .d.ts file
+        Protected        = 0x00000040,  // Property/Method
+        Static           = 0x00000080,  // Property/Method
+        MultiLine        = 0x00000100,  // Multi-line array or object literal
+        Synthetic        = 0x00000200,  // Synthetic node (for full fidelity)
+        DeclarationFile  = 0x00000400,  // Node is a .d.ts file
 
-        Modifier = Export | Ambient | Public | Private | Static,
-        AccessibilityModifier = Public | Private
+        Modifier = Export | Ambient | Public | Private | Protected | Static,
+        AccessibilityModifier = Public | Private | Protected
     }
 
     export interface Node extends TextRange {

@@ -1,4 +1,4 @@
-tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts(11,16): error TS2341: Property 'clodule.sfn' is inaccessible.
+tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts(11,16): error TS2341: Property 'sfn' is private and only accessible within class 'clodule<T>'.
 
 
 ==== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts (1 errors) ====
@@ -14,7 +14,7 @@ tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMer
         export function fn<T>(x: T, y: T): number {
             return clodule.sfn('a');
                    ~~~~~~~~~~~
-!!! error TS2341: Property 'clodule.sfn' is inaccessible.
+!!! error TS2341: Property 'sfn' is private and only accessible within class 'clodule<T>'.
         }
     }
     
