@@ -54,7 +54,7 @@ var servicesSources = [
 }).concat([
     "services.ts",
     "shims.ts",
-    "signatureInfoHelpers.ts"
+    "signatureHelp.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
