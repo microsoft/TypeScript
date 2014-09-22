@@ -7,7 +7,6 @@
 /// <reference path='syntax\incrementalParser.ts' />
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='getScriptLexicalStructureWalker.ts' />
-/// <reference path='braceMatcher.ts' />
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='formatting\formatting.ts' />
@@ -2083,6 +2082,40 @@ module ts {
             }
         }
 
+        /** Get the token whose text contains the position, or the containing node. */
+        function getNodeAtPosition(sourceFile: SourceFile, position: number) {
+            var current: Node = sourceFile;
+            outer: while (true) {
+                // find the child that has this
+                for (var i = 0, n = current.getChildCount(); i < n; i++) {
+                    var child = current.getChildAt(i);
+                    if (child.getStart() <= position && position < child.getEnd()) {
+                        current = child;
+                        continue outer;
+                    }
+                }
+                return current;
+            }
+        }
+
+        /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
+          * leading trivia or within the token text.
+          */
+        function getTokenAtPosition(sourceFile: SourceFile, position: number) {
+            var current: Node = sourceFile;
+            outer: while (true) {
+                // find the child that has this
+                for (var i = 0, n = current.getChildCount(); i < n; i++) {
+                    var child = current.getChildAt(i);
+                    if (child.getFullStart() <= position && position < child.getEnd()) {
+                        current = child;
+                        continue outer;
+                    }
+                }
+                return current;
+            }
+        }
+
         function getContainerNode(node: Node): Node {
             while (true) {
                 node = node.parent;
@@ -3726,7 +3759,59 @@ module ts {
 
         function getBraceMatchingAtPosition(filename: string, position: number) {
             var sourceFile = getCurrentSourceFile(filename);
-            return BraceMatcher.getMatchSpans(sourceFile, position);
+            return getMatchSpans(sourceFile, position);
+
+            function getMatchSpans(sourceFile: SourceFile, position: number): TypeScript.TextSpan[] {
+                var result: TypeScript.TextSpan[] = [];
+
+                var token = getTokenAtPosition(sourceFile, position);
+
+                if (token.getStart(sourceFile) === position) {
+                    var matchKind = getMatchingTokenKind(token);
+
+                    // Ensure that there is a corresponding token to match ours.
+                    if (matchKind) {
+                        var parentElement = token.parent;
+
+                        var childNodes = parentElement.getChildren(sourceFile);
+                        for (var i = 0, n = childNodes.length; i < n; i++) {
+                            var current = childNodes[i];
+
+                            if (current.kind === matchKind) {
+                                var range1 = new TypeScript.TextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
+                                var range2 = new TypeScript.TextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
+
+                                // We want to order the braces when we return the result.
+                                if (range1.start() < range2.start()) {
+                                    result.push(range1, range2);
+                                }
+                                else {
+                                    result.push(range2, range1);
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            function getMatchingTokenKind(token: Node): ts.SyntaxKind {
+                switch (token.kind) {
+                    case ts.SyntaxKind.OpenBraceToken:    return ts.SyntaxKind.CloseBraceToken
+                    case ts.SyntaxKind.OpenParenToken:    return ts.SyntaxKind.CloseParenToken;
+                    case ts.SyntaxKind.OpenBracketToken:  return ts.SyntaxKind.CloseBracketToken;
+                    case ts.SyntaxKind.LessThanToken:     return ts.SyntaxKind.GreaterThanToken;
+                    case ts.SyntaxKind.CloseBraceToken:   return ts.SyntaxKind.OpenBraceToken
+                    case ts.SyntaxKind.CloseParenToken:   return ts.SyntaxKind.OpenParenToken;
+                    case ts.SyntaxKind.CloseBracketToken: return ts.SyntaxKind.OpenBracketToken;
+                    case ts.SyntaxKind.GreaterThanToken:  return ts.SyntaxKind.LessThanToken;
+                }
+
+                return undefined;
+            }
         }
 
         function getIndentationAtPosition(filename: string, position: number, editorOptions: EditorOptions) {
@@ -4242,40 +4327,6 @@ module ts {
         return {
             getClassificationsForLine: getClassificationsForLine
         };
-    }
-
-    /** Get the token whose text contains the position, or the containing node. */
-    export function getNodeAtPosition(sourceFile: SourceFile, position: number) {
-        var current: Node = sourceFile;
-        outer: while (true) {
-            // find the child that has this
-            for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                var child = current.getChildAt(i);
-                if (child.getStart() <= position && position < child.getEnd()) {
-                    current = child;
-                    continue outer;
-                }
-            }
-            return current;
-        }
-    }
-
-    /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
-      * leading trivia or within the token text.
-      */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number) {
-        var current: Node = sourceFile;
-        outer: while (true) {
-            // find the child that has this
-            for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                var child = current.getChildAt(i);
-                if (child.getFullStart() <= position && position < child.getEnd()) {
-                    current = child;
-                    continue outer;
-                }
-            }
-            return current;
-        }
     }
 
     function initializeServices() {
