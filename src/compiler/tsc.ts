@@ -199,8 +199,9 @@ module ts {
 
     export function executeCommandLine(args: string[]): void {
         var commandLine = parseCommandLine(args);
+        var compilerOptions = commandLine.options;
 
-        if (commandLine.options.locale) {
+        if (compilerOptions.locale) {
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
 
@@ -208,32 +209,38 @@ module ts {
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
-            return sys.exit(1);
+            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
         }
 
-        if (commandLine.options.version) {
+        if (compilerOptions.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            return sys.exit(0);
+            return sys.exit(EmitReturnStatus.Succeeded);
         }
 
-        if (commandLine.options.help || commandLine.filenames.length === 0) {
+        if (compilerOptions.help) {
             printVersion();
             printHelp();
-            return sys.exit(0);
+            return sys.exit(EmitReturnStatus.Succeeded);
         }
 
-        var defaultCompilerHost = createCompilerHost(commandLine.options);
+        if (commandLine.filenames.length === 0) {
+            printVersion();
+            printHelp();
+            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+        }
+
+        var defaultCompilerHost = createCompilerHost(compilerOptions);
         
-        if (commandLine.options.watch) {
+        if (compilerOptions.watch) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
-                return sys.exit(1);
+                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
             }
 
             watchProgram(commandLine, defaultCompilerHost);
         }
         else {
-            var result = compile(commandLine, defaultCompilerHost).errors.length > 0 ? 1 : 0;
+            var result = compile(commandLine, defaultCompilerHost).exitStatus
             return sys.exit(result);
         }
     }
@@ -328,21 +335,27 @@ module ts {
 
     function compile(commandLine: ParsedCommandLine, compilerHost: CompilerHost) {
         var parseStart = new Date().getTime();
-        var program = createProgram(commandLine.filenames, commandLine.options, compilerHost);
+        var compilerOptions = commandLine.options;
+        var program = createProgram(commandLine.filenames, compilerOptions, compilerHost);
 
         var bindStart = new Date().getTime();
-        var errors = program.getDiagnostics();
+        var errors: Diagnostic[] = program.getDiagnostics();
+        var exitStatus: EmitReturnStatus;
+
         if (errors.length) {
             var checkStart = bindStart;
             var emitStart = bindStart;
             var reportStart = bindStart;
+            exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
         }
         else {
             var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
             var semanticErrors = checker.getDiagnostics();
             var emitStart = new Date().getTime();
-            var emitErrors = checker.emitFiles().errors;
+            var emitOutput = checker.emitFiles();
+            var emitErrors = emitOutput.errors;
+            exitStatus = emitOutput.emitResultStatus;
             var reportStart = new Date().getTime();
             errors = concatenate(semanticErrors, emitErrors);
         }
@@ -366,8 +379,7 @@ module ts {
             reportTimeStatistic("Total time", reportStart - parseStart);
         }
 
-        return { program: program, errors: errors };
-
+        return { program: program, exitStatus: exitStatus }
     }
 
     function printVersion() {
