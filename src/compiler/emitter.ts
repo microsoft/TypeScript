@@ -588,15 +588,40 @@ module ts {
                     recordSourceMapSpan(comment.end);
                 }
 
-                function serializeStringArray(list: string[]): string {
-                    if (list && list.length) {
-                        return "\"" + list.join("\",\"") + "\"";
-                    }
-                    return "";
-                }
+                var escapedCharsRegExp = /[\t\v\f\b\0\r\n\"\u2028\u2029\u0085]/g;
+                var escapedCharsMap: Map<string> = {
+                    "\t": "\\t",
+                    "\v": "\\v",
+                    "\f": "\\f",
+                    "\b": "\\b",
+                    "\0": "\\0",
+                    "\r": "\\r",
+                    "\n": "\\n",
+                    "\"": "\\\"",
+                    "\u2028": "\\u2028", // lineSeparator
+                    "\u2029": "\\u2029", // paragraphSeparator
+                    "\u0085": "\\u0085"  // nextLine
+                };
 
                 function serializeSourceMapContents(version: number, file: string, sourceRoot: string, sources: string[], names: string[], mappings: string) {
-                    return "{\"version\":" + version + ",\"file\":\"" + file + "\",\"sourceRoot\":\"" + sourceRoot + "\",\"sources\":[" + serializeStringArray(sources) + "],\"names\":[" + serializeStringArray(names) + "],\"mappings\":\"" + mappings + "\"}";
+                    return "{\"version\":" + version + ",\"file\":\"" + escapeString(file) + "\",\"sourceRoot\":\"" + escapeString(sourceRoot) + "\",\"sources\":[" + serializeStringArray(sources) + "],\"names\":[" + serializeStringArray(names) + "],\"mappings\":\"" + escapeString(mappings) + "\"}";
+
+                    /** This does not support the full escape characters, it only supports the subset that can be used in file names
+                      * or string literals. If the information encoded in the map changes, this needs to be revisited. */
+                    function escapeString(s: string): string {
+                        return escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, c => {
+                            return escapedCharsMap[c] || c;
+                        }) : s;
+                    }
+
+                    function serializeStringArray(list: string[]): string {
+                        var output = "";
+                        for (var i = 0, n = list.length; i < n; i++) {
+                            if (i) output += ",";
+                            output += "\"" + escapeString(list[i]) + "\"";
+                        }
+                        return output;
+                    }
                 }
 
                 function writeJavaScriptAndSourceMapFile(emitOutput: string, writeByteOrderMark: boolean) {
