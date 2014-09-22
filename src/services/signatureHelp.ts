@@ -448,6 +448,10 @@ module ts.SignatureHelp {
 
     export function getSignatureHelpCurrentArgumentState(sourceFile: SourceFile, position: number, applicableSpanStart: number): SignatureHelpState {
         var tokenPrecedingSpanStart = ServicesSyntaxUtilities.findPrecedingToken(applicableSpanStart, sourceFile);
+        if (!tokenPrecedingSpanStart) {
+            return undefined;
+        }
+
         if (tokenPrecedingSpanStart.kind !== SyntaxKind.OpenParenToken && tokenPrecedingSpanStart.kind !== SyntaxKind.LessThanToken) {
             // The span start must have moved backward in the file (for example if the open paren was backspaced)
             return undefined;
