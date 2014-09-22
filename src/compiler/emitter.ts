@@ -617,7 +617,9 @@ module ts {
                     function serializeStringArray(list: string[]): string {
                         var output = "";
                         for (var i = 0, n = list.length; i < n; i++) {
-                            if (i) output += ",";
+                            if (i) {
+                                output += ",";
+                            }
                             output += "\"" + escapeString(list[i]) + "\"";
                         }
                         return output;
