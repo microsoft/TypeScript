@@ -199,8 +199,9 @@ module ts {
 
     export function executeCommandLine(args: string[]): void {
         var commandLine = parseCommandLine(args);
+        var compilerOptions = commandLine.options;
 
-        if (commandLine.options.locale) {
+        if (compilerOptions.locale) {
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
 
@@ -211,20 +212,26 @@ module ts {
             return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
         }
 
-        if (commandLine.options.version) {
+        if (compilerOptions.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            return sys.exit(EmitReturnStatus.Succeeded);
         }
 
-        if (commandLine.options.help || commandLine.filenames.length === 0) {
+        if (compilerOptions.help) {
+            printVersion();
+            printHelp();
+            return sys.exit(EmitReturnStatus.Succeeded);
+        }
+
+        if (commandLine.filenames.length === 0) {
             printVersion();
             printHelp();
             return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
         }
 
-        var defaultCompilerHost = createCompilerHost(commandLine.options);
+        var defaultCompilerHost = createCompilerHost(compilerOptions);
         
-        if (commandLine.options.watch) {
+        if (compilerOptions.watch) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
                 return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
@@ -332,14 +339,14 @@ module ts {
         var program = createProgram(commandLine.filenames, compilerOptions, compilerHost);
 
         var bindStart = new Date().getTime();
-        var syntacticErrors = program.getDiagnostics();
-        var errors: Diagnostic[];
+        var errors: Diagnostic[] = program.getDiagnostics();
         var exitStatus: EmitReturnStatus;
 
-        if (syntacticErrors.length) {
+        if (errors.length) {
             var checkStart = bindStart;
             var emitStart = bindStart;
             var reportStart = bindStart;
+            exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
         }
         else {
             var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
@@ -350,7 +357,7 @@ module ts {
             var emitErrors = emitOutput.errors;
             exitStatus = emitOutput.emitResultStatus;
             var reportStart = new Date().getTime();
-            errors = concatenate(syntacticErrors, concatenate(semanticErrors, emitErrors));
+            errors = concatenate(semanticErrors, emitErrors);
         }
 
         reportDiagnostics(errors);
@@ -372,10 +379,6 @@ module ts {
             reportTimeStatistic("Total time", reportStart - parseStart);
         }
 
-        // Check if there exists syntactic errors
-        if (syntacticErrors.length > 0) {
-            exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-        } 
         return { program: program, exitStatus: exitStatus }
     }
 
