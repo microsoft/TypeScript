@@ -3479,175 +3479,22 @@ module ts {
             return emitOutput;
         }
 
-        function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {
-            var children = parent.getChildren(sourceFile);
-            var indexOfOpenerToken = children.indexOf(openerToken);
-            return children[indexOfOpenerToken + 1];
-        }
-
         // Signature help
         function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
             synchronizeHostData();
 
-            // Decide whether to show signature help
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
             var node = getNodeAtPosition(sourceFile, position);
 
-
-            // Semantic filtering of signature help
-            var signatureHelpContext = getSignatureHelpArgumentContext(node);
-            if (signatureHelpContext) {
-                var call = <CallExpression>signatureHelpContext.list.parent;
-                var candidates = <Signature[]>[];
-                var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
-                return candidates.length
-                    ? createSignatureHelpItems(candidates, resolvedSignature, signatureHelpContext.list)
-                    : undefined;
-            }
-
-            return undefined;
-
-
-            // If node is an argument, returns its index in the argument list
-            // If not, returns -1
-            function getArgumentIndexInfo(node: Node): ServicesSyntaxUtilities.ListItemInfo {
-                if (node.parent.kind !== SyntaxKind.CallExpression && node.parent.kind !== SyntaxKind.NewExpression) {
-                    return undefined;
-                }
-
-                var parent = <CallExpression>node.parent;
-                // Find out if 'node' is an argument, a type argument, or neither
-                if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
-                    // Find the list that starts right *after* the < or ( token
-                    var list = getChildListThatStartsWithOpenerToken(parent, node, sourceFile);
-                    Debug.assert(list);
-                    // Treat the open paren / angle bracket of a call as the introduction of parameter slot 0
-                    return {
-                        listItemIndex: 0,
-                        list: list
-                    };
-                }
-
-                if (node.kind === SyntaxKind.GreaterThanToken 
-                    || node.kind === SyntaxKind.CloseParenToken
-                    || node === parent.func) {
-                    return undefined;
-                }
-
-                return ServicesSyntaxUtilities.findListItemInfo(node);
-            }
-
-            function getSignatureHelpArgumentContext(node: Node): ServicesSyntaxUtilities.ListItemInfo {
-                // We only want this node if it is a token and it strictly contains the current position.
-                // Otherwise we want the previous token
-                var isToken = node.kind < SyntaxKind.Missing;
-                if (!isToken || position <= node.getStart() || position >= node.getEnd()) {
-                    node = ServicesSyntaxUtilities.findPrecedingToken(position, sourceFile);
-
-                    if (!node) {
-                        return undefined;
-                    }
-                }
-
-                var signatureHelpAvailable = false;
-                for (var n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
-                    if (n.kind === SyntaxKind.FunctionBlock) {
-                        return undefined;
-                    }
-
-                    var argumentInfo = getArgumentIndexInfo(n);
-                    if (argumentInfo) {
-                        return argumentInfo;
-                    }
-
-
-                    // TODO: Handle previous token logic
-                    // TODO: Handle generic call with incomplete 
-                }
-                return undefined;
-            }
-
-            function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentListOrTypeArgumentList: Node): SignatureHelpItems {
-                var items = map(candidates, candidateSignature => {
-                    var parameters = candidateSignature.parameters;
-                    var parameterHelpItems = parameters.length === 0 ? emptyArray : map(parameters, p => {
-                        var display = p.name;
-                        if (candidateSignature.hasRestParameter && parameters[parameters.length - 1] === p) {
-                            display = "..." + display;
-                        }
-                        var isOptional = !!(p.valueDeclaration.flags & NodeFlags.QuestionMark);
-                        if (isOptional) {
-                            display += "?";
-                        }
-                        display += ": " + typeInfoResolver.typeToString(typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
-                        return new SignatureHelpParameter(p.name, "", display, isOptional);
-                    });
-                    var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
-                    var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
-                    var signatureName = callTargetSymbol ? typeInfoResolver.symbolToString(callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined) : "";
-                    var prefix = signatureName;
-                    // TODO(jfreeman): Constraints?
-                    if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
-                        prefix += "<" + map(candidateSignature.typeParameters, tp => tp.symbol.name).join(", ") + ">";
-                    }
-                    prefix += "(";
-                    var suffix = "): " + typeInfoResolver.typeToString(candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
-                    return new SignatureHelpItem(candidateSignature.hasRestParameter, prefix, suffix, ", ", parameterHelpItems, "");
-                });
-                var selectedItemIndex = candidates.indexOf(bestSignature);
-                if (selectedItemIndex < 0) {
-                    selectedItemIndex = 0;
-                }
-
-                var applicableSpanStart = argumentListOrTypeArgumentList.getFullStart();
-                var applicableSpanEnd = skipTrivia(sourceFile.text, argumentListOrTypeArgumentList.end, /*stopAfterLineBreak*/ false);
-                var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
-                return new SignatureHelpItems(items, applicableSpan, selectedItemIndex);
-            }
+            return SignatureHelp.getSignatureHelpItems(sourceFile, position, node, typeInfoResolver);
         }
 
         function getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState {
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getCurrentSourceFile(fileName);
-            var tokenPrecedingSpanStart = ServicesSyntaxUtilities.findPrecedingToken(applicableSpanStart, sourceFile);
-            if (tokenPrecedingSpanStart.kind !== SyntaxKind.OpenParenToken && tokenPrecedingSpanStart.kind !== SyntaxKind.LessThanToken) {
-                // The span start must have moved backward in the file (for example if the open paren was backspaced)
-                return undefined;
-            }
 
-            var tokenPrecedingCurrentPosition = ServicesSyntaxUtilities.findPrecedingToken(position, sourceFile);
-            var call = <CallExpression>tokenPrecedingSpanStart.parent;
-            if (tokenPrecedingCurrentPosition.kind === SyntaxKind.CloseParenToken || tokenPrecedingCurrentPosition.kind === SyntaxKind.GreaterThanToken) {
-                if (tokenPrecedingCurrentPosition.parent === call) {
-                    // This call expression is complete. Stop signature help.
-                    return undefined;
-                }
-                // TODO(jfreeman): handle other (incorrect) ways that a call expression can end
-            }
-
-            Debug.assert(call.kind === SyntaxKind.CallExpression || call.kind === SyntaxKind.NewExpression, "wrong call kind " + SyntaxKind[call.kind]);
-
-            var argumentListOrTypeArgumentList = getChildListThatStartsWithOpenerToken(call, tokenPrecedingSpanStart, sourceFile);
-            // Debug.assert(argumentListOrTypeArgumentList.getChildCount() === 0 || argumentListOrTypeArgumentList.getChildCount() % 2 === 1, "Even number of children");
-
-            var numberOfCommas = countWhere(argumentListOrTypeArgumentList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
-            var argumentCount = numberOfCommas + 1;
-                
-            
-            if (argumentCount <= 1) {
-                return new SignatureHelpState(/*argumentIndex*/ 0, argumentCount);
-            }
-
-            var indexOfNodeContainingPosition = ServicesSyntaxUtilities.findListItemIndexContainingPosition(argumentListOrTypeArgumentList, position);
-
-            // indexOfNodeContainingPosition checks that position is between pos and end of each child, so it is
-            // possible that we are to the right of all children. Assume that we are still within
-            // the applicable span and that we are typing the last argument
-            // Alternatively, we could be in range of one of the arguments, in which case we need to divide
-            // by 2 to exclude commas
-            var argumentIndex = indexOfNodeContainingPosition < 0 ? argumentCount - 1 : indexOfNodeContainingPosition / 2;
-            return new SignatureHelpState(argumentIndex, argumentCount);
+            return SignatureHelp.getSignatureHelpCurrentArgumentState(sourceFile, position, applicableSpanStart);
         }
 
         /// Syntactic features
