@@ -201,6 +201,11 @@ module ts {
         var commandLine = parseCommandLine(args);
 
         if (commandLine.options.locale) {
+            if (typeof JSON === "undefined") {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
+                return sys.exit(1);
+            }
+
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
 
