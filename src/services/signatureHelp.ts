@@ -335,15 +335,15 @@ module ts.SignatureHelp {
 
     export function getSignatureHelpItems(sourceFile: SourceFile, position: number, startingNode: Node, typeInfoResolver: TypeChecker): SignatureHelpItems {
         // Decide whether to show signature help
-        var signatureHelpContext = getSignatureHelpArgumentContext(startingNode);
+        var argumentList = getContainingArgumentList(startingNode);
 
         // Semantic filtering of signature help
-        if (signatureHelpContext) {
-            var call = <CallExpression>signatureHelpContext.list.parent;
+        if (argumentList) {
+            var call = <CallExpression>argumentList.parent;
             var candidates = <Signature[]>[];
             var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
             return candidates.length
-                ? createSignatureHelpItems(candidates, resolvedSignature, signatureHelpContext.list)
+                ? createSignatureHelpItems(candidates, resolvedSignature, argumentList)
                 : undefined;
         }
 
@@ -352,7 +352,7 @@ module ts.SignatureHelp {
 
         // If node is an argument, returns its index in the argument list
         // If not, returns -1
-        function getArgumentIndexInfo(node: Node): ServicesSyntaxUtilities.ListItemInfo {
+        function getImmediatelyContainingArgumentList(node: Node): Node {
             if (node.parent.kind !== SyntaxKind.CallExpression && node.parent.kind !== SyntaxKind.NewExpression) {
                 return undefined;
             }
@@ -363,11 +363,7 @@ module ts.SignatureHelp {
                 // Find the list that starts right *after* the < or ( token
                 var list = getChildListThatStartsWithOpenerToken(parent, node, sourceFile);
                 Debug.assert(list);
-                // Treat the open paren / angle bracket of a call as the introduction of parameter slot 0
-                return {
-                    listItemIndex: 0,
-                    list: list
-                };
+                return list;
             }
 
             if (node.kind === SyntaxKind.GreaterThanToken
@@ -376,10 +372,10 @@ module ts.SignatureHelp {
                 return undefined;
             }
 
-            return ServicesSyntaxUtilities.findListItemInfo(node);
+            return ServicesSyntaxUtilities.findContainingList(node);
         }
 
-        function getSignatureHelpArgumentContext(node: Node): ServicesSyntaxUtilities.ListItemInfo {
+        function getContainingArgumentList(node: Node): Node {
             // We only want this node if it is a token and it strictly contains the current position.
             // Otherwise we want the previous token
             var isToken = node.kind < SyntaxKind.Missing;
@@ -397,9 +393,9 @@ module ts.SignatureHelp {
                     return undefined;
                 }
 
-                var argumentInfo = getArgumentIndexInfo(n);
-                if (argumentInfo) {
-                    return argumentInfo;
+                var argumentList = getImmediatelyContainingArgumentList(n);
+                if (argumentList) {
+                    return argumentList;
                 }
 
 

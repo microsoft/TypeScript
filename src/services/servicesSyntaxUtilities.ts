@@ -6,6 +6,17 @@ module ts.ServicesSyntaxUtilities {
     }
 
     export function findListItemInfo(node: Node): ListItemInfo {
+        var syntaxList = findContainingList(node);
+        var children = syntaxList.getChildren();
+        var index = indexOf(children, node);
+
+        return {
+            listItemIndex: index,
+            list: syntaxList
+        };
+    }
+
+    export function findContainingList(node: Node): Node {
         // The node might be a list element (nonsynthetic) or a comma (synthetic). Either way, it will
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
         // In order to find the list item index, we first need to locate SyntaxList itself and then search
@@ -17,13 +28,7 @@ module ts.ServicesSyntaxUtilities {
             }
         });
 
-        var children = syntaxList.getChildren();
-        var index = indexOf(children, node);
-
-        return {
-            listItemIndex: index,
-            list: syntaxList
-        };
+        return syntaxList;
     }
 
     // Includes the start position of each child, but excludes the end
