@@ -3487,7 +3487,7 @@ module ts {
             var sourceFile = getSourceFile(fileName);
             var node = getNodeAtPosition(sourceFile, position);
 
-            return SignatureHelp.getSignatureHelpItems(sourceFile, position, node, typeInfoResolver);
+            return SignatureHelp.getSignatureHelpItems(sourceFile, position, node, typeInfoResolver, cancellationToken);
         }
 
         function getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState {

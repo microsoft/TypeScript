@@ -333,15 +333,18 @@ module ts.SignatureHelp {
     //}
     var emptyArray: any[] = [];
 
-    export function getSignatureHelpItems(sourceFile: SourceFile, position: number, startingNode: Node, typeInfoResolver: TypeChecker): SignatureHelpItems {
+    export function getSignatureHelpItems(sourceFile: SourceFile, position: number, startingNode: Node, typeInfoResolver: TypeChecker, cancellationToken: CancellationToken): SignatureHelpItems {
         // Decide whether to show signature help
         var argumentList = getContainingArgumentList(startingNode);
+        cancellationToken.throwIfCancellationRequested();
 
         // Semantic filtering of signature help
         if (argumentList) {
             var call = <CallExpression>argumentList.parent;
             var candidates = <Signature[]>[];
             var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
+            cancellationToken.throwIfCancellationRequested();
+
             return candidates.length
                 ? createSignatureHelpItems(candidates, resolvedSignature, argumentList)
                 : undefined;
