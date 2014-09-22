@@ -522,8 +522,8 @@ module ts {
     }
 
     var supportedExtensions = [".d.ts", ".ts", ".js"];
-    export function removeFileExtension(path: string): string {
 
+    export function removeFileExtension(path: string): string {
         for (var i = 0; i < supportedExtensions.length; i++) {
             var ext = supportedExtensions[i];
 

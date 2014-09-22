@@ -9,29 +9,29 @@
 ////
 ////{| "itemName": "A.B.C", "kind": "module" |}
 ////module A.B.C {
-////    {| "itemName": "x", "kind": "var", "parent": "A.B.C" |}
+////    {| "itemName": "x", "kind": "var", "parentName": "A.B.C" |}
 ////    export var x;
 ////}
 ////
 ////{| "itemName": "A.B", "kind": "module" |}
 ////module A.B {
-////    {| "itemName": "y", "kind": "var", "parent": "A.B" |}
+////    {| "itemName": "y", "kind": "var", "parentName": "A.B" |}
 ////    export var y;
 ////}
 ////
 ////{| "itemName": "A", "kind": "module" |}
 ////module A {
-////    {| "itemName": "z", "kind": "var", "parent": "A" |}
+////    {| "itemName": "z", "kind": "var", "parentName": "A" |}
 ////    export var z;
 ////}
 ////
 ////{| "itemName": "A", "kind": "module" |}
 ////module A {
-////    {| "itemName": "B", "kind": "module", "parent": "E" |}
+////    {| "itemName": "B", "kind": "module", "parentName": "E" |}
 ////    module B {
-////        {| "itemName": "C", "kind": "module", "parent": "F" |}
+////        {| "itemName": "C", "kind": "module", "parentName": "F" |}
 ////        module C {
-////            {| "itemName": "x", "kind": "var", "parent": "C" |}
+////            {| "itemName": "x", "kind": "var", "parentName": "C" |}
 ////            declare var x;
 ////        }
 ////    }

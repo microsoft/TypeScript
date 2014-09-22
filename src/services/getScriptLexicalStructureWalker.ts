@@ -88,10 +88,6 @@ module ts {
         function getItemsWorker(nodes: Node[], createItem: (n: Node) => ts.NavigationBarItem): ts.NavigationBarItem[] {
             var items: ts.NavigationBarItem[] = [];
 
-            if (!nodes) {
-                return items;
-            }
-
             var keyToItem: Map<NavigationBarItem> = {};
 
             for (var i = 0, n = nodes.length; i < n; i++) {
@@ -162,39 +158,39 @@ module ts {
 
                 case SyntaxKind.GetAccessor:
                     var getAccessor = <AccessorDeclaration>node;
-                    return basicChildItem(node, getAccessor.name.text,  ts.ScriptElementKind.memberGetAccessorElement);
+                    return basicChildItem(node, getAccessor.name.text, ts.ScriptElementKind.memberGetAccessorElement);
 
                 case SyntaxKind.SetAccessor:
                     var setAccessor = <AccessorDeclaration>node;
-                    return basicChildItem(node, setAccessor.name.text,  ts.ScriptElementKind.memberSetAccessorElement);
+                    return basicChildItem(node, setAccessor.name.text, ts.ScriptElementKind.memberSetAccessorElement);
 
                 case SyntaxKind.IndexSignature:
-                    return basicChildItem(node, "[]",  ts.ScriptElementKind.indexSignatureElement);
+                    return basicChildItem(node, "[]", ts.ScriptElementKind.indexSignatureElement);
 
                 case SyntaxKind.EnumMember:
                     var enumElement = <EnumMember>node;
-                    return basicChildItem(node, enumElement.name.text,  ts.ScriptElementKind.memberVariableElement);
+                    return basicChildItem(node, enumElement.name.text, ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.CallSignature:
-                    return basicChildItem(node, "()",  ts.ScriptElementKind.callSignatureElement);
+                    return basicChildItem(node, "()", ts.ScriptElementKind.callSignatureElement);
 
                 case SyntaxKind.ConstructSignature:
-                    return basicChildItem(node, "new()",  ts.ScriptElementKind.constructSignatureElement);
+                    return basicChildItem(node, "new()", ts.ScriptElementKind.constructSignatureElement);
 
                 case SyntaxKind.Property:
                     var propertySignature = <PropertyDeclaration>node;
-                    return basicChildItem(node, propertySignature.name.text,  ts.ScriptElementKind.memberVariableElement);
+                    return basicChildItem(node, propertySignature.name.text, ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.FunctionDeclaration:
                     var functionDeclaration = <FunctionDeclaration>node;
                     if (!isTopLevelFunctionDeclaration(functionDeclaration)) {
-                        return basicChildItem(node, functionDeclaration.name.text,  ts.ScriptElementKind.functionElement);
+                        return basicChildItem(node, functionDeclaration.name.text, ts.ScriptElementKind.functionElement);
                     }
                     break;
 
                 case SyntaxKind.VariableDeclaration:
                     var variableDeclaration = <VariableDeclaration>node;
-                    return basicChildItem(node, variableDeclaration.name.text,  ts.ScriptElementKind.variableElement);
+                    return basicChildItem(node, variableDeclaration.name.text, ts.ScriptElementKind.variableElement);
                 
                 case SyntaxKind.Constructor:
                     return basicChildItem(node, "constructor", ts.ScriptElementKind.constructorImplementationElement);
@@ -307,7 +303,7 @@ module ts {
 
                     // Add the constructor parameters in as children of the class (for property parameters).
                     var nodes: Node[] = constructor
-                        ? (constructor.parameters).concat(node.members)
+                        ? constructor.parameters.concat(node.members)
                         : node.members;
 
                     var childItems = getItemsWorker(nodes, createChildItem);
