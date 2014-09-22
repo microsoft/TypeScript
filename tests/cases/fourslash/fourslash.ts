@@ -275,11 +275,11 @@ module FourSlashInterface {
         }
 
         public currentParameterHelpArgumentNameIs(name: string) {
-     //       FourSlash.currentTestState.verifyCurrentParameterHelpName(name);
+            FourSlash.currentTestState.verifyCurrentParameterHelpName(name);
         }
 
         public currentParameterSpanIs(parameter: string) {
-     //       FourSlash.currentTestState.verifyCurrentParameterSpanIs(parameter);
+            FourSlash.currentTestState.verifyCurrentParameterSpanIs(parameter);
         }
 
         public currentParameterHelpArgumentDocCommentIs(docComment: string) {

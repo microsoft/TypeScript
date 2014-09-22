@@ -59,9 +59,9 @@
  // verify.currentParameterHelpArgumentNameIs("U");
  // verify.currentParameterSpanIs("U");
 
- goTo.marker("construcor3");
- verify.currentParameterHelpArgumentNameIs("T");
- verify.currentParameterSpanIs("T extends IFoo");
+ //goTo.marker("construcor3");
+ //verify.currentParameterHelpArgumentNameIs("T");
+ //verify.currentParameterSpanIs("T extends IFoo");
 
  // goTo.marker("construcor4");
  // verify.currentParameterHelpArgumentNameIs("M");
