@@ -1186,6 +1186,13 @@ module ts {
                     public kind: SymbolDisplayPartKind,
                     public symbol: Symbol) {
         }
+
+        public toJSON() {
+            return {
+                text: this.text,
+                kind: SymbolDisplayPartKind[this.kind]
+            };
+        }
     }
 
     export enum SymbolDisplayPartKind {

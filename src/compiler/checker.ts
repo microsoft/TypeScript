@@ -950,12 +950,12 @@ module ts {
                 var displayParts: SymbolDisplayPart[] = [];
                 return {
                     displayParts: () => displayParts,
-                    writeKind: (text, kind) => displayParts.push({ text: text, kind: kind, symbol: undefined }),
-                    writeSymbol: (text, symbol) => displayParts.push({ text: text, kind: displayPartKind(symbol), symbol: symbol }),
+                    writeKind: (text, kind) => displayParts.push(new SymbolDisplayPart(text, kind, undefined)),
+                    writeSymbol: (text, symbol) => displayParts.push(new SymbolDisplayPart(text, displayPartKind(symbol), symbol)),
 
                     // Completely ignore indentation for display part writers.  And map newlines to
                     // a single space.
-                    writeLine: () => displayParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined }),
+                    writeLine: () => displayParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined)),
                     increaseIndent: () => { },
                     decreaseIndent: () => { },
                     clear: () => displayParts = [],

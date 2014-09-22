@@ -242,25 +242,135 @@ module ts {
             return this.declarations;
         }
 
-        //getDocumentationComment(): string {
-        //    if (this.documentationComment === undefined) {
-        //        var result = "";
+        getDocumentationComment(): string {
+            if (this.documentationComment === undefined) {
+                var lines: string[] = [];
 
-        //        var declarations = this.getDeclarations();
-        //        if (declarations) {
-        //            for (var i = 0, n = declarations.length; i < n; i++) {
-        //                var declaration = declarations[0];
+                // Get the doc comments from all the declarations of this symbol, and merge them
+                // into one single doc comment.
+                var declarations = this.getDeclarations();
+                if (declarations) {
+                    for (var i = 0, n = declarations.length; i < n; i++) {
+                        this.processDocumentationCommentDeclaration(lines, declarations[0]);
+                    }
+                }
 
-        //                var commentRanges = getLeadingCommentRangesOfNode(declaration);
+                // TODO: get the newline info from the host.
+                this.documentationComment = lines.join("\r\n");
+            }
 
-        //            }
-        //        }
+            return this.documentationComment;
+        }
 
-        //        this.documentationComment = result;
-        //    }
+        private processDocumentationCommentDeclaration(lines: string[], declaration: Node) {
+            var commentRanges = getLeadingCommentRangesOfNode(declaration);
+            var sourceFile = declaration.getSourceFile();
 
-        //    return this.documentationComment;
-        //}
+            for (var i = 0, n = commentRanges.length; i < n; i++) {
+                this.processDocumentationCommentRange(
+                    lines, sourceFile, commentRanges[0]);
+            }
+        }
+
+        private processDocumentationCommentRange(lines: string[], sourceFile: SourceFile, commentRange: CommentRange) {
+            // We only care about well-formed /** */ comments
+            if (commentRange.end - commentRange.pos > "/**/".length &&
+                sourceFile.text.substr(commentRange.pos, "/**".length) === "/**" &&
+                sourceFile.text.substr(commentRange.end - "*/".length, "*/".length) === "*/") {
+
+                // Put a newline between each converted comment we join together.
+                if (lines.length) {
+                    lines.push("");
+                }
+
+                var startLineAndChar = sourceFile.getLineAndCharacterFromPosition(commentRange.pos);
+                var endLineAndChar = sourceFile.getLineAndCharacterFromPosition(commentRange.end);
+
+                if (startLineAndChar.line === endLineAndChar.line) {
+                    // A single line doc comment.  Just extract the text between the
+                    // comment markers and add that to the doc comment we're building
+                    // up.
+                    lines.push(sourceFile.text.substring(commentRange.pos + "/**".length, commentRange.end - "*/".length).trim());
+                }
+                else {
+                    this.processMultiLineDocumentationCommentRange(sourceFile, commentRange, startLineAndChar, endLineAndChar, lines);
+                }
+            }
+        }
+
+        private processMultiLineDocumentationCommentRange(
+            sourceFile: SourceFile, commentRange: CommentRange, 
+            startLineAndChar: { line: number; character: number },
+            endLineAndChar: { line: number; character: number },
+            lines: string[]) {
+
+            // Comment spanned multiple lines.  Find the leftmost character 
+            // position in each line, and use that to determine what we should
+            // trim off, and what part of the line to keep.
+            // i.e.   if the comment looks like:
+            // 
+            // /** Foo
+            //   * Bar
+            //   *    Baz
+            //   */
+            //
+            // Then we'll want to add:
+            // Foo
+            // Bar
+            //    Baz
+            var trimLength: number = undefined;
+            for (var iLine = startLineAndChar.line + 1; iLine <= endLineAndChar.line; iLine++) {
+                var lineStart = sourceFile.getPositionFromLineAndCharacter(iLine, /*character:*/ 0);
+                var docCommentTriviaLength = this.skipDocumentationCommentTrivia(sourceFile.text, lineStart);
+
+                if (trimLength === undefined || (docCommentTriviaLength && docCommentTriviaLength < trimLength)) {
+                    trimLength = docCommentTriviaLength;
+                }
+            }
+
+            // Add the first line in.
+            var firstLine = this.trimRight(sourceFile.text.substr(commentRange.pos + "/**".length));
+            if (firstLine !== "") {
+                lines.push(firstLine);
+            }
+
+            // For all the lines up to the last (but not including the last), add the contents
+            // of the line (with the length up to the 
+            for (var iLine = startLineAndChar.line + 1; iLine < endLineAndChar.line; iLine++) {
+                var line = this.trimRight(sourceFile.text.substring(
+                    sourceFile.getPositionFromLineAndCharacter(iLine, /*character*/0),
+                    sourceFile.getPositionFromLineAndCharacter(iLine + 1, /*character*/0))).substr(trimLength);
+
+                lines.push(line);
+            }
+
+            // Add the last line if there is any actual text before the */
+            var lastLine = sourceFile.text.substring(
+                sourceFile.getPositionFromLineAndCharacter(endLineAndChar.line, /*character:*/ 0),
+                commentRange.end - "*/".length).substr(trimLength);
+
+            if (lastLine !== "") {
+                lines.push(lastLine);
+            }
+        }
+
+        private trimRight(val: string) {
+            return val.replace(/(\n|\r|\s)+$/, '');
+        }
+
+        private skipDocumentationCommentTrivia(text: string, lineStart: number): number {
+            for (var i = 0; i < text.length; i++) {
+                var char = text.charCodeAt(i);
+                if (char === CharacterCodes.asterisk) {
+                    return i + 1;
+                }
+                else if (!isWhiteSpace(char)) {
+                    return i;
+                }
+            }
+
+            return undefined;
+        }
     }
 
     class TypeObject implements Type {
@@ -682,20 +792,6 @@ module ts {
                     public textSpan: TypeScript.TextSpan,
                     public displayParts: SymbolDisplayPart[],
                     public documentation: SymbolDisplayPart[]) {
-        }
-
-        public toJSON() {
-            return {
-                kind: this.kind,
-                kindModifiers: this.kindModifiers,
-                textSpan: this.textSpan,
-                displayParts: this.displayParts.map(d => {
-                    return {
-                        text: d.text,
-                        kind: SymbolDisplayPartKind[d.kind]
-                    };
-                })
-            };
         }
     }
 
@@ -2277,7 +2373,7 @@ module ts {
                 return undefined;
             }
 
-            var symbol = typeInfoResolver.getSymbolInfo(node);
+            var symbol = <SymbolObject>typeInfoResolver.getSymbolInfo(node);
             if (!symbol) {
                 return undefined;
             }
@@ -2287,34 +2383,34 @@ module ts {
             var totalParts: SymbolDisplayPart[] = [];
 
             if (symbol.flags & SymbolFlags.Class) {
-                totalParts.push({ text: "class", kind: SymbolDisplayPartKind.keyword, symbol: undefined });
-                totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                totalParts.push(new SymbolDisplayPart("class", SymbolDisplayPartKind.keyword, undefined));
+                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Interface) {
-                totalParts.push({ text: "interface", kind: SymbolDisplayPartKind.keyword, symbol: undefined });
-                totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                totalParts.push(new SymbolDisplayPart("interface", SymbolDisplayPartKind.keyword, undefined));
+                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Enum) {
-                totalParts.push({ text: "enum", kind: SymbolDisplayPartKind.keyword, symbol: undefined });
-                totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                totalParts.push(new SymbolDisplayPart("enum", SymbolDisplayPartKind.keyword, undefined));
+                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Module) {
-                totalParts.push({ text: "module", kind: SymbolDisplayPartKind.keyword, symbol: undefined });
-                totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                totalParts.push(new SymbolDisplayPart("module", SymbolDisplayPartKind.keyword, undefined));
+                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.TypeParameter) {
-                totalParts.push({ text: "(", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
-                totalParts.push({ text: "type parameter", kind: SymbolDisplayPartKind.text, symbol: undefined });
-                totalParts.push({ text: ")", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
-                totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                totalParts.push(new SymbolDisplayPart("(", SymbolDisplayPartKind.punctuation, undefined));
+                totalParts.push(new SymbolDisplayPart("type parameter", SymbolDisplayPartKind.text, undefined));
+                totalParts.push(new SymbolDisplayPart(")", SymbolDisplayPartKind.punctuation, undefined));
+                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol));
             }
             else {
-                totalParts.push({ text: "(", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
+                totalParts.push(new SymbolDisplayPart("(", SymbolDisplayPartKind.punctuation, undefined));
                 var text: string;
 
                 if (symbol.flags & SymbolFlags.Property) { text = "property" }
@@ -2327,9 +2423,9 @@ module ts {
                     return undefined;
                 }
 
-                totalParts.push({ text: text, kind: SymbolDisplayPartKind.text, symbol: undefined });
-                totalParts.push({ text: ")", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
-                totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                totalParts.push(new SymbolDisplayPart(text, SymbolDisplayPartKind.text, undefined));
+                totalParts.push(new SymbolDisplayPart(")", SymbolDisplayPartKind.punctuation, undefined));
+                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
 
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, getContainerNode(node)));
 
@@ -2339,8 +2435,8 @@ module ts {
                     symbol.flags & SymbolFlags.Variable) {
 
                     if (type) {
-                        totalParts.push({ text: ":", kind: SymbolDisplayPartKind.punctuation, symbol: undefined });
-                        totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
+                        totalParts.push(new SymbolDisplayPart(":", SymbolDisplayPartKind.punctuation, undefined));
+                        totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
                         totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type, getContainerNode(node)));
                     }
                 }
@@ -2355,10 +2451,10 @@ module ts {
                     if (declaration.kind === SyntaxKind.EnumMember) {
                         var constantValue = typeInfoResolver.getEnumMemberValue(<EnumMember>declaration);
                         if (constantValue !== undefined) {
-                            totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
-                            totalParts.push({ text: "=", kind: SymbolDisplayPartKind.operator, symbol: undefined });
-                            totalParts.push({ text: " ", kind: SymbolDisplayPartKind.space, symbol: undefined });
-                            totalParts.push({ text: constantValue.toString(), kind: SymbolDisplayPartKind.numericLiteral, symbol: undefined });
+                            totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                            totalParts.push(new SymbolDisplayPart("=", SymbolDisplayPartKind.operator, undefined));
+                            totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                            totalParts.push(new SymbolDisplayPart(constantValue.toString(), SymbolDisplayPartKind.numericLiteral, undefined));
                         }
                     }
                 }
@@ -2369,7 +2465,7 @@ module ts {
                 getSymbolModifiers(symbol),
                 new TypeScript.TextSpan(node.getStart(), node.getWidth()),
                 totalParts,
-                []/*convertDocumentation(symbol)*/);
+                [new SymbolDisplayPart(symbol.getDocumentationComment(), SymbolDisplayPartKind.text, /*symbol:*/ null)]);
         }
 
         function getTypeAtPosition(fileName: string, position: number): TypeInfo {
