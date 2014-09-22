@@ -1661,9 +1661,9 @@ module FourSlash {
             }
 
             var actualMatchPosition = -1;
-            if (bracePosition >= actual[0].start() && bracePosition <= actual[0].end()) {
+            if (bracePosition === actual[0].start()) {
                 actualMatchPosition = actual[1].start();
-            } else if (bracePosition >= actual[1].start() && bracePosition <= actual[1].end()) {
+            } else if (bracePosition === actual[1].start()) {
                 actualMatchPosition = actual[0].start();
             } else {
                 throw new Error('verifyMatchingBracePosition failed - could not find the brace position: ' + bracePosition + ' in the returned list: (' + actual[0].start() + ',' + actual[0].end() + ') and (' + actual[1].start() + ',' + actual[1].end() + ')');
