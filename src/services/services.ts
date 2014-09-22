@@ -2083,40 +2083,6 @@ module ts {
             }
         }
 
-        /** Get the token whose text contains the position, or the containing node. */
-        function getNodeAtPosition(sourceFile: SourceFile, position: number) {
-            var current: Node = sourceFile;
-            outer: while (true) {
-                // find the child that has this
-                for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                    var child = current.getChildAt(i);
-                    if (child.getStart() <= position && position < child.getEnd()) {
-                        current = child;
-                        continue outer;
-                    }
-                }
-                return current;
-            }
-        }
-
-        /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
-          * leading trivia or within the token text.
-          */
-        function getTokenAtPosition(sourceFile: SourceFile, position: number) {
-            var current: Node = sourceFile;
-            outer: while (true) {
-                // find the child that has this
-                for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                    var child = current.getChildAt(i);
-                    if (child.getFullStart() <= position && position < child.getEnd()) {
-                        current = child;
-                        continue outer;
-                    }                  
-                }
-                return current;
-            }
-        }
-
         function getContainerNode(node: Node): Node {
             while (true) {
                 node = node.parent;
@@ -3759,14 +3725,13 @@ module ts {
         }
 
         function getBraceMatchingAtPosition(filename: string, position: number) {
-            filename = TypeScript.switchToForwardSlashes(filename);
-            var syntaxTree = getSyntaxTree(filename);
-            return TypeScript.Services.BraceMatcher.getMatchSpans(syntaxTree, position);
+            var sourceFile = getCurrentSourceFile(filename);
+            return BraceMatcher.getMatchSpans(sourceFile, position);
         }
 
         function getIndentationAtPosition(filename: string, position: number, editorOptions: EditorOptions) {
             filename = TypeScript.switchToForwardSlashes(filename);
-            
+
             var sourceFile = getCurrentSourceFile(filename);
             var options = new TypeScript.FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
 
@@ -4277,6 +4242,40 @@ module ts {
         return {
             getClassificationsForLine: getClassificationsForLine
         };
+    }
+
+    /** Get the token whose text contains the position, or the containing node. */
+    export function getNodeAtPosition(sourceFile: SourceFile, position: number) {
+        var current: Node = sourceFile;
+        outer: while (true) {
+            // find the child that has this
+            for (var i = 0, n = current.getChildCount(); i < n; i++) {
+                var child = current.getChildAt(i);
+                if (child.getStart() <= position && position < child.getEnd()) {
+                    current = child;
+                    continue outer;
+                }
+            }
+            return current;
+        }
+    }
+
+    /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
+      * leading trivia or within the token text.
+      */
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number) {
+        var current: Node = sourceFile;
+        outer: while (true) {
+            // find the child that has this
+            for (var i = 0, n = current.getChildCount(); i < n; i++) {
+                var child = current.getChildAt(i);
+                if (child.getFullStart() <= position && position < child.getEnd()) {
+                    current = child;
+                    continue outer;
+                }
+            }
+            return current;
+        }
     }
 
     function initializeServices() {

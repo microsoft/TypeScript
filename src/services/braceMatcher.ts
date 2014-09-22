@@ -15,59 +15,62 @@
 
 ///<reference path='references.ts' />
 
-module TypeScript.Services {
-    export class BraceMatcher {
+module ts.BraceMatcher {
 
-        // Given a script name and position in the script, return a pair of text range if the 
-        // position corresponds to a "brace matchin" characters (e.g. "{" or "(", etc.)
-        // If the position is not on any range, return an empty set.
-        public static getMatchSpans(syntaxTree: TypeScript.SyntaxTree, position: number): TypeScript.TextSpan[] {
-            var result: TypeScript.TextSpan[] = [];
+    // Given a script name and position in the script, return a pair of text range if the 
+    // position corresponds to a "brace matching" characters (e.g. "{" or "(", etc.)
+    // If the position is not on any range, return an empty set.
+    export function getMatchSpans(sourceFile: SourceFile, position: number): TypeScript.TextSpan[] {
+        var result: TypeScript.TextSpan[] = [];
 
-            var token = findToken(syntaxTree.sourceUnit(), position);
+        var token = getTokenAtPosition(sourceFile, position);
 
-            if (start(token) === position) {
-                var matchKind = BraceMatcher.getMatchingTokenKind(token);
+        if (token.getStart() === position) {
+            var matchKind = getMatchingTokenKind(token);
 
-                if (matchKind !== null) {
-                    var parentElement = token.parent;
+            // Ensure that there is a corresponding token to match ours.
+            if (matchKind) {
+                var parentElement = token.parent;
 
-                    for (var i = 0, n = childCount(parentElement); i < n; i++) {
-                        var current = childAt(parentElement, i);
-
-                        if (current !== null && fullWidth(current) > 0) {
-                            if (current.kind() === matchKind) {
-                                var range1 = new TypeScript.TextSpan(start(token), width(token));
-                                var range2 = new TypeScript.TextSpan(start(current), width(current));
-                                if (range1.start() < range2.start()) {
-                                    result.push(range1, range2);
-                                }
-                                else {
-                                    result.push(range2, range1);
-                                }
-                                break;
+                var childNodes = parentElement.getChildren();
+                for (var i = 0, n = childNodes.length; i < n; i++) {
+                    var current = childNodes[i];
+                    
+                    // TODO(drosen): Check if we need the check on 'current'.
+                    if (current && current.getFullWidth() > 0) {
+                        if (current.kind === matchKind) {
+                            var range1 = new TypeScript.TextSpan(token.getStart(), token.getWidth());
+                            var range2 = new TypeScript.TextSpan(current.getStart(), current.getWidth());
+                            // TODO(drosen): Does order *really* matter here?
+                            if (range1.start() < range2.start()) {
+                                result.push(range1, range2);
                             }
+                            else {
+                                result.push(range2, range1);
+                            }
+                            
+                            break;
                         }
                     }
                 }
             }
-
-            return result;
         }
 
-        private static getMatchingTokenKind(token: TypeScript.ISyntaxToken): TypeScript.SyntaxKind {
-            switch (token.kind()) {
-                case TypeScript.SyntaxKind.OpenBraceToken: return TypeScript.SyntaxKind.CloseBraceToken
-                case TypeScript.SyntaxKind.OpenParenToken: return TypeScript.SyntaxKind.CloseParenToken;
-                case TypeScript.SyntaxKind.OpenBracketToken: return TypeScript.SyntaxKind.CloseBracketToken;
-                case TypeScript.SyntaxKind.LessThanToken: return TypeScript.SyntaxKind.GreaterThanToken;
-                case TypeScript.SyntaxKind.CloseBraceToken: return TypeScript.SyntaxKind.OpenBraceToken
-                case TypeScript.SyntaxKind.CloseParenToken: return TypeScript.SyntaxKind.OpenParenToken;
-                case TypeScript.SyntaxKind.CloseBracketToken: return TypeScript.SyntaxKind.OpenBracketToken;
-                case TypeScript.SyntaxKind.GreaterThanToken: return TypeScript.SyntaxKind.LessThanToken;
-            }
+        return result;
+    }
 
-            return null;
+    function getMatchingTokenKind(token: Node): ts.SyntaxKind {
+        switch (token.kind) {
+            case ts.SyntaxKind.OpenBraceToken:    return ts.SyntaxKind.CloseBraceToken
+            case ts.SyntaxKind.OpenParenToken:    return ts.SyntaxKind.CloseParenToken;
+            case ts.SyntaxKind.OpenBracketToken:  return ts.SyntaxKind.CloseBracketToken;
+            case ts.SyntaxKind.LessThanToken:     return ts.SyntaxKind.GreaterThanToken;
+            case ts.SyntaxKind.CloseBraceToken:   return ts.SyntaxKind.OpenBraceToken
+            case ts.SyntaxKind.CloseParenToken:   return ts.SyntaxKind.OpenParenToken;
+            case ts.SyntaxKind.CloseBracketToken: return ts.SyntaxKind.OpenBracketToken;
+            case ts.SyntaxKind.GreaterThanToken:  return ts.SyntaxKind.LessThanToken;
         }
+
+        return undefined;
     }
 }
