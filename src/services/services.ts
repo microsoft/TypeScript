@@ -264,11 +264,13 @@ module ts {
 
         private processDocumentationCommentDeclaration(lines: string[], declaration: Node) {
             var commentRanges = getLeadingCommentRangesOfNode(declaration);
-            var sourceFile = declaration.getSourceFile();
+            if (commentRanges) {
+                var sourceFile = declaration.getSourceFile();
 
-            for (var i = 0, n = commentRanges.length; i < n; i++) {
-                this.processDocumentationCommentRange(
-                    lines, sourceFile, commentRanges[0]);
+                for (var i = 0, n = commentRanges.length; i < n; i++) {
+                    this.processDocumentationCommentRange(
+                        lines, sourceFile, commentRanges[0]);
+                }
             }
         }
 
@@ -320,8 +322,11 @@ module ts {
             //    Baz
             var trimLength: number = undefined;
             for (var iLine = startLineAndChar.line + 1; iLine <= endLineAndChar.line; iLine++) {
-                var lineStart = sourceFile.getPositionFromLineAndCharacter(iLine, /*character:*/ 0);
-                var docCommentTriviaLength = this.skipDocumentationCommentTrivia(sourceFile.text, lineStart);
+                var lineStart = sourceFile.getPositionFromLineAndCharacter(iLine, /*character:*/ 1);
+                var lineEnd = iLine === endLineAndChar.line
+                    ? commentRange.end - "*/".length
+                    : sourceFile.getPositionFromLineAndCharacter(iLine + 1, 1);
+                var docCommentTriviaLength = this.skipDocumentationCommentTrivia(sourceFile.text, lineStart, lineEnd);
 
                 if (trimLength === undefined || (docCommentTriviaLength && docCommentTriviaLength < trimLength)) {
                     trimLength = docCommentTriviaLength;
@@ -329,7 +334,9 @@ module ts {
             }
 
             // Add the first line in.
-            var firstLine = this.trimRight(sourceFile.text.substr(commentRange.pos + "/**".length));
+            var firstLine = sourceFile.text.substring(
+                commentRange.pos + "/**".length,
+                sourceFile.getPositionFromLineAndCharacter(startLineAndChar.line + 1, /*character:*/ 1)).trim();
             if (firstLine !== "") {
                 lines.push(firstLine);
             }
@@ -338,16 +345,16 @@ module ts {
             // of the line (with the length up to the 
             for (var iLine = startLineAndChar.line + 1; iLine < endLineAndChar.line; iLine++) {
                 var line = this.trimRight(sourceFile.text.substring(
-                    sourceFile.getPositionFromLineAndCharacter(iLine, /*character*/0),
-                    sourceFile.getPositionFromLineAndCharacter(iLine + 1, /*character*/0))).substr(trimLength);
+                    sourceFile.getPositionFromLineAndCharacter(iLine, /*character*/ 1),
+                    sourceFile.getPositionFromLineAndCharacter(iLine + 1, /*character*/ 1))).substr(trimLength);
 
                 lines.push(line);
             }
 
             // Add the last line if there is any actual text before the */
-            var lastLine = sourceFile.text.substring(
-                sourceFile.getPositionFromLineAndCharacter(endLineAndChar.line, /*character:*/ 0),
-                commentRange.end - "*/".length).substr(trimLength);
+            var lastLine = this.trimRight(sourceFile.text.substring(
+                sourceFile.getPositionFromLineAndCharacter(endLineAndChar.line, /*character:*/ 1),
+                commentRange.end - "*/".length)).substr(trimLength);
 
             if (lastLine !== "") {
                 lines.push(lastLine);
@@ -358,13 +365,25 @@ module ts {
             return val.replace(/(\n|\r|\s)+$/, '');
         }
 
-        private skipDocumentationCommentTrivia(text: string, lineStart: number): number {
-            for (var i = 0; i < text.length; i++) {
-                var char = text.charCodeAt(i);
-                if (char === CharacterCodes.asterisk) {
-                    return i + 1;
+        private skipDocumentationCommentTrivia(text: string, lineStart: number, lineEnd: number): number {
+            var seenAsterisk = false;
+            var lineLength = lineEnd - lineStart;
+            for (var i = 0; i < lineLength; i++) {
+                var char = text.charCodeAt(i + lineStart);
+                if (char === CharacterCodes.asterisk && !seenAsterisk) {
+                    // Ignore the first asterisk we see.  We want to trim out the line of *'s 
+                    // commonly seen at the start of a doc comment.
+                    seenAsterisk = true;
+                    continue;
+                }
+                else if (isLineBreak(char)) {
+                    // This was a blank line.  Just ignore it wrt computing the leading whitespace to
+                    // trim.
+                    break;
                 }
                 else if (!isWhiteSpace(char)) {
+                    // Found a real doc comment character.  Keep track of it so we can determine how
+                    // much of the doc comment leading trivia to trim off.
                     return i;
                 }
             }
@@ -2362,10 +2381,9 @@ module ts {
             return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
         }
 
-        /// QuickInfo
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             synchronizeHostData();
-
+             
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
             var node = getNodeAtPosition(sourceFile, position);
@@ -2377,6 +2395,9 @@ module ts {
             if (!symbol) {
                 return undefined;
             }
+
+            var documentation = symbol.getDocumentationComment();
+            var documentationParts = documentation === "" ? [] : [new SymbolDisplayPart(documentation, SymbolDisplayPartKind.text, /*symbol:*/ null)];
 
             // Having all this logic here is pretty unclean.  Consider moving to the roslyn model
             // where all symbol display logic is encapsulated into visitors and options.
@@ -2465,7 +2486,7 @@ module ts {
                 getSymbolModifiers(symbol),
                 new TypeScript.TextSpan(node.getStart(), node.getWidth()),
                 totalParts,
-                [new SymbolDisplayPart(symbol.getDocumentationComment(), SymbolDisplayPartKind.text, /*symbol:*/ null)]);
+                documentationParts);
         }
 
         function getTypeAtPosition(fileName: string, position: number): TypeInfo {
