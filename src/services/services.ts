@@ -1687,7 +1687,7 @@ module ts {
                 if (displayName && displayName.length >= 2 && firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
                     (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
                     // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
-                    // invalid identifer name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+                    // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
                     displayName = displayName.substring(1, displayName.length - 1);
                 }
                 
@@ -1708,6 +1708,13 @@ module ts {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
+            var firstCharCode = symbol.name.charCodeAt(0);
+            if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
+                // If the symbol is external module, don't retry the completion list
+                // Also name of modules is invalid in completion list (i.e declare module "http" { var x; } | // <= request completion here, "http" should not be there)
+                return undefined;
+            }
+
             var displayName = getValidCompletionEntryDisplayName(symbol.getName(), program.getCompilerOptions().target);
             if (!displayName) {
                 return undefined;
