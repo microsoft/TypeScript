@@ -333,25 +333,26 @@ module ts.SignatureHelp {
     //}
     var emptyArray: any[] = [];
 
-    export function getSignatureHelpItems(sourceFile: SourceFile, position: number, startingNode: Node, typeInfoResolver: TypeChecker, cancellationToken: CancellationToken): SignatureHelpItems {
+    export function getSignatureHelpItems(sourceFile: SourceFile, position: number, startingNode: Node, typeInfoResolver: TypeChecker, cancellationToken: CancellationTokenObject): SignatureHelpItems {
         // Decide whether to show signature help
         var argumentList = getContainingArgumentList(startingNode);
         cancellationToken.throwIfCancellationRequested();
 
         // Semantic filtering of signature help
-        if (argumentList) {
-            var call = <CallExpression>argumentList.parent;
-            var candidates = <Signature[]>[];
-            var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
-            cancellationToken.throwIfCancellationRequested();
-
-            return candidates.length
-                ? createSignatureHelpItems(candidates, resolvedSignature, argumentList)
-                : undefined;
+        if (!argumentList) {
+            return undefined;
         }
 
-        return undefined;
+        var call = <CallExpression>argumentList.parent;
+        var candidates = <Signature[]>[];
+        var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
+        cancellationToken.throwIfCancellationRequested();
 
+        if (!candidates.length) {
+            return undefined;
+        }
+
+        return createSignatureHelpItems(candidates, resolvedSignature, argumentList);
 
         // If node is an argument, returns its index in the argument list
         // If not, returns -1
@@ -420,7 +421,7 @@ module ts.SignatureHelp {
                         display += "?";
                     }
                     display += ": " + typeInfoResolver.typeToString(typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
-                    return new SignatureHelpParameter(p.name, "", display, /*isOptional*/ false);
+                    return new SignatureHelpParameter(p.name, "", display, isOptional);
                 });
                 var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
                 var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
@@ -439,6 +440,14 @@ module ts.SignatureHelp {
                 selectedItemIndex = 0;
             }
 
+            // We use full start and skip trivia on the end because we want to include trivia on
+            // both sides. For example,
+            //
+            //    foo(   /*comment */     a, b, c      /*comment*/     )
+            //        |                                               |
+            //
+            // The applicable span is from the first bar to the second bar (inclusive,
+            // but not including parentheses)
             var applicableSpanStart = argumentListOrTypeArgumentList.getFullStart();
             var applicableSpanEnd = skipTrivia(sourceFile.text, argumentListOrTypeArgumentList.end, /*stopAfterLineBreak*/ false);
             var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
@@ -459,14 +468,13 @@ module ts.SignatureHelp {
 
         var tokenPrecedingCurrentPosition = ServicesSyntaxUtilities.findPrecedingToken(position, sourceFile);
         var call = <CallExpression>tokenPrecedingSpanStart.parent;
+        Debug.assert(call.kind === SyntaxKind.CallExpression || call.kind === SyntaxKind.NewExpression, "wrong call kind " + SyntaxKind[call.kind]);
         if (tokenPrecedingCurrentPosition.kind === SyntaxKind.CloseParenToken || tokenPrecedingCurrentPosition.kind === SyntaxKind.GreaterThanToken) {
             if (tokenPrecedingCurrentPosition.parent === call) {
                 // This call expression is complete. Stop signature help.
                 return undefined;
             }
         }
-
-        Debug.assert(call.kind === SyntaxKind.CallExpression || call.kind === SyntaxKind.NewExpression, "wrong call kind " + SyntaxKind[call.kind]);
 
         var argumentListOrTypeArgumentList = getChildListThatStartsWithOpenerToken(call, tokenPrecedingSpanStart, sourceFile);
         // Debug.assert(argumentListOrTypeArgumentList.getChildCount() === 0 || argumentListOrTypeArgumentList.getChildCount() % 2 === 1, "Even number of children");
@@ -478,8 +486,6 @@ module ts.SignatureHelp {
 
         var numberOfCommas = countWhere(argumentListOrTypeArgumentList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
         var argumentCount = numberOfCommas + 1;
-
-
         if (argumentCount <= 1) {
             return new SignatureHelpState(/*argumentIndex*/ 0, argumentCount);
         }
@@ -490,8 +496,8 @@ module ts.SignatureHelp {
         // possible that we are to the right of all children. Assume that we are still within
         // the applicable span and that we are typing the last argument
         // Alternatively, we could be in range of one of the arguments, in which case we need to divide
-        // by 2 to exclude commas
-        var argumentIndex = indexOfNodeContainingPosition < 0 ? argumentCount - 1 : integerDivide(indexOfNodeContainingPosition, 2);
+        // by 2 to exclude commas. Use bit shifting in order to take the floor of the division.
+        var argumentIndex = indexOfNodeContainingPosition < 0 ? argumentCount - 1 : indexOfNodeContainingPosition >> 1;
         return new SignatureHelpState(argumentIndex, argumentCount);
     }
 

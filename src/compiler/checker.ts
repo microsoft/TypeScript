@@ -4137,6 +4137,10 @@ module ts {
 
             // For error recovery, since we have parsed OmittedExpressions for any extra commas
             // in the argument list, if we see any OmittedExpressions, just return true.
+            // The reason this is ok is because omitted expressions here are syntactically
+            // illegal, and will cause a parse error.
+            // Note: It may be worth keeping the upper bound check on arity, but removing
+            // the lower bound check if there are omitted expressions.
             if (!isCorrect && forEach(node.arguments, arg => arg.kind === SyntaxKind.OmittedExpression)) {
                 return true;
             }
@@ -4287,7 +4291,7 @@ module ts {
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
             if (candidateWithCorrectArity) {
-                checkApplicableSignature(node, candidateWithCorrectArity, relation, undefined, /*reportErrors*/ true);
+                checkApplicableSignature(node, candidateWithCorrectArity, relation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else {
                 error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);

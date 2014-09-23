@@ -1174,7 +1174,6 @@ module ts {
 
     export interface CancellationToken {
         isCancellationRequested(): boolean;
-        throwIfCancellationRequested?(): void;
     }
 
     export interface CompilerHost {

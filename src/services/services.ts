@@ -966,7 +966,7 @@ module ts {
 
     export class OperationCanceledException { }
 
-    class CancellationTokenObject {
+    export class CancellationTokenObject {
 
         public static None: CancellationTokenObject = new CancellationTokenObject(null)
 
@@ -3480,6 +3480,7 @@ module ts {
         }
 
         // Signature help
+        // This is a semantic operation
         function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
             synchronizeHostData();
 
@@ -3490,6 +3491,7 @@ module ts {
             return SignatureHelp.getSignatureHelpItems(sourceFile, position, node, typeInfoResolver, cancellationToken);
         }
 
+        // This is a syntactic operation
         function getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState {
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getCurrentSourceFile(fileName);
