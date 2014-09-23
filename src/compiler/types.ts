@@ -529,7 +529,7 @@ module ts {
         filename: string;
     }
 
-    export interface Comment extends TextRange {
+    export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
     }
 
@@ -640,15 +640,21 @@ module ts {
         getApparentType(type: Type): ApparentType;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
+        typeToDisplayParts(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[];
+        symbolToDisplayParts(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): SymbolDisplayPart[];
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
         getRootSymbol(symbol: Symbol): Symbol;
         getContextualType(node: Node): Type;
+
+        // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
+        // computed value.
+        getEnumMemberValue(node: EnumMember): number;
     }
 
     export interface TextWriter {
         write(s: string): void;
-        writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+        trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
         writeLine(): void;
         increaseIndent(): void;
         decreaseIndent(): void;
@@ -679,7 +685,6 @@ module ts {
         getProgram(): Program;
         getLocalNameOfContainer(container: Declaration): string;
         getExpressionNamePrefix(node: Identifier): string;
-        getPropertyAccessSubstitution(node: PropertyAccess): string;
         getExportAssignmentName(node: SourceFile): string;
         isReferencedImportDeclaration(node: ImportDeclaration): boolean;
         isTopLevelValueImportedViaEntityName(node: ImportDeclaration): boolean;
@@ -690,9 +695,12 @@ module ts {
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
         writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
-        writeSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, writer: TextWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult;
+
+        // Returns the constant value this property access resolves to, or 'undefined' if it does 
+        // resolve to a constant.
+        getConstantValue(node: PropertyAccess): number;
     }
 
     export enum SymbolFlags {
@@ -794,13 +802,16 @@ module ts {
     }
 
     export enum NodeCheckFlags {
-        TypeChecked    = 0x00000001,  // Node has been type checked
-        LexicalThis    = 0x00000002,  // Lexical 'this' reference
-        CaptureThis    = 0x00000004,  // Lexical 'this' used in body
-        EmitExtends    = 0x00000008,  // Emit __extends
-        SuperInstance  = 0x00000010,  // Instance 'super' reference
-        SuperStatic    = 0x00000020,  // Static 'super' reference
-        ContextChecked = 0x00000040,  // Contextual types have been assigned
+        TypeChecked        = 0x00000001,  // Node has been type checked
+        LexicalThis        = 0x00000002,  // Lexical 'this' reference
+        CaptureThis        = 0x00000004,  // Lexical 'this' used in body
+        EmitExtends        = 0x00000008,  // Emit __extends
+        SuperInstance      = 0x00000010,  // Instance 'super' reference
+        SuperStatic        = 0x00000020,  // Static 'super' reference
+        ContextChecked     = 0x00000040,  // Contextual types have been assigned
+
+        // Values for enum members have been computed, and any errors have been reported for them.
+        EnumValuesComputed = 0x00000080,
     }
 
     export interface NodeLinks {
@@ -1169,6 +1180,48 @@ module ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
+    }
+
+    export class SymbolDisplayPart {
+        constructor(public text: string,
+                    public kind: SymbolDisplayPartKind,
+                    public symbol: Symbol) {
+        }
+
+        public toJSON() {
+            return {
+                text: this.text,
+                kind: SymbolDisplayPartKind[this.kind]
+            };
+        }
+    }
+
+    export enum SymbolDisplayPartKind {
+        aliasName,
+        className,
+        enumName,
+        fieldName,
+        interfaceName,
+        keyword,
+        labelName,
+        lineBreak,
+        numericLiteral,
+        stringLiteral,
+        localName,
+        methodName,
+        moduleName,
+        namespaceName,
+        operator,
+        parameterName,
+        propertyName,
+        punctuation,
+        space,
+        anonymousTypeIndicator,
+        text,
+        typeParameterName,
+        enumMemberName,
+        functionName,
+        regularExpressionLiteral,
     }
 
     export interface CancellationToken {
