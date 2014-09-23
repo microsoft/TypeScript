@@ -4076,7 +4076,7 @@ module ts {
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
             var lastTokenOrCommentEnd = 0;
-            var lastToken = SyntaxKind.Unknown;
+            var lastNonTriviaToken = SyntaxKind.Unknown;
             var inUnterminatedMultiLineComment = false;
 
             // If we're in a string literal, then prepend: "\
@@ -4104,22 +4104,25 @@ module ts {
                 entries: []
             };
 
-            scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ true, text, onError, processComment);
+            scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false, text, onError, /*onComment*/ undefined);
 
             var token = SyntaxKind.Unknown;
             do {
                 token = scanner.scan();
 
-                if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastToken]) {
+                if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastNonTriviaToken]) {
                     if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
                         token = SyntaxKind.RegularExpressionLiteral;
                     }
                 }
-                else if (lastToken === SyntaxKind.DotToken) {
+                else if (lastNonTriviaToken === SyntaxKind.DotToken) {
                     token = SyntaxKind.Identifier;
                 }
 
-                lastToken = token;
+                // Only recall the token if it was *not* trivia.
+                if (!(SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken)) {
+                    lastNonTriviaToken = token;
+                }
 
                 processToken();
             }
@@ -4132,20 +4135,9 @@ module ts {
                 inUnterminatedMultiLineComment = message.key === Diagnostics.Asterisk_Slash_expected.key;
             }
 
-            function processComment(start: number, end: number) {
-                // add Leading white spaces
-                addLeadingWhiteSpace(start, end);
-
-                // add the comment
-                addResult(end - start, TokenClass.Comment);
-            }
-
             function processToken(): void {
                 var start = scanner.getTokenPos();
                 var end = scanner.getTextPos();
-
-                // add Leading white spaces
-                addLeadingWhiteSpace(start, end);
 
                 // add the token
                 addResult(end - start, classFromKind(token));
@@ -4165,15 +4157,6 @@ module ts {
                         }
                     }
                 }
-            }
-
-            function addLeadingWhiteSpace(start: number, end: number): void {
-                if (start > lastTokenOrCommentEnd) {
-                    addResult(start - lastTokenOrCommentEnd, TokenClass.Whitespace);
-                }
-
-                // Remember the end of the last token
-                lastTokenOrCommentEnd = end;
             }
 
             function addResult(length: number, classification: TokenClass): void {
@@ -4268,6 +4251,11 @@ module ts {
                     return TokenClass.StringLiteral;
                 case SyntaxKind.RegularExpressionLiteral:
                     return TokenClass.RegExpLiteral;
+                case SyntaxKind.MultiLineCommentTrivia:
+                case SyntaxKind.SingleLineCommentTrivia:
+                    return TokenClass.Comment;
+                case SyntaxKind.WhitespaceTrivia:
+                    return TokenClass.Whitespace;
                 case SyntaxKind.Identifier:
                 default:
                     return TokenClass.Identifier;
