@@ -9,7 +9,7 @@
 /// <reference path="commandLineParser.ts"/>
 
 module ts {
-    var version = "1.1.0.0";
+    var version = "1.1.0.1";
 
     /**
      * Checks to see if the locale is in the appropriate format,
