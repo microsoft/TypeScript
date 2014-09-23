@@ -1,4 +1,4 @@
-// accessing any private outside the class is an error
+// accessing any protected outside the class is an error
 
 class C {
     protected x;

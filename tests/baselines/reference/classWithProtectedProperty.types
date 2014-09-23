@@ -1,5 +1,5 @@
 === tests/cases/conformance/types/members/classWithProtectedProperty.ts ===
-// accessing any private outside the class is an error
+// accessing any protected outside the class is an error
 
 class C {
 >C : C

@@ -1,5 +1,5 @@
 //// [classWithProtectedProperty.ts]
-// accessing any private outside the class is an error
+// accessing any protected outside the class is an error
 
 class C {
     protected x;
@@ -28,7 +28,7 @@ class D extends C {
 }
 
 //// [classWithProtectedProperty.js]
-// accessing any private outside the class is an error
+// accessing any protected outside the class is an error
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
