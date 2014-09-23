@@ -972,8 +972,8 @@ module ts {
 
                 return {
                     string: () => str,
-                    writeKind: (text, kind) => str += text,
-                    writeSymbol: (text, symbol) => str += text,
+                    writeKind: text => str += text,
+                    writeSymbol: text => str += text,
 
                     // Completely ignore indentation for string writers.  And map newlines to
                     // a single space.
@@ -6513,10 +6513,10 @@ module ts {
             return undefined;
         }
 
-        function computeEnumMemberValues(node: EnumDeclaration, reportErrors: boolean) {
+        function computeEnumMemberValues(node: EnumDeclaration) {
             var nodeLinks = getNodeLinks(node);
 
-            if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputedAndChecked)) {
+            if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
                 var enumSymbol = getSymbolOfNode(node);
                 var enumType = getDeclaredTypeOfSymbol(enumSymbol);
                 var autoValue = 0;
@@ -6531,7 +6531,7 @@ module ts {
                             // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
                             // Also, we do not need to check this for ambients because there is already
                             // a syntax error if it is not a constant.
-                            if (reportErrors) {
+                            if (fullTypeCheck) {
                                 checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
                             }
                         }
@@ -6545,9 +6545,7 @@ module ts {
                     }
                 });
 
-                if (reportErrors) {
-                    nodeLinks.flags |= NodeCheckFlags.EnumValuesComputedAndChecked;
-                }
+                nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             }
         }
 
@@ -6561,7 +6559,7 @@ module ts {
             checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
 
-            computeEnumMemberValues(node, /*reportErrors:*/ true);
+            computeEnumMemberValues(node);
 
             // Spec 2014 - Section 9.3:
             // It isn't possible for one enum declaration to continue the automatic numbering sequence of another,
@@ -7531,7 +7529,7 @@ module ts {
         }
 
         function getEnumMemberValue(node: EnumMember): number {
-            computeEnumMemberValues(<EnumDeclaration>node.parent, /*reportErrors:*/ false);
+            computeEnumMemberValues(<EnumDeclaration>node.parent);
             return getNodeLinks(node).enumMemberValue;
         }
 
