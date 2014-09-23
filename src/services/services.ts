@@ -4077,8 +4077,7 @@ module ts {
             var offset = 0;
             var lastTokenOrCommentEnd = 0;
             var lastNonTriviaToken = SyntaxKind.Unknown;
-            var inUnterminatedMultiLineComment = false;
-
+            
             // If we're in a string literal, then prepend: "\
             // (and a newline).  That way when we lex we'll think we're still in a string literal.
             //
@@ -4104,7 +4103,7 @@ module ts {
                 entries: []
             };
 
-            scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false, text, onError, /*onComment*/ undefined);
+            scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false, text, /*onError*/ undefined, /*onComment*/ undefined);
 
             var token = SyntaxKind.Unknown;
             do {
@@ -4130,11 +4129,6 @@ module ts {
 
             return result;
 
-
-            function onError(message: DiagnosticMessage): void {
-                inUnterminatedMultiLineComment = message.key === Diagnostics.Asterisk_Slash_expected.key;
-            }
-
             function processToken(): void {
                 var start = scanner.getTokenPos();
                 var end = scanner.getTextPos();
@@ -4144,16 +4138,23 @@ module ts {
 
                 if (end >= text.length) {
                     // We're at the end.
-                    if (inUnterminatedMultiLineComment) {
-                        result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
-                    }
-                    else if (token === SyntaxKind.StringLiteral) {
+                    if (token === SyntaxKind.StringLiteral) {
+                        // Check to see if we finished up on a multiline string literal.
                         var tokenText = scanner.getTokenText();
                         if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.backslash) {
                             var quoteChar = tokenText.charCodeAt(0);
                             result.finalLexState = quoteChar === CharacterCodes.doubleQuote
                                 ? EndOfLineState.InDoubleQuoteStringLiteral
                                 : EndOfLineState.InSingleQuoteStringLiteral;
+                        }
+                    }
+                    else if (token === SyntaxKind.MultiLineCommentTrivia) {
+                        // Check to see if the multiline comment was unclosed.
+                        var tokenText = scanner.getTokenText()
+                        if (!(tokenText.length > 3 && // need to avoid catching '/*/'
+                            tokenText.charCodeAt(tokenText.length - 2) === CharacterCodes.asterisk &&
+                            tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.slash)) {
+                            result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
                         }
                     }
                 }
