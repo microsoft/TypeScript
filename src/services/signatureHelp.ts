@@ -333,9 +333,10 @@ module ts.SignatureHelp {
     //}
     var emptyArray: any[] = [];
 
-    export function getSignatureHelpItems(sourceFile: SourceFile, position: number, startingNode: Node, typeInfoResolver: TypeChecker, cancellationToken: CancellationTokenObject): SignatureHelpItems {
+    export function getSignatureHelpItems(sourceFile: SourceFile, position: number, typeInfoResolver: TypeChecker, cancellationToken: CancellationTokenObject): SignatureHelpItems {
         // Decide whether to show signature help
-        var argumentList = getContainingArgumentList(startingNode);
+        var startingToken = ServicesSyntaxUtilities.findTokenOnLeftOfPosition(sourceFile, position);
+        var argumentList = getContainingArgumentList(startingToken);
         cancellationToken.throwIfCancellationRequested();
 
         // Semantic filtering of signature help
@@ -361,6 +362,19 @@ module ts.SignatureHelp {
                 return undefined;
             }
 
+            // There are 3 cases to handle:
+            //   1. The token introduces a list, and should begin a sig help session
+            //   2. The token is either not associated with a list, or ends a list, so the session should end
+            //   3. The token is buried inside a list, and should give sig help
+            //
+            // The following are examples of each:
+            //
+            //    Case 1:
+            //          foo<$T, U>($a, b)    -> The token introduces a list, and should begin a sig help session
+            //    Case 2:
+            //          fo$o<T, U>$(a, b)$   -> The token is either not associated with a list, or ends a list, so the session should end
+            //    Case 3:
+            //          foo<T$, U$>(a$, $b$) -> The token is buried inside a list, and should give sig help
             var parent = <CallExpression>node.parent;
             // Find out if 'node' is an argument, a type argument, or neither
             if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
@@ -380,18 +394,6 @@ module ts.SignatureHelp {
         }
 
         function getContainingArgumentList(node: Node): Node {
-            // We only want this node if it is a token and it strictly contains the current position.
-            // Otherwise we want the previous token
-            var isToken = node.kind < SyntaxKind.Missing;
-            if (!isToken || position <= node.getStart() || position >= node.getEnd()) {
-                node = ServicesSyntaxUtilities.findPrecedingToken(position, sourceFile);
-
-                if (!node) {
-                    return undefined;
-                }
-            }
-
-            var signatureHelpAvailable = false;
             for (var n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
                 if (n.kind === SyntaxKind.FunctionBlock) {
                     return undefined;

@@ -44,6 +44,41 @@ module ts.ServicesSyntaxUtilities {
         return -1;
     }
 
+    /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
+      * leading trivia or within the token text.
+      */
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number) {
+        var current: Node = sourceFile;
+        outer: while (true) {
+            // find the child that has this
+            for (var i = 0, n = current.getChildCount(); i < n; i++) {
+                var child = current.getChildAt(i);
+                if (child.getFullStart() <= position && position < child.getEnd()) {
+                    current = child;
+                    continue outer;
+                }
+            }
+            return current;
+        }
+    }
+
+    /**
+      * The token on the left of the position is the token that strictly includes the position
+      * or sits to the left of the cursor if it is on a boundary. For example
+      *
+      *   fo|o               -> will return foo
+      *   foo <comment> |bar -> will return foo
+      *
+      */
+    export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
+        var tokenAtPosition = getTokenAtPosition(file, position);
+        if (position > tokenAtPosition.getStart(file)) {
+            return tokenAtPosition;
+        }
+
+        return findPrecedingToken(position, file);
+    }
+
     export function findNextToken(previousToken: Node, parent: Node): Node {
         return find(parent);
 

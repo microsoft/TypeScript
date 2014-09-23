@@ -2101,24 +2101,6 @@ module ts {
             }
         }
 
-        /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
-          * leading trivia or within the token text.
-          */
-        function getTokenAtPosition(sourceFile: SourceFile, position: number) {
-            var current: Node = sourceFile;
-            outer: while (true) {
-                // find the child that has this
-                for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                    var child = current.getChildAt(i);
-                    if (child.getFullStart() <= position && position < child.getEnd()) {
-                        current = child;
-                        continue outer;
-                    }                  
-                }
-                return current;
-            }
-        }
-
         function getContainerNode(node: Node): Node {
             while (true) {
                 node = node.parent;
@@ -3486,9 +3468,8 @@ module ts {
 
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
-            var node = getNodeAtPosition(sourceFile, position);
 
-            return SignatureHelp.getSignatureHelpItems(sourceFile, position, node, typeInfoResolver, cancellationToken);
+            return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
         }
 
         // This is a syntactic operation
@@ -3893,7 +3874,7 @@ module ts {
 
                     // OK, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
-                    var token = getTokenAtPosition(sourceFile, matchPosition);
+                    var token = ServicesSyntaxUtilities.getTokenAtPosition(sourceFile, matchPosition);
 
                     if (token.getStart() <= matchPosition && matchPosition < token.getEnd()) {
                         // match was within the token itself.  Not in the comment.  Keep searching
