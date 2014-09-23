@@ -3759,44 +3759,40 @@ module ts {
 
         function getBraceMatchingAtPosition(filename: string, position: number) {
             var sourceFile = getCurrentSourceFile(filename);
-            return getMatchSpans(sourceFile, position);
+            var result: TypeScript.TextSpan[] = [];
 
-            function getMatchSpans(sourceFile: SourceFile, position: number): TypeScript.TextSpan[] {
-                var result: TypeScript.TextSpan[] = [];
+            var token = getTokenAtPosition(sourceFile, position);
 
-                var token = getTokenAtPosition(sourceFile, position);
+            if (token.getStart(sourceFile) === position) {
+                var matchKind = getMatchingTokenKind(token);
 
-                if (token.getStart(sourceFile) === position) {
-                    var matchKind = getMatchingTokenKind(token);
+                // Ensure that there is a corresponding token to match ours.
+                if (matchKind) {
+                    var parentElement = token.parent;
 
-                    // Ensure that there is a corresponding token to match ours.
-                    if (matchKind) {
-                        var parentElement = token.parent;
+                    var childNodes = parentElement.getChildren(sourceFile);
+                    for (var i = 0, n = childNodes.length; i < n; i++) {
+                        var current = childNodes[i];
 
-                        var childNodes = parentElement.getChildren(sourceFile);
-                        for (var i = 0, n = childNodes.length; i < n; i++) {
-                            var current = childNodes[i];
+                        if (current.kind === matchKind) {
+                            var range1 = new TypeScript.TextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
+                            var range2 = new TypeScript.TextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
 
-                            if (current.kind === matchKind) {
-                                var range1 = new TypeScript.TextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
-                                var range2 = new TypeScript.TextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
-
-                                // We want to order the braces when we return the result.
-                                if (range1.start() < range2.start()) {
-                                    result.push(range1, range2);
-                                }
-                                else {
-                                    result.push(range2, range1);
-                                }
-
-                                break;
+                            // We want to order the braces when we return the result.
+                            if (range1.start() < range2.start()) {
+                                result.push(range1, range2);
                             }
+                            else {
+                                result.push(range2, range1);
+                            }
+
+                            break;
                         }
                     }
                 }
-
-                return result;
             }
+
+            return result;
 
             function getMatchingTokenKind(token: Node): ts.SyntaxKind {
                 switch (token.kind) {
