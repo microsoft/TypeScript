@@ -155,6 +155,27 @@ describe('Colorization', function () {
                 finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
+        it("correctly classifies the termination of a multiline comment", function () {
+            test("   */     ",
+                ts.EndOfLineState.InMultiLineCommentTrivia,
+                comment("   */"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("correctly classifies the continuation of a multiline comment", function () {
+            test("LOREM IPSUM DOLOR   ",
+                ts.EndOfLineState.InMultiLineCommentTrivia,
+                comment("LOREM IPSUM DOLOR   "),
+                finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
+        });
+
+        it("correctly classifies an unterminated multiline comment on a line ending in '/*/'", function () {
+            test("   /*/",
+                ts.EndOfLineState.Start,
+                comment("/*/"),
+                finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
+        });
+
         it("classifies correctly an unterminated multiline comment with trailing space", function () {
             test("/* ",
                 ts.EndOfLineState.Start,
