@@ -998,6 +998,22 @@ module ts {
             stringWriters.push(writer);
         }
 
+        function writeKeyword(writer: SymbolWriter, kind: SyntaxKind) {
+            writer.writeKind(tokenToString(kind), SymbolDisplayPartKind.keyword);
+        }
+
+        function writePunctuation(writer: SymbolWriter, kind: SyntaxKind) {
+            writer.writeKind(tokenToString(kind), SymbolDisplayPartKind.punctuation);
+        }
+
+        function writeOperator(writer: SymbolWriter, kind: SyntaxKind) {
+            writer.writeKind(tokenToString(kind), SymbolDisplayPartKind.operator);
+        }
+
+        function writeSpace(writer: SymbolWriter) {
+            writer.writeKind(" ", SymbolDisplayPartKind.space);
+        }
+
         function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
             var writer = getStringWriter();
             writeSymbol(symbol, writer, enclosingDeclaration, meaning);
@@ -1059,7 +1075,7 @@ module ts {
                     if (accessibleSymbolChain) {
                         for (var i = 0, n = accessibleSymbolChain.length; i < n; i++) {
                             if (needsDot) {
-                                writer.writeKind(".", SymbolDisplayPartKind.punctuation);
+                                writePunctuation(writer, SyntaxKind.DotToken);
                             }
 
                             writeSymbolName(accessibleSymbolChain[i]);
@@ -1073,7 +1089,7 @@ module ts {
                         }
 
                         if (needsDot) {
-                            writer.writeKind(".", SymbolDisplayPartKind.punctuation);
+                            writePunctuation(writer, SyntaxKind.DotToken);
                         }
 
                         writeSymbolName(symbol);
@@ -1100,7 +1116,7 @@ module ts {
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
             var writer = getStringWriter();
-            writeType(type, enclosingDeclaration, flags, writer);
+            writeType(type, writer, enclosingDeclaration, flags);
 
             var result = writer.string();
             releaseStringWriter(writer);
@@ -1115,7 +1131,7 @@ module ts {
 
         function typeToDisplayParts(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
             var writer = getDisplayPartWriter();
-            writeType(type, enclosingDeclaration, flags, writer);
+            writeType(type, writer, enclosingDeclaration, flags);
 
             var result = writer.displayParts();
             releaseDisplayPartWriter(writer);
@@ -1123,14 +1139,7 @@ module ts {
             return result;
         }
 
-        function writeType(type: Type, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void {
-            //var maxLength = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation ? undefined : 100;
-            //var stringWriter = createSingleLineTextWriter(maxLength);
-            // TODO(shkamat): typeToString should take enclosingDeclaration as input, once we have implemented enclosingDeclaration
-            writeTypeToWriter(type, writer, enclosingDeclaration, flags);
-        }
-
-        function writeTypeToWriter(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) {
+        function writeType(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) {
             var typeStack: Type[];
             return writeType(type, /*allowFunctionOrConstructorTypeLiteral*/ true);
 
@@ -1156,19 +1165,19 @@ module ts {
                 else {
                     // Should never get here
                     // { ... }
-                    writer.writeKind("{", SymbolDisplayPartKind.punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.space);
-                    writer.writeKind("...", SymbolDisplayPartKind.punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.space);
-                    writer.writeKind("}", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.OpenBraceToken);
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.DotDotDotToken);
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.CloseBraceToken);
                 }
             }
 
             function writeTypeList(types: Type[]) {
                 for (var i = 0; i < types.length; i++) {
                     if (i > 0) {
-                        writer.writeKind(",", SymbolDisplayPartKind.punctuation);
-                        writer.writeKind(" ", SymbolDisplayPartKind.space);
+                        writePunctuation(writer, SyntaxKind.CommaToken);
+                        writeSpace(writer);
                     }
                     writeType(types[i], /*allowFunctionOrConstructorTypeLiteral*/ true);
                 }
@@ -1179,20 +1188,21 @@ module ts {
                     // If we are writing array element type the arrow style signatures are not allowed as 
                     // we need to surround it by curlies, e.g. { (): T; }[]; as () => T[] would mean something different
                     writeType(type.typeArguments[0], /*allowFunctionOrConstructorTypeLiteral*/ false);
-                    writer.writeKind("[]", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
                 }
                 else {
                     writeSymbol(type.target.symbol, writer, enclosingDeclaration, SymbolFlags.Type);
-                    writer.writeKind("<", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.LessThanToken);
                     writeTypeList(type.typeArguments);
-                    writer.writeKind(">", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.GreaterThanToken);
                 }
             }
 
             function writeTupleType(type: TupleType) {
-                writer.writeKind("[", SymbolDisplayPartKind.punctuation);
+                writePunctuation(writer, SyntaxKind.OpenBracketToken);
                 writeTypeList(type.elementTypes);
-                writer.writeKind("]", SymbolDisplayPartKind.punctuation);
+                writePunctuation(writer, SyntaxKind.CloseBracketToken);
             }
 
             function writeAnonymousType(type: ObjectType, allowFunctionOrConstructorTypeLiteral: boolean) {
@@ -1206,7 +1216,7 @@ module ts {
                 }
                 else if (typeStack && contains(typeStack, type)) {
                     // Recursive usage, use any
-                    writer.writeKind("any", SymbolDisplayPartKind.keyword);
+                    writeKeyword(writer, SyntaxKind.AnyKeyword);
                 }
                 else {
                     if (!typeStack) {
@@ -1236,8 +1246,8 @@ module ts {
             }
 
             function writeTypeofSymbol(type: ObjectType) {
-                writer.writeKind("typeof", SymbolDisplayPartKind.keyword);
-                writer.writeKind(" ", SymbolDisplayPartKind.space);
+                writeKeyword(writer, SyntaxKind.TypeOfKeyword);
+                writeSpace(writer);
                 writeSymbol(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value);
             }
 
@@ -1245,7 +1255,8 @@ module ts {
                 var resolved = resolveObjectTypeMembers(type);
                 if (!resolved.properties.length && !resolved.stringIndexType && !resolved.numberIndexType) {
                     if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
-                        writer.writeKind("{}", SymbolDisplayPartKind.punctuation);
+                        writePunctuation(writer, SyntaxKind.OpenBraceToken);
+                        writePunctuation(writer, SyntaxKind.CloseBraceToken);
                         return;
                     }
 
@@ -1255,54 +1266,56 @@ module ts {
                             return;
                         }
                         if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
-                            writer.writeKind("new", SymbolDisplayPartKind.keyword);
-                            writer.writeKind(" ", SymbolDisplayPartKind.space);
+                            writeKeyword(writer, SyntaxKind.NewKeyword);
+                            writeSpace(writer);
                             writeSignature(resolved.constructSignatures[0], /*arrowStyle*/ true);
                             return;
                         }
                     }
                 }
 
-                writer.writeKind("{", SymbolDisplayPartKind.punctuation);
+                writePunctuation(writer, SyntaxKind.OpenBraceToken);
                 writer.writeLine();
                 writer.increaseIndent();
                 for (var i = 0; i < resolved.callSignatures.length; i++) {
                     writeSignature(resolved.callSignatures[i]);
-                    writer.writeKind(";", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.SemicolonToken);
                     writer.writeLine();
                 }
                 for (var i = 0; i < resolved.constructSignatures.length; i++) {
-                    writer.writeKind("new", SymbolDisplayPartKind.keyword);
-                    writer.writeKind(" ", SymbolDisplayPartKind.space);
+                    writeKeyword(writer, SyntaxKind.NewKeyword);
+                    writeSpace(writer);
 
                     writeSignature(resolved.constructSignatures[i]);
-                    writer.writeKind(";", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.SemicolonToken);
                     writer.writeLine();
                 }
                 if (resolved.stringIndexType) {
                     // [x: string]: 
-                    writer.writeKind("[", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
                     writer.writeKind("x", SymbolDisplayPartKind.parameterName);
-                    writer.writeKind(":", SymbolDisplayPartKind.punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.space);
-                    writer.writeKind("string", SymbolDisplayPartKind.keyword);
-                    writer.writeKind("]:", SymbolDisplayPartKind.punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.space);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
+                    writeKeyword(writer, SyntaxKind.StringKeyword);
+                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
                     writeType(resolved.stringIndexType, /*allowFunctionOrConstructorTypeLiteral*/ true);
-                    writer.writeKind(";", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.SemicolonToken);
                     writer.writeLine();
                 }
                 if (resolved.numberIndexType) {
                     // [x: number]: 
-                    writer.writeKind("[", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
                     writer.writeKind("x", SymbolDisplayPartKind.parameterName);
-                    writer.writeKind(":", SymbolDisplayPartKind.punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.space);
-                    writer.writeKind("number", SymbolDisplayPartKind.keyword);
-                    writer.writeKind("]:", SymbolDisplayPartKind.punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.space);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
+                    writeKeyword(writer, SyntaxKind.NumberKeyword);
+                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
                     writeType(resolved.numberIndexType, /*allowFunctionOrConstructorTypeLiteral*/ true);
-                    writer.writeKind(";", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.SemicolonToken);
                     writer.writeLine();
                 }
                 for (var i = 0; i < resolved.properties.length; i++) {
@@ -1313,78 +1326,78 @@ module ts {
                         for (var j = 0; j < signatures.length; j++) {
                             writeSymbol(p, writer);
                             if (isOptionalProperty(p)) {
-                                writer.writeKind("?", SymbolDisplayPartKind.punctuation);
+                                writePunctuation(writer, SyntaxKind.QuestionToken);
                             }
                             writeSignature(signatures[j]);
-                            writer.writeKind(";", SymbolDisplayPartKind.punctuation);
+                            writePunctuation(writer, SyntaxKind.SemicolonToken);
                             writer.writeLine();
                         }
                     }
                     else {
                         writeSymbol(p, writer);
                         if (isOptionalProperty(p)) {
-                            writer.writeKind("?", SymbolDisplayPartKind.punctuation);
+                            writePunctuation(writer, SyntaxKind.QuestionToken);
                         }
-                        writer.writeKind(":", SymbolDisplayPartKind.punctuation);
-                        writer.writeKind(" ", SymbolDisplayPartKind.space);
+                        writePunctuation(writer, SyntaxKind.ColonToken);
+                        writeSpace(writer);
                         writeType(t, /*allowFunctionOrConstructorTypeLiteral*/ true);
-                        writer.writeKind(";", SymbolDisplayPartKind.punctuation);
+                        writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
                 }
                 writer.decreaseIndent();
-                writer.writeKind("}", SymbolDisplayPartKind.punctuation);
+                writePunctuation(writer, SyntaxKind.CloseBraceToken);
             }
 
             function writeSignature(signature: Signature, arrowStyle?: boolean) {
                 if (signature.typeParameters) {
-                    writer.writeKind("<", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.LessThanToken);
                     for (var i = 0; i < signature.typeParameters.length; i++) {
                         if (i > 0) {
-                            writer.writeKind(",", SymbolDisplayPartKind.punctuation);
-                            writer.writeKind(" ", SymbolDisplayPartKind.space);
+                            writePunctuation(writer, SyntaxKind.CommaToken);
+                            writeSpace(writer);
                         }
                         var tp = signature.typeParameters[i];
                         writeSymbol(tp.symbol, writer);
                         var constraint = getConstraintOfTypeParameter(tp);
                         if (constraint) {
-                            writer.writeKind(" ", SymbolDisplayPartKind.space);
-                            writer.writeKind("extends", SymbolDisplayPartKind.keyword);
-                            writer.writeKind(" ", SymbolDisplayPartKind.space);
+                            writeSpace(writer);
+                            writeKeyword(writer, SyntaxKind.ExtendsKeyword);
+                            writeSpace(writer);
                             writeType(constraint, /*allowFunctionOrConstructorTypeLiteral*/ true);
                         }
                     }
-                    writer.writeKind(">", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.GreaterThanToken);
                 }
-                writer.writeKind("(", SymbolDisplayPartKind.punctuation);
+                writePunctuation(writer, SyntaxKind.OpenParenToken);
                 for (var i = 0; i < signature.parameters.length; i++) {
                     if (i > 0) {
-                        writer.writeKind(",", SymbolDisplayPartKind.punctuation);
-                        writer.writeKind(" ", SymbolDisplayPartKind.space);
+                        writePunctuation(writer, SyntaxKind.CommaToken);
+                        writeSpace(writer);
                     }
                     var p = signature.parameters[i];
                     if (getDeclarationFlagsFromSymbol(p) & NodeFlags.Rest) {
-                        writer.writeKind("...", SymbolDisplayPartKind.punctuation);
+                        writePunctuation(writer, SyntaxKind.DotDotDotToken);
                     }
                     writeSymbol(p, writer);
                     if (p.valueDeclaration.flags & NodeFlags.QuestionMark || (<VariableDeclaration>p.valueDeclaration).initializer) {
-                        writer.writeKind("?", SymbolDisplayPartKind.punctuation);
+                        writePunctuation(writer, SyntaxKind.QuestionToken);
                     }
-                    writer.writeKind(":", SymbolDisplayPartKind.punctuation);
-                    writer.writeKind(" ", SymbolDisplayPartKind.space);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
 
                     writeType(getTypeOfSymbol(p), /*allowFunctionOrConstructorTypeLiteral*/ true);
                 }
 
-                writer.writeKind(")", SymbolDisplayPartKind.punctuation);
+                writePunctuation(writer, SyntaxKind.CloseParenToken);
                 if (arrowStyle) {
-                    writer.writeKind(" ", SymbolDisplayPartKind.space);
-                    writer.writeKind("=>", SymbolDisplayPartKind.punctuation);
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.EqualsGreaterThanToken);
                 }
                 else {
-                    writer.writeKind(":", SymbolDisplayPartKind.punctuation);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
                 }
-                writer.writeKind(" ", SymbolDisplayPartKind.space);
+                writeSpace(writer);
 
                 writeType(getReturnTypeOfSignature(signature), /*allowFunctionOrConstructorTypeLiteral*/ true);
             }
@@ -7567,13 +7580,13 @@ module ts {
             var type = symbol && !(symbol.flags & SymbolFlags.TypeLiteral) ? getTypeOfSymbol(symbol) : getTypeFromTypeNode(location);
 
             emitSymbolWriter.writer = writer;
-            writeTypeToWriter(type, emitSymbolWriter, enclosingDeclaration, flags);
+            writeType(type, emitSymbolWriter, enclosingDeclaration, flags);
         }
 
         function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter) {
             var signature = getSignatureFromDeclaration(signatureDeclaration);
             emitSymbolWriter.writer = writer;
-            writeTypeToWriter(getReturnTypeOfSignature(signature), emitSymbolWriter, enclosingDeclaration, flags);
+            writeType(getReturnTypeOfSignature(signature), emitSymbolWriter, enclosingDeclaration, flags);
         }
 
         function invokeEmitter(targetSourceFile?: SourceFile) {
