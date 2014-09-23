@@ -7,7 +7,6 @@
 /// <reference path='syntax\incrementalParser.ts' />
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='getScriptLexicalStructureWalker.ts' />
-/// <reference path='braceMatcher.ts' />
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='formatting\formatting.ts' />
@@ -2111,7 +2110,7 @@ module ts {
                     if (child.getFullStart() <= position && position < child.getEnd()) {
                         current = child;
                         continue outer;
-                    }                  
+                    }
                 }
                 return current;
             }
@@ -3759,14 +3758,61 @@ module ts {
         }
 
         function getBraceMatchingAtPosition(filename: string, position: number) {
-            filename = TypeScript.switchToForwardSlashes(filename);
-            var syntaxTree = getSyntaxTree(filename);
-            return TypeScript.Services.BraceMatcher.getMatchSpans(syntaxTree, position);
+            var sourceFile = getCurrentSourceFile(filename);
+            var result: TypeScript.TextSpan[] = [];
+
+            var token = getTokenAtPosition(sourceFile, position);
+
+            if (token.getStart(sourceFile) === position) {
+                var matchKind = getMatchingTokenKind(token);
+
+                // Ensure that there is a corresponding token to match ours.
+                if (matchKind) {
+                    var parentElement = token.parent;
+
+                    var childNodes = parentElement.getChildren(sourceFile);
+                    for (var i = 0, n = childNodes.length; i < n; i++) {
+                        var current = childNodes[i];
+
+                        if (current.kind === matchKind) {
+                            var range1 = new TypeScript.TextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
+                            var range2 = new TypeScript.TextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
+
+                            // We want to order the braces when we return the result.
+                            if (range1.start() < range2.start()) {
+                                result.push(range1, range2);
+                            }
+                            else {
+                                result.push(range2, range1);
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return result;
+
+            function getMatchingTokenKind(token: Node): ts.SyntaxKind {
+                switch (token.kind) {
+                    case ts.SyntaxKind.OpenBraceToken:    return ts.SyntaxKind.CloseBraceToken
+                    case ts.SyntaxKind.OpenParenToken:    return ts.SyntaxKind.CloseParenToken;
+                    case ts.SyntaxKind.OpenBracketToken:  return ts.SyntaxKind.CloseBracketToken;
+                    case ts.SyntaxKind.LessThanToken:     return ts.SyntaxKind.GreaterThanToken;
+                    case ts.SyntaxKind.CloseBraceToken:   return ts.SyntaxKind.OpenBraceToken
+                    case ts.SyntaxKind.CloseParenToken:   return ts.SyntaxKind.OpenParenToken;
+                    case ts.SyntaxKind.CloseBracketToken: return ts.SyntaxKind.OpenBracketToken;
+                    case ts.SyntaxKind.GreaterThanToken:  return ts.SyntaxKind.LessThanToken;
+                }
+
+                return undefined;
+            }
         }
 
         function getIndentationAtPosition(filename: string, position: number, editorOptions: EditorOptions) {
             filename = TypeScript.switchToForwardSlashes(filename);
-            
+
             var sourceFile = getCurrentSourceFile(filename);
             var options = new TypeScript.FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
 
