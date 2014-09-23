@@ -4050,13 +4050,13 @@ module ts {
 
     /// Classifier
     export function createClassifier(host: Logger): Classifier {
-        var scanner: Scanner;
-        var noRegexTable: boolean[];
+        var scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false);
 
         /// We do not have a full parser support to know when we should parse a regex or not
         /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
         /// we have a series of divide operator. this list allows us to be more accurate by ruling out 
         /// locations where a regexp cannot exist.
+        var noRegexTable: boolean[];
         if (!noRegexTable) {
             noRegexTable = [];
             noRegexTable[SyntaxKind.Identifier] = true;
@@ -4077,7 +4077,7 @@ module ts {
             var offset = 0;
             var lastTokenOrCommentEnd = 0;
             var lastNonTriviaToken = SyntaxKind.Unknown;
-            
+
             // If we're in a string literal, then prepend: "\
             // (and a newline).  That way when we lex we'll think we're still in a string literal.
             //
@@ -4098,13 +4098,14 @@ module ts {
                     break;
             }
 
+            scanner.setText(text);
+
             var result: ClassificationResult = {
                 finalLexState: EndOfLineState.Start,
                 entries: []
             };
 
-            scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false, text, /*onError*/ undefined, /*onComment*/ undefined);
-
+            
             var token = SyntaxKind.Unknown;
             do {
                 token = scanner.scan();
