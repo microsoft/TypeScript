@@ -168,7 +168,14 @@ describe('Colorization', function () {
                 identifier("var"));
         });
 
-        it("classifies keyword after a dot on previous line", function () {
+        it("classifies a property access with whitespace around the dot", function () {
+            test("   x  .\tfoo ()",
+                ts.EndOfLineState.Start,
+                identifier("x"),
+                identifier("foo"));
+        });
+
+        it("classifies a keyword after a dot on previous line", function () {
             test("var",
                 ts.EndOfLineState.Start,
                 keyword("var"),
