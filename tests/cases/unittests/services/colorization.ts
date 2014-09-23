@@ -36,7 +36,7 @@ describe('Colorization', function () {
         }
         var finalEndOfLineState = classResult[classResult.length - 1];
 
-        assert.equal(position, code.length, "Expected accumilative length of all entries to match the length of the source. expected: " + code.length + ", but got: " + position);
+        assert.equal(position, code.length, "Expected cumulative length of all entries to match the length of the source. expected: " + code.length + ", but got: " + position);
 
         return {
             tuples: tuples,
@@ -84,8 +84,8 @@ describe('Colorization', function () {
                 var actualEntry = getEntryAtPosistion(result, actualEntryPosition);
 
                 assert(actualEntry, "Could not find classification entry for '" + expectedEntry.value + "' at position: " + actualEntryPosition);
-                assert.equal(actualEntry.length, expectedEntry.value.length, "Classification class does not match expected.");
-                assert.equal(actualEntry.class, expectedEntry.class,  "Classification class does not match expected.");
+                assert.equal(actualEntry.class, expectedEntry.class, "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.class] + ", Actual: " + ts.TokenClass[actualEntry.class]);
+                assert.equal(actualEntry.length, expectedEntry.value.length, "Classification length does not match expected. Expected: " + ts.TokenClass[expectedEntry.value.length] + ", Actual: " + ts.TokenClass[actualEntry.length]);
             }
         }
     }
@@ -105,7 +105,7 @@ describe('Colorization', function () {
                 punctuation(";"));
         });
 
-        it("classifies correctelly a comment after a divide operator", function () {
+        it("classifies correctly a comment after a divide operator", function () {
             test("1 / 2 // comment",
                 ts.EndOfLineState.Start,
                 numberLiteral("1"),
@@ -115,7 +115,7 @@ describe('Colorization', function () {
                 comment("// comment"));
         });
 
-        it("classifies correctelly a literal after a divide operator", function () {
+        it("classifies correctly a literal after a divide operator", function () {
             test("1 / 2, 3 / 4",
                 ts.EndOfLineState.Start,
                 numberLiteral("1"),
@@ -127,42 +127,42 @@ describe('Colorization', function () {
                 operator(","));
         });
 
-        it("classifies correctelly an unterminated multi-line string", function () {
+        it("classifies correctly an unterminated multi-line string", function () {
             test("'line1\\",
                 ts.EndOfLineState.Start,
                 stringLiteral("'line1\\"),
                 finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
         });
 
-        it("classifies correctelly the second line of an unterminated multi-line string", function () {
+        it("classifies correctly the second line of an unterminated multi-line string", function () {
             test("\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\"),
                 finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
         });
 
-        it("classifies correctelly the last line of a multi-line string", function () {
+        it("classifies correctly the last line of a multi-line string", function () {
             test("'",
                 ts.EndOfLineState.InSingleQuoteStringLiteral,
                 stringLiteral("'"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
         });
 
-        it("classifies correctelly an unterminated multiline comment", function () {
+        it("classifies correctly an unterminated multiline comment", function () {
             test("/*",
                 ts.EndOfLineState.Start,
                 comment("/*"),
                 finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
-        it("classifies correctelly an unterminated multiline comment with trailing space", function () {
+        it("classifies correctly an unterminated multiline comment with trailing space", function () {
             test("/* ",
                 ts.EndOfLineState.Start,
                 comment("/* "),
                 finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
-        it("classifies correctelly a keyword after a dot", function () {
+        it("classifies correctly a keyword after a dot", function () {
             test("a.var",
                 ts.EndOfLineState.Start,
                 identifier("var"));
