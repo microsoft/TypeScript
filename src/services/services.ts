@@ -45,6 +45,7 @@ module ts {
         getFlags(): SymbolFlags;
         getName(): string;
         getDeclarations(): Declaration[];
+        getDocumentationComment(): string;
     }
 
     export interface Type {
@@ -222,6 +223,9 @@ module ts {
         flags: SymbolFlags;
         name: string;
         declarations: Declaration[];
+
+        // Undefined is used to indicate the value has not been computed. If, after computing, the
+        // symbol has no doc comment, then the empty string will be returned.
         documentationComment: string;
 
         constructor(flags: SymbolFlags, name: string) {
@@ -2390,7 +2394,7 @@ module ts {
                 return undefined;
             }
 
-            var symbol = <SymbolObject>typeInfoResolver.getSymbolInfo(node);
+            var symbol = typeInfoResolver.getSymbolInfo(node);
             if (!symbol) {
                 return undefined;
             }

@@ -6544,9 +6544,7 @@ module ts {
                             // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
                             // Also, we do not need to check this for ambients because there is already
                             // a syntax error if it is not a constant.
-                            if (fullTypeCheck) {
-                                checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
-                            }
+                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
                         }
                     }
                     else if (ambient) {
