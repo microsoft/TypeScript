@@ -1710,8 +1710,8 @@ module ts {
             // not be accessed with a dot (a.1 <- invalid)
             var firstCharCode = symbol.name.charCodeAt(0);
             if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
-                // If the symbol is external module, don't retry the completion list
-                // Also name of modules is invalid in completion list (i.e declare module "http" { var x; } | // <= request completion here, "http" should not be there)
+                // If the symbol is external module, don't show it in the completion list
+                // (i.e declare module "http" { var x; } | // <= request completion here, "http" should not be there)
                 return undefined;
             }
 
