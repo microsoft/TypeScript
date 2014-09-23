@@ -31,9 +31,7 @@ module ts {
                     childNodes.push(node);
                 }
                 else if (node.kind === SyntaxKind.VariableStatement) {
-                    forEach((<VariableStatement>node).declarations, declaration => {
-                        childNodes.push(declaration);
-                    });
+                    childNodes.push.apply(childNodes, (<VariableStatement>node).declarations);
                 }
             }
 
