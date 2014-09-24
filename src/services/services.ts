@@ -1528,7 +1528,7 @@ module ts {
             isAnyFunction(node.parent) && (<FunctionDeclaration>node.parent).name === node;
     }
 
-    /// Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 }
+    /** Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 } */
     function isNameOfPropertyAssignment(node: Node): boolean {
         return (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
             node.parent.kind === SyntaxKind.PropertyAssignment && (<PropertyDeclaration>node.parent).name === node;
@@ -1747,9 +1747,11 @@ module ts {
             fullTypeCheckChecker_doNotAccessDirectly = undefined;
         }
 
-        /// Clean up any semantic caches that are not needed. 
-        /// The host can call this method if it wants to jettison unused memory.
-        /// We will just dump the typeChecker and recreate a new one. this should have the effect of destroying all the semantic caches.
+        /**
+         * Clean up any semantic caches that are not needed. 
+         * The host can call this method if it wants to jettison unused memory.
+         * We will just dump the typeChecker and recreate a new one. this should have the effect of destroying all the semantic caches.
+         */
         function cleanupSemanticCache(): void {
             if (program) {
                 typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
@@ -1773,8 +1775,10 @@ module ts {
             return program.getDiagnostics(getSourceFile(filename).getSourceFile());
         }
 
-        // getSemanticDiagnostiscs return array of Diagnostics. If '-d' is not enabled, only report semantic errors
-        // If '-d' enabled, report both semantic and emitter errors 
+        /**
+         * getSemanticDiagnostiscs return array of Diagnostics. If '-d' is not enabled, only report semantic errors
+         * If '-d' enabled, report both semantic and emitter errors  
+         */
         function getSemanticDiagnostics(filename: string) {
             synchronizeHostData();
 
