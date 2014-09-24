@@ -731,18 +731,8 @@ module ts {
     }
 
     export class TextChange {
-        constructor(public span: TypeScript.TextSpan, public newText: string) {
-        }
-
-        static createInsert(pos: number, newText: string): TextChange {
-            return new TextChange(new TypeScript.TextSpan(pos, 0), newText);
-        }
-        static createDelete(start: number, end: number): TextChange {
-            return new TextChange(TypeScript.TextSpan.fromBounds(start, end), "");
-        }
-        static createReplace(start: number, end: number, newText: string): TextChange {
-            return new TextChange(TypeScript.TextSpan.fromBounds(start, end), newText);
-        }
+        span: TypeScript.TextSpan;
+        newText: string;
     }
 
     export interface ReferenceEntry {
