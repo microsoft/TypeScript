@@ -101,7 +101,7 @@ module ts {
             };
         }
 
-        function createTextWriter(writeSymbol: (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags)=> void): EmitTextWriter {
+        function createTextWriter(trackSymbol: (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags)=> void): EmitTextWriter {
             var output = "";
             var indent = 0;
             var lineStart = true;
@@ -149,7 +149,7 @@ module ts {
 
             return {
                 write: write,
-                writeSymbol: writeSymbol,
+                trackSymbol: trackSymbol,
                 rawWrite: rawWrite,
                 writeLiteral: writeLiteral,
                 writeLine: writeLine,
@@ -182,7 +182,7 @@ module ts {
             });
         }
 
-        function emitComments(comments: Comment[], trailingSeparator: boolean, writer: EmitTextWriter, writeComment: (comment: Comment, writer: EmitTextWriter) => void) {
+        function emitComments(comments: CommentRange[], trailingSeparator: boolean, writer: EmitTextWriter, writeComment: (comment: CommentRange, writer: EmitTextWriter) => void) {
             var emitLeadingSpace = !trailingSeparator;
             forEach(comments, comment => {
                 if (emitLeadingSpace) {
@@ -203,7 +203,7 @@ module ts {
             });
         }
 
-        function emitNewLineBeforeLeadingComments(node: TextRange, leadingComments: Comment[], writer: EmitTextWriter) {
+        function emitNewLineBeforeLeadingComments(node: TextRange, leadingComments: CommentRange[], writer: EmitTextWriter) {
             // If the leading comments start on different line than the start of node, write new line
             if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
                 getLineOfLocalPosition(node.pos) !== getLineOfLocalPosition(leadingComments[0].pos)) {
@@ -211,7 +211,7 @@ module ts {
             }
         }
 
-        function writeCommentRange(comment: Comment, writer: EmitTextWriter) {
+        function writeCommentRange(comment: CommentRange, writer: EmitTextWriter) {
             if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
                 var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
                 var firstCommentLineIndent: number;
@@ -307,7 +307,7 @@ module ts {
         }
 
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
-            var writer = createTextWriter(writeSymbol);
+            var writer = createTextWriter(trackSymbol);
             var write = writer.write;
             var writeLine = writer.writeLine;
             var increaseIndent = writer.increaseIndent;
@@ -363,7 +363,7 @@ module ts {
             /** Sourcemap data that will get encoded */
             var sourceMapData: SourceMapData;
 
-            function writeSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) { }
+            function trackSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) { }
 
             function initializeEmitterWithSourceMaps() {
                 var sourceMapDir: string; // The directory in which sourcemap will be
@@ -585,7 +585,7 @@ module ts {
                     sourceMapNameIndices.pop();
                 };
 
-                function writeCommentRangeWithMap(comment: Comment, writer: EmitTextWriter) {
+                function writeCommentRangeWithMap(comment: CommentRange, writer: EmitTextWriter) {
                     recordSourceMapSpan(comment.pos);
                     writeCommentRange(comment, writer);
                     recordSourceMapSpan(comment.end);
@@ -748,22 +748,45 @@ module ts {
                 }
             }
 
-            function emitCommaList(nodes: Node[], count?: number) {
-                if (!(count >= 0)) count = nodes.length;
-                if (nodes) {
-                    for (var i = 0; i < count; i++) {
-                        if (i) write(", ");
-                        emit(nodes[i]);
+            function emitTrailingCommaIfPresent(nodeList: NodeArray<Node>, isMultiline: boolean): void {
+                if (nodeList.hasTrailingComma) {
+                    write(",");
+                    if (isMultiline) {
+                        writeLine();
                     }
                 }
             }
 
-            function emitMultiLineList(nodes: Node[]) {
+            function emitCommaList(nodes: NodeArray<Node>, includeTrailingComma: boolean, count?: number) {
+                if (!(count >= 0)) {
+                    count = nodes.length;
+                }
+                if (nodes) {
+                    for (var i = 0; i < count; i++) {
+                        if (i) {
+                            write(", ");
+                        }
+                        emit(nodes[i]);
+                    }
+
+                    if (includeTrailingComma) {
+                        emitTrailingCommaIfPresent(nodes, /*isMultiline*/ false);
+                    }
+                }
+            }
+
+            function emitMultiLineList(nodes: NodeArray<Node>, includeTrailingComma: boolean) {
                 if (nodes) {
                     for (var i = 0; i < nodes.length; i++) {
-                        if (i) write(",");
+                        if (i) {
+                            write(",");
+                        }
                         writeLine();
                         emit(nodes[i]);
+                    }
+
+                    if (includeTrailingComma) {
+                        emitTrailingCommaIfPresent(nodes, /*isMultiline*/ true);
                     }
                 }
             }
@@ -876,14 +899,14 @@ module ts {
                 if (node.flags & NodeFlags.MultiLine) {
                     write("[");
                     increaseIndent();
-                    emitMultiLineList(node.elements);
+                    emitMultiLineList(node.elements, /*includeTrailingComma*/ true);
                     decreaseIndent();
                     writeLine();
                     write("]");
                 }
                 else {
                     write("[");
-                    emitCommaList(node.elements);
+                    emitCommaList(node.elements, /*includeTrailingComma*/ true);
                     write("]");
                 }
             }
@@ -895,14 +918,14 @@ module ts {
                 else if (node.flags & NodeFlags.MultiLine) {
                     write("{");
                     increaseIndent();
-                    emitMultiLineList(node.properties);
+                    emitMultiLineList(node.properties, /*includeTrailingComma*/ compilerOptions.target >= ScriptTarget.ES5);
                     decreaseIndent();
                     writeLine();
                     write("}");
                 }
                 else {
                     write("{ ");
-                    emitCommaList(node.properties);
+                    emitCommaList(node.properties, /*includeTrailingComma*/ compilerOptions.target >= ScriptTarget.ES5);
                     write(" }");
                 }
             }
@@ -916,14 +939,15 @@ module ts {
             }
 
             function emitPropertyAccess(node: PropertyAccess) {
-                var text = resolver.getPropertyAccessSubstitution(node);
-                if (text) {
-                    write(text);
-                    return;
+                var constantValue = resolver.getConstantValue(node);
+                if (constantValue !== undefined) {
+                    write(constantValue.toString() + " /* " + identifierToString(node.right) + " */");
                 }
-                emit(node.left);
-                write(".");
-                emit(node.right);
+                else {
+                    emit(node.left);
+                    write(".");
+                    emit(node.right);
+                }
             }
 
             function emitIndexedAccess(node: IndexedAccess) {
@@ -948,13 +972,13 @@ module ts {
                     emitThis(node.func);
                     if (node.arguments.length) {
                         write(", ");
-                        emitCommaList(node.arguments);
+                        emitCommaList(node.arguments, /*includeTrailingComma*/ false);
                     }
                     write(")");
                 }
                 else {
                     write("(");
-                    emitCommaList(node.arguments);
+                    emitCommaList(node.arguments, /*includeTrailingComma*/ false);
                     write(")");
                 }
             }
@@ -964,7 +988,7 @@ module ts {
                 emit(node.func);
                 if (node.arguments) {
                     write("(");
-                    emitCommaList(node.arguments);
+                    emitCommaList(node.arguments, /*includeTrailingComma*/ false);
                     write(")");
                 }
             }
@@ -1137,7 +1161,7 @@ module ts {
                 if (node.declarations) {
                     emitToken(SyntaxKind.VarKeyword, endPos);
                     write(" ");
-                    emitCommaList(node.declarations);
+                    emitCommaList(node.declarations, /*includeTrailingComma*/ false);
                 }
                 if (node.initializer) {
                     emit(node.initializer);
@@ -1285,7 +1309,7 @@ module ts {
             function emitVariableStatement(node: VariableStatement) {
                 emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) write("var ");
-                emitCommaList(node.declarations);
+                emitCommaList(node.declarations, /*includeTrailingComma*/ false);
                 write(";");
                 emitTrailingComments(node);
             }
@@ -1394,7 +1418,7 @@ module ts {
                 increaseIndent();
                 write("(");
                 if (node) {
-                    emitCommaList(node.parameters, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
+                    emitCommaList(node.parameters, /*includeTrailingComma*/ false, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
                 }
                 write(")");
                 decreaseIndent();
@@ -2155,7 +2179,7 @@ module ts {
 
             function getLeadingCommentsWithoutDetachedComments() {
                 // get the leading comments from detachedPos
-                var leadingComments = getLeadingComments(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                var leadingComments = getLeadingCommentRanges(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
                 if (detachedCommentsInfo.length - 1) {
                     detachedCommentsInfo.pop();
                 }
@@ -2169,14 +2193,14 @@ module ts {
             function getLeadingCommentsToEmit(node: Node) {
                 // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
-                    var leadingComments: Comment[];
+                    var leadingComments: CommentRange[];
                     if (hasDetachedComments(node.pos)) {
                         // get comments without detached comments
                         leadingComments = getLeadingCommentsWithoutDetachedComments();
                     }
                     else {
                         // get the leading comments from the node
-                        leadingComments = getLeadingCommentsOfNode(node, currentSourceFile);
+                        leadingComments = getLeadingCommentRangesOfNode(node, currentSourceFile);
                     }
                     return leadingComments;
                 }
@@ -2192,21 +2216,21 @@ module ts {
             function emitTrailingDeclarationComments(node: Node) {
                 // Emit the trailing comments only if the parent's end doesn't match
                 if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
-                    var trailingComments = getTrailingComments(currentSourceFile.text, node.end);
+                    var trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.end);
                     // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                     emitComments(trailingComments, /*trailingSeparator*/ false, writer, writeComment);
                 }
             }
 
             function emitLeadingCommentsOfLocalPosition(pos: number) {
-                var leadingComments: Comment[];
+                var leadingComments: CommentRange[];
                 if (hasDetachedComments(pos)) {
                     // get comments without detached comments
                     leadingComments = getLeadingCommentsWithoutDetachedComments();
                 }
                 else {
                     // get the leading comments from the node
-                    leadingComments = getLeadingComments(currentSourceFile.text, pos);
+                    leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
                 }
                 emitNewLineBeforeLeadingComments({ pos: pos, end: pos }, leadingComments, writer);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
@@ -2214,10 +2238,10 @@ module ts {
             }
 
             function emitDetachedCommentsAtPosition(node: TextRange) {
-                var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
+                var leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
                 if (leadingComments) {
-                    var detachedComments: Comment[] = [];
-                    var lastComment: Comment;
+                    var detachedComments: CommentRange[] = [];
+                    var lastComment: CommentRange;
 
                     forEach(leadingComments, comment => {
                         if (lastComment) {
@@ -2261,7 +2285,7 @@ module ts {
             function emitPinnedOrTripleSlashCommentsOfNode(node: Node) {
                 var pinnedComments = ts.filter(getLeadingCommentsToEmit(node), isPinnedOrTripleSlashComment);
 
-                function isPinnedOrTripleSlashComment(comment: Comment) {
+                function isPinnedOrTripleSlashComment(comment: CommentRange) {
                     if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
                         return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
                     }
@@ -2300,7 +2324,7 @@ module ts {
         }
 
         function emitDeclarations(jsFilePath: string, root?: SourceFile) {
-            var writer = createTextWriter(writeSymbol);
+            var writer = createTextWriter(trackSymbol);
             var write = writer.write;
             var writeLine = writer.writeLine;
             var increaseIndent = writer.increaseIndent;
@@ -2328,7 +2352,7 @@ module ts {
                 var oldWriter = writer;
                 forEach(importDeclarations, aliasToWrite => {
                     var aliasEmitInfo = forEach(aliasDeclarationEmitInfo, declEmitInfo => declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined);
-                    writer = createTextWriter(writeSymbol);
+                    writer = createTextWriter(trackSymbol);
                     for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
                         writer.increaseIndent();
                     }
@@ -2339,10 +2363,9 @@ module ts {
                 writer = oldWriter;
             }
 
-            function writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
+            function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
                 var symbolAccesibilityResult = resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning);
                 if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
-                    resolver.writeSymbol(symbol, enclosingDeclaration, meaning, writer);
 
                     // write the aliases
                     if (symbolAccesibilityResult && symbolAccesibilityResult.aliasesToMakeVisible) {
