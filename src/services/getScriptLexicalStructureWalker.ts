@@ -1,4 +1,3 @@
-///<reference path='references.ts' />
 
 module TypeScript.Services {
     export class NavigationBarItemGetter {
