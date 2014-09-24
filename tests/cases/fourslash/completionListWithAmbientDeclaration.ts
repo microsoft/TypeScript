@@ -6,5 +6,4 @@
 //// /**/
 
 goTo.marker();
-debugger
 verifyNegatable.completionListContains("http");
