@@ -2174,10 +2174,10 @@ module ts {
                         // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
                         // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
                         // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
-                        if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && isEvalOrArgumentsIdentifier(operand)) {
+                        if ((operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken) && isEvalOrArgumentsIdentifier(operand)) {
                             reportInvalidUseInStrictMode(<Identifier>operand);
                         }
-                        else if (token === SyntaxKind.DeleteKeyword && operand.kind === SyntaxKind.Identifier) {
+                        else if (operator === SyntaxKind.DeleteKeyword && operand.kind === SyntaxKind.Identifier) {
                             // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its 
                             // UnaryExpression is a direct reference to a variable, function argument, or function name
                             grammarErrorOnNode(operand, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
