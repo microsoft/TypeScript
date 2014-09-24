@@ -684,28 +684,9 @@ module ts {
         dispose(): void;
     }
 
-    export class ClassificationTypeNames {
-        public static comment = "comment";
-        public static identifier = "identifier";
-        public static keyword = "keyword";
-        public static numericLiteral = "number";
-        public static operator = "operator";
-        public static stringLiteral = "string";
-        public static whiteSpace = "whitespace";
-        public static text = "text";
-
-        public static punctuation = "punctuation";
-
-        public static className = "class name";
-        public static enumName = "enum name";
-        public static interfaceName = "interface name";
-        public static moduleName = "module name";
-        public static typeParameterName = "type parameter name";
-    }
-
     export interface ClassifiedSpan {
         textSpan: TypeScript.TextSpan;
-        classificationType: string;
+        classificationType: string; // ClassificationTypeNames
     }
 
     export interface NavigationBarItem {
@@ -1015,6 +996,25 @@ module ts {
         static exportedModifier = "export";
         static ambientModifier = "declare";
         static staticModifier = "static";
+    }
+
+    export class ClassificationTypeNames {
+        public static comment = "comment";
+        public static identifier = "identifier";
+        public static keyword = "keyword";
+        public static numericLiteral = "number";
+        public static operator = "operator";
+        public static stringLiteral = "string";
+        public static whiteSpace = "whitespace";
+        public static text = "text";
+
+        public static punctuation = "punctuation";
+
+        public static className = "class name";
+        public static enumName = "enum name";
+        public static interfaceName = "interface name";
+        public static moduleName = "module name";
+        public static typeParameterName = "type parameter name";
     }
 
     enum MatchKind {
