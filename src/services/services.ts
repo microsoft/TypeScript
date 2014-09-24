@@ -7,7 +7,6 @@
 /// <reference path='syntax\incrementalParser.ts' />
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='getScriptLexicalStructureWalker.ts' />
-/// <reference path='braceMatcher.ts' />
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='signatureHelp.ts' />
@@ -48,6 +47,7 @@ module ts {
         getFlags(): SymbolFlags;
         getName(): string;
         getDeclarations(): Declaration[];
+        getDocumentationComment(): string;
     }
 
     export interface Type {
@@ -99,9 +99,7 @@ module ts {
         private _children: Node[];
 
         public getSourceFile(): SourceFile {
-            var node: Node = this;
-            while (node.kind !== SyntaxKind.SourceFile) node = node.parent;
-            return <SourceFile>node;
+            return getSourceFileOfNode(this);
         }
 
         public getStart(sourceFile?: SourceFile): number {
@@ -227,18 +225,175 @@ module ts {
         flags: SymbolFlags;
         name: string;
         declarations: Declaration[];
+
+        // Undefined is used to indicate the value has not been computed. If, after computing, the
+        // symbol has no doc comment, then the empty string will be returned.
+        documentationComment: string;
+
         constructor(flags: SymbolFlags, name: string) {
             this.flags = flags;
             this.name = name;
         }
+
         getFlags(): SymbolFlags {
             return this.flags;
         }
+
         getName(): string {
             return this.name;
         }
+
         getDeclarations(): Declaration[] {
             return this.declarations;
+        }
+
+        getDocumentationComment(): string {
+            if (this.documentationComment === undefined) {
+                var lines: string[] = [];
+
+                // Get the doc comments from all the declarations of this symbol, and merge them
+                // into one single doc comment.
+                var declarations = this.getDeclarations();
+                if (declarations) {
+                    for (var i = 0, n = declarations.length; i < n; i++) {
+                        this.processDocumentationCommentDeclaration(lines, declarations[0]);
+                    }
+                }
+
+                // TODO: get the newline info from the host.
+                this.documentationComment = lines.join("\r\n");
+            }
+
+            return this.documentationComment;
+        }
+
+        private processDocumentationCommentDeclaration(lines: string[], declaration: Node) {
+            var commentRanges = getLeadingCommentRangesOfNode(declaration);
+            if (commentRanges) {
+                var sourceFile = declaration.getSourceFile();
+
+                for (var i = 0, n = commentRanges.length; i < n; i++) {
+                    this.processDocumentationCommentRange(
+                        lines, sourceFile, commentRanges[0]);
+                }
+            }
+        }
+
+        private processDocumentationCommentRange(lines: string[], sourceFile: SourceFile, commentRange: CommentRange) {
+            // We only care about well-formed /** */ comments
+            if (commentRange.end - commentRange.pos > "/**/".length &&
+                sourceFile.text.substr(commentRange.pos, "/**".length) === "/**" &&
+                sourceFile.text.substr(commentRange.end - "*/".length, "*/".length) === "*/") {
+
+                // Put a newline between each converted comment we join together.
+                if (lines.length) {
+                    lines.push("");
+                }
+
+                var startLineAndChar = sourceFile.getLineAndCharacterFromPosition(commentRange.pos);
+                var endLineAndChar = sourceFile.getLineAndCharacterFromPosition(commentRange.end);
+
+                if (startLineAndChar.line === endLineAndChar.line) {
+                    // A single line doc comment.  Just extract the text between the
+                    // comment markers and add that to the doc comment we're building
+                    // up.
+                    lines.push(sourceFile.text.substring(commentRange.pos + "/**".length, commentRange.end - "*/".length).trim());
+                }
+                else {
+                    this.processMultiLineDocumentationCommentRange(sourceFile, commentRange, startLineAndChar, endLineAndChar, lines);
+                }
+            }
+        }
+
+        private processMultiLineDocumentationCommentRange(
+            sourceFile: SourceFile, commentRange: CommentRange, 
+            startLineAndChar: { line: number; character: number },
+            endLineAndChar: { line: number; character: number },
+            lines: string[]) {
+
+            // Comment spanned multiple lines.  Find the leftmost character 
+            // position in each line, and use that to determine what we should
+            // trim off, and what part of the line to keep.
+            // i.e.   if the comment looks like:
+            // 
+            // /** Foo
+            //   * Bar
+            //   *    Baz
+            //   */
+            //
+            // Then we'll want to add:
+            // Foo
+            // Bar
+            //    Baz
+            var trimLength: number = undefined;
+            for (var iLine = startLineAndChar.line + 1; iLine <= endLineAndChar.line; iLine++) {
+                var lineStart = sourceFile.getPositionFromLineAndCharacter(iLine, /*character:*/ 1);
+                var lineEnd = iLine === endLineAndChar.line
+                    ? commentRange.end - "*/".length
+                    : sourceFile.getPositionFromLineAndCharacter(iLine + 1, 1);
+                var docCommentTriviaLength = this.skipDocumentationCommentTrivia(sourceFile.text, lineStart, lineEnd);
+
+                if (trimLength === undefined || (docCommentTriviaLength && docCommentTriviaLength < trimLength)) {
+                    trimLength = docCommentTriviaLength;
+                }
+            }
+
+            // Add the first line in.
+            var firstLine = sourceFile.text.substring(
+                commentRange.pos + "/**".length,
+                sourceFile.getPositionFromLineAndCharacter(startLineAndChar.line + 1, /*character:*/ 1)).trim();
+            if (firstLine !== "") {
+                lines.push(firstLine);
+            }
+
+            // For all the lines up to the last (but not including the last), add the contents
+            // of the line (with the length up to the 
+            for (var iLine = startLineAndChar.line + 1; iLine < endLineAndChar.line; iLine++) {
+                var line = this.trimRight(sourceFile.text.substring(
+                    sourceFile.getPositionFromLineAndCharacter(iLine, /*character*/ 1),
+                    sourceFile.getPositionFromLineAndCharacter(iLine + 1, /*character*/ 1))).substr(trimLength);
+
+                lines.push(line);
+            }
+
+            // Add the last line if there is any actual text before the */
+            var lastLine = this.trimRight(sourceFile.text.substring(
+                sourceFile.getPositionFromLineAndCharacter(endLineAndChar.line, /*character:*/ 1),
+                commentRange.end - "*/".length)).substr(trimLength);
+
+            if (lastLine !== "") {
+                lines.push(lastLine);
+            }
+        }
+
+        private trimRight(val: string) {
+            return val.replace(/(\n|\r|\s)+$/, '');
+        }
+
+        private skipDocumentationCommentTrivia(text: string, lineStart: number, lineEnd: number): number {
+            var seenAsterisk = false;
+            var lineLength = lineEnd - lineStart;
+            for (var i = 0; i < lineLength; i++) {
+                var char = text.charCodeAt(i + lineStart);
+                if (char === CharacterCodes.asterisk && !seenAsterisk) {
+                    // Ignore the first asterisk we see.  We want to trim out the line of *'s 
+                    // commonly seen at the start of a doc comment.
+                    seenAsterisk = true;
+                    continue;
+                }
+                else if (isLineBreak(char)) {
+                    // This was a blank line.  Just ignore it wrt computing the leading whitespace to
+                    // trim.
+                    break;
+                }
+                else if (!isWhiteSpace(char)) {
+                    // Found a real doc comment character.  Keep track of it so we can determine how
+                    // much of the doc comment leading trivia to trim off.
+                    return i;
+                }
+            }
+
+            return undefined;
         }
     }
 
@@ -497,6 +652,7 @@ module ts {
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
         getTypeAtPosition(fileName: string, position: number): TypeInfo;
+        getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TypeScript.TextSpan;
 
@@ -652,6 +808,15 @@ module ts {
         prefix: string;
         suffix: string;
         text: string;
+    }
+
+    export class QuickInfo {
+        constructor(public kind: string,
+                    public kindModifiers: string,
+                    public textSpan: TypeScript.TextSpan,
+                    public displayParts: SymbolDisplayPart[],
+                    public documentation: SymbolDisplayPart[]) {
+        }
     }
 
     export class TypeInfo {
@@ -1470,11 +1635,14 @@ module ts {
         var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.
         var program: Program;
+
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
+
         // the sole purpose of this checker is to return semantic diagnostics
         // creation is deferred - use getFullTypeCheckChecker to get instance
         var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
+
         var useCaseSensitivefilenames = false;
         var sourceFilesByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
@@ -1715,11 +1883,10 @@ module ts {
                 return undefined;
             }
 
-            var declarations = symbol.getDeclarations();
             return {
                 name: displayName,
                 kind: getSymbolKind(symbol),
-                kindModifiers: declarations ? getNodeModifiers(declarations[0]) : ScriptElementKindModifier.none
+                kindModifiers: getSymbolModifiers(symbol)
             };
         }
 
@@ -2166,6 +2333,12 @@ module ts {
             }
         }
 
+        function getSymbolModifiers(symbol: Symbol): string {
+            return symbol && symbol.declarations && symbol.declarations.length > 0
+                ? getNodeModifiers(symbol.declarations[0])
+                : ScriptElementKindModifier.none;
+        }
+
         function getNodeModifiers(node: Node): string {
             var flags = node.flags;
             var result: string[] = [];
@@ -2179,7 +2352,114 @@ module ts {
             return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
         }
 
-        /// QuickInfo
+        function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
+            synchronizeHostData();
+             
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
+            var node = getNodeAtPosition(sourceFile, position);
+            if (!node) {
+                return undefined;
+            }
+
+            var symbol = typeInfoResolver.getSymbolInfo(node);
+            if (!symbol) {
+                return undefined;
+            }
+
+            var documentation = symbol.getDocumentationComment();
+            var documentationParts = documentation === "" ? [] : [new SymbolDisplayPart(documentation, SymbolDisplayPartKind.text, /*symbol:*/ null)];
+
+            // Having all this logic here is pretty unclean.  Consider moving to the roslyn model
+            // where all symbol display logic is encapsulated into visitors and options.
+            var totalParts: SymbolDisplayPart[] = [];
+
+            if (symbol.flags & SymbolFlags.Class) {
+                totalParts.push(new SymbolDisplayPart("class", SymbolDisplayPartKind.keyword, undefined));
+                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
+            }
+            else if (symbol.flags & SymbolFlags.Interface) {
+                totalParts.push(new SymbolDisplayPart("interface", SymbolDisplayPartKind.keyword, undefined));
+                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
+            }
+            else if (symbol.flags & SymbolFlags.Enum) {
+                totalParts.push(new SymbolDisplayPart("enum", SymbolDisplayPartKind.keyword, undefined));
+                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
+            }
+            else if (symbol.flags & SymbolFlags.Module) {
+                totalParts.push(new SymbolDisplayPart("module", SymbolDisplayPartKind.keyword, undefined));
+                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
+            }
+            else if (symbol.flags & SymbolFlags.TypeParameter) {
+                totalParts.push(new SymbolDisplayPart("(", SymbolDisplayPartKind.punctuation, undefined));
+                totalParts.push(new SymbolDisplayPart("type parameter", SymbolDisplayPartKind.text, undefined));
+                totalParts.push(new SymbolDisplayPart(")", SymbolDisplayPartKind.punctuation, undefined));
+                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol));
+            }
+            else {
+                totalParts.push(new SymbolDisplayPart("(", SymbolDisplayPartKind.punctuation, undefined));
+                var text: string;
+
+                if (symbol.flags & SymbolFlags.Property) { text = "property" }
+                else if (symbol.flags & SymbolFlags.EnumMember) { text = "enum member" }
+                else if (symbol.flags & SymbolFlags.Function) { text = "function" }
+                else if (symbol.flags & SymbolFlags.Variable) { text = "variable" }
+                else if (symbol.flags & SymbolFlags.Method) { text = "method" }
+
+                if (!text) {
+                    return undefined;
+                }
+
+                totalParts.push(new SymbolDisplayPart(text, SymbolDisplayPartKind.text, undefined));
+                totalParts.push(new SymbolDisplayPart(")", SymbolDisplayPartKind.punctuation, undefined));
+                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+
+                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, getContainerNode(node)));
+
+                var type = typeInfoResolver.getTypeOfSymbol(symbol);
+
+                if (symbol.flags & SymbolFlags.Property ||
+                    symbol.flags & SymbolFlags.Variable) {
+
+                    if (type) {
+                        totalParts.push(new SymbolDisplayPart(":", SymbolDisplayPartKind.punctuation, undefined));
+                        totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                        totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type, getContainerNode(node)));
+                    }
+                }
+                else if (symbol.flags & SymbolFlags.Function ||
+                    symbol.flags & SymbolFlags.Method) {
+                    if (type) {
+                        totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type, getContainerNode(node)));
+                    }
+                }
+                else if (symbol.flags & SymbolFlags.EnumMember) {
+                    var declaration = symbol.declarations[0];
+                    if (declaration.kind === SyntaxKind.EnumMember) {
+                        var constantValue = typeInfoResolver.getEnumMemberValue(<EnumMember>declaration);
+                        if (constantValue !== undefined) {
+                            totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                            totalParts.push(new SymbolDisplayPart("=", SymbolDisplayPartKind.operator, undefined));
+                            totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                            totalParts.push(new SymbolDisplayPart(constantValue.toString(), SymbolDisplayPartKind.numericLiteral, undefined));
+                        }
+                    }
+                }
+            }
+
+            return new QuickInfo(
+                getSymbolKind(symbol),
+                getSymbolModifiers(symbol),
+                new TypeScript.TextSpan(node.getStart(), node.getWidth()),
+                totalParts,
+                documentationParts);
+        }
+
         function getTypeAtPosition(fileName: string, position: number): TypeInfo {
             synchronizeHostData();
 
@@ -3750,14 +4030,61 @@ module ts {
         }
 
         function getBraceMatchingAtPosition(filename: string, position: number) {
-            filename = TypeScript.switchToForwardSlashes(filename);
-            var syntaxTree = getSyntaxTree(filename);
-            return TypeScript.Services.BraceMatcher.getMatchSpans(syntaxTree, position);
+            var sourceFile = getCurrentSourceFile(filename);
+            var result: TypeScript.TextSpan[] = [];
+
+            var token = getTokenAtPosition(sourceFile, position);
+
+            if (token.getStart(sourceFile) === position) {
+                var matchKind = getMatchingTokenKind(token);
+
+                // Ensure that there is a corresponding token to match ours.
+                if (matchKind) {
+                    var parentElement = token.parent;
+
+                    var childNodes = parentElement.getChildren(sourceFile);
+                    for (var i = 0, n = childNodes.length; i < n; i++) {
+                        var current = childNodes[i];
+
+                        if (current.kind === matchKind) {
+                            var range1 = new TypeScript.TextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
+                            var range2 = new TypeScript.TextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
+
+                            // We want to order the braces when we return the result.
+                            if (range1.start() < range2.start()) {
+                                result.push(range1, range2);
+                            }
+                            else {
+                                result.push(range2, range1);
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return result;
+
+            function getMatchingTokenKind(token: Node): ts.SyntaxKind {
+                switch (token.kind) {
+                    case ts.SyntaxKind.OpenBraceToken:    return ts.SyntaxKind.CloseBraceToken
+                    case ts.SyntaxKind.OpenParenToken:    return ts.SyntaxKind.CloseParenToken;
+                    case ts.SyntaxKind.OpenBracketToken:  return ts.SyntaxKind.CloseBracketToken;
+                    case ts.SyntaxKind.LessThanToken:     return ts.SyntaxKind.GreaterThanToken;
+                    case ts.SyntaxKind.CloseBraceToken:   return ts.SyntaxKind.OpenBraceToken
+                    case ts.SyntaxKind.CloseParenToken:   return ts.SyntaxKind.OpenParenToken;
+                    case ts.SyntaxKind.CloseBracketToken: return ts.SyntaxKind.OpenBracketToken;
+                    case ts.SyntaxKind.GreaterThanToken:  return ts.SyntaxKind.LessThanToken;
+                }
+
+                return undefined;
+            }
         }
 
         function getIndentationAtPosition(filename: string, position: number, editorOptions: EditorOptions) {
             filename = TypeScript.switchToForwardSlashes(filename);
-            
+
             var sourceFile = getCurrentSourceFile(filename);
             var options = new TypeScript.FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
 
@@ -3871,8 +4198,8 @@ module ts {
                     }
 
                     // Looks to be within the trivia. See if we can find the comment containing it.
-                    if (!getContainingComment(getTrailingComments(fileContents, token.getFullStart()), matchPosition) &&
-                        !getContainingComment(getLeadingComments(fileContents, token.getFullStart()), matchPosition)) {
+                    if (!getContainingComment(getTrailingCommentRanges(fileContents, token.getFullStart()), matchPosition) &&
+                        !getContainingComment(getLeadingCommentRanges(fileContents, token.getFullStart()), matchPosition)) {
                         continue;
                     }
 
@@ -3959,7 +4286,7 @@ module ts {
                 return new RegExp(regExpString, "gim");
             }
 
-            function getContainingComment(comments: Comment[], position: number): Comment {
+            function getContainingComment(comments: CommentRange[], position: number): CommentRange {
                 if (comments) {
                     for (var i = 0, n = comments.length; i < n; i++) {
                         var comment = comments[i];
@@ -3997,7 +4324,7 @@ module ts {
                     var kind = getSymbolKind(symbol);
                     if (kind) {
                         return RenameInfo.Create(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
-                            getNodeModifiers(symbol.getDeclarations()[0]),
+                            getSymbolModifiers(symbol),
                             new TypeScript.TextSpan(node.getStart(), node.getWidth()));
                     }
                 }
@@ -4019,6 +4346,7 @@ module ts {
             getTypeAtPosition: getTypeAtPosition,
             getSignatureHelpItems: getSignatureHelpItems,
             getSignatureHelpCurrentArgumentState: getSignatureHelpCurrentArgumentState,
+            getQuickInfoAtPosition: getQuickInfoAtPosition,
             getDefinitionAtPosition: getDefinitionAtPosition,
             getReferencesAtPosition: getReferencesAtPosition,
             getOccurrencesAtPosition: getOccurrencesAtPosition,
@@ -4041,13 +4369,13 @@ module ts {
 
     /// Classifier
     export function createClassifier(host: Logger): Classifier {
-        var scanner: Scanner;
-        var noRegexTable: boolean[];
+        var scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false);
 
         /// We do not have a full parser support to know when we should parse a regex or not
         /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
         /// we have a series of divide operator. this list allows us to be more accurate by ruling out 
         /// locations where a regexp cannot exist.
+        var noRegexTable: boolean[];
         if (!noRegexTable) {
             noRegexTable = [];
             noRegexTable[SyntaxKind.Identifier] = true;
@@ -4067,8 +4395,7 @@ module ts {
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
             var lastTokenOrCommentEnd = 0;
-            var lastToken = SyntaxKind.Unknown;
-            var inUnterminatedMultiLineComment = false;
+            var lastNonTriviaToken = SyntaxKind.Unknown;
 
             // If we're in a string literal, then prepend: "\
             // (and a newline).  That way when we lex we'll think we're still in a string literal.
@@ -4090,27 +4417,31 @@ module ts {
                     break;
             }
 
+            scanner.setText(text);
+
             var result: ClassificationResult = {
                 finalLexState: EndOfLineState.Start,
                 entries: []
             };
 
-            scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ true, text, onError, processComment);
-
+            
             var token = SyntaxKind.Unknown;
             do {
                 token = scanner.scan();
 
-                if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastToken]) {
+                if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastNonTriviaToken]) {
                     if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
                         token = SyntaxKind.RegularExpressionLiteral;
                     }
                 }
-                else if (lastToken === SyntaxKind.DotToken) {
+                else if (lastNonTriviaToken === SyntaxKind.DotToken) {
                     token = SyntaxKind.Identifier;
                 }
 
-                lastToken = token;
+                // Only recall the token if it was *not* trivia.
+                if (!(SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken)) {
+                    lastNonTriviaToken = token;
+                }
 
                 processToken();
             }
@@ -4118,35 +4449,17 @@ module ts {
 
             return result;
 
-
-            function onError(message: DiagnosticMessage): void {
-                inUnterminatedMultiLineComment = message.key === Diagnostics.Asterisk_Slash_expected.key;
-            }
-
-            function processComment(start: number, end: number) {
-                // add Leading white spaces
-                addLeadingWhiteSpace(start, end);
-
-                // add the comment
-                addResult(end - start, TokenClass.Comment);
-            }
-
             function processToken(): void {
                 var start = scanner.getTokenPos();
                 var end = scanner.getTextPos();
-
-                // add Leading white spaces
-                addLeadingWhiteSpace(start, end);
 
                 // add the token
                 addResult(end - start, classFromKind(token));
 
                 if (end >= text.length) {
                     // We're at the end.
-                    if (inUnterminatedMultiLineComment) {
-                        result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
-                    }
-                    else if (token === SyntaxKind.StringLiteral) {
+                    if (token === SyntaxKind.StringLiteral) {
+                        // Check to see if we finished up on a multiline string literal.
                         var tokenText = scanner.getTokenText();
                         if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.backslash) {
                             var quoteChar = tokenText.charCodeAt(0);
@@ -4155,16 +4468,16 @@ module ts {
                                 : EndOfLineState.InSingleQuoteStringLiteral;
                         }
                     }
+                    else if (token === SyntaxKind.MultiLineCommentTrivia) {
+                        // Check to see if the multiline comment was unclosed.
+                        var tokenText = scanner.getTokenText()
+                        if (!(tokenText.length > 3 && // need to avoid catching '/*/'
+                            tokenText.charCodeAt(tokenText.length - 2) === CharacterCodes.asterisk &&
+                            tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.slash)) {
+                            result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
+                        }
+                    }
                 }
-            }
-
-            function addLeadingWhiteSpace(start: number, end: number): void {
-                if (start > lastTokenOrCommentEnd) {
-                    addResult(start - lastTokenOrCommentEnd, TokenClass.Whitespace);
-                }
-
-                // Remember the end of the last token
-                lastTokenOrCommentEnd = end;
             }
 
             function addResult(length: number, classification: TokenClass): void {
@@ -4259,6 +4572,11 @@ module ts {
                     return TokenClass.StringLiteral;
                 case SyntaxKind.RegularExpressionLiteral:
                     return TokenClass.RegExpLiteral;
+                case SyntaxKind.MultiLineCommentTrivia:
+                case SyntaxKind.SingleLineCommentTrivia:
+                    return TokenClass.Comment;
+                case SyntaxKind.WhitespaceTrivia:
+                    return TokenClass.Whitespace;
                 case SyntaxKind.Identifier:
                 default:
                     return TokenClass.Identifier;

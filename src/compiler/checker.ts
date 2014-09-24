@@ -23,6 +23,28 @@ module ts {
         return undefined;
     }
 
+    interface SymbolWriter {
+        writeKind(text: string, kind: SymbolDisplayPartKind): void;
+        writeSymbol(text: string, symbol: Symbol): void;
+        writeLine(): void;
+        increaseIndent(): void;
+        decreaseIndent(): void;
+        clear(): void;
+
+        // Called when the symbol writer encounters a symbol to write.  Currently only used by the
+        // declaration emitter to help determine if it should patch up the final declaration file
+        // with import statements it previously saw (but chose not to emit).
+        trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+    }
+
+    interface DisplayPartsSymbolWriter extends SymbolWriter {
+        displayParts(): SymbolDisplayPart[];
+    }
+
+    interface StringSymbolWriter extends SymbolWriter {
+        string(): string;
+    }
+
     /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
     /// If fullTypeCheck === true,  then the typechecker should do every possible check to produce all errors
     /// If fullTypeCheck === false, the typechecker can take shortcuts and skip checks that only produce errors.
@@ -62,12 +84,15 @@ module ts {
             getTypeOfNode: getTypeOfNode,
             getApparentType: getApparentType,
             typeToString: typeToString,
+            typeToDisplayParts: typeToDisplayParts,
             symbolToString: symbolToString,
+            symbolToDisplayParts: symbolToDisplayParts,
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
             getRootSymbol: getRootSymbol,
             getContextualType: getContextualType,
             getFullyQualifiedName: getFullyQualifiedName,
-            getResolvedSignature: getResolvedSignature
+            getResolvedSignature: getResolvedSignature,
+            getEnumMemberValue: getEnumMemberValue
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -896,106 +921,238 @@ module ts {
                 { accessibility: SymbolAccessibility.NotAccessible, errorSymbolName: firstIdentifierName };
         }
 
+        // Pool writers to avoid needing to allocate them for every symbol we write.
+        var displayPartWriters: DisplayPartsSymbolWriter[] = [];
+        var stringWriters: StringSymbolWriter[] = [];
+
+        function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
+            var flags = symbol.flags;
+
+            if (flags & SymbolFlags.Variable) {
+                return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter
+                    ? SymbolDisplayPartKind.parameterName
+                    : SymbolDisplayPartKind.localName;
+            }
+            else if (flags & SymbolFlags.Property)      { return SymbolDisplayPartKind.propertyName; }
+            else if (flags & SymbolFlags.EnumMember)    { return SymbolDisplayPartKind.enumMemberName; }
+            else if (flags & SymbolFlags.Function)      { return SymbolDisplayPartKind.functionName; }
+            else if (flags & SymbolFlags.Class)         { return SymbolDisplayPartKind.className; }
+            else if (flags & SymbolFlags.Interface)     { return SymbolDisplayPartKind.interfaceName; }
+            else if (flags & SymbolFlags.Enum)          { return SymbolDisplayPartKind.enumName; }
+            else if (flags & SymbolFlags.Module)        { return SymbolDisplayPartKind.moduleName; }
+            else if (flags & SymbolFlags.Method)        { return SymbolDisplayPartKind.methodName; }
+            else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
+            
+            return SymbolDisplayPartKind.text;
+        }
+
+        function getDisplayPartWriter(): DisplayPartsSymbolWriter {
+            if (displayPartWriters.length == 0) {
+                var displayParts: SymbolDisplayPart[] = [];
+                return {
+                    displayParts: () => displayParts,
+                    writeKind: (text, kind) => displayParts.push(new SymbolDisplayPart(text, kind, undefined)),
+                    writeSymbol: (text, symbol) => displayParts.push(new SymbolDisplayPart(text, displayPartKind(symbol), symbol)),
+
+                    // Completely ignore indentation for display part writers.  And map newlines to
+                    // a single space.
+                    writeLine: () => displayParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined)),
+                    increaseIndent: () => { },
+                    decreaseIndent: () => { },
+                    clear: () => displayParts = [],
+                    trackSymbol: () => { }
+                };
+            }
+
+            return displayPartWriters.pop();
+        }
+
+        function getStringWriter(): StringSymbolWriter {
+            if (stringWriters.length == 0) {
+                var str = "";
+
+                return {
+                    string: () => str,
+                    writeKind: text => str += text,
+                    writeSymbol: text => str += text,
+
+                    // Completely ignore indentation for string writers.  And map newlines to
+                    // a single space.
+                    writeLine: () => str += " ",
+                    increaseIndent: () => { },
+                    decreaseIndent: () => { },
+                    clear: () => str = "",
+                    trackSymbol: () => { }
+                };
+            }
+
+            return stringWriters.pop();
+        }
+
+        function releaseDisplayPartWriter(writer: DisplayPartsSymbolWriter) {
+            writer.clear();
+            displayPartWriters.push(writer);
+        }
+
+        function releaseStringWriter(writer: StringSymbolWriter) {
+            writer.clear()
+            stringWriters.push(writer);
+        }
+
+        function writeKeyword(writer: SymbolWriter, kind: SyntaxKind) {
+            writer.writeKind(tokenToString(kind), SymbolDisplayPartKind.keyword);
+        }
+
+        function writePunctuation(writer: SymbolWriter, kind: SyntaxKind) {
+            writer.writeKind(tokenToString(kind), SymbolDisplayPartKind.punctuation);
+        }
+
+        function writeOperator(writer: SymbolWriter, kind: SyntaxKind) {
+            writer.writeKind(tokenToString(kind), SymbolDisplayPartKind.operator);
+        }
+
+        function writeSpace(writer: SymbolWriter) {
+            writer.writeKind(" ", SymbolDisplayPartKind.space);
+        }
+
+        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
+            var writer = getStringWriter();
+            writeSymbol(symbol, writer, enclosingDeclaration, meaning);
+
+            var result = writer.string();
+            releaseStringWriter(writer);
+
+            return result;
+        }
+
+        function symbolToDisplayParts(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): SymbolDisplayPart[] {
+            var writer = getDisplayPartWriter();
+            writeSymbol(symbol, writer, enclosingDeclaration, meaning);
+
+            var result = writer.displayParts();
+            releaseDisplayPartWriter(writer);
+
+            return result;
+        }
+
         // Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
         // Meaning needs to be specified if the enclosing declaration is given
-        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
-            function getSymbolName(symbol: Symbol) {
+        function writeSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags): void {
+            function writeSymbolName(symbol: Symbol): void {
                 if (symbol.declarations && symbol.declarations.length > 0) {
                     var declaration = symbol.declarations[0];
                     if (declaration.name) {
-                        return identifierToString(declaration.name);
+                        writer.writeSymbol(identifierToString(declaration.name), symbol);
+                        return;
                     }
                 }
-                return symbol.name;
+
+                writer.writeSymbol(symbol.name, symbol);
+            }
+
+            // Let the writer know we just wrote out a symbol.  The declarationemitter writer uses 
+            // this to determine if an import it has previously seen (and not writter out) needs 
+            // to be written to the file once the walk of the tree is complete.
+            //
+            // NOTE(cyrusn): This approach feels somewhat unfortunate.  A simple pass over the tree
+            // up front (for example, during checking) could determien if we need to emit the imports
+            // and we could then access that data during declaration emit.
+            writer.trackSymbol(symbol, enclosingDeclaration, meaning);
+
+            var needsDot = false;
+            function walkSymbol(symbol: Symbol, meaning: SymbolFlags): void {
+                if (symbol) {
+                    var accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning);
+
+                    if (!accessibleSymbolChain ||
+                        needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
+
+                        // Go up and add our parent.
+                        walkSymbol(
+                            getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol),
+                            getQualifiedLeftMeaning(meaning));
+                    }
+
+                    if (accessibleSymbolChain) {
+                        for (var i = 0, n = accessibleSymbolChain.length; i < n; i++) {
+                            if (needsDot) {
+                                writePunctuation(writer, SyntaxKind.DotToken);
+                            }
+
+                            writeSymbolName(accessibleSymbolChain[i]);
+                            needsDot = true;
+                        }
+                    }
+                    else {
+                        // If we didn't find accessible symbol chain for this symbol, break if this is external module
+                        if (!needsDot && ts.forEach(symbol.declarations, declaration => hasExternalModuleSymbol(declaration))) {
+                            return;
+                        }
+
+                        if (needsDot) {
+                            writePunctuation(writer, SyntaxKind.DotToken);
+                        }
+
+                        writeSymbolName(symbol);
+                        needsDot = true;
+                    }
+                }
             }
 
             // Get qualified name 
             if (enclosingDeclaration &&
                 // TypeParameters do not need qualification
                 !(symbol.flags & SymbolFlags.TypeParameter)) {
-                var symbolName: string;
-                while (symbol) {
-                    var isFirstName = !symbolName;
-                    var accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning);
 
-                    var currentSymbolName: string;
-                    if (accessibleSymbolChain) {
-                        currentSymbolName = ts.map(accessibleSymbolChain, accessibleSymbol => getSymbolName(accessibleSymbol)).join(".");
-                    }
-                    else {
-                        // If we didn't find accessible symbol chain for this symbol, break if this is external module
-                        if (!isFirstName && ts.forEach(symbol.declarations, declaration => hasExternalModuleSymbol(declaration))) {
-                            break;
-                        }
-                        currentSymbolName = getSymbolName(symbol);
-                    }
-                    symbolName = currentSymbolName + (isFirstName ? "" : ("." + symbolName));
-                    if (accessibleSymbolChain && !needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
-                        break;
-                    }
-                    symbol = getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
-                    meaning = getQualifiedLeftMeaning(meaning);
-                }
-
-                return symbolName;
+                walkSymbol(symbol, meaning);
+                return;
             }
 
-            return getSymbolName(symbol);
+            return writeSymbolName(symbol);
         }
 
         function writeSymbolToTextWriter(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, writer: TextWriter) {
             writer.write(symbolToString(symbol, enclosingDeclaration, meaning));
         }
 
-        function createSingleLineTextWriter(maxLength?: number) {
-            var result = "";
-            var overflow = false;
-            function write(s: string) {
-                if (!overflow) {
-                    result += s;
-                    if (result.length > maxLength) {
-                        result = result.substr(0, maxLength - 3) + "...";
-                        overflow = true;
-                    }
-                }
-            }
-            return {
-                write: write,
-                writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
-                    writeSymbolToTextWriter(symbol, enclosingDeclaration, meaning, this);
-                },
-                writeLine() {
-                    write(" ");
-                },
-                increaseIndent() { },
-                decreaseIndent() { },
-                getText() {
-                    return result;
-                }
-            };
-        }
-
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
+            var writer = getStringWriter();
+            writeType(type, writer, enclosingDeclaration, flags);
+
+            var result = writer.string();
+            releaseStringWriter(writer);
+
             var maxLength = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation ? undefined : 100;
-            var stringWriter = createSingleLineTextWriter(maxLength);
-            // TODO(shkamat): typeToString should take enclosingDeclaration as input, once we have implemented enclosingDeclaration
-            writeTypeToTextWriter(type, enclosingDeclaration, flags, stringWriter);
-            return stringWriter.getText();
+            if (maxLength && result.length >= maxLength) {
+                result = result.substr(0, maxLength - "...".length) + "...";
+            }
+
+            return result;
         }
 
-        function writeTypeToTextWriter(type: Type, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter) {
+        function typeToDisplayParts(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
+            var writer = getDisplayPartWriter();
+            writeType(type, writer, enclosingDeclaration, flags);
+
+            var result = writer.displayParts();
+            releaseDisplayPartWriter(writer);
+
+            return result;
+        }
+
+        function writeType(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) {
             var typeStack: Type[];
             return writeType(type, /*allowFunctionOrConstructorTypeLiteral*/ true);
 
             function writeType(type: Type, allowFunctionOrConstructorTypeLiteral: boolean) {
                 if (type.flags & TypeFlags.Intrinsic) {
-                    writer.write((<IntrinsicType>type).intrinsicName);
+                    writer.writeKind((<IntrinsicType>type).intrinsicName, SymbolDisplayPartKind.keyword);
                 }
                 else if (type.flags & TypeFlags.Reference) {
                     writeTypeReference(<TypeReference>type);
                 }
                 else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
-                    writer.writeSymbol(type.symbol, enclosingDeclaration, SymbolFlags.Type);
+                    writeSymbol(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type);
                 }
                 else if (type.flags & TypeFlags.Tuple) {
                     writeTupleType(<TupleType>type);
@@ -1004,18 +1161,24 @@ module ts {
                     writeAnonymousType(<ObjectType>type, allowFunctionOrConstructorTypeLiteral);
                 }
                 else if (type.flags & TypeFlags.StringLiteral) {
-                    writer.write((<StringLiteralType>type).text);
+                    writer.writeKind((<StringLiteralType>type).text, SymbolDisplayPartKind.stringLiteral);
                 }
                 else {
                     // Should never get here
-                    writer.write("{ ... }");
+                    // { ... }
+                    writePunctuation(writer, SyntaxKind.OpenBraceToken);
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.DotDotDotToken);
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.CloseBraceToken);
                 }
             }
 
             function writeTypeList(types: Type[]) {
                 for (var i = 0; i < types.length; i++) {
                     if (i > 0) {
-                        writer.write(", ");
+                        writePunctuation(writer, SyntaxKind.CommaToken);
+                        writeSpace(writer);
                     }
                     writeType(types[i], /*allowFunctionOrConstructorTypeLiteral*/ true);
                 }
@@ -1026,20 +1189,21 @@ module ts {
                     // If we are writing array element type the arrow style signatures are not allowed as 
                     // we need to surround it by curlies, e.g. { (): T; }[]; as () => T[] would mean something different
                     writeType(type.typeArguments[0], /*allowFunctionOrConstructorTypeLiteral*/ false);
-                    writer.write("[]");
+                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
                 }
                 else {
-                    writer.writeSymbol(type.target.symbol, enclosingDeclaration, SymbolFlags.Type);
-                    writer.write("<");
+                    writeSymbol(type.target.symbol, writer, enclosingDeclaration, SymbolFlags.Type);
+                    writePunctuation(writer, SyntaxKind.LessThanToken);
                     writeTypeList(type.typeArguments);
-                    writer.write(">");
+                    writePunctuation(writer, SyntaxKind.GreaterThanToken);
                 }
             }
 
             function writeTupleType(type: TupleType) {
-                writer.write("[");
+                writePunctuation(writer, SyntaxKind.OpenBracketToken);
                 writeTypeList(type.elementTypes);
-                writer.write("]");
+                writePunctuation(writer, SyntaxKind.CloseBracketToken);
             }
 
             function writeAnonymousType(type: ObjectType, allowFunctionOrConstructorTypeLiteral: boolean) {
@@ -1053,7 +1217,7 @@ module ts {
                 }
                 else if (typeStack && contains(typeStack, type)) {
                     // Recursive usage, use any
-                    writer.write("any");
+                    writeKeyword(writer, SyntaxKind.AnyKeyword);
                 }
                 else {
                     if (!typeStack) {
@@ -1083,15 +1247,17 @@ module ts {
             }
 
             function writeTypeofSymbol(type: ObjectType) {
-                writer.write("typeof ");
-                writer.writeSymbol(type.symbol, enclosingDeclaration, SymbolFlags.Value);
+                writeKeyword(writer, SyntaxKind.TypeOfKeyword);
+                writeSpace(writer);
+                writeSymbol(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value);
             }
 
             function writeLiteralType(type: ObjectType, allowFunctionOrConstructorTypeLiteral: boolean) {
                 var resolved = resolveObjectTypeMembers(type);
                 if (!resolved.properties.length && !resolved.stringIndexType && !resolved.numberIndexType) {
                     if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
-                        writer.write("{}");
+                        writePunctuation(writer, SyntaxKind.OpenBraceToken);
+                        writePunctuation(writer, SyntaxKind.CloseBraceToken);
                         return;
                     }
 
@@ -1101,37 +1267,56 @@ module ts {
                             return;
                         }
                         if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
-                            writer.write("new ");
+                            writeKeyword(writer, SyntaxKind.NewKeyword);
+                            writeSpace(writer);
                             writeSignature(resolved.constructSignatures[0], /*arrowStyle*/ true);
                             return;
                         }
                     }
                 }
 
-                writer.write("{");
+                writePunctuation(writer, SyntaxKind.OpenBraceToken);
                 writer.writeLine();
                 writer.increaseIndent();
                 for (var i = 0; i < resolved.callSignatures.length; i++) {
                     writeSignature(resolved.callSignatures[i]);
-                    writer.write(";");
+                    writePunctuation(writer, SyntaxKind.SemicolonToken);
                     writer.writeLine();
                 }
                 for (var i = 0; i < resolved.constructSignatures.length; i++) {
-                    writer.write("new ");
+                    writeKeyword(writer, SyntaxKind.NewKeyword);
+                    writeSpace(writer);
+
                     writeSignature(resolved.constructSignatures[i]);
-                    writer.write(";");
+                    writePunctuation(writer, SyntaxKind.SemicolonToken);
                     writer.writeLine();
                 }
                 if (resolved.stringIndexType) {
-                    writer.write("[x: string]: ");
+                    // [x: string]: 
+                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                    writer.writeKind("x", SymbolDisplayPartKind.parameterName);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
+                    writeKeyword(writer, SyntaxKind.StringKeyword);
+                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
                     writeType(resolved.stringIndexType, /*allowFunctionOrConstructorTypeLiteral*/ true);
-                    writer.write(";");
+                    writePunctuation(writer, SyntaxKind.SemicolonToken);
                     writer.writeLine();
                 }
                 if (resolved.numberIndexType) {
-                    writer.write("[x: number]: ");
+                    // [x: number]: 
+                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                    writer.writeKind("x", SymbolDisplayPartKind.parameterName);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
+                    writeKeyword(writer, SyntaxKind.NumberKeyword);
+                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
                     writeType(resolved.numberIndexType, /*allowFunctionOrConstructorTypeLiteral*/ true);
-                    writer.write(";");
+                    writePunctuation(writer, SyntaxKind.SemicolonToken);
                     writer.writeLine();
                 }
                 for (var i = 0; i < resolved.properties.length; i++) {
@@ -1140,64 +1325,81 @@ module ts {
                     if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfType(t).length) {
                         var signatures = getSignaturesOfType(t, SignatureKind.Call);
                         for (var j = 0; j < signatures.length; j++) {
-                            writer.writeSymbol(p);
+                            writeSymbol(p, writer);
                             if (isOptionalProperty(p)) {
-                                writer.write("?");
+                                writePunctuation(writer, SyntaxKind.QuestionToken);
                             }
                             writeSignature(signatures[j]);
-                            writer.write(";");
+                            writePunctuation(writer, SyntaxKind.SemicolonToken);
                             writer.writeLine();
                         }
                     }
                     else {
-                        writer.writeSymbol(p);
+                        writeSymbol(p, writer);
                         if (isOptionalProperty(p)) {
-                            writer.write("?");
+                            writePunctuation(writer, SyntaxKind.QuestionToken);
                         }
-                        writer.write(": ");
+                        writePunctuation(writer, SyntaxKind.ColonToken);
+                        writeSpace(writer);
                         writeType(t, /*allowFunctionOrConstructorTypeLiteral*/ true);
-                        writer.write(";");
+                        writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
                 }
                 writer.decreaseIndent();
-                writer.write("}");
+                writePunctuation(writer, SyntaxKind.CloseBraceToken);
             }
 
             function writeSignature(signature: Signature, arrowStyle?: boolean) {
                 if (signature.typeParameters) {
-                    writer.write("<");
+                    writePunctuation(writer, SyntaxKind.LessThanToken);
                     for (var i = 0; i < signature.typeParameters.length; i++) {
                         if (i > 0) {
-                            writer.write(", ");
+                            writePunctuation(writer, SyntaxKind.CommaToken);
+                            writeSpace(writer);
                         }
                         var tp = signature.typeParameters[i];
-                        writer.writeSymbol(tp.symbol);
+                        writeSymbol(tp.symbol, writer);
                         var constraint = getConstraintOfTypeParameter(tp);
                         if (constraint) {
-                            writer.write(" extends ");
+                            writeSpace(writer);
+                            writeKeyword(writer, SyntaxKind.ExtendsKeyword);
+                            writeSpace(writer);
                             writeType(constraint, /*allowFunctionOrConstructorTypeLiteral*/ true);
                         }
                     }
-                    writer.write(">");
+                    writePunctuation(writer, SyntaxKind.GreaterThanToken);
                 }
-                writer.write("(");
+                writePunctuation(writer, SyntaxKind.OpenParenToken);
                 for (var i = 0; i < signature.parameters.length; i++) {
                     if (i > 0) {
-                        writer.write(", ");
+                        writePunctuation(writer, SyntaxKind.CommaToken);
+                        writeSpace(writer);
                     }
                     var p = signature.parameters[i];
                     if (getDeclarationFlagsFromSymbol(p) & NodeFlags.Rest) {
-                        writer.write("...");
+                        writePunctuation(writer, SyntaxKind.DotDotDotToken);
                     }
-                    writer.writeSymbol(p);
+                    writeSymbol(p, writer);
                     if (p.valueDeclaration.flags & NodeFlags.QuestionMark || (<VariableDeclaration>p.valueDeclaration).initializer) {
-                        writer.write("?");
+                        writePunctuation(writer, SyntaxKind.QuestionToken);
                     }
-                    writer.write(": ");
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
+
                     writeType(getTypeOfSymbol(p), /*allowFunctionOrConstructorTypeLiteral*/ true);
                 }
-                writer.write(arrowStyle ? ") => " : "): ");
+
+                writePunctuation(writer, SyntaxKind.CloseParenToken);
+                if (arrowStyle) {
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.EqualsGreaterThanToken);
+                }
+                else {
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                }
+                writeSpace(writer);
+
                 writeType(getReturnTypeOfSignature(signature), /*allowFunctionOrConstructorTypeLiteral*/ true);
             }
         }
@@ -6356,7 +6558,7 @@ module ts {
             }
         }
 
-        function getConstantValue(node: Expression): number {
+        function getConstantValueForExpression(node: Expression): number {
             var isNegative = false;
             if (node.kind === SyntaxKind.PrefixOperator) {
                 var unaryExpression = <UnaryExpression>node;
@@ -6373,38 +6575,51 @@ module ts {
             return undefined;
         }
 
+        function computeEnumMemberValues(node: EnumDeclaration) {
+            var nodeLinks = getNodeLinks(node);
+
+            if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
+                var enumSymbol = getSymbolOfNode(node);
+                var enumType = getDeclaredTypeOfSymbol(enumSymbol);
+                var autoValue = 0;
+                var ambient = isInAmbientContext(node);
+
+                forEach(node.members, member => {
+                    var initializer = member.initializer;
+                    if (initializer) {
+                        autoValue = getConstantValueForExpression(initializer);
+                        if (autoValue === undefined && !ambient) {
+                            // Only here do we need to check that the initializer is assignable to the enum type.
+                            // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
+                            // Also, we do not need to check this for ambients because there is already
+                            // a syntax error if it is not a constant.
+                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                        }
+                    }
+                    else if (ambient) {
+                        autoValue = undefined;
+                    }
+
+                    if (autoValue !== undefined) {
+                        getNodeLinks(member).enumMemberValue = autoValue++;
+                    }
+                });
+
+                nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
+            }
+        }
+
         function checkEnumDeclaration(node: EnumDeclaration) {
             if (!fullTypeCheck) {
                 return;
             }
+
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
-            var enumSymbol = getSymbolOfNode(node);
-            var enumType = getDeclaredTypeOfSymbol(enumSymbol);
-            var autoValue = 0;
-            var ambient = isInAmbientContext(node);
-            forEach(node.members, member => {
-                var initializer = member.initializer;
-                if (initializer) {
-                    autoValue = getConstantValue(initializer);
-                    if (autoValue === undefined && !ambient) {
-                        // Only here do we need to check that the initializer is assignable to the enum type.
-                        // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
-                        // Also, we do not need to check this for ambients because there is already
-                        // a syntax error if it is not a constant.
-                        checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
-                    }
-                }
-                else if (ambient) {
-                    autoValue = undefined;
-                }
 
-                if (autoValue !== undefined) {
-                    getNodeLinks(member).enumMemberValue = autoValue++;
-                }
-            });
+            computeEnumMemberValues(node);
 
             // Spec 2014 - Section 9.3:
             // It isn't possible for one enum declaration to continue the automatic numbering sequence of another,
@@ -6412,6 +6627,7 @@ module ts {
             // for the first member.
             //
             // Only perform this check once per symbol
+            var enumSymbol = getSymbolOfNode(node);
             var firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
             if (node === firstDeclaration) {
                 var seenEnumMissingInitialInitializer = false;
@@ -7311,17 +7527,6 @@ module ts {
             }
         }
 
-        function getPropertyAccessSubstitution(node: PropertyAccess): string {
-            var symbol = getNodeLinks(node).resolvedSymbol;
-            if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
-                var declaration = symbol.valueDeclaration;
-                var constantValue: number;
-                if (declaration.kind === SyntaxKind.EnumMember && (constantValue = getNodeLinks(declaration).enumMemberValue) !== undefined) {
-                    return constantValue.toString() + " /* " + identifierToString(declaration.name) + " */";
-                }
-            }
-        }
-
         function getExportAssignmentName(node: SourceFile): string {
             var symbol = getExportAssignmentSymbol(getSymbolOfNode(node));
             return symbol && symbolIsValue(symbol) ? symbolToString(symbol): undefined;
@@ -7384,20 +7589,51 @@ module ts {
         }
 
         function getEnumMemberValue(node: EnumMember): number {
+            computeEnumMemberValues(<EnumDeclaration>node.parent);
             return getNodeLinks(node).enumMemberValue;
         }
+
+        function getConstantValue(node: PropertyAccess): number {
+            var symbol = getNodeLinks(node).resolvedSymbol;
+            if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
+                var declaration = symbol.valueDeclaration;
+                var constantValue: number;
+                if (declaration.kind === SyntaxKind.EnumMember && (constantValue = getNodeLinks(declaration).enumMemberValue) !== undefined) {
+                    return constantValue;
+                }
+            }
+
+            return undefined;
+        }
+
+        // Create a single instance that we can wrap the underlying emitter TextWriter with.  That
+        // way we don't have to allocate a new wrapper every time writeTypeAtLocation and 
+        // writeReturnTypeOfSignatureDeclaration are called.
+        var emitSymbolWriter = {
+            writer: <TextWriter>undefined,
+
+            writeKind: function (text: string) { this.writer.write(text) },
+            writeSymbol: function (text: string) { this.writer.write(text) },
+            writeLine: function () { this.writer.writeLine() },
+            increaseIndent: function () { this.writer.increaseIndent() },
+            decreaseIndent: function () { this.writer.decreaseIndent() },
+            clear: function () { },
+            trackSymbol: function (symbol: Symbol, declaration: Node, meaning: SymbolFlags) { this.writer.trackSymbol(symbol, declaration, meaning) }
+        };
 
         function writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             var symbol = getSymbolOfNode(location);
             var type = symbol && !(symbol.flags & SymbolFlags.TypeLiteral) ? getTypeOfSymbol(symbol) : getTypeFromTypeNode(location);
 
-            writeTypeToTextWriter(type, enclosingDeclaration, flags, writer);
+            emitSymbolWriter.writer = writer;
+            writeType(type, emitSymbolWriter, enclosingDeclaration, flags);
         }
 
         function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter) {
             var signature = getSignatureFromDeclaration(signatureDeclaration);
-            writeTypeToTextWriter(getReturnTypeOfSignature(signature), enclosingDeclaration, flags , writer);
+            emitSymbolWriter.writer = writer;
+            writeType(getReturnTypeOfSignature(signature), emitSymbolWriter, enclosingDeclaration, flags);
         }
 
         function invokeEmitter(targetSourceFile?: SourceFile) {
@@ -7405,7 +7641,6 @@ module ts {
                 getProgram: () => program,
                 getLocalNameOfContainer: getLocalNameOfContainer,
                 getExpressionNamePrefix: getExpressionNamePrefix,
-                getPropertyAccessSubstitution: getPropertyAccessSubstitution,
                 getExportAssignmentName: getExportAssignmentName,
                 isReferencedImportDeclaration: isReferencedImportDeclaration,
                 getNodeCheckFlags: getNodeCheckFlags,
@@ -7416,9 +7651,9 @@ module ts {
                 isImplementationOfOverload: isImplementationOfOverload,
                 writeTypeAtLocation: writeTypeAtLocation,
                 writeReturnTypeOfSignatureDeclaration: writeReturnTypeOfSignatureDeclaration,
-                writeSymbol: writeSymbolToTextWriter,
                 isSymbolAccessible: isSymbolAccessible,
-                isImportDeclarationEntityNameReferenceDeclarationVisibile: isImportDeclarationEntityNameReferenceDeclarationVisibile
+                isImportDeclarationEntityNameReferenceDeclarationVisibile: isImportDeclarationEntityNameReferenceDeclarationVisibile,
+                getConstantValue: getConstantValue,
             };
             checkProgram();
             return emitFiles(resolver, targetSourceFile);

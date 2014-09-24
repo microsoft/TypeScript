@@ -138,25 +138,27 @@ module ts {
         return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
     }
 
-    export function getLeadingCommentsOfNode(node: Node, sourceFileOfNode: SourceFile) {
+    export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode?: SourceFile) {
+        sourceFileOfNode = sourceFileOfNode || getSourceFileOfNode(node);
+
         // If parameter/type parameter, the prev token trailing comments are part of this node too
         if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
             // e.g.   (/** blah */ a, /** blah */ b);
-            return concatenate(getTrailingComments(sourceFileOfNode.text, node.pos),
+            return concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
                 // e.g.:     (
                 //            /** blah */ a,
                 //            /** blah */ b);
-                getLeadingComments(sourceFileOfNode.text, node.pos));
+                getLeadingCommentRanges(sourceFileOfNode.text, node.pos));
         }
         else {
-            return getLeadingComments(sourceFileOfNode.text, node.pos);
+            return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
         }
     }
 
     export function getJsDocComments(node: Declaration, sourceFileOfNode: SourceFile) {
-        return filter(getLeadingCommentsOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
+        return filter(getLeadingCommentRangesOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
 
-        function isJsDocComment(comment: Comment) {
+        function isJsDocComment(comment: CommentRange) {
             // True if the comment starts with '/**' but not if it is '/**/'
             return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
                 sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
@@ -813,7 +815,7 @@ module ts {
         // applying some stricter checks on that node.
         function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             var span = getErrorSpanForNode(node);
-            var start = skipTrivia(file.text, span.pos);
+            var start = span.end > span.pos ? skipTrivia(file.text, span.pos) : span.pos;
             var length = span.end - start;
 
             file.syntacticErrors.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
