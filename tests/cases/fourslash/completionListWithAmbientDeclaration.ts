@@ -6,4 +6,4 @@
 //// /**/
 
 goTo.marker();
-verifyNegatable.completionListContains("http");
+verify.not.completionListContains("http");

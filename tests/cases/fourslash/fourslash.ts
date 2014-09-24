@@ -630,7 +630,6 @@ function verifyOperationIsCancelled(f) {
 var test = new FourSlashInterface.test_();
 var goTo = new FourSlashInterface.goTo();
 var verify = new FourSlashInterface.verify();
-var verifyNegatable = new FourSlashInterface.verifyNegatable(true);
 var edit = new FourSlashInterface.edit();
 var debug = new FourSlashInterface.debug();
 var format = new FourSlashInterface.format();
