@@ -1,0 +1,9 @@
+tests/cases/compiler/deleteOperatorInStrictMode.ts(3,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+
+
+==== tests/cases/compiler/deleteOperatorInStrictMode.ts (1 errors) ====
+    "use strict"
+    var a;
+    delete a;
+           ~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
