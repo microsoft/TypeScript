@@ -11,7 +11,7 @@
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='signatureHelp.ts' />
-/// <reference path='servicesSyntaxUtilities.ts' />
+/// <reference path='utilities.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 
@@ -3446,7 +3446,9 @@ module ts {
         }
 
         // Signature help
-        // This is a semantic operation
+        /**
+         * This is a semantic operation.
+         */
         function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
             synchronizeHostData();
 
@@ -3456,7 +3458,9 @@ module ts {
             return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
         }
 
-        // This is a syntactic operation
+        /**
+         * This is a syntactic operation
+         */
         function getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState {
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getCurrentSourceFile(fileName);

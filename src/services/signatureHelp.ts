@@ -1,6 +1,3 @@
-// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
-// See LICENSE.txt in the project root for complete license information.
-
 ///<reference path='services.ts' />
 
 module ts.SignatureHelp {
@@ -130,172 +127,6 @@ module ts.SignatureHelp {
     //    return null;
     //}
 
-    ////public static getSignatureInfoFromSignatureSymbol(symbol: TypeScript.PullSymbol, signatures: TypeScript.PullSignatureSymbol[], enclosingScopeSymbol: TypeScript.PullSymbol, compilerState: LanguageServiceCompiler) {
-    ////    var signatureGroup: FormalSignatureItemInfo[] = [];
-
-    ////    var hasOverloads = signatures.length > 1;
-
-    ////    for (var i = 0, n = signatures.length; i < n; i++) {
-    ////        var signature = signatures[i];
-
-    ////        // filter out the definition signature if there are overloads
-    ////        if (hasOverloads && signature.isDefinition()) {
-    ////            continue;
-    ////        }
-
-    ////        var signatureGroupInfo = new FormalSignatureItemInfo();
-    ////        var paramIndexInfo: number[] = [];
-    ////        var functionName = signature.getScopedNameEx(enclosingScopeSymbol).toString();
-    ////        if (!functionName && (!symbol.isType() || (<TypeScript.PullTypeSymbol>symbol).isNamedTypeSymbol())) {
-    ////            functionName = symbol.getScopedNameEx(enclosingScopeSymbol).toString();
-    ////        }
-
-    ////        var signatureMemberName = signature.getSignatureTypeNameEx(functionName, /*shortform*/ false, /*brackets*/ false, enclosingScopeSymbol, /*getParamMarkerInfo*/ true, /*getTypeParameterMarkerInfo*/ true);
-    ////        signatureGroupInfo.signatureInfo = TypeScript.MemberName.memberNameToString(signatureMemberName, paramIndexInfo);
-    ////        signatureGroupInfo.docComment = signature.docComments();
-
-    ////        var parameterMarkerIndex = 0;
-
-    ////        if (signature.isGeneric()) {
-    ////            var typeParameters = signature.getTypeParameters();
-    ////            for (var j = 0, m = typeParameters.length; j < m; j++) {
-    ////                var typeParameter = typeParameters[j];
-    ////                var signatureTypeParameterInfo = new FormalTypeParameterInfo();
-    ////                signatureTypeParameterInfo.name = typeParameter.getDisplayName();
-    ////                signatureTypeParameterInfo.docComment = typeParameter.docComments();
-    ////                signatureTypeParameterInfo.minChar = paramIndexInfo[2 * parameterMarkerIndex];
-    ////                signatureTypeParameterInfo.limChar = paramIndexInfo[2 * parameterMarkerIndex + 1];
-    ////                parameterMarkerIndex++;
-    ////                signatureGroupInfo.typeParameters.push(signatureTypeParameterInfo);
-    ////            }
-    ////        }
-
-    ////        var parameters = signature.parameters;
-    ////        for (var j = 0, m = parameters.length; j < m; j++) {
-    ////            var parameter = parameters[j];
-    ////            var signatureParameterInfo = new FormalParameterInfo();
-    ////            signatureParameterInfo.isVariable = signature.hasVarArgs && (j === parameters.length - 1);
-    ////            signatureParameterInfo.name = parameter.getDisplayName();
-    ////            signatureParameterInfo.docComment = parameter.docComments();
-    ////            signatureParameterInfo.minChar = paramIndexInfo[2 * parameterMarkerIndex];
-    ////            signatureParameterInfo.limChar = paramIndexInfo[2 * parameterMarkerIndex + 1];
-    ////            parameterMarkerIndex++;
-    ////            signatureGroupInfo.parameters.push(signatureParameterInfo);
-    ////        }
-
-    ////        signatureGroup.push(signatureGroupInfo);
-    ////    }
-
-    ////    return signatureGroup;
-    ////}
-
-    ////public static getSignatureInfoFromGenericSymbol(symbol: TypeScript.PullSymbol, enclosingScopeSymbol: TypeScript.PullSymbol, compilerState: LanguageServiceCompiler) {
-    ////    var signatureGroupInfo = new FormalSignatureItemInfo();
-
-    ////    var paramIndexInfo: number[] = [];
-    ////    var symbolName = symbol.getScopedNameEx(enclosingScopeSymbol, /*skipTypeParametersInName*/ false, /*useConstaintInName*/ true, /*getPrettyTypeName*/ false, /*getTypeParamMarkerInfo*/ true);
-
-    ////    signatureGroupInfo.signatureInfo = TypeScript.MemberName.memberNameToString(symbolName, paramIndexInfo);
-    ////    signatureGroupInfo.docComment = symbol.docComments();
-
-    ////    var parameterMarkerIndex = 0;
-
-    ////    var typeSymbol = symbol.type;
-
-    ////    var typeParameters = typeSymbol.getTypeParameters();
-    ////    for (var i = 0, n = typeParameters.length; i < n; i++) {
-    ////        var typeParameter = typeParameters[i];
-    ////        var signatureTypeParameterInfo = new FormalTypeParameterInfo();
-    ////        signatureTypeParameterInfo.name = typeParameter.getDisplayName();
-    ////        signatureTypeParameterInfo.docComment = typeParameter.docComments();
-    ////        signatureTypeParameterInfo.minChar = paramIndexInfo[2 * i];
-    ////        signatureTypeParameterInfo.limChar = paramIndexInfo[2 * i + 1];
-    ////        signatureGroupInfo.typeParameters.push(signatureTypeParameterInfo);
-    ////    }
-
-    ////    return [signatureGroupInfo];
-    ////}
-
-    ////public static getActualSignatureInfoFromCallExpression(ast: IExpressionWithArgumentListSyntax, caretPosition: number, typeParameterInformation: IPartiallyWrittenTypeArgumentListInformation): ActualSignatureInfo {
-    ////    if (!ast) {
-    ////        return null;
-    ////    }
-
-    ////    var result = new ActualSignatureInfo();
-
-    ////    // The expression is not guaranteed to be complete, we need to populate the min and lim with the most accurate information we have about
-    ////    // type argument and argument lists
-    ////    var parameterMinChar = caretPosition;
-    ////    var parameterLimChar = caretPosition;
-
-    ////    if (ast.argumentList.typeArgumentList) {
-    ////        parameterMinChar = Math.min(start(ast.argumentList.typeArgumentList));
-    ////        parameterLimChar = Math.max(Math.max(start(ast.argumentList.typeArgumentList), end(ast.argumentList.typeArgumentList) + trailingTriviaWidth(ast.argumentList.typeArgumentList)));
-    ////    }
-
-    ////    if (ast.argumentList.arguments) {
-    ////        parameterMinChar = Math.min(parameterMinChar, end(ast.argumentList.openParenToken));
-    ////        parameterLimChar = Math.max(parameterLimChar,
-    ////            ast.argumentList.closeParenToken.fullWidth() > 0 ? start(ast.argumentList.closeParenToken) : fullEnd(ast.argumentList));
-    ////    }
-
-    ////    result.parameterMinChar = parameterMinChar;
-    ////    result.parameterLimChar = parameterLimChar;
-    ////    result.currentParameterIsTypeParameter = false;
-    ////    result.currentParameter = -1;
-
-    ////    if (typeParameterInformation) {
-    ////        result.currentParameterIsTypeParameter = true;
-    ////        result.currentParameter = typeParameterInformation.argumentIndex;
-    ////    }
-    ////    else if (ast.argumentList.arguments && ast.argumentList.arguments.length > 0) {
-    ////        result.currentParameter = 0;
-    ////        for (var index = 0; index < ast.argumentList.arguments.length; index++) {
-    ////            if (caretPosition > end(ast.argumentList.arguments[index]) + lastToken(ast.argumentList.arguments[index]).trailingTriviaWidth()) {
-    ////                result.currentParameter++;
-    ////            }
-    ////        }
-    ////    }
-
-    ////    return result;
-    ////}
-
-    ////public static getActualSignatureInfoFromPartiallyWritenGenericExpression(caretPosition: number, typeParameterInformation: IPartiallyWrittenTypeArgumentListInformation): ActualSignatureInfo {
-    ////    var result = new ActualSignatureInfo();
-
-    ////    result.parameterMinChar = start(typeParameterInformation.lessThanToken);
-    ////    result.parameterLimChar = Math.max(fullEnd(typeParameterInformation.lessThanToken), caretPosition);
-    ////    result.currentParameterIsTypeParameter = true;
-    ////    result.currentParameter = typeParameterInformation.argumentIndex;
-
-    ////    return result;
-    ////}
-
-    ////public static isSignatureHelpBlocker(sourceUnit: TypeScript.SourceUnitSyntax, position: number): boolean {
-    ////    // We shouldn't be getting a possition that is outside the file because
-    ////    // isEntirelyInsideComment can't handle when the position is out of bounds, 
-    ////    // callers should be fixed, however we should be resiliant to bad inputs
-    ////    // so we return true (this position is a blocker for getting signature help)
-    ////    if (position < 0 || position > fullWidth(sourceUnit)) {
-    ////        return true;
-    ////    }
-
-    ////    return TypeScript.Syntax.isEntirelyInsideComment(sourceUnit, position);
-    ////}
-
-    ////public static isTargetOfObjectCreationExpression(positionedToken: TypeScript.ISyntaxToken): boolean {
-    ////    var positionedParent = TypeScript.Syntax.getAncestorOfKind(positionedToken, TypeScript.SyntaxKind.ObjectCreationExpression);
-    ////    if (positionedParent) {
-    ////        var objectCreationExpression = <TypeScript.ObjectCreationExpressionSyntax> positionedParent;
-    ////        var expressionRelativeStart = objectCreationExpression.newKeyword.fullWidth();
-    ////        var tokenRelativeStart = positionedToken.fullStart() - fullStart(positionedParent);
-    ////        return tokenRelativeStart >= expressionRelativeStart &&
-    ////            tokenRelativeStart <= (expressionRelativeStart + fullWidth(objectCreationExpression.expression));
-    ////    }
-
-    ////    return false;
-    ////}
-
     //private static moveBackUpTillMatchingTokenKind(token: TypeScript.ISyntaxToken, tokenKind: TypeScript.SyntaxKind, matchingTokenKind: TypeScript.SyntaxKind): TypeScript.ISyntaxToken {
     //    if (!token || token.kind() !== tokenKind) {
     //        throw TypeScript.Errors.invalidOperation();
@@ -360,8 +191,10 @@ module ts.SignatureHelp {
 
         return createSignatureHelpItems(candidates, resolvedSignature, argumentList);
 
-        // If node is an argument, returns its index in the argument list
-        // If not, returns -1
+        /**
+         * If node is an argument, returns its index in the argument list.
+         * If not, returns -1.
+         */
         function getImmediatelyContainingArgumentList(node: Node): Node {
             if (node.parent.kind !== SyntaxKind.CallExpression && node.parent.kind !== SyntaxKind.NewExpression) {
                 return undefined;

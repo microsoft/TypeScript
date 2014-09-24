@@ -31,7 +31,9 @@ module ts {
         return syntaxList;
     }
 
-    // Includes the start position of each child, but excludes the end
+    /**
+     * Includes the start position of each child, but excludes the end.
+     */
     export function findListItemIndexContainingPosition(list: Node, position: number): number {
         Debug.assert(list.kind === SyntaxKind.SyntaxList);
         var children = list.getChildren();
