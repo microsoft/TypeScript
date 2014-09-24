@@ -22,20 +22,20 @@ var debugObjectHost = (<any>this);
 
 module ts {
     export interface ScriptSnapshotShim {
-        /** Get's a portion of the script snapshot specified by [start, end). */
+        /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
 
-        /** Get's the length of this script snapshot. */
+        /** Gets the length of this script snapshot. */
         getLength(): number;
 
-        /** This call returns the JSON encoded array of the type: number[] */
+        /** This call returns the JSON-encoded array of the type: number[] */
         getLineStartPositions(): string;
 
         /**
-         * Returns a JSON encoded value of the type:
+         * Returns a JSON-encoded value of the type:
          *   { span: { start: number; length: number }; newLength: number }
          *
-         * Or null value if there was no change.
+         * Or undefined value if there was no change.
          */
         getChangeRange(oldSnapshot: ScriptSnapshotShim): string;
     }
@@ -44,7 +44,7 @@ module ts {
     export interface LanguageServiceShimHost extends Logger {
         getCompilationSettings(): string;
 
-        /** Returns a JSON encoded value of the type: string[] */
+        /** Returns a JSON-encoded value of the type: string[] */
         getScriptFileNames(): string;
         getScriptVersion(fileName: string): string;
         getScriptIsOpen(fileName: string): boolean;
@@ -93,51 +93,51 @@ module ts {
         getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): string;
 
         /**
-         * Returns a JSON encoded value of the type:
+         * Returns a JSON-encoded value of the type:
          * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
          */
         getRenameInfo(fileName: string, position: number): string;
 
         /**
-         * Returns a JSON encoded value of the type:
+         * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; kind: string; name: string; containerKind: string; containerName: string }
          *
-         * Or null value if no definition can be found.
+         * Or undefined value if no definition can be found.
          */
         getDefinitionAtPosition(fileName: string, position: number): string;
 
         /**
-         * Returns a JSON encoded value of the type:
+         * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
          */
         getReferencesAtPosition(fileName: string, position: number): string;
 
         /**
-         * Returns a JSON encoded value of the type:
+         * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
          */
         getOccurrencesAtPosition(fileName: string, position: number): string;
 
         /**
-         * Returns a JSON encoded value of the type:
+         * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
          */
         getImplementorsAtPosition(fileName: string, position: number): string;
         
         /**
-         * Returns a JSON encoded value of the type:
+         * Returns a JSON-encoded value of the type:
          * { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
          */
         getNavigateToItems(searchValue: string): string;
 
         /**
-         * Returns a JSON encoded value of the type:
+         * Returns a JSON-encoded value of the type:
          * { text: string; kind: string; kindModifiers: string; bolded: boolean; grayed: boolean; indent: number; spans: { start: number; length: number; }[]; childItems: <recursive use of this type>[] } [] = [];
          */
         getNavigationBarItems(fileName: string): string;
 
         /**
-         * Returns a JSON encoded value of the type:
+         * Returns a JSON-encoded value of the type:
          * { textSpan: { start: number, length: number }; hintSpan: { start: number, length: number }; bannerText: string; autoCollapse: boolean } [] = [];
          */
         getOutliningSpans(fileName: string): string;
