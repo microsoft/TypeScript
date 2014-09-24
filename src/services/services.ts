@@ -304,7 +304,7 @@ module ts {
         }
 
         private processMultiLineDocumentationCommentRange(
-            sourceFile: SourceFile, commentRange: CommentRange, 
+            sourceFile: SourceFile, commentRange: CommentRange,
             startLineAndChar: { line: number; character: number },
             endLineAndChar: { line: number; character: number },
             lines: string[]) {
@@ -703,36 +703,31 @@ module ts {
         public static typeParameterName = "type parameter name";
     }
 
-    export class ClassifiedSpan {
-        constructor(public textSpan: TypeScript.TextSpan,
-                    public classificationType: string) {
-
-        }
+    export interface ClassifiedSpan {
+        textSpan: TypeScript.TextSpan;
+        classificationType: string;
     }
 
-    export class NavigationBarItem {
-        constructor(public text: string,
-                    public kind: string,
-                    public kindModifiers: string,
-                    public spans: TypeScript.TextSpan[],
-                    public childItems: NavigationBarItem[] = null,
-                    public indent = 0,
-                    public bolded = false,
-                    public grayed = false) {
-        }
+    export interface NavigationBarItem {
+        text: string;
+        kind: string;
+        kindModifiers: string;
+        spans: TypeScript.TextSpan[];
+        childItems: NavigationBarItem[];
+        indent: number;
+        bolded: boolean;
+        grayed: boolean;
     }
 
-    export class TodoCommentDescriptor {
-        constructor(public text: string,
-                    public priority: number) {
-        }
+    export interface TodoCommentDescriptor {
+        text: string;
+        priority: number;
     }
 
-    export class TodoComment {
-        constructor(public descriptor: TodoCommentDescriptor,
-                    public message: string,
-                    public position: number) {
-        }
+    export interface TodoComment {
+        descriptor: TodoCommentDescriptor;
+        message: string;
+        position: number;
     }
 
     export class TextChange {
@@ -750,28 +745,21 @@ module ts {
         }
     }
 
-    export class ReferenceEntry {
-        public fileName: string = "";
-        public textSpan: TypeScript.TextSpan;
-        public isWriteAccess: boolean = false;
-
-        constructor(fileName: string, textSpan: TypeScript.TextSpan, isWriteAccess: boolean) {
-            this.fileName = fileName;
-            this.textSpan = textSpan;
-            this.isWriteAccess = isWriteAccess;
-        }
+    export interface ReferenceEntry {
+        textSpan: TypeScript.TextSpan;
+        fileName: string;
+        isWriteAccess: boolean;
     }
 
-    export class NavigateToItem {
-        constructor(public name: string,
-                    public kind: string,
-                    public kindModifiers: string,
-                    public matchKind: string,
-                    public fileName: string,
-                    public textSpan: TypeScript.TextSpan,
-                    public containerName: string,
-                    public containerKind: string) {
-        }
+    export interface NavigateToItem {
+        name: string;
+        kind: string;
+        kindModifiers: string;
+        matchKind: string;
+        fileName: string;
+        textSpan: TypeScript.TextSpan;
+        containerName: string;
+        containerKind: string;
     }
 
     export interface EditorOptions {
@@ -792,14 +780,13 @@ module ts {
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
     }
 
-    export class DefinitionInfo {
-        constructor(public fileName: string,
-                    public textSpan: TypeScript.TextSpan,
-                    public kind: string,
-                    public name: string,
-                    public containerKind: string,
-                    public containerName: string) {
-        }
+    export interface DefinitionInfo {
+        fileName: string;
+        textSpan: TypeScript.TextSpan;
+        kind: string;
+        name: string;
+        containerKind: string;
+        containerName: string;
     }
 
     export interface MemberName {
@@ -808,23 +795,20 @@ module ts {
         text: string;
     }
 
-    export class QuickInfo {
-        constructor(public kind: string,
-                    public kindModifiers: string,
-                    public textSpan: TypeScript.TextSpan,
-                    public displayParts: SymbolDisplayPart[],
-                    public documentation: SymbolDisplayPart[]) {
-        }
+    export interface QuickInfo {
+        kind: string;
+        kindModifiers: string;
+        textSpan: TypeScript.TextSpan;
+        displayParts: SymbolDisplayPart[];
+        documentation: SymbolDisplayPart[];
     }
 
-    export class TypeInfo {
-        constructor(
-            public memberName: TypeScript.MemberName,
-            public docComment: string,
-            public fullSymbolName: string,
-            public kind: string,
-            public textSpan: TypeScript.TextSpan) {
-        }
+    export interface TypeInfo {
+        memberName: TypeScript.MemberName;
+        docComment: string;
+        fullSymbolName: string;
+        kind: string;
+        textSpan: TypeScript.TextSpan;
     }
 
     export class RenameInfo {
@@ -852,12 +836,11 @@ module ts {
         }
     }
 
-    export class SignatureHelpParameter {
-        constructor(public name: string,
-                    public documentation: string,
-                    public display: string,
-                    public isOptional: boolean) {
-        }
+    export interface SignatureHelpParameter {
+        name: string;
+        documentation: string;
+        display: string;
+        isOptional: boolean;
     }
 
     /**
@@ -867,30 +850,27 @@ module ts {
      * an edit has happened, while signature help is still active, the host can ask important 
      * questions like 'what parameter is the user currently contained within?'.
      */
-    export class SignatureHelpItem {
-        constructor(public isVariadic: boolean,
-                    public prefix: string,
-                    public suffix: string,
-                    public separator: string,
-                    public parameters: SignatureHelpParameter[],
-                    public documentation: string) {
-        }
+    export interface SignatureHelpItem {
+        isVariadic: boolean;
+        prefix: string;
+        suffix: string;
+        separator: string;
+        parameters: SignatureHelpParameter[];
+        documentation: string;
     }
 
     /**
      * Represents a set of signature help items, and the preferred item that should be selected.
      */
-    export class SignatureHelpItems {
-        constructor(public items: SignatureHelpItem[],
-                    public applicableSpan: TypeScript.TextSpan,
-                    public selectedItemIndex: number) {
-        }
+    export interface SignatureHelpItems {
+        items: SignatureHelpItem[];
+        applicableSpan: TypeScript.TextSpan;
+        selectedItemIndex: number;
     }
 
-    export class SignatureHelpState {
-        constructor(public argumentIndex: number,
-                    public argumentCount: number) {
-        }
+    export interface SignatureHelpState {
+        argumentIndex: number;
+        argumentCount: number;
     }
 
     export interface CompletionInfo {
@@ -2484,12 +2464,13 @@ module ts {
                 }
             }
 
-            return new QuickInfo(
-                getSymbolKind(symbol),
-                getSymbolModifiers(symbol),
-                new TypeScript.TextSpan(node.getStart(), node.getWidth()),
-                totalParts,
-                documentationParts);
+            return {
+                kind: getSymbolKind(symbol),
+                kindModifiers: getSymbolModifiers(symbol),
+                textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
+                displayParts: totalParts,
+                documentation: documentationParts
+            };
         }
 
         function getTypeAtPosition(fileName: string, position: number): TypeInfo {
@@ -2505,10 +2486,13 @@ module ts {
             var symbol = typeInfoResolver.getSymbolInfo(node);
             var type = symbol && typeInfoResolver.getTypeOfSymbol(symbol);
             if (type) {
-                return new TypeInfo(
-                    new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
-                    "", typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
-                    getSymbolKind(symbol), TypeScript.TextSpan.fromBounds(node.pos, node.end));
+                return {
+                    memberName: new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
+                    docComment: "",
+                    fullSymbolName: typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
+                    kind: getSymbolKind(symbol),
+                    textSpan: TypeScript.TextSpan.fromBounds(node.pos, node.end)
+                };
             }
 
             return undefined;
@@ -2517,13 +2501,14 @@ module ts {
         /// Goto definition
         function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[]{
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
-                return new DefinitionInfo(
-                    node.getSourceFile().filename,
-                    TypeScript.TextSpan.fromBounds(node.getStart(), node.getEnd()),
-                    symbolKind,
-                    symbolName,
-                    undefined,
-                    containerName);
+                return {
+                    fileName: node.getSourceFile().filename,
+                    textSpan: TypeScript.TextSpan.fromBounds(node.getStart(), node.getEnd()),
+                    kind: symbolKind,
+                    name: symbolName,
+                    containerKind: undefined,
+                    containerName: containerName
+                };
             }
 
             function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
@@ -2593,10 +2578,14 @@ module ts {
             if (comment) {
                 var targetFilename = normalizePath(combinePaths(getDirectoryPath(filename), comment.filename));
                 if (program.getSourceFile(targetFilename)) {
-                    return [new DefinitionInfo(
-                        targetFilename, TypeScript.TextSpan.fromBounds(0, 0),
-                        ScriptElementKind.scriptElement,
-                        comment.filename, undefined, undefined)];
+                    return [{
+                        fileName: targetFilename,
+                        textSpan: TypeScript.TextSpan.fromBounds(0, 0),
+                        kind: ScriptElementKind.scriptElement,
+                        name: comment.filename,
+                        containerName: undefined,
+                        containerKind: undefined
+                    }];
                 }
                 return undefined;
             }
@@ -2629,7 +2618,7 @@ module ts {
             return result;
         }
 
-        /// References and Occurances
+        /// References and Occurrences
         function getOccurrencesAtPosition(filename: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
@@ -2749,7 +2738,11 @@ module ts {
                         }
 
                         if (shouldHighlightNextKeyword) {
-                            result.push(new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(elseKeyword.getStart(), ifKeyword.end), /* isWriteAccess */ false));
+                            result.push({
+                                fileName: filename,
+                                textSpan: TypeScript.TextSpan.fromBounds(elseKeyword.getStart(), ifKeyword.end),
+                                isWriteAccess: false
+                            });
                             i++; // skip the next keyword
                             continue;
                         }
@@ -3585,7 +3578,12 @@ module ts {
                 start += 1;
                 end -= 1;
             }
-            return new ReferenceEntry(node.getSourceFile().filename, TypeScript.TextSpan.fromBounds(start, end), isWriteAccess(node));
+
+            return {
+                fileName: node.getSourceFile().filename,
+                textSpan: TypeScript.TextSpan.fromBounds(start, end),
+                isWriteAccess: isWriteAccess(node)
+            };
         }
 
         /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
@@ -3878,9 +3876,10 @@ module ts {
                         if (symbol) {
                             var type = classifySymbol(symbol);
                             if (type) {
-                                result.push(new ClassifiedSpan(
-                                    new TypeScript.TextSpan(node.getStart(), node.getWidth()),
-                                    type));
+                                result.push({
+                                    textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
+                                    classificationType: type
+                                });
                             }
                         }
                     }
@@ -3902,9 +3901,10 @@ module ts {
 
             function classifyTrivia(trivia: TypeScript.ISyntaxTrivia) {
                 if (trivia.isComment() && span.intersectsWith(trivia.fullStart(), trivia.fullWidth())) {
-                    result.push(new ClassifiedSpan(
-                        new TypeScript.TextSpan(trivia.fullStart(), trivia.fullWidth()),
-                        ClassificationTypeNames.comment));
+                    result.push({
+                        textSpan: new TypeScript.TextSpan(trivia.fullStart(), trivia.fullWidth()),
+                        classificationType: ClassificationTypeNames.comment
+                    });
                 }
             }
 
@@ -3922,9 +3922,10 @@ module ts {
                 if (TypeScript.width(token) > 0) {
                     var type = classifyTokenType(token);
                     if (type) {
-                        result.push(new ClassifiedSpan(
-                            new TypeScript.TextSpan(TypeScript.start(token), TypeScript.width(token)),
-                            type));
+                        result.push({
+                            textSpan: new TypeScript.TextSpan(TypeScript.start(token), TypeScript.width(token)),
+                            classificationType: type
+                        });
                     }
                 }
 
@@ -4227,7 +4228,11 @@ module ts {
                     }
 
                     var message = matchArray[2];
-                    result.push(new TodoComment(descriptor, message, matchPosition));
+                    result.push({
+                        descriptor: descriptor,
+                        message: message,
+                        position: matchPosition
+                    });
                 }
             }
 
