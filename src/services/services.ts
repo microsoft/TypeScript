@@ -811,29 +811,14 @@ module ts {
         textSpan: TypeScript.TextSpan;
     }
 
-    export class RenameInfo {
-        constructor(public canRename: boolean,
-                    public localizedErrorMessage: string,
-                    public displayName: string,
-                    public fullDisplayName: string,
-                    public kind: string,
-                    public kindModifiers: string,
-                    public triggerSpan: TypeScript.TextSpan) {
-        }
-
-        public static CreateError(localizedErrorMessage: string) {
-            return new RenameInfo(/*canRename:*/ false, localizedErrorMessage,
-                                  /*displayName:*/ null, /*fullDisplayName:*/ null,
-                                  /*kind:*/ null, /*kindModifiers:*/ null, /*triggerSpan:*/ null);
-        }
-
-        public static Create(displayName: string,
-                             fullDisplayName: string,
-                             kind: string,
-                             kindModifiers: string,
-                             triggerSpan: TypeScript.TextSpan) {
-            return new RenameInfo(/*canRename:*/ true, /*localizedErrorMessage:*/ null, displayName, fullDisplayName, kind, kindModifiers, triggerSpan);
-        }
+    export interface RenameInfo {
+        canRename: boolean;
+        localizedErrorMessage: string;
+        displayName: string;
+        fullDisplayName: string;
+        kind: string;
+        kindModifiers: string;
+        triggerSpan: TypeScript.TextSpan;
     }
 
     export interface SignatureHelpParameter {
@@ -4319,7 +4304,7 @@ module ts {
                     (char >= TypeScript.CharacterCodes._0 && char <= TypeScript.CharacterCodes._9);
             }
         }
-      
+
 
         function getRenameInfo(fileName: string, position: number): RenameInfo {
             synchronizeHostData();
@@ -4337,14 +4322,38 @@ module ts {
                 if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
                     var kind = getSymbolKind(symbol);
                     if (kind) {
-                        return RenameInfo.Create(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
+                        return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),
                             new TypeScript.TextSpan(node.getStart(), node.getWidth()));
                     }
                 }
             }
 
-            return RenameInfo.CreateError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
+            return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
+
+            function getRenameInfoError(localizedErrorMessage: string): RenameInfo {
+                return {
+                    canRename: false,
+                    localizedErrorMessage: getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key),
+                    displayName: undefined,
+                    fullDisplayName: undefined,
+                    kind: undefined,
+                    kindModifiers: undefined,
+                    triggerSpan: undefined
+                };
+            }
+
+            function getRenameInfo(displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: TypeScript.TextSpan): RenameInfo {
+                return {
+                    canRename: true,
+                    localizedErrorMessage: undefined,
+                    displayName: displayName,
+                    fullDisplayName: fullDisplayName,
+                    kind: kind,
+                    kindModifiers: kindModifiers,
+                    triggerSpan: triggerSpan
+                };
+            }
         }
 
         return {
