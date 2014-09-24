@@ -259,7 +259,9 @@ module ts {
         localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
-    export interface NodeArray<T> extends Array<T>, TextRange { }
+    export interface NodeArray<T> extends Array<T>, TextRange {
+        hasTrailingComma?: boolean;
+    }
 
     export interface Identifier extends Node {
         text: string;                 // Text of identifier (with escapes converted to characters)

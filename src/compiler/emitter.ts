@@ -824,11 +824,21 @@ module ts {
                 }
             }
 
+            function emitTrailingCommaIfPresent(nodeList: NodeArray<Node>, isMultiline: boolean): void {
+                if (nodeList.hasTrailingComma) {
+                    write(",");
+                    if (isMultiline) {
+                        writeLine();
+                    }
+                }
+            }
+
             function emitArrayLiteral(node: ArrayLiteral) {
                 if (node.flags & NodeFlags.MultiLine) {
                     write("[");
                     increaseIndent();
                     emitMultiLineList(node.elements);
+                    emitTrailingCommaIfPresent(node.elements, /*isMultiline*/ true);
                     decreaseIndent();
                     writeLine();
                     write("]");
@@ -836,6 +846,7 @@ module ts {
                 else {
                     write("[");
                     emitCommaList(node.elements);
+                    emitTrailingCommaIfPresent(node.elements, /*isMultiline*/ false);
                     write("]");
                 }
             }
@@ -848,6 +859,11 @@ module ts {
                     write("{");
                     increaseIndent();
                     emitMultiLineList(node.properties);
+
+                    if (compilerOptions.target === ScriptTarget.ES5) {
+                        emitTrailingCommaIfPresent(node.properties, /*isMultiline*/ true);
+                    }
+
                     decreaseIndent();
                     writeLine();
                     write("}");
@@ -855,6 +871,11 @@ module ts {
                 else {
                     write("{ ");
                     emitCommaList(node.properties);
+
+                    if (compilerOptions.target === ScriptTarget.ES5) {
+                        emitTrailingCommaIfPresent(node.properties, /*isMultiline*/ false);
+                    }
+
                     write(" }");
                 }
             }

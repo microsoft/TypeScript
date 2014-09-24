@@ -4141,8 +4141,12 @@ module ts {
             // illegal, and will cause a parse error.
             // Note: It may be worth keeping the upper bound check on arity, but removing
             // the lower bound check if there are omitted expressions.
-            if (!isCorrect && forEach(node.arguments, arg => arg.kind === SyntaxKind.OmittedExpression)) {
-                return true;
+            if (!isCorrect) {
+                // Technically this type assertion is not safe because args could be initialized to emptyArray
+                // above.
+                if ((<NodeArray<Node>>args).hasTrailingComma || forEach(args, arg => arg.kind === SyntaxKind.OmittedExpression)) {
+                    return true;
+                }
             }
             return isCorrect;
         }

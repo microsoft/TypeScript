@@ -1197,7 +1197,7 @@ module ts {
         }
 
         // Parses a comma-delimited list of elements
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, allowTrailingComma: boolean, preserveTrailingComma: boolean): NodeArray<T> {
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, allowTrailingComma: boolean): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
@@ -1228,11 +1228,8 @@ module ts {
                                 grammarErrorAtPos(commaStart, scanner.getStartPos() - commaStart, Diagnostics.Trailing_comma_not_allowed);
                             }
                         }
-                        // Even if we reported an error because of a disallowed trailing comma, we still may
-                        // need to preserve it for the checker so that signature help can work well.
-                        if (preserveTrailingComma) {
-                            result.push(<T>createNode(SyntaxKind.OmittedExpression));
-                        }
+                        // Always preserve a trailing comma by marking it on the NodeArray
+                        result.hasTrailingComma = true;
                     }
 
                     break;
@@ -1267,7 +1264,7 @@ module ts {
 
         function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, startToken: SyntaxKind, endToken: SyntaxKind): NodeArray<T> {
             if (parseExpected(startToken)) {
-                var result = parseDelimitedList(kind, parseElement, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ false);
+                var result = parseDelimitedList(kind, parseElement, /*allowTrailingComma*/ false);
                 parseExpected(endToken);
                 return result;
             }
@@ -2307,7 +2304,7 @@ module ts {
                     // needs evidence of a trailing comma in order to give good results for signature help.
                     // That is why we do not allow a trailing comma, but we "preserve" a trailing comma.
                     callExpr.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions,
-                        parseArgumentExpression, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ true);
+                        parseArgumentExpression, /*allowTrailingComma*/ false);
                     parseExpected(SyntaxKind.CloseParenToken);
                     expr = finishNode(callExpr);
                     continue;
@@ -2402,7 +2399,7 @@ module ts {
             parseExpected(SyntaxKind.OpenBracketToken);
             if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
             node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, 
-                parseArrayLiteralElement, /*allowTrailingComma*/ true, /*preserveTrailingComma*/ true);
+                parseArrayLiteralElement, /*allowTrailingComma*/ true);
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
@@ -2444,10 +2441,7 @@ module ts {
                 node.flags |= NodeFlags.MultiLine;
             }
 
-            // ES3 itself does not accept a trailing comma in an object literal, however, we'd like to preserve it in ES5.
-            var preserveTrailingComma = languageVersion !== ScriptTarget.ES3;
-
-            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, /*allowTrailingComma*/ true, preserveTrailingComma);
+            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, /*allowTrailingComma*/ true);
             parseExpected(SyntaxKind.CloseBraceToken);
 
             var seen: Map<SymbolFlags> = {};
@@ -2540,7 +2534,7 @@ module ts {
                 // needs evidence of a trailing comma in order to give good results for signature help.
                 // That is why we do not allow a trailing comma, but we "preserve" a trailing comma.
                 node.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions,
-                    parseArgumentExpression, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ true);
+                    parseArgumentExpression, /*allowTrailingComma*/ false);
                 parseExpected(SyntaxKind.CloseParenToken);
             }
             return finishNode(node);
@@ -3110,7 +3104,7 @@ module ts {
 
         function parseVariableDeclarationList(flags: NodeFlags, noIn?: boolean): NodeArray<VariableDeclaration> {
             return parseDelimitedList(ParsingContext.VariableDeclarations,
-                () => parseVariableDeclaration(flags, noIn), /*allowTrailingComma*/ false, /*preserveTrailingComma*/ false);
+                () => parseVariableDeclaration(flags, noIn), /*allowTrailingComma*/ false);
         }
 
         function parseVariableStatement(pos?: number, flags?: NodeFlags): VariableStatement {
@@ -3510,7 +3504,7 @@ module ts {
             if (parseOptional(SyntaxKind.ImplementsKeyword)) {
                 implementsKeywordLength = scanner.getStartPos() - implementsKeywordStart;
                 node.implementedTypes = parseDelimitedList(ParsingContext.BaseTypeReferences,
-                    parseTypeReference, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ false);
+                    parseTypeReference, /*allowTrailingComma*/ false);
             }
             var errorCountBeforeClassBody = file.syntacticErrors.length;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
@@ -3539,7 +3533,7 @@ module ts {
             if (parseOptional(SyntaxKind.ExtendsKeyword)) {
                 extendsKeywordLength = scanner.getStartPos() - extendsKeywordStart;
                 node.baseTypes = parseDelimitedList(ParsingContext.BaseTypeReferences,
-                    parseTypeReference, /*allowTrailingComma*/ false, /*preserveTrailingComma*/ false);
+                    parseTypeReference, /*allowTrailingComma*/ false);
             }
             var errorCountBeforeInterfaceBody = file.syntacticErrors.length;
             node.members = parseTypeLiteral().members;
@@ -3604,7 +3598,7 @@ module ts {
             node.name = parseIdentifier();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 node.members = parseDelimitedList(ParsingContext.EnumMembers,
-                    parseAndCheckEnumMember, /*allowTrailingComma*/ true, /*preserveTrailingComma*/ false);
+                    parseAndCheckEnumMember, /*allowTrailingComma*/ true);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
