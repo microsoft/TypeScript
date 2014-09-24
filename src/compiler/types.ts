@@ -228,7 +228,9 @@ module ts {
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = EndOfFileToken,
-        LastToken = StringKeyword
+        LastToken = StringKeyword,
+        FirstTriviaToken = SingleLineCommentTrivia,
+        LastTriviaToken = WhitespaceTrivia
     }
 
     export enum NodeFlags {
