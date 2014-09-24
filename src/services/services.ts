@@ -9,6 +9,8 @@
 /// <reference path='getScriptLexicalStructureWalker.ts' />
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
+/// <reference path='signatureHelp.ts' />
+/// <reference path='utilities.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 
@@ -201,7 +203,7 @@ module ts {
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
-            var children = this.getChildren(sourceFile);
+            var children = this.getChildren();
             for (var i = 0; i < children.length; i++) {
                 var child = children[i];
                 if (child.kind < SyntaxKind.Missing) return child;
@@ -1084,7 +1086,7 @@ module ts {
 
     export class OperationCanceledException { }
 
-    class CancellationTokenObject {
+    export class CancellationTokenObject {
 
         public static None: CancellationTokenObject = new CancellationTokenObject(null)
 
@@ -2209,40 +2211,6 @@ module ts {
             }
         }
 
-        /** Get the token whose text contains the position, or the containing node. */
-        function getNodeAtPosition(sourceFile: SourceFile, position: number) {
-            var current: Node = sourceFile;
-            outer: while (true) {
-                // find the child that has this
-                for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                    var child = current.getChildAt(i);
-                    if (child.getStart() <= position && position < child.getEnd()) {
-                        current = child;
-                        continue outer;
-                    }
-                }
-                return current;
-            }
-        }
-
-        /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
-          * leading trivia or within the token text.
-          */
-        function getTokenAtPosition(sourceFile: SourceFile, position: number) {
-            var current: Node = sourceFile;
-            outer: while (true) {
-                // find the child that has this
-                for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                    var child = current.getChildAt(i);
-                    if (child.getFullStart() <= position && position < child.getEnd()) {
-                        current = child;
-                        continue outer;
-                    }
-                }
-                return current;
-            }
-        }
-
         function getContainerNode(node: Node): Node {
             while (true) {
                 node = node.parent;
@@ -2510,7 +2478,7 @@ module ts {
                     result.push(getDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
                     return true;
                 }
-
+                
                 return false;
             }
 
@@ -2715,7 +2683,7 @@ module ts {
                                 break;
                             }
                         }
-
+                        
                         if (shouldHighlightNextKeyword) {
                             result.push({
                                 fileName: filename,
@@ -3734,6 +3702,29 @@ module ts {
             return emitOutput;
         }
 
+        // Signature help
+        /**
+         * This is a semantic operation.
+         */
+        function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
+            synchronizeHostData();
+
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
+
+            return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
+        }
+
+        /**
+         * This is a syntactic operation
+         */
+        function getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState {
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getCurrentSourceFile(fileName);
+
+            return SignatureHelp.getSignatureHelpCurrentArgumentState(sourceFile, position, applicableSpanStart);
+        }
+
         /// Syntactic features
         function getSyntaxTree(filename: string): TypeScript.SyntaxTree {
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -4361,9 +4352,9 @@ module ts {
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
+            getSignatureHelpItems: getSignatureHelpItems,
+            getSignatureHelpCurrentArgumentState: getSignatureHelpCurrentArgumentState,
             getQuickInfoAtPosition: getQuickInfoAtPosition,
-            getSignatureHelpItems: (filename, position): SignatureHelpItems => null,
-            getSignatureHelpCurrentArgumentState: (fileName, position, applicableSpanStart): SignatureHelpState => null,
             getDefinitionAtPosition: getDefinitionAtPosition,
             getReferencesAtPosition: getReferencesAtPosition,
             getOccurrencesAtPosition: getOccurrencesAtPosition,
@@ -4386,13 +4377,13 @@ module ts {
 
     /// Classifier
     export function createClassifier(host: Logger): Classifier {
-        var scanner: Scanner;
-        var noRegexTable: boolean[];
+        var scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false);
 
         /// We do not have a full parser support to know when we should parse a regex or not
         /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
         /// we have a series of divide operator. this list allows us to be more accurate by ruling out 
         /// locations where a regexp cannot exist.
+        var noRegexTable: boolean[];
         if (!noRegexTable) {
             noRegexTable = [];
             noRegexTable[SyntaxKind.Identifier] = true;
@@ -4412,8 +4403,7 @@ module ts {
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
             var lastTokenOrCommentEnd = 0;
-            var lastToken = SyntaxKind.Unknown;
-            var inUnterminatedMultiLineComment = false;
+            var lastNonTriviaToken = SyntaxKind.Unknown;
 
             // If we're in a string literal, then prepend: "\
             // (and a newline).  That way when we lex we'll think we're still in a string literal.
@@ -4435,27 +4425,31 @@ module ts {
                     break;
             }
 
+            scanner.setText(text);
+
             var result: ClassificationResult = {
                 finalLexState: EndOfLineState.Start,
                 entries: []
             };
 
-            scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ true, text, onError, processComment);
-
+            
             var token = SyntaxKind.Unknown;
             do {
                 token = scanner.scan();
 
-                if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastToken]) {
+                if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastNonTriviaToken]) {
                     if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
                         token = SyntaxKind.RegularExpressionLiteral;
                     }
                 }
-                else if (lastToken === SyntaxKind.DotToken) {
+                else if (lastNonTriviaToken === SyntaxKind.DotToken) {
                     token = SyntaxKind.Identifier;
                 }
 
-                lastToken = token;
+                // Only recall the token if it was *not* trivia.
+                if (!(SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken)) {
+                    lastNonTriviaToken = token;
+                }
 
                 processToken();
             }
@@ -4463,35 +4457,17 @@ module ts {
 
             return result;
 
-
-            function onError(message: DiagnosticMessage): void {
-                inUnterminatedMultiLineComment = message.key === Diagnostics.Asterisk_Slash_expected.key;
-            }
-
-            function processComment(start: number, end: number) {
-                // add Leading white spaces
-                addLeadingWhiteSpace(start, end);
-
-                // add the comment
-                addResult(end - start, TokenClass.Comment);
-            }
-
             function processToken(): void {
                 var start = scanner.getTokenPos();
                 var end = scanner.getTextPos();
-
-                // add Leading white spaces
-                addLeadingWhiteSpace(start, end);
 
                 // add the token
                 addResult(end - start, classFromKind(token));
 
                 if (end >= text.length) {
                     // We're at the end.
-                    if (inUnterminatedMultiLineComment) {
-                        result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
-                    }
-                    else if (token === SyntaxKind.StringLiteral) {
+                    if (token === SyntaxKind.StringLiteral) {
+                        // Check to see if we finished up on a multiline string literal.
                         var tokenText = scanner.getTokenText();
                         if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.backslash) {
                             var quoteChar = tokenText.charCodeAt(0);
@@ -4500,16 +4476,16 @@ module ts {
                                 : EndOfLineState.InSingleQuoteStringLiteral;
                         }
                     }
+                    else if (token === SyntaxKind.MultiLineCommentTrivia) {
+                        // Check to see if the multiline comment was unclosed.
+                        var tokenText = scanner.getTokenText()
+                        if (!(tokenText.length > 3 && // need to avoid catching '/*/'
+                            tokenText.charCodeAt(tokenText.length - 2) === CharacterCodes.asterisk &&
+                            tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.slash)) {
+                            result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
+                        }
+                    }
                 }
-            }
-
-            function addLeadingWhiteSpace(start: number, end: number): void {
-                if (start > lastTokenOrCommentEnd) {
-                    addResult(start - lastTokenOrCommentEnd, TokenClass.Whitespace);
-                }
-
-                // Remember the end of the last token
-                lastTokenOrCommentEnd = end;
             }
 
             function addResult(length: number, classification: TokenClass): void {
@@ -4604,6 +4580,11 @@ module ts {
                     return TokenClass.StringLiteral;
                 case SyntaxKind.RegularExpressionLiteral:
                     return TokenClass.RegExpLiteral;
+                case SyntaxKind.MultiLineCommentTrivia:
+                case SyntaxKind.SingleLineCommentTrivia:
+                    return TokenClass.Comment;
+                case SyntaxKind.WhitespaceTrivia:
+                    return TokenClass.Whitespace;
                 case SyntaxKind.Identifier:
                 default:
                     return TokenClass.Identifier;

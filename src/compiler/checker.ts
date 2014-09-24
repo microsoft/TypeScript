@@ -91,6 +91,7 @@ module ts {
             getRootSymbol: getRootSymbol,
             getContextualType: getContextualType,
             getFullyQualifiedName: getFullyQualifiedName,
+            getResolvedSignature: getResolvedSignature,
             getEnumMemberValue: getEnumMemberValue
         };
 
@@ -4330,55 +4331,26 @@ module ts {
             return unknownSignature;
         }
 
-        function isCandidateSignature(node: CallExpression, signature: Signature) {
+        function signatureHasCorrectArity(node: CallExpression, signature: Signature): boolean {
             var args = node.arguments || emptyArray;
-            return args.length >= signature.minArgumentCount &&
+            var isCorrect = args.length >= signature.minArgumentCount &&
                 (signature.hasRestParameter || args.length <= signature.parameters.length) &&
                 (!node.typeArguments || signature.typeParameters && node.typeArguments.length === signature.typeParameters.length);
-        }
 
-        // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
-        // A nit here is that we reorder only signatures that belong to the same symbol,
-        // so order how inherited signatures are processed is still preserved.
-        // interface A { (x: string): void }
-        // interface B extends A { (x: 'foo'): string }
-        // var b: B;
-        // b('foo') // <- here overloads should be processed as [(x:'foo'): string, (x: string): void]
-        function collectCandidates(node: CallExpression, signatures: Signature[]): Signature[]{
-            var result: Signature[] = [];
-            var lastParent: Node;
-            var lastSymbol: Symbol;
-            var cutoffPos: number = 0;
-            var pos: number;
-            for (var i = 0; i < signatures.length; i++) {
-                var signature = signatures[i];
-                if (isCandidateSignature(node, signature)) {
-                    var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
-                    var parent = signature.declaration && signature.declaration.parent;
-                    if (!lastSymbol || symbol === lastSymbol) {                        
-                        if (lastParent && parent === lastParent) {
-                            pos++;
-                        }
-                        else {
-                            lastParent = parent;
-                            pos = cutoffPos;
-                        }
-                    }
-                    else {
-                        // current declaration belongs to a different symbol
-                        // set cutoffPos so re-orderings in the future won't change result set from 0 to cutoffPos
-                        pos = cutoffPos = result.length;
-                        lastParent = parent;
-                    }
-                    lastSymbol = symbol;
-
-                    for (var j = result.length; j > pos; j--) {
-                        result[j] = result[j - 1];
-                    }
-                    result[pos] = signature;
+            // For error recovery, since we have parsed OmittedExpressions for any extra commas
+            // in the argument list, if we see any OmittedExpressions, just return true.
+            // The reason this is ok is because omitted expressions here are syntactically
+            // illegal, and will cause a parse error.
+            // Note: It may be worth keeping the upper bound check on arity, but removing
+            // the lower bound check if there are omitted expressions.
+            if (!isCorrect) {
+                // Technically this type assertion is not safe because args could be initialized to emptyArray
+                // above.
+                if ((<NodeArray<Node>>args).hasTrailingComma || forEach(args, arg => arg.kind === SyntaxKind.OmittedExpression)) {
+                    return true;
                 }
             }
-            return result;
+            return isCorrect;
         }
 
         // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
@@ -4409,6 +4381,9 @@ module ts {
             var mapper = createInferenceMapper(context);
             // First infer from arguments that are not context sensitive
             for (var i = 0; i < args.length; i++) {
+                if (args[i].kind === SyntaxKind.OmittedExpression) {
+                    continue;
+                }
                 if (!excludeArgument || excludeArgument[i] === undefined) {
                     var parameterType = getTypeAtPosition(signature, i);
                     inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
@@ -4417,6 +4392,9 @@ module ts {
             // Next, infer from those context sensitive arguments that are no longer excluded
             if (excludeArgument) {
                 for (var i = 0; i < args.length; i++) {
+                    if (args[i].kind === SyntaxKind.OmittedExpression) {
+                        continue;
+                    }
                     if (excludeArgument[i] === false) {
                         var parameterType = getTypeAtPosition(signature, i);
                         inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
@@ -4445,6 +4423,10 @@ module ts {
             if (node.arguments) {
                 for (var i = 0; i < node.arguments.length; i++) {
                     var arg = node.arguments[i];
+                    if (arg.kind === SyntaxKind.OmittedExpression) {
+                        continue;
+                    }
+
                     var paramType = getTypeAtPosition(signature, i);
                     // String literals get string literal types unless we're reporting errors
                     var argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors ?
@@ -4462,9 +4444,11 @@ module ts {
             return true;
         }
 
-        function resolveCall(node: CallExpression, signatures: Signature[]): Signature {
+        function resolveCall(node: CallExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature {
             forEach(node.typeArguments, checkSourceElement);
-            var candidates = collectCandidates(node, signatures);
+            var candidates = candidatesOutArray || [];
+            // collectCandidates fills up the candidates array directly
+            collectCandidates();
             if (!candidates.length) {
                 error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
                 return resolveErrorCall(node);
@@ -4480,20 +4464,24 @@ module ts {
             var relation = candidates.length === 1 ? assignableRelation : subtypeRelation;
             while (true) {
                 for (var i = 0; i < candidates.length; i++) {
+                    if (!signatureHasCorrectArity(node, candidates[i])) {
+                        continue;
+                    }
+
                     while (true) {
-                        var candidate = candidates[i];
-                        if (candidate.typeParameters) {
+                        var candidateWithCorrectArity = candidates[i];
+                        if (candidateWithCorrectArity.typeParameters) {
                             var typeArguments = node.typeArguments ?
-                                checkTypeArguments(candidate, node.typeArguments) :
-                                inferTypeArguments(candidate, args, excludeArgument);
-                            candidate = getSignatureInstantiation(candidate, typeArguments);
+                                checkTypeArguments(candidateWithCorrectArity, node.typeArguments) :
+                                inferTypeArguments(candidateWithCorrectArity, args, excludeArgument);
+                            candidateWithCorrectArity = getSignatureInstantiation(candidateWithCorrectArity, typeArguments);
                         }
-                        if (!checkApplicableSignature(node, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                        if (!checkApplicableSignature(node, candidateWithCorrectArity, relation, excludeArgument, /*reportErrors*/ false)) {
                             break;
                         }
                         var index = excludeArgument ? indexOf(excludeArgument, true) : -1;
                         if (index < 0) {
-                            return candidate;
+                            return candidateWithCorrectArity;
                         }
                         excludeArgument[index] = false;
                     }
@@ -4503,17 +4491,70 @@ module ts {
                 }
                 relation = assignableRelation;
             }
+
             // No signatures were applicable. Now report errors based on the last applicable signature with
             // no arguments excluded from assignability checks.
-            checkApplicableSignature(node, candidate, relation, undefined, /*reportErrors*/ true);
+            // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
+            // skip the checkApplicableSignature check.
+            if (candidateWithCorrectArity) {
+                checkApplicableSignature(node, candidateWithCorrectArity, relation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+            }
+            else {
+                error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
+                return resolveErrorCall(node);
+            }
             return resolveErrorCall(node);
+
+            // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
+            // A nit here is that we reorder only signatures that belong to the same symbol,
+            // so order how inherited signatures are processed is still preserved.
+            // interface A { (x: string): void }
+            // interface B extends A { (x: 'foo'): string }
+            // var b: B;
+            // b('foo') // <- here overloads should be processed as [(x:'foo'): string, (x: string): void]
+            function collectCandidates(): void {
+                var result = candidates;
+                var lastParent: Node;
+                var lastSymbol: Symbol;
+                var cutoffPos: number = 0;
+                var pos: number;
+                Debug.assert(!result.length);
+                for (var i = 0; i < signatures.length; i++) {
+                    var signature = signatures[i];
+                    if (true) {
+                        var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
+                        var parent = signature.declaration && signature.declaration.parent;
+                        if (!lastSymbol || symbol === lastSymbol) {
+                            if (lastParent && parent === lastParent) {
+                                pos++;
+                            }
+                            else {
+                                lastParent = parent;
+                                pos = cutoffPos;
+                            }
+                        }
+                        else {
+                            // current declaration belongs to a different symbol
+                            // set cutoffPos so re-orderings in the future won't change result set from 0 to cutoffPos
+                            pos = cutoffPos = result.length;
+                            lastParent = parent;
+                        }
+                        lastSymbol = symbol;
+
+                        for (var j = result.length; j > pos; j--) {
+                            result[j] = result[j - 1];
+                        }
+                        result[pos] = signature;
+                    }
+                }
+            }
         }
 
-        function resolveCallExpression(node: CallExpression): Signature {
+        function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[]): Signature {
             if (node.func.kind === SyntaxKind.SuperKeyword) {
                 var superType = checkSuperExpression(node.func);
                 if (superType !== unknownType) {
-                    return resolveCall(node, getSignaturesOfType(superType, SignatureKind.Construct));
+                    return resolveCall(node, getSignaturesOfType(superType, SignatureKind.Construct), candidatesOutArray);
                 }
                 return resolveUntypedCall(node);
             }
@@ -4561,10 +4602,10 @@ module ts {
                 }
                 return resolveErrorCall(node);
             }
-            return resolveCall(node, callSignatures);
+            return resolveCall(node, callSignatures, candidatesOutArray);
         }
 
-        function resolveNewExpression(node: NewExpression): Signature {
+        function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
             var expressionType = checkExpression(node.func);
             if (expressionType === unknownType) {
                 // Another error has already been reported
@@ -4599,7 +4640,7 @@ module ts {
             // that the user will not add any.
             var constructSignatures = getSignaturesOfType(expressionType, SignatureKind.Construct);
             if (constructSignatures.length) {
-                return resolveCall(node, constructSignatures);
+                return resolveCall(node, constructSignatures, candidatesOutArray);
             }
 
             // If ConstructExpr's apparent type is an object type with no construct signatures but
@@ -4608,7 +4649,7 @@ module ts {
             // operation is Any.
             var callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
-                var signature = resolveCall(node, callSignatures);
+                var signature = resolveCall(node, callSignatures, candidatesOutArray);
                 if (getReturnTypeOfSignature(signature) !== voidType) {
                     error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
                 }
@@ -4619,11 +4660,19 @@ module ts {
             return resolveErrorCall(node);
         }
 
-        function getResolvedSignature(node: CallExpression): Signature {
+        // candidatesOutArray is passed by signature help in the language service, and collectCandidates
+        // must fill it up with the appropriate candidate signatures
+        function getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature {
             var links = getNodeLinks(node);
-            if (!links.resolvedSignature) {
+            // If getResolvedSignature has already been called, we will have cached the resolvedSignature.
+            // However, it is possible that either candidatesOutArray was not passed in the first time,
+            // or that a different candidatesOutArray was passed in. Therefore, we need to redo the work
+            // to correctly fill the candidatesOutArray.
+            if (!links.resolvedSignature || candidatesOutArray) {
                 links.resolvedSignature = anySignature;
-                links.resolvedSignature = node.kind === SyntaxKind.CallExpression ? resolveCallExpression(node) : resolveNewExpression(node);
+                links.resolvedSignature = node.kind === SyntaxKind.CallExpression
+                    ? resolveCallExpression(node, candidatesOutArray)
+                    : resolveNewExpression(node, candidatesOutArray);
             }
             return links.resolvedSignature;
         }
@@ -4935,10 +4984,12 @@ module ts {
             // The instanceof operator requires the left operand to be of type Any, an object type, or a type parameter type,
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
-            if (!isTypeAnyTypeObjectTypeOrTypeParameter(leftType)) {
+            // NOTE: do not raise error if leftType is unknown as related error was already reported
+            if (leftType !== unknownType && !isTypeAnyTypeObjectTypeOrTypeParameter(leftType)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
-            if (rightType !== anyType && !isTypeSubtypeOf(rightType, globalFunctionType)) {
+            // NOTE: do not raise error if right is unknown as related error was already reported
+            if (rightType !== unknownType && rightType !== anyType && !isTypeSubtypeOf(rightType, globalFunctionType)) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type);
             }
             return booleanType;
@@ -5266,7 +5317,7 @@ module ts {
             if (fullTypeCheck) {
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 if (compilerOptions.noImplicitAny && !node.type) {
                     switch (node.kind) {
@@ -6012,7 +6063,7 @@ module ts {
             }
         }
 
-        function checkCollistionWithRequireExportsInGeneratedCode(node: Node, name: Identifier) {
+        function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier) {
             if (!needCollisionCheckForIdentifier(node, name, "require") && !needCollisionCheckForIdentifier(node, name, "exports")) {
                 return;
             }
@@ -6057,7 +6108,7 @@ module ts {
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 if (!useTypeFromValueDeclaration) {
                     // TypeScript 1.0 spec (April 2014): 5.1
                     // Multiple declarations for the same variable name in the same declaration space are permitted,
@@ -6316,7 +6367,7 @@ module ts {
             checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
             checkCollisionWithCapturedThisVariable(node, node.name);
-            checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
             var symbol = getSymbolOfNode(node);
             var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
@@ -6567,7 +6618,7 @@ module ts {
 
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
-            checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
 
             computeEnumMemberValues(node);
@@ -6620,7 +6671,7 @@ module ts {
         function checkModuleDeclaration(node: ModuleDeclaration) {
             if (fullTypeCheck) {
                 checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkExportsOnMergedDeclarations(node);
                 var symbol = getSymbolOfNode(node);
                 if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
@@ -6655,7 +6706,7 @@ module ts {
 
         function checkImportDeclaration(node: ImportDeclaration) {
             checkCollisionWithCapturedThisVariable(node, node.name);
-            checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             var symbol = getSymbolOfNode(node);
             var target: Symbol;
             

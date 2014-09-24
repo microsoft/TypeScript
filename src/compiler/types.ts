@@ -228,7 +228,9 @@ module ts {
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = EndOfFileToken,
-        LastToken = StringKeyword
+        LastToken = StringKeyword,
+        FirstTriviaToken = SingleLineCommentTrivia,
+        LastTriviaToken = WhitespaceTrivia
     }
 
     export enum NodeFlags {
@@ -259,7 +261,9 @@ module ts {
         localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
-    export interface NodeArray<T> extends Array<T>, TextRange { }
+    export interface NodeArray<T> extends Array<T>, TextRange {
+        hasTrailingComma?: boolean;
+    }
 
     export interface Identifier extends Node {
         text: string;                 // Text of identifier (with escapes converted to characters)
@@ -646,6 +650,7 @@ module ts {
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
         getRootSymbol(symbol: Symbol): Symbol;
         getContextualType(node: Node): Type;
+        getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature;
 
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
         // computed value.
@@ -933,7 +938,7 @@ module ts {
         resolvedReturnType: Type;           // Resolved return type
         minArgumentCount: number;           // Number of non-optional parameters
         hasRestParameter: boolean;          // True if last parameter is rest parameter
-        hasStringLiterals: boolean;         // True if instantiated
+        hasStringLiterals: boolean;         // True if specialized
         target?: Signature;                 // Instantiation target
         mapper?: TypeMapper;                // Instantiation mapper
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
