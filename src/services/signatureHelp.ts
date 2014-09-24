@@ -335,7 +335,12 @@ module ts.SignatureHelp {
 
     export function getSignatureHelpItems(sourceFile: SourceFile, position: number, typeInfoResolver: TypeChecker, cancellationToken: CancellationTokenObject): SignatureHelpItems {
         // Decide whether to show signature help
-        var startingToken = ServicesSyntaxUtilities.findTokenOnLeftOfPosition(sourceFile, position);
+        var startingToken = findTokenOnLeftOfPosition(sourceFile, position);
+        if (!startingToken) {
+            // We are at the beginning of the file
+            return undefined;
+        }
+
         var argumentList = getContainingArgumentList(startingToken);
         cancellationToken.throwIfCancellationRequested();
 
@@ -390,7 +395,7 @@ module ts.SignatureHelp {
                 return undefined;
             }
 
-            return ServicesSyntaxUtilities.findContainingList(node);
+            return findContainingList(node);
         }
 
         function getContainingArgumentList(node: Node): Node {
@@ -458,7 +463,7 @@ module ts.SignatureHelp {
     }
 
     export function getSignatureHelpCurrentArgumentState(sourceFile: SourceFile, position: number, applicableSpanStart: number): SignatureHelpState {
-        var tokenPrecedingSpanStart = ServicesSyntaxUtilities.findPrecedingToken(applicableSpanStart, sourceFile);
+        var tokenPrecedingSpanStart = findPrecedingToken(applicableSpanStart, sourceFile);
         if (!tokenPrecedingSpanStart) {
             return undefined;
         }
@@ -468,7 +473,7 @@ module ts.SignatureHelp {
             return undefined;
         }
 
-        var tokenPrecedingCurrentPosition = ServicesSyntaxUtilities.findPrecedingToken(position, sourceFile);
+        var tokenPrecedingCurrentPosition = findPrecedingToken(position, sourceFile);
         var call = <CallExpression>tokenPrecedingSpanStart.parent;
         Debug.assert(call.kind === SyntaxKind.CallExpression || call.kind === SyntaxKind.NewExpression, "wrong call kind " + SyntaxKind[call.kind]);
         if (tokenPrecedingCurrentPosition.kind === SyntaxKind.CloseParenToken || tokenPrecedingCurrentPosition.kind === SyntaxKind.GreaterThanToken) {
@@ -492,7 +497,7 @@ module ts.SignatureHelp {
             return new SignatureHelpState(/*argumentIndex*/ 0, argumentCount);
         }
 
-        var indexOfNodeContainingPosition = ServicesSyntaxUtilities.findListItemIndexContainingPosition(argumentListOrTypeArgumentList, position);
+        var indexOfNodeContainingPosition = findListItemIndexContainingPosition(argumentListOrTypeArgumentList, position);
 
         // indexOfNodeContainingPosition checks that position is between pos and end of each child, so it is
         // possible that we are to the right of all children. Assume that we are still within

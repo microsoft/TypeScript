@@ -2085,22 +2085,6 @@ module ts {
             }
         }
 
-        /** Get the token whose text contains the position, or the containing node. */
-        function getNodeAtPosition(sourceFile: SourceFile, position: number) {
-            var current: Node = sourceFile;
-            outer: while (true) {
-                // find the child that has this
-                for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                    var child = current.getChildAt(i);
-                    if (child.getStart() <= position && position < child.getEnd()) {
-                        current = child;
-                        continue outer;
-                    }
-                }
-                return current;
-            }
-        }
-
         function getContainerNode(node: Node): Node {
             while (true) {
                 node = node.parent;
@@ -3874,7 +3858,7 @@ module ts {
 
                     // OK, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
-                    var token = ServicesSyntaxUtilities.getTokenAtPosition(sourceFile, matchPosition);
+                    var token = getTokenAtPosition(sourceFile, matchPosition);
 
                     if (token.getStart() <= matchPosition && matchPosition < token.getEnd()) {
                         // match was within the token itself.  Not in the comment.  Keep searching

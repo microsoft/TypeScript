@@ -7,7 +7,7 @@ module ts.formatting {
                 return 0; // past EOF
             }
 
-            var precedingToken = ServicesSyntaxUtilities.findPrecedingToken(position, sourceFile);
+            var precedingToken = findPrecedingToken(position, sourceFile);
             if (!precedingToken) {
                 return 0;
             }
@@ -107,7 +107,7 @@ module ts.formatting {
          */ 
         function getActualIndentationForListItemBeforeComma(commaToken: Node, sourceFile: SourceFile, options: TypeScript.FormattingOptions): number {
             // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
-            var commaItemInfo = ServicesSyntaxUtilities.findListItemInfo(commaToken);
+            var commaItemInfo = findListItemInfo(commaToken);
             Debug.assert(commaItemInfo.listItemIndex > 0);
             // The item we're interested in is right before the comma
             return deriveActualIndentationFromList(commaItemInfo.list.getChildren(), commaItemInfo.listItemIndex - 1, sourceFile, options);
@@ -138,7 +138,7 @@ module ts.formatting {
         }
 
         function nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken: Node, current: Node, lineAtPosition: number, sourceFile: SourceFile): boolean {
-            var nextToken = ServicesSyntaxUtilities.findNextToken(precedingToken, current);
+            var nextToken = findNextToken(precedingToken, current);
             if (!nextToken) {
                 return false;
             }

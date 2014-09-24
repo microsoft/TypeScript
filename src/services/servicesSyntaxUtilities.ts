@@ -1,5 +1,5 @@
 // These utilities are common to multiple language service features.
-module ts.ServicesSyntaxUtilities {
+module ts {
     export interface ListItemInfo {
         listItemIndex: number;
         list: Node;
@@ -62,6 +62,22 @@ module ts.ServicesSyntaxUtilities {
         }
     }
 
+    /** Get the token whose text contains the position, or the containing node. */
+    export function getNodeAtPosition(sourceFile: SourceFile, position: number) {
+        var current: Node = sourceFile;
+        outer: while (true) {
+            // find the child that has this
+            for (var i = 0, n = current.getChildCount(); i < n; i++) {
+                var child = current.getChildAt(i);
+                if (child.getStart() <= position && position < child.getEnd()) {
+                    current = child;
+                    continue outer;
+                }
+            }
+            return current;
+        }
+    }
+
     /**
       * The token on the left of the position is the token that strictly includes the position
       * or sits to the left of the cursor if it is on a boundary. For example
@@ -71,8 +87,10 @@ module ts.ServicesSyntaxUtilities {
       *
       */
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
+        // Ideally, getTokenAtPosition should return a token. However, it is currently
+        // broken, so we do a check to make sure the result was indeed a token.
         var tokenAtPosition = getTokenAtPosition(file, position);
-        if (position > tokenAtPosition.getStart(file)) {
+        if (isToken(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
             return tokenAtPosition;
         }
 
