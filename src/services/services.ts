@@ -9,6 +9,8 @@
 /// <reference path='getScriptLexicalStructureWalker.ts' />
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
+/// <reference path='signatureHelp.ts' />
+/// <reference path='utilities.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 
@@ -201,7 +203,7 @@ module ts {
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
-            var children = this.getChildren(sourceFile);
+            var children = this.getChildren();
             for (var i = 0; i < children.length; i++) {
                 var child = children[i];
                 if (child.kind < SyntaxKind.Missing) return child;
@@ -1129,7 +1131,7 @@ module ts {
 
     export class OperationCanceledException { }
 
-    class CancellationTokenObject {
+    export class CancellationTokenObject {
 
         public static None: CancellationTokenObject = new CancellationTokenObject(null)
 
@@ -2250,40 +2252,6 @@ module ts {
             }
         }
 
-        /** Get the token whose text contains the position, or the containing node. */
-        function getNodeAtPosition(sourceFile: SourceFile, position: number) {
-            var current: Node = sourceFile;
-            outer: while (true) {
-                // find the child that has this
-                for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                    var child = current.getChildAt(i);
-                    if (child.getStart() <= position && position < child.getEnd()) {
-                        current = child;
-                        continue outer;
-                    }
-                }
-                return current;
-            }
-        }
-
-        /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
-          * leading trivia or within the token text.
-          */
-        function getTokenAtPosition(sourceFile: SourceFile, position: number) {
-            var current: Node = sourceFile;
-            outer: while (true) {
-                // find the child that has this
-                for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                    var child = current.getChildAt(i);
-                    if (child.getFullStart() <= position && position < child.getEnd()) {
-                        current = child;
-                        continue outer;
-                    }
-                }
-                return current;
-            }
-        }
-
         function getContainerNode(node: Node): Node {
             while (true) {
                 node = node.parent;
@@ -2546,7 +2514,7 @@ module ts {
                     result.push(getDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
                     return true;
                 }
-
+                
                 return false;
             }
 
@@ -2747,7 +2715,7 @@ module ts {
                                 break;
                             }
                         }
-
+                        
                         if (shouldHighlightNextKeyword) {
                             result.push(new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(elseKeyword.getStart(), ifKeyword.end), /* isWriteAccess */ false));
                             i++; // skip the next keyword
@@ -3757,6 +3725,29 @@ module ts {
             return emitOutput;
         }
 
+        // Signature help
+        /**
+         * This is a semantic operation.
+         */
+        function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
+            synchronizeHostData();
+
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
+
+            return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
+        }
+
+        /**
+         * This is a syntactic operation
+         */
+        function getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState {
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getCurrentSourceFile(fileName);
+
+            return SignatureHelp.getSignatureHelpCurrentArgumentState(sourceFile, position, applicableSpanStart);
+        }
+
         /// Syntactic features
         function getSyntaxTree(filename: string): TypeScript.SyntaxTree {
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -4353,9 +4344,9 @@ module ts {
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
+            getSignatureHelpItems: getSignatureHelpItems,
+            getSignatureHelpCurrentArgumentState: getSignatureHelpCurrentArgumentState,
             getQuickInfoAtPosition: getQuickInfoAtPosition,
-            getSignatureHelpItems: (filename, position): SignatureHelpItems => null,
-            getSignatureHelpCurrentArgumentState: (fileName, position, applicableSpanStart): SignatureHelpState => null,
             getDefinitionAtPosition: getDefinitionAtPosition,
             getReferencesAtPosition: getReferencesAtPosition,
             getOccurrencesAtPosition: getOccurrencesAtPosition,

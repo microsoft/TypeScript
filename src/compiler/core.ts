@@ -11,7 +11,9 @@ module ts {
         var result: U;
         if (array) {
             for (var i = 0, len = array.length; i < len; i++) {
-                if (result = callback(array[i])) break;
+                if (result = callback(array[i])) {
+                    break;
+                }
             }
         }
         return result;
@@ -37,6 +39,18 @@ module ts {
             }
         }
         return -1;
+    }
+
+    export function countWhere<T>(array: T[], predicate: (x: T) => boolean): number {
+        var count = 0;
+        if (array) {
+            for (var i = 0, len = array.length; i < len; i++) {
+                if (predicate(array[i])) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
