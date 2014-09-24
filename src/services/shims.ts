@@ -87,7 +87,9 @@ module ts {
         getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
 
+        getQuickInfoAtPosition(fileName: string, position: number): string;
         getTypeAtPosition(fileName: string, position: number): string;
+
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string;
         getBreakpointStatementAtPosition(fileName: string, position: number): string;
 
@@ -540,6 +542,16 @@ module ts {
         /// QUICKINFO
         /// Computes a string representation of the type at the requested position
         /// in the active file.
+        public getQuickInfoAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "getQuickInfoAtPosition('" + fileName + "', " + position + ")",
+                () => {
+                    var quickInfo = this.languageService.getQuickInfoAtPosition(fileName, position);
+                    return quickInfo;
+                });
+        }
+
+
         public getTypeAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 "getTypeAtPosition('" + fileName + "', " + position + ")",

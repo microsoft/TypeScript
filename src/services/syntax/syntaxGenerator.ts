@@ -354,6 +354,17 @@ var definitions:ITypeDefinition[] = [
         ],
         isTypeScriptSpecific: true
     },
+    <any> {
+        name: 'TupleTypeSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['ITypeSyntax'],
+        children: [
+            <any>{ name: 'openBracketToken', isToken: true, excludeFromAST: true },
+            <any>{ name: 'types', isSeparatedList: true, elementType: 'ITypeSyntax' },
+            <any>{ name: 'closeBracketToken', isToken: true, excludeFromAST: true }
+        ],
+        isTypeScriptSpecific: true
+    },
     <any>{
         name: 'TypeAnnotationSyntax',
         baseType: 'ISyntaxNode',

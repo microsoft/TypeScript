@@ -131,25 +131,27 @@ module ts {
         return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
     }
 
-    export function getLeadingCommentsOfNode(node: Node, sourceFileOfNode: SourceFile) {
+    export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode?: SourceFile) {
+        sourceFileOfNode = sourceFileOfNode || getSourceFileOfNode(node);
+
         // If parameter/type parameter, the prev token trailing comments are part of this node too
         if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
             // e.g.   (/** blah */ a, /** blah */ b);
-            return concatenate(getTrailingComments(sourceFileOfNode.text, node.pos),
+            return concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
                 // e.g.:     (
                 //            /** blah */ a,
                 //            /** blah */ b);
-                getLeadingComments(sourceFileOfNode.text, node.pos));
+                getLeadingCommentRanges(sourceFileOfNode.text, node.pos));
         }
         else {
-            return getLeadingComments(sourceFileOfNode.text, node.pos);
+            return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
         }
     }
 
     export function getJsDocComments(node: Declaration, sourceFileOfNode: SourceFile) {
-        return filter(getLeadingCommentsOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
+        return filter(getLeadingCommentRangesOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
 
-        function isJsDocComment(comment: Comment) {
+        function isJsDocComment(comment: CommentRange) {
             // True if the comment starts with '/**' but not if it is '/**/'
             return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
                 sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
@@ -649,6 +651,7 @@ module ts {
         switch (token) {
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.StaticKeyword:
             case SyntaxKind.ExportKeyword:
             case SyntaxKind.DeclareKeyword:
@@ -811,7 +814,7 @@ module ts {
         // applying some stricter checks on that node.
         function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             var span = getErrorSpanForNode(node);
-            var start = skipTrivia(file.text, span.pos);
+            var start = span.end > span.pos ? skipTrivia(file.text, span.pos) : span.pos;
             var length = span.end - start;
 
             file.syntacticErrors.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
@@ -2977,6 +2980,7 @@ module ts {
                     }
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
                     // When followed by an identifier or keyword, these do not start a statement but
                     // might instead be following type members
@@ -3295,6 +3299,8 @@ module ts {
             var lastDeclareModifierLength: number;
             var lastPrivateModifierStart: number;
             var lastPrivateModifierLength: number;
+            var lastProtectedModifierStart: number;
+            var lastProtectedModifierLength: number;
 
             while (true) {
                 var modifierStart = scanner.getTokenPos();
@@ -3332,6 +3338,21 @@ module ts {
                         lastPrivateModifierStart = modifierStart;
                         lastPrivateModifierLength = modifierLength;
                         flags |= NodeFlags.Private;
+                        break;
+
+                    case SyntaxKind.ProtectedKeyword:
+                        if (flags & NodeFlags.Public || flags & NodeFlags.Private || flags & NodeFlags.Protected) {
+                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics.Accessibility_modifier_already_seen);
+                        }
+                        else if (flags & NodeFlags.Static) {
+                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_must_precede_1_modifier, "protected", "static");
+                        }
+                        else if (context === ModifierContext.ModuleElements || context === ModifierContext.SourceElements) {
+                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "protected");
+                        }
+                        lastProtectedModifierStart = modifierStart;
+                        lastProtectedModifierLength = modifierLength;
+                        flags |= NodeFlags.Protected;
                         break;
 
                     case SyntaxKind.StaticKeyword:
@@ -3390,6 +3411,9 @@ module ts {
             }
             else if (token === SyntaxKind.ConstructorKeyword && flags & NodeFlags.Private) {
                 grammarErrorAtPos(lastPrivateModifierStart, lastPrivateModifierLength, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
+            }
+            else if (token === SyntaxKind.ConstructorKeyword && flags & NodeFlags.Protected) {
+                grammarErrorAtPos(lastProtectedModifierStart, lastProtectedModifierLength, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "protected");
             }
             else if (token === SyntaxKind.ImportKeyword) {
                 if (flags & NodeFlags.Ambient) {
@@ -3667,6 +3691,7 @@ module ts {
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
                     // Check for modifier on source element
                     return lookAhead(() => { nextToken(); return isDeclaration(); });

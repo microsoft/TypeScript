@@ -1,7 +1,7 @@
 tests/cases/compiler/propertyParameterWithQuestionMark.ts(6,5): error TS2322: Type '{}' is not assignable to type 'C':
   Property 'x' is missing in type '{}'.
 tests/cases/compiler/propertyParameterWithQuestionMark.ts(8,1): error TS2322: Type '{ x?: any; }' is not assignable to type 'C':
-  Required property 'x' cannot be reimplemented with optional property in '{ x?: any; }'.
+  Property 'x' is optional in type '{ x?: any; }' but required in type 'C'.
 
 
 ==== tests/cases/compiler/propertyParameterWithQuestionMark.ts (2 errors) ====
@@ -18,5 +18,5 @@ tests/cases/compiler/propertyParameterWithQuestionMark.ts(8,1): error TS2322: Ty
     v = v2; // Should fail
     ~
 !!! error TS2322: Type '{ x?: any; }' is not assignable to type 'C':
-!!! error TS2322:   Required property 'x' cannot be reimplemented with optional property in '{ x?: any; }'.
+!!! error TS2322:   Property 'x' is optional in type '{ x?: any; }' but required in type 'C'.
     var v3: { x } = new C; // Should succeed
