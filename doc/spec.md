@@ -3898,10 +3898,10 @@ A super property access in a static member function or a static member accessor 
 _super.<PropertyName>
 ```
 
-where *PropertyName* is the name of the referenced base class property. When the super property access appears in a function call, the generated JavaScript is equivalent to*
+where *PropertyName* is the name of the referenced base class property. When the super property access appears in a function call, the generated JavaScript is equivalent to
 
 ```TypeScript
-*_super.<PropertyName>.call(this, <Arguments>)
+_super.<PropertyName>.call(this, <Arguments>)
 ```
 
 where Arguments is the code generated for the argument list specified in the function call.
