@@ -3796,7 +3796,7 @@ module ts {
             var currentArguemntState = getSignatureHelpCurrentArgumentState(filename, position, signatureHelpItems.applicableSpan.start());
 
             var formalSignatures: FormalSignatureItemInfo[] = [];
-            forEach(signatureHelpItems.items, signature=> {
+            forEach(signatureHelpItems.items, signature => {
                 var signatureInfoString = signature.prefix;
 
                 var paramters: FormalParameterInfo[] = [];
@@ -3807,6 +3807,7 @@ module ts {
                     if (i) {
                         signatureInfoString += signature.separator;
                     }
+
                     var start = signatureInfoString.length;
                     signatureInfoString += paramter.display;
                     var end = signatureInfoString.length - 1;
@@ -3819,7 +3820,6 @@ module ts {
                         minChar: start,
                         limChar: end
                     });
-
                 }
 
                 signatureInfoString += signature.suffix;
