@@ -340,6 +340,7 @@ module ts {
         Parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2: { code: 4077, category: DiagnosticCategory.Error, key: "Parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'." },
         Parameter_0_of_exported_function_has_or_is_using_private_name_1: { code: 4078, category: DiagnosticCategory.Error, key: "Parameter '{0}' of exported function has or is using private name '{1}'." },
         The_current_host_does_not_support_the_0_option: { code: 5001, category: DiagnosticCategory.Error, key: "The current host does not support the '{0}' option." },
+        A_file_cannot_have_a_reference_to_itself: { code: 5006, category: DiagnosticCategory.Error, key: "A file cannot have a reference to itself." },
         Cannot_find_the_common_subdirectory_path_for_the_input_files: { code: 5009, category: DiagnosticCategory.Error, key: "Cannot find the common subdirectory path for the input files." },
         Cannot_read_file_0_Colon_1: { code: 5012, category: DiagnosticCategory.Error, key: "Cannot read file '{0}': {1}" },
         Unsupported_file_encoding: { code: 5013, category: DiagnosticCategory.Error, key: "Unsupported file encoding." },
