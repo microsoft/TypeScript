@@ -3829,17 +3829,17 @@ module ts {
                         }
                         else {
                             var basePath = getDirectoryPath(file.filename);
-							var referenceFilename = normalizePath(combinePaths(basePath, matchResult[3]));
-							if (file.filename === referenceFilename) {
-								errorAtPos(range.pos, range.end - range.pos, Diagnostics.A_file_cannot_have_a_reference_to_itself);
-							}
-							else {
-								referencedFiles.push({
-									pos: range.pos,
-									end: range.end,
-									filename: matchResult[3]
-								});
-							}
+                            var referenceFilename = normalizePath(combinePaths(basePath, matchResult[3]));
+			    if (file.filename === referenceFilename) {
+			        errorAtPos(range.pos, range.end - range.pos, Diagnostics.A_file_cannot_have_a_reference_to_itself);
+			    }
+			    else {
+			        referencedFiles.push({
+			            pos: range.pos,
+			            end: range.end,
+				    filename: matchResult[3]
+			        });
+		            }
                         }
                     }
                 }
