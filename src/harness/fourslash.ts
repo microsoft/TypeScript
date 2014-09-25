@@ -821,13 +821,9 @@ module FourSlash {
 
             var help = this.getActiveSignatureHelpItem();
             assert.equal(
-                this.partsToString(help.prefixDisplayParts) + 
-                help.parameters.map(p => this.partsToString(p.displayParts)).join(this.partsToString(help.separatorDisplayParts)) + 
-                this.partsToString(help.suffixDisplayParts), expected);
-        }
-
-        private partsToString(parts: ts.SymbolDisplayPart[]): string {
-            return parts.map(p => p.text).join("");
+                ts.SymbolDisplayPart.toString(help.prefixDisplayParts) + 
+                help.parameters.map(p => ts.SymbolDisplayPart.toString(p.displayParts)).join(ts.SymbolDisplayPart.toString(help.separatorDisplayParts)) + 
+                ts.SymbolDisplayPart.toString(help.suffixDisplayParts), expected);
         }
 
         public verifyCurrentParameterIsVariable(isVariable: boolean) {
@@ -851,7 +847,7 @@ module FourSlash {
 
             var activeSignature = this.getActiveSignatureHelpItem();
             var activeParameter = this.getActiveParameter();
-            assert.equal(this.partsToString(activeParameter.displayParts), parameter);
+            assert.equal(ts.SymbolDisplayPart.toString(activeParameter.displayParts), parameter);
         }
 
         public verifyCurrentParameterHelpDocComment(docComment: string) {
@@ -1640,7 +1636,7 @@ module FourSlash {
 
         public verifyTodoComments(descriptors: string[], spans: TextSpan[]) {
             var actual = this.languageService.getTodoComments(this.activeFile.fileName,
-                descriptors.map(d => new ts.TodoCommentDescriptor(d, 0)));
+                descriptors.map(d => { return { text: d, priority: 0 }; }));
 
             if (actual.length !== spans.length) {
                 throw new Error('verifyTodoComments failed - expected total spans to be ' + spans.length + ', but was ' + actual.length);

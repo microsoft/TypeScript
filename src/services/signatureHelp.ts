@@ -249,9 +249,9 @@ module ts.SignatureHelp {
         }
 
         function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentListOrTypeArgumentList: Node): SignatureHelpItems {
-            var items = map(candidates, candidateSignature => {
+            var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
                 var parameters = candidateSignature.parameters;
-                var parameterHelpItems = parameters.length === 0 ? emptyArray : map(parameters, p => {
+                var parameterHelpItems: SignatureHelpParameter[] = parameters.length === 0 ? emptyArray : map(parameters, p => {
                     var displayParts: SymbolDisplayPart[] = [];
 
                     if (candidateSignature.hasRestParameter && parameters[parameters.length - 1] === p) {
@@ -271,7 +271,12 @@ module ts.SignatureHelp {
                     var typeParts = typeInfoResolver.typeToDisplayParts(typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
                     displayParts.push.apply(displayParts, typeParts);
 
-                    return new SignatureHelpParameter(p.name, getSymbolDocumentationDisplayParts(p), displayParts, isOptional);
+                    return {
+                        name: p.name,
+                        documentation: getSymbolDocumentationDisplayParts(p),
+                        displayParts: displayParts,
+                        isOptional: isOptional
+                    };
                 });
 
                 var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
@@ -309,7 +314,14 @@ module ts.SignatureHelp {
                 var typeParts = typeInfoResolver.typeToDisplayParts(candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
                 suffixParts.push.apply(suffixParts, typeParts);
                 
-                return new SignatureHelpItem(candidateSignature.hasRestParameter, prefixParts, suffixParts, separatorParts, parameterHelpItems, null);
+                return {
+                    isVariadic: candidateSignature.hasRestParameter,
+                    prefixDisplayParts: prefixParts,
+                    suffixDisplayParts: suffixParts,
+                    separatorDisplayParts: separatorParts,
+                    parameters: parameterHelpItems,
+                    documentation: <SymbolDisplayPart[]>null
+                };
             });
 
             var selectedItemIndex = candidates.indexOf(bestSignature);
@@ -328,7 +340,11 @@ module ts.SignatureHelp {
             var applicableSpanStart = argumentListOrTypeArgumentList.getFullStart();
             var applicableSpanEnd = skipTrivia(sourceFile.text, argumentListOrTypeArgumentList.end, /*stopAfterLineBreak*/ false);
             var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
-            return new SignatureHelpItems(items, applicableSpan, selectedItemIndex);
+            return {
+                items: items,
+                applicableSpan: applicableSpan,
+                selectedItemIndex: selectedItemIndex
+            };
         }
     }
 
@@ -364,7 +380,7 @@ module ts.SignatureHelp {
         var numberOfCommas = countWhere(argumentListOrTypeArgumentList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
         var argumentCount = numberOfCommas + 1;
         if (argumentCount <= 1) {
-            return new SignatureHelpState(/*argumentIndex*/ 0, argumentCount);
+            return { argumentIndex: 0, argumentCount: argumentCount };
         }
 
         var indexOfNodeContainingPosition = findListItemIndexContainingPosition(argumentListOrTypeArgumentList, position);
@@ -375,7 +391,7 @@ module ts.SignatureHelp {
         // Alternatively, we could be in range of one of the arguments, in which case we need to divide
         // by 2 to exclude commas. Use bit shifting in order to take the floor of the division.
         var argumentIndex = indexOfNodeContainingPosition < 0 ? argumentCount - 1 : indexOfNodeContainingPosition >> 1;
-        return new SignatureHelpState(argumentIndex, argumentCount);
+        return { argumentIndex: argumentIndex, argumentCount: argumentCount };
     }
 
     function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {
