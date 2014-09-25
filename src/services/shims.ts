@@ -96,6 +96,8 @@ module ts {
         getSignatureHelpItems(fileName: string, position: number): string;
         getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): string;
 
+        getSignatureAtPosition(fileName: string, position: number): string;
+
         // Returns a JSON encoded value of the type:
         // { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
         getRenameInfo(fileName: string, position: number): string;
@@ -604,6 +606,13 @@ module ts {
                 });
         }
 
+        public getSignatureAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "getSignatureAtPosition('" + fileName + "', " + position + ")",
+                () => {
+                    return this.languageService.getSignatureAtPosition(fileName, position);
+                });
+        }
 
         /// GOTO DEFINITION
         /// Computes the definition location and file for the symbol

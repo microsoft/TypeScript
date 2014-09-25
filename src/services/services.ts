@@ -661,6 +661,8 @@ module ts {
         getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems;
         getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState;
 
+        getSignatureAtPosition(fileName: string, position: number): SignatureInfo;
+
         getRenameInfo(fileName: string, position: number): RenameInfo;
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
@@ -685,6 +687,42 @@ module ts {
 
         dispose(): void;
     }
+
+    export interface SignatureInfo {
+        actual: ActualSignatureInfo;
+        formal: FormalSignatureItemInfo[]; // Formal signatures
+        activeFormal: number; // Index of the "best match" formal signature
+    }
+
+    export interface FormalSignatureItemInfo {
+        signatureInfo: string;
+        typeParameters: FormalTypeParameterInfo[];
+        parameters: FormalParameterInfo[];   // Array of parameters
+        docComment: string; // Help for the signature
+    }
+
+    export interface FormalTypeParameterInfo {
+        name: string;        // Type parameter name
+        docComment: string;  // Comments that contain help for the parameter
+        minChar: number;     // minChar for parameter info in the formal signature info string
+        limChar: number;     // lim char for parameter info in the formal signature info string
+    }
+
+    export interface FormalParameterInfo {
+        name: string;        // Parameter name
+        isVariable: boolean; // true if parameter is var args
+        docComment: string;  // Comments that contain help for the parameter
+        minChar: number;     // minChar for parameter info in the formal signature info string
+        limChar: number;     // lim char for parameter info in the formal signature info string
+    }
+
+    export interface ActualSignatureInfo {
+        parameterMinChar: number;
+        parameterLimChar: number;
+        currentParameterIsTypeParameter: boolean; // current parameter is a type argument or a normal argument
+        currentParameter: number;        // Index of active parameter in "parameters" or "typeParamters" array
+    }
+
 
     export class ClassificationTypeNames {
         public static comment = "comment";
@@ -3748,6 +3786,67 @@ module ts {
             return SignatureHelp.getSignatureHelpCurrentArgumentState(sourceFile, position, applicableSpanStart);
         }
 
+        function getSignatureAtPosition(filename: string, position: number): SignatureInfo {
+            var signatureHelpItems = getSignatureHelpItems(filename, position);
+
+            if (!signatureHelpItems) {
+                return undefined;
+            }
+
+            var currentArguemntState = getSignatureHelpCurrentArgumentState(filename, position, signatureHelpItems.applicableSpan.start());
+
+            var formalSignatures: FormalSignatureItemInfo[] = [];
+            forEach(signatureHelpItems.items, signature=> {
+                var signatureInfoString = signature.prefix;
+
+                var paramters: FormalParameterInfo[] = [];
+                for (var i = 0, n = signature.parameters.length; i < n; i++) {
+                    var paramter = signature.parameters[i];
+
+                    // add the parameter to the string
+                    if (i) {
+                        signatureInfoString += signature.separator;
+                    }
+                    var start = signatureInfoString.length;
+                    signatureInfoString += paramter.display;
+                    var end = signatureInfoString.length - 1;
+
+                    // add the parameter to the list
+                    paramters.push({
+                        name: paramter.name,
+                        isVariable: i == n -1 && signature.isVariadic,
+                        docComment: paramter.documentation,
+                        minChar: start,
+                        limChar: end
+                    });
+
+                }
+
+                signatureInfoString += signature.suffix;
+
+                formalSignatures.push({
+                    signatureInfo: signatureInfoString,
+                    docComment: signature.documentation,
+                    parameters: paramters,
+                    typeParameters: [],
+                    docComments: signature.documentation
+                });
+            });
+
+            var actualSignature: ActualSignatureInfo = {
+                parameterMinChar: 0,
+                parameterLimChar: 0,
+                currentParameterIsTypeParameter: false,
+                currentParameter: currentArguemntState.argumentIndex
+            };
+
+            return {
+                actual: actualSignature,
+                formal: formalSignatures,
+                activeFormal: 0
+            };
+        }
+
         /// Syntactic features
         function getSyntaxTree(filename: string): TypeScript.SyntaxTree {
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -4364,6 +4463,7 @@ module ts {
             getFormattingEditsForDocument: getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
             getEmitOutput: getEmitOutput,
+            getSignatureAtPosition: getSignatureAtPosition,
         };
     }
 
