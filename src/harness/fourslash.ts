@@ -820,7 +820,14 @@ module FourSlash {
             this.taoInvalidReason = 'verifyCurrentSignatureHelpIs NYI';
 
             var help = this.getActiveSignatureHelpItem();
-            assert.equal(help.prefix + help.parameters.map(p => p.display).join(help.separator) + help.suffix, expected);
+            assert.equal(
+                this.partsToString(help.prefixDisplayParts) + 
+                help.parameters.map(p => this.partsToString(p.displayParts)).join(this.partsToString(help.separatorDisplayParts)) + 
+                this.partsToString(help.suffixDisplayParts), expected);
+        }
+
+        private partsToString(parts: ts.SymbolDisplayPart[]): string {
+            return parts.map(p => p.text).join("");
         }
 
         public verifyCurrentParameterIsVariable(isVariable: boolean) {
@@ -844,7 +851,7 @@ module FourSlash {
 
             var activeSignature = this.getActiveSignatureHelpItem();
             var activeParameter = this.getActiveParameter();
-            assert.equal(activeParameter.display, parameter);
+            assert.equal(this.partsToString(activeParameter.displayParts), parameter);
         }
 
         public verifyCurrentParameterHelpDocComment(docComment: string) {

@@ -856,8 +856,8 @@ module ts {
 
     export class SignatureHelpParameter {
         constructor(public name: string,
-                    public documentation: string,
-                    public display: string,
+                    public documentation: SymbolDisplayPart[],
+                    public displayParts: SymbolDisplayPart[],
                     public isOptional: boolean) {
         }
     }
@@ -871,11 +871,11 @@ module ts {
      */
     export class SignatureHelpItem {
         constructor(public isVariadic: boolean,
-                    public prefix: string,
-                    public suffix: string,
-                    public separator: string,
+                    public prefixDisplayParts: SymbolDisplayPart[],
+                    public suffixDisplayParts: SymbolDisplayPart[],
+                    public separatorDisplayParts: SymbolDisplayPart[],
                     public parameters: SignatureHelpParameter[],
-                    public documentation: string) {
+                    public documentation: SymbolDisplayPart[]) {
         }
     }
 
@@ -1630,6 +1630,11 @@ module ts {
         });
     }
 
+    export function getSymbolDocumentationDisplayParts(symbol: Symbol): SymbolDisplayPart[] {
+        var documentation = symbol.getDocumentationComment();
+        return documentation === "" ? [] : [new SymbolDisplayPart(documentation, SymbolDisplayPartKind.text, /*symbol:*/ null)];
+    }
+
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
@@ -2376,8 +2381,7 @@ module ts {
                 return undefined;
             }
 
-            var documentation = symbol.getDocumentationComment();
-            var documentationParts = documentation === "" ? [] : [new SymbolDisplayPart(documentation, SymbolDisplayPartKind.text, /*symbol:*/ null)];
+            var documentationParts = getSymbolDocumentationDisplayParts(symbol);
 
             // Having all this logic here is pretty unclean.  Consider moving to the roslyn model
             // where all symbol display logic is encapsulated into visitors and options.
