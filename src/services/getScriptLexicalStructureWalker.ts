@@ -151,7 +151,7 @@ module TypeScript.Services {
             }
         }
 
-        private getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: TypeScript.TextSpan[], childItems?: ts.NavigationBarItem[], indent: number = 0): ts.NavigationBarItem {
+        private getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: TypeScript.TextSpan[], childItems: ts.NavigationBarItem[]= [], indent: number = 0): ts.NavigationBarItem {
             return {
                 text: text,
                 kind: kind,
