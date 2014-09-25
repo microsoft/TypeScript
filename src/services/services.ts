@@ -3821,8 +3821,8 @@ module ts {
             });
 
             var actualSignature: ActualSignatureInfo = {
-                parameterMinChar: 0,
-                parameterLimChar: 0,
+                parameterMinChar: signatureHelpItems.applicableSpan.start(),
+                parameterLimChar: signatureHelpItems.applicableSpan.end(),
                 currentParameterIsTypeParameter: false,
                 currentParameter: currentArguemntState.argumentIndex
             };
