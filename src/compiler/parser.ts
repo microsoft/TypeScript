@@ -3822,26 +3822,27 @@ module ts {
                     }
                     else {
                         var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
-						var start = range.pos;
-						var end = range.end;
+			var start = range.pos;
+			var end = range.end;
                         var length = end - start;
+
                         if (!matchResult) {
                             errorAtPos(start, length, Diagnostics.Invalid_reference_directive_syntax);
                         }
                         else {
-						    var referenceFilename = matchResult[3];
+		            var referenceFilename = matchResult[3];
                             var basePath = getDirectoryPath(file.filename);
                             var referenceFullPath = normalizePath(combinePaths(basePath, referenceFilename));
-			                if (file.filename === referenceFullPath) {
-			                    errorAtPos(start, length, Diagnostics.A_file_cannot_have_a_reference_to_itself);
-			                }
-			                else {
-			                    referencedFiles.push({
-			                        pos: start,
-			                        end: end,
-				                    filename: referenceFilename
-			                    });
-		                    }
+			    if (file.filename === referenceFullPath) {
+			        errorAtPos(start, length, Diagnostics.A_file_cannot_have_a_reference_to_itself);
+			    }
+			    else {
+			        referencedFiles.push({
+			            pos: start,
+			            end: end,
+				    filename: referenceFilename
+			        });
+		            }
                         }
                     }
                 }
