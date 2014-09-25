@@ -49,7 +49,7 @@ module ts {
     /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
       * leading trivia or within the token text.
       */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number) {
+    export function getTokenContainingPosition(sourceFile: SourceFile, position: number) {
         var current: Node = sourceFile;
         outer: while (true) {
             // find the child that has this
@@ -64,16 +64,29 @@ module ts {
         }
     }
 
-    /** Get the token whose text contains the position, or the containing node. */
-    export function getNodeAtPosition(sourceFile: SourceFile, position: number) {
+    /** Get the token whose text contains the position */
+    export function getExactTokenAtPosition(sourceFile: SourceFile, position: number, includeItemAtEndPosition: (n: Node) => boolean) {
         var current: Node = sourceFile;
         outer: while (true) {
-            // find the child that has this
-            for (var i = 0, n = current.getChildCount(); i < n; i++) {
+            if (isToken(current)) {
+                // exit early
+                return current;
+            }
+
+            // find the child that contains 'position'
+            for (var i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
                 var child = current.getChildAt(i);
-                if (child.getStart() <= position && position < child.getEnd()) {
-                    current = child;
-                    continue outer;
+                if (child.getStart(sourceFile) <= position) {
+                    if (position < child.getEnd()) {
+                        current = child;
+                        continue outer;
+                    }
+                    else if (includeItemAtEndPosition && child.getEnd() === position) {
+                        var previousToken = findPrecedingToken(position, sourceFile, child);
+                        if (previousToken && includeItemAtEndPosition(previousToken)) {
+                            return previousToken;
+                        }
+                    }
                 }
             }
             return current;
@@ -91,7 +104,7 @@ module ts {
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
-        var tokenAtPosition = getTokenAtPosition(file, position);
+        var tokenAtPosition = getTokenContainingPosition(file, position);
         if (isToken(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
             return tokenAtPosition;
         }
@@ -126,8 +139,8 @@ module ts {
         }
     }
 
-    export function findPrecedingToken(position: number, sourceFile: SourceFile): Node {
-        return find(sourceFile);
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node): Node {
+        return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
             if (isToken(n)) {
@@ -163,7 +176,7 @@ module ts {
                 }
             }
 
-            Debug.assert(n.kind === SyntaxKind.SourceFile);
+            Debug.assert(startNode || n.kind === SyntaxKind.SourceFile);
 
             // Here we know that none of child token nodes embrace the position, 
             // the only known case is when position is at the end of the file.
