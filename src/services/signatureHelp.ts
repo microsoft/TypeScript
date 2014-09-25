@@ -261,7 +261,7 @@ module ts.SignatureHelp {
                         display += "?";
                     }
                     display += ": " + typeInfoResolver.typeToString(typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
-                    return new SignatureHelpParameter(p.name, "", display, isOptional);
+                    return { name: p.name,  documentation: "", display: display, isOptiona: isOptional };
                 });
                 var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
                 var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
@@ -273,7 +273,14 @@ module ts.SignatureHelp {
                 }
                 prefix += "(";
                 var suffix = "): " + typeInfoResolver.typeToString(candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
-                return new SignatureHelpItem(candidateSignature.hasRestParameter, prefix, suffix, ", ", parameterHelpItems, "");
+                return {
+                    isVariadic: candidateSignature.hasRestParameter,
+                    prefix: prefix,
+                    suffix: suffix,
+                    separator: ", ",
+                    parameters: parameterHelpItems,
+                    documentation: ""
+                };
             });
             var selectedItemIndex = candidates.indexOf(bestSignature);
             if (selectedItemIndex < 0) {
@@ -291,7 +298,11 @@ module ts.SignatureHelp {
             var applicableSpanStart = argumentListOrTypeArgumentList.getFullStart();
             var applicableSpanEnd = skipTrivia(sourceFile.text, argumentListOrTypeArgumentList.end, /*stopAfterLineBreak*/ false);
             var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
-            return new SignatureHelpItems(items, applicableSpan, selectedItemIndex);
+            return {
+                items: items,
+                applicableSpan: applicableSpan,
+                selectedItemIndex: selectedItemIndex
+            };
         }
     }
 
@@ -327,7 +338,7 @@ module ts.SignatureHelp {
         var numberOfCommas = countWhere(argumentListOrTypeArgumentList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
         var argumentCount = numberOfCommas + 1;
         if (argumentCount <= 1) {
-            return new SignatureHelpState(/*argumentIndex*/ 0, argumentCount);
+            return { argumentIndex: 0, argumentCount: argumentCount };
         }
 
         var indexOfNodeContainingPosition = findListItemIndexContainingPosition(argumentListOrTypeArgumentList, position);
@@ -338,7 +349,7 @@ module ts.SignatureHelp {
         // Alternatively, we could be in range of one of the arguments, in which case we need to divide
         // by 2 to exclude commas. Use bit shifting in order to take the floor of the division.
         var argumentIndex = indexOfNodeContainingPosition < 0 ? argumentCount - 1 : indexOfNodeContainingPosition >> 1;
-        return new SignatureHelpState(argumentIndex, argumentCount);
+        return { argumentIndex: argumentIndex, argumentCount: argumentCount };
     }
 
     function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {

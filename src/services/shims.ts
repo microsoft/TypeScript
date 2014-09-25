@@ -22,31 +22,29 @@ var debugObjectHost = (<any>this);
 
 module ts {
     export interface ScriptSnapshotShim {
-        // Get's a portion of the script snapshot specified by [start, end).  
+        /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
 
-        // Get's the length of this script snapshot.
+        /** Gets the length of this script snapshot. */
         getLength(): number;
 
-        // This call returns the JSON encoded array of the type:
-        //  number[]
+        /** This call returns the JSON-encoded array of the type: number[] */
         getLineStartPositions(): string;
 
-        // Returns a JSON encoded value of the type:
-        //  { span: { start: number; length: number }; newLength: number }
-        //
-        // Or null value if there was no change.
+        /**
+         * Returns a JSON-encoded value of the type:
+         *   { span: { start: number; length: number }; newLength: number }
+         *
+         * Or undefined value if there was no change.
+         */
         getChangeRange(oldSnapshot: ScriptSnapshotShim): string;
     }
 
-    //
-    // Public interface of the host of a language service shim instance.
-    //
+    /** Public interface of the host of a language service shim instance.*/
     export interface LanguageServiceShimHost extends Logger {
         getCompilationSettings(): string;
 
-        // Returns a JSON encoded value of the type:
-        // string[]
+        /** Returns a JSON-encoded value of the type: string[] */
         getScriptFileNames(): string;
         getScriptVersion(fileName: string): string;
         getScriptIsOpen(fileName: string): boolean;
@@ -57,9 +55,7 @@ module ts {
         getDefaultLibFilename(): string;
     }
 
-    //
-    // Public interface of of a language service instance shim.
-    //
+    /** Public interface of a language service instance shim. */
     export interface ShimFactory {
         registerShim(shim: Shim): void;
         unregisterShim(shim: Shim): void;
@@ -98,38 +94,54 @@ module ts {
 
         getSignatureAtPosition(fileName: string, position: number): string;
 
-        // Returns a JSON encoded value of the type:
-        // { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
+         */
         getRenameInfo(fileName: string, position: number): string;
 
-        // Returns a JSON encoded value of the type:
-        // { fileName: string; textSpan: { start: number; length: number}; kind: string; name: string; containerKind: string; containerName: string }
-        //
-        // Or null value if no definition can be found.
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; kind: string; name: string; containerKind: string; containerName: string }
+         *
+         * Or undefined value if no definition can be found.
+         */
         getDefinitionAtPosition(fileName: string, position: number): string;
 
-        // Returns a JSON encoded value of the type:
-        // { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
+         */
         getReferencesAtPosition(fileName: string, position: number): string;
 
-        // Returns a JSON encoded value of the type:
-        // { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
+         */
         getOccurrencesAtPosition(fileName: string, position: number): string;
 
-        // Returns a JSON encoded value of the type:
-        // { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
+         */
         getImplementorsAtPosition(fileName: string, position: number): string;
-
-        // Returns a JSON encoded value of the type:
-        // { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
+        
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
+         */
         getNavigateToItems(searchValue: string): string;
 
-        // Returns a JSON encoded value of the type:
-        // { text: string; kind: string; kindModifiers: string; bolded: boolean; grayed: boolean; indent: number; spans: { start: number; length: number; }[]; childItems: <recursive use of this type>[] } [] = [];
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { text: string; kind: string; kindModifiers: string; bolded: boolean; grayed: boolean; indent: number; spans: { start: number; length: number; }[]; childItems: <recursive use of this type>[] } [] = [];
+         */
         getNavigationBarItems(fileName: string): string;
 
-        // Returns a JSON encoded value of the type:
-        // { textSpan: { start: number, length: number }; hintSpan: { start: number, length: number }; bannerText: string; autoCollapse: boolean } [] = [];
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { textSpan: { start: number, length: number }; hintSpan: { start: number, length: number }; bannerText: string; autoCollapse: boolean } [] = [];
+         */
         getOutliningSpans(fileName: string): string;
 
         getTodoComments(fileName: string, todoCommentDescriptors: string): string;
@@ -437,9 +449,12 @@ module ts {
             return forwardJSONCall(this.logger, actionDescription, action);
         }
 
-        // DISPOSE
-        // Ensure (almost) deterministic release of internal Javascript resources when
-        // some external native objects holds onto us (e.g. Com/Interop).
+        /// DISPOSE
+
+        /**
+         * Ensure (almost) deterministic release of internal Javascript resources when
+         * some external native objects holds onto us (e.g. Com/Interop).
+         */
         public dispose(dummy: any): void {
             this.logger.log("dispose()");
             this.languageService.dispose();
@@ -456,8 +471,11 @@ module ts {
             super.dispose(dummy);
         }
 
-        // REFRESH
-        // Update the list of scripts known to the compiler
+        /// REFRESH
+
+        /**
+         * Update the list of scripts known to the compiler
+         */
         public refresh(throwOnError: boolean): void {
             this.forwardJSONCall(
                 "refresh(" + throwOnError + ")",
@@ -542,8 +560,11 @@ module ts {
         }
 
         /// QUICKINFO
-        /// Computes a string representation of the type at the requested position
-        /// in the active file.
+
+        /**
+         * Computes a string representation of the type at the requested position
+         * in the active file.
+         */
         public getQuickInfoAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 "getQuickInfoAtPosition('" + fileName + "', " + position + ")",
@@ -564,8 +585,11 @@ module ts {
         }
 
         /// NAMEORDOTTEDNAMESPAN
-        /// Computes span information of the name or dotted name at the requested position
-        // in the active file.
+
+        /**
+         * Computes span information of the name or dotted name at the requested position
+         * in the active file.
+         */
         public getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string {
             return this.forwardJSONCall(
                 "getNameOrDottedNameSpan('" + fileName + "', " + startPos + ", " + endPos + ")",
@@ -575,8 +599,10 @@ module ts {
                 });
         }
 
-        /// STATEMENTSPAN
-        /// Computes span information of statement at the requested position in the active file.
+        /**
+         * STATEMENTSPAN
+         * Computes span information of statement at the requested position in the active file.
+         */
         public getBreakpointStatementAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 "getBreakpointStatementAtPosition('" + fileName + "', " + position + ")",
@@ -615,8 +641,11 @@ module ts {
         }
 
         /// GOTO DEFINITION
-        /// Computes the definition location and file for the symbol
-        /// at the requested position. 
+
+        /**
+         * Computes the definition location and file for the symbol
+         * at the requested position. 
+         */
         public getDefinitionAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 "getDefinitionAtPosition('" + fileName + "', " + position + ")",
@@ -654,9 +683,12 @@ module ts {
         }
 
         /// GET REFERENCES
-        ///  Return references to a symbol at the requested position.
-        ///  References are separated by "\n".
-        ///  Each reference is a "fileindex min lim" sub-string.
+
+        /**
+         * Return references to a symbol at the requested position.
+         * References are separated by "\n".
+         * Each reference is a "fileindex min lim" sub-string.
+         */
         public getReferencesAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 "getReferencesAtPosition('" + fileName + "', " + position + ")",
@@ -684,9 +716,12 @@ module ts {
 
 
         /// COMPLETION LISTS
-        /// Get a string based representation of the completions 
-        /// to provide at the given source position and providing a member completion 
-        /// list if requested.
+
+        /**
+         * Get a string based representation of the completions 
+         * to provide at the given source position and providing a member completion 
+         * list if requested.
+         */
         public getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean) {
             return this.forwardJSONCall(
                 "getCompletionsAtPosition('" + fileName + "', " + position + ", " + isMemberCompletion + ")",
@@ -696,7 +731,7 @@ module ts {
                 });
         }
 
-        /// Get a string based representation of a completion list entry details
+        /** Get a string based representation of a completion list entry details */
         public getCompletionEntryDetails(fileName: string, position: number, entryName: string) {
             return this.forwardJSONCall(
                 "getCompletionEntryDetails('" + fileName + "', " + position + ", " + entryName + ")",
@@ -737,7 +772,8 @@ module ts {
         }
 
         /// NAVIGATE TO
-        ///  Return a list of symbols that are interesting to navigate to
+
+        /** Return a list of symbols that are interesting to navigate to */
         public getNavigateToItems(searchValue: string): string {
             return this.forwardJSONCall(
                 "getNavigateToItems('" + searchValue + "')",
@@ -816,9 +852,6 @@ module ts {
             return forwardJSONCall(this.logger, actionDescription, action);
         }
 
-        ///
-        /// getPreProcessedFileInfo
-        ///
         public getPreProcessedFileInfo(fileName: string, sourceText: TypeScript.IScriptSnapshot): string {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
@@ -828,9 +861,6 @@ module ts {
                 });
         }
 
-        ///
-        /// getDefaultCompilationSettings
-        ///
         public getDefaultCompilationSettings(): string {
             return this.forwardJSONCall(
                 "getDefaultCompilationSettings()",
