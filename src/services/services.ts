@@ -3799,27 +3799,29 @@ module ts {
             forEach(signatureHelpItems.items, signature => {
                 var signatureInfoString = signature.prefix;
 
-                var paramters: FormalParameterInfo[] = [];
-                for (var i = 0, n = signature.parameters.length; i < n; i++) {
-                    var paramter = signature.parameters[i];
+                var parameters: FormalParameterInfo[] = [];
+                if (signature.parameters) {
+                    for (var i = 0, n = signature.parameters.length; i < n; i++) {
+                        var parameter = signature.parameters[i];
 
-                    // add the parameter to the string
-                    if (i) {
-                        signatureInfoString += signature.separator;
+                        // add the parameter to the string
+                        if (i) {
+                            signatureInfoString += signature.separator;
+                        }
+
+                        var start = signatureInfoString.length;
+                        signatureInfoString += parameter.display;
+                        var end = signatureInfoString.length - 1;
+
+                        // add the parameter to the list
+                        parameters.push({
+                            name: parameter.name,
+                            isVariable: i == n - 1 && signature.isVariadic,
+                            docComment: parameter.documentation,
+                            minChar: start,
+                            limChar: end
+                        });
                     }
-
-                    var start = signatureInfoString.length;
-                    signatureInfoString += paramter.display;
-                    var end = signatureInfoString.length - 1;
-
-                    // add the parameter to the list
-                    paramters.push({
-                        name: paramter.name,
-                        isVariable: i == n -1 && signature.isVariadic,
-                        docComment: paramter.documentation,
-                        minChar: start,
-                        limChar: end
-                    });
                 }
 
                 signatureInfoString += signature.suffix;
@@ -3827,7 +3829,7 @@ module ts {
                 formalSignatures.push({
                     signatureInfo: signatureInfoString,
                     docComment: signature.documentation,
-                    parameters: paramters,
+                    parameters: parameters,
                     typeParameters: [],
                     docComments: signature.documentation
                 });
