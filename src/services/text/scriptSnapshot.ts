@@ -3,7 +3,7 @@
 module TypeScript {
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the 
-     * snapshot is observably immutable.  i.e. the same calls with the same parameters will return
+     * snapshot is observably immutable. i.e. the same calls with the same parameters will return
      * the same values.
      */
     export interface IScriptSnapshot {
@@ -23,7 +23,7 @@ module TypeScript {
         /**
          * Gets the TextChangeRange that describe how the text changed between this text and 
          * an older version.  This information is used by the incremental parser to determine
-         * what sections of the script need to be re-parsed.  'null' can be returned if the 
+         * what sections of the script need to be re-parsed.  'undefined' can be returned if the 
          * change range cannot be determined.  However, in that case, incremental parsing will
          * not happen and the entire document will be re - parsed.
          */
