@@ -65,7 +65,7 @@ module ts {
     }
 
     /** Get the token whose text contains the position */
-    export function getExactTokenAtPosition(sourceFile: SourceFile, position: number, includeItemAtEndPosition: (n: Node) => boolean) {
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeItemAtEndPosition: (n: Node) => boolean) {
         var current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {

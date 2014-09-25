@@ -2088,7 +2088,7 @@ module ts {
             }
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
-            var mappedNode = getExactTokenAtPosition(sourceFile, TypeScript.end(node) - 1, /*includeItemAtEndPosition*/ undefined);
+            var mappedNode = getTokenAtPosition(sourceFile, TypeScript.end(node) - 1, /*includeItemAtEndPosition*/ undefined);
             if (isPunctuation(mappedNode.kind)) {
                 mappedNode = mappedNode.parent;
             }
@@ -2325,7 +2325,7 @@ module ts {
              
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
-            var node = getExactTokenAtPosition(sourceFile, position, /*includeItemAtEndPosition*/ undefined);
+            var node = getTokenAtPosition(sourceFile, position, /*includeItemAtEndPosition*/ undefined);
             if (!node) {
                 return undefined;
             }
@@ -2434,7 +2434,7 @@ module ts {
 
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
-            var node = getExactTokenAtPosition(sourceFile, position, /*includeItemAtEndPosition*/ undefined);
+            var node = getTokenAtPosition(sourceFile, position, /*includeItemAtEndPosition*/ undefined);
             if (!node) {
                 return undefined;
             }
@@ -2530,7 +2530,7 @@ module ts {
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
-            var node = getExactTokenAtPosition(sourceFile, position, isValidGotoDefinitionTarget);
+            var node = getTokenAtPosition(sourceFile, position, isValidGotoDefinitionTarget);
             if (!node) {
                 return undefined;
             }
@@ -2594,7 +2594,7 @@ module ts {
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
-            var node = getExactTokenAtPosition(sourceFile, position, isValidFindOccurencesTarget);
+            var node = getTokenAtPosition(sourceFile, position, isValidFindOccurencesTarget);
             if (!node) {
                 return undefined;
             }
@@ -2942,7 +2942,7 @@ module ts {
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
-            var node = getExactTokenAtPosition(sourceFile, position, /*includeItemAtEndPosition*/ undefined);
+            var node = getTokenAtPosition(sourceFile, position, /*includeItemAtEndPosition*/ undefined);
             if (!node) {
                 return undefined;
             }
@@ -3125,7 +3125,7 @@ module ts {
                 forEach(possiblePositions, position => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    var node = getExactTokenAtPosition(sourceFile, position, /*includeItemAtEndPosition*/ undefined);
+                    var node = getTokenAtPosition(sourceFile, position, /*includeItemAtEndPosition*/ undefined);
                     if (!node || node.getWidth() !== labelName.length) {
                         return;
                     }
@@ -3181,7 +3181,7 @@ module ts {
                     forEach(possiblePositions, position => {
                         cancellationToken.throwIfCancellationRequested();
 
-                        var referenceLocation = getExactTokenAtPosition(sourceFile, position, /*includeItemAtEndPosition*/ undefined);
+                        var referenceLocation = getTokenAtPosition(sourceFile, position, /*includeItemAtEndPosition*/ undefined);
                         if (!isValidReferencePosition(referenceLocation, searchText)) {
                             return;
                         }
@@ -3233,7 +3233,7 @@ module ts {
                 forEach(possiblePositions, position => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    var node = getExactTokenAtPosition(sourceFile, position, n => n.kind === SyntaxKind.SuperKeyword);
+                    var node = getTokenAtPosition(sourceFile, position, n => n.kind === SyntaxKind.SuperKeyword);
 
                     if (!node || node.kind !== SyntaxKind.SuperKeyword) {
                         return;
@@ -3299,7 +3299,7 @@ module ts {
                     forEach(possiblePositions, position => {
                         cancellationToken.throwIfCancellationRequested();
 
-                        var node = getExactTokenAtPosition(sourceFile, position, n => n.kind === SyntaxKind.ThisKeyword);
+                        var node = getTokenAtPosition(sourceFile, position, n => n.kind === SyntaxKind.ThisKeyword);
                         if (!node || node.kind !== SyntaxKind.ThisKeyword) {
                             return;
                         }
@@ -4345,7 +4345,7 @@ module ts {
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
 
-            var node = getExactTokenAtPosition(sourceFile, position, n => n.kind === SyntaxKind.Identifier);
+            var node = getTokenAtPosition(sourceFile, position, n => n.kind === SyntaxKind.Identifier);
 
             // Can only rename an identifier.
             if (node && node.kind === SyntaxKind.Identifier) {
