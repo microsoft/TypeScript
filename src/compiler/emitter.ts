@@ -3150,7 +3150,7 @@ module ts {
                 }
             }
 
-            function resolveScriptReference(sourceFile: SourceFile, reference: FileReference) {
+            function tryResolveScriptReference(sourceFile: SourceFile, reference: FileReference) {
                 var referenceFileName = normalizePath(combinePaths(getDirectoryPath(sourceFile.filename), reference.filename));
                 return program.getSourceFile(referenceFileName);
             }
@@ -3180,7 +3180,7 @@ module ts {
                 if (!compilerOptions.noResolve) {
                     var addedGlobalFileReference = false;
                     forEach(root.referencedFiles, fileReference => {
-                        var referencedFile = resolveScriptReference(root, fileReference);
+                        var referencedFile = tryResolveScriptReference(root, fileReference);
 
                         // All the references that are not going to be part of same file
                         if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
@@ -3205,11 +3205,11 @@ module ts {
                         // Check what references need to be added
                         if (!compilerOptions.noResolve) {
                             forEach(sourceFile.referencedFiles, fileReference => {
-                                var referencedFile = resolveScriptReference(sourceFile, fileReference);
+                                var referencedFile = tryResolveScriptReference(sourceFile, fileReference);
 
                                 // If the reference file is a declaration file or an external module, emit that reference
-                                if (isExternalModuleOrDeclarationFile(referencedFile) &&
-                                    !contains(emittedReferencedFiles, referencedFile)) { // If the file reference was not already emitted
+                                if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
+                                    !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
 
                                     writeReferencePath(referencedFile);
                                     emittedReferencedFiles.push(referencedFile);
