@@ -2419,9 +2419,8 @@ module ts {
                 // otherwise this will bring y.x into the scope of x which is incorrect
                 node.initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
             }
-            else {
-                parseExpected(SyntaxKind.ColonToken);
-                node.initializer = parseAssignmentExpression(false);
+            else if (token !== SyntaxKind.ColonToken && node.name.kind === SyntaxKind.Identifier) {
+                node.initializer = node.name;            }            else {                parseExpected(SyntaxKind.ColonToken);                node.initializer = parseAssignmentExpression(false);
             }
             return finishNode(node);
         }

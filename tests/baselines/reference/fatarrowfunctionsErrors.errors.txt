@@ -1,6 +1,6 @@
 tests/cases/compiler/fatarrowfunctionsErrors.ts(2,8): error TS1005: ',' expected.
-tests/cases/compiler/fatarrowfunctionsErrors.ts(2,18): error TS1005: ':' expected.
-tests/cases/compiler/fatarrowfunctionsErrors.ts(2,19): error TS1005: ',' expected.
+tests/cases/compiler/fatarrowfunctionsErrors.ts(2,18): error TS1005: ',' expected.
+tests/cases/compiler/fatarrowfunctionsErrors.ts(2,19): error TS1005: ':' expected.
 tests/cases/compiler/fatarrowfunctionsErrors.ts(2,20): error TS1128: Declaration or statement expected.
 tests/cases/compiler/fatarrowfunctionsErrors.ts(2,21): error TS1128: Declaration or statement expected.
 tests/cases/compiler/fatarrowfunctionsErrors.ts(5,10): error TS1005: ',' expected.
@@ -11,6 +11,7 @@ tests/cases/compiler/fatarrowfunctionsErrors.ts(11,21): error TS1005: '=>' expec
 tests/cases/compiler/fatarrowfunctionsErrors.ts(12,23): error TS1005: '=>' expected.
 tests/cases/compiler/fatarrowfunctionsErrors.ts(1,1): error TS2304: Cannot find name 'foo'.
 tests/cases/compiler/fatarrowfunctionsErrors.ts(2,1): error TS2304: Cannot find name 'foo'.
+tests/cases/compiler/fatarrowfunctionsErrors.ts(2,11): error TS2304: Cannot find name 'return'.
 tests/cases/compiler/fatarrowfunctionsErrors.ts(3,1): error TS2304: Cannot find name 'foo'.
 tests/cases/compiler/fatarrowfunctionsErrors.ts(4,1): error TS2304: Cannot find name 'foo'.
 tests/cases/compiler/fatarrowfunctionsErrors.ts(5,9): error TS2304: Cannot find name 'x'.
@@ -18,7 +19,7 @@ tests/cases/compiler/fatarrowfunctionsErrors.ts(5,21): error TS2304: Cannot find
 tests/cases/compiler/fatarrowfunctionsErrors.ts(5,23): error TS2304: Cannot find name 'x'.
 
 
-==== tests/cases/compiler/fatarrowfunctionsErrors.ts (18 errors) ====
+==== tests/cases/compiler/fatarrowfunctionsErrors.ts (19 errors) ====
     foo((...Far:any[])=>{return 0;})
     ~~~
 !!! error TS2304: Cannot find name 'foo'.
@@ -26,15 +27,17 @@ tests/cases/compiler/fatarrowfunctionsErrors.ts(5,23): error TS2304: Cannot find
            ~~
 !!! error TS1005: ',' expected.
                      ~
-!!! error TS1005: ':' expected.
-                      ~
 !!! error TS1005: ',' expected.
+                      ~
+!!! error TS1005: ':' expected.
                        ~
 !!! error TS1128: Declaration or statement expected.
                         ~
 !!! error TS1128: Declaration or statement expected.
     ~~~
 !!! error TS2304: Cannot find name 'foo'.
+              ~~~~~~
+!!! error TS2304: Cannot find name 'return'.
     foo((x?)=>{return x;})
     ~~~
 !!! error TS2304: Cannot find name 'foo'.

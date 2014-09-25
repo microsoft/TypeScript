@@ -1,15 +1,15 @@
-tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts(2,10): error TS1005: ':' expected.
-tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts(2,14): error TS1005: ',' expected.
-tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts(2,10): error TS2304: Cannot find name 'get'.
+tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts(2,10): error TS1005: ',' expected.
+tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts(2,3): error TS2304: Cannot find name 'public'.
+tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts(2,14): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts (3 errors) ====
     var v = {
       public get foo() { }
              ~~~
-!!! error TS1005: ':' expected.
-                 ~~~
 !!! error TS1005: ',' expected.
-             ~~~
-!!! error TS2304: Cannot find name 'get'.
+      ~~~~~~
+!!! error TS2304: Cannot find name 'public'.
+                 ~~~
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
     };
