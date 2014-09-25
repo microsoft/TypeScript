@@ -4480,9 +4480,9 @@ External import declarations are used to import external modules and create loca
 &emsp;&emsp;&emsp;`import`&emsp;*Identifier*&emsp;`=`&emsp;*ExternalModuleReference*&emsp;`;`
 
 &emsp;&emsp;*ExternalModuleReference:*  
-&emsp;&emsp;&emsp;`require`&emsp;`(`&emsp;*StringLiteral*&emsp;`)
+&emsp;&emsp;&emsp;`require`&emsp;`(`&emsp;*StringLiteral*&emsp;`)`
 
-`The string literal specified in an *ExternalModuleReference* is interpreted as an external module name (section [11.2.1](#11.2.1)).
+The string literal specified in an *ExternalModuleReference* is interpreted as an external module name (section [11.2.1](#11.2.1)).
 
 An external import declaration introduces a local identifier that references a given external module. The local identifier becomes an alias for, and is classified exactly like, the entity or entities exported from the referenced external module. Specifically, if the referenced external module contains no export assignment the identifier is classified as a module, and if the referenced external module contains an export assignment the identifier is classified exactly like the entity or entities named in the export assignment.
 
@@ -5182,9 +5182,9 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;`import`&emsp;*Identifier*&emsp;`=`&emsp;*ExternalModuleReference*&emsp;`;`
 
 &emsp;&emsp;*ExternalModuleReference:*  
-&emsp;&emsp;&emsp;`require`&emsp;`(`&emsp;*StringLiteral*&emsp;`)
+&emsp;&emsp;&emsp;`require`&emsp;`(`&emsp;*StringLiteral*&emsp;`)`
 
-&emsp;&emsp;`*ExportAssignment:*  
+&emsp;&emsp;*ExportAssignment:*  
 &emsp;&emsp;&emsp;`export`&emsp;`=`&emsp;*Identifier*&emsp;`;`
 
 ## <a name="A.10"/>A.10 Ambients
