@@ -151,23 +151,23 @@ module ts {
                     return basicChildItem(node, parameter.name.text, ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.Method:
-                    var memberFunction = <MethodDeclaration>node;
-                    return basicChildItem(node, memberFunction.name.text, ts.ScriptElementKind.memberFunctionElement);
+                    var method = <MethodDeclaration>node;
+                    return basicChildItem(node, getPropertyText(method.name), ts.ScriptElementKind.memberFunctionElement);
 
                 case SyntaxKind.GetAccessor:
                     var getAccessor = <AccessorDeclaration>node;
-                    return basicChildItem(node, getAccessor.name.text, ts.ScriptElementKind.memberGetAccessorElement);
+                    return basicChildItem(node, getPropertyText(getAccessor.name), ts.ScriptElementKind.memberGetAccessorElement);
 
                 case SyntaxKind.SetAccessor:
                     var setAccessor = <AccessorDeclaration>node;
-                    return basicChildItem(node, setAccessor.name.text, ts.ScriptElementKind.memberSetAccessorElement);
+                    return basicChildItem(node, getPropertyText(setAccessor.name), ts.ScriptElementKind.memberSetAccessorElement);
 
                 case SyntaxKind.IndexSignature:
                     return basicChildItem(node, "[]", ts.ScriptElementKind.indexSignatureElement);
 
                 case SyntaxKind.EnumMember:
-                    var enumElement = <EnumMember>node;
-                    return basicChildItem(node, enumElement.name.text, ts.ScriptElementKind.memberVariableElement);
+                    var enumMember = <EnumMember>node;
+                    return basicChildItem(node, getPropertyText(enumMember.name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.CallSignature:
                     return basicChildItem(node, "()", ts.ScriptElementKind.callSignatureElement);
@@ -176,8 +176,8 @@ module ts {
                     return basicChildItem(node, "new()", ts.ScriptElementKind.constructSignatureElement);
 
                 case SyntaxKind.Property:
-                    var propertySignature = <PropertyDeclaration>node;
-                    return basicChildItem(node, propertySignature.name.text, ts.ScriptElementKind.memberVariableElement);
+                    var property = <PropertyDeclaration>node;
+                    return basicChildItem(node, getPropertyText(property.name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.FunctionDeclaration:
                     var functionDeclaration = <FunctionDeclaration>node;
@@ -224,13 +224,13 @@ module ts {
 
             return undefined;
 
-            function getModuleNames(moduleDeclaration: ModuleDeclaration): string[]{
+            function getModuleName(moduleDeclaration: ModuleDeclaration): string {
                 // We want to maintain quotation marks.
                 if (moduleDeclaration.name.kind === SyntaxKind.StringLiteral) {
-                    return [getSourceTextOfNode(moduleDeclaration.name)];
+                    return getPropertyText(moduleDeclaration.name);
                 }
 
-                // Otherwise, we need to aggregate each identifier of the qualified name.
+                // Otherwise, we need to aggregate each identifier to build up the qualified name.
                 var result: string[] = [];
 
                 result.push(moduleDeclaration.name.text);
@@ -241,15 +241,15 @@ module ts {
                     result.push(moduleDeclaration.name.text);
                 } 
 
-                return result;
+                return result.join(".");
             }
 
             function createModuleItem(node: ModuleDeclaration): NavigationBarItem {
-                var moduleNames = getModuleNames(node);
+                var moduleName = getModuleName(node);
                 
                 var childItems = getItemsWorker(getChildNodes((<Block>getInnermostModule(node).body).statements), createChildItem);
 
-                return new ts.NavigationBarItem(moduleNames.join("."),
+                return new ts.NavigationBarItem(moduleName,
                     ts.ScriptElementKind.moduleElement,
                     getNodeModifiers(node),
                     [getNodeSpan(node)],
@@ -281,7 +281,7 @@ module ts {
 
                 hasGlobalNode = true;
                 var rootName = isExternalModule(node) ?
-                    "\"" + getBaseFilename(removeFileExtension(normalizePath(node.filename))) + "\"" :
+                    "\"" + escapeString(getBaseFilename(removeFileExtension(normalizePath(node.filename)))) + "\"" :
                     "<global>"
 
                 return new ts.NavigationBarItem(rootName,
@@ -340,7 +340,6 @@ module ts {
         }
 
         function getInnermostModule(node: ModuleDeclaration): ModuleDeclaration {
-
             while (node.body.kind === SyntaxKind.ModuleDeclaration) {
                 node = <ModuleDeclaration>node.body;
             }
@@ -350,6 +349,25 @@ module ts {
 
         function getNodeSpan(node: Node) {
             return TypeScript.TextSpan.fromBounds(node.getStart(), node.getEnd());
+        }
+
+        function getPropertyText(node: Node): string {
+            if (node.kind === SyntaxKind.Identifier) {
+                return (<Identifier>node).text;
+            }
+
+            if (node.kind === SyntaxKind.StringLiteral) {
+                // normalize the quotes and remove all '\{newline}'s from the original text.
+                var text = getSourceTextOfNodeFromSourceText(sourceFile.text, node);
+                text = text.substring(1, text.length - 1).replace(/\\\r?\n/g, "");
+                return "\"" + text + "\"";
+            }
+
+            if (node.kind === SyntaxKind.NumericLiteral) {
+                return (<LiteralExpression>node).text;
+            }
+
+            Debug.fail("getPropertyText given a property that is neither an identifier nor a literal expression.");
         }
     }
 }

@@ -3,7 +3,7 @@
 ////declare module "X.Y.Z" {
 ////}
 ////
-////{| "itemName": "'X2.Y2.Z2'", "kind": "module" |}
+////{| "itemName": "\"X2.Y2.Z2\"", "kind": "module" |}
 ////declare module 'X2.Y2.Z2' {
 ////}
 ////
