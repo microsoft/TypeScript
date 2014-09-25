@@ -925,38 +925,17 @@ module ts {
         var displayPartWriters: DisplayPartsSymbolWriter[] = [];
         var stringWriters: StringSymbolWriter[] = [];
 
-        function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
-            var flags = symbol.flags;
-
-            if (flags & SymbolFlags.Variable) {
-                return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter
-                    ? SymbolDisplayPartKind.parameterName
-                    : SymbolDisplayPartKind.localName;
-            }
-            else if (flags & SymbolFlags.Property)      { return SymbolDisplayPartKind.propertyName; }
-            else if (flags & SymbolFlags.EnumMember)    { return SymbolDisplayPartKind.enumMemberName; }
-            else if (flags & SymbolFlags.Function)      { return SymbolDisplayPartKind.functionName; }
-            else if (flags & SymbolFlags.Class)         { return SymbolDisplayPartKind.className; }
-            else if (flags & SymbolFlags.Interface)     { return SymbolDisplayPartKind.interfaceName; }
-            else if (flags & SymbolFlags.Enum)          { return SymbolDisplayPartKind.enumName; }
-            else if (flags & SymbolFlags.Module)        { return SymbolDisplayPartKind.moduleName; }
-            else if (flags & SymbolFlags.Method)        { return SymbolDisplayPartKind.methodName; }
-            else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
-            
-            return SymbolDisplayPartKind.text;
-        }
-
         function getDisplayPartWriter(): DisplayPartsSymbolWriter {
             if (displayPartWriters.length == 0) {
                 var displayParts: SymbolDisplayPart[] = [];
                 return {
                     displayParts: () => displayParts,
                     writeKind: (text, kind) => displayParts.push(new SymbolDisplayPart(text, kind, undefined)),
-                    writeSymbol: (text, symbol) => displayParts.push(new SymbolDisplayPart(text, displayPartKind(symbol), symbol)),
+                    writeSymbol: (text, symbol) => displayParts.push(symbolPart(text, symbol)),
 
                     // Completely ignore indentation for display part writers.  And map newlines to
                     // a single space.
-                    writeLine: () => displayParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined)),
+                    writeLine: () => displayParts.push(spacePart()),
                     increaseIndent: () => { },
                     decreaseIndent: () => { },
                     clear: () => displayParts = [],
@@ -7692,5 +7671,50 @@ module ts {
         initializeTypeChecker();
 
         return checker;
+    }
+
+    export function spacePart() {
+        return new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined);
+    }
+
+    export function keywordPart(kind: SyntaxKind) {
+        return new SymbolDisplayPart(tokenToString(kind), SymbolDisplayPartKind.keyword, undefined);
+    }
+
+    export function punctuationPart(kind: SyntaxKind) {
+        return new SymbolDisplayPart(tokenToString(kind), SymbolDisplayPartKind.punctuation, undefined);
+    }
+
+    export function operatorPart(kind: SyntaxKind) {
+        return new SymbolDisplayPart(tokenToString(kind), SymbolDisplayPartKind.operator, undefined);
+    }
+
+    export function textPart(text: string) {
+        return new SymbolDisplayPart(text, SymbolDisplayPartKind.text, undefined);
+    }
+
+    export function symbolPart(text: string, symbol: Symbol) {
+        return new SymbolDisplayPart(text, displayPartKind(symbol), symbol)
+    }
+
+    function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
+        var flags = symbol.flags;
+
+        if (flags & SymbolFlags.Variable) {
+            return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter
+                ? SymbolDisplayPartKind.parameterName
+                : SymbolDisplayPartKind.localName;
+        }
+        else if (flags & SymbolFlags.Property) { return SymbolDisplayPartKind.propertyName; }
+        else if (flags & SymbolFlags.EnumMember) { return SymbolDisplayPartKind.enumMemberName; }
+        else if (flags & SymbolFlags.Function) { return SymbolDisplayPartKind.functionName; }
+        else if (flags & SymbolFlags.Class) { return SymbolDisplayPartKind.className; }
+        else if (flags & SymbolFlags.Interface) { return SymbolDisplayPartKind.interfaceName; }
+        else if (flags & SymbolFlags.Enum) { return SymbolDisplayPartKind.enumName; }
+        else if (flags & SymbolFlags.Module) { return SymbolDisplayPartKind.moduleName; }
+        else if (flags & SymbolFlags.Method) { return SymbolDisplayPartKind.methodName; }
+        else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
+
+        return SymbolDisplayPartKind.text;
     }
 }

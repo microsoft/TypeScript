@@ -833,8 +833,8 @@ module ts {
 
     export interface SignatureHelpParameter {
         name: string;
-        documentation: string;
-        display: string;
+        documentation: SymbolDisplayPart[];
+        displayParts: SymbolDisplayPart[];
         isOptional: boolean;
     }
 
@@ -847,11 +847,11 @@ module ts {
      */
     export interface SignatureHelpItem {
         isVariadic: boolean;
-        prefix: string;
-        suffix: string;
-        separator: string;
+        prefixDisplayParts: SymbolDisplayPart[];
+        suffixDisplayParts: SymbolDisplayPart[];
+        separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
-        documentation: string;
+        documentation: SymbolDisplayPart[];
     }
 
     /**
@@ -1622,6 +1622,11 @@ module ts {
         });
     }
 
+    export function getSymbolDocumentationDisplayParts(symbol: Symbol): SymbolDisplayPart[] {
+        var documentation = symbol.getDocumentationComment();
+        return documentation === "" ? [] : [new SymbolDisplayPart(documentation, SymbolDisplayPartKind.text, /*symbol:*/ null)];
+    }
+
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
@@ -2372,42 +2377,41 @@ module ts {
                 return undefined;
             }
 
-            var documentation = symbol.getDocumentationComment();
-            var documentationParts = documentation === "" ? [] : [new SymbolDisplayPart(documentation, SymbolDisplayPartKind.text, /*symbol:*/ null)];
+            var documentationParts = getSymbolDocumentationDisplayParts(symbol);
 
             // Having all this logic here is pretty unclean.  Consider moving to the roslyn model
             // where all symbol display logic is encapsulated into visitors and options.
             var totalParts: SymbolDisplayPart[] = [];
 
             if (symbol.flags & SymbolFlags.Class) {
-                totalParts.push(new SymbolDisplayPart("class", SymbolDisplayPartKind.keyword, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Interface) {
-                totalParts.push(new SymbolDisplayPart("interface", SymbolDisplayPartKind.keyword, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Enum) {
-                totalParts.push(new SymbolDisplayPart("enum", SymbolDisplayPartKind.keyword, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(keywordPart(SyntaxKind.EnumKeyword));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Module) {
-                totalParts.push(new SymbolDisplayPart("module", SymbolDisplayPartKind.keyword, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(keywordPart(SyntaxKind.ModuleKeyword));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.TypeParameter) {
-                totalParts.push(new SymbolDisplayPart("(", SymbolDisplayPartKind.punctuation, undefined));
+                totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 totalParts.push(new SymbolDisplayPart("type parameter", SymbolDisplayPartKind.text, undefined));
-                totalParts.push(new SymbolDisplayPart(")", SymbolDisplayPartKind.punctuation, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol));
             }
             else {
-                totalParts.push(new SymbolDisplayPart("(", SymbolDisplayPartKind.punctuation, undefined));
+                totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 var text: string;
 
                 if (symbol.flags & SymbolFlags.Property) { text = "property" }
@@ -2421,8 +2425,8 @@ module ts {
                 }
 
                 totalParts.push(new SymbolDisplayPart(text, SymbolDisplayPartKind.text, undefined));
-                totalParts.push(new SymbolDisplayPart(")", SymbolDisplayPartKind.punctuation, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                totalParts.push(spacePart());
 
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, getContainerNode(node)));
 
@@ -2432,8 +2436,8 @@ module ts {
                     symbol.flags & SymbolFlags.Variable) {
 
                     if (type) {
-                        totalParts.push(new SymbolDisplayPart(":", SymbolDisplayPartKind.punctuation, undefined));
-                        totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                        totalParts.push(punctuationPart(SyntaxKind.ColonToken));
+                        totalParts.push(spacePart());
                         totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type, getContainerNode(node)));
                     }
                 }
@@ -2448,9 +2452,9 @@ module ts {
                     if (declaration.kind === SyntaxKind.EnumMember) {
                         var constantValue = typeInfoResolver.getEnumMemberValue(<EnumMember>declaration);
                         if (constantValue !== undefined) {
-                            totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
-                            totalParts.push(new SymbolDisplayPart("=", SymbolDisplayPartKind.operator, undefined));
-                            totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                            totalParts.push(spacePart());
+                            totalParts.push(operatorPart(SyntaxKind.EqualsToken));
+                            totalParts.push(spacePart());
                             totalParts.push(new SymbolDisplayPart(constantValue.toString(), SymbolDisplayPartKind.numericLiteral, undefined));
                         }
                     }
@@ -3782,7 +3786,7 @@ module ts {
 
             var formalSignatures: FormalSignatureItemInfo[] = [];
             forEach(signatureHelpItems.items, signature => {
-                var signatureInfoString = signature.prefix;
+                var signatureInfoString = ts.SymbolDisplayPart.toString(signature.prefixDisplayParts);
 
                 var parameters: FormalParameterInfo[] = [];
                 if (signature.parameters) {
@@ -3791,32 +3795,31 @@ module ts {
 
                         // add the parameter to the string
                         if (i) {
-                            signatureInfoString += signature.separator;
+                            signatureInfoString += ts.SymbolDisplayPart.toString(signature.separatorDisplayParts);
                         }
 
                         var start = signatureInfoString.length;
-                        signatureInfoString += parameter.display;
+                        signatureInfoString += ts.SymbolDisplayPart.toString(parameter.displayParts);
                         var end = signatureInfoString.length - 1;
 
                         // add the parameter to the list
                         parameters.push({
                             name: parameter.name,
                             isVariable: i == n - 1 && signature.isVariadic,
-                            docComment: parameter.documentation,
+                            docComment: ts.SymbolDisplayPart.toString(parameter.documentation),
                             minChar: start,
                             limChar: end
                         });
                     }
                 }
 
-                signatureInfoString += signature.suffix;
+                signatureInfoString += ts.SymbolDisplayPart.toString(signature.suffixDisplayParts);
 
                 formalSignatures.push({
                     signatureInfo: signatureInfoString,
-                    docComment: signature.documentation,
+                    docComment: ts.SymbolDisplayPart.toString(signature.documentation),
                     parameters: parameters,
                     typeParameters: [],
-                    docComments: signature.documentation
                 });
             });
 
