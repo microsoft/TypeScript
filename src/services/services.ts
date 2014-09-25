@@ -2384,34 +2384,34 @@ module ts {
             var totalParts: SymbolDisplayPart[] = [];
 
             if (symbol.flags & SymbolFlags.Class) {
-                totalParts.push(new SymbolDisplayPart("class", SymbolDisplayPartKind.keyword, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Interface) {
-                totalParts.push(new SymbolDisplayPart("interface", SymbolDisplayPartKind.keyword, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Enum) {
-                totalParts.push(new SymbolDisplayPart("enum", SymbolDisplayPartKind.keyword, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(keywordPart(SyntaxKind.EnumKeyword));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Module) {
-                totalParts.push(new SymbolDisplayPart("module", SymbolDisplayPartKind.keyword, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(keywordPart(SyntaxKind.ModuleKeyword));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.TypeParameter) {
-                totalParts.push(new SymbolDisplayPart("(", SymbolDisplayPartKind.punctuation, undefined));
+                totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 totalParts.push(new SymbolDisplayPart("type parameter", SymbolDisplayPartKind.text, undefined));
-                totalParts.push(new SymbolDisplayPart(")", SymbolDisplayPartKind.punctuation, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol));
             }
             else {
-                totalParts.push(new SymbolDisplayPart("(", SymbolDisplayPartKind.punctuation, undefined));
+                totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 var text: string;
 
                 if (symbol.flags & SymbolFlags.Property) { text = "property" }
@@ -2425,8 +2425,8 @@ module ts {
                 }
 
                 totalParts.push(new SymbolDisplayPart(text, SymbolDisplayPartKind.text, undefined));
-                totalParts.push(new SymbolDisplayPart(")", SymbolDisplayPartKind.punctuation, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                totalParts.push(spacePart());
 
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, getContainerNode(node)));
 
@@ -2436,8 +2436,8 @@ module ts {
                     symbol.flags & SymbolFlags.Variable) {
 
                     if (type) {
-                        totalParts.push(new SymbolDisplayPart(":", SymbolDisplayPartKind.punctuation, undefined));
-                        totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                        totalParts.push(punctuationPart(SyntaxKind.ColonToken));
+                        totalParts.push(spacePart());
                         totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type, getContainerNode(node)));
                     }
                 }
@@ -2452,9 +2452,9 @@ module ts {
                     if (declaration.kind === SyntaxKind.EnumMember) {
                         var constantValue = typeInfoResolver.getEnumMemberValue(<EnumMember>declaration);
                         if (constantValue !== undefined) {
-                            totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
-                            totalParts.push(new SymbolDisplayPart("=", SymbolDisplayPartKind.operator, undefined));
-                            totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                            totalParts.push(spacePart());
+                            totalParts.push(operatorPart(SyntaxKind.EqualsToken));
+                            totalParts.push(spacePart());
                             totalParts.push(new SymbolDisplayPart(constantValue.toString(), SymbolDisplayPartKind.numericLiteral, undefined));
                         }
                     }

@@ -255,18 +255,18 @@ module ts.SignatureHelp {
                     var displayParts: SymbolDisplayPart[] = [];
 
                     if (candidateSignature.hasRestParameter && parameters[parameters.length - 1] === p) {
-                        displayParts.push(new SymbolDisplayPart(tokenToString(SyntaxKind.DotDotDotToken), SymbolDisplayPartKind.punctuation, undefined));
+                        displayParts.push(punctuationPart(SyntaxKind.DotDotDotToken));
                     }
 
-                    displayParts.push(new SymbolDisplayPart(p.name, SymbolDisplayPartKind.parameterName, p));
+                    displayParts.push(symbolPart(p.name, p));
 
                     var isOptional = !!(p.valueDeclaration.flags & NodeFlags.QuestionMark);
                     if (isOptional) {
-                        displayParts.push(new SymbolDisplayPart(tokenToString(SyntaxKind.QuestionToken), SymbolDisplayPartKind.punctuation, undefined));
+                        displayParts.push(punctuationPart(SyntaxKind.QuestionToken));
                     }
 
-                    displayParts.push(new SymbolDisplayPart(tokenToString(SyntaxKind.ColonToken), SymbolDisplayPartKind.punctuation, undefined));
-                    displayParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                    displayParts.push(punctuationPart(SyntaxKind.ColonToken));
+                    displayParts.push(spacePart());
 
                     var typeParts = typeInfoResolver.typeToDisplayParts(typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
                     displayParts.push.apply(displayParts, typeParts);
@@ -284,14 +284,11 @@ module ts.SignatureHelp {
 
                 var prefixParts = callTargetSymbol ? typeInfoResolver.symbolToDisplayParts(callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined) : [];
 
-                var separatorParts = [
-                    new SymbolDisplayPart(tokenToString(SyntaxKind.CommaToken), SymbolDisplayPartKind.punctuation, undefined),
-                    new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined)
-                ];
+                var separatorParts = [punctuationPart(SyntaxKind.CommaToken), spacePart()];
 
                 // TODO(jfreeman): Constraints?
                 if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
-                    prefixParts.push(new SymbolDisplayPart(tokenToString(SyntaxKind.LessThanToken), SymbolDisplayPartKind.punctuation, undefined));
+                    prefixParts.push(punctuationPart(SyntaxKind.LessThanToken));
 
                     for (var i = 0, n = candidateSignature.typeParameters.length; i < n; i++) {
                         if (i) {
@@ -299,17 +296,17 @@ module ts.SignatureHelp {
                         }
 
                         var tp = candidateSignature.typeParameters[i].symbol;
-                        prefixParts.push(new SymbolDisplayPart(tp.name, SymbolDisplayPartKind.typeParameterName, tp));
+                        prefixParts.push(symbolPart(tp.name, tp));
                     }
 
-                    prefixParts.push(new SymbolDisplayPart(tokenToString(SyntaxKind.GreaterThanToken), SymbolDisplayPartKind.punctuation, undefined));
+                    prefixParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                 }
 
-                prefixParts.push(new SymbolDisplayPart(tokenToString(SyntaxKind.OpenParenToken), SymbolDisplayPartKind.punctuation, undefined));
+                prefixParts.push(punctuationPart(SyntaxKind.OpenParenToken));
 
-                var suffixParts = [new SymbolDisplayPart(tokenToString(SyntaxKind.CloseParenToken), SymbolDisplayPartKind.punctuation, undefined)];
-                suffixParts.push(new SymbolDisplayPart(tokenToString(SyntaxKind.ColonToken), SymbolDisplayPartKind.punctuation, undefined));
-                suffixParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                var suffixParts = [punctuationPart(SyntaxKind.CloseParenToken)];
+                suffixParts.push(punctuationPart(SyntaxKind.ColonToken));
+                suffixParts.push(spacePart());
 
                 var typeParts = typeInfoResolver.typeToDisplayParts(candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
                 suffixParts.push.apply(suffixParts, typeParts);
