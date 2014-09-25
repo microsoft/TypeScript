@@ -15,6 +15,10 @@
         "category": "Error",
         "code": 1009
     },
+	"A file cannot have a reference to itself.": {
+        "category": "Error",
+        "code": 1006
+    },
     "'*/' expected.": {
         "category": "Error",
         "code": 1010
@@ -1355,10 +1359,7 @@
         "category": "Error",
         "code": 5001
     },
-    "A file cannot have a reference to itself.": {
-        "category": "Error",
-        "code": 5006
-    },
+
     "Cannot find the common subdirectory path for the input files.": {
         "category": "Error",
         "code": 5009
