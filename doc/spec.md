@@ -1,11 +1,5 @@
 # TypeScript Language Specification
 
-Microsoft (R) Windows Script Host Version 5.8
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-Microsoft (R) Windows Script Host Version 5.8
-Copyright (C) Microsoft Corporation. All rights reserved.
-
 Version 1.3
 
 September, 2014
