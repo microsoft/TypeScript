@@ -13,8 +13,6 @@
 // limitations under the License.
 //
 
-///<reference path='references.ts' />
-
 module ts {
 
     export interface OutliningSpan {

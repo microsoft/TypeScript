@@ -409,7 +409,7 @@ module ts {
         // Build up the list of examples.
         var padding = makePadding(marginLength);
         output += getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine;
-        output += padding + "tsc --out foo.js foo.ts" + sys.newLine;
+        output += padding + "tsc --out file.js file.ts" + sys.newLine;
         output += padding + "tsc @args.txt" + sys.newLine;
         output += sys.newLine;
 

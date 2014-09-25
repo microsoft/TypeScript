@@ -1633,7 +1633,7 @@ module FourSlash {
 
         public verifyTodoComments(descriptors: string[], spans: TextSpan[]) {
             var actual = this.languageService.getTodoComments(this.activeFile.fileName,
-                descriptors.map(d => new ts.TodoCommentDescriptor(d, 0)));
+                descriptors.map(d => { return { text: d, priority: 0 }; }));
 
             if (actual.length !== spans.length) {
                 throw new Error('verifyTodoComments failed - expected total spans to be ' + spans.length + ', but was ' + actual.length);
