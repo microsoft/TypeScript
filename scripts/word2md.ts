@@ -138,76 +138,28 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     var tableCellIndex: number;
     var columnAlignment: number[] = [];
 
-    function reformatSubscripts() {
-        var find = doc.range().find;
-        find.clearFormatting();
-        find.font.subscript = true;
-        var replace = find.replacement;
-        replace.clearFormatting();
-        replace.font.subscript = false;
-        find.execute("", false, false, false, false, false, true, 0, true, "<sub>^&</sub>", 2);
+    function setProperties(target: {}, properties: {}) {
+        for (var name in properties) {
+            if (properties.hasOwnProperty(name)) {
+                var value = properties[name];
+                if (typeof value === "object") {
+                    setProperties(target[name], value);
+                }
+                else {
+                    target[name] = value;
+                }
+            }
+        }
     }
 
-    function reformatCodeFragments() {
+    function findReplace(findText: string, findProps: {}, replaceText: string, replaceProps: {}) {
         var find = doc.range().find;
         find.clearFormatting();
-        find.style = "Code Fragment";
+        setProperties(find, findProps);
         var replace = find.replacement;
         replace.clearFormatting();
-        replace.style = -66;  // Default Paragraph Font
-        find.execute("", false, false, false, false, false, true, 0, true, "`^&`", 2);
-    }
-
-    function reformatProductions() {
-        var find = doc.range().find;
-        find.clearFormatting();
-        find.style = "Production";
-        var replace = find.replacement;
-        replace.clearFormatting();
-        replace.style = -66;  // Default Paragraph Font
-        find.execute("", false, false, false, false, false, true, 0, true, "*^&*", 2);
-    }
-
-    function reformatTerminals() {
-        var find = doc.range().find;
-        find.clearFormatting();
-        find.style = "Terminal";
-        var replace = find.replacement;
-        replace.clearFormatting();
-        replace.style = -66;  // Default Paragraph Font
-        find.execute("", false, false, false, false, false, true, 0, true, "`^&`", 2);
-    }
-
-    function reformatBoldItalic() {
-        var find = doc.range().find;
-        find.clearFormatting();
-        find.font.bold = true;
-        find.font.italic = true;
-        var replace = find.replacement;
-        replace.clearFormatting();
-        replace.font.bold = false;
-        replace.font.italic = false;
-        find.execute("", false, false, false, false, false, true, 0, true, "***^&***", 2);
-    }
-
-    function reformatItalic() {
-        var find = doc.range().find;
-        find.clearFormatting();
-        find.font.italic = true;
-        var replace = find.replacement;
-        replace.clearFormatting();
-        replace.font.italic = false;
-        find.execute("", false, false, false, false, false, true, 0, true, "*^&*", 2);
-    }
-
-    function reformatReferences() {
-        doc.fields.toggleShowCodes();
-        var find = doc.range().find;
-        find.clearFormatting();
-        var replace = find.replacement;
-        replace.clearFormatting();
-        find.execute("^19 REF", false, false, false, false, false, true, 0, true, "[^&](#^&)", 2);
-        doc.fields.toggleShowCodes();
+        setProperties(replace, replaceProps);
+        find.execute(findText, false, false, false, false, false, true, 0, true, replaceText, 2);
     }
 
     function write(s: string) {
@@ -230,7 +182,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
         write("|\n");
     }
 
-    function stripFormattingMarks(text: string) {
+    function trimEndFormattingMarks(text: string) {
         var i = text.length;
         while (i > 0 && text.charCodeAt(i - 1) < 0x20) i--;
         return text.substr(0, i);
@@ -257,7 +209,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
         var level = 1;
         var sectionBreak = text.indexOf("\x0C") >= 0;
 
-        text = stripFormattingMarks(text);
+        text = trimEndFormattingMarks(text);
         if (inTable) {
             style = "Table";
         }
@@ -274,7 +226,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
             case "Heading":
             case "Appendix":
                 var section = p.range.listFormat.listString;
-                write("####".substr(0, level) + " <a name=\"" + section + "\"/>" + section + " " + text + "\n\n");
+                write("####".substr(0, level) + ' <a name="' + section + '"/>' + section + " " + text + "\n\n");
                 break;
 
             case "Normal":
@@ -337,21 +289,22 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     }
 
     function writeDocument() {
-        var p = doc.paragraphs.first;
-        while (p) {
+        for (var p = doc.paragraphs.first; p; p = p.next()) {
             writeParagraph(p);
-            p = p.next();
         }
         writeBlockEnd();
     }
 
-    reformatSubscripts();
-    reformatCodeFragments();
-    reformatProductions();
-    reformatTerminals();
-    reformatBoldItalic();
-    reformatItalic();
-    reformatReferences();
+    findReplace("", { font: { subscript: true } }, "<sub>^&</sub>", { font: { subscript: false } });
+    findReplace("", { style: "Code Fragment" }, "`^&`", { style: -66 /* default font */ });
+    findReplace("", { style: "Production" }, "*^&*", { style: -66 /* default font */});
+    findReplace("", { style: "Terminal" }, "`^&`", { style: -66 /* default font */});
+    findReplace("", { font: { bold: true, italic: true } }, "***^&***", { font: { bold: false, italic: false } });
+    findReplace("", { font: { italic: true } }, "*^&*", { font: { italic: false } });
+
+    doc.fields.toggleShowCodes();
+    findReplace("^19 REF", {}, "[^&](#^&)", {});
+    doc.fields.toggleShowCodes();
 
     writeDocument();
 
