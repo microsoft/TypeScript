@@ -189,6 +189,12 @@ describe('Colorization', function () {
                 identifier("var"));
         });
 
+        it("correctly classifies a string literal after a dot", function () {
+            test("a.\"var\"",
+                ts.EndOfLineState.Start,
+                stringLiteral("\"var\""));
+        });
+
         it("correctly classifies a keyword after a dot separated by comment trivia", function () {
             test("a./*hello world*/ var",
                 ts.EndOfLineState.Start,

@@ -4556,7 +4556,7 @@ module ts {
                             token = SyntaxKind.RegularExpressionLiteral;
                         }
                     }
-                    else if (lastNonTriviaToken === SyntaxKind.DotToken) {
+                    else if (lastNonTriviaToken === SyntaxKind.DotToken && isKeyword(token)) {
                         token = SyntaxKind.Identifier;
                     }
 
@@ -4610,10 +4610,6 @@ module ts {
 
                     result.entries.push({ length: length, classification: classification });
                 }
-            }
-
-            function isTrivia(token: SyntaxKind) {
-                return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
             }
         }
 
