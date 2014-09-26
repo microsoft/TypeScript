@@ -279,11 +279,11 @@ module FourSlashInterface {
         }
 
         public currentParameterHelpArgumentDocCommentIs(docComment: string) {
-    //        FourSlash.currentTestState.verifyCurrentParameterHelpDocComment(docComment);
+            FourSlash.currentTestState.verifyCurrentParameterHelpDocComment(docComment);
         }
 
         public currentSignatureHelpDocCommentIs(docComment: string) {
-    //        FourSlash.currentTestState.verifyCurrentSignatureHelpDocComment(docComment);
+            FourSlash.currentTestState.verifyCurrentSignatureHelpDocComment(docComment);
         }
 
         public signatureHelpCountIs(expected: number) {

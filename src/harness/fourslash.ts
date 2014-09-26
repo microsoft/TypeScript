@@ -189,6 +189,9 @@ module FourSlash {
     }
 
     export var currentTestState: TestState = null;
+    function assertionMessage(msg: string) {
+        return "\nMarker: " + currentTestState.lastKnownMarker + "\nChecking: " + msg + "\n\n";
+    }
 
     export class TestCancellationToken implements ts.CancellationToken {
         // 0 - cancelled
@@ -652,14 +655,14 @@ module FourSlash {
 
             var details = this.getCompletionEntryDetails(entryName);
 
-            assert.equal(ts.displayPartsToString(details.displayParts), expectedText);
+            assert.equal(ts.displayPartsToString(details.displayParts), expectedText, assertionMessage("completion entry details text"));
 
             if (expectedDocumentation != undefined) {
-                assert.equal(ts.displayPartsToString(details.documentation), expectedDocumentation);
+                assert.equal(ts.displayPartsToString(details.documentation), expectedDocumentation, assertionMessage("completion entry documentation"));
             }
 
             if (kind !== undefined) {
-                assert.equal(details.kind, kind);
+                assert.equal(details.kind, kind, assertionMessage("completion entry kind"));
             }
         }
 
@@ -766,10 +769,6 @@ module FourSlash {
             var actualQuickInfoText = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.displayParts) : "";
             var actualQuickInfoDocumentation = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.documentation) : "";
 
-            function assertionMessage(msg: string) {
-                return "\nMarker: " + currentTestState.lastKnownMarker + "\nChecking: " + msg + "\n\n";
-            }
-
             if (negative) {
                 if (expectedText !== undefined) {
                     assert.notEqual(actualQuickInfoText, expectedText, assertionMessage("quick info text"));
@@ -842,7 +841,7 @@ module FourSlash {
 
             var activeParameter = this.getActiveParameter();
             var activeParameterDocComment = activeParameter.documentation;
-            assert.equal(activeParameterDocComment, docComment);
+            assert.equal(ts.displayPartsToString(activeParameterDocComment), docComment, assertionMessage("current parameter Help DocComment"));
         }
 
         public verifyCurrentSignatureHelpParameterCount(expectedCount: number) {
@@ -861,7 +860,7 @@ module FourSlash {
             this.taoInvalidReason = 'verifyCurrentSignatureHelpDocComment NYI';
 
             var actualDocComment = this.getActiveSignatureHelpItem().documentation;
-            assert.equal(actualDocComment, docComment);
+            assert.equal(ts.displayPartsToString(actualDocComment), docComment, assertionMessage("current signature help doc comment"));
         }
 
         public verifySignatureHelpCount(expected: number) {
@@ -1968,10 +1967,6 @@ module FourSlash {
 
             if (text || documentation || kind) {
                 this.taoInvalidReason = 'assertItemInCompletionList only supports the "name" parameter';
-            }
-
-            function assertionMessage(msg: string) {
-                return "\nMarker: " + currentTestState.lastKnownMarker + "\nChecking: " + msg + "\n\n";
             }
 
             for (var i = 0; i < items.length; i++) {

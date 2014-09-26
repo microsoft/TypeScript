@@ -317,7 +317,7 @@ module ts.SignatureHelp {
                     suffixDisplayParts: suffixParts,
                     separatorDisplayParts: separatorParts,
                     parameters: parameterHelpItems,
-                    documentation: <SymbolDisplayPart[]>null
+                    documentation: candidateSignature.getDocumentationComment()
                 };
             });
 
