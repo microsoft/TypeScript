@@ -820,7 +820,10 @@ module FourSlash {
             this.taoInvalidReason = 'verifyCurrentSignatureHelpIs NYI';
 
             var help = this.getActiveSignatureHelpItem();
-            assert.equal(help.prefix + help.parameters.map(p => p.display).join(help.separator) + help.suffix, expected);
+            assert.equal(
+                ts.SymbolDisplayPart.toString(help.prefixDisplayParts) + 
+                help.parameters.map(p => ts.SymbolDisplayPart.toString(p.displayParts)).join(ts.SymbolDisplayPart.toString(help.separatorDisplayParts)) + 
+                ts.SymbolDisplayPart.toString(help.suffixDisplayParts), expected);
         }
 
         public verifyCurrentParameterIsVariable(isVariable: boolean) {
@@ -844,7 +847,7 @@ module FourSlash {
 
             var activeSignature = this.getActiveSignatureHelpItem();
             var activeParameter = this.getActiveParameter();
-            assert.equal(activeParameter.display, parameter);
+            assert.equal(ts.SymbolDisplayPart.toString(activeParameter.displayParts), parameter);
         }
 
         public verifyCurrentParameterHelpDocComment(docComment: string) {
@@ -956,10 +959,9 @@ module FourSlash {
             var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
 
             var item = help.items[help.selectedItemIndex];
-            var state = this.languageService.getSignatureHelpCurrentArgumentState(this.activeFile.fileName, this.currentCaretPosition, help.applicableSpan.start());
-
+ 
             // Same logic as in getActiveSignatureHelp - this value might be -1 until a parameter value actually gets typed
-            var currentParam = state === undefined ? 0 : state.argumentIndex;
+            var currentParam = help.argumentIndex < 0 ? 0 : help.argumentIndex;
             return item.parameters[currentParam];
         }
 

@@ -29,13 +29,13 @@ function convertDocumentToMarkdown(doc) {
             }
         }
     }
-    function findReplace(findText, findProps, replaceText, replaceProps) {
+    function findReplace(findText, findOptions, replaceText, replaceOptions) {
         var find = doc.range().find;
         find.clearFormatting();
-        setProperties(find, findProps);
+        setProperties(find, findOptions);
         var replace = find.replacement;
         replace.clearFormatting();
-        setProperties(replace, replaceProps);
+        setProperties(replace, replaceOptions);
         find.execute(findText, false, false, false, false, false, true, 0, true, replaceText, 2);
     }
     function write(s) {
@@ -154,6 +154,10 @@ function convertDocumentToMarkdown(doc) {
         }
         writeBlockEnd();
     }
+    findReplace("<", {}, "&lt;", {});
+    findReplace("&lt;", { style: "Code" }, "<", {});
+    findReplace("&lt;", { style: "Code Fragment" }, "<", {});
+    findReplace("&lt;", { style: "Terminal" }, "<", {});
     findReplace("", { font: { subscript: true } }, "<sub>^&</sub>", { font: { subscript: false } });
     findReplace("", { style: "Code Fragment" }, "`^&`", { style: -66 });
     findReplace("", { style: "Production" }, "*^&*", { style: -66 });

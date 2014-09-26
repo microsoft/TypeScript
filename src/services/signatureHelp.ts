@@ -249,39 +249,78 @@ module ts.SignatureHelp {
         }
 
         function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentListOrTypeArgumentList: Node): SignatureHelpItems {
-            var items = map(candidates, candidateSignature => {
+            var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
                 var parameters = candidateSignature.parameters;
-                var parameterHelpItems = parameters.length === 0 ? emptyArray : map(parameters, p => {
-                    var display = p.name;
+                var parameterHelpItems: SignatureHelpParameter[] = parameters.length === 0 ? emptyArray : map(parameters, p => {
+                    var displayParts: SymbolDisplayPart[] = [];
+
                     if (candidateSignature.hasRestParameter && parameters[parameters.length - 1] === p) {
-                        display = "..." + display;
+                        displayParts.push(punctuationPart(SyntaxKind.DotDotDotToken));
                     }
+
+                    displayParts.push(symbolPart(p.name, p));
+
                     var isOptional = !!(p.valueDeclaration.flags & NodeFlags.QuestionMark);
                     if (isOptional) {
-                        display += "?";
+                        displayParts.push(punctuationPart(SyntaxKind.QuestionToken));
                     }
-                    display += ": " + typeInfoResolver.typeToString(typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
-                    return { name: p.name,  documentation: "", display: display, isOptiona: isOptional };
+
+                    displayParts.push(punctuationPart(SyntaxKind.ColonToken));
+                    displayParts.push(spacePart());
+
+                    var typeParts = typeInfoResolver.typeToDisplayParts(typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
+                    displayParts.push.apply(displayParts, typeParts);
+
+                    return {
+                        name: p.name,
+                        documentation: getSymbolDocumentationDisplayParts(p),
+                        displayParts: displayParts,
+                        isOptional: isOptional
+                    };
                 });
+
                 var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
                 var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
-                var signatureName = callTargetSymbol ? typeInfoResolver.symbolToString(callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined) : "";
-                var prefix = signatureName;
+
+                var prefixParts = callTargetSymbol ? typeInfoResolver.symbolToDisplayParts(callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined) : [];
+
+                var separatorParts = [punctuationPart(SyntaxKind.CommaToken), spacePart()];
+
                 // TODO(jfreeman): Constraints?
                 if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
-                    prefix += "<" + map(candidateSignature.typeParameters, tp => tp.symbol.name).join(", ") + ">";
+                    prefixParts.push(punctuationPart(SyntaxKind.LessThanToken));
+
+                    for (var i = 0, n = candidateSignature.typeParameters.length; i < n; i++) {
+                        if (i) {
+                            prefixParts.push.apply(prefixParts, separatorParts);
+                        }
+
+                        var tp = candidateSignature.typeParameters[i].symbol;
+                        prefixParts.push(symbolPart(tp.name, tp));
+                    }
+
+                    prefixParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                 }
-                prefix += "(";
-                var suffix = "): " + typeInfoResolver.typeToString(candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
+
+                prefixParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+
+                var suffixParts = [punctuationPart(SyntaxKind.CloseParenToken)];
+                suffixParts.push(punctuationPart(SyntaxKind.ColonToken));
+                suffixParts.push(spacePart());
+
+                var typeParts = typeInfoResolver.typeToDisplayParts(candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
+                suffixParts.push.apply(suffixParts, typeParts);
+                
                 return {
                     isVariadic: candidateSignature.hasRestParameter,
-                    prefix: prefix,
-                    suffix: suffix,
-                    separator: ", ",
+                    prefixDisplayParts: prefixParts,
+                    suffixDisplayParts: suffixParts,
+                    separatorDisplayParts: separatorParts,
                     parameters: parameterHelpItems,
-                    documentation: ""
+                    documentation: <SymbolDisplayPart[]>null
                 };
             });
+
             var selectedItemIndex = candidates.indexOf(bestSignature);
             if (selectedItemIndex < 0) {
                 selectedItemIndex = 0;
@@ -298,15 +337,19 @@ module ts.SignatureHelp {
             var applicableSpanStart = argumentListOrTypeArgumentList.getFullStart();
             var applicableSpanEnd = skipTrivia(sourceFile.text, argumentListOrTypeArgumentList.end, /*stopAfterLineBreak*/ false);
             var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+
+            var state = getSignatureHelpCurrentArgumentState(sourceFile, position, applicableSpanStart);
             return {
                 items: items,
                 applicableSpan: applicableSpan,
-                selectedItemIndex: selectedItemIndex
+                selectedItemIndex: selectedItemIndex,
+                argumentIndex: state.argumentIndex,
+                argumentCount: state.argumentCount
             };
         }
     }
 
-    export function getSignatureHelpCurrentArgumentState(sourceFile: SourceFile, position: number, applicableSpanStart: number): SignatureHelpState {
+    function getSignatureHelpCurrentArgumentState(sourceFile: SourceFile, position: number, applicableSpanStart: number): { argumentIndex: number; argumentCount: number } {
         var tokenPrecedingSpanStart = findPrecedingToken(applicableSpanStart, sourceFile);
         if (!tokenPrecedingSpanStart) {
             return undefined;

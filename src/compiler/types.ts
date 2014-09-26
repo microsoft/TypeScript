@@ -1199,6 +1199,10 @@ module ts {
                 kind: SymbolDisplayPartKind[this.kind]
             };
         }
+
+        public static toString(parts: SymbolDisplayPart[]) {
+            return parts.map(p => p.text).join("");
+        }
     }
 
     export enum SymbolDisplayPartKind {

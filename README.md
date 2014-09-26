@@ -18,7 +18,7 @@ There are many ways to [contribute](https://github.com/Microsoft/TypeScript/blob
 
 *  [Quick tutorial](http://www.typescriptlang.org/Tutorial)
 *  [Programming handbook](http://www.typescriptlang.org/Handbook)
-*  [Language specification](http://go.microsoft.com/fwlink/?LinkId=267238)
+*  [Language specification](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)
 *  [Homepage](http://www.typescriptlang.org/)
 
 ## Building
