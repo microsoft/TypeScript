@@ -651,16 +651,18 @@ module ts {
         getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
-        getTypeAtPosition(fileName: string, position: number): TypeInfo;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
+
+        // Obsolete.  Use getQuickInfoAtPosition instead.
+        getTypeAtPosition(fileName: string, position: number): TypeInfo;
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TypeScript.TextSpan;
 
         getBreakpointStatementAtPosition(fileName: string, position: number): TypeScript.TextSpan;
 
         getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems;
-        getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState;
 
+        // Obsolete.  Use getSignatureHelpItems instead.
         getSignatureAtPosition(fileName: string, position: number): SignatureInfo;
 
         getRenameInfo(fileName: string, position: number): RenameInfo;
@@ -861,9 +863,6 @@ module ts {
         items: SignatureHelpItem[];
         applicableSpan: TypeScript.TextSpan;
         selectedItemIndex: number;
-    }
-
-    export interface SignatureHelpState {
         argumentIndex: number;
         argumentCount: number;
     }
@@ -3765,16 +3764,6 @@ module ts {
             return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
         }
 
-        /**
-         * This is a syntactic operation
-         */
-        function getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState {
-            fileName = TypeScript.switchToForwardSlashes(fileName);
-            var sourceFile = getCurrentSourceFile(fileName);
-
-            return SignatureHelp.getSignatureHelpCurrentArgumentState(sourceFile, position, applicableSpanStart);
-        }
-
         function getSignatureAtPosition(filename: string, position: number): SignatureInfo {
             var signatureHelpItems = getSignatureHelpItems(filename, position);
 
@@ -3782,7 +3771,7 @@ module ts {
                 return undefined;
             }
 
-            var currentArguemntState = getSignatureHelpCurrentArgumentState(filename, position, signatureHelpItems.applicableSpan.start());
+            var currentArgumentState = { argumentIndex: signatureHelpItems.argumentIndex, argumentCount: signatureHelpItems.argumentCount };
 
             var formalSignatures: FormalSignatureItemInfo[] = [];
             forEach(signatureHelpItems.items, signature => {
@@ -3827,7 +3816,7 @@ module ts {
                 parameterMinChar: signatureHelpItems.applicableSpan.start(),
                 parameterLimChar: signatureHelpItems.applicableSpan.end(),
                 currentParameterIsTypeParameter: false,
-                currentParameter: currentArguemntState.argumentIndex
+                currentParameter: currentArgumentState.argumentIndex
             };
 
             return {
@@ -4465,7 +4454,6 @@ module ts {
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
             getSignatureHelpItems: getSignatureHelpItems,
-            getSignatureHelpCurrentArgumentState: getSignatureHelpCurrentArgumentState,
             getQuickInfoAtPosition: getQuickInfoAtPosition,
             getDefinitionAtPosition: getDefinitionAtPosition,
             getReferencesAtPosition: getReferencesAtPosition,

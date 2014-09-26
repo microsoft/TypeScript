@@ -959,10 +959,9 @@ module FourSlash {
             var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
 
             var item = help.items[help.selectedItemIndex];
-            var state = this.languageService.getSignatureHelpCurrentArgumentState(this.activeFile.fileName, this.currentCaretPosition, help.applicableSpan.start());
-
+ 
             // Same logic as in getActiveSignatureHelp - this value might be -1 until a parameter value actually gets typed
-            var currentParam = state === undefined ? 0 : state.argumentIndex;
+            var currentParam = help.argumentIndex < 0 ? 0 : help.argumentIndex;
             return item.parameters[currentParam];
         }
 
