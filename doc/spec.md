@@ -102,9 +102,9 @@ TypeScript is a trademark of Microsoft Corporation.
     * [4.14.5 The void Operator](#4.14.5)
     * [4.14.6 The typeof Operator](#4.14.6)
   * [4.15 Binary Operators](#4.15)
-    * [4.15.1 The *, /, %, –, <<, >>, >>>, &, ^, and | operators](#4.15.1)
+    * [4.15.1 The *, /, %, –, &lt;&lt;, >>, >>>, &, ^, and | operators](#4.15.1)
     * [4.15.2 The + operator](#4.15.2)
-    * [4.15.3 The <, >, <=, >=, ==, !=, ===, and !== operators](#4.15.3)
+    * [4.15.3 The &lt;, >, &lt;=, >=, ==, !=, ===, and !== operators](#4.15.3)
     * [4.15.4 The instanceof operator](#4.15.4)
     * [4.15.5 The in operator](#4.15.5)
     * [4.15.6 The && operator](#4.15.6)
@@ -1088,7 +1088,7 @@ Since a type parameter represents a multitude of different type arguments, type 
 
 ### <a name="3.4.1"/>3.4.1 Type Parameter Lists
 
-Class, interface, and function declarations may optionally include lists of type parameters enclosed in < and > brackets. Type parameters are also permitted in call signatures of object, function, and constructor type literals.
+Class, interface, and function declarations may optionally include lists of type parameters enclosed in &lt; and > brackets. Type parameters are also permitted in call signatures of object, function, and constructor type literals.
 
 &emsp;&emsp;*TypeParameters:*  
 &emsp;&emsp;&emsp;`<`&emsp;*TypeParameterList*&emsp;`>`
@@ -1149,7 +1149,7 @@ Given the declaration
 interface G<T, U extends Function> { }
 ```
 
-a type reference of the form ‘G<A, B>’ places no requirements on ‘A’ but requires ‘B’ to be assignable to ‘Function’.
+a type reference of the form ‘G&lt;A, B>’ places no requirements on ‘A’ but requires ‘B’ to be assignable to ‘Function’.
 
 The process of substituting type arguments for type parameters in a generic type or generic signature is known as ***instantiating*** the generic type or signature. Instantiation of a generic type or signature can fail if the supplied type arguments do not satisfy the constraints of their corresponding type parameters.
 
@@ -1354,13 +1354,13 @@ Object type literals are the primary form of type literals and are described in 
 
 As the table above illustrates, an array type literal is shorthand for a reference to the generic interface type ‘Array’ in the global module, a function type literal is shorthand for an object type containing a single call signature, and a constructor type literal is shorthand for an object type containing a single construct signature. Note that function and constructor types with multiple call or construct signatures cannot be written as function or constructor type literals but must instead be written as object type literals.
 
-In order to avoid grammar ambiguities, array type literals permit only a restricted set of notations for the element type. Specifically, an A*rrayType* cannot start with a *FunctionType* or *ConstructorType*. To use one of those forms for the element type, an array type must be written using the ‘Array<T>’ notation. For example, the type
+In order to avoid grammar ambiguities, array type literals permit only a restricted set of notations for the element type. Specifically, an A*rrayType* cannot start with a *FunctionType* or *ConstructorType*. To use one of those forms for the element type, an array type must be written using the ‘Array&lt;T>’ notation. For example, the type
 
 ```TypeScript
 () => string[]
 ```
 
-denotes a function returning a string array, not an array of functions returning string. The latter can be expressed using ‘Array<T>’ notation
+denotes a function returning a string array, not an array of functions returning string. The latter can be expressed using ‘Array&lt;T>’ notation
 
 ```TypeScript
 Array<() => string>
@@ -1833,7 +1833,7 @@ interface List<T> {
 }
 ```
 
-‘List<T>’ has a member ‘owner’ of type ‘List<List<T>>’, which has a member ‘owner’ of type ‘List<List<List<T>>>’, which has a member ‘owner’ of type ‘List<List<List<List<T>>>>’ and so on, ad infinitum. Since type relationships are determined structurally, possibly exploring the constituent types to their full depth, in order to determine type relationships involving infinitely expanding generic types it may be necessary for the compiler to terminate the recursion at some point with the assumption that no further exploration will change the outcome.
+‘List&lt;T>’ has a member ‘owner’ of type ‘List&lt;List&lt;T>>’, which has a member ‘owner’ of type ‘List&lt;List&lt;List&lt;T>>>’, which has a member ‘owner’ of type ‘List&lt;List&lt;List&lt;List&lt;T>>>>’ and so on, ad infinitum. Since type relationships are determined structurally, possibly exploring the constituent types to their full depth, in order to determine type relationships involving infinitely expanding generic types it may be necessary for the compiler to terminate the recursion at some point with the assumption that no further exploration will change the outcome.
 
 ## <a name="3.9"/>3.9 Widened Types
 
@@ -2247,7 +2247,7 @@ A signature is said to be an ***applicable signature*** with respect to an argum
 
 ### <a name="4.12.2"/>4.12.2 Type Argument Inference
 
-Given a signature < *T<sub>1</sub>* , *T<sub>2</sub>* , … , *T<sub>n</sub>* > ( *p<sub>1</sub>* : *P<sub>1</sub>* , *p<sub>2</sub>* : *P<sub>2</sub>* , … , *p<sub>m</sub>* : *P<sub>m</sub>* ), where each parameter type *P* references zero or more of the type parameters *T*, and an argument list ( *e<sub>1</sub>* , *e<sub>2</sub>* , … , *e<sub>m</sub>* ), the task of type argument inference is to find a set of type arguments *A<sub>1</sub>*…*A<sub>n</sub>* to substitute for *T<sub>1</sub>*…*T<sub>n</sub>* such that the argument list becomes an applicable signature.
+Given a signature &lt; *T<sub>1</sub>* , *T<sub>2</sub>* , … , *T<sub>n</sub>* > ( *p<sub>1</sub>* : *P<sub>1</sub>* , *p<sub>2</sub>* : *P<sub>2</sub>* , … , *p<sub>m</sub>* : *P<sub>m</sub>* ), where each parameter type *P* references zero or more of the type parameters *T*, and an argument list ( *e<sub>1</sub>* , *e<sub>2</sub>* , … , *e<sub>m</sub>* ), the task of type argument inference is to find a set of type arguments *A<sub>1</sub>*…*A<sub>n</sub>* to substitute for *T<sub>1</sub>*…*T<sub>n</sub>* such that the argument list becomes an applicable signature.
 
 The inferred type argument for a particular type parameter is determined from a set of candidate types. Given a type parameter *T*, let *C* denote the widened form (section [3.9](#3.9)) of the best common type (section [3.10](#3.10)) of the set of candidate types *T*. Then,
 
@@ -2337,7 +2337,7 @@ The inclusion of type arguments in the *Arguments* production (section [4.12](#4
 f(g<A, B>(7));
 ```
 
-could be interpreted as  a call to ‘f’ with two arguments, ‘g < A’ and ‘B > (7)’. Alternatively, it could be interpreted as a call to ‘f’ with one argument, which is a call to a generic function ‘g’ with two type arguments and one regular argument.
+could be interpreted as  a call to ‘f’ with two arguments, ‘g &lt; A’ and ‘B > (7)’. Alternatively, it could be interpreted as a call to ‘f’ with one argument, which is a call to a generic function ‘g’ with two type arguments and one regular argument.
 
 The grammar ambiguity is resolved as follows: In a context where one possible interpretation of a sequence of tokens is an *Arguments* production, if the initial sequence of tokens forms a syntactically correct *TypeArguments* production and is followed by a ‘`(`‘ token, then the sequence of tokens is processed an *Arguments* production, and any other possible interpretation is discarded. Otherwise, the sequence of tokens is not considered an *Arguments* production.
 
@@ -2449,7 +2449,7 @@ In the example above, ‘x’ is of type ‘number’, ‘y’ is of type ‘string’ because w
 
 The subsections that follow specify the compile-time processing rules of the binary operators. In general, if the operands of a binary operator do not meet the stated requirements, a compile-time error occurs and the result of the operation defaults to type any in further processing. Tables that summarize the compile-time processing rules for operands of the Any type, the Boolean, Number, and String primitive types, and all object types and type parameters (the Object column in the tables) are provided.
 
-### <a name="4.15.1"/>4.15.1 The *, /, %, –, <<, >>, >>>, &, ^, and | operators
+### <a name="4.15.1"/>4.15.1 The *, /, %, –, &lt;&lt;, >>, >>>, &, ^, and | operators
 
 These operators require their operands to be of type Any, the Number primitive type, or an enum type. Operands of an enum type are treated as having the primitive type Number. If one operand is the `null` or `undefine``d` value, it is treated as having the type of the other operand. The result is always of the Number primitive type.
 
@@ -2483,7 +2483,7 @@ var s = getValue() + "";
 
 The example above converts the result of ‘getValue()’ to a string if it isn’t a string already. The type inferred for ‘s’ is the String primitive type regardless of the return type of ‘getValue’.
 
-### <a name="4.15.3"/>4.15.3 The <, >, <=, >=, ==, !=, ===, and !== operators
+### <a name="4.15.3"/>4.15.3 The &lt;, >, &lt;=, >=, ==, !=, ===, and !== operators
 
 These operators require one operand type to be identical to or a subtype of the other operand type. The result is always of the Boolean primitive type.
 
@@ -4398,7 +4398,7 @@ The source elements permitted in a TypeScript implementation source file are a s
 
 Declaration source files are restricted to contain declarations only. Declaration source files can be used to declare the static type information associated with existing JavaScript code in an adjunct manner. They are entirely optional but enable the TypeScript compiler and tools to provide better verification and assistance when integrating existing JavaScript code and libraries in a TypeScript application.
 
-Implementation and declaration source files that contain no import or export declarations form the single ***global module***. Entities declared in the global module are in scope everywhere in a program. Initialization order of the source files that make up the global module ultimately depends on the order in which the generated JavaScript files are loaded at run-time (which, for example, may be controlled by <script/> tags that reference the generated JavaScript files).
+Implementation and declaration source files that contain no import or export declarations form the single ***global module***. Entities declared in the global module are in scope everywhere in a program. Initialization order of the source files that make up the global module ultimately depends on the order in which the generated JavaScript files are loaded at run-time (which, for example, may be controlled by &lt;script/> tags that reference the generated JavaScript files).
 
 Implementation and declaration source files that contain at least one external import declaration, export assignment, or top-level exported declaration are considered separate ***external modules***. Entities declared in an external module are in scope only in that module, but exported entities can be imported into other modules using import declarations. Initialization order of external modules is determined by the module loader being and is not specified by the TypeScript language. However, it is generally the case that non-circularly dependent modules are automatically loaded and initialized in the correct order.
 
@@ -4408,7 +4408,7 @@ External modules can additionally be declared using *AmbientExternalModuleDeclar
 
 The TypeScript compiler automatically determines a source file’s dependencies and includes those dependencies in the program being compiled. The determination is made from “reference comments” and external import declarations as follows:
 
-* A comment of the form /// <reference path="…"/> adds a dependency on the source file specified in the path argument. The path is resolved relative to the directory of the containing source file.
+* A comment of the form /// &lt;reference path="…"/> adds a dependency on the source file specified in the path argument. The path is resolved relative to the directory of the containing source file.
 * An external import declaration that specifies a relative external module name (section [11.2.1](#11.2.1)) resolves the name relative to the directory of the containing source file. If a source file with the resulting path and file extension ‘.ts’ exists, that file is added as a dependency. Otherwise, if a source file with the resulting path and file extension ‘.d.ts’ exists, that file is added as a dependency.
 * An external import declaration that specifies a top-level external module name (section [11.2.1](#11.2.1)) resolves the name in a host dependent manner (typically by resolving the name relative to a module name space root or searching for the name in a series of directories). If a source file with extension ‘.ts’ or ‘.d.ts’ corresponding to the reference is located, that file is added as a dependency.
 
@@ -4619,7 +4619,7 @@ The special ‘require’ and ‘exports’ dependencies are always present. Additional 
 
 # <a name="12"/>12 Ambients
 
-Ambient declarations are used to provide static typing over existing JavaScript code. Ambient declarations differ from regular declarations in that no JavaScript code is emitted for them. Instead of introducing new variables, functions, classes, enums, or modules, ambient declarations provide type information for entities that exist “ambiently” and are included in a program by external means, for example by referencing a JavaScript library in a <script/> tag.
+Ambient declarations are used to provide static typing over existing JavaScript code. Ambient declarations differ from regular declarations in that no JavaScript code is emitted for them. Instead of introducing new variables, functions, classes, enums, or modules, ambient declarations provide type information for entities that exist “ambiently” and are included in a program by external means, for example by referencing a JavaScript library in a &lt;script/> tag.
 
 ## <a name="12.1"/>12.1 Ambient Declarations
 
