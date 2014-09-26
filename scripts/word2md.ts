@@ -97,7 +97,7 @@ module Word {
     }
 
     export interface Fields extends Collection<Field> {
-        toggleShowCodes();
+        toggleShowCodes(): void;
     }
 
     export interface Document {
@@ -138,7 +138,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     var tableCellIndex: number;
     var columnAlignment: number[] = [];
 
-    function setProperties(target: {}, properties: {}) {
+    function setProperties(target: any, properties: any) {
         for (var name in properties) {
             if (properties.hasOwnProperty(name)) {
                 var value = properties[name];
