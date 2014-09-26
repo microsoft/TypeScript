@@ -1354,7 +1354,7 @@ Object type literals are the primary form of type literals and are described in 
 
 As the table above illustrates, an array type literal is shorthand for a reference to the generic interface type ‘Array’ in the global module, a function type literal is shorthand for an object type containing a single call signature, and a constructor type literal is shorthand for an object type containing a single construct signature. Note that function and constructor types with multiple call or construct signatures cannot be written as function or constructor type literals but must instead be written as object type literals.
 
-In order to avoid grammar ambiguities, array type literals permit only a restricted set of notations for the element type. Specifically, an A*rrayType* cannot start with a *FunctionType* or *ConstructorType*. To use one of those forms for the element type, an array type must be written using the ‘Array&lt;T>’ notation. For example, the type
+In order to avoid grammar ambiguities, array type literals permit only a restricted set of notations for the element type. Specifically, an *ArrayType* cannot start with a *FunctionType* or *ConstructorType*. To use one of those forms for the element type, an array type must be written using the ‘Array&lt;T>’ notation. For example, the type
 
 ```TypeScript
 () => string[]
