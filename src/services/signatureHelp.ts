@@ -337,15 +337,19 @@ module ts.SignatureHelp {
             var applicableSpanStart = argumentListOrTypeArgumentList.getFullStart();
             var applicableSpanEnd = skipTrivia(sourceFile.text, argumentListOrTypeArgumentList.end, /*stopAfterLineBreak*/ false);
             var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+
+            var state = getSignatureHelpCurrentArgumentState(sourceFile, position, applicableSpanStart);
             return {
                 items: items,
                 applicableSpan: applicableSpan,
-                selectedItemIndex: selectedItemIndex
+                selectedItemIndex: selectedItemIndex,
+                argumentIndex: state.argumentIndex,
+                argumentCount: state.argumentCount
             };
         }
     }
 
-    export function getSignatureHelpCurrentArgumentState(sourceFile: SourceFile, position: number, applicableSpanStart: number): SignatureHelpState {
+    function getSignatureHelpCurrentArgumentState(sourceFile: SourceFile, position: number, applicableSpanStart: number): { argumentIndex: number; argumentCount: number } {
         var tokenPrecedingSpanStart = findPrecedingToken(applicableSpanStart, sourceFile);
         if (!tokenPrecedingSpanStart) {
             return undefined;

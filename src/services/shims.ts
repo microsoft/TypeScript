@@ -84,14 +84,16 @@ module ts {
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
+
+        // Obsolete.  Use getQuickInfoAtPosition instead.
         getTypeAtPosition(fileName: string, position: number): string;
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string;
         getBreakpointStatementAtPosition(fileName: string, position: number): string;
 
         getSignatureHelpItems(fileName: string, position: number): string;
-        getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): string;
 
+        // Obsolete.  Use getSignatureHelpItems instead.
         getSignatureAtPosition(fileName: string, position: number): string;
 
         /**
@@ -620,15 +622,6 @@ module ts {
                 () => {
                     var signatureInfo = this.languageService.getSignatureHelpItems(fileName, position);
                     return signatureInfo;
-                });
-        }
-
-        public getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): string {
-            return this.forwardJSONCall(
-                "getSignatureHelpCurrentArgumentState('" + fileName + "', " + position + ", " + applicableSpanStart + ")",
-                () => {
-                    var signatureHelpState = this.languageService.getSignatureHelpCurrentArgumentState(fileName, position, applicableSpanStart);
-                    return signatureHelpState;
                 });
         }
 
