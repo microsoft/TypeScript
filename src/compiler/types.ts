@@ -655,6 +655,8 @@ module ts {
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
         // computed value.
         getEnumMemberValue(node: EnumMember): number;
+
+        isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean;
     }
 
     export interface TextWriter {

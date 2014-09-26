@@ -2038,15 +2038,6 @@ module ts {
                 return (SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation);
             }
 
-            function isVisibleWithinClassDeclaration(symbol: Symbol, containingClass: Declaration): boolean {
-                var declaration = symbol.declarations && symbol.declarations[0];
-                if (declaration && (declaration.flags & NodeFlags.Private)) {
-                    var declarationClass = getAncestor(declaration, SyntaxKind.ClassDeclaration);
-                    return containingClass === declarationClass;
-                }
-                return true;
-            }
-
             function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
                 if (!existingMembers || existingMembers.length === 0) {
                     return contextualMemberSymbols;
@@ -2150,7 +2141,6 @@ module ts {
             // Right of dot member completion list
             if (isRightOfDot) {
                 var symbols: Symbol[] = [];
-                var containingClass = getAncestor(mappedNode, SyntaxKind.ClassDeclaration);
                 isMemberCompletion = true;
 
                 if (mappedNode.kind === SyntaxKind.Identifier || mappedNode.kind === SyntaxKind.QualifiedName || mappedNode.kind === SyntaxKind.PropertyAccess) {
@@ -2158,7 +2148,7 @@ module ts {
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
                         forEachValue(symbol.exports, symbol => {
-                            if (isVisibleWithinClassDeclaration(symbol, containingClass)) {
+                            if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(mappedNode.parent), symbol.name)) {
                                 symbols.push(symbol);
                             }
                         });
@@ -2170,7 +2160,7 @@ module ts {
                 if (apparentType) {
                     // Filter private properties
                     forEach(apparentType.getApparentProperties(), symbol => {
-                        if (isVisibleWithinClassDeclaration(symbol, containingClass)) {
+                        if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(mappedNode.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
                     });
