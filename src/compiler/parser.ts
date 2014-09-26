@@ -3833,7 +3833,7 @@ module ts {
 		            var referenceFilename = matchResult[3];
                             var basePath = getDirectoryPath(file.filename);
                             var referenceFullPath = normalizePath(combinePaths(basePath, referenceFilename));
-			    if (file.filename === referenceFullPath) {
+			    if (file.filename.toLocaleLowerCase() === referenceFullPath.toLocaleLowerCase()) {
 			        errorAtPos(start, length, Diagnostics.A_file_cannot_have_a_reference_to_itself);
 			    }
 			    else {

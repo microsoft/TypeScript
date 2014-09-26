@@ -11,13 +11,13 @@
         "category": "Error",
         "code": 1005
     },
-    "Trailing comma not allowed.": {
-        "category": "Error",
-        "code": 1009
-    },
 	"A file cannot have a reference to itself.": {
         "category": "Error",
         "code": 1006
+    },
+    "Trailing comma not allowed.": {
+        "category": "Error",
+        "code": 1009
     },
     "'*/' expected.": {
         "category": "Error",
