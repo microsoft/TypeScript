@@ -4550,17 +4550,16 @@ module ts {
             do {
                 token = scanner.scan();
 
-                if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastNonTriviaToken]) {
-                    if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
-                        token = SyntaxKind.RegularExpressionLiteral;
+                if (!isTrivia(token)) {
+                    if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastNonTriviaToken]) {
+                        if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
+                            token = SyntaxKind.RegularExpressionLiteral;
+                        }
                     }
-                }
-                else if (lastNonTriviaToken === SyntaxKind.DotToken) {
-                    token = SyntaxKind.Identifier;
-                }
+                    else if (lastNonTriviaToken === SyntaxKind.DotToken) {
+                        token = SyntaxKind.Identifier;
+                    }
 
-                // Only recall the token if it was *not* trivia.
-                if (!(SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken)) {
                     lastNonTriviaToken = token;
                 }
 
@@ -4611,6 +4610,10 @@ module ts {
 
                     result.entries.push({ length: length, classification: classification });
                 }
+            }
+
+            function isTrivia(token: SyntaxKind) {
+                return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
             }
         }
 
