@@ -1,7 +1,7 @@
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,19): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,35): error TS1005: ')' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,28): error TS1005: ',' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,29): error TS1005: ':' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,28): error TS1005: ':' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,29): error TS1005: ',' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,18): error TS1129: Statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,30): error TS1005: ',' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,33): error TS1138: Parameter declaration expected.
@@ -58,7 +58,6 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,55): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,1): error TS2304: Cannot find name 'module'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,39): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,21): error TS2304: Cannot find name 'return'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,26): error TS2304: Cannot find name 'bfs'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,17): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(34,17): error TS2304: Cannot find name 'retValue'.
@@ -97,7 +96,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,29): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error TS2304: Cannot find name 'string'.
 
 
-==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (97 errors) ====
+==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (96 errors) ====
     declare module "fs" {
         export class File {
             constructor(filename: string);
@@ -131,12 +130,10 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error T
     
                         return 1;
                                ~
-!!! error TS1005: ',' expected.
-                                ~
 !!! error TS1005: ':' expected.
+                                ~
+!!! error TS1005: ',' expected.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        ~~~~~~
-!!! error TS2304: Cannot find name 'return'.
                     }
     ~~~~~~~~~~~~~~~~~
 !!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.

@@ -2408,6 +2408,7 @@ module ts {
 
         function parsePropertyAssignment(): PropertyDeclaration {
             var node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment);
+            var nameToken = token;
             node.name = parsePropertyName();
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
@@ -2419,8 +2420,8 @@ module ts {
                 // otherwise this will bring y.x into the scope of x which is incorrect
                 node.initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
             }
-            else if (token !== SyntaxKind.ColonToken && node.name.kind === SyntaxKind.Identifier) {
-                node.initializer = node.name;            }            else {                parseExpected(SyntaxKind.ColonToken);                node.initializer = parseAssignmentExpression(false);
+            else if (token !== SyntaxKind.ColonToken && nameToken === SyntaxKind.Identifier) {
+                node.initializer = clone(node.name);            }            else {                parseExpected(SyntaxKind.ColonToken);                node.initializer = parseAssignmentExpression(false);
             }
             return finishNode(node);
         }
