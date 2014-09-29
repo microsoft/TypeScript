@@ -64,8 +64,27 @@ module ts {
         }
     }
 
+    /** Gets the token whose text has range [start, end) and position >= start and position < end */
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
+        return getTouchingToken(sourceFile, position, /*includeItemAtEndPosition*/ undefined);
+    }
+
+    /* Gets the token whose text has range [start, end) and 
+     * position >= start and (position < end or (position === end && token is keyword or identifier))
+     */
+    export function getTouchingWord(sourceFile: SourceFile, position: number): Node {
+        return getTouchingToken(sourceFile, position, isWord);
+    }
+
+    /* Gets the token whose text has range [start, end) and position >= start 
+     * and (position < end or (position === end && token is keyword or identifier or numeric\string litera))
+     */
+    export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
+        return getTouchingToken(sourceFile, position, isPropertyName);
+    }
+
     /** Get the token whose text contains the position */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeItemAtEndPosition: (n: Node) => boolean) {
+    export function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition: (n: Node) => boolean): Node {
         var current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
@@ -213,5 +232,17 @@ module ts {
 
     function isToken(n: Node): boolean {
         return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
+    }
+
+    function isKeyword(n: Node): boolean {
+        return n.kind >= SyntaxKind.FirstKeyword && n.kind <= SyntaxKind.LastKeyword;
+    }
+
+    function isWord(n: Node): boolean {
+        return n.kind === SyntaxKind.Identifier || isKeyword(n);
+    }
+
+    function isPropertyName(n: Node): boolean {
+        return n.kind === SyntaxKind.StringLiteral || n.kind === SyntaxKind.NumericLiteral || isWord(n);
     }
 }
