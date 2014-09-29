@@ -174,7 +174,7 @@ module ts.formatting {
 
         function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: Node, childStartLine: number, sourceFile: SourceFile): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
-                var elseKeyword = forEach(parent.getChildren(), c => c.kind === SyntaxKind.ElseKeyword && c);
+                var elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
                 Debug.assert(elseKeyword);
 
                 var elseKeywordStartLine =  getStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
@@ -383,7 +383,7 @@ module ts.formatting {
                     return isCompletedNode((<WhileStatement>n).statement, sourceFile);
                 case SyntaxKind.DoStatement:
                     // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
-                    var hasWhileKeyword = forEach(n.getChildren(), c => c.kind === SyntaxKind.WhileKeyword && c);
+                    var hasWhileKeyword = findChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile);
                     if(hasWhileKeyword) {
                         return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
                     }
