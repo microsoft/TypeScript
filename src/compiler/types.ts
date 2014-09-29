@@ -1190,22 +1190,9 @@ module ts {
         verticalTab = 0x0B,           // \v
     }
 
-    export class SymbolDisplayPart {
-        constructor(public text: string,
-                    public kind: SymbolDisplayPartKind,
-                    public symbol: Symbol) {
-        }
-
-        public toJSON() {
-            return {
-                text: this.text,
-                kind: SymbolDisplayPartKind[this.kind]
-            };
-        }
-
-        public static toString(parts: SymbolDisplayPart[]) {
-            return parts.map(p => p.text).join("");
-        }
+    export interface SymbolDisplayPart {
+        text: string;
+        kind: SymbolDisplayPartKind;
     }
 
     export enum SymbolDisplayPartKind {
@@ -1215,20 +1202,17 @@ module ts {
         fieldName,
         interfaceName,
         keyword,
-        labelName,
         lineBreak,
         numericLiteral,
         stringLiteral,
         localName,
         methodName,
         moduleName,
-        namespaceName,
         operator,
         parameterName,
         propertyName,
         punctuation,
         space,
-        anonymousTypeIndicator,
         text,
         typeParameterName,
         enumMemberName,

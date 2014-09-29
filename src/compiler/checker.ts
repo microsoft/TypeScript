@@ -45,6 +45,14 @@ module ts {
         string(): string;
     }
 
+    // TODO this should go back in services
+    export function getSymbolDisplayPart(text: string, kind: SymbolDisplayPartKind, symbol?: Symbol): SymbolDisplayPart {
+        return <SymbolDisplayPart> {
+            text: text,
+            kind: kind
+        };
+    }
+
     /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
     /// If fullTypeCheck === true,  then the typechecker should do every possible check to produce all errors
     /// If fullTypeCheck === false, the typechecker can take shortcuts and skip checks that only produce errors.
@@ -931,7 +939,7 @@ module ts {
                 var displayParts: SymbolDisplayPart[] = [];
                 return {
                     displayParts: () => displayParts,
-                    writeKind: (text, kind) => displayParts.push(new SymbolDisplayPart(text, kind, undefined)),
+                    writeKind: (text, kind) => displayParts.push(getSymbolDisplayPart(text, kind)),
                     writeSymbol: (text, symbol) => displayParts.push(symbolPart(text, symbol)),
 
                     // Completely ignore indentation for display part writers.  And map newlines to
@@ -7699,27 +7707,27 @@ module ts {
     }
 
     export function spacePart() {
-        return new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined);
+        return getSymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined);
     }
 
     export function keywordPart(kind: SyntaxKind) {
-        return new SymbolDisplayPart(tokenToString(kind), SymbolDisplayPartKind.keyword, undefined);
+        return getSymbolDisplayPart(tokenToString(kind), SymbolDisplayPartKind.keyword, undefined);
     }
 
     export function punctuationPart(kind: SyntaxKind) {
-        return new SymbolDisplayPart(tokenToString(kind), SymbolDisplayPartKind.punctuation, undefined);
+        return getSymbolDisplayPart(tokenToString(kind), SymbolDisplayPartKind.punctuation, undefined);
     }
 
     export function operatorPart(kind: SyntaxKind) {
-        return new SymbolDisplayPart(tokenToString(kind), SymbolDisplayPartKind.operator, undefined);
+        return getSymbolDisplayPart(tokenToString(kind), SymbolDisplayPartKind.operator, undefined);
     }
 
     export function textPart(text: string) {
-        return new SymbolDisplayPart(text, SymbolDisplayPartKind.text, undefined);
+        return getSymbolDisplayPart(text, SymbolDisplayPartKind.text, undefined);
     }
 
     export function symbolPart(text: string, symbol: Symbol) {
-        return new SymbolDisplayPart(text, displayPartKind(symbol), symbol)
+        return getSymbolDisplayPart(text, displayPartKind(symbol), symbol)
     }
 
     function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {

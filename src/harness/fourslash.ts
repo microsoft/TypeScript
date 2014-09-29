@@ -523,17 +523,17 @@ module FourSlash {
             }
         }
 
-        public verifyMemberListContains(symbol: string, type?: string, docComment?: string, fullSymbolName?: string, kind?: string) {
+        public verifyMemberListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             this.scenarioActions.push('<ShowCompletionList />');
             this.scenarioActions.push('<VerifyCompletionContainsItem ItemName="' + symbol + '"/>');
 
-            if (type || docComment || fullSymbolName || kind) {
+            if (text || documentation || kind) {
                 this.taoInvalidReason = 'verifyMemberListContains only supports the "symbol" parameter';
             }
 
             var members = this.getMemberListAtCaret();
             if (members) {
-                this.assertItemInCompletionList(members.entries, symbol, type, docComment, fullSymbolName, kind);
+                this.assertItemInCompletionList(members.entries, symbol, text, documentation, kind);
             }
             else {
                 this.raiseError("Expected a member list, but none was provided");
@@ -632,9 +632,9 @@ module FourSlash {
             }
         }
 
-        public verifyCompletionListContains(symbol: string, type?: string, docComment?: string, fullSymbolName?: string, kind?: string) {
+        public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             var completions = this.getCompletionListAtCaret();
-            this.assertItemInCompletionList(completions.entries, symbol, type, docComment, fullSymbolName, kind);
+            this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind);
         }
 
         public verifyCompletionListDoesNotContain(symbol: string) {
@@ -647,19 +647,15 @@ module FourSlash {
             }
         }
 
-        public verifyCompletionEntryDetails(entryName: string, type: string, docComment?: string, fullSymbolName?: string, kind?: string) {
+        public verifyCompletionEntryDetails(entryName: string, expectedText: string, expectedDocumentation?: string, kind?: string) {
             this.taoInvalidReason = 'verifyCompletionEntryDetails NYI';
 
             var details = this.getCompletionEntryDetails(entryName);
 
-            assert.equal(details.type, type);
+            assert.equal(ts.displayPartsToString(details.displayParts), expectedText);
 
-            if (docComment != undefined) {
-                assert.equal(details.docComment, docComment);
-            }
-
-            if (fullSymbolName !== undefined) {
-                assert.equal(details.fullSymbolName, fullSymbolName);
+            if (expectedDocumentation != undefined) {
+                assert.equal(ts.displayPartsToString(details.documentation), expectedDocumentation);
             }
 
             if (kind !== undefined) {
@@ -758,49 +754,35 @@ module FourSlash {
             return this.languageService.getImplementorsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
-        public verifyQuickInfo(negative: boolean, expectedTypeName?: string, docComment?: string, symbolName?: string, kind?: string) {
-            [expectedTypeName, docComment, symbolName, kind].forEach(str => {
+        public verifyQuickInfo(negative: boolean, expectedText?: string, expectedDocumentation?: string) {
+            [expectedText, expectedDocumentation].forEach(str => {
                 if (str) {
                     this.scenarioActions.push('<ShowQuickInfo />');
                     this.scenarioActions.push('<VerifyQuickInfoTextContains IgnoreSpacing="true" Text="' + escapeXmlAttributeValue(str) + '" ' + (negative ? 'ExpectsFailure="true"' : '') + ' />');
                 }
             });
 
-            var actualQuickInfo = this.languageService.getTypeAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-            var actualQuickInfoMemberName = actualQuickInfo ? actualQuickInfo.memberName.toString() : "";
-            var actualQuickInfoDocComment = actualQuickInfo ? actualQuickInfo.docComment : "";
-            var actualQuickInfoSymbolName = actualQuickInfo ? actualQuickInfo.fullSymbolName : "";
-            var actualQuickInfoKind = actualQuickInfo ? actualQuickInfo.kind : "";
+            var actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var actualQuickInfoText = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.displayParts) : "";
+            var actualQuickInfoDocumentation = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.documentation) : "";
 
             function assertionMessage(msg: string) {
                 return "\nMarker: " + currentTestState.lastKnownMarker + "\nChecking: " + msg + "\n\n";
             }
 
             if (negative) {
-                if (expectedTypeName !== undefined) {
-                    assert.notEqual(actualQuickInfoMemberName, expectedTypeName, assertionMessage("quick info member name"));
+                if (expectedText !== undefined) {
+                    assert.notEqual(actualQuickInfoText, expectedText, assertionMessage("quick info text"));
                 }
-                if (docComment != undefined) {
-                    assert.notEqual(actualQuickInfoDocComment, docComment, assertionMessage("quick info doc comment"));
-                }
-                if (symbolName !== undefined) {
-                    assert.notEqual(actualQuickInfoSymbolName, symbolName, assertionMessage("quick info symbol name"));
-                }
-                if (kind !== undefined) {
-                    assert.notEqual(actualQuickInfoKind, kind, assertionMessage("quick info kind"));
+                if (expectedDocumentation != undefined) {
+                    assert.notEqual(actualQuickInfoDocumentation, expectedDocumentation, assertionMessage("quick info doc comment"));
                 }
             } else {
-                if (expectedTypeName !== undefined) {
-                    assert.equal(actualQuickInfoMemberName, expectedTypeName, assertionMessage("quick info member"));
+                if (expectedText !== undefined) {
+                    assert.equal(actualQuickInfoText, expectedText, assertionMessage("quick info text"));
                 }
-                if (docComment != undefined) {
-                    assert.equal(actualQuickInfoDocComment, docComment, assertionMessage("quick info doc"));
-                }
-                if (symbolName !== undefined) {
-                    assert.equal(actualQuickInfoSymbolName, symbolName, assertionMessage("quick info symbol name"));
-                }
-                if (kind !== undefined) {
-                    assert.equal(actualQuickInfoKind, kind, assertionMessage("quick info kind"));
+                if (expectedDocumentation != undefined) {
+                    assert.equal(actualQuickInfoDocumentation, expectedDocumentation, assertionMessage("quick info doc"));
                 }
             }
         }
@@ -808,7 +790,7 @@ module FourSlash {
         public verifyQuickInfoExists(negative: number) {
             this.taoInvalidReason = 'verifyQuickInfoExists NYI';
 
-            var actualQuickInfo = this.languageService.getTypeAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (negative) {
                 if (actualQuickInfo) {
                     this.raiseError('verifyQuickInfoExists failed. Expected quick info NOT to exist');
@@ -826,9 +808,9 @@ module FourSlash {
 
             var help = this.getActiveSignatureHelpItem();
             assert.equal(
-                ts.SymbolDisplayPart.toString(help.prefixDisplayParts) + 
-                help.parameters.map(p => ts.SymbolDisplayPart.toString(p.displayParts)).join(ts.SymbolDisplayPart.toString(help.separatorDisplayParts)) + 
-                ts.SymbolDisplayPart.toString(help.suffixDisplayParts), expected);
+                ts.displayPartsToString(help.prefixDisplayParts) + 
+                help.parameters.map(p => ts.displayPartsToString(p.displayParts)).join(ts.displayPartsToString(help.separatorDisplayParts)) + 
+                ts.displayPartsToString(help.suffixDisplayParts), expected);
         }
 
         public verifyCurrentParameterIsVariable(isVariable: boolean) {
@@ -852,7 +834,7 @@ module FourSlash {
 
             var activeSignature = this.getActiveSignatureHelpItem();
             var activeParameter = this.getActiveParameter();
-            assert.equal(ts.SymbolDisplayPart.toString(activeParameter.displayParts), parameter);
+            assert.equal(ts.displayPartsToString(activeParameter.displayParts), parameter);
         }
 
         public verifyCurrentParameterHelpDocComment(docComment: string) {
@@ -1054,7 +1036,7 @@ module FourSlash {
         }
 
         public printCurrentQuickInfo() {
-            var quickInfo = this.languageService.getTypeAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var quickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             Harness.IO.log(JSON.stringify(quickInfo));
         }
 
@@ -1710,7 +1692,7 @@ module FourSlash {
             }
 
             for (i = 0; i < positions.length; i++) {
-                var nameOf = (type: ts.TypeInfo) => type ? type.fullSymbolName : '(none)';
+                var nameOf = (type: ts.QuickInfo) => type ? ts.displayPartsToString(type.displayParts) : '(none)';
 
                 var pullName: string, refName: string;
                 var anyFailed = false;
@@ -1718,7 +1700,7 @@ module FourSlash {
                 var errMsg = '';
 
                 try {
-                    var pullType = this.languageService.getTypeAtPosition(this.activeFile.fileName, positions[i]);
+                    var pullType = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, positions[i]);
                     pullName = nameOf(pullType);
                 } catch (err1) {
                     errMsg = 'Failed to get pull type check. Exception: ' + err1 + '\r\n';
@@ -1728,7 +1710,7 @@ module FourSlash {
                 }
 
                 try {
-                    var referenceType = referenceLanguageService.getTypeAtPosition(this.activeFile.fileName, positions[i]);
+                    var referenceType = referenceLanguageService.getQuickInfoAtPosition(this.activeFile.fileName, positions[i]);
                     refName = nameOf(referenceType);
                 } catch (err2) {
                     errMsg = 'Failed to get full type check. Exception: ' + err2 + '\r\n';
@@ -1980,28 +1962,25 @@ module FourSlash {
             return result;
         }
 
-        private assertItemInCompletionList(items: ts.CompletionEntry[], name: string, type?: string, docComment?: string, fullSymbolName?: string, kind?: string) {
+        private assertItemInCompletionList(items: ts.CompletionEntry[], name: string, text?: string, documentation?: string, kind?: string) {
             this.scenarioActions.push('<ShowCompletionList />');
             this.scenarioActions.push('<VerifyCompletionContainsItem ItemName="' + name + '"/>');
 
-            if (type || docComment || fullSymbolName || kind) {
+            if (text || documentation || kind) {
                 this.taoInvalidReason = 'assertItemInCompletionList only supports the "name" parameter';
             }
 
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
                 if (item.name == name) {
-                    if (docComment != undefined || type !== undefined || fullSymbolName !== undefined) {
+                    if (documentation != undefined || text !== undefined) {
                         var details = this.getCompletionEntryDetails(item.name);
 
-                        if (docComment != undefined) {
-                            assert.equal(details.docComment, docComment);
+                        if (documentation != undefined) {
+                            assert.equal(ts.displayPartsToString(details.documentation), documentation);
                         }
-                        if (type !== undefined) {
-                            assert.equal(details.type, type);
-                        }
-                        if (fullSymbolName !== undefined) {
-                            assert.equal(details.fullSymbolName, fullSymbolName);
+                        if (text !== undefined) {
+                            assert.equal(ts.displayPartsToString(details.displayParts), text);
                         }
                     }
 
@@ -2015,7 +1994,7 @@ module FourSlash {
 
             var itemsString = items.map((item) => JSON.stringify({ name: item.name, kind: item.kind })).join(",\n");
 
-            this.raiseError('Expected "' + JSON.stringify({ name: name, type: type, docComment: docComment, fullSymbolName: fullSymbolName, kind: kind }) + '" to be in list [' + itemsString + ']');
+            this.raiseError('Expected "' + JSON.stringify({ name: name, text: text, documentation: documentation, kind: kind }) + '" to be in list [' + itemsString + ']');
         }
 
         private findFile(indexOrName: any) {

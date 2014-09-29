@@ -273,7 +273,7 @@ module ts.SignatureHelp {
 
                     return {
                         name: p.name,
-                        documentation: getSymbolDocumentationDisplayParts(p),
+                        documentation: p.getDocumentationComment(),
                         displayParts: displayParts,
                         isOptional: isOptional
                     };
