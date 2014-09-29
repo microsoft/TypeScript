@@ -1,11 +1,3 @@
-// word2md - Word to Markdown conversion tool
-//
-// word2md converts a Microsoft Word document to Markdown formatted text. The tool uses the
-// Word Automation APIs to start an instance of Word and access the contents of the document
-// being converted. The tool must be run using the cscript.exe script host and requires Word
-// to be installed on the target machine. The name of the document to convert must be specified
-// as a command line argument and the resulting Markdown is written to standard output. The
-// tool recognizes the specific Word styles used in the TypeScript Language Specification.
 var sys = (function () {
     var args = [];
     for (var i = 0; i < WScript.Arguments.length; i++) {
@@ -37,13 +29,13 @@ function convertDocumentToMarkdown(doc) {
             }
         }
     }
-    function findReplace(findText, findProps, replaceText, replaceProps) {
+    function findReplace(findText, findOptions, replaceText, replaceOptions) {
         var find = doc.range().find;
         find.clearFormatting();
-        setProperties(find, findProps);
+        setProperties(find, findOptions);
         var replace = find.replacement;
         replace.clearFormatting();
-        setProperties(replace, replaceProps);
+        setProperties(replace, replaceOptions);
         find.execute(findText, false, false, false, false, false, true, 0, true, replaceText, 2);
     }
     function write(s) {
@@ -162,10 +154,14 @@ function convertDocumentToMarkdown(doc) {
         }
         writeBlockEnd();
     }
+    findReplace("<", {}, "&lt;", {});
+    findReplace("&lt;", { style: "Code" }, "<", {});
+    findReplace("&lt;", { style: "Code Fragment" }, "<", {});
+    findReplace("&lt;", { style: "Terminal" }, "<", {});
     findReplace("", { font: { subscript: true } }, "<sub>^&</sub>", { font: { subscript: false } });
-    findReplace("", { style: "Code Fragment" }, "`^&`", { style: -66 /* default font */ });
-    findReplace("", { style: "Production" }, "*^&*", { style: -66 /* default font */ });
-    findReplace("", { style: "Terminal" }, "`^&`", { style: -66 /* default font */ });
+    findReplace("", { style: "Code Fragment" }, "`^&`", { style: -66 });
+    findReplace("", { style: "Production" }, "*^&*", { style: -66 });
+    findReplace("", { style: "Terminal" }, "`^&`", { style: -66 });
     findReplace("", { font: { bold: true, italic: true } }, "***^&***", { font: { bold: false, italic: false } });
     findReplace("", { font: { italic: true } }, "*^&*", { font: { italic: false } });
     doc.fields.toggleShowCodes();

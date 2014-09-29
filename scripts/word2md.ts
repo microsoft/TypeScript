@@ -97,7 +97,7 @@ module Word {
     }
 
     export interface Fields extends Collection<Field> {
-        toggleShowCodes();
+        toggleShowCodes(): void;
     }
 
     export interface Document {
@@ -129,6 +129,15 @@ var sys = (function () {
     };
 })();
 
+interface FindReplaceOptions {
+    style?: any;
+    font?: {
+        bold?: boolean;
+        italic?: boolean;
+        subscript?: boolean;
+    };
+}
+
 function convertDocumentToMarkdown(doc: Word.Document): string {
 
     var result: string = "";
@@ -138,7 +147,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     var tableCellIndex: number;
     var columnAlignment: number[] = [];
 
-    function setProperties(target: {}, properties: {}) {
+    function setProperties(target: any, properties: any) {
         for (var name in properties) {
             if (properties.hasOwnProperty(name)) {
                 var value = properties[name];
@@ -152,13 +161,13 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
         }
     }
 
-    function findReplace(findText: string, findProps: {}, replaceText: string, replaceProps: {}) {
+    function findReplace(findText: string, findOptions: FindReplaceOptions, replaceText: string, replaceOptions: FindReplaceOptions) {
         var find = doc.range().find;
         find.clearFormatting();
-        setProperties(find, findProps);
+        setProperties(find, findOptions);
         var replace = find.replacement;
         replace.clearFormatting();
-        setProperties(replace, replaceProps);
+        setProperties(replace, replaceOptions);
         find.execute(findText, false, false, false, false, false, true, 0, true, replaceText, 2);
     }
 
@@ -295,6 +304,10 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
         writeBlockEnd();
     }
 
+    findReplace("<", {}, "&lt;", {});
+    findReplace("&lt;", { style: "Code" }, "<", {});
+    findReplace("&lt;", { style: "Code Fragment" }, "<", {});
+    findReplace("&lt;", { style: "Terminal" }, "<", {});
     findReplace("", { font: { subscript: true } }, "<sub>^&</sub>", { font: { subscript: false } });
     findReplace("", { style: "Code Fragment" }, "`^&`", { style: -66 /* default font */ });
     findReplace("", { style: "Production" }, "*^&*", { style: -66 /* default font */});
