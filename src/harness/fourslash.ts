@@ -1970,6 +1970,10 @@ module FourSlash {
                 this.taoInvalidReason = 'assertItemInCompletionList only supports the "name" parameter';
             }
 
+            function assertionMessage(msg: string) {
+                return "\nMarker: " + currentTestState.lastKnownMarker + "\nChecking: " + msg + "\n\n";
+            }
+
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
                 if (item.name == name) {
@@ -1977,15 +1981,15 @@ module FourSlash {
                         var details = this.getCompletionEntryDetails(item.name);
 
                         if (documentation != undefined) {
-                            assert.equal(ts.displayPartsToString(details.documentation), documentation);
+                            assert.equal(ts.displayPartsToString(details.documentation), documentation, assertionMessage("completion item documentation"));
                         }
                         if (text !== undefined) {
-                            assert.equal(ts.displayPartsToString(details.displayParts), text);
+                            assert.equal(ts.displayPartsToString(details.displayParts), text, assertionMessage("completion item detail text"));
                         }
                     }
 
                     if (kind !== undefined) {
-                        assert.equal(item.kind, kind);
+                        assert.equal(item.kind, kind, assertionMessage("completion item kind"));
                     }
 
                     return;

@@ -66,6 +66,7 @@ module ts {
         getTypeParameters(): Type[];
         getParameters(): Symbol[];
         getReturnType(): Type;
+        getDocumentationComment(): SymbolDisplayPart[];
     }
 
     export interface SourceFile {
@@ -248,287 +249,293 @@ module ts {
 
         getDocumentationComment(): SymbolDisplayPart[] {
             if (this.documentationComment === undefined) {
-                this.documentationComment = [];
-                var docComments = getJsDocCommentsSeparatedByNewLines(this);
-                ts.forEach(docComments, docComment => {
-                    if (this.documentationComment.length) {
-                        this.documentationComment.push(lineBreakPart());
-                    }
-                    this.documentationComment.push(docComment);
-                });
+                this.documentationComment = getJsDocCommentsFromDeclarations(this.declarations, this.name);
             }
 
             return this.documentationComment;
+        }
+    }
 
-            function getJsDocCommentsSeparatedByNewLines(symbol: Symbol) {
-                var paramTag = "@param";
-                var jsDocCommentParts: SymbolDisplayPart[] = [];
+    function getJsDocCommentsFromDeclarations(declarations: Declaration[], name: string) {
+        var documentationComment = <SymbolDisplayPart[]>[];
+        var docComments = getJsDocCommentsSeparatedByNewLines();
+        ts.forEach(docComments, docComment => {
+            if (documentationComment.length) {
+                documentationComment.push(lineBreakPart());
+            }
+            documentationComment.push(docComment);
+        });
 
-                ts.forEach(symbol.declarations, declaration => {
-                    var sourceFileOfDeclaration = getSourceFileOfNode(declaration);
-                    // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
-                    if (declaration.kind === SyntaxKind.Parameter) {
-                        ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
-                            if (cleanedParamJsDocComment) {
-                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
-                            }
-                        });
-                    }
+        return documentationComment;
 
-                    // Get the cleaned js doc comment text from the declaration
-                    ts.forEach(getJsDocCommentTextRange(
-                        declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
-                            if (cleanedJsDocComment) {
-                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
-                            }
-                        });
-                });
+        function getJsDocCommentsSeparatedByNewLines() {
+            var paramTag = "@param";
+            var jsDocCommentParts: SymbolDisplayPart[] = [];
 
-                return jsDocCommentParts;
-
-                function getJsDocCommentTextRange(node: Node, sourceFile: SourceFile): TextRange[] {
-                    return ts.map(getJsDocComments(node, sourceFile),
-                        jsDocComment => {
-                            return {
-                                pos: jsDocComment.pos + "/*".length, // Consume /* from the comment
-                                end: jsDocComment.end - "*/".length // Trim off comment end indicator 
-                            };
-                        });
+            ts.forEach(declarations, declaration => {
+                var sourceFileOfDeclaration = getSourceFileOfNode(declaration);
+                // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
+                if (declaration.kind === SyntaxKind.Parameter) {
+                    ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
+                        var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                        if (cleanedParamJsDocComment) {
+                            jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
+                        }
+                    });
                 }
 
-                function consumeWhiteSpacesOnTheLine(pos: number, end: number, sourceFile: SourceFile, maxSpacesToRemove?: number) {
-                    if (maxSpacesToRemove !== undefined) {
-                        end = Math.min(end, pos + maxSpacesToRemove);
+                // Get the cleaned js doc comment text from the declaration
+                ts.forEach(getJsDocCommentTextRange(
+                    declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
+                        var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                        if (cleanedJsDocComment) {
+                            jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
+                        }
+                    });
+            });
+
+            return jsDocCommentParts;
+
+            function getJsDocCommentTextRange(node: Node, sourceFile: SourceFile): TextRange[] {
+                return ts.map(getJsDocComments(node, sourceFile),
+                    jsDocComment => {
+                        return {
+                            pos: jsDocComment.pos + "/*".length, // Consume /* from the comment
+                            end: jsDocComment.end - "*/".length // Trim off comment end indicator 
+                        };
+                    });
+            }
+
+            function consumeWhiteSpacesOnTheLine(pos: number, end: number, sourceFile: SourceFile, maxSpacesToRemove?: number) {
+                if (maxSpacesToRemove !== undefined) {
+                    end = Math.min(end, pos + maxSpacesToRemove);
+                }
+
+                for (; pos < end; pos++) {
+                    var ch = sourceFile.text.charCodeAt(pos);
+                    if (!isWhiteSpace(ch) || isLineBreak(ch)) {
+                        // Either found lineBreak or non whiteSpace
+                        return pos;
+                    }
+                }
+
+                return end;
+            }
+
+            function consumeLineBreaks(pos: number, end: number, sourceFile: SourceFile) {
+                while (pos < end && isLineBreak(sourceFile.text.charCodeAt(pos))) {
+                    pos++;
+                }
+
+                return pos;
+            }
+
+            function isName(pos: number, end: number, sourceFile: SourceFile, name: string) {
+                return pos + name.length < end &&
+                    sourceFile.text.substr(pos, name.length) === name &&
+                    isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length));
+            }
+
+            function isParamTag(pos: number, end: number, sourceFile: SourceFile) {
+                // If it is @param tag
+                return isName(pos, end, sourceFile, paramTag);
+            }
+
+            function getCleanedJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
+                var spacesToRemoveAfterAsterisk: number;
+                var docComments: SymbolDisplayPart[] = [];
+                var isInParamTag = false;
+
+                while (pos < end) {
+                    var docCommentTextOfLine = "";
+                    // First consume leading white space
+                    pos = consumeWhiteSpacesOnTheLine(pos, end, sourceFile);
+
+                    // If the comment starts with '*' consume the spaces on this line
+                    if (pos < end && sourceFile.text.charCodeAt(pos) === CharacterCodes.asterisk) {
+                        var lineStartPos = pos + 1;
+                        pos = consumeWhiteSpacesOnTheLine(pos + 1, end, sourceFile, spacesToRemoveAfterAsterisk);
+
+                        // Set the spaces to remove after asterisk as margin if not already set
+                        if (spacesToRemoveAfterAsterisk === undefined && pos < end && !isLineBreak(sourceFile.text.charCodeAt(pos))) {
+                            spacesToRemoveAfterAsterisk = pos - lineStartPos;
+                        }
+                    }
+                    else if (spacesToRemoveAfterAsterisk === undefined) {
+                        spacesToRemoveAfterAsterisk = 0;
                     }
 
-                    for (; pos < end; pos++) {
-                        var ch = sourceFile.text.charCodeAt(pos);
-                        if (!isWhiteSpace(ch) || isLineBreak(ch)) {
-                            // Either found lineBreak or non whiteSpace
-                            return pos;
+                    // Analyse text on this line
+                    while (pos < end && !isLineBreak(sourceFile.text.charCodeAt(pos))) {
+                        var ch = sourceFile.text.charAt(pos);
+                        if (ch === "@") {
+                            // If it is @param tag
+                            if (isParamTag(pos, end, sourceFile)) {
+                                isInParamTag = true;
+                                pos += paramTag.length;
+                                continue;
+                            }
+                            else {
+                                isInParamTag = false;
+                            }
+                        }
+
+                        // Add the ch to doc text if we arent in param tag
+                        if (!isInParamTag) {
+                            docCommentTextOfLine += ch;
+                        }
+
+                        // Scan next character
+                        pos++;
+                    }
+
+                    // Continue with next line
+                    pos = consumeLineBreaks(pos, end, sourceFile);
+                    if (docCommentTextOfLine) {
+                        docComments.push(textPart(docCommentTextOfLine));
+                    }
+                }
+
+                return docComments;
+            }
+
+            function getCleanedParamJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
+                var paramHelpStringMargin: number;
+                var paramDocComments: SymbolDisplayPart[] = [];
+                while (pos < end) {
+                    if (isParamTag(pos, end, sourceFile)) {
+                        // Consume leading spaces 
+                        pos = consumeWhiteSpaces(pos + paramTag.length);
+                        if (pos >= end) {
+                            break;
+                        }
+
+                        // Ignore type expression
+                        if (sourceFile.text.charCodeAt(pos) === CharacterCodes.openBrace) {
+                            pos++;
+                            for (var curlies = 1; pos < end; pos++) {
+                                var charCode = sourceFile.text.charCodeAt(pos);
+
+                                // { character means we need to find another } to match the found one
+                                if (charCode === CharacterCodes.openBrace) {
+                                    curlies++;
+                                    continue;
+                                }
+
+                                // } char
+                                if (charCode === CharacterCodes.closeBrace) {
+                                    curlies--;
+                                    if (curlies === 0) {
+                                        // We do not have any more } to match the type expression is ignored completely
+                                        pos++;
+                                        break;
+                                    }
+                                    else {
+                                        // there are more { to be matched with }
+                                        continue;
+                                    }
+                                }
+
+                                // Found start of another tag
+                                if (charCode === CharacterCodes.at) {
+                                    break;
+                                }
+                            }
+
+                            // Consume white spaces
+                            pos = consumeWhiteSpaces(pos);
+                            if (pos >= end) {
+                                break;
+                            }
+                        }
+
+                        // Parameter name
+                        if (isName(pos, end, sourceFile, name)) {
+                            // Found the parameter we are looking for consume white spaces
+                            pos = consumeWhiteSpaces(pos + name.length);
+                            if (pos >= end) {
+                                break;
+                            }
+
+                            var paramHelpString = "";
+                            var firstLineParamHelpStringPos = pos;
+                            while (pos < end) {
+                                var ch = sourceFile.text.charCodeAt(pos);
+
+                                // at line break, set this comment line text and go to next line 
+                                if (isLineBreak(ch)) {
+                                    if (paramHelpString) {
+                                        paramDocComments.push(textPart(paramHelpString));
+                                        paramHelpString = "";
+                                    }
+
+                                    // Get the pos after cleaning start of the line
+                                    setPosForParamHelpStringOnNextLine(firstLineParamHelpStringPos);
+                                    continue;
+                                }
+
+                                // Done scanning param help string - next tag found
+                                if (ch === CharacterCodes.at) {
+                                    break;
+                                }
+
+                                paramHelpString += sourceFile.text.charAt(pos);
+
+                                // Go to next character
+                                pos++;
+                            }
+
+                            // If there is param help text, add it top the doc comments
+                            if (paramHelpString) {
+                                paramDocComments.push(textPart(paramHelpString));
+                            }
+                            paramHelpStringMargin = undefined;
+                        }
+
+                        // If this is the start of another tag, continue with the loop in seach of param tag with symbol name
+                        if (sourceFile.text.charCodeAt(pos) === CharacterCodes.at) {
+                            continue;
                         }
                     }
 
-                    return end;
+                    // Next character
+                    pos++;
                 }
 
-                function consumeLineBreaks(pos: number, end: number, sourceFile: SourceFile) {
-                    while (pos < end && isLineBreak(sourceFile.text.charCodeAt(pos))) {
+                return paramDocComments;
+
+                function consumeWhiteSpaces(pos: number) {
+                    while (pos < end && isWhiteSpace(sourceFile.text.charCodeAt(pos))) {
                         pos++;
                     }
 
                     return pos;
                 }
 
-                function isName(pos: number, end: number, sourceFile: SourceFile, name: string) {
-                    return pos + name.length < end &&
-                        sourceFile.text.substr(pos, name.length) === name &&
-                        isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length));
-                }
-
-                function isParamTag(pos: number, end: number, sourceFile: SourceFile) {
-                    // If it is @param tag
-                    return isName(pos, end, sourceFile, paramTag);
-                }
-
-                function getCleanedJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
-                    var spacesToRemoveAfterAsterisk: number;
-                    var docComments: SymbolDisplayPart[] = [];
-                    var isInParamTag = false;
-
-                    while (pos < end) {
-                        var docCommentTextOfLine = "";
-                        // First consume leading white space
-                        pos = consumeWhiteSpacesOnTheLine(pos, end, sourceFile);
-
-                        // If the comment starts with '*' consume the spaces on this line
-                        if (pos < end && sourceFile.text.charCodeAt(pos) === CharacterCodes.asterisk) {
-                            var lineStartPos = pos + 1;
-                            pos = consumeWhiteSpacesOnTheLine(pos + 1, end, sourceFile, spacesToRemoveAfterAsterisk);
-
-                            // Set the spaces to remove after asterisk as margin if not already set
-                            if (spacesToRemoveAfterAsterisk === undefined && pos < end && !isLineBreak(sourceFile.text.charCodeAt(pos))) {
-                                spacesToRemoveAfterAsterisk = pos - lineStartPos;
-                            }
-                        }
-                        else if (spacesToRemoveAfterAsterisk === undefined) {
-                            spacesToRemoveAfterAsterisk = 0;
-                        }
-
-                        // Analyse text on this line
-                        while (pos < end && !isLineBreak(sourceFile.text.charCodeAt(pos))) {
-                            var ch = sourceFile.text.charAt(pos);
-                            if (ch === "@") {
-                                // If it is @param tag
-                                if (isParamTag(pos, end, sourceFile)) {
-                                    isInParamTag = true;
-                                    pos += paramTag.length;
-                                    continue;
-                                }
-                                else {
-                                    isInParamTag = false;
-                                }
-                            }
-
-                            // Add the ch to doc text if we arent in param tag
-                            if (!isInParamTag) {
-                                docCommentTextOfLine += ch;
-                            }
-
-                            // Scan next character
-                            pos++;
-                        }
-
-                        // Continue with next line
-                        pos = consumeLineBreaks(pos, end, sourceFile);
-                        if (docCommentTextOfLine) {
-                            docComments.push(textPart(docCommentTextOfLine));
-                        }
+                function setPosForParamHelpStringOnNextLine(firstLineParamHelpStringPos: number) {
+                    // Get the pos after consuming line breaks
+                    pos = consumeLineBreaks(pos, end, sourceFile);
+                    if (pos >= end) {
+                        return;
                     }
 
-                    return docComments;
-                }
-
-                function getCleanedParamJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
-                    var paramHelpStringMargin: number;
-                    var paramDocComments: SymbolDisplayPart[] = [];
-                    while (pos < end) {
-                        if (isParamTag(pos, end, sourceFile)) {
-                            // Consume leading spaces 
-                            pos = consumeWhiteSpaces(pos + paramTag.length);
-                            if (pos >= end) {
-                                break;
-                            }
-
-                            // Ignore type expression
-                            if (sourceFile.text.charCodeAt(pos) === CharacterCodes.openBrace) {
-                                pos++;
-                                for (var curlies = 1; pos < end; pos++) {
-                                    var charCode = sourceFile.text.charCodeAt(pos);
-
-                                    // { character means we need to find another } to match the found one
-                                    if (charCode === CharacterCodes.openBrace) {
-                                        curlies++;
-                                        continue;
-                                    }
-
-                                    // } char
-                                    if (charCode === CharacterCodes.closeBrace) {
-                                        curlies--;
-                                        if (curlies === 0) {
-                                            // We do not have any more } to match the type expression is ignored completely
-                                            pos++;
-                                            break;
-                                        }
-                                        else {
-                                            // there are more { to be matched with }
-                                            continue;
-                                        }
-                                    }
-
-                                    // Found start of another tag
-                                    if (charCode === CharacterCodes.at) {
-                                        break;
-                                    }
-                                }
-
-                                // Consume white spaces
-                                pos = consumeWhiteSpaces(pos);
-                                if (pos >= end) {
-                                    break;
-                                }
-                            }
-
-                            // Parameter name
-                            if (isName(pos, end, sourceFile, symbol.name)) {
-                                // Found the parameter we are looking for consume white spaces
-                                pos = consumeWhiteSpaces(pos + symbol.name.length);
-                                if (pos >= end) {
-                                    break;
-                                }
-
-                                var paramHelpString = "";
-                                var firstLineParamHelpStringPos = pos;
-                                while (pos < end) {
-                                    var ch = sourceFile.text.charCodeAt(pos);
-
-                                    // at line break, set this comment line text and go to next line 
-                                    if (isLineBreak(ch)) {
-                                        if (paramHelpString) {
-                                            paramDocComments.push(textPart(paramHelpString));
-                                            paramHelpString = "";
-                                        }
-
-                                        // Get the pos after cleaning start of the line
-                                        setPosForParamHelpStringOnNextLine(firstLineParamHelpStringPos);
-                                        continue;
-                                    }
-
-                                    // Done scanning param help string - next tag found
-                                    if (ch === CharacterCodes.at) {
-                                        break;
-                                    }
-
-                                    paramHelpString += sourceFile.text.charAt(pos);
-
-                                    // Go to next character
-                                    pos++;
-                                }
-
-                                // If there is param help text, add it top the doc comments
-                                if (paramHelpString) {
-                                    paramDocComments.push(textPart(paramHelpString));
-                                }
-                                paramHelpStringMargin = undefined;
-                            }
-
-                            // If this is the start of another tag, continue with the loop in seach of param tag with symbol name
-                            if (sourceFile.text.charCodeAt(pos) === CharacterCodes.at) {
-                                continue;
-                            }
-                        }
-
-                        // Next character
-                        pos++;
+                    if (paramHelpStringMargin === undefined) {
+                        paramHelpStringMargin = sourceFile.getLineAndCharacterFromPosition(firstLineParamHelpStringPos).character - 1;
                     }
 
-                    return paramDocComments;
-
-                    function consumeWhiteSpaces(pos: number) {
-                        while (pos < end && isWhiteSpace(sourceFile.text.charCodeAt(pos))) {
-                            pos++;
-                        }
-
-                        return pos;
+                    // Now consume white spaces max 
+                    var startOfLinePos = pos;
+                    pos = consumeWhiteSpacesOnTheLine(pos, end, sourceFile, paramHelpStringMargin);
+                    if (pos >= end) {
+                        return;
                     }
 
-                    function setPosForParamHelpStringOnNextLine(firstLineParamHelpStringPos: number) {
-                        // Get the pos after consuming line breaks
-                        pos = consumeLineBreaks(pos, end, sourceFile);
-                        if (pos >= end) {
-                            return;
-                        }
-
-                        if (paramHelpStringMargin === undefined) {
-                            paramHelpStringMargin = sourceFile.getLineAndCharacterFromPosition(firstLineParamHelpStringPos).character - 1;
-                        }
-
-                        // Now consume white spaces max 
-                        var startOfLinePos = pos;
-                        pos = consumeWhiteSpacesOnTheLine(pos, end, sourceFile, paramHelpStringMargin);
-                        if (pos >= end) {
-                            return;
-                        }
-
-                        var consumedSpaces = pos - startOfLinePos;
-                        if (consumedSpaces < paramHelpStringMargin) {
-                            var ch = sourceFile.text.charCodeAt(pos);
-                            if (ch === CharacterCodes.asterisk) {
-                                // Consume more spaces after asterisk
-                                pos = consumeWhiteSpacesOnTheLine(pos + 1, end, sourceFile, paramHelpStringMargin - consumedSpaces - 1);
-                            }
+                    var consumedSpaces = pos - startOfLinePos;
+                    if (consumedSpaces < paramHelpStringMargin) {
+                        var ch = sourceFile.text.charCodeAt(pos);
+                        if (ch === CharacterCodes.asterisk) {
+                            // Consume more spaces after asterisk
+                            pos = consumeWhiteSpacesOnTheLine(pos + 1, end, sourceFile, paramHelpStringMargin - consumedSpaces - 1);
                         }
                     }
                 }
@@ -583,6 +590,11 @@ module ts {
         minArgumentCount: number;
         hasRestParameter: boolean;
         hasStringLiterals: boolean;
+
+        // Undefined is used to indicate the value has not been computed. If, after computing, the
+        // symbol has no doc comment, then the empty string will be returned.
+        documentationComment: SymbolDisplayPart[];
+
         constructor(checker: TypeChecker) {
             this.checker = checker;
         }
@@ -597,6 +609,14 @@ module ts {
         }
         getReturnType(): Type {
             return this.checker.getReturnTypeOfSignature(this);
+        }
+
+        getDocumentationComment(): SymbolDisplayPart[] {
+            if (this.documentationComment === undefined) {
+                this.documentationComment = this.declaration ? getJsDocCommentsFromDeclarations([this.declaration], this.declaration.name ? this.declaration.name.text : "") : [];
+            }
+
+            return this.documentationComment;
         }
     }
 
@@ -1386,6 +1406,14 @@ module ts {
         var result = displayPartWriter.displayParts();
         releaseDisplayPartWriter(displayPartWriter);
 
+        return result;
+    }
+
+    function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
+        var displayPartWriter = getDisplayPartWriter();
+        typechecker.writeSignature(signature, displayPartWriter, enclosingDeclaration, flags);
+        var result = displayPartWriter.displayParts();
+        releaseDisplayPartWriter(displayPartWriter);
         return result;
     }
 
@@ -2515,12 +2543,13 @@ module ts {
                 var type = session.typeChecker.getTypeOfSymbol(symbol);
                 Debug.assert(type, "Could not find type for symbol");
                 var completionEntry = createCompletionEntry(symbol);
+                var displayPartsAndDocumentations = getSymbolDisplayPartsAndDocumentationOfSymbol(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location);
                 return {
                     name: entryName,
                     kind: completionEntry.kind,
                     kindModifiers: completionEntry.kindModifiers,
-                    displayParts: getSymbolDisplayPartsofSymbol(symbol, getSourceFile(filename), session.location, session.typeChecker),
-                    documentation: symbol.getDocumentationComment()
+                    displayParts: displayPartsAndDocumentations.displayParts,
+                    documentation: displayPartsAndDocumentations.documentation
                 };
             }
             else {
@@ -2649,10 +2678,107 @@ module ts {
             return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
         }
 
-        function getSymbolDisplayPartsofSymbol(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node, typeResolver: TypeChecker): SymbolDisplayPart[] {
+        function getSymbolDisplayPartsAndDocumentationOfSymbol(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node, typeResolver: TypeChecker, location: Node) {
             var displayParts: SymbolDisplayPart[] = [];
+            var documentation: SymbolDisplayPart[];
             var symbolFlags = typeResolver.getRootSymbol(symbol).flags;
-            if (symbolFlags & SymbolFlags.Class) {
+
+            var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags);
+            var hasAddedSymbolInfo: boolean;
+            // Class at constructor site need to be shown as constructor apart from property,method, vars
+            if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Signature || symbolFlags & SymbolFlags.Class) {
+                // If it is accessor they are allowed only if location is at name of the accessor
+                if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
+                    if (!isNameOfFunctionDeclaration(location) || ts.contains(symbol.getDeclarations(), location.parent)) {
+                        symbolKind = ScriptElementKind.memberVariableElement;
+                    }
+                }
+
+                var type = typeResolver.getTypeOfSymbol(symbol);
+                if (type) {
+                    if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
+                        // try get the call/construct signature from the type if it matches
+                        var callExpression: CallExpression;
+                        if (location.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>location.parent).right === location) {
+                            location = location.parent;
+                        }
+                        callExpression = <CallExpression>location.parent;
+
+                        var candidateSignatures = <Signature[]>[];
+                        signature = typeResolver.getResolvedSignature(callExpression, candidateSignatures);
+                        if (!signature && candidateSignatures.length) {
+                            // Use the first candidate:
+                            signature = candidateSignatures[0];
+                        }
+
+                        var useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.func.kind === SyntaxKind.SuperKeyword;
+                        var allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
+
+                        if (contains(allSignatures, signature)) {
+                            // Write it as method/function/constructor as: (constructor) a(....)
+                            if (symbolKind === ScriptElementKind.memberVariableElement || symbolFlags & SymbolFlags.Variable || symbolFlags & SymbolFlags.Class) {
+                                if (useConstructSignatures) {
+                                    symbolKind = ScriptElementKind.constructorImplementationElement;
+                                }
+                                else {
+                                    switch (symbolKind) {
+                                        case ScriptElementKind.memberVariableElement:
+                                            symbolKind = ScriptElementKind.memberFunctionElement;
+                                            break;
+                                        case ScriptElementKind.variableElement:
+                                            symbolKind = ScriptElementKind.functionElement;
+                                            break;
+                                        case ScriptElementKind.parameterElement:
+                                        case ScriptElementKind.localVariableElement:
+                                            symbolKind = ScriptElementKind.localFunctionElement;
+                                            break;
+                                        default:
+                                            Debug.fail("symbolKind: " + symbolKind);
+                                    }
+                                }
+                            }
+
+                            // Constructor or call signatures use the type name
+                            if (useConstructSignatures || (signature.declaration.kind === SyntaxKind.CallSignature &&
+                                !(type.symbol.flags & SymbolFlags.TypeLiteral || type.symbol.flags & SymbolFlags.ObjectLiteral))) {
+                                addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
+                            }
+                            else {
+                                addPrefixForAnyFunctionOrVar(symbol, symbolKind);
+                            }
+                            addSignatureDisplayParts(signature, allSignatures);
+                            hasAddedSymbolInfo = true;
+                        }
+                    }
+                    else if (isNameOfFunctionDeclaration(location) || // name of function declaration
+                        (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)) { // At constructor keyword of constructor declaration
+                        // get the signature from the declaration and write it
+                        var signature: Signature;
+                        var functionDeclaration = <FunctionDeclaration>location.parent;
+                        var allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getConstructSignatures() : type.getCallSignatures();
+                        if (!typeResolver.isImplementationOfOverload(functionDeclaration)) {
+                            signature = typeResolver.getSignatureFromDeclaration(functionDeclaration);
+                        }
+                        else {
+                            signature = allSignatures[0];
+                        }
+
+                        if (functionDeclaration.kind === SyntaxKind.Constructor) {
+                            // show (constructor) Type(...) signature
+                            addPrefixForAnyFunctionOrVar(type.symbol, ScriptElementKind.constructorImplementationElement);
+                        }
+                        else {
+                            // (function/method) symbol(..signature)
+                            addPrefixForAnyFunctionOrVar(functionDeclaration.kind === SyntaxKind.CallSignature &&
+                                !(type.symbol.flags & SymbolFlags.TypeLiteral || type.symbol.flags & SymbolFlags.ObjectLiteral) ? type.symbol : symbol, symbolKind);
+                        }
+
+                        addSignatureDisplayParts(signature, allSignatures);
+                        hasAddedSymbolInfo = true;
+                    }
+                }
+            }
+            if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
@@ -2683,68 +2809,80 @@ module ts {
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, enclosingDeclaration));
             }
-            else {
-                //public static string FormatSymbolName(string name, string fullSymbolName, string kind, out bool useTypeName)
-                var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags);
-                var text: string;
-            if (symbolKind === ScriptElementKind.unknown) {
-                if (symbolFlags & SymbolFlags.EnumMember) {
-                    text = "enum member";
+            if (symbolFlags & SymbolFlags.EnumMember) {
+                addPrefixForAnyFunctionOrVar(symbol, "enum member");
+                var declaration = symbol.declarations[0];
+                if (declaration.kind === SyntaxKind.EnumMember) {
+                    var constantValue = typeResolver.getEnumMemberValue(<EnumMember>declaration);
+                    if (constantValue !== undefined) {
+                        displayParts.push(spacePart());
+                        displayParts.push(operatorPart(SyntaxKind.EqualsToken));
+                        displayParts.push(spacePart());
+                        displayParts.push(displayPart(constantValue.toString(), SymbolDisplayPartKind.numericLiteral));
+                    }
                 }
             }
-            else {
-                text = symbolKind;
-            }
-
-                if (text || symbolFlags & SymbolFlags.Signature) {
-                    addNewLineIfDisplayPartsExist();
-                    if (text) {
-                        displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                        displayParts.push(textPart(text));
-                        displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
-                        displayParts.push(spacePart());
-
-                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
-                    }
-
-                    var type = typeResolver.getTypeOfSymbol(symbol);
-                    if (symbolFlags & SymbolFlags.Property ||
+            else if (!hasAddedSymbolInfo && symbolKind !== ScriptElementKind.unknown) {
+                if (type) {
+                    addPrefixForAnyFunctionOrVar(symbol, symbolKind);
+                    if (symbolKind === ScriptElementKind.memberVariableElement ||
                         symbolFlags & SymbolFlags.Variable) {
-                        if (type) {
-                            displayParts.push(punctuationPart(SyntaxKind.ColonToken));
-                            displayParts.push(spacePart());
-                            displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, type, enclosingDeclaration, TypeFormatFlags.NoTruncation));
-                        }
+                        displayParts.push(punctuationPart(SyntaxKind.ColonToken));
+                        displayParts.push(spacePart());
+                        displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, type, enclosingDeclaration, TypeFormatFlags.NoTruncation));
                     }
                     else if (symbolFlags & SymbolFlags.Function ||
                         symbolFlags & SymbolFlags.Method ||
+                        symbolFlags & SymbolFlags.Constructor ||
                         symbolFlags & SymbolFlags.Signature ||
                         symbolFlags & SymbolFlags.Accessor) {
-                        if (type) {
-                            displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, type, enclosingDeclaration, TypeFormatFlags.NoTruncation | TypeFormatFlags.NoArrowStyleTopLevelSignature));
-                        }
-                    }
-                    else if (symbolFlags & SymbolFlags.EnumMember) {
-                        var declaration = symbol.declarations[0];
-                        if (declaration.kind === SyntaxKind.EnumMember) {
-                            var constantValue = typeResolver.getEnumMemberValue(<EnumMember>declaration);
-                            if (constantValue !== undefined) {
-                                displayParts.push(spacePart());
-                                displayParts.push(operatorPart(SyntaxKind.EqualsToken));
-                                displayParts.push(spacePart());
-                                displayParts.push(displayPart(constantValue.toString(), SymbolDisplayPartKind.numericLiteral));
-                            }
-                        }
+                        var allSignatures = type.getCallSignatures();
+                        addSignatureDisplayParts(allSignatures[0], allSignatures);
                     }
                 }
+            }             
+
+            if (!documentation) {
+                documentation = symbol.getDocumentationComment();
             }
 
-            return displayParts;
+            return { displayParts: displayParts, documentation: documentation };
 
             function addNewLineIfDisplayPartsExist() {
                 if (displayParts.length) {
                     displayParts.push(lineBreakPart());
                 }
+            }
+
+            function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
+                addNewLineIfDisplayPartsExist();
+                if (symbolKind) {
+                    displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                    displayParts.push(textPart(symbolKind));
+                    displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                    displayParts.push(spacePart());
+                    //if (symbol.declarations && symbol.declarations.length) {
+                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
+                    //}
+                }
+            }
+
+            function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[]) {
+                displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, enclosingDeclaration, TypeFormatFlags.NoTruncation));
+                if (allSignatures.length > 1) {
+                    displayParts.push(spacePart());
+                    displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                    displayParts.push(operatorPart(SyntaxKind.PlusToken));
+                    displayParts.push(spacePart());
+                    displayParts.push(displayPart((allSignatures.length - 1).toString(), SymbolDisplayPartKind.numericLiteral));
+                    displayParts.push(spacePart());
+                    displayParts.push(textPart("overload"));
+                    displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                    displayParts.push(textPart("s"));
+                    displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                    displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                }
+                documentation = signature.getDocumentationComment();
             }
         }
 
@@ -2763,12 +2901,13 @@ module ts {
                 return undefined;
             }
 
+            var displayPartsAndDocumentations = getSymbolDisplayPartsAndDocumentationOfSymbol(symbol, sourceFile, getContainerNode(node), typeInfoResolver, node);
             return {
                 kind: getSymbolKind(symbol),
                 kindModifiers: getSymbolModifiers(symbol),
                 textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
-                displayParts: getSymbolDisplayPartsofSymbol(symbol, sourceFile, getContainerNode(node), typeInfoResolver),
-                documentation: symbol.getDocumentationComment()
+                displayParts: displayPartsAndDocumentations.displayParts,
+                documentation: displayPartsAndDocumentations.documentation
             };
         }
 

@@ -334,9 +334,7 @@ goTo.marker('25');
 verify.currentSignatureHelpDocCommentIs("fn f1 with number");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('25q');
-// TODO: type name format for the overload
-//verify.quickInfoIs("(a: number): any (+ 1 overload(s))", "fn f1 with number", "f1", "function");
-verify.quickInfoIs(undefined, "fn f1 with number");
+verify.quickInfoIs("(function) f1(a: number): any (+ 1 overload(s))", "fn f1 with number");
 goTo.marker('25aq');
 verify.quickInfoIs("(parameter) a: number", "");
 
@@ -344,16 +342,13 @@ goTo.marker('26');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('26q');
-// TODO: Selection of correct overload and doc comment only from that overload
-//verify.quickInfoIs("(b: string): any (+ 1 overload(s))", "", "f1", "function");
+verify.quickInfoIs("(function) f1(b: string): any (+ 1 overload(s))", "");
 goTo.marker('26aq');
 verify.quickInfoIs("(parameter) b: string", "");
 
 goTo.marker('27');
 verify.completionListContains("multiply", "(function) multiply(a: number, b: number, c?: number, d?: any, e?: any): void", "This is multiplication function\n@anotherTag\n@anotherTag");
-// TODO: overload formatting
-//verify.completionListContains("f1", "(a: number): any (+ 1 overload(s))", "fn f1 with number", "f1", "function");
-verify.completionListContains("f1", undefined, "fn f1 with number");
+verify.completionListContains("f1", "(function) f1(a: number): any (+ 1 overload(s))", "fn f1 with number");
 
 goTo.marker('28');
 verify.currentSignatureHelpDocCommentIs("This is subtract function");

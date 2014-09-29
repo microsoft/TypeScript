@@ -651,6 +651,9 @@ module ts {
         getRootSymbol(symbol: Symbol): Symbol;
         getContextualType(node: Node): Type;
         getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature;
+        getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
+        writeSignature(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        isImplementationOfOverload(node: FunctionDeclaration): boolean;
 
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
         // computed value.
@@ -678,7 +681,7 @@ module ts {
         WriteArrayAsGenericType = 0x00000001,  // Write Array<T> instead T[]
         UseTypeOfFunction       = 0x00000002,  // Write typeof instead of function type literal
         NoTruncation            = 0x00000004,  // Don't truncate typeToString result
-        NoArrowStyleTopLevelSignature = 0x00000008, // Do not write type global top level function or constructor literal
+        WriteArrowStyleSignature= 0x00000008,  // Write arrow style signature
     }
 
     export enum SymbolAccessibility {
