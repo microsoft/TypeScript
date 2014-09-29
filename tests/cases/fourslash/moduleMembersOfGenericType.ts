@@ -6,4 +6,4 @@
 ////var r = M./**/;
 
 goTo.marker();
-verify.completionListContains('x', '<T>(x: T) => T');
+verify.completionListContains('x', '(var) M.x: <T>(x: T) => T');

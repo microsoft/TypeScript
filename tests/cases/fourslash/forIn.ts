@@ -5,4 +5,4 @@
 
 goTo.marker();
 
-verify.quickInfoIs('any', "", "p", "var");
+verify.quickInfoIs('(var) p: any', "");

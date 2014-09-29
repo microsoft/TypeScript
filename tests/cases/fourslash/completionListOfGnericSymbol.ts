@@ -6,6 +6,6 @@
 ////a./**/
 
 goTo.marker();
-verify.memberListContains('length', "number", /*docComments*/ undefined, /*fullSymbolName*/ undefined,/*kind*/ "property");
-verify.memberListContains('toString', "() => string", /*docComments*/ undefined, /*fullSymbolName*/ undefined,/*kind*/ "method");
+verify.memberListContains('length', "number", /*docComments*/ undefined, /*kind*/ "property");
+verify.memberListContains('toString', "() => string", /*docComments*/ undefined, /*kind*/ "method");
 

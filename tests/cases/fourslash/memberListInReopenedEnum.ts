@@ -12,7 +12,7 @@
 
 
 goTo.marker('1');
-verify.memberListContains('A', 'E', undefined, "E.A");
-verify.memberListContains('B', 'E', undefined, "E.B");
-verify.memberListContains('C', 'E', undefined, "E.C");
-verify.memberListContains('D', 'E', undefined, "E.D");
+verify.memberListContains('A', '(enum member) E.A = 0');
+verify.memberListContains('B', '(enum member) E.B = 1');
+verify.memberListContains('C', '(enum member) E.C = 0');
+verify.memberListContains('D', '(enum member) E.D = 1');

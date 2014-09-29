@@ -17,17 +17,17 @@ goTo.marker("S");
 verify.memberListIsEmpty();
 
 goTo.marker("T");
-verify.memberListContains("x", "number");
-verify.memberListContains("y", "string");
+verify.memberListContains("x", "(property) IFoo.x: number");
+verify.memberListContains("y", "(property) IFoo.y: string");
 verify.memberListCount(2);
 
 goTo.marker("U");
-verify.memberListContains("toString", "() => string");
+verify.memberListContains("toString", "(method) Object.toString(): string");
 verify.memberListCount(7); // constructor, toString, toLocaleString, valueOf, hasOwnProperty, isPrototypeOf, propertyIsEnumerable
 
 goTo.marker("V");
-verify.memberListContains("x", "number");
-verify.memberListContains("y", "string");
+verify.memberListContains("x", "(property) IFoo.x: number");
+verify.memberListContains("y", "(property) IFoo.y: string");
 verify.memberListCount(2);
 
 

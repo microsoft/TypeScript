@@ -25,7 +25,7 @@ diagnostics.setEditValidation(IncrementalEditValidation.None);
 
 // Do resolve without typeCheck
 goTo.marker('1');
-verify.quickInfoIs("string");
+verify.quickInfoIs("(var) val: string");
 
 // TypeCheck
 verify.numberOfErrorsInCurrentFile(1);

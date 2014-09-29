@@ -23,34 +23,32 @@ module ts {
         return undefined;
     }
 
-    interface SymbolWriter {
-        writeKind(text: string, kind: SymbolDisplayPartKind): void;
-        writeSymbol(text: string, symbol: Symbol): void;
-        writeLine(): void;
-        increaseIndent(): void;
-        decreaseIndent(): void;
-        clear(): void;
-
-        // Called when the symbol writer encounters a symbol to write.  Currently only used by the
-        // declaration emitter to help determine if it should patch up the final declaration file
-        // with import statements it previously saw (but chose not to emit).
-        trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
-    }
-
-    interface DisplayPartsSymbolWriter extends SymbolWriter {
-        displayParts(): SymbolDisplayPart[];
-    }
-
-    interface StringSymbolWriter extends SymbolWriter {
+    export interface StringSymbolWriter extends SymbolWriter {
         string(): string;
     }
 
-    // TODO this should go back in services
-    export function getSymbolDisplayPart(text: string, kind: SymbolDisplayPartKind, symbol?: Symbol): SymbolDisplayPart {
-        return <SymbolDisplayPart> {
-            text: text,
-            kind: kind
-        };
+    // Pool writers to avoid needing to allocate them for every symbol we write.
+    var stringWriters: StringSymbolWriter[] = [];
+    export function getSingleLineStringWriter(): StringSymbolWriter {
+        if (stringWriters.length == 0) {
+            var str = "";
+
+            return {
+                string: () => str,
+                writeKind: text => str += text,
+                writeSymbol: text => str += text,
+
+                // Completely ignore indentation for string writers.  And map newlines to
+                // a single space.
+                writeLine: () => str += " ",
+                increaseIndent: () => { },
+                decreaseIndent: () => { },
+                clear: () => str = "",
+                trackSymbol: () => { }
+            };
+        }
+
+        return stringWriters.pop();
     }
 
     /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
@@ -92,9 +90,9 @@ module ts {
             getTypeOfNode: getTypeOfNode,
             getApparentType: getApparentType,
             typeToString: typeToString,
-            typeToDisplayParts: typeToDisplayParts,
+            writeType: writeType,
             symbolToString: symbolToString,
-            symbolToDisplayParts: symbolToDisplayParts,
+            writeSymbol: writeSymbol,
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
             getRootSymbol: getRootSymbol,
             getContextualType: getContextualType,
@@ -930,58 +928,6 @@ module ts {
                 { accessibility: SymbolAccessibility.NotAccessible, errorSymbolName: firstIdentifierName };
         }
 
-        // Pool writers to avoid needing to allocate them for every symbol we write.
-        var displayPartWriters: DisplayPartsSymbolWriter[] = [];
-        var stringWriters: StringSymbolWriter[] = [];
-
-        function getDisplayPartWriter(): DisplayPartsSymbolWriter {
-            if (displayPartWriters.length == 0) {
-                var displayParts: SymbolDisplayPart[] = [];
-                return {
-                    displayParts: () => displayParts,
-                    writeKind: (text, kind) => displayParts.push(getSymbolDisplayPart(text, kind)),
-                    writeSymbol: (text, symbol) => displayParts.push(symbolPart(text, symbol)),
-
-                    // Completely ignore indentation for display part writers.  And map newlines to
-                    // a single space.
-                    writeLine: () => displayParts.push(spacePart()),
-                    increaseIndent: () => { },
-                    decreaseIndent: () => { },
-                    clear: () => displayParts = [],
-                    trackSymbol: () => { }
-                };
-            }
-
-            return displayPartWriters.pop();
-        }
-
-        function getStringWriter(): StringSymbolWriter {
-            if (stringWriters.length == 0) {
-                var str = "";
-
-                return {
-                    string: () => str,
-                    writeKind: text => str += text,
-                    writeSymbol: text => str += text,
-
-                    // Completely ignore indentation for string writers.  And map newlines to
-                    // a single space.
-                    writeLine: () => str += " ",
-                    increaseIndent: () => { },
-                    decreaseIndent: () => { },
-                    clear: () => str = "",
-                    trackSymbol: () => { }
-                };
-            }
-
-            return stringWriters.pop();
-        }
-
-        function releaseDisplayPartWriter(writer: DisplayPartsSymbolWriter) {
-            writer.clear();
-            displayPartWriters.push(writer);
-        }
-
         function releaseStringWriter(writer: StringSymbolWriter) {
             writer.clear()
             stringWriters.push(writer);
@@ -1004,21 +950,11 @@ module ts {
         }
 
         function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
-            var writer = getStringWriter();
+            var writer = getSingleLineStringWriter();
             writeSymbol(symbol, writer, enclosingDeclaration, meaning);
 
             var result = writer.string();
             releaseStringWriter(writer);
-
-            return result;
-        }
-
-        function symbolToDisplayParts(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): SymbolDisplayPart[] {
-            var writer = getDisplayPartWriter();
-            writeSymbol(symbol, writer, enclosingDeclaration, meaning);
-
-            var result = writer.displayParts();
-            releaseDisplayPartWriter(writer);
 
             return result;
         }
@@ -1099,12 +1035,8 @@ module ts {
             return writeSymbolName(symbol);
         }
 
-        function writeSymbolToTextWriter(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, writer: TextWriter) {
-            writer.write(symbolToString(symbol, enclosingDeclaration, meaning));
-        }
-
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-            var writer = getStringWriter();
+            var writer = getSingleLineStringWriter();
             writeType(type, writer, enclosingDeclaration, flags);
 
             var result = writer.string();
@@ -1114,16 +1046,6 @@ module ts {
             if (maxLength && result.length >= maxLength) {
                 result = result.substr(0, maxLength - "...".length) + "...";
             }
-
-            return result;
-        }
-
-        function typeToDisplayParts(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
-            var writer = getDisplayPartWriter();
-            writeType(type, writer, enclosingDeclaration, flags);
-
-            var result = writer.displayParts();
-            releaseDisplayPartWriter(writer);
 
             return result;
         }
@@ -7620,34 +7542,17 @@ module ts {
             return undefined;
         }
 
-        // Create a single instance that we can wrap the underlying emitter TextWriter with.  That
-        // way we don't have to allocate a new wrapper every time writeTypeAtLocation and 
-        // writeReturnTypeOfSignatureDeclaration are called.
-        var emitSymbolWriter = {
-            writer: <TextWriter>undefined,
-
-            writeKind: function (text: string) { this.writer.write(text) },
-            writeSymbol: function (text: string) { this.writer.write(text) },
-            writeLine: function () { this.writer.writeLine() },
-            increaseIndent: function () { this.writer.increaseIndent() },
-            decreaseIndent: function () { this.writer.decreaseIndent() },
-            clear: function () { },
-            trackSymbol: function (symbol: Symbol, declaration: Node, meaning: SymbolFlags) { this.writer.trackSymbol(symbol, declaration, meaning) }
-        };
-
-        function writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter) {
+        function writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             var symbol = getSymbolOfNode(location);
             var type = symbol && !(symbol.flags & SymbolFlags.TypeLiteral) ? getTypeOfSymbol(symbol) : getTypeFromTypeNode(location);
 
-            emitSymbolWriter.writer = writer;
-            writeType(type, emitSymbolWriter, enclosingDeclaration, flags);
+            writeType(type, writer, enclosingDeclaration, flags);
         }
 
-        function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter) {
+        function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             var signature = getSignatureFromDeclaration(signatureDeclaration);
-            emitSymbolWriter.writer = writer;
-            writeType(getReturnTypeOfSignature(signature), emitSymbolWriter, enclosingDeclaration, flags);
+            writeType(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
         }
 
         function invokeEmitter(targetSourceFile?: SourceFile) {
@@ -7704,50 +7609,5 @@ module ts {
         initializeTypeChecker();
 
         return checker;
-    }
-
-    export function spacePart() {
-        return getSymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined);
-    }
-
-    export function keywordPart(kind: SyntaxKind) {
-        return getSymbolDisplayPart(tokenToString(kind), SymbolDisplayPartKind.keyword, undefined);
-    }
-
-    export function punctuationPart(kind: SyntaxKind) {
-        return getSymbolDisplayPart(tokenToString(kind), SymbolDisplayPartKind.punctuation, undefined);
-    }
-
-    export function operatorPart(kind: SyntaxKind) {
-        return getSymbolDisplayPart(tokenToString(kind), SymbolDisplayPartKind.operator, undefined);
-    }
-
-    export function textPart(text: string) {
-        return getSymbolDisplayPart(text, SymbolDisplayPartKind.text, undefined);
-    }
-
-    export function symbolPart(text: string, symbol: Symbol) {
-        return getSymbolDisplayPart(text, displayPartKind(symbol), symbol)
-    }
-
-    function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
-        var flags = symbol.flags;
-
-        if (flags & SymbolFlags.Variable) {
-            return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter
-                ? SymbolDisplayPartKind.parameterName
-                : SymbolDisplayPartKind.localName;
-        }
-        else if (flags & SymbolFlags.Property) { return SymbolDisplayPartKind.propertyName; }
-        else if (flags & SymbolFlags.EnumMember) { return SymbolDisplayPartKind.enumMemberName; }
-        else if (flags & SymbolFlags.Function) { return SymbolDisplayPartKind.functionName; }
-        else if (flags & SymbolFlags.Class) { return SymbolDisplayPartKind.className; }
-        else if (flags & SymbolFlags.Interface) { return SymbolDisplayPartKind.interfaceName; }
-        else if (flags & SymbolFlags.Enum) { return SymbolDisplayPartKind.enumName; }
-        else if (flags & SymbolFlags.Module) { return SymbolDisplayPartKind.moduleName; }
-        else if (flags & SymbolFlags.Method) { return SymbolDisplayPartKind.methodName; }
-        else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
-
-        return SymbolDisplayPartKind.text;
     }
 }

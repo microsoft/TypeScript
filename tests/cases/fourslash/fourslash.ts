@@ -226,10 +226,6 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyQuickInfo(this.negative, expectedText, expectedDocumentation);
         }
 
-        public quickInfoSymbolNameIs(expectedSymbolInfo: string) {
-            FourSlash.currentTestState.verifyQuickInfo(this.negative, expectedSymbolInfo);
-        }
-
         public quickInfoExists() {
             FourSlash.currentTestState.verifyQuickInfoExists(this.negative);
         }
