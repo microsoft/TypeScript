@@ -2803,7 +2803,7 @@ module ts {
 
             /**
              * Aggregates all throw-statements within this node *without* crossing
-             * into function boundaries and try-blocks.
+             * into function boundaries and try-blocks with catch-clauses.
              */
             function aggregateOwnedThrowStatements(node: Node): ThrowStatement[] {
                 var statementAccumulator: ThrowStatement[] = []
@@ -2816,10 +2816,16 @@ module ts {
                     }
                     else if (node.kind === SyntaxKind.TryStatement) {
                         var tryStatement = <TryStatement>node;
-                        
+
+                        // If a try statement has a catch clause, then any thrown exceptions in the try block
+                        // will be propagated to the next owner.
                         if (tryStatement.catchBlock) {
                             aggregate(tryStatement.catchBlock);
                         }
+                        else {
+                            aggregate(tryStatement.tryBlock);
+                        }
+
                         if (tryStatement.finallyBlock) {
                             aggregate(tryStatement.finallyBlock);
                         }
@@ -2833,7 +2839,8 @@ module ts {
 
             /**
              * For lack of a better name, this function takes a throw statement and returns the first
-             * encountered ancestor that is a try-block, function-block, or source file.
+             * encountered ancestor that is a try-block (whose try statement has a catch clause),
+             * function-block, or source file.
              */
             function getContextualThrowStatementOwner(throwStatement: ThrowStatement): Node {
                 var child: Node = throwStatement;
@@ -2845,10 +2852,14 @@ module ts {
                         return parent;
                     }
                     
-                    // A throw-statement is only owned by a try-statement if it occurs in the try block.
-                    // Otherwise, it is owned by the next closest function-block or try-block.
-                    if (parent.kind === SyntaxKind.TryStatement && child === (<TryStatement>parent).tryBlock) {
-                        return child;
+                    // A throw-statement is only owned by a try-statement if the try-statement has
+                    // a catch clause, and if the throw-statement occurs within the try block.
+                    if (parent.kind === SyntaxKind.TryStatement) {
+                        var tryStatement = <TryStatement>parent;
+
+                        if (tryStatement.tryBlock === child && tryStatement.catchBlock) {
+                            return child;
+                        }
                     }
 
                     child = parent;
