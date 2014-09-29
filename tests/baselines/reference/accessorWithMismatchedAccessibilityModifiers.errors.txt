@@ -1,0 +1,59 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts(3,9): error TS2379: Getter and setter accessors do not agree in visibility.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts(6,17): error TS2379: Getter and setter accessors do not agree in visibility.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts(11,19): error TS2379: Getter and setter accessors do not agree in visibility.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts(14,17): error TS2379: Getter and setter accessors do not agree in visibility.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts(19,19): error TS2379: Getter and setter accessors do not agree in visibility.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts(21,9): error TS2379: Getter and setter accessors do not agree in visibility.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts(27,26): error TS2379: Getter and setter accessors do not agree in visibility.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts(29,16): error TS2379: Getter and setter accessors do not agree in visibility.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts (8 errors) ====
+    
+    class C {
+        get x() {
+            ~
+!!! error TS2379: Getter and setter accessors do not agree in visibility.
+            return 1;
+        }
+        private set x(v) {
+                    ~
+!!! error TS2379: Getter and setter accessors do not agree in visibility.
+        }
+    }
+    
+    class D {
+        protected get x() {
+                      ~
+!!! error TS2379: Getter and setter accessors do not agree in visibility.
+            return 1;
+        }
+        private set x(v) {
+                    ~
+!!! error TS2379: Getter and setter accessors do not agree in visibility.
+        }
+    }
+    
+    class E {
+        protected set x(v) {
+                      ~
+!!! error TS2379: Getter and setter accessors do not agree in visibility.
+        }
+        get x() {
+            ~
+!!! error TS2379: Getter and setter accessors do not agree in visibility.
+            return 1;
+        }
+    }
+    
+    class F {
+        protected static set x(v) {
+                             ~
+!!! error TS2379: Getter and setter accessors do not agree in visibility.
+        }
+        static get x() {
+                   ~
+!!! error TS2379: Getter and setter accessors do not agree in visibility.
+            return 1;
+        }
+    }

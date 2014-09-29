@@ -2,6 +2,7 @@
 
 var fs = require("fs");
 var path = require("path");
+var child_process = require("child_process");
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -9,6 +10,7 @@ var servicesDirectory = "src/services/";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
+var docDirectory = "doc/";
 
 var builtDirectory = "built/";
 var builtLocalDirectory = "built/local/";
@@ -54,6 +56,8 @@ var servicesSources = [
 }).concat([
     "services.ts",
     "shims.ts",
+    "signatureHelp.ts",
+    "utilities.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
@@ -63,7 +67,6 @@ var harnessSources = [
     "sourceMapRecorder.ts",
     "harnessLanguageService.ts",
     "fourslash.ts",
-    "external/json2.ts",
     "runnerbase.ts",
     "compilerRunner.ts",
     "typeWriter.ts",
@@ -259,6 +262,38 @@ task("clean", function() {
     jake.rmRf(builtDirectory);
 });
 
+// Generate Markdown spec
+var word2mdJs = path.join(scriptsDirectory, "word2md.js");
+var word2mdTs = path.join(scriptsDirectory, "word2md.ts");
+var specWord = path.join(docDirectory, "TypeScript Language Specification.docx");
+var specMd = path.join(docDirectory, "spec.md");
+var headerMd = path.join(docDirectory, "header.md");
+
+file(word2mdTs);
+
+// word2md script
+compileFile(word2mdJs,
+            [word2mdTs],
+            [word2mdTs],
+            [],
+            false);
+
+// The generated spec.md; built for the 'generate-spec' task
+file(specMd, [word2mdJs, specWord], function () {
+    jake.cpR(headerMd, specMd, {silent: true});
+	var specWordFullPath = path.resolve(specWord);
+    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" >>' + specMd;
+	console.log(cmd);
+	child_process.exec(cmd, function () {
+		complete();
+	});
+}, {async: true})
+
+
+desc("Generates a Markdown version of the Language Specification");
+task("generate-spec", [specMd])
+
+
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", libraryTargets, function() {
@@ -318,7 +353,7 @@ function exec(cmd, completeHandler) {
         complete();
     })
     try{
-        ex.run();   
+        ex.run();
     } catch(e) {
         console.log('Exception: ' + e)
     }
@@ -342,7 +377,7 @@ function cleanTestDirs() {
 function writeTestConfigFile(tests, testConfigFile) {
     console.log('Running test(s): ' + tests);
     var testConfigContents = '{\n' + '\ttest: [\'' + tests + '\']\n}';
-    fs.writeFileSync('test.config', testConfigContents);    
+    fs.writeFileSync('test.config', testConfigContents);
 }
 
 function deleteTemporaryProjectOutput() {
@@ -385,7 +420,7 @@ desc("Generates code coverage data via instanbul")
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
     console.log(cmd);
-    exec(cmd);  
+    exec(cmd);
 }, { async: true });
 
 // Browser tests

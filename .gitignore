@@ -36,4 +36,5 @@ tests/*.d.ts
 *.config
 scripts/debug.bat
 scripts/run.bat
+scripts/word2md.js
 coverage/
