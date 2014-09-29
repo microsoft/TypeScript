@@ -1013,6 +1013,11 @@ module ts {
                             return;
                         }
 
+                        // if this is anonymous type break
+                        if (symbol.flags & SymbolFlags.TypeLiteral) {
+                            return;
+                        }
+
                         if (needsDot) {
                             writePunctuation(writer, SyntaxKind.DotToken);
                         }
