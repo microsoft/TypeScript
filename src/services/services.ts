@@ -1031,6 +1031,7 @@ module ts {
         static none = "";
         static publicMemberModifier = "public";
         static privateMemberModifier = "private";
+        static protectedMemberModifier = "protected";
         static exportedModifier = "export";
         static ambientModifier = "declare";
         static staticModifier = "static";
@@ -2353,6 +2354,7 @@ module ts {
             var result: string[] = [];
 
             if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
+            if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
             if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
             if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
             if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
