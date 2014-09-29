@@ -89,6 +89,11 @@ module ts {
             description: Diagnostics.Do_not_emit_comments_to_output,
         },
         {
+            name: "symbolForPrivates",
+            type: "boolean",
+            description: Diagnostics.Use_ES6_Symbol_for_private_members,
+        },
+        {
             name: "sourceMap",
             type: "boolean",
             description: Diagnostics.Generates_corresponding_map_file,

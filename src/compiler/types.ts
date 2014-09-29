@@ -1012,6 +1012,7 @@ module ts {
         removeComments?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        symbolForPrivates?: boolean;
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
