@@ -1522,15 +1522,15 @@ module ts {
                 });
             }
 
-            function emitMemberAccess(memberName: Identifier) {
-                if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
+            function emitMemberAccess(member: Declaration) {
+                if (member.name.kind === SyntaxKind.StringLiteral || member.name.kind === SyntaxKind.NumericLiteral) {
                     write("[");
-                    emitNode(memberName);
+                    emitNode(member.name);
                     write("]");
                 }
                 else {
                     write(".");
-                    emitNode(memberName);
+                    emitNode(member.name);
                 }
             }
 
@@ -1547,7 +1547,7 @@ module ts {
                         else {
                             write("this");
                         }
-                        emitMemberAccess((<PropertyDeclaration>member).name);
+                        emitMemberAccess(<PropertyDeclaration>member);
                         emitEnd((<PropertyDeclaration>member).name);
                         write(" = ");
                         emit((<PropertyDeclaration>member).initializer);
@@ -1573,7 +1573,7 @@ module ts {
                         if (!(member.flags & NodeFlags.Static)) {
                             write(".prototype");
                         }
-                        emitMemberAccess((<MethodDeclaration>member).name);
+                        emitMemberAccess(<MethodDeclaration>member);
                         emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
                         emitStart(member);
