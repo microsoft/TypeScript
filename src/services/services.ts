@@ -1317,6 +1317,38 @@ module ts {
         return displayPart("\n", SymbolDisplayPartKind.lineBreak);
     }
 
+    function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
+        return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
+    }
+
+    function isLocalVariableOrFunction(symbol: Symbol) {
+        if (symbol.parent) {
+            return false; // This is exported symbol
+        }
+
+        return ts.forEach(symbol.declarations, declaration => {
+            // Function expressions are local
+            if (declaration.kind === SyntaxKind.FunctionExpression) {
+                return true;
+            }
+
+            if (declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.FunctionDeclaration) {
+                return;
+            }
+
+            // If the parent is not sourceFile or module element it is local variable
+            for (var parent = declaration.parent; parent.kind !== SyntaxKind.FunctionBlock; parent = parent.parent) {
+                // Reached source file or module block
+                if (parent.kind === SyntaxKind.SourceFile || parent.kind === SyntaxKind.ModuleBlock) {
+                    return;
+                }
+            }
+
+            // parent is in function block
+            return true;
+        });
+    }
+
     export function symbolPart(text: string, symbol: Symbol) {
         return displayPart(text, displayPartKind(symbol), symbol);
 
@@ -1324,9 +1356,7 @@ module ts {
             var flags = symbol.flags;
 
             if (flags & SymbolFlags.Variable) {
-                return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter
-                    ? SymbolDisplayPartKind.parameterName
-                    : SymbolDisplayPartKind.localName;
+                return isFirstDeclarationOfSymbolParameter(symbol) ? SymbolDisplayPartKind.parameterName : SymbolDisplayPartKind.localName;
             }
             else if (flags & SymbolFlags.Property) { return SymbolDisplayPartKind.propertyName; }
             else if (flags & SymbolFlags.EnumMember) { return SymbolDisplayPartKind.enumMemberName; }
@@ -2534,27 +2564,35 @@ module ts {
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
+            var result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags);
+            if (result === ScriptElementKind.unknown) {
+                if (flags & SymbolFlags.IndexSignature) return ScriptElementKind.indexSignatureElement;
+                if (flags & SymbolFlags.ConstructSignature) return ScriptElementKind.constructSignatureElement;
+                if (flags & SymbolFlags.CallSignature) return ScriptElementKind.callSignatureElement;
+                if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+                if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
+            }
+
+            return result;
+        }
+
+        function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol: Symbol, flags: SymbolFlags) {
             if (flags & SymbolFlags.Variable) {
-                if (ts.forEach(symbol.declarations, declaration => declaration.kind === SyntaxKind.Parameter)) {
+                if (isFirstDeclarationOfSymbolParameter(symbol)) {
                     return ScriptElementKind.parameterElement;
                 }
-                return ScriptElementKind.variableElement;
+                return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
             }
-            if (flags & SymbolFlags.Function) return ScriptElementKind.functionElement;
+            if (flags & SymbolFlags.Function) return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
             if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
             if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
             if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
             if (flags & SymbolFlags.Property) return ScriptElementKind.memberVariableElement;
-            if (flags & SymbolFlags.IndexSignature) return ScriptElementKind.indexSignatureElement;
-            if (flags & SymbolFlags.ConstructSignature) return ScriptElementKind.constructSignatureElement;
-            if (flags & SymbolFlags.CallSignature) return ScriptElementKind.callSignatureElement;
             if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
-            if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-            if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
 
             return ScriptElementKind.unknown;
         }
-
+        
         function getTypeKind(type: Type): string {
             var flags = type.getFlags();
 
@@ -2613,7 +2651,7 @@ module ts {
 
         function getSymbolDisplayPartsofSymbol(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node, typeResolver: TypeChecker): SymbolDisplayPart[] {
             var displayParts: SymbolDisplayPart[] = [];
-            var symbolFlags = typeResolver.getTargetSymbol(symbol).flags;
+            var symbolFlags = typeResolver.getRootSymbol(symbol).flags;
             if (symbolFlags & SymbolFlags.Class) {
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
                 displayParts.push(spacePart());
@@ -2647,36 +2685,16 @@ module ts {
             }
             else {
                 //public static string FormatSymbolName(string name, string fullSymbolName, string kind, out bool useTypeName)
+                var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags);
                 var text: string;
-                if (symbolFlags & SymbolFlags.Property) {
-                    text = "property";
-                }
-                else if (symbolFlags & SymbolFlags.EnumMember) {
+            if (symbolKind === ScriptElementKind.unknown) {
+                if (symbolFlags & SymbolFlags.EnumMember) {
                     text = "enum member";
                 }
-                else if (symbolFlags & SymbolFlags.Function) {
-                    text = "function";
-                }
-                else if (symbolFlags & SymbolFlags.Variable) {
-                    if (ts.forEach(symbol.declarations, declaration => declaration.kind === SyntaxKind.Parameter)) {
-                        text = "parameter";
-                    }
-                    else {
-                        text = "var";
-                    }
-                }
-                else if (symbolFlags & SymbolFlags.Method) {
-                    text = "method";
-                }
-                else if (symbolFlags & SymbolFlags.Constructor) {
-                    text = "constructor";
-                }
-                else if (symbolFlags & SymbolFlags.GetAccessor) {
-                    text = "getter";
-                }
-                else if (symbolFlags & SymbolFlags.SetAccessor) {
-                    text = "setter";
-                }
+            }
+            else {
+                text = symbolKind;
+            }
 
                 if (text || symbolFlags & SymbolFlags.Signature) {
                     addNewLineIfDisplayPartsExist();

@@ -1014,7 +1014,7 @@ module ts {
                         }
 
                         // if this is anonymous type break
-                        if (symbol.flags & SymbolFlags.TypeLiteral) {
+                        if (symbol.flags & SymbolFlags.TypeLiteral || symbol.flags & SymbolFlags.ObjectLiteral) {
                             return;
                         }
 

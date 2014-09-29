@@ -6,7 +6,4 @@
 ////};
 
 goTo.marker();
-// TODO (local var)
-//verify.quickInfoIs('(local var) xx: T', null);
-verify.quickInfoIs('(var) xx: T', null);
-
+verify.quickInfoIs('(local var) xx: T', null);
