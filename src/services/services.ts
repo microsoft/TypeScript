@@ -2613,30 +2613,31 @@ module ts {
 
         function getSymbolDisplayPartsofSymbol(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node, typeResolver: TypeChecker): SymbolDisplayPart[] {
             var displayParts: SymbolDisplayPart[] = [];
-            if (symbol.flags & SymbolFlags.Class) {
+            var symbolFlags = typeResolver.getTargetSymbol(symbol).flags;
+            if (symbolFlags & SymbolFlags.Class) {
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
             }
-            if (symbol.flags & SymbolFlags.Interface) {
+            if (symbolFlags & SymbolFlags.Interface) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
             }
-            if (symbol.flags & SymbolFlags.Enum) {
+            if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.EnumKeyword));
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
             }
-            if (symbol.flags & SymbolFlags.Module) {
+            if (symbolFlags & SymbolFlags.Module) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.ModuleKeyword));
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
             }
-            if (symbol.flags & SymbolFlags.TypeParameter) {
+            if (symbolFlags & SymbolFlags.TypeParameter) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 displayParts.push(textPart("type parameter"));
@@ -2647,16 +2648,16 @@ module ts {
             else {
                 //public static string FormatSymbolName(string name, string fullSymbolName, string kind, out bool useTypeName)
                 var text: string;
-                if (symbol.flags & SymbolFlags.Property) {
+                if (symbolFlags & SymbolFlags.Property) {
                     text = "property";
                 }
-                else if (symbol.flags & SymbolFlags.EnumMember) {
+                else if (symbolFlags & SymbolFlags.EnumMember) {
                     text = "enum member";
                 }
-                else if (symbol.flags & SymbolFlags.Function) {
+                else if (symbolFlags & SymbolFlags.Function) {
                     text = "function";
                 }
-                else if (symbol.flags & SymbolFlags.Variable) {
+                else if (symbolFlags & SymbolFlags.Variable) {
                     if (ts.forEach(symbol.declarations, declaration => declaration.kind === SyntaxKind.Parameter)) {
                         text = "parameter";
                     }
@@ -2664,20 +2665,20 @@ module ts {
                         text = "var";
                     }
                 }
-                else if (symbol.flags & SymbolFlags.Method) {
+                else if (symbolFlags & SymbolFlags.Method) {
                     text = "method";
                 }
-                else if (symbol.flags & SymbolFlags.Constructor) {
+                else if (symbolFlags & SymbolFlags.Constructor) {
                     text = "constructor";
                 }
-                else if (symbol.flags & SymbolFlags.GetAccessor) {
+                else if (symbolFlags & SymbolFlags.GetAccessor) {
                     text = "getter";
                 }
-                else if (symbol.flags & SymbolFlags.SetAccessor) {
+                else if (symbolFlags & SymbolFlags.SetAccessor) {
                     text = "setter";
                 }
 
-                if (text || symbol.flags & SymbolFlags.Signature) {
+                if (text || symbolFlags & SymbolFlags.Signature) {
                     addNewLineIfDisplayPartsExist();
                     if (text) {
                         displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
@@ -2689,23 +2690,23 @@ module ts {
                     }
 
                     var type = typeResolver.getTypeOfSymbol(symbol);
-                    if (symbol.flags & SymbolFlags.Property ||
-                        symbol.flags & SymbolFlags.Variable) {
+                    if (symbolFlags & SymbolFlags.Property ||
+                        symbolFlags & SymbolFlags.Variable) {
                         if (type) {
                             displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                             displayParts.push(spacePart());
                             displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, type, enclosingDeclaration, TypeFormatFlags.NoTruncation));
                         }
                     }
-                    else if (symbol.flags & SymbolFlags.Function ||
-                        symbol.flags & SymbolFlags.Method ||
-                        symbol.flags & SymbolFlags.Signature ||
-                        symbol.flags & SymbolFlags.Accessor) {
+                    else if (symbolFlags & SymbolFlags.Function ||
+                        symbolFlags & SymbolFlags.Method ||
+                        symbolFlags & SymbolFlags.Signature ||
+                        symbolFlags & SymbolFlags.Accessor) {
                         if (type) {
                             displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, type, enclosingDeclaration, TypeFormatFlags.NoTruncation | TypeFormatFlags.NoArrowStyleTopLevelSignature));
                         }
                     }
-                    else if (symbol.flags & SymbolFlags.EnumMember) {
+                    else if (symbolFlags & SymbolFlags.EnumMember) {
                         var declaration = symbol.declarations[0];
                         if (declaration.kind === SyntaxKind.EnumMember) {
                             var constantValue = typeResolver.getEnumMemberValue(<EnumMember>declaration);

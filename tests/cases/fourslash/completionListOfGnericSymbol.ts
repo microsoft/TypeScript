@@ -6,6 +6,7 @@
 ////a./**/
 
 goTo.marker();
-verify.memberListContains('length', "number", /*docComments*/ undefined, /*kind*/ "property");
-verify.memberListContains('toString', "() => string", /*docComments*/ undefined, /*kind*/ "method");
+// TODO. show as Array<number> or Array<T>.length instead
+verify.memberListContains('length', "(property) Array.length: number", /*docComments*/ undefined, /*kind*/ "property");
+verify.memberListContains('toString', "(method) Array.toString(): string", /*docComments*/ undefined, /*kind*/ "method");
 
