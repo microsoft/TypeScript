@@ -3825,24 +3825,16 @@ module ts {
                         var start = range.pos;
                         var end = range.end;
                         var length = end - start;
-                        
+                       
                         if (!matchResult) {
                             errorAtPos(start, length, Diagnostics.Invalid_reference_directive_syntax);
                         }
                         else {
-                            var referenceFilename = matchResult[3];
-                            var basePath = getDirectoryPath(file.filename);
-                            var referenceFullPath = normalizePath(combinePaths(basePath, referenceFilename));
-                            if (file.filename.toLocaleLowerCase() === referenceFullPath.toLocaleLowerCase()) {
-                                errorAtPos(start, length, Diagnostics.A_file_cannot_have_a_reference_to_itself);
-                            }
-                            else {
-                                referencedFiles.push({
-                                    pos: start,
-                                    end: end,
-                                    filename: referenceFilename
-                                });
-                            }
+                            referencedFiles.push({
+                                pos: start,
+                                end: end,
+                                filename: matchResult[3]
+                            });
                         }
                     }
                 }
@@ -3957,6 +3949,9 @@ module ts {
                 else if (!findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                 }
+                else if (refFile && host.getCanonicalFileName(filename) === host.getCanonicalFileName(refFile.filename)) {
+                    diagnostic = Diagnostics.A_file_cannot_have_a_reference_to_itself;
+                }
             }
             else {
                 if (!(findSourceFile(filename + ".ts", isDefaultLib, refFile, refPos, refEnd) || findSourceFile(filename + ".d.ts", isDefaultLib, refFile, refPos, refEnd))) {
@@ -4015,7 +4010,7 @@ module ts {
 
         function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
-                processSourceFile(normalizePath(combinePaths(basePath, ref.filename)), /* isDefaultLib */ false, file, ref.pos, ref.end);
+				processSourceFile(normalizePath(combinePaths(basePath, ref.filename)), /* isDefaultLib */ false, file, ref.pos, ref.end);
             });
         }
 
