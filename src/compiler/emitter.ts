@@ -314,6 +314,7 @@ module ts {
             var decreaseIndent = writer.decreaseIndent;
 
             var extendsEmitted = false;
+            var symbolEmitted = false;
 
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
@@ -2033,6 +2034,11 @@ module ts {
                     writeLine();
                     write("};");
                     extendsEmitted = true;
+                }
+                if (compilerOptions.symbolForPrivates && !symbolEmitted) {
+                    writeLine();
+                    write("var __symbol = (this && this.__symbol) || (1, eval)(\"this\").Symbol || function (name) { return name; };");
+                    symbolEmitted = true;
                 }
                 if (isExternalModule(node)) {
                     if (compilerOptions.module === ModuleKind.AMD) {
