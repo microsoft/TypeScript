@@ -945,9 +945,25 @@ module ts {
                     write(constantValue.toString() + " /* " + identifierToString(node.right) + " */");
                 }
                 else {
-                    emit(node.left);
-                    write(".");
-                    emit(node.right);
+                    var rewriteUsingSymbol = compilerOptions.symbolForPrivates && resolver.isPrivatePropertyAccess(node);
+                    if (rewriteUsingSymbol) {
+                        emit(node.left);
+                        if (resolver.isStaticPropertyAccess(node)) {
+                            write("[__symbolstatic_");
+                            emit(node.right);
+                            write("]");
+                        }
+                        else {
+                            write("[__symbol_");
+                            emit(node.right);
+                            write("]");
+                        }
+                    }
+                    else {
+                        emit(node.left);
+                        write(".");
+                        emit(node.right);
+                    }
                 }
             }
 
@@ -1511,8 +1527,20 @@ module ts {
                         writeLine();
                         emitStart(param);
                         emitStart(param.name);
-                        write("this.");
-                        emitNode(param.name);
+                        if (compilerOptions.symbolForPrivates && param.flags & NodeFlags.Private) {
+                            if (param.flags & NodeFlags.Static) {
+                                write("this[__symbolstatic_");
+                            }
+                            else {
+                                write("this[__symbol_");
+                            }
+                            emitNode(param.name);
+                            write("]");
+                        }
+                        else {
+                            write("this.");
+                            emitNode(param.name);
+                        }
                         emitEnd(param.name);
                         write(" = ");
                         emit(param.name);
@@ -1525,6 +1553,16 @@ module ts {
             function emitMemberAccess(member: Declaration) {
                 if (member.name.kind === SyntaxKind.StringLiteral || member.name.kind === SyntaxKind.NumericLiteral) {
                     write("[");
+                    emitNode(member.name);
+                    write("]");
+                }
+                else if (compilerOptions.symbolForPrivates && member.flags & NodeFlags.Private) {
+                    if (member.flags & NodeFlags.Static) {
+                        write("[__symbolstatic_");
+                    }
+                    else {
+                        write("[__symbol_");
+                    }
                     emitNode(member.name);
                     write("]");
                 }
@@ -1654,6 +1692,35 @@ module ts {
                     emitEnd(node.baseType);
                 }
                 writeLine();
+                if (compilerOptions.symbolForPrivates) {
+                    forEach(node.members, (member: Node) => {
+                        if (member.flags & NodeFlags.Private) {
+                            if (member.flags & NodeFlags.Static) {
+                                write("var __symbolstatic_");
+                            }
+                            else {
+                                write("var __symbol_");
+                            }
+                            emitNode((<Declaration>member).name);
+                            write(" = __symbol(\"");
+                            emitNode((<Declaration>member).name);
+                            write("\");");
+                            writeLine();
+                        }
+                        else if (member.kind === SyntaxKind.Constructor) {
+                            forEach((<ConstructorDeclaration>member).parameters, (parameter: ParameterDeclaration) => {
+                                if ((parameter.flags & NodeFlags.Private) === NodeFlags.Private) {
+                                    write("var __symbol_");
+                                    emitNode(parameter.name);
+                                    write(" = __symbol(\"");
+                                    emitNode(parameter.name);
+                                    write("\");");
+                                    writeLine();
+                                }
+                            });
+                        }
+                    });
+                }
                 emitConstructorOfClass();
                 emitMemberFunctions(node);
                 emitMemberAssignments(node, NodeFlags.Static);
