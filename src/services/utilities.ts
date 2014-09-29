@@ -16,6 +16,10 @@ module ts {
         };
     }
 
+    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node {
+        return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
+    }
+
     export function findContainingList(node: Node): Node {
         // The node might be a list element (nonsynthetic) or a comma (synthetic). Either way, it will
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
