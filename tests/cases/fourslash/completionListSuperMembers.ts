@@ -25,7 +25,7 @@
 
 
 goTo.marker();
-verify.memberListContains("publicProperty");
+verify.not.memberListContains("publicProperty");
 verify.memberListContains("publicInstanceMethod");
 // No statics
 verify.not.memberListContains("publicStaticProperty");

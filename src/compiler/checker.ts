@@ -92,7 +92,8 @@ module ts {
             getContextualType: getContextualType,
             getFullyQualifiedName: getFullyQualifiedName,
             getResolvedSignature: getResolvedSignature,
-            getEnumMemberValue: getEnumMemberValue
+            getEnumMemberValue: getEnumMemberValue,
+            isValidPropertyAccess: isValidPropertyAccess
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -4237,6 +4238,25 @@ module ts {
                 return getTypeOfSymbol(prop);
             }
             return anyType;
+        }
+
+        function isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean {
+            var type = checkExpression(node.left);
+            if (type !== unknownType && type !== anyType) {
+                var apparentType = getApparentType(getWidenedType(type));
+                var prop = getPropertyOfApparentType(apparentType, propertyName);
+                if (prop && prop.parent && prop.parent.flags & SymbolFlags.Class) {
+                    if (node.left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.Method) {
+                        return false;
+                    }
+                    else {
+                        var diagnosticsCount = diagnostics.length;
+                        checkClassPropertyAccess(node, type, prop);
+                        return diagnostics.length === diagnosticsCount
+                    }
+                }
+            }
+            return true;
         }
 
         function checkIndexedAccess(node: IndexedAccess): Type {
