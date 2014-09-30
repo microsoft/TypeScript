@@ -2664,11 +2664,9 @@ module ts {
                 function tryPushAccessorKeyword(accessorSymbol: Symbol, accessorKind: SyntaxKind): void {
                     var accessor = getDeclarationOfKind(accessorSymbol, accessorKind);
 
-                    if (!accessor) {
-                        return;
+                    if (accessor) {
+                        forEach(accessor.getChildren(), child => pushKeywordIf(keywords, child, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword));
                     }
-
-                    forEach(accessor.getChildren(), child => pushKeywordIf(keywords, child, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword));
                 }
             }
 
