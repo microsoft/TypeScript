@@ -2680,6 +2680,11 @@ module ts {
                         return getConstructorOccurrences(<ConstructorDeclaration>node.parent);
                     }
                     break;
+                case SyntaxKind.GetKeyword:
+                case SyntaxKind.SetKeyword:
+                    if (hasKind(node.parent, SyntaxKind.GetAccessor) || hasKind(node.parent, SyntaxKind.SetAccessor)) {
+                        return getGetAndSetOccurrences(<AccessorDeclaration>node.parent);
+                    }
             }
 
             return undefined;
@@ -3008,6 +3013,23 @@ module ts {
                 });
 
                 return map(keywords, getReferenceEntryFromNode);
+            }
+
+            function getGetAndSetOccurrences(accessorDeclaration: AccessorDeclaration): ReferenceEntry[] {
+                var keywords: Node[] = [];
+
+                tryPushAccessorKeyword(accessorDeclaration.symbol, SyntaxKind.GetAccessor);
+                tryPushAccessorKeyword(accessorDeclaration.symbol, SyntaxKind.SetAccessor);
+
+                return map(keywords, getReferenceEntryFromNode);
+
+                function tryPushAccessorKeyword(accessorSymbol: Symbol, accessorKind: SyntaxKind): void {
+                    var accessor = getDeclarationOfKind(accessorSymbol, accessorKind);
+
+                    if (accessor) {
+                        forEach(accessor.getChildren(), child => pushKeywordIf(keywords, child, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword));
+                    }
+                }
             }
 
             // returns true if 'node' is defined and has a matching 'kind'.
