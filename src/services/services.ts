@@ -4022,7 +4022,7 @@ module ts {
             var sourceFile = getCurrentSourceFile(filename);
             var result: TypeScript.TextSpan[] = [];
 
-            var token = getTouchingToken(sourceFile, position, /*allowPositionInLeadingTrivia*/ true);
+            var token = getTouchingToken(sourceFile, position, /*allowPositionInLeadingTrivia*/ false);
 
             if (token.getStart(sourceFile) === position) {
                 var matchKind = getMatchingTokenKind(token);
