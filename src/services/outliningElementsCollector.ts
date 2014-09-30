@@ -13,8 +13,6 @@
 // limitations under the License.
 //
 
-///<reference path='references.ts' />
-
 module ts {
 
     export interface OutliningSpan {
@@ -62,17 +60,23 @@ module ts {
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.CatchBlock:
                     case SyntaxKind.FinallyBlock:
-                        var openBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.OpenBraceToken && c);
-                        var closeBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.CloseBraceToken && c);
+                        var openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
+                        var closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
                         addOutlineRange(n.parent, openBrace, closeBrace);
                         break;
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ObjectLiteral:
-                        var openBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.OpenBraceToken && c);
-                        var closeBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.CloseBraceToken && c);
+                    case SyntaxKind.SwitchStatement:
+                        var openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
+                        var closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
                         addOutlineRange(n, openBrace, closeBrace);
+                        break;
+                    case SyntaxKind.ArrayLiteral:
+                        var openBracket = findChildOfKind(n, SyntaxKind.OpenBracketToken, sourceFile);
+                        var closeBracket = findChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
+                        addOutlineRange(n, openBracket, closeBracket);
                         break;
                 }
                 depth++;

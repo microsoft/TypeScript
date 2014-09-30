@@ -725,22 +725,45 @@ module ts {
                 }
             }
 
-            function emitCommaList(nodes: Node[], count?: number) {
-                if (!(count >= 0)) count = nodes.length;
-                if (nodes) {
-                    for (var i = 0; i < count; i++) {
-                        if (i) write(", ");
-                        emit(nodes[i]);
+            function emitTrailingCommaIfPresent(nodeList: NodeArray<Node>, isMultiline: boolean): void {
+                if (nodeList.hasTrailingComma) {
+                    write(",");
+                    if (isMultiline) {
+                        writeLine();
                     }
                 }
             }
 
-            function emitMultiLineList(nodes: Node[]) {
+            function emitCommaList(nodes: NodeArray<Node>, includeTrailingComma: boolean, count?: number) {
+                if (!(count >= 0)) {
+                    count = nodes.length;
+                }
+                if (nodes) {
+                    for (var i = 0; i < count; i++) {
+                        if (i) {
+                            write(", ");
+                        }
+                        emit(nodes[i]);
+                    }
+
+                    if (includeTrailingComma) {
+                        emitTrailingCommaIfPresent(nodes, /*isMultiline*/ false);
+                    }
+                }
+            }
+
+            function emitMultiLineList(nodes: NodeArray<Node>, includeTrailingComma: boolean) {
                 if (nodes) {
                     for (var i = 0; i < nodes.length; i++) {
-                        if (i) write(",");
+                        if (i) {
+                            write(",");
+                        }
                         writeLine();
                         emit(nodes[i]);
+                    }
+
+                    if (includeTrailingComma) {
+                        emitTrailingCommaIfPresent(nodes, /*isMultiline*/ true);
                     }
                 }
             }
@@ -853,14 +876,14 @@ module ts {
                 if (node.flags & NodeFlags.MultiLine) {
                     write("[");
                     increaseIndent();
-                    emitMultiLineList(node.elements);
+                    emitMultiLineList(node.elements, /*includeTrailingComma*/ true);
                     decreaseIndent();
                     writeLine();
                     write("]");
                 }
                 else {
                     write("[");
-                    emitCommaList(node.elements);
+                    emitCommaList(node.elements, /*includeTrailingComma*/ true);
                     write("]");
                 }
             }
@@ -872,14 +895,14 @@ module ts {
                 else if (node.flags & NodeFlags.MultiLine) {
                     write("{");
                     increaseIndent();
-                    emitMultiLineList(node.properties);
+                    emitMultiLineList(node.properties, /*includeTrailingComma*/ compilerOptions.target >= ScriptTarget.ES5);
                     decreaseIndent();
                     writeLine();
                     write("}");
                 }
                 else {
                     write("{ ");
-                    emitCommaList(node.properties);
+                    emitCommaList(node.properties, /*includeTrailingComma*/ compilerOptions.target >= ScriptTarget.ES5);
                     write(" }");
                 }
             }
@@ -926,13 +949,13 @@ module ts {
                     emitThis(node.func);
                     if (node.arguments.length) {
                         write(", ");
-                        emitCommaList(node.arguments);
+                        emitCommaList(node.arguments, /*includeTrailingComma*/ false);
                     }
                     write(")");
                 }
                 else {
                     write("(");
-                    emitCommaList(node.arguments);
+                    emitCommaList(node.arguments, /*includeTrailingComma*/ false);
                     write(")");
                 }
             }
@@ -942,7 +965,7 @@ module ts {
                 emit(node.func);
                 if (node.arguments) {
                     write("(");
-                    emitCommaList(node.arguments);
+                    emitCommaList(node.arguments, /*includeTrailingComma*/ false);
                     write(")");
                 }
             }
@@ -1115,7 +1138,7 @@ module ts {
                 if (node.declarations) {
                     emitToken(SyntaxKind.VarKeyword, endPos);
                     write(" ");
-                    emitCommaList(node.declarations);
+                    emitCommaList(node.declarations, /*includeTrailingComma*/ false);
                 }
                 if (node.initializer) {
                     emit(node.initializer);
@@ -1263,7 +1286,7 @@ module ts {
             function emitVariableStatement(node: VariableStatement) {
                 emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) write("var ");
-                emitCommaList(node.declarations);
+                emitCommaList(node.declarations, /*includeTrailingComma*/ false);
                 write(";");
                 emitTrailingComments(node);
             }
@@ -1372,7 +1395,7 @@ module ts {
                 increaseIndent();
                 write("(");
                 if (node) {
-                    emitCommaList(node.parameters, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
+                    emitCommaList(node.parameters, /*includeTrailingComma*/ false, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
                 }
                 write(")");
                 decreaseIndent();

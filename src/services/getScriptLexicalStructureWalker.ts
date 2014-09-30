@@ -1,4 +1,5 @@
-///<reference path='references.ts' />
+/// <reference path='services.ts' />
+/// <reference path="text/textSpan.ts" />
 
 module ts {
     export function getNavigationBarItemsHelper(sourceFile: SourceFile): ts.NavigationBarItem[]  {
@@ -148,6 +149,7 @@ module ts {
                     if ((node.flags & NodeFlags.Modifier) === 0) {
                         return undefined;
                     }
+
                     return basicChildItem(node, getSourceText(parameter.name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.Method:
@@ -198,7 +200,20 @@ module ts {
         }
 
         function basicChildItem(node: Node, name: string, scriptElementKind: string): NavigationBarItem {
-            return new NavigationBarItem(name, scriptElementKind, getNodeModifiers(node), [getNodeSpan(node)]);
+            return getNavigationBarItem(name, scriptElementKind, getNodeModifiers(node), [getNodeSpan(node)]);
+        }
+
+        function getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: TypeScript.TextSpan[], childItems: ts.NavigationBarItem[]= [], indent: number = 0): ts.NavigationBarItem {
+            return {
+                text: text,
+                kind: kind,
+                kindModifiers: kindModifiers,
+                spans: spans,
+                childItems: childItems,
+                indent: indent,
+                bolded: false,
+                grayed: false
+            };
         }
 
         function createTopLevelItem(node: Node): ts.NavigationBarItem {
@@ -249,7 +264,7 @@ module ts {
                 
                 var childItems = getItemsWorker(getChildNodes((<Block>getInnermostModule(node).body).statements), createChildItem);
 
-                return new ts.NavigationBarItem(moduleName,
+                return getNavigationBarItem(moduleName,
                     ts.ScriptElementKind.moduleElement,
                     getNodeModifiers(node),
                     [getNodeSpan(node)],
@@ -261,7 +276,7 @@ module ts {
                 if (node.name && node.body && node.body.kind === SyntaxKind.FunctionBlock) {
                     var childItems = getItemsWorker((<Block>node.body).statements, createChildItem);
 
-                    return new ts.NavigationBarItem(node.name.text,
+                    return getNavigationBarItem(node.name.text,
                         ts.ScriptElementKind.functionElement,
                         getNodeModifiers(node),
                         [getNodeSpan(node)],
@@ -284,7 +299,7 @@ module ts {
                     "\"" + escapeString(getBaseFilename(removeFileExtension(normalizePath(node.filename)))) + "\"" :
                     "<global>"
 
-                return new ts.NavigationBarItem(rootName,
+                return getNavigationBarItem(rootName,
                     ts.ScriptElementKind.moduleElement,
                     ts.ScriptElementKindModifier.none,
                     [getNodeSpan(node)],
@@ -307,7 +322,7 @@ module ts {
                     var childItems = getItemsWorker(nodes, createChildItem);
                 }
 
-                return new ts.NavigationBarItem(
+                return getNavigationBarItem(
                     node.name.text,
                     ts.ScriptElementKind.classElement,
                     getNodeModifiers(node),
@@ -318,7 +333,7 @@ module ts {
 
             function createEnumItem(node: EnumDeclaration): ts.NavigationBarItem {
                 var childItems = getItemsWorker(node.members, createChildItem);
-                return new ts.NavigationBarItem(
+                return getNavigationBarItem(
                     node.name.text,
                     ts.ScriptElementKind.enumElement,
                     getNodeModifiers(node),
@@ -329,7 +344,7 @@ module ts {
 
             function createIterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
                 var childItems = getItemsWorker(node.members, createChildItem);
-                return new ts.NavigationBarItem(
+                return getNavigationBarItem(
                     node.name.text,
                     ts.ScriptElementKind.interfaceElement,
                     getNodeModifiers(node),

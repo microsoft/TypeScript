@@ -9,6 +9,8 @@
 /// <reference path='getScriptLexicalStructureWalker.ts' />
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
+/// <reference path='signatureHelp.ts' />
+/// <reference path='utilities.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 
@@ -201,7 +203,7 @@ module ts {
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
-            var children = this.getChildren(sourceFile);
+            var children = this.getChildren();
             for (var i = 0; i < children.length; i++) {
                 var child = children[i];
                 if (child.kind < SyntaxKind.Missing) return child;
@@ -304,7 +306,7 @@ module ts {
         }
 
         private processMultiLineDocumentationCommentRange(
-            sourceFile: SourceFile, commentRange: CommentRange, 
+            sourceFile: SourceFile, commentRange: CommentRange,
             startLineAndChar: { line: number; character: number },
             endLineAndChar: { line: number; character: number },
             lines: string[]) {
@@ -649,15 +651,19 @@ module ts {
         getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
-        getTypeAtPosition(fileName: string, position: number): TypeInfo;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
+
+        // Obsolete.  Use getQuickInfoAtPosition instead.
+        getTypeAtPosition(fileName: string, position: number): TypeInfo;
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TypeScript.TextSpan;
 
         getBreakpointStatementAtPosition(fileName: string, position: number): TypeScript.TextSpan;
 
         getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems;
-        getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState;
+
+        // Obsolete.  Use getSignatureHelpItems instead.
+        getSignatureAtPosition(fileName: string, position: number): SignatureInfo;
 
         getRenameInfo(fileName: string, position: number): RenameInfo;
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
@@ -684,94 +690,88 @@ module ts {
         dispose(): void;
     }
 
-    export class ClassificationTypeNames {
-        public static comment = "comment";
-        public static identifier = "identifier";
-        public static keyword = "keyword";
-        public static numericLiteral = "number";
-        public static operator = "operator";
-        public static stringLiteral = "string";
-        public static whiteSpace = "whitespace";
-        public static text = "text";
-
-        public static punctuation = "punctuation";
-
-        public static className = "class name";
-        public static enumName = "enum name";
-        public static interfaceName = "interface name";
-        public static moduleName = "module name";
-        public static typeParameterName = "type parameter name";
+    export interface SignatureInfo {
+        actual: ActualSignatureInfo;
+        formal: FormalSignatureItemInfo[]; // Formal signatures
+        activeFormal: number; // Index of the "best match" formal signature
     }
 
-    export class ClassifiedSpan {
-        constructor(public textSpan: TypeScript.TextSpan,
-                    public classificationType: string) {
-
-        }
+    export interface FormalSignatureItemInfo {
+        signatureInfo: string;
+        typeParameters: FormalTypeParameterInfo[];
+        parameters: FormalParameterInfo[];   // Array of parameters
+        docComment: string; // Help for the signature
     }
 
-    export class NavigationBarItem {
-        constructor(public text: string,
-                    public kind: string,
-                    public kindModifiers: string,
-                    public spans: TypeScript.TextSpan[],
-                    public childItems: NavigationBarItem[] = null,
-                    public indent = 0,
-                    public bolded = false,
-                    public grayed = false) {
-        }
+    export interface FormalTypeParameterInfo {
+        name: string;        // Type parameter name
+        docComment: string;  // Comments that contain help for the parameter
+        minChar: number;     // minChar for parameter info in the formal signature info string
+        limChar: number;     // lim char for parameter info in the formal signature info string
     }
 
-    export class TodoCommentDescriptor {
-        constructor(public text: string,
-                    public priority: number) {
-        }
+    export interface FormalParameterInfo {
+        name: string;        // Parameter name
+        isVariable: boolean; // true if parameter is var args
+        docComment: string;  // Comments that contain help for the parameter
+        minChar: number;     // minChar for parameter info in the formal signature info string
+        limChar: number;     // lim char for parameter info in the formal signature info string
     }
 
-    export class TodoComment {
-        constructor(public descriptor: TodoCommentDescriptor,
-                    public message: string,
-                    public position: number) {
-        }
+    export interface ActualSignatureInfo {
+        parameterMinChar: number;
+        parameterLimChar: number;
+        currentParameterIsTypeParameter: boolean; // current parameter is a type argument or a normal argument
+        currentParameter: number;        // Index of active parameter in "parameters" or "typeParamters" array
+    }
+
+    export interface ClassifiedSpan {
+        textSpan: TypeScript.TextSpan;
+        classificationType: string; // ClassificationTypeNames
+    }
+
+    export interface NavigationBarItem {
+        text: string;
+        kind: string;
+        kindModifiers: string;
+        spans: TypeScript.TextSpan[];
+        childItems: NavigationBarItem[];
+        indent: number;
+        bolded: boolean;
+        grayed: boolean;
+    }
+
+    export interface TodoCommentDescriptor {
+        text: string;
+        priority: number;
+    }
+
+    export interface TodoComment {
+        descriptor: TodoCommentDescriptor;
+        message: string;
+        position: number;
     }
 
     export class TextChange {
-        constructor(public span: TypeScript.TextSpan, public newText: string) {
-        }
-
-        static createInsert(pos: number, newText: string): TextChange {
-            return new TextChange(new TypeScript.TextSpan(pos, 0), newText);
-        }
-        static createDelete(start: number, end: number): TextChange {
-            return new TextChange(TypeScript.TextSpan.fromBounds(start, end), "");
-        }
-        static createReplace(start: number, end: number, newText: string): TextChange {
-            return new TextChange(TypeScript.TextSpan.fromBounds(start, end), newText);
-        }
+        span: TypeScript.TextSpan;
+        newText: string;
     }
 
-    export class ReferenceEntry {
-        public fileName: string = "";
-        public textSpan: TypeScript.TextSpan;
-        public isWriteAccess: boolean = false;
-
-        constructor(fileName: string, textSpan: TypeScript.TextSpan, isWriteAccess: boolean) {
-            this.fileName = fileName;
-            this.textSpan = textSpan;
-            this.isWriteAccess = isWriteAccess;
-        }
+    export interface ReferenceEntry {
+        textSpan: TypeScript.TextSpan;
+        fileName: string;
+        isWriteAccess: boolean;
     }
 
-    export class NavigateToItem {
-        constructor(public name: string,
-                    public kind: string,
-                    public kindModifiers: string,
-                    public matchKind: string,
-                    public fileName: string,
-                    public textSpan: TypeScript.TextSpan,
-                    public containerName: string,
-                    public containerKind: string) {
-        }
+    export interface NavigateToItem {
+        name: string;
+        kind: string;
+        kindModifiers: string;
+        matchKind: string;
+        fileName: string;
+        textSpan: TypeScript.TextSpan;
+        containerName: string;
+        containerKind: string;
     }
 
     export interface EditorOptions {
@@ -792,14 +792,13 @@ module ts {
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
     }
 
-    export class DefinitionInfo {
-        constructor(public fileName: string,
-                    public textSpan: TypeScript.TextSpan,
-                    public kind: string,
-                    public name: string,
-                    public containerKind: string,
-                    public containerName: string) {
-        }
+    export interface DefinitionInfo {
+        fileName: string;
+        textSpan: TypeScript.TextSpan;
+        kind: string;
+        name: string;
+        containerKind: string;
+        containerName: string;
     }
 
     export interface MemberName {
@@ -808,56 +807,37 @@ module ts {
         text: string;
     }
 
-    export class QuickInfo {
-        constructor(public kind: string,
-                    public kindModifiers: string,
-                    public textSpan: TypeScript.TextSpan,
-                    public displayParts: SymbolDisplayPart[],
-                    public documentation: SymbolDisplayPart[]) {
-        }
+    export interface QuickInfo {
+        kind: string;
+        kindModifiers: string;
+        textSpan: TypeScript.TextSpan;
+        displayParts: SymbolDisplayPart[];
+        documentation: SymbolDisplayPart[];
     }
 
-    export class TypeInfo {
-        constructor(
-            public memberName: TypeScript.MemberName,
-            public docComment: string,
-            public fullSymbolName: string,
-            public kind: string,
-            public textSpan: TypeScript.TextSpan) {
-        }
+    export interface TypeInfo {
+        memberName: TypeScript.MemberName;
+        docComment: string;
+        fullSymbolName: string;
+        kind: string;
+        textSpan: TypeScript.TextSpan;
     }
 
-    export class RenameInfo {
-        constructor(public canRename: boolean,
-                    public localizedErrorMessage: string,
-                    public displayName: string,
-                    public fullDisplayName: string,
-                    public kind: string,
-                    public kindModifiers: string,
-                    public triggerSpan: TypeScript.TextSpan) {
-        }
-
-        public static CreateError(localizedErrorMessage: string) {
-            return new RenameInfo(/*canRename:*/ false, localizedErrorMessage,
-                                  /*displayName:*/ null, /*fullDisplayName:*/ null,
-                                  /*kind:*/ null, /*kindModifiers:*/ null, /*triggerSpan:*/ null);
-        }
-
-        public static Create(displayName: string,
-                             fullDisplayName: string,
-                             kind: string,
-                             kindModifiers: string,
-                             triggerSpan: TypeScript.TextSpan) {
-            return new RenameInfo(/*canRename:*/ true, /*localizedErrorMessage:*/ null, displayName, fullDisplayName, kind, kindModifiers, triggerSpan);
-        }
+    export interface RenameInfo {
+        canRename: boolean;
+        localizedErrorMessage: string;
+        displayName: string;
+        fullDisplayName: string;
+        kind: string;
+        kindModifiers: string;
+        triggerSpan: TypeScript.TextSpan;
     }
 
-    export class SignatureHelpParameter {
-        constructor(public name: string,
-                    public documentation: string,
-                    public display: string,
-                    public isOptional: boolean) {
-        }
+    export interface SignatureHelpParameter {
+        name: string;
+        documentation: SymbolDisplayPart[];
+        displayParts: SymbolDisplayPart[];
+        isOptional: boolean;
     }
 
     /**
@@ -867,30 +847,24 @@ module ts {
      * an edit has happened, while signature help is still active, the host can ask important 
      * questions like 'what parameter is the user currently contained within?'.
      */
-    export class SignatureHelpItem {
-        constructor(public isVariadic: boolean,
-                    public prefix: string,
-                    public suffix: string,
-                    public separator: string,
-                    public parameters: SignatureHelpParameter[],
-                    public documentation: string) {
-        }
+    export interface SignatureHelpItem {
+        isVariadic: boolean;
+        prefixDisplayParts: SymbolDisplayPart[];
+        suffixDisplayParts: SymbolDisplayPart[];
+        separatorDisplayParts: SymbolDisplayPart[];
+        parameters: SignatureHelpParameter[];
+        documentation: SymbolDisplayPart[];
     }
 
     /**
      * Represents a set of signature help items, and the preferred item that should be selected.
      */
-    export class SignatureHelpItems {
-        constructor(public items: SignatureHelpItem[],
-                    public applicableSpan: TypeScript.TextSpan,
-                    public selectedItemIndex: number) {
-        }
-    }
-
-    export class SignatureHelpState {
-        constructor(public argumentIndex: number,
-                    public argumentCount: number) {
-        }
+    export interface SignatureHelpItems {
+        items: SignatureHelpItem[];
+        applicableSpan: TypeScript.TextSpan;
+        selectedItemIndex: number;
+        argumentIndex: number;
+        argumentCount: number;
     }
 
     export interface CompletionInfo {
@@ -1057,9 +1031,29 @@ module ts {
         static none = "";
         static publicMemberModifier = "public";
         static privateMemberModifier = "private";
+        static protectedMemberModifier = "protected";
         static exportedModifier = "export";
         static ambientModifier = "declare";
         static staticModifier = "static";
+    }
+
+    export class ClassificationTypeNames {
+        public static comment = "comment";
+        public static identifier = "identifier";
+        public static keyword = "keyword";
+        public static numericLiteral = "number";
+        public static operator = "operator";
+        public static stringLiteral = "string";
+        public static whiteSpace = "whitespace";
+        public static text = "text";
+
+        public static punctuation = "punctuation";
+
+        public static className = "class name";
+        public static enumName = "enum name";
+        public static interfaceName = "interface name";
+        public static moduleName = "module name";
+        public static typeParameterName = "type parameter name";
     }
 
     enum MatchKind {
@@ -1129,7 +1123,7 @@ module ts {
 
     export class OperationCanceledException { }
 
-    class CancellationTokenObject {
+    export class CancellationTokenObject {
 
         public static None: CancellationTokenObject = new CancellationTokenObject(null)
 
@@ -1521,6 +1515,7 @@ module ts {
         var result: string[] = [];
 
         if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
+        if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
         if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
         if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
         if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
@@ -1586,7 +1581,7 @@ module ts {
             isAnyFunction(node.parent) && (<FunctionDeclaration>node.parent).name === node;
     }
 
-    /// Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 }
+    /** Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 } */
     function isNameOfPropertyAssignment(node: Node): boolean {
         return (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
             node.parent.kind === SyntaxKind.PropertyAssignment && (<PropertyDeclaration>node.parent).name === node;
@@ -1639,6 +1634,11 @@ module ts {
             kind: ScriptElementKind.keyword,
             kindModifiers: ScriptElementKindModifier.none
         });
+    }
+
+    export function getSymbolDocumentationDisplayParts(symbol: Symbol): SymbolDisplayPart[] {
+        var documentation = symbol.getDocumentationComment();
+        return documentation === "" ? [] : [new SymbolDisplayPart(documentation, SymbolDisplayPartKind.text, /*symbol:*/ null)];
     }
 
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService {
@@ -1805,9 +1805,11 @@ module ts {
             fullTypeCheckChecker_doNotAccessDirectly = undefined;
         }
 
-        /// Clean up any semantic caches that are not needed. 
-        /// The host can call this method if it wants to jettison unused memory.
-        /// We will just dump the typeChecker and recreate a new one. this should have the effect of destroying all the semantic caches.
+        /**
+         * Clean up any semantic caches that are not needed. 
+         * The host can call this method if it wants to jettison unused memory.
+         * We will just dump the typeChecker and recreate a new one. this should have the effect of destroying all the semantic caches.
+         */
         function cleanupSemanticCache(): void {
             if (program) {
                 typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
@@ -1831,8 +1833,10 @@ module ts {
             return program.getDiagnostics(getSourceFile(filename).getSourceFile());
         }
 
-        // getSemanticDiagnostiscs return array of Diagnostics. If '-d' is not enabled, only report semantic errors
-        // If '-d' enabled, report both semantic and emitter errors 
+        /**
+         * getSemanticDiagnostiscs return array of Diagnostics. If '-d' is not enabled, only report semantic errors
+         * If '-d' enabled, report both semantic and emitter errors  
+         */
         function getSemanticDiagnostics(filename: string) {
             synchronizeHostData();
 
@@ -1862,13 +1866,21 @@ module ts {
         }
 
         /// Completion
-        function getValidCompletionEntryDisplayName(displayName: string, target: ScriptTarget): string {
+        function getValidCompletionEntryDisplayName(symbol: Symbol, target: ScriptTarget): string {
+            var displayName = symbol.getName();
             if (displayName && displayName.length > 0) {
                 var firstCharCode = displayName.charCodeAt(0);
+                // First check of the displayName is not external module; if it is an external module, it is not valid entry
+                if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
+                    // If the symbol is external module, don't show it in the completion list
+                    // (i.e declare module "http" { var x; } | // <= request completion here, "http" should not be there)
+                    return undefined;
+                }
+
                 if (displayName && displayName.length >= 2 && firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
                     (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
                     // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
-                    // invalid identifer name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+                    // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
                     displayName = displayName.substring(1, displayName.length - 1);
                 }
                 
@@ -1876,6 +1888,7 @@ module ts {
                 for (var i = 1, n = displayName.length; isValid && i < n; i++) {
                     isValid = isIdentifierPart(displayName.charCodeAt(i), target);
                 }
+
 
                 if (isValid) {
                     return displayName;
@@ -1889,7 +1902,7 @@ module ts {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
-            var displayName = getValidCompletionEntryDisplayName(symbol.getName(), program.getCompilerOptions().target);
+            var displayName = getValidCompletionEntryDisplayName(symbol, program.getCompilerOptions().target);
             if (!displayName) {
                 return undefined;
             }
@@ -2263,40 +2276,6 @@ module ts {
             }
         }
 
-        /** Get the token whose text contains the position, or the containing node. */
-        function getNodeAtPosition(sourceFile: SourceFile, position: number) {
-            var current: Node = sourceFile;
-            outer: while (true) {
-                // find the child that has this
-                for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                    var child = current.getChildAt(i);
-                    if (child.getStart() <= position && position < child.getEnd()) {
-                        current = child;
-                        continue outer;
-                    }
-                }
-                return current;
-            }
-        }
-
-        /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
-          * leading trivia or within the token text.
-          */
-        function getTokenAtPosition(sourceFile: SourceFile, position: number) {
-            var current: Node = sourceFile;
-            outer: while (true) {
-                // find the child that has this
-                for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                    var child = current.getChildAt(i);
-                    if (child.getFullStart() <= position && position < child.getEnd()) {
-                        current = child;
-                        continue outer;
-                    }
-                }
-                return current;
-            }
-        }
-
         function getContainerNode(node: Node): Node {
             while (true) {
                 node = node.parent;
@@ -2399,42 +2378,41 @@ module ts {
                 return undefined;
             }
 
-            var documentation = symbol.getDocumentationComment();
-            var documentationParts = documentation === "" ? [] : [new SymbolDisplayPart(documentation, SymbolDisplayPartKind.text, /*symbol:*/ null)];
+            var documentationParts = getSymbolDocumentationDisplayParts(symbol);
 
             // Having all this logic here is pretty unclean.  Consider moving to the roslyn model
             // where all symbol display logic is encapsulated into visitors and options.
             var totalParts: SymbolDisplayPart[] = [];
 
             if (symbol.flags & SymbolFlags.Class) {
-                totalParts.push(new SymbolDisplayPart("class", SymbolDisplayPartKind.keyword, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Interface) {
-                totalParts.push(new SymbolDisplayPart("interface", SymbolDisplayPartKind.keyword, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Enum) {
-                totalParts.push(new SymbolDisplayPart("enum", SymbolDisplayPartKind.keyword, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(keywordPart(SyntaxKind.EnumKeyword));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.Module) {
-                totalParts.push(new SymbolDisplayPart("module", SymbolDisplayPartKind.keyword, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(keywordPart(SyntaxKind.ModuleKeyword));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
             else if (symbol.flags & SymbolFlags.TypeParameter) {
-                totalParts.push(new SymbolDisplayPart("(", SymbolDisplayPartKind.punctuation, undefined));
+                totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 totalParts.push(new SymbolDisplayPart("type parameter", SymbolDisplayPartKind.text, undefined));
-                totalParts.push(new SymbolDisplayPart(")", SymbolDisplayPartKind.punctuation, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol));
             }
             else {
-                totalParts.push(new SymbolDisplayPart("(", SymbolDisplayPartKind.punctuation, undefined));
+                totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 var text: string;
 
                 if (symbol.flags & SymbolFlags.Property) { text = "property" }
@@ -2448,8 +2426,8 @@ module ts {
                 }
 
                 totalParts.push(new SymbolDisplayPart(text, SymbolDisplayPartKind.text, undefined));
-                totalParts.push(new SymbolDisplayPart(")", SymbolDisplayPartKind.punctuation, undefined));
-                totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                totalParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                totalParts.push(spacePart());
 
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, getContainerNode(node)));
 
@@ -2459,8 +2437,8 @@ module ts {
                     symbol.flags & SymbolFlags.Variable) {
 
                     if (type) {
-                        totalParts.push(new SymbolDisplayPart(":", SymbolDisplayPartKind.punctuation, undefined));
-                        totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                        totalParts.push(punctuationPart(SyntaxKind.ColonToken));
+                        totalParts.push(spacePart());
                         totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type, getContainerNode(node)));
                     }
                 }
@@ -2475,21 +2453,22 @@ module ts {
                     if (declaration.kind === SyntaxKind.EnumMember) {
                         var constantValue = typeInfoResolver.getEnumMemberValue(<EnumMember>declaration);
                         if (constantValue !== undefined) {
-                            totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
-                            totalParts.push(new SymbolDisplayPart("=", SymbolDisplayPartKind.operator, undefined));
-                            totalParts.push(new SymbolDisplayPart(" ", SymbolDisplayPartKind.space, undefined));
+                            totalParts.push(spacePart());
+                            totalParts.push(operatorPart(SyntaxKind.EqualsToken));
+                            totalParts.push(spacePart());
                             totalParts.push(new SymbolDisplayPart(constantValue.toString(), SymbolDisplayPartKind.numericLiteral, undefined));
                         }
                     }
                 }
             }
 
-            return new QuickInfo(
-                getSymbolKind(symbol),
-                getSymbolModifiers(symbol),
-                new TypeScript.TextSpan(node.getStart(), node.getWidth()),
-                totalParts,
-                documentationParts);
+            return {
+                kind: getSymbolKind(symbol),
+                kindModifiers: getSymbolModifiers(symbol),
+                textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
+                displayParts: totalParts,
+                documentation: documentationParts
+            };
         }
 
         function getTypeAtPosition(fileName: string, position: number): TypeInfo {
@@ -2505,10 +2484,13 @@ module ts {
             var symbol = typeInfoResolver.getSymbolInfo(node);
             var type = symbol && typeInfoResolver.getTypeOfSymbol(symbol);
             if (type) {
-                return new TypeInfo(
-                    new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
-                    "", typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
-                    getSymbolKind(symbol), TypeScript.TextSpan.fromBounds(node.pos, node.end));
+                return {
+                    memberName: new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
+                    docComment: "",
+                    fullSymbolName: typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
+                    kind: getSymbolKind(symbol),
+                    textSpan: TypeScript.TextSpan.fromBounds(node.pos, node.end)
+                };
             }
 
             return undefined;
@@ -2517,13 +2499,14 @@ module ts {
         /// Goto definition
         function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[]{
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
-                return new DefinitionInfo(
-                    node.getSourceFile().filename,
-                    TypeScript.TextSpan.fromBounds(node.getStart(), node.getEnd()),
-                    symbolKind,
-                    symbolName,
-                    undefined,
-                    containerName);
+                return {
+                    fileName: node.getSourceFile().filename,
+                    textSpan: TypeScript.TextSpan.fromBounds(node.getStart(), node.getEnd()),
+                    kind: symbolKind,
+                    name: symbolName,
+                    containerKind: undefined,
+                    containerName: containerName
+                };
             }
 
             function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
@@ -2546,7 +2529,7 @@ module ts {
                     result.push(getDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
                     return true;
                 }
-
+                
                 return false;
             }
 
@@ -2593,10 +2576,14 @@ module ts {
             if (comment) {
                 var targetFilename = normalizePath(combinePaths(getDirectoryPath(filename), comment.filename));
                 if (program.getSourceFile(targetFilename)) {
-                    return [new DefinitionInfo(
-                        targetFilename, TypeScript.TextSpan.fromBounds(0, 0),
-                        ScriptElementKind.scriptElement,
-                        comment.filename, undefined, undefined)];
+                    return [{
+                        fileName: targetFilename,
+                        textSpan: TypeScript.TextSpan.fromBounds(0, 0),
+                        kind: ScriptElementKind.scriptElement,
+                        name: comment.filename,
+                        containerName: undefined,
+                        containerKind: undefined
+                    }];
                 }
                 return undefined;
             }
@@ -2629,7 +2616,7 @@ module ts {
             return result;
         }
 
-        /// References and Occurances
+        /// References and Occurrences
         function getOccurrencesAtPosition(filename: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
@@ -2747,9 +2734,13 @@ module ts {
                                 break;
                             }
                         }
-
+                        
                         if (shouldHighlightNextKeyword) {
-                            result.push(new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(elseKeyword.getStart(), ifKeyword.end), /* isWriteAccess */ false));
+                            result.push({
+                                fileName: filename,
+                                textSpan: TypeScript.TextSpan.fromBounds(elseKeyword.getStart(), ifKeyword.end),
+                                isWriteAccess: false
+                            });
                             i++; // skip the next keyword
                             continue;
                         }
@@ -3585,7 +3576,12 @@ module ts {
                 start += 1;
                 end -= 1;
             }
-            return new ReferenceEntry(node.getSourceFile().filename, TypeScript.TextSpan.fromBounds(start, end), isWriteAccess(node));
+
+            return {
+                fileName: node.getSourceFile().filename,
+                textSpan: TypeScript.TextSpan.fromBounds(start, end),
+                isWriteAccess: isWriteAccess(node)
+            };
         }
 
         /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
@@ -3757,6 +3753,81 @@ module ts {
             return emitOutput;
         }
 
+        // Signature help
+        /**
+         * This is a semantic operation.
+         */
+        function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
+            synchronizeHostData();
+
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
+
+            return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
+        }
+
+        function getSignatureAtPosition(filename: string, position: number): SignatureInfo {
+            var signatureHelpItems = getSignatureHelpItems(filename, position);
+
+            if (!signatureHelpItems) {
+                return undefined;
+            }
+
+            var currentArgumentState = { argumentIndex: signatureHelpItems.argumentIndex, argumentCount: signatureHelpItems.argumentCount };
+
+            var formalSignatures: FormalSignatureItemInfo[] = [];
+            forEach(signatureHelpItems.items, signature => {
+                var signatureInfoString = ts.SymbolDisplayPart.toString(signature.prefixDisplayParts);
+
+                var parameters: FormalParameterInfo[] = [];
+                if (signature.parameters) {
+                    for (var i = 0, n = signature.parameters.length; i < n; i++) {
+                        var parameter = signature.parameters[i];
+
+                        // add the parameter to the string
+                        if (i) {
+                            signatureInfoString += ts.SymbolDisplayPart.toString(signature.separatorDisplayParts);
+                        }
+
+                        var start = signatureInfoString.length;
+                        signatureInfoString += ts.SymbolDisplayPart.toString(parameter.displayParts);
+                        var end = signatureInfoString.length - 1;
+
+                        // add the parameter to the list
+                        parameters.push({
+                            name: parameter.name,
+                            isVariable: i == n - 1 && signature.isVariadic,
+                            docComment: ts.SymbolDisplayPart.toString(parameter.documentation),
+                            minChar: start,
+                            limChar: end
+                        });
+                    }
+                }
+
+                signatureInfoString += ts.SymbolDisplayPart.toString(signature.suffixDisplayParts);
+
+                formalSignatures.push({
+                    signatureInfo: signatureInfoString,
+                    docComment: ts.SymbolDisplayPart.toString(signature.documentation),
+                    parameters: parameters,
+                    typeParameters: [],
+                });
+            });
+
+            var actualSignature: ActualSignatureInfo = {
+                parameterMinChar: signatureHelpItems.applicableSpan.start(),
+                parameterLimChar: signatureHelpItems.applicableSpan.end(),
+                currentParameterIsTypeParameter: false,
+                currentParameter: currentArgumentState.argumentIndex
+            };
+
+            return {
+                actual: actualSignature,
+                formal: formalSignatures,
+                activeFormal: 0
+            };
+        }
+
         /// Syntactic features
         function getSyntaxTree(filename: string): TypeScript.SyntaxTree {
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -3878,9 +3949,10 @@ module ts {
                         if (symbol) {
                             var type = classifySymbol(symbol);
                             if (type) {
-                                result.push(new ClassifiedSpan(
-                                    new TypeScript.TextSpan(node.getStart(), node.getWidth()),
-                                    type));
+                                result.push({
+                                    textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
+                                    classificationType: type
+                                });
                             }
                         }
                     }
@@ -3902,9 +3974,10 @@ module ts {
 
             function classifyTrivia(trivia: TypeScript.ISyntaxTrivia) {
                 if (trivia.isComment() && span.intersectsWith(trivia.fullStart(), trivia.fullWidth())) {
-                    result.push(new ClassifiedSpan(
-                        new TypeScript.TextSpan(trivia.fullStart(), trivia.fullWidth()),
-                        ClassificationTypeNames.comment));
+                    result.push({
+                        textSpan: new TypeScript.TextSpan(trivia.fullStart(), trivia.fullWidth()),
+                        classificationType: ClassificationTypeNames.comment
+                    });
                 }
             }
 
@@ -3922,9 +3995,10 @@ module ts {
                 if (TypeScript.width(token) > 0) {
                     var type = classifyTokenType(token);
                     if (type) {
-                        result.push(new ClassifiedSpan(
-                            new TypeScript.TextSpan(TypeScript.start(token), TypeScript.width(token)),
-                            type));
+                        result.push({
+                            textSpan: new TypeScript.TextSpan(TypeScript.start(token), TypeScript.width(token)),
+                            classificationType: type
+                        });
                     }
                 }
 
@@ -4227,7 +4301,11 @@ module ts {
                     }
 
                     var message = matchArray[2];
-                    result.push(new TodoComment(descriptor, message, matchPosition));
+                    result.push({
+                        descriptor: descriptor,
+                        message: message,
+                        position: matchPosition
+                    });
                 }
             }
 
@@ -4314,7 +4392,7 @@ module ts {
                     (char >= TypeScript.CharacterCodes._0 && char <= TypeScript.CharacterCodes._9);
             }
         }
-      
+
 
         function getRenameInfo(fileName: string, position: number): RenameInfo {
             synchronizeHostData();
@@ -4332,14 +4410,38 @@ module ts {
                 if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
                     var kind = getSymbolKind(symbol);
                     if (kind) {
-                        return RenameInfo.Create(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
+                        return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),
                             new TypeScript.TextSpan(node.getStart(), node.getWidth()));
                     }
                 }
             }
 
-            return RenameInfo.CreateError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
+            return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
+
+            function getRenameInfoError(localizedErrorMessage: string): RenameInfo {
+                return {
+                    canRename: false,
+                    localizedErrorMessage: getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key),
+                    displayName: undefined,
+                    fullDisplayName: undefined,
+                    kind: undefined,
+                    kindModifiers: undefined,
+                    triggerSpan: undefined
+                };
+            }
+
+            function getRenameInfo(displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: TypeScript.TextSpan): RenameInfo {
+                return {
+                    canRename: true,
+                    localizedErrorMessage: undefined,
+                    displayName: displayName,
+                    fullDisplayName: fullDisplayName,
+                    kind: kind,
+                    kindModifiers: kindModifiers,
+                    triggerSpan: triggerSpan
+                };
+            }
         }
 
         return {
@@ -4353,9 +4455,8 @@ module ts {
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
+            getSignatureHelpItems: getSignatureHelpItems,
             getQuickInfoAtPosition: getQuickInfoAtPosition,
-            getSignatureHelpItems: (filename, position): SignatureHelpItems => null,
-            getSignatureHelpCurrentArgumentState: (fileName, position, applicableSpanStart): SignatureHelpState => null,
             getDefinitionAtPosition: getDefinitionAtPosition,
             getReferencesAtPosition: getReferencesAtPosition,
             getOccurrencesAtPosition: getOccurrencesAtPosition,
@@ -4373,6 +4474,7 @@ module ts {
             getFormattingEditsForDocument: getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
             getEmitOutput: getEmitOutput,
+            getSignatureAtPosition: getSignatureAtPosition,
         };
     }
 
@@ -4438,17 +4540,16 @@ module ts {
             do {
                 token = scanner.scan();
 
-                if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastNonTriviaToken]) {
-                    if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
-                        token = SyntaxKind.RegularExpressionLiteral;
+                if (!isTrivia(token)) {
+                    if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastNonTriviaToken]) {
+                        if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
+                            token = SyntaxKind.RegularExpressionLiteral;
+                        }
                     }
-                }
-                else if (lastNonTriviaToken === SyntaxKind.DotToken) {
-                    token = SyntaxKind.Identifier;
-                }
+                    else if (lastNonTriviaToken === SyntaxKind.DotToken && isKeyword(token)) {
+                        token = SyntaxKind.Identifier;
+                    }
 
-                // Only recall the token if it was *not* trivia.
-                if (!(SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken)) {
                     lastNonTriviaToken = token;
                 }
 

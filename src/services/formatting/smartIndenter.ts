@@ -2,7 +2,6 @@
 
 module ts.formatting {
     export module SmartIndenter {
-
         export function getIndentation(position: number, sourceFile: SourceFile, options: TypeScript.FormattingOptions): number {
             if (position > sourceFile.text.length) {
                 return 0; // past EOF
@@ -108,8 +107,10 @@ module ts.formatting {
          */ 
         function getActualIndentationForListItemBeforeComma(commaToken: Node, sourceFile: SourceFile, options: TypeScript.FormattingOptions): number {
             // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
-            var itemInfo = findPrecedingListItem(commaToken);
-            return deriveActualIndentationFromList(itemInfo.list.getChildren(), itemInfo.listItemIndex, sourceFile, options);
+            var commaItemInfo = findListItemInfo(commaToken);
+            Debug.assert(commaItemInfo.listItemIndex > 0);
+            // The item we're interested in is right before the comma
+            return deriveActualIndentationFromList(commaItemInfo.list.getChildren(), commaItemInfo.listItemIndex - 1, sourceFile, options);
         }
 
         /*
@@ -167,34 +168,13 @@ module ts.formatting {
             return sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile));
         }
 
-        function findPrecedingListItem(commaToken: Node): { listItemIndex: number; list: Node } {
-            // CommaToken node is synthetic and thus will be stored in SyntaxList, however parent of the CommaToken points to the container of the SyntaxList skipping the list.
-            // In order to find the preceding list item we first need to locate SyntaxList itself and then search for the position of CommaToken
-            var syntaxList = forEach(commaToken.parent.getChildren(), c => {
-                // find syntax list that covers the span of CommaToken
-                if (c.kind == SyntaxKind.SyntaxList && c.pos <= commaToken.end && c.end >= commaToken.end) {
-                    return c;
-                }
-            });
-            Debug.assert(syntaxList);
-
-            var children = syntaxList.getChildren();
-            var commaIndex = indexOf(children, commaToken);
-            Debug.assert(commaIndex !== -1 && commaIndex !== 0);
-
-            return {
-                listItemIndex: commaIndex - 1,
-                list: syntaxList
-            };
-        }
-
         function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
             return candidate.end > position || !isCompletedNode(candidate, sourceFile);
         }
 
         function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: Node, childStartLine: number, sourceFile: SourceFile): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
-                var elseKeyword = forEach(parent.getChildren(), c => c.kind === SyntaxKind.ElseKeyword && c);
+                var elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
                 Debug.assert(elseKeyword);
 
                 var elseKeywordStartLine =  getStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
@@ -286,112 +266,6 @@ module ts.formatting {
             }
 
             return column;
-        }
-
-        function findNextToken(previousToken: Node, parent: Node): Node {
-            return find(parent);
-
-            function find(n: Node): Node {
-                if (isToken(n) && n.pos === previousToken.end) {
-                    // this is token that starts at the end of previous token - return it
-                    return n;
-                }
-
-                var children = n.getChildren();
-                for (var i = 0, len = children.length; i < len; ++i) {
-                    var child = children[i];
-                    var shouldDiveInChildNode = 
-                        // previous token is enclosed somewhere in the child
-                        (child.pos <= previousToken.pos && child.end > previousToken.end) ||
-                        // previous token ends exactly at the beginning of child
-                        (child.pos === previousToken.end);
-
-                    if (shouldDiveInChildNode && nodeHasTokens(child)) {
-                        return find(child);
-                    }
-                }
-
-                return undefined;
-            }
-        }
-
-        function findPrecedingToken(position: number, sourceFile: SourceFile): Node {
-            return find(sourceFile);
-
-            function findRightmostToken(n: Node): Node {
-                if (isToken(n)) {
-                    return n;
-                }
-
-                var children = n.getChildren();
-                var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
-                return candidate && findRightmostToken(candidate);
-
-            }
-
-            function find(n: Node): Node {
-                if (isToken(n)) {
-                    return n;
-                }
-
-                var children = n.getChildren();
-                for (var i = 0, len = children.length; i < len; ++i) {
-                    var child = children[i];
-                    if (nodeHasTokens(child)) {
-                        if (position < child.end) {
-                            if (child.getStart(sourceFile) >= position) {
-                                // actual start of the node is past the position - previous token should be at the end of previous child
-                                var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
-                                return candidate && findRightmostToken(candidate)
-                            }
-                            else {
-                                // candidate should be in this node
-                                return find(child);
-                            }
-                        }
-                    }
-                }
-
-                Debug.assert(n.kind === SyntaxKind.SourceFile);
-
-                // Here we know that none of child token nodes embrace the position, 
-                // the only known case is when position is at the end of the file.
-                // Try to find the rightmost token in the file without filtering.
-                // Namely we are skipping the check: 'position < node.end'
-                if (children.length) {
-                    var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
-                    return candidate && findRightmostToken(candidate);
-                }
-            }
-
-            /// finds last node that is considered as candidate for search (isCandidate(node) === true) starting from 'exclusiveStartPosition'
-            function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node {
-                for (var i = exclusiveStartPosition - 1; i >= 0; --i) {
-                    if (nodeHasTokens(children[i])) {
-                        return children[i];
-                    }
-                }
-            }
-        }
-
-        /*
-         * Checks if node is something that can contain tokens (except EOF) - filters out EOF tokens, Missing\Omitted expressions, empty SyntaxLists and expression statements that wrap any of listed nodes.
-         */
-        function nodeHasTokens(n: Node): boolean {
-            if (n.kind === SyntaxKind.ExpressionStatement) {
-                return nodeHasTokens((<ExpressionStatement>n).expression);
-            }
-
-            if (n.kind === SyntaxKind.EndOfFileToken || n.kind === SyntaxKind.OmittedExpression || n.kind === SyntaxKind.Missing) {
-                return false;
-            }
-
-            // SyntaxList is already realized so getChildCount should be fast and non-expensive
-            return n.kind !== SyntaxKind.SyntaxList || n.getChildCount() !== 0;
-        }
-
-        function isToken(n: Node): boolean {
-            return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
         }
 
         function nodeContentIsIndented(parent: Node, child: Node): boolean {
@@ -509,7 +383,7 @@ module ts.formatting {
                     return isCompletedNode((<WhileStatement>n).statement, sourceFile);
                 case SyntaxKind.DoStatement:
                     // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
-                    var hasWhileKeyword = forEach(n.getChildren(), c => c.kind === SyntaxKind.WhileKeyword && c);
+                    var hasWhileKeyword = findChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile);
                     if(hasWhileKeyword) {
                         return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
                     }
