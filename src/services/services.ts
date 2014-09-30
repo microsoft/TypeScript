@@ -2038,15 +2038,6 @@ module ts {
                 return (SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation);
             }
 
-            function isVisibleWithinClassDeclaration(symbol: Symbol, containingClass: Declaration): boolean {
-                var declaration = symbol.declarations && symbol.declarations[0];
-                if (declaration && (declaration.flags & NodeFlags.Private)) {
-                    var declarationClass = getAncestor(declaration, SyntaxKind.ClassDeclaration);
-                    return containingClass === declarationClass;
-                }
-                return true;
-            }
-
             function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
                 if (!existingMembers || existingMembers.length === 0) {
                     return contextualMemberSymbols;
@@ -2150,7 +2141,6 @@ module ts {
             // Right of dot member completion list
             if (isRightOfDot) {
                 var symbols: Symbol[] = [];
-                var containingClass = getAncestor(mappedNode, SyntaxKind.ClassDeclaration);
                 isMemberCompletion = true;
 
                 if (mappedNode.kind === SyntaxKind.Identifier || mappedNode.kind === SyntaxKind.QualifiedName || mappedNode.kind === SyntaxKind.PropertyAccess) {
@@ -2158,7 +2148,7 @@ module ts {
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
                         forEachValue(symbol.exports, symbol => {
-                            if (isVisibleWithinClassDeclaration(symbol, containingClass)) {
+                            if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(mappedNode.parent), symbol.name)) {
                                 symbols.push(symbol);
                             }
                         });
@@ -2170,7 +2160,7 @@ module ts {
                 if (apparentType) {
                     // Filter private properties
                     forEach(apparentType.getApparentProperties(), symbol => {
-                        if (isVisibleWithinClassDeclaration(symbol, containingClass)) {
+                        if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(mappedNode.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
                     });
@@ -2645,6 +2635,11 @@ module ts {
                         return getReturnOccurrences(<ReturnStatement>node.parent);
                     }
                     break;
+                case SyntaxKind.ThrowKeyword:
+                    if (hasKind(node.parent, SyntaxKind.ThrowStatement)) {
+                        return getThrowOccurrences(<ThrowStatement>node.parent);
+                    }
+                    break;
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
@@ -2762,11 +2757,107 @@ module ts {
                 }
 
                 var keywords: Node[] = []
-                forEachReturnStatement(<Block>(<FunctionDeclaration>func).body, returnStatement => {
+                forEachReturnStatement(<Block>func.body, returnStatement => {
                     pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
                 });
 
+                // Include 'throw' statements that do not occur within a try block.
+                forEach(aggregateOwnedThrowStatements(func.body), throwStatement => {
+                    pushKeywordIf(keywords, throwStatement.getFirstToken(), SyntaxKind.ThrowKeyword);
+                });
+
                 return map(keywords, getReferenceEntryFromNode);
+            }
+            
+            function getThrowOccurrences(throwStatement: ThrowStatement) {
+                var owner = getThrowStatementOwner(throwStatement);
+
+                if (!owner) {
+                    return undefined;
+                }
+
+                var keywords: Node[] = [];
+                
+                forEach(aggregateOwnedThrowStatements(owner), throwStatement => {
+                    pushKeywordIf(keywords, throwStatement.getFirstToken(), SyntaxKind.ThrowKeyword);
+                });
+
+                // If the "owner" is a function, then we equate 'return' and 'throw' statements in their
+                // ability to "jump out" of the function, and include occurrences for both.
+                if (owner.kind === SyntaxKind.FunctionBlock) {
+                    forEachReturnStatement(<Block>owner, returnStatement => {
+                        pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
+                    });
+                }
+                
+                return map(keywords, getReferenceEntryFromNode);
+            }
+
+            /**
+             * Aggregates all throw-statements within this node *without* crossing
+             * into function boundaries and try-blocks with catch-clauses.
+             */
+            function aggregateOwnedThrowStatements(node: Node): ThrowStatement[] {
+                var statementAccumulator: ThrowStatement[] = []
+                aggregate(node);
+                return statementAccumulator;
+
+                function aggregate(node: Node): void {
+                    if (node.kind === SyntaxKind.ThrowStatement) {
+                        statementAccumulator.push(<ThrowStatement>node);
+                    }
+                    else if (node.kind === SyntaxKind.TryStatement) {
+                        var tryStatement = <TryStatement>node;
+
+                        if (tryStatement.catchBlock) {
+                            aggregate(tryStatement.catchBlock);
+                        }
+                        else {
+                            // Exceptions thrown within a try block lacking a catch clause
+                            // are "owned" in the current context.
+                            aggregate(tryStatement.tryBlock);
+                        }
+
+                        if (tryStatement.finallyBlock) {
+                            aggregate(tryStatement.finallyBlock);
+                        }
+                    }
+                    // Do not cross function boundaries.
+                    else if (!isAnyFunction(node)) {
+                        forEachChild(node, aggregate);
+                    }
+                };
+            }
+
+            /**
+             * For lack of a better name, this function takes a throw statement and returns the
+             * nearest ancestor that is a try-block (whose try statement has a catch clause),
+             * function-block, or source file.
+             */
+            function getThrowStatementOwner(throwStatement: ThrowStatement): Node {
+                var child: Node = throwStatement;
+
+                while (child.parent) {
+                    var parent = child.parent;
+
+                    if (parent.kind === SyntaxKind.FunctionBlock || parent.kind === SyntaxKind.SourceFile) {
+                        return parent;
+                    }
+                    
+                    // A throw-statement is only owned by a try-statement if the try-statement has
+                    // a catch clause, and if the throw-statement occurs within the try block.
+                    if (parent.kind === SyntaxKind.TryStatement) {
+                        var tryStatement = <TryStatement>parent;
+
+                        if (tryStatement.tryBlock === child && tryStatement.catchBlock) {
+                            return child;
+                        }
+                    }
+
+                    child = parent;
+                }
+
+                return undefined;
             }
 
             function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {

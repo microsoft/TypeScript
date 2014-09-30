@@ -412,6 +412,11 @@ module FourSlash {
             }
         }
 
+        private raiseError(message: string) {
+            message = "Marker: " + currentTestState.lastKnownMarker + "\n" + message;
+            throw new Error(message);
+        }
+
         private getDiagnostics(fileName: string): ts.Diagnostic[] {
             var syntacticErrors = this.languageService.getSyntacticDiagnostics(fileName);
             var semanticErrors = this.languageService.getSemanticDiagnostics(fileName);
@@ -500,7 +505,7 @@ module FourSlash {
                 this.printErrorLog(false, errors);
                 var errorMsg = "Actual number of errors (" + actual + ") does not match expected number (" + expected + ")";
                 Harness.IO.log(errorMsg);
-                throw new Error(errorMsg);
+                this.raiseError(errorMsg);
             }
         }
 
@@ -514,7 +519,7 @@ module FourSlash {
 
             var evaluation = new Function(emit.outputFiles[0].text + ';\r\nreturn (' + expr + ');')();
             if (evaluation !== value) {
-                throw new Error('Expected evaluation of expression "' + expr + '" to equal "' + value + '", but got "' + evaluation + '"');
+                this.raiseError('Expected evaluation of expression "' + expr + '" to equal "' + value + '", but got "' + evaluation + '"');
             }
         }
 
@@ -531,7 +536,7 @@ module FourSlash {
                 this.assertItemInCompletionList(members.entries, symbol, type, docComment, fullSymbolName, kind);
             }
             else {
-                throw new Error("Expected a member list, but none was provided");
+                this.raiseError("Expected a member list, but none was provided");
             }
         }
 
@@ -554,11 +559,11 @@ module FourSlash {
                 var match = members.entries.length === expectedCount;
 
                 if ((!match && !negative) || (match && negative)) {
-                    throw new Error("Member list count was " + members.entries.length + ". Expected " + expectedCount);
+                    this.raiseError("Member list count was " + members.entries.length + ". Expected " + expectedCount);
                 }
             }
             else if (expectedCount) {
-                throw new Error("Member list count was 0. Expected " + expectedCount);
+                this.raiseError("Member list count was 0. Expected " + expectedCount);
             }
         }
 
@@ -568,7 +573,7 @@ module FourSlash {
 
             var members = this.getMemberListAtCaret();
             if (members.entries.filter(e => e.name === symbol).length !== 0) {
-                throw new Error('Member list did contain ' + symbol);
+                this.raiseError('Member list did contain ' + symbol);
             }
         }
 
@@ -579,7 +584,7 @@ module FourSlash {
             var itemsCount = completions.entries.length;
 
             if (itemsCount <= count) {
-                throw new Error('Expected completion list items count to be greater than ' + count + ', but is actually ' + itemsCount);
+                this.raiseError('Expected completion list items count to be greater than ' + count + ', but is actually ' + itemsCount);
             }
         }
 
@@ -592,7 +597,7 @@ module FourSlash {
 
             var members = this.getMemberListAtCaret();
             if ((!members || members.entries.length === 0) && negative) {
-                throw new Error("Member list is empty at Caret");
+                this.raiseError("Member list is empty at Caret");
             } else if ((members && members.entries.length !== 0) && !negative) {
 
                 var errorMsg = "\n" + "Member List contains: [" + members.entries[0].name;
@@ -602,7 +607,7 @@ module FourSlash {
                 errorMsg += "]\n";
 
                 Harness.IO.log(errorMsg);
-                throw new Error("Member list is not empty at Caret");
+                this.raiseError("Member list is not empty at Caret");
 
             }
         }
@@ -612,7 +617,7 @@ module FourSlash {
 
             var completions = this.getCompletionListAtCaret();
             if ((!completions || completions.entries.length === 0) && negative) {
-                throw new Error("Completion list is empty at Caret");
+                this.raiseError("Completion list is empty at Caret");
             } else if ((completions && completions.entries.length !== 0) && !negative) {
 
                 var errorMsg = "\n" + "Completion List contains: [" + completions.entries[0].name;
@@ -622,7 +627,7 @@ module FourSlash {
                 errorMsg += "]\n";
 
                 Harness.IO.log(errorMsg);
-                throw new Error("Completion list is not empty at Caret");
+                this.raiseError("Completion list is not empty at Caret");
 
             }
         }
@@ -638,7 +643,7 @@ module FourSlash {
 
             var completions = this.getCompletionListAtCaret();
             if (completions && completions.entries && completions.entries.filter(e => e.name === symbol).length !== 0) {
-                throw new Error('Completion list did contain ' + symbol);
+                this.raiseError('Completion list did contain ' + symbol);
             }
         }
 
@@ -668,21 +673,21 @@ module FourSlash {
             var references = this.getReferencesAtCaret();
 
             if (!references || references.length === 0) {
-                throw new Error('verifyReferencesAtPositionListContains failed - found 0 references, expected at least one.');
+                this.raiseError('verifyReferencesAtPositionListContains failed - found 0 references, expected at least one.');
             }
 
             for (var i = 0; i < references.length; i++) {
                 var reference = references[i];
                 if (reference && reference.fileName === fileName && reference.textSpan.start() === start && reference.textSpan.end() === end) {
                     if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
-                        throw new Error('verifyReferencesAtPositionListContains failed - item isWriteAccess value doe not match, actual: ' + reference.isWriteAccess + ', expected: ' + isWriteAccess + '.');
+                        this.raiseError('verifyReferencesAtPositionListContains failed - item isWriteAccess value doe not match, actual: ' + reference.isWriteAccess + ', expected: ' + isWriteAccess + '.');
                     }
                     return;
                 }
             }
 
             var missingItem = { fileName: fileName, start: start, end: end, isWriteAccess: isWriteAccess };
-            throw new Error('verifyReferencesAtPositionListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(references) + ')');
+            this.raiseError('verifyReferencesAtPositionListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(references) + ')');
         }
 
         public verifyReferencesCountIs(count: number, localFilesOnly: boolean = true) {
@@ -706,7 +711,7 @@ module FourSlash {
 
             if (referencesCount !== count) {
                 var condition = localFilesOnly ? "excluding libs" : "including libs";
-                throw new Error("Expected references count (" + condition + ") to be " + count + ", but is actually " + referencesCount);
+                this.raiseError("Expected references count (" + condition + ") to be " + count + ", but is actually " + referencesCount);
             }
         }
 
@@ -729,7 +734,7 @@ module FourSlash {
 
             if (implementorsCount !== count) {
                 var condition = localFilesOnly ? "excluding libs" : "including libs";
-                throw new Error("Expected implementors count (" + condition + ") to be " + count + ", but is actually " + implementors.length);
+                this.raiseError("Expected implementors count (" + condition + ") to be " + count + ", but is actually " + implementors.length);
             }
         }
 
@@ -806,12 +811,12 @@ module FourSlash {
             var actualQuickInfo = this.languageService.getTypeAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (negative) {
                 if (actualQuickInfo) {
-                    throw new Error('verifyQuickInfoExists failed. Expected quick info NOT to exist');
+                    this.raiseError('verifyQuickInfoExists failed. Expected quick info NOT to exist');
                 }
             }
             else {
                 if (!actualQuickInfo) {
-                    throw new Error('verifyQuickInfoExists failed. Expected quick info to exist');
+                    this.raiseError('verifyQuickInfoExists failed. Expected quick info to exist');
                 }
             }
         }
@@ -892,25 +897,25 @@ module FourSlash {
             var actual = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
             if (shouldBePresent) {
                 if (!actual) {
-                    throw new Error("Expected signature help to be present, but it wasn't");
+                    this.raiseError("Expected signature help to be present, but it wasn't");
                 }
             } else {
                 if (actual) {
-                    throw new Error("Expected no signature help, but got '" + JSON.stringify(actual) + "'");
+                    this.raiseError("Expected no signature help, but got '" + JSON.stringify(actual) + "'");
                 }
             }
         }
 
         private validate(name: string, expected: string, actual: string) {
             if (expected && expected !== actual) {
-                throw new Error("Expected " + name + " '" + expected + "'.  Got '" + actual + "' instead.");
+                this.raiseError("Expected " + name + " '" + expected + "'.  Got '" + actual + "' instead.");
             }
         }
 
         public verifyRenameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string) {
             var renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
             if (!renameInfo.canRename) {
-                throw new Error("Rename did not succeed");
+                this.raiseError("Rename did not succeed");
             }
 
             this.validate("displayName", displayName, renameInfo.displayName);
@@ -919,13 +924,13 @@ module FourSlash {
             this.validate("kindModifiers", kindModifiers, renameInfo.kindModifiers);
 
             if (this.getRanges().length !== 1) {
-                throw new Error("Expected a single range to be selected in the test file.");
+                this.raiseError("Expected a single range to be selected in the test file.");
             }
 
             var expectedRange = this.getRanges()[0];
             if (renameInfo.triggerSpan.start() !== expectedRange.start ||
                 renameInfo.triggerSpan.end() !== expectedRange.end) {
-                throw new Error("Expected triggerSpan [" + expectedRange.start + "," + expectedRange.end + ").  Got [" +
+                this.raiseError("Expected triggerSpan [" + expectedRange.start + "," + expectedRange.end + ").  Got [" +
                     renameInfo.triggerSpan.start() + "," + renameInfo.triggerSpan.end() + ") instead.");
             }
         }
@@ -933,7 +938,7 @@ module FourSlash {
         public verifyRenameInfoFailed(message?: string) {
             var renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
             if (renameInfo.canRename) {
-                throw new Error("Rename was expected to fail");
+                this.raiseError("Rename was expected to fail");
             }
 
             this.validate("error", message, renameInfo.localizedErrorMessage);
@@ -1009,7 +1014,7 @@ module FourSlash {
 
             // If there is not emiThisFile flag specified in the test file, throw an error
             if (emitFiles.length === 0) {
-                throw new Error("No emitThisFile is specified in the test file");
+                this.raiseError("No emitThisFile is specified in the test file");
             }
 
             Harness.Baseline.runBaseline(
@@ -1309,7 +1314,7 @@ module FourSlash {
             //var fullSyntaxErrs = JSON.stringify(refSyntaxTree.diagnostics());
 
             //if (incrSyntaxErrs !== fullSyntaxErrs) {
-            //    throw new Error('Mismatched incremental/full syntactic errors for file ' + this.activeFile.fileName + '.\n=== Incremental errors ===\n' + incrSyntaxErrs + '\n=== Full Errors ===\n' + fullSyntaxErrs);
+            //    this.raiseError('Mismatched incremental/full syntactic errors for file ' + this.activeFile.fileName + '.\n=== Incremental errors ===\n' + incrSyntaxErrs + '\n=== Full Errors ===\n' + fullSyntaxErrs);
             //}
 
             // if (this.editValidation !== IncrementalEditValidation.SyntacticOnly) {
@@ -1326,7 +1331,7 @@ module FourSlash {
             //        var incrSemanticErrs = JSON.stringify(this.languageService.getSemanticDiagnostics(this.testData.files[i].fileName));
 
             //        if (incrSemanticErrs !== refSemanticErrs) {
-            //            throw new Error('Mismatched incremental/full semantic errors for file ' + this.testData.files[i].fileName + '\n=== Incremental errors ===\n' + incrSemanticErrs + '\n=== Full Errors ===\n' + refSemanticErrs);
+            //            this.raiseError('Mismatched incremental/full semantic errors for file ' + this.testData.files[i].fileName + '\n=== Incremental errors ===\n' + incrSemanticErrs + '\n=== Full Errors ===\n' + refSemanticErrs);
             //        }
             //    }
             // }
@@ -1365,7 +1370,7 @@ module FourSlash {
                 var newContent = snapshot.getText(0, snapshot.getLength());
 
                 if (newContent.replace(/\s/g, '') !== oldContent.replace(/\s/g, '')) {
-                    throw new Error('Formatting operation destroyed non-whitespace content');
+                    this.raiseError('Formatting operation destroyed non-whitespace content');
                 }
             }
             return runningOffset;
@@ -1422,11 +1427,11 @@ module FourSlash {
 
             var definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (!definitions || !definitions.length) {
-                throw new Error('goToDefinition failed - expected to at least one definition location but got 0');
+                this.raiseError('goToDefinition failed - expected to at least one definition location but got 0');
             }
 
             if (definitionIndex >= definitions.length) {
-                throw new Error('goToDefinition failed - definitionIndex value (' + definitionIndex + ') exceeds definition list size (' + definitions.length + ')');
+                this.raiseError('goToDefinition failed - definitionIndex value (' + definitionIndex + ') exceeds definition list size (' + definitions.length + ')');
             }
 
             var definition = definitions[definitionIndex];
@@ -1442,10 +1447,10 @@ module FourSlash {
             var foundDefinitions = definitions && definitions.length;
 
             if (foundDefinitions && negative) {
-                throw new Error('goToDefinition - expected to 0 definition locations but got ' + definitions.length);
+                this.raiseError('goToDefinition - expected to 0 definition locations but got ' + definitions.length);
             }
             else if (!foundDefinitions && !negative) {
-                throw new Error('goToDefinition - expected to at least one definition location but got 0');
+                this.raiseError('goToDefinition - expected to at least one definition location but got 0');
             }
         }
 
@@ -1480,7 +1485,7 @@ module FourSlash {
 
             var actual = this.getIndentation(this.activeFile.fileName, this.currentCaretPosition);
             if (actual != numberOfSpaces) {
-                throw new Error('verifyIndentationAtCurrentPosition failed - expected: ' + numberOfSpaces + ', actual: ' + actual);
+                this.raiseError('verifyIndentationAtCurrentPosition failed - expected: ' + numberOfSpaces + ', actual: ' + actual);
             }
         }
 
@@ -1489,7 +1494,7 @@ module FourSlash {
 
             var actual = this.getIndentation(fileName, position);
             if (actual !== numberOfSpaces) {
-                throw new Error('verifyIndentationAtPosition failed - expected: ' + numberOfSpaces + ', actual: ' + actual);
+                this.raiseError('verifyIndentationAtPosition failed - expected: ' + numberOfSpaces + ', actual: ' + actual);
             }
         }
 
@@ -1532,14 +1537,14 @@ module FourSlash {
 
             var span = this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition);
             if (span === null) {
-                throw new Error('verifyCurrentNameOrDottedNameSpanText\n' +
+                this.raiseError('verifyCurrentNameOrDottedNameSpanText\n' +
                     '\tExpected: "' + text + '"\n' +
                     '\t  Actual: null');
             }
 
             var actual = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getText(span.start(), span.end());
             if (actual !== text) {
-                throw new Error('verifyCurrentNameOrDottedNameSpanText\n' +
+                this.raiseError('verifyCurrentNameOrDottedNameSpanText\n' +
                     '\tExpected: "' + text + '"\n' +
                     '\t  Actual: "' + actual + '"');
             }
@@ -1577,7 +1582,7 @@ module FourSlash {
 
         private verifyClassifications(expected: { classificationType: string; text: string }[], actual: ts.ClassifiedSpan[]) {
             if (actual.length !== expected.length) {
-                throw new Error('verifySyntacticClassification failed - expected total classifications to be ' + expected.length + ', but was ' + actual.length);
+                this.raiseError('verifySyntacticClassification failed - expected total classifications to be ' + expected.length + ', but was ' + actual.length);
             }
 
             for (var i = 0; i < expected.length; i++) {
@@ -1586,7 +1591,7 @@ module FourSlash {
 
                 var expectedType: string = (<any>ts.ClassificationTypeNames)[expectedClassification.classificationType];
                 if (expectedType !== actualClassification.classificationType) {
-                    throw new Error('verifySyntacticClassification failed - expected classifications type to be ' +
+                    this.raiseError('verifySyntacticClassification failed - expected classifications type to be ' +
                         expectedType + ', but was ' +
                         actualClassification.classificationType);
                 }
@@ -1594,7 +1599,7 @@ module FourSlash {
                 var actualSpan = actualClassification.textSpan;
                 var actualText = this.activeFile.content.substr(actualSpan.start(), actualSpan.length());
                 if (expectedClassification.text !== actualText) {
-                    throw new Error('verifySyntacticClassification failed - expected classificatied text to be ' +
+                    this.raiseError('verifySyntacticClassification failed - expected classificatied text to be ' +
                         expectedClassification.text + ', but was ' +
                         actualText);
                 }
@@ -1621,14 +1626,14 @@ module FourSlash {
             var actual = this.languageService.getOutliningSpans(this.activeFile.fileName);
 
             if (actual.length !== spans.length) {
-                throw new Error('verifyOutliningSpans failed - expected total spans to be ' + spans.length + ', but was ' + actual.length);
+                this.raiseError('verifyOutliningSpans failed - expected total spans to be ' + spans.length + ', but was ' + actual.length);
             }
 
             for (var i = 0; i < spans.length; i++) {
                 var expectedSpan = spans[i];
                 var actualSpan = actual[i];
                 if (expectedSpan.start !== actualSpan.textSpan.start() || expectedSpan.end !== actualSpan.textSpan.end()) {
-                    throw new Error('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualSpan.textSpan.start() + ',' + actualSpan.textSpan.end() + ')');
+                    this.raiseError('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualSpan.textSpan.start() + ',' + actualSpan.textSpan.end() + ')');
                 }
             }
         }
@@ -1638,7 +1643,7 @@ module FourSlash {
                 descriptors.map(d => { return { text: d, priority: 0 }; }));
 
             if (actual.length !== spans.length) {
-                throw new Error('verifyTodoComments failed - expected total spans to be ' + spans.length + ', but was ' + actual.length);
+                this.raiseError('verifyTodoComments failed - expected total spans to be ' + spans.length + ', but was ' + actual.length);
             }
 
             for (var i = 0; i < spans.length; i++) {
@@ -1647,7 +1652,7 @@ module FourSlash {
                 var actualCommentSpan = new TypeScript.TextSpan(actualComment.position, actualComment.message.length);
 
                 if (expectedSpan.start !== actualCommentSpan.start() || expectedSpan.end !== actualCommentSpan.end()) {
-                    throw new Error('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualCommentSpan.start() + ',' + actualCommentSpan.end() + ')');
+                    this.raiseError('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualCommentSpan.start() + ',' + actualCommentSpan.end() + ')');
                 }
             }
         }
@@ -1658,7 +1663,7 @@ module FourSlash {
             var actual = this.languageService.getBraceMatchingAtPosition(this.activeFile.fileName, bracePosition);
 
             if (actual.length !== 2) {
-                throw new Error('verifyMatchingBracePosition failed - expected result to contain 2 spans, but it had ' + actual.length);
+                this.raiseError('verifyMatchingBracePosition failed - expected result to contain 2 spans, but it had ' + actual.length);
             }
 
             var actualMatchPosition = -1;
@@ -1667,11 +1672,11 @@ module FourSlash {
             } else if (bracePosition === actual[1].start()) {
                 actualMatchPosition = actual[0].start();
             } else {
-                throw new Error('verifyMatchingBracePosition failed - could not find the brace position: ' + bracePosition + ' in the returned list: (' + actual[0].start() + ',' + actual[0].end() + ') and (' + actual[1].start() + ',' + actual[1].end() + ')');
+                this.raiseError('verifyMatchingBracePosition failed - could not find the brace position: ' + bracePosition + ' in the returned list: (' + actual[0].start() + ',' + actual[0].end() + ') and (' + actual[1].start() + ',' + actual[1].end() + ')');
             }
 
             if (actualMatchPosition !== expectedMatchPosition) {
-                throw new Error('verifyMatchingBracePosition failed - expected: ' + actualMatchPosition + ',  actual: ' + expectedMatchPosition);
+                this.raiseError('verifyMatchingBracePosition failed - expected: ' + actualMatchPosition + ',  actual: ' + expectedMatchPosition);
             }
         }
 
@@ -1681,7 +1686,7 @@ module FourSlash {
             var actual = this.languageService.getBraceMatchingAtPosition(this.activeFile.fileName, bracePosition);
 
             if (actual.length !== 0) {
-                throw new Error('verifyNoMatchingBracePosition failed - expected: 0 spans, actual: ' + actual.length);
+                this.raiseError('verifyNoMatchingBracePosition failed - expected: 0 spans, actual: ' + actual.length);
             }
         }
 
@@ -1768,7 +1773,7 @@ module FourSlash {
             }
 
             if (expected != actual) {
-                throw new Error('verifyNavigationItemsCount failed - found: ' + actual + ' navigation items, expected: ' + expected + '.');
+                this.raiseError('verifyNavigationItemsCount failed - found: ' + actual + ' navigation items, expected: ' + expected + '.');
             }
         }
 
@@ -1788,7 +1793,7 @@ module FourSlash {
             var items = this.languageService.getNavigateToItems(searchValue);
 
             if (!items || items.length === 0) {
-                throw new Error('verifyNavigationItemsListContains failed - found 0 navigation items, expected at least one.');
+                this.raiseError('verifyNavigationItemsListContains failed - found 0 navigation items, expected at least one.');
             }
 
             for (var i = 0; i < items.length; i++) {
@@ -1804,7 +1809,7 @@ module FourSlash {
             // if there was an explicit match kind specified, then it should be validated.
             if (matchKind !== undefined) {
                 var missingItem = { name: name, kind: kind, searchValue: searchValue, matchKind: matchKind, fileName: fileName, parentName: parentName };
-                throw new Error('verifyNavigationItemsListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(items) + ')');
+                this.raiseError('verifyNavigationItemsListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(items) + ')');
             }
         }
 
@@ -1815,7 +1820,7 @@ module FourSlash {
             var actual = this.getNavigationBarItemsCount(items);
 
             if (expected != actual) {
-                throw new Error('verifyGetScriptLexicalStructureListCount failed - found: ' + actual + ' navigation items, expected: ' + expected + '.');
+                this.raiseError('verifyGetScriptLexicalStructureListCount failed - found: ' + actual + ' navigation items, expected: ' + expected + '.');
             }
         }
 
@@ -1840,7 +1845,7 @@ module FourSlash {
             var items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
 
             if (!items || items.length === 0) {
-                throw new Error('verifyGetScriptLexicalStructureListContains failed - found 0 navigation items, expected at least one.');
+                this.raiseError('verifyGetScriptLexicalStructureListContains failed - found 0 navigation items, expected at least one.');
             }
 
             if (this.navigationBarItemsContains(items, name, kind)) {
@@ -1848,7 +1853,7 @@ module FourSlash {
             }
 
             var missingItem = { name: name, kind: kind };
-            throw new Error('verifyGetScriptLexicalStructureListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(items) + ')');
+            this.raiseError('verifyGetScriptLexicalStructureListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(items) + ')');
         }
 
         private navigationBarItemsContains(items: ts.NavigationBarItem[], name: string, kind: string) {
@@ -1902,21 +1907,21 @@ module FourSlash {
             var occurances = this.getOccurancesAtCurrentPosition();
 
             if (!occurances || occurances.length === 0) {
-                throw new Error('verifyOccurancesAtPositionListContains failed - found 0 references, expected at least one.');
+                this.raiseError('verifyOccurancesAtPositionListContains failed - found 0 references, expected at least one.');
             }
 
             for (var i = 0; i < occurances.length; i++) {
                 var occurance = occurances[i];
                 if (occurance && occurance.fileName === fileName && occurance.textSpan.start() === start && occurance.textSpan.end() === end) {
                     if (typeof isWriteAccess !== "undefined" && occurance.isWriteAccess !== isWriteAccess) {
-                        throw new Error('verifyOccurancesAtPositionListContains failed - item isWriteAccess value doe not match, actual: ' + occurance.isWriteAccess + ', expected: ' + isWriteAccess + '.');
+                        this.raiseError('verifyOccurancesAtPositionListContains failed - item isWriteAccess value doe not match, actual: ' + occurance.isWriteAccess + ', expected: ' + isWriteAccess + '.');
                     }
                     return;
                 }
             }
 
             var missingItem = { fileName: fileName, start: start, end: end, isWriteAccess: isWriteAccess };
-            throw new Error('verifyOccurancesAtPositionListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(occurances) + ')');
+            this.raiseError('verifyOccurancesAtPositionListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(occurances) + ')');
         }
 
         public verifyOccurrencesAtPositionListCount(expectedCount: number) {
@@ -1925,7 +1930,7 @@ module FourSlash {
             var occurances = this.getOccurancesAtCurrentPosition();
             var actualCount = occurances ? occurances.length : 0;
             if (expectedCount !== actualCount) {
-                throw new Error('verifyOccurrencesAtPositionListCount failed - actual: ' + actualCount + ', expected:' + expectedCount);
+                this.raiseError('verifyOccurrencesAtPositionListCount failed - actual: ' + actualCount + ', expected:' + expectedCount);
             }
         }
 
@@ -2010,7 +2015,7 @@ module FourSlash {
 
             var itemsString = items.map((item) => JSON.stringify({ name: item.name, kind: item.kind })).join(",\n");
 
-            throw new Error("Marker: " + currentTestState.lastKnownMarker + "\n" + 'Expected "' + JSON.stringify({ name: name, type: type, docComment: docComment, fullSymbolName: fullSymbolName, kind: kind }) + '" to be in list [' + itemsString + ']');
+            this.raiseError('Expected "' + JSON.stringify({ name: name, type: type, docComment: docComment, fullSymbolName: fullSymbolName, kind: kind }) + '" to be in list [' + itemsString + ']');
         }
 
         private findFile(indexOrName: any) {
