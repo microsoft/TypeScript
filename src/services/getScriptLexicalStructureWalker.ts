@@ -148,26 +148,26 @@ module ts {
                     if ((node.flags & NodeFlags.Modifier) === 0) {
                         return undefined;
                     }
-                    return basicChildItem(node, parameter.name.text, ts.ScriptElementKind.memberVariableElement);
+                    return basicChildItem(node, getSourceText(parameter.name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.Method:
                     var method = <MethodDeclaration>node;
-                    return basicChildItem(node, getPropertyText(method.name), ts.ScriptElementKind.memberFunctionElement);
+                    return basicChildItem(node, getSourceText(method.name), ts.ScriptElementKind.memberFunctionElement);
 
                 case SyntaxKind.GetAccessor:
                     var getAccessor = <AccessorDeclaration>node;
-                    return basicChildItem(node, getPropertyText(getAccessor.name), ts.ScriptElementKind.memberGetAccessorElement);
+                    return basicChildItem(node, getSourceText(getAccessor.name), ts.ScriptElementKind.memberGetAccessorElement);
 
                 case SyntaxKind.SetAccessor:
                     var setAccessor = <AccessorDeclaration>node;
-                    return basicChildItem(node, getPropertyText(setAccessor.name), ts.ScriptElementKind.memberSetAccessorElement);
+                    return basicChildItem(node, getSourceText(setAccessor.name), ts.ScriptElementKind.memberSetAccessorElement);
 
                 case SyntaxKind.IndexSignature:
                     return basicChildItem(node, "[]", ts.ScriptElementKind.indexSignatureElement);
 
                 case SyntaxKind.EnumMember:
                     var enumMember = <EnumMember>node;
-                    return basicChildItem(node, getPropertyText(enumMember.name), ts.ScriptElementKind.memberVariableElement);
+                    return basicChildItem(node, getSourceText(enumMember.name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.CallSignature:
                     return basicChildItem(node, "()", ts.ScriptElementKind.callSignatureElement);
@@ -177,18 +177,18 @@ module ts {
 
                 case SyntaxKind.Property:
                     var property = <PropertyDeclaration>node;
-                    return basicChildItem(node, getPropertyText(property.name), ts.ScriptElementKind.memberVariableElement);
+                    return basicChildItem(node, getSourceText(property.name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.FunctionDeclaration:
                     var functionDeclaration = <FunctionDeclaration>node;
                     if (!isTopLevelFunctionDeclaration(functionDeclaration)) {
-                        return basicChildItem(node, functionDeclaration.name.text, ts.ScriptElementKind.functionElement);
+                        return basicChildItem(node, getSourceText(functionDeclaration.name), ts.ScriptElementKind.functionElement);
                     }
                     break;
 
                 case SyntaxKind.VariableDeclaration:
                     var variableDeclaration = <VariableDeclaration>node;
-                    return basicChildItem(node, variableDeclaration.name.text, ts.ScriptElementKind.variableElement);
+                    return basicChildItem(node, getSourceText(variableDeclaration.name), ts.ScriptElementKind.variableElement);
                 
                 case SyntaxKind.Constructor:
                     return basicChildItem(node, "constructor", ts.ScriptElementKind.constructorImplementationElement);
@@ -227,7 +227,7 @@ module ts {
             function getModuleName(moduleDeclaration: ModuleDeclaration): string {
                 // We want to maintain quotation marks.
                 if (moduleDeclaration.name.kind === SyntaxKind.StringLiteral) {
-                    return getPropertyText(moduleDeclaration.name);
+                    return getSourceText(moduleDeclaration.name);
                 }
 
                 // Otherwise, we need to aggregate each identifier to build up the qualified name.
@@ -351,23 +351,8 @@ module ts {
             return TypeScript.TextSpan.fromBounds(node.getStart(), node.getEnd());
         }
 
-        function getPropertyText(node: Node): string {
-            if (node.kind === SyntaxKind.Identifier) {
-                return (<Identifier>node).text;
-            }
-
-            if (node.kind === SyntaxKind.StringLiteral) {
-                // normalize the quotes and remove all '\{newline}'s from the original text.
-                var text = getSourceTextOfNodeFromSourceText(sourceFile.text, node);
-                text = text.substring(1, text.length - 1).replace(/\\\r?\n/g, "");
-                return "\"" + text + "\"";
-            }
-
-            if (node.kind === SyntaxKind.NumericLiteral) {
-                return (<LiteralExpression>node).text;
-            }
-
-            Debug.fail("getPropertyText given a property that is neither an identifier nor a literal expression.");
+        function getSourceText(node: Node): string {
+            return getSourceTextOfNodeFromSourceText(sourceFile.text, node);
         }
     }
 }
