@@ -944,11 +944,6 @@ module FourSlash {
             this.validate("error", message, renameInfo.localizedErrorMessage);
         }
 
-        //private getFormalParameter() {
-        //    var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-        //    return help.formal;
-        //}
-
         private getActiveSignatureHelpItem() {
             var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
 
