@@ -19,7 +19,7 @@
 ////}
 
 goTo.marker("1");
-verify.quickInfoIs("() => string", undefined, "y1", "property");
+verify.quickInfoIs("(property) y1: () => string", undefined);
 
 goTo.marker("2");
-verify.quickInfoIs("number");
+verify.quickInfoIs("(var) value: number");

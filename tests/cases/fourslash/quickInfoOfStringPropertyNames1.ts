@@ -5,7 +5,7 @@
 ////}
 
 ////var f: foo;
-////var r/*1*/ = f['foo bar'];
+////var /*1*/r = f['foo bar'];
 
 ////class bar {
 ////    'hello world': number;
@@ -16,18 +16,18 @@
 ////}
 
 ////var b: bar;
-////var r2/*2*/ = b["hello world"];
-////var r4/*3*/ = b['1'];
-////var r5/*4*/ = b[1];
+////var /*2*/r2 = b["hello world"];
+////var /*3*/r4 = b['1'];
+////var /*4*/r5 = b[1];
 
 goTo.marker('1');
-verify.quickInfoIs('string');
+verify.quickInfoIs('(var) r: string');
 
 goTo.marker('2');
-verify.quickInfoIs('number');
+verify.quickInfoIs('(var) r2: number');
 
 goTo.marker('3');
-verify.quickInfoIs('string');
+verify.quickInfoIs('(var) r4: string');
 
 goTo.marker('4');
-verify.quickInfoIs('string');
+verify.quickInfoIs('(var) r5: string');

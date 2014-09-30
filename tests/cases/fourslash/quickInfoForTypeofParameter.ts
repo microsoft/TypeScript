@@ -6,10 +6,10 @@
 ////}
 
 goTo.marker('ref2');
-verify.quickInfoIs("string", undefined, "y1", "local var");
+verify.quickInfoIs("(local var) y1: string", undefined);
 
 goTo.marker('ref1');
-verify.quickInfoIs("string", undefined, "y1", "local var");
+verify.quickInfoIs("(local var) y1: string", undefined);
 
 goTo.marker('ref2');
-verify.quickInfoIs("string", undefined, "y1", "local var");
+verify.quickInfoIs("(local var) y1: string", undefined);

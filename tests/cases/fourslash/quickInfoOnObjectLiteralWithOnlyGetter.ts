@@ -9,13 +9,13 @@
 ////var /*2*/x = point./*3*/x;
 
 goTo.marker('1');
-verify.quickInfoIs("(x: number): { x: number; }", undefined, "makePoint", "function");
+verify.quickInfoIs("(function) makePoint(x: number): {\n    x: number;\n}", undefined);
 
 goTo.marker('2');
-verify.quickInfoIs("number", undefined, "x", "var");
+verify.quickInfoIs("(var) x: number", undefined);
 
 goTo.marker('3');
-verify.memberListContains("x", "number", undefined, "x", "property");
+verify.memberListContains("x", "(property) x: number", undefined);
 
 goTo.marker('4');
-verify.quickInfoIs("{ x: number; }", undefined, "point", "var");
+verify.quickInfoIs("(var) point: {\n    x: number;\n}", undefined);

@@ -6,3 +6,4 @@
 
 goTo.marker();
 verify.quickInfoExists();
+verify.quickInfoIs("(var) e: any");

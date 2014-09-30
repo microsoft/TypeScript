@@ -18,5 +18,5 @@
 diagnostics.setEditValidation(IncrementalEditValidation.None);
 
 goTo.marker('1');
-verify.quickInfoIs("string", undefined, "M2.A.foo", "property");
+verify.quickInfoIs("(property) M2.A.foo: string", undefined);
 verify.numberOfErrorsInCurrentFile(0);

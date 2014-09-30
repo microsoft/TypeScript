@@ -8,7 +8,7 @@
 edit.insert('');
 
 goTo.marker("1");
-verify.quickInfoIs("string", undefined, "variable1", "parameter");
+verify.quickInfoIs("(parameter) variable1: string", undefined);
 
 goTo.marker("2");
-verify.quickInfoIs("string", undefined, "variable2", "parameter");
+verify.quickInfoIs("(parameter) variable2: string", undefined);

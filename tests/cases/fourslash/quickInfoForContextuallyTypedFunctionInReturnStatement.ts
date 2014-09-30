@@ -17,4 +17,4 @@
 
 
 goTo.marker();
-verify.quickInfoIs("number");
+verify.quickInfoIs("(parameter) value: number");

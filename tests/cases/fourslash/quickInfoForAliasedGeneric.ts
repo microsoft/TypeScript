@@ -7,11 +7,11 @@
 ////    }
 ////}
 ////import d = M.N;
-////var aa/*1*/: d.C<number>;
-////var bb/*2*/: d.D;
+////var /*1*/aa: d.C<number>;
+////var /*2*/bb: d.D;
 
 goTo.marker('1');
-verify.quickInfoIs('M.N.C<number>');
+verify.quickInfoIs('(var) aa: d.C<number>');
 
 goTo.marker('2');
-verify.quickInfoIs('M.N.D');
+verify.quickInfoIs('(var) bb: d.D');
