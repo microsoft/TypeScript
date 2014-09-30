@@ -2195,7 +2195,7 @@ module ts {
                 else {
                     isMemberCompletion = false;
                     /// TODO filter meaning based on the current context
-                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace;
+                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Import;
                     var symbols = typeInfoResolver.getSymbolsInScope(mappedNode, symbolMeanings);
 
                     getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
