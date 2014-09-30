@@ -2149,7 +2149,7 @@ module ts {
                     var symbol = typeInfoResolver.getSymbolInfo(mappedNode);
 
                     // This is an alias, follow what it aliases
-                    while (symbol && symbol.flags & SymbolFlags.Import) {
+                    if (symbol && symbol.flags & SymbolFlags.Import) {
                         symbol = typeInfoResolver.getAliasedSymbol(symbol);
                     }
 
