@@ -1073,7 +1073,7 @@ module ts {
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArgumentExpressions:
-                    return isExpression();
+                    return token === SyntaxKind.CommaToken || isExpression();
                 case ParsingContext.ArrayLiteralMembers:
                     return token === SyntaxKind.CommaToken || isExpression();
                 case ParsingContext.Parameters:
