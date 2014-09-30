@@ -284,6 +284,16 @@ module ts {
                     });
                 }
 
+                // If this is left side of dotted module declaration, there is no doc comments associated with this node
+                if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
+                    return;
+                }
+
+                // If this is dotted module name, get the doc comments from the parent
+                while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
+                    declaration = declaration.parent;
+                } 
+
                 // Get the cleaned js doc comment text from the declaration
                 ts.forEach(getJsDocCommentTextRange(
                     declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
