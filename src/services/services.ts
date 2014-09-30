@@ -256,7 +256,7 @@ module ts {
                 var declarations = this.getDeclarations();
                 if (declarations) {
                     for (var i = 0, n = declarations.length; i < n; i++) {
-                        this.processDocumentationCommentDeclaration(lines, declarations[0]);
+                        this.processDocumentationCommentDeclaration(lines, declarations[i]);
                     }
                 }
 
@@ -274,7 +274,7 @@ module ts {
 
                 for (var i = 0, n = commentRanges.length; i < n; i++) {
                     this.processDocumentationCommentRange(
-                        lines, sourceFile, commentRanges[0]);
+                        lines, sourceFile, commentRanges[i]);
                 }
             }
         }
