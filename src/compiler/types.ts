@@ -657,6 +657,7 @@ module ts {
         getEnumMemberValue(node: EnumMember): number;
 
         isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean;
+        getAliasedSymbol(symbol: Symbol): Symbol;
     }
 
     export interface TextWriter {

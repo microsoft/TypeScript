@@ -93,7 +93,8 @@ module ts {
             getFullyQualifiedName: getFullyQualifiedName,
             getResolvedSignature: getResolvedSignature,
             getEnumMemberValue: getEnumMemberValue,
-            isValidPropertyAccess: isValidPropertyAccess
+            isValidPropertyAccess: isValidPropertyAccess,
+            getAliasedSymbol: resolveImport
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
