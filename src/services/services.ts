@@ -2833,6 +2833,14 @@ module ts {
                     }
                 }
             }
+            if (symbolFlags & SymbolFlags.Import) {
+                addNewLineIfDisplayPartsExist();
+                displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                displayParts.push(textPart("alias"));
+                displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                displayParts.push(spacePart());
+                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
+            }
             else if (!hasAddedSymbolInfo && symbolKind !== ScriptElementKind.unknown) {
                 if (type) {
                     addPrefixForAnyFunctionOrVar(symbol, symbolKind);

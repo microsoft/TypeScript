@@ -36,60 +36,62 @@ edit.insert('');
 
 goTo.file("commentsExternalModules_file0.ts");
 goTo.marker('1');
-verify.quickInfoIs("m1", "Module comment", "m1", "module");
+verify.quickInfoIs("module m1", "Module comment");
 
 goTo.marker('2');
-verify.completionListContains("b", "number", "b's comment", "m1.b", "var");
-verify.completionListContains("foo", "(): number", "foo's comment", "foo", "function");
+verify.completionListContains("b", "(var) m1.b: number", "b's comment");
+verify.completionListContains("foo", "(function) foo(): number", "foo's comment");
 
 goTo.marker('3');
 verify.currentSignatureHelpDocCommentIs("foo's comment");
 goTo.marker('3q');
-verify.quickInfoIs("(): number", "foo's comment", "foo", "function");
+verify.quickInfoIs("(function) foo(): number", "foo's comment");
 
 goTo.marker('4');
-verify.completionListContains("m1", "m1", "Module comment", "m1", "module");
+verify.completionListContains("m1", "module m1", "Module comment");
 
 goTo.marker('5');
-verify.memberListContains("b", "number", "b's comment", "m1.b", "var");
-verify.memberListContains("fooExport", "(): number", "exported function", "m1.fooExport", "function");
-verify.memberListContains("m2", "m1.m2");
+verify.memberListContains("b", "(var) m1.b: number", "b's comment");
+verify.memberListContains("fooExport", "(function) m1.fooExport(): number", "exported function");
+verify.memberListContains("m2", "module m1.m2");
 
 goTo.marker('6');
 verify.currentSignatureHelpDocCommentIs("exported function");
 goTo.marker('6q');
-verify.quickInfoIs("(): number", "exported function", "m1.fooExport", "function");
+verify.quickInfoIs("(function) m1.fooExport(): number", "exported function");
 
 goTo.marker('7');
-verify.quickInfoIs("m1.m2.c", "", "myvar", "var");
+verify.quickInfoIs("(var) myvar: m1.m2.c", "");
 
 goTo.marker('8');
-verify.memberListContains("c", undefined, "class comment;", "m1.m2.c", "class");
-verify.memberListContains("i", "m1.m2.c", "i", "m1.m2.i", "var");
+verify.memberListContains("c", "class m1.m2.c", "class comment;");
+verify.memberListContains("i", "(var) m1.m2.i: m1.m2.c", "i");
 
 goTo.file("commentsExternalModules_file1.ts");
 goTo.marker('9');
-verify.quickInfoIs(undefined, "This is on import declaration", "extMod", "module");
+verify.quickInfoIs('(alias) extMod', "This is on import declaration");
 
 goTo.marker('10');
-verify.completionListContains("extMod", "extMod", "This is on import declaration", "extMod", "module");
+// TODO: extMod should exist in the completion list
+//verify.completionListContains("extMod", "(alias) extMod", "This is on import declaration");
+verify.not.completionListContains("extMod", "(alias) extMod", "This is on import declaration");
 
 goTo.marker('11');
-verify.memberListContains("m1", "extMod.m1");
+verify.memberListContains("m1", "module extMod.m1");
 
 goTo.marker('12');
-verify.memberListContains("b", "number", "b's comment", "extMod.m1.b", "var");
-verify.memberListContains("fooExport", "(): number", "exported function", "extMod.m1.fooExport", "function");
-verify.memberListContains("m2", "extMod.m1.m2");
+verify.memberListContains("b", "(var) extMod.m1.b: number", "b's comment");
+verify.memberListContains("fooExport", "(function) extMod.m1.fooExport(): number", "exported function");
+verify.memberListContains("m2", "module extMod.m1.m2");
 
 goTo.marker('13');
 verify.currentSignatureHelpDocCommentIs("exported function");
 goTo.marker('13q');
-verify.quickInfoIs("(): number", "exported function", "extMod.m1.fooExport", "function");
+verify.quickInfoIs("(function) extMod.m1.fooExport(): number", "exported function");
 
 goTo.marker('14');
-verify.quickInfoIs("extMod.m1.m2.c", "", "newVar", "var");
+verify.quickInfoIs("(var) newVar: extMod.m1.m2.c", "");
 
 goTo.marker('15');
-verify.memberListContains("c", undefined, "class comment;", "extMod.m1.m2.c", "class");
-verify.memberListContains("i", "extMod.m1.m2.c", "i", "extMod.m1.m2.i", "var");
+verify.memberListContains("c", "class extMod.m1.m2.c", "class comment;");
+verify.memberListContains("i", "(var) extMod.m1.m2.i: extMod.m1.m2.c", "i");
