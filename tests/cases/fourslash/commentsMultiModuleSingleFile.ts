@@ -20,16 +20,16 @@
 edit.insert('');
 
 goTo.marker('1');
-verify.completionListContains("multiM", "multiM", "this is multi declare module\nthi is multi module 2", "multiM", "module");
+verify.completionListContains("multiM", "module multiM", "this is multi declare module\nthi is multi module 2");
 
 goTo.marker('2');
-verify.quickInfoIs("multiM", "this is multi declare module\nthi is multi module 2", "multiM", "module");
+verify.quickInfoIs("module multiM", "this is multi declare module\nthi is multi module 2");
 
 goTo.marker('3');
-verify.quickInfoIs("multiM", "this is multi declare module\nthi is multi module 2", "multiM", "module");
+verify.quickInfoIs("module multiM", "this is multi declare module\nthi is multi module 2");
 
 goTo.marker('4');
-verify.quickInfoIs("typeof multiM", "this is multi declare module\nthi is multi module 2", "multiM", "module");
+verify.quickInfoIs("module multiM", "this is multi declare module\nthi is multi module 2");
 
 goTo.marker('5');
-verify.quickInfoIs("typeof multiM", "this is multi declare module\nthi is multi module 2", "multiM", "module");
+verify.quickInfoIs("module multiM", "this is multi declare module\nthi is multi module 2");

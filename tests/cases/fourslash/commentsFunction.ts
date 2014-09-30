@@ -46,36 +46,36 @@ verify.currentSignatureHelpDocCommentIs("This is comment for function signature"
 verify.currentParameterHelpArgumentDocCommentIs("this is comment for b");
 
 goTo.marker('4');
-verify.completionListContains('foo', '(): void', 'This comment should appear for foo', "foo", "function");
+verify.completionListContains('foo', '(function) foo(): void', 'This comment should appear for foo');
 
 goTo.marker('5');
-verify.completionListContains('fooWithParameters', '(a: string, b: number): void', 'This is comment for function signature', "fooWithParameters", "function");
+verify.completionListContains('fooWithParameters', '(function) fooWithParameters(a: string, b: number): void', 'This is comment for function signature');
 
 goTo.marker('6');
-verify.quickInfoIs("(): void", "This comment should appear for foo", "foo", "function");
+verify.quickInfoIs("(function) foo(): void", "This comment should appear for foo");
 
 goTo.marker('7');
-verify.quickInfoIs("(): void", "This comment should appear for foo", "foo", "function");
+verify.quickInfoIs("(function) foo(): void", "This comment should appear for foo");
 
 goTo.marker('8');
-verify.quickInfoIs("(a: string, b: number): void", "This is comment for function signature", "fooWithParameters", "function");
+verify.quickInfoIs("(function) fooWithParameters(a: string, b: number): void", "This is comment for function signature");
 
 goTo.marker('9');
-verify.quickInfoIs("(a: string, b: number): void", "This is comment for function signature", "fooWithParameters", "function");
+verify.quickInfoIs("(function) fooWithParameters(a: string, b: number): void", "This is comment for function signature");
 
 goTo.marker('10');
-verify.completionListContains('a', 'string', 'this is comment about a', "a", "parameter");
-verify.completionListContains('b', 'number', 'this is comment for b', "b", "parameter");
+verify.completionListContains('a', '(parameter) a: string', 'this is comment about a');
+verify.completionListContains('b', '(parameter) b: number', 'this is comment for b');
 
 goTo.marker('11');
-verify.quickInfoIs("(a: number, b: number) => number", "lamdaFoo var comment", "lambdaFoo", "var");
+verify.quickInfoIs("(var) lambdaFoo: (a: number, b: number) => number", "lamdaFoo var comment");
 
 goTo.marker('12');
-verify.quickInfoIs("(a: number, b: number) => number", "", "lambddaNoVarComment", "var");
+verify.quickInfoIs("(var) lambddaNoVarComment: (a: number, b: number) => number", "");
 
 goTo.marker('13');
-verify.completionListContains('lambdaFoo', '(a: number, b: number) => number', 'lamdaFoo var comment', "lambdaFoo", "var");
-verify.completionListContains('lambddaNoVarComment', '(a: number, b: number) => number', '', "lambddaNoVarComment", "var");
+verify.completionListContains('lambdaFoo', '(var) lambdaFoo: (a: number, b: number) => number', 'lamdaFoo var comment');
+verify.completionListContains('lambddaNoVarComment', '(var) lambddaNoVarComment: (a: number, b: number) => number', '');
 
 goTo.marker('14');
 verify.currentParameterHelpArgumentDocCommentIs("param a");
@@ -90,42 +90,42 @@ goTo.marker('17');
 verify.currentParameterHelpArgumentDocCommentIs("param b");
 
 goTo.marker('18');
-verify.completionListContains('a', 'number', 'param a', "a", "parameter");
-verify.completionListContains('b', 'number', 'param b', "b", "parameter");
+verify.completionListContains('a', '(parameter) a: number', 'param a');
+verify.completionListContains('b', '(parameter) b: number', 'param b');
 
 goTo.marker('19');
 verify.currentSignatureHelpDocCommentIs("Does something");
 verify.currentParameterHelpArgumentDocCommentIs("a string");
 
 goTo.marker('20');
-verify.quickInfoIs('string', '', 'd', "local var");
+verify.quickInfoIs('(local var) d: string', '');
 
 goTo.marker('20a');
-verify.quickInfoIs('(a: number) => number', '', 'lambdaAnotherFunc', "var");
+verify.quickInfoIs('(var) lambdaAnotherFunc: (a: number) => number', '');
 goTo.marker('21');
-verify.quickInfoIs('number', '', 'a', "parameter");
+verify.quickInfoIs('(parameter) a: number', '');
 goTo.marker('22');
-verify.quickInfoIs('number', '', 'bbbb', "local var");
+verify.quickInfoIs('(local var) bbbb: number', '');
 goTo.marker('23');
-verify.quickInfoIs('number', '', 'bbbb', "local var");
+verify.quickInfoIs('(local var) bbbb: number', '');
 goTo.marker('24');
-verify.quickInfoIs('number', '', 'a', "parameter");
+verify.quickInfoIs('(parameter) a: number', '');
 
 goTo.marker('25');
-verify.quickInfoIs('(a: number): string', '', 'anotherFunc', "function");
+verify.quickInfoIs('(function) anotherFunc(a: number): string', '');
 goTo.marker('26');
-verify.quickInfoIs('number', '', 'a', "parameter");
+verify.quickInfoIs('(parameter) a: number', '');
 goTo.marker('27a');
-verify.quickInfoIs('(b: string) => string', '', 'lambdaVar', "local var");
+verify.quickInfoIs('(local var) lambdaVar: (b: string) => string', '');
 goTo.marker('27');
-verify.quickInfoIs('string', '', 'b', "parameter");
+verify.quickInfoIs('(parameter) b: string', '');
 goTo.marker('28');
-verify.quickInfoIs('string', '', 'localVar', "local var");
+verify.quickInfoIs('(local var) localVar: string', '');
 goTo.marker('29');
-verify.quickInfoIs('string', '', 'localVar', "local var");
+verify.quickInfoIs('(local var) localVar: string', '');
 goTo.marker('30');
-verify.quickInfoIs('string', '', 'b', "parameter");
+verify.quickInfoIs('(parameter) b: string', '');
 goTo.marker('31');
-verify.quickInfoIs('(b: string) => string', '', 'lambdaVar', "local var");
+verify.quickInfoIs('(local function) lambdaVar(b: string): string', '');
 goTo.marker('32');
-verify.quickInfoIs('number', '', 'a', "parameter");
+verify.quickInfoIs('(parameter) a: number', '');

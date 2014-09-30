@@ -249,14 +249,14 @@ module ts {
 
         getDocumentationComment(): SymbolDisplayPart[] {
             if (this.documentationComment === undefined) {
-                this.documentationComment = getJsDocCommentsFromDeclarations(this.declarations, this.name);
+                this.documentationComment = getJsDocCommentsFromDeclarations(this.declarations, this.name, !(this.flags & SymbolFlags.Property));
             }
 
             return this.documentationComment;
         }
     }
 
-    function getJsDocCommentsFromDeclarations(declarations: Declaration[], name: string) {
+    function getJsDocCommentsFromDeclarations(declarations: Declaration[], name: string, canUseParsedParamTagComments: boolean) {
         var documentationComment = <SymbolDisplayPart[]>[];
         var docComments = getJsDocCommentsSeparatedByNewLines();
         ts.forEach(docComments, docComment => {
@@ -275,7 +275,7 @@ module ts {
             ts.forEach(declarations, declaration => {
                 var sourceFileOfDeclaration = getSourceFileOfNode(declaration);
                 // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
-                if (declaration.kind === SyntaxKind.Parameter) {
+                if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
                     ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
                         var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
                         if (cleanedParamJsDocComment) {
@@ -613,7 +613,10 @@ module ts {
 
         getDocumentationComment(): SymbolDisplayPart[] {
             if (this.documentationComment === undefined) {
-                this.documentationComment = this.declaration ? getJsDocCommentsFromDeclarations([this.declaration], this.declaration.name ? this.declaration.name.text : "") : [];
+                this.documentationComment = this.declaration ? getJsDocCommentsFromDeclarations(
+                    [this.declaration],
+                    this.declaration.name ? this.declaration.name.text : "",
+                    /*canUseParsedParamTagComments*/ false) : [];
             }
 
             return this.documentationComment;
@@ -2689,9 +2692,7 @@ module ts {
             if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Signature || symbolFlags & SymbolFlags.Class) {
                 // If it is accessor they are allowed only if location is at name of the accessor
                 if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
-                    if (!isNameOfFunctionDeclaration(location) || ts.contains(symbol.getDeclarations(), location.parent)) {
-                        symbolKind = ScriptElementKind.memberVariableElement;
-                    }
+                    symbolKind = ScriptElementKind.memberVariableElement;
                 }
 
                 var type = typeResolver.getTypeOfSymbol(symbol);
@@ -2750,7 +2751,7 @@ module ts {
                             hasAddedSymbolInfo = true;
                         }
                     }
-                    else if (isNameOfFunctionDeclaration(location) || // name of function declaration
+                    else if ((isNameOfFunctionDeclaration(location) && !(symbol.flags & SymbolFlags.Accessor)) || // name of function declaration
                         (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)) { // At constructor keyword of constructor declaration
                         // get the signature from the declaration and write it
                         var signature: Signature;
