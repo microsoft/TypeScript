@@ -2778,7 +2778,7 @@ module ts {
             }
             
             function getThrowOccurrences(throwStatement: ThrowStatement) {
-                var owner = getContextualThrowStatementOwner(throwStatement);
+                var owner = getThrowStatementOwner(throwStatement);
 
                 if (!owner) {
                     return undefined;
@@ -2817,12 +2817,12 @@ module ts {
                     else if (node.kind === SyntaxKind.TryStatement) {
                         var tryStatement = <TryStatement>node;
 
-                        // If a try statement has a catch clause, then any thrown exceptions in the try block
-                        // will be propagated to the next owner.
                         if (tryStatement.catchBlock) {
                             aggregate(tryStatement.catchBlock);
                         }
                         else {
+                            // Exceptions thrown within a try block lacking a catch clause
+                            // are "owned" in the current context.
                             aggregate(tryStatement.tryBlock);
                         }
 
@@ -2838,11 +2838,11 @@ module ts {
             }
 
             /**
-             * For lack of a better name, this function takes a throw statement and returns the first
-             * encountered ancestor that is a try-block (whose try statement has a catch clause),
+             * For lack of a better name, this function takes a throw statement and returns the
+             * nearest ancestor that is a try-block (whose try statement has a catch clause),
              * function-block, or source file.
              */
-            function getContextualThrowStatementOwner(throwStatement: ThrowStatement): Node {
+            function getThrowStatementOwner(throwStatement: ThrowStatement): Node {
                 var child: Node = throwStatement;
 
                 while (child.parent) {
