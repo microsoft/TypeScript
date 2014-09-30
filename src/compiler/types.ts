@@ -645,7 +645,7 @@ module ts {
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         writeType(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
-        writeSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+        writeSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
         getRootSymbol(symbol: Symbol): Symbol;
@@ -653,6 +653,7 @@ module ts {
         getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
         writeSignature(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        writeTypeParameter(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
 
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
@@ -682,6 +683,11 @@ module ts {
         UseTypeOfFunction       = 0x00000002,  // Write typeof instead of function type literal
         NoTruncation            = 0x00000004,  // Don't truncate typeToString result
         WriteArrowStyleSignature= 0x00000008,  // Write arrow style signature
+    }
+
+    export enum SymbolFormatFlags {
+        None                                  = 0x00000000,
+        WriteTypeParametersOfClassOrInterface = 0x00000001,  // Write c<T> instead of just writing symbol name c of generic class
     }
 
     export enum SymbolAccessibility {

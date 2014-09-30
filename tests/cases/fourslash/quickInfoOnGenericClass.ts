@@ -5,4 +5,4 @@
 ////}
 
 goTo.marker();
-verify.quickInfoIs('Container<T>', null, 'Container<T>');
+verify.quickInfoIs('class Container<T>', null);

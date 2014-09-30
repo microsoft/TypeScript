@@ -9,20 +9,20 @@
 ////    }
 ////    var b: B<string>;
 ////    var r3 = b.foo; // number
-////    var r/*2*/4 = b.ba/*1*/r; // string
+////    var r/*2*/4 = b.b/*1*/ar; // string
 ////}
 
 diagnostics.setEditValidation(IncrementalEditValidation.None);
 
 goTo.marker('1');
-verify.quickInfoIs("string", undefined, "MM.B<T>.bar", "property");
+verify.quickInfoIs("(property) B<T>.bar: string", undefined);
 edit.deleteAtCaret(1);
 edit.insert('z');
-verify.quickInfoIs("any");
+verify.not.quickInfoExists();
 verify.numberOfErrorsInCurrentFile(1);
 edit.backspace(1);
-edit.insert('r');
-verify.quickInfoIs("string", undefined, "MM.B<T>.bar", "property");
+edit.insert('a');
+verify.quickInfoIs("(property) B<T>.bar: string", undefined);
 goTo.marker('2');
-verify.quickInfoIs("string", undefined, "r4", "var");
+verify.quickInfoIs("(var) r4: string", undefined);
 verify.numberOfErrorsInCurrentFile(0);

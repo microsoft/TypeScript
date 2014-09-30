@@ -1405,29 +1405,30 @@ module ts {
         }
     }
 
+    function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
+        var displayPartWriter = getDisplayPartWriter();
+        writeDisplayParts(displayPartWriter);
+        var result = displayPartWriter.displayParts();
+        releaseDisplayPartWriter(displayPartWriter);
+        return result;
+    }
+
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
-        var displayPartWriter = getDisplayPartWriter();
-        typechecker.writeType(type, displayPartWriter, enclosingDeclaration, flags);
-        var result = displayPartWriter.displayParts();
-        releaseDisplayPartWriter(displayPartWriter);
-        return result;
+        return mapToDisplayParts(writer => {
+            typechecker.writeType(type, writer, enclosingDeclaration, flags);
+        });
     }
 
-    export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): SymbolDisplayPart[] {
-        var displayPartWriter = getDisplayPartWriter();
-        typeChecker.writeSymbol(symbol, displayPartWriter, enclosingDeclaration, meaning);
-        var result = displayPartWriter.displayParts();
-        releaseDisplayPartWriter(displayPartWriter);
-
-        return result;
+    export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
+        return mapToDisplayParts(writer => {
+            typeChecker.writeSymbol(symbol, writer, enclosingDeclaration, meaning, flags);
+        });
     }
 
-    function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
-        var displayPartWriter = getDisplayPartWriter();
-        typechecker.writeSignature(signature, displayPartWriter, enclosingDeclaration, flags);
-        var result = displayPartWriter.displayParts();
-        releaseDisplayPartWriter(displayPartWriter);
-        return result;
+    function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[]{
+        return mapToDisplayParts(writer => {
+            typechecker.writeSignature(signature, writer, enclosingDeclaration, flags);
+        });
     }
 
     export function getDefaultCompilerOptions(): CompilerOptions {
@@ -2792,13 +2793,13 @@ module ts {
             if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
+                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOfClassOrInterface));
             }
             if (symbolFlags & SymbolFlags.Interface) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
+                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOfClassOrInterface));
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
@@ -2819,6 +2820,25 @@ module ts {
                 displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, enclosingDeclaration));
+                displayParts.push(spacePart());
+                displayParts.push(keywordPart(SyntaxKind.InKeyword));
+                displayParts.push(spacePart());
+                if (symbol.parent) {
+                    // Class/Interface type parameter
+                    displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol.parent, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOfClassOrInterface))
+                }
+                else {
+                    // Method/function type parameter
+                    var signatureDeclaration = <SignatureDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
+                    var signature = typeResolver.getSignatureFromDeclaration(signatureDeclaration);
+                    if (signatureDeclaration.kind === SyntaxKind.ConstructSignature) {
+                        displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                        displayParts.push(spacePart());
+                    } else if (signatureDeclaration.kind !== SyntaxKind.CallSignature) {
+                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, signatureDeclaration.symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOfClassOrInterface))
+                    }
+                    displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, sourceFile, TypeFormatFlags.NoTruncation));
+                }
             }
             if (symbolFlags & SymbolFlags.EnumMember) {
                 addPrefixForAnyFunctionOrVar(symbol, "enum member");
@@ -2848,7 +2868,16 @@ module ts {
                         symbolFlags & SymbolFlags.Variable) {
                         displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                         displayParts.push(spacePart());
-                        displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, type, enclosingDeclaration, TypeFormatFlags.NoTruncation));
+                        // If the type is type parameter, format it specially
+                        if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
+                            var typeParameterParts = mapToDisplayParts(writer => {
+                                typeResolver.writeTypeParameter(<TypeParameter>type, writer, enclosingDeclaration, TypeFormatFlags.NoTruncation);
+                            });
+                            displayParts.push.apply(displayParts, typeParameterParts);
+                        }
+                        else {
+                            displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, type, enclosingDeclaration, TypeFormatFlags.NoTruncation));
+                        }
                     }
                     else if (symbolFlags & SymbolFlags.Function ||
                         symbolFlags & SymbolFlags.Method ||
@@ -2880,9 +2909,8 @@ module ts {
                     displayParts.push(textPart(symbolKind));
                     displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                     displayParts.push(spacePart());
-                    //if (symbol.declarations && symbol.declarations.length) {
-                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
-                    //}
+                    // Write type parameters of class/Interface if it is property/method of the generic class/interface
+                    displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOfClassOrInterface));
                 }
             }
 

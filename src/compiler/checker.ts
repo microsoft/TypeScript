@@ -102,6 +102,7 @@ module ts {
             isValidPropertyAccess: isValidPropertyAccess,
             getSignatureFromDeclaration: getSignatureFromDeclaration,
             writeSignature: writeSignature,
+            writeTypeParameter: writeTypeParameter,
             isImplementationOfOverload: isImplementationOfOverload
         };
 
@@ -964,12 +965,19 @@ module ts {
 
         // Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
         // Meaning needs to be specified if the enclosing declaration is given
-        function writeSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags): void {
+        function writeSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void {
             function writeSymbolName(symbol: Symbol): void {
                 if (symbol.declarations && symbol.declarations.length > 0) {
                     var declaration = symbol.declarations[0];
                     if (declaration.name) {
                         writer.writeSymbol(identifierToString(declaration.name), symbol);
+                        if (flags & SymbolFormatFlags.WriteTypeParametersOfClassOrInterface) {
+                            var rootSymbol = getRootSymbol(symbol);
+                            if (rootSymbol.flags & SymbolFlags.Class || rootSymbol.flags & SymbolFlags.Interface) {
+                                writeTypeParameters(getTypeParametersOfClassOrInterface(symbol), writer, enclosingDeclaration);
+                            }
+                        }
+
                         return;
                     }
                 }
@@ -1268,26 +1276,33 @@ module ts {
             }
         }
 
-        function writeSignature(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
-            if (signature.typeParameters) {
+        function writeTypeParameter(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            writeSymbol(tp.symbol, writer);
+            var constraint = getConstraintOfTypeParameter(tp);
+            if (constraint) {
+                writeSpace(writer);
+                writeKeyword(writer, SyntaxKind.ExtendsKeyword);
+                writeSpace(writer);
+                writeType(constraint, writer, enclosingDeclaration, flags, typeStack);
+            }
+        }
+
+        function writeTypeParameters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            if (typeParameters) {
                 writePunctuation(writer, SyntaxKind.LessThanToken);
-                for (var i = 0; i < signature.typeParameters.length; i++) {
+                for (var i = 0; i < typeParameters.length; i++) {
                     if (i > 0) {
                         writePunctuation(writer, SyntaxKind.CommaToken);
                         writeSpace(writer);
                     }
-                    var tp = signature.typeParameters[i];
-                    writeSymbol(tp.symbol, writer);
-                    var constraint = getConstraintOfTypeParameter(tp);
-                    if (constraint) {
-                        writeSpace(writer);
-                        writeKeyword(writer, SyntaxKind.ExtendsKeyword);
-                        writeSpace(writer);
-                        writeType(constraint, writer, enclosingDeclaration, flags, typeStack);
-                    }
+                    writeTypeParameter(typeParameters[i], writer, enclosingDeclaration, flags, typeStack);
                 }
                 writePunctuation(writer, SyntaxKind.GreaterThanToken);
             }
+        }
+
+        function writeSignature(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            writeTypeParameters(signature.typeParameters, writer, enclosingDeclaration, flags, typeStack);
             writePunctuation(writer, SyntaxKind.OpenParenToken);
             for (var i = 0; i < signature.parameters.length; i++) {
                 if (i > 0) {
