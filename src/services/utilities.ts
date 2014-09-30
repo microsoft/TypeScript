@@ -46,45 +46,22 @@ module ts {
         return -1;
     }
 
-    /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
-      * leading trivia or within the token text.
-      */
-    export function getTokenContainingPosition(sourceFile: SourceFile, position: number) {
-        var current: Node = sourceFile;
-        outer: while (true) {
-            // find the child that has this
-            for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                var child = current.getChildAt(i);
-                if (child.getFullStart() <= position && position < child.getEnd()) {
-                    current = child;
-                    continue outer;
-                }
-            }
-            return current;
-        }
-    }
-
-    /** Gets the token whose text has range [start, end) and position >= start and position < end */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, /*includeItemAtEndPosition*/ undefined);
-    }
-
     /* Gets the token whose text has range [start, end) and 
      * position >= start and (position < end or (position === end && token is keyword or identifier))
      */
     export function getTouchingWord(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, isWord);
+        return getTouchingToken(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, isWord);
     }
 
     /* Gets the token whose text has range [start, end) and position >= start 
      * and (position < end or (position === end && token is keyword or identifier or numeric\string litera))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, isPropertyName);
+        return getTouchingToken(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, isPropertyName);
     }
 
     /** Get the token whose text contains the position */
-    export function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition: (n: Node) => boolean): Node {
+    export function getTouchingToken(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition?: (n: Node) => boolean): Node {
         var current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
@@ -95,7 +72,8 @@ module ts {
             // find the child that contains 'position'
             for (var i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
                 var child = current.getChildAt(i);
-                if (child.getStart(sourceFile) <= position) {
+                var start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile);
+                if (start <= position) {
                     if (position < child.getEnd()) {
                         current = child;
                         continue outer;
@@ -123,7 +101,7 @@ module ts {
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
-        var tokenAtPosition = getTokenContainingPosition(file, position);
+        var tokenAtPosition = getTouchingToken(file, position, /*allowPositionInLeadingTrivia*/ true);
         if (isToken(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
             return tokenAtPosition;
         }
