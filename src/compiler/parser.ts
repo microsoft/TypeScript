@@ -3516,7 +3516,7 @@ module ts {
                 } else if (extendTypes.length === 1) {
                     node.baseType = extendTypes[0];
                 } else {
-                    grammarErrorAtPos(extendsKeywordStart, extendsKeywordLength, Diagnostics.A_class_can_only_extend_a_single_class, "extends");
+                    errorAtPos(extendsKeywordStart, extendsKeywordLength, Diagnostics.A_class_can_only_extend_a_single_class, "extends");
                 }
             }
 
