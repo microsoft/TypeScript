@@ -84,8 +84,13 @@ module ts {
                     if (node.name) {
                         node.name.parent = node;
                     }
-                    file.semanticErrors.push(createDiagnosticForNode(node.name ? node.name : node,
-                        Diagnostics.Duplicate_identifier_0, getDisplayName(node)));
+                    // Report errors every position with duplicate declarations
+                    // Report errors on previous encountered declarations
+                    forEach(symbol.declarations, (declaration) => {
+                        file.semanticErrors.push(createDiagnosticForNode(declaration.name, Diagnostics.Duplicate_identifier_0, getDisplayName(declaration)));
+                    });
+                    file.semanticErrors.push(createDiagnosticForNode(node, Diagnostics.Duplicate_identifier_0, getDisplayName(node)));
+
                     symbol = createSymbol(0, name);
                 }
             }
