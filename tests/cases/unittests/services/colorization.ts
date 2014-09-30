@@ -217,5 +217,19 @@ describe('Colorization', function () {
                 keyword("var"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
         });
+
+        it("classifies multiple keywords properly", function () {
+            test("public static",
+                ts.EndOfLineState.Start,
+                keyword("public"),
+                keyword("static"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+
+            test("public var",
+                ts.EndOfLineState.Start,
+                keyword("public"),
+                identifier("var"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
     });
 });

@@ -4577,26 +4577,58 @@ module ts {
         /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
         /// we have a series of divide operator. this list allows us to be more accurate by ruling out 
         /// locations where a regexp cannot exist.
-        var noRegexTable: boolean[];
-        if (!noRegexTable) {
-            noRegexTable = [];
-            noRegexTable[SyntaxKind.Identifier] = true;
-            noRegexTable[SyntaxKind.StringLiteral] = true;
-            noRegexTable[SyntaxKind.NumericLiteral] = true;
-            noRegexTable[SyntaxKind.RegularExpressionLiteral] = true;
-            noRegexTable[SyntaxKind.ThisKeyword] = true;
-            noRegexTable[SyntaxKind.PlusPlusToken] = true;
-            noRegexTable[SyntaxKind.MinusMinusToken] = true;
-            noRegexTable[SyntaxKind.CloseParenToken] = true;
-            noRegexTable[SyntaxKind.CloseBracketToken] = true;
-            noRegexTable[SyntaxKind.CloseBraceToken] = true;
-            noRegexTable[SyntaxKind.TrueKeyword] = true;
-            noRegexTable[SyntaxKind.FalseKeyword] = true;
+        var noRegexTable: boolean[] = [];
+        noRegexTable[SyntaxKind.Identifier] = true;
+        noRegexTable[SyntaxKind.StringLiteral] = true;
+        noRegexTable[SyntaxKind.NumericLiteral] = true;
+        noRegexTable[SyntaxKind.RegularExpressionLiteral] = true;
+        noRegexTable[SyntaxKind.ThisKeyword] = true;
+        noRegexTable[SyntaxKind.PlusPlusToken] = true;
+        noRegexTable[SyntaxKind.MinusMinusToken] = true;
+        noRegexTable[SyntaxKind.CloseParenToken] = true;
+        noRegexTable[SyntaxKind.CloseBracketToken] = true;
+        noRegexTable[SyntaxKind.CloseBraceToken] = true;
+        noRegexTable[SyntaxKind.TrueKeyword] = true;
+        noRegexTable[SyntaxKind.FalseKeyword] = true;
+
+        function isAccessibilityModifier(kind: SyntaxKind) {
+            switch (kind) {
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
+                    return true;
+            }
+
+            return false;
+        }
+
+        /** Returns true if 'keyword2' can legally follow 'keyword1' in any language construct. */
+        function canFollow(keyword1: SyntaxKind, keyword2: SyntaxKind) {
+            if (isAccessibilityModifier(keyword1)) {
+                if (keyword2 === SyntaxKind.GetKeyword ||
+                    keyword2 === SyntaxKind.SetKeyword ||
+                    keyword2 === SyntaxKind.ConstructorKeyword ||
+                    keyword2 === SyntaxKind.StaticKeyword) {
+
+                    // Allow things like  "public get", "public constructor" and "public static".  
+                    // These are all legal.
+                    return true;
+                }
+
+                // Any other keyword following "public" is actually an identifier an not a real
+                // keyword.
+                return false;
+            }
+
+            // Assume any other keyword combination is legal.  This can be refined in the future
+            // if there are more cases we want the classifier to be better at.
+            return true;
         }
 
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
             var lastTokenOrCommentEnd = 0;
+            var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
 
             // If we're in a string literal, then prepend: "\
@@ -4626,8 +4658,6 @@ module ts {
                 entries: []
             };
 
-            
-            var token = SyntaxKind.Unknown;
             do {
                 token = scanner.scan();
 
@@ -4638,6 +4668,13 @@ module ts {
                         }
                     }
                     else if (lastNonTriviaToken === SyntaxKind.DotToken && isKeyword(token)) {
+                        token = SyntaxKind.Identifier;
+                    }
+                    else if (isKeyword(lastNonTriviaToken) && isKeyword(token) && !canFollow(lastNonTriviaToken, token)) {
+                        // We have two keywords in a row.  Only treat the second as a keyword if 
+                        // it's a sequence that could legally occur in the language.  Otherwise
+                        // treat it as an identifier.  This way, if someone writes "private var"
+                        // we recognize that 'var' is actually an identifier here.
                         token = SyntaxKind.Identifier;
                     }
 
