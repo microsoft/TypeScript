@@ -8,7 +8,7 @@ tests/cases/compiler/duplicateInterfaceMembers1.ts(3,4): error TS2300: Duplicate
        ~
 !!! error TS2300: Duplicate identifier 'x'.
        x: number;
-       ~~~~~~~~~~
+       ~
 !!! error TS2300: Duplicate identifier 'x'.
     }
     

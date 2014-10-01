@@ -1,5 +1,5 @@
 tests/cases/compiler/constructorOverloads7.ts(1,15): error TS2300: Duplicate identifier 'Point'.
-tests/cases/compiler/constructorOverloads7.ts(15,1): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/constructorOverloads7.ts(15,10): error TS2300: Duplicate identifier 'Point'.
 tests/cases/compiler/constructorOverloads7.ts(22,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 
 
@@ -21,18 +21,13 @@ tests/cases/compiler/constructorOverloads7.ts(22,18): error TS2384: Overload sig
     // Because Point is a constructor function, this is inferred
     // to be Point and return type is inferred to be void
     function Point(x, y) {
-    ~~~~~~~~~~~~~~~~~~~~~~
+             ~~~~~
+!!! error TS2300: Duplicate identifier 'Point'.
         this.x = x;
-    ~~~~~~~~~~~~~~~
         this.y = y;
-    ~~~~~~~~~~~~~~~
-    
     
         return this;
-    ~~~~~~~~~~~~~~~~
     }
-    ~
-!!! error TS2300: Duplicate identifier 'Point'.
     
     declare function EF1(a:number, b:number):number;
                      ~~~

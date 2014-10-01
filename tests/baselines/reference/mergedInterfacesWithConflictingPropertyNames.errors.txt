@@ -15,7 +15,7 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConfli
     
     interface A {
         x: number;
-        ~~~~~~~~~~
+        ~
 !!! error TS2300: Duplicate identifier 'x'.
     }
     
@@ -28,7 +28,7 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConfli
     
         interface A<T> {
             x: number;  // error
-            ~~~~~~~~~~
+            ~
 !!! error TS2300: Duplicate identifier 'x'.
         }
     }
@@ -56,7 +56,7 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConfli
     module M3 {
         export interface A<T> {
             x: number;  // error
-            ~~~~~~~~~~
+            ~
 !!! error TS2300: Duplicate identifier 'x'.
         }
     }

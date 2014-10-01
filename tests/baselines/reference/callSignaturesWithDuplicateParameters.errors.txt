@@ -70,28 +70,28 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWit
     var f4 = <T>(x: T, x: T) => { }
                  ~
 !!! error TS2300: Duplicate identifier 'x'.
-                       ~~~~
+                       ~
 !!! error TS2300: Duplicate identifier 'x'.
     
     function foo2(x: string, x: number) { }
                   ~
 !!! error TS2300: Duplicate identifier 'x'.
-                             ~~~~~~~~~
+                             ~
 !!! error TS2300: Duplicate identifier 'x'.
     var f5 = function foo(x: string, x: number) { }
                           ~
 !!! error TS2300: Duplicate identifier 'x'.
-                                     ~~~~~~~~~
+                                     ~
 !!! error TS2300: Duplicate identifier 'x'.
     var f6 = function (x: string, x: number) { }
                        ~
 !!! error TS2300: Duplicate identifier 'x'.
-                                  ~~~~~~~~~
+                                  ~
 !!! error TS2300: Duplicate identifier 'x'.
     var f7 = (x: string, x: number) => { }
               ~
 !!! error TS2300: Duplicate identifier 'x'.
-                         ~~~~~~~~~
+                         ~
 !!! error TS2300: Duplicate identifier 'x'.
     var f8 = <T>(x: T, y: T) => { }
     
@@ -104,12 +104,12 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWit
         foo2(x: number, x: string) { }
              ~
 !!! error TS2300: Duplicate identifier 'x'.
-                        ~~~~~~~~~
+                        ~
 !!! error TS2300: Duplicate identifier 'x'.
         foo3<T>(x: T, x: T) { }
                 ~
 !!! error TS2300: Duplicate identifier 'x'.
-                      ~~~~
+                      ~
 !!! error TS2300: Duplicate identifier 'x'.
     }
     
@@ -122,7 +122,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWit
         (x: string, x: number);
          ~
 !!! error TS2300: Duplicate identifier 'x'.
-                    ~~~~~~~~~
+                    ~
 !!! error TS2300: Duplicate identifier 'x'.
         foo(x, x);
             ~
@@ -132,12 +132,12 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWit
         foo(x: number, x: string);
             ~
 !!! error TS2300: Duplicate identifier 'x'.
-                       ~~~~~~~~~
+                       ~
 !!! error TS2300: Duplicate identifier 'x'.
         foo3<T>(x: T, x: T);
                 ~
 !!! error TS2300: Duplicate identifier 'x'.
-                      ~~~~
+                      ~
 !!! error TS2300: Duplicate identifier 'x'.
     }
     
@@ -150,7 +150,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWit
         foo2(x: number, x: string);
              ~
 !!! error TS2300: Duplicate identifier 'x'.
-                        ~~~~~~~~~
+                        ~
 !!! error TS2300: Duplicate identifier 'x'.
     };
     
@@ -163,11 +163,11 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWit
         a: function foo(x: number, x: string) { },
                         ~
 !!! error TS2300: Duplicate identifier 'x'.
-                                   ~~~~~~~~~
+                                   ~
 !!! error TS2300: Duplicate identifier 'x'.
         b: <T>(x: T, x: T) => { }
                ~
 !!! error TS2300: Duplicate identifier 'x'.
-                     ~~~~
+                     ~
 !!! error TS2300: Duplicate identifier 'x'.
     }

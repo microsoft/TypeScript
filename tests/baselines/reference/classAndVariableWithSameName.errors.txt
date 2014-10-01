@@ -5,7 +5,7 @@ tests/cases/conformance/classes/classDeclarations/classAndVariableWithSameName.t
 
 
 ==== tests/cases/conformance/classes/classDeclarations/classAndVariableWithSameName.ts (4 errors) ====
-    class C { foo: string; }
+    class C { foo: string; } // error
           ~
 !!! error TS2300: Duplicate identifier 'C'.
     var C = ''; // error
@@ -13,7 +13,7 @@ tests/cases/conformance/classes/classDeclarations/classAndVariableWithSameName.t
 !!! error TS2300: Duplicate identifier 'C'.
     
     module M {
-        class D {
+        class D { // error
               ~
 !!! error TS2300: Duplicate identifier 'D'.
             bar: string;

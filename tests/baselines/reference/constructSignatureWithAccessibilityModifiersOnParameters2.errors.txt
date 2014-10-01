@@ -2,11 +2,11 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatur
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,24): error TS2300: Duplicate identifier 'x'.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,27): error TS2369: A parameter property is only allowed in a constructor implementation.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,35): error TS2300: Duplicate identifier 'y'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(5,17): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(5,27): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(5,24): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(5,35): error TS2300: Duplicate identifier 'y'.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(9,17): error TS2369: A parameter property is only allowed in a constructor implementation.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(9,25): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(10,17): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(10,24): error TS2300: Duplicate identifier 'x'.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(14,17): error TS2369: A parameter property is only allowed in a constructor implementation.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(19,10): error TS2369: A parameter property is only allowed in a constructor implementation.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(20,10): error TS2369: A parameter property is only allowed in a constructor implementation.
@@ -32,9 +32,9 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatur
                                       ~
 !!! error TS2300: Duplicate identifier 'y'.
         constructor(public x, private y) { }
-                    ~~~~~~~~
+                           ~
 !!! error TS2300: Duplicate identifier 'x'.
-                              ~~~~~~~~~
+                                      ~
 !!! error TS2300: Duplicate identifier 'y'.
     }
     
@@ -45,7 +45,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatur
                             ~
 !!! error TS2300: Duplicate identifier 'x'.
         constructor(public x) { }
-                    ~~~~~~~~
+                           ~
 !!! error TS2300: Duplicate identifier 'x'.
     }
     

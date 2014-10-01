@@ -1,7 +1,7 @@
 tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(4,12): error TS2300: Duplicate identifier 'Origin'.
-tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(8,5): error TS2300: Duplicate identifier 'Origin'.
+tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(8,21): error TS2300: Duplicate identifier 'Origin'.
 tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(16,16): error TS2300: Duplicate identifier 'Origin'.
-tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20,9): error TS2300: Duplicate identifier 'Origin'.
+tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20,25): error TS2300: Duplicate identifier 'Origin'.
 
 
 ==== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts (4 errors) ====
@@ -15,7 +15,7 @@ tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMer
     
     module Point {
         export function Origin() { return null; } //expected duplicate identifier error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~
 !!! error TS2300: Duplicate identifier 'Origin'.
     }
     
@@ -31,7 +31,7 @@ tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMer
     
         export module Point {
             export function Origin() { return ""; }//expected duplicate identifier error
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            ~~~~~~
 !!! error TS2300: Duplicate identifier 'Origin'.
         }
     }

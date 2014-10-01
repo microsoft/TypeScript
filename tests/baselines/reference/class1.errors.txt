@@ -3,9 +3,9 @@ tests/cases/compiler/class1.ts(2,7): error TS2300: Duplicate identifier 'foo'.
 
 
 ==== tests/cases/compiler/class1.ts (2 errors) ====
-    interface foo{ }
+    interface foo{ } // error
               ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
-    class foo{ }
+    class foo{ } // error
           ~~~
 !!! error TS2300: Duplicate identifier 'foo'.

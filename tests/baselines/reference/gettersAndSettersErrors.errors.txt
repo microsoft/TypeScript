@@ -6,7 +6,7 @@ tests/cases/compiler/gettersAndSettersErrors.ts(11,17): error TS1056: Accessors 
 tests/cases/compiler/gettersAndSettersErrors.ts(12,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/gettersAndSettersErrors.ts(2,16): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/compiler/gettersAndSettersErrors.ts(3,16): error TS2300: Duplicate identifier 'Foo'.
-tests/cases/compiler/gettersAndSettersErrors.ts(5,5): error TS2300: Duplicate identifier 'Foo'.
+tests/cases/compiler/gettersAndSettersErrors.ts(5,12): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/compiler/gettersAndSettersErrors.ts(11,17): error TS2379: Getter and setter accessors do not agree in visibility.
 tests/cases/compiler/gettersAndSettersErrors.ts(12,16): error TS2379: Getter and setter accessors do not agree in visibility.
 
@@ -25,7 +25,7 @@ tests/cases/compiler/gettersAndSettersErrors.ts(12,16): error TS2379: Getter and
 !!! error TS2300: Duplicate identifier 'Foo'.
     
         public Foo = 0; // error - duplicate identifier Foo - confirmed
-        ~~~~~~~~~~~~~~~
+               ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
         public get Goo(v:string):string {return null;} // error - getters must not have a parameter
                    ~~~

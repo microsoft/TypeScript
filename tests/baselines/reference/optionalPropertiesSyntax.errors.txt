@@ -55,7 +55,7 @@ tests/cases/compiler/optionalPropertiesSyntax.ts(34,5): error TS2375: Duplicate 
         ~~~~
 !!! error TS2300: Duplicate identifier 'prop'.
         prop?: any;
-        ~~~~~~~~~~~
+        ~~~~
 !!! error TS2300: Duplicate identifier 'prop'.
         prop2?: any;
     }

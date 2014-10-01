@@ -10,12 +10,10 @@ tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndFunctionWi
         ~
 !!! error TS2300: Duplicate identifier 'x'.
         x() { // error
-        ~~~~~~~~~~~~~~
-            return 1;
-    ~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+        ~
 !!! error TS2300: Duplicate identifier 'x'.
+            return 1;
+        }
     }
     
     class D {
@@ -23,6 +21,6 @@ tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndFunctionWi
         ~
 !!! error TS2300: Duplicate identifier 'x'.
         x(v) { } // error
-        ~~~~~~~~
+        ~
 !!! error TS2300: Duplicate identifier 'x'.
     }

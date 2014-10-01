@@ -12,6 +12,6 @@ tests/cases/compiler/duplicatePropertiesInStrictMode.ts(4,3): error TS2300: Dupl
       x: 2
       ~
 !!! error TS1117: An object literal cannot have multiple properties with the same name in strict mode.
-      ~~~~
+      ~
 !!! error TS2300: Duplicate identifier 'x'.
     }

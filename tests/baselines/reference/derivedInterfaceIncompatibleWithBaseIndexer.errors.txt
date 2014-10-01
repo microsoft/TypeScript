@@ -54,6 +54,6 @@ tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompa
     
     interface Derived5 extends Base {
         '1': { x: number } // error
-        ~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2300: Duplicate identifier ''1''.
     }

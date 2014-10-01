@@ -1,5 +1,5 @@
 tests/cases/compiler/anyDeclare.ts(3,9): error TS2300: Duplicate identifier 'myFn'.
-tests/cases/compiler/anyDeclare.ts(4,5): error TS2300: Duplicate identifier 'myFn'.
+tests/cases/compiler/anyDeclare.ts(4,14): error TS2300: Duplicate identifier 'myFn'.
 
 
 ==== tests/cases/compiler/anyDeclare.ts (2 errors) ====
@@ -9,7 +9,7 @@ tests/cases/compiler/anyDeclare.ts(4,5): error TS2300: Duplicate identifier 'myF
             ~~~~
 !!! error TS2300: Duplicate identifier 'myFn'.
         function myFn() {  }
-        ~~~~~~~~~~~~~~~~~~~~
+                 ~~~~
 !!! error TS2300: Duplicate identifier 'myFn'.
     }
     

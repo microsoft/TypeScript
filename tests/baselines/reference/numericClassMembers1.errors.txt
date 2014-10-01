@@ -10,7 +10,7 @@ tests/cases/compiler/numericClassMembers1.ts(8,2): error TS2300: Duplicate ident
       ~
 !!! error TS2300: Duplicate identifier '0'.
       0.0 = 2;
-      ~~~~~~~~
+      ~~~
 !!! error TS2300: Duplicate identifier '0.0'.
     }
      
@@ -19,7 +19,7 @@ tests/cases/compiler/numericClassMembers1.ts(8,2): error TS2300: Duplicate ident
       ~~~
 !!! error TS2300: Duplicate identifier '0.0'.
      '0' = 2;
-     ~~~~~~~~
+     ~~~
 !!! error TS2300: Duplicate identifier ''0''.
     }
     

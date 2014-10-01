@@ -3,12 +3,12 @@ tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWi
 tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(15,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(18,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(2,5): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(3,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(3,9): error TS2300: Duplicate identifier 'x'.
 tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(9,5): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(10,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(10,9): error TS2300: Duplicate identifier 'x'.
 tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(14,13): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(15,5): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(18,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(15,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(18,9): error TS2300: Duplicate identifier 'x'.
 
 
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts (11 errors) ====
@@ -19,12 +19,10 @@ tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWi
         get x() { // error
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-        ~~~~~~~~~~~~~~~~~~
-            return 1;
-    ~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+            ~
 !!! error TS2300: Duplicate identifier 'x'.
+            return 1;
+        }
     }
     
     class D {
@@ -34,7 +32,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWi
         set x(v) { } // error
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-        ~~~~~~~~~~~~
+            ~
 !!! error TS2300: Duplicate identifier 'x'.
     }
     
@@ -45,15 +43,13 @@ tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWi
         get x() { // error
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-        ~~~~~~~~~~~~~~~~~~
-            return 1;
-    ~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+            ~
 !!! error TS2300: Duplicate identifier 'x'.
+            return 1;
+        }
         set x(v) { }
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-        ~~~~~~~~~~~~
+            ~
 !!! error TS2300: Duplicate identifier 'x'.
     }

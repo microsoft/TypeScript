@@ -1,5 +1,5 @@
 tests/cases/compiler/augmentedTypesVar.ts(6,5): error TS2300: Duplicate identifier 'x2'.
-tests/cases/compiler/augmentedTypesVar.ts(7,1): error TS2300: Duplicate identifier 'x2'.
+tests/cases/compiler/augmentedTypesVar.ts(7,10): error TS2300: Duplicate identifier 'x2'.
 tests/cases/compiler/augmentedTypesVar.ts(10,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x3' must be of type 'number', but here has type '() => void'.
 tests/cases/compiler/augmentedTypesVar.ts(13,5): error TS2300: Duplicate identifier 'x4'.
 tests/cases/compiler/augmentedTypesVar.ts(14,7): error TS2300: Duplicate identifier 'x4'.
@@ -23,7 +23,7 @@ tests/cases/compiler/augmentedTypesVar.ts(31,8): error TS2300: Duplicate identif
         ~~
 !!! error TS2300: Duplicate identifier 'x2'.
     function x2() { } // error
-    ~~~~~~~~~~~~~~~~~
+             ~~
 !!! error TS2300: Duplicate identifier 'x2'.
     
     var x3 = 1; 

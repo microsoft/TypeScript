@@ -1,5 +1,5 @@
 tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(5,12): error TS2300: Duplicate identifier 'fn'.
-tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(10,5): error TS2300: Duplicate identifier 'fn'.
+tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(10,21): error TS2300: Duplicate identifier 'fn'.
 
 
 ==== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts (2 errors) ====
@@ -15,12 +15,10 @@ tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMer
     module clodule {
         // error: duplicate identifier expected
         export function fn<T>(x: T, y: T): T {
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            return x;
-    ~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+                        ~~
 !!! error TS2300: Duplicate identifier 'fn'.
+            return x;
+        }
     }
     
     

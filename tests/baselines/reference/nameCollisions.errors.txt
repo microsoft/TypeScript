@@ -4,11 +4,11 @@ tests/cases/compiler/nameCollisions.ts(10,12): error TS2300: Duplicate identifie
 tests/cases/compiler/nameCollisions.ts(13,9): error TS2300: Duplicate identifier 'z'.
 tests/cases/compiler/nameCollisions.ts(15,12): error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
 tests/cases/compiler/nameCollisions.ts(24,9): error TS2300: Duplicate identifier 'f'.
-tests/cases/compiler/nameCollisions.ts(25,5): error TS2300: Duplicate identifier 'f'.
+tests/cases/compiler/nameCollisions.ts(25,14): error TS2300: Duplicate identifier 'f'.
 tests/cases/compiler/nameCollisions.ts(27,14): error TS2300: Duplicate identifier 'f2'.
 tests/cases/compiler/nameCollisions.ts(28,9): error TS2300: Duplicate identifier 'f2'.
 tests/cases/compiler/nameCollisions.ts(33,11): error TS2300: Duplicate identifier 'C'.
-tests/cases/compiler/nameCollisions.ts(34,5): error TS2300: Duplicate identifier 'C'.
+tests/cases/compiler/nameCollisions.ts(34,14): error TS2300: Duplicate identifier 'C'.
 tests/cases/compiler/nameCollisions.ts(36,14): error TS2300: Duplicate identifier 'C2'.
 tests/cases/compiler/nameCollisions.ts(37,11): error TS2300: Duplicate identifier 'C2'.
 tests/cases/compiler/nameCollisions.ts(42,11): error TS2300: Duplicate identifier 'cli'.
@@ -55,7 +55,7 @@ tests/cases/compiler/nameCollisions.ts(46,11): error TS2300: Duplicate identifie
             ~
 !!! error TS2300: Duplicate identifier 'f'.
         function f() { } //error
-        ~~~~~~~~~~~~~~~~
+                 ~
 !!! error TS2300: Duplicate identifier 'f'.
     
         function f2() { }
@@ -72,7 +72,7 @@ tests/cases/compiler/nameCollisions.ts(46,11): error TS2300: Duplicate identifie
               ~
 !!! error TS2300: Duplicate identifier 'C'.
         function C() { } // error
-        ~~~~~~~~~~~~~~~~
+                 ~
 !!! error TS2300: Duplicate identifier 'C'.
     
         function C2() { }

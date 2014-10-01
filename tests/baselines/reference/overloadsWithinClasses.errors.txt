@@ -1,16 +1,16 @@
-tests/cases/compiler/overloadsWithinClasses.ts(3,5): error TS2393: Duplicate function implementation.
-tests/cases/compiler/overloadsWithinClasses.ts(5,5): error TS2393: Duplicate function implementation.
+tests/cases/compiler/overloadsWithinClasses.ts(3,12): error TS2393: Duplicate function implementation.
+tests/cases/compiler/overloadsWithinClasses.ts(5,12): error TS2393: Duplicate function implementation.
 
 
 ==== tests/cases/compiler/overloadsWithinClasses.ts (2 errors) ====
     class foo {
      
         static fnOverload( ) {}
-        ~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~
 !!! error TS2393: Duplicate function implementation.
      
         static fnOverload(foo: string){ } // error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~
 !!! error TS2393: Duplicate function implementation.
      
     }

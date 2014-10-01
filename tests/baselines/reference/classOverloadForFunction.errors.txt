@@ -1,5 +1,5 @@
 tests/cases/compiler/classOverloadForFunction.ts(1,7): error TS2300: Duplicate identifier 'foo'.
-tests/cases/compiler/classOverloadForFunction.ts(2,1): error TS2300: Duplicate identifier 'foo'.
+tests/cases/compiler/classOverloadForFunction.ts(2,10): error TS2300: Duplicate identifier 'foo'.
 
 
 ==== tests/cases/compiler/classOverloadForFunction.ts (2 errors) ====
@@ -7,6 +7,6 @@ tests/cases/compiler/classOverloadForFunction.ts(2,1): error TS2300: Duplicate i
           ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
     function foo() {}
-    ~~~~~~~~~~~~~~~~~
+             ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
     

@@ -146,137 +146,137 @@ tests/cases/compiler/giant.ts(672,25): error TS1036: Statements are not allowed 
 tests/cases/compiler/giant.ts(676,30): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(676,33): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/giant.ts(23,12): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(24,5): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(24,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(24,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(25,12): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(26,5): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(26,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(27,13): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(28,5): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(28,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(28,17): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(29,13): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(30,5): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(30,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(33,12): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(34,5): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(34,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(35,12): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(36,5): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(36,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(36,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(76,5): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(87,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(88,9): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(88,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(88,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(89,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(90,9): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(90,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(91,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(92,9): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(92,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(92,21): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(93,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(94,9): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(94,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(97,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(98,9): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(98,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(99,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(100,9): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(100,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(100,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(140,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(166,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(167,9): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(167,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(167,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(168,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(169,9): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(169,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(170,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(171,9): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(171,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(171,21): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(172,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(173,9): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(173,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(176,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(177,9): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(177,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(178,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(179,9): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(179,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(179,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(219,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(245,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(246,9): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(246,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(247,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(248,9): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(248,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(249,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(250,9): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(250,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(251,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(252,9): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(252,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(255,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(256,9): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(256,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(257,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(258,9): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(258,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(281,12): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(282,5): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(282,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(282,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(283,12): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(284,5): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(284,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(285,13): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(286,5): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(286,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(286,17): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(287,13): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(288,5): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(288,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(291,12): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(292,5): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(292,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(293,12): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(294,5): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(294,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(294,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(334,5): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(345,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(346,9): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(346,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(346,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(347,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(348,9): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(348,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(349,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(350,9): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(350,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(350,21): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(351,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(352,9): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(352,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(355,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(356,9): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(356,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(357,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(358,9): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(358,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(358,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(398,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(424,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(425,9): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(425,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(425,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(426,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(427,9): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(427,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(428,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(429,9): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(429,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(429,21): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(430,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(431,9): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(431,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(434,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(435,9): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(435,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(436,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(437,9): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(437,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(437,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(477,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(503,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(504,9): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(504,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(505,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(506,9): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(506,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(507,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(508,9): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(508,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(509,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(510,9): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(510,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(513,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(514,9): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(514,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(515,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(516,9): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(516,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(539,12): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(540,5): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(540,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(541,12): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(542,5): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(542,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(543,13): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(544,5): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(544,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(545,13): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(546,5): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(546,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(549,12): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(550,5): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(550,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(551,12): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(552,5): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(552,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(602,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all be optional or required.
 
@@ -308,7 +308,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
         public get pgF()
-        ~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                    ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -318,7 +318,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         public set psF(param:any)
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         private rgF() { }
         ~~~~~~~
@@ -326,7 +326,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                 ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
         private get rgF()
-        ~~~~~~~~~~~~~~~~~
+                    ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
                     ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -336,7 +336,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                 ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         private set rsF(param:any)
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         static tV;
         ~~~~~~
@@ -346,7 +346,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static set tsF(param:any)
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static tgF() { }
         ~~~~~~
@@ -354,7 +354,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         static get tgF()
-        ~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                    ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -422,7 +422,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
-            ~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                        ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -432,7 +432,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
             ~~~~~~~
@@ -440,7 +440,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
-            ~~~~~~~~~~~~~~~~~
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
                         ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -450,7 +450,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
             ~~~~~~
@@ -460,7 +460,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
             ~~~~~~
@@ -468,7 +468,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
-            ~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                        ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -553,7 +553,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
-            ~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                        ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -563,7 +563,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
             ~~~~~~~
@@ -571,7 +571,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
-            ~~~~~~~~~~~~~~~~~
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
                         ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -581,7 +581,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
             ~~~~~~
@@ -591,7 +591,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
             ~~~~~~
@@ -599,7 +599,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
-            ~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                        ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -696,7 +696,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             public get pgF()
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
             public psF(param:any) { }
                                   ~
@@ -706,7 +706,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             public set psF(param:any)
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
                           ~
@@ -716,7 +716,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             private get rgF()
                         ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~~~~~~~~~~~~~~~~
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private rsF(param:any) { }
                                    ~
@@ -726,7 +726,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             private set rsF(param:any)
                         ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
             static tF() { }
@@ -740,7 +740,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             static set tsF(param:any)
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
                          ~
@@ -750,7 +750,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             static get tgF()
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         }
         export declare module eaM {
@@ -786,7 +786,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
         public get pgF()
-        ~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                    ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -796,7 +796,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         public set psF(param:any)
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         private rgF() { }
         ~~~~~~~
@@ -804,7 +804,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                 ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
         private get rgF()
-        ~~~~~~~~~~~~~~~~~
+                    ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
                     ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -814,7 +814,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                 ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         private set rsF(param:any)
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         static tV;
         ~~~~~~
@@ -824,7 +824,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static set tsF(param:any)
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static tgF() { }
         ~~~~~~
@@ -832,7 +832,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         static get tgF()
-        ~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                    ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -900,7 +900,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
-            ~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                        ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -910,7 +910,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
             ~~~~~~~
@@ -918,7 +918,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
-            ~~~~~~~~~~~~~~~~~
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
                         ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -928,7 +928,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
             ~~~~~~
@@ -938,7 +938,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
             ~~~~~~
@@ -946,7 +946,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
-            ~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                        ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -1031,7 +1031,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
-            ~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                        ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -1041,7 +1041,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
             ~~~~~~~
@@ -1049,7 +1049,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
-            ~~~~~~~~~~~~~~~~~
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
                         ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -1059,7 +1059,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
             ~~~~~~
@@ -1069,7 +1069,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
             ~~~~~~
@@ -1077,7 +1077,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
-            ~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                        ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -1174,7 +1174,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             public get pgF()
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
             public psF(param:any) { }
                                   ~
@@ -1184,7 +1184,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             public set psF(param:any)
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
                           ~
@@ -1194,7 +1194,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             private get rgF()
                         ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~~~~~~~~~~~~~~~~
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private rsF(param:any) { }
                                    ~
@@ -1204,7 +1204,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             private set rsF(param:any)
                         ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
             static tF() { }
@@ -1218,7 +1218,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             static set tsF(param:any)
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
                          ~
@@ -1228,7 +1228,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             static get tgF()
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         }
         export declare module eaM {
@@ -1276,7 +1276,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
         public get pgF()
                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-        ~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
         public psF(param:any) { }
                               ~
@@ -1286,7 +1286,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
         public set psF(param:any)
                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         private rgF() { }
                       ~
@@ -1296,7 +1296,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
         private get rgF()
                     ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-        ~~~~~~~~~~~~~~~~~
+                    ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
         private rsF(param:any) { }
                                ~
@@ -1306,7 +1306,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
         private set rsF(param:any)
                     ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         static tV;
         static tF() { }
@@ -1320,7 +1320,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
         static set tsF(param:any)
                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static tgF() { }
                      ~
@@ -1330,7 +1330,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
         static get tgF()
                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-        ~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
     }
     export declare module eaM {

@@ -65,7 +65,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralType
         ~~~~~~~~~~~~~~~~
 !!! error TS2381: A signature with an implementation cannot use a string literal type.
         foo(x: 'a') { },
-        ~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
     }
     

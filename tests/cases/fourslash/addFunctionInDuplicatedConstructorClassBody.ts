@@ -9,4 +9,4 @@
 goTo.marker();
 var func = 'fn() { }';
 edit.insert(func);
-verify.numberOfErrorsInCurrentFile(1);
+verify.numberOfErrorsInCurrentFile(2);

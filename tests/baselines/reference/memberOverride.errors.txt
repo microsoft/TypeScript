@@ -11,7 +11,7 @@ tests/cases/compiler/memberOverride.ts(8,5): error TS2323: Type 'string' is not 
         ~
 !!! error TS2300: Duplicate identifier 'a'.
         a: 5
-        ~~~~
+        ~
 !!! error TS2300: Duplicate identifier 'a'.
     }
     

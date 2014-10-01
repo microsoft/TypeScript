@@ -8,19 +8,19 @@ tests/cases/compiler/callOverloads5.ts(13,10): error TS2350: Only a void functio
 
 
 ==== tests/cases/compiler/callOverloads5.ts (7 errors) ====
-    function Foo():Foo;
+    function Foo():Foo; // error
              ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
                    ~~~
 !!! error TS2304: Cannot find name 'Foo'.
-    function Foo(s:string):Foo;
+    function Foo(s:string):Foo; // error
              ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
              ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
                            ~~~
 !!! error TS2304: Cannot find name 'Foo'.
-    class Foo {
+    class Foo { // error
           ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
     	bar1(s:string);

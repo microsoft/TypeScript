@@ -17,7 +17,7 @@ tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericString
 !!! error TS2300: Duplicate identifier '"1"'.
         "1.0": number; // not a duplicate
         1.0: number;
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2300: Duplicate identifier '1.0'.
     }
     
@@ -27,7 +27,7 @@ tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericString
 !!! error TS2300: Duplicate identifier '"1"'.
         "1.": number; // not a duplicate
         1: number;
-        ~~~~~~~~~~
+        ~
 !!! error TS2300: Duplicate identifier '1'.
     }
     
@@ -36,7 +36,7 @@ tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericString
         ~~~
 !!! error TS2300: Duplicate identifier '"1"'.
         1.0: string;
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2300: Duplicate identifier '1.0'.
     }
     
@@ -45,6 +45,6 @@ tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericString
         ~~~
 !!! error TS2300: Duplicate identifier '"0"'.
         0: ''
-        ~~~~~
+        ~
 !!! error TS2300: Duplicate identifier '0'.
     }

@@ -21,7 +21,7 @@ tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS2300: Duplicate
         ~~~~~
 !!! error TS2300: Duplicate identifier 'thunk'.
         thunk: (num: number) => {}
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2300: Duplicate identifier 'thunk'.
     });
     
@@ -33,7 +33,7 @@ tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS2300: Duplicate
 !!! error TS2300: Duplicate identifier 'thunk'.
         thunk: (str: string) => {}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2300: Duplicate identifier 'thunk'.
     });
     ~

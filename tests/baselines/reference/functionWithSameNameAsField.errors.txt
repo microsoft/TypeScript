@@ -1,5 +1,5 @@
 tests/cases/compiler/functionWithSameNameAsField.ts(2,12): error TS2300: Duplicate identifier 'total'.
-tests/cases/compiler/functionWithSameNameAsField.ts(3,5): error TS2300: Duplicate identifier 'total'.
+tests/cases/compiler/functionWithSameNameAsField.ts(3,12): error TS2300: Duplicate identifier 'total'.
 
 
 ==== tests/cases/compiler/functionWithSameNameAsField.ts (2 errors) ====
@@ -8,13 +8,10 @@ tests/cases/compiler/functionWithSameNameAsField.ts(3,5): error TS2300: Duplicat
                ~~~~~
 !!! error TS2300: Duplicate identifier 'total'.
         public total(total: number) {
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            this.total = total;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            return this;
-    ~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+               ~~~~~
 !!! error TS2300: Duplicate identifier 'total'.
+            this.total = total;
+            return this;
+        }
     }
     

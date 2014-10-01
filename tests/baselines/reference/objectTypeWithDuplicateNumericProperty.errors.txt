@@ -25,13 +25,13 @@ tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(
         ~
 !!! error TS2300: Duplicate identifier '1'.
         1.0;
-        ~~~~
+        ~~~
 !!! error TS2300: Duplicate identifier '1.0'.
         1.;
-        ~~~
+        ~~
 !!! error TS2300: Duplicate identifier '1.'.
         1.00;
-        ~~~~~
+        ~~~~
 !!! error TS2300: Duplicate identifier '1.00'.
     }
     
@@ -40,13 +40,13 @@ tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(
         ~
 !!! error TS2300: Duplicate identifier '1'.
         1.0;
-        ~~~~
+        ~~~
 !!! error TS2300: Duplicate identifier '1.0'.
         1.;
-        ~~~
+        ~~
 !!! error TS2300: Duplicate identifier '1.'.
         1.00;
-        ~~~~~
+        ~~~~
 !!! error TS2300: Duplicate identifier '1.00'.
     }
     
@@ -55,13 +55,13 @@ tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(
         ~
 !!! error TS2300: Duplicate identifier '1'.
         1.0;
-        ~~~~
+        ~~~
 !!! error TS2300: Duplicate identifier '1.0'.
         1.;
-        ~~~
+        ~~
 !!! error TS2300: Duplicate identifier '1.'.
         1.00;
-        ~~~~~
+        ~~~~
 !!! error TS2300: Duplicate identifier '1.00'.
     }
     
@@ -70,13 +70,13 @@ tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(
         ~
 !!! error TS2300: Duplicate identifier '1'.
         1.0: 1,
-        ~~~~~~
+        ~~~
 !!! error TS2300: Duplicate identifier '1.0'.
         1.: 1,
-        ~~~~~
+        ~~
 !!! error TS2300: Duplicate identifier '1.'.
         1.00: 1
-        ~~~~~~~
+        ~~~~
 !!! error TS2300: Duplicate identifier '1.00'.
     }
     

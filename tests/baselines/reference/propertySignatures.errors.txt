@@ -8,7 +8,7 @@ tests/cases/compiler/propertySignatures.ts(14,12): error TS2304: Cannot find nam
     var foo1: { a:string; a: string; };
                 ~
 !!! error TS2300: Duplicate identifier 'a'.
-                          ~~~~~~~~~~
+                          ~
 !!! error TS2300: Duplicate identifier 'a'.
     
     // Should be OK

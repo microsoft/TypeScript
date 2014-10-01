@@ -5,9 +5,9 @@ tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameN
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(12,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(15,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(2,16): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(3,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(3,16): error TS2300: Duplicate identifier 'x'.
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(7,16): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(8,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(8,16): error TS2300: Duplicate identifier 'x'.
 
 
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts (10 errors) ====
@@ -20,7 +20,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameN
         static get x() { return 1; } // error
                    ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~
 !!! error TS2300: Duplicate identifier 'x'.
     }
     
@@ -33,7 +33,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameN
         static set x(v) {  } // error
                    ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-        ~~~~~~~~~~~~~~~~~~~~
+                   ~
 !!! error TS2300: Duplicate identifier 'x'.
     }
     

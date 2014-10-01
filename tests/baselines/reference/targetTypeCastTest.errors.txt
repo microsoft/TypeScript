@@ -1,5 +1,5 @@
 tests/cases/compiler/targetTypeCastTest.ts(1,13): error TS2300: Duplicate identifier 'Point'.
-tests/cases/compiler/targetTypeCastTest.ts(3,1): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/targetTypeCastTest.ts(3,10): error TS2300: Duplicate identifier 'Point'.
 
 
 ==== tests/cases/compiler/targetTypeCastTest.ts (2 errors) ====
@@ -8,14 +8,11 @@ tests/cases/compiler/targetTypeCastTest.ts(3,1): error TS2300: Duplicate identif
 !!! error TS2300: Duplicate identifier 'Point'.
     
     function Point(x, y) {
-    ~~~~~~~~~~~~~~~~~~~~~~
-        this.x = x;
-    ~~~~~~~~~~~~~~~
-        this.y = y;   
-    ~~~~~~~~~~~~~~~~~~
-    }
-    ~
+             ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
+        this.x = x;
+        this.y = y;   
+    }
     
     interface Adder {
         (x: number, y: number): number;   

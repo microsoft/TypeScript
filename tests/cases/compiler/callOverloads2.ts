@@ -10,7 +10,7 @@ class Foo { // error
 
 function Foo(); // error
 
-function F1(s:string) {return s;} // error 
+function F1(s:string) {return s;} // error
 function F1(a:any) { return a;} // error
 
 function Goo(s:string); // error - no implementation

@@ -1,7 +1,7 @@
 tests/cases/compiler/augmentedTypesFunction.ts(2,10): error TS2300: Duplicate identifier 'y1'.
 tests/cases/compiler/augmentedTypesFunction.ts(3,5): error TS2300: Duplicate identifier 'y1'.
-tests/cases/compiler/augmentedTypesFunction.ts(6,1): error TS2393: Duplicate function implementation.
-tests/cases/compiler/augmentedTypesFunction.ts(7,1): error TS2393: Duplicate function implementation.
+tests/cases/compiler/augmentedTypesFunction.ts(6,10): error TS2393: Duplicate function implementation.
+tests/cases/compiler/augmentedTypesFunction.ts(7,10): error TS2393: Duplicate function implementation.
 tests/cases/compiler/augmentedTypesFunction.ts(9,10): error TS2300: Duplicate identifier 'y2a'.
 tests/cases/compiler/augmentedTypesFunction.ts(10,5): error TS2300: Duplicate identifier 'y2a'.
 tests/cases/compiler/augmentedTypesFunction.ts(13,10): error TS2300: Duplicate identifier 'y3'.
@@ -23,10 +23,10 @@ tests/cases/compiler/augmentedTypesFunction.ts(21,6): error TS2300: Duplicate id
     
     // function then function
     function y2() { } // error
-    ~~~~~~~~~~~~~~~~~
+             ~~
 !!! error TS2393: Duplicate function implementation.
     function y2() { } // error
-    ~~~~~~~~~~~~~~~~~
+             ~~
 !!! error TS2393: Duplicate function implementation.
     
     function y2a() { }  // error
