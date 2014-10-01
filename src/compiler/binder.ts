@@ -89,7 +89,7 @@ module ts {
                     forEach(symbol.declarations, (declaration) => {
                         file.semanticErrors.push(createDiagnosticForNode(declaration.name, Diagnostics.Duplicate_identifier_0, getDisplayName(declaration)));
                     });
-                    file.semanticErrors.push(createDiagnosticForNode(node, Diagnostics.Duplicate_identifier_0, getDisplayName(node)));
+                    file.semanticErrors.push(createDiagnosticForNode(node.name, Diagnostics.Duplicate_identifier_0, getDisplayName(node)));
 
                     symbol = createSymbol(0, name);
                 }

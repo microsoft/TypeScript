@@ -5727,7 +5727,7 @@ module ts {
 
             if (duplicateFunctionDeclaration) {
                 forEach( declarations, declaration => {
-                    error(declaration, Diagnostics.Duplicate_function_implementation);
+                    error(declaration.name, Diagnostics.Duplicate_function_implementation);
                 });
             }
 
