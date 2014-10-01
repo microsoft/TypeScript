@@ -581,10 +581,10 @@ For this switch statement, the compiler will generate the following code.
 
 ```TypeScript
 switch (op) {  
-    case 0 /* Operator.ADD */ :  
+    case 0 /* Operator.ADD */:  
         // execute add  
         break;  
-    case 1 /* Operator.DIV */ :  
+    case 1 /* Operator.DIV */:  
         // execute div  
         break;  
     // ...  
@@ -738,7 +738,7 @@ var M;
         return s;  
     }  
     M.f = f;  
-})(M||(M={}));
+})(M || (M = {}));
 ```
 
 In this case, the compiler assumes that the module object resides in global variable ‘M’, which may or may not have been initialized to the desired module object.
@@ -1068,7 +1068,7 @@ Type references (section [3.6.2](#3.6.2)) to class and interface types are class
 
 ### <a name="3.3.2"/>3.3.2 Array Types
 
-***Array types*** represent JavaScript arrays with a common element type. Array types are named type references created from the generic interface type ‘Array’ in the global module with the array element type as a type argument. Array type literals (section [Error! Reference source not found.](#Error! Reference source not found.)) provide a shorthand notation for creating such references.
+***Array types*** represent JavaScript arrays with a common element type. Array types are named type references created from the generic interface type ‘Array’ in the global module with the array element type as a type argument. Array type literals (section [3.6.4](#3.6.4)) provide a shorthand notation for creating such references.
 
 The declaration of the ‘Array’ interface includes a property ‘length’ and a numeric index signature for the element type, along with other members:
 
