@@ -1025,6 +1025,8 @@ module ts {
         static primitiveType = "primitive type";
 
         static label = "label";
+
+        static alias = "alias"
     }
 
     export class ScriptElementKindModifier {
@@ -2145,6 +2147,12 @@ module ts {
 
                 if (mappedNode.kind === SyntaxKind.Identifier || mappedNode.kind === SyntaxKind.QualifiedName || mappedNode.kind === SyntaxKind.PropertyAccess) {
                     var symbol = typeInfoResolver.getSymbolInfo(mappedNode);
+
+                    // This is an alias, follow what it aliases
+                    if (symbol && symbol.flags & SymbolFlags.Import) {
+                        symbol = typeInfoResolver.getAliasedSymbol(symbol);
+                    }
+
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
                         forEachValue(symbol.exports, symbol => {
@@ -2195,7 +2203,7 @@ module ts {
                 else {
                     isMemberCompletion = false;
                     /// TODO filter meaning based on the current context
-                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace;
+                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Import;
                     var symbols = typeInfoResolver.getSymbolsInScope(mappedNode, symbolMeanings);
 
                     getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
@@ -2293,6 +2301,7 @@ module ts {
             if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
             if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
             if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
+            if (flags & SymbolFlags.Import) return ScriptElementKind.alias;
 
             return ScriptElementKind.unknown;
         }
