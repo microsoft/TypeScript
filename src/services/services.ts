@@ -2088,7 +2088,7 @@ module ts {
             }
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
-            var mappedNode = getTouchingToken(sourceFile, TypeScript.end(node) - 1, /*allowPositionInLeadingTrivia*/ false);
+            var mappedNode = getTouchingToken(sourceFile, TypeScript.end(node) - 1);
             if (isPunctuation(mappedNode.kind)) {
                 mappedNode = mappedNode.parent;
             }
@@ -4022,7 +4022,7 @@ module ts {
             var sourceFile = getCurrentSourceFile(filename);
             var result: TypeScript.TextSpan[] = [];
 
-            var token = getTouchingToken(sourceFile, position, /*allowPositionInLeadingTrivia*/ false);
+            var token = getTouchingToken(sourceFile, position);
 
             if (token.getStart(sourceFile) === position) {
                 var matchKind = getMatchingTokenKind(token);
@@ -4178,7 +4178,7 @@ module ts {
 
                     // OK, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
-                    var token = getTouchingToken(sourceFile, matchPosition, /*allowPositionInLeadingTrivia*/ true);
+                    var token = getTokenAtPosition(sourceFile, matchPosition);
 
                     if (token.getStart() <= matchPosition && matchPosition < token.getEnd()) {
                         // match was within the token itself.  Not in the comment.  Keep searching

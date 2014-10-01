@@ -50,18 +50,28 @@ module ts {
      * position >= start and (position < end or (position === end && token is keyword or identifier))
      */
     export function getTouchingWord(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, isWord);
+        return getTouchingToken(sourceFile, position, isWord);
     }
 
     /* Gets the token whose text has range [start, end) and position >= start 
      * and (position < end or (position === end && token is keyword or identifier or numeric\string litera))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, isPropertyName);
+        return getTouchingToken(sourceFile, position, isPropertyName);
+    }
+
+    /** Returns the token if position is in [start, end) or if position === end and includeItemAtEndPosition(token) === true */
+    export function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition?: (n: Node) => boolean): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includeItemAtEndPosition);
+    }
+
+    /** Returns a token if position is in [start-of-leading-trivia, end) */
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includeItemAtEndPosition*/ undefined);
     }
 
     /** Get the token whose text contains the position */
-    export function getTouchingToken(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition?: (n: Node) => boolean): Node {
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean): Node {
         var current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
@@ -101,7 +111,7 @@ module ts {
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
-        var tokenAtPosition = getTouchingToken(file, position, /*allowPositionInLeadingTrivia*/ true);
+        var tokenAtPosition = getTokenAtPosition(file, position);
         if (isToken(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
             return tokenAtPosition;
         }
