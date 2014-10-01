@@ -1,7 +1,7 @@
 
-function Foo():Foo;
-function Foo(s:string):Foo;
-class Foo {    
+function Foo():Foo; // error
+function Foo(s:string):Foo; // error
+class Foo { // error
     bar1() { /*WScript.Echo("bar1");*/ }
     constructor(x: any) {
         // WScript.Echo("Constructor function has executed");

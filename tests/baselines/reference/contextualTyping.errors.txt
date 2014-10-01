@@ -1,9 +1,10 @@
 tests/cases/compiler/contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
-tests/cases/compiler/contextualTyping.ts(207,10): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/contextualTyping.ts(197,15): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/contextualTyping.ts(207,1): error TS2300: Duplicate identifier 'Point'.
 tests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not assignable to type 'B':\n  Property 'x' is missing in type '{}'.
 
 
-==== tests/cases/compiler/contextualTyping.ts (3 errors) ====
+==== tests/cases/compiler/contextualTyping.ts (4 errors) ====
     // DEFAULT INTERFACES
     interface IFoo {
         n: number;
@@ -203,6 +204,8 @@ tests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not 
     
     // contextually typing from ambient class declarations
     declare class Point
+                  ~~~~~
+!!! error TS2300: Duplicate identifier 'Point'.
     {
           constructor(x: number, y: number);
           x: number;
@@ -213,13 +216,18 @@ tests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not 
     }
     
     function Point(x, y) {
-             ~~~~~
-!!! error TS2300: Duplicate identifier 'Point'.
+    ~~~~~~~~~~~~~~~~~~~~~~
         this.x = x;
+    ~~~~~~~~~~~~~~~
         this.y = y;
+    ~~~~~~~~~~~~~~~
+    
     
         return this;
+    ~~~~~~~~~~~~~~~~
     }
+    ~
+!!! error TS2300: Duplicate identifier 'Point'.
     
     Point.origin = new Point(0, 0);
     

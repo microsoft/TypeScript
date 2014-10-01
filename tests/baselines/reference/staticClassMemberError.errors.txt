@@ -1,9 +1,10 @@
 tests/cases/compiler/staticClassMemberError.ts(4,3): error TS2304: Cannot find name 's'.
+tests/cases/compiler/staticClassMemberError.ts(9,10): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/compiler/staticClassMemberError.ts(9,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/compiler/staticClassMemberError.ts(10,7): error TS2300: Duplicate identifier 'Foo'.
 
 
-==== tests/cases/compiler/staticClassMemberError.ts (3 errors) ====
+==== tests/cases/compiler/staticClassMemberError.ts (4 errors) ====
     class C {
     	static s;
     	public a() {
@@ -15,6 +16,8 @@ tests/cases/compiler/staticClassMemberError.ts(10,7): error TS2300: Duplicate id
     
     // just want to make sure this one doesn't crash the compiler
     function Foo();
+             ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
              ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
     class Foo {

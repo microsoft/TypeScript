@@ -1,8 +1,9 @@
 tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts(1,12): error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
+tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts(17,18): error TS2300: Duplicate identifier 'Point'.
 tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
 
 
-==== tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts (2 errors) ====
+==== tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts (3 errors) ====
     module A.B.C {
                ~
 !!! error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
@@ -22,6 +23,8 @@ tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.
     
     module M2.X {
         export class Point {
+                     ~~~~~
+!!! error TS2300: Duplicate identifier 'Point'.
             x: number; y: number;
         }
     }

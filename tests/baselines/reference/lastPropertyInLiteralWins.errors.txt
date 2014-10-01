@@ -1,13 +1,15 @@
+tests/cases/compiler/lastPropertyInLiteralWins.ts(8,5): error TS2300: Duplicate identifier 'thunk'.
 tests/cases/compiler/lastPropertyInLiteralWins.ts(9,5): error TS2300: Duplicate identifier 'thunk'.
 tests/cases/compiler/lastPropertyInLiteralWins.ts(12,6): error TS2345: Argument of type '{ thunk: (num: number) => void; }' is not assignable to parameter of type 'Thing'.
   Types of property 'thunk' are incompatible:
     Type '(num: number) => void' is not assignable to type '(str: string) => void':
       Types of parameters 'num' and 'str' are incompatible:
         Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/lastPropertyInLiteralWins.ts(13,5): error TS2300: Duplicate identifier 'thunk'.
 tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS2300: Duplicate identifier 'thunk'.
 
 
-==== tests/cases/compiler/lastPropertyInLiteralWins.ts (3 errors) ====
+==== tests/cases/compiler/lastPropertyInLiteralWins.ts (5 errors) ====
     interface Thing {
         thunk: (str: string) => void;
     }
@@ -16,8 +18,10 @@ tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS2300: Duplicate
     }
     test({ // Should error, as last one wins, and is wrong type
         thunk: (str: string) => {},
-        thunk: (num: number) => {}
         ~~~~~
+!!! error TS2300: Duplicate identifier 'thunk'.
+        thunk: (num: number) => {}
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'thunk'.
     });
     
@@ -25,9 +29,11 @@ tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS2300: Duplicate
          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         thunk: (num: number) => {},
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
+!!! error TS2300: Duplicate identifier 'thunk'.
         thunk: (str: string) => {}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        ~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'thunk'.
     });
     ~
