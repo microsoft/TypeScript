@@ -5696,6 +5696,8 @@ module ts {
             // when checking exported function declarations across modules check only duplicate implementations
             // names and consistency of modifiers are verified when we check local symbol
             var isExportSymbolInsideModule = symbol.parent && symbol.parent.flags & SymbolFlags.Module;
+            var duplicateFunctionDeclaration = false;
+            var multipleConstructorImplementation = false;
             for (var i = 0; i < declarations.length; i++) {
                 var node = <FunctionDeclaration>declarations[i];
                 var inAmbientContext = isInAmbientContext(node);
@@ -5718,10 +5720,10 @@ module ts {
 
                     if (node.body && bodyDeclaration) {
                         if (isConstructor) {
-                            error(node, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
+                            multipleConstructorImplementation = true;
                         }
                         else {
-                            error(node, Diagnostics.Duplicate_function_implementation);
+                            duplicateFunctionDeclaration = true;
                         }
                     }
                     else if (!isExportSymbolInsideModule && previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
@@ -5743,6 +5745,18 @@ module ts {
                         lastSeenNonAmbientDeclaration = node;
                     }
                 }
+            }
+
+            if (multipleConstructorImplementation) {
+                forEach(declarations, declaration => {
+                    error(declaration, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
+                });
+            }
+
+            if (duplicateFunctionDeclaration) {
+                forEach( declarations, declaration => {
+                    error(declaration.name, Diagnostics.Duplicate_function_implementation);
+                });
             }
 
             if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body) {

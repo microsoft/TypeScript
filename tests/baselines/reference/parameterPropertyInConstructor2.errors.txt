@@ -1,9 +1,10 @@
 tests/cases/compiler/parameterPropertyInConstructor2.ts(3,5): error TS2394: Overload signature is not compatible with function implementation.
 tests/cases/compiler/parameterPropertyInConstructor2.ts(3,17): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/compiler/parameterPropertyInConstructor2.ts(3,24): error TS2300: Duplicate identifier 'names'.
 tests/cases/compiler/parameterPropertyInConstructor2.ts(4,24): error TS2300: Duplicate identifier 'names'.
 
 
-==== tests/cases/compiler/parameterPropertyInConstructor2.ts (3 errors) ====
+==== tests/cases/compiler/parameterPropertyInConstructor2.ts (4 errors) ====
     module mod {
       class Customers {
         constructor(public names: string);
@@ -11,6 +12,8 @@ tests/cases/compiler/parameterPropertyInConstructor2.ts(4,24): error TS2300: Dup
 !!! error TS2394: Overload signature is not compatible with function implementation.
                     ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.
+                           ~~~~~
+!!! error TS2300: Duplicate identifier 'names'.
         constructor(public names: string, public ages: number) {
                            ~~~~~
 !!! error TS2300: Duplicate identifier 'names'.
