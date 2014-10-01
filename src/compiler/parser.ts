@@ -3831,15 +3831,17 @@ module ts {
                     }
                     else {
                         var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
+                        var start = range.pos;
+                        var end = range.end;
+                        var length = end - start;
+                       
                         if (!matchResult) {
-                            var start = range.pos;
-                            var length = range.end - start;
                             errorAtPos(start, length, Diagnostics.Invalid_reference_directive_syntax);
                         }
                         else {
                             referencedFiles.push({
-                                pos: range.pos,
-                                end: range.end,
+                                pos: start,
+                                end: end,
                                 filename: matchResult[3]
                             });
                         }
@@ -3955,6 +3957,9 @@ module ts {
                 }
                 else if (!findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
+                }
+                else if (refFile && host.getCanonicalFileName(filename) === host.getCanonicalFileName(refFile.filename)) {
+                    diagnostic = Diagnostics.A_file_cannot_have_a_reference_to_itself;
                 }
             }
             else {
