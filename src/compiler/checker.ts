@@ -5669,7 +5669,7 @@ module ts {
             // names and consistency of modifiers are verified when we check local symbol
             var isExportSymbolInsideModule = symbol.parent && symbol.parent.flags & SymbolFlags.Module;
             var duplicateFunctionDeclaration = false;
-            var multipleConstructorImplemenation = false;
+            var multipleConstructorImplementation = false;
             for (var i = 0; i < declarations.length; i++) {
                 var node = <FunctionDeclaration>declarations[i];
                 var inAmbientContext = isInAmbientContext(node);
@@ -5692,7 +5692,7 @@ module ts {
 
                     if (node.body && bodyDeclaration) {
                         if (isConstructor) {
-                            multipleConstructorImplemenation = true;
+                            multipleConstructorImplementation = true;
                         }
                         else {
                             duplicateFunctionDeclaration = true;
@@ -5719,7 +5719,7 @@ module ts {
                 }
             }
 
-            if (multipleConstructorImplemenation) {
+            if (multipleConstructorImplementation) {
                 forEach(declarations, declaration => {
                     error(declaration, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
                 });
