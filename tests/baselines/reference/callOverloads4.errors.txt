@@ -1,16 +1,22 @@
+tests/cases/compiler/callOverloads4.ts(2,10): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/compiler/callOverloads4.ts(2,16): error TS2304: Cannot find name 'Foo'.
+tests/cases/compiler/callOverloads4.ts(3,10): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/compiler/callOverloads4.ts(3,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/compiler/callOverloads4.ts(3,24): error TS2304: Cannot find name 'Foo'.
 tests/cases/compiler/callOverloads4.ts(4,7): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/compiler/callOverloads4.ts(12,10): error TS2350: Only a void function can be called with the 'new' keyword.
 
 
-==== tests/cases/compiler/callOverloads4.ts (5 errors) ====
+==== tests/cases/compiler/callOverloads4.ts (7 errors) ====
     
     function Foo():Foo;
+             ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
                    ~~~
 !!! error TS2304: Cannot find name 'Foo'.
     function Foo(s:string):Foo;
+             ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
              ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
                            ~~~

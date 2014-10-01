@@ -1,70 +1,82 @@
+tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(5,5): error TS2300: Duplicate identifier '1'.
 tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(6,5): error TS2300: Duplicate identifier '1.0'.
 tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(7,5): error TS2300: Duplicate identifier '1.'.
 tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(8,5): error TS2300: Duplicate identifier '1.00'.
+tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(12,5): error TS2300: Duplicate identifier '1'.
 tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(13,5): error TS2300: Duplicate identifier '1.0'.
 tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(14,5): error TS2300: Duplicate identifier '1.'.
 tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(15,5): error TS2300: Duplicate identifier '1.00'.
+tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(19,5): error TS2300: Duplicate identifier '1'.
 tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(20,5): error TS2300: Duplicate identifier '1.0'.
 tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(21,5): error TS2300: Duplicate identifier '1.'.
 tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(22,5): error TS2300: Duplicate identifier '1.00'.
+tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(26,5): error TS2300: Duplicate identifier '1'.
 tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(27,5): error TS2300: Duplicate identifier '1.0'.
 tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(28,5): error TS2300: Duplicate identifier '1.'.
 tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts(29,5): error TS2300: Duplicate identifier '1.00'.
 
 
-==== tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts (12 errors) ====
+==== tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts (16 errors) ====
     // numeric properties must be distinct after a ToNumber operation
     // so the below are all errors
     
     class C {
         1;
+        ~
+!!! error TS2300: Duplicate identifier '1'.
         1.0;
-        ~~~
+        ~~~~
 !!! error TS2300: Duplicate identifier '1.0'.
         1.;
-        ~~
+        ~~~
 !!! error TS2300: Duplicate identifier '1.'.
         1.00;
-        ~~~~
+        ~~~~~
 !!! error TS2300: Duplicate identifier '1.00'.
     }
     
     interface I {
         1;
+        ~
+!!! error TS2300: Duplicate identifier '1'.
         1.0;
-        ~~~
+        ~~~~
 !!! error TS2300: Duplicate identifier '1.0'.
         1.;
-        ~~
+        ~~~
 !!! error TS2300: Duplicate identifier '1.'.
         1.00;
-        ~~~~
+        ~~~~~
 !!! error TS2300: Duplicate identifier '1.00'.
     }
     
     var a: {
         1;
+        ~
+!!! error TS2300: Duplicate identifier '1'.
         1.0;
-        ~~~
+        ~~~~
 !!! error TS2300: Duplicate identifier '1.0'.
         1.;
-        ~~
+        ~~~
 !!! error TS2300: Duplicate identifier '1.'.
         1.00;
-        ~~~~
+        ~~~~~
 !!! error TS2300: Duplicate identifier '1.00'.
     }
     
     var b = {
         1: 1,
+        ~
+!!! error TS2300: Duplicate identifier '1'.
         1.0: 1,
-        ~~~
+        ~~~~~~
 !!! error TS2300: Duplicate identifier '1.0'.
         1.: 1,
-        ~~
+        ~~~~~
 !!! error TS2300: Duplicate identifier '1.'.
         1.00: 1
-        ~~~~
+        ~~~~~~~
 !!! error TS2300: Duplicate identifier '1.00'.
     }
     
