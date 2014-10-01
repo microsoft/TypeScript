@@ -256,7 +256,7 @@ module ts {
                 var declarations = this.getDeclarations();
                 if (declarations) {
                     for (var i = 0, n = declarations.length; i < n; i++) {
-                        this.processDocumentationCommentDeclaration(lines, declarations[0]);
+                        this.processDocumentationCommentDeclaration(lines, declarations[i]);
                     }
                 }
 
@@ -274,7 +274,7 @@ module ts {
 
                 for (var i = 0, n = commentRanges.length; i < n; i++) {
                     this.processDocumentationCommentRange(
-                        lines, sourceFile, commentRanges[0]);
+                        lines, sourceFile, commentRanges[i]);
                 }
             }
         }
@@ -1025,6 +1025,8 @@ module ts {
         static primitiveType = "primitive type";
 
         static label = "label";
+
+        static alias = "alias"
     }
 
     export class ScriptElementKindModifier {
@@ -2038,15 +2040,6 @@ module ts {
                 return (SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation);
             }
 
-            function isVisibleWithinClassDeclaration(symbol: Symbol, containingClass: Declaration): boolean {
-                var declaration = symbol.declarations && symbol.declarations[0];
-                if (declaration && (declaration.flags & NodeFlags.Private)) {
-                    var declarationClass = getAncestor(declaration, SyntaxKind.ClassDeclaration);
-                    return containingClass === declarationClass;
-                }
-                return true;
-            }
-
             function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
                 if (!existingMembers || existingMembers.length === 0) {
                     return contextualMemberSymbols;
@@ -2130,7 +2123,7 @@ module ts {
             }
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
-            var mappedNode = getNodeAtPosition(sourceFile, TypeScript.end(node) - 1);
+            var mappedNode = getTouchingToken(sourceFile, TypeScript.end(node) - 1);
             if (isPunctuation(mappedNode.kind)) {
                 mappedNode = mappedNode.parent;
             }
@@ -2150,15 +2143,20 @@ module ts {
             // Right of dot member completion list
             if (isRightOfDot) {
                 var symbols: Symbol[] = [];
-                var containingClass = getAncestor(mappedNode, SyntaxKind.ClassDeclaration);
                 isMemberCompletion = true;
 
                 if (mappedNode.kind === SyntaxKind.Identifier || mappedNode.kind === SyntaxKind.QualifiedName || mappedNode.kind === SyntaxKind.PropertyAccess) {
                     var symbol = typeInfoResolver.getSymbolInfo(mappedNode);
+
+                    // This is an alias, follow what it aliases
+                    if (symbol && symbol.flags & SymbolFlags.Import) {
+                        symbol = typeInfoResolver.getAliasedSymbol(symbol);
+                    }
+
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
                         forEachValue(symbol.exports, symbol => {
-                            if (isVisibleWithinClassDeclaration(symbol, containingClass)) {
+                            if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(mappedNode.parent), symbol.name)) {
                                 symbols.push(symbol);
                             }
                         });
@@ -2170,7 +2168,7 @@ module ts {
                 if (apparentType) {
                     // Filter private properties
                     forEach(apparentType.getApparentProperties(), symbol => {
-                        if (isVisibleWithinClassDeclaration(symbol, containingClass)) {
+                        if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(mappedNode.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
                     });
@@ -2205,7 +2203,7 @@ module ts {
                 else {
                     isMemberCompletion = false;
                     /// TODO filter meaning based on the current context
-                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace;
+                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Import;
                     var symbols = typeInfoResolver.getSymbolsInScope(mappedNode, symbolMeanings);
 
                     getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
@@ -2303,6 +2301,7 @@ module ts {
             if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
             if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
             if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
+            if (flags & SymbolFlags.Import) return ScriptElementKind.alias;
 
             return ScriptElementKind.unknown;
         }
@@ -2368,7 +2367,7 @@ module ts {
              
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
-            var node = getNodeAtPosition(sourceFile, position);
+            var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
                 return undefined;
             }
@@ -2476,7 +2475,7 @@ module ts {
 
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
-            var node = getNodeAtPosition(sourceFile, position);
+            var node = getTouchingWord(sourceFile, position);
             if (!node) {
                 return undefined;
             }
@@ -2559,7 +2558,7 @@ module ts {
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
-            var node = getNodeAtPosition(sourceFile, position);
+            var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
                 return undefined;
             }
@@ -2623,7 +2622,7 @@ module ts {
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
-            var node = getNodeAtPosition(sourceFile, position);
+            var node = getTouchingWord(sourceFile, position);
             if (!node) {
                 return undefined;
             }
@@ -2643,6 +2642,11 @@ module ts {
                 case SyntaxKind.ReturnKeyword:
                     if (hasKind(node.parent, SyntaxKind.ReturnStatement)) {
                         return getReturnOccurrences(<ReturnStatement>node.parent);
+                    }
+                    break;
+                case SyntaxKind.ThrowKeyword:
+                    if (hasKind(node.parent, SyntaxKind.ThrowStatement)) {
+                        return getThrowOccurrences(<ThrowStatement>node.parent);
                     }
                     break;
                 case SyntaxKind.TryKeyword:
@@ -2685,6 +2689,11 @@ module ts {
                         return getConstructorOccurrences(<ConstructorDeclaration>node.parent);
                     }
                     break;
+                case SyntaxKind.GetKeyword:
+                case SyntaxKind.SetKeyword:
+                    if (hasKind(node.parent, SyntaxKind.GetAccessor) || hasKind(node.parent, SyntaxKind.SetAccessor)) {
+                        return getGetAndSetOccurrences(<AccessorDeclaration>node.parent);
+                    }
             }
 
             return undefined;
@@ -2762,11 +2771,107 @@ module ts {
                 }
 
                 var keywords: Node[] = []
-                forEachReturnStatement(<Block>(<FunctionDeclaration>func).body, returnStatement => {
+                forEachReturnStatement(<Block>func.body, returnStatement => {
                     pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
                 });
 
+                // Include 'throw' statements that do not occur within a try block.
+                forEach(aggregateOwnedThrowStatements(func.body), throwStatement => {
+                    pushKeywordIf(keywords, throwStatement.getFirstToken(), SyntaxKind.ThrowKeyword);
+                });
+
                 return map(keywords, getReferenceEntryFromNode);
+            }
+            
+            function getThrowOccurrences(throwStatement: ThrowStatement) {
+                var owner = getThrowStatementOwner(throwStatement);
+
+                if (!owner) {
+                    return undefined;
+                }
+
+                var keywords: Node[] = [];
+                
+                forEach(aggregateOwnedThrowStatements(owner), throwStatement => {
+                    pushKeywordIf(keywords, throwStatement.getFirstToken(), SyntaxKind.ThrowKeyword);
+                });
+
+                // If the "owner" is a function, then we equate 'return' and 'throw' statements in their
+                // ability to "jump out" of the function, and include occurrences for both.
+                if (owner.kind === SyntaxKind.FunctionBlock) {
+                    forEachReturnStatement(<Block>owner, returnStatement => {
+                        pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
+                    });
+                }
+                
+                return map(keywords, getReferenceEntryFromNode);
+            }
+
+            /**
+             * Aggregates all throw-statements within this node *without* crossing
+             * into function boundaries and try-blocks with catch-clauses.
+             */
+            function aggregateOwnedThrowStatements(node: Node): ThrowStatement[] {
+                var statementAccumulator: ThrowStatement[] = []
+                aggregate(node);
+                return statementAccumulator;
+
+                function aggregate(node: Node): void {
+                    if (node.kind === SyntaxKind.ThrowStatement) {
+                        statementAccumulator.push(<ThrowStatement>node);
+                    }
+                    else if (node.kind === SyntaxKind.TryStatement) {
+                        var tryStatement = <TryStatement>node;
+
+                        if (tryStatement.catchBlock) {
+                            aggregate(tryStatement.catchBlock);
+                        }
+                        else {
+                            // Exceptions thrown within a try block lacking a catch clause
+                            // are "owned" in the current context.
+                            aggregate(tryStatement.tryBlock);
+                        }
+
+                        if (tryStatement.finallyBlock) {
+                            aggregate(tryStatement.finallyBlock);
+                        }
+                    }
+                    // Do not cross function boundaries.
+                    else if (!isAnyFunction(node)) {
+                        forEachChild(node, aggregate);
+                    }
+                };
+            }
+
+            /**
+             * For lack of a better name, this function takes a throw statement and returns the
+             * nearest ancestor that is a try-block (whose try statement has a catch clause),
+             * function-block, or source file.
+             */
+            function getThrowStatementOwner(throwStatement: ThrowStatement): Node {
+                var child: Node = throwStatement;
+
+                while (child.parent) {
+                    var parent = child.parent;
+
+                    if (parent.kind === SyntaxKind.FunctionBlock || parent.kind === SyntaxKind.SourceFile) {
+                        return parent;
+                    }
+                    
+                    // A throw-statement is only owned by a try-statement if the try-statement has
+                    // a catch clause, and if the throw-statement occurs within the try block.
+                    if (parent.kind === SyntaxKind.TryStatement) {
+                        var tryStatement = <TryStatement>parent;
+
+                        if (tryStatement.tryBlock === child && tryStatement.catchBlock) {
+                            return child;
+                        }
+                    }
+
+                    child = parent;
+                }
+
+                return undefined;
             }
 
             function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
@@ -2919,6 +3024,23 @@ module ts {
                 return map(keywords, getReferenceEntryFromNode);
             }
 
+            function getGetAndSetOccurrences(accessorDeclaration: AccessorDeclaration): ReferenceEntry[] {
+                var keywords: Node[] = [];
+
+                tryPushAccessorKeyword(accessorDeclaration.symbol, SyntaxKind.GetAccessor);
+                tryPushAccessorKeyword(accessorDeclaration.symbol, SyntaxKind.SetAccessor);
+
+                return map(keywords, getReferenceEntryFromNode);
+
+                function tryPushAccessorKeyword(accessorSymbol: Symbol, accessorKind: SyntaxKind): void {
+                    var accessor = getDeclarationOfKind(accessorSymbol, accessorKind);
+
+                    if (accessor) {
+                        forEach(accessor.getChildren(), child => pushKeywordIf(keywords, child, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword));
+                    }
+                }
+            }
+
             // returns true if 'node' is defined and has a matching 'kind'.
             function hasKind(node: Node, kind: SyntaxKind) {
                 return node !== undefined && node.kind === kind;
@@ -2945,7 +3067,7 @@ module ts {
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
-            var node = getNodeAtPosition(sourceFile, position);
+            var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
                 return undefined;
             }
@@ -3128,7 +3250,7 @@ module ts {
                 forEach(possiblePositions, position => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    var node = getNodeAtPosition(sourceFile, position);
+                    var node = getTouchingWord(sourceFile, position);
                     if (!node || node.getWidth() !== labelName.length) {
                         return;
                     }
@@ -3184,7 +3306,7 @@ module ts {
                     forEach(possiblePositions, position => {
                         cancellationToken.throwIfCancellationRequested();
 
-                        var referenceLocation = getNodeAtPosition(sourceFile, position);
+                        var referenceLocation = getTouchingPropertyName(sourceFile, position);
                         if (!isValidReferencePosition(referenceLocation, searchText)) {
                             return;
                         }
@@ -3236,7 +3358,7 @@ module ts {
                 forEach(possiblePositions, position => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    var node = getNodeAtPosition(sourceFile, position);
+                    var node = getTouchingWord(sourceFile, position);
 
                     if (!node || node.kind !== SyntaxKind.SuperKeyword) {
                         return;
@@ -3302,7 +3424,7 @@ module ts {
                     forEach(possiblePositions, position => {
                         cancellationToken.throwIfCancellationRequested();
 
-                        var node = getNodeAtPosition(sourceFile, position);
+                        var node = getTouchingWord(sourceFile, position);
                         if (!node || node.kind !== SyntaxKind.ThisKeyword) {
                             return;
                         }
@@ -4116,7 +4238,7 @@ module ts {
             var sourceFile = getCurrentSourceFile(filename);
             var result: TypeScript.TextSpan[] = [];
 
-            var token = getTokenAtPosition(sourceFile, position);
+            var token = getTouchingToken(sourceFile, position);
 
             if (token.getStart(sourceFile) === position) {
                 var matchKind = getMatchingTokenKind(token);
@@ -4400,7 +4522,7 @@ module ts {
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
 
-            var node = getNodeAtPosition(sourceFile, position);
+            var node = getTouchingWord(sourceFile, position);
 
             // Can only rename an identifier.
             if (node && node.kind === SyntaxKind.Identifier) {
@@ -4486,26 +4608,58 @@ module ts {
         /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
         /// we have a series of divide operator. this list allows us to be more accurate by ruling out 
         /// locations where a regexp cannot exist.
-        var noRegexTable: boolean[];
-        if (!noRegexTable) {
-            noRegexTable = [];
-            noRegexTable[SyntaxKind.Identifier] = true;
-            noRegexTable[SyntaxKind.StringLiteral] = true;
-            noRegexTable[SyntaxKind.NumericLiteral] = true;
-            noRegexTable[SyntaxKind.RegularExpressionLiteral] = true;
-            noRegexTable[SyntaxKind.ThisKeyword] = true;
-            noRegexTable[SyntaxKind.PlusPlusToken] = true;
-            noRegexTable[SyntaxKind.MinusMinusToken] = true;
-            noRegexTable[SyntaxKind.CloseParenToken] = true;
-            noRegexTable[SyntaxKind.CloseBracketToken] = true;
-            noRegexTable[SyntaxKind.CloseBraceToken] = true;
-            noRegexTable[SyntaxKind.TrueKeyword] = true;
-            noRegexTable[SyntaxKind.FalseKeyword] = true;
+        var noRegexTable: boolean[] = [];
+        noRegexTable[SyntaxKind.Identifier] = true;
+        noRegexTable[SyntaxKind.StringLiteral] = true;
+        noRegexTable[SyntaxKind.NumericLiteral] = true;
+        noRegexTable[SyntaxKind.RegularExpressionLiteral] = true;
+        noRegexTable[SyntaxKind.ThisKeyword] = true;
+        noRegexTable[SyntaxKind.PlusPlusToken] = true;
+        noRegexTable[SyntaxKind.MinusMinusToken] = true;
+        noRegexTable[SyntaxKind.CloseParenToken] = true;
+        noRegexTable[SyntaxKind.CloseBracketToken] = true;
+        noRegexTable[SyntaxKind.CloseBraceToken] = true;
+        noRegexTable[SyntaxKind.TrueKeyword] = true;
+        noRegexTable[SyntaxKind.FalseKeyword] = true;
+
+        function isAccessibilityModifier(kind: SyntaxKind) {
+            switch (kind) {
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
+                    return true;
+            }
+
+            return false;
+        }
+
+        /** Returns true if 'keyword2' can legally follow 'keyword1' in any language construct. */
+        function canFollow(keyword1: SyntaxKind, keyword2: SyntaxKind) {
+            if (isAccessibilityModifier(keyword1)) {
+                if (keyword2 === SyntaxKind.GetKeyword ||
+                    keyword2 === SyntaxKind.SetKeyword ||
+                    keyword2 === SyntaxKind.ConstructorKeyword ||
+                    keyword2 === SyntaxKind.StaticKeyword) {
+
+                    // Allow things like  "public get", "public constructor" and "public static".  
+                    // These are all legal.
+                    return true;
+                }
+
+                // Any other keyword following "public" is actually an identifier an not a real
+                // keyword.
+                return false;
+            }
+
+            // Assume any other keyword combination is legal.  This can be refined in the future
+            // if there are more cases we want the classifier to be better at.
+            return true;
         }
 
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
             var lastTokenOrCommentEnd = 0;
+            var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
 
             // If we're in a string literal, then prepend: "\
@@ -4535,8 +4689,6 @@ module ts {
                 entries: []
             };
 
-            
-            var token = SyntaxKind.Unknown;
             do {
                 token = scanner.scan();
 
@@ -4547,6 +4699,13 @@ module ts {
                         }
                     }
                     else if (lastNonTriviaToken === SyntaxKind.DotToken && isKeyword(token)) {
+                        token = SyntaxKind.Identifier;
+                    }
+                    else if (isKeyword(lastNonTriviaToken) && isKeyword(token) && !canFollow(lastNonTriviaToken, token)) {
+                        // We have two keywords in a row.  Only treat the second as a keyword if 
+                        // it's a sequence that could legally occur in the language.  Otherwise
+                        // treat it as an identifier.  This way, if someone writes "private var"
+                        // we recognize that 'var' is actually an identifier here.
                         token = SyntaxKind.Identifier;
                     }
 
