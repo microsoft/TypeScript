@@ -84,7 +84,7 @@ module ts {
                     if (node.name) {
                         node.name.parent = node;
                     }
-                    // Report errors every position with duplicate declarations
+                    // Report errors every position with duplicate declaration
                     // Report errors on previous encountered declarations
                     forEach(symbol.declarations, (declaration) => {
                         file.semanticErrors.push(createDiagnosticForNode(declaration.name, Diagnostics.Duplicate_identifier_0, getDisplayName(declaration)));

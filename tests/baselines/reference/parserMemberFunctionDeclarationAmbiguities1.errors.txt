@@ -1,13 +1,21 @@
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(2,3): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(3,3): error TS2393: Duplicate function implementation.
 tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(5,3): error TS2393: Duplicate function implementation.
 tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(6,3): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(8,3): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(9,3): error TS2393: Duplicate function implementation.
 tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(11,3): error TS2393: Duplicate function implementation.
 tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(12,3): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts (4 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts (8 errors) ====
     class C {
       public() {}
+      ~~~~~~~~~~~
+!!! error TS2393: Duplicate function implementation.
       static() {}
+      ~~~~~~~~~~~
+!!! error TS2393: Duplicate function implementation.
     
       public public() {}
       ~~~~~~~~~~~~~~~~~~
@@ -17,7 +25,11 @@ tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemb
 !!! error TS2393: Duplicate function implementation.
     
       public static public() {}
+      ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2393: Duplicate function implementation.
       public static static() {}
+      ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2393: Duplicate function implementation.
       
       static public() {}
       ~~~~~~~~~~~~~~~~~~
