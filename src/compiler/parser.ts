@@ -3508,8 +3508,23 @@ module ts {
             parseExpected(SyntaxKind.ClassKeyword);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
-            // TODO(jfreeman): Parse arbitrary sequence of heritage clauses and error for order and duplicates
-            node.baseType = parseOptional(SyntaxKind.ExtendsKeyword) ? parseTypeReference() : undefined;
+
+            // TODO(jfreeman): Parse arbitrary sequence of heritage clauses and error for order and duplicates            
+            var extendsKeywordStart = scanner.getTokenPos();
+            var extendsKeywordLength: number;
+            if (parseOptional(SyntaxKind.ExtendsKeyword)) {
+                extendsKeywordLength = scanner.getStartPos() - extendsKeywordStart;
+                var extendTypes = parseDelimitedList(ParsingContext.BaseTypeReferences,
+                    parseTypeReference, /*allowTrailingComma*/ false);
+                if (extendTypes.length === 0) {
+                    node.baseType = undefined;
+                } else if (extendTypes.length === 1) {
+                    node.baseType = extendTypes[0];
+                } else {
+                    errorAtPos(extendsKeywordStart, extendsKeywordLength, Diagnostics.A_class_can_only_extend_a_single_class, "extends");
+                }
+            }
+
             var implementsKeywordStart = scanner.getTokenPos();
             var implementsKeywordLength: number;
             if (parseOptional(SyntaxKind.ImplementsKeyword)) {
