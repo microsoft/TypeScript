@@ -294,6 +294,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifySignatureHelpCount(expected);
         }
 
+        public signatureHelpArgumentCountIs(expected: number) {
+            FourSlash.currentTestState.verifySignatureHelpArgumentCount(expected);
+        }
+
         public currentSignatureParamterCountIs(expected: number) {
             FourSlash.currentTestState.verifyCurrentSignatureHelpParameterCount(expected);
         }

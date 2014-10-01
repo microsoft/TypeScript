@@ -44,8 +44,10 @@ TypeScript is a trademark of Microsoft Corporation.
   * [3.3 Object Types](#3.3)
     * [3.3.1 Named Type References](#3.3.1)
     * [3.3.2 Array Types](#3.3.2)
-    * [3.3.3 Anonymous Types](#3.3.3)
-    * [3.3.4 Members](#3.3.4)
+    * [3.3.3 Tuple Types](#3.3.3)
+    * [3.3.4 Function Types](#3.3.4)
+    * [3.3.5 Constructor Types](#3.3.5)
+    * [3.3.6 Members](#3.3.6)
   * [3.4 Type Parameters](#3.4)
     * [3.4.1 Type Parameter Lists](#3.4.1)
     * [3.4.2 Type Argument Lists](#3.4.2)
@@ -54,9 +56,13 @@ TypeScript is a trademark of Microsoft Corporation.
   * [3.6 Specifying Types](#3.6)
     * [3.6.1 Predefined Types](#3.6.1)
     * [3.6.2 Type References](#3.6.2)
-    * [3.6.3 Type Queries](#3.6.3)
-    * [3.6.4 Type Literals](#3.6.4)
-  * [3.7 Object Type Literals](#3.7)
+    * [3.6.3 Object Type Literals](#3.6.3)
+    * [3.6.4 Array Type Literals](#3.6.4)
+    * [3.6.5 Tuple Type Literals](#3.6.5)
+    * [3.6.6 Function Type Literals](#3.6.6)
+    * [3.6.7 Constructor Type Literals](#3.6.7)
+    * [3.6.8 Type Queries](#3.6.8)
+  * [3.7 Specifying Members](#3.7)
     * [3.7.1 Property Signatures](#3.7.1)
     * [3.7.2 Call Signatures](#3.7.2)
     * [3.7.3 Construct Signatures](#3.7.3)
@@ -575,10 +581,10 @@ For this switch statement, the compiler will generate the following code.
 
 ```TypeScript
 switch (op) {  
-    case 0 /* Operator.ADD */ :  
+    case 0 /* Operator.ADD */:  
         // execute add  
         break;  
-    case 1 /* Operator.DIV */ :  
+    case 1 /* Operator.DIV */:  
         // execute div  
         break;  
     // ...  
@@ -732,7 +738,7 @@ var M;
         return s;  
     }  
     M.f = f;  
-})(M||(M={}));
+})(M || (M = {}));
 ```
 
 In this case, the compiler assumes that the module object resides in global variable ‘M’, which may or may not have been initialized to the desired module object.
@@ -1041,7 +1047,20 @@ All string literal types are subtypes of the String primitive type.
 
 ## <a name="3.3"/>3.3 Object Types
 
-The object types include references to class and interface types as well as anonymous object types created by a number of constructs such as object literals, function declarations, and module declarations. Object types are composed from properties, call signatures, construct signatures, and index signatures, collectively called members.
+Object types are composed from properties, call signatures, construct signatures, and index signatures, collectively called members.
+
+Class and interface type references, array types, tuple types, function types, and constructor types are all classified as object types. Multiple constructs in the TypeScript language create object types, including:
+
+* Object type literals (section [3.6.3](#3.6.3)).
+* Array type literals (section [3.6.4](#3.6.4)).
+* Tuple type literals (section [3.6.5](#3.6.5)).
+* Function type literals (section [3.6.6](#3.6.6)).
+* Constructor type literals (section [3.6.7](#3.6.7)).
+* Object literals (section [4.5](#4.5)).
+* Array literals (section [4.6](#4.6)).
+* Function expressions (section [4.9](#4.9)) and function declarations ([6.1](#6.1)).
+* Constructor function types created by class declarations (section [8.2.5](#8.2.5)).
+* Module instance types created by module declarations (section [10.3](#10.3)).
 
 ### <a name="3.3.1"/>3.3.1 Named Type References
 
@@ -1049,22 +1068,60 @@ Type references (section [3.6.2](#3.6.2)) to class and interface types are class
 
 ### <a name="3.3.2"/>3.3.2 Array Types
 
-Array types represent JavaScript arrays. Array types are type references (section [3.6.2](#3.6.2)) created from the generic interface type ‘Array’ in the global module. Array type literals (section [3.6.4](#3.6.4)) provide a shorthand notation for creating such references.
+***Array types*** represent JavaScript arrays with a common element type. Array types are named type references created from the generic interface type ‘Array’ in the global module with the array element type as a type argument. Array type literals (section [3.6.4](#3.6.4)) provide a shorthand notation for creating such references.
 
-Array literals (section [4.6](#4.6)) may be used to create values of array types.
+The declaration of the ‘Array’ interface includes a property ‘length’ and a numeric index signature for the element type, along with other members:
 
-### <a name="3.3.3"/>3.3.3 Anonymous Types
+```TypeScript
+interface Array<T> {  
+    length: number;  
+    [x: number]: T;  
+    // Other members  
+}
+```
 
-Several constructs in the TypeScript language introduce new anonymous object types:
+Array literals (section [4.6](#4.6)) may be used to create values of array types. For example
 
-* Function and constructor type literals (section [3.6.4](#3.6.4)).
-* Object type literals (section [3.7](#3.7)).
-* Object literals (section [4.5](#4.5)).
-* Function expressions (section [4.9](#4.9)) and function declarations ([6.1](#6.1)).
-* Constructor function types created by class declarations (section [8.2.5](#8.2.5)).
-* Module instance types created by module declarations (section [10.3](#10.3)).
+```TypeScript
+var a: string[] = ["hello", "world"];
+```
 
-### <a name="3.3.4"/>3.3.4 Members
+### <a name="3.3.3"/>3.3.3 Tuple Types
+
+***Tuple types*** represent JavaScript arrays with individually tracked element types. Tuple types are written using tuple type literals (section [3.6.5](#3.6.5)). A tuple type combines a set of numerically named properties with the members of an array type. Specifically, a tuple type
+
+```TypeScript
+[ T0, T1, ..., Tn ]
+```
+
+combines the set of properties
+
+```TypeScript
+{  
+    0: T0;  
+    1: T1;  
+    ...  
+    n: Tn;  
+}
+```
+
+with the members of an array type whose element type is the best common type (section [3.10](#3.10)) of the tuple element types.
+
+Array literals (section [4.6](#4.6)) may be used to create values of tuple types. For example
+
+```TypeScript
+var t: [number, string] = [1, "one"];
+```
+
+### <a name="3.3.4"/>3.3.4 Function Types
+
+An object type containing one or more call signatures is said to be a ***function type***. Function types may be written using function type literals (section [3.6.6](#3.6.6)) or by including call signatures in object type literals.
+
+### <a name="3.3.5"/>3.3.5 Constructor Types
+
+An object type containing one or more construct signatures is said to be a ***constructor type***. Constructor types may be written using constructor type literals (section [3.6.7](#3.6.7)) or by including construct signatures in object type literals.
+
+### <a name="3.3.6"/>3.3.6 Members
 
 Every object type is composed from zero or more of the following kinds of members:
 
@@ -1198,13 +1255,19 @@ class G<T> {               // Introduce type parameter T
 
 ## <a name="3.6"/>3.6 Specifying Types
 
-Types are specified either by referencing their keyword or name, by querying expression types, or by writing type literals which compose other types into new types.
+Types are specified either by referencing their keyword or name, or by writing object type literals, array type literals, tuple type literals, function type literals, constructor type literals, or type queries.
 
 &emsp;&emsp;*Type:*  
 &emsp;&emsp;&emsp;*PredefinedType*  
 &emsp;&emsp;&emsp;*TypeReference*  
-&emsp;&emsp;&emsp;*TypeQuery*  
-&emsp;&emsp;&emsp;*TypeLiteral*
+&emsp;&emsp;&emsp;*ObjectType*  
+&emsp;&emsp;&emsp;*ArrayType*  
+&emsp;&emsp;&emsp;*TupleType*  
+&emsp;&emsp;&emsp;*FunctionType*  
+&emsp;&emsp;&emsp;*ConstructorType*  
+&emsp;&emsp;&emsp;*TypeQuery*
+
+The different forms of type notations are described in the following sections.
 
 ### <a name="3.6.1"/>3.6.1 Predefined Types
 
@@ -1278,7 +1341,123 @@ var v1: {
 };
 ```
 
-### <a name="3.6.3"/>3.6.3 Type Queries
+### <a name="3.6.3"/>3.6.3 Object Type Literals
+
+An object type literal defines an object type by specifying the set of members that are statically considered to be present in instances of the type. Object type literals can be given names using interface declarations but are otherwise anonymous.
+
+&emsp;&emsp;*ObjectType:*  
+&emsp;&emsp;&emsp;`{`&emsp;*TypeBody<sub>opt</sub>*&emsp;`}`
+
+&emsp;&emsp;*TypeBody:*  
+&emsp;&emsp;&emsp;*TypeMemberList*&emsp;`;`*<sub>opt</sub>*
+
+&emsp;&emsp;*TypeMemberList:*  
+&emsp;&emsp;&emsp;*TypeMember*  
+&emsp;&emsp;&emsp;*TypeMemberList*&emsp;`;`&emsp;*TypeMember*
+
+&emsp;&emsp;*TypeMember:*  
+&emsp;&emsp;&emsp;*PropertySignature*  
+&emsp;&emsp;&emsp;*CallSignature*  
+&emsp;&emsp;&emsp;*ConstructSignature*  
+&emsp;&emsp;&emsp;*IndexSignature*  
+&emsp;&emsp;&emsp;*MethodSignature*
+
+The members of an object type literal are specified as a combination of property, call, construct, index, and method signatures. Object type members are described in section [3.7](#3.7).
+
+### <a name="3.6.4"/>3.6.4 Array Type Literals
+
+An array type literal is written as an element type followed by an open and close square bracket.
+
+&emsp;&emsp;*ArrayType:*  
+&emsp;&emsp;&emsp;*ElementType*&emsp;*[no LineTerminator here]*&emsp;`[`&emsp;`]`
+
+&emsp;&emsp;*ElementType:*  
+&emsp;&emsp;&emsp;*PredefinedType*  
+&emsp;&emsp;&emsp;*TypeReference*  
+&emsp;&emsp;&emsp;*ObjectType*  
+&emsp;&emsp;&emsp;*ArrayType*  
+&emsp;&emsp;&emsp;*TupleType*  
+&emsp;&emsp;&emsp;*TypeQuery*
+
+An array type literal references an array type (section [3.3.2](#3.3.2)) with the given element type. An array type literal is simply shorthand notation for a reference to the generic interface type ‘Array’ in the global module with the element type as a type argument.
+
+In order to avoid grammar ambiguities, array type literals permit only a restricted set of notations for the element type. Specifically, an *ArrayType* cannot start with a *FunctionType* or *ConstructorType*. To use one of those forms for the element type, an array type must be written using the ‘Array&lt;T>’ notation. For example, the type
+
+```TypeScript
+() => string[]
+```
+
+denotes a function returning a string array, not an array of functions returning string. The latter can be expressed using ‘Array&lt;T>’ notation
+
+```TypeScript
+Array<() => string>
+```
+
+or by writing the element type as an object type literal
+
+```TypeScript
+{ (): string }[]
+```
+
+### <a name="3.6.5"/>3.6.5 Tuple Type Literals
+
+A tuple type literal is written as a sequence of element types, separated by commas and enclosed in square brackets.
+
+&emsp;&emsp;*TupleType:*  
+&emsp;&emsp;&emsp;`[`&emsp;*TupleElementTypes*&emsp;`]`
+
+&emsp;&emsp;*TupleElementTypes:*  
+&emsp;&emsp;&emsp;*TupleElementType*  
+&emsp;&emsp;&emsp;*TupleElementTypes*&emsp;`,`&emsp;*TupleElementType*
+
+&emsp;&emsp;*TupleElementType:*  
+&emsp;&emsp;&emsp;*Type*
+
+A tuple type literal references a tuple type (section [3.3.3](#3.3.3)).
+
+### <a name="3.6.6"/>3.6.6 Function Type Literals
+
+A function type literal specifies the type parameters, regular parameters, and return type of a call signature.
+
+&emsp;&emsp;*FunctionType:*  
+&emsp;&emsp;&emsp;*TypeParameters<sub>opt</sub>*&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`=>`&emsp;*Type*
+
+A function type literal is shorthand for an object type containing a single call signature. Specifically, a function type literal of the form
+
+```TypeScript
+< T1, T2, ... > ( p1, p2, ... ) => R
+```
+
+is exactly equivalent to the object type literal
+
+```TypeScript
+{ < T1, T2, ... > ( p1, p2, ... ) : R }
+```
+
+Note that function types with multiple call or construct signatures cannot be written as function type literals but must instead be written as object type literals.
+
+### <a name="3.6.7"/>3.6.7 Constructor Type Literals
+
+A constructor type literal specifies the type parameters, regular parameters, and return type of a construct signature.
+
+&emsp;&emsp;*ConstructorType:*  
+&emsp;&emsp;&emsp;`new`&emsp;*TypeParameters<sub>opt</sub>*&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`=>`&emsp;*Type*
+
+A constructor type literal is shorthand for an object type containing a single construct signature. Specifically, a constructor type literal of the form
+
+```TypeScript
+new < T1, T2, ... > ( p1, p2, ... ) => R
+```
+
+is exactly equivalent to the object type literal
+
+```TypeScript
+{ new < T1, T2, ... > ( p1, p2, ... ) : R }
+```
+
+Note that constructor types with multiple construct signatures cannot be written as constructor type literals but must instead be written as object type literals.
+
+### <a name="3.6.8"/>3.6.8 Type Queries
 
 A type query obtains the type of an expression.
 
@@ -1318,82 +1497,9 @@ var h: () => typeof h;
 
 Here, ‘g’ and ‘g.x’ have the same recursive type, and likewise ‘h’ and ‘h()’ have the same recursive type.
 
-### <a name="3.6.4"/>3.6.4 Type Literals
+## <a name="3.7"/>3.7 Specifying Members
 
-Type literals compose other types into new anonymous types.
-
-&emsp;&emsp;*TypeLiteral:*  
-&emsp;&emsp;&emsp;*ObjectType*  
-&emsp;&emsp;&emsp;*ArrayType*  
-&emsp;&emsp;&emsp;*FunctionType*  
-&emsp;&emsp;&emsp;*ConstructorType*
-
-&emsp;&emsp;*ArrayType:*  
-&emsp;&emsp;&emsp;*ElementType*&emsp;*[no LineTerminator here]*&emsp;`[`&emsp;`]`
-
-&emsp;&emsp;*ElementType:*  
-&emsp;&emsp;&emsp;*PredefinedType*  
-&emsp;&emsp;&emsp;*TypeReference*  
-&emsp;&emsp;&emsp;*TypeQuery*  
-&emsp;&emsp;&emsp;*ObjectType*  
-&emsp;&emsp;&emsp;*ArrayType*
-
-&emsp;&emsp;*FunctionType:*  
-&emsp;&emsp;&emsp;*TypeParameters<sub>opt</sub>*&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`=>`&emsp;*Type*
-
-&emsp;&emsp;*ConstructorType:*  
-&emsp;&emsp;&emsp;`new`&emsp;*TypeParameters<sub>opt</sub>*&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`=>`&emsp;*Type*
-
-Object type literals are the primary form of type literals and are described in section [3.7](#3.7). Array, function, and constructor type literals are simply shorthand notations for other types:
-
-|Type literal|Equivalent form|
-|---|---|
-|`T [ ]`|`Array < T >`|
-|`< ... > ( ... ) => T`|`{ < ... > ( ... ) : T }`|
-|`new < ... > ( ... ) => T`|`{ new < ... > ( ... ) : T }`|
-
-As the table above illustrates, an array type literal is shorthand for a reference to the generic interface type ‘Array’ in the global module, a function type literal is shorthand for an object type containing a single call signature, and a constructor type literal is shorthand for an object type containing a single construct signature. Note that function and constructor types with multiple call or construct signatures cannot be written as function or constructor type literals but must instead be written as object type literals.
-
-In order to avoid grammar ambiguities, array type literals permit only a restricted set of notations for the element type. Specifically, an *ArrayType* cannot start with a *FunctionType* or *ConstructorType*. To use one of those forms for the element type, an array type must be written using the ‘Array&lt;T>’ notation. For example, the type
-
-```TypeScript
-() => string[]
-```
-
-denotes a function returning a string array, not an array of functions returning string. The latter can be expressed using ‘Array&lt;T>’ notation
-
-```TypeScript
-Array<() => string>
-```
-
-or by writing the element type as an object type literal
-
-```TypeScript
-{ (): string }[]
-```
-
-## <a name="3.7"/>3.7 Object Type Literals
-
-An object type literal defines an object type by specifying the set of members that are statically considered to be present in instances of the type. Object type literals can be given names using interface declarations but are otherwise anonymous.
-
-&emsp;&emsp;*ObjectType:*  
-&emsp;&emsp;&emsp;`{`&emsp;*TypeBody<sub>opt</sub>*&emsp;`}`
-
-&emsp;&emsp;*TypeBody:*  
-&emsp;&emsp;&emsp;*TypeMemberList*&emsp;`;`*<sub>opt</sub>*
-
-&emsp;&emsp;*TypeMemberList:*  
-&emsp;&emsp;&emsp;*TypeMember*  
-&emsp;&emsp;&emsp;*TypeMemberList*&emsp;`;`&emsp;*TypeMember*
-
-&emsp;&emsp;*TypeMember:*  
-&emsp;&emsp;&emsp;*PropertySignature*  
-&emsp;&emsp;&emsp;*CallSignature*  
-&emsp;&emsp;&emsp;*ConstructSignature*  
-&emsp;&emsp;&emsp;*IndexSignature*  
-&emsp;&emsp;&emsp;*MethodSignature*
-
-The members of an object type literal are specified as a combination of property, call, construct, index, and method signatures. The signatures are separated by semicolons and enclosed in curly braces.
+The members of an object type literal (section [3.6.3](#3.6.3)) are specified as a combination of property, call, construct, index, and method signatures.
 
 ### <a name="3.7.1"/>3.7.1 Property Signatures
 
@@ -1422,9 +1528,9 @@ A call signature defines the type parameters, parameter list, and return type as
 
 A call signature that includes *TypeParameters* (section [3.4.1](#3.4.1)) is called a ***generic call signature***. Conversely, a call signature with no *TypeParameters* is called a non-generic call signature.
 
-As well as being members of object type literals, call signatures occur in method signatures (section [3.7.5](#3.7.5)), function expressions (section [4.9](#4.9)), and function declarations (section [6.1](#6.1)).<sub>
+As well as being members of object type literals, call signatures occur in method signatures (section [3.7.5](#3.7.5)), function expressions (section [4.9](#4.9)), and function declarations (section [6.1](#6.1)).
 
-</sub>An object type containing call signatures is said to be a ***function type***.
+An object type containing call signatures is said to be a ***function type***.
 
 #### <a name="3.7.2.1"/>3.7.2.1 Type Parameters
 
@@ -1548,7 +1654,7 @@ The type parameters, parameter list, and return type of a construct signature ar
 
 A type containing construct signatures is said to be a ***constructor type***.
 
-### <a name="3.7.4"/>3.7.4 Index Signatures
+### <a name="3.7.4"/>3.7.4 Index Signatures
 
 An index signature defines a type constraint for properties in the containing type.
 
@@ -1980,9 +2086,38 @@ When an object literal is contextually typed by a type that includes a string in
 
 ## <a name="4.6"/>4.6 Array Literals
 
-In the absence of a contextual type, the type of an array literal is *C*`[]`, where *C* is the Undefined type (section [3.2.6](#3.2.6)) if the array literal is empty, or the best common type of the element expressions if the array literal is not empty.
+An array literal
 
-When an array literal is contextually typed (section [4.19](#4.19)) by an object type containing a numeric index signature of type *T*, each element expression is contextually typed by *T* and the type of the array literal is the best common type of the contextual type *T* and the types of the element expressions.
+```TypeScript
+[expr1, expr2, ..., exprN]
+```
+
+denotes a value of an array type (section [3.3.2](#3.3.2)) or a tuple type (section [3.3.3](#3.3.3)) depending on context.
+
+Each element expression in a non-empty array literal is processed as follows:
+
+* If the array literal is contextually typed (section [4.19](#4.19)) by a type *T* and *T* has a property with the numeric name *N*, where *N* is the index of the element expression in the array literal, the element expression is contextually typed by the type of that property.
+* Otherwise, if the array literal is contextually typed by a type *T* with a numeric index signature, the element expression is contextually typed by the type of the numeric index signature.
+* Otherwise, the element expression is not contextually typed.
+
+The resulting type of a non-empty array literal expression is determined as follows:
+
+* If the array literal is contextually typed by a type *T* and *T* has at least one property with a numeric name that matches the index of an element expression in the array literal, the resulting type is a tuple type constructed from the types of the element expressions.
+* Otherwise, if the array literal is contextually typed by a type T with a numeric index signature of type *S*, the resulting type is an array type where the element type is the best common type of the contextual type *S* and the types of the element expressions.
+* Otherwise, if the array literal is not contextually typed, the resulting type is an array type where the element type is the best common type of the types of the element expressions.
+
+The resulting type of an empty array literal expression is determined as follows:
+
+* If the array literal is contextually typed by a type *T* with a numeric index signature of type *S*, the resulting type is an array type with element type *S*.
+* Otherwise, the resulting type is an array type with the element type Undefined.
+
+The rules above mean that an array literal is always of an array type, unless it is contextually typed by a type with numerically named properties (such as a tuple type). For example
+
+```TypeScript
+var a = [1, 2];                          // number[]  
+var b = ["hello", true];                 // {}[]  
+var c: [number, string] = [3, "three"];  // [number, string]
+```
 
 ## <a name="4.7"/>4.7 Parentheses
 
@@ -2180,6 +2315,26 @@ where *object* and *index* are expressions, is used to access the property with 
 * Otherwise, if *object*’s apparent type has a string index signature and *index* is of type Any, the String or Number primitive type, or an enum type, the property access is of the type of that index signature.
 * Otherwise, if *index* is of type Any, the String or Number primitive type, or an enum type, the property access is of type Any.
 * Otherwise, the property access is invalid and a compile-time error occurs.
+
+The rules above mean that properties are strongly typed when accessed using bracket notation with the literal representation of their name. For example:
+
+```TypeScript
+var type = {  
+    name: "boolean",  
+    primitive: true  
+};
+
+var s = type["name"];       // string  
+var b = type["primitive"];  // boolean
+```
+
+Tuple types assign numeric names to each of their elements and elements are therefore strongly typed when accessed using bracket notation with a numeric literal:
+
+```TypeScript
+var data: [string, number] = ["five", 5];  
+var s = data[0];  // string  
+var n = data[1];  // number
+```
 
 ## <a name="4.11"/>4.11 The new Operator
 
@@ -2435,7 +2590,7 @@ The ‘void’ operator takes an operand of any type and produces the value ‘undefin
 
 ### <a name="4.14.6"/>4.14.6 The typeof Operator
 
-The ‘typeof’ operator takes an operand of any type and produces a value of the String primitive type. In positions where a type is expected, ‘typeof’ can also be used in a type query (section [3.6.3](#3.6.3)) to produce the type of an expression.
+The ‘typeof’ operator takes an operand of any type and produces a value of the String primitive type. In positions where a type is expected, ‘typeof’ can also be used in a type query (section [3.6.8](#3.6.8)) to produce the type of an expression.
 
 ```TypeScript
 var x = 5;  
@@ -2451,7 +2606,7 @@ The subsections that follow specify the compile-time processing rules of the bin
 
 ### <a name="4.15.1"/>4.15.1 The *, /, %, –, &lt;&lt;, >>, >>>, &, ^, and | operators
 
-These operators require their operands to be of type Any, the Number primitive type, or an enum type. Operands of an enum type are treated as having the primitive type Number. If one operand is the `null` or `undefine``d` value, it is treated as having the type of the other operand. The result is always of the Number primitive type.
+These operators require their operands to be of type Any, the Number primitive type, or an enum type. Operands of an enum type are treated as having the primitive type Number. If one operand is the `null` or `undefined` value, it is treated as having the type of the other operand. The result is always of the Number primitive type.
 
 ||Any|Boolean|Number|String|Object|
 |:---:|:---:|:---:|:---:|:---:|:---:|
@@ -4803,8 +4958,12 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;*Type:*  
 &emsp;&emsp;&emsp;*PredefinedType*  
 &emsp;&emsp;&emsp;*TypeReference*  
-&emsp;&emsp;&emsp;*TypeQuery*  
-&emsp;&emsp;&emsp;*TypeLiteral*
+&emsp;&emsp;&emsp;*ObjectType*  
+&emsp;&emsp;&emsp;*ArrayType*  
+&emsp;&emsp;&emsp;*TupleType*  
+&emsp;&emsp;&emsp;*FunctionType*  
+&emsp;&emsp;&emsp;*ConstructorType*  
+&emsp;&emsp;&emsp;*TypeQuery*
 
 &emsp;&emsp;*PredefinedType:*  
 &emsp;&emsp;&emsp;`any`  
@@ -4824,35 +4983,6 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*Identifier*  
 &emsp;&emsp;&emsp;*ModuleName*&emsp;`.`&emsp;*Identifier*
 
-&emsp;&emsp;*TypeQuery:*  
-&emsp;&emsp;&emsp;`typeof`&emsp;*TypeQueryExpression*
-
-&emsp;&emsp;*TypeQueryExpression:*  
-&emsp;&emsp;&emsp;*Identifier*  
-&emsp;&emsp;&emsp;*TypeQueryExpression*&emsp;`.`&emsp;*IdentifierName*
-
-&emsp;&emsp;*TypeLiteral:*  
-&emsp;&emsp;&emsp;*ObjectType*  
-&emsp;&emsp;&emsp;*ArrayType*  
-&emsp;&emsp;&emsp;*FunctionType*  
-&emsp;&emsp;&emsp;*ConstructorType*
-
-&emsp;&emsp;*ArrayType:*  
-&emsp;&emsp;&emsp;*ElementType*&emsp;*[no LineTerminator here]*&emsp;`[`&emsp;`]`
-
-&emsp;&emsp;*ElementType:*  
-&emsp;&emsp;&emsp;*PredefinedType*  
-&emsp;&emsp;&emsp;*TypeReference*  
-&emsp;&emsp;&emsp;*TypeQuery*  
-&emsp;&emsp;&emsp;*ObjectType*  
-&emsp;&emsp;&emsp;*ArrayType*
-
-&emsp;&emsp;*FunctionType:*  
-&emsp;&emsp;&emsp;*TypeParameters<sub>opt</sub>*&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`=>`&emsp;*Type*
-
-&emsp;&emsp;*ConstructorType:*  
-&emsp;&emsp;&emsp;`new`&emsp;*TypeParameters<sub>opt</sub>*&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`=>`&emsp;*Type*
-
 &emsp;&emsp;*ObjectType:*  
 &emsp;&emsp;&emsp;`{`&emsp;*TypeBody<sub>opt</sub>*&emsp;`}`
 
@@ -4869,6 +4999,40 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*ConstructSignature*  
 &emsp;&emsp;&emsp;*IndexSignature*  
 &emsp;&emsp;&emsp;*MethodSignature*
+
+&emsp;&emsp;*ArrayType:*  
+&emsp;&emsp;&emsp;*ElementType*&emsp;*[no LineTerminator here]*&emsp;`[`&emsp;`]`
+
+&emsp;&emsp;*ElementType:*  
+&emsp;&emsp;&emsp;*PredefinedType*  
+&emsp;&emsp;&emsp;*TypeReference*  
+&emsp;&emsp;&emsp;*ObjectType*  
+&emsp;&emsp;&emsp;*ArrayType*  
+&emsp;&emsp;&emsp;*TupleType*  
+&emsp;&emsp;&emsp;*TypeQuery*
+
+&emsp;&emsp;*TupleType:*  
+&emsp;&emsp;&emsp;`[`&emsp;*TupleElementTypes*&emsp;`]`
+
+&emsp;&emsp;*TupleElementTypes:*  
+&emsp;&emsp;&emsp;*TupleElementType*  
+&emsp;&emsp;&emsp;*TupleElementTypes*&emsp;`,`&emsp;*TupleElementType*
+
+&emsp;&emsp;*TupleElementType:*  
+&emsp;&emsp;&emsp;*Type*
+
+&emsp;&emsp;*FunctionType:*  
+&emsp;&emsp;&emsp;*TypeParameters<sub>opt</sub>*&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`=>`&emsp;*Type*
+
+&emsp;&emsp;*ConstructorType:*  
+&emsp;&emsp;&emsp;`new`&emsp;*TypeParameters<sub>opt</sub>*&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`=>`&emsp;*Type*
+
+&emsp;&emsp;*TypeQuery:*  
+&emsp;&emsp;&emsp;`typeof`&emsp;*TypeQueryExpression*
+
+&emsp;&emsp;*TypeQueryExpression:*  
+&emsp;&emsp;&emsp;*Identifier*  
+&emsp;&emsp;&emsp;*TypeQueryExpression*&emsp;`.`&emsp;*IdentifierName*
 
 &emsp;&emsp;*PropertySignature:*  
 &emsp;&emsp;&emsp;*PropertyName*&emsp;`?`*<sub>opt</sub>*&emsp;*TypeAnnotation<sub>opt</sub>*

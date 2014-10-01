@@ -92,7 +92,9 @@ module ts {
             getContextualType: getContextualType,
             getFullyQualifiedName: getFullyQualifiedName,
             getResolvedSignature: getResolvedSignature,
-            getEnumMemberValue: getEnumMemberValue
+            getEnumMemberValue: getEnumMemberValue,
+            isValidPropertyAccess: isValidPropertyAccess,
+            getAliasedSymbol: resolveImport
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -4239,6 +4241,25 @@ module ts {
             return anyType;
         }
 
+        function isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean {
+            var type = checkExpression(node.left);
+            if (type !== unknownType && type !== anyType) {
+                var apparentType = getApparentType(getWidenedType(type));
+                var prop = getPropertyOfApparentType(apparentType, propertyName);
+                if (prop && prop.parent && prop.parent.flags & SymbolFlags.Class) {
+                    if (node.left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.Method) {
+                        return false;
+                    }
+                    else {
+                        var diagnosticsCount = diagnostics.length;
+                        checkClassPropertyAccess(node, type, prop);
+                        return diagnostics.length === diagnosticsCount
+                    }
+                }
+            }
+            return true;
+        }
+
         function checkIndexedAccess(node: IndexedAccess): Type {
             var objectType = checkExpression(node.object);
             var indexType = checkExpression(node.index);
@@ -4311,25 +4332,32 @@ module ts {
         }
 
         function signatureHasCorrectArity(node: CallExpression, signature: Signature): boolean {
-            var args = node.arguments || emptyArray;
-            var isCorrect = args.length >= signature.minArgumentCount &&
-                (signature.hasRestParameter || args.length <= signature.parameters.length) &&
-                (!node.typeArguments || signature.typeParameters && node.typeArguments.length === signature.typeParameters.length);
-
-            // For error recovery, since we have parsed OmittedExpressions for any extra commas
-            // in the argument list, if we see any OmittedExpressions, just return true.
-            // The reason this is ok is because omitted expressions here are syntactically
-            // illegal, and will cause a parse error.
-            // Note: It may be worth keeping the upper bound check on arity, but removing
-            // the lower bound check if there are omitted expressions.
-            if (!isCorrect) {
-                // Technically this type assertion is not safe because args could be initialized to emptyArray
-                // above.
-                if ((<NodeArray<Node>>args).hasTrailingComma || forEach(args, arg => arg.kind === SyntaxKind.OmittedExpression)) {
-                    return true;
-                }
+            if (!node.arguments) {
+                // This only happens when we have something of the form:
+                //     new C
+                //
+                return signature.minArgumentCount === 0;
             }
-            return isCorrect;
+
+            // For IDE scenarios, since we may have an incomplete call, we make two modifications
+            // to arity checking.
+            //    1. A trailing comma is tantamount to adding another argument
+            //    2. If the call is incomplete (no closing paren) allow fewer arguments than expected
+            var args = node.arguments;
+            var numberOfArgs = args.hasTrailingComma ? args.length + 1 : args.length;
+            var hasTooManyArguments = !signature.hasRestParameter && numberOfArgs > signature.parameters.length;
+            var hasRightNumberOfTypeArguments = !node.typeArguments ||
+                (signature.typeParameters && node.typeArguments.length === signature.typeParameters.length);
+
+            if (hasTooManyArguments || !hasRightNumberOfTypeArguments) {
+                return false;
+            }
+
+            // If we are missing the close paren, the call is incomplete, and we should skip
+            // the lower bound check.
+            var callIsIncomplete = args.end === node.end;
+            var hasEnoughArguments = numberOfArgs >= signature.minArgumentCount;
+            return callIsIncomplete || hasEnoughArguments;
         }
 
         // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
