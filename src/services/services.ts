@@ -4034,7 +4034,7 @@ module ts {
 
             return result;
 
-            function classifySymbol(symbol: Symbol) {
+            function classifySymbol(symbol: Symbol, isInTypePosition: boolean) {
                 var flags = symbol.getFlags();
 
                 if (flags & SymbolFlags.Class) {
@@ -4043,14 +4043,16 @@ module ts {
                 else if (flags & SymbolFlags.Enum) {
                     return ClassificationTypeNames.enumName;
                 }
-                else if (flags & SymbolFlags.Interface) {
-                    return ClassificationTypeNames.interfaceName;
-                }
                 else if (flags & SymbolFlags.Module) {
                     return ClassificationTypeNames.moduleName;
                 }
-                else if (flags & SymbolFlags.TypeParameter) {
-                    return ClassificationTypeNames.typeParameterName;
+                else if (isInTypePosition) {
+                    if (flags & SymbolFlags.Interface) {
+                        return ClassificationTypeNames.interfaceName;
+                    }
+                    else if (flags & SymbolFlags.TypeParameter) {
+                        return ClassificationTypeNames.typeParameterName;
+                    }
                 }
             }
 
@@ -4060,7 +4062,7 @@ module ts {
                     if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
                         var symbol = typeInfoResolver.getSymbolInfo(node);
                         if (symbol) {
-                            var type = classifySymbol(symbol);
+                            var type = classifySymbol(symbol, isTypeNode(node) || isTypeDeclarationName(node));
                             if (type) {
                                 result.push({
                                     textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
