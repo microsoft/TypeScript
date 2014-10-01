@@ -1288,7 +1288,7 @@ module ts {
         }
 
         function writeTypeParameters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
-            if (typeParameters) {
+            if (typeParameters && typeParameters.length) {
                 writePunctuation(writer, SyntaxKind.LessThanToken);
                 for (var i = 0; i < typeParameters.length; i++) {
                     if (i > 0) {
