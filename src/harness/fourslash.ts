@@ -891,6 +891,13 @@ module FourSlash {
             assert.equal(actual, expected);
         }
 
+        public verifySignatureHelpArgumentCount(expected: number) {
+            this.taoInvalidReason = 'verifySignatureHelpArgumentCount NYI';
+            var signatureHelpItems = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
+            var actual = signatureHelpItems.argumentCount;
+            assert.equal(actual, expected);
+        }
+
         public verifySignatureHelpPresent(shouldBePresent = true) {
             this.taoInvalidReason = 'verifySignatureHelpPresent NYI';
 
@@ -944,29 +951,16 @@ module FourSlash {
             this.validate("error", message, renameInfo.localizedErrorMessage);
         }
 
-        //private getFormalParameter() {
-        //    var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-        //    return help.formal;
-        //}
-
         private getActiveSignatureHelpItem() {
             var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-
-            // If the signature hasn't been narrowed down yet (e.g. no parameters have yet been entered),
-            // 'activeFormal' will be -1 (even if there is only 1 signature). Signature help will show the
-            // first signature in the signature group, so go with that
-            var index = help.selectedItemIndex < 0 ? 0 : help.selectedItemIndex;
-
+            var index = help.selectedItemIndex;
             return help.items[index];
         }
 
         private getActiveParameter(): ts.SignatureHelpParameter {
             var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-
             var item = help.items[help.selectedItemIndex];
- 
-            // Same logic as in getActiveSignatureHelp - this value might be -1 until a parameter value actually gets typed
-            var currentParam = help.argumentIndex < 0 ? 0 : help.argumentIndex;
+            var currentParam = help.argumentIndex;
             return item.parameters[currentParam];
         }
 

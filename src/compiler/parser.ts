@@ -1073,7 +1073,7 @@ module ts {
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArgumentExpressions:
-                    return isExpression();
+                    return token === SyntaxKind.CommaToken || isExpression();
                 case ParsingContext.ArrayLiteralMembers:
                     return token === SyntaxKind.CommaToken || isExpression();
                 case ParsingContext.Parameters:
@@ -1226,18 +1226,6 @@ module ts {
                     error(Diagnostics._0_expected, ",");
                 }
                 else if (isListTerminator(kind)) {
-                    // Check if the last token was a comma.
-                    if (commaStart >= 0) {
-                        if (!allowTrailingComma) {
-                            if (file.syntacticErrors.length === errorCountBeforeParsingList) {
-                                // Report a grammar error so we don't affect lookahead
-                                grammarErrorAtPos(commaStart, scanner.getStartPos() - commaStart, Diagnostics.Trailing_comma_not_allowed);
-                            }
-                        }
-                        // Always preserve a trailing comma by marking it on the NodeArray
-                        result.hasTrailingComma = true;
-                    }
-
                     break;
                 }
                 else {
@@ -1248,6 +1236,23 @@ module ts {
                     nextToken();
                 }
             }
+
+            // Recording the trailing comma is deliberately done after the previous
+            // loop, and not just if we see a list terminator. This is because the list
+            // may have ended incorrectly, but it is still important to know if there
+            // was a trailing comma.
+            // Check if the last token was a comma.
+            if (commaStart >= 0) {
+                if (!allowTrailingComma) {
+                    if (file.syntacticErrors.length === errorCountBeforeParsingList) {
+                        // Report a grammar error so we don't affect lookahead
+                        grammarErrorAtPos(commaStart, scanner.getStartPos() - commaStart, Diagnostics.Trailing_comma_not_allowed);
+                    }
+                }
+                // Always preserve a trailing comma by marking it on the NodeArray
+                result.hasTrailingComma = true;
+            }
+
             result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
