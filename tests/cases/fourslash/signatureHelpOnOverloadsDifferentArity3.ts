@@ -11,6 +11,7 @@ goTo.marker();
 verify.signatureHelpCountIs(4);
 verify.currentSignatureHelpIs("f(): any");
 verify.currentSignatureParamterCountIs(0);
+verify.signatureHelpArgumentCountIs(0);
 
 edit.insert(", ");
 verify.signatureHelpCountIs(4);
@@ -19,8 +20,7 @@ verify.currentSignatureParamterCountIs(2);
 verify.currentParameterHelpArgumentNameIs("b");
 verify.currentParameterSpanIs("b: boolean");
 
-// What should the intended behavior be if there are too many arguments?
 edit.insert(", ");
 verify.signatureHelpCountIs(4);
-verify.currentSignatureHelpIs("f(): any");
-verify.currentSignatureParamterCountIs(0);
+verify.currentSignatureHelpIs("f(s: string, b: boolean): any");
+verify.currentSignatureParamterCountIs(2);

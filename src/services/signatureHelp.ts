@@ -252,6 +252,33 @@ module ts.SignatureHelp {
             return undefined;
         }
 
+        /**
+         * The selectedItemIndex could be negative for several reasons.
+         *     1. There are too many arguments for all of the overloads
+         *     2. None of the overloads were type compatible
+         * The solution here is to try to pick the best overload by picking
+         * either the first one that has an appropriate number of parameters,
+         * or the one with the most parameters.
+         */
+        function selectBestInvalidOverloadIndex(candidates: Signature[], argumentCount: number): number {
+            var maxParamsSignatureIndex = -1;
+            var maxParams = -1;
+            for (var i = 0; i < candidates.length; i++) {
+                var candidate = candidates[i];
+
+                if (candidate.hasRestParameter || candidate.parameters.length >= argumentCount) {
+                    return i;
+                }
+
+                if (candidate.parameters.length > maxParams) {
+                    maxParams = candidate.parameters.length;
+                    maxParamsSignatureIndex = i;
+                }
+            }
+
+            return maxParamsSignatureIndex;
+        }
+
         function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentInfoOrTypeArgumentInfo: ListItemInfo): SignatureHelpItems {
             var argumentListOrTypeArgumentList = argumentInfoOrTypeArgumentInfo.list;
             var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
@@ -326,11 +353,6 @@ module ts.SignatureHelp {
                 };
             });
 
-            var selectedItemIndex = candidates.indexOf(bestSignature);
-            if (selectedItemIndex < 0) {
-                selectedItemIndex = 0;
-            }
-
             // We use full start and skip trivia on the end because we want to include trivia on
             // both sides. For example,
             //
@@ -353,8 +375,18 @@ module ts.SignatureHelp {
             // But if we are on a comma, we also want to pretend we are on the argument *following*
             // the comma. That amounts to taking the ceiling of half the index.
             var argumentIndex = (argumentInfoOrTypeArgumentInfo.listItemIndex + 1) >> 1;
-            var numberOfCommas = countWhere(argumentListOrTypeArgumentList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
-            var argumentCount = numberOfCommas + 1;
+
+            // argumentCount is the number of commas plus one, unless the list is completely empty,
+            // in which case there are 0.
+            var argumentCount = argumentListOrTypeArgumentList.getChildCount() === 0
+                ? 0
+                : 1 + countWhere(argumentListOrTypeArgumentList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
+
+            var selectedItemIndex = candidates.indexOf(bestSignature);
+            if (selectedItemIndex < 0) {
+                selectedItemIndex = selectBestInvalidOverloadIndex(candidates, argumentCount);
+            }
+
             return {
                 items: items,
                 applicableSpan: applicableSpan,
