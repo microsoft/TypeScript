@@ -258,6 +258,12 @@ module ts.SignatureHelp {
             return undefined;
         }
 
+        function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {
+            var children = parent.getChildren(sourceFile);
+            var indexOfOpenerToken = children.indexOf(openerToken);
+            return children[indexOfOpenerToken + 1];
+        }
+
         /**
          * The selectedItemIndex could be negative for several reasons.
          *     1. There are too many arguments for all of the overloads
@@ -401,11 +407,5 @@ module ts.SignatureHelp {
                 argumentCount: argumentCount
             };
         }
-    }
-
-    function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {
-        var children = parent.getChildren(sourceFile);
-        var indexOfOpenerToken = children.indexOf(openerToken);
-        return children[indexOfOpenerToken + 1];
     }
 }
