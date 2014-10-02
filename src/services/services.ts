@@ -2573,7 +2573,8 @@ module ts {
             /// Triple slash reference comments
             var comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
             if (comment) {
-                var targetFilename = normalizePath(combinePaths(getDirectoryPath(filename), comment.filename));
+                var targetFilename = isRootedDiskPath(comment.filename) ? comment.filename : combinePaths(getDirectoryPath(filename), comment.filename);
+                targetFilename = normalizePath(targetFilename);
                 if (program.getSourceFile(targetFilename)) {
                     return [{
                         fileName: targetFilename,
