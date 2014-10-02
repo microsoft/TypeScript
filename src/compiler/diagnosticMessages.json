@@ -1032,6 +1032,10 @@
         "category": "Error",
         "code": 2446
     },
+    "The '{0}' operator is not allowed for boolean types {1}.": {
+        "category": "Error",
+        "code": 2447
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1406,6 +1410,10 @@
     "Redirect output structure to the directory.": {
         "category": "Message",
         "code": 6006
+    },
+    "Consider using '{0}' instead.": {
+        "category": "Message",
+        "code": 6007
     },
     "Do not emit comments to output.": {
         "category": "Message",
