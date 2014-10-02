@@ -1576,7 +1576,7 @@ module FourSlash {
 
         private verifyClassifications(expected: { classificationType: string; text: string }[], actual: ts.ClassifiedSpan[]) {
             if (actual.length !== expected.length) {
-                this.raiseError('verifySyntacticClassification failed - expected total classifications to be ' + expected.length + ', but was ' + actual.length);
+                this.raiseError('verifyClassifications failed - expected total classifications to be ' + expected.length + ', but was ' + actual.length);
             }
 
             for (var i = 0; i < expected.length; i++) {
@@ -1585,7 +1585,7 @@ module FourSlash {
 
                 var expectedType: string = (<any>ts.ClassificationTypeNames)[expectedClassification.classificationType];
                 if (expectedType !== actualClassification.classificationType) {
-                    this.raiseError('verifySyntacticClassification failed - expected classifications type to be ' +
+                    this.raiseError('verifyClassifications failed - expected classifications type to be ' +
                         expectedType + ', but was ' +
                         actualClassification.classificationType);
                 }
@@ -1593,7 +1593,7 @@ module FourSlash {
                 var actualSpan = actualClassification.textSpan;
                 var actualText = this.activeFile.content.substr(actualSpan.start(), actualSpan.length());
                 if (expectedClassification.text !== actualText) {
-                    this.raiseError('verifySyntacticClassification failed - expected classificatied text to be ' +
+                    this.raiseError('verifyClassifications failed - expected classificatied text to be ' +
                         expectedClassification.text + ', but was ' +
                         actualText);
                 }
