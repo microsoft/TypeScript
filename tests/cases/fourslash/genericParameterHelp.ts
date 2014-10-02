@@ -38,17 +38,17 @@
 //  verify.currentParameterHelpArgumentNameIs("U");
 //  verify.currentParameterSpanIs("U");
 
- goTo.marker("3");
- verify.currentParameterHelpArgumentNameIs("a");
- verify.currentParameterSpanIs("a: T");
+goTo.marker("3");
+verify.currentParameterHelpArgumentNameIs("a");
+verify.currentParameterSpanIs("a: T");
 
- // goTo.marker("4");
- // verify.currentParameterHelpArgumentNameIs("M");
- // verify.currentParameterSpanIs("M extends IFoo");
+goTo.marker("4");
+verify.currentParameterHelpArgumentNameIs("M");
+verify.currentParameterSpanIs("M extends IFoo");
 
- // goTo.marker("5");
- // verify.currentParameterHelpArgumentNameIs("M");
- // verify.currentParameterSpanIs("M extends IFoo");
+goTo.marker("5");
+verify.currentParameterHelpArgumentNameIs("M");
+verify.currentParameterSpanIs("M extends IFoo");
 
  // goTo.marker("construcor1");
  // verify.currentSignatureHelpIs("testClass<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): testClass<T, U, M>");
@@ -59,17 +59,17 @@
  // verify.currentParameterHelpArgumentNameIs("U");
  // verify.currentParameterSpanIs("U");
 
- //goTo.marker("construcor3");
- //verify.currentParameterHelpArgumentNameIs("T");
- //verify.currentParameterSpanIs("T extends IFoo");
+goTo.marker("construcor3");
+verify.currentParameterHelpArgumentNameIs("T");
+verify.currentParameterSpanIs("T extends IFoo");
 
- // goTo.marker("construcor4");
- // verify.currentParameterHelpArgumentNameIs("M");
- // verify.currentParameterSpanIs("M extends IFoo");
+goTo.marker("construcor4");
+verify.currentParameterHelpArgumentNameIs("M");
+verify.currentParameterSpanIs("M extends IFoo");
 
- // goTo.marker("construcor5");
- // verify.currentParameterHelpArgumentNameIs("U");
- // verify.currentParameterSpanIs("U");
+goTo.marker("construcor5");
+verify.currentParameterHelpArgumentNameIs("U");
+verify.currentParameterSpanIs("U");
 
  // goTo.marker("type1");
  // verify.signatureHelpCountIs(1);
