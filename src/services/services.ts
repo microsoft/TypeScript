@@ -504,17 +504,36 @@ module ts {
             if (!this.namedDeclarations) {
                 var sourceFile = this;
                 var namedDeclarations: Declaration[] = [];
-                var isExternalModule = ts.isExternalModule(sourceFile);
+                
+                // This keeps track of the last encountered function/method/method signature
+                // so that we may ignore all but the first overload.
+                var overloadDeclaration: FunctionDeclaration;
 
                 forEachChild(sourceFile, function visit(node: Node): boolean {
                     switch (node.kind) {
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.Method:
+                            var functionDeclaration = <FunctionDeclaration>node;
+
+                            // We can assume that overloadDeclaration will never be "trampled"
+                            // between consecutive overloads because we never dive into parameter initializers.
+                            if (functionDeclaration.name) {
+                                if (overloadDeclaration &&
+                                    functionDeclaration.name.text === overloadDeclaration.name.text &&
+                                    node.parent === overloadDeclaration.parent) {
+                                    break;
+                                }
+
+                                namedDeclarations.push(functionDeclaration);
+                                overloadDeclaration = functionDeclaration;
+                            }
+                            break;
+
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ImportDeclaration:
-                        case SyntaxKind.Method:
-                        case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.Constructor:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
@@ -522,9 +541,7 @@ module ts {
                             if ((<Declaration>node).name) {
                                 namedDeclarations.push(<Declaration>node);
                             }
-                            forEachChild(node, visit);
-                            break;
-
+                            // fall through
                         case SyntaxKind.VariableStatement:
                         case SyntaxKind.ModuleBlock:
                         case SyntaxKind.FunctionBlock:
@@ -532,10 +549,11 @@ module ts {
                             break;
 
                         case SyntaxKind.Parameter:
+                            // Only consider properties defined as constructor parameters
                             if (!(node.flags & NodeFlags.AccessibilityModifier)) {
-                                // Only consider properties defined as constructor parameters
                                 break;
                             }
+                            // fall through
                         case SyntaxKind.VariableDeclaration:
                         case SyntaxKind.EnumMember:
                         case SyntaxKind.Property:
