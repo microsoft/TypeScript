@@ -2356,7 +2356,7 @@ module ts {
                 var errorStart = scanner.getTokenPos();
                 var errorLength = scanner.getTextPos() - errorStart;
                 grammarErrorAtPos(errorStart, errorLength, Diagnostics.Type_expected);
-                return createNode(SyntaxKind.OmittedType);
+                return createNode(SyntaxKind.Missing);
             }
 
             return parseType();
