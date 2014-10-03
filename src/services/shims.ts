@@ -369,6 +369,7 @@ module ts {
             if (diagnosticMessagesJson == null || diagnosticMessagesJson == "") {
                 return null;
             }
+
             try {
                 return JSON.parse(diagnosticMessagesJson);
             }
