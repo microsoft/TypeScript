@@ -1,0 +1,2 @@
+//// [fooResult.js.map]
+{"version":3,"file":"fooResult.js","sourceRoot":"","sources":["../testFiles/app.ts","../testFiles/app2.ts"],"names":["c","c.constructor","d","d.constructor"],"mappings":"AAEA,AAFA,gFAAgF;AAChF,0GAA0G;IACpG,CAAC;IAAPA,SAAMA,CAACA;IACPC,CAACA;IAADD,QAACA;AAADA,CAACA,AADD,IACC;ACHD,IAAM,CAAC;IAAPE,SAAMA,CAACA;IACPC,CAACA;IAADD,QAACA;AAADA,CAACA,AADD,IACC"}

@@ -2096,9 +2096,6 @@ module FourSlash {
         xmlData.push(xml);
     }
 
-    // Cache these between executions so we don't have to re-parse them for every test
-    var fourslashSourceFile: ts.SourceFile = undefined;
-
     export function runFourSlashTestContent(content: string, fileName: string): TestXmlData {
         // Parse out the files and their metadata
         var testData = parseTestData(content, fileName);
@@ -2106,21 +2103,16 @@ module FourSlash {
         currentTestState = new TestState(testData);
 
         var result = '';
-        var fourslashFilename = 'fourslash.ts';
-        var tsFn = 'tests/cases/fourslash/' + fourslashFilename;
-        fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), ts.ScriptTarget.ES5, /*version*/ "0", /*isOpen*/ false);
-
-        var files: { [filename: string]: ts.SourceFile; } = {};
-        files[Harness.Compiler.getCanonicalFileName(fourslashFilename)] = fourslashSourceFile;
-        files[Harness.Compiler.getCanonicalFileName(fileName)] = ts.createSourceFile(fileName, content, ts.ScriptTarget.ES5, /*version*/ "0", /*isOpen*/ false);
-        files[Harness.Compiler.getCanonicalFileName(Harness.Compiler.defaultLibFileName)] = Harness.Compiler.defaultLibSourceFile;
-
-        var host = Harness.Compiler.createCompilerHost(files, (fn, contents) => result = contents);
-        var program = ts.createProgram([fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
+        var host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFilename, content: undefined },
+            { unitName: fileName, content: content }],
+            (fn, contents) => result = contents,
+            ts.ScriptTarget.ES5,
+            sys.useCaseSensitiveFileNames);
+        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
         checker.checkProgram();
 
-        var errs = checker.getDiagnostics(files[fileName]);
+        var errs = checker.getDiagnostics(program.getSourceFile(fileName));
         if (errs.length > 0) {
             throw new Error('Error compiling ' + fileName + ': ' + errs.map(e => e.messageText).join('\r\n'));
         }
