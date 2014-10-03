@@ -234,7 +234,7 @@ module Harness.LanguageService {
         }
 
         public getLocalizedDiagnosticMessages(): string {
-            return JSON.stringify({});
+            return null;
         }
 
         /** Return a new instance of the language service shim, up-to-date wrt to typecheck.
