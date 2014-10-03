@@ -237,6 +237,10 @@ module FourSlashInterface {
         public definitionLocationExists() {
             FourSlash.currentTestState.verifyDefinitionLocationExists(this.negative);
         }
+
+        public verifyDefinitionsName(name: string, containerName: string) {
+            FourSlash.currentTestState.verifyDefinitionsName(this.negative, name, containerName);
+        }
     }
 
     export class verify extends verifyNegatable {
