@@ -209,9 +209,11 @@ module ts {
     export var localizedDiagnosticMessages: Map<string> = undefined;
 
     export function getLocaleSpecificMessage(message: string) {
-        return localizedDiagnosticMessages && localizedDiagnosticMessages[message]
-            ? localizedDiagnosticMessages[message]
-            : message;
+        if (ts.localizedDiagnosticMessages) {
+            message = localizedDiagnosticMessages[message];
+        }
+
+        return message;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
@@ -476,7 +478,7 @@ module ts {
         }
     }
 
-    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, isAbsolutePathAnUrl: boolean) {
+    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: (fileName: string) => string, isAbsolutePathAnUrl: boolean) {
         var pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
         var directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
         if (directoryComponents.length > 1 && directoryComponents[directoryComponents.length - 1] === "") {
@@ -487,7 +489,7 @@ module ts {
 
         // Find the component that differs
         for (var joinStartIndex = 0; joinStartIndex < pathComponents.length && joinStartIndex < directoryComponents.length; joinStartIndex++) {
-            if (directoryComponents[joinStartIndex] !== pathComponents[joinStartIndex]) {
+            if (getCanonicalFileName(directoryComponents[joinStartIndex]) !== getCanonicalFileName(pathComponents[joinStartIndex])) {
                 break;
             }
         }
