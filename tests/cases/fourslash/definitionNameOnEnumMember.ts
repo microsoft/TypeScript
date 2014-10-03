@@ -8,5 +8,4 @@
 ////var enumMember = e./*1*/thirdMember;
 
 goTo.marker("1");
-// This is bug #652
-verify.verifyDefinitionsName("e.thirdMember", "e");
+verify.verifyDefinitionsName("thirdMember", "e");
