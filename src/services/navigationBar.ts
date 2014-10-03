@@ -1,8 +1,8 @@
 /// <reference path='services.ts' />
 /// <reference path="text/textSpan.ts" />
 
-module ts {
-    export function getNavigationBarItemsHelper(sourceFile: SourceFile): ts.NavigationBarItem[]  {
+module ts.NavigationBar {
+    export function getNavigationBarItems(sourceFile: SourceFile): ts.NavigationBarItem[]  {
         var hasGlobalNode = false;
 
         return getItemsWorker(getTopLevelNodes(sourceFile), createTopLevelItem);

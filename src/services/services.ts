@@ -6,7 +6,7 @@
 
 /// <reference path='syntax\incrementalParser.ts' />
 /// <reference path='outliningElementsCollector.ts' />
-/// <reference path='getScriptLexicalStructureWalker.ts' />
+/// <reference path='navigationBar.ts' />
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='signatureHelp.ts' />
@@ -3907,7 +3907,7 @@ module ts {
         function getNavigationBarItems(filename: string): NavigationBarItem[] {
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            return getNavigationBarItemsHelper(getCurrentSourceFile(filename));
+            return NavigationBar.getNavigationBarItems(getCurrentSourceFile(filename));
         }
 
         function getSemanticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[] {
