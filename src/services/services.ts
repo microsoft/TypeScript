@@ -1,4 +1,4 @@
- /// <reference path="..\compiler\types.ts"/>
+/// <reference path="..\compiler\types.ts"/>
 /// <reference path="..\compiler\core.ts"/>
 /// <reference path="..\compiler\scanner.ts"/>
 /// <reference path="..\compiler\parser.ts"/>
@@ -4711,7 +4711,7 @@ module ts {
             // In order to determine if the user is potentially typing something generic, we use a 
             // weak heuristic where we track < and > tokens.  It's a weak heuristic, but should
             // work well enough in practice.
-            var inGenericStack = 0;
+            var angleBracketStack = 0;
 
             do {
                 token = scanner.scan();
@@ -4736,19 +4736,18 @@ module ts {
                              token === SyntaxKind.LessThanToken) {
                         // Could be the start of something generic.  Keep track of that by bumping 
                         // up the current count of generic contexts we may be in.
-                        inGenericStack++;
+                        angleBracketStack++;
                     }
-                    else if (token === SyntaxKind.GreaterThanToken && inGenericStack > 0) {
+                    else if (token === SyntaxKind.GreaterThanToken && angleBracketStack > 0) {
                         // If we think we're currently in something generic, then mark that that
                         // generic entity is complete.
-                        inGenericStack--;
+                        angleBracketStack--;
                     }
                     else if (token === SyntaxKind.AnyKeyword ||
                              token === SyntaxKind.StringKeyword ||
                              token === SyntaxKind.NumberKeyword ||
-                             token === SyntaxKind.BooleanKeyword ||
-                             token === SyntaxKind.VoidKeyword) {
-                        if (inGenericStack > 0) {
+                             token === SyntaxKind.BooleanKeyword) {
+                        if (angleBracketStack > 0) {
                             // If it looks like we're could be in something generic, don't classify this 
                             // as a keyword.  We may just get overwritten by the syntactic classifier,
                             // causing a noisy experience for the user.
