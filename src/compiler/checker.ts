@@ -5022,18 +5022,20 @@ module ts {
                     if (leftType.flags & (TypeFlags.Undefined | TypeFlags.Null)) leftType = rightType;
                     if (rightType.flags & (TypeFlags.Undefined | TypeFlags.Null)) rightType = leftType;
 
-                    if (leftType.flags & TypeFlags.Boolean && rightType.flags & TypeFlags.Boolean) {
-                        var suggestedOperator = suggestedBooleanOperator(node.operator);
-                        if (suggestedOperator !== undefined) {
-                            error(node, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(node.operator), tokenToString(suggestedOperator));
-                        }
-                    } else {
+                    var suggestedOperator: SyntaxKind;
+                    // if both operands are booleans and we have a guess as to what the user meant to do return a helpful error
+                    if ((leftType.flags & TypeFlags.Boolean) && (rightType.flags & TypeFlags.Boolean) && (suggestedOperator = getSuggestedBooleanOperator(node.operator)) !== undefined) {   
+                        error(node, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(node.operator), tokenToString(suggestedOperator));
+                    }
+                    // otherwise just check each operand seperately and report errors as normal 
+                    else {
                         var leftOk = checkArithmeticOperandType(node.left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
                         var rightOk = checkArithmeticOperandType(node.right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
                         if (leftOk && rightOk) {
                             checkAssignmentOperator(numberType);
-                        }
-                    }    
+                        }    
+                    }
+
                     return numberType;
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.PlusEqualsToken:
@@ -5098,7 +5100,7 @@ module ts {
             }
             
             // if a user tries to apply an innappropriate operator to 2 boolean operands try and return them a helpful suggestion
-            function suggestedBooleanOperator(operator: any): SyntaxKind { 
+            function getSuggestedBooleanOperator(operator: any): SyntaxKind { 
                 switch (operator) {
                     case SyntaxKind.BarToken:
                     case SyntaxKind.BarEqualsToken:
