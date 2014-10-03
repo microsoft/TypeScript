@@ -231,5 +231,43 @@ describe('Colorization', function () {
                 identifier("var"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
         });
+
+        it("classifies partially written generics correctly.", function () {
+            test("Foo<number",
+                ts.EndOfLineState.Start,
+                identifier("Foo"),
+                operator("<"),
+                identifier("number"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+
+            // Looks like a cast, should get classified as a keyword.
+            test("<number",
+                ts.EndOfLineState.Start,
+                operator("<"),
+                keyword("number"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+
+            // handle nesting properly.
+            test("Foo<Foo,Foo<number",
+                ts.EndOfLineState.Start,
+                identifier("Foo"),
+                operator("<"),
+                identifier("Foo"),
+                punctuation(","),
+                identifier("Foo"),
+                operator("<"),
+                identifier("number"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+
+            // no longer in something that looks generic.
+            test("Foo<Foo> number",
+                ts.EndOfLineState.Start,
+                identifier("Foo"),
+                operator("<"),
+                identifier("Foo"),
+                operator(">"
+                identifier("keyword"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
     });
 });
