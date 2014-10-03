@@ -1650,8 +1650,8 @@ module ts {
         var writer: (filename: string, data: string, writeByteOrderMark: boolean) => void = undefined;
 
         // Check if the localized messages json is set, otherwise query the host for it
-        if (!TypeScript.LocalizedDiagnosticMessages) {
-            TypeScript.LocalizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
+        if (!localizedDiagnosticMessages) {
+            localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
         function getSourceFile(filename: string): SourceFile {
