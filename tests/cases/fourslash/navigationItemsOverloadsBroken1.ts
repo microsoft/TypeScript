@@ -24,6 +24,6 @@
 ////    throw overload;
 ////}
 
-verify.navigationItemsListCount(1, "overload1", "exact");
+verify.navigationItemsListCount(2, "overload1", "exact");
 verify.navigationItemsListCount(2, "overload2", "exact");
-verify.navigationItemsListCount(3, "overload", "prefix");
+verify.navigationItemsListCount(4, "overload", "prefix");

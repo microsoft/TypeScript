@@ -504,28 +504,31 @@ module ts {
             if (!this.namedDeclarations) {
                 var sourceFile = this;
                 var namedDeclarations: Declaration[] = [];
-                
-                // This keeps track of the last encountered function/method/method signature
-                // so that we may ignore all but the first overload.
-                var overloadDeclaration: FunctionDeclaration;
 
-                forEachChild(sourceFile, function visit(node: Node): boolean {
+                forEachChild(sourceFile, function visit(node: Node): void {
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.Method:
                             var functionDeclaration = <FunctionDeclaration>node;
 
-                            // We can assume that overloadDeclaration will never be "trampled"
-                            // between consecutive overloads because we never dive into parameter initializers.
-                            if (functionDeclaration.name) {
-                                if (overloadDeclaration &&
-                                    functionDeclaration.name.text === overloadDeclaration.name.text &&
-                                    node.parent === overloadDeclaration.parent) {
-                                    break;
+                            if (functionDeclaration.name && functionDeclaration.name.kind !== SyntaxKind.Missing) {
+                                var lastDeclaration = namedDeclarations.length > 0 ?
+                                    namedDeclarations[namedDeclarations.length - 1] :
+                                    undefined;
+
+                                // Check whether this declaration belongs to an "overload group".
+                                if (lastDeclaration && functionDeclaration.symbol === lastDeclaration.symbol) {
+                                    // Overwrite the last declaration if it was an overload
+                                    // and this one is an implementation.
+                                    if (functionDeclaration.body && !(<FunctionDeclaration>lastDeclaration).body) {
+                                        namedDeclarations[namedDeclarations.length - 1] = functionDeclaration;
+                                    }
+                                }
+                                else {
+                                    namedDeclarations.push(node);
                                 }
 
-                                namedDeclarations.push(functionDeclaration);
-                                overloadDeclaration = functionDeclaration;
+                                forEachChild(node, visit);
                             }
                             break;
 
@@ -534,7 +537,6 @@ module ts {
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ImportDeclaration:
-                        case SyntaxKind.Constructor:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
                         case SyntaxKind.TypeLiteral:
@@ -542,6 +544,7 @@ module ts {
                                 namedDeclarations.push(<Declaration>node);
                             }
                             // fall through
+                        case SyntaxKind.Constructor:
                         case SyntaxKind.VariableStatement:
                         case SyntaxKind.ModuleBlock:
                         case SyntaxKind.FunctionBlock:
@@ -560,9 +563,6 @@ module ts {
                             namedDeclarations.push(<Declaration>node);
                             break;
                     }
-
-                    // do not go any deeper
-                    return undefined;
                 });
 
                 this.namedDeclarations = namedDeclarations;
