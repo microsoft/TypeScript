@@ -54,11 +54,11 @@ module ts {
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
-    export function getSourceTextOfNodeFromSourceText(sourceText: string, node: Node): string {
+    export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
         return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
     }
 
-    export function getSourceTextOfNode(node: Node): string {
+    export function getTextOfNode(node: Node): string {
         var text = getSourceFileOfNode(node).text;
         return text.substring(skipTrivia(text, node.pos), node.end);
     }
@@ -75,7 +75,7 @@ module ts {
 
     // Return display name of an identifier
     export function identifierToString(identifier: Identifier) {
-        return identifier.kind === SyntaxKind.Missing ? "(Missing)" : getSourceTextOfNode(identifier);
+        return identifier.kind === SyntaxKind.Missing ? "(Missing)" : getTextOfNode(identifier);
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
@@ -3045,7 +3045,7 @@ module ts {
             parseExpected(SyntaxKind.ColonToken);
 
             if (labelledStatementInfo.nodeIsNestedInLabel(node.label, /*requireIterationStatement*/ false, /*stopAtFunctionBoundary*/ true)) {
-                grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getSourceTextOfNodeFromSourceText(sourceText, node.label));
+                grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getTextOfNodeFromSourceText(sourceText, node.label));
             }
             labelledStatementInfo.addLabel(node.label);
 

@@ -2575,7 +2575,7 @@ module ts {
         function getStringLiteralType(node: StringLiteralTypeNode): StringLiteralType {
             if (hasProperty(stringLiteralTypes, node.text)) return stringLiteralTypes[node.text];
             var type = stringLiteralTypes[node.text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
-            type.text = getSourceTextOfNode(node);
+            type.text = getTextOfNode(node);
             return type;
         }
 
@@ -7430,7 +7430,7 @@ module ts {
                 while (!isUniqueLocalName(escapeIdentifier(prefix + name), container)) {
                     prefix += "_";
                 }
-                links.localModuleName = prefix + getSourceTextOfNode(container.name);
+                links.localModuleName = prefix + getTextOfNode(container.name);
             }
             return links.localModuleName;
         }

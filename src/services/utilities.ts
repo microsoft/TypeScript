@@ -222,7 +222,7 @@ module ts {
         return n.kind !== SyntaxKind.SyntaxList || n.getChildCount() !== 0;
     }
 
-    function isToken(n: Node): boolean {
+    export function isToken(n: Node): boolean {
         return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
     }
 

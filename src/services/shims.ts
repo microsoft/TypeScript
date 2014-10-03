@@ -104,6 +104,12 @@ module ts {
 
         /**
          * Returns a JSON-encoded value of the type:
+         * { fileName: string, textSpan: { start: number, length: number } }[]
+         */
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): string;
+
+        /**
+         * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; kind: string; name: string; containerKind: string; containerName: string }
          *
          * Or undefined value if no definition can be found.
@@ -647,6 +653,14 @@ module ts {
                 "getRenameInfo('" + fileName + "', " + position + ")",
                 () => {
                     return this.languageService.getRenameInfo(fileName, position);
+                });
+        }
+
+        public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): string {
+            return this.forwardJSONCall(
+                "findRenameLocations('" + fileName + "', " + position + ", " + findInStrings + ", " + findInComments + ")",
+                () => {
+                    return this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments);
                 });
         }
 

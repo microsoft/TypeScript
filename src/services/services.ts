@@ -666,6 +666,8 @@ module ts {
         getSignatureAtPosition(fileName: string, position: number): SignatureInfo;
 
         getRenameInfo(fileName: string, position: number): RenameInfo;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
+        
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
@@ -755,6 +757,11 @@ module ts {
     export class TextChange {
         span: TypeScript.TextSpan;
         newText: string;
+    }
+
+    export interface RenameLocation {
+        textSpan: TypeScript.TextSpan;
+        fileName: string;
     }
 
     export interface ReferenceEntry {
@@ -3062,11 +3069,19 @@ module ts {
             }
         }
 
-        function getReferencesAtPosition(filename: string, position: number): ReferenceEntry[] {
+        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
+            return findReferences(fileName, position, findInStrings, findInComments);
+        }
+
+        function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
+            return findReferences(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
+        }
+
+        function findReferences(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
             synchronizeHostData();
 
-            filename = TypeScript.switchToForwardSlashes(filename);
-            var sourceFile = getSourceFile(filename);
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
 
             var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
@@ -3082,7 +3097,88 @@ module ts {
                 return undefined;
             }
 
-            return getReferencesForNode(node, program.getSourceFiles());
+            Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral);
+            var references = getReferencesForNode(node, program.getSourceFiles());
+
+            var name = (<Identifier>node).text;
+            var tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</
+
+            if (findInStrings) {
+                forEach(program.getSourceFiles(), addStringReferences);
+            }
+
+            if (findInComments) {
+                forEach(program.getSourceFiles(), addCommentReferences);
+            }
+
+            return references;
+
+            function addReferencesInRawText(rawText: string, rawTextPositionInSourceText: number, sourceText: string) {
+                var matchIndex = 0;
+                while ((matchIndex = rawText.indexOf(name, matchIndex)) >= 0) {
+                    // Only consider it a match if there isn't a letter/number before or after 
+                    // the match.
+                    var indexInSourceText = rawTextPositionInSourceText + matchIndex;
+
+                    if (indexInSourceText === 0 || !isIdentifierPart(sourceText.charCodeAt(indexInSourceText - 1), ScriptTarget.ES5)) {
+                        var matchEnd = indexInSourceText + name.length;
+                        if (matchEnd >= sourceText.length || !isIdentifierPart(sourceText.charCodeAt(matchEnd), ScriptTarget.ES5)) {
+
+                            references.push({
+                                fileName: sourceFile.filename,
+                                textSpan: new TypeScript.TextSpan(indexInSourceText, name.length),
+                                isWriteAccess: false
+                            });
+                        }
+                    }
+
+                    // Advance the matchIndex forward (if we don't, then we'll simply find the same 
+                    // match at the same position again).
+                    matchIndex++;
+                }
+            }
+
+            function addCommentReferences(sourceFile: SourceFile) {
+                var sourceText = sourceFile.text;
+                forEachChild(sourceFile, addCommentReferencesInNode);
+
+                function addCommentReferencesInNode(node: Node) {
+                    if (isToken(node)) {
+                        // Found a token, walk its comments (if it has any) for matches).
+                        forEach(getLeadingCommentRanges(sourceText, node.pos), addReferencesInCommentRange);
+                    }
+                    else {
+                        forEach(node.getChildren(), addCommentReferencesInNode);
+                    }
+                }
+
+                function addReferencesInCommentRange(range: CommentRange) {
+                    var commentText = sourceText.substring(range.pos, range.end);
+
+                    // Don't add matches in ///<reference comments.  We don't want to 
+                    // unintentionally update a file name.
+                    if (!tripleSlashDirectivePrefixRegex.test(commentText)) {
+                        addReferencesInRawText(commentText, range.pos, sourceText);
+                    }
+                }
+            }
+
+            function addStringReferences(sourceFile: SourceFile) {
+                var sourceText = sourceFile.text;
+
+                forEachChild(sourceFile, addStringReferencesInNode);
+
+                function addStringReferencesInNode(node: Node) {
+                    if (node.kind === SyntaxKind.StringLiteral) {
+                        // Found a string literal.  See if we can find any matches in it.
+                        addReferencesInRawText(getTextOfNodeFromSourceText(sourceText, node), node.getStart(sourceFile), sourceText);
+                    }
+                    else {
+                        // Recurse and keep looking for references in strings.
+                        forEachChild(node, addStringReferencesInNode);
+                    }
+                }
+            }
         }
 
         function getReferencesForNode(node: Node, sourceFiles: SourceFile[]): ReferenceEntry[] {
@@ -4590,6 +4686,7 @@ module ts {
             getBreakpointStatementAtPosition: getBreakpointStatementAtPosition,
             getNavigateToItems: getNavigateToItems,
             getRenameInfo: getRenameInfo,
+            findRenameLocations: findRenameLocations,
             getNavigationBarItems: getNavigationBarItems,
             getOutliningSpans: getOutliningSpans,
             getTodoComments: getTodoComments,
