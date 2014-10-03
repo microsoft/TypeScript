@@ -1071,7 +1071,9 @@ module ts {
 
             function writeType(type: Type, flags: TypeFormatFlags) {
                 if (type.flags & TypeFlags.Intrinsic) {
-                    writer.writeKind((<IntrinsicType>type).intrinsicName, SymbolDisplayPartKind.keyword);
+                    // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
+                    writer.writeKind(!(flags & TypeFormatFlags.WriteOwnNameForAnyLike) && 
+                        (type.flags & TypeFlags.Any) ? "any" : (<IntrinsicType>type).intrinsicName, SymbolDisplayPartKind.keyword);
                 }
                 else if (type.flags & TypeFlags.Reference) {
                     writeTypeReference(<TypeReference>type);
@@ -6951,19 +6953,6 @@ module ts {
             if (position < sourceFile.pos) position = sourceFile.pos;
             if (position > sourceFile.end) position = sourceFile.end;
             return findChildAtPosition(sourceFile);
-        }
-
-        function isInsideWithStatementBody(node: Node): boolean {
-            if (node) {
-                while (node.parent) {
-                    if (node.parent.kind === SyntaxKind.WithStatement && (<WithStatement>node.parent).statement === node) {
-                        return true;
-                    }
-                    node = node.parent;
-                }
-            }
-
-            return false;
         }
 
         function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[]{

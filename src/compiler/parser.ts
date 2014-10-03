@@ -166,6 +166,19 @@ module ts {
         }
     }
 
+    export function isInsideWithStatementBody(node: Node): boolean {
+        if (node) {
+            while (node.parent) {
+                if (node.parent.kind === SyntaxKind.WithStatement && (<WithStatement>node.parent).statement === node) {
+                    return true;
+                }
+                node = node.parent;
+            }
+        }
+
+        return false;
+    }
+
     export var fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/
 
     // Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes

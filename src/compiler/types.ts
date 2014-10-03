@@ -683,6 +683,7 @@ module ts {
         UseTypeOfFunction       = 0x00000002,  // Write typeof instead of function type literal
         NoTruncation            = 0x00000004,  // Don't truncate typeToString result
         WriteArrowStyleSignature= 0x00000008,  // Write arrow style signature
+        WriteOwnNameForAnyLike  = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
     }
 
     export enum SymbolFormatFlags {

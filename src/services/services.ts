@@ -2945,6 +2945,29 @@ module ts {
 
             var symbol = typeInfoResolver.getSymbolInfo(node);
             if (!symbol) {
+                
+                // Try getting just type at this position and show
+                switch (node.kind) {
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.PropertyAccess:
+                    case SyntaxKind.QualifiedName:
+                    case SyntaxKind.ThisKeyword:
+                    case SyntaxKind.SuperKeyword:
+                        // For the identifiers/this/usper etc get the type at position if not inside if statement
+                        if (!isInsideWithStatementBody(node)) {
+                            var type = typeInfoResolver.getTypeOfNode(node);
+                            if (type) {
+                                return {
+                                    kind: ScriptElementKind.unknown,
+                                    kindModifiers: ScriptElementKindModifier.none,
+                                    textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
+                                    displayParts: typeToDisplayParts(typeInfoResolver, type, getContainerNode(node), TypeFormatFlags.NoTruncation),
+                                    documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined
+                                };
+                            }
+                        }
+                }
+
                 return undefined;
             }
 
