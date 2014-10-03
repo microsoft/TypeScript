@@ -34,16 +34,28 @@ module ts {
         export function collectElements(sourceFile: SourceFile): OutliningSpan[] {
             var elements: OutliningSpan[] = [];
 
-            function addOutlineRange(hintSpanNode: Node, startElement: Node, endElement: Node) {
+            function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean) {
                 if (hintSpanNode && startElement && endElement) {
                     var span: OutliningSpan = {
                         textSpan: TypeScript.TextSpan.fromBounds(startElement.pos, endElement.end),
                         hintSpan: TypeScript.TextSpan.fromBounds(hintSpanNode.getStart(), hintSpanNode.end),
                         bannerText: "...",
-                        autoCollapse: false
+                        autoCollapse: autoCollapse
                     };
                     elements.push(span);
                 }
+            }
+
+            function autoCollapse(node: Node) {
+                switch (node.kind) {
+                    case SyntaxKind.ModuleBlock:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                        return false;
+                }
+
+                return true;
             }
 
             var depth = 0;
@@ -62,7 +74,7 @@ module ts {
                     case SyntaxKind.FinallyBlock:
                         var openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
                         var closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
-                        addOutlineRange(n.parent, openBrace, closeBrace);
+                        addOutliningSpan(n.parent, openBrace, closeBrace, autoCollapse(n));
                         break;
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
@@ -71,12 +83,12 @@ module ts {
                     case SyntaxKind.SwitchStatement:
                         var openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
                         var closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
-                        addOutlineRange(n, openBrace, closeBrace);
+                        addOutliningSpan(n, openBrace, closeBrace, autoCollapse(n));
                         break;
                     case SyntaxKind.ArrayLiteral:
                         var openBracket = findChildOfKind(n, SyntaxKind.OpenBracketToken, sourceFile);
                         var closeBracket = findChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
-                        addOutlineRange(n, openBracket, closeBracket);
+                        addOutliningSpan(n, openBracket, closeBracket, autoCollapse(n));
                         break;
                 }
                 depth++;
