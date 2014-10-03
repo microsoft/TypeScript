@@ -5022,9 +5022,11 @@ module ts {
                     if (leftType.flags & (TypeFlags.Undefined | TypeFlags.Null)) leftType = rightType;
                     if (rightType.flags & (TypeFlags.Undefined | TypeFlags.Null)) rightType = leftType;
 
-                    var boolean = typeToString(booleanType);
-                    if (typeToString(leftType) === boolean && typeToString(rightType) === boolean) {
-                        error(node, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_1, tokenToString(node.operator), preferredBooleanOperator(node.operator));
+                    if (leftType.flags & TypeFlags.Boolean && rightType.flags & TypeFlags.Boolean) {
+                        var suggestedOperator = suggestedBooleanOperator(node.operator);
+                        if (suggestedOperator !== undefined) {
+                            error(node, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(node.operator), tokenToString(suggestedOperator));
+                        }
                     } else {
                         var leftOk = checkArithmeticOperandType(node.left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
                         var rightOk = checkArithmeticOperandType(node.right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
@@ -5094,36 +5096,22 @@ module ts {
                 case SyntaxKind.CommaToken:
                     return rightType;
             }
-
-            function preferredBooleanOperator(operator: any): string {
-                var message = "";
-                var suggestion:SyntaxKind; 
+            
+            // if a user tries to apply an innappropriate operator to 2 boolean operands try and return them a helpful suggestion
+            function suggestedBooleanOperator(operator: any): SyntaxKind { 
                 switch (operator) {
                     case SyntaxKind.BarToken:
-                        suggestion = SyntaxKind.BarBarToken;
-                        break;
-                    case SyntaxKind.CaretToken:
-                        suggestion =  SyntaxKind.ExclamationEqualsEqualsToken;
-                        break;
-                    case SyntaxKind.AmpersandToken:
-                        suggestion = SyntaxKind.AmpersandAmpersandToken;
-                        break;
-                    case SyntaxKind.CaretEqualsToken:
-                        suggestion = SyntaxKind.CaretEqualsToken;
-                        break;
                     case SyntaxKind.BarEqualsToken:
-                        suggestion = SyntaxKind.BarEqualsToken;
-                        break;
+                        return SyntaxKind.BarBarToken;
+                    case SyntaxKind.CaretToken:
+                    case SyntaxKind.CaretEqualsToken:
+                        return SyntaxKind.ExclamationEqualsEqualsToken;
+                    case SyntaxKind.AmpersandToken:
                     case SyntaxKind.AmpersandEqualsToken:
-                        suggestion = SyntaxKind.AmpersandEqualsToken;
-                        break;
+                        return SyntaxKind.AmpersandAmpersandToken;
+                    default:
+                        return undefined;
                 }
-                if (suggestion !== undefined) {
-                    return "Consider using " + tokenToString(suggestion) + ".";
-                    //message = createCompilerDiagnostic(Diagnostics.Consider_using_0_instead, tokenToString(suggestion));
-                    //message = message(node, Diagnostics.Consider_using_0_instead, tokenToString(suggestion));
-                }
-                return message;
             }
 
             function checkAssignmentOperator(valueType: Type): void {
