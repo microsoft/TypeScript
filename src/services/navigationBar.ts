@@ -3,11 +3,15 @@
 
 module ts.NavigationBar {
     export function getNavigationBarItems(sourceFile: SourceFile): ts.NavigationBarItem[]  {
+        // If the source file has any child items, then it included in the tree
+        // and takes lexical ownership of all other top-level items.
         var hasGlobalNode = false;
 
         return getItemsWorker(getTopLevelNodes(sourceFile), createTopLevelItem);
 
         function getIndent(node: Node): number {
+            // If we have a global node in the tree,
+            // then it adds an extra layer of depth to all subnodes.
             var indent = hasGlobalNode ? 1 : 0;
 
             var current = node.parent;
@@ -150,57 +154,57 @@ module ts.NavigationBar {
                         return undefined;
                     }
 
-                    return basicChildItem(node, getSourceText(parameter.name), ts.ScriptElementKind.memberVariableElement);
+                    return createItem(node, getSourceText(parameter.name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.Method:
                     var method = <MethodDeclaration>node;
-                    return basicChildItem(node, getSourceText(method.name), ts.ScriptElementKind.memberFunctionElement);
+                    return createItem(node, getSourceText(method.name), ts.ScriptElementKind.memberFunctionElement);
 
                 case SyntaxKind.GetAccessor:
                     var getAccessor = <AccessorDeclaration>node;
-                    return basicChildItem(node, getSourceText(getAccessor.name), ts.ScriptElementKind.memberGetAccessorElement);
+                    return createItem(node, getSourceText(getAccessor.name), ts.ScriptElementKind.memberGetAccessorElement);
 
                 case SyntaxKind.SetAccessor:
                     var setAccessor = <AccessorDeclaration>node;
-                    return basicChildItem(node, getSourceText(setAccessor.name), ts.ScriptElementKind.memberSetAccessorElement);
+                    return createItem(node, getSourceText(setAccessor.name), ts.ScriptElementKind.memberSetAccessorElement);
 
                 case SyntaxKind.IndexSignature:
-                    return basicChildItem(node, "[]", ts.ScriptElementKind.indexSignatureElement);
+                    return createItem(node, "[]", ts.ScriptElementKind.indexSignatureElement);
 
                 case SyntaxKind.EnumMember:
                     var enumMember = <EnumMember>node;
-                    return basicChildItem(node, getSourceText(enumMember.name), ts.ScriptElementKind.memberVariableElement);
+                    return createItem(node, getSourceText(enumMember.name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.CallSignature:
-                    return basicChildItem(node, "()", ts.ScriptElementKind.callSignatureElement);
+                    return createItem(node, "()", ts.ScriptElementKind.callSignatureElement);
 
                 case SyntaxKind.ConstructSignature:
-                    return basicChildItem(node, "new()", ts.ScriptElementKind.constructSignatureElement);
+                    return createItem(node, "new()", ts.ScriptElementKind.constructSignatureElement);
 
                 case SyntaxKind.Property:
                     var property = <PropertyDeclaration>node;
-                    return basicChildItem(node, getSourceText(property.name), ts.ScriptElementKind.memberVariableElement);
+                    return createItem(node, getSourceText(property.name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.FunctionDeclaration:
                     var functionDeclaration = <FunctionDeclaration>node;
                     if (!isTopLevelFunctionDeclaration(functionDeclaration)) {
-                        return basicChildItem(node, getSourceText(functionDeclaration.name), ts.ScriptElementKind.functionElement);
+                        return createItem(node, getSourceText(functionDeclaration.name), ts.ScriptElementKind.functionElement);
                     }
                     break;
 
                 case SyntaxKind.VariableDeclaration:
                     var variableDeclaration = <VariableDeclaration>node;
-                    return basicChildItem(node, getSourceText(variableDeclaration.name), ts.ScriptElementKind.variableElement);
+                    return createItem(node, getSourceText(variableDeclaration.name), ts.ScriptElementKind.variableElement);
                 
                 case SyntaxKind.Constructor:
-                    return basicChildItem(node, "constructor", ts.ScriptElementKind.constructorImplementationElement);
+                    return createItem(node, "constructor", ts.ScriptElementKind.constructorImplementationElement);
             }
 
             return undefined;
-        }
 
-        function basicChildItem(node: Node, name: string, scriptElementKind: string): NavigationBarItem {
-            return getNavigationBarItem(name, scriptElementKind, getNodeModifiers(node), [getNodeSpan(node)]);
+            function createItem(node: Node, name: string, scriptElementKind: string): NavigationBarItem {
+                return getNavigationBarItem(name, scriptElementKind, getNodeModifiers(node), [getNodeSpan(node)]);
+            }
         }
 
         function getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: TypeScript.TextSpan[], childItems: ts.NavigationBarItem[]= [], indent: number = 0): ts.NavigationBarItem {
