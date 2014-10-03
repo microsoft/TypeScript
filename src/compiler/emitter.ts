@@ -56,10 +56,10 @@ module ts {
 
         function getOwnEmitOutputFilePath(sourceFile: SourceFile, extension: string) {
             if (compilerOptions.outDir) {
-                var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(getSourceFilePathInNewDir(compilerOptions.outDir, sourceFile));
+                var emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(compilerOptions.outDir, sourceFile));
             }
             else {
-                var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(sourceFile.filename);
+                var emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.filename);
             }
 
             return emitOutputFilePathWithoutExtension + extension;
@@ -3141,7 +3141,7 @@ module ts {
                     ? referencedFile.filename // Declaration file, use declaration file name
                     : shouldEmitToOwnFile(referencedFile, compilerOptions)
                     ? getOwnEmitOutputFilePath(referencedFile, ".d.ts") // Own output file so get the .d.ts file
-                    : getModuleNameFromFilename(compilerOptions.out) + ".d.ts";// Global out file
+                    : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
 
                 declFileName = getRelativePathToDirectoryOrUrl(
                     getDirectoryPath(normalizeSlashes(jsFilePath)),
@@ -3214,7 +3214,7 @@ module ts {
                     }
                 });
                 declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
-                writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
+                writeFile(removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
             }
         }
 

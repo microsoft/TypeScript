@@ -22,10 +22,6 @@ module ts {
         amdDependencies: string[];
     }
 
-    export function getModuleNameFromFilename(filename: string) {
-        return removeFileExtension(filename);
-    }
-
     export function getSourceFileOfNode(node: Node): SourceFile {
         while (node && node.kind !== SyntaxKind.SourceFile) node = node.parent;
         return <SourceFile>node;
