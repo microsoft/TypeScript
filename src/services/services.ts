@@ -1,4 +1,4 @@
-/// <reference path="..\compiler\types.ts"/>
+ /// <reference path="..\compiler\types.ts"/>
 /// <reference path="..\compiler\core.ts"/>
 /// <reference path="..\compiler\scanner.ts"/>
 /// <reference path="..\compiler\parser.ts"/>
@@ -4692,6 +4692,27 @@ module ts {
                 entries: []
             };
 
+            // We can run into an unfortunate interaction between the lexical and syntactic classifier
+            // when the user is typing something generic.  Consider the case where the user types:
+            //
+            //      Foo<number
+            //
+            // From the lexical classifier's perspective, 'number' is a keyword, and so the word will
+            // be classified as such.  However, from the syntactic classifier's tree-based perspective
+            // this is simply an expression with the identifier 'number' on the RHS of the less than
+            // token.  So the classification will go back to being an identifier.  The moment the user
+            // types again, number will become a keyword, then an identifier, etc. etc.
+            //
+            // To try to avoid this problem, we avoid classifying contextual keywords as keywords 
+            // when the user is potentially typing something generic.  We just can't do a good enough
+            // job at the lexical level, and so well leave it up to the syntactic classifier to make
+            // the determination.
+            //
+            // In order to determine if the user is potentially typing something generic, we use a 
+            // weak heuristic where we track < and > tokens.  It's a weak heuristic, but should
+            // work well enough in practice.
+            var inGenericStack = 0;
+
             do {
                 token = scanner.scan();
 
@@ -4710,6 +4731,29 @@ module ts {
                         // treat it as an identifier.  This way, if someone writes "private var"
                         // we recognize that 'var' is actually an identifier here.
                         token = SyntaxKind.Identifier;
+                    }
+                    else if (lastNonTriviaToken === SyntaxKind.Identifier &&
+                             token === SyntaxKind.LessThanToken) {
+                        // Could be the start of something generic.  Keep track of that by bumping 
+                        // up the current count of generic contexts we may be in.
+                        inGenericStack++;
+                    }
+                    else if (token === SyntaxKind.GreaterThanToken && inGenericStack > 0) {
+                        // If we think we're currently in something generic, then mark that that
+                        // generic entity is complete.
+                        inGenericStack--;
+                    }
+                    else if (token === SyntaxKind.AnyKeyword ||
+                             token === SyntaxKind.StringKeyword ||
+                             token === SyntaxKind.NumberKeyword ||
+                             token === SyntaxKind.BooleanKeyword ||
+                             token === SyntaxKind.VoidKeyword) {
+                        if (inGenericStack > 0) {
+                            // If it looks like we're could be in something generic, don't classify this 
+                            // as a keyword.  We may just get overwritten by the syntactic classifier,
+                            // causing a noisy experience for the user.
+                            token = SyntaxKind.Identifier;
+                        }
                     }
 
                     lastNonTriviaToken = token;
