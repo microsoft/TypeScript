@@ -7543,6 +7543,16 @@ module ts {
             return undefined;
         }
 
+        function isPrivatePropertyAccess(node: PropertyAccess): boolean {
+            var symbol = getNodeLinks(node).resolvedSymbol;
+            return symbol && !!forEach(symbol.declarations, declaration => declaration.flags & NodeFlags.Private);
+        }
+
+        function isStaticPropertyAccess(node: PropertyAccess): boolean {
+            var symbol = getNodeLinks(node).resolvedSymbol;
+            return symbol && !!forEach(symbol.declarations, declaration => declaration.flags & NodeFlags.Static);
+        }
+
         // Create a single instance that we can wrap the underlying emitter TextWriter with.  That
         // way we don't have to allocate a new wrapper every time writeTypeAtLocation and 
         // writeReturnTypeOfSignatureDeclaration are called.
@@ -7586,6 +7596,8 @@ module ts {
                 hasSemanticErrors: hasSemanticErrors,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
+                isPrivatePropertyAccess: isPrivatePropertyAccess,
+                isStaticPropertyAccess: isStaticPropertyAccess,
                 writeTypeAtLocation: writeTypeAtLocation,
                 writeReturnTypeOfSignatureDeclaration: writeReturnTypeOfSignatureDeclaration,
                 isSymbolAccessible: isSymbolAccessible,

@@ -1416,6 +1416,10 @@
         "category": "Message",
         "code": 6009
     },
+    "Use ES6 Symbol for private members.": {
+        "category": "Message",
+        "code": 6010
+    },
     "Specify ECMAScript target version: 'ES3' (default), or 'ES5'": {
         "category": "Message",
         "code": 6015

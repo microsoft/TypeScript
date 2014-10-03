@@ -355,6 +355,7 @@ module ts {
         Watch_input_files: { code: 6005, category: DiagnosticCategory.Message, key: "Watch input files." },
         Redirect_output_structure_to_the_directory: { code: 6006, category: DiagnosticCategory.Message, key: "Redirect output structure to the directory." },
         Do_not_emit_comments_to_output: { code: 6009, category: DiagnosticCategory.Message, key: "Do not emit comments to output." },
+        Use_ES6_Symbol_for_private_members: { code: 6010, category: DiagnosticCategory.Message, key: "Use ES6 Symbol for private members." },
         Specify_ECMAScript_target_version_Colon_ES3_default_or_ES5: { code: 6015, category: DiagnosticCategory.Message, key: "Specify ECMAScript target version: 'ES3' (default), or 'ES5'" },
         Specify_module_code_generation_Colon_commonjs_or_amd: { code: 6016, category: DiagnosticCategory.Message, key: "Specify module code generation: 'commonjs' or 'amd'" },
         Print_this_message: { code: 6017, category: DiagnosticCategory.Message, key: "Print this message." },
