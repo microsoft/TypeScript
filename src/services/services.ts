@@ -3132,6 +3132,8 @@ module ts {
                         }
                     }
 
+                    // Advance the matchIndex forward (if we don't, then we'll simply find the same 
+                    // match at the same position again).
                     matchIndex++;
                 }
             }
