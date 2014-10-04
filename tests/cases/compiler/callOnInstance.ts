@@ -1,6 +1,6 @@
-declare function D(): string;
+declare function D(): string; // error
 
-declare class D { constructor (value: number); } // Duplicate identifier
+declare class D { constructor (value: number); } // error
 
 var s1: string = D(); // OK
 

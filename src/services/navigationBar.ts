@@ -166,26 +166,26 @@ module ts.NavigationBar {
                         return undefined;
                     }
 
-                    return createItem(node, getSourceText(parameter.name), ts.ScriptElementKind.memberVariableElement);
+                    return createItem(node, getTextOfNode(parameter.name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.Method:
                     var method = <MethodDeclaration>node;
-                    return createItem(node, getSourceText(method.name), ts.ScriptElementKind.memberFunctionElement);
+                    return createItem(node, getTextOfNode(method.name), ts.ScriptElementKind.memberFunctionElement);
 
                 case SyntaxKind.GetAccessor:
                     var getAccessor = <AccessorDeclaration>node;
-                    return createItem(node, getSourceText(getAccessor.name), ts.ScriptElementKind.memberGetAccessorElement);
+                    return createItem(node, getTextOfNode(getAccessor.name), ts.ScriptElementKind.memberGetAccessorElement);
 
                 case SyntaxKind.SetAccessor:
                     var setAccessor = <AccessorDeclaration>node;
-                    return createItem(node, getSourceText(setAccessor.name), ts.ScriptElementKind.memberSetAccessorElement);
+                    return createItem(node, getTextOfNode(setAccessor.name), ts.ScriptElementKind.memberSetAccessorElement);
 
                 case SyntaxKind.IndexSignature:
                     return createItem(node, "[]", ts.ScriptElementKind.indexSignatureElement);
 
                 case SyntaxKind.EnumMember:
                     var enumMember = <EnumMember>node;
-                    return createItem(node, getSourceText(enumMember.name), ts.ScriptElementKind.memberVariableElement);
+                    return createItem(node, getTextOfNode(enumMember.name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.CallSignature:
                     return createItem(node, "()", ts.ScriptElementKind.callSignatureElement);
@@ -195,18 +195,18 @@ module ts.NavigationBar {
 
                 case SyntaxKind.Property:
                     var property = <PropertyDeclaration>node;
-                    return createItem(node, getSourceText(property.name), ts.ScriptElementKind.memberVariableElement);
+                    return createItem(node, getTextOfNode(property.name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.FunctionDeclaration:
                     var functionDeclaration = <FunctionDeclaration>node;
                     if (!isTopLevelFunctionDeclaration(functionDeclaration)) {
-                        return createItem(node, getSourceText(functionDeclaration.name), ts.ScriptElementKind.functionElement);
+                        return createItem(node, getTextOfNode(functionDeclaration.name), ts.ScriptElementKind.functionElement);
                     }
                     break;
 
                 case SyntaxKind.VariableDeclaration:
                     var variableDeclaration = <VariableDeclaration>node;
-                    return createItem(node, getSourceText(variableDeclaration.name), ts.ScriptElementKind.variableElement);
+                    return createItem(node, getTextOfNode(variableDeclaration.name), ts.ScriptElementKind.variableElement);
                 
                 case SyntaxKind.Constructor:
                     return createItem(node, "constructor", ts.ScriptElementKind.constructorImplementationElement);
@@ -258,7 +258,7 @@ module ts.NavigationBar {
             function getModuleName(moduleDeclaration: ModuleDeclaration): string {
                 // We want to maintain quotation marks.
                 if (moduleDeclaration.name.kind === SyntaxKind.StringLiteral) {
-                    return getSourceText(moduleDeclaration.name);
+                    return getTextOfNode(moduleDeclaration.name);
                 }
 
                 // Otherwise, we need to aggregate each identifier to build up the qualified name.
@@ -382,8 +382,8 @@ module ts.NavigationBar {
             return TypeScript.TextSpan.fromBounds(node.getStart(), node.getEnd());
         }
 
-        function getSourceText(node: Node): string {
-            return getSourceTextOfNodeFromSourceText(sourceFile.text, node);
+        function getTextOfNode(node: Node): string {
+            return getTextOfNodeFromSourceText(sourceFile.text, node);
         }
     }
 }

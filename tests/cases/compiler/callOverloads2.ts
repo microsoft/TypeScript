@@ -1,6 +1,6 @@
 
 
-class Foo {    
+class Foo { // error
     bar1() { /*WScript.Echo("bar1");*/ }
 
     constructor(x: any) {
@@ -8,10 +8,10 @@ class Foo {
     }
 }
 
-function Foo();
+function Foo(); // error
 
-function F1(s:string) {return s;}
-function F1(a:any) { return a;} // error -  duplicate identifier
+function F1(s:string) {return s;} // error
+function F1(a:any) { return a;} // error
 
 function Goo(s:string); // error - no implementation
 

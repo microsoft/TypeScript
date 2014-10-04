@@ -43,11 +43,11 @@ module ts {
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
-    export function getSourceTextOfNodeFromSourceText(sourceText: string, node: Node): string {
+    export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
         return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
     }
 
-    export function getSourceTextOfNode(node: Node): string {
+    export function getTextOfNode(node: Node): string {
         var text = getSourceFileOfNode(node).text;
         return text.substring(skipTrivia(text, node.pos), node.end);
     }
@@ -64,7 +64,7 @@ module ts {
 
     // Return display name of an identifier
     export function identifierToString(identifier: Identifier) {
-        return identifier.kind === SyntaxKind.Missing ? "(Missing)" : getSourceTextOfNode(identifier);
+        return identifier.kind === SyntaxKind.Missing ? "(Missing)" : getTextOfNode(identifier);
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
@@ -389,6 +389,100 @@ module ts {
         }
 
         return false;
+    }
+
+    /**
+     * Note: this function only works when given a node with valid parent pointers.
+     */
+    export function isTypeNode(node: Node): boolean {
+        if (node.kind >= SyntaxKind.FirstTypeNode && node.kind <= SyntaxKind.LastTypeNode) {
+            return true;
+        }
+
+        switch (node.kind) {
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.BooleanKeyword:
+                return true;
+            case SyntaxKind.VoidKeyword:
+                return node.parent.kind !== SyntaxKind.PrefixOperator;
+            case SyntaxKind.StringLiteral:
+                // Specialized signatures can have string literals as their parameters' type names
+                return node.parent.kind === SyntaxKind.Parameter;
+            // Identifiers and qualified names may be type nodes, depending on their context. Climb
+            // above them to find the lowest container
+            case SyntaxKind.Identifier:
+                // If the identifier is the RHS of a qualified name, then it's a type iff its parent is.
+                if (node.parent.kind === SyntaxKind.QualifiedName) {
+                    node = node.parent;
+                }
+            // Fall through
+            case SyntaxKind.QualifiedName:
+                // At this point, node is either a qualified name or an identifier
+                var parent = node.parent;
+                if (parent.kind === SyntaxKind.TypeQuery) {
+                    return false;
+                }
+                // Do not recursively call isTypeNode on the parent. In the example:
+                //
+                //     var a: A.B.C;
+                //
+                // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
+                // A.B.C is a type node.
+                if (parent.kind >= SyntaxKind.FirstTypeNode && parent.kind <= SyntaxKind.LastTypeNode) {
+                    return true;
+                }
+                switch (parent.kind) {
+                    case SyntaxKind.TypeParameter:
+                        return node === (<TypeParameterDeclaration>parent).constraint;
+                    case SyntaxKind.Property:
+                    case SyntaxKind.Parameter:
+                    case SyntaxKind.VariableDeclaration:
+                        return node === (<VariableDeclaration>parent).type;
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        return node === (<FunctionDeclaration>parent).type;
+                    case SyntaxKind.CallSignature:
+                    case SyntaxKind.ConstructSignature:
+                    case SyntaxKind.IndexSignature:
+                        return node === (<SignatureDeclaration>parent).type;
+                    case SyntaxKind.TypeAssertion:
+                        return node === (<TypeAssertion>parent).type;
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                        return (<CallExpression>parent).typeArguments && (<CallExpression>parent).typeArguments.indexOf(node) >= 0;
+                }
+        }
+
+        return false;
+    }
+
+    /**
+     * Note: this function only works when given a node with valid parent pointers.
+     *
+     * returns true if the given identifier is the name of a type declaration node (class, interface, enum, type parameter, etc)
+     */
+    export function isTypeDeclarationName(name: Node): boolean {
+        return name.kind == SyntaxKind.Identifier &&
+            isTypeDeclaration(name.parent) &&
+            (<Declaration>name.parent).name === name;
+    }
+
+
+    export function isTypeDeclaration(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
+                return true;
+        }
     }
 
     export function getContainingFunction(node: Node): SignatureDeclaration {
@@ -1065,7 +1159,7 @@ module ts {
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArgumentExpressions:
-                    return isExpression();
+                    return token === SyntaxKind.CommaToken || isExpression();
                 case ParsingContext.ArrayLiteralMembers:
                     return token === SyntaxKind.CommaToken || isExpression();
                 case ParsingContext.Parameters:
@@ -1218,18 +1312,6 @@ module ts {
                     error(Diagnostics._0_expected, ",");
                 }
                 else if (isListTerminator(kind)) {
-                    // Check if the last token was a comma.
-                    if (commaStart >= 0) {
-                        if (!allowTrailingComma) {
-                            if (file.syntacticErrors.length === errorCountBeforeParsingList) {
-                                // Report a grammar error so we don't affect lookahead
-                                grammarErrorAtPos(commaStart, scanner.getStartPos() - commaStart, Diagnostics.Trailing_comma_not_allowed);
-                            }
-                        }
-                        // Always preserve a trailing comma by marking it on the NodeArray
-                        result.hasTrailingComma = true;
-                    }
-
                     break;
                 }
                 else {
@@ -1240,6 +1322,23 @@ module ts {
                     nextToken();
                 }
             }
+
+            // Recording the trailing comma is deliberately done after the previous
+            // loop, and not just if we see a list terminator. This is because the list
+            // may have ended incorrectly, but it is still important to know if there
+            // was a trailing comma.
+            // Check if the last token was a comma.
+            if (commaStart >= 0) {
+                if (!allowTrailingComma) {
+                    if (file.syntacticErrors.length === errorCountBeforeParsingList) {
+                        // Report a grammar error so we don't affect lookahead
+                        grammarErrorAtPos(commaStart, scanner.getStartPos() - commaStart, Diagnostics.Trailing_comma_not_allowed);
+                    }
+                }
+                // Always preserve a trailing comma by marking it on the NodeArray
+                result.hasTrailingComma = true;
+            }
+
             result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
@@ -2938,7 +3037,7 @@ module ts {
             parseExpected(SyntaxKind.ColonToken);
 
             if (labelledStatementInfo.nodeIsNestedInLabel(node.label, /*requireIterationStatement*/ false, /*stopAtFunctionBoundary*/ true)) {
-                grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getSourceTextOfNodeFromSourceText(sourceText, node.label));
+                grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getTextOfNodeFromSourceText(sourceText, node.label));
             }
             labelledStatementInfo.addLabel(node.label);
 
@@ -3818,15 +3917,17 @@ module ts {
                     }
                     else {
                         var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
+                        var start = range.pos;
+                        var end = range.end;
+                        var length = end - start;
+                       
                         if (!matchResult) {
-                            var start = range.pos;
-                            var length = range.end - start;
                             errorAtPos(start, length, Diagnostics.Invalid_reference_directive_syntax);
                         }
                         else {
                             referencedFiles.push({
-                                pos: range.pos,
-                                end: range.end,
+                                pos: start,
+                                end: end,
                                 filename: matchResult[3]
                             });
                         }
@@ -3943,6 +4044,9 @@ module ts {
                 else if (!findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                 }
+                else if (refFile && host.getCanonicalFileName(filename) === host.getCanonicalFileName(refFile.filename)) {
+                    diagnostic = Diagnostics.A_file_cannot_have_a_reference_to_itself;
+                }
             }
             else {
                 if (!(findSourceFile(filename + ".ts", isDefaultLib, refFile, refPos, refEnd) || findSourceFile(filename + ".d.ts", isDefaultLib, refFile, refPos, refEnd))) {
@@ -4001,7 +4105,8 @@ module ts {
 
         function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
-                processSourceFile(normalizePath(combinePaths(basePath, ref.filename)), /* isDefaultLib */ false, file, ref.pos, ref.end);
+                var referencedFilename = isRootedDiskPath(ref.filename) ? ref.filename : combinePaths(basePath, ref.filename);
+                processSourceFile(normalizePath(referencedFilename), /* isDefaultLib */ false, file, ref.pos, ref.end);
             });
         }
 

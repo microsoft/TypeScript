@@ -5,6 +5,7 @@ module ts {
         Unterminated_string_literal: { code: 1002, category: DiagnosticCategory.Error, key: "Unterminated string literal." },
         Identifier_expected: { code: 1003, category: DiagnosticCategory.Error, key: "Identifier expected." },
         _0_expected: { code: 1005, category: DiagnosticCategory.Error, key: "'{0}' expected." },
+        A_file_cannot_have_a_reference_to_itself: { code: 1006, category: DiagnosticCategory.Error, key: "A file cannot have a reference to itself." },
         Trailing_comma_not_allowed: { code: 1009, category: DiagnosticCategory.Error, key: "Trailing comma not allowed." },
         Asterisk_Slash_expected: { code: 1010, category: DiagnosticCategory.Error, key: "'*/' expected." },
         Unexpected_token: { code: 1012, category: DiagnosticCategory.Error, key: "Unexpected token." },

@@ -240,7 +240,6 @@ module FourSlashInterface {
     }
 
     export class verify extends verifyNegatable {
-
         public caretAtMarker(markerName?: string) {
             FourSlash.currentTestState.verifyCaretAtMarker(markerName);
         }
@@ -292,6 +291,10 @@ module FourSlashInterface {
 
         public signatureHelpCountIs(expected: number) {
             FourSlash.currentTestState.verifySignatureHelpCount(expected);
+        }
+
+        public signatureHelpArgumentCountIs(expected: number) {
+            FourSlash.currentTestState.verifySignatureHelpArgumentCount(expected);
         }
 
         public currentSignatureParamterCountIs(expected: number) {
@@ -412,6 +415,10 @@ module FourSlashInterface {
 
         public renameInfoFailed(message?: string) {
             FourSlash.currentTestState.verifyRenameInfoFailed(message)
+        }
+
+        public renameLocations(findInStrings: boolean, findInComments: boolean) {
+            FourSlash.currentTestState.verifyRenameLocations(findInStrings, findInComments);
         }
     }
 

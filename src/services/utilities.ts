@@ -50,34 +50,54 @@ module ts {
         return -1;
     }
 
-    /** Get a token that contains the position. This is guaranteed to return a token, the position can be in the 
-      * leading trivia or within the token text.
-      */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number) {
-        var current: Node = sourceFile;
-        outer: while (true) {
-            // find the child that has this
-            for (var i = 0, n = current.getChildCount(); i < n; i++) {
-                var child = current.getChildAt(i);
-                if (child.getFullStart() <= position && position < child.getEnd()) {
-                    current = child;
-                    continue outer;
-                }
-            }
-            return current;
-        }
+    /* Gets the token whose text has range [start, end) and 
+     * position >= start and (position < end or (position === end && token is keyword or identifier))
+     */
+    export function getTouchingWord(sourceFile: SourceFile, position: number): Node {
+        return getTouchingToken(sourceFile, position, isWord);
     }
 
-    /** Get the token whose text contains the position, or the containing node. */
-    export function getNodeAtPosition(sourceFile: SourceFile, position: number) {
+    /* Gets the token whose text has range [start, end) and position >= start 
+     * and (position < end or (position === end && token is keyword or identifier or numeric\string litera))
+     */
+    export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
+        return getTouchingToken(sourceFile, position, isPropertyName);
+    }
+
+    /** Returns the token if position is in [start, end) or if position === end and includeItemAtEndPosition(token) === true */
+    export function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition?: (n: Node) => boolean): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includeItemAtEndPosition);
+    }
+
+    /** Returns a token if position is in [start-of-leading-trivia, end) */
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includeItemAtEndPosition*/ undefined);
+    }
+
+    /** Get the token whose text contains the position */
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean): Node {
         var current: Node = sourceFile;
         outer: while (true) {
-            // find the child that has this
-            for (var i = 0, n = current.getChildCount(); i < n; i++) {
+            if (isToken(current)) {
+                // exit early
+                return current;
+            }
+
+            // find the child that contains 'position'
+            for (var i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
                 var child = current.getChildAt(i);
-                if (child.getStart() <= position && position < child.getEnd()) {
-                    current = child;
-                    continue outer;
+                var start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile);
+                if (start <= position) {
+                    if (position < child.getEnd()) {
+                        current = child;
+                        continue outer;
+                    }
+                    else if (includeItemAtEndPosition && child.getEnd() === position) {
+                        var previousToken = findPrecedingToken(position, sourceFile, child);
+                        if (previousToken && includeItemAtEndPosition(previousToken)) {
+                            return previousToken;
+                        }
+                    }
                 }
             }
             return current;
@@ -130,8 +150,8 @@ module ts {
         }
     }
 
-    export function findPrecedingToken(position: number, sourceFile: SourceFile): Node {
-        return find(sourceFile);
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node): Node {
+        return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
             if (isToken(n)) {
@@ -167,7 +187,7 @@ module ts {
                 }
             }
 
-            Debug.assert(n.kind === SyntaxKind.SourceFile);
+            Debug.assert(startNode || n.kind === SyntaxKind.SourceFile);
 
             // Here we know that none of child token nodes embrace the position, 
             // the only known case is when position is at the end of the file.
@@ -202,7 +222,19 @@ module ts {
         return n.kind !== SyntaxKind.SyntaxList || n.getChildCount() !== 0;
     }
 
-    function isToken(n: Node): boolean {
+    export function isToken(n: Node): boolean {
         return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
+    }
+
+    function isKeyword(n: Node): boolean {
+        return n.kind >= SyntaxKind.FirstKeyword && n.kind <= SyntaxKind.LastKeyword;
+    }
+
+    function isWord(n: Node): boolean {
+        return n.kind === SyntaxKind.Identifier || isKeyword(n);
+    }
+
+    function isPropertyName(n: Node): boolean {
+        return n.kind === SyntaxKind.StringLiteral || n.kind === SyntaxKind.NumericLiteral || isWord(n);
     }
 }

@@ -209,11 +209,9 @@ module ts {
     export var localizedDiagnosticMessages: Map<string> = undefined;
 
     export function getLocaleSpecificMessage(message: string) {
-        if (ts.localizedDiagnosticMessages) {
-            message = localizedDiagnosticMessages[message];
-        }
-
-        return message;
+        return localizedDiagnosticMessages && localizedDiagnosticMessages[message]
+            ? localizedDiagnosticMessages[message]
+            : message;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
