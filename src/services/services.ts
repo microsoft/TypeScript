@@ -6,7 +6,7 @@
 
 /// <reference path='syntax\incrementalParser.ts' />
 /// <reference path='outliningElementsCollector.ts' />
-/// <reference path='getScriptLexicalStructureWalker.ts' />
+/// <reference path='navigationBar.ts' />
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='signatureHelp.ts' />
@@ -1519,6 +1519,20 @@ module ts {
     }
 
     /// Helpers
+    export function getNodeModifiers(node: Node): string {
+        var flags = node.flags;
+        var result: string[] = [];
+
+        if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
+        if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
+        if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
+        if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
+        if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
+
+        return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
+    }
+
     function getTargetLabel(referenceNode: Node, labelName: string): Identifier {
         while (referenceNode) {
             if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.text === labelName) {
@@ -2353,20 +2367,6 @@ module ts {
             return symbol && symbol.declarations && symbol.declarations.length > 0
                 ? getNodeModifiers(symbol.declarations[0])
                 : ScriptElementKindModifier.none;
-        }
-
-        function getNodeModifiers(node: Node): string {
-            var flags = node.flags;
-            var result: string[] = [];
-
-            if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
-            if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
-            if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
-            if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
-            if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
-            if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
-
-            return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
@@ -4088,10 +4088,10 @@ module ts {
             return TypeScript.Services.Breakpoints.getBreakpointLocation(syntaxtree, position);
         }
 
-        function getNavigationBarItems(filename: string) {
+        function getNavigationBarItems(filename: string): NavigationBarItem[] {
             filename = TypeScript.switchToForwardSlashes(filename);
-            var syntaxTree = getSyntaxTree(filename);
-            return new TypeScript.Services.NavigationBarItemGetter().getItems(syntaxTree.sourceUnit());
+
+            return NavigationBar.getNavigationBarItems(getCurrentSourceFile(filename));
         }
 
         function getSemanticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[] {

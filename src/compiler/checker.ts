@@ -5658,6 +5658,10 @@ module ts {
             var isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
 
             function reportImplementationExpectedError(node: FunctionDeclaration): void {
+                if (node.name && node.name.kind === SyntaxKind.Missing) {
+                    return;
+                }
+
                 var seen = false;
                 var subsequentNode = forEachChild(node.parent, c => {
                     if (seen) {

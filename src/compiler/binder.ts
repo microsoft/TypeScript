@@ -337,7 +337,7 @@ module ts {
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>node)) {
-                        bindAnonymousDeclaration(node, SymbolFlags.ValueModule, '"' + getModuleNameFromFilename((<SourceFile>node).filename) + '"');
+                        bindAnonymousDeclaration(node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).filename) + '"');
                         break;
                     }
                 default:

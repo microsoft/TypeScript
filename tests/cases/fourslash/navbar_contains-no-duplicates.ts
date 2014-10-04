@@ -27,7 +27,6 @@
 ////     export var {| "itemName": "x", "kind": "var" |}x = 3;
 //// }
 
-verify.getScriptLexicalStructureListCount(12);
 test.markers().forEach(marker => {
     if (marker.data) {
         verify.getScriptLexicalStructureListContains(
@@ -39,3 +38,4 @@ test.markers().forEach(marker => {
             marker.position);
     }
 });
+verify.getScriptLexicalStructureListCount(12);

@@ -49,3 +49,4 @@ test.markers().forEach((marker) => {
     }
 });
 
+verify.getScriptLexicalStructureListCount(23);
