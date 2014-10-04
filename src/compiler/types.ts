@@ -154,6 +154,7 @@ module ts {
         TypeLiteral,
         ArrayType,
         TupleType,
+        UnionType,
         // Expression
         ArrayLiteral,
         ObjectLiteral,
@@ -224,7 +225,7 @@ module ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
-        LastTypeNode = TupleType,
+        LastTypeNode = UnionType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = EndOfFileToken,
@@ -335,6 +336,10 @@ module ts {
 
     export interface TupleTypeNode extends TypeNode {
         elementTypes: NodeArray<TypeNode>;
+    }
+
+    export interface UnionTypeNode extends TypeNode {
+        types: NodeArray<TypeNode>;
     }
 
     export interface StringLiteralTypeNode extends TypeNode {
@@ -728,19 +733,20 @@ module ts {
         ConstructSignature = 0x00010000,  // Construct signature
         IndexSignature     = 0x00020000,  // Index signature
         TypeParameter      = 0x00040000,  // Type parameter
+        UnionProperty      = 0x00080000,  // Property in union type
 
         // Export markers (see comment in declareModuleMember in binder)
-        ExportValue        = 0x00080000,  // Exported value marker
-        ExportType         = 0x00100000,  // Exported type marker
-        ExportNamespace    = 0x00200000,  // Exported namespace marker
+        ExportValue        = 0x00100000,  // Exported value marker
+        ExportType         = 0x00200000,  // Exported type marker
+        ExportNamespace    = 0x00400000,  // Exported namespace marker
 
-        Import             = 0x00400000,  // Import
-        Instantiated       = 0x00800000,  // Instantiated symbol
-        Merged             = 0x01000000,  // Merged symbol (created during program binding)
-        Transient          = 0x02000000,  // Transient symbol (created during type check)
-        Prototype          = 0x04000000,  // Symbol for the prototype property (without source code representation)
+        Import             = 0x00800000,  // Import
+        Instantiated       = 0x01000000,  // Instantiated symbol
+        Merged             = 0x02000000,  // Merged symbol (created during program binding)
+        Transient          = 0x04000000,  // Transient symbol (created during type check)
+        Prototype          = 0x08000000,  // Prototype property (no source representation)
 
-        Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
+        Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | UnionProperty,
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,
         Namespace = ValueModule | NamespaceModule,
         Module    = ValueModule | NamespaceModule,
@@ -798,6 +804,7 @@ module ts {
         mapper?: TypeMapper;           // Type mapper for instantiation alias
         referenced?: boolean;          // True if alias symbol has been referenced as a value
         exportAssignSymbol?: Symbol;   // Symbol exported from external module
+        unionType?: UnionType;         // Containing union type for union property
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
@@ -845,13 +852,14 @@ module ts {
         Interface          = 0x00000800,  // Interface
         Reference          = 0x00001000,  // Generic type reference
         Tuple              = 0x00002000,  // Tuple
-        Anonymous          = 0x00004000,  // Anonymous
-        FromSignature      = 0x00008000,  // Created for signature assignment check
+        Union              = 0x00004000,  // Union
+        Anonymous          = 0x00008000,  // Anonymous
+        FromSignature      = 0x00010000,  // Created for signature assignment check
 
         Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
-        ObjectType = Class | Interface | Reference | Tuple | Anonymous
+        ObjectType = Class | Interface | Reference | Tuple | Union | Anonymous
     }
 
     // Properties common to all types
@@ -909,6 +917,10 @@ module ts {
         baseArrayType: TypeReference;  // Array<T> where T is best common type of element types
     }
 
+    export interface UnionType extends ObjectType {
+        types: Type[];  // Constituent types
+    }
+
     // Resolved object type
     export interface ResolvedObjectType extends ObjectType {
         members: SymbolTable;              // Properties by name
@@ -941,6 +953,7 @@ module ts {
         hasStringLiterals: boolean;         // True if specialized
         target?: Signature;                 // Instantiation target
         mapper?: TypeMapper;                // Instantiation mapper
+        unionSignatures?: Signature[];      // Underlying signatures of a union signature
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
     }
