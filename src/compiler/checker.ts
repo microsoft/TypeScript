@@ -5100,7 +5100,7 @@ module ts {
             }
             
             // if a user tries to apply an innappropriate operator to 2 boolean operands try and return them a helpful suggestion
-            function getSuggestedBooleanOperator(operator: any): SyntaxKind { 
+            function getSuggestedBooleanOperator(operator: SyntaxKind): SyntaxKind { 
                 switch (operator) {
                     case SyntaxKind.BarToken:
                     case SyntaxKind.BarEqualsToken:
