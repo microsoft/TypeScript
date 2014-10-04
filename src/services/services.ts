@@ -2637,7 +2637,7 @@ module ts {
 
             if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
                 isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
-                return getReferencesForNode(node, [sourceFile]);
+                return getReferencesForNode(node, [sourceFile], /*findInStrings:*/ false, /*findInComments:*/ false);
             }
 
             switch (node.kind) {
@@ -3098,90 +3098,10 @@ module ts {
             }
 
             Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral);
-            var references = getReferencesForNode(node, program.getSourceFiles());
-
-            var name = (<Identifier>node).text;
-            var tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</
-
-            if (findInStrings) {
-                forEach(program.getSourceFiles(), addStringReferences);
-            }
-
-            if (findInComments) {
-                forEach(program.getSourceFiles(), addCommentReferences);
-            }
-
-            return references;
-
-            function addReferencesInRawText(rawText: string, rawTextPositionInSourceText: number, sourceText: string) {
-                var matchIndex = 0;
-                while ((matchIndex = rawText.indexOf(name, matchIndex)) >= 0) {
-                    // Only consider it a match if there isn't a letter/number before or after 
-                    // the match.
-                    var indexInSourceText = rawTextPositionInSourceText + matchIndex;
-
-                    if (indexInSourceText === 0 || !isIdentifierPart(sourceText.charCodeAt(indexInSourceText - 1), ScriptTarget.ES5)) {
-                        var matchEnd = indexInSourceText + name.length;
-                        if (matchEnd >= sourceText.length || !isIdentifierPart(sourceText.charCodeAt(matchEnd), ScriptTarget.ES5)) {
-
-                            references.push({
-                                fileName: sourceFile.filename,
-                                textSpan: new TypeScript.TextSpan(indexInSourceText, name.length),
-                                isWriteAccess: false
-                            });
-                        }
-                    }
-
-                    // Advance the matchIndex forward (if we don't, then we'll simply find the same 
-                    // match at the same position again).
-                    matchIndex++;
-                }
-            }
-
-            function addCommentReferences(sourceFile: SourceFile) {
-                var sourceText = sourceFile.text;
-                forEachChild(sourceFile, addCommentReferencesInNode);
-
-                function addCommentReferencesInNode(node: Node) {
-                    if (isToken(node)) {
-                        // Found a token, walk its comments (if it has any) for matches).
-                        forEach(getLeadingCommentRanges(sourceText, node.pos), addReferencesInCommentRange);
-                    }
-                    else {
-                        forEach(node.getChildren(), addCommentReferencesInNode);
-                    }
-                }
-
-                function addReferencesInCommentRange(range: CommentRange) {
-                    var commentText = sourceText.substring(range.pos, range.end);
-
-                    // Don't add matches in ///<reference comments.  We don't want to 
-                    // unintentionally update a file name.
-                    if (!tripleSlashDirectivePrefixRegex.test(commentText)) {
-                        addReferencesInRawText(commentText, range.pos, sourceText);
-                    }
-                }
-            }
-
-            function addStringReferences(sourceFile: SourceFile) {
-                var sourceText = sourceFile.text;
-
-                forEachChild(sourceFile, addStringReferencesInNode);
-
-                function addStringReferencesInNode(node: Node) {
-                    if (node.kind === SyntaxKind.StringLiteral) {
-                        // Found a string literal.  See if we can find any matches in it.
-                        addReferencesInRawText(getTextOfNodeFromSourceText(sourceText, node), node.getStart(sourceFile), sourceText);
-                    }
-                    else {
-                        // Recurse and keep looking for references in strings.
-                        forEachChild(node, addStringReferencesInNode);
-                    }
-                }
-            }
+            return getReferencesForNode(node, program.getSourceFiles(), findInStrings, findInComments);
         }
 
-        function getReferencesForNode(node: Node, sourceFiles: SourceFile[]): ReferenceEntry[] {
+        function getReferencesForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
@@ -3231,7 +3151,7 @@ module ts {
 
             if (scope) {
                 result = [];
-                getReferencesInNode(scope, symbol, symbolName, node, searchMeaning, result);
+                getReferencesInNode(scope, symbol, symbolName, node, searchMeaning, findInStrings, findInComments, result);
             }
             else {
                 forEach(sourceFiles, sourceFile => {
@@ -3239,7 +3159,7 @@ module ts {
 
                     if (lookUp(sourceFile.identifiers, symbolName)) {
                         result = result || [];
-                        getReferencesInNode(sourceFile, symbol, symbolName, node, searchMeaning, result);
+                        getReferencesInNode(sourceFile, symbol, symbolName, node, searchMeaning, findInStrings, findInComments, result);
                     }
                 });
             }
@@ -3391,8 +3311,16 @@ module ts {
               * tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
               * searchLocation: a node where the search value 
               */
-            function getReferencesInNode(container: Node, searchSymbol: Symbol, searchText: string, searchLocation: Node, searchMeaning: SearchMeaning, result: ReferenceEntry[]): void {
+            function getReferencesInNode(container: Node,
+                                         searchSymbol: Symbol,
+                                         searchText: string,
+                                         searchLocation: Node,
+                                         searchMeaning: SearchMeaning,
+                                         findInStrings: boolean,
+                                         findInComments: boolean,
+                                         result: ReferenceEntry[]): void {
                 var sourceFile = container.getSourceFile();
+                var tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</
 
                 var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, container.getStart(), container.getEnd());
 
@@ -3405,6 +3333,17 @@ module ts {
 
                         var referenceLocation = getTouchingPropertyName(sourceFile, position);
                         if (!isValidReferencePosition(referenceLocation, searchText)) {
+                            // This wasn't the start of a token.  Check to see if it might be a 
+                            // match in a comment or string if that's what the caller is asking
+                            // for.
+                            if ((findInStrings && isInString(position)) ||
+                                (findInComments && isInComment(position))) {
+                                result.push({
+                                    fileName: sourceFile.filename,
+                                    textSpan: new TypeScript.TextSpan(position, searchText.length),
+                                    isWriteAccess: false
+                                });
+                            }
                             return;
                         }
 
@@ -3424,6 +3363,32 @@ module ts {
                             result.push(getReferenceEntryFromNode(referenceLocation));
                         }
                     });
+                }
+
+                function isInString(position: number) {
+                    var token = getTokenAtPosition(sourceFile, position);
+                    return token && token.kind === SyntaxKind.StringLiteral && position > token.getStart();
+                }
+
+                function isInComment(position: number) {
+                    var token = getTokenAtPosition(sourceFile, position);
+                    if (token && position < token.getStart()) {
+                        // First, we have to see if this position actually landed in a comment.
+                        var commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+
+                        // Then we want to make sure that it wasn't in a "///<" directive comment
+                        // We don't want to unintentionally update a file name.
+                        return forEach(commentRanges, c => {
+                            if (c.pos < position && position < c.end) {
+                                var commentText = sourceFile.text.substring(c.pos, c.end);
+                                if (!tripleSlashDirectivePrefixRegex.test(commentText)) {
+                                    return true;
+                                }
+                            }
+                        });
+                    }
+
+                    return false;
                 }
             }
 
