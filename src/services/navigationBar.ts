@@ -16,8 +16,20 @@ module ts.NavigationBar {
 
             var current = node.parent;
             while (current) {
-                if (current.kind === SyntaxKind.ModuleDeclaration || current.kind === SyntaxKind.FunctionDeclaration) {
-                    indent++;
+                switch (current.kind) {
+                    case SyntaxKind.ModuleDeclaration:
+                        // If we have a module declared as A.B.C, it is more "intuitive"
+                        // to say it only has a single layer of depth
+                        do {
+                            current = current.parent;
+                        } while (current.kind === SyntaxKind.ModuleDeclaration);
+
+                        // fall through
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                        indent++;
                 }
 
                 current = current.parent;
@@ -207,7 +219,7 @@ module ts.NavigationBar {
             }
         }
 
-        function getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: TypeScript.TextSpan[], childItems: ts.NavigationBarItem[]= [], indent: number = 0): ts.NavigationBarItem {
+        function getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: TypeScript.TextSpan[], childItems: ts.NavigationBarItem[] = [], indent: number = 0): ts.NavigationBarItem {
             return {
                 text: text,
                 kind: kind,
