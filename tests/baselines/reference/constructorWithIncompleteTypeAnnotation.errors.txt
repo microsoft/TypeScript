@@ -72,7 +72,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(89,23): error TS
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(108,24): error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(159,31): error TS2304: Cannot find name 'Property'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(166,13): error TS2365: Operator '+=' cannot be applied to types 'number' and 'void'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(180,40): error TS2447: The '^' operator is not allowed for boolean types. Consider using !== instead.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(180,40): error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(213,16): error TS2304: Cannot find name 'bool'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(218,29): error TS2304: Cannot find name 'yield'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(223,23): error TS2304: Cannot find name 'bool'.
@@ -370,7 +370,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error T
                 i = i + i - i * i / i % i & i | i ^ i;/*+ - * / % & | ^*/
                 var b  =  true && false || true ^ false;/*& | ^*/
                                            ~~~~~~~~~~~~
-!!! error TS2447: The '^' operator is not allowed for boolean types. Consider using !== instead.
+!!! error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
                 b = !b;/*!*/
                 i = ~i;/*~i*/
                 b = i < (i - 1) && (i + 1) > i;/*< && >*/

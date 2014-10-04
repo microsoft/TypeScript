@@ -395,7 +395,7 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(417,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(418,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(420,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(421,12): error TS2447: The '&' operator is not allowed for boolean types. Consider using && instead.
+tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(421,12): error TS2447: The '&' operator is not allowed for boolean types. Consider using '&&' instead.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(422,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(423,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(423,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
@@ -450,7 +450,7 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(474,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(475,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(477,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(478,12): error TS2447: The '^' operator is not allowed for boolean types. Consider using !== instead.
+tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(478,12): error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(479,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(480,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(480,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
@@ -505,7 +505,7 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(531,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(532,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(534,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(535,13): error TS2447: The '|' operator is not allowed for boolean types. Consider using || instead.
+tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(535,13): error TS2447: The '|' operator is not allowed for boolean types. Consider using '||' instead.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(536,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(537,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts(537,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
@@ -1774,7 +1774,7 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     var r8b2 = b & b;
                ~~~~~
-!!! error TS2447: The '&' operator is not allowed for boolean types. Consider using && instead.
+!!! error TS2447: The '&' operator is not allowed for boolean types. Consider using '&&' instead.
     var r8b3 = b & c;
                ~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
@@ -1941,7 +1941,7 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     var r9b2 = b ^ b;
                ~~~~~
-!!! error TS2447: The '^' operator is not allowed for boolean types. Consider using !== instead.
+!!! error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
     var r9b3 = b ^ c;
                ~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
@@ -2108,7 +2108,7 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     var r10b2 = b | b;
                 ~~~~~
-!!! error TS2447: The '|' operator is not allowed for boolean types. Consider using || instead.
+!!! error TS2447: The '|' operator is not allowed for boolean types. Consider using '||' instead.
     var r10b3 = b | c;
                 ~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.

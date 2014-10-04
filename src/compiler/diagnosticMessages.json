@@ -1032,7 +1032,7 @@
         "category": "Error",
         "code": 2446
     },
-    "The '{0}' operator is not allowed for boolean types. Consider using {1} instead.": {
+    "The '{0}' operator is not allowed for boolean types. Consider using '{1}' instead.": {
         "category": "Error",
         "code": 2447
     },
