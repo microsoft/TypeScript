@@ -654,6 +654,7 @@ module ts {
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
         writeSignature(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         writeTypeParameter(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        writeTypeParametersOfSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
 
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
@@ -684,11 +685,15 @@ module ts {
         NoTruncation            = 0x00000004,  // Don't truncate typeToString result
         WriteArrowStyleSignature= 0x00000008,  // Write arrow style signature
         WriteOwnNameForAnyLike  = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
+        WriteTypeArgumentsOfSignature = 0x00000020, // Write the type arguments instead of type parameters of the signature
     }
 
     export enum SymbolFormatFlags {
-        None                                  = 0x00000000,
-        WriteTypeParametersOfClassOrInterface = 0x00000001,  // Write c<T> instead of just writing symbol name c of generic class
+        None                            = 0x00000000,
+        WriteTypeParametersOrArguments  = 0x00000001,  // Write symbols's type argument if it is instantiated symbol
+                                                       // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
+                                                       //     var a: C<number>; 
+                                                       //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
     }
 
     export enum SymbolAccessibility {

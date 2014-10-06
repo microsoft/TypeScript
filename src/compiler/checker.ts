@@ -103,6 +103,7 @@ module ts {
             getSignatureFromDeclaration: getSignatureFromDeclaration,
             writeSignature: writeSignature,
             writeTypeParameter: writeTypeParameter,
+            writeTypeParametersOfSymbol: writeTypeParametersOfSymbol,
             isImplementationOfOverload: isImplementationOfOverload
         };
 
@@ -966,18 +967,26 @@ module ts {
         // Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
         // Meaning needs to be specified if the enclosing declaration is given
         function writeSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void {
+            var previouslyWrittenSymbol: Symbol;
             function writeSymbolName(symbol: Symbol): void {
+                if (previouslyWrittenSymbol) {
+                    // Write type arguments of instantiated class/interface here
+                    if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
+                        if (symbol.flags & SymbolFlags.Instantiated) {
+                            writeTypeArguments(getTypeParametersOfClassOrInterface(previouslyWrittenSymbol),
+                                (<TransientSymbol>symbol).mapper, writer, enclosingDeclaration);
+                        }
+                        else {
+                            writeTypeParametersOfSymbol(previouslyWrittenSymbol, writer, enclosingDeclaration);
+                        }
+                    }
+                    writePunctuation(writer, SyntaxKind.DotToken);
+                }
+                previouslyWrittenSymbol = symbol;
                 if (symbol.declarations && symbol.declarations.length > 0) {
                     var declaration = symbol.declarations[0];
                     if (declaration.name) {
                         writer.writeSymbol(identifierToString(declaration.name), symbol);
-                        if (flags & SymbolFormatFlags.WriteTypeParametersOfClassOrInterface) {
-                            var rootSymbol = getRootSymbol(symbol);
-                            if (rootSymbol.flags & SymbolFlags.Class || rootSymbol.flags & SymbolFlags.Interface) {
-                                writeTypeParameters(getTypeParametersOfClassOrInterface(symbol), writer, enclosingDeclaration);
-                            }
-                        }
-
                         return;
                     }
                 }
@@ -985,16 +994,14 @@ module ts {
                 writer.writeSymbol(symbol.name, symbol);
             }
 
-            // Let the writer know we just wrote out a symbol.  The declarationemitter writer uses 
-            // this to determine if an import it has previously seen (and not writter out) needs 
+            // Let the writer know we just wrote out a symbol.  The declaration emitter writer uses 
+            // this to determine if an import it has previously seen (and not writer out) needs 
             // to be written to the file once the walk of the tree is complete.
             //
             // NOTE(cyrusn): This approach feels somewhat unfortunate.  A simple pass over the tree
-            // up front (for example, during checking) could determien if we need to emit the imports
+            // up front (for example, during checking) could determine if we need to emit the imports
             // and we could then access that data during declaration emit.
             writer.trackSymbol(symbol, enclosingDeclaration, meaning);
-
-            var needsDot = false;
             function walkSymbol(symbol: Symbol, meaning: SymbolFlags): void {
                 if (symbol) {
                     var accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning);
@@ -1010,17 +1017,12 @@ module ts {
 
                     if (accessibleSymbolChain) {
                         for (var i = 0, n = accessibleSymbolChain.length; i < n; i++) {
-                            if (needsDot) {
-                                writePunctuation(writer, SyntaxKind.DotToken);
-                            }
-
                             writeSymbolName(accessibleSymbolChain[i]);
-                            needsDot = true;
                         }
                     }
                     else {
                         // If we didn't find accessible symbol chain for this symbol, break if this is external module
-                        if (!needsDot && ts.forEach(symbol.declarations, declaration => hasExternalModuleSymbol(declaration))) {
+                        if (!previouslyWrittenSymbol && ts.forEach(symbol.declarations, declaration => hasExternalModuleSymbol(declaration))) {
                             return;
                         }
 
@@ -1029,12 +1031,7 @@ module ts {
                             return;
                         }
 
-                        if (needsDot) {
-                            writePunctuation(writer, SyntaxKind.DotToken);
-                        }
-
                         writeSymbolName(symbol);
-                        needsDot = true;
                     }
                 }
             }
@@ -1303,8 +1300,35 @@ module ts {
             }
         }
 
+        function writeTypeArguments(typeParameters: TypeParameter[], mapper: TypeMapper, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            if (typeParameters && typeParameters.length) {
+                writePunctuation(writer, SyntaxKind.LessThanToken);
+                for (var i = 0; i < typeParameters.length; i++) {
+                    if (i > 0) {
+                        writePunctuation(writer, SyntaxKind.CommaToken);
+                        writeSpace(writer);
+                    }
+                    writeType(mapper(typeParameters[i]), writer, enclosingDeclaration, TypeFormatFlags.WriteArrowStyleSignature);
+                }
+                writePunctuation(writer, SyntaxKind.GreaterThanToken);
+            }
+        }
+
+        function writeTypeParametersOfSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags) {
+            var rootSymbol = getRootSymbol(symbol);
+            if (rootSymbol.flags & SymbolFlags.Class || rootSymbol.flags & SymbolFlags.Interface) {
+                writeTypeParameters(getTypeParametersOfClassOrInterface(symbol), writer, enclosingDeclaraiton, flags);
+            }
+        }
+
         function writeSignature(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
-            writeTypeParameters(signature.typeParameters, writer, enclosingDeclaration, flags, typeStack);
+            if (signature.target && (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature)) {
+                // Instantiated signature, write type arguments instead
+                writeTypeArguments(signature.target.typeParameters, signature.mapper, writer, enclosingDeclaration);
+            }
+            else {
+                writeTypeParameters(signature.typeParameters, writer, enclosingDeclaration, flags, typeStack);
+            }
             writePunctuation(writer, SyntaxKind.OpenParenToken);
             for (var i = 0; i < signature.parameters.length; i++) {
                 if (i > 0) {

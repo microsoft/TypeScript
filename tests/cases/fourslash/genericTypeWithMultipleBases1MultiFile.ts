@@ -21,4 +21,4 @@ goTo.marker();
 verify.completionListContains('watch', '(property) iBaseScope.watch: () => void');
 verify.completionListContains('moveUp', '(property) iMover.moveUp: () => void');
 debugger;
-verify.completionListContains('family', '(property) iScope<TModel>.family: number');
+verify.completionListContains('family', '(property) iScope<number>.family: number');

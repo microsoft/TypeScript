@@ -2726,7 +2726,7 @@ module ts {
                         var useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.func.kind === SyntaxKind.SuperKeyword;
                         var allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
-                        if (contains(allSignatures, signature)) {
+                        if (contains(allSignatures, signature.target || signature)) {
                             // Write it as method/function/constructor as: (constructor) a(....)
                             if (symbolKind === ScriptElementKind.memberVariableElement || symbolFlags & SymbolFlags.Variable || symbolFlags & SymbolFlags.Class) {
                                 if (useConstructSignatures) {
@@ -2793,13 +2793,15 @@ module ts {
             if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOfClassOrInterface));
+                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                writeTypeParametersOfSymbol(symbol, sourceFile);
             }
             if (symbolFlags & SymbolFlags.Interface) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOfClassOrInterface));
+                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                writeTypeParametersOfSymbol(symbol, sourceFile);
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
@@ -2825,7 +2827,8 @@ module ts {
                 displayParts.push(spacePart());
                 if (symbol.parent) {
                     // Class/Interface type parameter
-                    displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol.parent, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOfClassOrInterface))
+                    displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol.parent, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments))
+                    writeTypeParametersOfSymbol(symbol.parent, enclosingDeclaration);
                 }
                 else {
                     // Method/function type parameter
@@ -2835,9 +2838,9 @@ module ts {
                         displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                         displayParts.push(spacePart());
                     } else if (signatureDeclaration.kind !== SyntaxKind.CallSignature) {
-                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, signatureDeclaration.symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOfClassOrInterface))
+                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, signatureDeclaration.symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments))
                     }
-                    displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, sourceFile, TypeFormatFlags.NoTruncation));
+                    displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, sourceFile, TypeFormatFlags.NoTruncation | TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 }
             }
             if (symbolFlags & SymbolFlags.EnumMember) {
@@ -2910,12 +2913,12 @@ module ts {
                     displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                     displayParts.push(spacePart());
                     // Write type parameters of class/Interface if it is property/method of the generic class/interface
-                    displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOfClassOrInterface));
+                    displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
                 }
             }
 
             function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[]) {
-                displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, enclosingDeclaration, TypeFormatFlags.NoTruncation));
+                displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, enclosingDeclaration, TypeFormatFlags.NoTruncation | TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 if (allSignatures.length > 1) {
                     displayParts.push(spacePart());
                     displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
@@ -2930,6 +2933,13 @@ module ts {
                     displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                 }
                 documentation = signature.getDocumentationComment();
+            }
+
+            function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
+                var typeParameterParts = mapToDisplayParts(writer => {
+                    typeResolver.writeTypeParametersOfSymbol(symbol, writer, enclosingDeclaration, TypeFormatFlags.NoTruncation);
+                });
+                displayParts.push.apply(displayParts, typeParameterParts);
             }
         }
 

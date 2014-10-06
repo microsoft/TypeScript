@@ -15,14 +15,14 @@
 diagnostics.setEditValidation(IncrementalEditValidation.None);
 
 goTo.marker('1');
-verify.quickInfoIs("(property) B<T>.bar: string", undefined);
+verify.quickInfoIs("(property) B<string>.bar: string", undefined);
 edit.deleteAtCaret(1);
 edit.insert('z');
 verify.quickInfoIs("any");
 verify.numberOfErrorsInCurrentFile(1);
 edit.backspace(1);
 edit.insert('a');
-verify.quickInfoIs("(property) B<T>.bar: string", undefined);
+verify.quickInfoIs("(property) B<string>.bar: string", undefined);
 goTo.marker('2');
 verify.quickInfoIs("(var) r4: string", undefined);
 verify.numberOfErrorsInCurrentFile(0);
