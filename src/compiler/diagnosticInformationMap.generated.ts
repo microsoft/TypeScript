@@ -48,6 +48,7 @@ module ts {
         Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher: { code: 1056, category: DiagnosticCategory.Error, key: "Accessors are only available when targeting ECMAScript 5 and higher." },
         Enum_member_must_have_initializer: { code: 1061, category: DiagnosticCategory.Error, key: "Enum member must have initializer." },
         An_export_assignment_cannot_be_used_in_an_internal_module: { code: 1063, category: DiagnosticCategory.Error, key: "An export assignment cannot be used in an internal module." },
+        An_enum_member_cannot_have_a_numeric_name: { code: 1065, category: DiagnosticCategory.Error, key: "An enum member cannot have a numeric name." },
         Ambient_enum_elements_can_only_have_integer_literal_initializers: { code: 1066, category: DiagnosticCategory.Error, key: "Ambient enum elements can only have integer literal initializers." },
         Unexpected_token_A_constructor_method_accessor_or_property_was_expected: { code: 1068, category: DiagnosticCategory.Error, key: "Unexpected token. A constructor, method, accessor, or property was expected." },
         A_declare_modifier_cannot_be_used_with_an_import_declaration: { code: 1079, category: DiagnosticCategory.Error, key: "A 'declare' modifier cannot be used with an import declaration." },

@@ -3673,6 +3673,11 @@ module ts {
                 var node = <EnumMember>createNode(SyntaxKind.EnumMember);
                 var errorCountBeforeEnumMember = file.syntacticErrors.length;
                 node.name = parsePropertyName();
+                
+                if(isIntegerLiteral(node.name)) {
+                    grammarErrorOnNode(node.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
+                }
+
                 node.initializer = parseInitializer(/*inParameter*/ false);
 
                 if (inAmbientContext) {
