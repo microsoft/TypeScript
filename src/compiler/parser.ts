@@ -3674,7 +3674,7 @@ module ts {
                 var errorCountBeforeEnumMember = file.syntacticErrors.length;
                 node.name = parsePropertyName();
                 
-                if(isIntegerLiteral(node.name)) {
+                if(!isNaN(Number(node.name.text))) {
                     grammarErrorOnNode(node.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                 }
 
