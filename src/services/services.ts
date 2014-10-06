@@ -1621,7 +1621,7 @@ module ts {
             (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node));
     }
 
-    enum SearchMeaning {
+    enum SemanticMeaning {
         None = 0x0,
         Value = 0x1,
         Type = 0x2,
@@ -3315,7 +3315,7 @@ module ts {
                                          searchSymbol: Symbol,
                                          searchText: string,
                                          searchLocation: Node,
-                                         searchMeaning: SearchMeaning,
+                                         searchMeaning: SemanticMeaning,
                                          findInStrings: boolean,
                                          findInComments: boolean,
                                          result: ReferenceEntry[]): void {
@@ -3613,114 +3613,6 @@ module ts {
                 return undefined;
             }
 
-            function getMeaningFromDeclaration(node: Declaration): SearchMeaning {
-                switch (node.kind) {
-                    case SyntaxKind.Parameter:
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.Property:
-                    case SyntaxKind.PropertyAssignment:
-                    case SyntaxKind.EnumMember:
-                    case SyntaxKind.Method:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.CatchBlock:
-                        return SearchMeaning.Value;
-
-                    case SyntaxKind.TypeParameter:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.TypeLiteral:
-                        return SearchMeaning.Type;
-
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.EnumDeclaration:
-                        return SearchMeaning.Value | SearchMeaning.Type;
-
-                    case SyntaxKind.ModuleDeclaration:
-                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
-                            return SearchMeaning.Namespace | SearchMeaning.Value;
-                        }
-                        else if (isInstantiated(node)) {
-                            return SearchMeaning.Namespace | SearchMeaning.Value;
-                        }
-                        else {
-                            return SearchMeaning.Namespace;
-                        }
-                        break;
-
-                    case SyntaxKind.ImportDeclaration:
-                        return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
-                }
-                Debug.fail("Unknown declaration type");
-            }
-
-            function isTypeReference(node: Node): boolean {
-                if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node)
-                    node = node.parent;
-
-                return node.parent.kind === SyntaxKind.TypeReference;
-            }
-
-            function isNamespaceReference(node: Node): boolean {
-                var root = node;
-                var isLastClause = true;
-                if (root.parent.kind === SyntaxKind.QualifiedName) {
-                    while (root.parent && root.parent.kind === SyntaxKind.QualifiedName)
-                        root = root.parent;
-
-                    isLastClause = (<QualifiedName>root).right === node;
-                }
-
-                return root.parent.kind === SyntaxKind.TypeReference && !isLastClause;
-            }
-
-            function isInRightSideOfImport(node: EntityName) {
-                while (node.parent.kind === SyntaxKind.QualifiedName) {
-                    node = node.parent;
-                }
-
-                return node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).entityName === node;
-            }
-
-            function getMeaningFromRightHandSideOfImport(node: Node) {
-                Debug.assert(node.kind === SyntaxKind.Identifier);
-
-                //     import a = |b|; // Namespace
-                //     import a = |b.c|; // Value, type, namespace
-                //     import a = |b.c|.d; // Namespace
-
-                if (node.parent.kind === SyntaxKind.QualifiedName &&
-                    (<QualifiedName>node.parent).right === node &&
-                    node.parent.parent.kind === SyntaxKind.ImportDeclaration) {
-                    return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
-                }
-                return SearchMeaning.Namespace;
-            }
-
-            function getMeaningFromLocation(node: Node): SearchMeaning {
-                if (node.parent.kind === SyntaxKind.ExportAssignment) {
-                    return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
-                }
-                else if (isInRightSideOfImport(node)) {
-                    return getMeaningFromRightHandSideOfImport(node);
-                }
-                else if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
-                    return getMeaningFromDeclaration(node.parent);
-                }
-                else if (isTypeReference(node)) {
-                    return SearchMeaning.Type;
-                }
-                else if (isNamespaceReference(node)) {
-                    return SearchMeaning.Namespace;
-                }
-                else {
-                    return SearchMeaning.Value;
-                }
-            }
-
             /** Given an initial searchMeaning, extracted from a location, widen the search scope based on the declarations
               * of the corresponding symbol. e.g. if we are searching for "Foo" in value position, but "Foo" references a class
               * then we need to widen the search to include type positions as well.
@@ -3728,7 +3620,7 @@ module ts {
               * module, we want to keep the search limited to only types, as the two declarations (interface and uninstantiated module)
               * do not intersect in any of the three spaces.
               */
-            function getIntersectingMeaningFromDeclarations(meaning: SearchMeaning, declarations: Declaration[]): SearchMeaning {
+            function getIntersectingMeaningFromDeclarations(meaning: SemanticMeaning, declarations: Declaration[]): SemanticMeaning {
                 if (declarations) {
                     do {
                         // The result is order-sensitive, for instance if initialMeaning === Namespace, and declarations = [class, instantiated module]
@@ -3937,6 +3829,114 @@ module ts {
             return emitOutput;
         }
 
+        function getMeaningFromDeclaration(node: Declaration): SemanticMeaning {
+            switch (node.kind) {
+                case SyntaxKind.Parameter:
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.Property:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.Method:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.CatchBlock:
+                    return SemanticMeaning.Value;
+
+                case SyntaxKind.TypeParameter:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeLiteral:
+                    return SemanticMeaning.Type;
+
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                    return SemanticMeaning.Value | SemanticMeaning.Type;
+
+                case SyntaxKind.ModuleDeclaration:
+                    if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
+                        return SemanticMeaning.Namespace | SemanticMeaning.Value;
+                    }
+                    else if (isInstantiated(node)) {
+                        return SemanticMeaning.Namespace | SemanticMeaning.Value;
+                    }
+                    else {
+                        return SemanticMeaning.Namespace;
+                    }
+                    break;
+
+                case SyntaxKind.ImportDeclaration:
+                    return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+            }
+            Debug.fail("Unknown declaration type");
+        }
+
+        function isTypeReference(node: Node): boolean {
+            if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node)
+                node = node.parent;
+
+            return node.parent.kind === SyntaxKind.TypeReference;
+        }
+
+        function isNamespaceReference(node: Node): boolean {
+            var root = node;
+            var isLastClause = true;
+            if (root.parent.kind === SyntaxKind.QualifiedName) {
+                while (root.parent && root.parent.kind === SyntaxKind.QualifiedName)
+                    root = root.parent;
+
+                isLastClause = (<QualifiedName>root).right === node;
+            }
+
+            return root.parent.kind === SyntaxKind.TypeReference && !isLastClause;
+        }
+
+        function isInRightSideOfImport(node: EntityName) {
+            while (node.parent.kind === SyntaxKind.QualifiedName) {
+                node = node.parent;
+            }
+
+            return node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).entityName === node;
+        }
+
+        function getMeaningFromRightHandSideOfImport(node: Node) {
+            Debug.assert(node.kind === SyntaxKind.Identifier);
+
+            //     import a = |b|; // Namespace
+            //     import a = |b.c|; // Value, type, namespace
+            //     import a = |b.c|.d; // Namespace
+
+            if (node.parent.kind === SyntaxKind.QualifiedName &&
+                (<QualifiedName>node.parent).right === node &&
+                node.parent.parent.kind === SyntaxKind.ImportDeclaration) {
+                return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+            }
+            return SemanticMeaning.Namespace;
+        }
+
+        function getMeaningFromLocation(node: Node): SemanticMeaning {
+            if (node.parent.kind === SyntaxKind.ExportAssignment) {
+                return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+            }
+            else if (isInRightSideOfImport(node)) {
+                return getMeaningFromRightHandSideOfImport(node);
+            }
+            else if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+                return getMeaningFromDeclaration(node.parent);
+            }
+            else if (isTypeReference(node)) {
+                return SemanticMeaning.Type;
+            }
+            else if (isNamespaceReference(node)) {
+                return SemanticMeaning.Namespace;
+            }
+            else {
+                return SemanticMeaning.Value;
+            }
+        }
+
         // Signature help
         /**
          * This is a semantic operation.
@@ -4133,7 +4133,7 @@ module ts {
                     if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
                         var symbol = typeInfoResolver.getSymbolInfo(node);
                         if (symbol) {
-                            var type = classifySymbol(symbol, isTypeNode(node) || isTypeDeclarationName(node));
+                            var type = classifySymbol(symbol, getMeaningFromLocation(node) === SemanticMeaning.Type);
                             if (type) {
                                 result.push({
                                     textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
