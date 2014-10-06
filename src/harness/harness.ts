@@ -660,7 +660,7 @@ module Harness {
                 var useCaseSensitiveFileNames = sys.useCaseSensitiveFileNames;
                 this.settings.forEach(setting => {
                     switch (setting.flag.toLowerCase()) {
-                        // "filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve"
+                        // "filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve"
                         case "module":
                         case "modulegentarget":
                             if (typeof setting.value === 'string') {
@@ -1070,7 +1070,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
