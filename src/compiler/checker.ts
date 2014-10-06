@@ -7130,6 +7130,22 @@ module ts {
             return mapToArray(symbols);
         }
 
+        function isTypeDeclarationName(name: Node): boolean {
+            return name.kind == SyntaxKind.Identifier &&
+                isTypeDeclaration(name.parent) &&
+                (<Declaration>name.parent).name === name;
+        }
+
+        function isTypeDeclaration(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.TypeParameter:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                    return true;
+            }
+        }
+
         // True if the given identifier is part of a type reference
         function isTypeReferenceIdentifier(entityName: EntityName): boolean {
             var node: Node = entityName;
@@ -7205,6 +7221,75 @@ module ts {
                             }
                     }
             }
+            return false;
+        }
+
+        function isTypeNode(node: Node): boolean {
+            if (node.kind >= SyntaxKind.FirstTypeNode && node.kind <= SyntaxKind.LastTypeNode) {
+                return true;
+            }
+
+            switch (node.kind) {
+                case SyntaxKind.AnyKeyword:
+                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.StringKeyword:
+                case SyntaxKind.BooleanKeyword:
+                    return true;
+                case SyntaxKind.VoidKeyword:
+                    return node.parent.kind !== SyntaxKind.PrefixOperator;
+                case SyntaxKind.StringLiteral:
+                    // Specialized signatures can have string literals as their parameters' type names
+                    return node.parent.kind === SyntaxKind.Parameter;
+                // Identifiers and qualified names may be type nodes, depending on their context. Climb
+                // above them to find the lowest container
+                case SyntaxKind.Identifier:
+                    // If the identifier is the RHS of a qualified name, then it's a type iff its parent is.
+                    if (node.parent.kind === SyntaxKind.QualifiedName) {
+                        node = node.parent;
+                    }
+                // Fall through
+                case SyntaxKind.QualifiedName:
+                    // At this point, node is either a qualified name or an identifier
+                    var parent = node.parent;
+                    if (parent.kind === SyntaxKind.TypeQuery) {
+                        return false;
+                    }
+                    // Do not recursively call isTypeNode on the parent. In the example:
+                    //
+                    //     var a: A.B.C;
+                    //
+                    // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
+                    // A.B.C is a type node.
+                    if (parent.kind >= SyntaxKind.FirstTypeNode && parent.kind <= SyntaxKind.LastTypeNode) {
+                        return true;
+                    }
+                    switch (parent.kind) {
+                        case SyntaxKind.TypeParameter:
+                            return node === (<TypeParameterDeclaration>parent).constraint;
+                        case SyntaxKind.Property:
+                        case SyntaxKind.Parameter:
+                        case SyntaxKind.VariableDeclaration:
+                            return node === (<VariableDeclaration>parent).type;
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.Method:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            return node === (<FunctionDeclaration>parent).type;
+                        case SyntaxKind.CallSignature:
+                        case SyntaxKind.ConstructSignature:
+                        case SyntaxKind.IndexSignature:
+                            return node === (<SignatureDeclaration>parent).type;
+                        case SyntaxKind.TypeAssertion:
+                            return node === (<TypeAssertion>parent).type;
+                        case SyntaxKind.CallExpression:
+                        case SyntaxKind.NewExpression:
+                            return (<CallExpression>parent).typeArguments && (<CallExpression>parent).typeArguments.indexOf(node) >= 0;
+                    }
+            }
+
             return false;
         }
 
