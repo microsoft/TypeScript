@@ -117,13 +117,25 @@ module ts.NavigationBar {
         }
 
         function isTopLevelFunctionDeclaration(functionDeclaration: FunctionDeclaration) {
-            // A function declaration is 'top level' if it contains any function declarations 
-            // within it.
-            return functionDeclaration.kind === SyntaxKind.FunctionDeclaration &&
-               functionDeclaration.body &&
-               functionDeclaration.body.kind === SyntaxKind.FunctionBlock &&
-               forEach((<Block>functionDeclaration.body).statements, 
-                    s => s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text));
+            if (functionDeclaration.kind === SyntaxKind.FunctionDeclaration) {
+                // A function declaration is 'top level' if it contains any function declarations 
+                // within it. 
+                if (functionDeclaration.body && functionDeclaration.body.kind === SyntaxKind.FunctionBlock) {
+                    if (forEach((<Block>functionDeclaration.body).statements,
+                        s => s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text))) {
+
+                        return true;
+                    }
+
+                    // Or if it is not parented by another function.  i.e all functions
+                    // at module scope are 'top level'.
+                    if (functionDeclaration.parent.kind !== SyntaxKind.FunctionBlock) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
         
         function getItemsWorker(nodes: Node[], createItem: (n: Node) => ts.NavigationBarItem): ts.NavigationBarItem[] {
@@ -402,7 +414,9 @@ module ts.NavigationBar {
         }
 
         function getNodeSpan(node: Node) {
-            return TypeScript.TextSpan.fromBounds(node.getStart(), node.getEnd());
+            return node.kind === SyntaxKind.SourceFile
+                ? TypeScript.TextSpan.fromBounds(node.getFullStart(), node.getEnd())
+                : TypeScript.TextSpan.fromBounds(node.getStart(), node.getEnd());
         }
 
         function getTextOfNode(node: Node): string {

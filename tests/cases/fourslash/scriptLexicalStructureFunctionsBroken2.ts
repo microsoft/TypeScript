@@ -10,4 +10,4 @@ test.markers().forEach((marker) => {
     verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.getScriptLexicalStructureListCount(2); // <global> and 'f'
+verify.getScriptLexicalStructureListCount(3); // <global> and 'f'
