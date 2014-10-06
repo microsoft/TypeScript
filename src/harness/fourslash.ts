@@ -758,6 +758,10 @@ module FourSlash {
             return this.languageService.getImplementorsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
+        private assertionMessage(name: string, actualValue: any, expectedValue: any) {
+            return "\nActual " + name + ":\n\t" + actualValue + "\nExpected value:\n\t" + expectedValue;
+        }
+
         public verifyQuickInfo(negative: boolean, expectedTypeName?: string, docComment?: string, symbolName?: string, kind?: string) {
             [expectedTypeName, docComment, symbolName, kind].forEach(str => {
                 if (str) {
@@ -772,40 +776,68 @@ module FourSlash {
             var actualQuickInfoSymbolName = actualQuickInfo ? actualQuickInfo.fullSymbolName : "";
             var actualQuickInfoKind = actualQuickInfo ? actualQuickInfo.kind : "";
 
-            function assertionMessage(name: string, actualValue: string, expectedValue: string) {
-                return "\nActual " + name + ":\n\t" + actualValue + "\nExpected value:\n\t" + expectedValue;
-            }
-
             if (negative) {
                 if (expectedTypeName !== undefined) {
-                    assert.notEqual(actualQuickInfoMemberName, expectedTypeName, assertionMessage("quick info member name", actualQuickInfoMemberName, expectedTypeName));
+                    assert.notEqual(actualQuickInfoMemberName, expectedTypeName, this.assertionMessage("quick info member name", actualQuickInfoMemberName, expectedTypeName));
                 }
                 if (docComment != undefined) {
-                    assert.notEqual(actualQuickInfoDocComment, docComment, assertionMessage("quick info doc comment", actualQuickInfoDocComment, docComment));
+                    assert.notEqual(actualQuickInfoDocComment, docComment, this.assertionMessage("quick info doc comment", actualQuickInfoDocComment, docComment));
                 }
                 if (symbolName !== undefined) {
-                    assert.notEqual(actualQuickInfoSymbolName, symbolName, assertionMessage("quick info symbol name", actualQuickInfoSymbolName, symbolName));
+                    assert.notEqual(actualQuickInfoSymbolName, symbolName, this.assertionMessage("quick info symbol name", actualQuickInfoSymbolName, symbolName));
                 }
                 if (kind !== undefined) {
-                    assert.notEqual(actualQuickInfoKind, kind, assertionMessage("quick info kind", actualQuickInfoKind, kind));
+                    assert.notEqual(actualQuickInfoKind, kind, this.assertionMessage("quick info kind", actualQuickInfoKind, kind));
                 }
             } else {
                 if (expectedTypeName !== undefined) {
-                    assert.equal(actualQuickInfoMemberName, expectedTypeName, assertionMessage("quick info member", actualQuickInfoMemberName, expectedTypeName));
+                    assert.equal(actualQuickInfoMemberName, expectedTypeName, this.assertionMessage("quick info member", actualQuickInfoMemberName, expectedTypeName));
                 }
                 if (docComment != undefined) {
-                    assert.equal(actualQuickInfoDocComment, docComment, assertionMessage("quick info doc", actualQuickInfoDocComment, docComment));
+                    assert.equal(actualQuickInfoDocComment, docComment, this.assertionMessage("quick info doc", actualQuickInfoDocComment, docComment));
                 }
                 if (symbolName !== undefined) {
-                    assert.equal(actualQuickInfoSymbolName, symbolName, assertionMessage("quick info symbol name", actualQuickInfoSymbolName, symbolName));
+                    assert.equal(actualQuickInfoSymbolName, symbolName, this.assertionMessage("quick info symbol name", actualQuickInfoSymbolName, symbolName));
                 }
                 if (kind !== undefined) {
-                    assert.equal(actualQuickInfoKind, kind, assertionMessage("quick info kind", actualQuickInfoKind, kind));
+                    assert.equal(actualQuickInfoKind, kind, this.assertionMessage("quick info kind", actualQuickInfoKind, kind));
                 }
             }
         }
 
-        public verifyQuickInfoExists(negative: number) {
+        public verifyRenameLocations(findInStrings: boolean, findInComments: boolean) {
+            var renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
+            if (renameInfo.canRename) {
+                var references = this.languageService.findRenameLocations(
+                    this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments);
+
+                var ranges = this.getRanges();
+                if (ranges.length !== references.length) {
+                    this.raiseError(this.assertionMessage("Rename locations", references.length, ranges.length));
+                }
+
+                ranges = ranges.sort((r1, r2) => r1.start - r2.start);
+                references = references.sort((r1, r2) => r1.textSpan.start() - r2.textSpan.start());
+
+                for (var i = 0, n = ranges.length; i < n; i++) {
+                    var reference = references[i];
+                    var range = ranges[i];
+
+                    if (reference.textSpan.start() !== range.start ||
+                        reference.textSpan.end() !== range.end) {
+
+                        this.raiseError(this.assertionMessage("Rename location",
+                            "[" + reference.textSpan.start() + "," + reference.textSpan.end() + ")",
+                            "[" + range.start + "," + range.end + ")"));
+                    }
+                }
+            }
+            else {
+                this.raiseError("Expected rename to succeed, but it actually failed.");
+            }
+        }
+
+        public verifyQuickInfoExists(negative: boolean) {
             this.taoInvalidReason = 'verifyQuickInfoExists NYI';
 
             var actualQuickInfo = this.languageService.getTypeAtPosition(this.activeFile.fileName, this.currentCaretPosition);
@@ -1576,7 +1608,7 @@ module FourSlash {
 
         private verifyClassifications(expected: { classificationType: string; text: string }[], actual: ts.ClassifiedSpan[]) {
             if (actual.length !== expected.length) {
-                this.raiseError('verifySyntacticClassification failed - expected total classifications to be ' + expected.length + ', but was ' + actual.length);
+                this.raiseError('verifyClassifications failed - expected total classifications to be ' + expected.length + ', but was ' + actual.length);
             }
 
             for (var i = 0; i < expected.length; i++) {
@@ -1585,7 +1617,7 @@ module FourSlash {
 
                 var expectedType: string = (<any>ts.ClassificationTypeNames)[expectedClassification.classificationType];
                 if (expectedType !== actualClassification.classificationType) {
-                    this.raiseError('verifySyntacticClassification failed - expected classifications type to be ' +
+                    this.raiseError('verifyClassifications failed - expected classifications type to be ' +
                         expectedType + ', but was ' +
                         actualClassification.classificationType);
                 }
@@ -1593,7 +1625,7 @@ module FourSlash {
                 var actualSpan = actualClassification.textSpan;
                 var actualText = this.activeFile.content.substr(actualSpan.start(), actualSpan.length());
                 if (expectedClassification.text !== actualText) {
-                    this.raiseError('verifySyntacticClassification failed - expected classificatied text to be ' +
+                    this.raiseError('verifyClassifications failed - expected classificatied text to be ' +
                         expectedClassification.text + ', but was ' +
                         actualText);
                 }

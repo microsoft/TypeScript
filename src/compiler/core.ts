@@ -209,11 +209,9 @@ module ts {
     export var localizedDiagnosticMessages: Map<string> = undefined;
 
     export function getLocaleSpecificMessage(message: string) {
-        if (ts.localizedDiagnosticMessages) {
-            message = localizedDiagnosticMessages[message];
-        }
-
-        return message;
+        return localizedDiagnosticMessages && localizedDiagnosticMessages[message]
+            ? localizedDiagnosticMessages[message]
+            : message;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
@@ -533,6 +531,43 @@ module ts {
         var pathLen = path.length;
         var extLen = extension.length;
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+    }
+
+    var supportedExtensions = [".d.ts", ".ts", ".js"];
+
+    export function removeFileExtension(path: string): string {
+        for (var i = 0; i < supportedExtensions.length; i++) {
+            var ext = supportedExtensions[i];
+
+            if (fileExtensionIs(path, ext)) {
+                return path.substr(0, path.length - ext.length);
+            }
+        }
+
+        return path;
+    }
+
+    var escapedCharsRegExp = /[\t\v\f\b\0\r\n\"\\\u2028\u2029\u0085]/g;
+    var escapedCharsMap: Map<string> = {
+        "\t": "\\t",
+        "\v": "\\v",
+        "\f": "\\f",
+        "\b": "\\b",
+        "\0": "\\0",
+        "\r": "\\r",
+        "\n": "\\n",
+        "\"": "\\\"",
+        "\u2028": "\\u2028", // lineSeparator
+        "\u2029": "\\u2029", // paragraphSeparator
+        "\u0085": "\\u0085"  // nextLine
+    };
+
+    /** NOTE: This *does not* support the full escape characters, it only supports the subset that can be used in file names
+      * or string literals. If the information encoded in the map changes, this needs to be revisited. */
+    export function escapeString(s: string): string {
+        return escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, c => {
+            return escapedCharsMap[c] || c;
+        }) : s;
     }
 
     export interface ObjectAllocator {

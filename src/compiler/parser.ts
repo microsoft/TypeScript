@@ -17,20 +17,9 @@ module ts {
         return node;
     }
 
-    var moduleExtensions = [".d.ts", ".ts", ".js"];
-
     interface ReferenceComments {
         referencedFiles: FileReference[];
         amdDependencies: string[];
-    }
-
-    export function getModuleNameFromFilename(filename: string) {
-        for (var i = 0; i < moduleExtensions.length; i++) {
-            var ext = moduleExtensions[i];
-            var len = filename.length - ext.length;
-            if (len > 0 && filename.substr(len) === ext) return filename.substr(0, len);
-        }
-        return filename;
     }
 
     export function getSourceFileOfNode(node: Node): SourceFile {
@@ -54,11 +43,11 @@ module ts {
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
-    export function getSourceTextOfNodeFromSourceText(sourceText: string, node: Node): string {
+    export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
         return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
     }
 
-    export function getSourceTextOfNode(node: Node): string {
+    export function getTextOfNode(node: Node): string {
         var text = getSourceFileOfNode(node).text;
         return text.substring(skipTrivia(text, node.pos), node.end);
     }
@@ -75,7 +64,7 @@ module ts {
 
     // Return display name of an identifier
     export function identifierToString(identifier: Identifier) {
-        return identifier.kind === SyntaxKind.Missing ? "(Missing)" : getSourceTextOfNode(identifier);
+        return identifier.kind === SyntaxKind.Missing ? "(Missing)" : getTextOfNode(identifier);
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
@@ -400,6 +389,100 @@ module ts {
         }
 
         return false;
+    }
+
+    /**
+     * Note: this function only works when given a node with valid parent pointers.
+     */
+    export function isTypeNode(node: Node): boolean {
+        if (node.kind >= SyntaxKind.FirstTypeNode && node.kind <= SyntaxKind.LastTypeNode) {
+            return true;
+        }
+
+        switch (node.kind) {
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.BooleanKeyword:
+                return true;
+            case SyntaxKind.VoidKeyword:
+                return node.parent.kind !== SyntaxKind.PrefixOperator;
+            case SyntaxKind.StringLiteral:
+                // Specialized signatures can have string literals as their parameters' type names
+                return node.parent.kind === SyntaxKind.Parameter;
+            // Identifiers and qualified names may be type nodes, depending on their context. Climb
+            // above them to find the lowest container
+            case SyntaxKind.Identifier:
+                // If the identifier is the RHS of a qualified name, then it's a type iff its parent is.
+                if (node.parent.kind === SyntaxKind.QualifiedName) {
+                    node = node.parent;
+                }
+            // Fall through
+            case SyntaxKind.QualifiedName:
+                // At this point, node is either a qualified name or an identifier
+                var parent = node.parent;
+                if (parent.kind === SyntaxKind.TypeQuery) {
+                    return false;
+                }
+                // Do not recursively call isTypeNode on the parent. In the example:
+                //
+                //     var a: A.B.C;
+                //
+                // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
+                // A.B.C is a type node.
+                if (parent.kind >= SyntaxKind.FirstTypeNode && parent.kind <= SyntaxKind.LastTypeNode) {
+                    return true;
+                }
+                switch (parent.kind) {
+                    case SyntaxKind.TypeParameter:
+                        return node === (<TypeParameterDeclaration>parent).constraint;
+                    case SyntaxKind.Property:
+                    case SyntaxKind.Parameter:
+                    case SyntaxKind.VariableDeclaration:
+                        return node === (<VariableDeclaration>parent).type;
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        return node === (<FunctionDeclaration>parent).type;
+                    case SyntaxKind.CallSignature:
+                    case SyntaxKind.ConstructSignature:
+                    case SyntaxKind.IndexSignature:
+                        return node === (<SignatureDeclaration>parent).type;
+                    case SyntaxKind.TypeAssertion:
+                        return node === (<TypeAssertion>parent).type;
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                        return (<CallExpression>parent).typeArguments && (<CallExpression>parent).typeArguments.indexOf(node) >= 0;
+                }
+        }
+
+        return false;
+    }
+
+    /**
+     * Note: this function only works when given a node with valid parent pointers.
+     *
+     * returns true if the given identifier is the name of a type declaration node (class, interface, enum, type parameter, etc)
+     */
+    export function isTypeDeclarationName(name: Node): boolean {
+        return name.kind == SyntaxKind.Identifier &&
+            isTypeDeclaration(name.parent) &&
+            (<Declaration>name.parent).name === name;
+    }
+
+
+    export function isTypeDeclaration(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
+                return true;
+        }
     }
 
     export function getContainingFunction(node: Node): SignatureDeclaration {
@@ -1013,7 +1096,10 @@ module ts {
                 return finishNode(node);
             }
             error(Diagnostics.Identifier_expected);
-            return <Identifier>createMissingNode();
+
+            var node = <Identifier>createMissingNode();
+            node.text = "";
+            return node;
         }
 
         function parseIdentifier(): Identifier {
@@ -2951,7 +3037,7 @@ module ts {
             parseExpected(SyntaxKind.ColonToken);
 
             if (labelledStatementInfo.nodeIsNestedInLabel(node.label, /*requireIterationStatement*/ false, /*stopAtFunctionBoundary*/ true)) {
-                grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getSourceTextOfNodeFromSourceText(sourceText, node.label));
+                grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getTextOfNodeFromSourceText(sourceText, node.label));
             }
             labelledStatementInfo.addLabel(node.label);
 

@@ -28,7 +28,7 @@
 ////}
 ////function bar() {
 ////}
-debugger;
+
 goTo.marker("file1");
 verify.getScriptLexicalStructureListCount(0);
 

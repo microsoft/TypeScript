@@ -56,10 +56,10 @@ module ts {
 
         function getOwnEmitOutputFilePath(sourceFile: SourceFile, extension: string) {
             if (compilerOptions.outDir) {
-                var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(getSourceFilePathInNewDir(compilerOptions.outDir, sourceFile));
+                var emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(compilerOptions.outDir, sourceFile));
             }
             else {
-                var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(sourceFile.filename);
+                var emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.filename);
             }
 
             return emitOutputFilePathWithoutExtension + extension;
@@ -591,21 +591,6 @@ module ts {
                     recordSourceMapSpan(comment.end);
                 }
 
-                var escapedCharsRegExp = /[\t\v\f\b\0\r\n\"\u2028\u2029\u0085]/g;
-                var escapedCharsMap: Map<string> = {
-                    "\t": "\\t",
-                    "\v": "\\v",
-                    "\f": "\\f",
-                    "\b": "\\b",
-                    "\0": "\\0",
-                    "\r": "\\r",
-                    "\n": "\\n",
-                    "\"": "\\\"",
-                    "\u2028": "\\u2028", // lineSeparator
-                    "\u2029": "\\u2029", // paragraphSeparator
-                    "\u0085": "\\u0085"  // nextLine
-                };
-
                 function serializeSourceMapContents(version: number, file: string, sourceRoot: string, sources: string[], names: string[], mappings: string) {
                     if (typeof JSON !== "undefined") {
                         return JSON.stringify({
@@ -619,14 +604,6 @@ module ts {
                     }
 
                     return "{\"version\":" + version + ",\"file\":\"" + escapeString(file) + "\",\"sourceRoot\":\"" + escapeString(sourceRoot) + "\",\"sources\":[" + serializeStringArray(sources) + "],\"names\":[" + serializeStringArray(names) + "],\"mappings\":\"" + escapeString(mappings) + "\"}";
-
-                    /** This does not support the full escape characters, it only supports the subset that can be used in file names
-                      * or string literals. If the information encoded in the map changes, this needs to be revisited. */
-                    function escapeString(s: string): string {
-                        return escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, c => {
-                            return escapedCharsMap[c] || c;
-                        }) : s;
-                    }
 
                     function serializeStringArray(list: string[]): string {
                         var output = "";
@@ -3164,7 +3141,7 @@ module ts {
                     ? referencedFile.filename // Declaration file, use declaration file name
                     : shouldEmitToOwnFile(referencedFile, compilerOptions)
                     ? getOwnEmitOutputFilePath(referencedFile, ".d.ts") // Own output file so get the .d.ts file
-                    : getModuleNameFromFilename(compilerOptions.out) + ".d.ts";// Global out file
+                    : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
 
                 declFileName = getRelativePathToDirectoryOrUrl(
                     getDirectoryPath(normalizeSlashes(jsFilePath)),
@@ -3237,7 +3214,7 @@ module ts {
                     }
                 });
                 declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
-                writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
+                writeFile(removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
             }
         }
 
