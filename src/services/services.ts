@@ -2557,13 +2557,13 @@ module ts {
                 var type = session.typeChecker.getTypeOfSymbol(symbol);
                 Debug.assert(type, "Could not find type for symbol");
                 var completionEntry = createCompletionEntry(symbol);
-                var displayPartsAndDocumentations = getSymbolDisplayPartsAndDocumentationOfSymbol(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location);
+                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location);
                 return {
                     name: entryName,
-                    kind: completionEntry.kind,
+                    kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
                     kindModifiers: completionEntry.kindModifiers,
-                    displayParts: displayPartsAndDocumentations.displayParts,
-                    documentation: displayPartsAndDocumentations.documentation
+                    displayParts: displayPartsDocumentationsAndSymbolKind.displayParts,
+                    documentation: displayPartsDocumentationsAndSymbolKind.documentation
                 };
             }
             else {
@@ -2692,7 +2692,7 @@ module ts {
             return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
         }
 
-        function getSymbolDisplayPartsAndDocumentationOfSymbol(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node, typeResolver: TypeChecker, location: Node) {
+        function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node, typeResolver: TypeChecker, location: Node) {
             var displayParts: SymbolDisplayPart[] = [];
             var documentation: SymbolDisplayPart[];
             var symbolFlags = typeResolver.getRootSymbol(symbol).flags;
@@ -2863,32 +2863,37 @@ module ts {
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
             }
-            else if (!hasAddedSymbolInfo && symbolKind !== ScriptElementKind.unknown) {
-                if (type) {
-                    addPrefixForAnyFunctionOrVar(symbol, symbolKind);
-                    if (symbolKind === ScriptElementKind.memberVariableElement ||
-                        symbolFlags & SymbolFlags.Variable) {
-                        displayParts.push(punctuationPart(SyntaxKind.ColonToken));
-                        displayParts.push(spacePart());
-                        // If the type is type parameter, format it specially
-                        if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
-                            var typeParameterParts = mapToDisplayParts(writer => {
-                                typeResolver.writeTypeParameter(<TypeParameter>type, writer, enclosingDeclaration, TypeFormatFlags.NoTruncation);
-                            });
-                            displayParts.push.apply(displayParts, typeParameterParts);
+            if (!hasAddedSymbolInfo) {
+                if (symbolKind !== ScriptElementKind.unknown) {
+                    if (type) {
+                        addPrefixForAnyFunctionOrVar(symbol, symbolKind);
+                        if (symbolKind === ScriptElementKind.memberVariableElement ||
+                            symbolFlags & SymbolFlags.Variable) {
+                            displayParts.push(punctuationPart(SyntaxKind.ColonToken));
+                            displayParts.push(spacePart());
+                            // If the type is type parameter, format it specially
+                            if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
+                                var typeParameterParts = mapToDisplayParts(writer => {
+                                    typeResolver.writeTypeParameter(<TypeParameter>type, writer, enclosingDeclaration, TypeFormatFlags.NoTruncation);
+                                });
+                                displayParts.push.apply(displayParts, typeParameterParts);
+                            }
+                            else {
+                                displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, type, enclosingDeclaration, TypeFormatFlags.NoTruncation));
+                            }
                         }
-                        else {
-                            displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, type, enclosingDeclaration, TypeFormatFlags.NoTruncation));
+                        else if (symbolFlags & SymbolFlags.Function ||
+                            symbolFlags & SymbolFlags.Method ||
+                            symbolFlags & SymbolFlags.Constructor ||
+                            symbolFlags & SymbolFlags.Signature ||
+                            symbolFlags & SymbolFlags.Accessor) {
+                            var allSignatures = type.getCallSignatures();
+                            addSignatureDisplayParts(allSignatures[0], allSignatures);
                         }
                     }
-                    else if (symbolFlags & SymbolFlags.Function ||
-                        symbolFlags & SymbolFlags.Method ||
-                        symbolFlags & SymbolFlags.Constructor ||
-                        symbolFlags & SymbolFlags.Signature ||
-                        symbolFlags & SymbolFlags.Accessor) {
-                        var allSignatures = type.getCallSignatures();
-                        addSignatureDisplayParts(allSignatures[0], allSignatures);
-                    }
+                }
+                else {
+                    symbolKind = getSymbolKind(symbol); 
                 }
             }             
 
@@ -2896,7 +2901,7 @@ module ts {
                 documentation = symbol.getDocumentationComment();
             }
 
-            return { displayParts: displayParts, documentation: documentation };
+            return { displayParts: displayParts, documentation: documentation, symbolKind: symbolKind };
 
             function addNewLineIfDisplayPartsExist() {
                 if (displayParts.length) {
@@ -2980,13 +2985,13 @@ module ts {
                 return undefined;
             }
 
-            var displayPartsAndDocumentations = getSymbolDisplayPartsAndDocumentationOfSymbol(symbol, sourceFile, getContainerNode(node), typeInfoResolver, node);
+            var displayPartsDocumentationsAndKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, sourceFile, getContainerNode(node), typeInfoResolver, node);
             return {
                 kind: getSymbolKind(symbol),
-                kindModifiers: getSymbolModifiers(symbol),
+                kindModifiers: displayPartsDocumentationsAndKind.symbolKind,
                 textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
-                displayParts: displayPartsAndDocumentations.displayParts,
-                documentation: displayPartsAndDocumentations.documentation
+                displayParts: displayPartsDocumentationsAndKind.displayParts,
+                documentation: displayPartsDocumentationsAndKind.documentation
             };
         }
 
