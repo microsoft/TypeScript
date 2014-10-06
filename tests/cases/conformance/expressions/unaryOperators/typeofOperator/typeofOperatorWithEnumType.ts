@@ -1,7 +1,7 @@
 // typeof  operator on enum type
 
 enum ENUM { };
-enum ENUM1 { 1, 2, "" };
+enum ENUM1 { A, B, "" };
 
 // enum type var
 var ResultIsString1 = typeof ENUM;

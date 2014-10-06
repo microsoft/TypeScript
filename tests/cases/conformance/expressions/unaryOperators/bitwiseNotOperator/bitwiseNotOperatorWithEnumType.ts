@@ -1,6 +1,6 @@
 // ~ operator on enum type
 
-enum ENUM1 { 1, 2, "" };
+enum ENUM1 { A, B, "" };
 
 // enum type var
 var ResultIsNumber1 = ~ENUM1;

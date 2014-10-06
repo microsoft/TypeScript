@@ -1,6 +1,6 @@
 // ! operator on enum type
 
-enum ENUM { 1, 2, 3 };
+enum ENUM { A, B, C };
 enum ENUM1 { };
 
 // enum type var
