@@ -313,7 +313,7 @@ module ts.NavigationBar {
 
             function createFunctionItem(node: FunctionDeclaration) {
                 if (node.name && node.body && node.body.kind === SyntaxKind.FunctionBlock) {
-                    var childItems = getItemsWorker(getChildNodes((<Block>node.body).statements), createChildItem);
+                    var childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
 
                     return getNavigationBarItem(node.name.text,
                         ts.ScriptElementKind.functionElement,
