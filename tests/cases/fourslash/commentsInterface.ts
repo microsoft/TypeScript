@@ -111,7 +111,7 @@ goTo.marker('12');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("param help");
 goTo.marker('12q');
-verify.quickInfoIs("(method) i2.foo(b: number): string", "");
+verify.quickInfoIs("(property) i2.foo: (b: number) => string", "");
 
 goTo.marker('13');
 verify.quickInfoIs("(var) i2_i_i2_si: number", "");
@@ -130,7 +130,7 @@ goTo.marker('16');
 verify.currentSignatureHelpDocCommentIs("new method");
 verify.currentParameterHelpArgumentDocCommentIs("param");
 goTo.marker('16q');
-verify.quickInfoIs("(constructor) i2(i: i1): any", "new method");
+verify.quickInfoIs("(var) i2_i: new i2(i: i1) => any", "new method");
 
 goTo.marker('17');
 verify.quickInfoIs("(var) i2_i_nc_x: number", "");
@@ -151,7 +151,7 @@ goTo.marker('22');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('22q');
-verify.quickInfoIs("(method) i2.nc_foo(b: number): string", "");
+verify.quickInfoIs("(property) i2.nc_foo: (b: number) => string", "");
 
 goTo.marker('23');
 verify.quickInfoIs("(var) i2_i_r: number", "");
@@ -160,7 +160,7 @@ goTo.marker('24');
 verify.currentSignatureHelpDocCommentIs("this is call signature");
 verify.currentParameterHelpArgumentDocCommentIs("paramhelp a");
 goTo.marker('24q');
-verify.quickInfoIs("(function) i2(a: number, b: number): number", "this is call signature");
+verify.quickInfoIs("(var) i2_i: i2(a: number, b: number) => number", "this is call signature");
 
 goTo.marker('25');
 verify.currentSignatureHelpDocCommentIs("this is call signature");
@@ -244,7 +244,7 @@ goTo.marker('43');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("comment i3 l b");
 goTo.marker('43q');
-verify.quickInfoIs("(method) i3.l(b: number): string", "");
+verify.quickInfoIs("(property) i3.l: (b: number) => string", "");
 
 goTo.marker('44');
 verify.currentSignatureHelpDocCommentIs("");
@@ -256,4 +256,4 @@ goTo.marker('45');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('45q');
-verify.quickInfoIs("(method) i3.nc_l(b: number): string", "");
+verify.quickInfoIs("(property) i3.nc_l: (b: number) => string", "");

@@ -126,6 +126,7 @@ verify.quickInfoIs('(local var) localVar: string', '');
 goTo.marker('30');
 verify.quickInfoIs('(parameter) b: string', '');
 goTo.marker('31');
-verify.quickInfoIs('(local function) lambdaVar(b: string): string', '');
+debugger;
+verify.quickInfoIs('(local var) lambdaVar: (b: string) => string', '');
 goTo.marker('32');
 verify.quickInfoIs('(parameter) a: number', '');

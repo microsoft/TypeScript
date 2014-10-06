@@ -30,7 +30,7 @@ verify.quickInfoIs("(method) C.x1(a: number, callback: (x: 'hi') => number): any
 goTo.marker('5');
 verify.quickInfoIs('(parameter) callback: (x: string) => number');
 goTo.marker('6');
-verify.quickInfoIs('(local function) callback(x: string): number');
+verify.quickInfoIs('(parameter) callback: (x: string) => number');
 goTo.marker('7');
 verify.quickInfoIs("(method) C.x1(a: number, callback: (x: 'hi') => number): any");
 goTo.marker('8');

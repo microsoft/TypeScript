@@ -6,12 +6,7 @@
 ////    /*3*/f(3);
 ////}
 
-// Declaration is shown as type information
-goTo.marker("1");
-verify.quickInfoIs("(var) f: (x: number) => number", "");
-
-// But the call sites show the signatures selected
-[2, 3].forEach((val) => {
+[1, 2, 3].forEach((val) => {
     goTo.marker("" + val);
-    verify.quickInfoIs("(function) f(x: number): number", "");
+    verify.quickInfoIs("(var) f: (x: number) => number", "");
 } );

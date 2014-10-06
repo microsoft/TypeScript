@@ -2727,38 +2727,37 @@ module ts {
                         var allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
                         if (contains(allSignatures, signature.target || signature)) {
-                            // Write it as method/function/constructor as: (constructor) a(....)
-                            if (symbolKind === ScriptElementKind.memberVariableElement || symbolFlags & SymbolFlags.Variable || symbolFlags & SymbolFlags.Class) {
-                                if (useConstructSignatures) {
-                                    symbolKind = ScriptElementKind.constructorImplementationElement;
-                                }
-                                else {
-                                    switch (symbolKind) {
-                                        case ScriptElementKind.memberVariableElement:
-                                            symbolKind = ScriptElementKind.memberFunctionElement;
-                                            break;
-                                        case ScriptElementKind.variableElement:
-                                            symbolKind = ScriptElementKind.functionElement;
-                                            break;
-                                        case ScriptElementKind.parameterElement:
-                                        case ScriptElementKind.localVariableElement:
-                                            symbolKind = ScriptElementKind.localFunctionElement;
-                                            break;
-                                        default:
-                                            Debug.fail("symbolKind: " + symbolKind);
-                                    }
-                                }
-                            }
-
-                            // Constructor or call signatures use the type name
-                            if (useConstructSignatures || (signature.declaration.kind === SyntaxKind.CallSignature &&
-                                !(type.symbol.flags & SymbolFlags.TypeLiteral || type.symbol.flags & SymbolFlags.ObjectLiteral))) {
+                            if (useConstructSignatures && (symbolFlags & SymbolFlags.Class)) {
+                                // Constructor
+                                symbolKind = ScriptElementKind.constructorImplementationElement;
                                 addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
                             }
                             else {
                                 addPrefixForAnyFunctionOrVar(symbol, symbolKind);
                             }
-                            addSignatureDisplayParts(signature, allSignatures);
+
+                            switch (symbolKind) {
+                                case ScriptElementKind.memberVariableElement:
+                                case ScriptElementKind.variableElement:
+                                case ScriptElementKind.parameterElement:
+                                case ScriptElementKind.localVariableElement:
+                                    // If it is call or construct signature of lambda's write type name
+                                    displayParts.push(punctuationPart(SyntaxKind.ColonToken));
+                                    displayParts.push(spacePart());
+                                    if (useConstructSignatures) {
+                                        displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                                        displayParts.push(spacePart());
+                                    }
+                                    if (!(type.flags & TypeFlags.Anonymous)) {
+                                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                                    }
+                                    addSignatureDisplayParts(signature, allSignatures, TypeFormatFlags.WriteArrowStyleSignature);
+                                    break;
+
+                                default:
+                                    // Just signature
+                                    addSignatureDisplayParts(signature, allSignatures);
+                            }
                             hasAddedSymbolInfo = true;
                         }
                     }
@@ -2917,8 +2916,8 @@ module ts {
                 }
             }
 
-            function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[]) {
-                displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, enclosingDeclaration, TypeFormatFlags.NoTruncation | TypeFormatFlags.WriteTypeArgumentsOfSignature));
+            function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[], flags?: TypeFormatFlags) {
+                displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, enclosingDeclaration, flags | TypeFormatFlags.NoTruncation | TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 if (allSignatures.length > 1) {
                     displayParts.push(spacePart());
                     displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));

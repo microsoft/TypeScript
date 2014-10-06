@@ -308,7 +308,7 @@ verify.completionListContains('f4', '(function) f4(a: number): number (+ 1 overl
 
 goTo.marker('18');
 verify.completionListContains('i1', 'interface i1', '');
-verify.completionListContains('i1_i', '(constructor) i1(b: number): any (+ 1 overload(s))', '');
+verify.completionListContains('i1_i', '(var) i1_i: new i1(b: number) => any (+ 1 overload(s))', '');
 verify.completionListContains('i2', 'interface i2', '');
 verify.completionListContains('i2_i', '(var) i2_i: i2', '');
 verify.completionListContains('i3', 'interface i3', '');
@@ -320,25 +320,25 @@ goTo.marker('19');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('19q');
-verify.quickInfoIs("(constructor) i1(b: number): any (+ 1 overload(s))", "");
+verify.quickInfoIs("(var) i1_i: new i1(b: number) => any (+ 1 overload(s))", "");
 
 goTo.marker('20');
 verify.currentSignatureHelpDocCommentIs("new 1");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('20q');
-verify.quickInfoIs("(constructor) i1(a: string): any (+ 1 overload(s))", "new 1");
+verify.quickInfoIs("(var) i1_i: new i1(a: string) => any (+ 1 overload(s))", "new 1");
 
 goTo.marker('21');
 verify.currentSignatureHelpDocCommentIs("this signature 1");
 verify.currentParameterHelpArgumentDocCommentIs("param a");
 goTo.marker('21q');
-verify.quickInfoIs("(function) i1(a: number): number (+ 1 overload(s))", "this signature 1");
+verify.quickInfoIs("(var) i1_i: i1(a: number) => number (+ 1 overload(s))", "this signature 1");
 
 goTo.marker('22');
 verify.currentSignatureHelpDocCommentIs("this is signature 2");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('22q');
-verify.quickInfoIs("(function) i1(b: string): number (+ 1 overload(s))", "this is signature 2");
+verify.quickInfoIs("(var) i1_i: i1(b: string) => number (+ 1 overload(s))", "this is signature 2");
 
 goTo.marker('23');
 verify.memberListContains('foo', '(method) i1.foo(a: number): number (+ 1 overload(s))', 'foo 1');
@@ -398,73 +398,73 @@ goTo.marker('32');
 verify.currentSignatureHelpDocCommentIs("new 2");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('32q');
-verify.quickInfoIs("(constructor) i2(b: number): any (+ 1 overload(s))", "new 2");
+verify.quickInfoIs("(var) i2_i: new i2(b: number) => any (+ 1 overload(s))", "new 2");
 
 goTo.marker('33');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('33q');
-verify.quickInfoIs("(constructor) i2(a: string): any (+ 1 overload(s))", "");
+verify.quickInfoIs("(var) i2_i: new i2(a: string) => any (+ 1 overload(s))", "");
 
 goTo.marker('34');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('34q');
-verify.quickInfoIs("(function) i2(a: number): number (+ 1 overload(s))", "");
+verify.quickInfoIs("(var) i2_i: i2(a: number) => number (+ 1 overload(s))", "");
 
 goTo.marker('35');
 verify.currentSignatureHelpDocCommentIs("this is signature 2");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('35q');
-verify.quickInfoIs("(function) i2(b: string): number (+ 1 overload(s))", "this is signature 2");
+verify.quickInfoIs("(var) i2_i: i2(b: string) => number (+ 1 overload(s))", "this is signature 2");
 
 goTo.marker('36');
 verify.currentSignatureHelpDocCommentIs("new 2");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('36q');
-verify.quickInfoIs("(constructor) i3(b: number): any (+ 1 overload(s))", "new 2");
+verify.quickInfoIs("(var) i3_i: new i3(b: number) => any (+ 1 overload(s))", "new 2");
 
 goTo.marker('37');
 verify.currentSignatureHelpDocCommentIs("new 1");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('37q');
-verify.quickInfoIs("(constructor) i3(a: string): any (+ 1 overload(s))", "new 1");
+verify.quickInfoIs("(var) i3_i: new i3(a: string) => any (+ 1 overload(s))", "new 1");
 
 goTo.marker('38');
 verify.currentSignatureHelpDocCommentIs("this is signature 1");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('38q');
-verify.quickInfoIs("(function) i3(a: number): number (+ 1 overload(s))", "this is signature 1");
+verify.quickInfoIs("(var) i3_i: i3(a: number) => number (+ 1 overload(s))", "this is signature 1");
 
 goTo.marker('39');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('39q');
-verify.quickInfoIs("(function) i3(b: string): number (+ 1 overload(s))", "");
+verify.quickInfoIs("(var) i3_i: i3(b: string) => number (+ 1 overload(s))", "");
 
 goTo.marker('40');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('40q');
-verify.quickInfoIs("(constructor) i4(b: number): any (+ 1 overload(s))", "");
+verify.quickInfoIs("(var) i4_i: new i4(b: number) => any (+ 1 overload(s))", "");
 
 goTo.marker('41');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('41q');
-verify.quickInfoIs("(constructor) i4(a: string): any (+ 1 overload(s))", "");
+verify.quickInfoIs("(var) i4_i: new i4(a: string) => any (+ 1 overload(s))", "");
 
 goTo.marker('42');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('42q');
-verify.quickInfoIs("(function) i4(a: number): number (+ 1 overload(s))", "");
+verify.quickInfoIs("(var) i4_i: i4(a: number) => number (+ 1 overload(s))", "");
 
 goTo.marker('43');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('43q');
-verify.quickInfoIs("(function) i4(b: string): number (+ 1 overload(s))", "");
+verify.quickInfoIs("(var) i4_i: i4(b: string) => number (+ 1 overload(s))", "");
 
 goTo.marker('44');
 verify.memberListContains('prop1', '(method) c.prop1(a: number): number (+ 1 overload(s))', '');

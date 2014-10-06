@@ -63,7 +63,7 @@ verify.quickInfoIs("(function) foo(): void", "foos comment");
 goTo.marker('6');
 verify.currentSignatureHelpDocCommentIs("");
 goTo.marker('6q');
-verify.quickInfoIs("(function) fooVar(): void", "");
+verify.quickInfoIs("(var) fooVar: () => void", "");
 
 goTo.marker('7');
 verify.completionListContains("foo", "(function) foo(): void", "foos comment");
@@ -77,7 +77,7 @@ verify.quickInfoIs("(function) foo(): void", "foos comment");
 goTo.marker('9');
 verify.currentSignatureHelpDocCommentIs("");
 goTo.marker('9q');
-verify.quickInfoIs("(function) fooVar(): void", "");
+verify.quickInfoIs("(var) fooVar: () => void", "");
 goTo.marker('9aq');
 verify.quickInfoIs("(var) fooVar: () => void", "fooVar comment");
 
