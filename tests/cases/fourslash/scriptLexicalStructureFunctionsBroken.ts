@@ -9,4 +9,4 @@ test.markers().forEach((marker) => {
     verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.getScriptLexicalStructureListCount(1); // 1 function - no global since the inner function thinks it has a declaration.
+verify.getScriptLexicalStructureListCount(3); // <global>, 'f' in the top level list, and 'f' as a child of '<global>'

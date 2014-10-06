@@ -22,7 +22,8 @@ module ts.NavigationBar {
                         // to say it only has a single layer of depth
                         do {
                             current = current.parent;
-                        } while (current.kind === SyntaxKind.ModuleDeclaration);
+                        }
+                        while (current.kind === SyntaxKind.ModuleDeclaration);
 
                         // fall through
                     case SyntaxKind.ClassDeclaration:
@@ -37,14 +38,19 @@ module ts.NavigationBar {
 
             return indent;
         }
-
+          
         function getChildNodes(nodes: Node[]): Node[] {
             var childNodes: Node[] = [];    
 
             for (var i = 0, n = nodes.length; i < n; i++) {
                 var node = nodes[i];
 
-                if (node.kind === SyntaxKind.FunctionDeclaration) {
+                if (node.kind === SyntaxKind.ClassDeclaration ||
+                    node.kind === SyntaxKind.EnumDeclaration ||
+                    node.kind === SyntaxKind.InterfaceDeclaration ||
+                    node.kind === SyntaxKind.ModuleDeclaration ||
+                    node.kind === SyntaxKind.FunctionDeclaration) {
+
                     childNodes.push(node);
                 }
                 else if (node.kind === SyntaxKind.VariableStatement) {
@@ -52,7 +58,7 @@ module ts.NavigationBar {
                 }
             }
 
-            return childNodes;
+            return sortNodes(childNodes);
         }
 
         function getTopLevelNodes(node: SourceFile): Node[] {
@@ -63,8 +69,27 @@ module ts.NavigationBar {
 
             return topLevelNodes;
         }
-
+         
+        function sortNodes(nodes: Node[]): Node[] {
+            return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
+                if (n1.name && n2.name) {
+                    return n1.name.text.localeCompare(n2.name.text);
+                }
+                else if (n1.name) {
+                    return 1;
+                }
+                else if (n2.name) {
+                    -1;
+                }
+                else {
+                    return n1.kind - n2.kind;
+                }
+            });
+        }
+        
         function addTopLevelNodes(nodes: Node[], topLevelNodes: Node[]): void {
+            nodes = sortNodes(nodes);
+
             for (var i = 0, n = nodes.length; i < n; i++) {
                 var node = nodes[i];
                 switch (node.kind) {
@@ -97,9 +122,10 @@ module ts.NavigationBar {
             return functionDeclaration.kind === SyntaxKind.FunctionDeclaration &&
                functionDeclaration.body &&
                functionDeclaration.body.kind === SyntaxKind.FunctionBlock &&
-               forEach((<Block>functionDeclaration.body).statements, s => s.kind === SyntaxKind.FunctionDeclaration);
+               forEach((<Block>functionDeclaration.body).statements, 
+                    s => s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text));
         }
-
+        
         function getItemsWorker(nodes: Node[], createItem: (n: Node) => ts.NavigationBarItem): ts.NavigationBarItem[] {
             var items: ts.NavigationBarItem[] = [];
 
@@ -161,31 +187,26 @@ module ts.NavigationBar {
         function createChildItem(node: Node): ts.NavigationBarItem {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
-                    var parameter = <ParameterDeclaration>node;
                     if ((node.flags & NodeFlags.Modifier) === 0) {
                         return undefined;
                     }
 
-                    return createItem(node, getTextOfNode(parameter.name), ts.ScriptElementKind.memberVariableElement);
+                    return createItem(node, getTextOfNode((<ParameterDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.Method:
-                    var method = <MethodDeclaration>node;
-                    return createItem(node, getTextOfNode(method.name), ts.ScriptElementKind.memberFunctionElement);
+                    return createItem(node, getTextOfNode((<MethodDeclaration>node).name), ts.ScriptElementKind.memberFunctionElement);
 
                 case SyntaxKind.GetAccessor:
-                    var getAccessor = <AccessorDeclaration>node;
-                    return createItem(node, getTextOfNode(getAccessor.name), ts.ScriptElementKind.memberGetAccessorElement);
+                    return createItem(node, getTextOfNode((<AccessorDeclaration>node).name), ts.ScriptElementKind.memberGetAccessorElement);
 
                 case SyntaxKind.SetAccessor:
-                    var setAccessor = <AccessorDeclaration>node;
-                    return createItem(node, getTextOfNode(setAccessor.name), ts.ScriptElementKind.memberSetAccessorElement);
+                    return createItem(node, getTextOfNode((<AccessorDeclaration>node).name), ts.ScriptElementKind.memberSetAccessorElement);
 
                 case SyntaxKind.IndexSignature:
                     return createItem(node, "[]", ts.ScriptElementKind.indexSignatureElement);
 
                 case SyntaxKind.EnumMember:
-                    var enumMember = <EnumMember>node;
-                    return createItem(node, getTextOfNode(enumMember.name), ts.ScriptElementKind.memberVariableElement);
+                    return createItem(node, getTextOfNode((<EnumMember>node).name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.CallSignature:
                     return createItem(node, "()", ts.ScriptElementKind.callSignatureElement);
@@ -194,19 +215,13 @@ module ts.NavigationBar {
                     return createItem(node, "new()", ts.ScriptElementKind.constructSignatureElement);
 
                 case SyntaxKind.Property:
-                    var property = <PropertyDeclaration>node;
-                    return createItem(node, getTextOfNode(property.name), ts.ScriptElementKind.memberVariableElement);
+                    return createItem(node, getTextOfNode((<PropertyDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.FunctionDeclaration:
-                    var functionDeclaration = <FunctionDeclaration>node;
-                    if (!isTopLevelFunctionDeclaration(functionDeclaration)) {
-                        return createItem(node, getTextOfNode(functionDeclaration.name), ts.ScriptElementKind.functionElement);
-                    }
-                    break;
+                    return createItem(node, getTextOfNode((<FunctionDeclaration>node).name), ts.ScriptElementKind.functionElement);
 
                 case SyntaxKind.VariableDeclaration:
-                    var variableDeclaration = <VariableDeclaration>node;
-                    return createItem(node, getTextOfNode(variableDeclaration.name), ts.ScriptElementKind.variableElement);
+                    return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.variableElement);
                 
                 case SyntaxKind.Constructor:
                     return createItem(node, "constructor", ts.ScriptElementKind.constructorImplementationElement);
@@ -219,7 +234,15 @@ module ts.NavigationBar {
             }
         }
 
+        function isEmpty(text: string) {
+            return !text || text.trim() === "";
+        }
+
         function getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: TypeScript.TextSpan[], childItems: ts.NavigationBarItem[] = [], indent: number = 0): ts.NavigationBarItem {
+            if (isEmpty(text)) {
+                return undefined;
+            }
+
             return {
                 text: text,
                 kind: kind,
@@ -290,7 +313,7 @@ module ts.NavigationBar {
 
             function createFunctionItem(node: FunctionDeclaration) {
                 if (node.name && node.body && node.body.kind === SyntaxKind.FunctionBlock) {
-                    var childItems = getItemsWorker((<Block>node.body).statements, createChildItem);
+                    var childItems = getItemsWorker(getChildNodes((<Block>node.body).statements), createChildItem);
 
                     return getNavigationBarItem(node.name.text,
                         ts.ScriptElementKind.functionElement,
@@ -335,7 +358,7 @@ module ts.NavigationBar {
                         ? constructor.parameters.concat(node.members)
                         : node.members;
 
-                    var childItems = getItemsWorker(nodes, createChildItem);
+                    var childItems = getItemsWorker(sortNodes(nodes), createChildItem);
                 }
 
                 return getNavigationBarItem(
@@ -348,7 +371,7 @@ module ts.NavigationBar {
             }
 
             function createEnumItem(node: EnumDeclaration): ts.NavigationBarItem {
-                var childItems = getItemsWorker(node.members, createChildItem);
+                var childItems = getItemsWorker(sortNodes(node.members), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,
                     ts.ScriptElementKind.enumElement,
@@ -359,7 +382,7 @@ module ts.NavigationBar {
             }
 
             function createIterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
-                var childItems = getItemsWorker(node.members, createChildItem);
+                var childItems = getItemsWorker(sortNodes(node.members), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,
                     ts.ScriptElementKind.interfaceElement,
