@@ -7,7 +7,7 @@
 ////r./*2*/
 
 goTo.marker('1');
-verify.completionListContains('prototype', 'c5b');
+verify.completionListContains('prototype', '(property) c5b.prototype: c5b');
 edit.insert('y;');
 goTo.marker('2');
-verify.completionListContains('foo', '(): void');
+verify.completionListContains('foo', '(method) c5b.foo(): void');

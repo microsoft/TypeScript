@@ -2,12 +2,12 @@
 
 ////declare class m3e { foo(): void } 
 ////module m3e { export var y = 2; }
-////var r/*1*/ = new m3e();
+////var /*1*/r = new m3e();
 ////r./*2*/
-////var r2/*4*/ = m3e./*3*/
+////var /*4*/r2 = m3e./*3*/
 
 goTo.marker('1');
-verify.quickInfoIs('m3e');
+verify.quickInfoIs('(var) r: m3e');
 
 goTo.marker('2');
 verify.completionListContains('foo');
@@ -19,4 +19,4 @@ verify.completionListContains('y');
 edit.insert('y;');
 
 goTo.marker('4');
-verify.quickInfoIs('number');
+verify.quickInfoIs('(var) r2: number');
