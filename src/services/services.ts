@@ -2606,7 +2606,7 @@ module ts {
             var result: DefinitionInfo[] = [];
 
             var declarations = symbol.getDeclarations();
-            var symbolName = typeInfoResolver.symbolToString(symbol, node);
+            var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
             var symbolKind = getSymbolKind(symbol);
             var containerSymbol = symbol.parent;
             var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
