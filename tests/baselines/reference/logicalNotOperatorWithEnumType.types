@@ -1,8 +1,11 @@
 === tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithEnumType.ts ===
 // ! operator on enum type
 
-enum ENUM { 1, 2, 3 };
+enum ENUM { A, B, C };
 >ENUM : ENUM
+>A : ENUM
+>B : ENUM
+>C : ENUM
 
 enum ENUM1 { };
 >ENUM1 : ENUM1
@@ -17,17 +20,17 @@ var ResultIsBoolean1 = !ENUM;
 var ResultIsBoolean2 = !ENUM[1];
 >ResultIsBoolean2 : boolean
 >!ENUM[1] : boolean
->ENUM[1] : ENUM
+>ENUM[1] : string
 >ENUM : typeof ENUM
 
 var ResultIsBoolean3 = !(ENUM[1] + ENUM[2]);
 >ResultIsBoolean3 : boolean
 >!(ENUM[1] + ENUM[2]) : boolean
->(ENUM[1] + ENUM[2]) : number
->ENUM[1] + ENUM[2] : number
->ENUM[1] : ENUM
+>(ENUM[1] + ENUM[2]) : string
+>ENUM[1] + ENUM[2] : string
+>ENUM[1] : string
 >ENUM : typeof ENUM
->ENUM[2] : ENUM
+>ENUM[2] : string
 >ENUM : typeof ENUM
 
 // multiple ! operators
@@ -42,11 +45,11 @@ var ResultIsBoolean5 = !!!(ENUM[1] + ENUM[2]);
 >!!!(ENUM[1] + ENUM[2]) : boolean
 >!!(ENUM[1] + ENUM[2]) : boolean
 >!(ENUM[1] + ENUM[2]) : boolean
->(ENUM[1] + ENUM[2]) : number
->ENUM[1] + ENUM[2] : number
->ENUM[1] : ENUM
+>(ENUM[1] + ENUM[2]) : string
+>ENUM[1] + ENUM[2] : string
+>ENUM[1] : string
 >ENUM : typeof ENUM
->ENUM[2] : ENUM
+>ENUM[2] : string
 >ENUM : typeof ENUM
 
 // miss assignment operators
@@ -60,7 +63,7 @@ var ResultIsBoolean5 = !!!(ENUM[1] + ENUM[2]);
 
 !ENUM[1];
 >!ENUM[1] : boolean
->ENUM[1] : ENUM
+>ENUM[1] : string
 >ENUM : typeof ENUM
 
 !ENUM, ENUM1;

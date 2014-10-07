@@ -1,0 +1,27 @@
+tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts(6,25): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts(7,23): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts(10,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts(12,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+
+
+==== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts (4 errors) ====
+    // ++ operator on enum type
+    
+    enum ENUM1 { A, B, "" };
+    
+    // expression
+    var ResultIsNumber1 = ++ENUM1[1];
+                            ~~~~~~~~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber2 = ENUM1[1]++;
+                          ~~~~~~~~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+    
+    // miss assignment operator
+    ++ENUM1[1];
+      ~~~~~~~~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+    
+    ENUM1[1]++;
+    ~~~~~~~~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.

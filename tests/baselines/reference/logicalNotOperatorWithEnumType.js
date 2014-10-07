@@ -1,7 +1,7 @@
 //// [logicalNotOperatorWithEnumType.ts]
 // ! operator on enum type
 
-enum ENUM { 1, 2, 3 };
+enum ENUM { A, B, C };
 enum ENUM1 { };
 
 // enum type var
@@ -25,9 +25,9 @@ var ResultIsBoolean5 = !!!(ENUM[1] + ENUM[2]);
 // ! operator on enum type
 var ENUM;
 (function (ENUM) {
-    ENUM[ENUM["1"] = 0] = "1";
-    ENUM[ENUM["2"] = 1] = "2";
-    ENUM[ENUM["3"] = 2] = "3";
+    ENUM[ENUM["A"] = 0] = "A";
+    ENUM[ENUM["B"] = 1] = "B";
+    ENUM[ENUM["C"] = 2] = "C";
 })(ENUM || (ENUM = {}));
 ;
 var ENUM1;

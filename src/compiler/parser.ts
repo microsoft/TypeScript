@@ -3674,7 +3674,8 @@ module ts {
                 var errorCountBeforeEnumMember = file.syntacticErrors.length;
                 node.name = parsePropertyName();
                 
-                if(!isNaN(Number(node.name.text))) {
+                // number("") returns 0 so we have to special case it
+                if(node.name.text !== "" && !isNaN(Number(node.name.text))) {
                     grammarErrorOnNode(node.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                 }
 

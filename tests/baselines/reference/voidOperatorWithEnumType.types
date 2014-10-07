@@ -4,8 +4,10 @@
 enum ENUM { };
 >ENUM : ENUM
 
-enum ENUM1 { 1, 2, "" };
+enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
+>A : ENUM1
+>B : ENUM1
 
 // enum type var
 var ResultIsAny1 = void ENUM;
@@ -32,7 +34,7 @@ var ResultIsAny4 = void (ENUM[0] + ENUM1[1]);
 >ENUM[0] + ENUM1[1] : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
->ENUM1[1] : ENUM1
+>ENUM1[1] : string
 >ENUM1 : typeof ENUM1
 
 // multiple void  operators
@@ -51,7 +53,7 @@ var ResultIsAny6 = void void void (ENUM[0] + ENUM1[1]);
 >ENUM[0] + ENUM1[1] : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
->ENUM1[1] : ENUM1
+>ENUM1[1] : string
 >ENUM1 : typeof ENUM1
 
 // miss assignment operators
@@ -65,7 +67,7 @@ void ENUM1;
 
 void ENUM1[1];
 >void ENUM1[1] : undefined
->ENUM1[1] : ENUM1
+>ENUM1[1] : string
 >ENUM1 : typeof ENUM1
 
 void ENUM, ENUM1;
