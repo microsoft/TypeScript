@@ -1415,7 +1415,7 @@ module ts {
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typechecker.writeType(type, writer, enclosingDeclaration, flags);
+            typechecker.writeType(type, writer, enclosingDeclaration, flags | TypeFormatFlags.WriteUndefinedAndNullAsAny);
         });
     }
 
@@ -1427,7 +1427,7 @@ module ts {
 
     function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[]{
         return mapToDisplayParts(writer => {
-            typechecker.writeSignature(signature, writer, enclosingDeclaration, flags);
+            typechecker.writeSignature(signature, writer, enclosingDeclaration, flags | TypeFormatFlags.WriteUndefinedAndNullAsAny);
         });
     }
 
@@ -2626,6 +2626,9 @@ module ts {
                 }
                 return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
             }
+            if (flags & SymbolFlags.Undefined) {
+                return ScriptElementKind.variableElement;
+            }
             if (flags & SymbolFlags.Function) return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
             if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
             if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
@@ -2704,6 +2707,10 @@ module ts {
                 // If it is accessor they are allowed only if location is at name of the accessor
                 if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
                     symbolKind = ScriptElementKind.memberVariableElement;
+                }
+                else if (symbol.name === "undefined") {
+                    // undefined is symbol and not property
+                    symbolKind = ScriptElementKind.variableElement;
                 }
 
                 var type = typeResolver.getTypeOfSymbol(symbol);
@@ -2874,7 +2881,7 @@ module ts {
                             // If the type is type parameter, format it specially
                             if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
                                 var typeParameterParts = mapToDisplayParts(writer => {
-                                    typeResolver.writeTypeParameter(<TypeParameter>type, writer, enclosingDeclaration, TypeFormatFlags.NoTruncation);
+                                    typeResolver.writeTypeParameter(<TypeParameter>type, writer, enclosingDeclaration, TypeFormatFlags.NoTruncation | TypeFormatFlags.WriteUndefinedAndNullAsAny);
                                 });
                                 displayParts.push.apply(displayParts, typeParameterParts);
                             }
@@ -2941,7 +2948,7 @@ module ts {
 
             function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
                 var typeParameterParts = mapToDisplayParts(writer => {
-                    typeResolver.writeTypeParametersOfSymbol(symbol, writer, enclosingDeclaration, TypeFormatFlags.NoTruncation);
+                    typeResolver.writeTypeParametersOfSymbol(symbol, writer, enclosingDeclaration, TypeFormatFlags.NoTruncation | TypeFormatFlags.WriteUndefinedAndNullAsAny);
                 });
                 displayParts.push.apply(displayParts, typeParameterParts);
             }

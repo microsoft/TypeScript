@@ -679,13 +679,14 @@ module ts {
     }
 
     export enum TypeFormatFlags {
-        None                    = 0x00000000, 
-        WriteArrayAsGenericType = 0x00000001,  // Write Array<T> instead T[]
-        UseTypeOfFunction       = 0x00000002,  // Write typeof instead of function type literal
-        NoTruncation            = 0x00000004,  // Don't truncate typeToString result
-        WriteArrowStyleSignature= 0x00000008,  // Write arrow style signature
-        WriteOwnNameForAnyLike  = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
-        WriteTypeArgumentsOfSignature = 0x00000020, // Write the type arguments instead of type parameters of the signature
+        None                            = 0x00000000, 
+        WriteArrayAsGenericType         = 0x00000001,  // Write Array<T> instead T[]
+        UseTypeOfFunction               = 0x00000002,  // Write typeof instead of function type literal
+        NoTruncation                    = 0x00000004,  // Don't truncate typeToString result
+        WriteArrowStyleSignature        = 0x00000008,  // Write arrow style signature
+        WriteOwnNameForAnyLike          = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
+        WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
+        WriteUndefinedAndNullAsAny      = 0x00000040,  // Write undefined and null as any
     }
 
     export enum SymbolFormatFlags {
@@ -762,6 +763,8 @@ module ts {
         Merged             = 0x01000000,  // Merged symbol (created during program binding)
         Transient          = 0x02000000,  // Transient symbol (created during type check)
         Prototype          = 0x04000000,  // Symbol for the prototype property (without source code representation)
+
+        Undefined          = 0x08000000,  // Symbol for the undefined
 
         Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,

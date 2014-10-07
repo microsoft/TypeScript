@@ -107,7 +107,7 @@ module ts {
             isImplementationOfOverload: isImplementationOfOverload
         };
 
-        var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
+        var undefinedSymbol = createSymbol(SymbolFlags.Undefined | SymbolFlags.Property | SymbolFlags.Transient, "undefined");
         var argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
         var unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
         var resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
@@ -1067,7 +1067,12 @@ module ts {
             return writeType(type, flags | TypeFormatFlags.WriteArrowStyleSignature);
 
             function writeType(type: Type, flags: TypeFormatFlags) {
-                if (type.flags & TypeFlags.Intrinsic) {
+                // Write undefined/null type as any
+                if ((flags & TypeFormatFlags.WriteUndefinedAndNullAsAny) &&
+                    ((type.flags & TypeFlags.Undefined) || (type.flags & TypeFlags.Null))) {
+                    writeKeyword(writer, SyntaxKind.AnyKeyword);
+                }
+                else if (type.flags & TypeFlags.Intrinsic) {
                     // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
                     writer.writeKind(!(flags & TypeFormatFlags.WriteOwnNameForAnyLike) && 
                         (type.flags & TypeFlags.Any) ? "any" : (<IntrinsicType>type).intrinsicName, SymbolDisplayPartKind.keyword);
