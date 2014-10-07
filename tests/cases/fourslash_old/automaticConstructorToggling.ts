@@ -5,10 +5,10 @@
 ////class C<T> { /*C*/constructor(val: T) { } }
 ////class D<T> { constructor(/*D*/val: T) { } }
 ////
-////new A/*Asig*/<string>();
-////new B/*Bsig*/("");
-////new C/*Csig*/("");
-////new D/*Dsig*/<string>();
+////new /*Asig*/A<string>();
+////new /*Bsig*/B("");
+////new /*Csig*/C("");
+////new /*Dsig*/D<string>();
 
 var A = 'A';
 var B = 'B';
@@ -17,41 +17,41 @@ var D = 'D'
 goTo.marker(B);
 edit.insert('constructor(val: T) { }');
 goTo.marker('Asig');
-verify.quickInfoIs("(): A<string>", null, A, 'constructor');
+verify.quickInfoIs("(constructor) A<string>(): A<string>");
 
 goTo.marker('Bsig');
-verify.quickInfoIs("(val: string): B<string>", null, B, 'constructor');
+verify.quickInfoIs("(constructor) B<string>(val: string): B<string>");
 
 goTo.marker('Csig'); 
-verify.quickInfoIs("(val: string): C<string>", null, C, 'constructor');
+verify.quickInfoIs("(constructor) C<string>(val: string): C<string>");
 
 goTo.marker('Dsig');
-verify.quickInfoIs("(val: string): D<string>", null, D, 'constructor');
+verify.quickInfoIs("(constructor) D<string>(val: string): D<string>");
 
 goTo.marker(C);
 edit.deleteAtCaret('constructor(val: T) { }'.length);
 goTo.marker('Asig');
-verify.quickInfoIs("(): A<string>", null, A, 'constructor');
+verify.quickInfoIs("(constructor) A<string>(): A<string>");
 
 goTo.marker('Bsig');
-verify.quickInfoIs("(val: string): B<string>", null, B, 'constructor');
+verify.quickInfoIs("(constructor) B<string>(val: string): B<string>");
 
 goTo.marker('Csig');
-verify.quickInfoIs("(): C<{}>", null, C, 'constructor');
+verify.quickInfoIs("(constructor) C<{}>(): C<{}>");
 
 goTo.marker('Dsig');
-verify.quickInfoIs("(val: string): D<string>", null, D, 'constructor');
+verify.quickInfoIs("(constructor) D<string>(val: string): D<string>");
 
 goTo.marker(D);
 edit.deleteAtCaret("val: T".length);
 goTo.marker('Asig');
-verify.quickInfoIs("(): A<string>", null, A, 'constructor');
+verify.quickInfoIs("(constructor) A<string>(): A<string>");
 
 goTo.marker('Bsig');
-verify.quickInfoIs("(val: string): B<string>", null, B, 'constructor');
+verify.quickInfoIs("(constructor) B<string>(val: string): B<string>");
 
 goTo.marker('Csig');
-verify.quickInfoIs("(): C<{}>", null, C, 'constructor');
+verify.quickInfoIs("(constructor) C<{}>(): C<{}>");
 
 goTo.marker('Dsig');
-verify.quickInfoIs("(): D<string>", null, D, 'constructor');
+verify.quickInfoIs("(constructor) D<string>(): D<string>");

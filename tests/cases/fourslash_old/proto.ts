@@ -8,13 +8,13 @@
 ////var /*4*/fun: (__proto__: any) => boolean;
 
 goTo.marker('1');
-verify.quickInfoIs("__proto__", "", "M.__proto__", "interface");
+verify.quickInfoIs("interface M.__proto__", "");
 goTo.marker('2');
-verify.quickInfoIs("M.__proto__", "", "__proto__", "var");
+verify.quickInfoIs("(var) __proto__: M.__proto__", "");
 goTo.marker('3');
-verify.completionListContains("__proto__", "M.__proto__", "", "__proto__", "var");
+verify.completionListContains("__proto__", "(var) __proto__: M.__proto__", "");
 edit.insert("__proto__");
 goTo.definition();
 verify.caretAtMarker('2');
 goTo.marker('4');
-verify.quickInfoIs("(__proto__: any) => boolean", "", "fun", "var");
+verify.quickInfoIs("(var) fun: (__proto__: any) => boolean", "");
