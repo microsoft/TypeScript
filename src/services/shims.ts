@@ -502,7 +502,8 @@ module ts {
                 start: diagnostic.start,
                 length: diagnostic.length,
                 /// TODO: no need for the tolowerCase call
-                category: DiagnosticCategory[diagnostic.category].toLowerCase()
+                category: DiagnosticCategory[diagnostic.category].toLowerCase(),
+                code: diagnostic.code
             };
         }
 
