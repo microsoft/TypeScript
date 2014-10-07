@@ -241,6 +241,12 @@ module ts.SignatureHelp {
                     return undefined;
                 }
 
+                // If the node is not a subspan of its parent, this is a big problem.
+                // There have been crashes that might be caused by this violation.
+                if (n.pos < n.parent.pos || n.end > n.parent.end) {
+                    Debug.fail("Node of kind " + SyntaxKind[n.kind] + " is not a subspan of its parent of kind " + SyntaxKind[n.parent.kind]);
+                }
+
                 var argumentInfo = getImmediatelyContainingArgumentInfo(n);
                 if (argumentInfo) {
                     return argumentInfo;
