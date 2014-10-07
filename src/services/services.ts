@@ -2733,7 +2733,12 @@ module ts {
                         var useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.func.kind === SyntaxKind.SuperKeyword;
                         var allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
-                        if (contains(allSignatures, signature.target || signature)) {
+                        if (!contains(allSignatures, signature.target || signature)) {
+                            // Get the first signature if there 
+                            signature = allSignatures.length ? allSignatures[0] : undefined;
+                        }
+
+                        if (signature) {
                             if (useConstructSignatures && (symbolFlags & SymbolFlags.Class)) {
                                 // Constructor
                                 symbolKind = ScriptElementKind.constructorImplementationElement;

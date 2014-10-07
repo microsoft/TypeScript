@@ -310,11 +310,11 @@ goTo.marker('18');
 verify.completionListContains('i1', 'interface i1', '');
 verify.completionListContains('i1_i', '(var) i1_i: new i1(b: number) => any (+ 1 overload(s))', '');
 verify.completionListContains('i2', 'interface i2', '');
-verify.completionListContains('i2_i', '(var) i2_i: i2', '');
+verify.completionListContains('i2_i', '(var) i2_i: new i2(a: string) => any (+ 1 overload(s))', '');
 verify.completionListContains('i3', 'interface i3', '');
-verify.completionListContains('i3_i', '(var) i3_i: i3', '');
+verify.completionListContains('i3_i', '(var) i3_i: new i3(a: string) => any (+ 1 overload(s))', 'new 1');
 verify.completionListContains('i4', 'interface i4', '');
-verify.completionListContains('i4_i', '(var) i4_i: i4', '');
+verify.completionListContains('i4_i', '(var) i4_i: new i4(a: string) => any (+ 1 overload(s))', '');
 
 goTo.marker('19');
 verify.currentSignatureHelpDocCommentIs("");
