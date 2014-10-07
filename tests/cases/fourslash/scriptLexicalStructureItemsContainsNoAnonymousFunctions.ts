@@ -41,4 +41,4 @@ goTo.marker("file3");
 verify.getScriptLexicalStructureListContains("<global>", "module");
 verify.getScriptLexicalStructureListContains("foo", "function");
 verify.getScriptLexicalStructureListContains("bar", "function");
-verify.getScriptLexicalStructureListCount(3);
+verify.getScriptLexicalStructureListCount(5);

@@ -2606,7 +2606,7 @@ module ts {
             var result: DefinitionInfo[] = [];
 
             var declarations = symbol.getDeclarations();
-            var symbolName = typeInfoResolver.symbolToString(symbol, node);
+            var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
             var symbolKind = getSymbolKind(symbol);
             var containerSymbol = symbol.parent;
             var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
@@ -3544,7 +3544,7 @@ module ts {
             }
 
             function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[]): void {
-                if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                if (symbol && symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
                         if (declaration.kind === SyntaxKind.ClassDeclaration) {
                             getPropertySymbolFromTypeReference((<ClassDeclaration>declaration).baseType);
@@ -3559,14 +3559,15 @@ module ts {
 
                 function getPropertySymbolFromTypeReference(typeReference: TypeReferenceNode) {
                     if (typeReference) {
-                        // TODO: move to getTypeOfNode instead
-                        var typeReferenceSymbol = typeInfoResolver.getSymbolInfo(typeReference.typeName);
-                        if (typeReferenceSymbol) {
-                            var propertySymbol = typeReferenceSymbol.members[propertyName];
-                            if (propertySymbol) result.push(typeReferenceSymbol.members[propertyName]);
+                        var type = typeInfoResolver.getTypeOfNode(typeReference);
+                        if (type) {
+                            var propertySymbol = typeInfoResolver.getPropertyOfType(type, propertyName);
+                            if (propertySymbol) {
+                                result.push(propertySymbol);
+                            }
 
                             // Visit the typeReference as well to see if it directly or indirectly use that property
-                            getPropertySymbolsFromBaseTypes(typeReferenceSymbol, propertyName, result);
+                            getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result);
                         }
                     }
                 }

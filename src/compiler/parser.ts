@@ -3639,7 +3639,7 @@ module ts {
             }
             return finishNode(node);
         }
-
+        
         function parseAndCheckEnumDeclaration(pos: number, flags: NodeFlags): EnumDeclaration {
             function isIntegerLiteral(expression: Expression): boolean {
                 function isInteger(literalExpression: LiteralExpression): boolean {

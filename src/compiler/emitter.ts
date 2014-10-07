@@ -527,7 +527,8 @@ module ts {
                     sourceMapData.sourceMapSources.push(getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
                         node.filename,
                         compilerHost.getCurrentDirectory(),
-                    /*isAbsolutePathAnUrl*/ true));
+                        compilerHost.getCanonicalFileName,
+                        /*isAbsolutePathAnUrl*/ true));
                     sourceMapSourceIndex = sourceMapData.sourceMapSources.length - 1;
 
                     // The one that can be used from program to get the actual source file
@@ -669,7 +670,8 @@ module ts {
                             getDirectoryPath(normalizePath(jsFilePath)), // get the relative sourceMapDir path based on jsFilePath
                             combinePaths(sourceMapDir, sourceMapData.jsSourceMappingURL), // this is where user expects to see sourceMap
                             compilerHost.getCurrentDirectory(),
-                        /*isAbsolutePathAnUrl*/ true);
+                            compilerHost.getCanonicalFileName,
+                            /*isAbsolutePathAnUrl*/ true);
                     }
                     else {
                         sourceMapData.jsSourceMappingURL = combinePaths(sourceMapDir, sourceMapData.jsSourceMappingURL);
@@ -3147,7 +3149,8 @@ module ts {
                     getDirectoryPath(normalizeSlashes(jsFilePath)),
                     declFileName,
                     compilerHost.getCurrentDirectory(),
-                /*isAbsolutePathAnUrl*/ false);
+                    compilerHost.getCanonicalFileName,
+                    /*isAbsolutePathAnUrl*/ false);
 
                 referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
             }

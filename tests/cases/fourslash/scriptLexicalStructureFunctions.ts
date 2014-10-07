@@ -20,4 +20,4 @@ test.markers().forEach((marker) => {
     verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.getScriptLexicalStructureListCount(5); // 4 functions + global
+verify.getScriptLexicalStructureListCount(8); // 4 functions + global.  Note: there are 8 because of the functions show up at the top level and as child items.

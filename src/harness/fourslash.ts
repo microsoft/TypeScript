@@ -413,8 +413,12 @@ module FourSlash {
         }
 
         private raiseError(message: string) {
-            message = "Marker: " + currentTestState.lastKnownMarker + "\n" + message;
+            message = this.messageAtLastKnownMarker(message);
             throw new Error(message);
+        }
+
+        private messageAtLastKnownMarker(message: string) {
+            return "Marker: " + currentTestState.lastKnownMarker + "\n" + message;
         }
 
         private getDiagnostics(fileName: string): ts.Diagnostic[] {
@@ -778,29 +782,29 @@ module FourSlash {
 
             if (negative) {
                 if (expectedTypeName !== undefined) {
-                    assert.notEqual(actualQuickInfoMemberName, expectedTypeName, this.assertionMessage("quick info member name", actualQuickInfoMemberName, expectedTypeName));
+                    assert.notEqual(actualQuickInfoMemberName, expectedTypeName, this.messageAtLastKnownMarker("quick info member name"));
                 }
                 if (docComment != undefined) {
-                    assert.notEqual(actualQuickInfoDocComment, docComment, this.assertionMessage("quick info doc comment", actualQuickInfoDocComment, docComment));
+                    assert.notEqual(actualQuickInfoDocComment, docComment, this.messageAtLastKnownMarker("quick info doc comment"));
                 }
                 if (symbolName !== undefined) {
-                    assert.notEqual(actualQuickInfoSymbolName, symbolName, this.assertionMessage("quick info symbol name", actualQuickInfoSymbolName, symbolName));
+                    assert.notEqual(actualQuickInfoSymbolName, symbolName, this.messageAtLastKnownMarker("quick info symbol name"));
                 }
                 if (kind !== undefined) {
-                    assert.notEqual(actualQuickInfoKind, kind, this.assertionMessage("quick info kind", actualQuickInfoKind, kind));
+                    assert.notEqual(actualQuickInfoKind, kind, this.messageAtLastKnownMarker("quick info kind"));
                 }
             } else {
                 if (expectedTypeName !== undefined) {
-                    assert.equal(actualQuickInfoMemberName, expectedTypeName, this.assertionMessage("quick info member", actualQuickInfoMemberName, expectedTypeName));
+                    assert.equal(actualQuickInfoMemberName, expectedTypeName, this.messageAtLastKnownMarker("quick info member"));
                 }
                 if (docComment != undefined) {
-                    assert.equal(actualQuickInfoDocComment, docComment, this.assertionMessage("quick info doc", actualQuickInfoDocComment, docComment));
+                    assert.equal(actualQuickInfoDocComment, docComment, this.messageAtLastKnownMarker("quick info doc"));
                 }
                 if (symbolName !== undefined) {
-                    assert.equal(actualQuickInfoSymbolName, symbolName, this.assertionMessage("quick info symbol name", actualQuickInfoSymbolName, symbolName));
+                    assert.equal(actualQuickInfoSymbolName, symbolName, this.messageAtLastKnownMarker("quick info symbol name"));
                 }
                 if (kind !== undefined) {
-                    assert.equal(actualQuickInfoKind, kind, this.assertionMessage("quick info kind", actualQuickInfoKind, kind));
+                    assert.equal(actualQuickInfoKind, kind, this.messageAtLastKnownMarker("quick info kind"));
                 }
             }
         }
@@ -1480,6 +1484,21 @@ module FourSlash {
             }
         }
 
+        public verifyDefinitionsName(negative: boolean, expectedName: string, expectedContainerName: string) {
+            this.taoInvalidReason = 'verifyDefinititionsInfo NYI';
+
+            var definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var actualDefinitionName = definitions && definitions.length ? definitions[0].name : "";
+            var actualDefinitionContainerName = definitions && definitions.length ? definitions[0].containerName : "";
+            if (negative) {
+                assert.notEqual(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Name"));
+                assert.notEqual(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Container Name"));
+            } else {
+                assert.equal(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Name"));
+                assert.equal(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Container Name"));
+            }
+        }
+
         public getMarkers(): Marker[] {
             //  Return a copy of the list
             return this.testData.markers.slice(0);
@@ -2128,9 +2147,6 @@ module FourSlash {
         xmlData.push(xml);
     }
 
-    // Cache these between executions so we don't have to re-parse them for every test
-    var fourslashSourceFile: ts.SourceFile = undefined;
-
     export function runFourSlashTestContent(content: string, fileName: string): TestXmlData {
         // Parse out the files and their metadata
         var testData = parseTestData(content, fileName);
@@ -2138,21 +2154,16 @@ module FourSlash {
         currentTestState = new TestState(testData);
 
         var result = '';
-        var fourslashFilename = 'fourslash.ts';
-        var tsFn = 'tests/cases/fourslash/' + fourslashFilename;
-        fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), ts.ScriptTarget.ES5, /*version*/ "0", /*isOpen*/ false);
-
-        var files: { [filename: string]: ts.SourceFile; } = {};
-        files[Harness.Compiler.getCanonicalFileName(fourslashFilename)] = fourslashSourceFile;
-        files[Harness.Compiler.getCanonicalFileName(fileName)] = ts.createSourceFile(fileName, content, ts.ScriptTarget.ES5, /*version*/ "0", /*isOpen*/ false);
-        files[Harness.Compiler.getCanonicalFileName(Harness.Compiler.defaultLibFileName)] = Harness.Compiler.defaultLibSourceFile;
-
-        var host = Harness.Compiler.createCompilerHost(files, (fn, contents) => result = contents);
-        var program = ts.createProgram([fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
+        var host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFilename, content: undefined },
+            { unitName: fileName, content: content }],
+            (fn, contents) => result = contents,
+            ts.ScriptTarget.ES5,
+            sys.useCaseSensitiveFileNames);
+        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
         checker.checkProgram();
 
-        var errs = checker.getDiagnostics(files[fileName]);
+        var errs = checker.getDiagnostics(program.getSourceFile(fileName));
         if (errs.length > 0) {
             throw new Error('Error compiling ' + fileName + ': ' + errs.map(e => e.messageText).join('\r\n'));
         }
