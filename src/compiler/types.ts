@@ -827,14 +827,15 @@ module ts {
     }
 
     export interface NodeLinks {
-        resolvedType?: Type;            // Cached type of type node
-        resolvedSignature?: Signature;  // Cached signature of signature node or call expression
-        resolvedSymbol?: Symbol;        // Cached name resolution result
-        flags?: NodeCheckFlags;         // Set of flags specific to Node
-        enumMemberValue?: number;       // Constant value of enum member
+        resolvedType?: Type;              // Cached type of type node
+        resolvedSignature?: Signature;    // Cached signature of signature node or call expression
+        resolvedSymbol?: Symbol;          // Cached name resolution result
+        flags?: NodeCheckFlags;           // Set of flags specific to Node
+        enumMemberValue?: number;         // Constant value of enum member
         isIllegalTypeReferenceInConstraint?: boolean; // Is type reference in constraint refers to the type parameter from the same list
-        isVisible?: boolean;            // Is this node visible
-        localModuleName?: string;       // Local name for module instance
+        isVisible?: boolean;              // Is this node visible
+        localModuleName?: string;         // Local name for module instance
+        assignmentChecks?: Map<boolean>;  // Cache of assignment checks
     }
 
     export enum TypeFlags {
@@ -856,10 +857,10 @@ module ts {
         Anonymous          = 0x00008000,  // Anonymous
         FromSignature      = 0x00010000,  // Created for signature assignment check
 
-        Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
+        Intrinsic  = Any | String | Number | Boolean | Void | Undefined | Null,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
-        ObjectType = Class | Interface | Reference | Tuple | Union | Anonymous
+        ObjectType = Class | Interface | Reference | Tuple | Union | Anonymous,
     }
 
     // Properties common to all types

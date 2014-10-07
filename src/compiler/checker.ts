@@ -3844,30 +3844,273 @@ module ts {
 
         // EXPRESSION TYPE CHECKING
 
-        function checkIdentifier(node: Identifier): Type {
-            function isInTypeQuery(node: Node): boolean {
-                // TypeScript 1.0 spec (April 2014): 3.6.3
-                // A type query consists of the keyword typeof followed by an expression.
-                // The expression is restricted to a single identifier or a sequence of identifiers separated by periods
-                while (node) {
-                    switch (node.kind) {
-                        case SyntaxKind.TypeQuery:
-                            return true;
-                        case SyntaxKind.Identifier:
-                        case SyntaxKind.QualifiedName:
-                            node = node.parent;
-                            continue;
-                        default:
-                            return false;
+        function getResolvedSymbol(node: Identifier): Symbol {
+            var links = getNodeLinks(node);
+            if (!links.resolvedSymbol) {
+                links.resolvedSymbol = resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, identifierToString(node)) || unknownSymbol;
+            }
+            return links.resolvedSymbol;
+        }
+
+        function isInTypeQuery(node: Node): boolean {
+            // TypeScript 1.0 spec (April 2014): 3.6.3
+            // A type query consists of the keyword typeof followed by an expression.
+            // The expression is restricted to a single identifier or a sequence of identifiers separated by periods
+            while (node) {
+                switch (node.kind) {
+                    case SyntaxKind.TypeQuery:
+                        return true;
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.QualifiedName:
+                        node = node.parent;
+                        continue;
+                    default:
+                        return false;
+                }
+            }
+            Debug.fail("should not get here");
+        }
+
+        // Remove one or more primitive types from a union type
+        function subtractPrimitiveTypes(type: Type, subtractMask: TypeFlags): Type {
+            if (type.flags & TypeFlags.Union) {
+                var types = (<UnionType>type).types;
+                if (forEach(types, t => t.flags & subtractMask)) {
+                    var newTypes: Type[] = [];
+                    forEach(types, t => {
+                        if (!(t.flags & subtractMask)) {
+                            newTypes.push(t);
+                        }
+                    });
+                    return getUnionType(newTypes);
+                }
+            }
+            return type;
+        }
+
+        // Check if a given variable is assigned within a given syntax node
+        function IsVariableAssignedWithin(symbol: Symbol, node: Node): boolean {
+            var links = getNodeLinks(node);
+            if (links.assignmentChecks) {
+                var cachedResult = links.assignmentChecks[symbol.id];
+                if (cachedResult !== undefined) {
+                    return cachedResult;
+                }
+            }
+            else {
+                links.assignmentChecks = {};
+            }
+            return links.assignmentChecks[symbol.id] = isAssignedIn(node);
+
+            function isAssignedInBinaryExpression(node: BinaryExpression) {
+                if (node.operator >= SyntaxKind.FirstAssignment && node.operator <= SyntaxKind.LastAssignment) {
+                    var n = node.left;
+                    while (n.kind === SyntaxKind.ParenExpression) {
+                        n = (<ParenExpression>n).expression;
+                    }
+                    if (n.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>n) === symbol) {
+                        return true;
                     }
                 }
-                Debug.fail("should not get here");
+                return forEachChild(node, isAssignedIn);
             }
 
-            var symbol = resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, identifierToString(node));
-            if (!symbol) {
-                symbol = unknownSymbol;
+            function isAssignedInVariableDeclaration(node: VariableDeclaration) {
+                if (getSymbolOfNode(node) === symbol && node.initializer) {
+                    return true;
+                }
+                return forEachChild(node, isAssignedIn);
             }
+
+            function isAssignedIn(node: Node): boolean {
+                switch (node.kind) {
+                    case SyntaxKind.BinaryExpression:
+                        return isAssignedInBinaryExpression(<BinaryExpression>node);
+                    case SyntaxKind.VariableDeclaration:
+                        return isAssignedInVariableDeclaration(<VariableDeclaration>node);
+                    case SyntaxKind.ArrayLiteral:
+                    case SyntaxKind.ObjectLiteral:
+                    case SyntaxKind.PropertyAccess:
+                    case SyntaxKind.IndexedAccess:
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                    case SyntaxKind.TypeAssertion:
+                    case SyntaxKind.ParenExpression:
+                    case SyntaxKind.PrefixOperator:
+                    case SyntaxKind.PostfixOperator:
+                    case SyntaxKind.ConditionalExpression:
+                    case SyntaxKind.Block:
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.ExpressionStatement:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.ForStatement:
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ReturnStatement:
+                    case SyntaxKind.WithStatement:
+                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.CaseClause:
+                    case SyntaxKind.DefaultClause:
+                    case SyntaxKind.LabeledStatement:
+                    case SyntaxKind.ThrowStatement:
+                    case SyntaxKind.TryStatement:
+                    case SyntaxKind.TryBlock:
+                    case SyntaxKind.CatchBlock:
+                    case SyntaxKind.FinallyBlock:
+                        return forEachChild(node, isAssignedIn);
+                }
+                return false;
+            }
+        }
+
+        // Get the narrowed type of a given symbol at a given location
+        function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
+            var type = getTypeOfSymbol(symbol);
+            // Only narrow when symbol is variable of a non-primitive type
+            if (symbol.flags & SymbolFlags.Variable && isTypeAnyOrObjectOrTypeParameter(type)) {
+                while (true) {
+                    var child = node;
+                    node = node.parent;
+                    // Stop at containing function or module block
+                    if (!node || node.kind === SyntaxKind.FunctionBlock || node.kind === SyntaxKind.ModuleBlock) {
+                        break;
+                    }
+                    var narrowedType = type;
+                    switch (node.kind) {
+                        case SyntaxKind.IfStatement:
+                            // In a branch of an if statement, narrow based on controlling expression
+                            if (child !== (<IfStatement>node).expression) {
+                                narrowedType = narrowType(type, (<IfStatement>node).expression, child === (<IfStatement>node).thenStatement);
+                            }
+                            break;
+                        case SyntaxKind.ConditionalExpression:
+                            // In a branch of a conditional expression, narrow based on controlling condition
+                            if (child !== (<ConditionalExpression>node).condition) {
+                                narrowedType = narrowType(type, (<ConditionalExpression>node).condition, child === (<ConditionalExpression>node).whenTrue);
+                            }
+                            break;
+                        case SyntaxKind.BinaryExpression:
+                            // In the right operand of an && or ||, narrow based on left operand
+                            if (child === (<BinaryExpression>node).right) {
+                                if ((<BinaryExpression>node).operator === SyntaxKind.AmpersandAmpersandToken) {
+                                    narrowedType = narrowType(type, (<BinaryExpression>node).left, true);
+                                }
+                                else if ((<BinaryExpression>node).operator === SyntaxKind.BarBarToken) {
+                                    narrowedType = narrowType(type, (<BinaryExpression>node).left, false);
+                                }
+                            }
+                            break;
+                    }
+                    // Only use narrowed type if construct contains no assignments to variable
+                    if (narrowedType !== type && !IsVariableAssignedWithin(symbol, node)) {
+                        type = narrowedType;
+                    }
+                }
+            }
+            return type;
+
+            function narrowTypeByEquality(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
+                var left = <UnaryExpression>expr.left;
+                var right = <LiteralExpression>expr.right;
+                // Check that we have 'typeof <symbol>' on the left and string literal on the right
+                if (left.kind !== SyntaxKind.PrefixOperator || left.operator !== SyntaxKind.TypeOfKeyword ||
+                    left.operand.kind !== SyntaxKind.Identifier || right.kind !== SyntaxKind.StringLiteral ||
+                    getResolvedSymbol(<Identifier>left.operand) !== symbol) {
+                    return type;
+                }
+                var t = right.text;
+                var checkType: Type = t === "string" ? stringType : t === "number" ? numberType : t === "boolean" ? booleanType : emptyObjectType;
+                if (expr.operator === SyntaxKind.ExclamationEqualsEqualsToken) {
+                    assumeTrue = !assumeTrue;
+                }
+                if (assumeTrue) {
+                    // The assumed result is true. If check was for a primitive type, that type is the narrowed type. Otherwise we can
+                    // remove the primitive types from the narrowed type.
+                    return checkType === emptyObjectType ? subtractPrimitiveTypes(type, TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean) : checkType;
+                }
+                else {
+                    // The assumed result is false. If check was for a primitive type we can remove that type from the narrowed type.
+                    // Otherwise we don't have enough information to do anything.
+                    return checkType === emptyObjectType ? type : subtractPrimitiveTypes(type, checkType.flags);
+                }
+            }
+
+            function narrowTypeByAnd(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
+                if (assumeTrue) {
+                    // The assumed result is true, therefore we narrow assuming each operand to be true.
+                    return narrowType(narrowType(type, expr.left, true), expr.right, true);
+                }
+                else {
+                    // The assumed result is true. This means either the first operand was false, or the first operand was true
+                    // and the second operand was false. We narrow with those assumptions and union the two resulting types.
+                    return getUnionType([narrowType(type, expr.left, false), narrowType(narrowType(type, expr.left, true), expr.right, false)]);
+                }
+            }
+
+            function narrowTypeByOr(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
+                if (assumeTrue) {
+                    // The assumed result is true. This means either the first operand was true, or the first operand was false
+                    // and the second operand was true. We narrow with those assumptions and union the two resulting types.
+                    return getUnionType([narrowType(type, expr.left, true), narrowType(narrowType(type, expr.left, false), expr.right, true)]);
+                }
+                else {
+                    // The assumed result is false, therefore we narrow assuming each operand to be false.
+                    return narrowType(narrowType(type, expr.left, false), expr.right, false);
+                }
+            }
+
+            function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
+                // Check that we have variable symbol on the left
+                if (expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
+                    return type;
+                }
+                // Check that right operand is a function type with a prototype property
+                var rightType = checkExpression(expr.right);
+                if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
+                    return type;
+                }
+                var prototypeProperty = getPropertyOfType(getApparentType(rightType), "prototype");
+                if (!prototypeProperty) {
+                    return type;
+                }
+                var prototypeType = getTypeOfSymbol(prototypeProperty);
+                // Narrow to type of prototype property if it is a subtype of current type
+                return isTypeSubtypeOf(prototypeType, type) ? prototypeType : type;
+            }
+
+            // Narrow the given type based on the given expression having the assumed boolean value
+            function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
+                switch (expr.kind) {
+                    case SyntaxKind.ParenExpression:
+                        return narrowType(type, (<ParenExpression>expr).expression, assumeTrue);
+                    case SyntaxKind.BinaryExpression:
+                        var operator = (<BinaryExpression>expr).operator;
+                        if (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
+                            return narrowTypeByEquality(type, <BinaryExpression>expr, assumeTrue);
+                        }
+                        else if (operator === SyntaxKind.AmpersandAmpersandToken) {
+                            return narrowTypeByAnd(type, <BinaryExpression>expr, assumeTrue);
+                        }
+                        else if (operator === SyntaxKind.BarBarToken) {
+                            return narrowTypeByOr(type, <BinaryExpression>expr, assumeTrue);
+                        }
+                        else if (operator === SyntaxKind.InstanceOfKeyword) {
+                            return narrowTypeByInstanceof(type, <BinaryExpression>expr, assumeTrue);
+                        }
+                        break;
+                    case SyntaxKind.PrefixOperator:
+                        if ((<UnaryExpression>expr).operator === SyntaxKind.ExclamationToken) {
+                            return narrowType(type, (<UnaryExpression>expr).operand, !assumeTrue);
+                        }
+                        break;
+                }
+                return type;
+            }
+        }
+
+        function checkIdentifier(node: Identifier): Type {
+            var symbol = getResolvedSymbol(node);
 
             if (symbol.flags & SymbolFlags.Import) {
                 // Mark the import as referenced so that we emit it in the final .js file.
@@ -3875,13 +4118,11 @@ module ts {
                 getSymbolLinks(symbol).referenced = !isInTypeQuery(node);
             }
 
-            getNodeLinks(node).resolvedSymbol = symbol;
-
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
             checkCollisionWithIndexVariableInGeneratedCode(node, node);
 
-            return getTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol));
+            return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
         }
 
         function captureLexicalThis(node: Node, container: Node): void {
@@ -5134,8 +5375,8 @@ module ts {
             return numberType;
         }
 
-        function isTypeAnyTypeObjectTypeOrTypeParameter(type: Type): boolean {
-            return type === anyType || ((type.flags & (TypeFlags.ObjectType | TypeFlags.TypeParameter)) !== 0);
+        function isTypeAnyOrObjectOrTypeParameter(type: Type): boolean {
+            return (type.flags & (TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) !== 0;
         }
 
         function checkInstanceOfExpression(node: BinaryExpression, leftType: Type, rightType: Type): Type {
@@ -5144,7 +5385,7 @@ module ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (leftType !== unknownType && !isTypeAnyTypeObjectTypeOrTypeParameter(leftType)) {
+            if (leftType !== unknownType && !isTypeAnyOrObjectOrTypeParameter(leftType)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
@@ -5162,7 +5403,7 @@ module ts {
             if (leftType !== anyType && leftType !== stringType && leftType !== numberType) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_types_any_string_or_number);
             }
-            if (!isTypeAnyTypeObjectTypeOrTypeParameter(rightType)) {
+            if (!isTypeAnyOrObjectOrTypeParameter(rightType)) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -6338,7 +6579,7 @@ module ts {
             var exprType = checkExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeAnyTypeObjectTypeOrTypeParameter(exprType) && exprType !== unknownType) {
+            if (!isTypeAnyOrObjectOrTypeParameter(exprType) && exprType !== unknownType) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
