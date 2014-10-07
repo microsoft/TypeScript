@@ -3242,7 +3242,7 @@ module ts {
         } else {
             // targetSourceFile is specified (i.e. calling emitter from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                // If shouldEmitToOwnFile is true or targetSouceFile is an external module file, then emit targetSourceFile in its own output file
+                // If shouldEmitToOwnFile is true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
                 var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, ".js");
                 emitFile(jsFilePath, targetSourceFile);
             } else {
