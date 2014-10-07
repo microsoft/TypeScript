@@ -3930,7 +3930,7 @@ module ts {
             // Perform semantic and force a type check before emit to ensure that all symbols are updated
             // EmitFiles will report if there is an error from TypeChecker and Emitter
             // Depend whether we will have to emit into a single file or not either emit only selected file in the project, emit all files into a single file
-            var emitFilesResult = getFullTypeCheckChecker().emitFiles(targetSourceFile);;
+            var emitFilesResult = getFullTypeCheckChecker().emitFiles(targetSourceFile);
             emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
 
             // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput

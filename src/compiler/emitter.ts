@@ -3228,7 +3228,7 @@ module ts {
         }
 
         if (targetSourceFile === undefined) {
-            // No targetSourceFile is specified (i.e. calling emitter from batch compiler)
+            // No targetSourceFile is specified (e.g. calling emitter from batch compiler)
             forEach(program.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                     var jsFilePath = getOwnEmitOutputFilePath(sourceFile, ".js");
@@ -3240,7 +3240,7 @@ module ts {
                 emitFile(compilerOptions.out);
             }
         } else {
-            // targetSourceFile is specified (i.e. calling emitter from language service)
+            // targetSourceFile is specified (e.g calling emitter from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
                 // If shouldEmitToOwnFile is true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
                 var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, ".js");
