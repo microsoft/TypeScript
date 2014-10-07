@@ -58,7 +58,8 @@ var servicesSources = [
     "shims.ts",
     "signatureHelp.ts",
     "utilities.ts",
-    "navigationBar.ts"
+    "navigationBar.ts",
+    "outliningElementsCollector.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
