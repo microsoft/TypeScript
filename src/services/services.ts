@@ -2405,7 +2405,7 @@ module ts {
                 totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
-            else if (getMeaningFromLocation(node) === SemanticMeaning.Type) {
+            else if (getMeaningFromLocation(node) & SemanticMeaning.Type) {
                 if (symbol.flags & SymbolFlags.Interface) {
                     totalParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
                     totalParts.push(spacePart());
@@ -4107,7 +4107,7 @@ module ts {
 
             return result;
 
-            function classifySymbol(symbol: Symbol, isInTypePosition: boolean) {
+            function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning) {
                 var flags = symbol.getFlags();
 
                 if (flags & SymbolFlags.Class) {
@@ -4119,7 +4119,7 @@ module ts {
                 else if (flags & SymbolFlags.Module) {
                     return ClassificationTypeNames.moduleName;
                 }
-                else if (isInTypePosition) {
+                else if (meaningAtPosition & SemanticMeaning.Type) {
                     if (flags & SymbolFlags.Interface) {
                         return ClassificationTypeNames.interfaceName;
                     }
@@ -4135,7 +4135,7 @@ module ts {
                     if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
                         var symbol = typeInfoResolver.getSymbolInfo(node);
                         if (symbol) {
-                            var type = classifySymbol(symbol, getMeaningFromLocation(node) === SemanticMeaning.Type);
+                            var type = classifySymbol(symbol, getMeaningFromLocation(node));
                             if (type) {
                                 result.push({
                                     textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
