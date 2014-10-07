@@ -504,27 +504,47 @@ module ts {
             if (!this.namedDeclarations) {
                 var sourceFile = this;
                 var namedDeclarations: Declaration[] = [];
-                var isExternalModule = ts.isExternalModule(sourceFile);
 
-                forEachChild(sourceFile, function visit(node: Node): boolean {
+                forEachChild(sourceFile, function visit(node: Node): void {
                     switch (node.kind) {
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.Method:
+                            var functionDeclaration = <FunctionDeclaration>node;
+
+                            if (functionDeclaration.name && functionDeclaration.name.kind !== SyntaxKind.Missing) {
+                                var lastDeclaration = namedDeclarations.length > 0 ?
+                                    namedDeclarations[namedDeclarations.length - 1] :
+                                    undefined;
+
+                                // Check whether this declaration belongs to an "overload group".
+                                if (lastDeclaration && functionDeclaration.symbol === lastDeclaration.symbol) {
+                                    // Overwrite the last declaration if it was an overload
+                                    // and this one is an implementation.
+                                    if (functionDeclaration.body && !(<FunctionDeclaration>lastDeclaration).body) {
+                                        namedDeclarations[namedDeclarations.length - 1] = functionDeclaration;
+                                    }
+                                }
+                                else {
+                                    namedDeclarations.push(node);
+                                }
+
+                                forEachChild(node, visit);
+                            }
+                            break;
+
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ImportDeclaration:
-                        case SyntaxKind.Method:
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.Constructor:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
                         case SyntaxKind.TypeLiteral:
                             if ((<Declaration>node).name) {
                                 namedDeclarations.push(<Declaration>node);
                             }
-                            forEachChild(node, visit);
-                            break;
-
+                            // fall through
+                        case SyntaxKind.Constructor:
                         case SyntaxKind.VariableStatement:
                         case SyntaxKind.ModuleBlock:
                         case SyntaxKind.FunctionBlock:
@@ -532,19 +552,17 @@ module ts {
                             break;
 
                         case SyntaxKind.Parameter:
+                            // Only consider properties defined as constructor parameters
                             if (!(node.flags & NodeFlags.AccessibilityModifier)) {
-                                // Only consider properties defined as constructor parameters
                                 break;
                             }
+                            // fall through
                         case SyntaxKind.VariableDeclaration:
                         case SyntaxKind.EnumMember:
                         case SyntaxKind.Property:
                             namedDeclarations.push(<Declaration>node);
                             break;
                     }
-
-                    // do not go any deeper
-                    return undefined;
                 });
 
                 this.namedDeclarations = namedDeclarations;
