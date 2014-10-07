@@ -19,7 +19,7 @@
 ////});
 ////var t1 :(a1: string, a2: string) => void = (.../*t1*/f1) => { }  // f1 => any[];
 ////var t2: (a1: string, ...a2: string[]) => void = (.../*t2*/f1) => { } // f1 => any[];
-////var t3: (a1: number, a2: boolean, ...c: string[]) => void  = (f1/*t31*/, .../*t32*/f2) => { }; // f1 => number, f2 => any[]
+////var t3: (a1: number, a2: boolean, ...c: string[]) => void  = (/*t31*/f1, .../*t32*/f2) => { }; // f1 => number, f2 => any[]
 ////var t4: (...a1: string[]) => void = (.../*t4*/f1) => { };      // f1 => string[]
 ////var t5: (...a1: string[]) => void = (/*t5*/f1) => { };         // f1 => string
 ////var t6: (...a1: string[]) => void = (/*t61*/f1, .../*t62*/f2) => { };  // f1 => string, f2 => string[]
