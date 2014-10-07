@@ -1,0 +1,9 @@
+EmitOutputStatus : Succeeded
+Filename : declSingleFile.js
+var x = 5;
+var Bar = (function () {
+    function Bar() {
+    }
+    return Bar;
+})();
+
