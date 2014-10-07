@@ -148,7 +148,7 @@ module ts.NavigationBar {
                 var item = createItem(child);
                 if (item !== undefined) {
                     if (item.text.length > 0) {
-                        var key = item.text + "-" + item.kind;
+                        var key = item.text + "-" + item.kind + "-" + item.indent;
 
                         var itemWithSameName = keyToItem[key];
                         if (itemWithSameName) {
