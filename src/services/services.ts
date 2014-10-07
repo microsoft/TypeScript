@@ -2395,11 +2395,6 @@ module ts {
                 totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
-            else if (symbol.flags & SymbolFlags.Interface) {
-                totalParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
-                totalParts.push(spacePart());
-                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
-            }
             else if (symbol.flags & SymbolFlags.Enum) {
                 totalParts.push(keywordPart(SyntaxKind.EnumKeyword));
                 totalParts.push(spacePart());
@@ -2410,12 +2405,19 @@ module ts {
                 totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
-            else if (symbol.flags & SymbolFlags.TypeParameter) {
-                totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                totalParts.push(new SymbolDisplayPart("type parameter", SymbolDisplayPartKind.text, undefined));
-                totalParts.push(punctuationPart(SyntaxKind.CloseParenToken));
-                totalParts.push(spacePart());
-                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol));
+            else if (getMeaningFromLocation(node) === SemanticMeaning.Type) {
+                if (symbol.flags & SymbolFlags.Interface) {
+                    totalParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
+                    totalParts.push(spacePart());
+                    totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
+                }
+                else if (symbol.flags & SymbolFlags.TypeParameter) {
+                    totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                    totalParts.push(new SymbolDisplayPart("type parameter", SymbolDisplayPartKind.text, undefined));
+                    totalParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                    totalParts.push(spacePart());
+                    totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol));
+                }
             }
             else {
                 totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
