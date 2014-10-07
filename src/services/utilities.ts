@@ -27,10 +27,17 @@ module ts {
         // for the position of the relevant node (or comma).
         var syntaxList = forEach(node.parent.getChildren(), c => {
             // find syntax list that covers the span of the node
-            if (c.kind == SyntaxKind.SyntaxList && c.pos <= node.pos && c.end >= node.end) {
+            if (c.kind === SyntaxKind.SyntaxList && c.pos <= node.pos && c.end >= node.end) {
                 return c;
             }
         });
+
+        // syntaxList should not be undefined here. If it is, there is a problem. Find out if
+        // there at least is a child that is a list.
+        if (!syntaxList) {
+            Debug.assert(findChildOfKind(node.parent, SyntaxKind.SyntaxList),
+                "Node of kind " + SyntaxKind[node.parent.kind] + " has no list children");
+        }
 
         return syntaxList;
     }
