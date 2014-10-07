@@ -1259,27 +1259,24 @@ module ts {
     }
 
     export function displayPartsToString(displayParts: SymbolDisplayPart[]) {
-        var result = "";
-        ts.forEach(displayParts, displayPart => {
-            result += displayPart.text;
-        });
-        return result;
+        if (displayParts) {
+            return map(displayParts, displayPart => displayPart.text).join("");
+        }
+
+        return "";
     }
 
     interface DisplayPartsSymbolWriter extends SymbolWriter {
         displayParts(): SymbolDisplayPart[];
     }
 
-    var displayPartWriters: DisplayPartsSymbolWriter[] = [];
+    var displayPartWriter = getDisplayPartWriter();
     function getDisplayPartWriter(): DisplayPartsSymbolWriter {
-        if (displayPartWriters.length !== 0) {
-            return displayPartWriters.pop();
-        }
+        var displayParts: SymbolDisplayPart[];
+        var lineStart: boolean;
+        var indent: number;
 
-        var displayParts: SymbolDisplayPart[] = [];
-        var lineStart = true;
-        var indent = 0;
-
+        resetWriter();
         return {
             displayParts: () => displayParts,
             writeKind: writeKind,
@@ -1287,7 +1284,7 @@ module ts {
             writeLine: writeLine,
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
-            clear: () => displayParts = [],
+            clear: resetWriter,
             trackSymbol: () => { }
         };
 
@@ -1312,11 +1309,12 @@ module ts {
             displayParts.push(lineBreakPart());
             lineStart = true;
         }
-    }
 
-    function releaseDisplayPartWriter(writer: DisplayPartsSymbolWriter) {
-        writer.clear();
-        displayPartWriters.push(writer);
+        function resetWriter() {
+            displayParts = []
+            lineStart = true;
+            indent = 0;
+        }
     }
 
     function displayPart(text: string, kind: SymbolDisplayPartKind, symbol?: Symbol): SymbolDisplayPart {
@@ -1366,14 +1364,14 @@ module ts {
             }
 
             if (declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.FunctionDeclaration) {
-                return;
+                return false;
             }
 
-            // If the parent is not sourceFile or module element it is local variable
+            // If the parent is not sourceFile or module block it is local variable
             for (var parent = declaration.parent; parent.kind !== SyntaxKind.FunctionBlock; parent = parent.parent) {
                 // Reached source file or module block
                 if (parent.kind === SyntaxKind.SourceFile || parent.kind === SyntaxKind.ModuleBlock) {
-                    return;
+                    return false;
                 }
             }
 
@@ -1406,10 +1404,9 @@ module ts {
     }
 
     function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
-        var displayPartWriter = getDisplayPartWriter();
         writeDisplayParts(displayPartWriter);
         var result = displayPartWriter.displayParts();
-        releaseDisplayPartWriter(displayPartWriter);
+        displayPartWriter.clear();
         return result;
     }
 
@@ -2609,9 +2606,6 @@ module ts {
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
             var result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags);
             if (result === ScriptElementKind.unknown) {
-                if (flags & SymbolFlags.IndexSignature) return ScriptElementKind.indexSignatureElement;
-                if (flags & SymbolFlags.ConstructSignature) return ScriptElementKind.constructSignatureElement;
-                if (flags & SymbolFlags.CallSignature) return ScriptElementKind.callSignatureElement;
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
                 if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
             }
@@ -4431,7 +4425,7 @@ module ts {
                         // add the parameter to the list
                         parameters.push({
                             name: parameter.name,
-                            isVariable: i == n - 1 && signature.isVariadic,
+                            isVariable: i === n - 1 && signature.isVariadic,
                             docComment: displayPartsToString(parameter.documentation),
                             minChar: start,
                             limChar: end

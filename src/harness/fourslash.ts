@@ -657,7 +657,7 @@ module FourSlash {
 
             assert.equal(ts.displayPartsToString(details.displayParts), expectedText, assertionMessage("completion entry details text"));
 
-            if (expectedDocumentation != undefined) {
+            if (expectedDocumentation !== undefined) {
                 assert.equal(ts.displayPartsToString(details.documentation), expectedDocumentation, assertionMessage("completion entry documentation"));
             }
 
@@ -1971,11 +1971,11 @@ module FourSlash {
 
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
-                if (item.name == name) {
+                if (item.name === name) {
                     if (documentation != undefined || text !== undefined) {
                         var details = this.getCompletionEntryDetails(item.name);
 
-                        if (documentation != undefined) {
+                        if (documentation !== undefined) {
                             assert.equal(ts.displayPartsToString(details.documentation), documentation, assertionMessage("completion item documentation"));
                         }
                         if (text !== undefined) {
