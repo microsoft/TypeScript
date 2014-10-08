@@ -174,7 +174,7 @@ module ts {
     }
 
     /// TODO: delete this, it is only needed until the VS interface is updated
-    enum LanguageVersion {
+    export enum LanguageVersion {
         EcmaScript3 = 0,
         EcmaScript5 = 1,
     }
