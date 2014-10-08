@@ -2846,7 +2846,7 @@ module ts {
                     else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
                         displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, signatureDeclaration.symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments))
                     }
-                    displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, sourceFile, TypeFormatFlags.NoTruncation | TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                    displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 }
             }
             if (symbolFlags & SymbolFlags.EnumMember) {
@@ -2881,12 +2881,12 @@ module ts {
                             // If the type is type parameter, format it specially
                             if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
                                 var typeParameterParts = mapToDisplayParts(writer => {
-                                    typeResolver.writeTypeParameter(<TypeParameter>type, writer, enclosingDeclaration, TypeFormatFlags.NoTruncation | TypeFormatFlags.WriteUndefinedAndNullAsAny);
+                                    typeResolver.writeTypeParameter(<TypeParameter>type, writer, enclosingDeclaration, TypeFormatFlags.WriteUndefinedAndNullAsAny);
                                 });
                                 displayParts.push.apply(displayParts, typeParameterParts);
                             }
                             else {
-                                displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, type, enclosingDeclaration, TypeFormatFlags.NoTruncation));
+                                displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, type, enclosingDeclaration));
                             }
                         }
                         else if (symbolFlags & SymbolFlags.Function ||
@@ -2929,7 +2929,7 @@ module ts {
             }
 
             function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[], flags?: TypeFormatFlags) {
-                displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, enclosingDeclaration, flags | TypeFormatFlags.NoTruncation | TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 if (allSignatures.length > 1) {
                     displayParts.push(spacePart());
                     displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
@@ -2944,7 +2944,7 @@ module ts {
 
             function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
                 var typeParameterParts = mapToDisplayParts(writer => {
-                    typeResolver.writeTypeParametersOfSymbol(symbol, writer, enclosingDeclaration, TypeFormatFlags.NoTruncation | TypeFormatFlags.WriteUndefinedAndNullAsAny);
+                    typeResolver.writeTypeParametersOfSymbol(symbol, writer, enclosingDeclaration, TypeFormatFlags.WriteUndefinedAndNullAsAny);
                 });
                 displayParts.push.apply(displayParts, typeParameterParts);
             }
@@ -2978,7 +2978,7 @@ module ts {
                                     kind: ScriptElementKind.unknown,
                                     kindModifiers: ScriptElementKindModifier.none,
                                     textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
-                                    displayParts: typeToDisplayParts(typeInfoResolver, type, getContainerNode(node), TypeFormatFlags.NoTruncation),
+                                    displayParts: typeToDisplayParts(typeInfoResolver, type, getContainerNode(node)),
                                     documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined
                                 };
                             }
