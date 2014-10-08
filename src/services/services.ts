@@ -972,7 +972,7 @@ module ts {
     
     export interface SymbolDisplayPart {
         text: string;
-        kind: SymbolDisplayPartKind;
+        kind: string;
     }
 
     export interface QuickInfo {
@@ -1320,7 +1320,7 @@ module ts {
     function displayPart(text: string, kind: SymbolDisplayPartKind, symbol?: Symbol): SymbolDisplayPart {
         return <SymbolDisplayPart> {
             text: text,
-            kind: kind
+            kind: SymbolDisplayPartKind[kind]
         };
     }
     
