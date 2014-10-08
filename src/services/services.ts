@@ -1082,9 +1082,9 @@ module ts {
         filename: string;           // the file where the completion was requested
         position: number;           // position in the file where the completion was requested
         entries: CompletionEntry[]; // entries for this completion
-        symbols: Map<Symbol>; // symbols by entry name map
-        location: Node;          // the node where the completion was requested
-        typeChecker: TypeChecker;// the typeChecker used to generate this completion
+        symbols: Map<Symbol>;       // symbols by entry name map
+        location: Node;             // the node where the completion was requested
+        typeChecker: TypeChecker;   // the typeChecker used to generate this completion
     }
 
     interface FormattingOptions {
@@ -1626,6 +1626,7 @@ module ts {
         Value = 0x1,
         Type = 0x2,
         Namespace = 0x4
+        All = Value | Type | Namespace
     }
 
     enum BreakContinueSearchType {
@@ -1916,16 +1917,20 @@ module ts {
                 return undefined;
             }
 
+            // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
+            //               which is permissible given that it is backwards compatible; but really we should consider
+            //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
+            //               We COULD also just do the "lazy" thing that 'getSymbolModifiers' does which is to use the first declaration.
             return {
                 name: displayName,
-                kind: getSymbolKind(symbol),
+                kind: getSymbolKind(symbol, SemanticMeaning.All),
                 kindModifiers: getSymbolModifiers(symbol)
             };
         }
 
         function getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
-                forEach(symbols, (symbol) => {
+                forEach(symbols, symbol => {
                     var entry = createCompletionEntry(symbol);
                     if (entry && !lookUp(session.symbols, entry.name)) {
                         session.entries.push(entry);
@@ -2303,12 +2308,11 @@ module ts {
             }
         }
 
-        function getSymbolKind(symbol: Symbol): string {
+        function getSymbolKind(symbol: Symbol, meaningAtLocation: SemanticMeaning): string {
             var flags = typeInfoResolver.getRootSymbol(symbol).getFlags();
 
             if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
-            if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
             if (flags & SymbolFlags.Variable) return ScriptElementKind.variableElement;
             if (flags & SymbolFlags.Function) return ScriptElementKind.functionElement;
@@ -2320,9 +2324,13 @@ module ts {
             if (flags & SymbolFlags.ConstructSignature) return ScriptElementKind.constructSignatureElement;
             if (flags & SymbolFlags.CallSignature) return ScriptElementKind.callSignatureElement;
             if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
-            if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
             if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
             if (flags & SymbolFlags.Import) return ScriptElementKind.alias;
+
+            if (meaningAtLocation & SemanticMeaning.Type) {
+                if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
+                if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+            }
 
             return ScriptElementKind.unknown;
         }
@@ -2379,6 +2387,8 @@ module ts {
                 return undefined;
             }
 
+            var semanticMeaning = getMeaningFromLocation(node);
+
             var symbol = typeInfoResolver.getSymbolInfo(node);
             if (!symbol) {
                 return undefined;
@@ -2405,7 +2415,7 @@ module ts {
                 totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
-            else if (getMeaningFromLocation(node) & SemanticMeaning.Type) {
+            else if (semanticMeaning & SemanticMeaning.Type) {
                 if (symbol.flags & SymbolFlags.Interface) {
                     totalParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
                     totalParts.push(spacePart());
@@ -2471,7 +2481,7 @@ module ts {
             }
 
             return {
-                kind: getSymbolKind(symbol),
+                kind: getSymbolKind(symbol, semanticMeaning),
                 kindModifiers: getSymbolModifiers(symbol),
                 textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
                 displayParts: totalParts,
@@ -2496,7 +2506,7 @@ module ts {
                     memberName: new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
                     docComment: "",
                     fullSymbolName: typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
-                    kind: getSymbolKind(symbol),
+                    kind: getSymbolKind(symbol, SemanticMeaning.Type),
                     textSpan: TypeScript.TextSpan.fromBounds(node.pos, node.end)
                 };
             }
@@ -2609,10 +2619,10 @@ module ts {
 
             var declarations = symbol.getDeclarations();
             var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            var symbolKind = getSymbolKind(symbol);
+            var symbolKind = getSymbolKind(symbol, getMeaningFromLocation(node));
             var containerSymbol = symbol.parent;
             var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
-            var containerKind = containerSymbol ? getSymbolKind(symbol) : "";
+            var containerKind = containerSymbol ? getSymbolKind(symbol, SemanticMeaning.Namespace) : "";
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
@@ -4596,7 +4606,7 @@ module ts {
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
                 if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
-                    var kind = getSymbolKind(symbol);
+                    var kind = getSymbolKind(symbol, getMeaningFromLocation(node));
                     if (kind) {
                         return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),
