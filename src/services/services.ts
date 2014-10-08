@@ -2717,7 +2717,7 @@ module ts {
                         }
                         callExpression = <CallExpression>location.parent;
 
-                        var candidateSignatures = <Signature[]>[];
+                        var candidateSignatures: Signature[] = [];
                         signature = typeResolver.getResolvedSignature(callExpression, candidateSignatures);
                         if (!signature && candidateSignatures.length) {
                             // Use the first candidate:
@@ -2934,13 +2934,9 @@ module ts {
                     displayParts.push(spacePart());
                     displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                     displayParts.push(operatorPart(SyntaxKind.PlusToken));
-                    displayParts.push(spacePart());
                     displayParts.push(displayPart((allSignatures.length - 1).toString(), SymbolDisplayPartKind.numericLiteral));
                     displayParts.push(spacePart());
-                    displayParts.push(textPart("overload"));
-                    displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                    displayParts.push(textPart("s"));
-                    displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                    displayParts.push(textPart(allSignatures.length === 2 ? "overload" : "overloads"));
                     displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                 }
                 documentation = signature.getDocumentationComment();

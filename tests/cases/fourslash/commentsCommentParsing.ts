@@ -334,7 +334,7 @@ goTo.marker('25');
 verify.currentSignatureHelpDocCommentIs("fn f1 with number");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('25q');
-verify.quickInfoIs("(function) f1(a: number): any (+ 1 overload(s))", "fn f1 with number");
+verify.quickInfoIs("(function) f1(a: number): any (+1 overload)", "fn f1 with number");
 goTo.marker('25aq');
 verify.quickInfoIs("(parameter) a: number", "");
 
@@ -342,13 +342,13 @@ goTo.marker('26');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('26q');
-verify.quickInfoIs("(function) f1(b: string): any (+ 1 overload(s))", "");
+verify.quickInfoIs("(function) f1(b: string): any (+1 overload)", "");
 goTo.marker('26aq');
 verify.quickInfoIs("(parameter) b: string", "");
 
 goTo.marker('27');
 verify.completionListContains("multiply", "(function) multiply(a: number, b: number, c?: number, d?: any, e?: any): void", "This is multiplication function\n@anotherTag\n@anotherTag");
-verify.completionListContains("f1", "(function) f1(a: number): any (+ 1 overload(s))", "fn f1 with number");
+verify.completionListContains("f1", "(function) f1(a: number): any (+1 overload)", "fn f1 with number");
 
 goTo.marker('28');
 verify.currentSignatureHelpDocCommentIs("This is subtract function");

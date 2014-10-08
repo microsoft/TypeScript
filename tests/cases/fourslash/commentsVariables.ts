@@ -97,4 +97,4 @@ goTo.marker('14');
 verify.quickInfoIs("(function) foo(): void", "foos comment");
 
 goTo.marker('15');
-verify.quickInfoIs("(function) foo2(a: number): void (+ 1 overload(s))", "");
+verify.quickInfoIs("(function) foo2(a: number): void (+1 overload)", "");
