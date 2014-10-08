@@ -967,22 +967,22 @@ module ts {
         // Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
         // Meaning needs to be specified if the enclosing declaration is given
         function writeSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void {
-            var previouslyWrittenSymbol: Symbol;
+            var parentSymbol: Symbol;
             function writeSymbolName(symbol: Symbol): void {
-                if (previouslyWrittenSymbol) {
+                if (parentSymbol) {
                     // Write type arguments of instantiated class/interface here
                     if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
                         if (symbol.flags & SymbolFlags.Instantiated) {
-                            writeTypeArguments(getTypeParametersOfClassOrInterface(previouslyWrittenSymbol),
+                            writeTypeArguments(getTypeParametersOfClassOrInterface(parentSymbol),
                                 (<TransientSymbol>symbol).mapper, writer, enclosingDeclaration);
                         }
                         else {
-                            writeTypeParametersOfSymbol(previouslyWrittenSymbol, writer, enclosingDeclaration);
+                            writeTypeParametersOfSymbol(parentSymbol, writer, enclosingDeclaration);
                         }
                     }
                     writePunctuation(writer, SyntaxKind.DotToken);
                 }
-                previouslyWrittenSymbol = symbol;
+                parentSymbol = symbol;
                 if (symbol.declarations && symbol.declarations.length > 0) {
                     var declaration = symbol.declarations[0];
                     if (declaration.name) {
@@ -1022,7 +1022,7 @@ module ts {
                     }
                     else {
                         // If we didn't find accessible symbol chain for this symbol, break if this is external module
-                        if (!previouslyWrittenSymbol && ts.forEach(symbol.declarations, declaration => hasExternalModuleSymbol(declaration))) {
+                        if (!parentSymbol && ts.forEach(symbol.declarations, declaration => hasExternalModuleSymbol(declaration))) {
                             return;
                         }
 
@@ -6994,6 +6994,19 @@ module ts {
             if (position < sourceFile.pos) position = sourceFile.pos;
             if (position > sourceFile.end) position = sourceFile.end;
             return findChildAtPosition(sourceFile);
+        }
+
+        function isInsideWithStatementBody(node: Node): boolean {
+            if (node) {
+                while (node.parent) {
+                    if (node.parent.kind === SyntaxKind.WithStatement && (<WithStatement>node.parent).statement === node) {
+                        return true;
+                    }
+                    node = node.parent;
+                }
+            }
+
+            return false;
         }
 
         function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[]{

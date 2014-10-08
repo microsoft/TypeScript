@@ -2970,18 +2970,16 @@ module ts {
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
                     case SyntaxKind.SuperKeyword:
-                        // For the identifiers/this/usper etc get the type at position if not inside if statement
-                        if (!isInsideWithStatementBody(node)) {
-                            var type = typeInfoResolver.getTypeOfNode(node);
-                            if (type) {
-                                return {
-                                    kind: ScriptElementKind.unknown,
-                                    kindModifiers: ScriptElementKindModifier.none,
-                                    textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
-                                    displayParts: typeToDisplayParts(typeInfoResolver, type, getContainerNode(node)),
-                                    documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined
-                                };
-                            }
+                        // For the identifiers/this/usper etc get the type at position
+                        var type = typeInfoResolver.getTypeOfNode(node);
+                        if (type) {
+                            return {
+                                kind: ScriptElementKind.unknown,
+                                kindModifiers: ScriptElementKindModifier.none,
+                                textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
+                                displayParts: typeToDisplayParts(typeInfoResolver, type, getContainerNode(node)),
+                                documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined
+                            };
                         }
                 }
 
