@@ -4508,8 +4508,23 @@ module ts {
             }
             else {
                 error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
-                return resolveErrorCall(node);
             }
+
+            // No signature was applicable. We have already reported the errors for the invalid signature.
+            // If this is a type resolution session, e.g. Language Service, try to get better information that anySignature.
+            // Pick the first candidate that matches the arity. This way we can get a contextual type for cases like:
+            //  declare function f(a: { xa: number; xb: number; });
+            //  f({ |
+            if (!fullTypeCheck) {
+                if (candidates.length) {
+                    for (var i = 0; i < candidates.length; i++) {
+                        if (signatureHasCorrectArity(node, candidates[i])) {
+                            return candidates[i];
+                        }
+                    }
+                }
+            }
+
             return resolveErrorCall(node);
 
             // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
