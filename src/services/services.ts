@@ -1625,7 +1625,7 @@ module ts {
         None = 0x0,
         Value = 0x1,
         Type = 0x2,
-        Namespace = 0x4
+        Namespace = 0x4,
         All = Value | Type | Namespace
     }
 
@@ -1920,7 +1920,7 @@ module ts {
             // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
             //               which is permissible given that it is backwards compatible; but really we should consider
             //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
-            //               We COULD also just do the "lazy" thing that 'getSymbolModifiers' does which is to use the first declaration.
+            //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
             return {
                 name: displayName,
                 kind: getSymbolKind(symbol, SemanticMeaning.All),
@@ -2311,9 +2311,17 @@ module ts {
         function getSymbolKind(symbol: Symbol, meaningAtLocation: SemanticMeaning): string {
             var flags = typeInfoResolver.getRootSymbol(symbol).getFlags();
 
-            if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
+
+            // The following should only apply if encountered at a type position,
+            // and need to have precedence over other meanings if this is the case.
+            if (meaningAtLocation & SemanticMeaning.Type) {
+                if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
+                if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+            }
+            
+            if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             if (flags & SymbolFlags.Variable) return ScriptElementKind.variableElement;
             if (flags & SymbolFlags.Function) return ScriptElementKind.functionElement;
             if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
@@ -2326,11 +2334,6 @@ module ts {
             if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
             if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
             if (flags & SymbolFlags.Import) return ScriptElementKind.alias;
-
-            if (meaningAtLocation & SemanticMeaning.Type) {
-                if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
-                if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-            }
 
             return ScriptElementKind.unknown;
         }
@@ -2622,7 +2625,6 @@ module ts {
             var symbolKind = getSymbolKind(symbol, getMeaningFromLocation(node));
             var containerSymbol = symbol.parent;
             var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
-            var containerKind = containerSymbol ? getSymbolKind(symbol, SemanticMeaning.Namespace) : "";
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
@@ -4126,9 +4128,6 @@ module ts {
                 else if (flags & SymbolFlags.Enum) {
                     return ClassificationTypeNames.enumName;
                 }
-                else if (flags & SymbolFlags.Module) {
-                    return ClassificationTypeNames.moduleName;
-                }
                 else if (meaningAtPosition & SemanticMeaning.Type) {
                     if (flags & SymbolFlags.Interface) {
                         return ClassificationTypeNames.interfaceName;
@@ -4136,6 +4135,9 @@ module ts {
                     else if (flags & SymbolFlags.TypeParameter) {
                         return ClassificationTypeNames.typeParameterName;
                     }
+                }
+                else if (flags & SymbolFlags.Module) {
+                    return ClassificationTypeNames.moduleName;
                 }
             }
 
