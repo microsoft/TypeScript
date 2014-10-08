@@ -1412,7 +1412,7 @@ module ts {
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typechecker.writeType(type, writer, enclosingDeclaration, flags | TypeFormatFlags.WriteUndefinedAndNullAsAny);
+            typechecker.writeType(type, writer, enclosingDeclaration, flags);
         });
     }
 
@@ -1424,7 +1424,7 @@ module ts {
 
     function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[]{
         return mapToDisplayParts(writer => {
-            typechecker.writeSignature(signature, writer, enclosingDeclaration, flags | TypeFormatFlags.WriteUndefinedAndNullAsAny);
+            typechecker.writeSignature(signature, writer, enclosingDeclaration, flags);
         });
     }
 
@@ -2881,7 +2881,7 @@ module ts {
                             // If the type is type parameter, format it specially
                             if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
                                 var typeParameterParts = mapToDisplayParts(writer => {
-                                    typeResolver.writeTypeParameter(<TypeParameter>type, writer, enclosingDeclaration, TypeFormatFlags.WriteUndefinedAndNullAsAny);
+                                    typeResolver.writeTypeParameter(<TypeParameter>type, writer, enclosingDeclaration);
                                 });
                                 displayParts.push.apply(displayParts, typeParameterParts);
                             }
@@ -2944,7 +2944,7 @@ module ts {
 
             function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
                 var typeParameterParts = mapToDisplayParts(writer => {
-                    typeResolver.writeTypeParametersOfSymbol(symbol, writer, enclosingDeclaration, TypeFormatFlags.WriteUndefinedAndNullAsAny);
+                    typeResolver.writeTypeParametersOfSymbol(symbol, writer, enclosingDeclaration);
                 });
                 displayParts.push.apply(displayParts, typeParameterParts);
             }
