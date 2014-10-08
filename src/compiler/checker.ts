@@ -7225,7 +7225,7 @@ module ts {
         }
 
         function isTypeNode(node: Node): boolean {
-            if (node.kind >= SyntaxKind.FirstTypeNode && node.kind <= SyntaxKind.LastTypeNode) {
+            if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
                 return true;
             }
 
@@ -7240,6 +7240,7 @@ module ts {
                 case SyntaxKind.StringLiteral:
                     // Specialized signatures can have string literals as their parameters' type names
                     return node.parent.kind === SyntaxKind.Parameter;
+
                 // Identifiers and qualified names may be type nodes, depending on their context. Climb
                 // above them to find the lowest container
                 case SyntaxKind.Identifier:
@@ -7247,9 +7248,11 @@ module ts {
                     if (node.parent.kind === SyntaxKind.QualifiedName) {
                         node = node.parent;
                     }
-                // Fall through
+                    // fall through
                 case SyntaxKind.QualifiedName:
                     // At this point, node is either a qualified name or an identifier
+                    Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName, "'node' was expected to be a qualified name or identifier in 'isTypeNode'.");
+
                     var parent = node.parent;
                     if (parent.kind === SyntaxKind.TypeQuery) {
                         return false;
@@ -7260,7 +7263,7 @@ module ts {
                     //
                     // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
                     // A.B.C is a type node.
-                    if (parent.kind >= SyntaxKind.FirstTypeNode && parent.kind <= SyntaxKind.LastTypeNode) {
+                    if (SyntaxKind.FirstTypeNode <= parent.kind && parent.kind <= SyntaxKind.LastTypeNode) {
                         return true;
                     }
                     switch (parent.kind) {
