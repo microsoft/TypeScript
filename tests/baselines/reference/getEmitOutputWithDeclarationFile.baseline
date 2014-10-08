@@ -1,0 +1,11 @@
+EmitOutputStatus : JSGeneratedWithSemanticErrors
+
+EmitOutputStatus : JSGeneratedWithSemanticErrors
+Filename : tests/cases/fourslash/inputFile2.js
+var x1 = "hello world";
+var Foo = (function () {
+    function Foo() {
+    }
+    return Foo;
+})();
+
