@@ -3720,6 +3720,7 @@ module ts {
             for (var i = 0; i < typeParameters.length; i++) inferences.push([]);
             return {
                 typeParameters: typeParameters,
+                inferenceCount: 0,
                 inferences: inferences,
                 inferredTypes: new Array(typeParameters.length),
             };
@@ -3757,6 +3758,7 @@ module ts {
                     var typeParameters = context.typeParameters;
                     for (var i = 0; i < typeParameters.length; i++) {
                         if (target === typeParameters[i]) {
+                            context.inferenceCount++;
                             var inferences = context.inferences[i];
                             if (!contains(inferences, source)) inferences.push(source);
                             break;
@@ -3769,6 +3771,35 @@ module ts {
                     var targetTypes = (<TypeReference>target).typeArguments;
                     for (var i = 0; i < sourceTypes.length; i++) {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
+                    }
+                }
+                else if (target.flags & TypeFlags.Union) {
+                    // Target is a union type
+                    var targetTypes = (<UnionType>target).types;
+                    var startCount = context.inferenceCount;
+                    var typeParameterCount = 0;
+                    var typeParameter: TypeParameter;
+                    // First infer to each type in union that isn't a type parameter
+                    for (var i = 0; i < targetTypes.length; i++) {
+                        var t = targetTypes[i];
+                        if (t.flags & TypeFlags.TypeParameter && contains(context.typeParameters, t)) {
+                            typeParameter = <TypeParameter>t;
+                            typeParameterCount++;
+                        }
+                        else {
+                            inferFromTypes(source, t);
+                        }
+                    }
+                    // If no inferences were produced above and union contains a single naked type parameter, infer to that type parameter
+                    if (context.inferenceCount === startCount && typeParameterCount === 1) {
+                        inferFromTypes(source, typeParameter);
+                    }
+                }
+                else if (source.flags & TypeFlags.Union) {
+                    // Source is a union type, infer from each consituent type
+                    var sourceTypes = (<UnionType>source).types;
+                    for (var i = 0; i < sourceTypes.length; i++) {
+                        inferFromTypes(sourceTypes[i], target);
                     }
                 }
                 else if (source.flags & TypeFlags.ObjectType && (target.flags & (TypeFlags.Reference | TypeFlags.Tuple) ||
@@ -5169,7 +5200,9 @@ module ts {
 
             // Try to return the best common type if we have any return expressions.
             if (types.length > 0) {
-                var commonType = getCommonSupertype(types);
+                // When return statements are contextually typed we allow the return type to be a union type. Otherwise we require the
+                // return expressions to have a best common supertype.
+                var commonType = getContextualSignature(func) ? getUnionType(types) : getCommonSupertype(types);
                 if (!commonType) {
                     error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
                     

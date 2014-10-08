@@ -970,6 +970,7 @@ module ts {
 
     export interface InferenceContext {
         typeParameters: TypeParameter[];
+        inferenceCount: number;
         inferences: Type[][];
         inferredTypes: Type[];
     }
