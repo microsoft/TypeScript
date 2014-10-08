@@ -92,7 +92,8 @@ module ts {
             getContextualType: getContextualType,
             getFullyQualifiedName: getFullyQualifiedName,
             getResolvedSignature: getResolvedSignature,
-            getEnumMemberValue: getEnumMemberValue
+            getEnumMemberValue: getEnumMemberValue,
+            getUnionTypesOfUnionProperty: getUnionTypesOfUnionProperty
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -1748,6 +1749,10 @@ module ts {
                 links.type = getUnionType(types);
             }
             return links.type;
+        }
+
+        function getUnionTypesOfUnionProperty(symbol: Symbol): Type[] {
+            return (symbol.flags & SymbolFlags.UnionProperty) ? getSymbolLinks(symbol).unionType.types : undefined;
         }
 
         function getTypeOfSymbol(symbol: Symbol): Type {
@@ -3583,7 +3588,8 @@ module ts {
         }
 
         function getBestCommonType(types: Type[], contextualType?: Type): Type {
-            return contextualType && isSupertypeOfEach(contextualType, types) ? contextualType : getUnionType(types);        }
+            return contextualType && isSupertypeOfEach(contextualType, types) ? contextualType : getUnionType(types);
+        }
 
         function isTypeOfObjectLiteral(type: Type): boolean {
             return (type.flags & TypeFlags.Anonymous) && type.symbol && (type.symbol.flags & SymbolFlags.ObjectLiteral) ? true : false;

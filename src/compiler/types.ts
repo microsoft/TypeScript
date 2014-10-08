@@ -657,6 +657,8 @@ module ts {
         getContextualType(node: Node): Type;
         getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature;
 
+        getUnionTypesOfUnionProperty(symbol: Symbol): Type[];
+
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
         // computed value.
         getEnumMemberValue(node: EnumMember): number;

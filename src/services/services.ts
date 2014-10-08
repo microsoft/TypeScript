@@ -2284,8 +2284,16 @@ module ts {
             }
         }
 
+        function getConcreteSymbol(symbol: Symbol): Symbol {
+            if (symbol.flags & SymbolFlags.UnionProperty) {
+                var types = typeInfoResolver.getUnionTypesOfUnionProperty(symbol);
+                symbol = typeInfoResolver.getPropertyOfType(types[0], symbol.name);
+            }
+            return typeInfoResolver.getRootSymbol(symbol);
+        }
+
         function getSymbolKind(symbol: Symbol): string {
-            var flags = typeInfoResolver.getRootSymbol(symbol).getFlags();
+            var flags = getConcreteSymbol(symbol).getFlags();
 
             if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
@@ -2344,6 +2352,7 @@ module ts {
         }
 
         function getSymbolModifiers(symbol: Symbol): string {
+            symbol = getConcreteSymbol(symbol);
             return symbol && symbol.declarations && symbol.declarations.length > 0
                 ? getNodeModifiers(symbol.declarations[0])
                 : ScriptElementKindModifier.none;
