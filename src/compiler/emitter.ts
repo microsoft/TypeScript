@@ -3243,15 +3243,14 @@ module ts {
                 emitFile(compilerOptions.out);
             }
         } else {
-            // targetSourceFile is specified (e.g calling emitter from language service or user language service getSemanticDiagnostic)
-            var shouldEmitTargetToOwnFile = shouldEmitToOwnFile(targetSourceFile, compilerOptions);
-            if (shouldEmitTargetToOwnFile) {
-                // If shouldEmitToOwnFile is true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
+            // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
+            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
+                // If shouldEmitToOwnFile return true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
                 var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
-            else if (!shouldEmitTargetToOwnFile && compilerOptions.out) {
-                // If shouldEmitToOwnFile is false and --out is specified, then emit all, non-external-module file, into one single output file
+            else if (compilerOptions.out) {
+                // Otherwise, if --out is specified and targetSourceFile shouldn't be emitted to own file, then emit all, non-external-module file, into one single output file
                 emitFile(compilerOptions.out);
             }
         }
