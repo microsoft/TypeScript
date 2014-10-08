@@ -1,8 +1,6 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
-    export var LocalizedDiagnosticMessages: ts.Map<any> = null;
-
     export class Location {
         private _fileName: string;
         private _lineMap: LineMap;

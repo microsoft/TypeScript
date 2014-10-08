@@ -172,15 +172,15 @@ module ts.SignatureHelp {
             return undefined;
         }
 
-        var argumentList = getContainingArgumentList(startingToken);
+        var argumentInfo = getContainingArgumentInfo(startingToken);
         cancellationToken.throwIfCancellationRequested();
 
         // Semantic filtering of signature help
-        if (!argumentList) {
+        if (!argumentInfo) {
             return undefined;
         }
 
-        var call = <CallExpression>argumentList.parent;
+        var call = <CallExpression>argumentInfo.list.parent;
         var candidates = <Signature[]>[];
         var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
         cancellationToken.throwIfCancellationRequested();
@@ -189,13 +189,13 @@ module ts.SignatureHelp {
             return undefined;
         }
 
-        return createSignatureHelpItems(candidates, resolvedSignature, argumentList);
+        return createSignatureHelpItems(candidates, resolvedSignature, argumentInfo);
 
         /**
          * If node is an argument, returns its index in the argument list.
          * If not, returns -1.
          */
-        function getImmediatelyContainingArgumentList(node: Node): Node {
+        function getImmediatelyContainingArgumentInfo(node: Node): ListItemInfo {
             if (node.parent.kind !== SyntaxKind.CallExpression && node.parent.kind !== SyntaxKind.NewExpression) {
                 return undefined;
             }
@@ -216,10 +216,14 @@ module ts.SignatureHelp {
             var parent = <CallExpression>node.parent;
             // Find out if 'node' is an argument, a type argument, or neither
             if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
-                // Find the list that starts right *after* the < or ( token
+                // Find the list that starts right *after* the < or ( token.
+                // If the user has just opened a list, consider this item 0.
                 var list = getChildListThatStartsWithOpenerToken(parent, node, sourceFile);
                 Debug.assert(list);
-                return list;
+                return {
+                    list: list,
+                    listItemIndex: 0
+                };
             }
 
             if (node.kind === SyntaxKind.GreaterThanToken
@@ -228,18 +232,24 @@ module ts.SignatureHelp {
                 return undefined;
             }
 
-            return findContainingList(node);
+            return findListItemInfo(node);
         }
 
-        function getContainingArgumentList(node: Node): Node {
+        function getContainingArgumentInfo(node: Node): ListItemInfo {
             for (var n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
                 if (n.kind === SyntaxKind.FunctionBlock) {
                     return undefined;
                 }
 
-                var argumentList = getImmediatelyContainingArgumentList(n);
-                if (argumentList) {
-                    return argumentList;
+                // If the node is not a subspan of its parent, this is a big problem.
+                // There have been crashes that might be caused by this violation.
+                if (n.pos < n.parent.pos || n.end > n.parent.end) {
+                    Debug.fail("Node of kind " + SyntaxKind[n.kind] + " is not a subspan of its parent of kind " + SyntaxKind[n.parent.kind]);
+                }
+
+                var argumentInfo = getImmediatelyContainingArgumentInfo(n);
+                if (argumentInfo) {
+                    return argumentInfo;
                 }
 
 
@@ -248,7 +258,35 @@ module ts.SignatureHelp {
             return undefined;
         }
 
-        function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentListOrTypeArgumentList: Node): SignatureHelpItems {
+        /**
+         * The selectedItemIndex could be negative for several reasons.
+         *     1. There are too many arguments for all of the overloads
+         *     2. None of the overloads were type compatible
+         * The solution here is to try to pick the best overload by picking
+         * either the first one that has an appropriate number of parameters,
+         * or the one with the most parameters.
+         */
+        function selectBestInvalidOverloadIndex(candidates: Signature[], argumentCount: number): number {
+            var maxParamsSignatureIndex = -1;
+            var maxParams = -1;
+            for (var i = 0; i < candidates.length; i++) {
+                var candidate = candidates[i];
+
+                if (candidate.hasRestParameter || candidate.parameters.length >= argumentCount) {
+                    return i;
+                }
+
+                if (candidate.parameters.length > maxParams) {
+                    maxParams = candidate.parameters.length;
+                    maxParamsSignatureIndex = i;
+                }
+            }
+
+            return maxParamsSignatureIndex;
+        }
+
+        function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentInfoOrTypeArgumentInfo: ListItemInfo): SignatureHelpItems {
+            var argumentListOrTypeArgumentList = argumentInfoOrTypeArgumentInfo.list;
             var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
                 var parameters = candidateSignature.parameters;
                 var parameterHelpItems: SignatureHelpParameter[] = parameters.length === 0 ? emptyArray : map(parameters, p => {
@@ -321,11 +359,6 @@ module ts.SignatureHelp {
                 };
             });
 
-            var selectedItemIndex = candidates.indexOf(bestSignature);
-            if (selectedItemIndex < 0) {
-                selectedItemIndex = 0;
-            }
-
             // We use full start and skip trivia on the end because we want to include trivia on
             // both sides. For example,
             //
@@ -338,61 +371,36 @@ module ts.SignatureHelp {
             var applicableSpanEnd = skipTrivia(sourceFile.text, argumentListOrTypeArgumentList.end, /*stopAfterLineBreak*/ false);
             var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
 
-            var state = getSignatureHelpCurrentArgumentState(sourceFile, position, applicableSpanStart);
+            // The listItemIndex we got back includes commas. Our goal is to return the index of the proper
+            // item (not including commas). Here are some examples:
+            //    1. foo(a, b, c $) -> the listItemIndex is 4, we want to return 2
+            //    2. foo(a, b, $ c) -> listItemIndex is 3, we want to return 2
+            //    3. foo($a) -> listItemIndex is 0, we want to return 0
+            //
+            // In general, we want to subtract the number of commas before the current index.
+            // But if we are on a comma, we also want to pretend we are on the argument *following*
+            // the comma. That amounts to taking the ceiling of half the index.
+            var argumentIndex = (argumentInfoOrTypeArgumentInfo.listItemIndex + 1) >> 1;
+
+            // argumentCount is the number of commas plus one, unless the list is completely empty,
+            // in which case there are 0.
+            var argumentCount = argumentListOrTypeArgumentList.getChildCount() === 0
+                ? 0
+                : 1 + countWhere(argumentListOrTypeArgumentList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
+
+            var selectedItemIndex = candidates.indexOf(bestSignature);
+            if (selectedItemIndex < 0) {
+                selectedItemIndex = selectBestInvalidOverloadIndex(candidates, argumentCount);
+            }
+
             return {
                 items: items,
                 applicableSpan: applicableSpan,
                 selectedItemIndex: selectedItemIndex,
-                argumentIndex: state.argumentIndex,
-                argumentCount: state.argumentCount
+                argumentIndex: argumentIndex,
+                argumentCount: argumentCount
             };
         }
-    }
-
-    function getSignatureHelpCurrentArgumentState(sourceFile: SourceFile, position: number, applicableSpanStart: number): { argumentIndex: number; argumentCount: number } {
-        var tokenPrecedingSpanStart = findPrecedingToken(applicableSpanStart, sourceFile);
-        if (!tokenPrecedingSpanStart) {
-            return undefined;
-        }
-
-        if (tokenPrecedingSpanStart.kind !== SyntaxKind.OpenParenToken && tokenPrecedingSpanStart.kind !== SyntaxKind.LessThanToken) {
-            // The span start must have moved backward in the file (for example if the open paren was backspaced)
-            return undefined;
-        }
-
-        var tokenPrecedingCurrentPosition = findPrecedingToken(position, sourceFile);
-        var call = <CallExpression>tokenPrecedingSpanStart.parent;
-        Debug.assert(call.kind === SyntaxKind.CallExpression || call.kind === SyntaxKind.NewExpression, "wrong call kind " + SyntaxKind[call.kind]);
-        if (tokenPrecedingCurrentPosition.kind === SyntaxKind.CloseParenToken || tokenPrecedingCurrentPosition.kind === SyntaxKind.GreaterThanToken) {
-            if (tokenPrecedingCurrentPosition.parent === call) {
-                // This call expression is complete. Stop signature help.
-                return undefined;
-            }
-        }
-
-        var argumentListOrTypeArgumentList = getChildListThatStartsWithOpenerToken(call, tokenPrecedingSpanStart, sourceFile);
-        // Debug.assert(argumentListOrTypeArgumentList.getChildCount() === 0 || argumentListOrTypeArgumentList.getChildCount() % 2 === 1, "Even number of children");
-
-        // The call might be finished, but incorrectly. Check if we are still within the bounds of the call
-        if (position > skipTrivia(sourceFile.text, argumentListOrTypeArgumentList.end, /*stopAfterLineBreak*/ false)) {
-            return undefined;
-        }
-
-        var numberOfCommas = countWhere(argumentListOrTypeArgumentList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
-        var argumentCount = numberOfCommas + 1;
-        if (argumentCount <= 1) {
-            return { argumentIndex: 0, argumentCount: argumentCount };
-        }
-
-        var indexOfNodeContainingPosition = findListItemIndexContainingPosition(argumentListOrTypeArgumentList, position);
-
-        // indexOfNodeContainingPosition checks that position is between pos and end of each child, so it is
-        // possible that we are to the right of all children. Assume that we are still within
-        // the applicable span and that we are typing the last argument
-        // Alternatively, we could be in range of one of the arguments, in which case we need to divide
-        // by 2 to exclude commas. Use bit shifting in order to take the floor of the division.
-        var argumentIndex = indexOfNodeContainingPosition < 0 ? argumentCount - 1 : indexOfNodeContainingPosition >> 1;
-        return { argumentIndex: argumentIndex, argumentCount: argumentCount };
     }
 
     function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {

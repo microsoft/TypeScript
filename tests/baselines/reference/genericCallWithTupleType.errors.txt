@@ -1,0 +1,47 @@
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(22,1): error TS2322: Type '[number, string]' is not assignable to type '[string, number]':
+  Types of property '0' are incompatible:
+    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(23,1): error TS2322: Type '[{}, {}]' is not assignable to type '[string, number]':
+  Types of property '0' are incompatible:
+    Type '{}' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(24,1): error TS2322: Type '[{}]' is not assignable to type '[{}, {}]':
+  Property '1' is missing in type '[{}]'.
+
+
+==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts (3 errors) ====
+    interface I<T, U> {
+        tuple1: [T, U];
+    } 
+    
+    var i1: I<string, number>;
+    var i2: I<{}, {}>;
+    
+    // no error
+    i1.tuple1 = ["foo", 5];
+    var e1 = i1.tuple1[0];  // string
+    var e2 = i1.tuple1[1];  // number
+    i1.tuple1 = ["foo", 5, false, true];
+    var e3 = i1.tuple1[2];  // {}
+    i1.tuple1[3] = { a: "string" };
+    var e4 = i1.tuple1[3];  // {}
+    i2.tuple1 = ["foo", 5];
+    i2.tuple1 = ["foo", "bar"];
+    i2.tuple1 = [5, "bar"];
+    i2.tuple1 = [{}, {}];
+    
+    // error
+    i1.tuple1 = [5, "foo"];
+    ~~~~~~~~~
+!!! error TS2322: Type '[number, string]' is not assignable to type '[string, number]':
+!!! error TS2322:   Types of property '0' are incompatible:
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    i1.tuple1 = [{}, {}];
+    ~~~~~~~~~
+!!! error TS2322: Type '[{}, {}]' is not assignable to type '[string, number]':
+!!! error TS2322:   Types of property '0' are incompatible:
+!!! error TS2322:     Type '{}' is not assignable to type 'string'.
+    i2.tuple1 = [{}];
+    ~~~~~~~~~
+!!! error TS2322: Type '[{}]' is not assignable to type '[{}, {}]':
+!!! error TS2322:   Property '1' is missing in type '[{}]'.
+    

@@ -1,9 +1,11 @@
+tests/cases/compiler/genericClassesRedeclaration.ts(16,11): error TS2300: Duplicate identifier 'StringHashTable'.
+tests/cases/compiler/genericClassesRedeclaration.ts(29,11): error TS2300: Duplicate identifier 'IdentiferNameHashTable'.
 tests/cases/compiler/genericClassesRedeclaration.ts(42,9): error TS2374: Duplicate string index signature.
 tests/cases/compiler/genericClassesRedeclaration.ts(55,11): error TS2300: Duplicate identifier 'StringHashTable'.
 tests/cases/compiler/genericClassesRedeclaration.ts(68,11): error TS2300: Duplicate identifier 'IdentiferNameHashTable'.
 
 
-==== tests/cases/compiler/genericClassesRedeclaration.ts (3 errors) ====
+==== tests/cases/compiler/genericClassesRedeclaration.ts (5 errors) ====
     declare module TypeScript {
         interface IIndexable<T> {
             [s: string]: T;
@@ -20,6 +22,8 @@ tests/cases/compiler/genericClassesRedeclaration.ts(68,11): error TS2300: Duplic
             lookup(key: string): T;
         }
         class StringHashTable<T> implements IHashTable<T> {
+              ~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'StringHashTable'.
             private itemCount;
             private table;
             public getAllKeys(): string[];
@@ -33,6 +37,8 @@ tests/cases/compiler/genericClassesRedeclaration.ts(68,11): error TS2300: Duplic
             public remove(key: string): void;
         }
         class IdentiferNameHashTable<T> extends StringHashTable<T> {
+              ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'IdentiferNameHashTable'.
             public getAllKeys(): string[];
             public add(key: string, data: T): boolean;
             public addOrUpdate(key: string, data: T): boolean;

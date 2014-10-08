@@ -84,8 +84,13 @@ module ts {
                     if (node.name) {
                         node.name.parent = node;
                     }
-                    file.semanticErrors.push(createDiagnosticForNode(node.name ? node.name : node,
-                        Diagnostics.Duplicate_identifier_0, getDisplayName(node)));
+                    // Report errors every position with duplicate declaration
+                    // Report errors on previous encountered declarations
+                    forEach(symbol.declarations, (declaration) => {
+                        file.semanticErrors.push(createDiagnosticForNode(declaration.name, Diagnostics.Duplicate_identifier_0, getDisplayName(declaration)));
+                    });
+                    file.semanticErrors.push(createDiagnosticForNode(node.name, Diagnostics.Duplicate_identifier_0, getDisplayName(node)));
+
                     symbol = createSymbol(0, name);
                 }
             }
@@ -332,7 +337,7 @@ module ts {
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>node)) {
-                        bindAnonymousDeclaration(node, SymbolFlags.ValueModule, '"' + getModuleNameFromFilename((<SourceFile>node).filename) + '"');
+                        bindAnonymousDeclaration(node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).filename) + '"');
                         break;
                     }
                 default:

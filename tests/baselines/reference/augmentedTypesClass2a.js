@@ -1,6 +1,6 @@
 //// [augmentedTypesClass2a.ts]
 //// class then function
-class c2 { public foo() { } }
+class c2 { public foo() { } } // error
 function c2() { } // error
 var c2 = () => { }
 
@@ -12,7 +12,7 @@ var c2 = (function () {
     c2.prototype.foo = function () {
     };
     return c2;
-})();
+})(); // error
 function c2() {
 } // error
 var c2 = function () {
