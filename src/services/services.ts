@@ -2563,6 +2563,25 @@ module ts {
                 return false;
             }
 
+            function getDefinitionFromSymbol(symbol: Symbol, location: Node, result: DefinitionInfo[]): void {
+                var declarations = symbol.getDeclarations();
+                if (declarations) {
+                    var symbolName = typeInfoResolver.symbolToString(symbol, location);
+                    var symbolKind = getSymbolKind(symbol);
+                    var containerSymbol = symbol.parent;
+                    var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, location) : "";
+                    var containerKind = containerSymbol ? getSymbolKind(symbol) : "";
+
+                    if (!tryAddConstructSignature(symbol, location, symbolKind, symbolName, containerName, result) &&
+                        !tryAddCallSignature(symbol, location, symbolKind, symbolName, containerName, result)) {
+                        // Just add all the declarations. 
+                        forEach(declarations, declaration => {
+                            result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                        });
+                    }
+                }
+            }
+
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -2601,25 +2620,19 @@ module ts {
 
             // Could not find a symbol e.g. node is string or number keyword,
             // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-            if (!symbol || !(symbol.getDeclarations())) {
+            if (!symbol) {
                 return undefined;
             }
 
             var result: DefinitionInfo[] = [];
 
-            var declarations = symbol.getDeclarations();
-            var symbolName = typeInfoResolver.symbolToString(symbol, node);
-            var symbolKind = getSymbolKind(symbol);
-            var containerSymbol = symbol.parent;
-            var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
-            var containerKind = containerSymbol ? getSymbolKind(symbol) : "";
-
-            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
-                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
-                // Just add all the declarations. 
-                forEach(declarations, declaration => {
-                    result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+            if (symbol.flags & SymbolFlags.UnionProperty) {
+                forEach(typeInfoResolver.getUnionTypesOfUnionProperty(symbol), t => {
+                    getDefinitionFromSymbol(typeInfoResolver.getPropertyOfType(t, symbol.name), node, result);
                 });
+            }
+            else {
+                getDefinitionFromSymbol(symbol, node, result);
             }
 
             return result;
