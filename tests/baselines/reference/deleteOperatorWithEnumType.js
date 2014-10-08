@@ -9,17 +9,17 @@ var ResultIsBoolean1 = delete ENUM;
 var ResultIsBoolean2 = delete ENUM1;
 
 // enum type expressions
-var ResultIsBoolean3 = delete ENUM1[0];
-var ResultIsBoolean4 = delete (ENUM[0] + ENUM1[1]);
+var ResultIsBoolean3 = delete ENUM1["A"];
+var ResultIsBoolean4 = delete (ENUM[0] + ENUM1["B"]);
 
 // multiple delete  operators
 var ResultIsBoolean5 = delete delete ENUM;
-var ResultIsBoolean6 = delete delete delete (ENUM[0] + ENUM1[1]);
+var ResultIsBoolean6 = delete delete delete (ENUM[0] + ENUM1["B"]);
 
 // miss assignment operators
 delete ENUM;
 delete ENUM1;
-delete ENUM1[1];
+delete ENUM1.B;
 delete ENUM, ENUM1;
 
 //// [deleteOperatorWithEnumType.js]
@@ -39,13 +39,13 @@ var ENUM1;
 var ResultIsBoolean1 = delete ENUM;
 var ResultIsBoolean2 = delete ENUM1;
 // enum type expressions
-var ResultIsBoolean3 = delete ENUM1[0];
-var ResultIsBoolean4 = delete (ENUM[0] + ENUM1[1]);
+var ResultIsBoolean3 = delete ENUM1["A"];
+var ResultIsBoolean4 = delete (ENUM[0] + ENUM1["B"]);
 // multiple delete  operators
 var ResultIsBoolean5 = delete delete ENUM;
-var ResultIsBoolean6 = delete delete delete (ENUM[0] + ENUM1[1]);
+var ResultIsBoolean6 = delete delete delete (ENUM[0] + ENUM1["B"]);
 // miss assignment operators
 delete ENUM;
 delete ENUM1;
-delete ENUM1[1];
+delete 1 /* B */;
 delete ENUM, ENUM1;

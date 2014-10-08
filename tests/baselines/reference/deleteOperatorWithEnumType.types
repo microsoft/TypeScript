@@ -21,20 +21,20 @@ var ResultIsBoolean2 = delete ENUM1;
 >ENUM1 : typeof ENUM1
 
 // enum type expressions
-var ResultIsBoolean3 = delete ENUM1[0];
+var ResultIsBoolean3 = delete ENUM1["A"];
 >ResultIsBoolean3 : boolean
->delete ENUM1[0] : boolean
->ENUM1[0] : string
+>delete ENUM1["A"] : boolean
+>ENUM1["A"] : ENUM1
 >ENUM1 : typeof ENUM1
 
-var ResultIsBoolean4 = delete (ENUM[0] + ENUM1[1]);
+var ResultIsBoolean4 = delete (ENUM[0] + ENUM1["B"]);
 >ResultIsBoolean4 : boolean
->delete (ENUM[0] + ENUM1[1]) : boolean
->(ENUM[0] + ENUM1[1]) : string
->ENUM[0] + ENUM1[1] : string
+>delete (ENUM[0] + ENUM1["B"]) : boolean
+>(ENUM[0] + ENUM1["B"]) : string
+>ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
->ENUM1[1] : string
+>ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
 
 // multiple delete  operators
@@ -44,16 +44,16 @@ var ResultIsBoolean5 = delete delete ENUM;
 >delete ENUM : boolean
 >ENUM : typeof ENUM
 
-var ResultIsBoolean6 = delete delete delete (ENUM[0] + ENUM1[1]);
+var ResultIsBoolean6 = delete delete delete (ENUM[0] + ENUM1["B"]);
 >ResultIsBoolean6 : boolean
->delete delete delete (ENUM[0] + ENUM1[1]) : boolean
->delete delete (ENUM[0] + ENUM1[1]) : boolean
->delete (ENUM[0] + ENUM1[1]) : boolean
->(ENUM[0] + ENUM1[1]) : string
->ENUM[0] + ENUM1[1] : string
+>delete delete delete (ENUM[0] + ENUM1["B"]) : boolean
+>delete delete (ENUM[0] + ENUM1["B"]) : boolean
+>delete (ENUM[0] + ENUM1["B"]) : boolean
+>(ENUM[0] + ENUM1["B"]) : string
+>ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
->ENUM1[1] : string
+>ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
 
 // miss assignment operators
@@ -65,10 +65,11 @@ delete ENUM1;
 >delete ENUM1 : boolean
 >ENUM1 : typeof ENUM1
 
-delete ENUM1[1];
->delete ENUM1[1] : boolean
->ENUM1[1] : string
+delete ENUM1.B;
+>delete ENUM1.B : boolean
+>ENUM1.B : ENUM1
 >ENUM1 : typeof ENUM1
+>B : ENUM1
 
 delete ENUM, ENUM1;
 >delete ENUM, ENUM1 : typeof ENUM1

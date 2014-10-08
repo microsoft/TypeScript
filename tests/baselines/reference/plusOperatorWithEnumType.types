@@ -21,20 +21,20 @@ var ResultIsNumber2 = +ENUM1;
 >ENUM1 : typeof ENUM1
 
 // enum type expressions
-var ResultIsNumber3 = +ENUM1[0];
+var ResultIsNumber3 = +ENUM1["A"];
 >ResultIsNumber3 : number
->+ENUM1[0] : number
->ENUM1[0] : string
+>+ENUM1["A"] : number
+>ENUM1["A"] : ENUM1
 >ENUM1 : typeof ENUM1
 
-var ResultIsNumber4 = +(ENUM[0] + ENUM1[1]);
+var ResultIsNumber4 = +(ENUM[0] + ENUM1["B"]);
 >ResultIsNumber4 : number
->+(ENUM[0] + ENUM1[1]) : number
->(ENUM[0] + ENUM1[1]) : string
->ENUM[0] + ENUM1[1] : string
+>+(ENUM[0] + ENUM1["B"]) : number
+>(ENUM[0] + ENUM1["B"]) : string
+>ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
->ENUM1[1] : string
+>ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
 
 // miss assignment operators
@@ -46,10 +46,11 @@ var ResultIsNumber4 = +(ENUM[0] + ENUM1[1]);
 >+ENUM1 : number
 >ENUM1 : typeof ENUM1
 
-+ENUM1[1];
->+ENUM1[1] : number
->ENUM1[1] : string
++ENUM1.B;
+>+ENUM1.B : number
+>ENUM1.B : ENUM1
 >ENUM1 : typeof ENUM1
+>B : ENUM1
 
 +ENUM, ENUM1;
 >+ENUM, ENUM1 : typeof ENUM1

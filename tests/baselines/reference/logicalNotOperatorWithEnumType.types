@@ -17,20 +17,21 @@ var ResultIsBoolean1 = !ENUM;
 >ENUM : typeof ENUM
 
 // enum type expressions
-var ResultIsBoolean2 = !ENUM[1];
+var ResultIsBoolean2 = !ENUM["B"];
 >ResultIsBoolean2 : boolean
->!ENUM[1] : boolean
->ENUM[1] : string
+>!ENUM["B"] : boolean
+>ENUM["B"] : ENUM
 >ENUM : typeof ENUM
 
-var ResultIsBoolean3 = !(ENUM[1] + ENUM[2]);
+var ResultIsBoolean3 = !(ENUM.B + ENUM["C"]);
 >ResultIsBoolean3 : boolean
->!(ENUM[1] + ENUM[2]) : boolean
->(ENUM[1] + ENUM[2]) : string
->ENUM[1] + ENUM[2] : string
->ENUM[1] : string
+>!(ENUM.B + ENUM["C"]) : boolean
+>(ENUM.B + ENUM["C"]) : number
+>ENUM.B + ENUM["C"] : number
+>ENUM.B : ENUM
 >ENUM : typeof ENUM
->ENUM[2] : string
+>B : ENUM
+>ENUM["C"] : ENUM
 >ENUM : typeof ENUM
 
 // multiple ! operators
@@ -40,17 +41,18 @@ var ResultIsBoolean4 = !!ENUM;
 >!ENUM : boolean
 >ENUM : typeof ENUM
 
-var ResultIsBoolean5 = !!!(ENUM[1] + ENUM[2]);
+var ResultIsBoolean5 = !!!(ENUM["B"] + ENUM.C);
 >ResultIsBoolean5 : boolean
->!!!(ENUM[1] + ENUM[2]) : boolean
->!!(ENUM[1] + ENUM[2]) : boolean
->!(ENUM[1] + ENUM[2]) : boolean
->(ENUM[1] + ENUM[2]) : string
->ENUM[1] + ENUM[2] : string
->ENUM[1] : string
+>!!!(ENUM["B"] + ENUM.C) : boolean
+>!!(ENUM["B"] + ENUM.C) : boolean
+>!(ENUM["B"] + ENUM.C) : boolean
+>(ENUM["B"] + ENUM.C) : number
+>ENUM["B"] + ENUM.C : number
+>ENUM["B"] : ENUM
 >ENUM : typeof ENUM
->ENUM[2] : string
+>ENUM.C : ENUM
 >ENUM : typeof ENUM
+>C : ENUM
 
 // miss assignment operators
 !ENUM;
@@ -61,10 +63,11 @@ var ResultIsBoolean5 = !!!(ENUM[1] + ENUM[2]);
 >!ENUM1 : boolean
 >ENUM1 : typeof ENUM1
 
-!ENUM[1];
->!ENUM[1] : boolean
->ENUM[1] : string
+!ENUM.B;
+>!ENUM.B : boolean
+>ENUM.B : ENUM
 >ENUM : typeof ENUM
+>B : ENUM
 
 !ENUM, ENUM1;
 >!ENUM, ENUM1 : typeof ENUM1

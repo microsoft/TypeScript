@@ -12,8 +12,8 @@ var ResultIsNumber3 = ENUM--;
 var ResultIsNumber4 = ENUM1--;
 
 // enum type expressions
-var ResultIsNumber5 = --(ENUM[1] + ENUM[2]);
-var ResultIsNumber6 = (ENUM[1] + ENUM[2])--;
+var ResultIsNumber5 = --(ENUM["A"] + ENUM.B);
+var ResultIsNumber6 = (ENUM.A + ENUM["B"])--;
 
 // miss assignment operator
 --ENUM;
@@ -41,8 +41,8 @@ var ResultIsNumber2 = --ENUM1;
 var ResultIsNumber3 = ENUM--;
 var ResultIsNumber4 = ENUM1--;
 // enum type expressions
-var ResultIsNumber5 = --(ENUM[1] + ENUM[2]);
-var ResultIsNumber6 = (ENUM[1] + ENUM[2])--;
+var ResultIsNumber5 = --(ENUM["A"] + ENUM.B);
+var ResultIsNumber6 = (ENUM.A + ENUM["B"])--;
 // miss assignment operator
 --ENUM;
 --ENUM1;

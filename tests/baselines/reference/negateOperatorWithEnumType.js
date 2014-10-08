@@ -8,13 +8,13 @@ enum ENUM1 { A, B, "" };
 var ResultIsNumber1 = -ENUM;
 
 // expressions
-var ResultIsNumber2 = -ENUM1[1];
-var ResultIsNumber3 = -(ENUM1[1] + ENUM1[2]);
+var ResultIsNumber2 = -ENUM1["B"];
+var ResultIsNumber3 = -(ENUM1.B + ENUM1[""]);
 
 // miss assignment operators
 -ENUM;
 -ENUM1;
--ENUM1[1];
+-ENUM1["B"];
 -ENUM, ENUM1;
 
 //// [negateOperatorWithEnumType.js]
@@ -33,10 +33,10 @@ var ENUM1;
 // enum type var
 var ResultIsNumber1 = -ENUM;
 // expressions
-var ResultIsNumber2 = -ENUM1[1];
-var ResultIsNumber3 = -(ENUM1[1] + ENUM1[2]);
+var ResultIsNumber2 = -ENUM1["B"];
+var ResultIsNumber3 = -(1 /* B */ + ENUM1[""]);
 // miss assignment operators
 -ENUM;
 -ENUM1;
--ENUM1[1];
+-ENUM1["B"];
 -ENUM, ENUM1;

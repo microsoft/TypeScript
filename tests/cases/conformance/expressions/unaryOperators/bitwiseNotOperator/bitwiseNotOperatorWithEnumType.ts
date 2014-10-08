@@ -6,13 +6,13 @@ enum ENUM1 { A, B, "" };
 var ResultIsNumber1 = ~ENUM1;
 
 // enum type expressions
-var ResultIsNumber2 = ~ENUM1[1];
-var ResultIsNumber3 = ~(ENUM1[1] + ENUM1[2]);
+var ResultIsNumber2 = ~ENUM1["A"];
+var ResultIsNumber3 = ~(ENUM1.A + ENUM1["B"]);
 
 // multiple ~ operators
-var ResultIsNumber4 = ~~~(ENUM1[1] + ENUM1[2]);
+var ResultIsNumber4 = ~~~(ENUM1["A"] + ENUM1.B);
 
 // miss assignment operators
 ~ENUM1;
-~ENUM1[1];
-~ENUM1[1], ~ENUM1[2];
+~ENUM1["A"];
+~ENUM1.A, ~ENUM1["B"];

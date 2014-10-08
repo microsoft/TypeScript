@@ -4,13 +4,13 @@
 enum ENUM1 { A, B, "" };
 
 // expression
-var ResultIsNumber1 = ++ENUM1[1];
-var ResultIsNumber2 = ENUM1[1]++;
+var ResultIsNumber1 = ++ENUM1["B"];
+var ResultIsNumber2 = ENUM1.B++;
 
 // miss assignment operator
-++ENUM1[1];
+++ENUM1["B"];
 
-ENUM1[1]++;
+ENUM1.B++;
 
 //// [incrementOperatorWithEnumType.js]
 // ++ operator on enum type
@@ -22,8 +22,8 @@ var ENUM1;
 })(ENUM1 || (ENUM1 = {}));
 ;
 // expression
-var ResultIsNumber1 = ++ENUM1[1];
-var ResultIsNumber2 = ENUM1[1]++;
+var ResultIsNumber1 = ++ENUM1["B"];
+var ResultIsNumber2 = 1 /* B */++;
 // miss assignment operator
-++ENUM1[1];
-ENUM1[1]++;
+++ENUM1["B"];
+1 /* B */++;

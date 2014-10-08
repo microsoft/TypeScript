@@ -21,20 +21,20 @@ var ResultIsString2 = typeof ENUM1;
 >ENUM1 : typeof ENUM1
 
 // enum type expressions
-var ResultIsString3 = typeof ENUM1[0];
+var ResultIsString3 = typeof ENUM1["A"];
 >ResultIsString3 : string
->typeof ENUM1[0] : string
->ENUM1[0] : string
+>typeof ENUM1["A"] : string
+>ENUM1["A"] : ENUM1
 >ENUM1 : typeof ENUM1
 
-var ResultIsString4 = typeof (ENUM[0] + ENUM1[1]);
+var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
 >ResultIsString4 : string
->typeof (ENUM[0] + ENUM1[1]) : string
->(ENUM[0] + ENUM1[1]) : string
->ENUM[0] + ENUM1[1] : string
+>typeof (ENUM[0] + ENUM1["B"]) : string
+>(ENUM[0] + ENUM1["B"]) : string
+>ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
->ENUM1[1] : string
+>ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
 
 // multiple typeof  operators
@@ -44,17 +44,18 @@ var ResultIsString5 = typeof typeof ENUM;
 >typeof ENUM : string
 >ENUM : typeof ENUM
 
-var ResultIsString6 = typeof typeof typeof (ENUM[0] + ENUM1[1]);
+var ResultIsString6 = typeof typeof typeof (ENUM[0] + ENUM1.B);
 >ResultIsString6 : string
->typeof typeof typeof (ENUM[0] + ENUM1[1]) : string
->typeof typeof (ENUM[0] + ENUM1[1]) : string
->typeof (ENUM[0] + ENUM1[1]) : string
->(ENUM[0] + ENUM1[1]) : string
->ENUM[0] + ENUM1[1] : string
+>typeof typeof typeof (ENUM[0] + ENUM1.B) : string
+>typeof typeof (ENUM[0] + ENUM1.B) : string
+>typeof (ENUM[0] + ENUM1.B) : string
+>(ENUM[0] + ENUM1.B) : string
+>ENUM[0] + ENUM1.B : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
->ENUM1[1] : string
+>ENUM1.B : ENUM1
 >ENUM1 : typeof ENUM1
+>B : ENUM1
 
 // miss assignment operators
 typeof ENUM;
@@ -65,9 +66,9 @@ typeof ENUM1;
 >typeof ENUM1 : string
 >ENUM1 : typeof ENUM1
 
-typeof ENUM1[1];
->typeof ENUM1[1] : string
->ENUM1[1] : string
+typeof ENUM1["B"];
+>typeof ENUM1["B"] : string
+>ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
 
 typeof ENUM, ENUM1;
