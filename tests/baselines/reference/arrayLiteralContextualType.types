@@ -1,0 +1,86 @@
+=== tests/cases/compiler/arrayLiteralContextualType.ts ===
+interface IAnimal {
+>IAnimal : IAnimal
+
+    name: string;
+>name : string
+}
+
+class Giraffe {
+>Giraffe : Giraffe
+
+    name = "Giraffe";
+>name : string
+
+    neckLength = "3m";
+>neckLength : string
+}
+
+class Elephant {
+>Elephant : Elephant
+
+    name = "Elephant";
+>name : string
+
+    trunkDiameter = "20cm";
+>trunkDiameter : string
+}
+
+function foo(animals: IAnimal[]) { }
+>foo : (animals: IAnimal[]) => void
+>animals : IAnimal[]
+>IAnimal : IAnimal
+
+function bar(animals: { [n: number]: IAnimal }) { }
+>bar : (animals: { [x: number]: IAnimal; }) => void
+>animals : { [x: number]: IAnimal; }
+>n : number
+>IAnimal : IAnimal
+
+foo([
+>foo([    new Giraffe(),    new Elephant()]) : void
+>foo : (animals: IAnimal[]) => void
+>[    new Giraffe(),    new Elephant()] : IAnimal[]
+
+    new Giraffe(),
+>new Giraffe() : Giraffe
+>Giraffe : typeof Giraffe
+
+    new Elephant()
+>new Elephant() : Elephant
+>Elephant : typeof Elephant
+
+]); // Legal because of the contextual type IAnimal provided by the parameter
+bar([
+>bar([    new Giraffe(),    new Elephant()]) : void
+>bar : (animals: { [x: number]: IAnimal; }) => void
+>[    new Giraffe(),    new Elephant()] : IAnimal[]
+
+    new Giraffe(),
+>new Giraffe() : Giraffe
+>Giraffe : typeof Giraffe
+
+    new Elephant()
+>new Elephant() : Elephant
+>Elephant : typeof Elephant
+
+]); // Legal because of the contextual type IAnimal provided by the parameter
+
+var arr = [new Giraffe(), new Elephant()];
+>arr : Array<Giraffe | Elephant>
+>[new Giraffe(), new Elephant()] : Array<Giraffe | Elephant>
+>new Giraffe() : Giraffe
+>Giraffe : typeof Giraffe
+>new Elephant() : Elephant
+>Elephant : typeof Elephant
+
+foo(arr); // Error because of no contextual type
+>foo(arr) : void
+>foo : (animals: IAnimal[]) => void
+>arr : Array<Giraffe | Elephant>
+
+bar(arr); // Error because of no contextual type
+>bar(arr) : void
+>bar : (animals: { [x: number]: IAnimal; }) => void
+>arr : Array<Giraffe | Elephant>
+

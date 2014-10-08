@@ -1,3 +1,4 @@
+tests/cases/compiler/promisePermutations.ts(74,70): error TS2345: Argument of type '(x: number) => IPromise<number>' is not assignable to parameter of type '(value: IPromise<number>) => IPromise<number>'.
 tests/cases/compiler/promisePermutations.ts(79,19): error TS2345: Argument of type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
 tests/cases/compiler/promisePermutations.ts(82,19): error TS2345: Argument of type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
 tests/cases/compiler/promisePermutations.ts(83,19): error TS2345: Argument of type '(x: number, y?: string) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
@@ -19,13 +20,20 @@ tests/cases/compiler/promisePermutations.ts(120,19): error TS2345: Argument of t
 tests/cases/compiler/promisePermutations.ts(121,19): error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => Promise<T>' is not assignable to parameter of type '(value: number) => Promise<number>'.
 tests/cases/compiler/promisePermutations.ts(122,19): error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => Promise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
 tests/cases/compiler/promisePermutations.ts(126,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<number>'.
+tests/cases/compiler/promisePermutations.ts(129,11): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/promisePermutations.ts(132,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<number>'.
 tests/cases/compiler/promisePermutations.ts(133,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => Promise<T>' is not assignable to parameter of type '(value: number) => Promise<number>'.
 tests/cases/compiler/promisePermutations.ts(134,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => Promise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
+tests/cases/compiler/promisePermutations.ts(137,11): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/promisePermutations.ts(144,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/promisePermutations.ts(152,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/promisePermutations.ts(156,21): error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
 tests/cases/compiler/promisePermutations.ts(158,21): error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
+tests/cases/compiler/promisePermutations.ts(159,21): error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => Promise<string>'.
+tests/cases/compiler/promisePermutations.ts(160,21): error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
 
 
-==== tests/cases/compiler/promisePermutations.ts (25 errors) ====
+==== tests/cases/compiler/promisePermutations.ts (33 errors) ====
     interface Promise<T> {
         then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
         then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>;
@@ -100,6 +108,8 @@ tests/cases/compiler/promisePermutations.ts(158,21): error TS2345: Argument of t
     var s3b = s3.then(testFunction3P, testFunction3P, testFunction3P);
     var s3c = s3.then(testFunction3P, testFunction3, testFunction3);
     var s3d = s3.then(testFunction3P, testFunction3, testFunction3).then(testFunction3, testFunction3, testFunction3);
+                                                                         ~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: number) => IPromise<number>' is not assignable to parameter of type '(value: IPromise<number>) => IPromise<number>'.
     
     var r4: IPromise<string>;
     var sIPromise: (x: any) => IPromise<string>;
@@ -197,6 +207,8 @@ tests/cases/compiler/promisePermutations.ts(158,21): error TS2345: Argument of t
     var r9b = r9.then(sIPromise, sIPromise, sIPromise); // ok
     var r9c = r9.then(nIPromise, nIPromise, nIPromise); // ok
     var r9d = r9.then(testFunction, sIPromise, nIPromise); // ok
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s9: Promise<number>;
     var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
@@ -211,6 +223,8 @@ tests/cases/compiler/promisePermutations.ts(158,21): error TS2345: Argument of t
     var s9d = s9.then(sPromise, sPromise, sPromise); // ok
     var s9e = s9.then(nPromise, nPromise, nPromise); // ok
     var s9f = s9.then(testFunction, sIPromise, nIPromise); // ok
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var s9g = s9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     
     var r10 = testFunction10(x => x);
@@ -218,6 +232,8 @@ tests/cases/compiler/promisePermutations.ts(158,21): error TS2345: Argument of t
     var r10b = r10.then(sIPromise, sIPromise, sIPromise); // ok
     var r10c = r10.then(nIPromise, nIPromise, nIPromise); // ok
     var r10d = r10.then(testFunction, sIPromise, nIPromise); // ok
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var r10e = r10.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s10 = testFunction10P(x => x);
     var s10a = s10.then(testFunction10, testFunction10, testFunction10); // ok
@@ -226,16 +242,24 @@ tests/cases/compiler/promisePermutations.ts(158,21): error TS2345: Argument of t
     var s10d = s10.then(sPromise, sPromise, sPromise); // ok
     var s10e = s10.then(nIPromise, nPromise, nIPromise); // ok
     var s10f = s10.then(testFunctionP, sIPromise, nIPromise); // ok
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
     
     var r11: IPromise<number>;
     var r11a = r11.then(testFunction11, testFunction11, testFunction11); // ok
+                        ~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
     var s11: Promise<number>;
     var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
                         ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
     var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // ok
+                        ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => Promise<string>'.
     var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // ok
+                        ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
     
     var r12 = testFunction12(x => x);
     var r12a = r12.then(testFunction12, testFunction12, testFunction12); // ok

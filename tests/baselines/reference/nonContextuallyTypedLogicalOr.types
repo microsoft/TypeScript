@@ -1,0 +1,39 @@
+=== tests/cases/compiler/nonContextuallyTypedLogicalOr.ts ===
+interface Contextual {
+>Contextual : Contextual
+
+    dummy;
+>dummy : any
+
+    p?: number;
+>p : number
+}
+
+interface Ellement {
+>Ellement : Ellement
+
+    dummy;
+>dummy : any
+
+    p: any;
+>p : any
+}
+
+var c: Contextual;
+>c : Contextual
+>Contextual : Contextual
+
+var e: Ellement;
+>e : Ellement
+>Ellement : Ellement
+
+// This should error. Even though we are contextually typing e with Contextual, the RHS still
+// needs to be a supertype of the LHS to win as the best common type.
+(c || e).dummy;
+>(c || e).dummy : any
+>(c || e) : Contextual | Ellement
+>c || e : Contextual | Ellement
+>c : Contextual
+>e : Ellement
+>dummy : any
+

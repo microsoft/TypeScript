@@ -176,7 +176,7 @@ _.all([true, 1, null, 'yes'], _.identity);
 >_.all : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >all : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
->[true, 1, null, 'yes'] : {}[]
+>[true, 1, null, 'yes'] : Array<string | number | boolean>
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static
 >identity : <T>(value: T) => T
@@ -186,7 +186,7 @@ _.any([null, 0, 'yes', false]);
 >_.any : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >any : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
->[null, 0, 'yes', false] : {}[]
+>[null, 0, 'yes', false] : Array<string | number | boolean>
 
 _.contains([1, 2, 3], 3);
 >_.contains([1, 2, 3], 3) : boolean
@@ -364,11 +364,11 @@ _.rest([5, 4, 3, 2, 1]);
 >[5, 4, 3, 2, 1] : number[]
 
 _.compact([0, 1, false, 2, '', 3]);
->_.compact([0, 1, false, 2, '', 3]) : {}[]
+>_.compact([0, 1, false, 2, '', 3]) : Array<string | number | boolean>
 >_.compact : <T>(list: T[]) => T[]
 >_ : Underscore.Static
 >compact : <T>(list: T[]) => T[]
->[0, 1, false, 2, '', 3] : {}[]
+>[0, 1, false, 2, '', 3] : Array<string | number | boolean>
 
 _.flatten([1, 2, 3, 4]);
 >_.flatten([1, 2, 3, 4]) : {}[]
@@ -393,7 +393,7 @@ _.flatten([1, [2], [3, [[4]]]]);
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >[1, [2], [3, [[4]]]] : any[]
 >[2] : number[]
->[3, [[4]]] : {}[]
+>[3, [[4]]] : Array<number | number[][]>
 >[[4]] : number[][]
 >[4] : number[]
 
@@ -404,7 +404,7 @@ _.flatten([1, [2], [3, [[4]]]], true);
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >[1, [2], [3, [[4]]]] : any[]
 >[2] : number[]
->[3, [[4]]] : {}[]
+>[3, [[4]]] : Array<number | number[][]>
 >[[4]] : number[][]
 >[4] : number[]
 
