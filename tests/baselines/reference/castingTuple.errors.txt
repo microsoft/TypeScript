@@ -1,3 +1,7 @@
+tests/cases/conformance/types/tuple/castingTuple.ts(13,23): error TS2353: Neither type '[number, string]' nor type '[number, string, boolean]' is assignable to the other:
+  Property '2' is missing in type '[number, string]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(16,21): error TS2353: Neither type '[C, D]' nor type '[C, D, A]' is assignable to the other:
+  Property '2' is missing in type '[C, D]'.
 tests/cases/conformance/types/tuple/castingTuple.ts(24,10): error TS2353: Neither type '[number, string]' nor type '[number, number]' is assignable to the other:
   Types of property '1' are incompatible:
     Type 'string' is not assignable to type 'number'.
@@ -8,12 +12,13 @@ tests/cases/conformance/types/tuple/castingTuple.ts(25,10): error TS2353: Neithe
 tests/cases/conformance/types/tuple/castingTuple.ts(26,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
 tests/cases/conformance/types/tuple/castingTuple.ts(26,14): error TS2353: Neither type '[number, string]' nor type 'number[]' is assignable to the other:
   Types of property 'pop' are incompatible:
-    Type '() => {}' is not assignable to type '() => number':
-      Type '{}' is not assignable to type 'number'.
+    Type '() => string | number' is not assignable to type '() => number':
+      Type 'string | number' is not assignable to type 'number':
+        Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/castingTuple.ts(27,1): error TS2304: Cannot find name 't4'.
 
 
-==== tests/cases/conformance/types/tuple/castingTuple.ts (5 errors) ====
+==== tests/cases/conformance/types/tuple/castingTuple.ts (7 errors) ====
     interface I { }
     class A { a = 10; }
     class C implements I { c };
@@ -27,9 +32,15 @@ tests/cases/conformance/types/tuple/castingTuple.ts(27,1): error TS2304: Cannot 
     var numStrTuple: [number, string] = [5, "foo"];
     var emptyObjTuple = <[{}, {}]>numStrTuple;
     var numStrBoolTuple = <[number, string, boolean]>numStrTuple;
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2353: Neither type '[number, string]' nor type '[number, string, boolean]' is assignable to the other:
+!!! error TS2353:   Property '2' is missing in type '[number, string]'.
     var classCDTuple: [C, D] = [new C(), new D()];
     var interfaceIITuple = <[I, I]>classCDTuple;
     var classCDATuple = <[C, D, A]>classCDTuple;
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2353: Neither type '[C, D]' nor type '[C, D, A]' is assignable to the other:
+!!! error TS2353:   Property '2' is missing in type '[C, D]'.
     var eleFromCDA1 = classCDATuple[2]; // A
     var eleFromCDA2 = classCDATuple[5]; // {}
     var t10: [E1, E2] = [E1.one, E2.one];
@@ -54,8 +65,9 @@ tests/cases/conformance/types/tuple/castingTuple.ts(27,1): error TS2304: Cannot 
                  ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2353: Neither type '[number, string]' nor type 'number[]' is assignable to the other:
 !!! error TS2353:   Types of property 'pop' are incompatible:
-!!! error TS2353:     Type '() => {}' is not assignable to type '() => number':
-!!! error TS2353:       Type '{}' is not assignable to type 'number'.
+!!! error TS2353:     Type '() => string | number' is not assignable to type '() => number':
+!!! error TS2353:       Type 'string | number' is not assignable to type 'number':
+!!! error TS2353:         Type 'string' is not assignable to type 'number'.
     t4[2] = 10;
     ~~
 !!! error TS2304: Cannot find name 't4'.
