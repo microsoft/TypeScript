@@ -995,7 +995,7 @@ module ts {
             }
 
             // Let the writer know we just wrote out a symbol.  The declaration emitter writer uses 
-            // this to determine if an import it has previously seen (and not writer out) needs 
+            // this to determine if an import it has previously seen (and not written out) needs 
             // to be written to the file once the walk of the tree is complete.
             //
             // NOTE(cyrusn): This approach feels somewhat unfortunate.  A simple pass over the tree
