@@ -13,7 +13,7 @@ diagnostics.setEditValidation(IncrementalEditValidation.None);
 
 // Do resolve without typeCheck
 goTo.marker('1');
-verify.quickInfoIs("c1");
+verify.quickInfoIs("(var) val: c1");
 
 // TypeCheck
 verify.numberOfErrorsInCurrentFile(1);

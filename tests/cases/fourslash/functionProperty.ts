@@ -30,20 +30,20 @@ verify.currentSignatureHelpIs('x(a: number): void');
 goTo.marker('signatureC');
 verify.currentSignatureHelpIs('x(a: number): void');
 
-//goTo.marker('completionA');
-//verify.completionListContains("x", "(a: number): void");
+goTo.marker('completionA');
+verify.completionListContains("x", "(property) x: (a: number) => void");
 
-//goTo.marker('completionB');
-//verify.completionListContains("x", "(a: number) => void");
+goTo.marker('completionB');
+verify.completionListContains("x", "(property) x: (a: number) => void");
 
-//goTo.marker('completionC');
-//verify.completionListContains("x", "(a: number) => void");
+goTo.marker('completionC');
+verify.completionListContains("x", "(property) x: (a: number) => void");
 
-//goTo.marker('quickInfoA');
-//verify.quickInfoIs("(a: number): void", undefined, "x", "local function");
+goTo.marker('quickInfoA');
+verify.quickInfoIs("(property) x: (a: number) => void", undefined);
 
-//goTo.marker('quickInfoB');
-//verify.quickInfoIs("(a: number) => void", undefined, "x", "property");
+goTo.marker('quickInfoB');
+verify.quickInfoIs("(property) x: (a: number) => void", undefined);
 
-//goTo.marker('quickInfoC');
-//verify.quickInfoIs("(a: number) => void", undefined, "x", "property");
+goTo.marker('quickInfoC');
+verify.quickInfoIs("(property) x: (a: number) => void", undefined);

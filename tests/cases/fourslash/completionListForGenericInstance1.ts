@@ -7,4 +7,4 @@
 ////i/**/
 
 goTo.marker();
-verify.completionListContains('i', 'Iterator<string, number>', '', 'i');
+verify.completionListContains('i', '(var) i: Iterator<string, number>');

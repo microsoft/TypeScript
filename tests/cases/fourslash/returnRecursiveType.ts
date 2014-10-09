@@ -8,4 +8,4 @@
 ////var My/**/Var = MyFn();
 
 goTo.marker();
-verify.quickInfoIs('MyInt');
+verify.quickInfoIs('(var) MyVar: MyInt');

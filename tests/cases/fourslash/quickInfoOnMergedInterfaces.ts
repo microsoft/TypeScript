@@ -19,4 +19,4 @@
 diagnostics.setEditValidation(IncrementalEditValidation.None);
 
 goTo.marker('1');
-verify.quickInfoIs("number", undefined, "r4", "var");
+verify.quickInfoIs("(var) r4: number");

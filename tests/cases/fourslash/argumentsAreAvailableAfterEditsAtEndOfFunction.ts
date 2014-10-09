@@ -12,4 +12,4 @@
 goTo.marker();
 var text = "this.children = ch";
 edit.insert(text);
-verify.completionListContains("children", "string[]");
+verify.completionListContains("children", "(parameter) children: string[]");

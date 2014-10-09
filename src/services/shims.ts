@@ -85,9 +85,6 @@ module ts {
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
 
-        // Obsolete.  Use getQuickInfoAtPosition instead.
-        getTypeAtPosition(fileName: string, position: number): string;
-
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string;
         getBreakpointStatementAtPosition(fileName: string, position: number): string;
 
@@ -174,7 +171,7 @@ module ts {
     }
 
     /// TODO: delete this, it is only needed until the VS interface is updated
-    enum LanguageVersion {
+    export enum LanguageVersion {
         EcmaScript3 = 0,
         EcmaScript5 = 1,
     }
@@ -578,15 +575,6 @@ module ts {
                 });
         }
 
-
-        public getTypeAtPosition(fileName: string, position: number): string {
-            return this.forwardJSONCall(
-                "getTypeAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    var typeInfo = this.languageService.getTypeAtPosition(fileName, position);
-                    return typeInfo;
-                });
-        }
 
         /// NAMEORDOTTEDNAMESPAN
 

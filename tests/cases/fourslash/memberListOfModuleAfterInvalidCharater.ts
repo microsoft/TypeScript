@@ -7,4 +7,4 @@
 ////testModule./**/
 
 goTo.marker();
-verify.completionListContains('foo', 'number');
+verify.completionListContains('foo', '(var) testModule.foo: number');
