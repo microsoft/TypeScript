@@ -1204,7 +1204,8 @@ module ts {
         }
 
         public static toString(parts: SymbolDisplayPart[]) {
-            return parts.map(p => p.text).join("");
+            var result = map(parts, p => p.text);
+            return result ? result.join("") : "";
         }
     }
 

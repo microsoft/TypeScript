@@ -2162,9 +2162,16 @@ module ts {
             }
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
-            var mappedNode = getTouchingToken(sourceFile, TypeScript.end(node) - 1);
-            if (isPunctuation(mappedNode.kind)) {
-                mappedNode = mappedNode.parent;
+            var precedingToken = findTokenOnLeftOfPosition(sourceFile, TypeScript.end(node));
+            var mappedNode: Node;
+            if (!precedingToken) {
+                mappedNode = sourceFile;
+            }
+            else if (isPunctuation(precedingToken.kind)) {
+                mappedNode = precedingToken.parent;
+            }
+            else {
+                mappedNode = precedingToken;
             }
 
             Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
