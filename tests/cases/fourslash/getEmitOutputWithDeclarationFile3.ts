@@ -4,7 +4,6 @@
 // @out: declSingle.js
 
 // @Filename: decl.d.ts
-// @emitThisFile: true
 //// interface I { a: string; }
 
 // @Filename: inputFile2.ts
@@ -16,6 +15,9 @@
 
 // @Filename: inputFile4.ts
 //// var x1:number = 1000;
+
+// @Filename: inputFile5.js
+//// var x2 = 1000;
 
 debugger;
 verify.baselineGetEmitOutput();

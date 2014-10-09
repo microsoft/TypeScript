@@ -3258,7 +3258,7 @@ module ts {
                 emitFile(jsFilePath, targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
-                // Otherwise, if --out is specified and targetSourceFile shouldn't be emitted to own file,
+                // Otherwise, if --out is specified and targetSourceFile is not a declaration file,
                 // Emit all, non-external-module file, into one single output file
                 emitFile(compilerOptions.out);
             }
