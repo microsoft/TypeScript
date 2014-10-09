@@ -6639,7 +6639,6 @@ module ts {
                 var ambient = isInAmbientContext(node);
 
                 forEach(node.members, member => {
-                    // todo: remove first check here when isNumericName gets fixed
                     if(isNumericName(member.name.text)) {
                         error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
