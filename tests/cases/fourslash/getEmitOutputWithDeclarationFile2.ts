@@ -1,6 +1,6 @@
 ﻿/// <reference path="fourslash.ts" />
 
-// @BaselineFile: getEmitOutputWithDeclarationFile.baseline
+// @BaselineFile: getEmitOutputWithDeclarationFile2.baseline
 
 // @Filename: decl.d.ts
 // @emitThisFile: true
@@ -8,11 +8,11 @@
 
 // @Filename: inputFile2.ts
 // @emitThisFile: true
-//// var x1: string = "hello world";
-//// class Foo{
-////    x : string;
-////    y : number;
-//// }
+//// export class Foo { }
+
+// @Filename: inputFile3.ts
+// @emitThisFile: true
+//// var x:string = "hello";
 
 debugger;
 verify.baselineGetEmitOutput();

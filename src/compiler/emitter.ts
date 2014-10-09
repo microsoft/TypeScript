@@ -25,8 +25,15 @@ module ts {
         return indentStrings[1].length;
     }
 
+    function isDeclarationFile(sourceFile: SourceFile): boolean {
+        if (sourceFile.flags & NodeFlags.DeclarationFile) {
+            return true;
+        }
+        return false;
+    }
+
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        if (!(sourceFile.flags & NodeFlags.DeclarationFile)) {
+        if (!isDeclarationFile(sourceFile)) {
             if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
                 return true;
             }
@@ -3242,14 +3249,15 @@ module ts {
             if (compilerOptions.out) {
                 emitFile(compilerOptions.out);
             }
-        } else {
+        }
+        else {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
                 // If shouldEmitToOwnFile return true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
                 var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
-            else if (compilerOptions.out) {
+            else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
                 // Otherwise, if --out is specified and targetSourceFile shouldn't be emitted to own file, then emit all, non-external-module file, into one single output file
                 emitFile(compilerOptions.out);
             }

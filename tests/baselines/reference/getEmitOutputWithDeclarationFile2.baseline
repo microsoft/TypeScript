@@ -2,10 +2,14 @@ EmitOutputStatus : Succeeded
 
 EmitOutputStatus : Succeeded
 Filename : tests/cases/fourslash/inputFile2.js
-var x1 = "hello world";
 var Foo = (function () {
     function Foo() {
     }
     return Foo;
 })();
+exports.Foo = Foo;
+
+EmitOutputStatus : Succeeded
+Filename : tests/cases/fourslash/inputFile3.js
+var x = "hello";
 
