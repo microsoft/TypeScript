@@ -111,6 +111,10 @@ module ts {
         return file.externalModuleIndicator !== undefined;
     }
 
+    export function isDeclarationFile(file: SourceFile): boolean {
+        return (file.flags & NodeFlags.DeclarationFile) !== 0;
+    }
+
     export function isPrologueDirective(node: Node): boolean {
         return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
@@ -4125,7 +4129,7 @@ module ts {
                         }
                     }
                 }
-                else if (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || file.flags & NodeFlags.DeclarationFile)) {
+                else if (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
                     // TypeScript 1.0 spec (April 2014): 12.1.6
                     // An AmbientExternalModuleDeclaration declares an external module. 
                     // This type of declaration is permitted only in the global module.

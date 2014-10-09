@@ -25,13 +25,6 @@ module ts {
         return indentStrings[1].length;
     }
 
-    function isDeclarationFile(sourceFile: SourceFile): boolean {
-        if (sourceFile.flags & NodeFlags.DeclarationFile) {
-            return true;
-        }
-        return false;
-    }
-
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
             if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
@@ -43,7 +36,7 @@ module ts {
     }
 
     export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
-        return isExternalModule(sourceFile) || (sourceFile.flags & NodeFlags.DeclarationFile) !== 0;
+        return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
