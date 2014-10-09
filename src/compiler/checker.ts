@@ -4095,8 +4095,7 @@ module ts {
         var numericScanner: Scanner;
         function isNumericName(name: string) {
             // First see if the name is in canonical string representation.
-            // Unfortunately this permits various forms of "NaN" and "Infinity",
-            // but it is a good check to save time.
+            // We can't simply rely on this because this permits various forms of "NaN" and "Infinity".
             if ((+name).toString() !== name) {
                 return false;
             }
@@ -4104,7 +4103,7 @@ module ts {
             numericScanner = numericScanner || createScanner(compilerOptions.target || ScriptTarget.ES5, /*skipTrivia*/ false);
             numericScanner.setText(name);
 
-            // Ensure that the name is nothing more than an optional sign (+/-) and a numeric literal
+            // Ensure that the name is nothing more than an optional sign ('-') and a numeric literal
             // (i.e. it is preceded by nothing and scanning leaves us at the very end of the string).
             var token = numericScanner.scan();
             
