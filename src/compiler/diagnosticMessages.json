@@ -183,10 +183,6 @@
         "category": "Error",
         "code": 1063
     },
-    "An enum member cannot have a numeric name.": {
-        "category": "Error",
-        "code":  1065
-    },
     "Ambient enum elements can only have integer literal initializers.": {
         "category": "Error",
         "code": 1066
@@ -450,6 +446,10 @@
     "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
         "category": "Error",
         "code": 1150
+    },
+    "An enum member cannot have a numeric name.": {
+        "category": "Error",
+        "code":  1151
     },
 
     "Duplicate identifier '{0}'.": {
