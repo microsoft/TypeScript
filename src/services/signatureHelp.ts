@@ -306,12 +306,12 @@ module ts.SignatureHelp {
                     displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                     displayParts.push(spacePart());
 
-                    var typeParts = typeInfoResolver.typeToDisplayParts(typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
+                    var typeParts = typeToDisplayParts(typeInfoResolver, typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
                     displayParts.push.apply(displayParts, typeParts);
 
                     return {
                         name: p.name,
-                        documentation: getSymbolDocumentationDisplayParts(p),
+                        documentation: p.getDocumentationComment(),
                         displayParts: displayParts,
                         isOptional: isOptional
                     };
@@ -320,7 +320,7 @@ module ts.SignatureHelp {
                 var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
                 var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
 
-                var prefixParts = callTargetSymbol ? typeInfoResolver.symbolToDisplayParts(callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined) : [];
+                var prefixParts = callTargetSymbol ? symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined) : [];
 
                 var separatorParts = [punctuationPart(SyntaxKind.CommaToken), spacePart()];
 
@@ -346,7 +346,7 @@ module ts.SignatureHelp {
                 suffixParts.push(punctuationPart(SyntaxKind.ColonToken));
                 suffixParts.push(spacePart());
 
-                var typeParts = typeInfoResolver.typeToDisplayParts(candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
+                var typeParts = typeToDisplayParts(typeInfoResolver, candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
                 suffixParts.push.apply(suffixParts, typeParts);
                 
                 return {
@@ -355,7 +355,7 @@ module ts.SignatureHelp {
                     suffixDisplayParts: suffixParts,
                     separatorDisplayParts: separatorParts,
                     parameters: parameterHelpItems,
-                    documentation: <SymbolDisplayPart[]>null
+                    documentation: candidateSignature.getDocumentationComment()
                 };
             });
 

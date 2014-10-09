@@ -12,8 +12,8 @@
 ////var v/*3*/3: G<G<A, B>, C>;         // Ok
 
 goTo.marker('1');
-verify.quickInfoIs('G<A, C>', null, 'v1');
+verify.quickInfoIs('(var) v1: G<A, C>', null);
 goTo.marker('2');
-verify.quickInfoIs('G<{ a: string; }, C>', null, 'v2');
+verify.quickInfoIs('(var) v2: G<{\n    a: string;\n}, C>', null);
 goTo.marker('3');
-verify.quickInfoIs('G<G<A, B>, C>', null, 'v3');
+verify.quickInfoIs('(var) v3: G<G<A, B>, C>', null);

@@ -3,17 +3,17 @@
 ////function m2g() { };
 ////module m2g { export class C { foo(x: number) { } } } 
 ////var x: m2g./*1*/;
-////var r/*2*/ = m2g/*3*/;
+////var /*2*/r = m2g/*3*/;
 
-//goTo.marker('1');
-//verify.completionListContains('C');
+goTo.marker('1');
+verify.completionListContains('C');
 
-//edit.insert('C.');
-//verify.not.completionListContains('foo');
-//edit.backspace(1);
+edit.insert('C.');
+verify.not.completionListContains('foo');
+edit.backspace(1);
 
-//goTo.marker('2');
-//verify.quickInfoIs("typeof m2g", undefined, "r", "var");
+goTo.marker('2');
+verify.quickInfoIs("(var) r: typeof m2g");
 
 goTo.marker('3');
 edit.insert('(');

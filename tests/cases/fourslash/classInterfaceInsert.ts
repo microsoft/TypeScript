@@ -10,10 +10,10 @@
 //// }
 
 goTo.marker('className');
-verify.quickInfoSymbolNameIs('Sphere');
+verify.quickInfoIs('class Sphere');
 
 goTo.marker('interfaceGoesHere');
 edit.insert("\r\ninterface Surface {\r\n    reflect: () => number;\r\n}\r\n");
 
 goTo.marker('className');
-verify.quickInfoSymbolNameIs('Sphere');
+verify.quickInfoIs('class Sphere');

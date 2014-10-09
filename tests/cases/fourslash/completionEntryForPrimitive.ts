@@ -6,4 +6,4 @@ diagnostics.setEditValidation(IncrementalEditValidation.None);
 goTo.marker();
 verify.not.completionListIsEmpty();
 edit.insert("nu");
-verify.completionListContains("number", undefined, undefined, undefined, "keyword");
+verify.completionListContains("number", undefined, undefined, "keyword");

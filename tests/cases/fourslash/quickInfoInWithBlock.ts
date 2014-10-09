@@ -7,10 +7,10 @@
 
 
 goTo.marker('1');
-verify.not.quickInfoExists();
+verify.quickInfoIs("");
 
 goTo.marker('2');
-verify.not.quickInfoExists();
+verify.quickInfoIs("");
 
 goTo.marker('3');
-verify.not.quickInfoExists();
+verify.quickInfoIs("");

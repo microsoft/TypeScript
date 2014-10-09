@@ -8,4 +8,4 @@
 ////fnc1./**/
 
 goTo.marker();
-verify.memberListContains('arguments', 'any');
+verify.memberListContains('arguments', '(property) Function.arguments: any');

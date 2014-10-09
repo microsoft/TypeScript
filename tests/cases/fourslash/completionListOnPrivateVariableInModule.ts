@@ -3,4 +3,4 @@
 //// module Foo {     var testing = "";     test/**/ }
 
 goTo.marker();
-verify.completionListContains('testing', 'string');
+verify.completionListContains('testing', '(var) testing: string');
