@@ -3231,21 +3231,27 @@ module ts {
         }
 
         if (targetSourceFile === undefined) {
+            // No targetSourceFile is specified (e.g. calling emitter from batch compiler)
             forEach(program.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                     var jsFilePath = getOwnEmitOutputFilePath(sourceFile, ".js");
                     emitFile(jsFilePath, sourceFile);
                 }
             });
-        }
-        else {
-            // Emit only one file specified in targetFilename. This is mainly used in compilerOnSave feature
-            var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, ".js");
-            emitFile(jsFilePath, targetSourceFile);
-        }
 
-        if (compilerOptions.out) {
-            emitFile(compilerOptions.out);
+            if (compilerOptions.out) {
+                emitFile(compilerOptions.out);
+            }
+        } else {
+            // targetSourceFile is specified (e.g calling emitter from language service)
+            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
+                // If shouldEmitToOwnFile is true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
+                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, ".js");
+                emitFile(jsFilePath, targetSourceFile);
+            } else {
+                // If shouldEmitToOwnFile is false, then emit all, non-external-module file, into one single output file
+                emitFile(compilerOptions.out);
+            }
         }
        
         // Sort and make the unique list of diagnostics
