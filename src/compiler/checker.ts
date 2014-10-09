@@ -88,7 +88,7 @@ module ts {
             symbolToString: symbolToString,
             symbolToDisplayParts: symbolToDisplayParts,
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
-            getRootSymbol: getRootSymbol,
+            getRootSymbols: getRootSymbols,
             getContextualType: getContextualType,
             getFullyQualifiedName: getFullyQualifiedName,
             getResolvedSignature: getResolvedSignature,
@@ -7863,8 +7863,22 @@ module ts {
             }
         }
 
-        function getRootSymbol(symbol: Symbol) {
-            return ((symbol.flags & SymbolFlags.Transient) && getSymbolLinks(symbol).target) || symbol;
+        function getRootSymbols(symbol: Symbol): Symbol[] {
+            if (symbol.flags & SymbolFlags.UnionProperty) {
+                var symbols: Symbol[] = [];
+                var name = symbol.name;
+                forEach(getSymbolLinks(symbol).unionType.types, t => {
+                    symbols.push(getPropertyOfType(t, name));
+                });
+                return symbols;
+            }
+            else if (symbol.flags & SymbolFlags.Transient) {
+                var target = getSymbolLinks(symbol).target;
+                if (target) {
+                    return [target];
+                }
+            }
+            return [symbol];
         }
 
         // Emitter support

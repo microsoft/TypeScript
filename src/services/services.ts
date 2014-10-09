@@ -2284,16 +2284,8 @@ module ts {
             }
         }
 
-        function getConcreteSymbol(symbol: Symbol): Symbol {
-            if (symbol.flags & SymbolFlags.UnionProperty) {
-                var types = typeInfoResolver.getUnionTypesOfUnionProperty(symbol);
-                symbol = typeInfoResolver.getPropertyOfType(types[0], symbol.name);
-            }
-            return typeInfoResolver.getRootSymbol(symbol);
-        }
-
         function getSymbolKind(symbol: Symbol): string {
-            var flags = getConcreteSymbol(symbol).getFlags();
+            var flags = typeInfoResolver.getRootSymbols(symbol)[0].getFlags();
 
             if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
@@ -2352,7 +2344,7 @@ module ts {
         }
 
         function getSymbolModifiers(symbol: Symbol): string {
-            symbol = getConcreteSymbol(symbol);
+            symbol = typeInfoResolver.getRootSymbols(symbol)[0];
             return symbol && symbol.declarations && symbol.declarations.length > 0
                 ? getNodeModifiers(symbol.declarations[0])
                 : ScriptElementKindModifier.none;
@@ -3016,18 +3008,28 @@ module ts {
                 return [getReferenceEntryFromNode(node)];
             }
 
+            var declarations = symbol.getDeclarations();
+
+            // Handel union properties
+            if (symbol.flags & SymbolFlags.UnionProperty) {
+                declarations = [];
+                forEach(typeInfoResolver.getUnionTypesOfUnionProperty(symbol), t => {
+                    declarations.push.apply(declarations, t.getProperty(symbol.name).declarations);
+                });
+            }
+
             // the symbol was an internal symbol and does not have a declaration e.g.undefined symbol
-            if (!symbol.getDeclarations()) {
+            if (!declarations || !declarations.length) {
                 return undefined;
             }
 
             var result: ReferenceEntry[];
 
             // Compute the meaning from the location and the symbol it references
-            var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.getDeclarations());
+            var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
             // Get the text to search for, we need to normalize it as external module names will have quote
-            var symbolName = getNormalizedSymbolName(symbol);
+            var symbolName = getNormalizedSymbolName(symbol.name, declarations);
 
             // Get syntactic diagnostics
             var scope = getSymbolScope(symbol);
@@ -3049,15 +3051,15 @@ module ts {
 
             return result;
 
-            function getNormalizedSymbolName(symbol: Symbol): string {
+            function getNormalizedSymbolName(symbolName: string, declarations: Declaration[]): string {
                 // Special case for function expressions, whose names are solely local to their bodies.
-                var functionExpression = getDeclarationOfKind(symbol, SyntaxKind.FunctionExpression);
+                var functionExpression = forEach(declarations, d => d.kind === SyntaxKind.FunctionExpression ? d : undefined);
 
                 if (functionExpression && functionExpression.name) {
                     var name = functionExpression.name.text;
                 }
                 else {
-                    var name = symbol.name;
+                    var name = symbolName;
                 }
 
                 var length = name.length;
@@ -3084,22 +3086,24 @@ module ts {
                 var scope: Node = undefined;
 
                 var declarations = symbol.getDeclarations();
-                for (var i = 0, n = declarations.length; i < n; i++) {
-                    var container = getContainerNode(declarations[i]);
+                if (declarations) {
+                    for (var i = 0, n = declarations.length; i < n; i++) {
+                        var container = getContainerNode(declarations[i]);
 
-                    if (scope && scope !== container) {
-                        // Different declarations have different containers, bail out
-                        return undefined;
+                        if (scope && scope !== container) {
+                            // Different declarations have different containers, bail out
+                            return undefined;
+                        }
+
+                        if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
+                            // This is a global variable and not an external module, any declaration defined
+                            // within this scope is visible outside the file
+                            return undefined;
+                        }
+
+                        // The search scope is the container node
+                        scope = container;
                     }
-
-                    if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
-                        // This is a global variable and not an external module, any declaration defined
-                        // within this scope is visible outside the file
-                        return undefined;
-                    }
-
-                    // The search scope is the container node
-                    scope = container;
                 }
 
                 return scope;
@@ -3216,14 +3220,7 @@ module ts {
                         }
 
                         var referenceSymbol = typeInfoResolver.getSymbolInfo(referenceLocation);
-
-                        // Could not find a symbol e.g. node is string or number keyword,
-                        // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-                        if (!referenceSymbol || !(referenceSymbol.getDeclarations())) {
-                            return;
-                        }
-
-                        if (isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
+                        if (referenceSymbol && isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
                             result.push(getReferenceEntryFromNode(referenceLocation));
                         }
                     });
@@ -3359,24 +3356,26 @@ module ts {
                 // The search set contains at least the current symbol
                 var result = [symbol];
 
-                // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
-                var rootSymbol = typeInfoResolver.getRootSymbol(symbol);
-                if (rootSymbol && rootSymbol !== symbol) {
-                    result.push(rootSymbol);
-                }
-
                 // If the location is in a context sensitive location (i.e. in an object literal) try
                 // to get a contextual type for it, and add the property symbol from the contextual
                 // type to the search set
                 if (isNameOfPropertyAssignment(location)) {
                     var symbolFromContextualType = getPropertySymbolFromContextualType(location);
-                    if (symbolFromContextualType) result.push(typeInfoResolver.getRootSymbol(symbolFromContextualType));
+                    if (symbolFromContextualType) result.push.apply(result, typeInfoResolver.getRootSymbols(symbolFromContextualType));
                 }
 
-                // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
-                if (symbol.parent && symbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    getPropertySymbolsFromBaseTypes(symbol.parent, symbol.getName(), result);
-                }
+                // If this is a union property, add all the symbols from all its source symbols in all unioned types.
+                // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
+                forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
+                    if (rootSymbol !== symbol) {
+                        result.push(rootSymbol);
+                    }
+
+                    // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
+                    if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
+                    }
+                });
 
                 return result;
             }
@@ -3411,33 +3410,34 @@ module ts {
             }
 
             function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
-                // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
-                var referenceSymbolTarget = typeInfoResolver.getRootSymbol(referenceSymbol);
-
-                // if it is in the list, then we are done
-                if (searchSymbols.indexOf(referenceSymbolTarget) >= 0) {
-                    return true;
-                }
-
                 // If the reference location is in an object literal, try to get the contextual type for the 
                 // object literal, lookup the property symbol in the contextual type, and use this symbol to
                 // compare to our searchSymbol
                 if (isNameOfPropertyAssignment(referenceLocation)) {
                     var symbolFromContextualType = getPropertySymbolFromContextualType(referenceLocation);
-                    if (symbolFromContextualType && searchSymbols.indexOf(typeInfoResolver.getRootSymbol(symbolFromContextualType)) >= 0) {
-                        return true;
+                    if (symbolFromContextualType) {
+                        return forEach(typeInfoResolver.getRootSymbols(symbolFromContextualType), s => searchSymbols.indexOf(s) >= 0);
                     }
                 }
 
-                // Finally, try all properties with the same name in any type the containing type extend or implemented, and 
-                // see if any is in the list
-                if (referenceSymbol.parent && referenceSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    var result: Symbol[] = [];
-                    getPropertySymbolsFromBaseTypes(referenceSymbol.parent, referenceSymbol.getName(), result);
-                    return forEach(result, s => searchSymbols.indexOf(s) >= 0);
-                }
+                // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
+                // Or a union property, use its underlying unioned symbols
+                return forEach(typeInfoResolver.getRootSymbols(referenceSymbol), rootSymbol => {
+                    // if it is in the list, then we are done
+                    if (searchSymbols.indexOf(rootSymbol) >= 0) {
+                        return true;
+                    }
 
-                return false;
+                    // Finally, try all properties with the same name in any type the containing type extended or implemented, and 
+                    // see if any is in the list
+                    if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                        var result: Symbol[] = [];
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
+                        return forEach(result, s => searchSymbols.indexOf(s) >= 0);
+                    }
+
+                    return false;
+                });
             }
 
             function getPropertySymbolFromContextualType(node: Node): Symbol {
