@@ -4516,11 +4516,9 @@ module ts {
             //  declare function f(a: { xa: number; xb: number; });
             //  f({ |
             if (!fullTypeCheck) {
-                if (candidates.length) {
-                    for (var i = 0; i < candidates.length; i++) {
-                        if (signatureHasCorrectArity(node, candidates[i])) {
-                            return candidates[i];
-                        }
+                for (var i = 0, n = candidates.length; i < n; i++) {
+                    if (signatureHasCorrectArity(node, candidates[i])) {
+                        return candidates[i];
                     }
                 }
             }
