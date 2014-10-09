@@ -3020,11 +3020,6 @@ module ts {
 
             var symbol = typeInfoResolver.getSymbolInfo(node);
             if (!symbol) {
-                return undefined;
-            }
-
-            var symbol = typeInfoResolver.getSymbolInfo(node);
-            if (!symbol) {
                 
                 // Try getting just type at this position and show
                 switch (node.kind) {
