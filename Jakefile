@@ -57,7 +57,9 @@ var servicesSources = [
     "services.ts",
     "shims.ts",
     "signatureHelp.ts",
-    "utilities.ts"
+    "utilities.ts",
+    "navigationBar.ts",
+    "outliningElementsCollector.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
@@ -126,6 +128,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = false;
+var generateDeclarations = false;
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
 /* Compiles a file from a list of sources
@@ -140,6 +143,9 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "-removeComments --module commonjs -noImplicitAny "; //" -propagateEnumConstants "
+        if (generateDeclarations) {
+            options += "--declaration ";
+        }
         
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
         if (useDebugMode) {
@@ -248,7 +254,7 @@ task("local", ["generate-diagnostics", "lib", tscFile, servicesFile]);
 // Local target to build the compiler and services
 desc("Emit debug mode files with sourcemaps");
 task("debug", function() {
-        useDebugMode = true;
+    useDebugMode = true;
 });
 
 
@@ -260,6 +266,12 @@ task("default", ["local"]);
 desc("Cleans the compiler output, declare files, and tests");
 task("clean", function() {
     jake.rmRf(builtDirectory);
+});
+
+// generate declarations for compiler and services
+desc("Generate declarations for compiler and services");
+task("declaration", function() {
+    generateDeclarations = true;
 });
 
 // Generate Markdown spec
@@ -281,12 +293,12 @@ compileFile(word2mdJs,
 // The generated spec.md; built for the 'generate-spec' task
 file(specMd, [word2mdJs, specWord], function () {
     jake.cpR(headerMd, specMd, {silent: true});
-	var specWordFullPath = path.resolve(specWord);
+    var specWordFullPath = path.resolve(specWord);
     var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" >>' + specMd;
-	console.log(cmd);
-	child_process.exec(cmd, function () {
-		complete();
-	});
+    console.log(cmd);
+    child_process.exec(cmd, function () {
+        complete();
+    });
 }, {async: true})
 
 

@@ -1,10 +1,11 @@
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(9,25): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(14,17): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(15,18): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(24,19): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(36,32): error TS2345: Argument of type '(x: E) => F' is not assignable to parameter of type '(x: E) => E'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts (4 errors) ====
+==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts (5 errors) ====
     // When a function expression is inferentially typed (section 4.9.3) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, 
     // the corresponding inferred type arguments to become fixed and no further candidate inferences are made for them.
     
@@ -14,6 +15,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
     }
     
     var r1: (x: {}) => {} = foo((x: number) => 1, (x: string) => '');
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     function other2<T extends Date>(x: T) {
         var r7 = foo((a: T) => a, (b: T) => b); // T => T

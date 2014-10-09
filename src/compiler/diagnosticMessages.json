@@ -11,6 +11,10 @@
         "category": "Error",
         "code": 1005
     },
+	"A file cannot have a reference to itself.": {
+        "category": "Error",
+        "code": 1006
+    },
     "Trailing comma not allowed.": {
         "category": "Error",
         "code": 1009
@@ -1024,6 +1028,10 @@
         "category": "Error",
         "code": 2446
     },
+    "The '{0}' operator is not allowed for boolean types. Consider using '{1}' instead.": {
+        "category": "Error",
+        "code": 2447
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1347,6 +1355,7 @@
         "category": "Error",
         "code": 5001
     },
+
     "Cannot find the common subdirectory path for the input files.": {
         "category": "Error",
         "code": 5009

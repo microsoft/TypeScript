@@ -17,10 +17,10 @@ var v: { a: (_: string) => number } = { a: s => s.length } || { a: s => 1 };
 >s : string
 
 var v2 = (s: string) => s.length || function (s) { s.aaa };
->v2 : (s: string) => {}
->(s: string) => s.length || function (s) { s.aaa } : (s: string) => {}
+>v2 : (s: string) => number | { (s: any): void; }
+>(s: string) => s.length || function (s) { s.aaa } : (s: string) => number | { (s: any): void; }
 >s : string
->s.length || function (s) { s.aaa } : {}
+>s.length || function (s) { s.aaa } : number | { (s: any): void; }
 >s.length : number
 >s : string
 >length : number

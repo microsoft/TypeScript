@@ -22,8 +22,8 @@ function fn1<T, U>(t: T, u: U) {
 >t : T
 
     var r3 = t || u;
->r3 : {}
->t || u : {}
+>r3 : T | U
+>t || u : T | U
 >t : T
 >u : U
 
@@ -47,8 +47,8 @@ function fn2<T, U/* extends T*/, V/* extends T*/>(t: T, u: U, v: V) {
 >V : V
 
     var r1 = t || u;
->r1 : {}
->t || u : {}
+>r1 : T | U
+>t || u : T | U
 >t : T
 >u : U
 
@@ -67,8 +67,8 @@ function fn2<T, U/* extends T*/, V/* extends T*/>(t: T, u: U, v: V) {
 >u : U
 
     var r5 = u || v;
->r5 : {}
->u || v : {}
+>r5 : U | V
+>u || v : U | V
 >u : U
 >v : V
 
@@ -95,8 +95,8 @@ function fn3<T extends { a: string; b: string }, U extends { a: string; b: numbe
 >U : U
 
     var r1 = t || u;
->r1 : {}
->t || u : {}
+>r1 : T | U
+>t || u : T | U
 >t : T
 >u : U
 

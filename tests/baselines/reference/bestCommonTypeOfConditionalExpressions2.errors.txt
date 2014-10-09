@@ -1,14 +1,9 @@
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts(11,10): error TS2367: No best common type exists between 'number' and 'string'.
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts(12,10): error TS2367: No best common type exists between 'Derived' and 'Derived2'.
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts(15,12): error TS2367: No best common type exists between 'T' and 'U'.
 tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts(18,15): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts(19,12): error TS2367: No best common type exists between 'T' and 'U'.
 tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts(22,15): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts(22,28): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts(23,12): error TS2367: No best common type exists between 'T' and 'U'.
 
 
-==== tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts (8 errors) ====
+==== tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts (3 errors) ====
     // conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
     // these are errors
     
@@ -20,24 +15,16 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfC
     var derived2: Derived2;
     
     var r2 = true ? 1 : '';
-             ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'number' and 'string'.
     var r9 = true ? derived : derived2;
-             ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'Derived' and 'Derived2'.
     
     function foo<T, U>(t: T, u: U) {
         return true ? t : u;
-               ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'U'.
     }
     
     function foo2<T extends U, U>(t: T, u: U) { // Error for referencing own type parameter
                   ~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         return true ? t : u; // Ok because BCT(T, U) = U
-               ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'U'.
     }
     
     function foo3<T extends U, U extends V, V>(t: T, u: U) {
@@ -46,6 +33,4 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfC
                                ~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         return true ? t : u;
-               ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'U'.
     }

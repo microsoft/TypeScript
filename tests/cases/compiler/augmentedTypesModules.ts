@@ -2,18 +2,18 @@
 module m1 { }
 var m1 = 1; // Should be allowed
 
-module m1a { var y = 2; }
-var m1a = 1;
+module m1a { var y = 2; } // error
+var m1a = 1; // error
 
-module m1b { export var y = 2; }
-var m1b = 1;
+module m1b { export var y = 2; } // error
+var m1b = 1; // error
 
 module m1c {
     export interface I { foo(): void; }
 }
 var m1c = 1; // Should be allowed
 
-module m1d {
+module m1d { // error
     export class I { foo() { } }
 }
 var m1d = 1; // error

@@ -93,6 +93,8 @@ module ts {
             getFullyQualifiedName: getFullyQualifiedName,
             getResolvedSignature: getResolvedSignature,
             getEnumMemberValue: getEnumMemberValue,
+            isValidPropertyAccess: isValidPropertyAccess,
+            getAliasedSymbol: resolveImport
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -1157,7 +1159,7 @@ module ts {
                 }
             }
 
-            function writeTypeList(types: Type[], union?: boolean) {
+            function writeTypeList(types: Type[], union: boolean) {
                 for (var i = 0; i < types.length; i++) {
                     if (i > 0) {
                         if (union) {
@@ -1166,6 +1168,8 @@ module ts {
                         writePunctuation(writer, union ? SyntaxKind.BarToken : SyntaxKind.CommaToken);
                         writeSpace(writer);
                     }
+                    // Don't output function type literals in unions because '() => string | () => number' would be parsed
+                    // as a function type that returns a union type. Instead output '{ (): string; } | { (): number; }'.
                     writeType(types[i], /*allowFunctionOrConstructorTypeLiteral*/ !union);
                 }
             }
@@ -1181,14 +1185,14 @@ module ts {
                 else {
                     writeSymbol(type.target.symbol, writer, enclosingDeclaration, SymbolFlags.Type);
                     writePunctuation(writer, SyntaxKind.LessThanToken);
-                    writeTypeList(type.typeArguments);
+                    writeTypeList(type.typeArguments, /*union*/ false);
                     writePunctuation(writer, SyntaxKind.GreaterThanToken);
                 }
             }
 
             function writeTupleType(type: TupleType) {
                 writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                writeTypeList(type.elementTypes);
+                writeTypeList(type.elementTypes, /*union*/ false);
                 writePunctuation(writer, SyntaxKind.CloseBracketToken);
             }
 
@@ -1744,7 +1748,7 @@ module ts {
         function getTypeOfUnionProperty(symbol: Symbol): Type {
             var links = getSymbolLinks(symbol);
             if (!links.type) {
-                var types = map(links.unionType.types, t => getTypeOfSymbol(getPropertyOfType(getApparentType(t), symbol.name) || undefinedSymbol));
+                var types = map(links.unionType.types, t => getTypeOfSymbol(getPropertyOfType(getApparentType(t), symbol.name)));
                 links.type = getUnionType(types);
             }
             return links.type;
@@ -2069,25 +2073,37 @@ module ts {
         }
 
         function signatureListsIdentical(s: Signature[], t: Signature[]): boolean {
-            if (s.length !== t.length) return false;
+            if (s.length !== t.length) {
+                return false;
+            }
             for (var i = 0; i < s.length; i++) {
-                if (!compareSignatures(s[i], t[i], false, isTypeIdenticalTo)) return false;
+                if (!compareSignatures(s[i], t[i], /*compareReturnTypes*/ false, isTypeIdenticalTo)) {
+                    return false;
+                }
             }
             return true;
         }
 
+        // If the lists of call or construct signatures in the given types are all identical except for return types,
+        // and if none of the signatures are generic, return a list of signatures that has substitutes a union of the
+        // return types of the corresponding signatures in each resulting signature.
         function getUnionSignatures(types: Type[], kind: SignatureKind): Signature[] {
             var signatureLists = map(types, t => getSignaturesOfType(t, kind));
-            var baseSignatures = signatureLists[0];
-            for (var i = 0; i < baseSignatures.length; i++) {
-                if (baseSignatures[i].typeParameters) return emptyArray;
+            var signatures = signatureLists[0];
+            for (var i = 0; i < signatures.length; i++) {
+                if (signatures[i].typeParameters) {
+                    return emptyArray;
+                }
             }
             for (var i = 1; i < signatureLists.length; i++) {
-                if (!signatureListsIdentical(baseSignatures, signatureLists[i])) return emptyArray;
+                if (!signatureListsIdentical(signatures, signatureLists[i])) {
+                    return emptyArray;
+                }
             }
-            var result = map(baseSignatures, cloneSignature);
+            var result = map(signatures, cloneSignature);
             for (var i = 0; i < result.length; i++) {
                 var s = result[i];
+                // Clear resolved return type we possibly got from cloneSignature
                 s.resolvedReturnType = undefined;
                 s.unionSignatures = map(signatureLists, signatures => signatures[i]);
             }
@@ -2098,7 +2114,9 @@ module ts {
             var indexTypes: Type[] = [];
             for (var i = 0; i < types.length; i++) {
                 var indexType = getIndexTypeOfType(types[i], kind);
-                if (!indexType) return undefined;
+                if (!indexType) {
+                    return undefined;
+                }
                 indexTypes.push(indexType);
             }
             return getUnionType(indexTypes);
@@ -2113,14 +2131,16 @@ module ts {
                 }
             });
             if (types.length <= 1) {
-                var res = types.length ? resolveObjectTypeMembers(types[0]) : emptyObjectType;
-                setObjectTypeMembers(type, res.members, res.callSignatures, res.constructSignatures, res.stringIndexType, res.numberIndexType);
+                var resolved = types.length ? resolveObjectTypeMembers(types[0]) : emptyObjectType;
+                setObjectTypeMembers(type, resolved.members, resolved.callSignatures, resolved.constructSignatures, resolved.stringIndexType, resolved.numberIndexType);
                 return;
             }
             var members: SymbolTable = {};
             forEach(getPropertiesOfType(types[0]), prop => {
                 for (var i = 1; i < types.length; i++) {
-                    if (!getPropertyOfType(types[i], prop.name)) return;
+                    if (!getPropertyOfType(types[i], prop.name)) {
+                        return;
+                    }
                 }
                 var symbol = <TransientSymbol>createSymbol(SymbolFlags.UnionProperty | SymbolFlags.Transient, prop.name);
                 symbol.unionType = type;
@@ -2662,7 +2682,9 @@ module ts {
             else {
                 var i = 0;
                 var id = type.id;
-                while (i < sortedSet.length && sortedSet[i].id < id) i++;
+                while (i < sortedSet.length && sortedSet[i].id < id) {
+                    i++;
+                }
                 if (i === sortedSet.length || sortedSet[i].id !== id) {
                     sortedSet.splice(i, 0, type);
                 }
@@ -2677,7 +2699,9 @@ module ts {
 
         function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
             for (var i = 0, len = types.length; i < len; i++) {
-                if (candidate !== types[i] && isTypeSubtypeOf(candidate, types[i])) return true;
+                if (candidate !== types[i] && isTypeSubtypeOf(candidate, types[i])) {
+                    return true;
+                }
             }
             return false;
         }
@@ -2731,7 +2755,7 @@ module ts {
         function getStringLiteralType(node: StringLiteralTypeNode): StringLiteralType {
             if (hasProperty(stringLiteralTypes, node.text)) return stringLiteralTypes[node.text];
             var type = stringLiteralTypes[node.text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
-            type.text = getSourceTextOfNode(node);
+            type.text = getTextOfNode(node);
             return type;
         }
 
@@ -3467,7 +3491,7 @@ module ts {
                     return false;
                 }
                 for (var i = 0, len = sourceSignatures.length; i < len; ++i) {
-                    if (!compareSignatures(sourceSignatures[i], targetSignatures[i], /*returnTypes*/ true, isRelatedTo)) {
+                    if (!compareSignatures(sourceSignatures[i], targetSignatures[i], /*compareReturnTypes*/ true, isRelatedTo)) {
                         return false;
                     }
                 }
@@ -3535,7 +3559,7 @@ module ts {
             }
         }
 
-        function compareSignatures(source: Signature, target: Signature, returnTypes: boolean, compareTypes: (s: Type, t: Type) => boolean): boolean {
+        function compareSignatures(source: Signature, target: Signature, compareReturnTypes: boolean, compareTypes: (s: Type, t: Type) => boolean): boolean {
             if (source === target) {
                 return true;
             }
@@ -3568,7 +3592,7 @@ module ts {
                     return false;
                 }
             }
-            return !returnTypes || compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+            return !compareReturnTypes || compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
         }
 
         function isSupertypeOfEach(candidate: Type, types: Type[]): boolean {
@@ -3699,6 +3723,7 @@ module ts {
             for (var i = 0; i < typeParameters.length; i++) inferences.push([]);
             return {
                 typeParameters: typeParameters,
+                inferenceCount: 0,
                 inferences: inferences,
                 inferredTypes: new Array(typeParameters.length),
             };
@@ -3736,6 +3761,7 @@ module ts {
                     var typeParameters = context.typeParameters;
                     for (var i = 0; i < typeParameters.length; i++) {
                         if (target === typeParameters[i]) {
+                            context.inferenceCount++;
                             var inferences = context.inferences[i];
                             if (!contains(inferences, source)) inferences.push(source);
                             break;
@@ -3748,6 +3774,35 @@ module ts {
                     var targetTypes = (<TypeReference>target).typeArguments;
                     for (var i = 0; i < sourceTypes.length; i++) {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
+                    }
+                }
+                else if (target.flags & TypeFlags.Union) {
+                    // Target is a union type
+                    var targetTypes = (<UnionType>target).types;
+                    var startCount = context.inferenceCount;
+                    var typeParameterCount = 0;
+                    var typeParameter: TypeParameter;
+                    // First infer to each type in union that isn't a type parameter
+                    for (var i = 0; i < targetTypes.length; i++) {
+                        var t = targetTypes[i];
+                        if (t.flags & TypeFlags.TypeParameter && contains(context.typeParameters, t)) {
+                            typeParameter = <TypeParameter>t;
+                            typeParameterCount++;
+                        }
+                        else {
+                            inferFromTypes(source, t);
+                        }
+                    }
+                    // If no inferences were produced above and union contains a single naked type parameter, infer to that type parameter
+                    if (context.inferenceCount === startCount && typeParameterCount === 1) {
+                        inferFromTypes(source, typeParameter);
+                    }
+                }
+                else if (source.flags & TypeFlags.Union) {
+                    // Source is a union type, infer from each consituent type
+                    var sourceTypes = (<UnionType>source).types;
+                    for (var i = 0; i < sourceTypes.length; i++) {
+                        inferFromTypes(sourceTypes[i], target);
                     }
                 }
                 else if (source.flags & TypeFlags.ObjectType && (target.flags & (TypeFlags.Reference | TypeFlags.Tuple) ||
@@ -3877,20 +3932,14 @@ module ts {
             if (type.flags & TypeFlags.Union) {
                 var types = (<UnionType>type).types;
                 if (forEach(types, t => t.flags & subtractMask)) {
-                    var newTypes: Type[] = [];
-                    forEach(types, t => {
-                        if (!(t.flags & subtractMask)) {
-                            newTypes.push(t);
-                        }
-                    });
-                    return getUnionType(newTypes);
+                    return getUnionType(filter(types, t => !(t.flags & subtractMask)));
                 }
             }
             return type;
         }
 
         // Check if a given variable is assigned within a given syntax node
-        function IsVariableAssignedWithin(symbol: Symbol, node: Node): boolean {
+        function isVariableAssignedWithin(symbol: Symbol, node: Node): boolean {
             var links = getNodeLinks(node);
             if (links.assignmentChecks) {
                 var cachedResult = links.assignmentChecks[symbol.id];
@@ -3982,29 +4031,32 @@ module ts {
                         case SyntaxKind.IfStatement:
                             // In a branch of an if statement, narrow based on controlling expression
                             if (child !== (<IfStatement>node).expression) {
-                                narrowedType = narrowType(type, (<IfStatement>node).expression, child === (<IfStatement>node).thenStatement);
+                                narrowedType = narrowType(type, (<IfStatement>node).expression, /*assumeTrue*/ child === (<IfStatement>node).thenStatement);
                             }
                             break;
                         case SyntaxKind.ConditionalExpression:
                             // In a branch of a conditional expression, narrow based on controlling condition
                             if (child !== (<ConditionalExpression>node).condition) {
-                                narrowedType = narrowType(type, (<ConditionalExpression>node).condition, child === (<ConditionalExpression>node).whenTrue);
+                                narrowedType = narrowType(type, (<ConditionalExpression>node).condition, /*assumeTrue*/ child === (<ConditionalExpression>node).whenTrue);
                             }
                             break;
                         case SyntaxKind.BinaryExpression:
                             // In the right operand of an && or ||, narrow based on left operand
                             if (child === (<BinaryExpression>node).right) {
                                 if ((<BinaryExpression>node).operator === SyntaxKind.AmpersandAmpersandToken) {
-                                    narrowedType = narrowType(type, (<BinaryExpression>node).left, true);
+                                    narrowedType = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ true);
                                 }
                                 else if ((<BinaryExpression>node).operator === SyntaxKind.BarBarToken) {
-                                    narrowedType = narrowType(type, (<BinaryExpression>node).left, false);
+                                    narrowedType = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ false);
                                 }
                             }
                             break;
                     }
                     // Only use narrowed type if construct contains no assignments to variable
-                    if (narrowedType !== type && !IsVariableAssignedWithin(symbol, node)) {
+                    if (narrowedType !== type) {
+                        if (isVariableAssignedWithin(symbol, node)) {
+                            break;
+                        }
                         type = narrowedType;
                     }
                 }
@@ -4040,12 +4092,15 @@ module ts {
             function narrowTypeByAnd(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 if (assumeTrue) {
                     // The assumed result is true, therefore we narrow assuming each operand to be true.
-                    return narrowType(narrowType(type, expr.left, true), expr.right, true);
+                    return narrowType(narrowType(type, expr.left, /*assumeTrue*/ true), expr.right, /*assumeTrue*/ true);
                 }
                 else {
-                    // The assumed result is true. This means either the first operand was false, or the first operand was true
+                    // The assumed result is false. This means either the first operand was false, or the first operand was true
                     // and the second operand was false. We narrow with those assumptions and union the two resulting types.
-                    return getUnionType([narrowType(type, expr.left, false), narrowType(narrowType(type, expr.left, true), expr.right, false)]);
+                    return getUnionType([
+                        narrowType(type, expr.left, /*assumeTrue*/ false),
+                        narrowType(narrowType(type, expr.left, /*assumeTrue*/ true), expr.right, /*assumeTrue*/ false)
+                    ]);
                 }
             }
 
@@ -4053,17 +4108,20 @@ module ts {
                 if (assumeTrue) {
                     // The assumed result is true. This means either the first operand was true, or the first operand was false
                     // and the second operand was true. We narrow with those assumptions and union the two resulting types.
-                    return getUnionType([narrowType(type, expr.left, true), narrowType(narrowType(type, expr.left, false), expr.right, true)]);
+                    return getUnionType([
+                        narrowType(type, expr.left, /*assumeTrue*/ true),
+                        narrowType(narrowType(type, expr.left, /*assumeTrue*/ false), expr.right, /*assumeTrue*/ true)
+                    ]);
                 }
                 else {
                     // The assumed result is false, therefore we narrow assuming each operand to be false.
-                    return narrowType(narrowType(type, expr.left, false), expr.right, false);
+                    return narrowType(narrowType(type, expr.left, /*assumeTrue*/ false), expr.right, /*assumeTrue*/ false);
                 }
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                // Check that we have variable symbol on the left
-                if (expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
+                // Check that assumed result is true and we have variable symbol on the left
+                if (!assumeTrue || expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
                     return type;
                 }
                 // Check that right operand is a function type with a prototype property
@@ -4654,6 +4712,25 @@ module ts {
             return anyType;
         }
 
+        function isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean {
+            var type = checkExpression(node.left);
+            if (type !== unknownType && type !== anyType) {
+                var apparentType = getApparentType(getWidenedType(type));
+                var prop = getPropertyOfApparentType(apparentType, propertyName);
+                if (prop && prop.parent && prop.parent.flags & SymbolFlags.Class) {
+                    if (node.left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.Method) {
+                        return false;
+                    }
+                    else {
+                        var diagnosticsCount = diagnostics.length;
+                        checkClassPropertyAccess(node, type, prop);
+                        return diagnostics.length === diagnosticsCount
+                    }
+                }
+            }
+            return true;
+        }
+
         function checkIndexedAccess(node: IndexedAccess): Type {
             var objectType = checkExpression(node.object);
             var indexType = checkExpression(node.index);
@@ -4726,25 +4803,32 @@ module ts {
         }
 
         function signatureHasCorrectArity(node: CallExpression, signature: Signature): boolean {
-            var args = node.arguments || emptyArray;
-            var isCorrect = args.length >= signature.minArgumentCount &&
-                (signature.hasRestParameter || args.length <= signature.parameters.length) &&
-                (!node.typeArguments || signature.typeParameters && node.typeArguments.length === signature.typeParameters.length);
-
-            // For error recovery, since we have parsed OmittedExpressions for any extra commas
-            // in the argument list, if we see any OmittedExpressions, just return true.
-            // The reason this is ok is because omitted expressions here are syntactically
-            // illegal, and will cause a parse error.
-            // Note: It may be worth keeping the upper bound check on arity, but removing
-            // the lower bound check if there are omitted expressions.
-            if (!isCorrect) {
-                // Technically this type assertion is not safe because args could be initialized to emptyArray
-                // above.
-                if ((<NodeArray<Node>>args).hasTrailingComma || forEach(args, arg => arg.kind === SyntaxKind.OmittedExpression)) {
-                    return true;
-                }
+            if (!node.arguments) {
+                // This only happens when we have something of the form:
+                //     new C
+                //
+                return signature.minArgumentCount === 0;
             }
-            return isCorrect;
+
+            // For IDE scenarios, since we may have an incomplete call, we make two modifications
+            // to arity checking.
+            //    1. A trailing comma is tantamount to adding another argument
+            //    2. If the call is incomplete (no closing paren) allow fewer arguments than expected
+            var args = node.arguments;
+            var numberOfArgs = args.hasTrailingComma ? args.length + 1 : args.length;
+            var hasTooManyArguments = !signature.hasRestParameter && numberOfArgs > signature.parameters.length;
+            var hasRightNumberOfTypeArguments = !node.typeArguments ||
+                (signature.typeParameters && node.typeArguments.length === signature.typeParameters.length);
+
+            if (hasTooManyArguments || !hasRightNumberOfTypeArguments) {
+                return false;
+            }
+
+            // If we are missing the close paren, the call is incomplete, and we should skip
+            // the lower bound check.
+            var callIsIncomplete = args.end === node.end;
+            var hasEnoughArguments = numberOfArgs >= signature.minArgumentCount;
+            return callIsIncomplete || hasEnoughArguments;
         }
 
         // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
@@ -5145,7 +5229,9 @@ module ts {
 
             // Try to return the best common type if we have any return expressions.
             if (types.length > 0) {
-                var commonType = getCommonSupertype(types);
+                // When return statements are contextually typed we allow the return type to be a union type. Otherwise we require the
+                // return expressions to have a best common supertype.
+                var commonType = getContextualSignature(func) ? getUnionType(types) : getCommonSupertype(types);
                 if (!commonType) {
                     error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
                     
@@ -5444,10 +5530,21 @@ module ts {
                     if (leftType.flags & (TypeFlags.Undefined | TypeFlags.Null)) leftType = rightType;
                     if (rightType.flags & (TypeFlags.Undefined | TypeFlags.Null)) rightType = leftType;
 
-                    var leftOk = checkArithmeticOperandType(node.left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
-                    var rightOk = checkArithmeticOperandType(node.right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
-                    if (leftOk && rightOk) {
-                        checkAssignmentOperator(numberType);
+                    var suggestedOperator: SyntaxKind;
+                    // if a user tries to apply a bitwise operator to 2 boolean operands 
+                    // try and return them a helpful suggestion
+                    if ((leftType.flags & TypeFlags.Boolean) &&
+                        (rightType.flags & TypeFlags.Boolean) && 
+                        (suggestedOperator = getSuggestedBooleanOperator(node.operator)) !== undefined) {   
+                        error(node, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(node.operator), tokenToString(suggestedOperator));
+                    }
+                    else {
+                        // otherwise just check each operand separately and report errors as normal 
+                        var leftOk = checkArithmeticOperandType(node.left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
+                        var rightOk = checkArithmeticOperandType(node.right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
+                        if (leftOk && rightOk) {
+                            checkAssignmentOperator(numberType);
+                        }    
                     }
 
                     return numberType;
@@ -5511,6 +5608,22 @@ module ts {
                     return rightType;
                 case SyntaxKind.CommaToken:
                     return rightType;
+            }
+            
+            function getSuggestedBooleanOperator(operator: SyntaxKind): SyntaxKind { 
+                switch (operator) {
+                    case SyntaxKind.BarToken:
+                    case SyntaxKind.BarEqualsToken:
+                        return SyntaxKind.BarBarToken;
+                    case SyntaxKind.CaretToken:
+                    case SyntaxKind.CaretEqualsToken:
+                        return SyntaxKind.ExclamationEqualsEqualsToken;
+                    case SyntaxKind.AmpersandToken:
+                    case SyntaxKind.AmpersandEqualsToken:
+                        return SyntaxKind.AmpersandAmpersandToken;
+                    default:
+                        return undefined;
+                }
             }
 
             function checkAssignmentOperator(valueType: Type): void {
@@ -6047,6 +6160,10 @@ module ts {
             var isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
 
             function reportImplementationExpectedError(node: FunctionDeclaration): void {
+                if (node.name && node.name.kind === SyntaxKind.Missing) {
+                    return;
+                }
+
                 var seen = false;
                 var subsequentNode = forEachChild(node.parent, c => {
                     if (seen) {
@@ -6085,6 +6202,8 @@ module ts {
             // when checking exported function declarations across modules check only duplicate implementations
             // names and consistency of modifiers are verified when we check local symbol
             var isExportSymbolInsideModule = symbol.parent && symbol.parent.flags & SymbolFlags.Module;
+            var duplicateFunctionDeclaration = false;
+            var multipleConstructorImplementation = false;
             for (var i = 0; i < declarations.length; i++) {
                 var node = <FunctionDeclaration>declarations[i];
                 var inAmbientContext = isInAmbientContext(node);
@@ -6107,10 +6226,10 @@ module ts {
 
                     if (node.body && bodyDeclaration) {
                         if (isConstructor) {
-                            error(node, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
+                            multipleConstructorImplementation = true;
                         }
                         else {
-                            error(node, Diagnostics.Duplicate_function_implementation);
+                            duplicateFunctionDeclaration = true;
                         }
                     }
                     else if (!isExportSymbolInsideModule && previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
@@ -6132,6 +6251,18 @@ module ts {
                         lastSeenNonAmbientDeclaration = node;
                     }
                 }
+            }
+
+            if (multipleConstructorImplementation) {
+                forEach(declarations, declaration => {
+                    error(declaration, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
+                });
+            }
+
+            if (duplicateFunctionDeclaration) {
+                forEach( declarations, declaration => {
+                    error(declaration.name, Diagnostics.Duplicate_function_implementation);
+                });
             }
 
             if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body) {
@@ -7199,7 +7330,7 @@ module ts {
                     return checkArrayType(<ArrayTypeNode>node);
                 case SyntaxKind.TupleType:
                     return checkTupleType(<TupleTypeNode>node);
-                case SyntaxKind.TupleType:
+                case SyntaxKind.UnionType:
                     return checkUnionType(<UnionTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
@@ -7476,23 +7607,6 @@ module ts {
             return mapToArray(symbols);
         }
 
-        // True if the given identifier is the name of a type declaration node (class, interface, enum, type parameter, etc)
-        function isTypeDeclarationName(name: Node): boolean {
-            return name.kind == SyntaxKind.Identifier &&
-                isTypeDeclaration(name.parent) &&
-                (<Declaration>name.parent).name === name;
-        }
-
-        function isTypeDeclaration(node: Node): boolean {
-            switch (node.kind) {
-                case SyntaxKind.TypeParameter:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                    return true;
-            }
-        }
-
         // True if the given identifier is part of a type reference
         function isTypeReferenceIdentifier(entityName: EntityName): boolean {
             var node: Node = entityName;
@@ -7568,75 +7682,6 @@ module ts {
                             }
                     }
             }
-            return false;
-        }
-
-        function isTypeNode(node: Node): boolean {
-            if (node.kind >= SyntaxKind.FirstTypeNode && node.kind <= SyntaxKind.LastTypeNode) {
-                return true;
-            }
-
-            switch (node.kind) {
-                case SyntaxKind.AnyKeyword:
-                case SyntaxKind.NumberKeyword:
-                case SyntaxKind.StringKeyword:
-                case SyntaxKind.BooleanKeyword:
-                    return true;
-                case SyntaxKind.VoidKeyword:
-                    return node.parent.kind !== SyntaxKind.PrefixOperator;
-                case SyntaxKind.StringLiteral:
-                    // Specialized signatures can have string literals as their parameters' type names
-                    return node.parent.kind === SyntaxKind.Parameter;
-                // Identifiers and qualified names may be type nodes, depending on their context. Climb
-                // above them to find the lowest container
-                case SyntaxKind.Identifier:
-                    // If the identifier is the RHS of a qualified name, then it's a type iff its parent is.
-                    if (node.parent.kind === SyntaxKind.QualifiedName) {
-                        node = node.parent;
-                    }
-                    // Fall through
-                case SyntaxKind.QualifiedName:
-                    // At this point, node is either a qualified name or an identifier
-                    var parent = node.parent;
-                    if (parent.kind === SyntaxKind.TypeQuery) {
-                        return false;
-                    }
-                    // Do not recursively call isTypeNode on the parent. In the example:
-                    //
-                    //     var a: A.B.C;
-                    //
-                    // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
-                    // A.B.C is a type node.
-                    if (parent.kind >= SyntaxKind.FirstTypeNode && parent.kind <= SyntaxKind.LastTypeNode) {
-                        return true;
-                    }
-                    switch (parent.kind) {
-                        case SyntaxKind.TypeParameter:
-                            return node === (<TypeParameterDeclaration>parent).constraint;
-                        case SyntaxKind.Property:
-                        case SyntaxKind.Parameter:
-                        case SyntaxKind.VariableDeclaration:
-                            return node === (<VariableDeclaration>parent).type;
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.ArrowFunction:
-                        case SyntaxKind.Constructor:
-                        case SyntaxKind.Method:
-                        case SyntaxKind.GetAccessor:
-                        case SyntaxKind.SetAccessor:
-                            return node === (<FunctionDeclaration>parent).type;
-                        case SyntaxKind.CallSignature:
-                        case SyntaxKind.ConstructSignature:
-                        case SyntaxKind.IndexSignature:
-                            return node === (<SignatureDeclaration>parent).type;
-                        case SyntaxKind.TypeAssertion:
-                            return node === (<TypeAssertion>parent).type;
-                        case SyntaxKind.CallExpression:
-                        case SyntaxKind.NewExpression:
-                            return (<CallExpression>parent).typeArguments.indexOf(node) >= 0;
-                    }
-            }
-
             return false;
         }
 
@@ -7907,7 +7952,7 @@ module ts {
                 while (!isUniqueLocalName(escapeIdentifier(prefix + name), container)) {
                     prefix += "_";
                 }
-                links.localModuleName = prefix + getSourceTextOfNode(container.name);
+                links.localModuleName = prefix + getTextOfNode(container.name);
             }
             return links.localModuleName;
         }

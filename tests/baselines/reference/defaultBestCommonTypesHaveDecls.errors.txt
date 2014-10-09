@@ -1,6 +1,6 @@
 tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(4,6): error TS2339: Property 'length' does not exist on type '{}'.
 tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(10,6): error TS2339: Property 'length' does not exist on type 'Object'.
-tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(18,27): error TS2339: Property 'length' does not exist on type '{}'.
+tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(16,14): error TS2346: Supplied parameters do not match any signature of call target.
 
 
 ==== tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts (3 errors) ====
@@ -24,8 +24,8 @@ tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(18,27): error TS2339: Pr
     function concat<T>(x: T, y: T): T { return null; }
     
     var result = concat(1, "");
+                 ~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     var elementCount = result.length; // would like to get an error by now
-                              ~~~~~~
-!!! error TS2339: Property 'length' does not exist on type '{}'.
     

@@ -226,7 +226,8 @@ class ProjectRunner extends RunnerBase {
                     ? filename
                     : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(filename);
 
-                var diskRelativeName = ts.getRelativePathToDirectoryOrUrl(testCase.projectRoot, diskFileName, getCurrentDirectory(), false);
+                var diskRelativeName = ts.getRelativePathToDirectoryOrUrl(testCase.projectRoot, diskFileName,
+                    getCurrentDirectory(), Harness.Compiler.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
                 if (ts.isRootedDiskPath(diskRelativeName) || diskRelativeName.substr(0, 3) === "../") {
                     // If the generated output file resides in the parent folder or is rooted path, 
                     // we need to instead create files that can live in the project reference folder

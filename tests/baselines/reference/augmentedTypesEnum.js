@@ -1,24 +1,24 @@
 //// [augmentedTypesEnum.ts]
 // enum then var
-enum e1111 { One }
+enum e1111 { One } // error
 var e1111 = 1; // error
 
 // enum then function
-enum e2 { One }
+enum e2 { One } // error
 function e2() { } // error
 
-enum e3 { One }
+enum e3 { One } // error
 var e3 = () => { } // error
 
 // enum then class
-enum e4 { One }
+enum e4 { One } // error
 class e4 { public foo() { } } // error
 
 // enum then enum
 enum e5 { One }
-enum e5 { Two }
+enum e5 { Two } // error
 
-enum e5a { One }
+enum e5a { One } // error
 enum e5a { One } // error
 
 // enum then internal module
@@ -40,26 +40,26 @@ module e6b { export var y = 2; } // should be error
 var e1111;
 (function (e1111) {
     e1111[e1111["One"] = 0] = "One";
-})(e1111 || (e1111 = {}));
+})(e1111 || (e1111 = {})); // error
 var e1111 = 1; // error
 // enum then function
 var e2;
 (function (e2) {
     e2[e2["One"] = 0] = "One";
-})(e2 || (e2 = {}));
+})(e2 || (e2 = {})); // error
 function e2() {
 } // error
 var e3;
 (function (e3) {
     e3[e3["One"] = 0] = "One";
-})(e3 || (e3 = {}));
+})(e3 || (e3 = {})); // error
 var e3 = function () {
 }; // error
 // enum then class
 var e4;
 (function (e4) {
     e4[e4["One"] = 0] = "One";
-})(e4 || (e4 = {}));
+})(e4 || (e4 = {})); // error
 var e4 = (function () {
     function e4() {
     }
@@ -75,11 +75,11 @@ var e5;
 var e5;
 (function (e5) {
     e5[e5["Two"] = 0] = "Two";
-})(e5 || (e5 = {}));
+})(e5 || (e5 = {})); // error
 var e5a;
 (function (e5a) {
     e5a[e5a["One"] = 0] = "One";
-})(e5a || (e5a = {}));
+})(e5a || (e5a = {})); // error
 var e5a;
 (function (e5a) {
     e5a[e5a["One"] = 0] = "One";
