@@ -15,22 +15,22 @@
 ////var f/*7*/f = x.c.c; 
 
 goTo.marker('1');
-verify.quickInfoIs('I<I<I<I<I<I<number>>>>>>');
+verify.quickInfoIs('(var) yy: I<I<I<I<I<I<number>>>>>>');
 
 goTo.marker('2');
-verify.quickInfoIs('number');
+verify.quickInfoIs('(var) aa: number');
 
 goTo.marker('3');
-verify.quickInfoIs('I<number>');
+verify.quickInfoIs('(var) bb: I<number>');
 
 goTo.marker('4');
-verify.quickInfoIs('I<I<number>>');
+verify.quickInfoIs('(var) cc: I<I<number>>');
 
 goTo.marker('5');
-verify.quickInfoIs('I<number>');
+verify.quickInfoIs('(var) dd: I<number>');
 
 goTo.marker('6');
-verify.quickInfoIs('I<I<number>>');
+verify.quickInfoIs('(var) ee: I<I<number>>');
 
 goTo.marker('7');
-verify.quickInfoIs('I<I<I<number>>>');
+verify.quickInfoIs('(var) ff: I<I<I<number>>>');

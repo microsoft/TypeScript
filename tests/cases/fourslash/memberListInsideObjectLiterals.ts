@@ -26,16 +26,16 @@
 
 // Literal member completion inside empty literal.
 goTo.marker("1");
-verify.memberListContains("x1", "number");
-verify.memberListContains("y1", "number");
+verify.memberListContains("x1", "(property) MyPoint.x1: number");
+verify.memberListContains("y1", "(property) MyPoint.y1: number");
 
 // Literal member completion for 2nd member name.
 goTo.marker("2");
-verify.memberListContains("y1", "number");
+verify.memberListContains("y1", "(property) MyPoint.y1: number");
 
 // Literal member completion at existing member name location.
 goTo.marker("3");
-verify.memberListContains("y1", "number");
+verify.memberListContains("y1", "(property) MyPoint.y1: number");
 
 goTo.marker("4");
-verify.memberListContains("x1", "number");
+verify.memberListContains("x1", "(property) MyPoint.x1: number");

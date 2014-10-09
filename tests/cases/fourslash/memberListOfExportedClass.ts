@@ -12,4 +12,4 @@
 
 goTo.marker();
 verify.memberListCount(1);
-verify.memberListContains('pub', 'number');
+verify.memberListContains('pub', '(property) M.C.pub: number');

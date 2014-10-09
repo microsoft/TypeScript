@@ -8,5 +8,5 @@
 
 [1, 2, 3].forEach((val) => {
     goTo.marker("" + val);
-    verify.quickInfoIs("(x: number) => number", "", "f", "var");
+    verify.quickInfoIs("(var) f: (x: number) => number", "");
 } );

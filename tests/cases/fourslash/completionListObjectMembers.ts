@@ -10,5 +10,5 @@
 ////object./**/
 
 goTo.marker();
-verify.memberListContains("bar", 'any');
-verify.memberListContains("foo", '(bar: any) => any');
+verify.memberListContains("bar", '(property) bar: any');
+verify.memberListContains("foo", '(method) foo(bar: any): any');

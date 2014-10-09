@@ -11,11 +11,11 @@
 //// }
 
 goTo.marker('className');
-verify.quickInfoSymbolNameIs('Sphere');
+verify.quickInfoIs('class Sphere');
 
 goTo.marker('insertHere');
 edit.insert("ray: Ray;");
 
 goTo.marker('className');
 
-verify.quickInfoSymbolNameIs('Sphere');
+verify.quickInfoIs('class Sphere');
