@@ -3562,8 +3562,9 @@ module ts {
                 // to get a contextual type for it, and add the property symbol from the contextual
                 // type to the search set
                 if (isNameOfPropertyAssignment(location)) {
-                    var symbolFromContextualType = getPropertySymbolFromContextualType(location);
-                    if (symbolFromContextualType) result.push.apply(result, typeInfoResolver.getRootSymbols(symbolFromContextualType));
+                    forEach(getPropertySymbolsFromContextualType(location), contextualSymbol => {
+                        result.push.apply(result, typeInfoResolver.getRootSymbols(contextualSymbol));
+                    });
                 }
 
                 // If this is a union property, add all the symbols from all its source symbols in all unioned types.
@@ -3613,14 +3614,17 @@ module ts {
             }
 
             function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
+                if (searchSymbols.indexOf(referenceSymbol) >= 0) {
+                    return true;
+                }
+
                 // If the reference location is in an object literal, try to get the contextual type for the 
                 // object literal, lookup the property symbol in the contextual type, and use this symbol to
                 // compare to our searchSymbol
                 if (isNameOfPropertyAssignment(referenceLocation)) {
-                    var symbolFromContextualType = getPropertySymbolFromContextualType(referenceLocation);
-                    if (symbolFromContextualType) {
-                        return forEach(typeInfoResolver.getRootSymbols(symbolFromContextualType), s => searchSymbols.indexOf(s) >= 0);
-                    }
+                    return forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
+                        return forEach(typeInfoResolver.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0);
+                    });
                 }
 
                 // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
@@ -3643,12 +3647,36 @@ module ts {
                 });
             }
 
-            function getPropertySymbolFromContextualType(node: Node): Symbol {
+            function getPropertySymbolsFromContextualType(node: Node): Symbol[] {
                 if (isNameOfPropertyAssignment(node)) {
                     var objectLiteral = node.parent.parent;
                     var contextualType = typeInfoResolver.getContextualType(objectLiteral);
+                    var name = (<Identifier>node).text;
                     if (contextualType) {
-                        return typeInfoResolver.getPropertyOfType(contextualType, (<Identifier>node).text);
+                        if (contextualType.flags & TypeFlags.Union) {
+                            // This is a union type, first see if the property we are looking for is a union property (i.e. exists in all types)
+                            // if not, search the constituent types for the property
+                            var unionProperty = contextualType.getProperty(name)
+                            if (unionProperty) {
+                                return [unionProperty];
+                            }
+                            else {
+                                var result: Symbol[] = [];
+                                forEach((<UnionType>contextualType).types, t => {
+                                    var symbol = t.getProperty(name);
+                                    if (symbol) {
+                                        result.push(symbol);
+                                    }
+                                });
+                                return result;
+                            }
+                        }
+                        else {
+                            var symbol = contextualType.getProperty(name);
+                            if (symbol) {
+                                return [symbol];
+                            }
+                        }
                     }
                 }
                 return undefined;
