@@ -1,12 +1,16 @@
+tests/cases/compiler/augmentedTypesClass2.ts(4,7): error TS2300: Duplicate identifier 'c11'.
 tests/cases/compiler/augmentedTypesClass2.ts(10,11): error TS2300: Duplicate identifier 'c11'.
+tests/cases/compiler/augmentedTypesClass2.ts(16,7): error TS2300: Duplicate identifier 'c33'.
 tests/cases/compiler/augmentedTypesClass2.ts(21,6): error TS2300: Duplicate identifier 'c33'.
 
 
-==== tests/cases/compiler/augmentedTypesClass2.ts (2 errors) ====
+==== tests/cases/compiler/augmentedTypesClass2.ts (4 errors) ====
     // Checking class with other things in type space not value space
     
     // class then interface
-    class c11 {
+    class c11 { // error
+          ~~~
+!!! error TS2300: Duplicate identifier 'c11'.
         foo() {
             return 1;
         }
@@ -21,6 +25,8 @@ tests/cases/compiler/augmentedTypesClass2.ts(21,6): error TS2300: Duplicate iden
     // class then class - covered
     // class then enum 
     class c33 {
+          ~~~
+!!! error TS2300: Duplicate identifier 'c33'.
         foo() {
             return 1;
         }

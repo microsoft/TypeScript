@@ -22,8 +22,7 @@ goTo.marker('1');
 verify.quickInfoIs('(alias) Foo');
 
 goTo.marker('2');
-// TODO: bug in completion list
-verify.not.completionListContains('Foo');
+verify.completionListContains('Foo');
 
 goTo.marker('3');
 verify.quickInfoIs('(var) z: Foo');

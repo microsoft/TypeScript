@@ -58,10 +58,10 @@ module ts {
 
         function getOwnEmitOutputFilePath(sourceFile: SourceFile, extension: string) {
             if (compilerOptions.outDir) {
-                var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(getSourceFilePathInNewDir(compilerOptions.outDir, sourceFile));
+                var emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(compilerOptions.outDir, sourceFile));
             }
             else {
-                var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(sourceFile.filename);
+                var emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.filename);
             }
 
             return emitOutputFilePathWithoutExtension + extension;
@@ -538,7 +538,8 @@ module ts {
                     sourceMapData.sourceMapSources.push(getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
                         node.filename,
                         compilerHost.getCurrentDirectory(),
-                    /*isAbsolutePathAnUrl*/ true));
+                        compilerHost.getCanonicalFileName,
+                        /*isAbsolutePathAnUrl*/ true));
                     sourceMapSourceIndex = sourceMapData.sourceMapSources.length - 1;
 
                     // The one that can be used from program to get the actual source file
@@ -602,21 +603,6 @@ module ts {
                     recordSourceMapSpan(comment.end);
                 }
 
-                var escapedCharsRegExp = /[\t\v\f\b\0\r\n\"\u2028\u2029\u0085]/g;
-                var escapedCharsMap: Map<string> = {
-                    "\t": "\\t",
-                    "\v": "\\v",
-                    "\f": "\\f",
-                    "\b": "\\b",
-                    "\0": "\\0",
-                    "\r": "\\r",
-                    "\n": "\\n",
-                    "\"": "\\\"",
-                    "\u2028": "\\u2028", // lineSeparator
-                    "\u2029": "\\u2029", // paragraphSeparator
-                    "\u0085": "\\u0085"  // nextLine
-                };
-
                 function serializeSourceMapContents(version: number, file: string, sourceRoot: string, sources: string[], names: string[], mappings: string) {
                     if (typeof JSON !== "undefined") {
                         return JSON.stringify({
@@ -630,14 +616,6 @@ module ts {
                     }
 
                     return "{\"version\":" + version + ",\"file\":\"" + escapeString(file) + "\",\"sourceRoot\":\"" + escapeString(sourceRoot) + "\",\"sources\":[" + serializeStringArray(sources) + "],\"names\":[" + serializeStringArray(names) + "],\"mappings\":\"" + escapeString(mappings) + "\"}";
-
-                    /** This does not support the full escape characters, it only supports the subset that can be used in file names
-                      * or string literals. If the information encoded in the map changes, this needs to be revisited. */
-                    function escapeString(s: string): string {
-                        return escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, c => {
-                            return escapedCharsMap[c] || c;
-                        }) : s;
-                    }
 
                     function serializeStringArray(list: string[]): string {
                         var output = "";
@@ -703,7 +681,8 @@ module ts {
                             getDirectoryPath(normalizePath(jsFilePath)), // get the relative sourceMapDir path based on jsFilePath
                             combinePaths(sourceMapDir, sourceMapData.jsSourceMappingURL), // this is where user expects to see sourceMap
                             compilerHost.getCurrentDirectory(),
-                        /*isAbsolutePathAnUrl*/ true);
+                            compilerHost.getCanonicalFileName,
+                            /*isAbsolutePathAnUrl*/ true);
                     }
                     else {
                         sourceMapData.jsSourceMappingURL = combinePaths(sourceMapDir, sourceMapData.jsSourceMappingURL);
@@ -3161,7 +3140,7 @@ module ts {
                 }
             }
 
-            function resolveScriptReference(sourceFile: SourceFile, reference: FileReference) {
+            function tryResolveScriptReference(sourceFile: SourceFile, reference: FileReference) {
                 var referenceFileName = normalizePath(combinePaths(getDirectoryPath(sourceFile.filename), reference.filename));
                 return program.getSourceFile(referenceFileName);
             }
@@ -3175,13 +3154,14 @@ module ts {
                     ? referencedFile.filename // Declaration file, use declaration file name
                     : shouldEmitToOwnFile(referencedFile, compilerOptions)
                     ? getOwnEmitOutputFilePath(referencedFile, ".d.ts") // Own output file so get the .d.ts file
-                    : getModuleNameFromFilename(compilerOptions.out) + ".d.ts";// Global out file
+                    : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
 
                 declFileName = getRelativePathToDirectoryOrUrl(
                     getDirectoryPath(normalizeSlashes(jsFilePath)),
                     declFileName,
                     compilerHost.getCurrentDirectory(),
-                /*isAbsolutePathAnUrl*/ false);
+                    compilerHost.getCanonicalFileName,
+                    /*isAbsolutePathAnUrl*/ false);
 
                 referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
             }
@@ -3191,12 +3171,12 @@ module ts {
                 if (!compilerOptions.noResolve) {
                     var addedGlobalFileReference = false;
                     forEach(root.referencedFiles, fileReference => {
-                        var referencedFile = resolveScriptReference(root, fileReference);
+                        var referencedFile = tryResolveScriptReference(root, fileReference);
 
                         // All the references that are not going to be part of same file
-                        if ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
+                        if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
                             shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
-                            !addedGlobalFileReference) { // Or the global out file corresponding to this reference was not added
+                            !addedGlobalFileReference)) { // Or the global out file corresponding to this reference was not added
 
                             writeReferencePath(referencedFile);
                             if (!isExternalModuleOrDeclarationFile(referencedFile)) {
@@ -3216,11 +3196,11 @@ module ts {
                         // Check what references need to be added
                         if (!compilerOptions.noResolve) {
                             forEach(sourceFile.referencedFiles, fileReference => {
-                                var referencedFile = resolveScriptReference(sourceFile, fileReference);
+                                var referencedFile = tryResolveScriptReference(sourceFile, fileReference);
 
                                 // If the reference file is a declaration file or an external module, emit that reference
-                                if (isExternalModuleOrDeclarationFile(referencedFile) &&
-                                    !contains(emittedReferencedFiles, referencedFile)) { // If the file reference was not already emitted
+                                if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
+                                    !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
 
                                     writeReferencePath(referencedFile);
                                     emittedReferencedFiles.push(referencedFile);
@@ -3248,7 +3228,7 @@ module ts {
                     }
                 });
                 declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
-                writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
+                writeFile(removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
             }
         }
 
@@ -3262,21 +3242,27 @@ module ts {
         }
 
         if (targetSourceFile === undefined) {
+            // No targetSourceFile is specified (e.g. calling emitter from batch compiler)
             forEach(program.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                     var jsFilePath = getOwnEmitOutputFilePath(sourceFile, ".js");
                     emitFile(jsFilePath, sourceFile);
                 }
             });
-        }
-        else {
-            // Emit only one file specified in targetFilename. This is mainly used in compilerOnSave feature
-            var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, ".js");
-            emitFile(jsFilePath, targetSourceFile);
-        }
 
-        if (compilerOptions.out) {
-            emitFile(compilerOptions.out);
+            if (compilerOptions.out) {
+                emitFile(compilerOptions.out);
+            }
+        } else {
+            // targetSourceFile is specified (e.g calling emitter from language service)
+            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
+                // If shouldEmitToOwnFile is true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
+                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, ".js");
+                emitFile(jsFilePath, targetSourceFile);
+            } else {
+                // If shouldEmitToOwnFile is false, then emit all, non-external-module file, into one single output file
+                emitFile(compilerOptions.out);
+            }
         }
        
         // Sort and make the unique list of diagnostics

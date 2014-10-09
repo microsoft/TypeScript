@@ -18,7 +18,7 @@ goTo.marker('1');
 verify.quickInfoIs("(property) B<string>.bar: string", undefined);
 edit.deleteAtCaret(1);
 edit.insert('z');
-verify.quickInfoIs("any");
+verify.quickInfoIs("");
 verify.numberOfErrorsInCurrentFile(1);
 edit.backspace(1);
 edit.insert('a');

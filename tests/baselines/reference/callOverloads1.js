@@ -1,5 +1,5 @@
 //// [callOverloads1.ts]
-class Foo {    
+class Foo { // error
     bar1() { /*WScript.Echo("bar1");*/ }
 
     constructor(x: any) {

@@ -6,7 +6,7 @@
 
 /// <reference path='syntax\incrementalParser.ts' />
 /// <reference path='outliningElementsCollector.ts' />
-/// <reference path='getScriptLexicalStructureWalker.ts' />
+/// <reference path='navigationBar.ts' />
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='signatureHelp.ts' />
@@ -676,27 +676,47 @@ module ts {
             if (!this.namedDeclarations) {
                 var sourceFile = this;
                 var namedDeclarations: Declaration[] = [];
-                var isExternalModule = ts.isExternalModule(sourceFile);
 
-                forEachChild(sourceFile, function visit(node: Node): boolean {
+                forEachChild(sourceFile, function visit(node: Node): void {
                     switch (node.kind) {
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.Method:
+                            var functionDeclaration = <FunctionDeclaration>node;
+
+                            if (functionDeclaration.name && functionDeclaration.name.kind !== SyntaxKind.Missing) {
+                                var lastDeclaration = namedDeclarations.length > 0 ?
+                                    namedDeclarations[namedDeclarations.length - 1] :
+                                    undefined;
+
+                                // Check whether this declaration belongs to an "overload group".
+                                if (lastDeclaration && functionDeclaration.symbol === lastDeclaration.symbol) {
+                                    // Overwrite the last declaration if it was an overload
+                                    // and this one is an implementation.
+                                    if (functionDeclaration.body && !(<FunctionDeclaration>lastDeclaration).body) {
+                                        namedDeclarations[namedDeclarations.length - 1] = functionDeclaration;
+                                    }
+                                }
+                                else {
+                                    namedDeclarations.push(node);
+                                }
+
+                                forEachChild(node, visit);
+                            }
+                            break;
+
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ImportDeclaration:
-                        case SyntaxKind.Method:
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.Constructor:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
                         case SyntaxKind.TypeLiteral:
                             if ((<Declaration>node).name) {
                                 namedDeclarations.push(<Declaration>node);
                             }
-                            forEachChild(node, visit);
-                            break;
-
+                            // fall through
+                        case SyntaxKind.Constructor:
                         case SyntaxKind.VariableStatement:
                         case SyntaxKind.ModuleBlock:
                         case SyntaxKind.FunctionBlock:
@@ -704,19 +724,17 @@ module ts {
                             break;
 
                         case SyntaxKind.Parameter:
+                            // Only consider properties defined as constructor parameters
                             if (!(node.flags & NodeFlags.AccessibilityModifier)) {
-                                // Only consider properties defined as constructor parameters
                                 break;
                             }
+                            // fall through
                         case SyntaxKind.VariableDeclaration:
                         case SyntaxKind.EnumMember:
                         case SyntaxKind.Property:
                             namedDeclarations.push(<Declaration>node);
                             break;
                     }
-
-                    // do not go any deeper
-                    return undefined;
                 });
 
                 this.namedDeclarations = namedDeclarations;
@@ -835,6 +853,8 @@ module ts {
         getSignatureAtPosition(fileName: string, position: number): SignatureInfo;
 
         getRenameInfo(fileName: string, position: number): RenameInfo;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
+        
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
@@ -924,6 +944,11 @@ module ts {
     export class TextChange {
         span: TypeScript.TextSpan;
         newText: string;
+    }
+
+    export interface RenameLocation {
+        textSpan: TypeScript.TextSpan;
+        fileName: string;
     }
 
     export interface ReferenceEntry {
@@ -1184,6 +1209,8 @@ module ts {
         static primitiveType = "primitive type";
 
         static label = "label";
+
+        static alias = "alias"
     }
 
     export class ScriptElementKindModifier {
@@ -1839,6 +1866,20 @@ module ts {
     }
 
     /// Helpers
+    export function getNodeModifiers(node: Node): string {
+        var flags = node.flags;
+        var result: string[] = [];
+
+        if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
+        if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
+        if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
+        if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
+        if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
+
+        return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
+    }
+
     function getTargetLabel(referenceNode: Node, labelName: string): Identifier {
         while (referenceNode) {
             if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.text === labelName) {
@@ -1972,8 +2013,8 @@ module ts {
         var writer: (filename: string, data: string, writeByteOrderMark: boolean) => void = undefined;
 
         // Check if the localized messages json is set, otherwise query the host for it
-        if (!TypeScript.LocalizedDiagnosticMessages) {
-            TypeScript.LocalizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
+        if (!localizedDiagnosticMessages) {
+            localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
         function getSourceFile(filename: string): SourceFile {
@@ -2445,9 +2486,16 @@ module ts {
             }
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
-            var mappedNode = getNodeAtPosition(sourceFile, TypeScript.end(node) - 1);
-            if (isPunctuation(mappedNode.kind)) {
-                mappedNode = mappedNode.parent;
+            var precedingToken = findTokenOnLeftOfPosition(sourceFile, TypeScript.end(node));
+            var mappedNode: Node;
+            if (!precedingToken) {
+                mappedNode = sourceFile;
+            }
+            else if (isPunctuation(precedingToken.kind)) {
+                mappedNode = precedingToken.parent;
+            }
+            else {
+                mappedNode = precedingToken;
             }
 
             Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
@@ -2469,6 +2517,12 @@ module ts {
 
                 if (mappedNode.kind === SyntaxKind.Identifier || mappedNode.kind === SyntaxKind.QualifiedName || mappedNode.kind === SyntaxKind.PropertyAccess) {
                     var symbol = typeInfoResolver.getSymbolInfo(mappedNode);
+
+                    // This is an alias, follow what it aliases
+                    if (symbol && symbol.flags & SymbolFlags.Import) {
+                        symbol = typeInfoResolver.getAliasedSymbol(symbol);
+                    }
+
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
                         forEachValue(symbol.exports, symbol => {
@@ -2519,7 +2573,7 @@ module ts {
                 else {
                     isMemberCompletion = false;
                     /// TODO filter meaning based on the current context
-                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace;
+                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Import;
                     var symbols = typeInfoResolver.getSymbolsInScope(mappedNode, symbolMeanings);
 
                     getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
@@ -2608,6 +2662,7 @@ module ts {
             if (result === ScriptElementKind.unknown) {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
                 if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
+                if (flags & SymbolFlags.Import) return ScriptElementKind.alias;
             }
 
             return result;
@@ -2675,25 +2730,10 @@ module ts {
                 : ScriptElementKindModifier.none;
         }
 
-        function getNodeModifiers(node: Node): string {
-            var flags = node.flags;
-            var result: string[] = [];
-
-            if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
-            if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
-            if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
-            if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
-            if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
-            if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
-
-            return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
-        }
-
         function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node, typeResolver: TypeChecker, location: Node) {
             var displayParts: SymbolDisplayPart[] = [];
             var documentation: SymbolDisplayPart[];
             var symbolFlags = typeResolver.getRootSymbol(symbol).flags;
-
             var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags);
             var hasAddedSymbolInfo: boolean;
             // Class at constructor site need to be shown as constructor apart from property,method, vars
@@ -2952,11 +2992,16 @@ module ts {
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             synchronizeHostData();
-             
+
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
-            var node = getNodeAtPosition(sourceFile, position);
+            var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
+                return undefined;
+            }
+
+            var symbol = typeInfoResolver.getSymbolInfo(node);
+            if (!symbol) {
                 return undefined;
             }
 
@@ -3059,7 +3104,7 @@ module ts {
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
-            var node = getNodeAtPosition(sourceFile, position);
+            var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
                 return undefined;
             }
@@ -3074,7 +3119,8 @@ module ts {
             /// Triple slash reference comments
             var comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
             if (comment) {
-                var targetFilename = normalizePath(combinePaths(getDirectoryPath(filename), comment.filename));
+                var targetFilename = isRootedDiskPath(comment.filename) ? comment.filename : combinePaths(getDirectoryPath(filename), comment.filename);
+                targetFilename = normalizePath(targetFilename);
                 if (program.getSourceFile(targetFilename)) {
                     return [{
                         fileName: targetFilename,
@@ -3099,7 +3145,7 @@ module ts {
             var result: DefinitionInfo[] = [];
 
             var declarations = symbol.getDeclarations();
-            var symbolName = typeInfoResolver.symbolToString(symbol, node);
+            var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
             var symbolKind = getSymbolKind(symbol);
             var containerSymbol = symbol.parent;
             var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
@@ -3123,14 +3169,14 @@ module ts {
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
-            var node = getNodeAtPosition(sourceFile, position);
+            var node = getTouchingWord(sourceFile, position);
             if (!node) {
                 return undefined;
             }
 
             if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
                 isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
-                return getReferencesForNode(node, [sourceFile]);
+                return getReferencesForNode(node, [sourceFile], /*findInStrings:*/ false, /*findInComments:*/ false);
             }
 
             switch (node.kind) {
@@ -3562,13 +3608,21 @@ module ts {
             }
         }
 
-        function getReferencesAtPosition(filename: string, position: number): ReferenceEntry[] {
+        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
+            return findReferences(fileName, position, findInStrings, findInComments);
+        }
+
+        function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
+            return findReferences(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
+        }
+
+        function findReferences(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
             synchronizeHostData();
 
-            filename = TypeScript.switchToForwardSlashes(filename);
-            var sourceFile = getSourceFile(filename);
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
 
-            var node = getNodeAtPosition(sourceFile, position);
+            var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
                 return undefined;
             }
@@ -3582,10 +3636,11 @@ module ts {
                 return undefined;
             }
 
-            return getReferencesForNode(node, program.getSourceFiles());
+            Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral);
+            return getReferencesForNode(node, program.getSourceFiles(), findInStrings, findInComments);
         }
 
-        function getReferencesForNode(node: Node, sourceFiles: SourceFile[]): ReferenceEntry[] {
+        function getReferencesForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
@@ -3635,7 +3690,7 @@ module ts {
 
             if (scope) {
                 result = [];
-                getReferencesInNode(scope, symbol, symbolName, node, searchMeaning, result);
+                getReferencesInNode(scope, symbol, symbolName, node, searchMeaning, findInStrings, findInComments, result);
             }
             else {
                 forEach(sourceFiles, sourceFile => {
@@ -3643,7 +3698,7 @@ module ts {
 
                     if (lookUp(sourceFile.identifiers, symbolName)) {
                         result = result || [];
-                        getReferencesInNode(sourceFile, symbol, symbolName, node, searchMeaning, result);
+                        getReferencesInNode(sourceFile, symbol, symbolName, node, searchMeaning, findInStrings, findInComments, result);
                     }
                 });
             }
@@ -3751,7 +3806,7 @@ module ts {
                 forEach(possiblePositions, position => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    var node = getNodeAtPosition(sourceFile, position);
+                    var node = getTouchingWord(sourceFile, position);
                     if (!node || node.getWidth() !== labelName.length) {
                         return;
                     }
@@ -3795,8 +3850,16 @@ module ts {
               * tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
               * searchLocation: a node where the search value 
               */
-            function getReferencesInNode(container: Node, searchSymbol: Symbol, searchText: string, searchLocation: Node, searchMeaning: SearchMeaning, result: ReferenceEntry[]): void {
+            function getReferencesInNode(container: Node,
+                                         searchSymbol: Symbol,
+                                         searchText: string,
+                                         searchLocation: Node,
+                                         searchMeaning: SearchMeaning,
+                                         findInStrings: boolean,
+                                         findInComments: boolean,
+                                         result: ReferenceEntry[]): void {
                 var sourceFile = container.getSourceFile();
+                var tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</
 
                 var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, container.getStart(), container.getEnd());
 
@@ -3807,8 +3870,19 @@ module ts {
                     forEach(possiblePositions, position => {
                         cancellationToken.throwIfCancellationRequested();
 
-                        var referenceLocation = getNodeAtPosition(sourceFile, position);
+                        var referenceLocation = getTouchingPropertyName(sourceFile, position);
                         if (!isValidReferencePosition(referenceLocation, searchText)) {
+                            // This wasn't the start of a token.  Check to see if it might be a 
+                            // match in a comment or string if that's what the caller is asking
+                            // for.
+                            if ((findInStrings && isInString(position)) ||
+                                (findInComments && isInComment(position))) {
+                                result.push({
+                                    fileName: sourceFile.filename,
+                                    textSpan: new TypeScript.TextSpan(position, searchText.length),
+                                    isWriteAccess: false
+                                });
+                            }
                             return;
                         }
 
@@ -3828,6 +3902,32 @@ module ts {
                             result.push(getReferenceEntryFromNode(referenceLocation));
                         }
                     });
+                }
+
+                function isInString(position: number) {
+                    var token = getTokenAtPosition(sourceFile, position);
+                    return token && token.kind === SyntaxKind.StringLiteral && position > token.getStart();
+                }
+
+                function isInComment(position: number) {
+                    var token = getTokenAtPosition(sourceFile, position);
+                    if (token && position < token.getStart()) {
+                        // First, we have to see if this position actually landed in a comment.
+                        var commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+
+                        // Then we want to make sure that it wasn't in a "///<" directive comment
+                        // We don't want to unintentionally update a file name.
+                        return forEach(commentRanges, c => {
+                            if (c.pos < position && position < c.end) {
+                                var commentText = sourceFile.text.substring(c.pos, c.end);
+                                if (!tripleSlashDirectivePrefixRegex.test(commentText)) {
+                                    return true;
+                                }
+                            }
+                        });
+                    }
+
+                    return false;
                 }
             }
 
@@ -3859,7 +3959,7 @@ module ts {
                 forEach(possiblePositions, position => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    var node = getNodeAtPosition(sourceFile, position);
+                    var node = getTouchingWord(sourceFile, position);
 
                     if (!node || node.kind !== SyntaxKind.SuperKeyword) {
                         return;
@@ -3925,7 +4025,7 @@ module ts {
                     forEach(possiblePositions, position => {
                         cancellationToken.throwIfCancellationRequested();
 
-                        var node = getNodeAtPosition(sourceFile, position);
+                        var node = getTouchingWord(sourceFile, position);
                         if (!node || node.kind !== SyntaxKind.ThisKeyword) {
                             return;
                         }
@@ -3983,7 +4083,7 @@ module ts {
             }
 
             function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[]): void {
-                if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                if (symbol && symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
                         if (declaration.kind === SyntaxKind.ClassDeclaration) {
                             getPropertySymbolFromTypeReference((<ClassDeclaration>declaration).baseType);
@@ -3998,14 +4098,15 @@ module ts {
 
                 function getPropertySymbolFromTypeReference(typeReference: TypeReferenceNode) {
                     if (typeReference) {
-                        // TODO: move to getTypeOfNode instead
-                        var typeReferenceSymbol = typeInfoResolver.getSymbolInfo(typeReference.typeName);
-                        if (typeReferenceSymbol) {
-                            var propertySymbol = typeReferenceSymbol.members[propertyName];
-                            if (propertySymbol) result.push(typeReferenceSymbol.members[propertyName]);
+                        var type = typeInfoResolver.getTypeOfNode(typeReference);
+                        if (type) {
+                            var propertySymbol = typeInfoResolver.getPropertyOfType(type, propertyName);
+                            if (propertySymbol) {
+                                result.push(propertySymbol);
+                            }
 
                             // Visit the typeReference as well to see if it directly or indirectly use that property
-                            getPropertySymbolsFromBaseTypes(typeReferenceSymbol, propertyName, result);
+                            getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result);
                         }
                     }
                 }
@@ -4320,7 +4421,8 @@ module ts {
             filename = TypeScript.switchToForwardSlashes(filename);
             var compilerOptions = program.getCompilerOptions();
             var targetSourceFile = program.getSourceFile(filename);  // Current selected file to be output
-            var emitToSingleFile = ts.shouldEmitToOwnFile(targetSourceFile, compilerOptions);
+            // If --out flag is not specified, shouldEmitToOwnFile is true. Otherwise shouldEmitToOwnFile is false.
+            var shouldEmitToOwnFile = ts.shouldEmitToOwnFile(targetSourceFile, compilerOptions);
             var emitDeclaration = compilerOptions.declaration;
             var emitOutput: EmitOutput = {
                 outputFiles: [],
@@ -4341,7 +4443,7 @@ module ts {
             var syntacticDiagnostics: Diagnostic[] = [];
             var containSyntacticErrors = false;
 
-            if (emitToSingleFile) {
+            if (shouldEmitToOwnFile) {
                 // Check only the file we want to emit
                 containSyntacticErrors = containErrors(program.getDiagnostics(targetSourceFile));
             } else {
@@ -4368,7 +4470,7 @@ module ts {
             // Perform semantic and force a type check before emit to ensure that all symbols are updated
             // EmitFiles will report if there is an error from TypeChecker and Emitter
             // Depend whether we will have to emit into a single file or not either emit only selected file in the project, emit all files into a single file
-            var emitFilesResult = emitToSingleFile ? getFullTypeCheckChecker().emitFiles(targetSourceFile) : getFullTypeCheckChecker().emitFiles();
+            var emitFilesResult = getFullTypeCheckChecker().emitFiles(targetSourceFile);
             emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
 
             // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
@@ -4527,10 +4629,10 @@ module ts {
             return TypeScript.Services.Breakpoints.getBreakpointLocation(syntaxtree, position);
         }
 
-        function getNavigationBarItems(filename: string) {
+        function getNavigationBarItems(filename: string): NavigationBarItem[] {
             filename = TypeScript.switchToForwardSlashes(filename);
-            var syntaxTree = getSyntaxTree(filename);
-            return new TypeScript.Services.NavigationBarItemGetter().getItems(syntaxTree.sourceUnit());
+
+            return NavigationBar.getNavigationBarItems(getCurrentSourceFile(filename));
         }
 
         function getSemanticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[] {
@@ -4544,7 +4646,7 @@ module ts {
 
             return result;
 
-            function classifySymbol(symbol: Symbol) {
+            function classifySymbol(symbol: Symbol, isInTypePosition: boolean) {
                 var flags = symbol.getFlags();
 
                 if (flags & SymbolFlags.Class) {
@@ -4553,14 +4655,16 @@ module ts {
                 else if (flags & SymbolFlags.Enum) {
                     return ClassificationTypeNames.enumName;
                 }
-                else if (flags & SymbolFlags.Interface) {
-                    return ClassificationTypeNames.interfaceName;
-                }
                 else if (flags & SymbolFlags.Module) {
                     return ClassificationTypeNames.moduleName;
                 }
-                else if (flags & SymbolFlags.TypeParameter) {
-                    return ClassificationTypeNames.typeParameterName;
+                else if (isInTypePosition) {
+                    if (flags & SymbolFlags.Interface) {
+                        return ClassificationTypeNames.interfaceName;
+                    }
+                    else if (flags & SymbolFlags.TypeParameter) {
+                        return ClassificationTypeNames.typeParameterName;
+                    }
                 }
             }
 
@@ -4570,7 +4674,7 @@ module ts {
                     if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
                         var symbol = typeInfoResolver.getSymbolInfo(node);
                         if (symbol) {
-                            var type = classifySymbol(symbol);
+                            var type = classifySymbol(symbol, isTypeNode(node) || isTypeDeclarationName(node));
                             if (type) {
                                 result.push({
                                     textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
@@ -4739,7 +4843,7 @@ module ts {
             var sourceFile = getCurrentSourceFile(filename);
             var result: TypeScript.TextSpan[] = [];
 
-            var token = getTokenAtPosition(sourceFile, position);
+            var token = getTouchingToken(sourceFile, position);
 
             if (token.getStart(sourceFile) === position) {
                 var matchKind = getMatchingTokenKind(token);
@@ -5023,7 +5127,7 @@ module ts {
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
 
-            var node = getNodeAtPosition(sourceFile, position);
+            var node = getTouchingWord(sourceFile, position);
 
             // Can only rename an identifier.
             if (node && node.kind === SyntaxKind.Identifier) {
@@ -5087,6 +5191,7 @@ module ts {
             getBreakpointStatementAtPosition: getBreakpointStatementAtPosition,
             getNavigateToItems: getNavigateToItems,
             getRenameInfo: getRenameInfo,
+            findRenameLocations: findRenameLocations,
             getNavigationBarItems: getNavigationBarItems,
             getOutliningSpans: getOutliningSpans,
             getTodoComments: getTodoComments,
@@ -5108,26 +5213,58 @@ module ts {
         /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
         /// we have a series of divide operator. this list allows us to be more accurate by ruling out 
         /// locations where a regexp cannot exist.
-        var noRegexTable: boolean[];
-        if (!noRegexTable) {
-            noRegexTable = [];
-            noRegexTable[SyntaxKind.Identifier] = true;
-            noRegexTable[SyntaxKind.StringLiteral] = true;
-            noRegexTable[SyntaxKind.NumericLiteral] = true;
-            noRegexTable[SyntaxKind.RegularExpressionLiteral] = true;
-            noRegexTable[SyntaxKind.ThisKeyword] = true;
-            noRegexTable[SyntaxKind.PlusPlusToken] = true;
-            noRegexTable[SyntaxKind.MinusMinusToken] = true;
-            noRegexTable[SyntaxKind.CloseParenToken] = true;
-            noRegexTable[SyntaxKind.CloseBracketToken] = true;
-            noRegexTable[SyntaxKind.CloseBraceToken] = true;
-            noRegexTable[SyntaxKind.TrueKeyword] = true;
-            noRegexTable[SyntaxKind.FalseKeyword] = true;
+        var noRegexTable: boolean[] = [];
+        noRegexTable[SyntaxKind.Identifier] = true;
+        noRegexTable[SyntaxKind.StringLiteral] = true;
+        noRegexTable[SyntaxKind.NumericLiteral] = true;
+        noRegexTable[SyntaxKind.RegularExpressionLiteral] = true;
+        noRegexTable[SyntaxKind.ThisKeyword] = true;
+        noRegexTable[SyntaxKind.PlusPlusToken] = true;
+        noRegexTable[SyntaxKind.MinusMinusToken] = true;
+        noRegexTable[SyntaxKind.CloseParenToken] = true;
+        noRegexTable[SyntaxKind.CloseBracketToken] = true;
+        noRegexTable[SyntaxKind.CloseBraceToken] = true;
+        noRegexTable[SyntaxKind.TrueKeyword] = true;
+        noRegexTable[SyntaxKind.FalseKeyword] = true;
+
+        function isAccessibilityModifier(kind: SyntaxKind) {
+            switch (kind) {
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
+                    return true;
+            }
+
+            return false;
+        }
+
+        /** Returns true if 'keyword2' can legally follow 'keyword1' in any language construct. */
+        function canFollow(keyword1: SyntaxKind, keyword2: SyntaxKind) {
+            if (isAccessibilityModifier(keyword1)) {
+                if (keyword2 === SyntaxKind.GetKeyword ||
+                    keyword2 === SyntaxKind.SetKeyword ||
+                    keyword2 === SyntaxKind.ConstructorKeyword ||
+                    keyword2 === SyntaxKind.StaticKeyword) {
+
+                    // Allow things like  "public get", "public constructor" and "public static".  
+                    // These are all legal.
+                    return true;
+                }
+
+                // Any other keyword following "public" is actually an identifier an not a real
+                // keyword.
+                return false;
+            }
+
+            // Assume any other keyword combination is legal.  This can be refined in the future
+            // if there are more cases we want the classifier to be better at.
+            return true;
         }
 
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
             var lastTokenOrCommentEnd = 0;
+            var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
 
             // If we're in a string literal, then prepend: "\
@@ -5157,8 +5294,27 @@ module ts {
                 entries: []
             };
 
-            
-            var token = SyntaxKind.Unknown;
+            // We can run into an unfortunate interaction between the lexical and syntactic classifier
+            // when the user is typing something generic.  Consider the case where the user types:
+            //
+            //      Foo<number
+            //
+            // From the lexical classifier's perspective, 'number' is a keyword, and so the word will
+            // be classified as such.  However, from the syntactic classifier's tree-based perspective
+            // this is simply an expression with the identifier 'number' on the RHS of the less than
+            // token.  So the classification will go back to being an identifier.  The moment the user
+            // types again, number will become a keyword, then an identifier, etc. etc.
+            //
+            // To try to avoid this problem, we avoid classifying contextual keywords as keywords 
+            // when the user is potentially typing something generic.  We just can't do a good enough
+            // job at the lexical level, and so well leave it up to the syntactic classifier to make
+            // the determination.
+            //
+            // In order to determine if the user is potentially typing something generic, we use a 
+            // weak heuristic where we track < and > tokens.  It's a weak heuristic, but should
+            // work well enough in practice.
+            var angleBracketStack = 0;
+
             do {
                 token = scanner.scan();
 
@@ -5170,6 +5326,35 @@ module ts {
                     }
                     else if (lastNonTriviaToken === SyntaxKind.DotToken && isKeyword(token)) {
                         token = SyntaxKind.Identifier;
+                    }
+                    else if (isKeyword(lastNonTriviaToken) && isKeyword(token) && !canFollow(lastNonTriviaToken, token)) {
+                        // We have two keywords in a row.  Only treat the second as a keyword if 
+                        // it's a sequence that could legally occur in the language.  Otherwise
+                        // treat it as an identifier.  This way, if someone writes "private var"
+                        // we recognize that 'var' is actually an identifier here.
+                        token = SyntaxKind.Identifier;
+                    }
+                    else if (lastNonTriviaToken === SyntaxKind.Identifier &&
+                             token === SyntaxKind.LessThanToken) {
+                        // Could be the start of something generic.  Keep track of that by bumping 
+                        // up the current count of generic contexts we may be in.
+                        angleBracketStack++;
+                    }
+                    else if (token === SyntaxKind.GreaterThanToken && angleBracketStack > 0) {
+                        // If we think we're currently in something generic, then mark that that
+                        // generic entity is complete.
+                        angleBracketStack--;
+                    }
+                    else if (token === SyntaxKind.AnyKeyword ||
+                             token === SyntaxKind.StringKeyword ||
+                             token === SyntaxKind.NumberKeyword ||
+                             token === SyntaxKind.BooleanKeyword) {
+                        if (angleBracketStack > 0) {
+                            // If it looks like we're could be in something generic, don't classify this 
+                            // as a keyword.  We may just get overwritten by the syntactic classifier,
+                            // causing a noisy experience for the user.
+                            token = SyntaxKind.Identifier;
+                        }
                     }
 
                     lastNonTriviaToken = token;

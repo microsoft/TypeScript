@@ -101,6 +101,12 @@ module ts {
 
         /**
          * Returns a JSON-encoded value of the type:
+         * { fileName: string, textSpan: { start: number, length: number } }[]
+         */
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): string;
+
+        /**
+         * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; kind: string; name: string; containerKind: string; containerName: string }
          *
          * Or undefined value if no definition can be found.
@@ -165,7 +171,7 @@ module ts {
     }
 
     /// TODO: delete this, it is only needed until the VS interface is updated
-    enum LanguageVersion {
+    export enum LanguageVersion {
         EcmaScript3 = 0,
         EcmaScript5 = 1,
     }
@@ -341,12 +347,6 @@ module ts {
             }
             var options = compilationSettingsToCompilerOptions(<CompilerOptions>JSON.parse(<any>settingsJson));
 
-            /// TODO: this should be pushed into VS.
-            /// We can not ask the LS instance to resolve, as this will lead to asking the host about files it does not know about,
-            /// something it is not designed to handle. for now make sure we never get a "noresolve == false".
-            /// This value should not matter, as the host runs resolution logic independently
-            options.noResolve = true;
-
             return options;
         }
 
@@ -372,6 +372,7 @@ module ts {
             if (diagnosticMessagesJson == null || diagnosticMessagesJson == "") {
                 return null;
             }
+
             try {
                 return JSON.parse(diagnosticMessagesJson);
             }
@@ -498,7 +499,8 @@ module ts {
                 start: diagnostic.start,
                 length: diagnostic.length,
                 /// TODO: no need for the tolowerCase call
-                category: DiagnosticCategory[diagnostic.category].toLowerCase()
+                category: DiagnosticCategory[diagnostic.category].toLowerCase(),
+                code: diagnostic.code
             };
         }
 
@@ -640,6 +642,14 @@ module ts {
                 "getRenameInfo('" + fileName + "', " + position + ")",
                 () => {
                     return this.languageService.getRenameInfo(fileName, position);
+                });
+        }
+
+        public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): string {
+            return this.forwardJSONCall(
+                "findRenameLocations('" + fileName + "', " + position + ", " + findInStrings + ", " + findInComments + ")",
+                () => {
+                    return this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments);
                 });
         }
 

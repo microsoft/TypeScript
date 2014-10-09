@@ -61,8 +61,8 @@ goTo.marker('9');
 verify.quickInfoIs("(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
 verify.completionListContains("test1", "(property) test1: a1.connectModule", undefined);
 verify.completionListContains("test2", "(method) test2(): a1.connectModule", undefined);
-verify.not.completionListContains("connectModule");
-verify.not.completionListContains("connectExport");
+verify.completionListContains("connectModule");
+verify.completionListContains("connectExport");
 
 goTo.marker('10');
 verify.currentSignatureHelpIs("test1(res: any, req: any, next: any): void");
@@ -82,7 +82,6 @@ verify.quickInfoIs("(var) r4: a1.connectExport", undefined);
 goTo.marker('15');
 verify.not.completionListContains("test1", "(property) test1: a1.connectModule", undefined);
 verify.not.completionListContains("test2", "(method) test2(): a1.connectModule", undefined);
-// Bug aliases not in completion list
-verify.not.completionListContains("connectModule", "interface a1.connectModule", undefined);
-verify.not.completionListContains("connectExport", "interface a1.connectExport", undefined);
+verify.completionListContains("connectModule", "interface a1.connectModule", undefined);
+verify.completionListContains("connectExport", "interface a1.connectExport", undefined);
 

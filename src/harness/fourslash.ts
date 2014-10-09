@@ -416,8 +416,12 @@ module FourSlash {
         }
 
         private raiseError(message: string) {
-            message = "Marker: " + currentTestState.lastKnownMarker + "\n" + message;
+            message = this.messageAtLastKnownMarker(message);
             throw new Error(message);
+        }
+
+        private messageAtLastKnownMarker(message: string) {
+            return "Marker: " + currentTestState.lastKnownMarker + "\n" + message;
         }
 
         private getDiagnostics(fileName: string): ts.Diagnostic[] {
@@ -757,8 +761,12 @@ module FourSlash {
             return this.languageService.getImplementorsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
+        private assertionMessage(name: string, actualValue: any, expectedValue: any) {
+            return "\nActual " + name + ":\n\t" + actualValue + "\nExpected value:\n\t" + expectedValue;
+        }
+
         public verifyQuickInfo(negative: boolean, expectedText?: string, expectedDocumentation?: string) {
-            [expectedText, expectedDocumentation].forEach(str => {
+        [expectedText, expectedDocumentation].forEach(str => {
                 if (str) {
                     this.scenarioActions.push('<ShowQuickInfo />');
                     this.scenarioActions.push('<VerifyQuickInfoTextContains IgnoreSpacing="true" Text="' + escapeXmlAttributeValue(str) + '" ' + (negative ? 'ExpectsFailure="true"' : '') + ' />');
@@ -771,14 +779,14 @@ module FourSlash {
 
             if (negative) {
                 if (expectedText !== undefined) {
-                    assert.notEqual(actualQuickInfoText, expectedText, assertionMessage("quick info text"));
+                    assert.notEqual(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
                 }
                 if (expectedDocumentation != undefined) {
-                    assert.notEqual(actualQuickInfoDocumentation, expectedDocumentation, assertionMessage("quick info doc comment"));
+                    assert.notEqual(actualQuickInfoDocumentation, expectedDocumentation, this.messageAtLastKnownMarker("quick info doc comment"));
                 }
             } else {
                 if (expectedText !== undefined) {
-                    assert.equal(actualQuickInfoText, expectedText, assertionMessage("quick info text"));
+                    assert.equal(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
                 }
                 if (expectedDocumentation != undefined) {
                     assert.equal(actualQuickInfoDocumentation, expectedDocumentation, assertionMessage("quick info doc"));
@@ -786,7 +794,39 @@ module FourSlash {
             }
         }
 
-        public verifyQuickInfoExists(negative: number) {
+        public verifyRenameLocations(findInStrings: boolean, findInComments: boolean) {
+            var renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
+            if (renameInfo.canRename) {
+                var references = this.languageService.findRenameLocations(
+                    this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments);
+
+                var ranges = this.getRanges();
+                if (ranges.length !== references.length) {
+                    this.raiseError(this.assertionMessage("Rename locations", references.length, ranges.length));
+                }
+
+                ranges = ranges.sort((r1, r2) => r1.start - r2.start);
+                references = references.sort((r1, r2) => r1.textSpan.start() - r2.textSpan.start());
+
+                for (var i = 0, n = ranges.length; i < n; i++) {
+                    var reference = references[i];
+                    var range = ranges[i];
+
+                    if (reference.textSpan.start() !== range.start ||
+                        reference.textSpan.end() !== range.end) {
+
+                        this.raiseError(this.assertionMessage("Rename location",
+                            "[" + reference.textSpan.start() + "," + reference.textSpan.end() + ")",
+                            "[" + range.start + "," + range.end + ")"));
+                    }
+                }
+            }
+            else {
+                this.raiseError("Expected rename to succeed, but it actually failed.");
+            }
+        }
+
+        public verifyQuickInfoExists(negative: boolean) {
             this.taoInvalidReason = 'verifyQuickInfoExists NYI';
 
             var actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
@@ -872,6 +912,13 @@ module FourSlash {
             assert.equal(actual, expected);
         }
 
+        public verifySignatureHelpArgumentCount(expected: number) {
+            this.taoInvalidReason = 'verifySignatureHelpArgumentCount NYI';
+            var signatureHelpItems = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
+            var actual = signatureHelpItems.argumentCount;
+            assert.equal(actual, expected);
+        }
+
         public verifySignatureHelpPresent(shouldBePresent = true) {
             this.taoInvalidReason = 'verifySignatureHelpPresent NYI';
 
@@ -925,29 +972,16 @@ module FourSlash {
             this.validate("error", message, renameInfo.localizedErrorMessage);
         }
 
-        //private getFormalParameter() {
-        //    var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-        //    return help.formal;
-        //}
-
         private getActiveSignatureHelpItem() {
             var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-
-            // If the signature hasn't been narrowed down yet (e.g. no parameters have yet been entered),
-            // 'activeFormal' will be -1 (even if there is only 1 signature). Signature help will show the
-            // first signature in the signature group, so go with that
-            var index = help.selectedItemIndex < 0 ? 0 : help.selectedItemIndex;
-
+            var index = help.selectedItemIndex;
             return help.items[index];
         }
 
         private getActiveParameter(): ts.SignatureHelpParameter {
             var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-
             var item = help.items[help.selectedItemIndex];
- 
-            // Same logic as in getActiveSignatureHelp - this value might be -1 until a parameter value actually gets typed
-            var currentParam = help.argumentIndex < 0 ? 0 : help.argumentIndex;
+            var currentParam = help.argumentIndex;
             return item.parameters[currentParam];
         }
 
@@ -1435,6 +1469,21 @@ module FourSlash {
             }
         }
 
+        public verifyDefinitionsName(negative: boolean, expectedName: string, expectedContainerName: string) {
+            this.taoInvalidReason = 'verifyDefinititionsInfo NYI';
+
+            var definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var actualDefinitionName = definitions && definitions.length ? definitions[0].name : "";
+            var actualDefinitionContainerName = definitions && definitions.length ? definitions[0].containerName : "";
+            if (negative) {
+                assert.notEqual(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Name"));
+                assert.notEqual(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Container Name"));
+            } else {
+                assert.equal(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Name"));
+                assert.equal(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Container Name"));
+            }
+        }
+
         public getMarkers(): Marker[] {
             //  Return a copy of the list
             return this.testData.markers.slice(0);
@@ -1563,7 +1612,7 @@ module FourSlash {
 
         private verifyClassifications(expected: { classificationType: string; text: string }[], actual: ts.ClassifiedSpan[]) {
             if (actual.length !== expected.length) {
-                this.raiseError('verifySyntacticClassification failed - expected total classifications to be ' + expected.length + ', but was ' + actual.length);
+                this.raiseError('verifyClassifications failed - expected total classifications to be ' + expected.length + ', but was ' + actual.length);
             }
 
             for (var i = 0; i < expected.length; i++) {
@@ -1572,7 +1621,7 @@ module FourSlash {
 
                 var expectedType: string = (<any>ts.ClassificationTypeNames)[expectedClassification.classificationType];
                 if (expectedType !== actualClassification.classificationType) {
-                    this.raiseError('verifySyntacticClassification failed - expected classifications type to be ' +
+                    this.raiseError('verifyClassifications failed - expected classifications type to be ' +
                         expectedType + ', but was ' +
                         actualClassification.classificationType);
                 }
@@ -1580,7 +1629,7 @@ module FourSlash {
                 var actualSpan = actualClassification.textSpan;
                 var actualText = this.activeFile.content.substr(actualSpan.start(), actualSpan.length());
                 if (expectedClassification.text !== actualText) {
-                    this.raiseError('verifySyntacticClassification failed - expected classificatied text to be ' +
+                    this.raiseError('verifyClassifications failed - expected classificatied text to be ' +
                         expectedClassification.text + ', but was ' +
                         actualText);
                 }
@@ -2080,9 +2129,6 @@ module FourSlash {
         xmlData.push(xml);
     }
 
-    // Cache these between executions so we don't have to re-parse them for every test
-    var fourslashSourceFile: ts.SourceFile = undefined;
-
     export function runFourSlashTestContent(content: string, fileName: string): TestXmlData {
         // Parse out the files and their metadata
         var testData = parseTestData(content, fileName);
@@ -2090,21 +2136,16 @@ module FourSlash {
         currentTestState = new TestState(testData);
 
         var result = '';
-        var fourslashFilename = 'fourslash.ts';
-        var tsFn = 'tests/cases/fourslash/' + fourslashFilename;
-        fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), ts.ScriptTarget.ES5, /*version*/ "0", /*isOpen*/ false);
-
-        var files: { [filename: string]: ts.SourceFile; } = {};
-        files[Harness.Compiler.getCanonicalFileName(fourslashFilename)] = fourslashSourceFile;
-        files[Harness.Compiler.getCanonicalFileName(fileName)] = ts.createSourceFile(fileName, content, ts.ScriptTarget.ES5, /*version*/ "0", /*isOpen*/ false);
-        files[Harness.Compiler.getCanonicalFileName(Harness.Compiler.defaultLibFileName)] = Harness.Compiler.defaultLibSourceFile;
-
-        var host = Harness.Compiler.createCompilerHost(files, (fn, contents) => result = contents);
-        var program = ts.createProgram([fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
+        var host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFilename, content: undefined },
+            { unitName: fileName, content: content }],
+            (fn, contents) => result = contents,
+            ts.ScriptTarget.ES5,
+            sys.useCaseSensitiveFileNames);
+        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
         checker.checkProgram();
 
-        var errs = checker.getDiagnostics(files[fileName]);
+        var errs = checker.getDiagnostics(program.getSourceFile(fileName));
         if (errs.length > 0) {
             throw new Error('Error compiling ' + fileName + ': ' + errs.map(e => e.messageText).join('\r\n'));
         }

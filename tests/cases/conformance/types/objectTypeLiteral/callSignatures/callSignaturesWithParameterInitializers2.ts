@@ -17,8 +17,8 @@ c.foo();
 c.foo(1);
 
 var b = {
-    foo(x = 1),
-    foo(x = 1) { },
+    foo(x = 1), // error
+    foo(x = 1) { }, // error
 }
 
 b.foo();

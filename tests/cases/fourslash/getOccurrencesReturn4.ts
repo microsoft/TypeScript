@@ -19,7 +19,15 @@
 ////    return/*7*/ true;
 ////}
 
-test.markers().forEach(m => {
-    goTo.position(m.position, m.fileName)
-    verify.occurrencesAtPositionCount(0);
-});
+function verifyOccurencesAtMarker(marker: string, count: number) {
+    goTo.marker(marker);
+    verify.occurrencesAtPositionCount(count);
+}
+
+verifyOccurencesAtMarker("1", 4);
+verifyOccurencesAtMarker("2", 4);
+verifyOccurencesAtMarker("3", 4);
+verifyOccurencesAtMarker("4", 4);
+verifyOccurencesAtMarker("5", 1);
+verifyOccurencesAtMarker("6", 3);
+verifyOccurencesAtMarker("7", 3);

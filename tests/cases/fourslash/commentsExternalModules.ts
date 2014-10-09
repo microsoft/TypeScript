@@ -72,9 +72,7 @@ goTo.marker('9');
 verify.quickInfoIs('(alias) extMod', "This is on import declaration");
 
 goTo.marker('10');
-// TODO: extMod should exist in the completion list
-//verify.completionListContains("extMod", "(alias) extMod", "This is on import declaration");
-verify.not.completionListContains("extMod", "(alias) extMod", "This is on import declaration");
+verify.completionListContains("extMod", "(alias) extMod", "This is on import declaration");
 
 goTo.marker('11');
 verify.memberListContains("m1", "module extMod.m1");

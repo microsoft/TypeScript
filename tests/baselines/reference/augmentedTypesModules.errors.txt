@@ -1,23 +1,30 @@
+tests/cases/compiler/augmentedTypesModules.ts(5,8): error TS2300: Duplicate identifier 'm1a'.
 tests/cases/compiler/augmentedTypesModules.ts(6,5): error TS2300: Duplicate identifier 'm1a'.
+tests/cases/compiler/augmentedTypesModules.ts(8,8): error TS2300: Duplicate identifier 'm1b'.
 tests/cases/compiler/augmentedTypesModules.ts(9,5): error TS2300: Duplicate identifier 'm1b'.
+tests/cases/compiler/augmentedTypesModules.ts(16,8): error TS2300: Duplicate identifier 'm1d'.
 tests/cases/compiler/augmentedTypesModules.ts(19,5): error TS2300: Duplicate identifier 'm1d'.
 tests/cases/compiler/augmentedTypesModules.ts(25,8): error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
 tests/cases/compiler/augmentedTypesModules.ts(28,8): error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
 tests/cases/compiler/augmentedTypesModules.ts(51,8): error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
 
 
-==== tests/cases/compiler/augmentedTypesModules.ts (6 errors) ====
+==== tests/cases/compiler/augmentedTypesModules.ts (9 errors) ====
     // module then var
     module m1 { }
     var m1 = 1; // Should be allowed
     
-    module m1a { var y = 2; }
-    var m1a = 1;
+    module m1a { var y = 2; } // error
+           ~~~
+!!! error TS2300: Duplicate identifier 'm1a'.
+    var m1a = 1; // error
         ~~~
 !!! error TS2300: Duplicate identifier 'm1a'.
     
-    module m1b { export var y = 2; }
-    var m1b = 1;
+    module m1b { export var y = 2; } // error
+           ~~~
+!!! error TS2300: Duplicate identifier 'm1b'.
+    var m1b = 1; // error
         ~~~
 !!! error TS2300: Duplicate identifier 'm1b'.
     
@@ -26,7 +33,9 @@ tests/cases/compiler/augmentedTypesModules.ts(51,8): error TS2434: A module decl
     }
     var m1c = 1; // Should be allowed
     
-    module m1d {
+    module m1d { // error
+           ~~~
+!!! error TS2300: Duplicate identifier 'm1d'.
         export class I { foo() { } }
     }
     var m1d = 1; // error

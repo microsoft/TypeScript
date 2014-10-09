@@ -10,4 +10,4 @@
 //// 
 
 goTo.marker();
-verify.quickInfoExists();
+verify.not.quickInfoExists();
