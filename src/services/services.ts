@@ -2259,13 +2259,9 @@ module ts {
                 return undefined;
             }
 
-            // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
-            //               which is permissible given that it is backwards compatible; but really we should consider
-            //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
-            //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
             return {
                 name: displayName,
-                kind: getSymbolKind(symbol, SemanticMeaning.All),
+                kind: getSymbolKind(symbol),
                 kindModifiers: getSymbolModifiers(symbol)
             };
         }
@@ -2617,7 +2613,7 @@ module ts {
                 //               which is permissible given that it is backwards compatible; but really we should consider
                 //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
                 //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
-                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location, SemanticMeaning.All);
+                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location);
                 return {
                     name: entryName,
                     kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
@@ -2660,10 +2656,10 @@ module ts {
             }
         }
 
-        function getSymbolKind(symbol: Symbol, meaningAtLocation: SemanticMeaning): string {
+        // TODO(drosen): use contextual SemanticMeaning.
+        function getSymbolKind(symbol: Symbol): string {
             var flags = typeInfoResolver.getRootSymbol(symbol).getFlags();
 
-            // TODO(drosen): use meaningAtLocation.
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
@@ -2741,13 +2737,12 @@ module ts {
                 : ScriptElementKindModifier.none;
         }
 
-        // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
+        // TODO(drosen): use contextual SemanticMeaning.
         function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol,
                                                                 sourceFile: SourceFile,
                                                                 enclosingDeclaration: Node,
                                                                 typeResolver: TypeChecker,
-                                                                location: Node,
-                                                                semanticMeaning: SemanticMeaning) {
+                                                                location: Node) {
             var displayParts: SymbolDisplayPart[] = [];
             var documentation: SymbolDisplayPart[];
             var symbolFlags = typeResolver.getRootSymbol(symbol).flags;
@@ -2853,7 +2848,6 @@ module ts {
                 }
             }
 
-            // TODO(drosen): use semanticMeaning.
             if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
                 displayParts.push(spacePart());
@@ -2959,7 +2953,7 @@ module ts {
                     }
                 }
                 else {
-                    symbolKind = getSymbolKind(symbol, semanticMeaning);
+                    symbolKind = getSymbolKind(symbol);
                 }
             }
 
@@ -3050,8 +3044,7 @@ module ts {
                 return undefined;
             }
 
-            // TODO(drosen): Properly address 'semanticMeaning' parameter here
-            var displayPartsDocumentationsAndKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, sourceFile, getContainerNode(node), typeInfoResolver, node, SemanticMeaning.All);
+            var displayPartsDocumentationsAndKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, sourceFile, getContainerNode(node), typeInfoResolver, node);
             return {
                 kind: displayPartsDocumentationsAndKind.symbolKind,
                 kindModifiers: getSymbolModifiers(symbol),
@@ -3166,7 +3159,7 @@ module ts {
 
             var declarations = symbol.getDeclarations();
             var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            var symbolKind = getSymbolKind(symbol, getMeaningFromLocation(node));
+            var symbolKind = getSymbolKind(symbol);
             var containerSymbol = symbol.parent;
             var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
 
@@ -5153,7 +5146,7 @@ module ts {
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
                 if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
-                    var kind = getSymbolKind(symbol, getMeaningFromLocation(node));
+                    var kind = getSymbolKind(symbol);
                     if (kind) {
                         return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),
