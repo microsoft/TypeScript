@@ -2619,8 +2619,8 @@ module ts {
             var result: DefinitionInfo[] = [];
 
             if (symbol.flags & SymbolFlags.UnionProperty) {
-                forEach(typeInfoResolver.getUnionTypesOfUnionProperty(symbol), t => {
-                    getDefinitionFromSymbol(typeInfoResolver.getPropertyOfType(t, symbol.name), node, result);
+                forEach(typeInfoResolver.getRootSymbols(symbol), s => {
+                    getDefinitionFromSymbol(s, node, result);
                 });
             }
             else {
@@ -3013,8 +3013,8 @@ module ts {
             // Handel union properties
             if (symbol.flags & SymbolFlags.UnionProperty) {
                 declarations = [];
-                forEach(typeInfoResolver.getUnionTypesOfUnionProperty(symbol), t => {
-                    declarations.push.apply(declarations, t.getProperty(symbol.name).declarations);
+                forEach(typeInfoResolver.getRootSymbols(symbol), s => {
+                    declarations.push.apply(declarations, s.declarations);
                 });
             }
 

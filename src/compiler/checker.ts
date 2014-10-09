@@ -93,7 +93,6 @@ module ts {
             getFullyQualifiedName: getFullyQualifiedName,
             getResolvedSignature: getResolvedSignature,
             getEnumMemberValue: getEnumMemberValue,
-            getUnionTypesOfUnionProperty: getUnionTypesOfUnionProperty
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -1749,10 +1748,6 @@ module ts {
                 links.type = getUnionType(types);
             }
             return links.type;
-        }
-
-        function getUnionTypesOfUnionProperty(symbol: Symbol): Type[] {
-            return (symbol.flags & SymbolFlags.UnionProperty) ? getSymbolLinks(symbol).unionType.types : undefined;
         }
 
         function getTypeOfSymbol(symbol: Symbol): Type {
