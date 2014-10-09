@@ -4092,8 +4092,14 @@ module ts {
             return createArrayType(elementType);
         }
 
+        var numericScanner: Scanner;
         function isNumericName(name: string) {
-            return !isNaN(<number><any>name);
+            numericScanner = numericScanner || createScanner(compilerOptions.target || ScriptTarget.ES5, /*skipTrivia*/ false);
+            numericScanner.setText(name);
+
+            // Ensure that the name is nothing more than a numeric literal
+            // (i.e. it is preceded by nothing (whitespace) and scanning leaves us at the very end of the string).
+            return numericScanner.scan() === SyntaxKind.NumericLiteral && numericScanner.getTextPos() === name.length;
         }
 
         function checkObjectLiteral(node: ObjectLiteral, contextualMapper?: TypeMapper): Type {

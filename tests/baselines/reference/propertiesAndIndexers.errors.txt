@@ -13,13 +13,12 @@ tests/cases/compiler/propertiesAndIndexers.ts(33,11): error TS2411: Property '6'
 tests/cases/compiler/propertiesAndIndexers.ts(33,11): error TS2413: Numeric index type 'string' is not assignable to string index type 'number'.
 tests/cases/compiler/propertiesAndIndexers.ts(34,5): error TS2411: Property '2' of type 'Z' is not assignable to string index type 'number'.
 tests/cases/compiler/propertiesAndIndexers.ts(34,5): error TS2412: Property '2' of type 'Z' is not assignable to numeric index type 'string'.
-tests/cases/compiler/propertiesAndIndexers.ts(35,5): error TS2412: Property 'Infinity' of type 'number' is not assignable to numeric index type 'string'.
 tests/cases/compiler/propertiesAndIndexers.ts(36,5): error TS2411: Property 'zoo' of type 'string' is not assignable to string index type 'number'.
 tests/cases/compiler/propertiesAndIndexers.ts(44,5): error TS2411: Property 't' of type 'number' is not assignable to string index type 'string'.
 tests/cases/compiler/propertiesAndIndexers.ts(50,5): error TS2412: Property '3' of type 'boolean' is not assignable to numeric index type 'string'.
 
 
-==== tests/cases/compiler/propertiesAndIndexers.ts (19 errors) ====
+==== tests/cases/compiler/propertiesAndIndexers.ts (18 errors) ====
     interface X { }
     interface Y {
         n: number;
@@ -85,8 +84,6 @@ tests/cases/compiler/propertiesAndIndexers.ts(50,5): error TS2412: Property '3' 
         ~~~~~
 !!! error TS2412: Property '2' of type 'Z' is not assignable to numeric index type 'string'.
         Infinity: number;
-        ~~~~~~~~~~~~~~~~~
-!!! error TS2412: Property 'Infinity' of type 'number' is not assignable to numeric index type 'string'.
         zoo: string;
         ~~~~~~~~~~~~
 !!! error TS2411: Property 'zoo' of type 'string' is not assignable to string index type 'number'.
