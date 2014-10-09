@@ -1,0 +1,29 @@
+tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(3,3): error TS2412: Property '"1"' of type 'string' is not assignable to numeric index type 'number'.
+tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(4,3): error TS2412: Property '"-1"' of type 'string' is not assignable to numeric index type 'number'.
+tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(5,3): error TS2412: Property '"+1"' of type 'string' is not assignable to numeric index type 'number'.
+
+
+==== tests/cases/compiler/propertiesAndIndexersForNumericNames.ts (3 errors) ====
+    class C {
+      [i: number]: number;
+      public "1": string = "number"; // Error
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2412: Property '"1"' of type 'string' is not assignable to numeric index type 'number'.
+      public "-1": string = "negative number"; // Error
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2412: Property '"-1"' of type 'string' is not assignable to numeric index type 'number'.
+      public "+1": string = "positive number (for the paranoid)"; // Error
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2412: Property '"+1"' of type 'string' is not assignable to numeric index type 'number'.
+      
+      public " 1": string = "leading space"; // No error
+      public "1    ": string = "trailing space"; // No error
+      public "": string = "no nothing"; // No error
+      public "    ": string = "just space"; // No error
+      public "1 0 1": string = "several numbers and spaces"; // No error
+      public "NaN": string = "not a number"; // No error
+      public "-NaN": string = "not a negative number"; // No error
+      public "+Infinity": string = "A gillion"; // No error
+      public "-Infinity": string = "Negative-a-gillion"; // No error
+    }
+    

@@ -4097,9 +4097,15 @@ module ts {
             numericScanner = numericScanner || createScanner(compilerOptions.target || ScriptTarget.ES5, /*skipTrivia*/ false);
             numericScanner.setText(name);
 
-            // Ensure that the name is nothing more than a numeric literal
-            // (i.e. it is preceded by nothing (whitespace) and scanning leaves us at the very end of the string).
-            return numericScanner.scan() === SyntaxKind.NumericLiteral && numericScanner.getTextPos() === name.length;
+            // Ensure that the name is nothing more than an optional sign (+/-) and a numeric literal
+            // (i.e. it is preceded by nothing and scanning leaves us at the very end of the string).
+            var token = numericScanner.scan();
+            
+            if (token === SyntaxKind.MinusToken || token === SyntaxKind.PlusToken) {
+                token = numericScanner.scan();
+            }
+            
+            return token === SyntaxKind.NumericLiteral && numericScanner.getTextPos() === name.length;
         }
 
         function checkObjectLiteral(node: ObjectLiteral, contextualMapper?: TypeMapper): Type {
