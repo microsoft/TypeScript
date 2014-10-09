@@ -4094,6 +4094,13 @@ module ts {
 
         var numericScanner: Scanner;
         function isNumericName(name: string) {
+            // First see if the name is in canonical string representation.
+            // Unfortunately this permits various forms of "NaN" and "Infinity",
+            // but it is a good check to save time.
+            if ((+name).toString() !== name) {
+                return false;
+            }
+
             numericScanner = numericScanner || createScanner(compilerOptions.target || ScriptTarget.ES5, /*skipTrivia*/ false);
             numericScanner.setText(name);
 
@@ -4101,10 +4108,11 @@ module ts {
             // (i.e. it is preceded by nothing and scanning leaves us at the very end of the string).
             var token = numericScanner.scan();
             
-            if (token === SyntaxKind.MinusToken || token === SyntaxKind.PlusToken) {
+            // '+' will never be in front of a number in its printed form.
+            if (token === SyntaxKind.MinusToken) {
                 token = numericScanner.scan();
             }
-            
+
             return token === SyntaxKind.NumericLiteral && numericScanner.getTextPos() === name.length;
         }
 
@@ -4158,7 +4166,9 @@ module ts {
                             if (hasProperty(properties, id)) {
                                 if (kind === IndexKind.String || isNumericName(id)) {
                                     var type = getTypeOfSymbol(properties[id]);
-                                    if (!contains(propTypes, type)) propTypes.push(type);
+                                    if (!contains(propTypes, type)) {
+                                        propTypes.push(type);
+                                    }
                                 }
                             }
                         }
