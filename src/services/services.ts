@@ -2663,16 +2663,12 @@ module ts {
         function getSymbolKind(symbol: Symbol, meaningAtLocation: SemanticMeaning): string {
             var flags = typeInfoResolver.getRootSymbol(symbol).getFlags();
 
+            // TODO(drosen): use meaningAtLocation.
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
-
-            // The following should only apply if encountered at a type position,
-            // and need to have precedence over other meanings if this is the case.
-            if (meaningAtLocation & SemanticMeaning.Type) {
-                if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
-                if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-            }
-
+            if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
+            if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+            
             var result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags);
             if (result === ScriptElementKind.unknown) {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
@@ -2745,10 +2741,13 @@ module ts {
                 : ScriptElementKindModifier.none;
         }
 
-        function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
-            typeResolver: TypeChecker, location: Node,
-            // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
-            semanticMeaning = getMeaningFromLocation(location)) {
+        // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
+        function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol,
+                                                                sourceFile: SourceFile,
+                                                                enclosingDeclaration: Node,
+                                                                typeResolver: TypeChecker,
+                                                                location: Node,
+                                                                semanticMeaning: SemanticMeaning) {
             var displayParts: SymbolDisplayPart[] = [];
             var documentation: SymbolDisplayPart[];
             var symbolFlags = typeResolver.getRootSymbol(symbol).flags;
@@ -2853,13 +2852,15 @@ module ts {
                     }
                 }
             }
+
+            // TODO(drosen): use semanticMeaning.
             if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
                 writeTypeParametersOfSymbol(symbol, sourceFile);
             }
-            if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
+            if (symbolFlags & SymbolFlags.Interface) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
                 displayParts.push(spacePart());
@@ -2878,7 +2879,7 @@ module ts {
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
             }
-            if ((symbolFlags & SymbolFlags.TypeParameter) && (semanticMeaning & SemanticMeaning.Type)) {
+            if (symbolFlags & SymbolFlags.TypeParameter) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 displayParts.push(textPart("type parameter"));
@@ -3049,7 +3050,8 @@ module ts {
                 return undefined;
             }
 
-            var displayPartsDocumentationsAndKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, sourceFile, getContainerNode(node), typeInfoResolver, node);
+            // TODO(drosen): Properly address 'semanticMeaning' parameter here
+            var displayPartsDocumentationsAndKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, sourceFile, getContainerNode(node), typeInfoResolver, node, SemanticMeaning.All);
             return {
                 kind: displayPartsDocumentationsAndKind.symbolKind,
                 kindModifiers: getSymbolModifiers(symbol),
@@ -4666,19 +4668,18 @@ module ts {
             function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning) {
                 var flags = symbol.getFlags();
 
+                // TODO(drosen): use meaningAtPosition.
                 if (flags & SymbolFlags.Class) {
                     return ClassificationTypeNames.className;
                 }
                 else if (flags & SymbolFlags.Enum) {
                     return ClassificationTypeNames.enumName;
                 }
-                else if (meaningAtPosition & SemanticMeaning.Type) {
-                    if (flags & SymbolFlags.Interface) {
-                        return ClassificationTypeNames.interfaceName;
-                    }
-                    else if (flags & SymbolFlags.TypeParameter) {
-                        return ClassificationTypeNames.typeParameterName;
-                    }
+                else if (flags & SymbolFlags.Interface) {
+                    return ClassificationTypeNames.interfaceName;
+                }
+                else if (flags & SymbolFlags.TypeParameter) {
+                    return ClassificationTypeNames.typeParameterName;
                 }
                 else if (flags & SymbolFlags.Module) {
                     return ClassificationTypeNames.moduleName;
