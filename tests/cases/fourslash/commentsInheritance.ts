@@ -42,7 +42,7 @@
 ////    /** c1_nc_l1*/
 ////    public nc_l1: () => void;
 ////}
-////var i1/*1iq*/_i: i1;
+////var i1/*1iq*/_i: /*16i*/i1;
 ////i1_i./*1*/i/*2q*/1_f1(/*2*/);
 ////i1_i.i1_n/*3q*/c_f1(/*3*/);
 ////i1_i.f/*4q*/1(/*4*/);
@@ -179,7 +179,7 @@
 ////    nc_f1(): void;
 ////    nc_l1: () => void;
 ////}
-////var i2/*36iq*/_i: i2;
+////var i2/*36iq*/_i: /*51i*/i2;
 ////var i3/*37iq*/_i: i3;
 ////i2_i./*36*/i2/*37q*/_f1(/*37*/);
 ////i2_i.i2_n/*38q*/c_f1(/*38*/);
@@ -369,6 +369,9 @@ verify.completionListContains("i1", "interface i1", "i1 is interface with proper
 verify.completionListContains("i1_i", "(var) i1_i: i1", "");
 verify.completionListContains("c1", "class c1", "");
 verify.completionListContains("c1_i", "(var) c1_i: c1", "");
+
+goTo.marker('16i');
+verify.completionListContains("i1", "interface i1", "i1 is interface with properties");
 
 goTo.marker('17iq');
 verify.quickInfoIs("(var) c2_i: c2", "");
@@ -652,6 +655,10 @@ verify.completionListContains("i2", "interface i2", "");
 verify.completionListContains("i2_i", "(var) i2_i: i2", "");
 verify.completionListContains("i3", "interface i3", "");
 verify.completionListContains("i3_i", "(var) i3_i: i3", "");
+
+goTo.marker('51i');
+verify.completionListContains("i2", "interface i2", "");
+verify.completionListContains("i3", "interface i3", "");
 
 goTo.marker('52');
 verify.quickInfoIs("(constructor) c5(): c5", "");

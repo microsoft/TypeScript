@@ -1259,9 +1259,9 @@ module ts {
         filename: string;           // the file where the completion was requested
         position: number;           // position in the file where the completion was requested
         entries: CompletionEntry[]; // entries for this completion
-        symbols: Map<Symbol>; // symbols by entry name map
-        location: Node;          // the node where the completion was requested
-        typeChecker: TypeChecker;// the typeChecker used to generate this completion
+        symbols: Map<Symbol>;       // symbols by entry name map
+        location: Node;             // the node where the completion was requested
+        typeChecker: TypeChecker;   // the typeChecker used to generate this completion
     }
 
     interface FormattingOptions {
@@ -1968,11 +1968,12 @@ module ts {
             (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node));
     }
 
-    enum SearchMeaning {
+    enum SemanticMeaning {
         None = 0x0,
         Value = 0x1,
         Type = 0x2,
-        Namespace = 0x4
+        Namespace = 0x4,
+        All = Value | Type | Namespace
     }
 
     enum BreakContinueSearchType {
@@ -2258,16 +2259,20 @@ module ts {
                 return undefined;
             }
 
+            // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
+            //               which is permissible given that it is backwards compatible; but really we should consider
+            //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
+            //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
             return {
                 name: displayName,
-                kind: getSymbolKind(symbol),
+                kind: getSymbolKind(symbol, SemanticMeaning.All),
                 kindModifiers: getSymbolModifiers(symbol)
             };
         }
 
         function getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
-                forEach(symbols, (symbol) => {
+                forEach(symbols, symbol => {
                     var entry = createCompletionEntry(symbol);
                     if (entry && !lookUp(session.symbols, entry.name)) {
                         session.entries.push(entry);
@@ -2608,7 +2613,11 @@ module ts {
                 var type = session.typeChecker.getTypeOfSymbol(symbol);
                 Debug.assert(type, "Could not find type for symbol");
                 var completionEntry = createCompletionEntry(symbol);
-                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location);
+                // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
+                //               which is permissible given that it is backwards compatible; but really we should consider
+                //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
+                //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
+                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location, SemanticMeaning.All);
                 return {
                     name: entryName,
                     kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
@@ -2651,13 +2660,19 @@ module ts {
             }
         }
 
-        function getSymbolKind(symbol: Symbol): string {
+        function getSymbolKind(symbol: Symbol, meaningAtLocation: SemanticMeaning): string {
             var flags = typeInfoResolver.getRootSymbol(symbol).getFlags();
 
-            if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
-            if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
+
+            // The following should only apply if encountered at a type position,
+            // and need to have precedence over other meanings if this is the case.
+            if (meaningAtLocation & SemanticMeaning.Type) {
+                if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
+                if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+            }
+
             var result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags);
             if (result === ScriptElementKind.unknown) {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
@@ -2730,7 +2745,10 @@ module ts {
                 : ScriptElementKindModifier.none;
         }
 
-        function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node, typeResolver: TypeChecker, location: Node) {
+        function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
+            typeResolver: TypeChecker, location: Node,
+            // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
+            semanticMeaning = getMeaningFromLocation(location)) {
             var displayParts: SymbolDisplayPart[] = [];
             var documentation: SymbolDisplayPart[];
             var symbolFlags = typeResolver.getRootSymbol(symbol).flags;
@@ -2841,7 +2859,7 @@ module ts {
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
                 writeTypeParametersOfSymbol(symbol, sourceFile);
             }
-            if (symbolFlags & SymbolFlags.Interface) {
+            if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
                 displayParts.push(spacePart());
@@ -2860,7 +2878,7 @@ module ts {
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
             }
-            if (symbolFlags & SymbolFlags.TypeParameter) {
+            if ((symbolFlags & SymbolFlags.TypeParameter) && (semanticMeaning & SemanticMeaning.Type)) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 displayParts.push(textPart("type parameter"));
@@ -2940,9 +2958,9 @@ module ts {
                     }
                 }
                 else {
-                    symbolKind = getSymbolKind(symbol); 
+                    symbolKind = getSymbolKind(symbol, semanticMeaning);
                 }
-            }             
+            }
 
             if (!documentation) {
                 documentation = symbol.getDocumentationComment();
@@ -3033,8 +3051,8 @@ module ts {
 
             var displayPartsDocumentationsAndKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, sourceFile, getContainerNode(node), typeInfoResolver, node);
             return {
-                kind: getSymbolKind(symbol),
-                kindModifiers: displayPartsDocumentationsAndKind.symbolKind,
+                kind: displayPartsDocumentationsAndKind.symbolKind,
+                kindModifiers: getSymbolModifiers(symbol),
                 textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
                 displayParts: displayPartsDocumentationsAndKind.displayParts,
                 documentation: displayPartsDocumentationsAndKind.documentation
@@ -3146,10 +3164,9 @@ module ts {
 
             var declarations = symbol.getDeclarations();
             var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            var symbolKind = getSymbolKind(symbol);
+            var symbolKind = getSymbolKind(symbol, getMeaningFromLocation(node));
             var containerSymbol = symbol.parent;
             var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
-            var containerKind = containerSymbol ? getSymbolKind(symbol) : "";
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
@@ -3854,7 +3871,7 @@ module ts {
                                          searchSymbol: Symbol,
                                          searchText: string,
                                          searchLocation: Node,
-                                         searchMeaning: SearchMeaning,
+                                         searchMeaning: SemanticMeaning,
                                          findInStrings: boolean,
                                          findInComments: boolean,
                                          result: ReferenceEntry[]): void {
@@ -4153,114 +4170,6 @@ module ts {
                 return undefined;
             }
 
-            function getMeaningFromDeclaration(node: Declaration): SearchMeaning {
-                switch (node.kind) {
-                    case SyntaxKind.Parameter:
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.Property:
-                    case SyntaxKind.PropertyAssignment:
-                    case SyntaxKind.EnumMember:
-                    case SyntaxKind.Method:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.CatchBlock:
-                        return SearchMeaning.Value;
-
-                    case SyntaxKind.TypeParameter:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.TypeLiteral:
-                        return SearchMeaning.Type;
-
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.EnumDeclaration:
-                        return SearchMeaning.Value | SearchMeaning.Type;
-
-                    case SyntaxKind.ModuleDeclaration:
-                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
-                            return SearchMeaning.Namespace | SearchMeaning.Value;
-                        }
-                        else if (isInstantiated(node)) {
-                            return SearchMeaning.Namespace | SearchMeaning.Value;
-                        }
-                        else {
-                            return SearchMeaning.Namespace;
-                        }
-                        break;
-
-                    case SyntaxKind.ImportDeclaration:
-                        return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
-                }
-                Debug.fail("Unknown declaration type");
-            }
-
-            function isTypeReference(node: Node): boolean {
-                if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node)
-                    node = node.parent;
-
-                return node.parent.kind === SyntaxKind.TypeReference;
-            }
-
-            function isNamespaceReference(node: Node): boolean {
-                var root = node;
-                var isLastClause = true;
-                if (root.parent.kind === SyntaxKind.QualifiedName) {
-                    while (root.parent && root.parent.kind === SyntaxKind.QualifiedName)
-                        root = root.parent;
-
-                    isLastClause = (<QualifiedName>root).right === node;
-                }
-
-                return root.parent.kind === SyntaxKind.TypeReference && !isLastClause;
-            }
-
-            function isInRightSideOfImport(node: EntityName) {
-                while (node.parent.kind === SyntaxKind.QualifiedName) {
-                    node = node.parent;
-                }
-
-                return node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).entityName === node;
-            }
-
-            function getMeaningFromRightHandSideOfImport(node: Node) {
-                Debug.assert(node.kind === SyntaxKind.Identifier);
-
-                //     import a = |b|; // Namespace
-                //     import a = |b.c|; // Value, type, namespace
-                //     import a = |b.c|.d; // Namespace
-
-                if (node.parent.kind === SyntaxKind.QualifiedName &&
-                    (<QualifiedName>node.parent).right === node &&
-                    node.parent.parent.kind === SyntaxKind.ImportDeclaration) {
-                    return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
-                }
-                return SearchMeaning.Namespace;
-            }
-
-            function getMeaningFromLocation(node: Node): SearchMeaning {
-                if (node.parent.kind === SyntaxKind.ExportAssignment) {
-                    return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
-                }
-                else if (isInRightSideOfImport(node)) {
-                    return getMeaningFromRightHandSideOfImport(node);
-                }
-                else if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
-                    return getMeaningFromDeclaration(node.parent);
-                }
-                else if (isTypeReference(node)) {
-                    return SearchMeaning.Type;
-                }
-                else if (isNamespaceReference(node)) {
-                    return SearchMeaning.Namespace;
-                }
-                else {
-                    return SearchMeaning.Value;
-                }
-            }
-
             /** Given an initial searchMeaning, extracted from a location, widen the search scope based on the declarations
               * of the corresponding symbol. e.g. if we are searching for "Foo" in value position, but "Foo" references a class
               * then we need to widen the search to include type positions as well.
@@ -4268,7 +4177,7 @@ module ts {
               * module, we want to keep the search limited to only types, as the two declarations (interface and uninstantiated module)
               * do not intersect in any of the three spaces.
               */
-            function getIntersectingMeaningFromDeclarations(meaning: SearchMeaning, declarations: Declaration[]): SearchMeaning {
+            function getIntersectingMeaningFromDeclarations(meaning: SemanticMeaning, declarations: Declaration[]): SemanticMeaning {
                 if (declarations) {
                     do {
                         // The result is order-sensitive, for instance if initialMeaning === Namespace, and declarations = [class, instantiated module]
@@ -4478,6 +4387,114 @@ module ts {
             return emitOutput;
         }
 
+        function getMeaningFromDeclaration(node: Declaration): SemanticMeaning {
+            switch (node.kind) {
+                case SyntaxKind.Parameter:
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.Property:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.Method:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.CatchBlock:
+                    return SemanticMeaning.Value;
+
+                case SyntaxKind.TypeParameter:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeLiteral:
+                    return SemanticMeaning.Type;
+
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                    return SemanticMeaning.Value | SemanticMeaning.Type;
+
+                case SyntaxKind.ModuleDeclaration:
+                    if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
+                        return SemanticMeaning.Namespace | SemanticMeaning.Value;
+                    }
+                    else if (isInstantiated(node)) {
+                        return SemanticMeaning.Namespace | SemanticMeaning.Value;
+                    }
+                    else {
+                        return SemanticMeaning.Namespace;
+                    }
+                    break;
+
+                case SyntaxKind.ImportDeclaration:
+                    return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+            }
+            Debug.fail("Unknown declaration type");
+        }
+
+        function isTypeReference(node: Node): boolean {
+            if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node)
+                node = node.parent;
+
+            return node.parent.kind === SyntaxKind.TypeReference;
+        }
+
+        function isNamespaceReference(node: Node): boolean {
+            var root = node;
+            var isLastClause = true;
+            if (root.parent.kind === SyntaxKind.QualifiedName) {
+                while (root.parent && root.parent.kind === SyntaxKind.QualifiedName)
+                    root = root.parent;
+
+                isLastClause = (<QualifiedName>root).right === node;
+            }
+
+            return root.parent.kind === SyntaxKind.TypeReference && !isLastClause;
+        }
+
+        function isInRightSideOfImport(node: EntityName) {
+            while (node.parent.kind === SyntaxKind.QualifiedName) {
+                node = node.parent;
+            }
+
+            return node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).entityName === node;
+        }
+
+        function getMeaningFromRightHandSideOfImport(node: Node) {
+            Debug.assert(node.kind === SyntaxKind.Identifier);
+
+            //     import a = |b|; // Namespace
+            //     import a = |b.c|; // Value, type, namespace
+            //     import a = |b.c|.d; // Namespace
+
+            if (node.parent.kind === SyntaxKind.QualifiedName &&
+                (<QualifiedName>node.parent).right === node &&
+                node.parent.parent.kind === SyntaxKind.ImportDeclaration) {
+                return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+            }
+            return SemanticMeaning.Namespace;
+        }
+
+        function getMeaningFromLocation(node: Node): SemanticMeaning {
+            if (node.parent.kind === SyntaxKind.ExportAssignment) {
+                return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+            }
+            else if (isInRightSideOfImport(node)) {
+                return getMeaningFromRightHandSideOfImport(node);
+            }
+            else if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+                return getMeaningFromDeclaration(node.parent);
+            }
+            else if (isTypeReference(node)) {
+                return SemanticMeaning.Type;
+            }
+            else if (isNamespaceReference(node)) {
+                return SemanticMeaning.Namespace;
+            }
+            else {
+                return SemanticMeaning.Value;
+            }
+        }
+
         // Signature help
         /**
          * This is a semantic operation.
@@ -4646,7 +4663,7 @@ module ts {
 
             return result;
 
-            function classifySymbol(symbol: Symbol, isInTypePosition: boolean) {
+            function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning) {
                 var flags = symbol.getFlags();
 
                 if (flags & SymbolFlags.Class) {
@@ -4655,16 +4672,16 @@ module ts {
                 else if (flags & SymbolFlags.Enum) {
                     return ClassificationTypeNames.enumName;
                 }
-                else if (flags & SymbolFlags.Module) {
-                    return ClassificationTypeNames.moduleName;
-                }
-                else if (isInTypePosition) {
+                else if (meaningAtPosition & SemanticMeaning.Type) {
                     if (flags & SymbolFlags.Interface) {
                         return ClassificationTypeNames.interfaceName;
                     }
                     else if (flags & SymbolFlags.TypeParameter) {
                         return ClassificationTypeNames.typeParameterName;
                     }
+                }
+                else if (flags & SymbolFlags.Module) {
+                    return ClassificationTypeNames.moduleName;
                 }
             }
 
@@ -4674,7 +4691,7 @@ module ts {
                     if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
                         var symbol = typeInfoResolver.getSymbolInfo(node);
                         if (symbol) {
-                            var type = classifySymbol(symbol, isTypeNode(node) || isTypeDeclarationName(node));
+                            var type = classifySymbol(symbol, getMeaningFromLocation(node));
                             if (type) {
                                 result.push({
                                     textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
@@ -5135,7 +5152,7 @@ module ts {
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
                 if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
-                    var kind = getSymbolKind(symbol);
+                    var kind = getSymbolKind(symbol, getMeaningFromLocation(node));
                     if (kind) {
                         return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),

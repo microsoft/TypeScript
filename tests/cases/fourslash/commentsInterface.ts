@@ -26,7 +26,7 @@
 ////    fnfoo(/**param help*/b: number): string;
 ////    nc_fnfoo(b: number): string;
 ////}
-////var i2/*6*/_i: i2;
+////var i2/*6*/_i: /*34i*/i2;
 ////var i2_i/*7*/_x = i2_i./*8*/x;
 ////var i2_i/*9*/_foo = i2_i.f/*10*/oo;
 ////var i2_i_f/*11*/oo_r = i2_i.f/*12q*/oo(/*12*/30);
@@ -217,6 +217,11 @@ verify.completionListContains("i2_i_fnfoo", "(var) i2_i_fnfoo: (b: number) => st
 verify.completionListContains("i2_i_fnfoo_r", "(var) i2_i_fnfoo_r: string", "");
 verify.completionListContains("i2_i_nc_fnfoo", "(var) i2_i_nc_fnfoo: (b: number) => string", "");
 verify.completionListContains("i2_i_nc_fnfoo_r", "(var) i2_i_nc_fnfoo_r: string", "");
+
+goTo.marker('34i');
+verify.completionListContains("i1", "interface i1", "this is interface 1");
+verify.completionListContains("nc_i1", "interface nc_i1", "");
+verify.completionListContains("i2", "interface i2", "this is interface 2 with memebers");
 
 goTo.marker('36');
 verify.completionListContains("a", "(parameter) a: number", "i3_i a");
