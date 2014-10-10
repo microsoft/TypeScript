@@ -6,7 +6,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
         return x;
     }
     
-    var r = foo({ bar: 1, baz: '' }); // T = {}
+    var r = foo({ bar: 1, baz: '' }); // error
             ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
     var r2 = foo({ bar: 1, baz: 1 }); // T = number

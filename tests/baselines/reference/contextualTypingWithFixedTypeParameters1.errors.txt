@@ -4,9 +4,9 @@ tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts(3,10): error TS
 
 ==== tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts (2 errors) ====
     var f10: <T>(x: T, b: () => (a: T) => void, y: T) => T;
-    f10('', () => a => a.foo, ''); // a is string, fixed by first parameter
+    f10('', () => a => a.foo, ''); // a is string
                          ~~~
 !!! error TS2339: Property 'foo' does not exist on type 'string'.
-    var r9 = f10('', () => (a => a.foo), 1); // now a should be any
+    var r9 = f10('', () => (a => a.foo), 1); // error
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.

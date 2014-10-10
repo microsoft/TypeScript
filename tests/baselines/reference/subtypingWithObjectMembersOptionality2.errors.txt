@@ -48,4 +48,4 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     // object literal case
     var a: { Foo: Base; }
     var b: { Foo?: Derived; }
-    var r = true ? a : b; // error
+    var r = true ? a : b; // ok

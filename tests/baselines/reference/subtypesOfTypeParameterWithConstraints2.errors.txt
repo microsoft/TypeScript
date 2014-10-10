@@ -1,13 +1,11 @@
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts(3,13): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts(9,13): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts(9,26): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts(18,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r2' must be of type 'U | V', but here has type 'T | V'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts(19,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r2' must be of type 'U | V', but here has type 'T | V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts(23,13): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts(143,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts (7 errors) ====
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts (5 errors) ====
     // checking whether other types are subtypes of type parameters with constraints
     
     function f1<T extends U, U>(x: T, y: U) {
@@ -31,12 +29,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         var r2 = true ? y : z;
     
         // ok
-        var r2 = true ? z : x;
-            ~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r2' must be of type 'U | V', but here has type 'T | V'.
-        var r2 = true ? x : z;
-            ~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r2' must be of type 'U | V', but here has type 'T | V'.
+        var r2a = true ? z : x;
+        var r2b = true ? x : z;
     }
     
     // Date > U > T
@@ -79,18 +73,18 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
     }
     
     function f5<T extends Number>(x: T) {
-        var r1 = true ? 1 : x; // error
-        var r1 = true ? x : 1; // error
+        var r1 = true ? 1 : x; // ok
+        var r1 = true ? x : 1; // ok
     }
     
     function f6<T extends String>(x: T) {
-        var r2 = true ? '' : x; // error
-        var r2 = true ? x : ''; // error
+        var r2 = true ? '' : x; // ok
+        var r2 = true ? x : ''; // ok
     }
     
     function f7<T extends Boolean>(x: T) {
-        var r3 = true ? true : x; // error
-        var r3 = true ? x : true; // error
+        var r3 = true ? true : x; // ok
+        var r3 = true ? x : true; // ok
     }
     
     function f8<T extends Date>(x: T) {
@@ -137,11 +131,11 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
     }
     
     function f16<T extends E>(x: T) {
-        var r13 = true ? E : x; // BUG 831833
-        var r13 = true ? x : E; // BUG 831833
+        var r13 = true ? E : x; // ok
+        var r13 = true ? x : E; // ok
     
-        var r14 = true ? E.A : x; // BUG 831833
-        var r14 = true ? x : E.A; // BUG 831833
+        var r14 = true ? E.A : x; // ok
+        var r14 = true ? x : E.A; // ok
     }
     
     function f17<T extends typeof f>(x: T) {

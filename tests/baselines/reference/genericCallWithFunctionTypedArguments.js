@@ -24,16 +24,16 @@ function foo3<T, U>(x: T, cb: (a: T) => U, y: U) {
 
 var r7 = foo3(1, <Z>(a: Z) => '', ''); // string
 
-var r8 = foo3(1, function (a) { return '' }, 1); // {}
+var r8 = foo3(1, function (a) { return '' }, 1); // error
 var r9 = foo3<number, string>(1, (a) => '', ''); // string
 
 function other<T, U>(t: T, u: U) {
-    var r10 = foo2(1, (x: T) => ''); // string, non-generic signature allows inferences to be made
+    var r10 = foo2(1, (x: T) => ''); // error
     var r10 = foo2(1, (x) => ''); // string
 
-    var r11 = foo3(1, (x: T) => '', ''); // string
-    var r11b = foo3(1, (x: T) => '', 1); // {}
-    var r12 = foo3(1, function (a) { return '' }, 1); // {}
+    var r11 = foo3(1, (x: T) => '', ''); // error
+    var r11b = foo3(1, (x: T) => '', 1); // error
+    var r12 = foo3(1, function (a) { return '' }, 1); // error
 }
 
 //// [genericCallWithFunctionTypedArguments.js]
@@ -59,14 +59,14 @@ function foo3(x, cb, y) {
 var r7 = foo3(1, function (a) { return ''; }, ''); // string
 var r8 = foo3(1, function (a) {
     return '';
-}, 1); // {}
+}, 1); // error
 var r9 = foo3(1, function (a) { return ''; }, ''); // string
 function other(t, u) {
-    var r10 = foo2(1, function (x) { return ''; }); // string, non-generic signature allows inferences to be made
+    var r10 = foo2(1, function (x) { return ''; }); // error
     var r10 = foo2(1, function (x) { return ''; }); // string
-    var r11 = foo3(1, function (x) { return ''; }, ''); // string
-    var r11b = foo3(1, function (x) { return ''; }, 1); // {}
+    var r11 = foo3(1, function (x) { return ''; }, ''); // error
+    var r11b = foo3(1, function (x) { return ''; }, 1); // error
     var r12 = foo3(1, function (a) {
         return '';
-    }, 1); // {}
+    }, 1); // error
 }

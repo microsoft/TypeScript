@@ -11,11 +11,11 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         var r = true ? t : u;
         var r = true ? u : t;
     
-        // error
+        // ok
         var r2 = true ? t : v;
         var r2 = true ? v : t;
     
-        // error
+        // ok
         var r3 = true ? v : u;
         var r3 = true ? u : v;
     }
