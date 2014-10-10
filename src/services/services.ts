@@ -2749,7 +2749,7 @@ module ts {
             var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags);
             var hasAddedSymbolInfo: boolean;
             // Class at constructor site need to be shown as constructor apart from property,method, vars
-            if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Signature || symbolFlags & SymbolFlags.Class) {
+            if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Import) {
                 // If it is accessor they are allowed only if location is at name of the accessor
                 if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
                     symbolKind = ScriptElementKind.memberVariableElement;
@@ -2789,6 +2789,18 @@ module ts {
                                 // Constructor
                                 symbolKind = ScriptElementKind.constructorImplementationElement;
                                 addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
+                            }
+                            else if (symbolFlags & SymbolFlags.Import) {
+                                symbolKind = ScriptElementKind.alias;
+                                displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                                displayParts.push(textPart(symbolKind));
+                                displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                                displayParts.push(spacePart());
+                                if (useConstructSignatures) {
+                                    displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                                    displayParts.push(spacePart());
+                                }
+                                addFullSymbolName(symbol);
                             }
                             else {
                                 addPrefixForAnyFunctionOrVar(symbol, symbolKind);
