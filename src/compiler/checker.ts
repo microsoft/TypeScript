@@ -2144,6 +2144,14 @@ module ts {
                 }
                 var symbol = <TransientSymbol>createSymbol(SymbolFlags.UnionProperty | SymbolFlags.Transient, prop.name);
                 symbol.unionType = type;
+
+                symbol.declarations = [];
+                for (var i = 0; i < types.length; i++) {
+                    var s = getPropertyOfType(types[i], prop.name);
+                    if (s.declarations)
+                        symbol.declarations.push.apply(symbol.declarations, s.declarations);
+                }
+
                 members[prop.name] = symbol;
             });
             var callSignatures = getUnionSignatures(types, SignatureKind.Call);

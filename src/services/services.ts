@@ -2382,7 +2382,6 @@ module ts {
         }
 
         function getSymbolModifiers(symbol: Symbol): string {
-            symbol = typeInfoResolver.getRootSymbols(symbol)[0];
             return symbol && symbol.declarations && symbol.declarations.length > 0
                 ? getNodeModifiers(symbol.declarations[0])
                 : ScriptElementKindModifier.none;
@@ -2643,11 +2642,7 @@ module ts {
 
             var result: DefinitionInfo[] = [];
 
-            // The symbol could be a unionProperty, we need to ensure we are collecting all 
-            // declarations, so use getRootSymbol first.
-            forEach(typeInfoResolver.getRootSymbols(symbol), s => {
-                getDefinitionFromSymbol(s, node, result);
-            });
+            getDefinitionFromSymbol(symbol, node, result);
 
             return result;
         }
@@ -3162,13 +3157,7 @@ module ts {
                 return [getReferenceEntryFromNode(node)];
             }
 
-            var declarations = symbol.getDeclarations();
-
-            // Handle union properties
-            declarations = [];
-            forEach(typeInfoResolver.getRootSymbols(symbol), s => {
-                declarations.push.apply(declarations, s.declarations);
-            });
+            var declarations = symbol.declarations;
 
             // The symbol was an internal symbol and does not have a declaration e.g.undefined symbol
             if (!declarations || !declarations.length) {
