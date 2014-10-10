@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/Microsoft/TypeScript.svg?branch=master)](https://travis-ci.org/Microsoft/TypeScript)
-[![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/pr)](http://issuestats.com/Microsoft/TypeScript/issue_stats)
-[![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/issue)](http://issuestats.com/Microsoft/TypeScript/issue_stats)
+[![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/pr)](http://issuestats.com/github/microsoft/typescript)
+[![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/issue)](http://issuestats.com/github/microsoft/typescript)
 
 # TypeScript
 
