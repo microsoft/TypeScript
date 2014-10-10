@@ -695,6 +695,9 @@ module ts {
                                                        // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
                                                        //     var a: C<number>; 
                                                        //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
+        UseOnlyExternalAliasing         = 0x00000002,  // Use only external alias information to get the symbol name in the given context
+                                                       // eg.  module m { export class c { } } import x = m.c; 
+                                                       // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
     }
 
     export enum SymbolAccessibility {
