@@ -4083,27 +4083,8 @@ module ts {
             return createArrayType(elementType);
         }
 
-        var numericScanner: Scanner;
         function isNumericName(name: string) {
-            // First see if the name is in canonical string representation.
-            // We can't simply rely on this because this permits various forms of "NaN" and "Infinity".
-            if ((+name).toString() !== name) {
-                return false;
-            }
-
-            numericScanner = numericScanner || createScanner(compilerOptions.target || ScriptTarget.ES5, /*skipTrivia*/ false);
-            numericScanner.setText(name);
-
-            // Ensure that the name is nothing more than an optional sign ('-') and a numeric literal
-            // (i.e. it is preceded by nothing and scanning leaves us at the very end of the string).
-            var token = numericScanner.scan();
-            
-            // '+' will never be in front of a number in its printed form.
-            if (token === SyntaxKind.MinusToken) {
-                token = numericScanner.scan();
-            }
-
-            return token === SyntaxKind.NumericLiteral && numericScanner.getTextPos() === name.length;
+            return (+name).toString() === name;
         }
 
         function checkObjectLiteral(node: ObjectLiteral, contextualMapper?: TypeMapper): Type {
