@@ -4084,7 +4084,7 @@ module ts {
         }
 
         function isNumericName(name: string) {
-            return !isNaN(<number><any>name);
+            return (name !== "") && !isNaN(<number><any>name);
         }
 
         function checkObjectLiteral(node: ObjectLiteral, contextualMapper?: TypeMapper): Type {
@@ -6643,6 +6643,9 @@ module ts {
                 var ambient = isInAmbientContext(node);
 
                 forEach(node.members, member => {
+                    if(isNumericName(member.name.text)) {
+                        error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
+                    }
                     var initializer = member.initializer;
                     if (initializer) {
                         autoValue = getConstantValueForExpression(initializer);
