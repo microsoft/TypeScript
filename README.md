@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/Microsoft/TypeScript.svg?branch=master)](https://travis-ci.org/Microsoft/TypeScript)
+[![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/pr)](http://issuestats.com/Microsoft/TypeScript/issue_stats)
+[![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/issue)](http://issuestats.com/Microsoft/TypeScript/issue_stats)
+
 # TypeScript
 
 [TypeScript](http://www.typescriptlang.org/) is a language for application-scale JavaScript. TypeScript adds optional types, classes, and modules to JavaScript. TypeScript supports tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript. Try it out at the [playground](http://www.typescriptlang.org/Playground), and stay up to date via [our blog](http://blogs.msdn.com/typescript) and [twitter account](https://twitter.com/typescriptlang).
