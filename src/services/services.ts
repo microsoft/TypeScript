@@ -2754,10 +2754,6 @@ module ts {
                 if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
                     symbolKind = ScriptElementKind.memberVariableElement;
                 }
-                else if (symbol.name === "undefined") {
-                    // undefined is symbol and not property
-                    symbolKind = ScriptElementKind.variableElement;
-                }
 
                 var type = typeResolver.getTypeOfSymbol(symbol);
                 if (type) {
