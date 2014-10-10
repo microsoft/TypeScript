@@ -2066,7 +2066,7 @@ module ts {
         }
 
         function resolveTupleTypeMembers(type: TupleType) {
-            var arrayType = resolveObjectTypeMembers(createArrayType(getBestCommonType(type.elementTypes)));
+            var arrayType = resolveObjectTypeMembers(createArrayType(getUnionType(type.elementTypes)));
             var members = createTupleTypeMemberSymbols(type.elementTypes);
             addInheritedMembers(members, arrayType.properties);
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexType, arrayType.numberIndexType);
@@ -2716,13 +2716,41 @@ module ts {
             }
         }
 
-        function getUnionType(types: Type[]): Type {
+        function containsAnyType(types: Type[]) {
+            for (var i = 0; i < types.length; i++) {
+                if (types[i].flags & TypeFlags.Any) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function removeAllButLast(types: Type[], typeToRemove: Type) {
+            var i = types.length;
+            while (i > 0 && types.length > 1) {
+                i--;
+                if (types[i] === typeToRemove) {
+                    types.splice(i, 1);
+                }
+            }
+        }
+
+        function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
             if (types.length === 0) {
                 return emptyObjectType;
             }
             var sortedTypes: Type[] = [];
             addTypesToSortedSet(sortedTypes, types);
-            removeSubtypes(sortedTypes);
+            if (noSubtypeReduction) {
+                if (containsAnyType(sortedTypes)) {
+                    return anyType;
+                }
+                removeAllButLast(sortedTypes, undefinedType);
+                removeAllButLast(sortedTypes, nullType);
+            }
+            else {
+                removeSubtypes(sortedTypes);
+            }
             if (sortedTypes.length === 1) {
                 return sortedTypes[0];
             }
@@ -2738,7 +2766,7 @@ module ts {
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode));
+                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), /*noSubtypeReduction*/ true);
             }
             return links.resolvedType;
         }
@@ -2956,7 +2984,7 @@ module ts {
                     return createTupleType(instantiateList((<TupleType>type).elementTypes, mapper, instantiateType));
                 }
                 if (type.flags & TypeFlags.Union) {
-                    return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType));
+                    return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*noSubtypeReduction*/ true);
                 }
             }
             return type;
@@ -3606,7 +3634,7 @@ module ts {
             return forEach(types, t => isSupertypeOfEach(t, types) ? t : undefined);
         }
 
-        function getBestCommonType(types: Type[], contextualType?: Type): Type {
+        function getBestCommonType(types: Type[], contextualType: Type): Type {
             return contextualType && isSupertypeOfEach(contextualType, types) ? contextualType : getUnionType(types);        }
 
         function isTypeOfObjectLiteral(type: Type): boolean {
@@ -4558,7 +4586,7 @@ module ts {
                 return createTupleType(elementTypes);
             }
             var contextualElementType = contextualType && !isInferentialContext(contextualMapper) ? getIndexTypeOfType(contextualType, IndexKind.Number) : undefined;
-            var elementType = elements.length || contextualElementType ? getBestCommonType(deduplicate(elementTypes), contextualElementType) : undefinedType;
+            var elementType = elements.length || contextualElementType ? getBestCommonType(elementTypes, contextualElementType) : undefinedType;
             return createArrayType(elementType);
         }
 
@@ -5601,7 +5629,7 @@ module ts {
                 case SyntaxKind.AmpersandAmpersandToken:
                     return rightType;
                 case SyntaxKind.BarBarToken:
-                    return getBestCommonType([leftType, rightType], isInferentialContext(contextualMapper) ? undefined : getContextualType(node));
+                    return getUnionType([leftType, rightType]);
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
                     return rightType;
@@ -5651,9 +5679,7 @@ module ts {
             checkExpression(node.condition);
             var type1 = checkExpression(node.whenTrue, contextualMapper);
             var type2 = checkExpression(node.whenFalse, contextualMapper);
-            var contextualType = isInferentialContext(contextualMapper) ? undefined : getContextualType(node);
-            var resultType = getBestCommonType([type1, type2], contextualType);
-            return resultType;
+            return getUnionType([type1, type2]);
         }
 
         function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper?: TypeMapper): Type {
