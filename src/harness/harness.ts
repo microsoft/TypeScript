@@ -534,18 +534,47 @@ module Harness {
         export var defaultLibFileName = 'lib.d.ts';
         export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.ES5, /*version:*/ "0");
 
+        // Cache these between executions so we don't have to re-parse them for every test
+        export var fourslashFilename = 'fourslash.ts';
+        export var fourslashSourceFile: ts.SourceFile;
+
         export function getCanonicalFileName(fileName: string): string {
             return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
 
-        export function createCompilerHost(filemap: { [filename: string]: ts.SourceFile; }, writeFile: (fn: string, contents: string, writeByteOrderMark:boolean) => void): ts.CompilerHost {
+        export function createCompilerHost(inputFiles: { unitName: string; content: string; }[],
+            writeFile: (fn: string, contents: string, writeByteOrderMark: boolean) => void,
+            scriptTarget: ts.ScriptTarget,
+            useCaseSensitiveFileNames: boolean): ts.CompilerHost {
+
+            // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
+            function getCanonicalFileName(fileName: string): string {
+                return useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            }
+
+            var filemap: { [filename: string]: ts.SourceFile; } = {};
+            // Register input files
+            function register(file: { unitName: string; content: string; }) {
+                if (file.content !== undefined) {
+                    var filename = Path.switchToForwardSlashes(file.unitName);
+                    filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, scriptTarget, /*version:*/ "0");
+                }
+            };
+            inputFiles.forEach(register);
+
             return {
                 getCurrentDirectory: sys.getCurrentDirectory,
                 getCancellationToken: (): any => undefined,
                 getSourceFile: (fn, languageVersion) => {
                     if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
                         return filemap[getCanonicalFileName(fn)];
-                    } else {
+                    }
+                    else if (fn === fourslashFilename) {
+                        var tsFn = 'tests/cases/fourslash/' + fourslashFilename;
+                        fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), scriptTarget, /*version*/ "0", /*isOpen*/ false);
+                        return fourslashSourceFile;
+                    }
+                    else {
                         var lib = defaultLibFileName;
                         if (fn === defaultLibFileName) {
                             return defaultLibSourceFile;
@@ -557,7 +586,7 @@ module Harness {
                 getDefaultLibFilename: () => defaultLibFileName,
                 writeFile: writeFile,
                 getCanonicalFileName: getCanonicalFileName,
-                useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
+                useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: ()=> sys.newLine
             };
         }
@@ -614,7 +643,7 @@ module Harness {
             }
 
             public compileFiles(inputFiles: { unitName: string; content: string }[],
-                otherFiles: { unitName: string; content?: string }[],
+                otherFiles: { unitName: string; content: string }[],
                 onComplete: (result: CompilerResult, checker: ts.TypeChecker) => void,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
                 options?: ts.CompilerOptions) {
@@ -628,9 +657,10 @@ module Harness {
                     settingsCallback(null);
                 }
 
+                var useCaseSensitiveFileNames = sys.useCaseSensitiveFileNames;
                 this.settings.forEach(setting => {
                     switch (setting.flag.toLowerCase()) {
-                        // "filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve"
+                        // "filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve"
                         case "module":
                         case "modulegentarget":
                             if (typeof setting.value === 'string') {
@@ -706,10 +736,13 @@ module Harness {
                             options.removeComments = setting.value === 'false';
                             break;
 
+                        case 'usecasesensitivefilenames':
+                            useCaseSensitiveFileNames = setting.value === 'true';
+                            break;
+
                         case 'mapsourcefiles':
                         case 'maproot':
                         case 'generatedeclarationfiles':
-                        case 'usecasesensitivefileresolution':
                         case 'gatherDiagnostics':
                         case 'codepage':
                         case 'createFileLog':
@@ -748,7 +781,10 @@ module Harness {
                 var fileOutputs: GeneratedFile[] = [];
 
                 var programFiles = inputFiles.map(file => file.unitName);
-                var program = ts.createProgram(programFiles, options, createCompilerHost(filemap, (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark })));
+                var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(otherFiles),
+                    (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
+                    options.target,
+                    useCaseSensitiveFileNames));
 
                 var hadParseErrors = program.getDiagnostics().length > 0;
 
@@ -1034,7 +1070,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

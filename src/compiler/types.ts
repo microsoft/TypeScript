@@ -660,6 +660,9 @@ module ts {
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
         // computed value.
         getEnumMemberValue(node: EnumMember): number;
+
+        isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean;
+        getAliasedSymbol(symbol: Symbol): Symbol;
     }
 
     export interface TextWriter {
@@ -970,6 +973,7 @@ module ts {
 
     export interface InferenceContext {
         typeParameters: TypeParameter[];
+        inferenceCount: number;
         inferences: Type[][];
         inferredTypes: Type[];
     }

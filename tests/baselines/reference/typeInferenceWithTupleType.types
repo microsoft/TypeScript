@@ -1,0 +1,114 @@
+=== tests/cases/conformance/types/tuple/typeInferenceWithTupleType.ts ===
+function combine<T, U>(x: T, y: U): [T, U] {
+>combine : <T, U>(x: T, y: U) => [T, U]
+>T : T
+>U : U
+>x : T
+>T : T
+>y : U
+>U : U
+>T : T
+>U : U
+
+    return [x, y];
+>[x, y] : [T, U]
+>x : T
+>y : U
+}
+
+var combineResult = combine("string", 10);
+>combineResult : [string, number]
+>combine("string", 10) : [string, number]
+>combine : <T, U>(x: T, y: U) => [T, U]
+
+var combineEle1 = combineResult[0]; // string
+>combineEle1 : string
+>combineResult[0] : string
+>combineResult : [string, number]
+
+var combineEle2 = combineResult[1]; // number
+>combineEle2 : number
+>combineResult[1] : number
+>combineResult : [string, number]
+
+function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
+>zip : <T, U>(array1: T[], array2: U[]) => [[T, U]]
+>T : T
+>U : U
+>array1 : T[]
+>T : T
+>array2 : U[]
+>U : U
+>T : T
+>U : U
+
+    if (array1.length != array2.length) {
+>array1.length != array2.length : boolean
+>array1.length : number
+>array1 : T[]
+>length : number
+>array2.length : number
+>array2 : U[]
+>length : number
+
+        return [[undefined, undefined]];
+>[[undefined, undefined]] : [[undefined, undefined]]
+>[undefined, undefined] : [undefined, undefined]
+>undefined : undefined
+>undefined : undefined
+    }
+    var length = array1.length;
+>length : number
+>array1.length : number
+>array1 : T[]
+>length : number
+
+    var zipResult: [[T, U]];
+>zipResult : [[T, U]]
+>T : T
+>U : U
+
+    for (var i = 0; i < length; ++i) {
+>i : number
+>i < length : boolean
+>i : number
+>length : number
+>++i : number
+>i : number
+
+        zipResult.push([array1[i], array2[i]]);
+>zipResult.push([array1[i], array2[i]]) : number
+>zipResult.push : (...items: [T, U][]) => number
+>zipResult : [[T, U]]
+>push : (...items: [T, U][]) => number
+>[array1[i], array2[i]] : [T, U]
+>array1[i] : T
+>array1 : T[]
+>i : number
+>array2[i] : U
+>array2 : U[]
+>i : number
+    }
+    return zipResult;
+>zipResult : [[T, U]]
+}
+
+var zipResult = zip(["foo", "bar"], [5, 6]);
+>zipResult : [[string, number]]
+>zip(["foo", "bar"], [5, 6]) : [[string, number]]
+>zip : <T, U>(array1: T[], array2: U[]) => [[T, U]]
+>["foo", "bar"] : string[]
+>[5, 6] : number[]
+
+var zipResultEle = zipResult[0]; // [string, number]
+>zipResultEle : [string, number]
+>zipResult[0] : [string, number]
+>zipResult : [[string, number]]
+
+var zipResultEleEle = zipResult[0][0]; // string
+>zipResultEleEle : string
+>zipResult[0][0] : string
+>zipResult[0] : [string, number]
+>zipResult : [[string, number]]
+
+

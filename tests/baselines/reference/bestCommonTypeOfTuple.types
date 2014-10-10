@@ -1,0 +1,96 @@
+=== tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts ===
+function f1(x: number): string { return "foo"; }
+>f1 : (x: number) => string
+>x : number
+
+function f2(x: number): number { return 10; }
+>f2 : (x: number) => number
+>x : number
+
+function f3(x: number): boolean { return true; }
+>f3 : (x: number) => boolean
+>x : number
+
+enum E1 { one }
+>E1 : E1
+>one : E1
+
+enum E2 { two }
+>E2 : E2
+>two : E2
+
+
+var t1: [(x: number) => string, (x: number) => number];
+>t1 : [(x: number) => string, (x: number) => number]
+>x : number
+>x : number
+
+var t2: [E1, E2];
+>t2 : [E1, E2]
+>E1 : E1
+>E2 : E2
+
+var t3: [number, any];
+>t3 : [number, any]
+
+var t4: [E1, E2, number];
+>t4 : [E1, E2, number]
+>E1 : E1
+>E2 : E2
+
+// no error
+t1 = [f1, f2];
+>t1 = [f1, f2] : [(x: number) => string, (x: number) => number]
+>t1 : [(x: number) => string, (x: number) => number]
+>[f1, f2] : [(x: number) => string, (x: number) => number]
+>f1 : (x: number) => string
+>f2 : (x: number) => number
+
+t2 = [E1.one, E2.two];
+>t2 = [E1.one, E2.two] : [E1, E2]
+>t2 : [E1, E2]
+>[E1.one, E2.two] : [E1, E2]
+>E1.one : E1
+>E1 : typeof E1
+>one : E1
+>E2.two : E2
+>E2 : typeof E2
+>two : E2
+
+t3 = [5, undefined];
+>t3 = [5, undefined] : [number, undefined]
+>t3 : [number, any]
+>[5, undefined] : [number, undefined]
+>undefined : undefined
+
+t4 = [E1.one, E2.two, 20];
+>t4 = [E1.one, E2.two, 20] : [E1, E2, number]
+>t4 : [E1, E2, number]
+>[E1.one, E2.two, 20] : [E1, E2, number]
+>E1.one : E1
+>E1 : typeof E1
+>one : E1
+>E2.two : E2
+>E2 : typeof E2
+>two : E2
+
+var e1 = t1[2];  // {}
+>e1 : { (x: number): string; } | { (x: number): number; }
+>t1[2] : { (x: number): string; } | { (x: number): number; }
+>t1 : [(x: number) => string, (x: number) => number]
+
+var e2 = t2[2];  // {}
+>e2 : E1 | E2
+>t2[2] : E1 | E2
+>t2 : [E1, E2]
+
+var e3 = t3[2];  // any
+>e3 : any
+>t3[2] : any
+>t3 : [number, any]
+
+var e4 = t4[3];  // number
+>e4 : number
+>t4[3] : number
+>t4 : [E1, E2, number]
+

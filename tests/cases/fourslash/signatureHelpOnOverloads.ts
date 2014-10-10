@@ -13,6 +13,6 @@ verify.currentParameterSpanIs("x: string");
 edit.insert("'',");
 
 verify.signatureHelpCountIs(2);
-// verify.currentSignatureHelpIs("fn(x: string, y: number): any");
-// verify.currentParameterHelpArgumentNameIs("y");
-// verify.currentParameterSpanIs("y: number");
+verify.currentSignatureHelpIs("fn(x: string, y: number): any");
+verify.currentParameterHelpArgumentNameIs("y");
+verify.currentParameterSpanIs("y: number");
