@@ -4663,15 +4663,19 @@ module ts {
                 else if (flags & SymbolFlags.Enum) {
                     return ClassificationTypeNames.enumName;
                 }
-                else if (flags & SymbolFlags.Interface) {
-                    return ClassificationTypeNames.interfaceName;
-                }
-                else if (flags & SymbolFlags.TypeParameter) {
-                    return ClassificationTypeNames.typeParameterName;
+                else if (meaningAtPosition & SemanticMeaning.Type) {
+                    if (flags & SymbolFlags.Interface) {
+                        return ClassificationTypeNames.interfaceName;
+                    }
+                    else if (flags & SymbolFlags.TypeParameter) {
+                        return ClassificationTypeNames.typeParameterName;
+                    }
                 }
                 else if (flags & SymbolFlags.Module) {
                     return ClassificationTypeNames.moduleName;
                 }
+
+                return undefined;
             }
 
             function processNode(node: Node) {
