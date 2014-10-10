@@ -2917,11 +2917,28 @@ module ts {
             }
             if (symbolFlags & SymbolFlags.Import) {
                 addNewLineIfDisplayPartsExist();
-                displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                displayParts.push(textPart("alias"));
-                displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
+                displayParts.push(spacePart());
+                displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                displayParts.push(spacePart());
+                ts.forEach(symbol.declarations, declaration => {
+                    if (declaration.kind === SyntaxKind.ImportDeclaration) {
+                        var importDeclaration = <ImportDeclaration>declaration;
+                        if (importDeclaration.externalModuleName) {
+                            displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
+                            displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                            displayParts.push(displayPart(getTextOfNode(importDeclaration.externalModuleName), SymbolDisplayPartKind.stringLiteral));
+                            displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                        }
+                        else {
+                            var internalAliasSymbol = typeResolver.getSymbolInfo(importDeclaration.entityName);
+                            addFullSymbolName(internalAliasSymbol, enclosingDeclaration);
+                        }
+                        return true;
+                    }
+                });
             }
             if (!hasAddedSymbolInfo) {
                 if (symbolKind !== ScriptElementKind.unknown) {
@@ -3028,7 +3045,7 @@ module ts {
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
                     case SyntaxKind.SuperKeyword:
-                        // For the identifiers/this/usper etc get the type at position
+                        // For the identifiers/this/super etc get the type at position
                         var type = typeInfoResolver.getTypeOfNode(node);
                         if (type) {
                             return {

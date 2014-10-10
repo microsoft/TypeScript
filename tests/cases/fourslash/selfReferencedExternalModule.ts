@@ -5,5 +5,5 @@
 ////A./**/I
 
 goTo.marker();
-verify.completionListContains("A", "(alias) A");
+verify.completionListContains("A", "import A = require('app')");
 verify.completionListContains("I", "(var) I: number");

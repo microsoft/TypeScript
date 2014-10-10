@@ -28,7 +28,7 @@ goTo.marker('2');
 verify.quickInfoIs("module m1", "ModuleComment");
 
 goTo.marker('3');
-verify.quickInfoIs("(alias) extMod", "Import declaration");
+verify.quickInfoIs('import extMod = require("commentsImportDeclaration_file0")', "Import declaration");
 
 goTo.marker('6');
 verify.memberListContains("m1", "module extMod.m1");
