@@ -1,16 +1,17 @@
 tests/cases/compiler/tupleTypes.ts(1,9): error TS1122: A tuple type element list cannot be empty.
-tests/cases/compiler/tupleTypes.ts(14,1): error TS2322: Type '{}[]' is not assignable to type '[number, string]':
-  Property '0' is missing in type '{}[]'.
+tests/cases/compiler/tupleTypes.ts(14,1): error TS2322: Type 'Array<string | number>' is not assignable to type '[number, string]':
+  Property '0' is missing in type 'Array<string | number>'.
 tests/cases/compiler/tupleTypes.ts(15,1): error TS2322: Type '[number]' is not assignable to type '[number, string]':
   Property '1' is missing in type '[number]'.
 tests/cases/compiler/tupleTypes.ts(17,1): error TS2322: Type '[string, number]' is not assignable to type '[number, string]':
   Types of property '0' are incompatible:
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/tupleTypes.ts(41,1): error TS2323: Type '{}[]' is not assignable to type '[number, string]'.
+tests/cases/compiler/tupleTypes.ts(41,1): error TS2323: Type 'Array<string | number>' is not assignable to type '[number, string]'.
 tests/cases/compiler/tupleTypes.ts(47,1): error TS2322: Type '[number, string]' is not assignable to type 'number[]':
   Types of property 'pop' are incompatible:
-    Type '() => {}' is not assignable to type '() => number':
-      Type '{}' is not assignable to type 'number'.
+    Type '() => string | number' is not assignable to type '() => number':
+      Type 'string | number' is not assignable to type 'number':
+        Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/tupleTypes.ts(49,1): error TS2322: Type '[number, {}]' is not assignable to type 'number[]':
   Types of property 'pop' are incompatible:
     Type '() => {}' is not assignable to type '() => number':
@@ -36,13 +37,13 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
     var t0: number;
     var t1 = t[1];   // string
     var t1: string;
-    var t2 = t[2];   // {}
-    var t2: {};
+    var t2 = t[2];   // number|string
+    var t2: number|string;
     
     t = [];               // Error
     ~
-!!! error TS2322: Type '{}[]' is not assignable to type '[number, string]':
-!!! error TS2322:   Property '0' is missing in type '{}[]'.
+!!! error TS2322: Type 'Array<string | number>' is not assignable to type '[number, string]':
+!!! error TS2322:   Property '0' is missing in type 'Array<string | number>'.
     t = [1];              // Error
     ~
 !!! error TS2322: Type '[number]' is not assignable to type '[number, string]':
@@ -70,15 +71,15 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
     var tt0: number;
     var tt1 = tt[1];
     var tt1: string;
-    var tt2 = tt[2];
-    var tt2: {};
+    var tt2 = tt[2]; 
+    var tt2: number | string;
     
     tt = tuple2(1, undefined);
     tt = [1, undefined];
     tt = [undefined, undefined];
     tt = [];  // Error
     ~~
-!!! error TS2323: Type '{}[]' is not assignable to type '[number, string]'.
+!!! error TS2323: Type 'Array<string | number>' is not assignable to type '[number, string]'.
     
     var a: number[];
     var a1: [number, string];
@@ -88,8 +89,9 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
     ~
 !!! error TS2322: Type '[number, string]' is not assignable to type 'number[]':
 !!! error TS2322:   Types of property 'pop' are incompatible:
-!!! error TS2322:     Type '() => {}' is not assignable to type '() => number':
-!!! error TS2322:       Type '{}' is not assignable to type 'number'.
+!!! error TS2322:     Type '() => string | number' is not assignable to type '() => number':
+!!! error TS2322:       Type 'string | number' is not assignable to type 'number':
+!!! error TS2322:         Type 'string' is not assignable to type 'number'.
     a = a2;
     a = a3;   // Error
     ~

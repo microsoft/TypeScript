@@ -8,8 +8,8 @@ var t0 = t[0];   // number
 var t0: number;
 var t1 = t[1];   // string
 var t1: string;
-var t2 = t[2];   // {}
-var t2: {};
+var t2 = t[2];   // number|string
+var t2: number|string;
 
 t = [];               // Error
 t = [1];              // Error
@@ -32,8 +32,8 @@ var tt0 = tt[0];
 var tt0: number;
 var tt1 = tt[1];
 var tt1: string;
-var tt2 = tt[2];
-var tt2: {};
+var tt2 = tt[2]; 
+var tt2: number | string;
 
 tt = tuple2(1, undefined);
 tt = [1, undefined];

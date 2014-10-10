@@ -3,15 +3,15 @@
 
 class Foo { foo: number; }
 function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
-    // error
+    // ok
     var r = true ? t : u;
     var r = true ? u : t;
 
-    // error
+    // ok
     var r2 = true ? t : v;
     var r2 = true ? v : t;
 
-    // error
+    // ok
     var r3 = true ? v : u;
     var r3 = true ? u : v;
 
@@ -23,7 +23,7 @@ function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
     var r5 = true ? u : new Foo();
     var r5 = true ? new Foo() : u;
 
-    // BUG, should be error
+    // ok
     var r6 = true ? v : new Foo();
     var r6 = true ? new Foo() : v;
 
@@ -92,13 +92,13 @@ var Foo = (function () {
     return Foo;
 })();
 function f(t, u, v) {
-    // error
+    // ok
     var r = true ? t : u;
     var r = true ? u : t;
-    // error
+    // ok
     var r2 = true ? t : v;
     var r2 = true ? v : t;
-    // error
+    // ok
     var r3 = true ? v : u;
     var r3 = true ? u : v;
     // ok
@@ -107,7 +107,7 @@ function f(t, u, v) {
     // ok
     var r5 = true ? u : new Foo();
     var r5 = true ? new Foo() : u;
-    // BUG, should be error
+    // ok
     var r6 = true ? v : new Foo();
     var r6 = true ? new Foo() : v;
 }
