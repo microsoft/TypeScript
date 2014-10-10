@@ -2522,7 +2522,7 @@ module ts {
         }
 
         /// Goto definition
-        function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[]{
+        function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[] {
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
                 return {
                     fileName: node.getSourceFile().filename,
@@ -2554,7 +2554,7 @@ module ts {
                     result.push(getDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
                     return true;
                 }
-                
+
                 return false;
             }
 
@@ -2643,14 +2643,11 @@ module ts {
 
             var result: DefinitionInfo[] = [];
 
-            if (symbol.flags & SymbolFlags.UnionProperty) {
-                forEach(typeInfoResolver.getRootSymbols(symbol), s => {
-                    getDefinitionFromSymbol(s, node, result);
-                });
-            }
-            else {
-                getDefinitionFromSymbol(symbol, node, result);
-            }
+            // The symbol could be a unionProperty, we need to ensure we are collecting all 
+            // declarations, so use getRootSymbol first.
+            forEach(typeInfoResolver.getRootSymbols(symbol), s => {
+                getDefinitionFromSymbol(s, node, result);
+            });
 
             return result;
         }
@@ -3167,15 +3164,13 @@ module ts {
 
             var declarations = symbol.getDeclarations();
 
-            // Handel union properties
-            if (symbol.flags & SymbolFlags.UnionProperty) {
-                declarations = [];
-                forEach(typeInfoResolver.getRootSymbols(symbol), s => {
-                    declarations.push.apply(declarations, s.declarations);
-                });
-            }
+            // Handle union properties
+            declarations = [];
+            forEach(typeInfoResolver.getRootSymbols(symbol), s => {
+                declarations.push.apply(declarations, s.declarations);
+            });
 
-            // the symbol was an internal symbol and does not have a declaration e.g.undefined symbol
+            // The symbol was an internal symbol and does not have a declaration e.g.undefined symbol
             if (!declarations || !declarations.length) {
                 return undefined;
             }
