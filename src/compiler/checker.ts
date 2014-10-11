@@ -88,7 +88,7 @@ module ts {
             symbolToString: symbolToString,
             symbolToDisplayParts: symbolToDisplayParts,
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
-            getRootSymbol: getRootSymbol,
+            getRootSymbols: getRootSymbols,
             getContextualType: getContextualType,
             getFullyQualifiedName: getFullyQualifiedName,
             getResolvedSignature: getResolvedSignature,
@@ -2144,6 +2144,14 @@ module ts {
                 }
                 var symbol = <TransientSymbol>createSymbol(SymbolFlags.UnionProperty | SymbolFlags.Transient, prop.name);
                 symbol.unionType = type;
+
+                symbol.declarations = [];
+                for (var i = 0; i < types.length; i++) {
+                    var s = getPropertyOfType(types[i], prop.name);
+                    if (s.declarations)
+                        symbol.declarations.push.apply(symbol.declarations, s.declarations);
+                }
+
                 members[prop.name] = symbol;
             });
             var callSignatures = getUnionSignatures(types, SignatureKind.Call);
@@ -3635,7 +3643,8 @@ module ts {
         }
 
         function getBestCommonType(types: Type[], contextualType: Type): Type {
-            return contextualType && isSupertypeOfEach(contextualType, types) ? contextualType : getUnionType(types);        }
+            return contextualType && isSupertypeOfEach(contextualType, types) ? contextualType : getUnionType(types);
+        }
 
         function isTypeOfObjectLiteral(type: Type): boolean {
             return (type.flags & TypeFlags.Anonymous) && type.symbol && (type.symbol.flags & SymbolFlags.ObjectLiteral) ? true : false;
@@ -7928,8 +7937,22 @@ module ts {
             }
         }
 
-        function getRootSymbol(symbol: Symbol) {
-            return ((symbol.flags & SymbolFlags.Transient) && getSymbolLinks(symbol).target) || symbol;
+        function getRootSymbols(symbol: Symbol): Symbol[] {
+            if (symbol.flags & SymbolFlags.UnionProperty) {
+                var symbols: Symbol[] = [];
+                var name = symbol.name;
+                forEach(getSymbolLinks(symbol).unionType.types, t => {
+                    symbols.push(getPropertyOfType(getApparentType(t), name));
+                });
+                return symbols;
+            }
+            else if (symbol.flags & SymbolFlags.Transient) {
+                var target = getSymbolLinks(symbol).target;
+                if (target) {
+                    return [target];
+                }
+            }
+            return [symbol];
         }
 
         // Emitter support
