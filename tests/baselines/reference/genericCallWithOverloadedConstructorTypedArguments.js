@@ -34,7 +34,7 @@ module GenericParameter {
         return cb;
     }
 
-    var r8 = foo6(a); // new{} => string; new(x:{}, y?:{}) => string
+    var r8 = foo6(a); // error
     var r9 = foo6(b); // new any => string; new(x:any, y?:any) => string
 
     function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
@@ -73,7 +73,7 @@ var GenericParameter;
     function foo6(cb) {
         return cb;
     }
-    var r8 = foo6(a); // new{} => string; new(x:{}, y?:{}) => string
+    var r8 = foo6(a); // error
     var r9 = foo6(b); // new any => string; new(x:any, y?:any) => string
     function foo7(x, cb) {
         return cb;

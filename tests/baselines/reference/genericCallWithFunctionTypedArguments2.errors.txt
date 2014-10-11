@@ -31,7 +31,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFun
         return new cb(x);
     }
     
-    var r4 = foo2(1, i2); // string, instantiated generic
+    var r4 = foo2(1, i2); // error
              ~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
     var r4b = foo2(1, a); // any
@@ -44,7 +44,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFun
     
     var r7 = foo3(null, i, ''); // any
     var r7b = foo3(null, a, ''); // any
-    var r8 = foo3(1, i2, 1); // {}
+    var r8 = foo3(1, i2, 1); // error
              ~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
     var r9 = foo3<string, string>('', i2, ''); // string

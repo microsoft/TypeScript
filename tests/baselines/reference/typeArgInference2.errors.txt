@@ -13,6 +13,6 @@ tests/cases/compiler/typeArgInference2.ts(12,10): error TS2346: Supplied paramet
     var z3 = foo({ name: null });         // { name: any }
     var z4 = foo({ name: "abc" });        // { name: string }
     var z5 = foo({ name: "abc", a: 5 });  // { name: string; a: number }
-    var z6 = foo({ name: "abc", a: 5 }, { name: "def", b: 5 });  // Item
+    var z6 = foo({ name: "abc", a: 5 }, { name: "def", b: 5 });  // error
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.

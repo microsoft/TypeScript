@@ -2,53 +2,53 @@
 
 class Foo<T> { foo: T; }
 function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) {
-    // error
+    // ok
     var r1 = true ? t : u;
     var r1 = true ? u : t;
 
-    // error
+    // ok
     var r2 = true ? t : v;
     var r2 = true ? v : t;
 
-    // error
+    // ok
     var r3 = true ? v : u;
     var r3 = true ? u : v;
 
-    // ok?
+    // ok
     var r4 = true ? t : new Foo<T>();
     var r4 = true ? new Foo<T>() : t;
 
-    // ok?
+    // ok
     var r5 = true ? u : new Foo<T>();
     var r5 = true ? new Foo<T>() : u;
 
-    // ok?
+    // ok
     var r6 = true ? v : new Foo<T>();
     var r6 = true ? new Foo<T>() : v;
 
 
-    // ok?
+    // ok
     var r7 = true ? t : new Foo<U>();
     var r7 = true ? new Foo<U>() : t;
 
-    // ok?
+    // ok
     var r8 = true ? u : new Foo<U>();
     var r8 = true ? new Foo<U>() : u;
 
-    // ok?
+    // ok
     var r9 = true ? v : new Foo<U>();
     var r9 = true ? new Foo<U>() : v;
 
 
-    // ok?
+    // ok
     var r10 = true ? t : new Foo<V>();
     var r10 = true ? new Foo<V>() : t;
 
-    // ok?
+    // ok
     var r11 = true ? u : new Foo<V>();
     var r11 = true ? new Foo<V>() : u;
 
-    // ok?
+    // ok
     var r12 = true ? v : new Foo<V>();
     var r12 = true ? new Foo<V>() : v;
 }

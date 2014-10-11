@@ -62,18 +62,18 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFu
         var c3: C3<number, string>;
     
         function other<T, U>(t: T, u: U) {
-            var r10 = c.foo2(1, (x: T) => ''); // string, non-generic signature allows inferences to be made
+            var r10 = c.foo2(1, (x: T) => ''); // error
                       ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
             var r10 = c.foo2(1, (x) => ''); // string
     
-            var r11 = c3.foo3(1, (x: T) => '', ''); // string
+            var r11 = c3.foo3(1, (x: T) => '', ''); // error
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
-            var r11b = c3.foo3(1, (x: T) => '', 1); // {}
+            var r11b = c3.foo3(1, (x: T) => '', 1); // error
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
-            var r12 = c3.foo3(1, function (a) { return '' }, 1); // {}
+            var r12 = c3.foo3(1, function (a) { return '' }, 1); // error
                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(a: number) => string' is not assignable to parameter of type '(a: number) => number'.
 !!! error TS2345:   Type 'string' is not assignable to type 'number'.

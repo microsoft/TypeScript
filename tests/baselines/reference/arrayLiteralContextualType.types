@@ -74,12 +74,12 @@ var arr = [new Giraffe(), new Elephant()];
 >new Elephant() : Elephant
 >Elephant : typeof Elephant
 
-foo(arr); // Error because of no contextual type
+foo(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 >foo(arr) : void
 >foo : (animals: IAnimal[]) => void
 >arr : Array<Giraffe | Elephant>
 
-bar(arr); // Error because of no contextual type
+bar(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 >bar(arr) : void
 >bar : (animals: { [x: number]: IAnimal; }) => void
 >arr : Array<Giraffe | Elephant>

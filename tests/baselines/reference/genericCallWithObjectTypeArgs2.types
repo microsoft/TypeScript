@@ -57,7 +57,7 @@ var r = f({ x: new Derived(), y: new Derived2() }); // {}[]
 
 var r2 = f({ x: new Base(), y: new Derived2() }); // {}[]
 >r2 : Base[]
->f({ x: new Base(), y: new Derived2() }) : Base[]
+>f({ x: new Base(), y: new Derived2() }) : Array<Base | Derived2>
 >f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => Array<T | U>
 >{ x: new Base(), y: new Derived2() } : { x: Base; y: Derived2; }
 >x : Base

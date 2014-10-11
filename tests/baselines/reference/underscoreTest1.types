@@ -309,7 +309,7 @@ _.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd');
 >[1, 2, 3, 4, 5] : number[]
 >(num) => num % 2 == 0 ? 'even' : 'odd' : (num: number) => string
 >num : number
->num % 2 == 0 ? 'even' : 'odd' : any
+>num % 2 == 0 ? 'even' : 'odd' : string
 >num % 2 == 0 : boolean
 >num % 2 : number
 >num : number
