@@ -1062,6 +1062,8 @@ module ts {
     export enum ScriptTarget {
         ES3,
         ES5,
+        ES6,
+        Latest = ES6,
     }
 
     export interface ParsedCommandLine {

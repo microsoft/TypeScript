@@ -84,7 +84,7 @@ module TypeScript {
             if (languageVersion === ts.ScriptTarget.ES3) {
                 return Unicode.lookupInUnicodeMap(code, Unicode.unicodeES3IdentifierStart);
             }
-            else if (languageVersion === ts.ScriptTarget.ES5) {
+            else if (languageVersion >= ts.ScriptTarget.ES5) {
                 return Unicode.lookupInUnicodeMap(code, Unicode.unicodeES5IdentifierStart);
             }
             else {
@@ -96,7 +96,7 @@ module TypeScript {
             if (languageVersion === ts.ScriptTarget.ES3) {
                 return Unicode.lookupInUnicodeMap(code, Unicode.unicodeES3IdentifierPart);
             }
-            else if (languageVersion === ts.ScriptTarget.ES5) {
+            else if (languageVersion >= ts.ScriptTarget.ES5) {
                 return Unicode.lookupInUnicodeMap(code, Unicode.unicodeES5IdentifierPart);
             }
             else {

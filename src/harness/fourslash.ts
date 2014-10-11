@@ -2139,7 +2139,7 @@ module FourSlash {
         var host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFilename, content: undefined },
             { unitName: fileName, content: content }],
             (fn, contents) => result = contents,
-            ts.ScriptTarget.ES5,
+            ts.ScriptTarget.Latest,
             sys.useCaseSensitiveFileNames);
         var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);

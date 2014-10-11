@@ -1424,7 +1424,7 @@
         "category": "Message",
         "code": 6009
     },
-    "Specify ECMAScript target version: 'ES3' (default), or 'ES5'": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES6' (experimental)": {
         "category": "Message",
         "code": 6015
     },
@@ -1512,7 +1512,7 @@
         "category": "Error",
         "code": 6046
     },
-    "Argument for '--target' option must be 'es3' or 'es5'.": {
+    "Argument for '--target' option must be 'es3', 'es5', or 'es6'.": {
         "category": "Error",
         "code": 6047
     },

@@ -532,7 +532,7 @@ module Harness {
         }
 
         export var defaultLibFileName = 'lib.d.ts';
-        export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.ES5, /*version:*/ "0");
+        export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest, /*version:*/ "0");
 
         // Cache these between executions so we don't have to re-parse them for every test
         export var fourslashFilename = 'fourslash.ts';
@@ -685,6 +685,8 @@ module Harness {
                                     options.target = ts.ScriptTarget.ES3;
                                 } else if (setting.value.toLowerCase() === 'es5') {
                                     options.target = ts.ScriptTarget.ES5;
+                                } else if (setting.value.toLowerCase() === 'es6') {
+                                        options.target = ts.ScriptTarget.ES6;
                                 } else {
                                     throw new Error('Unknown compile target ' + setting.value);
                                 }

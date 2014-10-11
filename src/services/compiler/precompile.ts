@@ -184,7 +184,7 @@ module TypeScript {
 
     export function preProcessFile(fileName: string, sourceText: IScriptSnapshot, readImportFiles = true): IPreProcessedFileInfo {
         var text = SimpleText.fromScriptSnapshot(sourceText);
-        var scanner = Scanner.createScanner(ts.ScriptTarget.ES5, text, reportDiagnostic);
+        var scanner = Scanner.createScanner(ts.ScriptTarget.Latest, text, reportDiagnostic);
 
         var firstToken = scanner.scan(/*allowRegularExpression:*/ false);
 
