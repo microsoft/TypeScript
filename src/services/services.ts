@@ -2404,31 +2404,34 @@ module ts {
 
             var documentationParts = getSymbolDocumentationDisplayParts(symbol);
 
+            // TODO: handle union properties appropriately when merging with master
+            var symbolFlags = typeInfoResolver.getRootSymbols(symbol)[0].flags;
+
             // Having all this logic here is pretty unclean.  Consider moving to the roslyn model
             // where all symbol display logic is encapsulated into visitors and options.
             var totalParts: SymbolDisplayPart[] = [];
 
-            if (symbol.flags & SymbolFlags.Class) {
+            if (symbolFlags & SymbolFlags.Class) {
                 totalParts.push(keywordPart(SyntaxKind.ClassKeyword));
                 totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
-            else if (symbol.flags & SymbolFlags.Interface) {
+            else if (symbolFlags & SymbolFlags.Interface) {
                 totalParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
                 totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
-            else if (symbol.flags & SymbolFlags.Enum) {
+            else if (symbolFlags & SymbolFlags.Enum) {
                 totalParts.push(keywordPart(SyntaxKind.EnumKeyword));
                 totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
-            else if (symbol.flags & SymbolFlags.Module) {
+            else if (symbolFlags & SymbolFlags.Module) {
                 totalParts.push(keywordPart(SyntaxKind.ModuleKeyword));
                 totalParts.push(spacePart());
                 totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
             }
-            else if (symbol.flags & SymbolFlags.TypeParameter) {
+            else if (symbolFlags & SymbolFlags.TypeParameter) {
                 totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 totalParts.push(new SymbolDisplayPart("type parameter", SymbolDisplayPartKind.text, undefined));
                 totalParts.push(punctuationPart(SyntaxKind.CloseParenToken));
@@ -2439,11 +2442,11 @@ module ts {
                 totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 var text: string;
 
-                if (symbol.flags & SymbolFlags.Property) { text = "property" }
-                else if (symbol.flags & SymbolFlags.EnumMember) { text = "enum member" }
-                else if (symbol.flags & SymbolFlags.Function) { text = "function" }
-                else if (symbol.flags & SymbolFlags.Variable) { text = "variable" }
-                else if (symbol.flags & SymbolFlags.Method) { text = "method" }
+                if (symbolFlags & SymbolFlags.Property) { text = "property" }
+                else if (symbolFlags & SymbolFlags.EnumMember) { text = "enum member" }
+                else if (symbolFlags & SymbolFlags.Function) { text = "function" }
+                else if (symbolFlags & SymbolFlags.Variable) { text = "variable" }
+                else if (symbolFlags & SymbolFlags.Method) { text = "method" }
 
                 if (!text) {
                     return undefined;
@@ -2457,8 +2460,8 @@ module ts {
 
                 var type = typeInfoResolver.getTypeOfSymbol(symbol);
 
-                if (symbol.flags & SymbolFlags.Property ||
-                    symbol.flags & SymbolFlags.Variable) {
+                if (symbolFlags & SymbolFlags.Property ||
+                    symbolFlags & SymbolFlags.Variable) {
 
                     if (type) {
                         totalParts.push(punctuationPart(SyntaxKind.ColonToken));
@@ -2466,13 +2469,13 @@ module ts {
                         totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type, getContainerNode(node)));
                     }
                 }
-                else if (symbol.flags & SymbolFlags.Function ||
-                    symbol.flags & SymbolFlags.Method) {
+                else if (symbolFlags & SymbolFlags.Function ||
+                    symbolFlags & SymbolFlags.Method) {
                     if (type) {
                         totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type, getContainerNode(node)));
                     }
                 }
-                else if (symbol.flags & SymbolFlags.EnumMember) {
+                else if (symbolFlags & SymbolFlags.EnumMember) {
                     var declaration = symbol.declarations[0];
                     if (declaration.kind === SyntaxKind.EnumMember) {
                         var constantValue = typeInfoResolver.getEnumMemberValue(<EnumMember>declaration);
