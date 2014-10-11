@@ -2616,7 +2616,7 @@ var x267: { [n: number]: Base; } = [d1, d2] || undefined;
 >x267 : { [x: number]: Base; }
 >n : number
 >Base : Base
->[d1, d2] || undefined : { [x: number]: Base; }
+>[d1, d2] || undefined : Base[]
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
@@ -2699,7 +2699,7 @@ var x275: { [n: number]: Base; } = undefined || [d1, d2];
 >x275 : { [x: number]: Base; }
 >n : number
 >Base : Base
->undefined || [d1, d2] : { [x: number]: Base; }
+>undefined || [d1, d2] : Base[]
 >undefined : undefined
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -2800,7 +2800,7 @@ var x283: { [n: number]: Base; } = [d1, d2] || [d1, d2];
 >x283 : { [x: number]: Base; }
 >n : number
 >Base : Base
->[d1, d2] || [d1, d2] : { [x: number]: Base; }
+>[d1, d2] || [d1, d2] : Base[]
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
@@ -2933,7 +2933,7 @@ var x293: { [n: number]: Base; } = true ? [d1, d2] : [d1, d2];
 >x293 : { [x: number]: Base; }
 >n : number
 >Base : Base
->true ? [d1, d2] : [d1, d2] : { [x: number]: Base; }
+>true ? [d1, d2] : [d1, d2] : Base[]
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
@@ -2961,7 +2961,7 @@ var x295: (s: Base[]) => any = true ? n => { var n: Base[]; return null; } : n =
 >x295 : (s: Base[]) => any
 >s : Base[]
 >Base : Base
->true ? n => { var n: Base[]; return null; } : n => { var n: Base[]; return null; } : (s: Base[]) => any
+>true ? n => { var n: Base[]; return null; } : n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
@@ -2975,7 +2975,7 @@ var x296: Genric<Base> = true ? { func: n => { return [d1, d2]; } } : { func: n 
 >x296 : Genric<Base>
 >Genric : Genric<T>
 >Base : Base
->true ? { func: n => { return [d1, d2]; } } : { func: n => { return [d1, d2]; } } : Genric<Base>
+>true ? { func: n => { return [d1, d2]; } } : { func: n => { return [d1, d2]; } } : { func: (n: Base[]) => Array<Derived1 | Derived2>; }
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => Array<Derived1 | Derived2>; }
 >func : (n: Base[]) => Array<Derived1 | Derived2>
 >n => { return [d1, d2]; } : (n: Base[]) => Array<Derived1 | Derived2>
@@ -3076,7 +3076,7 @@ var x305: { [n: number]: Base; } = true ? undefined : [d1, d2];
 >x305 : { [x: number]: Base; }
 >n : number
 >Base : Base
->true ? undefined : [d1, d2] : { [x: number]: Base; }
+>true ? undefined : [d1, d2] : Base[]
 >undefined : undefined
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -3098,7 +3098,7 @@ var x307: (s: Base[]) => any = true ? undefined : n => { var n: Base[]; return n
 >x307 : (s: Base[]) => any
 >s : Base[]
 >Base : Base
->true ? undefined : n => { var n: Base[]; return null; } : (s: Base[]) => any
+>true ? undefined : n => { var n: Base[]; return null; } : (n: Base[]) => any
 >undefined : undefined
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
@@ -3109,7 +3109,7 @@ var x308: Genric<Base> = true ? undefined : { func: n => { return [d1, d2]; } };
 >x308 : Genric<Base>
 >Genric : Genric<T>
 >Base : Base
->true ? undefined : { func: n => { return [d1, d2]; } } : Genric<Base>
+>true ? undefined : { func: n => { return [d1, d2]; } } : { func: (n: Base[]) => Array<Derived1 | Derived2>; }
 >undefined : undefined
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => Array<Derived1 | Derived2>; }
 >func : (n: Base[]) => Array<Derived1 | Derived2>
@@ -3204,7 +3204,7 @@ var x317: { [n: number]: Base; } = true ? [d1, d2] : undefined;
 >x317 : { [x: number]: Base; }
 >n : number
 >Base : Base
->true ? [d1, d2] : undefined : { [x: number]: Base; }
+>true ? [d1, d2] : undefined : Base[]
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
@@ -3226,7 +3226,7 @@ var x319: (s: Base[]) => any = true ? n => { var n: Base[]; return null; } : und
 >x319 : (s: Base[]) => any
 >s : Base[]
 >Base : Base
->true ? n => { var n: Base[]; return null; } : undefined : (s: Base[]) => any
+>true ? n => { var n: Base[]; return null; } : undefined : (n: Base[]) => any
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
@@ -3237,7 +3237,7 @@ var x320: Genric<Base> = true ? { func: n => { return [d1, d2]; } } : undefined;
 >x320 : Genric<Base>
 >Genric : Genric<T>
 >Base : Base
->true ? { func: n => { return [d1, d2]; } } : undefined : Genric<Base>
+>true ? { func: n => { return [d1, d2]; } } : undefined : { func: (n: Base[]) => Array<Derived1 | Derived2>; }
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => Array<Derived1 | Derived2>; }
 >func : (n: Base[]) => Array<Derived1 | Derived2>
 >n => { return [d1, d2]; } : (n: Base[]) => Array<Derived1 | Derived2>
