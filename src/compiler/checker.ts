@@ -7916,7 +7916,7 @@ module ts {
                 var symbols: Symbol[] = [];
                 var name = symbol.name;
                 forEach(getSymbolLinks(symbol).unionType.types, t => {
-                    symbols.push(getPropertyOfType(t, name));
+                    symbols.push(getPropertyOfType(getApparentType(t), name));
                 });
                 return symbols;
             }
