@@ -4936,7 +4936,7 @@ module ts {
                     case SyntaxKind.IndexedAccess:
                         // special case indexed access to enums here and return false
                         var symbol = findSymbol((<IndexedAccess>n).object);
-                        return !symbol || ((symbol.flags & ~SymbolFlags.Enum) !== 0);
+                        return !symbol || symbol === unknownSymbol || ((symbol.flags & ~SymbolFlags.Enum) !== 0);
                     case SyntaxKind.ParenExpression:
                         return isReferenceOrErrorExpression((<ParenExpression>n).expression);
                     default:
