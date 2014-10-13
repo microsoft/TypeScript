@@ -661,6 +661,8 @@ module ts {
         writeTypeParameter(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         writeTypeParametersOfSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
+        isUndefinedSymbol(symbol: Symbol): boolean;
+        isArgumentsSymbol(symbol: Symbol): boolean;
 
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
         // computed value.
@@ -700,6 +702,9 @@ module ts {
                                                        // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
                                                        //     var a: C<number>; 
                                                        //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
+        UseOnlyExternalAliasing         = 0x00000002,  // Use only external alias information to get the symbol name in the given context
+                                                       // eg.  module m { export class c { } } import x = m.c; 
+                                                       // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
     }
 
     export enum SymbolAccessibility {
@@ -772,6 +777,7 @@ module ts {
         Undefined          = 0x10000000,  // Symbol for the undefined
 
         Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | UnionProperty,
+
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,
         Namespace = ValueModule | NamespaceModule,
         Module    = ValueModule | NamespaceModule,
