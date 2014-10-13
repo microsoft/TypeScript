@@ -1420,6 +1420,8 @@ module ts {
                 return isFirstDeclarationOfSymbolParameter(symbol) ? SymbolDisplayPartKind.parameterName : SymbolDisplayPartKind.localName;
             }
             else if (flags & SymbolFlags.Property) { return SymbolDisplayPartKind.propertyName; }
+            else if (flags & SymbolFlags.GetAccessor) { return SymbolDisplayPartKind.propertyName; }
+            else if (flags & SymbolFlags.SetAccessor) { return SymbolDisplayPartKind.propertyName; }
             else if (flags & SymbolFlags.EnumMember) { return SymbolDisplayPartKind.enumMemberName; }
             else if (flags & SymbolFlags.Function) { return SymbolDisplayPartKind.functionName; }
             else if (flags & SymbolFlags.Class) { return SymbolDisplayPartKind.className; }
