@@ -245,6 +245,8 @@ module ts {
         MultiLine        = 0x00000100,  // Multi-line array or object literal
         Synthetic        = 0x00000200,  // Synthetic node (for full fidelity)
         DeclarationFile  = 0x00000400,  // Node is a .d.ts file
+        Let              = 0x00000800,
+        Const            = 0x00001000,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected

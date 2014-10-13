@@ -2645,6 +2645,15 @@ module ts {
                         error(Diagnostics.Variable_declaration_list_cannot_be_empty);
                     }
                 }
+                else if (parseOptional(SyntaxKind.LetKeyword)) {
+                    var declarations = parseVariableDeclarationList(NodeFlags.Let, true);
+                    if (!declarations.length) {
+                        error(Diagnostics.Variable_declaration_list_cannot_be_empty);
+                    }
+                    if (languageVersion < ScriptTarget.ES6) {
+                        grammarErrorAtPos(declarations.pos, declarations.end - declarations.pos, Diagnostics.let_variable_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                    }
+                }
                 else {
                     var varOrInit = parseExpression(true);
                 }
@@ -2970,6 +2979,8 @@ module ts {
                     return !inErrorRecovery;
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.VarKeyword:
+                case SyntaxKind.LetKeyword:
+                case SyntaxKind.ConstKeyword:
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.IfKeyword:
                 case SyntaxKind.DoKeyword:
@@ -3016,6 +3027,8 @@ module ts {
                 case SyntaxKind.OpenBraceToken:
                     return parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
                 case SyntaxKind.VarKeyword:
+                case SyntaxKind.LetKeyword:
+                case SyntaxKind.ConstKeyword:
                     return parseVariableStatement();
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionDeclaration();
@@ -3095,6 +3108,9 @@ module ts {
             if (inAmbientContext && node.initializer && errorCountBeforeVariableDeclaration === file.syntacticErrors.length) {
                 grammarErrorAtPos(initializerStart, initializerFirstTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
             }
+            if (!inAmbientContext && !node.initializer && flags & NodeFlags.Const) {
+                grammarErrorOnNode(node, Diagnostics.Const_must_be_intialized);
+            }
             if (isInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
                 // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
                 // and its Identifier is eval or arguments 
@@ -3112,12 +3128,29 @@ module ts {
             var node = <VariableStatement>createNode(SyntaxKind.VariableStatement, pos);
             if (flags) node.flags = flags;
             var errorCountBeforeVarStatement = file.syntacticErrors.length;
-            parseExpected(SyntaxKind.VarKeyword);
-            node.declarations = parseVariableDeclarationList(flags, /*noIn*/false);
+            if (token === SyntaxKind.LetKeyword) {
+                node.flags |= NodeFlags.Let;
+            }
+            else if (token === SyntaxKind.ConstKeyword) {
+                node.flags |= NodeFlags.Const;
+            }
+            else if (token !== SyntaxKind.VarKeyword) {
+                error(Diagnostics.var_let_or_const_expected);
+            }
+            nextToken();
+            node.declarations = parseVariableDeclarationList(node.flags, /*noIn*/false);
             parseSemicolon();
             finishNode(node);
             if (!node.declarations.length && file.syntacticErrors.length === errorCountBeforeVarStatement) {
                 grammarErrorOnNode(node, Diagnostics.Variable_declaration_list_cannot_be_empty);
+            }
+            if (languageVersion < ScriptTarget.ES6) {
+                if (node.flags & NodeFlags.Let) {
+                    grammarErrorOnNode(node, Diagnostics.let_variable_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                }
+                else if (node.flags & NodeFlags.Const) {
+                    grammarErrorOnNode(node, Diagnostics.const_variable_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                }
             }
             return node;
         }
@@ -3697,6 +3730,8 @@ module ts {
         function isDeclaration(): boolean {
             switch (token) {
                 case SyntaxKind.VarKeyword:
+                case SyntaxKind.LetKeyword:
+                case SyntaxKind.ConstKeyword:
                 case SyntaxKind.FunctionKeyword:
                     return true;
                 case SyntaxKind.ClassKeyword:
@@ -3747,6 +3782,8 @@ module ts {
             var result: Declaration;
             switch (token) {
                 case SyntaxKind.VarKeyword:
+                case SyntaxKind.LetKeyword:
+                case SyntaxKind.ConstKeyword:
                     result = parseVariableStatement(pos, flags);
                     break;
                 case SyntaxKind.FunctionKeyword:

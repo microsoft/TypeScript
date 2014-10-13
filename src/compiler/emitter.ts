@@ -1149,7 +1149,12 @@ module ts {
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 if (node.declarations) {
-                    emitToken(SyntaxKind.VarKeyword, endPos);
+                    if (node.declarations[0] && node.declarations[0].flags & NodeFlags.Let) {
+                        emitToken(SyntaxKind.LetKeyword, endPos);
+                    }
+                    else {
+                        emitToken(SyntaxKind.VarKeyword, endPos);
+                    }
                     write(" ");
                     emitCommaList(node.declarations, /*includeTrailingComma*/ false);
                 }
@@ -1169,7 +1174,12 @@ module ts {
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 if (node.declaration) {
-                    emitToken(SyntaxKind.VarKeyword, endPos);
+                    if (node.declaration.flags & NodeFlags.Let) {
+                        emitToken(SyntaxKind.LetKeyword, endPos);
+                    }
+                    else {
+                        emitToken(SyntaxKind.VarKeyword, endPos);
+                    }
                     write(" ");
                     emit(node.declaration);
                 }
@@ -1298,7 +1308,17 @@ module ts {
 
             function emitVariableStatement(node: VariableStatement) {
                 emitLeadingComments(node);
-                if (!(node.flags & NodeFlags.Export)) write("var ");
+                if (!(node.flags & NodeFlags.Export)) {
+                    if (node.flags & NodeFlags.Let) {
+                        write("let ");
+                    }
+                    else if (node.flags & NodeFlags.Const) {
+                        write("const ");
+                    }
+                    else {
+                        write("var ");
+                    }
+                }
                 emitCommaList(node.declarations, /*includeTrailingComma*/ false);
                 write(";");
                 emitTrailingComments(node);
@@ -1774,7 +1794,15 @@ module ts {
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
-                    write("var ");
+                    if (node.flags & NodeFlags.Let) {
+                        write("let ");
+                    }
+                    else if (node.flags & NodeFlags.Const) {
+                        write("const ");
+                    }
+                    else {
+                        write("var ");
+                    }
                     emit(node.name);
                     write(" = ");
                     emitModuleMemberName(node);
@@ -2822,7 +2850,15 @@ module ts {
                 if (hasDeclarationWithEmit) {
                     emitJsDocComments(node);
                     emitDeclarationFlags(node);
-                    write("var ");
+                    if (node.flags & NodeFlags.Let) {
+                        write("let ");
+                    }
+                    else if (node.flags & NodeFlags.Const) {
+                        write("const ");
+                    }
+                    else {
+                        write("var ");
+                    }
                     emitCommaList(node.declarations, emitVariableDeclaration);
                     write(";");
                     writeLine();

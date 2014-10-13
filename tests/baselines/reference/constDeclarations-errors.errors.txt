@@ -1,0 +1,62 @@
+tests/cases/compiler/constDeclarations-errors.ts(3,7): error TS1155: const must be intialized.
+tests/cases/compiler/constDeclarations-errors.ts(4,7): error TS1155: const must be intialized.
+tests/cases/compiler/constDeclarations-errors.ts(5,7): error TS1155: const must be intialized.
+tests/cases/compiler/constDeclarations-errors.ts(5,11): error TS1155: const must be intialized.
+tests/cases/compiler/constDeclarations-errors.ts(5,15): error TS1155: const must be intialized.
+tests/cases/compiler/constDeclarations-errors.ts(5,27): error TS1155: const must be intialized.
+tests/cases/compiler/constDeclarations-errors.ts(8,5): error TS1109: Expression expected.
+tests/cases/compiler/constDeclarations-errors.ts(8,5): error TS1156: const must be declared inside a block.
+tests/cases/compiler/constDeclarations-errors.ts(8,11): error TS1155: const must be intialized.
+tests/cases/compiler/constDeclarations-errors.ts(8,13): error TS1005: ';' expected.
+tests/cases/compiler/constDeclarations-errors.ts(8,13): error TS1128: Declaration or statement expected.
+tests/cases/compiler/constDeclarations-errors.ts(8,18): error TS1128: Declaration or statement expected.
+tests/cases/compiler/constDeclarations-errors.ts(10,5): error TS1109: Expression expected.
+tests/cases/compiler/constDeclarations-errors.ts(10,5): error TS1156: const must be declared inside a block.
+tests/cases/compiler/constDeclarations-errors.ts(10,28): error TS1005: ';' expected.
+tests/cases/compiler/constDeclarations-errors.ts(10,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'any', but here has type 'number'.
+
+
+==== tests/cases/compiler/constDeclarations-errors.ts (16 errors) ====
+    
+    // error, missing intialicer
+    const c1;
+          ~~
+!!! error TS1155: const must be intialized.
+    const c2: number;
+          ~~
+!!! error TS1155: const must be intialized.
+    const c3, c4, c5 :string, c6;  // error, missing initialicer
+          ~~
+!!! error TS1155: const must be intialized.
+              ~~
+!!! error TS1155: const must be intialized.
+                  ~~
+!!! error TS1155: const must be intialized.
+                              ~~
+!!! error TS1155: const must be intialized.
+    
+    // error, wrong context
+    for(const c in {}) { }
+        ~~~~~
+!!! error TS1109: Expression expected.
+        ~~~~~~~
+!!! error TS1156: const must be declared inside a block.
+              ~
+!!! error TS1155: const must be intialized.
+                ~~
+!!! error TS1005: ';' expected.
+                ~~
+!!! error TS1128: Declaration or statement expected.
+                     ~
+!!! error TS1128: Declaration or statement expected.
+    
+    for(const c = 0; c < 9; c++) { }
+        ~~~~~
+!!! error TS1109: Expression expected.
+        ~~~~~~~~~~~~
+!!! error TS1156: const must be declared inside a block.
+                               ~
+!!! error TS1005: ';' expected.
+              ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'any', but here has type 'number'.
+    

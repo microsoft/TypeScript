@@ -1,0 +1,14 @@
+=== tests/cases/compiler/constDeclarations.ts ===
+
+// No error
+const c1 = false;
+>c1 : boolean
+
+const c2: number = 23;
+>c2 : number
+
+const c3 = 0, c4 :string = "", c5 = null;
+>c3 : number
+>c4 : string
+>c5 : any
+

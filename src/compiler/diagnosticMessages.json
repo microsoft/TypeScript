@@ -451,6 +451,22 @@
         "category": "Error",
         "code":  1151
     },
+	"'var', 'let' or 'const' expected.": {
+        "category": "Error",
+        "code": 1152
+    },
+	 "'let' variable declarations are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1153
+    },
+	 "'const' variable declarations are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1154
+    },
+	"Const must be intialized.": {
+        "category": "Error",
+        "code": 1155
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
