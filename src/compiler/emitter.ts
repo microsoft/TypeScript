@@ -2428,32 +2428,25 @@ module ts {
             }
 
             function emitDeclarationFlags(node: Declaration) {
+                if (node.flags & NodeFlags.Private) {
+                    write("private ");
+                }
+                else if (node.flags & NodeFlags.Protected) {
+                    write("protected ");
+                }
+
                 if (node.flags & NodeFlags.Static) {
-                    if (node.flags & NodeFlags.Private) {
-                        write("private ");
-                    }
-                    else if (node.flags & NodeFlags.Protected) {
-                        write("protected ");
-                    }
                     write("static ");
                 }
-                else {
-                    if (node.flags & NodeFlags.Private) {
-                        write("private ");
+                // If the node is parented in the current source file we need to emit export declare or just export
+                else if (node.parent === currentSourceFile) {
+                    // If the node is exported 
+                    if (node.flags & NodeFlags.Export) {
+                        write("export ");
                     }
-                    else if (node.flags & NodeFlags.Protected) {
-                        write("protected ");
-                    }
-                    // If the node is parented in the current source file we need to emit export declare or just export
-                    else if (node.parent === currentSourceFile) {
-                        // If the node is exported 
-                        if (node.flags & NodeFlags.Export) {
-                            write("export ");
-                        }
 
-                        if (node.kind !== SyntaxKind.InterfaceDeclaration) {
-                            write("declare ");
-                        }
+                    if (node.kind !== SyntaxKind.InterfaceDeclaration) {
+                        write("declare ");
                     }
                 }
             }
