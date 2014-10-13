@@ -15,5 +15,5 @@
 ////x.commonProperty./**/
 
 goTo.marker();
-verify.memberListContains("toString", "() => string", undefined, undefined, "method");
+verify.memberListContains("toString", "(method) toString(): string");
 verify.memberListCount(1);

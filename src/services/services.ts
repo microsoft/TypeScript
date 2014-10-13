@@ -2259,9 +2259,13 @@ module ts {
                 return undefined;
             }
 
+            // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
+            //               which is permissible given that it is backwards compatible; but really we should consider
+            //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
+            //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
             return {
                 name: displayName,
-                kind: getSymbolKind(symbol),
+                kind: getSymbolKind(symbol, SemanticMeaning.All),
                 kindModifiers: getSymbolModifiers(symbol)
             };
         }
@@ -2613,7 +2617,7 @@ module ts {
                 //               which is permissible given that it is backwards compatible; but really we should consider
                 //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
                 //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
-                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location);
+                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location, SemanticMeaning.All);
                 return {
                     name: entryName,
                     kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
@@ -2656,15 +2660,19 @@ module ts {
             }
         }
 
-        // TODO(drosen): use contextual SemanticMeaning.
-        function getSymbolKind(symbol: Symbol): string {
+        function getSymbolKind(symbol: Symbol, meaningAtLocation: SemanticMeaning): string {
             var flags = typeInfoResolver.getRootSymbols(symbol)[0].getFlags();
 
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
-            if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
-            if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-            
+
+            // The following should only apply if encountered at a type position,
+            // and need to have precedence over other meanings if this is the case.
+            if (meaningAtLocation & SemanticMeaning.Type) {
+                if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
+                if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+            }
+
             var result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags);
             if (result === ScriptElementKind.unknown) {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
@@ -2737,15 +2745,13 @@ module ts {
                 : ScriptElementKindModifier.none;
         }
 
-        // TODO(drosen): use contextual SemanticMeaning.
-        function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol,
-                                                                sourceFile: SourceFile,
-                                                                enclosingDeclaration: Node,
-                                                                typeResolver: TypeChecker,
-                                                                location: Node) {
+        function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
+            typeResolver: TypeChecker, location: Node,
+            // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
+            semanticMeaning = getMeaningFromLocation(location)) {
             var displayParts: SymbolDisplayPart[] = [];
             var documentation: SymbolDisplayPart[];
-            var symbolFlags = typeResolver.getRootSymbol(symbol).flags;
+            var symbolFlags = typeResolver.getRootSymbols(symbol)[0].flags;
             var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags);
             var hasAddedSymbolInfo: boolean;
             // Class at constructor site need to be shown as constructor apart from property,method, vars
@@ -2847,14 +2853,13 @@ module ts {
                     }
                 }
             }
-
             if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
                 writeTypeParametersOfSymbol(symbol, sourceFile);
             }
-            if (symbolFlags & SymbolFlags.Interface) {
+            if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
                 displayParts.push(spacePart());
@@ -2873,7 +2878,7 @@ module ts {
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
             }
-            if (symbolFlags & SymbolFlags.TypeParameter) {
+            if ((symbolFlags & SymbolFlags.TypeParameter) && (semanticMeaning & SemanticMeaning.Type)) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 displayParts.push(textPart("type parameter"));
@@ -2953,7 +2958,7 @@ module ts {
                     }
                 }
                 else {
-                    symbolKind = getSymbolKind(symbol);
+                    symbolKind = getSymbolKind(symbol, semanticMeaning);
                 }
             }
 
@@ -3015,7 +3020,6 @@ module ts {
 
             var symbol = typeInfoResolver.getSymbolInfo(node);
             if (!symbol) {
-                
                 // Try getting just type at this position and show
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
@@ -3107,25 +3111,6 @@ module ts {
                 return false;
             }
 
-            function getDefinitionFromSymbol(symbol: Symbol, location: Node, result: DefinitionInfo[]): void {
-                var declarations = symbol.getDeclarations();
-                if (declarations) {
-                    var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-                    var symbolKind = getSymbolKind(symbol);
-                    var containerSymbol = symbol.parent;
-                    var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, location) : "";
-                    var containerKind = containerSymbol ? getSymbolKind(symbol) : "";
-
-                    if (!tryAddConstructSignature(symbol, location, symbolKind, symbolName, containerName, result) &&
-                        !tryAddCallSignature(symbol, location, symbolKind, symbolName, containerName, result)) {
-                        // Just add all the declarations. 
-                        forEach(declarations, declaration => {
-                            result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
-                        });
-                    }
-                }
-            }
-
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -3173,7 +3158,7 @@ module ts {
 
             var declarations = symbol.getDeclarations();
             var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            var symbolKind = getSymbolKind(symbol);
+            var symbolKind = getSymbolKind(symbol, getMeaningFromLocation(node));
             var containerSymbol = symbol.parent;
             var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
 
@@ -4703,7 +4688,6 @@ module ts {
             function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning) {
                 var flags = symbol.getFlags();
 
-                // TODO(drosen): use meaningAtPosition.
                 if (flags & SymbolFlags.Class) {
                     return ClassificationTypeNames.className;
                 }
@@ -4721,8 +4705,6 @@ module ts {
                 else if (flags & SymbolFlags.Module) {
                     return ClassificationTypeNames.moduleName;
                 }
-
-                return undefined;
             }
 
             function processNode(node: Node) {
@@ -5192,7 +5174,7 @@ module ts {
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
                 if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
-                    var kind = getSymbolKind(symbol);
+                    var kind = getSymbolKind(symbol, getMeaningFromLocation(node));
                     if (kind) {
                         return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),

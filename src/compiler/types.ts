@@ -653,7 +653,6 @@ module ts {
         writeSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
-        getRootSymbol(symbol: Symbol): Symbol;
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Node): Type;
         getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature;

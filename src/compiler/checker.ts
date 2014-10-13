@@ -94,7 +94,6 @@ module ts {
             symbolToString: symbolToString,
             writeSymbol: writeSymbol,
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
-            getRootSymbol: getRootSymbol,
             getRootSymbols: getRootSymbols,
             getContextualType: getContextualType,
             getFullyQualifiedName: getFullyQualifiedName,

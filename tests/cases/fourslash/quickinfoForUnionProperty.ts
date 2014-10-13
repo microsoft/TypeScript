@@ -17,11 +17,11 @@
 
 
 goTo.marker("1");
-verify.quickInfoIs("One | Two", "", "x", "var");
+verify.quickInfoIs('(var) x: One | Two');
 
 
 goTo.marker("2");
-verify.quickInfoIs("string | number", "", "commonProperty", "property");
+verify.quickInfoIs('(property) commonProperty: string | number');
 
 goTo.marker("3");
-verify.quickInfoIs("() => number", "", "commonFunction", "method");
+verify.quickInfoIs('(method) commonFunction(): number');

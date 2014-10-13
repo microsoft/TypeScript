@@ -43,7 +43,7 @@ goTo.marker('4');
 verify.quickInfoIs('(var) r4: C');
 
 goTo.marker('5');
-verify.quickInfoIs('(var) x5: {\n    name: string;\n    age: number;\n}[]');
+verify.quickInfoIs('(var) x5: C[]');
 
 goTo.marker('6');
-verify.quickInfoIs('(var) r5: {\n    name: string;\n    age: number;\n}');
+verify.quickInfoIs('(var) r5: C');
