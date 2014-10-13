@@ -463,9 +463,17 @@
         "category": "Error",
         "code": 1154
     },
-	"Const must be intialized.": {
+	"const must be intialized.": {
         "category": "Error",
         "code": 1155
+    },
+	"const must be declared inside a block.": {
+        "category": "Error",
+        "code": 1156
+    },
+	"let must be declared inside a block.": {
+        "category": "Error",
+        "code": 1157
     },
 
     "Duplicate identifier '{0}'.": {
