@@ -83,6 +83,10 @@ module FourSlashInterface {
         public ranges(): Range[] {
             return FourSlash.currentTestState.getRanges();
         }
+
+        public markerByName(s: string): Marker {
+            return FourSlash.currentTestState.getMarkerByName(s);
+        }
     }
 
     export class diagnostics {
@@ -223,7 +227,7 @@ module FourSlashInterface {
         }
 
         public quickInfoIs(expectedText?: string, expectedDocumentation?: string) {
-            FourSlash.currentTestState.verifyQuickInfo(this.negative, expectedText, expectedDocumentation);
+            FourSlash.currentTestState.quickInfoIs(this.negative, expectedText, expectedDocumentation);
         }
 
         public quickInfoExists() {
@@ -419,6 +423,12 @@ module FourSlashInterface {
 
         public renameLocations(findInStrings: boolean, findInComments: boolean) {
             FourSlash.currentTestState.verifyRenameLocations(findInStrings, findInComments);
+        }
+
+        public verifyQuickInfo(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
+            displayParts: { text: string; kind: string; }[],
+            documentation: { text: string; kind: string; }[]) {
+            FourSlash.currentTestState.verifyQuickInfo(kind, kindModifiers, textSpan, displayParts, documentation);
         }
     }
 

@@ -765,7 +765,7 @@ module FourSlash {
             return "\nActual " + name + ":\n\t" + actualValue + "\nExpected value:\n\t" + expectedValue;
         }
 
-        public verifyQuickInfo(negative: boolean, expectedText?: string, expectedDocumentation?: string) {
+        public quickInfoIs(negative: boolean, expectedText?: string, expectedDocumentation?: string) {
         [expectedText, expectedDocumentation].forEach(str => {
                 if (str) {
                     this.scenarioActions.push('<ShowQuickInfo />');
@@ -792,6 +792,21 @@ module FourSlash {
                     assert.equal(actualQuickInfoDocumentation, expectedDocumentation, assertionMessage("quick info doc"));
                 }
             }
+        }
+
+
+        public verifyQuickInfo(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
+            displayParts: { text: string; kind: string; }[],
+            documentation: { text: string; kind: string; }[]) {
+            this.scenarioActions.push('<ShowQuickInfo />');
+            this.scenarioActions.push('<Verify return values of quickInfo="' + JSON.stringify(displayParts) + '"/>');
+
+            var actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            assert.equal(actualQuickInfo.kind, kind, this.messageAtLastKnownMarker("QuickInfo kind"));
+            assert.equal(actualQuickInfo.kindModifiers, kindModifiers, this.messageAtLastKnownMarker("QuickInfo kindModifiers"));
+            assert.equal(JSON.stringify(actualQuickInfo.textSpan), JSON.stringify(textSpan), this.messageAtLastKnownMarker("QuickInfo textSpan"));
+            assert.equal(JSON.stringify(actualQuickInfo.displayParts), JSON.stringify(displayParts), this.messageAtLastKnownMarker("QuickInfo displayParts"));
+            assert.equal(JSON.stringify(actualQuickInfo.documentation), JSON.stringify(documentation), this.messageAtLastKnownMarker("QuickInfo documentation"));
         }
 
         public verifyRenameLocations(findInStrings: boolean, findInComments: boolean) {

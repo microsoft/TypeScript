@@ -1317,7 +1317,10 @@ module ts {
 
         function writeIndent() {
             if (lineStart) {
-                displayParts.push(displayPart(getIndentString(indent), SymbolDisplayPartKind.space));
+                var indentString = getIndentString(indent);
+                if (indentString) {
+                    displayParts.push(displayPart(indentString, SymbolDisplayPartKind.space));
+                }
                 lineStart = false;
             }
         }
