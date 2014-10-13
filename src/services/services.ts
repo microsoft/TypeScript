@@ -2206,7 +2206,7 @@ module ts {
                 // Get emitter-diagnostics requires calling TypeChecker.emitFiles so we have to define CompilerHost.writer which does nothing because emitFiles function has side effects defined by CompilerHost.writer
                 var savedWriter = writer;
                 writer = (filename: string, data: string, writeByteOrderMark: boolean) => { };
-                allDiagnostics = allDiagnostics.concat(checker.emitFiles(targetSourceFile).errors);
+                allDiagnostics = allDiagnostics.concat(checker.getDeclarationDiagnostics(targetSourceFile));
                 writer = savedWriter;
             }
             return allDiagnostics

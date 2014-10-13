@@ -71,6 +71,7 @@ module ts {
         var checker: TypeChecker = {
             getProgram: () => program,
             getDiagnostics: getDiagnostics,
+            getDeclarationDiagnostics: getDeclarationDiagnosticsFromSourceFile,
             getGlobalDiagnostics: getGlobalDiagnostics,
             getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
             getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
@@ -7036,6 +7037,29 @@ module ts {
             }
             checkProgram();
             return getSortedDiagnostics();
+        }
+
+        function getDeclarationDiagnosticsFromSourceFile(targetSourceFile: SourceFile): Diagnostic[] {
+            var resolver: EmitResolver = {
+                getProgram: () => program,
+                getLocalNameOfContainer: getLocalNameOfContainer,
+                getExpressionNamePrefix: getExpressionNamePrefix,
+                getExportAssignmentName: getExportAssignmentName,
+                isReferencedImportDeclaration: isReferencedImportDeclaration,
+                getNodeCheckFlags: getNodeCheckFlags,
+                getEnumMemberValue: getEnumMemberValue,
+                isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
+                hasSemanticErrors: hasSemanticErrors,
+                isDeclarationVisible: isDeclarationVisible,
+                isImplementationOfOverload: isImplementationOfOverload,
+                writeTypeAtLocation: writeTypeAtLocation,
+                writeReturnTypeOfSignatureDeclaration: writeReturnTypeOfSignatureDeclaration,
+                isSymbolAccessible: isSymbolAccessible,
+                isImportDeclarationEntityNameReferenceDeclarationVisible: isImportDeclarationEntityNameReferenceDeclarationVisible,
+                getConstantValue: getConstantValue,
+            };
+            checkProgram();
+            return getDeclarationDiagnostics(program, resolver, targetSourceFile);
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {

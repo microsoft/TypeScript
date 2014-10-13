@@ -1233,6 +1233,13 @@ module ts {
         }
     }
 
+    export function getDeclarationDiagnostics(program: Program, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
+        var diagnostics: Diagnostic[] = [];
+        var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, program, ".js");
+        emitDeclarations(program, resolver, diagnostics, jsFilePath, targetSourceFile);
+        return diagnostics;
+    }
+
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
     export function emitFiles(resolver: EmitResolver, targetSourceFile?: SourceFile): EmitResult {
         var program = resolver.getProgram();
