@@ -716,14 +716,6 @@
         "category": "Error",
         "code": 2365
     },
-    "No best common type exists between '{0}', '{1}', and '{2}'.": {
-        "category": "Error",
-        "code": 2366
-    },
-    "No best common type exists between '{0}' and '{1}'.": {
-        "category": "Error",
-        "code": 2367
-    },
     "Type parameter name cannot be '{0}'": {
         "category": "Error",
         "code": 2368

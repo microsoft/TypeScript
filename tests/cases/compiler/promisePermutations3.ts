@@ -10,7 +10,7 @@ interface Promise<T> {
 
 interface IPromise<T> {
     then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>;
-    done?<U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void): void;
+    done? <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void): void;
 }
 
 declare function testFunction(): IPromise<number>;
@@ -81,7 +81,7 @@ var s4: Promise<string>;
 var s4a = s4.then(testFunction4, testFunction4, testFunction4); // error
 var s4b = s4.then(testFunction4P, testFunction4P, testFunction4P); // error 
 var s4c = s4.then(testFunction4P, testFunction4, testFunction4); // error
-var s4d = s4.then(sIPromise, testFunction4P, testFunction4).then(sIPromise, testFunction4P, testFunction4); 
+var s4d = s4.then(sIPromise, testFunction4P, testFunction4).then(sIPromise, testFunction4P, testFunction4);
 
 var r5: IPromise<string>;
 var r5a = r5.then(testFunction5, testFunction5, testFunction5); // error
@@ -125,7 +125,7 @@ var r9: IPromise<number>;
 var r9a = r9.then(testFunction9, testFunction9, testFunction9); // error
 var r9b = r9.then(sIPromise, sIPromise, sIPromise); // ok
 var r9c = r9.then(nIPromise, nIPromise, nIPromise); // ok
-var r9d = r9.then(testFunction, sIPromise, nIPromise); // ok
+var r9d = r9.then(testFunction, sIPromise, nIPromise); // error
 var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 var s9: Promise<number>;
 var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
@@ -133,14 +133,14 @@ var s9b = s9.then(testFunction9P, testFunction9P, testFunction9P); // error
 var s9c = s9.then(testFunction9P, testFunction9, testFunction9); // error
 var s9d = s9.then(sPromise, sPromise, sPromise); // ok
 var s9e = s9.then(nPromise, nPromise, nPromise); // ok
-var s9f = s9.then(testFunction, sIPromise, nIPromise); // ok
+var s9f = s9.then(testFunction, sIPromise, nIPromise); // error
 var s9g = s9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 
 var r10 = testFunction10(x => x);
 var r10a = r10.then(testFunction10, testFunction10, testFunction10); // ok
 var r10b = r10.then(sIPromise, sIPromise, sIPromise); // ok
 var r10c = r10.then(nIPromise, nIPromise, nIPromise); // ok
-var r10d = r10.then(testFunction, sIPromise, nIPromise); // ok
+var r10d = r10.then(testFunction, sIPromise, nIPromise); // error
 var r10e = r10.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 var s10 = testFunction10P(x => x);
 var s10a = s10.then(testFunction10, testFunction10, testFunction10); // ok
@@ -148,15 +148,15 @@ var s10b = s10.then(testFunction10P, testFunction10P, testFunction10P); // ok
 var s10c = s10.then(testFunction10P, testFunction10, testFunction10); // ok
 var s10d = s10.then(sPromise, sPromise, sPromise); // ok
 var s10e = s10.then(nIPromise, nPromise, nIPromise); // ok
-var s10f = s10.then(testFunctionP, sIPromise, nIPromise); // ok
+var s10f = s10.then(testFunctionP, sIPromise, nIPromise); // error
 var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
 
 var r11: IPromise<number>;
 var r11a = r11.then(testFunction11, testFunction11, testFunction11); // ok
 var s11: Promise<number>;
 var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
-var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // ok
-var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // ok
+var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // error
+var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // error
 
 var r12 = testFunction12(x => x);
 var r12a = r12.then(testFunction12, testFunction12, testFunction12); // ok

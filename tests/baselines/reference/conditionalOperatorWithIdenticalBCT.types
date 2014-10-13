@@ -80,7 +80,7 @@ var result4: (t: A) => any = true ? (m) => m.propertyX : (n) => n.propertyA;
 >result4 : (t: A) => any
 >t : A
 >A : A
->true ? (m) => m.propertyX : (n) => n.propertyA : (t: A) => any
+>true ? (m) => m.propertyX : (n) => n.propertyA : (m: A) => any
 >(m) => m.propertyX : (m: A) => any
 >m : A
 >m.propertyX : any
@@ -144,7 +144,7 @@ var result8: (t: A) => any = true ? (m) => m.propertyA : (n) => n.propertyX;
 >result8 : (t: A) => any
 >t : A
 >A : A
->true ? (m) => m.propertyA : (n) => n.propertyX : (t: A) => any
+>true ? (m) => m.propertyA : (n) => n.propertyX : (n: A) => any
 >(m) => m.propertyA : (m: A) => number
 >m : A
 >m.propertyA : number
@@ -161,7 +161,7 @@ var result8: (t: A) => any = true ? (m) => m.propertyA : (n) => n.propertyX;
 var resultIsX3: X = true ? a : b;
 >resultIsX3 : X
 >X : X
->true ? a : b : X
+>true ? a : b : A | B
 >a : A
 >b : B
 
@@ -169,7 +169,7 @@ var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 >result10 : (t: X) => any
 >t : X
 >X : X
->true ? (m) => m.propertyX1 : (n) => n.propertyX2 : (t: X) => any
+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : { (m: X): number; } | { (n: X): string; }
 >(m) => m.propertyX1 : (m: X) => number
 >m : X
 >m.propertyX1 : number
@@ -184,5 +184,5 @@ var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 //Expr1 and Expr2 are literals
 var result11: any = true ? 1 : 'string';
 >result11 : any
->true ? 1 : 'string' : any
+>true ? 1 : 'string' : string | number
 

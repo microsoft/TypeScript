@@ -82,7 +82,7 @@ module ts {
         return array1.concat(array2);
     }
 
-    export function uniqueElements<T>(array: T[]): T[] {
+    export function deduplicate<T>(array: T[]): T[] {
         if (array) {
             var result: T[] = [];
             for (var i = 0, len = array.length; i < len; i++) {

@@ -16,8 +16,8 @@ function f2<T extends U, U extends V, V>(x: T, y: U, z: V) {
     var r2 = true ? y : z;
 
     // ok
-    var r2 = true ? z : x;
-    var r2 = true ? x : z;
+    var r2a = true ? z : x;
+    var r2b = true ? x : z;
 }
 
 // Date > U > T
@@ -58,18 +58,18 @@ function f4<T extends Number>(x: T) {
 }
 
 function f5<T extends Number>(x: T) {
-    var r1 = true ? 1 : x; // error
-    var r1 = true ? x : 1; // error
+    var r1 = true ? 1 : x; // ok
+    var r1 = true ? x : 1; // ok
 }
 
 function f6<T extends String>(x: T) {
-    var r2 = true ? '' : x; // error
-    var r2 = true ? x : ''; // error
+    var r2 = true ? '' : x; // ok
+    var r2 = true ? x : ''; // ok
 }
 
 function f7<T extends Boolean>(x: T) {
-    var r3 = true ? true : x; // error
-    var r3 = true ? x : true; // error
+    var r3 = true ? true : x; // ok
+    var r3 = true ? x : true; // ok
 }
 
 function f8<T extends Date>(x: T) {
@@ -116,11 +116,11 @@ function f15<T extends C2<number>>(x: T) {
 }
 
 function f16<T extends E>(x: T) {
-    var r13 = true ? E : x; // BUG 831833
-    var r13 = true ? x : E; // BUG 831833
+    var r13 = true ? E : x; // ok
+    var r13 = true ? x : E; // ok
 
-    var r14 = true ? E.A : x; // BUG 831833
-    var r14 = true ? x : E.A; // BUG 831833
+    var r14 = true ? E.A : x; // ok
+    var r14 = true ? x : E.A; // ok
 }
 
 function f17<T extends typeof f>(x: T) {
@@ -171,8 +171,8 @@ function f2(x, y, z) {
     var r2 = true ? z : y;
     var r2 = true ? y : z;
     // ok
-    var r2 = true ? z : x;
-    var r2 = true ? x : z;
+    var r2a = true ? z : x;
+    var r2b = true ? x : z;
 }
 // Date > U > T
 function f3(x, y) {
@@ -222,16 +222,16 @@ function f4(x) {
     var r0b = true ? x : u; // ok
 }
 function f5(x) {
-    var r1 = true ? 1 : x; // error
-    var r1 = true ? x : 1; // error
+    var r1 = true ? 1 : x; // ok
+    var r1 = true ? x : 1; // ok
 }
 function f6(x) {
-    var r2 = true ? '' : x; // error
-    var r2 = true ? x : ''; // error
+    var r2 = true ? '' : x; // ok
+    var r2 = true ? x : ''; // ok
 }
 function f7(x) {
-    var r3 = true ? true : x; // error
-    var r3 = true ? x : true; // error
+    var r3 = true ? true : x; // ok
+    var r3 = true ? x : true; // ok
 }
 function f8(x) {
     var r4 = true ? new Date() : x; // ok
@@ -275,10 +275,10 @@ function f15(x) {
     var r12 = true ? x : c2; // ok
 }
 function f16(x) {
-    var r13 = true ? E : x; // BUG 831833
-    var r13 = true ? x : E; // BUG 831833
-    var r14 = true ? 0 /* A */ : x; // BUG 831833
-    var r14 = true ? x : 0 /* A */; // BUG 831833
+    var r13 = true ? E : x; // ok
+    var r13 = true ? x : E; // ok
+    var r14 = true ? 0 /* A */ : x; // ok
+    var r14 = true ? x : 0 /* A */; // ok
 }
 function f17(x) {
     var af;

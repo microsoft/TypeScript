@@ -7,7 +7,7 @@ tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDec
 tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(40,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C2'.
 tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(43,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'f' must be of type '(x: string) => number', but here has type '(x: number) => string'.
 tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(46,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'number[]'.
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(47,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type '{}[]'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(47,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'Array<C | D<string>>'.
 tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(50,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr2' must be of type 'D<string>[]', but here has type 'D<number>[]'.
 tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(53,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'm' must be of type 'typeof M', but here has type 'typeof A'.
 
@@ -79,7 +79,7 @@ tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDec
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'number[]'.
     for( var arr = [new C(), new C2(), new D<string>()];;){}
              ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type '{}[]'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'Array<C | D<string>>'.
     
     for(var arr2 = [new D<string>()];;){}
     for( var arr2 = new Array<D<number>>();;){}

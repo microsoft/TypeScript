@@ -1,0 +1,9 @@
+tests/cases/compiler/typeInferenceConflictingCandidates.ts(3,1): error TS2346: Supplied parameters do not match any signature of call target.
+
+
+==== tests/cases/compiler/typeInferenceConflictingCandidates.ts (1 errors) ====
+    declare function g<T>(a: T, b: T, c: (t: T) => T): T;
+    
+    g("", 3, a => a);
+    ~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.

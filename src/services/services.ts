@@ -2259,6 +2259,10 @@ module ts {
                 return undefined;
             }
 
+            // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
+            //               which is permissible given that it is backwards compatible; but really we should consider
+            //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
+            //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
             return {
                 name: displayName,
                 kind: getSymbolKind(symbol, typeChecker),
@@ -2613,7 +2617,7 @@ module ts {
                 //               which is permissible given that it is backwards compatible; but really we should consider
                 //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
                 //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
-                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location);
+                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location, SemanticMeaning.All);
                 return {
                     name: entryName,
                     kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
@@ -2658,7 +2662,7 @@ module ts {
 
         // TODO(drosen): use contextual SemanticMeaning.
         function getSymbolKind(symbol: Symbol, typeResolver: TypeChecker): string {
-            var flags = typeInfoResolver.getRootSymbol(symbol).getFlags();
+            var flags = typeInfoResolver.getRootSymbols(symbol)[0].getFlags();
 
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
@@ -2740,15 +2744,13 @@ module ts {
                 : ScriptElementKindModifier.none;
         }
 
-        // TODO(drosen): use contextual SemanticMeaning.
-        function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol,
-                                                                sourceFile: SourceFile,
-                                                                enclosingDeclaration: Node,
-                                                                typeResolver: TypeChecker,
-                                                                location: Node) {
+        function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
+            typeResolver: TypeChecker, location: Node,
+            // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
+            semanticMeaning = getMeaningFromLocation(location)) {
             var displayParts: SymbolDisplayPart[] = [];
             var documentation: SymbolDisplayPart[];
-            var symbolFlags = typeResolver.getRootSymbol(symbol).flags;
+            var symbolFlags = typeResolver.getRootSymbols(symbol)[0].flags;
             var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, typeResolver);
             var hasAddedSymbolInfo: boolean;
             // Class at constructor site need to be shown as constructor apart from property,method, vars
@@ -2858,14 +2860,13 @@ module ts {
                     }
                 }
             }
-
             if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 writeTypeParametersOfSymbol(symbol, sourceFile);
             }
-            if (symbolFlags & SymbolFlags.Interface) {
+            if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
                 displayParts.push(spacePart());
@@ -2884,7 +2885,7 @@ module ts {
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
             }
-            if (symbolFlags & SymbolFlags.TypeParameter) {
+            if ((symbolFlags & SymbolFlags.TypeParameter) && (semanticMeaning & SemanticMeaning.Type)) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 displayParts.push(textPart("type parameter"));
@@ -3050,7 +3051,6 @@ module ts {
 
             var symbol = typeInfoResolver.getSymbolInfo(node);
             if (!symbol) {
-                
                 // Try getting just type at this position and show
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
@@ -3085,7 +3085,7 @@ module ts {
         }
 
         /// Goto definition
-        function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[]{
+        function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[] {
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
                 return {
                     fileName: node.getSourceFile().filename,
@@ -3117,7 +3117,7 @@ module ts {
                     result.push(getDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
                     return true;
                 }
-                
+
                 return false;
             }
 
@@ -3181,7 +3181,7 @@ module ts {
 
             // Could not find a symbol e.g. node is string or number keyword,
             // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-            if (!symbol || !(symbol.getDeclarations())) {
+            if (!symbol) {
                 return undefined;
             }
 
@@ -3714,18 +3714,20 @@ module ts {
                 return [getReferenceEntryFromNode(node)];
             }
 
-            // the symbol was an internal symbol and does not have a declaration e.g.undefined symbol
-            if (!symbol.getDeclarations()) {
+            var declarations = symbol.declarations;
+
+            // The symbol was an internal symbol and does not have a declaration e.g.undefined symbol
+            if (!declarations || !declarations.length) {
                 return undefined;
             }
 
             var result: ReferenceEntry[];
 
             // Compute the meaning from the location and the symbol it references
-            var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.getDeclarations());
+            var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
             // Get the text to search for, we need to normalize it as external module names will have quote
-            var symbolName = getNormalizedSymbolName(symbol);
+            var symbolName = getNormalizedSymbolName(symbol.name, declarations);
 
             // Get syntactic diagnostics
             var scope = getSymbolScope(symbol);
@@ -3747,15 +3749,15 @@ module ts {
 
             return result;
 
-            function getNormalizedSymbolName(symbol: Symbol): string {
+            function getNormalizedSymbolName(symbolName: string, declarations: Declaration[]): string {
                 // Special case for function expressions, whose names are solely local to their bodies.
-                var functionExpression = getDeclarationOfKind(symbol, SyntaxKind.FunctionExpression);
+                var functionExpression = forEach(declarations, d => d.kind === SyntaxKind.FunctionExpression ? d : undefined);
 
                 if (functionExpression && functionExpression.name) {
                     var name = functionExpression.name.text;
                 }
                 else {
-                    var name = symbol.name;
+                    var name = symbolName;
                 }
 
                 var length = name.length;
@@ -3782,22 +3784,24 @@ module ts {
                 var scope: Node = undefined;
 
                 var declarations = symbol.getDeclarations();
-                for (var i = 0, n = declarations.length; i < n; i++) {
-                    var container = getContainerNode(declarations[i]);
+                if (declarations) {
+                    for (var i = 0, n = declarations.length; i < n; i++) {
+                        var container = getContainerNode(declarations[i]);
 
-                    if (scope && scope !== container) {
-                        // Different declarations have different containers, bail out
-                        return undefined;
+                        if (scope && scope !== container) {
+                            // Different declarations have different containers, bail out
+                            return undefined;
+                        }
+
+                        if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
+                            // This is a global variable and not an external module, any declaration defined
+                            // within this scope is visible outside the file
+                            return undefined;
+                        }
+
+                        // The search scope is the container node
+                        scope = container;
                     }
-
-                    if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
-                        // This is a global variable and not an external module, any declaration defined
-                        // within this scope is visible outside the file
-                        return undefined;
-                    }
-
-                    // The search scope is the container node
-                    scope = container;
                 }
 
                 return scope;
@@ -3933,14 +3937,7 @@ module ts {
                         }
 
                         var referenceSymbol = typeInfoResolver.getSymbolInfo(referenceLocation);
-
-                        // Could not find a symbol e.g. node is string or number keyword,
-                        // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-                        if (!referenceSymbol || !(referenceSymbol.getDeclarations())) {
-                            return;
-                        }
-
-                        if (isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
+                        if (referenceSymbol && isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
                             result.push(getReferenceEntryFromNode(referenceLocation));
                         }
                     });
@@ -4102,24 +4099,27 @@ module ts {
                 // The search set contains at least the current symbol
                 var result = [symbol];
 
-                // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
-                var rootSymbol = typeInfoResolver.getRootSymbol(symbol);
-                if (rootSymbol && rootSymbol !== symbol) {
-                    result.push(rootSymbol);
-                }
-
                 // If the location is in a context sensitive location (i.e. in an object literal) try
                 // to get a contextual type for it, and add the property symbol from the contextual
                 // type to the search set
                 if (isNameOfPropertyAssignment(location)) {
-                    var symbolFromContextualType = getPropertySymbolFromContextualType(location);
-                    if (symbolFromContextualType) result.push(typeInfoResolver.getRootSymbol(symbolFromContextualType));
+                    forEach(getPropertySymbolsFromContextualType(location), contextualSymbol => {
+                        result.push.apply(result, typeInfoResolver.getRootSymbols(contextualSymbol));
+                    });
                 }
 
-                // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
-                if (symbol.parent && symbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    getPropertySymbolsFromBaseTypes(symbol.parent, symbol.getName(), result);
-                }
+                // If this is a union property, add all the symbols from all its source symbols in all unioned types.
+                // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
+                forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
+                    if (rootSymbol !== symbol) {
+                        result.push(rootSymbol);
+                    }
+
+                    // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
+                    if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
+                    }
+                });
 
                 return result;
             }
@@ -4155,11 +4155,7 @@ module ts {
             }
 
             function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
-                // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
-                var referenceSymbolTarget = typeInfoResolver.getRootSymbol(referenceSymbol);
-
-                // if it is in the list, then we are done
-                if (searchSymbols.indexOf(referenceSymbolTarget) >= 0) {
+                if (searchSymbols.indexOf(referenceSymbol) >= 0) {
                     return true;
                 }
 
@@ -4167,29 +4163,61 @@ module ts {
                 // object literal, lookup the property symbol in the contextual type, and use this symbol to
                 // compare to our searchSymbol
                 if (isNameOfPropertyAssignment(referenceLocation)) {
-                    var symbolFromContextualType = getPropertySymbolFromContextualType(referenceLocation);
-                    if (symbolFromContextualType && searchSymbols.indexOf(typeInfoResolver.getRootSymbol(symbolFromContextualType)) >= 0) {
+                    return forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
+                        return forEach(typeInfoResolver.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0);
+                    });
+                }
+
+                // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
+                // Or a union property, use its underlying unioned symbols
+                return forEach(typeInfoResolver.getRootSymbols(referenceSymbol), rootSymbol => {
+                    // if it is in the list, then we are done
+                    if (searchSymbols.indexOf(rootSymbol) >= 0) {
                         return true;
                     }
-                }
 
-                // Finally, try all properties with the same name in any type the containing type extend or implemented, and 
-                // see if any is in the list
-                if (referenceSymbol.parent && referenceSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    var result: Symbol[] = [];
-                    getPropertySymbolsFromBaseTypes(referenceSymbol.parent, referenceSymbol.getName(), result);
-                    return forEach(result, s => searchSymbols.indexOf(s) >= 0);
-                }
+                    // Finally, try all properties with the same name in any type the containing type extended or implemented, and 
+                    // see if any is in the list
+                    if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                        var result: Symbol[] = [];
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
+                        return forEach(result, s => searchSymbols.indexOf(s) >= 0);
+                    }
 
-                return false;
+                    return false;
+                });
             }
 
-            function getPropertySymbolFromContextualType(node: Node): Symbol {
+            function getPropertySymbolsFromContextualType(node: Node): Symbol[] {
                 if (isNameOfPropertyAssignment(node)) {
                     var objectLiteral = node.parent.parent;
                     var contextualType = typeInfoResolver.getContextualType(objectLiteral);
+                    var name = (<Identifier>node).text;
                     if (contextualType) {
-                        return typeInfoResolver.getPropertyOfType(contextualType, (<Identifier>node).text);
+                        if (contextualType.flags & TypeFlags.Union) {
+                            // This is a union type, first see if the property we are looking for is a union property (i.e. exists in all types)
+                            // if not, search the constituent types for the property
+                            var unionProperty = contextualType.getProperty(name)
+                            if (unionProperty) {
+                                return [unionProperty];
+                            }
+                            else {
+                                var result: Symbol[] = [];
+                                forEach((<UnionType>contextualType).types, t => {
+                                    var symbol = t.getProperty(name);
+                                    if (symbol) {
+                                        result.push(symbol);
+                                    }
+                                });
+                                return result;
+                            }
+                        }
+                        else {
+                            var symbol = contextualType.getProperty(name);
+                            if (symbol) {
+                                return [symbol];
+                            }
+                        }
                     }
                 }
                 return undefined;
@@ -4691,7 +4719,6 @@ module ts {
             function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning) {
                 var flags = symbol.getFlags();
 
-                // TODO(drosen): use meaningAtPosition.
                 if (flags & SymbolFlags.Class) {
                     return ClassificationTypeNames.className;
                 }
@@ -4709,8 +4736,6 @@ module ts {
                 else if (flags & SymbolFlags.Module) {
                     return ClassificationTypeNames.moduleName;
                 }
-
-                return undefined;
             }
 
             function processNode(node: Node) {
