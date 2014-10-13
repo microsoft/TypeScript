@@ -7040,24 +7040,7 @@ module ts {
         }
 
         function getDeclarationDiagnosticsFromSourceFile(targetSourceFile: SourceFile): Diagnostic[] {
-            var resolver: EmitResolver = {
-                getProgram: () => program,
-                getLocalNameOfContainer: getLocalNameOfContainer,
-                getExpressionNamePrefix: getExpressionNamePrefix,
-                getExportAssignmentName: getExportAssignmentName,
-                isReferencedImportDeclaration: isReferencedImportDeclaration,
-                getNodeCheckFlags: getNodeCheckFlags,
-                getEnumMemberValue: getEnumMemberValue,
-                isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
-                hasSemanticErrors: hasSemanticErrors,
-                isDeclarationVisible: isDeclarationVisible,
-                isImplementationOfOverload: isImplementationOfOverload,
-                writeTypeAtLocation: writeTypeAtLocation,
-                writeReturnTypeOfSignatureDeclaration: writeReturnTypeOfSignatureDeclaration,
-                isSymbolAccessible: isSymbolAccessible,
-                isImportDeclarationEntityNameReferenceDeclarationVisible: isImportDeclarationEntityNameReferenceDeclarationVisible,
-                getConstantValue: getConstantValue,
-            };
+            var resolver = createResolver();
             checkProgram();
             return getDeclarationDiagnostics(program, resolver, targetSourceFile);
         }
@@ -7703,8 +7686,8 @@ module ts {
             writeType(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
         }
 
-        function invokeEmitter(targetSourceFile?: SourceFile) {
-            var resolver: EmitResolver = {
+        function createResolver(): EmitResolver {
+            return {
                 getProgram: () => program,
                 getLocalNameOfContainer: getLocalNameOfContainer,
                 getExpressionNamePrefix: getExpressionNamePrefix,
@@ -7721,7 +7704,11 @@ module ts {
                 isSymbolAccessible: isSymbolAccessible,
                 isImportDeclarationEntityNameReferenceDeclarationVisible: isImportDeclarationEntityNameReferenceDeclarationVisible,
                 getConstantValue: getConstantValue,
-            };
+            }
+        }
+
+        function invokeEmitter(targetSourceFile?: SourceFile) {
+            var resolver = createResolver();
             checkProgram();
             return emitFiles(resolver, targetSourceFile);
         }

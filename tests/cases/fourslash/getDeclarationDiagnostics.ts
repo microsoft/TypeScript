@@ -12,7 +12,6 @@
 // @Filename: input2.ts
 //// var x = "hello world"; /*2*/
 
-debugger;
 goTo.marker("1");
 verify.numberOfErrorsInCurrentFile(1);
 
