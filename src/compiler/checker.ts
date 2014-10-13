@@ -33,10 +33,16 @@ module ts {
         if (stringWriters.length == 0) {
             var str = "";
 
+            var writeText: (text: string) => void = text => str += text;
             return {
                 string: () => str,
-                writeKind: text => str += text,
-                writeSymbol: text => str += text,
+                writeKeyword: writeText,
+                writeOperator: writeText,
+                writePunctuation: writeText,
+                writeSpace: writeText,
+                writeStringLiteral: writeText,
+                writeParameter: writeText,
+                writeSymbol: writeText,
 
                 // Completely ignore indentation for string writers.  And map newlines to
                 // a single space.
@@ -945,19 +951,19 @@ module ts {
         }
 
         function writeKeyword(writer: SymbolWriter, kind: SyntaxKind) {
-            writer.writeKind(tokenToString(kind), SymbolDisplayPartKind.keyword);
+            writer.writeKeyword(tokenToString(kind));
         }
 
         function writePunctuation(writer: SymbolWriter, kind: SyntaxKind) {
-            writer.writeKind(tokenToString(kind), SymbolDisplayPartKind.punctuation);
+            writer.writePunctuation(tokenToString(kind));
         }
 
         function writeOperator(writer: SymbolWriter, kind: SyntaxKind) {
-            writer.writeKind(tokenToString(kind), SymbolDisplayPartKind.operator);
+            writer.writeOperator(tokenToString(kind));
         }
 
         function writeSpace(writer: SymbolWriter) {
-            writer.writeKind(" ", SymbolDisplayPartKind.space);
+            writer.writeSpace(" ");
         }
 
         function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
@@ -1076,8 +1082,8 @@ module ts {
                 // Write undefined/null type as any
                 if (type.flags & TypeFlags.Intrinsic) {
                     // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
-                    writer.writeKind(!(flags & TypeFormatFlags.WriteOwnNameForAnyLike) && 
-                        (type.flags & TypeFlags.Any) ? "any" : (<IntrinsicType>type).intrinsicName, SymbolDisplayPartKind.keyword);
+                    writer.writeKeyword(!(flags & TypeFormatFlags.WriteOwnNameForAnyLike) && 
+                        (type.flags & TypeFlags.Any) ? "any" : (<IntrinsicType>type).intrinsicName);
                 }
                 else if (type.flags & TypeFlags.Reference) {
                     writeTypeReference(<TypeReference>type);
@@ -1092,7 +1098,7 @@ module ts {
                     writeAnonymousType(<ObjectType>type, flags);
                 }
                 else if (type.flags & TypeFlags.StringLiteral) {
-                    writer.writeKind((<StringLiteralType>type).text, SymbolDisplayPartKind.stringLiteral);
+                    writer.writeStringLiteral((<StringLiteralType>type).text);
                 }
                 else {
                     // Should never get here
@@ -1225,7 +1231,7 @@ module ts {
                 if (resolved.stringIndexType) {
                     // [x: string]: 
                     writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                    writer.writeKind("x", SymbolDisplayPartKind.parameterName);
+                    writer.writeParameter("x");
                     writePunctuation(writer, SyntaxKind.ColonToken);
                     writeSpace(writer);
                     writeKeyword(writer, SyntaxKind.StringKeyword);
@@ -1239,7 +1245,7 @@ module ts {
                 if (resolved.numberIndexType) {
                     // [x: number]: 
                     writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                    writer.writeKind("x", SymbolDisplayPartKind.parameterName);
+                    writer.writeParameter("x");
                     writePunctuation(writer, SyntaxKind.ColonToken);
                     writeSpace(writer);
                     writeKeyword(writer, SyntaxKind.NumberKeyword);
