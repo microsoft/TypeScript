@@ -656,6 +656,8 @@ module ts {
         writeTypeParameter(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         writeTypeParametersOfSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
+        isUndefinedSymbol(symbol: Symbol): boolean;
+        isArgumentsSymbol(symbol: Symbol): boolean;
 
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
         // computed value.
@@ -766,8 +768,6 @@ module ts {
         Merged             = 0x01000000,  // Merged symbol (created during program binding)
         Transient          = 0x02000000,  // Transient symbol (created during type check)
         Prototype          = 0x04000000,  // Symbol for the prototype property (without source code representation)
-
-        Undefined          = 0x08000000,  // Symbol for the undefined
 
         Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,

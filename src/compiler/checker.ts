@@ -105,10 +105,12 @@ module ts {
             writeTypeParameter: writeTypeParameter,
             writeTypeParametersOfSymbol: writeTypeParametersOfSymbol,
             isImplementationOfOverload: isImplementationOfOverload,
-            getAliasedSymbol: resolveImport
+            getAliasedSymbol: resolveImport,
+            isUndefinedSymbol: symbol => symbol === undefinedSymbol,
+            isArgumentsSymbol: symbol => symbol === argumentsSymbol
         };
 
-        var undefinedSymbol = createSymbol(SymbolFlags.Undefined | SymbolFlags.Property | SymbolFlags.Transient, "undefined");
+        var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
         var argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
         var unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
         var resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
