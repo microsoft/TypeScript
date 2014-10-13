@@ -3813,7 +3813,6 @@ module ts {
                     }
                 }
                 else if (target.flags & TypeFlags.Union) {
-                    // Target is a union type
                     var targetTypes = (<UnionType>target).types;
                     var startCount = context.inferenceCount;
                     var typeParameterCount = 0;

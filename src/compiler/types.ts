@@ -972,10 +972,10 @@ module ts {
     }
 
     export interface InferenceContext {
-        typeParameters: TypeParameter[];
-        inferenceCount: number;
-        inferences: Type[][];
-        inferredTypes: Type[];
+        typeParameters: TypeParameter[];  // Type parameters for which inferences are made
+        inferenceCount: number;           // Incremented for every inference made (whether new or not)
+        inferences: Type[][];             // Inferences made for each type parameter
+        inferredTypes: Type[];            // Inferred type for each type parameter
     }
 
     export interface DiagnosticMessage {
