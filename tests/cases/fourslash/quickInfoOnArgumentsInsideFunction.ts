@@ -5,5 +5,4 @@
 ////}
 
 goTo.marker('1');
-debugger;
 verify.quickInfoIs('(local var) arguments: IArguments');
