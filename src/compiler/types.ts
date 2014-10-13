@@ -648,14 +648,20 @@ module ts {
         getTypeOfNode(node: Node): Type;
         getApparentType(type: Type): ApparentType;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        writeType(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
-        typeToDisplayParts(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[];
-        symbolToDisplayParts(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): SymbolDisplayPart[];
+        writeSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
+        getRootSymbol(symbol: Symbol): Symbol;
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Node): Type;
         getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature;
+        getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
+        writeSignature(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        writeTypeParameter(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        writeTypeParametersOfSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
+        isImplementationOfOverload(node: FunctionDeclaration): boolean;
 
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
         // computed value.
@@ -665,20 +671,36 @@ module ts {
         getAliasedSymbol(symbol: Symbol): Symbol;
     }
 
-    export interface TextWriter {
-        write(s: string): void;
-        trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+    export interface SymbolWriter {
+        writeKind(text: string, kind: SymbolDisplayPartKind): void;
+        writeSymbol(text: string, symbol: Symbol): void;
         writeLine(): void;
         increaseIndent(): void;
         decreaseIndent(): void;
-        getText(): string;
+        clear(): void;
+
+        // Called when the symbol writer encounters a symbol to write.  Currently only used by the
+        // declaration emitter to help determine if it should patch up the final declaration file
+        // with import statements it previously saw (but chose not to emit).
+        trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
     }
 
     export enum TypeFormatFlags {
-        None                    = 0x00000000, 
-        WriteArrayAsGenericType = 0x00000001,  // Write Array<T> instead T[]
-        UseTypeOfFunction       = 0x00000002,  // Write typeof instead of function type literal
-        NoTruncation            = 0x00000004,  // Don't truncate typeToString result
+        None                            = 0x00000000, 
+        WriteArrayAsGenericType         = 0x00000001,  // Write Array<T> instead T[]
+        UseTypeOfFunction               = 0x00000002,  // Write typeof instead of function type literal
+        NoTruncation                    = 0x00000004,  // Don't truncate typeToString result
+        WriteArrowStyleSignature        = 0x00000008,  // Write arrow style signature
+        WriteOwnNameForAnyLike          = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
+        WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
+    }
+
+    export enum SymbolFormatFlags {
+        None                            = 0x00000000,
+        WriteTypeParametersOrArguments  = 0x00000001,  // Write symbols's type argument if it is instantiated symbol
+                                                       // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
+                                                       //     var a: C<number>; 
+                                                       //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
     }
 
     export enum SymbolAccessibility {
@@ -706,8 +728,8 @@ module ts {
         hasSemanticErrors(): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
-        writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
-        writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
+        writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+        writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult;
 
@@ -748,6 +770,7 @@ module ts {
         Merged             = 0x02000000,  // Merged symbol (created during program binding)
         Transient          = 0x04000000,  // Transient symbol (created during type check)
         Prototype          = 0x08000000,  // Prototype property (no source representation)
+        Undefined          = 0x10000000,  // Symbol for the undefined
 
         Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | UnionProperty,
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,
@@ -1205,24 +1228,6 @@ module ts {
         verticalTab = 0x0B,           // \v
     }
 
-    export class SymbolDisplayPart {
-        constructor(public text: string,
-                    public kind: SymbolDisplayPartKind,
-                    public symbol: Symbol) {
-        }
-
-        public toJSON() {
-            return {
-                text: this.text,
-                kind: SymbolDisplayPartKind[this.kind]
-            };
-        }
-
-        public static toString(parts: SymbolDisplayPart[]) {
-            return parts.map(p => p.text).join("");
-        }
-    }
-
     export enum SymbolDisplayPartKind {
         aliasName,
         className,
@@ -1230,20 +1235,17 @@ module ts {
         fieldName,
         interfaceName,
         keyword,
-        labelName,
         lineBreak,
         numericLiteral,
         stringLiteral,
         localName,
         methodName,
         moduleName,
-        namespaceName,
         operator,
         parameterName,
         propertyName,
         punctuation,
         space,
-        anonymousTypeIndicator,
         text,
         typeParameterName,
         enumMemberName,

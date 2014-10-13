@@ -6,4 +6,4 @@
 ////}
 
 goTo.marker();
-verify.completionListContains("elem", "string");
+verify.completionListContains("elem", "(parameter) elem: string");

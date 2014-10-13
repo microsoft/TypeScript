@@ -9,7 +9,7 @@
 ////}
 
 goTo.marker("1");
-verify.memberListContains("x", undefined, undefined, undefined ,/*kind: */ "alias");
+verify.memberListContains("x", "(alias) x", undefined);
 
 goTo.marker("2");
 verify.memberListContains("value");

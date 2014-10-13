@@ -4,7 +4,9 @@
 /// <reference path="parser.ts"/>
 
 module ts {
-    interface EmitTextWriter extends TextWriter {
+    interface EmitTextWriter extends SymbolWriter {
+        write(s: string): void;
+        getText(): string;
         rawWrite(s: string): void;
         writeLiteral(s: string): void;
         getTextPos(): number;
@@ -14,7 +16,7 @@ module ts {
     }
 
     var indentStrings: string[] = ["", "    "];
-    function getIndentString(level: number) {
+    export function getIndentString(level: number) {
         if (indentStrings[level] === undefined) {
             indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
         }
@@ -26,7 +28,7 @@ module ts {
     }
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        if (!(sourceFile.flags & NodeFlags.DeclarationFile)) {
+        if (!isDeclarationFile(sourceFile)) {
             if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
                 return true;
             }
@@ -36,7 +38,7 @@ module ts {
     }
 
     export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
-        return isExternalModule(sourceFile) || (sourceFile.flags & NodeFlags.DeclarationFile) !== 0;
+        return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
@@ -147,9 +149,17 @@ module ts {
                 }
             }
 
+            function writeKind(text: string, kind: SymbolDisplayPartKind) {
+                write(text);
+            }
+            function writeSymbol(text: string, symbol: Symbol) {
+                write(text);
+            }
             return {
                 write: write,
                 trackSymbol: trackSymbol,
+                writeKind: writeKind,
+                writeSymbol: writeSymbol,
                 rawWrite: rawWrite,
                 writeLiteral: writeLiteral,
                 writeLine: writeLine,
@@ -160,6 +170,7 @@ module ts {
                 getLine: () => lineCount + 1,
                 getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
                 getText: () => output,
+                clear: () => { }
             };
         }
 
@@ -3242,14 +3253,17 @@ module ts {
             if (compilerOptions.out) {
                 emitFile(compilerOptions.out);
             }
-        } else {
-            // targetSourceFile is specified (e.g calling emitter from language service)
+        }
+        else {
+            // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                // If shouldEmitToOwnFile is true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
+                // If shouldEmitToOwnFile returns true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
                 var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, ".js");
                 emitFile(jsFilePath, targetSourceFile);
-            } else {
-                // If shouldEmitToOwnFile is false, then emit all, non-external-module file, into one single output file
+            }
+            else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
+                // Otherwise, if --out is specified and targetSourceFile is not a declaration file,
+                // Emit all, non-external-module file, into one single output file
                 emitFile(compilerOptions.out);
             }
         }

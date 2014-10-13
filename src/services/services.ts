@@ -23,7 +23,6 @@
 /// <reference path='compiler\ast.ts' />
 /// <reference path='compiler\astWalker.ts' />
 /// <reference path='compiler\astHelpers.ts' />
-/// <reference path='compiler\types.ts' />
 /// <reference path='compiler\pathUtils.ts' />
 
 module ts {
@@ -47,7 +46,7 @@ module ts {
         getFlags(): SymbolFlags;
         getName(): string;
         getDeclarations(): Declaration[];
-        getDocumentationComment(): string;
+        getDocumentationComment(): SymbolDisplayPart[];
     }
 
     export interface Type {
@@ -67,6 +66,7 @@ module ts {
         getTypeParameters(): Type[];
         getParameters(): Symbol[];
         getReturnType(): Type;
+        getDocumentationComment(): SymbolDisplayPart[];
     }
 
     export interface SourceFile {
@@ -228,7 +228,7 @@ module ts {
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty string will be returned.
-        documentationComment: string;
+        documentationComment: SymbolDisplayPart[];
 
         constructor(flags: SymbolFlags, name: string) {
             this.flags = flags;
@@ -247,153 +247,309 @@ module ts {
             return this.declarations;
         }
 
-        getDocumentationComment(): string {
+        getDocumentationComment(): SymbolDisplayPart[] {
             if (this.documentationComment === undefined) {
-                var lines: string[] = [];
-
-                // Get the doc comments from all the declarations of this symbol, and merge them
-                // into one single doc comment.
-                var declarations = this.getDeclarations();
-                if (declarations) {
-                    for (var i = 0, n = declarations.length; i < n; i++) {
-                        this.processDocumentationCommentDeclaration(lines, declarations[i]);
-                    }
-                }
-
-                // TODO: get the newline info from the host.
-                this.documentationComment = lines.join("\r\n");
+                this.documentationComment = getJsDocCommentsFromDeclarations(this.declarations, this.name, !(this.flags & SymbolFlags.Property));
             }
 
             return this.documentationComment;
         }
+    }
 
-        private processDocumentationCommentDeclaration(lines: string[], declaration: Node) {
-            var commentRanges = getLeadingCommentRangesOfNode(declaration);
-            if (commentRanges) {
-                var sourceFile = declaration.getSourceFile();
-
-                for (var i = 0, n = commentRanges.length; i < n; i++) {
-                    this.processDocumentationCommentRange(
-                        lines, sourceFile, commentRanges[i]);
-                }
+    function getJsDocCommentsFromDeclarations(declarations: Declaration[], name: string, canUseParsedParamTagComments: boolean) {
+        var documentationComment = <SymbolDisplayPart[]>[];
+        var docComments = getJsDocCommentsSeparatedByNewLines();
+        ts.forEach(docComments, docComment => {
+            if (documentationComment.length) {
+                documentationComment.push(lineBreakPart());
             }
-        }
+            documentationComment.push(docComment);
+        });
 
-        private processDocumentationCommentRange(lines: string[], sourceFile: SourceFile, commentRange: CommentRange) {
-            // We only care about well-formed /** */ comments
-            if (commentRange.end - commentRange.pos > "/**/".length &&
-                sourceFile.text.substr(commentRange.pos, "/**".length) === "/**" &&
-                sourceFile.text.substr(commentRange.end - "*/".length, "*/".length) === "*/") {
+        return documentationComment;
 
-                // Put a newline between each converted comment we join together.
-                if (lines.length) {
-                    lines.push("");
+        function getJsDocCommentsSeparatedByNewLines() {
+            var paramTag = "@param";
+            var jsDocCommentParts: SymbolDisplayPart[] = [];
+
+            ts.forEach(declarations, declaration => {
+                var sourceFileOfDeclaration = getSourceFileOfNode(declaration);
+                // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
+                if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
+                    ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
+                        var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                        if (cleanedParamJsDocComment) {
+                            jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
+                        }
+                    });
                 }
 
-                var startLineAndChar = sourceFile.getLineAndCharacterFromPosition(commentRange.pos);
-                var endLineAndChar = sourceFile.getLineAndCharacterFromPosition(commentRange.end);
-
-                if (startLineAndChar.line === endLineAndChar.line) {
-                    // A single line doc comment.  Just extract the text between the
-                    // comment markers and add that to the doc comment we're building
-                    // up.
-                    lines.push(sourceFile.text.substring(commentRange.pos + "/**".length, commentRange.end - "*/".length).trim());
+                // If this is left side of dotted module declaration, there is no doc comments associated with this node
+                if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
+                    return;
                 }
-                else {
-                    this.processMultiLineDocumentationCommentRange(sourceFile, commentRange, startLineAndChar, endLineAndChar, lines);
-                }
-            }
-        }
 
-        private processMultiLineDocumentationCommentRange(
-            sourceFile: SourceFile, commentRange: CommentRange,
-            startLineAndChar: { line: number; character: number },
-            endLineAndChar: { line: number; character: number },
-            lines: string[]) {
+                // If this is dotted module name, get the doc comments from the parent
+                while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
+                    declaration = declaration.parent;
+                } 
 
-            // Comment spanned multiple lines.  Find the leftmost character 
-            // position in each line, and use that to determine what we should
-            // trim off, and what part of the line to keep.
-            // i.e.   if the comment looks like:
-            // 
-            // /** Foo
-            //   * Bar
-            //   *    Baz
-            //   */
-            //
-            // Then we'll want to add:
-            // Foo
-            // Bar
-            //    Baz
-            var trimLength: number = undefined;
-            for (var iLine = startLineAndChar.line + 1; iLine <= endLineAndChar.line; iLine++) {
-                var lineStart = sourceFile.getPositionFromLineAndCharacter(iLine, /*character:*/ 1);
-                var lineEnd = iLine === endLineAndChar.line
-                    ? commentRange.end - "*/".length
-                    : sourceFile.getPositionFromLineAndCharacter(iLine + 1, 1);
-                var docCommentTriviaLength = this.skipDocumentationCommentTrivia(sourceFile.text, lineStart, lineEnd);
+                // Get the cleaned js doc comment text from the declaration
+                ts.forEach(getJsDocCommentTextRange(
+                    declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
+                        var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                        if (cleanedJsDocComment) {
+                            jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
+                        }
+                    });
+            });
 
-                if (trimLength === undefined || (docCommentTriviaLength && docCommentTriviaLength < trimLength)) {
-                    trimLength = docCommentTriviaLength;
-                }
+            return jsDocCommentParts;
+
+            function getJsDocCommentTextRange(node: Node, sourceFile: SourceFile): TextRange[] {
+                return ts.map(getJsDocComments(node, sourceFile),
+                    jsDocComment => {
+                        return {
+                            pos: jsDocComment.pos + "/*".length, // Consume /* from the comment
+                            end: jsDocComment.end - "*/".length // Trim off comment end indicator 
+                        };
+                    });
             }
 
-            // Add the first line in.
-            var firstLine = sourceFile.text.substring(
-                commentRange.pos + "/**".length,
-                sourceFile.getPositionFromLineAndCharacter(startLineAndChar.line + 1, /*character:*/ 1)).trim();
-            if (firstLine !== "") {
-                lines.push(firstLine);
-            }
-
-            // For all the lines up to the last (but not including the last), add the contents
-            // of the line (with the length up to the 
-            for (var iLine = startLineAndChar.line + 1; iLine < endLineAndChar.line; iLine++) {
-                var line = this.trimRight(sourceFile.text.substring(
-                    sourceFile.getPositionFromLineAndCharacter(iLine, /*character*/ 1),
-                    sourceFile.getPositionFromLineAndCharacter(iLine + 1, /*character*/ 1))).substr(trimLength);
-
-                lines.push(line);
-            }
-
-            // Add the last line if there is any actual text before the */
-            var lastLine = this.trimRight(sourceFile.text.substring(
-                sourceFile.getPositionFromLineAndCharacter(endLineAndChar.line, /*character:*/ 1),
-                commentRange.end - "*/".length)).substr(trimLength);
-
-            if (lastLine !== "") {
-                lines.push(lastLine);
-            }
-        }
-
-        private trimRight(val: string) {
-            return val.replace(/(\n|\r|\s)+$/, '');
-        }
-
-        private skipDocumentationCommentTrivia(text: string, lineStart: number, lineEnd: number): number {
-            var seenAsterisk = false;
-            var lineLength = lineEnd - lineStart;
-            for (var i = 0; i < lineLength; i++) {
-                var char = text.charCodeAt(i + lineStart);
-                if (char === CharacterCodes.asterisk && !seenAsterisk) {
-                    // Ignore the first asterisk we see.  We want to trim out the line of *'s 
-                    // commonly seen at the start of a doc comment.
-                    seenAsterisk = true;
-                    continue;
+            function consumeWhiteSpacesOnTheLine(pos: number, end: number, sourceFile: SourceFile, maxSpacesToRemove?: number) {
+                if (maxSpacesToRemove !== undefined) {
+                    end = Math.min(end, pos + maxSpacesToRemove);
                 }
-                else if (isLineBreak(char)) {
-                    // This was a blank line.  Just ignore it wrt computing the leading whitespace to
-                    // trim.
-                    break;
+
+                for (; pos < end; pos++) {
+                    var ch = sourceFile.text.charCodeAt(pos);
+                    if (!isWhiteSpace(ch) || isLineBreak(ch)) {
+                        // Either found lineBreak or non whiteSpace
+                        return pos;
+                    }
                 }
-                else if (!isWhiteSpace(char)) {
-                    // Found a real doc comment character.  Keep track of it so we can determine how
-                    // much of the doc comment leading trivia to trim off.
-                    return i;
-                }
+
+                return end;
             }
 
-            return undefined;
+            function consumeLineBreaks(pos: number, end: number, sourceFile: SourceFile) {
+                while (pos < end && isLineBreak(sourceFile.text.charCodeAt(pos))) {
+                    pos++;
+                }
+
+                return pos;
+            }
+
+            function isName(pos: number, end: number, sourceFile: SourceFile, name: string) {
+                return pos + name.length < end &&
+                    sourceFile.text.substr(pos, name.length) === name &&
+                    isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length));
+            }
+
+            function isParamTag(pos: number, end: number, sourceFile: SourceFile) {
+                // If it is @param tag
+                return isName(pos, end, sourceFile, paramTag);
+            }
+
+            function getCleanedJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
+                var spacesToRemoveAfterAsterisk: number;
+                var docComments: SymbolDisplayPart[] = [];
+                var isInParamTag = false;
+
+                while (pos < end) {
+                    var docCommentTextOfLine = "";
+                    // First consume leading white space
+                    pos = consumeWhiteSpacesOnTheLine(pos, end, sourceFile);
+
+                    // If the comment starts with '*' consume the spaces on this line
+                    if (pos < end && sourceFile.text.charCodeAt(pos) === CharacterCodes.asterisk) {
+                        var lineStartPos = pos + 1;
+                        pos = consumeWhiteSpacesOnTheLine(pos + 1, end, sourceFile, spacesToRemoveAfterAsterisk);
+
+                        // Set the spaces to remove after asterisk as margin if not already set
+                        if (spacesToRemoveAfterAsterisk === undefined && pos < end && !isLineBreak(sourceFile.text.charCodeAt(pos))) {
+                            spacesToRemoveAfterAsterisk = pos - lineStartPos;
+                        }
+                    }
+                    else if (spacesToRemoveAfterAsterisk === undefined) {
+                        spacesToRemoveAfterAsterisk = 0;
+                    }
+
+                    // Analyse text on this line
+                    while (pos < end && !isLineBreak(sourceFile.text.charCodeAt(pos))) {
+                        var ch = sourceFile.text.charAt(pos);
+                        if (ch === "@") {
+                            // If it is @param tag
+                            if (isParamTag(pos, end, sourceFile)) {
+                                isInParamTag = true;
+                                pos += paramTag.length;
+                                continue;
+                            }
+                            else {
+                                isInParamTag = false;
+                            }
+                        }
+
+                        // Add the ch to doc text if we arent in param tag
+                        if (!isInParamTag) {
+                            docCommentTextOfLine += ch;
+                        }
+
+                        // Scan next character
+                        pos++;
+                    }
+
+                    // Continue with next line
+                    pos = consumeLineBreaks(pos, end, sourceFile);
+                    if (docCommentTextOfLine) {
+                        docComments.push(textPart(docCommentTextOfLine));
+                    }
+                }
+
+                return docComments;
+            }
+
+            function getCleanedParamJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
+                var paramHelpStringMargin: number;
+                var paramDocComments: SymbolDisplayPart[] = [];
+                while (pos < end) {
+                    if (isParamTag(pos, end, sourceFile)) {
+                        // Consume leading spaces 
+                        pos = consumeWhiteSpaces(pos + paramTag.length);
+                        if (pos >= end) {
+                            break;
+                        }
+
+                        // Ignore type expression
+                        if (sourceFile.text.charCodeAt(pos) === CharacterCodes.openBrace) {
+                            pos++;
+                            for (var curlies = 1; pos < end; pos++) {
+                                var charCode = sourceFile.text.charCodeAt(pos);
+
+                                // { character means we need to find another } to match the found one
+                                if (charCode === CharacterCodes.openBrace) {
+                                    curlies++;
+                                    continue;
+                                }
+
+                                // } char
+                                if (charCode === CharacterCodes.closeBrace) {
+                                    curlies--;
+                                    if (curlies === 0) {
+                                        // We do not have any more } to match the type expression is ignored completely
+                                        pos++;
+                                        break;
+                                    }
+                                    else {
+                                        // there are more { to be matched with }
+                                        continue;
+                                    }
+                                }
+
+                                // Found start of another tag
+                                if (charCode === CharacterCodes.at) {
+                                    break;
+                                }
+                            }
+
+                            // Consume white spaces
+                            pos = consumeWhiteSpaces(pos);
+                            if (pos >= end) {
+                                break;
+                            }
+                        }
+
+                        // Parameter name
+                        if (isName(pos, end, sourceFile, name)) {
+                            // Found the parameter we are looking for consume white spaces
+                            pos = consumeWhiteSpaces(pos + name.length);
+                            if (pos >= end) {
+                                break;
+                            }
+
+                            var paramHelpString = "";
+                            var firstLineParamHelpStringPos = pos;
+                            while (pos < end) {
+                                var ch = sourceFile.text.charCodeAt(pos);
+
+                                // at line break, set this comment line text and go to next line 
+                                if (isLineBreak(ch)) {
+                                    if (paramHelpString) {
+                                        paramDocComments.push(textPart(paramHelpString));
+                                        paramHelpString = "";
+                                    }
+
+                                    // Get the pos after cleaning start of the line
+                                    setPosForParamHelpStringOnNextLine(firstLineParamHelpStringPos);
+                                    continue;
+                                }
+
+                                // Done scanning param help string - next tag found
+                                if (ch === CharacterCodes.at) {
+                                    break;
+                                }
+
+                                paramHelpString += sourceFile.text.charAt(pos);
+
+                                // Go to next character
+                                pos++;
+                            }
+
+                            // If there is param help text, add it top the doc comments
+                            if (paramHelpString) {
+                                paramDocComments.push(textPart(paramHelpString));
+                            }
+                            paramHelpStringMargin = undefined;
+                        }
+
+                        // If this is the start of another tag, continue with the loop in seach of param tag with symbol name
+                        if (sourceFile.text.charCodeAt(pos) === CharacterCodes.at) {
+                            continue;
+                        }
+                    }
+
+                    // Next character
+                    pos++;
+                }
+
+                return paramDocComments;
+
+                function consumeWhiteSpaces(pos: number) {
+                    while (pos < end && isWhiteSpace(sourceFile.text.charCodeAt(pos))) {
+                        pos++;
+                    }
+
+                    return pos;
+                }
+
+                function setPosForParamHelpStringOnNextLine(firstLineParamHelpStringPos: number) {
+                    // Get the pos after consuming line breaks
+                    pos = consumeLineBreaks(pos, end, sourceFile);
+                    if (pos >= end) {
+                        return;
+                    }
+
+                    if (paramHelpStringMargin === undefined) {
+                        paramHelpStringMargin = sourceFile.getLineAndCharacterFromPosition(firstLineParamHelpStringPos).character - 1;
+                    }
+
+                    // Now consume white spaces max 
+                    var startOfLinePos = pos;
+                    pos = consumeWhiteSpacesOnTheLine(pos, end, sourceFile, paramHelpStringMargin);
+                    if (pos >= end) {
+                        return;
+                    }
+
+                    var consumedSpaces = pos - startOfLinePos;
+                    if (consumedSpaces < paramHelpStringMargin) {
+                        var ch = sourceFile.text.charCodeAt(pos);
+                        if (ch === CharacterCodes.asterisk) {
+                            // Consume more spaces after asterisk
+                            pos = consumeWhiteSpacesOnTheLine(pos + 1, end, sourceFile, paramHelpStringMargin - consumedSpaces - 1);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -444,6 +600,11 @@ module ts {
         minArgumentCount: number;
         hasRestParameter: boolean;
         hasStringLiterals: boolean;
+
+        // Undefined is used to indicate the value has not been computed. If, after computing, the
+        // symbol has no doc comment, then the empty string will be returned.
+        documentationComment: SymbolDisplayPart[];
+
         constructor(checker: TypeChecker) {
             this.checker = checker;
         }
@@ -458,6 +619,17 @@ module ts {
         }
         getReturnType(): Type {
             return this.checker.getReturnTypeOfSignature(this);
+        }
+
+        getDocumentationComment(): SymbolDisplayPart[] {
+            if (this.documentationComment === undefined) {
+                this.documentationComment = this.declaration ? getJsDocCommentsFromDeclarations(
+                    [this.declaration],
+                    this.declaration.name ? this.declaration.name.text : "",
+                    /*canUseParsedParamTagComments*/ false) : [];
+            }
+
+            return this.documentationComment;
         }
     }
 
@@ -671,9 +843,6 @@ module ts {
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
 
-        // Obsolete.  Use getQuickInfoAtPosition instead.
-        getTypeAtPosition(fileName: string, position: number): TypeInfo;
-
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TypeScript.TextSpan;
 
         getBreakpointStatementAtPosition(fileName: string, position: number): TypeScript.TextSpan;
@@ -825,11 +994,10 @@ module ts {
         containerKind: string;
         containerName: string;
     }
-
-    export interface MemberName {
-        prefix: string;
-        suffix: string;
+    
+    export interface SymbolDisplayPart {
         text: string;
+        kind: string;
     }
 
     export interface QuickInfo {
@@ -838,14 +1006,6 @@ module ts {
         textSpan: TypeScript.TextSpan;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
-    }
-
-    export interface TypeInfo {
-        memberName: TypeScript.MemberName;
-        docComment: string;
-        fullSymbolName: string;
-        kind: string;
-        textSpan: TypeScript.TextSpan;
     }
 
     export interface RenameInfo {
@@ -907,9 +1067,8 @@ module ts {
         name: string;
         kind: string;            // see ScriptElementKind
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
-        type: string;
-        fullSymbolName: string;
-        docComment: string;
+        displayParts: SymbolDisplayPart[];
+        documentation: SymbolDisplayPart[];
     }
 
     export interface EmitOutput {
@@ -1100,9 +1259,9 @@ module ts {
         filename: string;           // the file where the completion was requested
         position: number;           // position in the file where the completion was requested
         entries: CompletionEntry[]; // entries for this completion
-        symbols: Map<Symbol>; // symbols by entry name map
-        location: Node;          // the node where the completion was requested
-        typeChecker: TypeChecker;// the typeChecker used to generate this completion
+        symbols: Map<Symbol>;       // symbols by entry name map
+        location: Node;             // the node where the completion was requested
+        typeChecker: TypeChecker;   // the typeChecker used to generate this completion
     }
 
     interface FormattingOptions {
@@ -1124,6 +1283,176 @@ module ts {
         sourceFile: SourceFile;
         refCount: number;
         owners: string[];
+    }
+
+    export function displayPartsToString(displayParts: SymbolDisplayPart[]) {
+        if (displayParts) {
+            return map(displayParts, displayPart => displayPart.text).join("");
+        }
+
+        return "";
+    }
+
+    interface DisplayPartsSymbolWriter extends SymbolWriter {
+        displayParts(): SymbolDisplayPart[];
+    }
+
+    var displayPartWriter = getDisplayPartWriter();
+    function getDisplayPartWriter(): DisplayPartsSymbolWriter {
+        var displayParts: SymbolDisplayPart[];
+        var lineStart: boolean;
+        var indent: number;
+
+        resetWriter();
+        return {
+            displayParts: () => displayParts,
+            writeKind: writeKind,
+            writeSymbol: writeSymbol,
+            writeLine: writeLine,
+            increaseIndent: () => { indent++; },
+            decreaseIndent: () => { indent--; },
+            clear: resetWriter,
+            trackSymbol: () => { }
+        };
+
+        function writeIndent() {
+            if (lineStart) {
+                displayParts.push(displayPart(getIndentString(indent), SymbolDisplayPartKind.space));
+                lineStart = false;
+            }
+        }
+
+        function writeKind(text: string, kind: SymbolDisplayPartKind) {
+            writeIndent();
+            displayParts.push(displayPart(text, kind));
+        }
+
+        function writeSymbol(text: string, symbol: Symbol) {
+            writeIndent();
+            displayParts.push(symbolPart(text, symbol));
+        }
+
+        function writeLine() {
+            displayParts.push(lineBreakPart());
+            lineStart = true;
+        }
+
+        function resetWriter() {
+            displayParts = []
+            lineStart = true;
+            indent = 0;
+        }
+    }
+
+    function displayPart(text: string, kind: SymbolDisplayPartKind, symbol?: Symbol): SymbolDisplayPart {
+        return <SymbolDisplayPart> {
+            text: text,
+            kind: SymbolDisplayPartKind[kind]
+        };
+    }
+    
+    export function spacePart() {
+        return displayPart(" ", SymbolDisplayPartKind.space);
+    }
+
+    export function keywordPart(kind: SyntaxKind) {
+        return displayPart(tokenToString(kind), SymbolDisplayPartKind.keyword);
+    }
+
+    export function punctuationPart(kind: SyntaxKind) {
+        return displayPart(tokenToString(kind), SymbolDisplayPartKind.punctuation);
+    }
+
+    export function operatorPart(kind: SyntaxKind) {
+        return displayPart(tokenToString(kind), SymbolDisplayPartKind.operator);
+    }
+
+    export function textPart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.text);
+    }
+
+    export function lineBreakPart() {
+        return displayPart("\n", SymbolDisplayPartKind.lineBreak);
+    }
+
+    function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
+        return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
+    }
+
+    function isLocalVariableOrFunction(symbol: Symbol) {
+        if (symbol.parent) {
+            return false; // This is exported symbol
+        }
+
+        return ts.forEach(symbol.declarations, declaration => {
+            // Function expressions are local
+            if (declaration.kind === SyntaxKind.FunctionExpression) {
+                return true;
+            }
+
+            if (declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.FunctionDeclaration) {
+                return false;
+            }
+
+            // If the parent is not sourceFile or module block it is local variable
+            for (var parent = declaration.parent; parent.kind !== SyntaxKind.FunctionBlock; parent = parent.parent) {
+                // Reached source file or module block
+                if (parent.kind === SyntaxKind.SourceFile || parent.kind === SyntaxKind.ModuleBlock) {
+                    return false;
+                }
+            }
+
+            // parent is in function block
+            return true;
+        });
+    }
+
+    export function symbolPart(text: string, symbol: Symbol) {
+        return displayPart(text, displayPartKind(symbol), symbol);
+
+        function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
+            var flags = symbol.flags;
+
+            if (flags & SymbolFlags.Variable) {
+                return isFirstDeclarationOfSymbolParameter(symbol) ? SymbolDisplayPartKind.parameterName : SymbolDisplayPartKind.localName;
+            }
+            else if (flags & SymbolFlags.Property) { return SymbolDisplayPartKind.propertyName; }
+            else if (flags & SymbolFlags.EnumMember) { return SymbolDisplayPartKind.enumMemberName; }
+            else if (flags & SymbolFlags.Function) { return SymbolDisplayPartKind.functionName; }
+            else if (flags & SymbolFlags.Class) { return SymbolDisplayPartKind.className; }
+            else if (flags & SymbolFlags.Interface) { return SymbolDisplayPartKind.interfaceName; }
+            else if (flags & SymbolFlags.Enum) { return SymbolDisplayPartKind.enumName; }
+            else if (flags & SymbolFlags.Module) { return SymbolDisplayPartKind.moduleName; }
+            else if (flags & SymbolFlags.Method) { return SymbolDisplayPartKind.methodName; }
+            else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
+
+            return SymbolDisplayPartKind.text;
+        }
+    }
+
+    function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
+        writeDisplayParts(displayPartWriter);
+        var result = displayPartWriter.displayParts();
+        displayPartWriter.clear();
+        return result;
+    }
+
+    export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
+        return mapToDisplayParts(writer => {
+            typechecker.writeType(type, writer, enclosingDeclaration, flags);
+        });
+    }
+
+    export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
+        return mapToDisplayParts(writer => {
+            typeChecker.writeSymbol(symbol, writer, enclosingDeclaration, meaning, flags);
+        });
+    }
+
+    function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[]{
+        return mapToDisplayParts(writer => {
+            typechecker.writeSignature(signature, writer, enclosingDeclaration, flags);
+        });
     }
 
     export function getDefaultCompilerOptions(): CompilerOptions {
@@ -1639,11 +1968,12 @@ module ts {
             (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node));
     }
 
-    enum SearchMeaning {
+    enum SemanticMeaning {
         None = 0x0,
         Value = 0x1,
         Type = 0x2,
-        Namespace = 0x4
+        Namespace = 0x4,
+        All = Value | Type | Namespace
     }
 
     enum BreakContinueSearchType {
@@ -1661,11 +1991,6 @@ module ts {
             kind: ScriptElementKind.keyword,
             kindModifiers: ScriptElementKindModifier.none
         });
-    }
-
-    export function getSymbolDocumentationDisplayParts(symbol: Symbol): SymbolDisplayPart[] {
-        var documentation = symbol.getDocumentationComment();
-        return documentation === "" ? [] : [new SymbolDisplayPart(documentation, SymbolDisplayPartKind.text, /*symbol:*/ null)];
     }
 
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService {
@@ -1943,7 +2268,7 @@ module ts {
 
         function getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
-                forEach(symbols, (symbol) => {
+                forEach(symbols, symbol => {
                     var entry = createCompletionEntry(symbol);
                     if (entry && !lookUp(session.symbols, entry.name)) {
                         session.entries.push(entry);
@@ -2162,9 +2487,16 @@ module ts {
             }
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
-            var mappedNode = getTouchingToken(sourceFile, TypeScript.end(node) - 1);
-            if (isPunctuation(mappedNode.kind)) {
-                mappedNode = mappedNode.parent;
+            var precedingToken = findTokenOnLeftOfPosition(sourceFile, TypeScript.end(node));
+            var mappedNode: Node;
+            if (!precedingToken) {
+                mappedNode = sourceFile;
+            }
+            else if (isPunctuation(precedingToken.kind)) {
+                mappedNode = precedingToken.parent;
+            }
+            else {
+                mappedNode = precedingToken;
             }
 
             Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
@@ -2260,7 +2592,7 @@ module ts {
             };
         }
 
-        function getCompletionEntryDetails(filename: string, position: number, entryName: string) {
+        function getCompletionEntryDetails(filename: string, position: number, entryName: string): CompletionEntryDetails {
             // Note: No need to call synchronizeHostData, as we have captured all the data we need
             //       in the getCompletionsAtPosition earlier
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -2277,13 +2609,17 @@ module ts {
                 var type = session.typeChecker.getTypeOfSymbol(symbol);
                 Debug.assert(type, "Could not find type for symbol");
                 var completionEntry = createCompletionEntry(symbol);
+                // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
+                //               which is permissible given that it is backwards compatible; but really we should consider
+                //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
+                //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
+                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location);
                 return {
                     name: entryName,
-                    kind: completionEntry.kind,
+                    kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
                     kindModifiers: completionEntry.kindModifiers,
-                    type: session.typeChecker.typeToString(type, session.location),
-                    fullSymbolName: typeInfoResolver.symbolToString(symbol, session.location),
-                    docComment: ""
+                    displayParts: displayPartsDocumentationsAndSymbolKind.displayParts,
+                    documentation: displayPartsDocumentationsAndSymbolKind.documentation
                 };
             }
             else {
@@ -2292,9 +2628,8 @@ module ts {
                     name: entryName,
                     kind: ScriptElementKind.keyword,
                     kindModifiers: ScriptElementKindModifier.none,
-                    type: undefined,
-                    fullSymbolName: entryName,
-                    docComment: undefined
+                    displayParts: [displayPart(entryName, SymbolDisplayPartKind.keyword)],
+                    documentation: undefined
                 };
             }
         }
@@ -2321,30 +2656,45 @@ module ts {
             }
         }
 
+        // TODO(drosen): use contextual SemanticMeaning.
         function getSymbolKind(symbol: Symbol): string {
             var flags = typeInfoResolver.getRootSymbols(symbol)[0].getFlags();
 
-            if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
-            if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
-            if (flags & SymbolFlags.Variable) return ScriptElementKind.variableElement;
-            if (flags & SymbolFlags.Function) return ScriptElementKind.functionElement;
+            if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
+            if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+            
+            var result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags);
+            if (result === ScriptElementKind.unknown) {
+                if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+                if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
+                if (flags & SymbolFlags.Import) return ScriptElementKind.alias;
+            }
+
+            return result;
+        }
+
+        function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol: Symbol, flags: SymbolFlags) {
+            if (flags & SymbolFlags.Variable) {
+                if (isFirstDeclarationOfSymbolParameter(symbol)) {
+                    return ScriptElementKind.parameterElement;
+                }
+                return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
+            }
+            if (flags & SymbolFlags.Undefined) {
+                return ScriptElementKind.variableElement;
+            }
+            if (flags & SymbolFlags.Function) return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
             if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
             if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
             if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
             if (flags & SymbolFlags.Property) return ScriptElementKind.memberVariableElement;
-            if (flags & SymbolFlags.IndexSignature) return ScriptElementKind.indexSignatureElement;
-            if (flags & SymbolFlags.ConstructSignature) return ScriptElementKind.constructSignatureElement;
-            if (flags & SymbolFlags.CallSignature) return ScriptElementKind.callSignatureElement;
             if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
-            if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-            if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
-            if (flags & SymbolFlags.Import) return ScriptElementKind.alias;
 
             return ScriptElementKind.unknown;
         }
-
+        
         function getTypeKind(type: Type): string {
             var flags = type.getFlags();
 
@@ -2387,9 +2737,275 @@ module ts {
                 : ScriptElementKindModifier.none;
         }
 
+        // TODO(drosen): use contextual SemanticMeaning.
+        function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol,
+                                                                sourceFile: SourceFile,
+                                                                enclosingDeclaration: Node,
+                                                                typeResolver: TypeChecker,
+                                                                location: Node) {
+            var displayParts: SymbolDisplayPart[] = [];
+            var documentation: SymbolDisplayPart[];
+            var symbolFlags = typeResolver.getRootSymbol(symbol).flags;
+            var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags);
+            var hasAddedSymbolInfo: boolean;
+            // Class at constructor site need to be shown as constructor apart from property,method, vars
+            if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Signature || symbolFlags & SymbolFlags.Class) {
+                // If it is accessor they are allowed only if location is at name of the accessor
+                if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
+                    symbolKind = ScriptElementKind.memberVariableElement;
+                }
+                else if (symbol.name === "undefined") {
+                    // undefined is symbol and not property
+                    symbolKind = ScriptElementKind.variableElement;
+                }
+
+                var type = typeResolver.getTypeOfSymbol(symbol);
+                if (type) {
+                    if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
+                        // try get the call/construct signature from the type if it matches
+                        var callExpression: CallExpression;
+                        if (location.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>location.parent).right === location) {
+                            location = location.parent;
+                        }
+                        callExpression = <CallExpression>location.parent;
+
+                        var candidateSignatures: Signature[] = [];
+                        signature = typeResolver.getResolvedSignature(callExpression, candidateSignatures);
+                        if (!signature && candidateSignatures.length) {
+                            // Use the first candidate:
+                            signature = candidateSignatures[0];
+                        }
+
+                        var useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.func.kind === SyntaxKind.SuperKeyword;
+                        var allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
+
+                        if (!contains(allSignatures, signature.target || signature)) {
+                            // Get the first signature if there 
+                            signature = allSignatures.length ? allSignatures[0] : undefined;
+                        }
+
+                        if (signature) {
+                            if (useConstructSignatures && (symbolFlags & SymbolFlags.Class)) {
+                                // Constructor
+                                symbolKind = ScriptElementKind.constructorImplementationElement;
+                                addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
+                            }
+                            else {
+                                addPrefixForAnyFunctionOrVar(symbol, symbolKind);
+                            }
+
+                            switch (symbolKind) {
+                                case ScriptElementKind.memberVariableElement:
+                                case ScriptElementKind.variableElement:
+                                case ScriptElementKind.parameterElement:
+                                case ScriptElementKind.localVariableElement:
+                                    // If it is call or construct signature of lambda's write type name
+                                    displayParts.push(punctuationPart(SyntaxKind.ColonToken));
+                                    displayParts.push(spacePart());
+                                    if (useConstructSignatures) {
+                                        displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                                        displayParts.push(spacePart());
+                                    }
+                                    if (!(type.flags & TypeFlags.Anonymous)) {
+                                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                                    }
+                                    addSignatureDisplayParts(signature, allSignatures, TypeFormatFlags.WriteArrowStyleSignature);
+                                    break;
+
+                                default:
+                                    // Just signature
+                                    addSignatureDisplayParts(signature, allSignatures);
+                            }
+                            hasAddedSymbolInfo = true;
+                        }
+                    }
+                    else if ((isNameOfFunctionDeclaration(location) && !(symbol.flags & SymbolFlags.Accessor)) || // name of function declaration
+                        (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)) { // At constructor keyword of constructor declaration
+                        // get the signature from the declaration and write it
+                        var signature: Signature;
+                        var functionDeclaration = <FunctionDeclaration>location.parent;
+                        var allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getConstructSignatures() : type.getCallSignatures();
+                        if (!typeResolver.isImplementationOfOverload(functionDeclaration)) {
+                            signature = typeResolver.getSignatureFromDeclaration(functionDeclaration);
+                        }
+                        else {
+                            signature = allSignatures[0];
+                        }
+
+                        if (functionDeclaration.kind === SyntaxKind.Constructor) {
+                            // show (constructor) Type(...) signature
+                            addPrefixForAnyFunctionOrVar(type.symbol, ScriptElementKind.constructorImplementationElement);
+                        }
+                        else {
+                            // (function/method) symbol(..signature)
+                            addPrefixForAnyFunctionOrVar(functionDeclaration.kind === SyntaxKind.CallSignature &&
+                                !(type.symbol.flags & SymbolFlags.TypeLiteral || type.symbol.flags & SymbolFlags.ObjectLiteral) ? type.symbol : symbol, symbolKind);
+                        }
+
+                        addSignatureDisplayParts(signature, allSignatures);
+                        hasAddedSymbolInfo = true;
+                    }
+                }
+            }
+
+            if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
+                displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                displayParts.push(spacePart());
+                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                writeTypeParametersOfSymbol(symbol, sourceFile);
+            }
+            if (symbolFlags & SymbolFlags.Interface) {
+                addNewLineIfDisplayPartsExist();
+                displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
+                displayParts.push(spacePart());
+                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                writeTypeParametersOfSymbol(symbol, sourceFile);
+            }
+            if (symbolFlags & SymbolFlags.Enum) {
+                addNewLineIfDisplayPartsExist();
+                displayParts.push(keywordPart(SyntaxKind.EnumKeyword));
+                displayParts.push(spacePart());
+                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
+            }
+            if (symbolFlags & SymbolFlags.Module) {
+                addNewLineIfDisplayPartsExist();
+                displayParts.push(keywordPart(SyntaxKind.ModuleKeyword));
+                displayParts.push(spacePart());
+                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
+            }
+            if (symbolFlags & SymbolFlags.TypeParameter) {
+                addNewLineIfDisplayPartsExist();
+                displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                displayParts.push(textPart("type parameter"));
+                displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                displayParts.push(spacePart());
+                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, enclosingDeclaration));
+                displayParts.push(spacePart());
+                displayParts.push(keywordPart(SyntaxKind.InKeyword));
+                displayParts.push(spacePart());
+                if (symbol.parent) {
+                    // Class/Interface type parameter
+                    displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol.parent, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments))
+                    writeTypeParametersOfSymbol(symbol.parent, enclosingDeclaration);
+                }
+                else {
+                    // Method/function type parameter
+                    var signatureDeclaration = <SignatureDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
+                    var signature = typeResolver.getSignatureFromDeclaration(signatureDeclaration);
+                    if (signatureDeclaration.kind === SyntaxKind.ConstructSignature) {
+                        displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                        displayParts.push(spacePart());
+                    }
+                    else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
+                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, signatureDeclaration.symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments))
+                    }
+                    displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                }
+            }
+            if (symbolFlags & SymbolFlags.EnumMember) {
+                addPrefixForAnyFunctionOrVar(symbol, "enum member");
+                var declaration = symbol.declarations[0];
+                if (declaration.kind === SyntaxKind.EnumMember) {
+                    var constantValue = typeResolver.getEnumMemberValue(<EnumMember>declaration);
+                    if (constantValue !== undefined) {
+                        displayParts.push(spacePart());
+                        displayParts.push(operatorPart(SyntaxKind.EqualsToken));
+                        displayParts.push(spacePart());
+                        displayParts.push(displayPart(constantValue.toString(), SymbolDisplayPartKind.numericLiteral));
+                    }
+                }
+            }
+            if (symbolFlags & SymbolFlags.Import) {
+                addNewLineIfDisplayPartsExist();
+                displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                displayParts.push(textPart("alias"));
+                displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                displayParts.push(spacePart());
+                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
+            }
+            if (!hasAddedSymbolInfo) {
+                if (symbolKind !== ScriptElementKind.unknown) {
+                    if (type) {
+                        addPrefixForAnyFunctionOrVar(symbol, symbolKind);
+                        if (symbolKind === ScriptElementKind.memberVariableElement ||
+                            symbolFlags & SymbolFlags.Variable) {
+                            displayParts.push(punctuationPart(SyntaxKind.ColonToken));
+                            displayParts.push(spacePart());
+                            // If the type is type parameter, format it specially
+                            if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
+                                var typeParameterParts = mapToDisplayParts(writer => {
+                                    typeResolver.writeTypeParameter(<TypeParameter>type, writer, enclosingDeclaration);
+                                });
+                                displayParts.push.apply(displayParts, typeParameterParts);
+                            }
+                            else {
+                                displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, type, enclosingDeclaration));
+                            }
+                        }
+                        else if (symbolFlags & SymbolFlags.Function ||
+                            symbolFlags & SymbolFlags.Method ||
+                            symbolFlags & SymbolFlags.Constructor ||
+                            symbolFlags & SymbolFlags.Signature ||
+                            symbolFlags & SymbolFlags.Accessor) {
+                            var allSignatures = type.getCallSignatures();
+                            addSignatureDisplayParts(allSignatures[0], allSignatures);
+                        }
+                    }
+                }
+                else {
+                    symbolKind = getSymbolKind(symbol);
+                }
+            }
+
+            if (!documentation) {
+                documentation = symbol.getDocumentationComment();
+            }
+
+            return { displayParts: displayParts, documentation: documentation, symbolKind: symbolKind };
+
+            function addNewLineIfDisplayPartsExist() {
+                if (displayParts.length) {
+                    displayParts.push(lineBreakPart());
+                }
+            }
+
+            function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
+                addNewLineIfDisplayPartsExist();
+                if (symbolKind) {
+                    displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                    displayParts.push(textPart(symbolKind));
+                    displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                    displayParts.push(spacePart());
+                    // Write type parameters of class/Interface if it is property/method of the generic class/interface
+                    displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                }
+            }
+
+            function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[], flags?: TypeFormatFlags) {
+                displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                if (allSignatures.length > 1) {
+                    displayParts.push(spacePart());
+                    displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                    displayParts.push(operatorPart(SyntaxKind.PlusToken));
+                    displayParts.push(displayPart((allSignatures.length - 1).toString(), SymbolDisplayPartKind.numericLiteral));
+                    displayParts.push(spacePart());
+                    displayParts.push(textPart(allSignatures.length === 2 ? "overload" : "overloads"));
+                    displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                }
+                documentation = signature.getDocumentationComment();
+            }
+
+            function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
+                var typeParameterParts = mapToDisplayParts(writer => {
+                    typeResolver.writeTypeParametersOfSymbol(symbol, writer, enclosingDeclaration);
+                });
+                displayParts.push.apply(displayParts, typeParameterParts);
+            }
+        }
+
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             synchronizeHostData();
-             
+
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
             var node = getTouchingPropertyName(sourceFile, position);
@@ -2399,128 +3015,38 @@ module ts {
 
             var symbol = typeInfoResolver.getSymbolInfo(node);
             if (!symbol) {
+                
+                // Try getting just type at this position and show
+                switch (node.kind) {
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.PropertyAccess:
+                    case SyntaxKind.QualifiedName:
+                    case SyntaxKind.ThisKeyword:
+                    case SyntaxKind.SuperKeyword:
+                        // For the identifiers/this/usper etc get the type at position
+                        var type = typeInfoResolver.getTypeOfNode(node);
+                        if (type) {
+                            return {
+                                kind: ScriptElementKind.unknown,
+                                kindModifiers: ScriptElementKindModifier.none,
+                                textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
+                                displayParts: typeToDisplayParts(typeInfoResolver, type, getContainerNode(node)),
+                                documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined
+                            };
+                        }
+                }
+
                 return undefined;
             }
 
-            var documentationParts = getSymbolDocumentationDisplayParts(symbol);
-
-            // TODO: handle union properties appropriately when merging with master
-            var symbolFlags = typeInfoResolver.getRootSymbols(symbol)[0].flags;
-
-            // Having all this logic here is pretty unclean.  Consider moving to the roslyn model
-            // where all symbol display logic is encapsulated into visitors and options.
-            var totalParts: SymbolDisplayPart[] = [];
-
-            if (symbolFlags & SymbolFlags.Class) {
-                totalParts.push(keywordPart(SyntaxKind.ClassKeyword));
-                totalParts.push(spacePart());
-                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
-            }
-            else if (symbolFlags & SymbolFlags.Interface) {
-                totalParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
-                totalParts.push(spacePart());
-                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
-            }
-            else if (symbolFlags & SymbolFlags.Enum) {
-                totalParts.push(keywordPart(SyntaxKind.EnumKeyword));
-                totalParts.push(spacePart());
-                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
-            }
-            else if (symbolFlags & SymbolFlags.Module) {
-                totalParts.push(keywordPart(SyntaxKind.ModuleKeyword));
-                totalParts.push(spacePart());
-                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, sourceFile));
-            }
-            else if (symbolFlags & SymbolFlags.TypeParameter) {
-                totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                totalParts.push(new SymbolDisplayPart("type parameter", SymbolDisplayPartKind.text, undefined));
-                totalParts.push(punctuationPart(SyntaxKind.CloseParenToken));
-                totalParts.push(spacePart());
-                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol));
-            }
-            else {
-                totalParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                var text: string;
-
-                if (symbolFlags & SymbolFlags.Property) { text = "property" }
-                else if (symbolFlags & SymbolFlags.EnumMember) { text = "enum member" }
-                else if (symbolFlags & SymbolFlags.Function) { text = "function" }
-                else if (symbolFlags & SymbolFlags.Variable) { text = "variable" }
-                else if (symbolFlags & SymbolFlags.Method) { text = "method" }
-
-                if (!text) {
-                    return undefined;
-                }
-
-                totalParts.push(new SymbolDisplayPart(text, SymbolDisplayPartKind.text, undefined));
-                totalParts.push(punctuationPart(SyntaxKind.CloseParenToken));
-                totalParts.push(spacePart());
-
-                totalParts.push.apply(totalParts, typeInfoResolver.symbolToDisplayParts(symbol, getContainerNode(node)));
-
-                var type = typeInfoResolver.getTypeOfSymbol(symbol);
-
-                if (symbolFlags & SymbolFlags.Property ||
-                    symbolFlags & SymbolFlags.Variable) {
-
-                    if (type) {
-                        totalParts.push(punctuationPart(SyntaxKind.ColonToken));
-                        totalParts.push(spacePart());
-                        totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type, getContainerNode(node)));
-                    }
-                }
-                else if (symbolFlags & SymbolFlags.Function ||
-                    symbolFlags & SymbolFlags.Method) {
-                    if (type) {
-                        totalParts.push.apply(totalParts, typeInfoResolver.typeToDisplayParts(type, getContainerNode(node)));
-                    }
-                }
-                else if (symbolFlags & SymbolFlags.EnumMember) {
-                    var declaration = symbol.declarations[0];
-                    if (declaration.kind === SyntaxKind.EnumMember) {
-                        var constantValue = typeInfoResolver.getEnumMemberValue(<EnumMember>declaration);
-                        if (constantValue !== undefined) {
-                            totalParts.push(spacePart());
-                            totalParts.push(operatorPart(SyntaxKind.EqualsToken));
-                            totalParts.push(spacePart());
-                            totalParts.push(new SymbolDisplayPart(constantValue.toString(), SymbolDisplayPartKind.numericLiteral, undefined));
-                        }
-                    }
-                }
-            }
-
+            var displayPartsDocumentationsAndKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, sourceFile, getContainerNode(node), typeInfoResolver, node);
             return {
-                kind: getSymbolKind(symbol),
+                kind: displayPartsDocumentationsAndKind.symbolKind,
                 kindModifiers: getSymbolModifiers(symbol),
                 textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
-                displayParts: totalParts,
-                documentation: documentationParts
+                displayParts: displayPartsDocumentationsAndKind.displayParts,
+                documentation: displayPartsDocumentationsAndKind.documentation
             };
-        }
-
-        function getTypeAtPosition(fileName: string, position: number): TypeInfo {
-            synchronizeHostData();
-
-            fileName = TypeScript.switchToForwardSlashes(fileName);
-            var sourceFile = getSourceFile(fileName);
-            var node = getTouchingWord(sourceFile, position);
-            if (!node) {
-                return undefined;
-            }
-
-            var symbol = typeInfoResolver.getSymbolInfo(node);
-            var type = symbol && typeInfoResolver.getTypeOfSymbol(symbol);
-            if (type) {
-                return {
-                    memberName: new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
-                    docComment: "",
-                    fullSymbolName: typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
-                    kind: getSymbolKind(symbol),
-                    textSpan: TypeScript.TextSpan.fromBounds(node.pos, node.end)
-                };
-            }
-
-            return undefined;
         }
 
         /// Goto definition
@@ -2645,7 +3171,19 @@ module ts {
 
             var result: DefinitionInfo[] = [];
 
-            getDefinitionFromSymbol(symbol, node, result);
+            var declarations = symbol.getDeclarations();
+            var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
+            var symbolKind = getSymbolKind(symbol);
+            var containerSymbol = symbol.parent;
+            var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
+
+            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
+                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
+                // Just add all the declarations. 
+                forEach(declarations, declaration => {
+                    result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                });
+            }
 
             return result;
         }
@@ -3346,7 +3884,7 @@ module ts {
                                          searchSymbol: Symbol,
                                          searchText: string,
                                          searchLocation: Node,
-                                         searchMeaning: SearchMeaning,
+                                         searchMeaning: SemanticMeaning,
                                          findInStrings: boolean,
                                          findInComments: boolean,
                                          result: ReferenceEntry[]): void {
@@ -3669,114 +4207,6 @@ module ts {
                 return undefined;
             }
 
-            function getMeaningFromDeclaration(node: Declaration): SearchMeaning {
-                switch (node.kind) {
-                    case SyntaxKind.Parameter:
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.Property:
-                    case SyntaxKind.PropertyAssignment:
-                    case SyntaxKind.EnumMember:
-                    case SyntaxKind.Method:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.CatchBlock:
-                        return SearchMeaning.Value;
-
-                    case SyntaxKind.TypeParameter:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.TypeLiteral:
-                        return SearchMeaning.Type;
-
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.EnumDeclaration:
-                        return SearchMeaning.Value | SearchMeaning.Type;
-
-                    case SyntaxKind.ModuleDeclaration:
-                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
-                            return SearchMeaning.Namespace | SearchMeaning.Value;
-                        }
-                        else if (isInstantiated(node)) {
-                            return SearchMeaning.Namespace | SearchMeaning.Value;
-                        }
-                        else {
-                            return SearchMeaning.Namespace;
-                        }
-                        break;
-
-                    case SyntaxKind.ImportDeclaration:
-                        return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
-                }
-                Debug.fail("Unknown declaration type");
-            }
-
-            function isTypeReference(node: Node): boolean {
-                if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node)
-                    node = node.parent;
-
-                return node.parent.kind === SyntaxKind.TypeReference;
-            }
-
-            function isNamespaceReference(node: Node): boolean {
-                var root = node;
-                var isLastClause = true;
-                if (root.parent.kind === SyntaxKind.QualifiedName) {
-                    while (root.parent && root.parent.kind === SyntaxKind.QualifiedName)
-                        root = root.parent;
-
-                    isLastClause = (<QualifiedName>root).right === node;
-                }
-
-                return root.parent.kind === SyntaxKind.TypeReference && !isLastClause;
-            }
-
-            function isInRightSideOfImport(node: EntityName) {
-                while (node.parent.kind === SyntaxKind.QualifiedName) {
-                    node = node.parent;
-                }
-
-                return node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).entityName === node;
-            }
-
-            function getMeaningFromRightHandSideOfImport(node: Node) {
-                Debug.assert(node.kind === SyntaxKind.Identifier);
-
-                //     import a = |b|; // Namespace
-                //     import a = |b.c|; // Value, type, namespace
-                //     import a = |b.c|.d; // Namespace
-
-                if (node.parent.kind === SyntaxKind.QualifiedName &&
-                    (<QualifiedName>node.parent).right === node &&
-                    node.parent.parent.kind === SyntaxKind.ImportDeclaration) {
-                    return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
-                }
-                return SearchMeaning.Namespace;
-            }
-
-            function getMeaningFromLocation(node: Node): SearchMeaning {
-                if (node.parent.kind === SyntaxKind.ExportAssignment) {
-                    return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
-                }
-                else if (isInRightSideOfImport(node)) {
-                    return getMeaningFromRightHandSideOfImport(node);
-                }
-                else if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
-                    return getMeaningFromDeclaration(node.parent);
-                }
-                else if (isTypeReference(node)) {
-                    return SearchMeaning.Type;
-                }
-                else if (isNamespaceReference(node)) {
-                    return SearchMeaning.Namespace;
-                }
-                else {
-                    return SearchMeaning.Value;
-                }
-            }
-
             /** Given an initial searchMeaning, extracted from a location, widen the search scope based on the declarations
               * of the corresponding symbol. e.g. if we are searching for "Foo" in value position, but "Foo" references a class
               * then we need to widen the search to include type positions as well.
@@ -3784,7 +4214,7 @@ module ts {
               * module, we want to keep the search limited to only types, as the two declarations (interface and uninstantiated module)
               * do not intersect in any of the three spaces.
               */
-            function getIntersectingMeaningFromDeclarations(meaning: SearchMeaning, declarations: Declaration[]): SearchMeaning {
+            function getIntersectingMeaningFromDeclarations(meaning: SemanticMeaning, declarations: Declaration[]): SemanticMeaning {
                 if (declarations) {
                     do {
                         // The result is order-sensitive, for instance if initialMeaning === Namespace, and declarations = [class, instantiated module]
@@ -3994,6 +4424,114 @@ module ts {
             return emitOutput;
         }
 
+        function getMeaningFromDeclaration(node: Declaration): SemanticMeaning {
+            switch (node.kind) {
+                case SyntaxKind.Parameter:
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.Property:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.Method:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.CatchBlock:
+                    return SemanticMeaning.Value;
+
+                case SyntaxKind.TypeParameter:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeLiteral:
+                    return SemanticMeaning.Type;
+
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                    return SemanticMeaning.Value | SemanticMeaning.Type;
+
+                case SyntaxKind.ModuleDeclaration:
+                    if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
+                        return SemanticMeaning.Namespace | SemanticMeaning.Value;
+                    }
+                    else if (isInstantiated(node)) {
+                        return SemanticMeaning.Namespace | SemanticMeaning.Value;
+                    }
+                    else {
+                        return SemanticMeaning.Namespace;
+                    }
+                    break;
+
+                case SyntaxKind.ImportDeclaration:
+                    return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+            }
+            Debug.fail("Unknown declaration type");
+        }
+
+        function isTypeReference(node: Node): boolean {
+            if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node)
+                node = node.parent;
+
+            return node.parent.kind === SyntaxKind.TypeReference;
+        }
+
+        function isNamespaceReference(node: Node): boolean {
+            var root = node;
+            var isLastClause = true;
+            if (root.parent.kind === SyntaxKind.QualifiedName) {
+                while (root.parent && root.parent.kind === SyntaxKind.QualifiedName)
+                    root = root.parent;
+
+                isLastClause = (<QualifiedName>root).right === node;
+            }
+
+            return root.parent.kind === SyntaxKind.TypeReference && !isLastClause;
+        }
+
+        function isInRightSideOfImport(node: EntityName) {
+            while (node.parent.kind === SyntaxKind.QualifiedName) {
+                node = node.parent;
+            }
+
+            return node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).entityName === node;
+        }
+
+        function getMeaningFromRightHandSideOfImport(node: Node) {
+            Debug.assert(node.kind === SyntaxKind.Identifier);
+
+            //     import a = |b|; // Namespace
+            //     import a = |b.c|; // Value, type, namespace
+            //     import a = |b.c|.d; // Namespace
+
+            if (node.parent.kind === SyntaxKind.QualifiedName &&
+                (<QualifiedName>node.parent).right === node &&
+                node.parent.parent.kind === SyntaxKind.ImportDeclaration) {
+                return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+            }
+            return SemanticMeaning.Namespace;
+        }
+
+        function getMeaningFromLocation(node: Node): SemanticMeaning {
+            if (node.parent.kind === SyntaxKind.ExportAssignment) {
+                return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+            }
+            else if (isInRightSideOfImport(node)) {
+                return getMeaningFromRightHandSideOfImport(node);
+            }
+            else if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+                return getMeaningFromDeclaration(node.parent);
+            }
+            else if (isTypeReference(node)) {
+                return SemanticMeaning.Type;
+            }
+            else if (isNamespaceReference(node)) {
+                return SemanticMeaning.Namespace;
+            }
+            else {
+                return SemanticMeaning.Value;
+            }
+        }
+
         // Signature help
         /**
          * This is a semantic operation.
@@ -4018,7 +4556,7 @@ module ts {
 
             var formalSignatures: FormalSignatureItemInfo[] = [];
             forEach(signatureHelpItems.items, signature => {
-                var signatureInfoString = ts.SymbolDisplayPart.toString(signature.prefixDisplayParts);
+                var signatureInfoString = displayPartsToString(signature.prefixDisplayParts);
 
                 var parameters: FormalParameterInfo[] = [];
                 if (signature.parameters) {
@@ -4027,29 +4565,29 @@ module ts {
 
                         // add the parameter to the string
                         if (i) {
-                            signatureInfoString += ts.SymbolDisplayPart.toString(signature.separatorDisplayParts);
+                            signatureInfoString += displayPartsToString(signature.separatorDisplayParts);
                         }
 
                         var start = signatureInfoString.length;
-                        signatureInfoString += ts.SymbolDisplayPart.toString(parameter.displayParts);
+                        signatureInfoString += displayPartsToString(parameter.displayParts);
                         var end = signatureInfoString.length - 1;
 
                         // add the parameter to the list
                         parameters.push({
                             name: parameter.name,
-                            isVariable: i == n - 1 && signature.isVariadic,
-                            docComment: ts.SymbolDisplayPart.toString(parameter.documentation),
+                            isVariable: i === n - 1 && signature.isVariadic,
+                            docComment: displayPartsToString(parameter.documentation),
                             minChar: start,
                             limChar: end
                         });
                     }
                 }
 
-                signatureInfoString += ts.SymbolDisplayPart.toString(signature.suffixDisplayParts);
+                signatureInfoString += displayPartsToString(signature.suffixDisplayParts);
 
                 formalSignatures.push({
                     signatureInfo: signatureInfoString,
-                    docComment: ts.SymbolDisplayPart.toString(signature.documentation),
+                    docComment: displayPartsToString(signature.documentation),
                     parameters: parameters,
                     typeParameters: [],
                 });
@@ -4162,19 +4700,17 @@ module ts {
 
             return result;
 
-            function classifySymbol(symbol: Symbol, isInTypePosition: boolean) {
+            function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning) {
                 var flags = symbol.getFlags();
 
+                // TODO(drosen): use meaningAtPosition.
                 if (flags & SymbolFlags.Class) {
                     return ClassificationTypeNames.className;
                 }
                 else if (flags & SymbolFlags.Enum) {
                     return ClassificationTypeNames.enumName;
                 }
-                else if (flags & SymbolFlags.Module) {
-                    return ClassificationTypeNames.moduleName;
-                }
-                else if (isInTypePosition) {
+                else if (meaningAtPosition & SemanticMeaning.Type) {
                     if (flags & SymbolFlags.Interface) {
                         return ClassificationTypeNames.interfaceName;
                     }
@@ -4182,6 +4718,11 @@ module ts {
                         return ClassificationTypeNames.typeParameterName;
                     }
                 }
+                else if (flags & SymbolFlags.Module) {
+                    return ClassificationTypeNames.moduleName;
+                }
+
+                return undefined;
             }
 
             function processNode(node: Node) {
@@ -4190,7 +4731,7 @@ module ts {
                     if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
                         var symbol = typeInfoResolver.getSymbolInfo(node);
                         if (symbol) {
-                            var type = classifySymbol(symbol, isTypeNode(node) || isTypeDeclarationName(node));
+                            var type = classifySymbol(symbol, getMeaningFromLocation(node));
                             if (type) {
                                 result.push({
                                     textSpan: new TypeScript.TextSpan(node.getStart(), node.getWidth()),
@@ -4697,7 +5238,6 @@ module ts {
             getSemanticClassifications: getSemanticClassifications,
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
-            getTypeAtPosition: getTypeAtPosition,
             getSignatureHelpItems: getSignatureHelpItems,
             getQuickInfoAtPosition: getQuickInfoAtPosition,
             getDefinitionAtPosition: getDefinitionAtPosition,
