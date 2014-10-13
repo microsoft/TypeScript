@@ -40,7 +40,7 @@ function bar(animals: { [n: number]: IAnimal }) { }
 foo([
 >foo([    new Giraffe(),    new Elephant()]) : void
 >foo : (animals: IAnimal[]) => void
->[    new Giraffe(),    new Elephant()] : IAnimal[]
+>[    new Giraffe(),    new Elephant()] : Array<Giraffe | Elephant>
 
     new Giraffe(),
 >new Giraffe() : Giraffe
@@ -54,7 +54,7 @@ foo([
 bar([
 >bar([    new Giraffe(),    new Elephant()]) : void
 >bar : (animals: { [x: number]: IAnimal; }) => void
->[    new Giraffe(),    new Elephant()] : IAnimal[]
+>[    new Giraffe(),    new Elephant()] : Array<Giraffe | Elephant>
 
     new Giraffe(),
 >new Giraffe() : Giraffe

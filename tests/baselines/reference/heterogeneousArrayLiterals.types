@@ -212,24 +212,24 @@ module WithContextualType {
     var a: Base[] = [derived, derived2];
 >a : Base[]
 >Base : Base
->[derived, derived2] : Base[]
+>[derived, derived2] : Array<Derived | Derived2>
 >derived : Derived
 >derived2 : Derived2
 
     var b: Derived[] = [null];
 >b : Derived[]
 >Derived : Derived
->[null] : Derived[]
+>[null] : null[]
 
     var c: Derived[] = [];
 >c : Derived[]
 >Derived : Derived
->[] : Derived[]
+>[] : undefined[]
 
     var d: { (): Base }[] = [() => derived, () => derived2];
 >d : { (): Base; }[]
 >Base : Base
->[() => derived, () => derived2] : { (): Base; }[]
+>[() => derived, () => derived2] : Array<{ (): Derived; } | { (): Derived2; }>
 >() => derived : () => Derived
 >derived : Derived
 >() => derived2 : () => Derived2
@@ -512,7 +512,7 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
     var k: Base[] = [t, u];
 >k : Base[]
 >Base : Base
->[t, u] : Base[]
+>[t, u] : Array<T | U>
 >t : T
 >u : U
 }

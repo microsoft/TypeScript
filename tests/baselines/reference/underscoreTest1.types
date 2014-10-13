@@ -104,7 +104,7 @@ var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
 >a : number[]
 >concat : { <U extends number[]>(...items: U[]): number[]; (...items: number[]): number[]; }
 >b : number[]
->[] : number[]
+>[] : undefined[]
 
 var even = _.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >even : number
@@ -200,7 +200,7 @@ _.invoke([[5, 1, 7], [3, 2, 1]], 'sort');
 >_.invoke : { (list: any[], methodName: string, ...args: any[]): any[]; (list: Dictionary<any>, methodName: string, ...args: any[]): any[]; }
 >_ : Underscore.Static
 >invoke : { (list: any[], methodName: string, ...args: any[]): any[]; (list: Dictionary<any>, methodName: string, ...args: any[]): any[]; }
->[[5, 1, 7], [3, 2, 1]] : any[]
+>[[5, 1, 7], [3, 2, 1]] : number[][]
 >[5, 1, 7] : number[]
 >[3, 2, 1] : number[]
 
@@ -375,14 +375,14 @@ _.flatten([1, 2, 3, 4]);
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, 2, 3, 4] : any[]
+>[1, 2, 3, 4] : number[]
 
 _.flatten([1, [2]]);
 >_.flatten([1, [2]]) : {}[]
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, [2]] : any[]
+>[1, [2]] : Array<number | number[]>
 >[2] : number[]
 
 // typescript doesn't like the elements being different
@@ -391,7 +391,7 @@ _.flatten([1, [2], [3, [[4]]]]);
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, [2], [3, [[4]]]] : any[]
+>[1, [2], [3, [[4]]]] : Array<number | Array<number | number[][]>>
 >[2] : number[]
 >[3, [[4]]] : Array<number | number[][]>
 >[[4]] : number[][]
@@ -402,7 +402,7 @@ _.flatten([1, [2], [3, [[4]]]], true);
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, [2], [3, [[4]]]] : any[]
+>[1, [2], [3, [[4]]]] : Array<number | Array<number | number[][]>>
 >[2] : number[]
 >[3, [[4]]] : Array<number | number[][]>
 >[[4]] : number[][]
@@ -463,17 +463,17 @@ _.object(['moe', 'larry', 'curly'], [30, 40, 50]);
 >_ : Underscore.Static
 >object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
 >['moe', 'larry', 'curly'] : string[]
->[30, 40, 50] : any[]
+>[30, 40, 50] : number[]
 
 _.object([['moe', 30], ['larry', 40], ['curly', 50]]);
 >_.object([['moe', 30], ['larry', 40], ['curly', 50]]) : any
 >_.object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
 >_ : Underscore.Static
 >object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
->[['moe', 30], ['larry', 40], ['curly', 50]] : any[][]
->['moe', 30] : any[]
->['larry', 40] : any[]
->['curly', 50] : any[]
+>[['moe', 30], ['larry', 40], ['curly', 50]] : Array<string | number>[]
+>['moe', 30] : Array<string | number>
+>['larry', 40] : Array<string | number>
+>['curly', 50] : Array<string | number>
 
 _.indexOf([1, 2, 3], 2);
 >_.indexOf([1, 2, 3], 2) : number
