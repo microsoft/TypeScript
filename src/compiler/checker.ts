@@ -4480,6 +4480,54 @@ module ts {
             return undefined;
         }
 
+        // Apply a mapping function to a contextual type and return the resulting type. If the contextual type
+        // is a union type, the mapping function is applied to each constituent type and a union of the resulting
+        // types is returned.
+        function applyToContextualType(type: Type, mapper: (t: Type) => Type): Type {
+            if (!(type.flags & TypeFlags.Union)) {
+                return mapper(type);
+            }
+            var types = (<UnionType>type).types;
+            var mappedType: Type;
+            var mappedTypes: Type[];
+            for (var i = 0; i < types.length; i++) {
+                var t = mapper(types[i]);
+                if (t) {
+                    if (!mappedType) {
+                        mappedType = t;
+                    }
+                    else if (!mappedTypes) {
+                        mappedTypes = [mappedType, t];
+                    }
+                    else {
+                        mappedTypes.push(t);
+                    }
+                }
+            }
+            return mappedTypes ? getUnionType(mappedTypes) : mappedType;
+        }
+
+        function getTypeOfPropertyOfContextualType(type: Type, name: string) {
+            return applyToContextualType(type, t => {
+                var prop = getPropertyOfType(t, name);
+                return prop ? getTypeOfSymbol(prop) : undefined;
+            });
+        }
+
+        function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
+            return applyToContextualType(type, t => getIndexTypeOfType(t, kind));
+        }
+
+        // Return true if the given contextual type is a tuple-like type
+        function contextualTypeIsTupleType(type: Type): boolean {
+            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, t => getPropertyOfType(t, "0")) : getPropertyOfType(type, "0"));
+        }
+
+        // Return true if the given contextual type provides an index signature of the given kind
+        function contextualTypeHasIndexSignature(type: Type, kind: IndexKind): boolean {
+            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, t => getIndexTypeOfType(t, kind)) : getIndexTypeOfType(type, kind));
+        }
+
         // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
         // the matching property in T, if one exists. Otherwise, it is the type of the numeric index signature in T, if one
         // exists. Otherwise, it is the type of the string index signature in T, if one exists.
@@ -4489,11 +4537,9 @@ module ts {
             var type = getContextualType(objectLiteral);
             var name = declaration.name.text;
             if (type && name) {
-                var prop = getPropertyOfType(type, name);
-                if (prop) {
-                    return getTypeOfSymbol(prop);
-                }
-                return isNumericName(name) && getIndexTypeOfType(type, IndexKind.Number) || getIndexTypeOfType(type, IndexKind.String);
+                return getTypeOfPropertyOfContextualType(type, name) ||
+                    isNumericName(name) && getIndexTypeOfContextualType(type, IndexKind.Number) ||
+                    getIndexTypeOfContextualType(type, IndexKind.String);
             }
             return undefined;
         }
@@ -4506,11 +4552,7 @@ module ts {
             var type = getContextualType(arrayLiteral);
             if (type) {
                 var index = indexOf(arrayLiteral.elements, node);
-                var prop = getPropertyOfType(type, "" + index);
-                if (prop) {
-                    return getTypeOfSymbol(prop);
-                }
-                return getIndexTypeOfType(type, IndexKind.Number);
+                return getTypeOfPropertyOfContextualType(type, "" + index) || getIndexTypeOfContextualType(type, IndexKind.Number);
             }
             return undefined;
         }
@@ -4528,7 +4570,6 @@ module ts {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
             }
-
             if (node.contextualType) {
                 return node.contextualType;
             }
@@ -4558,18 +4599,45 @@ module ts {
             return undefined;
         }
 
+        // Return the single non-generic signature in the given type, or undefined if none exists
+        function getNonGenericSignature(type: Type): Signature {
+            var signatures = getSignaturesOfType(type, SignatureKind.Call);
+            if (signatures.length !== 1) {
+                return undefined;
+            }
+            var signature = signatures[0];
+            if (signature.typeParameters) {
+                return undefined;
+            }
+            return signature;
+        }
+
+        // Return the contextual signature for a given expression node. A contextual type provides a
+        // contextual signature if it has a single call signature and if that call signature is non-generic.
+        // If the contextual type is a union type and each constituent type that has a contextual signature
+        // provides the same contextual signature, then the union type provides that contextual signature.
         function getContextualSignature(node: Expression): Signature {
             var type = getContextualType(node);
-            if (type) {
-                var signatures = getSignaturesOfType(type, SignatureKind.Call);
-                if (signatures.length === 1) {
-                    var signature = signatures[0];
-                    if (!signature.typeParameters) {
-                        return signature;
+            if (!type) {
+                return undefined;
+            }
+            if (!(type.flags & TypeFlags.Union)) {
+                return getNonGenericSignature(type);
+            }
+            var result: Signature;
+            var types = (<UnionType>type).types;
+            for (var i = 0; i < types.length; i++) {
+                var signature = getNonGenericSignature(types[i]);
+                if (signature) {
+                    if (!result) {
+                        result = signature;
+                    }
+                    else if (!compareSignatures(result, signature, /*compareReturnTypes*/ true, isTypeIdenticalTo)) {
+                        return undefined;
                     }
                 }
             }
-            return undefined;
+            return result;
         }
 
         // Presence of a contextual type mapper indicates inferential typing, except the identityMapper object is
@@ -4579,24 +4647,16 @@ module ts {
         }
 
         function checkArrayLiteral(node: ArrayLiteral, contextualMapper?: TypeMapper): Type {
-            var contextualType = getContextualType(node);
             var elements = node.elements;
-            var elementTypes: Type[] = [];
-            var isTupleLiteral: boolean = false;
-            for (var i = 0; i < elements.length; i++) {
-                if (contextualType && getPropertyOfType(contextualType, "" + i)) {
-                    isTupleLiteral = true;
-                }
-                var element = elements[i];
-                var type = element.kind !== SyntaxKind.OmittedExpression ? checkExpression(element, contextualMapper) : undefinedType;
-                elementTypes.push(type);
+            if (!elements.length) {
+                return createArrayType(undefinedType);
             }
-            if (isTupleLiteral) {
+            var elementTypes = map(elements, e => checkExpression(e, contextualMapper));
+            var contextualType = getContextualType(node);
+            if (contextualType && contextualTypeIsTupleType(contextualType)) {
                 return createTupleType(elementTypes);
             }
-            var contextualElementType = contextualType && !isInferentialContext(contextualMapper) ? getIndexTypeOfType(contextualType, IndexKind.Number) : undefined;
-            var elementType = elements.length || contextualElementType ? getBestCommonType(elementTypes, contextualElementType) : undefinedType;
-            return createArrayType(elementType);
+            return createArrayType(getUnionType(elementTypes));
         }
 
         function isNumericName(name: string) {
@@ -4607,7 +4667,6 @@ module ts {
             var members = node.symbol.members;
             var properties: SymbolTable = {};
             var contextualType = getContextualType(node);
-
             for (var id in members) {
                 if (hasProperty(members, id)) {
                     var member = members[id];
@@ -4645,21 +4704,19 @@ module ts {
             return createAnonymousType(node.symbol, properties, emptyArray, emptyArray, stringIndexType, numberIndexType);
 
             function getIndexType(kind: IndexKind) {
-                if (contextualType) {
-                    var indexType = getIndexTypeOfType(contextualType, kind);
-                    if (indexType) {
-                        var propTypes: Type[] = [];
-                        for (var id in properties) {
-                            if (hasProperty(properties, id)) {
-                                if (kind === IndexKind.String || isNumericName(id)) {
-                                    var type = getTypeOfSymbol(properties[id]);
-                                    if (!contains(propTypes, type)) propTypes.push(type);
-                                }
+                if (contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
+                    var propTypes: Type[] = [];
+                    for (var id in properties) {
+                        if (hasProperty(properties, id)) {
+                            if (kind === IndexKind.String || isNumericName(id)) {
+                                var type = getTypeOfSymbol(properties[id]);
+                                if (!contains(propTypes, type)) propTypes.push(type);
                             }
                         }
-                        return getBestCommonType(propTypes, isInferentialContext(contextualMapper) ? undefined : indexType);
                     }
+                    return propTypes.length ? getUnionType(propTypes) : undefinedType;
                 }
+                return undefined;
             }
         }
 
@@ -5249,11 +5306,12 @@ module ts {
         }
 
         function getReturnTypeFromBody(func: FunctionDeclaration, contextualMapper?: TypeMapper): Type {
+            var contextualSignature = getContextualSignature(func);
             if (func.body.kind !== SyntaxKind.FunctionBlock) {
                 var unwidenedType = checkAndMarkExpression(func.body, contextualMapper);
                 var widenedType = getWidenedType(unwidenedType);
 
-                if (fullTypeCheck && compilerOptions.noImplicitAny && widenedType !== unwidenedType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
+                if (fullTypeCheck && compilerOptions.noImplicitAny && !contextualSignature && widenedType !== unwidenedType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
                     error(func, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeToString(widenedType));
                 }
 
@@ -5267,7 +5325,7 @@ module ts {
             if (types.length > 0) {
                 // When return statements are contextually typed we allow the return type to be a union type. Otherwise we require the
                 // return expressions to have a best common supertype.
-                var commonType = getContextualSignature(func) ? getUnionType(types) : getCommonSupertype(types);
+                var commonType = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
                 if (!commonType) {
                     error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
                     
@@ -5277,7 +5335,7 @@ module ts {
                 var widenedType = getWidenedType(commonType);
 
                 // Check and report for noImplicitAny if the best common type implicitly gets widened to an 'any'/arrays-of-'any' type.
-                if (fullTypeCheck && compilerOptions.noImplicitAny && widenedType !== commonType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
+                if (fullTypeCheck && compilerOptions.noImplicitAny && !contextualSignature && widenedType !== commonType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
                     var typeName = typeToString(widenedType);
 
                     if (func.name) {
@@ -5776,6 +5834,8 @@ module ts {
                     return checkBinaryExpression(<BinaryExpression>node, contextualMapper);
                 case SyntaxKind.ConditionalExpression:
                     return checkConditionalExpression(<ConditionalExpression>node, contextualMapper);
+                case SyntaxKind.OmittedExpression:
+                    return undefinedType;
             }
             return unknownType;
         }
