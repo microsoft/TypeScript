@@ -112,36 +112,35 @@ module ts {
         };
         }
 
-    
     // Get source text of node in the current source file. Unlike getSourceTextOfNode this function
     // doesn't walk the parent chain to find the containing source file, rather it assumes the node is
     // in the source file currently being processed.
-    function getSourceTextOfLocalNode(node: Node, currentSourceFile: SourceFile): string {
+    function getSourceTextOfLocalNode(currentSourceFile: SourceFile, node: Node): string {
         var text = currentSourceFile.text;
         return text.substring(skipTrivia(text, node.pos), node.end);
     }
 
-    function getLineOfLocalPosition(pos: number, currentSourceFile: SourceFile) {
+    function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
         return currentSourceFile.getLineAndCharacterFromPosition(pos).line;
     }
 
-    function emitNewLineBeforeLeadingComments(node: TextRange, leadingComments: CommentRange[], writer: EmitTextWriter, currentSourceFile: SourceFile) {
+    function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {
         // If the leading comments start on different line than the start of node, write new line
         if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
-            getLineOfLocalPosition(node.pos, currentSourceFile) !== getLineOfLocalPosition(leadingComments[0].pos, currentSourceFile)) {
+            getLineOfLocalPosition(currentSourceFile, node.pos) !== getLineOfLocalPosition(currentSourceFile, leadingComments[0].pos)) {
             writer.writeLine();
         }
     }
 
-    function emitComments(comments: CommentRange[], trailingSeparator: boolean, writer: EmitTextWriter, currentSourceFile: SourceFile, newLine: string,
-                          writeComment: (comment: CommentRange, writer: EmitTextWriter, currentSourceFile: SourceFile, newLine: string) => void) {
+    function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
+                          writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
         var emitLeadingSpace = !trailingSeparator;
         forEach(comments, comment => {
             if (emitLeadingSpace) {
                 writer.write(" ");
                 emitLeadingSpace = false;
             }
-            writeComment(comment, writer, currentSourceFile, newLine);
+            writeComment(currentSourceFile, writer, comment, newLine);
             if (comment.hasTrailingNewLine) {
                 writer.writeLine();
             }
@@ -155,7 +154,7 @@ module ts {
         });
     }
 
-    function writeCommentRange(comment: CommentRange, writer: EmitTextWriter, currentSourceFile: SourceFile, newLine: string) {
+    function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string){
         if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
             var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
             var firstCommentLineIndent: number;
@@ -286,17 +285,17 @@ module ts {
         };
     }
 
-    function getSourceFilePathInNewDir(program: Program, newDirPath: string, sourceFile: SourceFile) {
+    function getSourceFilePathInNewDir(sourceFile: SourceFile, program: Program, newDirPath: string) {
         var compilerHost = program.getCompilerHost();
         var sourceFilePath = getNormalizedPathFromPathComponents(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory()));
         sourceFilePath = sourceFilePath.replace(program.getCommonSourceDirectory(), "");
         return combinePaths(newDirPath, sourceFilePath);
     }
 
-    function getOwnEmitOutputFilePath(program: Program, sourceFile: SourceFile, extension: string) {
+    function getOwnEmitOutputFilePath(sourceFile: SourceFile, program: Program, extension: string){
         var compilerOptions = program.getCompilerOptions();
         if (compilerOptions.outDir) {
-            var emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(program, compilerOptions.outDir, sourceFile));
+            var emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, program, compilerOptions.outDir));
         }
         else {
             var emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.filename);
@@ -311,7 +310,7 @@ module ts {
         });
     }
 
-    function emitDeclarations(resolver: EmitResolver, program: Program, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile) {
+    function emitDeclarations(program: Program, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile) {
         var newLine = program.getCompilerHost().getNewLine();
         var compilerOptions = program.getCompilerOptions();
         var compilerHost = program.getCompilerHost();
@@ -372,7 +371,7 @@ module ts {
                     if (errorInfo.typeName) {
                         diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
                             errorInfo.diagnosticMessage,
-                            getSourceTextOfLocalNode(errorInfo.typeName, currentSourceFile),
+                            getSourceTextOfLocalNode(currentSourceFile, errorInfo.typeName),
                             symbolAccesibilityResult.errorSymbolName,
                             symbolAccesibilityResult.errorModuleName));
                     }
@@ -406,14 +405,14 @@ module ts {
         function writeJsDocComments(declaration: Declaration) {
             if (declaration) {
                 var jsDocComments = getJsDocComments(declaration, currentSourceFile);
-                emitNewLineBeforeLeadingComments(declaration, jsDocComments, writer, currentSourceFile);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, declaration, jsDocComments);
                 // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(jsDocComments, /*trailingSeparator*/ true, writer, currentSourceFile, newLine, writeCommentRange);
+                emitComments(currentSourceFile, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentRange);
             }
         }
 
         function emitSourceTextOfNode(node: Node) {
-            write(getSourceTextOfLocalNode(node, currentSourceFile));
+            write(getSourceTextOfLocalNode(currentSourceFile, node));
         }
 
         function emitSourceFile(node: SourceFile) {
@@ -481,22 +480,22 @@ module ts {
                 writer.write("export ");
             }
             writer.write("import ");
-            writer.write(getSourceTextOfLocalNode(node.name, currentSourceFile));
+            writer.write(getSourceTextOfLocalNode(currentSourceFile, node.name));
             writer.write(" = ");
             if (node.entityName) {
                 checkEntityNameAccessible();
-                writer.write(getSourceTextOfLocalNode(node.entityName, currentSourceFile));
+                writer.write(getSourceTextOfLocalNode(currentSourceFile, node.entityName));
                 writer.write(";");
             }
             else {
                 writer.write("require(");
-                writer.write(getSourceTextOfLocalNode(node.externalModuleName, currentSourceFile));
+                writer.write(getSourceTextOfLocalNode(currentSourceFile, node.externalModuleName));
                 writer.write(");");
             }
             writer.writeLine();
 
             function checkEntityNameAccessible() {
-                var symbolAccesibilityResult = resolver.isImportDeclarationEntityNameReferenceDeclarationVisibile(node.entityName);
+                var symbolAccesibilityResult = resolver.isImportDeclarationEntityNameReferenceDeclarationVisible(node.entityName);
                 if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
                     // write the aliases
                     if (symbolAccesibilityResult.aliasesToMakeVisible) {
@@ -508,7 +507,7 @@ module ts {
                     reportedDeclarationError = true;
                     diagnostics.push(createDiagnosticForNode(node,
                         Diagnostics.Import_declaration_0_is_using_private_name_1,
-                        getSourceTextOfLocalNode(node.name, currentSourceFile),
+                        getSourceTextOfLocalNode(currentSourceFile, node.name),
                         symbolAccesibilityResult.errorSymbolName));
                 }
             }
@@ -1155,7 +1154,7 @@ module ts {
             var declFileName = referencedFile.flags & NodeFlags.DeclarationFile
                 ? referencedFile.filename // Declaration file, use declaration file name
                 : shouldEmitToOwnFile(referencedFile, compilerOptions)
-                ? getOwnEmitOutputFilePath(program, referencedFile, ".d.ts") // Own output file so get the .d.ts file
+                ? getOwnEmitOutputFilePath(referencedFile, program, ".d.ts") // Own output file so get the .d.ts file
                 : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
 
             declFileName = getRelativePathToDirectoryOrUrl(
@@ -1525,9 +1524,9 @@ module ts {
                     sourceMapNameIndices.pop();
                 };
 
-                function writeCommentRangeWithMap(comment: CommentRange, writer: EmitTextWriter) {
+                function writeCommentRangeWithMap(curentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
                     recordSourceMapSpan(comment.pos);
-                    writeCommentRange(comment, writer, currentSourceFile, newLine);
+                    writeCommentRange(currentSourceFile, writer, comment, newLine);
                     recordSourceMapSpan(comment.end);
                 }
 
@@ -1599,7 +1598,7 @@ module ts {
                     if (root) { // emitting single module file
                         // For modules or multiple emit files the mapRoot will have directory structure like the sources
                         // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(program, sourceMapDir, root));
+                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(root, program, sourceMapDir));
                     }
 
                     if (!isRootedDiskPath(sourceMapDir) && !isUrl(sourceMapDir)) {
@@ -1721,7 +1720,7 @@ module ts {
             }
 
             function emitLiteral(node: LiteralExpression) {
-                var text = getSourceTextOfLocalNode(node, currentSourceFile);
+                var text = getSourceTextOfLocalNode(currentSourceFile, node);
                 if (node.kind === SyntaxKind.StringLiteral && compilerOptions.sourceMap) {
                     writer.writeLiteral(text);
                 }
@@ -1743,7 +1742,7 @@ module ts {
                         write(node.text);
                     }
                     else {
-                        write(getSourceTextOfLocalNode(node, currentSourceFile));
+                        write(getSourceTextOfLocalNode(currentSourceFile, node));
                     }
 
                     write("\"");
@@ -1788,7 +1787,7 @@ module ts {
                         write(".");
                     }
                 }
-                write(getSourceTextOfLocalNode(node, currentSourceFile));
+                write(getSourceTextOfLocalNode(currentSourceFile, node));
             }
 
             function emitThis(node: Node) {
@@ -3126,9 +3125,9 @@ module ts {
 
             function emitLeadingDeclarationComments(node: Node) {
                 var leadingComments = getLeadingCommentsToEmit(node);
-                emitNewLineBeforeLeadingComments(node, leadingComments, writer, currentSourceFile);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(leadingComments, /*trailingSeparator*/ true, writer, currentSourceFile, newLine, writeComment);
+                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitTrailingDeclarationComments(node: Node) {
@@ -3136,7 +3135,7 @@ module ts {
                 if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
                     var trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.end);
                     // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                    emitComments(trailingComments, /*trailingSeparator*/ false, writer, currentSourceFile, newLine, writeComment);
+                    emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);                    
                 }
             }
 
@@ -3150,9 +3149,9 @@ module ts {
                     // get the leading comments from the node
                     leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
                 }
-                emitNewLineBeforeLeadingComments({ pos: pos, end: pos }, leadingComments, writer, currentSourceFile);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, { pos: pos, end: pos }, leadingComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(leadingComments, /*trailingSeparator*/ true, writer, currentSourceFile, newLine, writeComment);
+                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);                
             }
 
             function emitDetachedCommentsAtPosition(node: TextRange) {
@@ -3163,8 +3162,8 @@ module ts {
 
                     forEach(leadingComments, comment => {
                         if (lastComment) {
-                            var lastCommentLine = getLineOfLocalPosition(lastComment.end, currentSourceFile);
-                            var commentLine = getLineOfLocalPosition(comment.pos, currentSourceFile);
+                            var lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastComment.end);
+                            var commentLine = getLineOfLocalPosition(currentSourceFile, comment.pos);
 
                             if (commentLine >= lastCommentLine + 2) {
                                 // There was a blank line between the last comment and this comment.  This
@@ -3182,12 +3181,12 @@ module ts {
                         // All comments look like they could have been part of the copyright header.  Make
                         // sure there is at least one blank line between it and the node.  If not, it's not
                         // a copyright header.
-                        var lastCommentLine = getLineOfLocalPosition(detachedComments[detachedComments.length - 1].end, currentSourceFile);
-                        var astLine = getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node.pos), currentSourceFile);
+                        var lastCommentLine = getLineOfLocalPosition(currentSourceFile, detachedComments[detachedComments.length - 1].end);
+                        var astLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
                         if (astLine >= lastCommentLine + 2) {
                             // Valid detachedComments
-                            emitNewLineBeforeLeadingComments(node, leadingComments, writer, currentSourceFile);
-                            emitComments(detachedComments, /*trailingSeparator*/ true, writer, currentSourceFile, newLine, writeComment);
+                            emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
+                            emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
                             var currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: detachedComments[detachedComments.length - 1].end };
                             if (detachedCommentsInfo) {
                                 detachedCommentsInfo.push(currentDetachedCommentInfo);
@@ -3217,9 +3216,9 @@ module ts {
                     }
                 }
 
-                emitNewLineBeforeLeadingComments(node, pinnedComments, writer, currentSourceFile);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, pinnedComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(pinnedComments, /*trailingSeparator*/ true, writer, currentSourceFile, newLine, writeComment);
+                emitComments(currentSourceFile, writer, pinnedComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             if (compilerOptions.sourceMap) {
@@ -3246,7 +3245,7 @@ module ts {
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             emitJavaScript(jsFilePath, sourceFile);
             if (!hasSemanticErrors && compilerOptions.declaration) {
-                emitDeclarations(resolver, program, diagnostics, jsFilePath, sourceFile);
+                emitDeclarations(program, resolver, diagnostics, jsFilePath, sourceFile);
             }
         }
 
@@ -3254,7 +3253,7 @@ module ts {
             // No targetSourceFile is specified (e.g. calling emitter from batch compiler)
             forEach(program.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    var jsFilePath = getOwnEmitOutputFilePath(program, sourceFile, ".js");
+                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, program, ".js");
                     emitFile(jsFilePath, sourceFile);
                 }
             });
@@ -3267,7 +3266,7 @@ module ts {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
                 // If shouldEmitToOwnFile returns true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
-                var jsFilePath = getOwnEmitOutputFilePath(program, targetSourceFile, ".js");
+                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, program, ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
