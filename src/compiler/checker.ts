@@ -4941,8 +4941,9 @@ module ts {
                         // NOTE (not in spec): assignment to enum members should not be allowed
                         return !symbol || symbol === unknownSymbol || (symbol.flags & ~SymbolFlags.EnumMember) !== 0;
                     case SyntaxKind.IndexedAccess:
-                        //  old compiler doesn't check indexed assess
-                        return true;
+                        // special case indexed access to enums here and return false
+                        var symbol = findSymbol((<IndexedAccess>n).object);
+                        return !symbol || symbol === unknownSymbol || ((symbol.flags & ~SymbolFlags.Enum) !== 0);
                     case SyntaxKind.ParenExpression:
                         return isReferenceOrErrorExpression((<ParenExpression>n).expression);
                     default:

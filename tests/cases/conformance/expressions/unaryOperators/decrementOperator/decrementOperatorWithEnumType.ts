@@ -9,4 +9,4 @@ var ResultIsNumber2 = ENUM1.A--;
 // miss assignment operator
 --ENUM1["A"];
 
-ENUM1[A]--;
+ENUM1["A"]--;
