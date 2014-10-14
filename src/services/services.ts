@@ -2203,11 +2203,7 @@ module ts {
             var allDiagnostics = checker.getDiagnostics(targetSourceFile);
             if (compilerOptions.declaration) {
                 // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-                // Get emitter-diagnostics requires calling TypeChecker.emitFiles so we have to define CompilerHost.writer which does nothing because emitFiles function has side effects defined by CompilerHost.writer
-                var savedWriter = writer;
-                writer = (filename: string, data: string, writeByteOrderMark: boolean) => { };
                 allDiagnostics = allDiagnostics.concat(checker.getDeclarationDiagnostics(targetSourceFile));
-                writer = savedWriter;
             }
             return allDiagnostics
         }

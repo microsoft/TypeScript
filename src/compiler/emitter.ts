@@ -15,6 +15,13 @@ module ts {
         getIndent(): number;
     }
 
+    interface aliasDeclaration {
+        declaration: ImportDeclaration;
+        outputPos: number;
+        indent: number;
+        asynchronousOutput?: string; // If the output for alias was written asynchronously, the corresponding output
+    }
+
     var indentStrings: string[] = ["", "    "];
     export function getIndentString(level: number) {
         if (indentStrings[level] === undefined) {
@@ -326,12 +333,7 @@ module ts {
 
         var emitJsDocComments = compilerOptions.removeComments ? function (declaration: Declaration) { } : writeJsDocComments;
 
-        var aliasDeclarationEmitInfo: {
-            declaration: ImportDeclaration;
-            outputPos: number;
-            indent: number;
-            asynchronousOutput?: string; // If the output for alias was written asynchronously, the corresponding output
-        }[] = [];
+        var aliasDeclarationEmitInfo: aliasDeclaration[] = [];
 
         var getSymbolVisibilityDiagnosticMessage: (symbolAccesibilityResult: SymbolAccessiblityResult) => {
             errorNode: Node;
@@ -1213,24 +1215,27 @@ module ts {
                 }
             });
         }
-
-        // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
-        // or should we just not write this file like we are doing now
-        if (!reportedDeclarationError) {
-            var declarationOutput = referencePathsOutput;
-            var synchronousDeclarationOutput = writer.getText();
-            // apply additions
-            var appliedSyncOutputPos = 0;
-            forEach(aliasDeclarationEmitInfo, aliasEmitInfo => {
-                if (aliasEmitInfo.asynchronousOutput) {
-                    declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos, aliasEmitInfo.outputPos);
-                    declarationOutput += aliasEmitInfo.asynchronousOutput;
-                    appliedSyncOutputPos = aliasEmitInfo.outputPos;
-                }
-            });
-            declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
-            writeFile(compilerHost, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
+        return {
+            reportedDeclarationError: reportedDeclarationError,
+            aliasDeclarationEmitInfo: aliasDeclarationEmitInfo,
+            synchronousDeclarationOutput: writer.getText(),
+            declarationOutput: referencePathsOutput,
         }
+    }
+
+    function writeDeclarationToFile(compilerHost: CompilerHost, compilerOptions: CompilerOptions, diagnostics: Diagnostic[], aliasDeclarationEmitInfo: aliasDeclaration[],
+        synchronousDeclarationOutput: string, jsFilePath: string, declarationOutput: string) {
+        // apply additions
+        var appliedSyncOutputPos = 0;
+        forEach(aliasDeclarationEmitInfo, aliasEmitInfo => {
+            if (aliasEmitInfo.asynchronousOutput) {
+                declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos, aliasEmitInfo.outputPos);
+                declarationOutput += aliasEmitInfo.asynchronousOutput;
+                appliedSyncOutputPos = aliasEmitInfo.outputPos;
+            }
+        });
+        declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
+        writeFile(compilerHost, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM); 
     }
 
     export function getDeclarationDiagnostics(program: Program, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
@@ -3252,7 +3257,13 @@ module ts {
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             emitJavaScript(jsFilePath, sourceFile);
             if (!hasSemanticErrors && compilerOptions.declaration) {
-                emitDeclarations(program, resolver, diagnostics, jsFilePath, sourceFile);
+                var emitDeclarationResult = emitDeclarations(program, resolver, diagnostics, jsFilePath, sourceFile);
+                // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
+                // or should we just not write this file like we are doing now
+                if (!emitDeclarationResult.reportedDeclarationError) {
+                    writeDeclarationToFile(compilerHost, compilerOptions, diagnostics, emitDeclarationResult.aliasDeclarationEmitInfo, emitDeclarationResult.synchronousDeclarationOutput,
+                        jsFilePath, emitDeclarationResult.declarationOutput);
+                }
             }
         }
 

@@ -71,7 +71,7 @@ module ts {
         var checker: TypeChecker = {
             getProgram: () => program,
             getDiagnostics: getDiagnostics,
-            getDeclarationDiagnostics: getDeclarationDiagnosticsFromSourceFile,
+            getDeclarationDiagnostics: getDeclarationDiagnostics,
             getGlobalDiagnostics: getGlobalDiagnostics,
             getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
             getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
@@ -7039,10 +7039,10 @@ module ts {
             return getSortedDiagnostics();
         }
 
-        function getDeclarationDiagnosticsFromSourceFile(targetSourceFile: SourceFile): Diagnostic[] {
+        function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[] {
             var resolver = createResolver();
-            checkProgram();
-            return getDeclarationDiagnostics(program, resolver, targetSourceFile);
+            checkSourceFile(targetSourceFile);
+            return ts.getDeclarationDiagnostics(program, resolver, targetSourceFile);
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
