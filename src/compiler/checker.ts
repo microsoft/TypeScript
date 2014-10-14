@@ -318,7 +318,9 @@ module ts {
                 if (!s && nameNotFoundMessage) {
                     error(errorLocation, nameNotFoundMessage, nameArg);
                 }
+
                 if (s && s.flags & SymbolFlags.BlockScoped) {
+                    // Block-scoped variables can not be used before thier definition
                     var declaration = forEach(s.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
                     Debug.assert(declaration, "Bock-scoped variable declaration is undefined");
                     var declarationSourceFile = getSourceFileOfNode(declaration);
@@ -4923,7 +4925,7 @@ module ts {
             return true;
         }
 
-        function checkReferenceExpression(n: Node, message: DiagnosticMessage): boolean {
+        function checkReferenceExpression(n: Node, invalidReferenceMessage: DiagnosticMessage, constantVarianleMessage: DiagnosticMessage): boolean {
             function findSymbol(n: Node): Symbol {
                 var symbol = getNodeLinks(n).resolvedSymbol;
                 // Because we got the symbol from the resolvedSymbol property, it might be of kind
@@ -4962,8 +4964,20 @@ module ts {
                 }
             }
 
+            function isConstVariableReference(n: Node) {
+                if (n.kind === SyntaxKind.Identifier) {
+                    var symbol = findSymbol(n);
+                    return symbol && (symbol.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
+                }
+                return false;
+            }
+
             if (!isReferenceOrErrorExpression(n)) {
-                error(n, message);
+                error(n, invalidReferenceMessage);
+                return false;
+            }
+            if (isConstVariableReference(n)) {
+                error(n, constantVarianleMessage);
                 return false;
             }
             return true;
@@ -4988,7 +5002,9 @@ module ts {
                     var ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
                     if (ok) {
                         // run check only if former checks succeeded to avoid reporting cascading errors
-                        checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer);
+                        checkReferenceExpression(node.operand,
+                            Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer,
+                            Diagnostics.The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant);
                     }
                     return numberType;
             }
@@ -5000,7 +5016,9 @@ module ts {
             var ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
                 // run check only if former checks succeeded to avoid reporting cascading errors
-                checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer);
+                checkReferenceExpression(node.operand,
+                    Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer,
+                    Diagnostics.The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant);
             }
             return numberType;
         }
@@ -5177,7 +5195,7 @@ module ts {
                     // requires VarExpr to be classified as a reference
                     // A compound assignment furthermore requires VarExpr to be classified as a reference (section 4.1) 
                     // and the type of the non - compound operation to be assignable to the type of VarExpr.
-                    var ok = checkReferenceExpression(node.left, Diagnostics.Invalid_left_hand_side_of_assignment_expression);
+                    var ok = checkReferenceExpression(node.left, Diagnostics.Invalid_left_hand_side_of_assignment_expression, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant);
                     // Use default messages
                     if (ok) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
@@ -6252,7 +6270,7 @@ module ts {
                 }
                 else {
                     // run check only former check succeeded to avoid cascading errors
-                    checkReferenceExpression(node.variable, Diagnostics.Invalid_left_hand_side_in_for_in_statement); 
+                    checkReferenceExpression(node.variable, Diagnostics.Invalid_left_hand_side_in_for_in_statement, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant); 
                 }
             }
 

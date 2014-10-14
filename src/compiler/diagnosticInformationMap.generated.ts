@@ -270,6 +270,8 @@ module ts {
         Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1: { code: 2446, category: DiagnosticCategory.Error, key: "Property '{0}' is protected and only accessible through an instance of class '{1}'." },
         The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead: { code: 2447, category: DiagnosticCategory.Error, key: "The '{0}' operator is not allowed for boolean types. Consider using '{1}' instead." },
         Block_scoped_variable_0_used_before_its_declaration: { code: 2448, category: DiagnosticCategory.Error, key: "Block-scoped variable '{0}' used before its declaration." },
+        The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant: { code: 2449, category: DiagnosticCategory.Error, key: "The operand of an increment or decrement operator cannot be a constant." },
+        Left_hand_side_of_assignment_expression_cannot_be_a_constant: { code: 2450, category: DiagnosticCategory.Error, key: "Left-hand side of assignment expression cannot be a constant." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_name_1_from_private_module_2: { code: 4001, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
