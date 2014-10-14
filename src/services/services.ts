@@ -4686,7 +4686,7 @@ module ts {
                  * Returns true if there exists a module that introduces entities on the value side.
                  */
                 function hasValueSideModule(symbol: Symbol): boolean {
-                    return !!forEach(symbol.declarations, declaration => {
+                    return forEach(symbol.declarations, declaration => {
                         return declaration.kind === SyntaxKind.ModuleDeclaration && isInstantiated(declaration);
                     });
                 }
