@@ -15,6 +15,13 @@ module ts {
         getIndent(): number;
     }
 
+    interface aliasDeclaration {
+        declaration: ImportDeclaration;
+        outputPos: number;
+        indent: number;
+        asynchronousOutput?: string; // If the output for alias was written asynchronously, the corresponding output
+    }
+
     var indentStrings: string[] = ["", "    "];
     export function getIndentString(level: number) {
         if (indentStrings[level] === undefined) {
@@ -41,6 +48,1203 @@ module ts {
         return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
 
+    function createTextWriter(newLine: String, trackSymbol: (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) => void): EmitTextWriter {
+        var output = "";
+        var indent = 0;
+        var lineStart = true;
+        var lineCount = 0;
+        var linePos = 0;
+
+        function write(s: string) {
+            if (s && s.length) {
+                if (lineStart) {
+                    output += getIndentString(indent);
+                    lineStart = false;
+                }
+                output += s;
+            }
+        }
+
+        function rawWrite(s: string) {
+            if (s !== undefined) {
+                if (lineStart) {
+                    lineStart = false;
+                }
+                output += s;
+            }
+        }
+
+        function writeLiteral(s: string) {
+            if (s && s.length) {
+                write(s);
+                var lineStartsOfS = getLineStarts(s);
+                if (lineStartsOfS.length > 1) {
+                    lineCount = lineCount + lineStartsOfS.length - 1;
+                    linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
+                }
+            }
+        }
+
+        function writeLine() {
+            if (!lineStart) {
+                output += newLine;
+                lineCount++;
+                linePos = output.length;
+                lineStart = true;
+            }
+        }
+
+        function writeKind(text: string, kind: SymbolDisplayPartKind) {
+            write(text);
+        }
+        function writeSymbol(text: string, symbol: Symbol) {
+            write(text);
+        }
+        return {
+            write: write,
+            trackSymbol: trackSymbol,
+            writeKind: writeKind,
+            writeSymbol: writeSymbol,
+            rawWrite: rawWrite,
+            writeLiteral: writeLiteral,
+            writeLine: writeLine,
+            increaseIndent: () => indent++,
+            decreaseIndent: () => indent--,
+            getIndent: () => indent,
+            getTextPos: () => output.length,
+            getLine: () => lineCount + 1,
+            getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
+            getText: () => output,
+            clear: () => { }
+        };
+        }
+
+    // Get source text of node in the current source file. Unlike getSourceTextOfNode this function
+    // doesn't walk the parent chain to find the containing source file, rather it assumes the node is
+    // in the source file currently being processed.
+    function getSourceTextOfLocalNode(currentSourceFile: SourceFile, node: Node): string {
+        var text = currentSourceFile.text;
+        return text.substring(skipTrivia(text, node.pos), node.end);
+    }
+
+    function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
+        return currentSourceFile.getLineAndCharacterFromPosition(pos).line;
+    }
+
+    function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {
+        // If the leading comments start on different line than the start of node, write new line
+        if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
+            getLineOfLocalPosition(currentSourceFile, node.pos) !== getLineOfLocalPosition(currentSourceFile, leadingComments[0].pos)) {
+            writer.writeLine();
+        }
+    }
+
+    function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
+                          writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
+        var emitLeadingSpace = !trailingSeparator;
+        forEach(comments, comment => {
+            if (emitLeadingSpace) {
+                writer.write(" ");
+                emitLeadingSpace = false;
+            }
+            writeComment(currentSourceFile, writer, comment, newLine);
+            if (comment.hasTrailingNewLine) {
+                writer.writeLine();
+            }
+            else if (trailingSeparator) {
+                writer.write(" ");
+            }
+            else {
+                // Emit leading space to separate comment during next comment emit
+                emitLeadingSpace = true;
+            }
+        });
+    }
+
+    function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string){
+        if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
+            var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
+            var firstCommentLineIndent: number;
+            for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
+                var nextLineStart = currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, /*character*/1);
+
+                if (pos !== comment.pos) {
+                    // If we are not emitting first line, we need to write the spaces to adjust the alignment
+                    if (firstCommentLineIndent === undefined) {
+                        firstCommentLineIndent = calculateIndent(currentSourceFile.getPositionFromLineAndCharacter(firstCommentLineAndCharacter.line, /*character*/1),
+                            comment.pos);
+                    }
+
+                    // These are number of spaces writer is going to write at current indent
+                    var currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
+
+                    // Number of spaces we want to be writing
+                    // eg: Assume writer indent
+                    // module m {
+                    //         /* starts at character 9 this is line 1
+                    //    * starts at character pos 4 line                        --1  = 8 - 8 + 3
+                    //   More left indented comment */                            --2  = 8 - 8 + 2
+                    //     class c { }
+                    // }
+                    // module m {
+                    //     /* this is line 1 -- Assume current writer indent 8
+                    //      * line                                                --3 = 8 - 4 + 5 
+                    //            More right indented comment */                  --4 = 8 - 4 + 11
+                    //     class c { }
+                    // }
+                    var spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart);
+                    if (spacesToEmit > 0) {
+                        var numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
+                        var indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
+
+                        // Write indent size string ( in eg 1: = "", 2: "" , 3: string with 8 spaces 4: string with 12 spaces
+                        writer.rawWrite(indentSizeSpaceString);
+
+                        // Emit the single spaces (in eg: 1: 3 spaces, 2: 2 spaces, 3: 1 space, 4: 3 spaces)
+                        while (numberOfSingleSpacesToEmit) {
+                            writer.rawWrite(" ");
+                            numberOfSingleSpacesToEmit--;
+                        }
+                    }
+                    else {
+                        // No spaces to emit write empty string
+                        writer.rawWrite("");
+                    }
+                }
+
+                // Write the comment line text
+                writeTrimmedCurrentLine(pos, nextLineStart);
+
+                pos = nextLineStart;
+            }
+        }
+        else {
+            // Single line comment of style //....
+            writer.write(currentSourceFile.text.substring(comment.pos, comment.end));
+        }
+
+        function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
+            var end = Math.min(comment.end, nextLineStart - 1);
+            var currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
+            if (currentLineText) {
+                // trimmed forward and ending spaces text
+                writer.write(currentLineText);
+                if (end !== comment.end) {
+                    writer.writeLine();
+                }
+            }
+            else {
+                // Empty string - make sure we write empty line
+                writer.writeLiteral(newLine);
+            }
+        }
+
+        function calculateIndent(pos: number, end: number) {
+            var currentLineIndent = 0;
+            for (; pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos)); pos++) {
+                if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
+                    // Tabs = TabSize = indent size and go to next tabStop
+                    currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
+                }
+                else {
+                    // Single space
+                    currentLineIndent++;
+                }
+            }
+
+            return currentLineIndent;
+        }
+    }
+
+    function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
+        return forEach(node.members, member => {
+            if (member.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>member).body) {
+                return <ConstructorDeclaration>member;
+            }
+        });
+    }
+
+    function getAllAccessorDeclarations(node: ClassDeclaration, accessor: AccessorDeclaration) {
+        var firstAccessor: AccessorDeclaration;
+        var getAccessor: AccessorDeclaration;
+        var setAccessor: AccessorDeclaration;
+        forEach(node.members, (member: Declaration) => {
+            if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) &&
+                member.name.text === accessor.name.text &&
+                (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
+                if (!firstAccessor) {
+                    firstAccessor = <AccessorDeclaration>member;
+                }
+
+                if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
+                    getAccessor = <AccessorDeclaration>member;
+                }
+
+                if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
+                    setAccessor = <AccessorDeclaration>member;
+                }
+            }
+        });
+        return {
+            firstAccessor: firstAccessor,
+            getAccessor: getAccessor,
+            setAccessor: setAccessor
+        };
+    }
+
+    function getSourceFilePathInNewDir(sourceFile: SourceFile, program: Program, newDirPath: string) {
+        var compilerHost = program.getCompilerHost();
+        var sourceFilePath = getNormalizedPathFromPathComponents(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory()));
+        sourceFilePath = sourceFilePath.replace(program.getCommonSourceDirectory(), "");
+        return combinePaths(newDirPath, sourceFilePath);
+    }
+
+    function getOwnEmitOutputFilePath(sourceFile: SourceFile, program: Program, extension: string){
+        var compilerOptions = program.getCompilerOptions();
+        if (compilerOptions.outDir) {
+            var emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, program, compilerOptions.outDir));
+        }
+        else {
+            var emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.filename);
+        }
+
+        return emitOutputFilePathWithoutExtension + extension;
+    }
+
+    function writeFile(compilerHost: CompilerHost, diagnostics: Diagnostic[], filename: string, data: string, writeByteOrderMark: boolean) {
+        compilerHost.writeFile(filename, data, writeByteOrderMark, hostErrorMessage => {
+            diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, filename, hostErrorMessage));
+        });
+    }
+
+    function emitDeclarations(program: Program, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile) {
+        var newLine = program.getCompilerHost().getNewLine();
+        var compilerOptions = program.getCompilerOptions();
+        var compilerHost = program.getCompilerHost();
+        var writer = createTextWriter(newLine, trackSymbol);
+        var write = writer.write;
+        var writeLine = writer.writeLine;
+        var increaseIndent = writer.increaseIndent;
+        var decreaseIndent = writer.decreaseIndent;
+
+        var enclosingDeclaration: Node;
+        var currentSourceFile: SourceFile;
+        var reportedDeclarationError = false;
+
+        var emitJsDocComments = compilerOptions.removeComments ? function (declaration: Declaration) { } : writeJsDocComments;
+
+        var aliasDeclarationEmitInfo: aliasDeclaration[] = [];
+
+        var getSymbolVisibilityDiagnosticMessage: (symbolAccesibilityResult: SymbolAccessiblityResult) => {
+            errorNode: Node;
+            diagnosticMessage: DiagnosticMessage;
+            typeName?: Identifier
+        }
+
+        function writeAsychronousImportDeclarations(importDeclarations: ImportDeclaration[]) {
+            var oldWriter = writer;
+            forEach(importDeclarations, aliasToWrite => {
+                var aliasEmitInfo = forEach(aliasDeclarationEmitInfo, declEmitInfo => declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined);
+                writer = createTextWriter(newLine, trackSymbol);
+                for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
+                    writer.increaseIndent();
+                }
+
+                writeImportDeclaration(aliasToWrite);
+                aliasEmitInfo.asynchronousOutput = writer.getText();
+            });
+            writer = oldWriter;
+        }
+
+        function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
+            var symbolAccesibilityResult = resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning);
+            if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
+
+                // write the aliases
+                if (symbolAccesibilityResult && symbolAccesibilityResult.aliasesToMakeVisible) {
+                    writeAsychronousImportDeclarations(symbolAccesibilityResult.aliasesToMakeVisible);
+                }
+            }
+            else {
+                // Report error
+                reportedDeclarationError = true;
+                var errorInfo = getSymbolVisibilityDiagnosticMessage(symbolAccesibilityResult);
+                if (errorInfo) {
+                    if (errorInfo.typeName) {
+                        diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
+                            errorInfo.diagnosticMessage,
+                            getSourceTextOfLocalNode(currentSourceFile, errorInfo.typeName),
+                            symbolAccesibilityResult.errorSymbolName,
+                            symbolAccesibilityResult.errorModuleName));
+                    }
+                    else {
+                        diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
+                            errorInfo.diagnosticMessage,
+                            symbolAccesibilityResult.errorSymbolName,
+                            symbolAccesibilityResult.errorModuleName));
+                    }
+                }
+            }
+        }
+
+        function emitLines(nodes: Node[]) {
+            for (var i = 0, n = nodes.length; i < n; i++) {
+                emitNode(nodes[i]);
+            }
+        }
+
+        function emitCommaList(nodes: Node[], eachNodeEmitFn: (node: Node) => void) {
+            var currentWriterPos = writer.getTextPos();
+            for (var i = 0, n = nodes.length; i < n; i++) {
+                if (currentWriterPos !== writer.getTextPos()) {
+                    write(", ");
+                }
+                currentWriterPos = writer.getTextPos();
+                eachNodeEmitFn(nodes[i]);
+            }
+        }
+
+        function writeJsDocComments(declaration: Declaration) {
+            if (declaration) {
+                var jsDocComments = getJsDocComments(declaration, currentSourceFile);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, declaration, jsDocComments);
+                // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
+                emitComments(currentSourceFile, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentRange);
+            }
+        }
+
+        function emitSourceTextOfNode(node: Node) {
+            write(getSourceTextOfLocalNode(currentSourceFile, node));
+        }
+
+        function emitSourceFile(node: SourceFile) {
+            currentSourceFile = node;
+            enclosingDeclaration = node;
+            emitLines(node.statements);
+        }
+
+        function emitExportAssignment(node: ExportAssignment) {
+            write("export = ");
+            emitSourceTextOfNode(node.exportName);
+            write(";");
+            writeLine();
+        }
+
+        function emitDeclarationFlags(node: Declaration) {
+            if (node.flags & NodeFlags.Static) {
+                if (node.flags & NodeFlags.Private) {
+                    write("private ");
+                }
+                else if (node.flags & NodeFlags.Protected) {
+                    write("protected ");
+                }
+                write("static ");
+            }
+            else {
+                if (node.flags & NodeFlags.Private) {
+                    write("private ");
+                }
+                else if (node.flags & NodeFlags.Protected) {
+                    write("protected ");
+                }
+                // If the node is parented in the current source file we need to emit export declare or just export
+                else if (node.parent === currentSourceFile) {
+                    // If the node is exported 
+                    if (node.flags & NodeFlags.Export) {
+                        write("export ");
+                    }
+
+                    if (node.kind !== SyntaxKind.InterfaceDeclaration) {
+                        write("declare ");
+                    }
+                }
+            }
+        }
+
+        function emitImportDeclaration(node: ImportDeclaration) {
+            var nodeEmitInfo = {
+                declaration: node,
+                outputPos: writer.getTextPos(),
+                indent: writer.getIndent(),
+                hasWritten: resolver.isDeclarationVisible(node)
+            };
+            aliasDeclarationEmitInfo.push(nodeEmitInfo);
+            if (nodeEmitInfo.hasWritten) {
+                writeImportDeclaration(node);
+            }
+        }
+
+        function writeImportDeclaration(node: ImportDeclaration) {
+            // note usage of writer. methods instead of aliases created, just to make sure we are using 
+            // correct writer especially to handle asynchronous alias writing
+            emitJsDocComments(node);
+            if (node.flags & NodeFlags.Export) {
+                writer.write("export ");
+            }
+            writer.write("import ");
+            writer.write(getSourceTextOfLocalNode(currentSourceFile, node.name));
+            writer.write(" = ");
+            if (node.entityName) {
+                checkEntityNameAccessible();
+                writer.write(getSourceTextOfLocalNode(currentSourceFile, node.entityName));
+                writer.write(";");
+            }
+            else {
+                writer.write("require(");
+                writer.write(getSourceTextOfLocalNode(currentSourceFile, node.externalModuleName));
+                writer.write(");");
+            }
+            writer.writeLine();
+
+            function checkEntityNameAccessible() {
+                var symbolAccesibilityResult = resolver.isImportDeclarationEntityNameReferenceDeclarationVisible(node.entityName);
+                if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
+                    // write the aliases
+                    if (symbolAccesibilityResult.aliasesToMakeVisible) {
+                        writeAsychronousImportDeclarations(symbolAccesibilityResult.aliasesToMakeVisible);
+                    }
+                }
+                else {
+                    // Report error
+                    reportedDeclarationError = true;
+                    diagnostics.push(createDiagnosticForNode(node,
+                        Diagnostics.Import_declaration_0_is_using_private_name_1,
+                        getSourceTextOfLocalNode(currentSourceFile, node.name),
+                        symbolAccesibilityResult.errorSymbolName));
+                }
+            }
+        }
+
+        function emitModuleDeclaration(node: ModuleDeclaration) {
+            if (resolver.isDeclarationVisible(node)) {
+                emitJsDocComments(node);
+                emitDeclarationFlags(node);
+                write("module ");
+                emitSourceTextOfNode(node.name);
+                while (node.body.kind !== SyntaxKind.ModuleBlock) {
+                    node = <ModuleDeclaration>node.body;
+                    write(".");
+                    emitSourceTextOfNode(node.name);
+                }
+                var prevEnclosingDeclaration = enclosingDeclaration;
+                enclosingDeclaration = node;
+                write(" {");
+                writeLine();
+                increaseIndent();
+                emitLines((<Block>node.body).statements);
+                decreaseIndent();
+                write("}");
+                writeLine();
+                enclosingDeclaration = prevEnclosingDeclaration;
+            }
+        }
+
+        function emitEnumDeclaration(node: EnumDeclaration) {
+            if (resolver.isDeclarationVisible(node)) {
+                emitJsDocComments(node);
+                emitDeclarationFlags(node);
+                write("enum ");
+                emitSourceTextOfNode(node.name);
+                write(" {");
+                writeLine();
+                increaseIndent();
+                emitLines(node.members);
+                decreaseIndent();
+                write("}");
+                writeLine();
+            }
+        }
+
+        function emitEnumMemberDeclaration(node: EnumMember) {
+            emitJsDocComments(node);
+            emitSourceTextOfNode(node.name);
+            var enumMemberValue = resolver.getEnumMemberValue(node);
+            if (enumMemberValue !== undefined) {
+                write(" = ");
+                write(enumMemberValue.toString());
+            }
+            write(",");
+            writeLine();
+        }
+
+        function emitTypeParameters(typeParameters: TypeParameterDeclaration[]) {
+            function emitTypeParameter(node: TypeParameterDeclaration) {
+                function getTypeParameterConstraintVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                    // Type parameter constraints are named by user so we should always be able to name it
+                    var diagnosticMessage: DiagnosticMessage;
+                    switch (node.parent.kind) {
+                        case SyntaxKind.ClassDeclaration:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_private_name_1;
+                            break;
+
+                        case SyntaxKind.InterfaceDeclaration:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Type_parameter_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1;
+                            break;
+
+                        case SyntaxKind.ConstructSignature:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
+                            break;
+
+                        case SyntaxKind.CallSignature:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
+                            break;
+
+                        case SyntaxKind.Method:
+                            if (node.parent.flags & NodeFlags.Static) {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                                Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
+                            }
+                            else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                Diagnostics.Type_parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                                Diagnostics.Type_parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
+                            }
+                            else {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                Diagnostics.Type_parameter_0_of_method_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                                Diagnostics.Type_parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
+                            }
+                            break;
+
+                        case SyntaxKind.FunctionDeclaration:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_private_name_1;
+                            break;
+
+                        default:
+                            Debug.fail("This is unknown parent for type parameter: " + SyntaxKind[node.parent.kind]);
+                    }
+
+                    return {
+                        diagnosticMessage: diagnosticMessage,
+                        errorNode: node,
+                        typeName: node.name
+                    };
+                }
+
+                increaseIndent();
+                emitJsDocComments(node);
+                decreaseIndent();
+                emitSourceTextOfNode(node.name);
+                // If there is constraint present and this is not a type parameter of the private method emit the constraint
+                if (node.constraint && (node.parent.kind !== SyntaxKind.Method || !(node.parent.flags & NodeFlags.Private))) {
+                    write(" extends ");
+                    getSymbolVisibilityDiagnosticMessage = getTypeParameterConstraintVisibilityError;
+                    resolver.writeTypeAtLocation(node.constraint, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                }
+            }
+
+            if (typeParameters) {
+                write("<");
+                emitCommaList(typeParameters, emitTypeParameter);
+                write(">");
+            }
+        }
+
+        function emitHeritageClause(typeReferences: TypeReferenceNode[], isImplementsList: boolean) {
+            if (typeReferences) {
+                write(isImplementsList ? " implements " : " extends ");
+                emitCommaList(typeReferences, emitTypeOfTypeReference);
+            }
+
+            function emitTypeOfTypeReference(node: Node) {
+                getSymbolVisibilityDiagnosticMessage = getHeritageClauseVisibilityError;
+                resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.WriteArrayAsGenericType | TypeFormatFlags.UseTypeOfFunction, writer);
+
+                function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                    var diagnosticMessage: DiagnosticMessage;
+                    // Heritage clause is written by user so it can always be named
+                    if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                        // Class
+                        if (symbolAccesibilityResult.errorModuleName) {
+                            // Module is inaccessible
+                            diagnosticMessage = isImplementsList ?
+                            Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_name_1_from_private_module_2;
+                        }
+                        else {
+                            // Class or Interface implemented/extended is inaccessible
+                            diagnosticMessage = isImplementsList ?
+                            Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
+                            Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
+                        }
+                    }
+                    else {
+                        if (symbolAccesibilityResult.errorModuleName) {
+                            // Module is inaccessible
+                            diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_name_1_from_private_module_2;
+                        }
+                        else {
+                            // interface is inaccessible
+                            diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_private_name_1;
+                        }
+                    }
+
+                    return {
+                        diagnosticMessage: diagnosticMessage,
+                        errorNode: node,
+                        typeName: (<Declaration>node.parent).name
+                    };
+                }
+            }
+        }
+
+        function emitClassDeclaration(node: ClassDeclaration) {
+            function emitParameterProperties(constructorDeclaration: ConstructorDeclaration) {
+                if (constructorDeclaration) {
+                    forEach(constructorDeclaration.parameters, param => {
+                        if (param.flags & NodeFlags.AccessibilityModifier) {
+                            emitPropertyDeclaration(param);
+                        }
+                    });
+                }
+            }
+
+            if (resolver.isDeclarationVisible(node)) {
+                emitJsDocComments(node);
+                emitDeclarationFlags(node);
+                write("class ");
+                emitSourceTextOfNode(node.name);
+                var prevEnclosingDeclaration = enclosingDeclaration;
+                enclosingDeclaration = node;
+                emitTypeParameters(node.typeParameters);
+                if (node.baseType) {
+                    emitHeritageClause([node.baseType], /*isImplementsList*/ false);
+                }
+                emitHeritageClause(node.implementedTypes, /*isImplementsList*/ true);
+                write(" {");
+                writeLine();
+                increaseIndent();
+                emitParameterProperties(getFirstConstructorWithBody(node));
+                emitLines(node.members);
+                decreaseIndent();
+                write("}");
+                writeLine();
+                enclosingDeclaration = prevEnclosingDeclaration;
+            }
+        }
+
+        function emitInterfaceDeclaration(node: InterfaceDeclaration) {
+            if (resolver.isDeclarationVisible(node)) {
+                emitJsDocComments(node);
+                emitDeclarationFlags(node);
+                write("interface ");
+                emitSourceTextOfNode(node.name);
+                var prevEnclosingDeclaration = enclosingDeclaration;
+                enclosingDeclaration = node;
+                emitTypeParameters(node.typeParameters);
+                emitHeritageClause(node.baseTypes, /*isImplementsList*/ false);
+                write(" {");
+                writeLine();
+                increaseIndent();
+                emitLines(node.members);
+                decreaseIndent();
+                write("}");
+                writeLine();
+                enclosingDeclaration = prevEnclosingDeclaration;
+            }
+        }
+
+        function emitPropertyDeclaration(node: PropertyDeclaration) {
+            emitJsDocComments(node);
+            emitDeclarationFlags(node);
+            emitVariableDeclaration(node);
+            write(";");
+            writeLine();
+        }
+
+        function emitVariableDeclaration(node: VariableDeclaration) {
+            // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
+            // so there is no check needed to see if declaration is visible
+            if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
+                emitSourceTextOfNode(node.name);
+                // If optional property emit ?
+                if (node.kind === SyntaxKind.Property && (node.flags & NodeFlags.QuestionMark)) {
+                    write("?");
+                }
+                if (!(node.flags & NodeFlags.Private)) {
+                    write(": ");
+                    getSymbolVisibilityDiagnosticMessage = getVariableDeclarationTypeVisibilityError;
+                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                }
+            }
+
+            function getVariableDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                var diagnosticMessage: DiagnosticMessage;
+                if (node.kind === SyntaxKind.VariableDeclaration) {
+                    diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                    symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                    Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                    Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_private_module_2 :
+                    Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
+                }
+                // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
+                else if (node.kind === SyntaxKind.Property) {
+                    if (node.flags & NodeFlags.Static) {
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
+                    }
+                    else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Public_property_0_of_exported_class_has_or_is_using_private_name_1;
+                    }
+                    else {
+                        // Interfaces cannot have types that cannot be named
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        Diagnostics.Property_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Property_0_of_exported_interface_has_or_is_using_private_name_1;
+                    }
+                }
+
+                return diagnosticMessage !== undefined ? {
+                    diagnosticMessage: diagnosticMessage,
+                    errorNode: node,
+                    typeName: node.name
+                } : undefined;
+            }
+        }
+
+        function emitVariableStatement(node: VariableStatement) {
+            var hasDeclarationWithEmit = forEach(node.declarations, varDeclaration => resolver.isDeclarationVisible(varDeclaration));
+            if (hasDeclarationWithEmit) {
+                emitJsDocComments(node);
+                emitDeclarationFlags(node);
+                write("var ");
+                emitCommaList(node.declarations, emitVariableDeclaration);
+                write(";");
+                writeLine();
+            }
+        }
+
+        function emitAccessorDeclaration(node: AccessorDeclaration) {
+            var accessors = getAllAccessorDeclarations(<ClassDeclaration>node.parent, node);
+            if (node === accessors.firstAccessor) {
+                emitJsDocComments(accessors.getAccessor);
+                emitJsDocComments(accessors.setAccessor);
+                emitDeclarationFlags(node);
+                emitSourceTextOfNode(node.name);
+                if (!(node.flags & NodeFlags.Private)) {
+                    write(": ");
+                    getSymbolVisibilityDiagnosticMessage = getAccessorDeclarationTypeVisibilityError;
+                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                }
+                write(";");
+                writeLine();
+            }
+
+            function getAccessorDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                var diagnosticMessage: DiagnosticMessage;
+                if (node.kind === SyntaxKind.SetAccessor) {
+                    // Setters have to have type named and cannot infer it so, the type should always be named
+                    if (node.parent.flags & NodeFlags.Static) {
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_private_name_1;
+                    }
+                    else {
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_private_name_1;
+                    }
+                    return {
+                        diagnosticMessage: diagnosticMessage,
+                        errorNode: node.parameters[0],
+                        typeName: node.name
+                    };
+                }
+                else {
+                    if (node.flags & NodeFlags.Static) {
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                        Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                        Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_private_name_0;
+                    }
+                    else {
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                        Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                        Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0;
+                    }
+                    return {
+                        diagnosticMessage: diagnosticMessage,
+                        errorNode: node.name,
+                        typeName: undefined
+                    };
+                }
+            }
+        }
+
+        function emitFunctionDeclaration(node: FunctionDeclaration) {
+            // If we are emitting Method/Constructor it isn't moduleElement and hence already determined to be emitting
+            // so no need to verify if the declaration is visible
+            if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
+                !resolver.isImplementationOfOverload(node)) {
+                emitJsDocComments(node);
+                emitDeclarationFlags(node);
+                if (node.kind === SyntaxKind.FunctionDeclaration) {
+                    write("function ");
+                    emitSourceTextOfNode(node.name);
+                }
+                else if (node.kind === SyntaxKind.Constructor) {
+                    write("constructor");
+                }
+                else {
+                    emitSourceTextOfNode(node.name);
+                    if (node.flags & NodeFlags.QuestionMark) {
+                        write("?");
+                    }
+                }
+                emitSignatureDeclaration(node);
+            }
+        }
+
+        function emitConstructSignatureDeclaration(node: SignatureDeclaration) {
+            emitJsDocComments(node);
+            write("new ");
+            emitSignatureDeclaration(node);
+        }
+
+        function emitSignatureDeclaration(node: SignatureDeclaration) {
+            if (node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.IndexSignature) {
+                // Only index and call signatures are emitted directly, so emit their js doc comments, rest will do that in their own functions
+                emitJsDocComments(node);
+            }
+            emitTypeParameters(node.typeParameters);
+            if (node.kind === SyntaxKind.IndexSignature) {
+                write("[");
+            }
+            else {
+                write("(");
+            }
+
+            // Parameters
+            emitCommaList(node.parameters, emitParameterDeclaration);
+
+            if (node.kind === SyntaxKind.IndexSignature) {
+                write("]");
+            }
+            else {
+                write(")");
+            }
+
+            // If this is not a constructor and is not private, emit the return type
+            if (node.kind !== SyntaxKind.Constructor && !(node.flags & NodeFlags.Private)) {
+                write(": ");
+                getSymbolVisibilityDiagnosticMessage = getReturnTypeVisibilityError;
+                resolver.writeReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+            }
+            write(";");
+            writeLine();
+
+            function getReturnTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                var diagnosticMessage: DiagnosticMessage;
+                switch (node.kind) {
+                    case SyntaxKind.ConstructSignature:
+                        // Interfaces cannot have return types that cannot be named
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                        Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_0;
+                        break;
+
+                    case SyntaxKind.CallSignature:
+                        // Interfaces cannot have return types that cannot be named
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                        Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_private_name_0;
+                        break;
+
+                    case SyntaxKind.IndexSignature:
+                        // Interfaces cannot have return types that cannot be named
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                        Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_private_name_0;
+                        break;
+
+                    case SyntaxKind.Method:
+                        if (node.flags & NodeFlags.Static) {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                            Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_private_name_0;
+                        }
+                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                            Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_private_name_0;
+                        }
+                        else {
+                            // Interfaces cannot have return types that cannot be named
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_private_name_0;
+                        }
+                        break;
+
+                    case SyntaxKind.FunctionDeclaration:
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                        Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_private_module_1 :
+                        Diagnostics.Return_type_of_exported_function_has_or_is_using_private_name_0;
+                        break;
+
+                    default:
+                        Debug.fail("This is unknown kind for signature: " + SyntaxKind[node.kind]);
+                }
+
+                return {
+                    diagnosticMessage: diagnosticMessage,
+                    errorNode: <Node>node.name || node,
+                };
+            }
+        }
+
+        function emitParameterDeclaration(node: ParameterDeclaration) {
+            increaseIndent();
+            emitJsDocComments(node);
+            if (node.flags & NodeFlags.Rest) {
+                write("...");
+            }
+            emitSourceTextOfNode(node.name);
+            if (node.initializer || (node.flags & NodeFlags.QuestionMark)) {
+                write("?");
+            }
+            decreaseIndent();
+
+            if (!(node.parent.flags & NodeFlags.Private)) {
+                write(": ");
+                getSymbolVisibilityDiagnosticMessage = getParameterDeclarationTypeVisibilityError;
+                resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+            }
+
+            function getParameterDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                var diagnosticMessage: DiagnosticMessage;
+                switch (node.parent.kind) {
+                    case SyntaxKind.Constructor:
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_private_name_1;
+                        break;
+
+                    case SyntaxKind.ConstructSignature:
+                        // Interfaces cannot have parameter types that cannot be named
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
+                        break;
+
+                    case SyntaxKind.CallSignature:
+                        // Interfaces cannot have parameter types that cannot be named
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
+                        break;
+
+                    case SyntaxKind.Method:
+                        if (node.parent.flags & NodeFlags.Static) {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
+                        }
+                        else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
+                        }
+                        else {
+                            // Interfaces cannot have parameter types that cannot be named
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
+                        }
+                        break;
+
+                    case SyntaxKind.FunctionDeclaration:
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_exported_function_has_or_is_using_private_name_1;
+                        break;
+
+                    default:
+                        Debug.fail("This is unknown parent for parameter: " + SyntaxKind[node.parent.kind]);
+                }
+
+                return {
+                    diagnosticMessage: diagnosticMessage,
+                    errorNode: node,
+                    typeName: node.name
+                };
+            }
+        }
+
+        function emitNode(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.Constructor:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.Method:
+                    return emitFunctionDeclaration(<FunctionDeclaration>node);
+                case SyntaxKind.ConstructSignature:
+                    return emitConstructSignatureDeclaration(<SignatureDeclaration>node);
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.IndexSignature:
+                    return emitSignatureDeclaration(<SignatureDeclaration>node);
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return emitAccessorDeclaration(<AccessorDeclaration>node);
+                case SyntaxKind.VariableStatement:
+                    return emitVariableStatement(<VariableStatement>node);
+                case SyntaxKind.Property:
+                    return emitPropertyDeclaration(<PropertyDeclaration>node);
+                case SyntaxKind.InterfaceDeclaration:
+                    return emitInterfaceDeclaration(<InterfaceDeclaration>node);
+                case SyntaxKind.ClassDeclaration:
+                    return emitClassDeclaration(<ClassDeclaration>node);
+                case SyntaxKind.EnumMember:
+                    return emitEnumMemberDeclaration(<EnumMember>node);
+                case SyntaxKind.EnumDeclaration:
+                    return emitEnumDeclaration(<EnumDeclaration>node);
+                case SyntaxKind.ModuleDeclaration:
+                    return emitModuleDeclaration(<ModuleDeclaration>node);
+                case SyntaxKind.ImportDeclaration:
+                    return emitImportDeclaration(<ImportDeclaration>node);
+                case SyntaxKind.ExportAssignment:
+                    return emitExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.SourceFile:
+                    return emitSourceFile(<SourceFile>node);
+            }
+        }
+
+        function tryResolveScriptReference(sourceFile: SourceFile, reference: FileReference) {
+            var referenceFileName = normalizePath(combinePaths(getDirectoryPath(sourceFile.filename), reference.filename));
+            return program.getSourceFile(referenceFileName);
+        }
+
+        // Contains the reference paths that needs to go in the declaration file. 
+        // Collecting this separately because reference paths need to be first thing in the declaration file 
+        // and we could be collecting these paths from multiple files into single one with --out option
+        var referencePathsOutput = "";
+        function writeReferencePath(referencedFile: SourceFile) {
+            var declFileName = referencedFile.flags & NodeFlags.DeclarationFile
+                ? referencedFile.filename // Declaration file, use declaration file name
+                : shouldEmitToOwnFile(referencedFile, compilerOptions)
+                ? getOwnEmitOutputFilePath(referencedFile, program, ".d.ts") // Own output file so get the .d.ts file
+                : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
+
+            declFileName = getRelativePathToDirectoryOrUrl(
+                getDirectoryPath(normalizeSlashes(jsFilePath)),
+                declFileName,
+                compilerHost.getCurrentDirectory(),
+                compilerHost.getCanonicalFileName,
+            /*isAbsolutePathAnUrl*/ false);
+
+            referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
+        }
+
+        if (root) {
+            // Emitting just a single file, so emit references in this file only
+            if (!compilerOptions.noResolve) {
+                var addedGlobalFileReference = false;
+                forEach(root.referencedFiles, fileReference => {
+                    var referencedFile = tryResolveScriptReference(root, fileReference);
+
+                    // All the references that are not going to be part of same file
+                    if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
+                        shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
+                        !addedGlobalFileReference)) { // Or the global out file corresponding to this reference was not added
+
+                        writeReferencePath(referencedFile);
+                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
+                            addedGlobalFileReference = true;
+                        }
+                    }
+                });
+            }
+
+            emitNode(root);
+        }
+        else {
+            // Emit references corresponding to this file
+            var emittedReferencedFiles: SourceFile[] = [];
+            forEach(program.getSourceFiles(), sourceFile => {
+                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                    // Check what references need to be added
+                    if (!compilerOptions.noResolve) {
+                        forEach(sourceFile.referencedFiles, fileReference => {
+                            var referencedFile = tryResolveScriptReference(sourceFile, fileReference);
+
+                            // If the reference file is a declaration file or an external module, emit that reference
+                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
+                                !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
+
+                                writeReferencePath(referencedFile);
+                                emittedReferencedFiles.push(referencedFile);
+                            }
+                        });
+                    }
+
+                    emitNode(sourceFile);
+                }
+            });
+        }
+        return {
+            reportedDeclarationError: reportedDeclarationError,
+            aliasDeclarationEmitInfo: aliasDeclarationEmitInfo,
+            synchronousDeclarationOutput: writer.getText(),
+            declarationOutput: referencePathsOutput,
+        }
+    }
+
+    function writeDeclarationToFile(compilerHost: CompilerHost, compilerOptions: CompilerOptions, diagnostics: Diagnostic[], aliasDeclarationEmitInfo: aliasDeclaration[],
+        synchronousDeclarationOutput: string, jsFilePath: string, declarationOutput: string) {
+        // apply additions
+        var appliedSyncOutputPos = 0;
+        forEach(aliasDeclarationEmitInfo, aliasEmitInfo => {
+            if (aliasEmitInfo.asynchronousOutput) {
+                declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos, aliasEmitInfo.outputPos);
+                declarationOutput += aliasEmitInfo.asynchronousOutput;
+                appliedSyncOutputPos = aliasEmitInfo.outputPos;
+            }
+        });
+        declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
+        writeFile(compilerHost, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM); 
+    }
+
+    export function getDeclarationDiagnostics(program: Program, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
+        var diagnostics: Diagnostic[] = [];
+        var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, program, ".js");
+        emitDeclarations(program, resolver, diagnostics, jsFilePath, targetSourceFile);
+        return diagnostics;
+    }
+
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
     export function emitFiles(resolver: EmitResolver, targetSourceFile?: SourceFile): EmitResult {
         var program = resolver.getProgram();
@@ -50,279 +1254,14 @@ module ts {
         var diagnostics: Diagnostic[] = [];
         var newLine = program.getCompilerHost().getNewLine();
 
-        function getSourceFilePathInNewDir(newDirPath: string, sourceFile: SourceFile) {
-            var sourceFilePath = getNormalizedPathFromPathComponents(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory()));
-            sourceFilePath = sourceFilePath.replace(program.getCommonSourceDirectory(), "");
-            return combinePaths(newDirPath, sourceFilePath);
-        }
-
-        function getOwnEmitOutputFilePath(sourceFile: SourceFile, extension: string) {
-            if (compilerOptions.outDir) {
-                var emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(compilerOptions.outDir, sourceFile));
-            }
-            else {
-                var emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.filename);
-            }
-
-            return emitOutputFilePathWithoutExtension + extension;
-        }
-
-        function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
-            return forEach(node.members, member => {
-                if (member.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>member).body) {
-                    return <ConstructorDeclaration>member;
-                }
-            });
-        }
-
-        function getAllAccessorDeclarations(node: ClassDeclaration, accessor: AccessorDeclaration) {
-            var firstAccessor: AccessorDeclaration;
-            var getAccessor: AccessorDeclaration;
-            var setAccessor: AccessorDeclaration;
-            forEach(node.members, (member: Declaration) => {
-                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) &&
-                    member.name.text === accessor.name.text &&
-                    (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
-                    if (!firstAccessor) {
-                        firstAccessor = <AccessorDeclaration>member;
-                    }
-
-                    if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
-                        getAccessor = <AccessorDeclaration>member;
-                    }
-
-                    if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
-                        setAccessor = <AccessorDeclaration>member;
-                    }
-                }
-            });
-            return {
-                firstAccessor: firstAccessor,
-                getAccessor: getAccessor,
-                setAccessor: setAccessor
-            };
-        }
-
-        function createTextWriter(trackSymbol: (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags)=> void): EmitTextWriter {
-            var output = "";
-            var indent = 0;
-            var lineStart = true;
-            var lineCount = 0;
-            var linePos = 0;
-
-            function write(s: string) {
-                if (s && s.length) {
-                    if (lineStart) {
-                        output += getIndentString(indent);
-                        lineStart = false;
-                    }
-                    output += s;
-                }
-            }
-
-            function rawWrite(s: string) {
-                if (s !== undefined) {
-                    if (lineStart) {
-                        lineStart = false;
-                    }
-                    output += s;
-                }
-            }
-
-            function writeLiteral(s: string) {
-                if (s && s.length) {
-                    write(s);
-                    var lineStartsOfS = getLineStarts(s);
-                    if (lineStartsOfS.length > 1) {
-                        lineCount = lineCount + lineStartsOfS.length - 1;
-                        linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
-                    }
-                }
-            }
-
-            function writeLine() {
-                if (!lineStart) {
-                    output += newLine;
-                    lineCount++;
-                    linePos = output.length;
-                    lineStart = true;
-                }
-            }
-
-            function writeKind(text: string, kind: SymbolDisplayPartKind) {
-                write(text);
-            }
-            function writeSymbol(text: string, symbol: Symbol) {
-                write(text);
-            }
-            return {
-                write: write,
-                trackSymbol: trackSymbol,
-                writeKind: writeKind,
-                writeSymbol: writeSymbol,
-                rawWrite: rawWrite,
-                writeLiteral: writeLiteral,
-                writeLine: writeLine,
-                increaseIndent: () => indent++,
-                decreaseIndent: () => indent--,
-                getIndent: () => indent,
-                getTextPos: () => output.length,
-                getLine: () => lineCount + 1,
-                getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
-                getText: () => output,
-                clear: () => { }
-            };
-        }
-
-        // Get source text of node in the current source file. Unlike getSourceTextOfNode this function
-        // doesn't walk the parent chain to find the containing source file, rather it assumes the node is
-        // in the source file currently being processed.
-        var currentSourceFile: SourceFile;
-        function getSourceTextOfLocalNode(node: Node): string {
-            var text = currentSourceFile.text;
-            return text.substring(skipTrivia(text, node.pos), node.end);
-        }
-
-        function getLineOfLocalPosition(pos: number) {
-            return currentSourceFile.getLineAndCharacterFromPosition(pos).line;
-        }
-
-        function writeFile(filename: string, data: string, writeByteOrderMark: boolean) {
-            compilerHost.writeFile(filename, data, writeByteOrderMark, hostErrorMessage => {
-                diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, filename, hostErrorMessage));
-            });
-        }
-
-        function emitComments(comments: CommentRange[], trailingSeparator: boolean, writer: EmitTextWriter, writeComment: (comment: CommentRange, writer: EmitTextWriter) => void) {
-            var emitLeadingSpace = !trailingSeparator;
-            forEach(comments, comment => {
-                if (emitLeadingSpace) {
-                    writer.write(" ");
-                    emitLeadingSpace = false;
-                }
-                writeComment(comment, writer);
-                if (comment.hasTrailingNewLine) {
-                    writer.writeLine();
-                }
-                else if (trailingSeparator) {
-                    writer.write(" ");
-                }
-                else {
-                    // Emit leading space to separate comment during next comment emit
-                    emitLeadingSpace = true;
-                }
-            });
-        }
-
-        function emitNewLineBeforeLeadingComments(node: TextRange, leadingComments: CommentRange[], writer: EmitTextWriter) {
-            // If the leading comments start on different line than the start of node, write new line
-            if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
-                getLineOfLocalPosition(node.pos) !== getLineOfLocalPosition(leadingComments[0].pos)) {
-                writer.writeLine();
-            }
-        }
-
-        function writeCommentRange(comment: CommentRange, writer: EmitTextWriter) {
-            if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
-                var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
-                var firstCommentLineIndent: number;
-                for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
-                    var nextLineStart = currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, /*character*/1);
-
-                    if (pos !== comment.pos) {
-                        // If we are not emitting first line, we need to write the spaces to adjust the alignment
-                        if (firstCommentLineIndent === undefined) {
-                            firstCommentLineIndent = calculateIndent(currentSourceFile.getPositionFromLineAndCharacter(firstCommentLineAndCharacter.line, /*character*/1),
-                                comment.pos);
-                        }
-
-                        // These are number of spaces writer is going to write at current indent
-                        var currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
-
-                        // Number of spaces we want to be writing
-                        // eg: Assume writer indent
-                        // module m {
-                        //         /* starts at character 9 this is line 1
-                        //    * starts at character pos 4 line                        --1  = 8 - 8 + 3
-                        //   More left indented comment */                            --2  = 8 - 8 + 2
-                        //     class c { }
-                        // }
-                        // module m {
-                        //     /* this is line 1 -- Assume current writer indent 8
-                        //      * line                                                --3 = 8 - 4 + 5 
-                        //            More right indented comment */                  --4 = 8 - 4 + 11
-                        //     class c { }
-                        // }
-                        var spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart); 
-                        if (spacesToEmit > 0) {
-                            var numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
-                            var indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
-
-                            // Write indent size string ( in eg 1: = "", 2: "" , 3: string with 8 spaces 4: string with 12 spaces
-                            writer.rawWrite(indentSizeSpaceString);
-
-                            // Emit the single spaces (in eg: 1: 3 spaces, 2: 2 spaces, 3: 1 space, 4: 3 spaces)
-                            while (numberOfSingleSpacesToEmit) {
-                                writer.rawWrite(" ");
-                                numberOfSingleSpacesToEmit--;
-                            }
-                        }
-                        else {
-                            // No spaces to emit write empty string
-                            writer.rawWrite("");
-                        }
-                    }
-
-                    // Write the comment line text
-                    writeTrimmedCurrentLine(pos, nextLineStart);
-
-                    pos = nextLineStart;
-                }
-            }
-            else {
-                // Single line comment of style //....
-                writer.write(currentSourceFile.text.substring(comment.pos, comment.end));
-            }
-
-            function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
-                var end = Math.min(comment.end, nextLineStart - 1);
-                var currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
-                if (currentLineText) {
-                    // trimmed forward and ending spaces text
-                    writer.write(currentLineText);
-                    if (end !== comment.end) {
-                        writer.writeLine();
-                    }
-                }
-                else {
-                    // Empty string - make sure we write empty line
-                    writer.writeLiteral(newLine);
-                }
-            }
-
-            function calculateIndent(pos: number, end: number) {
-                var currentLineIndent = 0;
-                for (; pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos)); pos++) {
-                    if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
-                        // Tabs = TabSize = indent size and go to next tabStop
-                        currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
-                    }
-                    else {
-                        // Single space
-                        currentLineIndent++;
-                    }
-                }
-
-                return currentLineIndent;
-            }
-        }
-
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
-            var writer = createTextWriter(trackSymbol);
+            var writer = createTextWriter(newLine, trackSymbol);
             var write = writer.write;
             var writeLine = writer.writeLine;
             var increaseIndent = writer.increaseIndent;
             var decreaseIndent = writer.decreaseIndent;
+
+            var currentSourceFile: SourceFile;
 
             var extendsEmitted = false;
 
@@ -597,9 +1536,9 @@ module ts {
                     sourceMapNameIndices.pop();
                 };
 
-                function writeCommentRangeWithMap(comment: CommentRange, writer: EmitTextWriter) {
+                function writeCommentRangeWithMap(curentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
                     recordSourceMapSpan(comment.pos);
-                    writeCommentRange(comment, writer);
+                    writeCommentRange(currentSourceFile, writer, comment, newLine);
                     recordSourceMapSpan(comment.end);
                 }
 
@@ -632,7 +1571,7 @@ module ts {
                 function writeJavaScriptAndSourceMapFile(emitOutput: string, writeByteOrderMark: boolean) {
                     // Write source map file
                     encodeLastRecordedSourceMapSpan();
-                    writeFile(sourceMapData.sourceMapFilePath, serializeSourceMapContents(
+                    writeFile(compilerHost, diagnostics, sourceMapData.sourceMapFilePath, serializeSourceMapContents(
                         3,
                         sourceMapData.sourceMapFile,
                         sourceMapData.sourceMapSourceRoot,
@@ -671,7 +1610,7 @@ module ts {
                     if (root) { // emitting single module file
                         // For modules or multiple emit files the mapRoot will have directory structure like the sources
                         // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceMapDir, root));
+                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(root, program, sourceMapDir));
                     }
 
                     if (!isRootedDiskPath(sourceMapDir) && !isUrl(sourceMapDir)) {
@@ -717,7 +1656,7 @@ module ts {
             }
 
             function writeJavaScriptFile(emitOutput: string, writeByteOrderMark: boolean) {
-                writeFile(jsFilePath, emitOutput, writeByteOrderMark);
+                writeFile(compilerHost, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
 
             function emitTokenText(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
@@ -793,7 +1732,7 @@ module ts {
             }
 
             function emitLiteral(node: LiteralExpression) {
-                var text = getSourceTextOfLocalNode(node);
+                var text = getSourceTextOfLocalNode(currentSourceFile, node);
                 if (node.kind === SyntaxKind.StringLiteral && compilerOptions.sourceMap) {
                     writer.writeLiteral(text);
                 }
@@ -815,7 +1754,7 @@ module ts {
                         write(node.text);
                     }
                     else {
-                        write(getSourceTextOfLocalNode(node));
+                        write(getSourceTextOfLocalNode(currentSourceFile, node));
                     }
 
                     write("\"");
@@ -860,7 +1799,7 @@ module ts {
                         write(".");
                     }
                 }
-                write(getSourceTextOfLocalNode(node));
+                write(getSourceTextOfLocalNode(currentSourceFile, node));
             }
 
             function emitThis(node: Node) {
@@ -2198,9 +3137,9 @@ module ts {
 
             function emitLeadingDeclarationComments(node: Node) {
                 var leadingComments = getLeadingCommentsToEmit(node);
-                emitNewLineBeforeLeadingComments(node, leadingComments, writer);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);
+                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitTrailingDeclarationComments(node: Node) {
@@ -2208,7 +3147,7 @@ module ts {
                 if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
                     var trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.end);
                     // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                    emitComments(trailingComments, /*trailingSeparator*/ false, writer, writeComment);
+                    emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);                    
                 }
             }
 
@@ -2222,9 +3161,9 @@ module ts {
                     // get the leading comments from the node
                     leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
                 }
-                emitNewLineBeforeLeadingComments({ pos: pos, end: pos }, leadingComments, writer);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, { pos: pos, end: pos }, leadingComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);
+                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);                
             }
 
             function emitDetachedCommentsAtPosition(node: TextRange) {
@@ -2235,8 +3174,8 @@ module ts {
 
                     forEach(leadingComments, comment => {
                         if (lastComment) {
-                            var lastCommentLine = getLineOfLocalPosition(lastComment.end);
-                            var commentLine = getLineOfLocalPosition(comment.pos);
+                            var lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastComment.end);
+                            var commentLine = getLineOfLocalPosition(currentSourceFile, comment.pos);
 
                             if (commentLine >= lastCommentLine + 2) {
                                 // There was a blank line between the last comment and this comment.  This
@@ -2254,12 +3193,12 @@ module ts {
                         // All comments look like they could have been part of the copyright header.  Make
                         // sure there is at least one blank line between it and the node.  If not, it's not
                         // a copyright header.
-                        var lastCommentLine = getLineOfLocalPosition(detachedComments[detachedComments.length - 1].end);
-                        var astLine = getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node.pos));
+                        var lastCommentLine = getLineOfLocalPosition(currentSourceFile, detachedComments[detachedComments.length - 1].end);
+                        var astLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
                         if (astLine >= lastCommentLine + 2) {
                             // Valid detachedComments
-                            emitNewLineBeforeLeadingComments(node, leadingComments, writer);
-                            emitComments(detachedComments, /*trailingSeparator*/ true, writer, writeComment);
+                            emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
+                            emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
                             var currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: detachedComments[detachedComments.length - 1].end };
                             if (detachedCommentsInfo) {
                                 detachedCommentsInfo.push(currentDetachedCommentInfo);
@@ -2289,9 +3228,9 @@ module ts {
                     }
                 }
 
-                emitNewLineBeforeLeadingComments(node, pinnedComments, writer);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, pinnedComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(pinnedComments, /*trailingSeparator*/ true, writer, writeComment);
+                emitComments(currentSourceFile, writer, pinnedComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             if (compilerOptions.sourceMap) {
@@ -2313,931 +3252,18 @@ module ts {
             writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
         }
 
-        function emitDeclarations(jsFilePath: string, root?: SourceFile) {
-            var writer = createTextWriter(trackSymbol);
-            var write = writer.write;
-            var writeLine = writer.writeLine;
-            var increaseIndent = writer.increaseIndent;
-            var decreaseIndent = writer.decreaseIndent;
-
-            var enclosingDeclaration: Node;
-            var reportedDeclarationError = false;
-
-            var emitJsDocComments = compilerOptions.removeComments ? function (declaration: Declaration) { } : writeJsDocComments;
-
-            var aliasDeclarationEmitInfo: {
-                declaration: ImportDeclaration;
-                outputPos: number;
-                indent: number;
-                asynchronousOutput?: string; // If the output for alias was written asynchronously, the corresponding output
-            }[] = [];
-
-            var getSymbolVisibilityDiagnosticMessage: (symbolAccesibilityResult: SymbolAccessiblityResult) => {
-                errorNode: Node;
-                diagnosticMessage: DiagnosticMessage;
-                typeName?: Identifier
-            }
-
-            function writeAsychronousImportDeclarations(importDeclarations: ImportDeclaration[]) {
-                var oldWriter = writer;
-                forEach(importDeclarations, aliasToWrite => {
-                    var aliasEmitInfo = forEach(aliasDeclarationEmitInfo, declEmitInfo => declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined);
-                    writer = createTextWriter(trackSymbol);
-                    for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
-                        writer.increaseIndent();
-                    }
-
-                    writeImportDeclaration(aliasToWrite);
-                    aliasEmitInfo.asynchronousOutput = writer.getText();
-                });
-                writer = oldWriter;
-            }
-
-            function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
-                var symbolAccesibilityResult = resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning);
-                if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
-
-                    // write the aliases
-                    if (symbolAccesibilityResult && symbolAccesibilityResult.aliasesToMakeVisible) {
-                        writeAsychronousImportDeclarations(symbolAccesibilityResult.aliasesToMakeVisible);
-                    }
-                }
-                else {
-                    // Report error
-                    reportedDeclarationError = true;
-                    var errorInfo = getSymbolVisibilityDiagnosticMessage(symbolAccesibilityResult);
-                    if (errorInfo) {
-                        if (errorInfo.typeName) {
-                            diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
-                                errorInfo.diagnosticMessage,
-                                getSourceTextOfLocalNode(errorInfo.typeName),
-                                symbolAccesibilityResult.errorSymbolName,
-                                symbolAccesibilityResult.errorModuleName));
-                        }
-                        else {
-                            diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
-                                errorInfo.diagnosticMessage,
-                                symbolAccesibilityResult.errorSymbolName,
-                                symbolAccesibilityResult.errorModuleName));
-                        }
-                    }
-                }
-            }
-
-            function emitLines(nodes: Node[]) {
-                for (var i = 0, n = nodes.length; i < n; i++) {
-                    emitNode(nodes[i]);
-                }
-            }
-
-            function emitCommaList(nodes: Node[], eachNodeEmitFn: (node: Node) => void) {
-                var currentWriterPos = writer.getTextPos();
-                for (var i = 0, n = nodes.length; i < n; i++) {
-                    if (currentWriterPos !== writer.getTextPos()) {
-                        write(", ");
-                    }
-                    currentWriterPos = writer.getTextPos();
-                    eachNodeEmitFn(nodes[i]);
-                }
-            }
-
-            function writeJsDocComments(declaration: Declaration) {
-                if (declaration) {
-                    var jsDocComments = getJsDocComments(declaration, currentSourceFile);
-                    emitNewLineBeforeLeadingComments(declaration, jsDocComments, writer);
-                    // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
-                    emitComments(jsDocComments, /*trailingSeparator*/ true, writer, writeCommentRange);
-                }
-            }
-
-            function emitSourceTextOfNode(node: Node) {
-                write(getSourceTextOfLocalNode(node));
-            }
-
-            function emitSourceFile(node: SourceFile) {
-                currentSourceFile = node;
-                enclosingDeclaration = node;
-                emitLines(node.statements);
-            }
-
-            function emitExportAssignment(node: ExportAssignment) {
-                write("export = ");
-                emitSourceTextOfNode(node.exportName);
-                write(";");
-                writeLine();
-            }
-
-            function emitDeclarationFlags(node: Declaration) {
-                if (node.flags & NodeFlags.Static) {
-                    if (node.flags & NodeFlags.Private) {
-                        write("private ");
-                    }
-                    else if (node.flags & NodeFlags.Protected) {
-                        write("protected ");
-                    }
-                    write("static ");
-                }
-                else {
-                    if (node.flags & NodeFlags.Private) {
-                        write("private ");
-                    }
-                    else if (node.flags & NodeFlags.Protected) {
-                        write("protected ");
-                    }
-                    // If the node is parented in the current source file we need to emit export declare or just export
-                    else if (node.parent === currentSourceFile) {
-                        // If the node is exported 
-                        if (node.flags & NodeFlags.Export) {
-                            write("export ");
-                        }
-
-                        if (node.kind !== SyntaxKind.InterfaceDeclaration) {
-                            write("declare ");
-                        }
-                    }
-                }
-            }
-
-            function emitImportDeclaration(node: ImportDeclaration) {
-                var nodeEmitInfo = {
-                    declaration: node,
-                    outputPos: writer.getTextPos(),
-                    indent: writer.getIndent(),
-                    hasWritten: resolver.isDeclarationVisible(node)
-                };
-                aliasDeclarationEmitInfo.push(nodeEmitInfo);
-                if (nodeEmitInfo.hasWritten) {
-                    writeImportDeclaration(node);
-                }
-            }
-
-            function writeImportDeclaration(node: ImportDeclaration) {
-                // note usage of writer. methods instead of aliases created, just to make sure we are using 
-                // correct writer especially to handle asynchronous alias writing
-                emitJsDocComments(node);
-                if (node.flags & NodeFlags.Export) {
-                    writer.write("export ");
-                }
-                writer.write("import ");
-                writer.write(getSourceTextOfLocalNode(node.name));
-                writer.write(" = ");
-                if (node.entityName) {
-                    checkEntityNameAccessible();
-                    writer.write(getSourceTextOfLocalNode(node.entityName));
-                    writer.write(";");
-                }
-                else {
-                    writer.write("require(");
-                    writer.write(getSourceTextOfLocalNode(node.externalModuleName));
-                    writer.write(");");
-                }
-                writer.writeLine();
-
-                function checkEntityNameAccessible() {
-                    var symbolAccesibilityResult = resolver.isImportDeclarationEntityNameReferenceDeclarationVisibile(node.entityName);
-                    if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
-                        // write the aliases
-                        if (symbolAccesibilityResult.aliasesToMakeVisible) {
-                            writeAsychronousImportDeclarations(symbolAccesibilityResult.aliasesToMakeVisible);
-                        }
-                    }
-                    else {
-                        // Report error
-                        reportedDeclarationError = true;
-                        diagnostics.push(createDiagnosticForNode(node,
-                            Diagnostics.Import_declaration_0_is_using_private_name_1,
-                            getSourceTextOfLocalNode(node.name),
-                            symbolAccesibilityResult.errorSymbolName));
-                    }
-                }
-            }
-
-            function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (resolver.isDeclarationVisible(node)) {
-                    emitJsDocComments(node);
-                    emitDeclarationFlags(node);
-                    write("module ");
-                    emitSourceTextOfNode(node.name);
-                    while (node.body.kind !== SyntaxKind.ModuleBlock) {
-                        node = <ModuleDeclaration>node.body;
-                        write(".");
-                        emitSourceTextOfNode(node.name);
-                    }
-                    var prevEnclosingDeclaration = enclosingDeclaration;
-                    enclosingDeclaration = node;
-                    write(" {");
-                    writeLine();
-                    increaseIndent();
-                    emitLines((<Block>node.body).statements);
-                    decreaseIndent();
-                    write("}");
-                    writeLine();
-                    enclosingDeclaration = prevEnclosingDeclaration;
-                }
-            }
-
-            function emitEnumDeclaration(node: EnumDeclaration) {
-                if (resolver.isDeclarationVisible(node)) {
-                    emitJsDocComments(node);
-                    emitDeclarationFlags(node);
-                    write("enum ");
-                    emitSourceTextOfNode(node.name);
-                    write(" {");
-                    writeLine();
-                    increaseIndent();
-                    emitLines(node.members);
-                    decreaseIndent();
-                    write("}");
-                    writeLine();
-                }
-            }
-
-            function emitEnumMemberDeclaration(node: EnumMember) {
-                emitJsDocComments(node);
-                emitSourceTextOfNode(node.name);
-                var enumMemberValue = resolver.getEnumMemberValue(node);
-                if (enumMemberValue !== undefined) {
-                    write(" = ");
-                    write(enumMemberValue.toString());
-                }
-                write(",");
-                writeLine();
-            }
-
-            function emitTypeParameters(typeParameters: TypeParameterDeclaration[]) {
-                function emitTypeParameter(node: TypeParameterDeclaration) {
-                    function getTypeParameterConstraintVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
-                        // Type parameter constraints are named by user so we should always be able to name it
-                        var diagnosticMessage: DiagnosticMessage;
-                        switch (node.parent.kind) {
-                            case SyntaxKind.ClassDeclaration:
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_private_name_1;
-                                break;
-
-                            case SyntaxKind.InterfaceDeclaration:
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Type_parameter_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1;
-                                break;
-
-                            case SyntaxKind.ConstructSignature:
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
-                                break;
-
-                            case SyntaxKind.CallSignature:
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
-                                break;
-
-                            case SyntaxKind.Method:
-                                if (node.parent.flags & NodeFlags.Static) {
-                                    diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                    Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                                    Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
-                                }
-                                else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
-                                    diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                    Diagnostics.Type_parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                                    Diagnostics.Type_parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
-                                }
-                                else {
-                                    diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                    Diagnostics.Type_parameter_0_of_method_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-                                    Diagnostics.Type_parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
-                                }
-                                break;
-
-                            case SyntaxKind.FunctionDeclaration:
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_private_name_1;
-                                break;
-
-                            default:
-                                Debug.fail("This is unknown parent for type parameter: " + SyntaxKind[node.parent.kind]);
-                        }
-
-                        return {
-                            diagnosticMessage: diagnosticMessage,
-                            errorNode: node,
-                            typeName: node.name
-                        };
-                    }
-
-                    increaseIndent();
-                    emitJsDocComments(node);
-                    decreaseIndent();
-                    emitSourceTextOfNode(node.name);
-                    // If there is constraint present and this is not a type parameter of the private method emit the constraint
-                    if (node.constraint && (node.parent.kind !== SyntaxKind.Method || !(node.parent.flags & NodeFlags.Private))) {
-                        write(" extends ");
-                        getSymbolVisibilityDiagnosticMessage = getTypeParameterConstraintVisibilityError;
-                        resolver.writeTypeAtLocation(node.constraint, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
-                    }
-                }
-
-                if (typeParameters) {
-                    write("<");
-                    emitCommaList(typeParameters, emitTypeParameter);
-                    write(">");
-                }
-            }
-
-            function emitHeritageClause(typeReferences: TypeReferenceNode[], isImplementsList: boolean) {
-                if (typeReferences) {
-                    write(isImplementsList ? " implements " : " extends ");
-                    emitCommaList(typeReferences, emitTypeOfTypeReference);
-                }
-
-                function emitTypeOfTypeReference(node: Node) {
-                    getSymbolVisibilityDiagnosticMessage = getHeritageClauseVisibilityError;
-                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.WriteArrayAsGenericType | TypeFormatFlags.UseTypeOfFunction, writer);
-
-                    function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
-                        var diagnosticMessage: DiagnosticMessage;
-                        // Heritage clause is written by user so it can always be named
-                        if (node.parent.kind === SyntaxKind.ClassDeclaration) {
-                            // Class
-                            if (symbolAccesibilityResult.errorModuleName) {
-                                // Module is inaccessible
-                                diagnosticMessage = isImplementsList ?
-                                Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_name_1_from_private_module_2;
-                            }
-                            else {
-                                // Class or Interface implemented/extended is inaccessible
-                                diagnosticMessage = isImplementsList ?
-                                Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
-                                Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
-                            }
-                        }
-                        else {
-                            if (symbolAccesibilityResult.errorModuleName) {
-                                // Module is inaccessible
-                                diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_name_1_from_private_module_2;
-                            }
-                            else {
-                                // interface is inaccessible
-                                diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_private_name_1;
-                            }
-                        }
-
-                        return {
-                            diagnosticMessage: diagnosticMessage,
-                            errorNode: node,
-                            typeName: (<Declaration>node.parent).name
-                        };
-                    }
-                }
-            }
-
-            function emitClassDeclaration(node: ClassDeclaration) {
-                function emitParameterProperties(constructorDeclaration: ConstructorDeclaration) {
-                    if (constructorDeclaration) {
-                        forEach(constructorDeclaration.parameters, param => {
-                            if (param.flags & NodeFlags.AccessibilityModifier) {
-                                emitPropertyDeclaration(param);
-                            }
-                        });
-                    }
-                }
-
-                if (resolver.isDeclarationVisible(node)) {
-                    emitJsDocComments(node);
-                    emitDeclarationFlags(node);
-                    write("class ");
-                    emitSourceTextOfNode(node.name);
-                    var prevEnclosingDeclaration = enclosingDeclaration;
-                    enclosingDeclaration = node;
-                    emitTypeParameters(node.typeParameters);
-                    if (node.baseType) {
-                        emitHeritageClause([node.baseType], /*isImplementsList*/ false);
-                    }
-                    emitHeritageClause(node.implementedTypes, /*isImplementsList*/ true);
-                    write(" {");
-                    writeLine();
-                    increaseIndent();
-                    emitParameterProperties(getFirstConstructorWithBody(node));
-                    emitLines(node.members);
-                    decreaseIndent();
-                    write("}");
-                    writeLine();
-                    enclosingDeclaration = prevEnclosingDeclaration;
-                }
-            }
-
-            function emitInterfaceDeclaration(node: InterfaceDeclaration) {
-                if (resolver.isDeclarationVisible(node)) {
-                    emitJsDocComments(node);
-                    emitDeclarationFlags(node);
-                    write("interface ");
-                    emitSourceTextOfNode(node.name);
-                    var prevEnclosingDeclaration = enclosingDeclaration;
-                    enclosingDeclaration = node;
-                    emitTypeParameters(node.typeParameters);
-                    emitHeritageClause(node.baseTypes, /*isImplementsList*/ false);
-                    write(" {");
-                    writeLine();
-                    increaseIndent();
-                    emitLines(node.members);
-                    decreaseIndent();
-                    write("}");
-                    writeLine();
-                    enclosingDeclaration = prevEnclosingDeclaration;
-                }
-            }
-
-            function emitPropertyDeclaration(node: PropertyDeclaration) {
-                emitJsDocComments(node);
-                emitDeclarationFlags(node);
-                emitVariableDeclaration(node);
-                write(";");
-                writeLine();
-            }
-
-            function emitVariableDeclaration(node: VariableDeclaration) {
-                // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
-                // so there is no check needed to see if declaration is visible
-                if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
-                    emitSourceTextOfNode(node.name);
-                    // If optional property emit ?
-                    if (node.kind === SyntaxKind.Property && (node.flags & NodeFlags.QuestionMark)) {
-                        write("?");
-                    }
-                    if (!(node.flags & NodeFlags.Private)) {
-                        write(": ");
-                        getSymbolVisibilityDiagnosticMessage = getVariableDeclarationTypeVisibilityError;
-                        resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
-                    }
-                }
-
-                function getVariableDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
-                    var diagnosticMessage: DiagnosticMessage;
-                    if (node.kind === SyntaxKind.VariableDeclaration) {
-                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                        Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-                        Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_private_module_2 :
-                        Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
-                    }
-                    // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
-                    else if (node.kind === SyntaxKind.Property) {
-                        if (node.flags & NodeFlags.Static) {
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                            Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-                            Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                            Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
-                        }
-                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                            Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-                            Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                            Diagnostics.Public_property_0_of_exported_class_has_or_is_using_private_name_1;
-                        }
-                        else {
-                            // Interfaces cannot have types that cannot be named
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            Diagnostics.Property_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-                            Diagnostics.Property_0_of_exported_interface_has_or_is_using_private_name_1;
-                        }
-                    }
-
-                    return diagnosticMessage !== undefined ? {
-                        diagnosticMessage: diagnosticMessage,
-                        errorNode: node,
-                        typeName: node.name
-                    } : undefined;
-                }
-            }
-
-            function emitVariableStatement(node: VariableStatement) {
-                var hasDeclarationWithEmit = forEach(node.declarations, varDeclaration => resolver.isDeclarationVisible(varDeclaration));
-                if (hasDeclarationWithEmit) {
-                    emitJsDocComments(node);
-                    emitDeclarationFlags(node);
-                    write("var ");
-                    emitCommaList(node.declarations, emitVariableDeclaration);
-                    write(";");
-                    writeLine();
-                }
-            }
-
-            function emitAccessorDeclaration(node: AccessorDeclaration) {
-                var accessors = getAllAccessorDeclarations(<ClassDeclaration>node.parent, node);
-                if (node === accessors.firstAccessor) {
-                    emitJsDocComments(accessors.getAccessor);
-                    emitJsDocComments(accessors.setAccessor);
-                    emitDeclarationFlags(node);
-                    emitSourceTextOfNode(node.name);
-                    if (!(node.flags & NodeFlags.Private)) {
-                        write(": ");
-                        getSymbolVisibilityDiagnosticMessage = getAccessorDeclarationTypeVisibilityError;
-                        resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
-                    }
-                    write(";");
-                    writeLine();
-                }
-
-                function getAccessorDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
-                    var diagnosticMessage: DiagnosticMessage;
-                    if (node.kind === SyntaxKind.SetAccessor) {
-                        // Setters have to have type named and cannot infer it so, the type should always be named
-                        if (node.parent.flags & NodeFlags.Static) {
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                            Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_private_name_1;
-                        }
-                        else {
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                            Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_private_name_1;
-                        }
-                        return {
-                            diagnosticMessage: diagnosticMessage,
-                            errorNode: node.parameters[0],
-                            typeName: node.name
-                        };
-                    }
-                    else {
-                        if (node.flags & NodeFlags.Static) {
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                            Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-                            Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
-                            Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_private_name_0;
-                        }
-                        else {
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                            Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-                            Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
-                            Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0;
-                        }
-                        return {
-                            diagnosticMessage: diagnosticMessage,
-                            errorNode: node.name,
-                            typeName: undefined
-                        };
-                    }
-                }
-            }
-
-            function emitFunctionDeclaration(node: FunctionDeclaration) {
-                // If we are emitting Method/Constructor it isn't moduleElement and hence already determined to be emitting
-                // so no need to verify if the declaration is visible
-                if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
-                    !resolver.isImplementationOfOverload(node)) {
-                    emitJsDocComments(node);
-                    emitDeclarationFlags(node);
-                    if (node.kind === SyntaxKind.FunctionDeclaration) {
-                        write("function ");
-                        emitSourceTextOfNode(node.name);
-                    }
-                    else if (node.kind === SyntaxKind.Constructor) {
-                        write("constructor");
-                    }
-                    else {
-                        emitSourceTextOfNode(node.name);
-                        if (node.flags & NodeFlags.QuestionMark) {
-                            write("?");
-                        }
-                    }
-                    emitSignatureDeclaration(node);
-                }
-            }
-
-            function emitConstructSignatureDeclaration(node: SignatureDeclaration) {
-                emitJsDocComments(node);
-                write("new ");
-                emitSignatureDeclaration(node);
-            }
-
-            function emitSignatureDeclaration(node: SignatureDeclaration) {
-                if (node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.IndexSignature) {
-                    // Only index and call signatures are emitted directly, so emit their js doc comments, rest will do that in their own functions
-                    emitJsDocComments(node);
-                }
-                emitTypeParameters(node.typeParameters);
-                if (node.kind === SyntaxKind.IndexSignature) {
-                    write("[");
-                }
-                else {
-                    write("(");
-                }
-
-                // Parameters
-                emitCommaList(node.parameters, emitParameterDeclaration);
-
-                if (node.kind === SyntaxKind.IndexSignature) {
-                    write("]");
-                }
-                else {
-                    write(")");
-                }
-
-                // If this is not a constructor and is not private, emit the return type
-                if (node.kind !== SyntaxKind.Constructor && !(node.flags & NodeFlags.Private)) {
-                    write(": ");
-                    getSymbolVisibilityDiagnosticMessage = getReturnTypeVisibilityError;
-                    resolver.writeReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
-                }
-                write(";");
-                writeLine();
-
-                function getReturnTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
-                    var diagnosticMessage: DiagnosticMessage;
-                    switch (node.kind) {
-                        case SyntaxKind.ConstructSignature:
-                            // Interfaces cannot have return types that cannot be named
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ? 
-                            Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
-                            Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_0;
-                            break;
-
-                        case SyntaxKind.CallSignature:
-                            // Interfaces cannot have return types that cannot be named
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
-                            Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_private_name_0;
-                            break;
-
-                        case SyntaxKind.IndexSignature:
-                            // Interfaces cannot have return types that cannot be named
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
-                            Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_private_name_0;
-                            break;
-
-                        case SyntaxKind.Method:
-                            if (node.flags & NodeFlags.Static) {
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                                Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-                                Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
-                                Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_private_name_0;
-                            }
-                            else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                                Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-                                Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
-                                Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_private_name_0;
-                            }
-                            else {
-                                // Interfaces cannot have return types that cannot be named
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
-                                Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_private_name_0;
-                            }
-                            break;
-
-                        case SyntaxKind.FunctionDeclaration:
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                            Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-                            Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_private_module_1 :
-                            Diagnostics.Return_type_of_exported_function_has_or_is_using_private_name_0;
-                            break;
-
-                        default:
-                            Debug.fail("This is unknown kind for signature: " + SyntaxKind[node.kind]);
-                    }
-
-                    return {
-                        diagnosticMessage: diagnosticMessage,
-                        errorNode: <Node>node.name || node,
-                    };
-                }
-            }
-
-            function emitParameterDeclaration(node: ParameterDeclaration) {
-                increaseIndent();
-                emitJsDocComments(node);
-                if (node.flags & NodeFlags.Rest) {
-                    write("...");
-                }
-                emitSourceTextOfNode(node.name);
-                if (node.initializer || (node.flags & NodeFlags.QuestionMark)) {
-                    write("?");
-                }
-                decreaseIndent();
-
-                if (!(node.parent.flags & NodeFlags.Private)) {
-                    write(": ");
-                    getSymbolVisibilityDiagnosticMessage = getParameterDeclarationTypeVisibilityError;
-                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
-                }
-
-                function getParameterDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
-                    var diagnosticMessage: DiagnosticMessage;
-                    switch (node.parent.kind) {
-                        case SyntaxKind.Constructor:
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                            Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-                            Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                            Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_private_name_1;
-                            break;
-
-                        case SyntaxKind.ConstructSignature:
-                            // Interfaces cannot have parameter types that cannot be named
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-                            Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
-                            break;
-
-                        case SyntaxKind.CallSignature:
-                            // Interfaces cannot have parameter types that cannot be named
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-                            Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
-                            break;
-
-                        case SyntaxKind.Method:
-                            if (node.parent.flags & NodeFlags.Static) {
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                                Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-                                Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
-                            }
-                            else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                                Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-                                Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
-                            }
-                            else {
-                                // Interfaces cannot have parameter types that cannot be named
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
-                            }
-                            break;
-
-                        case SyntaxKind.FunctionDeclaration:
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                            Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-                            Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2 :
-                            Diagnostics.Parameter_0_of_exported_function_has_or_is_using_private_name_1;
-                            break;
-
-                        default:
-                            Debug.fail("This is unknown parent for parameter: " + SyntaxKind[node.parent.kind]);
-                    }
-
-                    return {
-                        diagnosticMessage: diagnosticMessage,
-                        errorNode: node,
-                        typeName: node.name
-                    };
-                }
-            }
-
-            function emitNode(node: Node) {
-                switch (node.kind) {
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.Method:
-                        return emitFunctionDeclaration(<FunctionDeclaration>node);
-                    case SyntaxKind.ConstructSignature:
-                        return emitConstructSignatureDeclaration(<SignatureDeclaration>node);
-                    case SyntaxKind.CallSignature:
-                    case SyntaxKind.IndexSignature:
-                        return emitSignatureDeclaration(<SignatureDeclaration>node);
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        return emitAccessorDeclaration(<AccessorDeclaration>node);
-                    case SyntaxKind.VariableStatement:
-                        return emitVariableStatement(<VariableStatement>node);
-                    case SyntaxKind.Property:
-                        return emitPropertyDeclaration(<PropertyDeclaration>node);
-                    case SyntaxKind.InterfaceDeclaration:
-                        return emitInterfaceDeclaration(<InterfaceDeclaration>node);
-                    case SyntaxKind.ClassDeclaration:
-                        return emitClassDeclaration(<ClassDeclaration>node);
-                    case SyntaxKind.EnumMember:
-                        return emitEnumMemberDeclaration(<EnumMember>node);
-                    case SyntaxKind.EnumDeclaration:
-                        return emitEnumDeclaration(<EnumDeclaration>node);
-                    case SyntaxKind.ModuleDeclaration:
-                        return emitModuleDeclaration(<ModuleDeclaration>node);
-                    case SyntaxKind.ImportDeclaration:
-                        return emitImportDeclaration(<ImportDeclaration>node);
-                    case SyntaxKind.ExportAssignment:
-                        return emitExportAssignment(<ExportAssignment>node);
-                    case SyntaxKind.SourceFile:
-                        return emitSourceFile(<SourceFile>node);
-                }
-            }
-
-            function tryResolveScriptReference(sourceFile: SourceFile, reference: FileReference) {
-                var referenceFileName = normalizePath(combinePaths(getDirectoryPath(sourceFile.filename), reference.filename));
-                return program.getSourceFile(referenceFileName);
-            }
-
-            // Contains the reference paths that needs to go in the declaration file. 
-            // Collecting this separately because reference paths need to be first thing in the declaration file 
-            // and we could be collecting these paths from multiple files into single one with --out option
-            var referencePathsOutput = "";
-            function writeReferencePath(referencedFile: SourceFile) {
-                var declFileName = referencedFile.flags & NodeFlags.DeclarationFile
-                    ? referencedFile.filename // Declaration file, use declaration file name
-                    : shouldEmitToOwnFile(referencedFile, compilerOptions)
-                    ? getOwnEmitOutputFilePath(referencedFile, ".d.ts") // Own output file so get the .d.ts file
-                    : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
-
-                declFileName = getRelativePathToDirectoryOrUrl(
-                    getDirectoryPath(normalizeSlashes(jsFilePath)),
-                    declFileName,
-                    compilerHost.getCurrentDirectory(),
-                    compilerHost.getCanonicalFileName,
-                    /*isAbsolutePathAnUrl*/ false);
-
-                referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
-            }
-
-            if (root) {
-                // Emitting just a single file, so emit references in this file only
-                if (!compilerOptions.noResolve) {
-                    var addedGlobalFileReference = false;
-                    forEach(root.referencedFiles, fileReference => {
-                        var referencedFile = tryResolveScriptReference(root, fileReference);
-
-                        // All the references that are not going to be part of same file
-                        if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
-                            shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
-                            !addedGlobalFileReference)) { // Or the global out file corresponding to this reference was not added
-
-                            writeReferencePath(referencedFile);
-                            if (!isExternalModuleOrDeclarationFile(referencedFile)) {
-                                addedGlobalFileReference = true;
-                            }
-                        }
-                    });
-                }
-
-                emitNode(root);
-            }
-            else {
-                // Emit references corresponding to this file
-                var emittedReferencedFiles: SourceFile[] = [];
-                forEach(program.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        // Check what references need to be added
-                        if (!compilerOptions.noResolve) {
-                            forEach(sourceFile.referencedFiles, fileReference => {
-                                var referencedFile = tryResolveScriptReference(sourceFile, fileReference);
-
-                                // If the reference file is a declaration file or an external module, emit that reference
-                                if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
-                                    !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
-
-                                    writeReferencePath(referencedFile);
-                                    emittedReferencedFiles.push(referencedFile);
-                                }
-                            });
-                        }
-
-                        emitNode(sourceFile);
-                    }
-                });
-            }
-
-            // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
-            // or should we just not write this file like we are doing now
-            if (!reportedDeclarationError) {
-                var declarationOutput = referencePathsOutput;
-                var synchronousDeclarationOutput = writer.getText();
-                // apply additions
-                var appliedSyncOutputPos = 0;
-                forEach(aliasDeclarationEmitInfo, aliasEmitInfo => {
-                    if (aliasEmitInfo.asynchronousOutput) {
-                        declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos, aliasEmitInfo.outputPos);
-                        declarationOutput += aliasEmitInfo.asynchronousOutput;
-                        appliedSyncOutputPos = aliasEmitInfo.outputPos;
-                    }
-                });
-                declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
-                writeFile(removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
-            }
-        }
-
         var hasSemanticErrors = resolver.hasSemanticErrors();
 
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             emitJavaScript(jsFilePath, sourceFile);
             if (!hasSemanticErrors && compilerOptions.declaration) {
-                emitDeclarations(jsFilePath, sourceFile);
+                var emitDeclarationResult = emitDeclarations(program, resolver, diagnostics, jsFilePath, sourceFile);
+                // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
+                // or should we just not write this file like we are doing now
+                if (!emitDeclarationResult.reportedDeclarationError) {
+                    writeDeclarationToFile(compilerHost, compilerOptions, diagnostics, emitDeclarationResult.aliasDeclarationEmitInfo, emitDeclarationResult.synchronousDeclarationOutput,
+                        jsFilePath, emitDeclarationResult.declarationOutput);
+                }
             }
         }
 
@@ -3245,7 +3271,7 @@ module ts {
             // No targetSourceFile is specified (e.g. calling emitter from batch compiler)
             forEach(program.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, ".js");
+                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, program, ".js");
                     emitFile(jsFilePath, sourceFile);
                 }
             });
@@ -3258,7 +3284,7 @@ module ts {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
                 // If shouldEmitToOwnFile returns true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
-                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, ".js");
+                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, program, ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
