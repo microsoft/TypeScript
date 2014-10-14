@@ -71,6 +71,7 @@ module ts {
         var checker: TypeChecker = {
             getProgram: () => program,
             getDiagnostics: getDiagnostics,
+            getDeclarationDiagnostics: getDeclarationDiagnostics,
             getGlobalDiagnostics: getGlobalDiagnostics,
             getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
             getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
@@ -930,7 +931,7 @@ module ts {
             }
         }
 
-        function isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult {
+        function isImportDeclarationEntityNameReferenceDeclarationVisible(entityName: EntityName): SymbolAccessiblityResult {
             var firstIdentifier = getFirstIdentifier(entityName);
             var firstIdentifierName = identifierToString(<Identifier>firstIdentifier);
             var symbolOfNameSpace = resolveName(entityName.parent, (<Identifier>firstIdentifier).text, SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, firstIdentifierName);
@@ -7048,6 +7049,12 @@ module ts {
             return getSortedDiagnostics();
         }
 
+        function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[] {
+            var resolver = createResolver();
+            checkSourceFile(targetSourceFile);
+            return ts.getDeclarationDiagnostics(program, resolver, targetSourceFile);
+        }
+
         function getGlobalDiagnostics(): Diagnostic[] {
             return filter(getSortedDiagnostics(), d => !d.file);
         }
@@ -7689,8 +7696,8 @@ module ts {
             writeType(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
         }
 
-        function invokeEmitter(targetSourceFile?: SourceFile) {
-            var resolver: EmitResolver = {
+        function createResolver(): EmitResolver {
+            return {
                 getProgram: () => program,
                 getLocalNameOfContainer: getLocalNameOfContainer,
                 getExpressionNamePrefix: getExpressionNamePrefix,
@@ -7705,9 +7712,13 @@ module ts {
                 writeTypeAtLocation: writeTypeAtLocation,
                 writeReturnTypeOfSignatureDeclaration: writeReturnTypeOfSignatureDeclaration,
                 isSymbolAccessible: isSymbolAccessible,
-                isImportDeclarationEntityNameReferenceDeclarationVisibile: isImportDeclarationEntityNameReferenceDeclarationVisibile,
+                isImportDeclarationEntityNameReferenceDeclarationVisible: isImportDeclarationEntityNameReferenceDeclarationVisible,
                 getConstantValue: getConstantValue,
-            };
+            }
+        }
+
+        function invokeEmitter(targetSourceFile?: SourceFile) {
+            var resolver = createResolver();
             checkProgram();
             return emitFiles(resolver, targetSourceFile);
         }
