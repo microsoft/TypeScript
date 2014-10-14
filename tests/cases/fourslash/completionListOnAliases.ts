@@ -9,7 +9,7 @@
 ////}
 
 goTo.marker("1");
-verify.memberListContains("x", "(alias) x", undefined);
+verify.memberListContains("x", "import x = M", undefined);
 
 goTo.marker("2");
 verify.memberListContains("value");
