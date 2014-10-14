@@ -18,7 +18,6 @@
 ////     }
 //// }
 
-debugger;
 var c = classification;
 verify.syntacticClassificationsAre(
     c.comment("// comment"),

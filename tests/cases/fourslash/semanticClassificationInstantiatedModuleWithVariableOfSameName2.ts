@@ -1,23 +1,28 @@
 ﻿/// <reference path="fourslash.ts"/>
 
-////module M {
-////    export interface I {
+////module /*0*/M {
+////    export interface /*1*/I {
 ////    }
 ////}
 ////
-////module M {
+////module /*2*/M {
 ////    var x = 10;
 ////}
 ////
-////var M = {
+////var /*3*/M = {
 ////    foo: 10,
 ////    bar: 20
 ////}
 ////
-////var v: M.I;
+////var v: /*4*/M./*5*/I;
 ////
-////var x = M;
+////var x = /*6*/M;
 
 var c = classification;
 verify.semanticClassificationsAre(
-    c.moduleName("M"), c.interfaceName("I"), c.moduleName("M"), c.moduleName("M"), c.interfaceName("I"), c.moduleName("M"));
+    c.moduleName("M", test.marker("0").position),
+    c.interfaceName("I", test.marker("1").position),
+    c.moduleName("M", test.marker("2").position),
+    c.moduleName("M", test.marker("4").position),
+    c.interfaceName("I", test.marker("5").position),
+    c.moduleName("M", test.marker("6").position));
