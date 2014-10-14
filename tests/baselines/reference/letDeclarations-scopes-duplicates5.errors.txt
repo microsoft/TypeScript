@@ -1,9 +1,12 @@
+tests/cases/compiler/file1.ts(2,7): error TS2300: Duplicate identifier 'var1'.
 tests/cases/compiler/file2.ts(1,7): error TS2300: Duplicate identifier 'var1'.
 
 
-==== tests/cases/compiler/file1.ts (0 errors) ====
+==== tests/cases/compiler/file1.ts (1 errors) ====
     
     const var1 = 0;
+          ~~~~
+!!! error TS2300: Duplicate identifier 'var1'.
     
 ==== tests/cases/compiler/file2.ts (1 errors) ====
     const var1 = 0;

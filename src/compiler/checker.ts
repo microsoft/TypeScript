@@ -226,6 +226,9 @@ module ts {
                 forEach(source.declarations, node => {
                     error(node.name ? node.name : node, Diagnostics.Duplicate_identifier_0, symbolToString(source));
                 });
+                forEach(target.declarations, node => {
+                    error(node.name ? node.name : node, Diagnostics.Duplicate_identifier_0, symbolToString(source));
+                });
             }
         }
 
