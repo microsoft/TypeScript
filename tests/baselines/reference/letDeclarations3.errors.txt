@@ -1,0 +1,18 @@
+tests/cases/compiler/letDeclarations3.ts(3,5): error TS2300: Duplicate identifier 'l1'.
+tests/cases/compiler/letDeclarations3.ts(3,9): error TS2300: Duplicate identifier 'l1'.
+tests/cases/compiler/letDeclarations3.ts(3,13): error TS2300: Duplicate identifier 'l1'.
+
+
+==== tests/cases/compiler/letDeclarations3.ts (3 errors) ====
+    
+    // Duplicate variables
+    let l1, l1, l1;
+        ~~
+!!! error TS2300: Duplicate identifier 'l1'.
+            ~~
+!!! error TS2300: Duplicate identifier 'l1'.
+                ~~
+!!! error TS2300: Duplicate identifier 'l1'.
+    
+    // unexpected 'let'
+    let l2, let, l3;

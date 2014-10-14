@@ -314,6 +314,21 @@ module ts {
                 if (!s && nameNotFoundMessage) {
                     error(errorLocation, nameNotFoundMessage, nameArg);
                 }
+                if (s && s.flags & SymbolFlags.BlockScoped) {
+                    var declaration = forEach(s.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
+                    Debug.assert(declaration, "Bock-scoped variable declaration is undefined");
+                    var declarationSourceFile = getSourceFileOfNode(declaration);
+                    var referenceSourceFile = getSourceFileOfNode(errorLocation);
+                    if (declarationSourceFile === referenceSourceFile && declaration.pos > errorLocation.pos) {
+                        error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
+                    }
+                    else if (compilerOptions.out) {
+                        var sourceFiles = program.getSourceFiles();
+                        if (sourceFiles.indexOf(referenceSourceFile) < sourceFiles.indexOf(declarationSourceFile)) {
+                            error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
+                        }
+                    }
+                }
                 return s;
             }
 

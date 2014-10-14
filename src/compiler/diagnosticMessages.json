@@ -451,27 +451,27 @@
         "category": "Error",
         "code":  1151
     },
-	"'var', 'let' or 'const' expected.": {
+    "'var', 'let' or 'const' expected.": {
         "category": "Error",
         "code": 1152
     },
-	 "'let' variable declarations are only available when targeting ECMAScript 6 and higher.": {
+    "'let' variable declarations are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
         "code": 1153
     },
-	 "'const' variable declarations are only available when targeting ECMAScript 6 and higher.": {
+    "'const' variable declarations are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
         "code": 1154
     },
-	"const must be intialized.": {
+    "const must be intialized.": {
         "category": "Error",
         "code": 1155
     },
-	"const must be declared inside a block.": {
+    "const must be declared inside a block.": {
         "category": "Error",
         "code": 1156
     },
-	"let must be declared inside a block.": {
+    "let must be declared inside a block.": {
         "category": "Error",
         "code": 1157
     },
@@ -1067,6 +1067,10 @@
     "The '{0}' operator is not allowed for boolean types. Consider using '{1}' instead.": {
         "category": "Error",
         "code": 2447
+    },
+    "Block-scoped variable '{0}' used before its declaration.": {
+        "category": "Error",
+        "code": 2448
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

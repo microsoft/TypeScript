@@ -1,0 +1,21 @@
+tests/cases/compiler/constDeclarations-useBeforeDefinition.ts(3,5): error TS2448: Block-scoped variable 'c1' used before its declaration.
+tests/cases/compiler/constDeclarations-useBeforeDefinition.ts(9,5): error TS2448: Block-scoped variable 'v1' used before its declaration.
+
+
+==== tests/cases/compiler/constDeclarations-useBeforeDefinition.ts (2 errors) ====
+    
+    {
+        c1;
+        ~~
+!!! error TS2448: Block-scoped variable 'c1' used before its declaration.
+        const c1 = 0;
+    }
+    
+    var v1;
+    {
+        v1;
+        ~~
+!!! error TS2448: Block-scoped variable 'v1' used before its declaration.
+        const v1 = 0;
+    }
+    
