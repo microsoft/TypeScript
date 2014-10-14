@@ -31,13 +31,14 @@ module ts {
 
         var parent: Node;
         var container: Declaration;
+        var blockScopeContainer: Node;
         var lastContainer: Declaration;
         var symbolCount = 0;
         var Symbol = objectAllocator.getSymbolConstructor();
 
         if (!file.locals) {
             file.locals = {};
-            container = file;
+            container = blockScopeContainer = file;
             bind(file);
             file.symbolCount = symbolCount;
         }
@@ -167,12 +168,13 @@ module ts {
 
         // All container nodes are kept on a linked list in declaration order. This list is used by the getLocalNameOfContainer function
         // in the type checker to validate that the local name used for a container is unique.
-        function bindChildren(node: Declaration, symbolKind: SymbolFlags) {
+        function bindChildren(node: Declaration, symbolKind: SymbolFlags, isBlockScopeContainer: boolean) {
             if (symbolKind & SymbolFlags.HasLocals) {
                 node.locals = {};
             }
             var saveParent = parent;
             var saveContainer = container;
+            var savedBlockScopeContainer = blockScopeContainer;
             parent = node;
             if (symbolKind & SymbolFlags.IsContainer) {
                 container = node;
@@ -184,12 +186,16 @@ module ts {
                     lastContainer = container;
                 }
             }
+            if (isBlockScopeContainer) {
+                blockScopeContainer = node;
+            }
             forEachChild(node, bind);
             container = saveContainer;
             parent = saveParent;
+            blockScopeContainer = savedBlockScopeContainer;
         }
 
-        function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
+        function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
             switch (container.kind) {
                 case SyntaxKind.ModuleDeclaration:
                     declareModuleMember(node, symbolKind, symbolExcludes);
@@ -225,126 +231,168 @@ module ts {
                     declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
                     break;
             }
-            bindChildren(node, symbolKind);
+            bindChildren(node, symbolKind, isBlockScopeContainer);
         }
 
         function bindConstructorDeclaration(node: ConstructorDeclaration) {
-            bindDeclaration(node, SymbolFlags.Constructor, 0);
+            bindDeclaration(node, SymbolFlags.Constructor, 0, /*isBlockScopeContainer*/ true);
             forEach(node.parameters, p => {
                 if (p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected)) {
-                    bindDeclaration(p, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                    bindDeclaration(p, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                 }
             });
         }
 
         function bindModuleDeclaration(node: ModuleDeclaration) {
             if (node.name.kind === SyntaxKind.StringLiteral) {
-                bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
             }
             else if (isInstantiated(node)) {
-                bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
             }
             else {
-                bindDeclaration(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
+                bindDeclaration(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes, /*isBlockScopeContainer*/ true);
             }
         }
 
-        function bindAnonymousDeclaration(node: Node, symbolKind: SymbolFlags, name: string) {
+        function bindAnonymousDeclaration(node: Node, symbolKind: SymbolFlags, name: string, isBlockScopeContainer: boolean) {
             var symbol = createSymbol(symbolKind, name);
             addDeclarationToSymbol(symbol, node, symbolKind);
-            bindChildren(node, symbolKind);
+            bindChildren(node, symbolKind, isBlockScopeContainer);
         }
 
         function bindCatchVariableDeclaration(node: CatchBlock) {
             var symbol = createSymbol(SymbolFlags.Variable, node.variable.text || "__missing");
             addDeclarationToSymbol(symbol, node, SymbolFlags.Variable);
             var saveParent = parent;
-            parent = node;
+            var savedBlockScopeContainer = blockScopeContainer;
+            parent = blockScopeContainer = node;
             forEachChild(node, bind);
             parent = saveParent;
+            blockScopeContainer = savedBlockScopeContainer;
+        }
+
+        function bindBlockScopedVariableDeclaration(node: Declaration) {
+            var symbolKind = SymbolFlags.Variable | SymbolFlags.BlockScoped;
+            switch (blockScopeContainer.kind) {
+                case SyntaxKind.ModuleDeclaration:
+                    declareModuleMember(node, symbolKind, SymbolFlags.BlockScopedExcludes);
+                    break;
+                case SyntaxKind.SourceFile:
+                    if (isExternalModule(<SourceFile>container)) {
+                        declareModuleMember(node, symbolKind, SymbolFlags.BlockScopedExcludes);
+                        break;
+                    }
+                default:
+                    if (!blockScopeContainer.locals) {
+                        blockScopeContainer.locals = {};
+                    }
+                    declareSymbol(blockScopeContainer.locals, undefined, node, symbolKind, SymbolFlags.BlockScopedExcludes);
+            }
+
+            bindChildren(node, symbolKind, /*isBlockScopeContainer*/ false);
         }
 
         function bind(node: Node) {
+            var isBlockScopeContainer: boolean;
             node.parent = parent;
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
-                    bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.Parameter:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Variable, SymbolFlags.ParameterExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Variable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.VariableDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Variable, SymbolFlags.VariableExcludes);
+                    if (node.flags & NodeFlags.BlockScoped) {
+                        bindBlockScopedVariableDeclaration(<Declaration>node);
+                    }
+                    else {
+                        bindDeclaration(<Declaration>node, SymbolFlags.Variable, SymbolFlags.VariableExcludes, /*isBlockScopeContainer*/ false);
+                    }
                     break;
                 case SyntaxKind.Property:
                 case SyntaxKind.PropertyAssignment:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.EnumMember:
-                    bindDeclaration(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.CallSignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.CallSignature, 0);
+                    bindDeclaration(<Declaration>node, SymbolFlags.CallSignature, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.Method:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Method, SymbolFlags.MethodExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Method, SymbolFlags.MethodExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.ConstructSignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.ConstructSignature, 0);
+                    bindDeclaration(<Declaration>node, SymbolFlags.ConstructSignature, 0, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.IndexSignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.IndexSignature, 0);
+                    bindDeclaration(<Declaration>node, SymbolFlags.IndexSignature, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.FunctionDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.Constructor:
                     bindConstructorDeclaration(<ConstructorDeclaration>node);
                     break;
                 case SyntaxKind.GetAccessor:
-                    bindDeclaration(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.SetAccessor:
-                    bindDeclaration(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.TypeLiteral:
-                    bindAnonymousDeclaration(node, SymbolFlags.TypeLiteral, "__type");
+                    bindAnonymousDeclaration(node, SymbolFlags.TypeLiteral, "__type", /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ObjectLiteral:
-                    bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__object");
+                    bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__object", /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    bindAnonymousDeclaration(node, SymbolFlags.Function, "__function");
+                    bindAnonymousDeclaration(node, SymbolFlags.Function, "__function", /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.CatchBlock:
                     bindCatchVariableDeclaration(<CatchBlock>node);
                     break;
                 case SyntaxKind.ClassDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Class, SymbolFlags.ClassExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.InterfaceDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.EnumDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Enum, SymbolFlags.EnumExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Enum, SymbolFlags.EnumExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ModuleDeclaration:
                     bindModuleDeclaration(<ModuleDeclaration>node);
                     break;
                 case SyntaxKind.ImportDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>node)) {
-                        bindAnonymousDeclaration(node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).filename) + '"');
+                        bindAnonymousDeclaration(node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).filename) + '"', /*isBlockScopeContainer*/ true);
                         break;
                     }
+
+                case SyntaxKind.Block:
+                case SyntaxKind.TryBlock:
+                case SyntaxKind.CatchBlock:
+                case SyntaxKind.FinallyBlock:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.SwitchStatement:
+                    isBlockScopeContainer = true;
+
                 default:
                     var saveParent = parent;
+                    var savedBlockScopeContainer = blockScopeContainer;
                     parent = node;
+                    if (isBlockScopeContainer) blockScopeContainer = node;
                     forEachChild(node, bind);
                     parent = saveParent;
+                    blockScopeContainer = savedBlockScopeContainer;
             }
         }
     }

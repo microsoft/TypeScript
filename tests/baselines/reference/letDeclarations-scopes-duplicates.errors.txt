@@ -1,0 +1,152 @@
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(3,5): error TS2300: Duplicate identifier 'var1'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(4,5): error TS2300: Duplicate identifier 'var1'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(6,5): error TS2300: Duplicate identifier 'var2'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(7,7): error TS2300: Duplicate identifier 'var2'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(9,7): error TS2300: Duplicate identifier 'var3'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(10,5): error TS2300: Duplicate identifier 'var3'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(12,7): error TS2300: Duplicate identifier 'var4'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(13,7): error TS2300: Duplicate identifier 'var4'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(15,5): error TS2300: Duplicate identifier 'var5'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(16,5): error TS2300: Duplicate identifier 'var5'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(18,5): error TS2300: Duplicate identifier 'var6'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(19,5): error TS2300: Duplicate identifier 'var6'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(22,9): error TS2300: Duplicate identifier 'var7'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(23,9): error TS2300: Duplicate identifier 'var7'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(25,13): error TS2300: Duplicate identifier 'var8'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(26,15): error TS2300: Duplicate identifier 'var8'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(32,13): error TS2300: Duplicate identifier 'var9'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(33,13): error TS2300: Duplicate identifier 'var9'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(37,11): error TS2300: Duplicate identifier 'var10'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(38,11): error TS2300: Duplicate identifier 'var10'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(41,9): error TS2300: Duplicate identifier 'var11'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(42,9): error TS2300: Duplicate identifier 'var11'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(46,9): error TS2300: Duplicate identifier 'var12'.
+tests/cases/compiler/letDeclarations-scopes-duplicates.ts(47,9): error TS2300: Duplicate identifier 'var12'.
+
+
+==== tests/cases/compiler/letDeclarations-scopes-duplicates.ts (24 errors) ====
+    
+    // Errors: redeclaration
+    let var1 = 0;
+        ~~~~
+!!! error TS2300: Duplicate identifier 'var1'.
+    let var1 = 0; // error
+        ~~~~
+!!! error TS2300: Duplicate identifier 'var1'.
+    
+    let var2 = 0;
+        ~~~~
+!!! error TS2300: Duplicate identifier 'var2'.
+    const var2 = 0;
+          ~~~~
+!!! error TS2300: Duplicate identifier 'var2'.
+    
+    const var3 = 0;
+          ~~~~
+!!! error TS2300: Duplicate identifier 'var3'.
+    let var3 = 0;
+        ~~~~
+!!! error TS2300: Duplicate identifier 'var3'.
+    
+    const var4 = 0;
+          ~~~~
+!!! error TS2300: Duplicate identifier 'var4'.
+    const var4 = 0;
+          ~~~~
+!!! error TS2300: Duplicate identifier 'var4'.
+    
+    var var5 = 0;
+        ~~~~
+!!! error TS2300: Duplicate identifier 'var5'.
+    let var5 = 0;
+        ~~~~
+!!! error TS2300: Duplicate identifier 'var5'.
+    
+    let var6 = 0;
+        ~~~~
+!!! error TS2300: Duplicate identifier 'var6'.
+    var var6 = 0;
+        ~~~~
+!!! error TS2300: Duplicate identifier 'var6'.
+    
+    {
+        let var7 = 0;
+            ~~~~
+!!! error TS2300: Duplicate identifier 'var7'.
+        let var7 = 0;
+            ~~~~
+!!! error TS2300: Duplicate identifier 'var7'.
+        {
+            let var8 = 0;
+                ~~~~
+!!! error TS2300: Duplicate identifier 'var8'.
+            const var8 = 0;
+                  ~~~~
+!!! error TS2300: Duplicate identifier 'var8'.
+        }
+    }
+    
+    switch (0) {
+        default:
+            let var9 = 0;
+                ~~~~
+!!! error TS2300: Duplicate identifier 'var9'.
+            let var9 = 0;
+                ~~~~
+!!! error TS2300: Duplicate identifier 'var9'.
+    }
+    
+    try {
+        const var10 = 0;
+              ~~~~~
+!!! error TS2300: Duplicate identifier 'var10'.
+        const var10 = 0;
+              ~~~~~
+!!! error TS2300: Duplicate identifier 'var10'.
+    }
+    catch (e) {
+        let var11 = 0;
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'var11'.
+        let var11 = 0;
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'var11'.
+    }
+    
+    function F1() {
+        let var12;
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'var12'.
+        let var12;
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'var12'.
+    }
+    
+    // OK
+    var var20 = 0;
+    
+    var var20 = 0
+    {
+        let var20 = 0;
+        {
+            let var20 = 0;
+        }
+    }
+    
+    switch (0) {
+        default:
+            let var20 = 0;
+    }
+    
+    try {
+        let var20 = 0;
+    }
+    catch (e) {
+        let var20 = 0;
+    }
+    
+    function F() {
+        let var20;
+    }
+    
+    

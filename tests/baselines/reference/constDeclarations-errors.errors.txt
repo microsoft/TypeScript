@@ -13,10 +13,11 @@ tests/cases/compiler/constDeclarations-errors.ts(8,18): error TS1128: Declaratio
 tests/cases/compiler/constDeclarations-errors.ts(10,5): error TS1109: Expression expected.
 tests/cases/compiler/constDeclarations-errors.ts(10,5): error TS1156: const must be declared inside a block.
 tests/cases/compiler/constDeclarations-errors.ts(10,28): error TS1005: ';' expected.
-tests/cases/compiler/constDeclarations-errors.ts(10,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'any', but here has type 'number'.
+tests/cases/compiler/constDeclarations-errors.ts(10,18): error TS2304: Cannot find name 'c'.
+tests/cases/compiler/constDeclarations-errors.ts(10,25): error TS2304: Cannot find name 'c'.
 
 
-==== tests/cases/compiler/constDeclarations-errors.ts (16 errors) ====
+==== tests/cases/compiler/constDeclarations-errors.ts (17 errors) ====
     
     // error, missing intialicer
     const c1;
@@ -57,6 +58,8 @@ tests/cases/compiler/constDeclarations-errors.ts(10,11): error TS2403: Subsequen
 !!! error TS1156: const must be declared inside a block.
                                ~
 !!! error TS1005: ';' expected.
-              ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'any', but here has type 'number'.
+                     ~
+!!! error TS2304: Cannot find name 'c'.
+                            ~
+!!! error TS2304: Cannot find name 'c'.
     

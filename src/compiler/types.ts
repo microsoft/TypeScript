@@ -245,11 +245,12 @@ module ts {
         MultiLine        = 0x00000100,  // Multi-line array or object literal
         Synthetic        = 0x00000200,  // Synthetic node (for full fidelity)
         DeclarationFile  = 0x00000400,  // Node is a .d.ts file
-        Let              = 0x00000800,
-        Const            = 0x00001000,
+        Let              = 0x00000800,  // Variable declaration
+        Const            = 0x00001000,  // Variable declaration
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
-        AccessibilityModifier = Public | Private | Protected
+        AccessibilityModifier = Public | Private | Protected,
+        BlockScoped = Let | Const
     }
 
     export interface Node extends TextRange {
@@ -768,6 +769,8 @@ module ts {
 
         Undefined          = 0x08000000,  // Symbol for the undefined
 
+        BlockScoped        = 0x10000000,
+
         Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,
         Namespace = ValueModule | NamespaceModule,
@@ -776,7 +779,8 @@ module ts {
         Signature = CallSignature | ConstructSignature | IndexSignature,
 
         ParameterExcludes       = Value,
-        VariableExcludes        = Value & ~Variable,
+        VariableExcludes        = (Value | BlockScoped) & ~Variable,
+        BlockScopedExcludes     = Value,
         PropertyExcludes        = Value,
         EnumMemberExcludes      = Value,
         FunctionExcludes        = Value & ~(Function | ValueModule),
