@@ -13,6 +13,7 @@
 /// <reference path='utilities.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
+/// <reference path='formatting\format.ts' />
 
 /// <reference path='core\references.ts' />
 /// <reference path='resources\references.ts' />
@@ -640,6 +641,7 @@ module ts {
         public text: string;
         public getLineAndCharacterFromPosition(position: number): { line: number; character: number } { return null; }
         public getPositionFromLineAndCharacter(line: number, character: number): number { return -1; }
+        public getLineStarts(): number[] { return undefined; }
         public amdDependencies: string[];
         public referencedFiles: FileReference[];
         public syntacticErrors: Diagnostic[];
@@ -975,6 +977,15 @@ module ts {
         ConvertTabsToSpaces: boolean;
     }
 
+    export function copyEditorOptions(o: EditorOptions): EditorOptions {
+        return {
+            IndentSize: o.IndentSize,
+            TabSize: o.TabSize,
+            NewLineCharacter: o.NewLineCharacter,
+            ConvertTabsToSpaces: o.ConvertTabsToSpaces
+        };
+    }
+
     export interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
@@ -984,6 +995,23 @@ module ts {
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
+    }
+
+    export function copyFormatCodeOptions(o: FormatCodeOptions): FormatCodeOptions {
+        return {
+            IndentSize: o.IndentSize,
+            TabSize: o.TabSize,
+            NewLineCharacter: o.NewLineCharacter,
+            ConvertTabsToSpaces: o.ConvertTabsToSpaces,
+            InsertSpaceAfterCommaDelimiter: o.InsertSpaceAfterCommaDelimiter,
+            InsertSpaceAfterSemicolonInForStatements: o.InsertSpaceAfterSemicolonInForStatements,
+            InsertSpaceBeforeAndAfterBinaryOperators: o.InsertSpaceBeforeAndAfterBinaryOperators,
+            InsertSpaceAfterKeywordsInControlFlowStatements: o.InsertSpaceAfterKeywordsInControlFlowStatements,
+            InsertSpaceAfterFunctionKeywordForAnonymousFunctions: o.InsertSpaceAfterFunctionKeywordForAnonymousFunctions,
+            InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: o.InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis,
+            PlaceOpenBraceOnNewLineForFunctions: o.PlaceOpenBraceOnNewLineForFunctions,
+            PlaceOpenBraceOnNewLineForControlBlocks: o.PlaceOpenBraceOnNewLineForControlBlocks
+        };
     }
 
     export interface DefinitionInfo {
@@ -1996,6 +2024,7 @@ module ts {
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
+        var ruleProvider: ts.formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.
         var program: Program;
 
@@ -2024,6 +2053,16 @@ module ts {
 
         function getFullTypeCheckChecker() {
             return fullTypeCheckChecker_doNotAccessDirectly || (fullTypeCheckChecker_doNotAccessDirectly = program.getTypeChecker(/*fullTypeCheck*/ true));
+        }
+
+        function getRuleProvider(options: FormatCodeOptions) {
+            // Ensure rules are initialized and up to date wrt to formatting options
+            if (!ruleProvider) {
+                ruleProvider = new ts.formatting.RulesProvider(host);
+            }
+
+            ruleProvider.ensureUpToDate(options);
+            return ruleProvider;
         }
 
         function createCompilerHost(): CompilerHost {
@@ -4968,7 +5007,7 @@ module ts {
             var sourceFile = getCurrentSourceFile(filename);
             var options = new TypeScript.FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
 
-            return formatting.SmartIndenter.getIndentation(position, sourceFile, options);
+            return formatting.SmartIndenter.getIndentation(position, sourceFile, copyEditorOptions(editorOptions));
         }
 
         function getFormattingManager(filename: string, options: FormatCodeOptions) {
@@ -4994,6 +5033,10 @@ module ts {
 
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
             fileName = TypeScript.switchToForwardSlashes(fileName);
+            var options = copyFormatCodeOptions(options);
+            var sourceFile = getCurrentSourceFile(fileName);
+            var edits = formatting.formatSelection(start, end, sourceFile, getRuleProvider(options), options);
+            return edits;
 
             var manager = getFormattingManager(fileName, options);
             return manager.formatSelection(start, end);
@@ -5001,6 +5044,11 @@ module ts {
 
         function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
             fileName = TypeScript.switchToForwardSlashes(fileName);
+
+            var sourceFile = getCurrentSourceFile(fileName);
+            var options = copyFormatCodeOptions(options)
+            var edits = formatting.formatDocument(sourceFile, getRuleProvider(options), options);
+            return edits;
 
             var manager = getFormattingManager(fileName, options);
             return manager.formatDocument();
@@ -5011,13 +5059,25 @@ module ts {
 
             var manager = getFormattingManager(fileName, options);
 
+            var sourceFile = getCurrentSourceFile(fileName);
+            var options = copyFormatCodeOptions(options);
+
             if (key === "}") {
+                var edits = formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(options), options);
+                return edits;
+
                 return manager.formatOnClosingCurlyBrace(position);
             }
             else if (key === ";") {
+                var edits = formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(options), options);
+                return edits;
+
                 return manager.formatOnSemicolon(position);
             }
             else if (key === "\n") {
+                var edits = formatting.formatOnEnter(position, sourceFile, getRuleProvider(options), options);
+                return edits;
+
                 return manager.formatOnEnter(position);
             }
 

@@ -132,7 +132,7 @@ module ts {
             function writeLiteral(s: string) {
                 if (s && s.length) {
                     write(s);
-                    var lineStartsOfS = getLineStarts(s);
+                    var lineStartsOfS = computeLineStarts(s);
                     if (lineStartsOfS.length > 1) {
                         lineCount = lineCount + lineStartsOfS.length - 1;
                         linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];

@@ -547,6 +547,7 @@ module ts {
         text: string;
         getLineAndCharacterFromPosition(position: number): { line: number; character: number };
         getPositionFromLineAndCharacter(line: number, character: number): number;
+        getLineStarts(): number[];
         amdDependencies: string[];
         referencedFiles: FileReference[];
         syntacticErrors: Diagnostic[];

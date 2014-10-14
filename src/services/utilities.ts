@@ -233,6 +233,10 @@ module ts {
         return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
     }
 
+    export function isComment(kind: SyntaxKind): boolean {
+        return kind === SyntaxKind.SingleLineCommentTrivia || kind === SyntaxKind.MultiLineCommentTrivia;
+    }
+
     function isKeyword(n: Node): boolean {
         return n.kind >= SyntaxKind.FirstKeyword && n.kind <= SyntaxKind.LastKeyword;
     }
