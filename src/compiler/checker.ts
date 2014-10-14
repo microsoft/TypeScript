@@ -172,6 +172,7 @@ module ts {
 
         function getExcludedSymbolFlags(flags: SymbolFlags): SymbolFlags {
             var result: SymbolFlags = 0;
+            if (flags & SymbolFlags.BlockScoped) result |= SymbolFlags.BlockScopedExcludes;
             if (flags & SymbolFlags.Variable) result |= SymbolFlags.VariableExcludes;
             if (flags & SymbolFlags.Property) result |= SymbolFlags.PropertyExcludes;
             if (flags & SymbolFlags.EnumMember) result |= SymbolFlags.EnumMemberExcludes;
