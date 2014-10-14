@@ -226,12 +226,8 @@ module ts.SignatureHelp {
                 };
             }
 
-            if (node.kind === SyntaxKind.GreaterThanToken
-                || node.kind === SyntaxKind.CloseParenToken
-                || node === parent.func) {
-                return undefined;
-            }
-
+            // findListItemInfo can return undefined if we are not in parent's argument list
+            // or type argument list.
             return findListItemInfo(node);
         }
 

@@ -7,6 +7,15 @@ module ts {
 
     export function findListItemInfo(node: Node): ListItemInfo {
         var syntaxList = findContainingList(node);
+
+        // It is possible at this point for syntaxList to be undefined, either if
+        // node.parent had no list child, or if none of its list children contained
+        // the span of node. If this happens, return undefined. The caller should
+        // handle this case.
+        if (!syntaxList) {
+            return undefined;
+        }
+
         var children = syntaxList.getChildren();
         var index = indexOf(children, node);
 
@@ -31,13 +40,6 @@ module ts {
                 return c;
             }
         });
-
-        // syntaxList should not be undefined here. If it is, there is a problem. Find out if
-        // there at least is a child that is a list.
-        if (!syntaxList) {
-            Debug.assert(findChildOfKind(node.parent, SyntaxKind.SyntaxList),
-                "Node of kind " + SyntaxKind[node.parent.kind] + " has no list children");
-        }
 
         return syntaxList;
     }
