@@ -559,6 +559,11 @@ module ts.formatting {
                 case SyntaxKind.Block:
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.TryBlock:
+                case SyntaxKind.CatchBlock:
+                case SyntaxKind.FinallyBlock:
+                case SyntaxKind.FunctionBlock:
+                case SyntaxKind.ModuleBlock:
                     return true;
             }
 
@@ -668,15 +673,34 @@ module ts.formatting {
             return context.contextNode.kind === SyntaxKind.TypeLiteral;// && context.contextNode.parent.kind !== SyntaxKind.InterfaceDeclaration;
         }
 
-        static IsTypeArgumentOrParameter(tokenKind: SyntaxKind, parentKind: SyntaxKind): boolean {
-            return;
-            //return ((tokenKind === SyntaxKind.LessThanToken || tokenKind === SyntaxKind.GreaterThanToken) &&
+        static IsTypeArgumentOrParameter(token: TextRangeWithKind, parent: Node): boolean {
+            if (token.kind !== SyntaxKind.LessThanToken && token.kind !== SyntaxKind.GreaterThanToken) {
+                return false;
+            }
+            switch (parent.kind) {
+                case SyntaxKind.TypeReference:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.Method:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                    return true;
+                default:
+                    return false;
+
+            }
+            //return ((token.kind === SyntaxKind.LessThanToken || token.kind === SyntaxKind.GreaterThanToken) &&
             //    (parentKind === SyntaxKind.TypeParameterList || parentKind === SyntaxKind.TypeArgumentList));
         }
 
         static IsTypeArgumentOrParameterContext(context: FormattingContext): boolean {
-            return Rules.IsTypeArgumentOrParameter(context.currentTokenSpan.kind, context.currentTokenParent.kind) ||
-                Rules.IsTypeArgumentOrParameter(context.nextTokenSpan.kind, context.nextTokenParent.kind);
+            return Rules.IsTypeArgumentOrParameter(context.currentTokenSpan, context.currentTokenParent) ||
+                Rules.IsTypeArgumentOrParameter(context.nextTokenSpan, context.nextTokenParent);
         }
 
         static IsVoidOpContext(context: FormattingContext): boolean {

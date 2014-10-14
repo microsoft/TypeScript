@@ -17,17 +17,17 @@
 
 module ts.formatting {
     export class FormattingContext {
-        public currentTokenSpan: TextRangeWithKind = null;
-        public nextTokenSpan: TextRangeWithKind = null;
-        public contextNode: Node = null;
-        public currentTokenParent: Node = null;
-        public nextTokenParent: Node = null;
+        public currentTokenSpan: TextRangeWithKind;
+        public nextTokenSpan: TextRangeWithKind;
+        public contextNode: Node;
+        public currentTokenParent: Node;
+        public nextTokenParent: Node;
 
-        private contextNodeAllOnSameLine: boolean = null;
-        private nextNodeAllOnSameLine: boolean = null;
-        private tokensAreOnSameLine: boolean = null;
-        private contextNodeBlockIsOnOneLine: boolean = null;
-        private nextNodeBlockIsOnOneLine: boolean = null;
+        private contextNodeAllOnSameLine: boolean;
+        private nextNodeAllOnSameLine: boolean;
+        private tokensAreOnSameLine: boolean;
+        private contextNodeBlockIsOnOneLine: boolean;
+        private nextNodeBlockIsOnOneLine: boolean;
 
         constructor(private sourceFile: SourceFile, public formattingRequestKind: FormattingRequestKind) {
         }
@@ -98,9 +98,7 @@ module ts.formatting {
             return this.nextNodeBlockIsOnOneLine;
         }
 
-        public NodeIsOnOneLine(node: Node): boolean {
-            return;
-
+        private NodeIsOnOneLine(node: Node): boolean {
             var startLine = this.sourceFile.getLineAndCharacterFromPosition(node.getStart(this.sourceFile)).line;
             var endLine = this.sourceFile.getLineAndCharacterFromPosition(node.getEnd()).line;
             //var startLine = this.snapshot.getLineNumberFromPosition(node.start());
@@ -111,7 +109,7 @@ module ts.formatting {
 
         // Now we know we have a block (or a fake block represented by some other kind of node with an open and close brace as children).
         // IMPORTANT!!! This relies on the invariant that IsBlockContext must return true ONLY for nodes with open and close braces as immediate children
-        public BlockIsOnOneLine(node: Node): boolean {
+        private BlockIsOnOneLine(node: Node): boolean {
             var openBrace = findChildOfKind(node, SyntaxKind.OpenBraceToken, this.sourceFile);
             var closeBrace = findChildOfKind(node, SyntaxKind.CloseBraceToken, this.sourceFile);
             if (openBrace && closeBrace) {

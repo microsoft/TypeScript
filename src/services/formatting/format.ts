@@ -226,6 +226,7 @@ module ts.formatting {
 
             while (currentTokenInfo.token && node.end >= currentTokenInfo.token.end) {
                 currentTokenInfo = consumeCurrentToken(node, childContextNode, indentation);
+                childContextNode = node;
             }
 
             /// Local functions
