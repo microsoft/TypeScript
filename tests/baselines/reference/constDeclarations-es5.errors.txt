@@ -1,17 +1,17 @@
-tests/cases/compiler/constDeclarations-es5.ts(2,1): error TS1154: 'const' variable declarations are only available when targeting ECMAScript 6 and higher.
-tests/cases/compiler/constDeclarations-es5.ts(3,1): error TS1154: 'const' variable declarations are only available when targeting ECMAScript 6 and higher.
-tests/cases/compiler/constDeclarations-es5.ts(4,1): error TS1154: 'const' variable declarations are only available when targeting ECMAScript 6 and higher.
+tests/cases/compiler/constDeclarations-es5.ts(2,1): error TS1154: 'const' declarations are only available when targeting ECMAScript 6 and higher.
+tests/cases/compiler/constDeclarations-es5.ts(3,1): error TS1154: 'const' declarations are only available when targeting ECMAScript 6 and higher.
+tests/cases/compiler/constDeclarations-es5.ts(4,1): error TS1154: 'const' declarations are only available when targeting ECMAScript 6 and higher.
 
 
 ==== tests/cases/compiler/constDeclarations-es5.ts (3 errors) ====
     
     const z7 = false;
     ~~~~~~~~~~~~~~~~~
-!!! error TS1154: 'const' variable declarations are only available when targeting ECMAScript 6 and higher.
+!!! error TS1154: 'const' declarations are only available when targeting ECMAScript 6 and higher.
     const z8: number = 23;
     ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1154: 'const' variable declarations are only available when targeting ECMAScript 6 and higher.
+!!! error TS1154: 'const' declarations are only available when targeting ECMAScript 6 and higher.
     const z9 = 0, z10 :string = "", z11 = null;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1154: 'const' variable declarations are only available when targeting ECMAScript 6 and higher.
+!!! error TS1154: 'const' declarations are only available when targeting ECMAScript 6 and higher.
     

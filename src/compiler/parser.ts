@@ -2654,7 +2654,16 @@ module ts {
                         error(Diagnostics.Variable_declaration_list_cannot_be_empty);
                     }
                     if (languageVersion < ScriptTarget.ES6) {
-                        grammarErrorAtPos(declarations.pos, declarations.end - declarations.pos, Diagnostics.let_variable_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                        grammarErrorAtPos(declarations.pos, declarations.end - declarations.pos, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                    }
+                }
+                else if (parseOptional(SyntaxKind.ConstKeyword)) {
+                    var declarations = parseVariableDeclarationList(NodeFlags.Const, true);
+                    if (!declarations.length) {
+                        error(Diagnostics.Variable_declaration_list_cannot_be_empty);
+                    }
+                    if (languageVersion < ScriptTarget.ES6) {
+                        grammarErrorAtPos(declarations.pos, declarations.end - declarations.pos, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                     }
                 }
                 else {
@@ -3145,10 +3154,10 @@ module ts {
             }
             if (languageVersion < ScriptTarget.ES6) {
                 if (node.flags & NodeFlags.Let) {
-                    grammarErrorOnNode(node, Diagnostics.let_variable_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                    grammarErrorOnNode(node, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                 }
                 else if (node.flags & NodeFlags.Const) {
-                    grammarErrorOnNode(node, Diagnostics.const_variable_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                    grammarErrorOnNode(node, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                 }
             }
             else if (!allowLetDeclarations){

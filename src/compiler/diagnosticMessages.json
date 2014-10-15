@@ -455,11 +455,11 @@
         "category": "Error",
         "code": 1152
     },
-    "'let' variable declarations are only available when targeting ECMAScript 6 and higher.": {
+    "'let' declarations are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
         "code": 1153
     },
-    "'const' variable declarations are only available when targeting ECMAScript 6 and higher.": {
+    "'const' declarations are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
         "code": 1154
     },
