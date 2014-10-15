@@ -1439,19 +1439,19 @@ module ts {
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typechecker.writeType(type, writer, enclosingDeclaration, flags);
+            typechecker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         });
     }
 
     export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typeChecker.writeSymbol(symbol, writer, enclosingDeclaration, meaning, flags);
+            typeChecker.getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning, flags);
         });
     }
 
     function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[]{
         return mapToDisplayParts(writer => {
-            typechecker.writeSignature(signature, writer, enclosingDeclaration, flags);
+            typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
         });
     }
 
@@ -2965,7 +2965,7 @@ module ts {
                             // If the type is type parameter, format it specially
                             if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
                                 var typeParameterParts = mapToDisplayParts(writer => {
-                                    typeResolver.writeTypeParameter(<TypeParameter>type, writer, enclosingDeclaration);
+                                    typeResolver.getSymbolDisplayBuilder().buildTypeParameterDisplay(<TypeParameter>type, writer, enclosingDeclaration);
                                 });
                                 displayParts.push.apply(displayParts, typeParameterParts);
                             }
@@ -3033,7 +3033,7 @@ module ts {
 
             function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
                 var typeParameterParts = mapToDisplayParts(writer => {
-                    typeResolver.writeTypeParametersOfSymbol(symbol, writer, enclosingDeclaration);
+                    typeResolver.getSymbolDisplayBuilder().buildTypeParameterDisplayFromSymbol(symbol, writer, enclosingDeclaration);
                 });
                 displayParts.push.apply(displayParts, typeParameterParts);
             }
