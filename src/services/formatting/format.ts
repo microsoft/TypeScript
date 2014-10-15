@@ -232,6 +232,10 @@ module ts.formatting {
             /// Local functions
 
             function processChildNode(child: Node, containingList: Node[], listElementIndex: number): void {
+                if (child.kind === SyntaxKind.Missing) {
+                    return;
+                }
+
                 var start = child.getStart(sourceFile);
                 
                 while (currentTokenInfo.token && start >= currentTokenInfo.token.end) {
@@ -343,7 +347,6 @@ module ts.formatting {
 
         function consumeCurrentToken(parent: Node, contextNode: Node, indentation: number): TokenInfo {
             Debug.assert(rangeContainsRange(parent, currentTokenInfo.token));
-
             if (currentTokenInfo.leadingTrivia) {
                 processTrivia(currentTokenInfo.leadingTrivia, parent, contextNode, indentation);
             }
@@ -360,7 +363,7 @@ module ts.formatting {
         function processTrivia(trivia: TextRangeWithKind[], parent: Node, contextNode: Node, currentIndentation: number): void {
             for (var i = 0, len = trivia.length; i < len; ++i) {
                 var triviaItem = trivia[i];
-                if (isComment(triviaItem.kind) && rangeContainsRange(originalRange, triviaItem)) {
+                if (isComment(triviaItem.kind)) {
                     processRange(triviaItem, parent, contextNode, currentIndentation);
                 }
             }
