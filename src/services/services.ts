@@ -2662,7 +2662,7 @@ module ts {
 
         // TODO(drosen): use contextual SemanticMeaning.
         function getSymbolKind(symbol: Symbol, typeResolver: TypeChecker): string {
-            var flags = typeInfoResolver.getRootSymbols(symbol)[0].getFlags();
+            var flags = symbol.getFlags();
 
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
@@ -2698,6 +2698,22 @@ module ts {
             if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
             if (flags & SymbolFlags.Property) return ScriptElementKind.memberVariableElement;
             if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
+
+            if (flags & SymbolFlags.UnionProperty) {
+                return forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
+                    var rootSymbolFlags = rootSymbol.getFlags();
+                    if (rootSymbolFlags & SymbolFlags.Property) {
+                        return ScriptElementKind.memberVariableElement;
+                    }
+                    if (rootSymbolFlags & SymbolFlags.GetAccessor) return ScriptElementKind.memberVariableElement;
+                    if (rootSymbolFlags & SymbolFlags.SetAccessor) return ScriptElementKind.memberVariableElement;
+                    Debug.assert(rootSymbolFlags & SymbolFlags.Method);
+                }) || ScriptElementKind.memberFunctionElement;
+
+                
+                //? 
+                //: ScriptElementKind.memberFunctionElement
+            }
 
             return ScriptElementKind.unknown;
         }
@@ -2750,7 +2766,7 @@ module ts {
             semanticMeaning = getMeaningFromLocation(location)) {
             var displayParts: SymbolDisplayPart[] = [];
             var documentation: SymbolDisplayPart[];
-            var symbolFlags = typeResolver.getRootSymbols(symbol)[0].flags;
+            var symbolFlags = symbol.flags;
             var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, typeResolver);
             var hasAddedSymbolInfo: boolean;
             // Class at constructor site need to be shown as constructor apart from property,method, vars
@@ -2977,7 +2993,8 @@ module ts {
                             symbolFlags & SymbolFlags.Method ||
                             symbolFlags & SymbolFlags.Constructor ||
                             symbolFlags & SymbolFlags.Signature ||
-                            symbolFlags & SymbolFlags.Accessor) {
+                            symbolFlags & SymbolFlags.Accessor || 
+                            symbolKind === ScriptElementKind.memberFunctionElement) {
                             var allSignatures = type.getCallSignatures();
                             addSignatureDisplayParts(allSignatures[0], allSignatures);
                         }

@@ -605,6 +605,12 @@ module ts {
         }
 
         function symbolIsValue(symbol: Symbol): boolean {
+            // If it is an instantiated symbol, then it is a value if the symbol it is an
+            // instantiation of is a value.
+            if (symbol.flags & SymbolFlags.Instantiated) {
+                return (getSymbolLinks(symbol).target.flags & SymbolFlags.Value) !== 0;
+            }
+
             // If the symbol has the value flag, it is trivially a value.
             if (symbol.flags & SymbolFlags.Value) {
                 return true;
@@ -613,12 +619,6 @@ module ts {
             // If it is an import, then it is a value if the symbol it resolves to is a value.
             if (symbol.flags & SymbolFlags.Import) {
                 return (resolveImport(symbol).flags & SymbolFlags.Value) !== 0;
-            }
-
-            // If it is an instantiated symbol, then it is a value if the symbol it is an
-            // instantiation of is a value.
-            if (symbol.flags & SymbolFlags.Instantiated) {
-                return (getSymbolLinks(symbol).target.flags & SymbolFlags.Value) !== 0;
             }
 
             return false;
@@ -1336,8 +1336,8 @@ module ts {
             }
 
             function buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags) {
-                var rootSymbol = getRootSymbol(symbol);
-                if (rootSymbol.flags & SymbolFlags.Class || rootSymbol.flags & SymbolFlags.Interface) {
+                var targetSymbol = getTargetSymbol(symbol);
+                if (targetSymbol.flags & SymbolFlags.Class || targetSymbol.flags & SymbolFlags.Interface) {
                     buildTypeParameterListDisplay(getTypeParametersOfClassOrInterface(symbol), writer, enclosingDeclaraiton, flags);
                 }
             }
@@ -1753,6 +1753,9 @@ module ts {
         }
 
         function getTypeOfSymbol(symbol: Symbol): Type {
+            if (symbol.flags & SymbolFlags.Instantiated) {
+                return getTypeOfInstantiatedSymbol(symbol);
+            }
             if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
                 return getTypeOfVariableOrParameterOrProperty(symbol);
             }
@@ -1767,9 +1770,6 @@ module ts {
             }
             if (symbol.flags & SymbolFlags.Import) {
                 return getTypeOfImport(symbol);
-            }
-            if (symbol.flags & SymbolFlags.Instantiated) {
-                return getTypeOfInstantiatedSymbol(symbol);
             }
             if (symbol.flags & SymbolFlags.UnionProperty) {
                 return getTypeOfUnionProperty(symbol);
@@ -1928,6 +1928,7 @@ module ts {
         }
 
         function getDeclaredTypeOfSymbol(symbol: Symbol): Type {
+            Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0);
             if (symbol.flags & SymbolFlags.Class) {
                 return getDeclaredTypeOfClass(symbol);
             }
@@ -1943,7 +1944,6 @@ module ts {
             if (symbol.flags & SymbolFlags.Import) {
                 return getDeclaredTypeOfImport(symbol);
             }
-            Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0);
             return unknownType;
         }
 
@@ -2949,7 +2949,7 @@ module ts {
 
             // Keep the flags from the symbol we're instantiating.  Mark that is instantiated, and 
             // also transient so that we can just store data on it directly.
-            var result = <TransientSymbol>createSymbol(SymbolFlags.Instantiated | SymbolFlags.Transient, symbol.name);
+            var result = <TransientSymbol>createSymbol(SymbolFlags.Instantiated | SymbolFlags.Transient | symbol.flags, symbol.name);
             result.declarations = symbol.declarations;
             result.parent = symbol.parent;
             result.target = symbol;
@@ -3699,7 +3699,7 @@ module ts {
                         var members: SymbolTable = {};
                         var index = 0;
                         forEach(properties, p => {
-                            var symbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, p.name);
+                            var symbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | p.flags, p.name);
                             symbol.declarations = p.declarations;
                             symbol.parent = p.parent;
                             symbol.type = widenedTypes[index++];
@@ -4681,7 +4681,7 @@ module ts {
                     var member = members[id];
                     if (member.flags & SymbolFlags.Property) {
                         var type = checkExpression((<PropertyDeclaration>member.declarations[0]).initializer, contextualMapper);
-                        var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, member.name);
+                        var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
                         prop.declarations = member.declarations;
                         prop.parent = member.parent;
                         if (member.valueDeclaration) prop.valueDeclaration = member.valueDeclaration;
@@ -8108,10 +8108,6 @@ module ts {
             else {
                 return getPropertiesOfType(<Type>apparentType);
             }
-        }
-
-        function getRootSymbol(symbol: Symbol): Symbol {
-            return symbol.flags & SymbolFlags.Transient && getSymbolLinks(symbol).target || symbol;
         }
 
         function getRootSymbols(symbol: Symbol): Symbol[] {
