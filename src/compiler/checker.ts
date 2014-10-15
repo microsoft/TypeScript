@@ -4099,6 +4099,12 @@ module ts {
             // This is motivated by ECMA-262 sections 9.3.1, 9.8.1, 11.1.5, and 11.2.1.
             //
             // Here, we test whether 'ToString(ToNumber(name))' is exactly equal to 'name'.
+            // The '+' prefix operator is equivalent here to applying the abstract ToNumber operation.
+            // Applying the 'toString()' method on a number gives us the abstract ToString operation on a number.
+            //
+            // Note that this accepts the values 'Infinity', '-Infinity', and 'NaN', and that this is intentional.
+            // This is desired behavior, because when indexing with them as numeric entities, you are indexing
+            // with the strings '"Infinity"', '"-Infinity"', and '"NaN"' respectively.
             return (+name).toString() === name;
         }
 
