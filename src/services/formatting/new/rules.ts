@@ -602,6 +602,7 @@ module ts.formatting {
         static NodeIsTypeScriptDeclWithBlockContext(node: Node): boolean {
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.ModuleDeclaration:

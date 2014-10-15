@@ -363,20 +363,58 @@ module ts.formatting {
 
             if (lastTriviaWasNewLine && indentToken) {
 
-                // TODO: remove
-                var tokenRange = getNonAdjustedLineAndCharacterFromPosition(currentTokenInfo.token.pos, sourceFile);
+                var indentNextTokenOrTrivia = true;
 
-                // TODO: handle indentation in multiline comments
-                var currentIndentation = tokenRange.character;
-                if (indentation !== currentIndentation) {
-                    var indentationString = getIndentationString(indentation, options);
-                    var startLinePosition = getStartPositionOfLine(tokenRange.line, sourceFile);
-                    recordReplace(startLinePosition, currentIndentation, indentationString);
+                if (currentTokenInfo.leadingTrivia) {
+                    for (var i = 0, len = currentTokenInfo.leadingTrivia.length; i < len; ++i) {
+                        var triviaItem = currentTokenInfo.leadingTrivia[i];
+                        if (rangeContainsRange(originalRange, triviaItem)) {
+                            switch (triviaItem.kind) {
+                                case SyntaxKind.MultiLineCommentTrivia:
+                                    // TODO
+                                    indentNextTokenOrTrivia = false;
+                                    break;
+                                case SyntaxKind.SingleLineCommentTrivia:
+                                    if (indentNextTokenOrTrivia) {
+                                        insertIndentation(triviaItem.pos, indentation, sourceFile);
+                                        indentNextTokenOrTrivia = false;
+                                    }
+                                    break;
+                                case SyntaxKind.WhitespaceTrivia:
+                                    // TODO
+                                    break;
+                                case SyntaxKind.NewLineTrivia:
+                                    indentNextTokenOrTrivia = true;
+                                    break;
+                            }
+                        }
+                    }
                 }
+
+                insertIndentation(currentTokenInfo.token.pos, indentation, sourceFile);
+                //// TODO: remove
+                //var tokenRange = getNonAdjustedLineAndCharacterFromPosition(currentTokenInfo.token.pos, sourceFile);
+
+                //// TODO: handle indentation in multiline comments
+                //var currentIndentation = tokenRange.character;
+                //if (indentation !== currentIndentation) {
+                //    var indentationString = getIndentationString(indentation, options);
+                //    var startLinePosition = getStartPositionOfLine(tokenRange.line, sourceFile);
+                //    recordReplace(startLinePosition, currentIndentation, indentationString);
+                //}
             }
 
 
             return fetchNextTokenInfo();
+        }
+
+        function insertIndentation(pos: number, indentation: number, sourceFile: SourceFile): void {
+            var tokenRange = getNonAdjustedLineAndCharacterFromPosition(pos, sourceFile);
+            if (indentation !== tokenRange.character) {
+                var indentationString = getIndentationString(indentation, options);
+                var startLinePosition = getStartPositionOfLine(tokenRange.line, sourceFile);
+                recordReplace(startLinePosition, tokenRange.character, indentationString);
+            }
         }
 
         function processTrivia(trivia: TextRangeWithKind[], parent: Node, contextNode: Node, currentIndentation: number): void {
