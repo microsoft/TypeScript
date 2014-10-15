@@ -17,7 +17,7 @@ interface IHasVisualizationModel {
 var xs: IHasVisualizationModel[] = [moduleA];
 >xs : IHasVisualizationModel[]
 >IHasVisualizationModel : IHasVisualizationModel
->[moduleA] : IHasVisualizationModel[]
+>[moduleA] : typeof moduleA[]
 >moduleA : typeof moduleA
 
 var xs2: typeof moduleA[] = [moduleA];

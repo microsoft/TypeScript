@@ -11,7 +11,7 @@
         "category": "Error",
         "code": 1005
     },
-	"A file cannot have a reference to itself.": {
+    "A file cannot have a reference to itself.": {
         "category": "Error",
         "code": 1006
     },
@@ -187,7 +187,7 @@
         "category": "Error",
         "code": 1066
     },
-    "Unexpected token. A constructor, method, accessor, or property was expected." : {
+    "Unexpected token. A constructor, method, accessor, or property was expected.": {
         "category": "Error",
         "code": 1068
     },
@@ -444,9 +444,13 @@
         "code": 1149
     },
     "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
-       "category": "Error",
-       "code": 1150
-   },
+        "category": "Error",
+        "code": 1150
+    },
+    "An enum member cannot have a numeric name.": {
+        "category": "Error",
+        "code":  1151
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -556,7 +560,7 @@
         "category": "Error",
         "code": 2326
     },
-	"Property '{0}' is optional in type '{1}' but required in type '{2}'.": {
+    "Property '{0}' is optional in type '{1}' but required in type '{2}'.": {
         "category": "Error",
         "code": 2327
     },
@@ -711,14 +715,6 @@
     "Operator '{0}' cannot be applied to types '{1}' and '{2}'.": {
         "category": "Error",
         "code": 2365
-    },
-    "No best common type exists between '{0}', '{1}', and '{2}'.": {
-        "category": "Error",
-        "code": 2366
-    },
-    "No best common type exists between '{0}' and '{1}'.": {
-        "category": "Error",
-        "code": 2367
     },
     "Type parameter name cannot be '{0}'": {
         "category": "Error",

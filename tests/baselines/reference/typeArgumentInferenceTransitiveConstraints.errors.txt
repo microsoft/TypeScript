@@ -1,9 +1,8 @@
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceTransitiveConstraints.ts(2,29): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceTransitiveConstraints.ts(2,42): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceTransitiveConstraints.ts(7,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'd' must be of type '{}[]', but here has type 'Date[]'.
 
 
-==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceTransitiveConstraints.ts (3 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceTransitiveConstraints.ts (2 errors) ====
     
     function fn<A extends Date, B extends A, C extends B>(a: A, b: B, c: C) {
                                 ~~~~~~~~~~~
@@ -15,6 +14,4 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceTransitiv
     
     var d = fn(new Date(), new Date(), new Date());
     var d: Date[]; // Should be OK (d should be Date[])
-        ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'd' must be of type '{}[]', but here has type 'Date[]'.
     

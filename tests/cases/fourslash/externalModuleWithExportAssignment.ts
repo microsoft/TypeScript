@@ -30,7 +30,7 @@
 
 goTo.file("externalModuleWithExportAssignment_file1.ts");
 goTo.marker('1');
-verify.quickInfoIs("(alias) a1");
+verify.quickInfoIs('import a1 = require("externalModuleWithExportAssignment_file0")');
 
 goTo.marker('2');
 verify.quickInfoIs("(var) a: {\n    (): a1.connectExport;\n    test1: a1.connectModule;\n    test2(): a1.connectModule;\n}", undefined);

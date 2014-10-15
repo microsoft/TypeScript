@@ -5,7 +5,7 @@ class EventBase {
     private _listeners: { (...args: any[]): void; }[] = [];
 >_listeners : { (...args: any[]): void; }[]
 >args : any[]
->[] : { (...args: any[]): void; }[]
+>[] : undefined[]
 
     add(listener: (...args: any[]) => void): void {
 >add : (listener: (...args: any[]) => void) => void

@@ -19,7 +19,7 @@
 edit.insert('');
 
 goTo.marker('1');
-verify.quickInfoIs('(alias) Foo');
+verify.quickInfoIs("import Foo = require('mergedDeclarationsWithExportAssignment1_file0')");
 
 goTo.marker('2');
 verify.completionListContains('Foo');
