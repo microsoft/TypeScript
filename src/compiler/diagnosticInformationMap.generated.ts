@@ -272,6 +272,7 @@ module ts {
         Block_scoped_variable_0_used_before_its_declaration: { code: 2448, category: DiagnosticCategory.Error, key: "Block-scoped variable '{0}' used before its declaration." },
         The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant: { code: 2449, category: DiagnosticCategory.Error, key: "The operand of an increment or decrement operator cannot be a constant." },
         Left_hand_side_of_assignment_expression_cannot_be_a_constant: { code: 2450, category: DiagnosticCategory.Error, key: "Left-hand side of assignment expression cannot be a constant." },
+        Cannot_redeclare_constant_0: { code: 2451, category: DiagnosticCategory.Error, key: "Cannot redeclare constant '{0}'." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_name_1_from_private_module_2: { code: 4001, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },

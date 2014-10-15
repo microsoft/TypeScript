@@ -6174,6 +6174,36 @@ module ts {
             }
         }
 
+        function checkCollisionsWithConstDeclarations(node: VariableDeclaration) {
+            // Variable declarations are hoisted to the top of their function scope. They can shadow
+            // block scoped declarations, which bind tighter. this will not be flagged as duplicate definition
+            // by the binder as the declaration scope is different.
+            // A non-initialized declaration is a no-op as the block declaration will resolve before the var
+            // declaration. the problem is if the declaration has an initializer. this will act as a write to the
+            // block declared value. this is fine for let, but not const.
+            //
+            // Only consider declarations with initializers, uninitialized var declarations will not 
+            // step on a const variable.
+            // Do not consider let and const declarations, as duplicate block-scoped declarations 
+            // are handled by the binder.
+            // We are only looking for var declarations that step on const declarations from a 
+            // different scope. e.g.:
+            //      var x = 0;
+            //      {
+            //          const x = 0;
+            //          var x = 0;
+            //      }
+            if (node.initializer && (node.flags & NodeFlags.BlockScoped) === 0) {
+                var symbol = getSymbolOfNode(node);
+                var localDeclarationSymbol = resolveName(node, node.name.text, SymbolFlags.BlockScoped, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
+                if (localDeclarationSymbol && localDeclarationSymbol !== symbol) {
+                    if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.Const) {
+                        error(node, Diagnostics.Cannot_redeclare_constant_0, symbolToString(localDeclarationSymbol));
+                    }
+                }
+            }
+        }
+
         function checkVariableDeclaration(node: VariableDeclaration) {
             checkSourceElement(node.type);
             checkExportsOnMergedDeclarations(node);
@@ -6197,6 +6227,8 @@ module ts {
                         // Use default messages
                         checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
                     }
+
+                    checkCollisionsWithConstDeclarations(node);
                 }
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);

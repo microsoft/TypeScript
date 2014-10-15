@@ -1080,6 +1080,10 @@
         "category": "Error",
         "code": 2450
     },
+    "Cannot redeclare constant '{0}'.": {
+        "category": "Error",
+        "code": 2451
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
