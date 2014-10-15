@@ -4782,115 +4782,99 @@ module ts {
             var sourceFile = getCurrentSourceFile(fileName);
 
             var result: ClassifiedSpan[] = [];
-            processElement(sourceFile.getSourceUnit());
+            processElement(sourceFile, sourceFile);
 
             return result;
 
-            function classifyTrivia(trivia: TypeScript.ISyntaxTrivia) {
-                if (trivia.isComment() && span.intersectsWith(trivia.fullStart(), trivia.fullWidth())) {
+            function classifyComment(comment: CommentRange) {
+                var width = comment.end - comment.pos;
+                if (span.intersectsWith(comment.pos, width)) {
                     result.push({
-                        textSpan: new TypeScript.TextSpan(trivia.fullStart(), trivia.fullWidth()),
+                        textSpan: new TypeScript.TextSpan(comment.pos, width),
                         classificationType: ClassificationTypeNames.comment
                     });
                 }
             }
 
-            function classifyTriviaList(trivia: TypeScript.ISyntaxTriviaList) {
-                for (var i = 0, n = trivia.count(); i < n; i++) {
-                    classifyTrivia(trivia.syntaxTriviaAt(i));
-                }
-            }
+            function classifyToken(token: Node, tokenOwner: Node, sourceFile: SourceFile): void {
+                forEach(getLeadingCommentRanges(sourceFile.text, token.getFullStart()), classifyComment);
 
-            function classifyToken(token: TypeScript.ISyntaxToken) {
-                if (token.hasLeadingComment()) {
-                    classifyTriviaList(token.leadingTrivia());
-                }
-
-                if (TypeScript.width(token) > 0) {
-                    var type = classifyTokenType(token);
+                if (token.getWidth() > 0) {
+                    var type = classifyTokenType(token, tokenOwner);
                     if (type) {
                         result.push({
-                            textSpan: new TypeScript.TextSpan(TypeScript.start(token), TypeScript.width(token)),
+                            textSpan: new TypeScript.TextSpan(token.getStart(), token.getWidth()),
                             classificationType: type
                         });
                     }
                 }
 
-                if (token.hasTrailingComment()) {
-                    classifyTriviaList(token.trailingTrivia());
-                }
+                forEach(getTrailingCommentRanges(sourceFile.text, token.getEnd()), classifyComment);
             }
 
-            function classifyTokenType(token: TypeScript.ISyntaxToken): string {
-                var tokenKind = token.kind();
-                if (TypeScript.SyntaxFacts.isAnyKeyword(token.kind())) {
+            function classifyTokenType(token: Node, tokenOwner: Node): string {
+                var tokenKind = token.kind;
+                if (isKeyword(tokenKind)) {
                     return ClassificationTypeNames.keyword;
                 }
 
-                // Special case < and >  If they appear in a generic context they are punctation,
+                // Special case < and >  If they appear in a generic context they are punctuation,
                 // not operators.
-                if (tokenKind === TypeScript.SyntaxKind.LessThanToken || tokenKind === TypeScript.SyntaxKind.GreaterThanToken) {
-                    var tokenParentKind = token.parent.kind();
-                    if (tokenParentKind === TypeScript.SyntaxKind.TypeArgumentList ||
-                        tokenParentKind === TypeScript.SyntaxKind.TypeParameterList) {
-
+                if (tokenKind === SyntaxKind.LessThanToken || tokenKind === SyntaxKind.GreaterThanToken) {
+                    var tokenParentKind = token.parent.kind;
+                    // If the node owning the token has a type argument list or type parameter list, then
+                    // we can effectively assume that a '<' and '>' belong to those lists.
+                    if (getTypeArgumentOrTypeParameterList(tokenOwner)) {
                         return ClassificationTypeNames.punctuation;
                     }
                 }
 
-                if (TypeScript.SyntaxFacts.isBinaryExpressionOperatorToken(tokenKind) ||
-                    TypeScript.SyntaxFacts.isPrefixUnaryExpressionOperatorToken(tokenKind)) {
-                    return ClassificationTypeNames.operator;
+                if (isPunctuation(token)) {
+                    if (tokenOwner.kind === SyntaxKind.BinaryExpression ||
+                        tokenOwner.kind === SyntaxKind.VariableDeclaration || // the '=' in a variable declaration is special cased here.
+                        tokenOwner.kind === SyntaxKind.PrefixOperator ||
+                        tokenOwner.kind === SyntaxKind.PostfixOperator ||
+                        tokenOwner.kind === SyntaxKind.ConditionalExpression) {
+                        return ClassificationTypeNames.operator;
+                    }
+                    else {
+                        return ClassificationTypeNames.punctuation;
+                    }
                 }
-                else if (TypeScript.SyntaxFacts.isAnyPunctuation(tokenKind)) {
-                    return ClassificationTypeNames.punctuation;
-                }
-                else if (tokenKind === TypeScript.SyntaxKind.NumericLiteral) {
+                else if (tokenKind === SyntaxKind.NumericLiteral) {
                     return ClassificationTypeNames.numericLiteral;
                 }
-                else if (tokenKind === TypeScript.SyntaxKind.StringLiteral) {
+                else if (tokenKind === SyntaxKind.StringLiteral) {
                     return ClassificationTypeNames.stringLiteral;
                 }
-                else if (tokenKind === TypeScript.SyntaxKind.RegularExpressionLiteral) {
-                    // TODO: we shoudl get another classification type for these literals.
+                else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
+                    // TODO: we should get another classification type for these literals.
                     return ClassificationTypeNames.stringLiteral;
                 }
-                else if (tokenKind === TypeScript.SyntaxKind.IdentifierName) {
-                    var current: TypeScript.ISyntaxNodeOrToken = token;
-                    var parent = token.parent;
-                    while (parent.kind() === TypeScript.SyntaxKind.QualifiedName) {
-                        current = parent;
-                        parent = parent.parent;
-                    }
-
-                    switch (parent.kind()) {
-                        case TypeScript.SyntaxKind.SimplePropertyAssignment:
-                            if ((<TypeScript.SimplePropertyAssignmentSyntax>parent).propertyName === token) {
-                                return ClassificationTypeNames.identifier;
-                            }
-                            return;
-                        case TypeScript.SyntaxKind.ClassDeclaration:
-                            if ((<TypeScript.ClassDeclarationSyntax>parent).identifier === token) {
+                else if (tokenKind === SyntaxKind.Identifier) {
+                    switch (tokenOwner.kind) {
+                        case SyntaxKind.ClassDeclaration:
+                            if ((<ClassDeclaration>tokenOwner).name === token) {
                                 return ClassificationTypeNames.className;
                             }
                             return;
-                        case TypeScript.SyntaxKind.TypeParameter:
-                            if ((<TypeScript.TypeParameterSyntax>parent).identifier === token) {
+                        case SyntaxKind.TypeParameter:
+                            if ((<TypeParameterDeclaration>tokenOwner).name === token) {
                                 return ClassificationTypeNames.typeParameterName;
                             }
                             return;
-                        case TypeScript.SyntaxKind.InterfaceDeclaration:
-                            if ((<TypeScript.InterfaceDeclarationSyntax>parent).identifier === token) {
+                        case SyntaxKind.InterfaceDeclaration:
+                            if ((<InterfaceDeclaration>tokenOwner).name === token) {
                                 return ClassificationTypeNames.interfaceName;
                             }
                             return;
-                        case TypeScript.SyntaxKind.EnumDeclaration:
-                            if ((<TypeScript.EnumDeclarationSyntax>parent).identifier === token) {
+                        case SyntaxKind.EnumDeclaration:
+                            if ((<EnumDeclaration>tokenOwner).name === token) {
                                 return ClassificationTypeNames.enumName;
                             }
                             return;
-                        case TypeScript.SyntaxKind.ModuleDeclaration:
-                            if ((<TypeScript.ModuleDeclarationSyntax>parent).name === current) {
+                        case SyntaxKind.ModuleDeclaration:
+                            if ((<ModuleDeclaration>tokenOwner).name === token) {
                                 return ClassificationTypeNames.moduleName;
                             }
                             return;
@@ -4900,19 +4884,18 @@ module ts {
                 }
             }
 
-            function processElement(element: TypeScript.ISyntaxElement) {
+            function processElement(element: Node, sourceFile: SourceFile) {
                 // Ignore nodes that don't intersect the original span to classify.
-                if (!TypeScript.isShared(element) && span.intersectsWith(TypeScript.fullStart(element), TypeScript.fullWidth(element))) {
-                    for (var i = 0, n = TypeScript.childCount(element); i < n; i++) {
-                        var child = TypeScript.childAt(element, i);
-                        if (child) {
-                            if (TypeScript.isToken(child)) {
-                                classifyToken(<TypeScript.ISyntaxToken>child);
-                            }
-                            else {
-                                // Recurse into our child nodes.
-                                processElement(child);
-                            }
+                if (span.intersectsWith(element.getFullStart(), element.getFullWidth())) {
+                    var children = element.getChildren();
+                    for (var i = 0, n = children.length; i < n; i++) {
+                        var child = children[i];
+                        if (isToken(child)) {
+                            classifyToken(child, element, sourceFile);
+                        }
+                        else {
+                            // Recurse into our child nodes.
+                            processElement(child, sourceFile);
                         }
                     }
                 }
