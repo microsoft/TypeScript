@@ -77,6 +77,15 @@ module ts {
         update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
+    ///
+    /// Pre-processing
+    ///
+    interface ITripleSlashDirectiveProperties {
+        noDefaultLib: boolean;
+        diagnostics: TypeScript.Diagnostic[];
+        referencedFiles: TypeScript.IFileReference[];
+    }
+
     var scanner: Scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ true);
 
     var emptyArray: any[] = [];
@@ -1893,6 +1902,162 @@ module ts {
             releaseDocument: releaseDocument,
             reportStats: reportStats
         };
+    }
+
+    export var tripleSlashReferenceRegExp = /^(\/\/\/\s*<reference\s+path=)('|")(.+?)\2\s*(static=('|")(.+?)\5\s*)*\/>/;
+    export function preProcessFile(fileName: string, sourceText: TypeScript.IScriptSnapshot, readImportFiles = true): TypeScript.IPreProcessedFileInfo {
+        var reportDiagnostic = () => { }
+        function isNoDefaultLibMatch(comment: string): RegExpExecArray {
+            var isNoDefaultLibRegex = /^(\/\/\/\s*<reference\s+no-default-lib=)('|")(.+?)\2\s*\/>/gim;
+            return isNoDefaultLibRegex.exec(comment);
+        }
+
+        function getFileReferenceFromReferencePath(fileName: string, text: TypeScript.ISimpleText, position: number, comment: string, diagnostics: TypeScript.Diagnostic[]): TypeScript.IFileReference {
+            // First, just see if they've written: /// <reference\s+
+            // If so, then we'll consider this a reference directive and we'll report errors if it's
+            // malformed.  Otherwise, we'll completely ignore this.
+            var lineMap = text.lineMap();
+
+            var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
+            if (simpleReferenceRegEx.exec(comment)) {
+                var isNoDefaultLib = isNoDefaultLibMatch(comment);
+
+                if (!isNoDefaultLib) {
+                    var fullReferenceRegEx = tripleSlashReferenceRegExp;
+                    var fullReference = fullReferenceRegEx.exec(comment);
+
+                    if (!fullReference) {
+                        // It matched the start of a reference directive, but wasn't well formed.  Report
+                        // an appropriate error to the user.
+                        diagnostics.push(new TypeScript.Diagnostic(fileName, lineMap, position, comment.length, TypeScript.DiagnosticCode.Invalid_reference_directive_syntax));
+                    }
+                    else {
+                        var path: string = normalizePath(fullReference[3]);
+                        var adjustedPath = normalizePath(path);
+
+                        var isResident = fullReference.length >= 7 && fullReference[6] === "true";
+                        return {
+                            line: 0,
+                            character: 0,
+                            position: 0,
+                            length: 0,
+                            path: TypeScript.switchToForwardSlashes(adjustedPath),
+                            isResident: isResident
+                        };
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        function processImports(text: TypeScript.ISimpleText, scanner: TypeScript.Scanner.IScanner, token: TypeScript.ISyntaxToken, importedFiles: TypeScript.IFileReference[]): void {
+            var lineChar = { line: -1, character: -1 };
+
+            var lineMap = text.lineMap();
+            var start = new Date().getTime();
+            // Look for:
+            // import foo = module("foo")
+            while (token.kind() !== TypeScript.SyntaxKind.EndOfFileToken) {
+                if (token.kind() === TypeScript.SyntaxKind.ImportKeyword) {
+                    var importToken = token;
+                    token = scanner.scan(/*allowRegularExpression:*/ false);
+
+                    if (TypeScript.SyntaxFacts.isIdentifierNameOrAnyKeyword(token)) {
+                        token = scanner.scan(/*allowRegularExpression:*/ false);
+
+                        if (token.kind() === TypeScript.SyntaxKind.EqualsToken) {
+                            token = scanner.scan(/*allowRegularExpression:*/ false);
+
+                            if (token.kind() === TypeScript.SyntaxKind.ModuleKeyword || token.kind() === TypeScript.SyntaxKind.RequireKeyword) {
+                                token = scanner.scan(/*allowRegularExpression:*/ false);
+
+                                if (token.kind() === TypeScript.SyntaxKind.OpenParenToken) {
+                                    token = scanner.scan(/*allowRegularExpression:*/ false);
+
+                                    lineMap.fillLineAndCharacterFromPosition(TypeScript.start(importToken, text), lineChar);
+
+                                    if (token.kind() === TypeScript.SyntaxKind.StringLiteral) {
+                                        var ref = {
+                                            line: lineChar.line,
+                                            character: lineChar.character,
+                                            position: TypeScript.start(token, text),
+                                            length: TypeScript.width(token),
+                                            path: TypeScript.stripStartAndEndQuotes(TypeScript.switchToForwardSlashes(token.text())),
+                                            isResident: false
+                                        };
+                                        importedFiles.push(ref);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                token = scanner.scan(/*allowRegularExpression:*/ false);
+            }
+
+            var totalTime = new Date().getTime() - start;
+            //TypeScript.fileResolutionScanImportsTime += totalTime
+        }
+
+        function processTripleSlashDirectives(fileName: string, text: TypeScript.ISimpleText, firstToken: TypeScript.ISyntaxToken): ITripleSlashDirectiveProperties {
+            var leadingTrivia = firstToken.leadingTrivia(text);
+
+            var position = 0;
+            var lineChar = { line: -1, character: -1 };
+            var noDefaultLib = false;
+            var diagnostics: TypeScript.Diagnostic[] = [];
+            var referencedFiles: TypeScript.IFileReference[] = [];
+            var lineMap = text.lineMap();
+
+            for (var i = 0, n = leadingTrivia.count(); i < n; i++) {
+                var trivia = leadingTrivia.syntaxTriviaAt(i);
+
+                if (trivia.kind() === TypeScript.SyntaxKind.SingleLineCommentTrivia) {
+                    var triviaText = trivia.fullText();
+                    var referencedCode = getFileReferenceFromReferencePath(fileName, text, position, triviaText, diagnostics);
+
+                    if (referencedCode) {
+                        lineMap.fillLineAndCharacterFromPosition(position, lineChar);
+                        referencedCode.position = position;
+                        referencedCode.length = trivia.fullWidth();
+                        referencedCode.line = lineChar.line;
+                        referencedCode.character = lineChar.character;
+
+                        referencedFiles.push(referencedCode);
+                    }
+
+                    // is it a lib file?
+                    var isNoDefaultLib = isNoDefaultLibMatch(triviaText);
+                    if (isNoDefaultLib) {
+                        noDefaultLib = isNoDefaultLib[3] === "true";
+                    }
+                }
+
+                position += trivia.fullWidth();
+            }
+
+            return { noDefaultLib: noDefaultLib, diagnostics: diagnostics, referencedFiles: referencedFiles };
+        }
+
+        var text = TypeScript.SimpleText.fromScriptSnapshot(sourceText);
+        var scanner = TypeScript.Scanner.createScanner(ts.ScriptTarget.ES5, text, reportDiagnostic);
+
+        var firstToken = scanner.scan(/*allowRegularExpression:*/ false);
+
+        // only search out dynamic mods
+        // if you find a dynamic mod, ignore every other mod inside, until you balance rcurlies
+        // var position
+
+        var importedFiles: TypeScript.IFileReference[] = [];
+        if (readImportFiles) {
+            processImports(text, scanner, firstToken, importedFiles);
+        }
+
+        var properties = processTripleSlashDirectives(fileName, text, firstToken);
+
+        return { referencedFiles: properties.referencedFiles, importedFiles: importedFiles, isLibFile: properties.noDefaultLib, diagnostics: properties.diagnostics };
     }
 
     /// Helpers

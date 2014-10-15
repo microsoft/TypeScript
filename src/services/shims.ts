@@ -847,7 +847,7 @@ module ts {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
-                    var result = TypeScript.preProcessFile(fileName, sourceText);
+                    var result = ts.preProcessFile(fileName, sourceText); //TypeScript.preProcessFile(fileName, sourceText);
                     return result;
                 });
         }
