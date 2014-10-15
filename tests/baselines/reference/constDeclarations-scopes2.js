@@ -20,7 +20,7 @@ for (const c = 0; c < 10; n = c ) {
 const c = "string";
 var n;
 var b;
-for (var c = 0; c < 10; n = c) {
+for (const c = 0; c < 10; n = c) {
     // for block
     const c = false;
     b = c;

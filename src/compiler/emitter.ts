@@ -1152,6 +1152,9 @@ module ts {
                     if (node.declarations[0] && node.declarations[0].flags & NodeFlags.Let) {
                         emitToken(SyntaxKind.LetKeyword, endPos);
                     }
+                    else if (node.declarations[0] && node.declarations[0].flags & NodeFlags.Const) {
+                        emitToken(SyntaxKind.ConstKeyword, endPos);
+                    }
                     else {
                         emitToken(SyntaxKind.VarKeyword, endPos);
                     }
@@ -1794,15 +1797,7 @@ module ts {
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
-                    if (node.flags & NodeFlags.Let) {
-                        write("let ");
-                    }
-                    else if (node.flags & NodeFlags.Const) {
-                        write("const ");
-                    }
-                    else {
-                        write("var ");
-                    }
+                    write("var ");
                     emit(node.name);
                     write(" = ");
                     emitModuleMemberName(node);
