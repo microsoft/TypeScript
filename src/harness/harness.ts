@@ -139,6 +139,7 @@ module Harness {
         deleteFile(filename: string): void;
         listFiles(path: string, filter: RegExp, options?: { recursive?: boolean }): string[];
         log(text: string): void;
+        getMemoryUsage? (): number;
     }
 
     module IOImpl {
@@ -274,6 +275,13 @@ module Harness {
                 }
 
                 return filesInFolder(path);
+            }
+
+            export var getMemoryUsage: typeof IO.getMemoryUsage = () => {
+                if (global.gc) {
+                    global.gc();
+                }
+                return process.memoryUsage().heapUsed;
             }
         }
 

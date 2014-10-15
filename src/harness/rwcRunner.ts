@@ -47,19 +47,9 @@ module RWC {
 
     export function runRWCTest(jsonPath: string) {
         describe("Testing a RWC project: " + jsonPath, () => {
-            var harnessCompiler = Harness.Compiler.getCompiler();
-            var opts: ts.ParsedCommandLine;
-
-            var ioLog: IOLog = JSON.parse(Harness.IO.readFile(jsonPath));
-            var errors = '';
-
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
-                harnessCompiler = undefined;
-                opts = undefined;
-                ioLog = undefined;
-                errors = undefined;
                 inputFiles = undefined;
                 otherFiles = undefined;
                 compilerResult = undefined;
@@ -67,21 +57,30 @@ module RWC {
                 baselineOpts = undefined;
                 baseName = undefined;
                 declFileCompilationResult = undefined;
+                //if (Harness.IO.getMemoryUsage) {
+                //    console.log(Harness.IO.getMemoryUsage());
+                //}
             });
 
-
-            it('has parsable options', () => {
-                runWithIOLog(ioLog, () => {
-                    opts = ts.parseCommandLine(ioLog.arguments);
-                    assert.equal(opts.errors.length, 0);
-                });
-            });
+            //var startTime: number;
+            //it('getTimeStart', () => {
+            //    startTime = new Date().getTime();
+            //});
 
             var inputFiles: { unitName: string; content: string; }[] = [];
             var otherFiles: { unitName: string; content: string; }[] = [];
             var compilerResult: Harness.Compiler.CompilerResult;
             var compilerOptions: ts.CompilerOptions;
             it('can compile', () => {
+                var harnessCompiler = Harness.Compiler.getCompiler();
+                var opts: ts.ParsedCommandLine;
+
+                var ioLog: IOLog = JSON.parse(Harness.IO.readFile(jsonPath));
+                runWithIOLog(ioLog, () => {
+                    opts = ts.parseCommandLine(ioLog.arguments);
+                    assert.equal(opts.errors.length, 0);
+                });
+
                 runWithIOLog(ioLog, () => {
                     harnessCompiler.reset();
 
@@ -139,7 +138,7 @@ module RWC {
                 declResult: Harness.Compiler.CompilerResult;
             };
             it('Correct compiler generated.d.ts', () => {
-                declFileCompilationResult = harnessCompiler.compileDeclarationFiles(inputFiles, otherFiles, compilerResult, /*settingscallback*/ undefined, compilerOptions);
+                declFileCompilationResult = Harness.Compiler.getCompiler().compileDeclarationFiles(inputFiles, otherFiles, compilerResult, /*settingscallback*/ undefined, compilerOptions);
             });
 
 
@@ -199,6 +198,10 @@ module RWC {
                     }, false, baselineOpts);
                 }
             });
+
+            //it('EndTIme', () => {
+            //    console.log("Parse time:" + baseName+ " ("  + (new Date().getTime() - startTime) + ")");
+            //});
 
             // TODO: Type baselines (need to refactor out from compilerRunner)
         });
