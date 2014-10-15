@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
-//// interface Thing {
+//// interface /*0*/Thing {
 ////     toExponential(): number;
 //// }
 //// 
@@ -8,4 +8,4 @@
 //// Thing.toExponential();
 
 var c = classification;
-verify.semanticClassificationsAre(c.interfaceName("Thing"));
+verify.semanticClassificationsAre(c.interfaceName("Thing", test.marker("0").position));

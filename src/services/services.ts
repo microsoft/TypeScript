@@ -4734,7 +4734,24 @@ module ts {
                     }
                 }
                 else if (flags & SymbolFlags.Module) {
-                    return ClassificationTypeNames.moduleName;
+                    // Only classify a module as such if
+                    //  - It appears in a namespace context.
+                    //  - There exists a module declaration which actually impacts the value side.
+                    if (meaningAtPosition & SemanticMeaning.Namespace ||
+                        (meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol))) {
+                        return ClassificationTypeNames.moduleName;
+                    }
+                }
+
+                return undefined;
+
+                /**
+                 * Returns true if there exists a module that introduces entities on the value side.
+                 */
+                function hasValueSideModule(symbol: Symbol): boolean {
+                    return forEach(symbol.declarations, declaration => {
+                        return declaration.kind === SyntaxKind.ModuleDeclaration && isInstantiated(declaration);
+                    });
                 }
             }
 
