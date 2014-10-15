@@ -1,6 +1,6 @@
 # TypeScript Language Specification
 
-Version 1.3
+Version 1.4
 
 October, 2014
 
@@ -2928,17 +2928,17 @@ function foo(x: number | string) {
 
 The type of a variable or parameter is narrowed in the following situations:
 
-* In the true branch statement of an ‘if’ statement, the type of a variable or parameter is *narrowed *by any type guard in the ‘if’ condition *when true*, provided the true branch statement contains no assignments to the variable or parameter.
-* In the false branch statement of an ‘if’ statement, the type of a variable or parameter is *narrowed *by any type guard in the ‘if’ condition *when false*, provided the false branch statement contains no assignments to the variable or parameter.
-* In the true expression of a conditional expression, the type of a variable or parameter is *narrowed *by any type guard in the condition *when true*, provided the true expression contains no assignments to the variable or parameter.
-* In the false expression of a conditional expression, the type of a variable or parameter is *narrowed *by any type guard in the condition *when false*, provided the false expression contains no assignments to the variable or parameter.
-* In the right operand of a && operation, the type of a variable or parameter is *narrowed *by any type guard in the left operand *when true*, provided the right operand contains no assignments to the variable or parameter.
-* In the right operand of a || operation, the type of a variable or parameter is *narrowed *by any type guard in the left operand *when false*, provided the right operand contains no assignments to the variable or parameter.
+* In the true branch statement of an ‘if’ statement, the type of a variable or parameter is *narrowed* by any type guard in the ‘if’ condition *when true*, provided the true branch statement contains no assignments to the variable or parameter.
+* In the false branch statement of an ‘if’ statement, the type of a variable or parameter is *narrowed* by any type guard in the ‘if’ condition *when false*, provided the false branch statement contains no assignments to the variable or parameter.
+* In the true expression of a conditional expression, the type of a variable or parameter is *narrowed* by any type guard in the condition *when true*, provided the true expression contains no assignments to the variable or parameter.
+* In the false expression of a conditional expression, the type of a variable or parameter is *narrowed* by any type guard in the condition *when false*, provided the false expression contains no assignments to the variable or parameter.
+* In the right operand of a && operation, the type of a variable or parameter is *narrowed* by any type guard in the left operand *when true*, provided the right operand contains no assignments to the variable or parameter.
+* In the right operand of a || operation, the type of a variable or parameter is *narrowed* by any type guard in the left operand *when false*, provided the right operand contains no assignments to the variable or parameter.
 
 A type guard is simply an expression that follows a particular pattern. The process of narrowing the type of a variable *x* by a type guard *when true* or *when false* depends on the type guard as follows:
 
 * A type guard of the form `x instanceof C`, where *C* is of a subtype of the global type ‘Function’ and *C* has a property named ‘prototype’
-  * *when true*, narrows the type of *x* to the type of the ‘prototype’ property in *C* provided it is a subtype of the type of *x* , or
+  * *when true*, narrows the type of *x* to the type of the ‘prototype’ property in *C* provided it is a subtype of the type of *x*, or
   * *when false*, has no effect on the type of *x*.
 * A type guard of the form `typeof x === s`, where *s* is a string literal with the value ‘string’, ‘number’, or ‘boolean’,
   * *when true*, narrows the type of *x* to the given primitive type, or
@@ -2962,7 +2962,7 @@ A type guard is simply an expression that follows a particular pattern. The proc
 
 A primitive type *P* is removed from a type *T* as follows:
 
-* If *T* is a union type *P* | *T<sub>1</sub>* | *T<sub>2</sub>* | … | *T<sub>n</sub>*, the result is the type* T<sub>1</sub>* | *T<sub>2</sub>* | … | *T<sub>n</sub>*.
+* If *T* is a union type *P* | *T<sub>1</sub>* | *T<sub>2</sub>* | … | *T<sub>n</sub>*, the result is the type *T<sub>1</sub>* | *T<sub>2</sub>* | … | *T<sub>n</sub>*.
 * Otherwise, the result is *T*.
 
 Note that type guards affect types of variables and parameters only and have no effect on members of objects such as properties. Also note that it is possible to defeat a type guard by calling a function that changes the type of the guarded variable.
