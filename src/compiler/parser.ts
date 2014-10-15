@@ -3160,13 +3160,16 @@ module ts {
                     grammarErrorOnNode(node, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                 }
             }
-            else if (!allowLetDeclarations){
+            else if (!allowLetDeclarations) {
                 if (node.flags & NodeFlags.Let) {
                     grammarErrorOnNode(node, Diagnostics.let_must_be_declared_inside_a_block);
                 }
                 else if (node.flags & NodeFlags.Const) {
                     grammarErrorOnNode(node, Diagnostics.const_must_be_declared_inside_a_block);
                 }
+            }
+            else if (node.flags & NodeFlags.Export && node.flags & NodeFlags.BlockScoped) {
+                grammarErrorOnNode(node, Diagnostics.Only_var_declarations_can_be_exported);
             }
             return node;
         }

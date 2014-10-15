@@ -475,6 +475,10 @@
         "category": "Error",
         "code": 1157
     },
+    "Only var declarations can be exported.": {
+        "category": "Error",
+        "code": 1158
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
