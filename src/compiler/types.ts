@@ -231,7 +231,11 @@ module ts {
         FirstToken = EndOfFileToken,
         LastToken = StringKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
-        LastTriviaToken = WhitespaceTrivia
+        LastTriviaToken = WhitespaceTrivia,
+        FirstOperator = SemicolonToken,
+        LastOperator = CaretEqualsToken,
+        FirstBinaryOperator = LessThanToken,
+        LastBinaryOperator = CaretEqualsToken
     }
 
     export enum NodeFlags {

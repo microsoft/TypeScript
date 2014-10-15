@@ -189,7 +189,7 @@ module ts.formatting {
         var previousParent: Node;
         var previousRangeStartLine: number;
 
-        var lastTriviaWasNewLine = false;
+        var lastTriviaWasNewLine = true;
         var edits: TextChange[] = [];
 
         // advance the scaner
@@ -208,7 +208,7 @@ module ts.formatting {
                 return;
             }
 
-            if (!rangeContainsRange(node, currentTokenInfo)) {
+            if (!rangeContainsRange(node, currentTokenInfo.token)) {
                 // node and its descendents don't contain current token from the scanner - skip it
                 return;
             }
@@ -351,13 +351,30 @@ module ts.formatting {
                 processTrivia(currentTokenInfo.leadingTrivia, parent, contextNode, indentation);
             }
 
+
+            var indentToken: boolean;
             if (rangeContainsRange(originalRange, currentTokenInfo.token)) {
-                processRange(currentTokenInfo.token, parent, contextNode, indentation);
+                indentToken = processRange(currentTokenInfo.token, parent, contextNode, indentation);
             }
 
             if (currentTokenInfo.trailingTrivia) {
                 processTrivia(currentTokenInfo.trailingTrivia, parent, contextNode, indentation);
             }
+
+            if (lastTriviaWasNewLine && indentToken) {
+
+                // TODO: remove
+                var tokenRange = getNonAdjustedLineAndCharacterFromPosition(currentTokenInfo.token.pos, sourceFile);
+
+                // TODO: handle indentation in multiline comments
+                var currentIndentation = tokenRange.character;
+                if (indentation !== currentIndentation) {
+                    var indentationString = getIndentationString(indentation, options);
+                    var startLinePosition = getStartPositionOfLine(tokenRange.line, sourceFile);
+                    recordReplace(startLinePosition, currentIndentation, indentationString);
+                }
+            }
+
 
             return fetchNextTokenInfo();
         }
@@ -371,10 +388,11 @@ module ts.formatting {
             }
         }
 
-        function processRange(range: TextRangeWithKind, parent: Node, contextNode: Node, indentation: number) {
+        function processRange(range: TextRangeWithKind, parent: Node, contextNode: Node, indentation: number): boolean {
             var rangeStart = getNonAdjustedLineAndCharacterFromPosition(range.pos, sourceFile);
-            if (rangeContainsRange(originalRange, range)) {
-                var indentToken = true;
+            var indentToken = true;
+
+            if (rangeContainsRange(originalRange, range)) {                
                 if (!previousRange) {
                     var originalStart = getNonAdjustedLineAndCharacterFromPosition(originalRange.pos, sourceFile);
                     // TODO: implement
@@ -389,23 +407,12 @@ module ts.formatting {
                     processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode)
                     indentToken = rangeStart.line !== previousRangeStartLine;
                 }
-
-                if (lastTriviaWasNewLine && indentToken) {
-                    // TODO: handle indentation in multiline comments
-                    if (!isTrivia(range.kind)) {
-                        var currentIndentation = rangeStart.character;
-                        if (indentation !== currentIndentation) {
-                            var indentationString = getIndentationString(indentation, options);
-                            var startLinePosition = getStartPositionOfLine(rangeStart.line, sourceFile);
-                            recordReplace(startLinePosition, currentIndentation, indentationString);
-                        }
-                    }
-                }
             }
-
             previousRange = range;
             previousParent = parent;
             previousRangeStartLine = rangeStart.line;
+
+            return indentToken;
         }
 
         function processPair(currentItem: TextRangeWithKind,

@@ -448,6 +448,7 @@ module ts.formatting {
 
             switch (context.contextNode.kind) {
                 case SyntaxKind.BinaryExpression:
+                case SyntaxKind.ConditionalExpression:
                     return true;
                 //// binary expressions
                 //case SyntaxKind.AssignmentExpression:
@@ -492,8 +493,10 @@ module ts.formatting {
                 case SyntaxKind.ImportDeclaration:
                 // equal in var a = 0;
                 case SyntaxKind.VariableDeclaration:
-                // TODO:
-                //case SyntaxKind.EqualsValueClause:
+                // equal in p = 0;
+                case SyntaxKind.Parameter:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.Property:
                     return context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
                 // "in" keyword in for (var x in []) { }
                 case SyntaxKind.ForInStatement:
@@ -704,8 +707,7 @@ module ts.formatting {
         }
 
         static IsVoidOpContext(context: FormattingContext): boolean {
-            return;
-            //return context.currentTokenSpan.token.kind === SyntaxKind.VoidKeyword && context.currentTokenParent.kind() === SyntaxKind.VoidExpression;
+            return context.currentTokenSpan.kind === SyntaxKind.VoidKeyword && context.currentTokenParent.kind === SyntaxKind.PrefixOperator;
         }
     }
 }
