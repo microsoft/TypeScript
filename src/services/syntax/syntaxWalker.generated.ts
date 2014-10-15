@@ -103,6 +103,12 @@ module TypeScript {
             this.visitNodeOrToken(node.name);
         }
 
+        public visitTupleType(node: TupleTypeSyntax): void {
+            this.visitToken(node.openBracketToken);
+            this.visitSeparatedList(node.types);
+            this.visitToken(node.closeBracketToken);
+        }
+
         public visitInterfaceDeclaration(node: InterfaceDeclarationSyntax): void {
             this.visitList(node.modifiers);
             this.visitToken(node.interfaceKeyword);

@@ -1,3 +1,21 @@
+tests/cases/compiler/privacyGloImportParseErrors.ts(59,5): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyGloImportParseErrors.ts(69,5): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyGloImportParseErrors.ts(81,5): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyGloImportParseErrors.ts(82,5): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyGloImportParseErrors.ts(121,9): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyGloImportParseErrors.ts(125,13): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyGloImportParseErrors.ts(133,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+tests/cases/compiler/privacyGloImportParseErrors.ts(146,5): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyGloImportParseErrors.ts(149,9): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyGloImportParseErrors.ts(22,27): error TS2435: Ambient external modules cannot be nested in other modules.
+tests/cases/compiler/privacyGloImportParseErrors.ts(30,20): error TS2435: Ambient external modules cannot be nested in other modules.
+tests/cases/compiler/privacyGloImportParseErrors.ts(59,37): error TS2307: Cannot find external module 'm1_M3_public'.
+tests/cases/compiler/privacyGloImportParseErrors.ts(69,37): error TS2307: Cannot find external module 'm1_M4_private'.
+tests/cases/compiler/privacyGloImportParseErrors.ts(133,24): error TS2435: Ambient external modules cannot be nested in other modules.
+tests/cases/compiler/privacyGloImportParseErrors.ts(138,16): error TS2435: Ambient external modules cannot be nested in other modules.
+tests/cases/compiler/privacyGloImportParseErrors.ts(141,12): error TS2435: Ambient external modules cannot be nested in other modules.
+
+
 ==== tests/cases/compiler/privacyGloImportParseErrors.ts (16 errors) ====
     module m1 {
         export module m1_M1_public {
@@ -22,7 +40,7 @@
     
         export declare module "m1_M3_public" {
                               ~~~~~~~~~~~~~~
-!!! Ambient external modules cannot be nested in other modules.
+!!! error TS2435: Ambient external modules cannot be nested in other modules.
             export function f1();
             export class c1 {
             }
@@ -32,7 +50,7 @@
     
         declare module "m1_M4_private" {
                        ~~~~~~~~~~~~~~~
-!!! Ambient external modules cannot be nested in other modules.
+!!! error TS2435: Ambient external modules cannot be nested in other modules.
             export function f1();
             export class c1 {
             }
@@ -63,9 +81,9 @@
     
         import m1_im3_private = require("m1_M3_public");
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declarations in an internal module cannot reference an external module.
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
                                         ~~~~~~~~~~~~~~
-!!! Cannot find external module 'm1_M3_public'.
+!!! error TS2307: Cannot find external module 'm1_M3_public'.
         export var m1_im3_private_v1_public = m1_im3_private.c1;
         export var m1_im3_private_v2_public = new m1_im3_private.c1();
         export var m1_im3_private_v3_public = m1_im3_private.f1;
@@ -77,9 +95,9 @@
     
         import m1_im4_private = require("m1_M4_private");
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declarations in an internal module cannot reference an external module.
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
                                         ~~~~~~~~~~~~~~~
-!!! Cannot find external module 'm1_M4_private'.
+!!! error TS2307: Cannot find external module 'm1_M4_private'.
         export var m1_im4_private_v1_public = m1_im4_private.c1;
         export var m1_im4_private_v2_public = new m1_im4_private.c1();
         export var m1_im4_private_v3_public = m1_im4_private.f1;
@@ -93,10 +111,10 @@
         export import m1_im2_public = m1_M2_private;
         export import m1_im3_public = require("m1_M3_public");
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declarations in an internal module cannot reference an external module.
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
         export import m1_im4_public = require("m1_M4_private");
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declarations in an internal module cannot reference an external module.
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
     }
     
     module glo_M1_public {
@@ -137,13 +155,13 @@
         module m2 {
             import errorImport = require("glo_M2_public");
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declarations in an internal module cannot reference an external module.
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
             import nonerrorImport = glo_M1_public;
     
             module m5 {
                 import m5_errorImport = require("glo_M2_public");
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declarations in an internal module cannot reference an external module.
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
                 import m5_nonerrorImport = glo_M1_public;
             }
         }
@@ -153,33 +171,33 @@
         module m2 {
             declare module "abc" {
             ~~~~~~~
-!!! A 'declare' modifier cannot be used in an already ambient context.
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
                            ~~~~~
-!!! Ambient external modules cannot be nested in other modules.
+!!! error TS2435: Ambient external modules cannot be nested in other modules.
             }
         }
     
         module m2 {
             module "abc2" {
                    ~~~~~~
-!!! Ambient external modules cannot be nested in other modules.
+!!! error TS2435: Ambient external modules cannot be nested in other modules.
             }
         }
         module "abc3" {
                ~~~~~~
-!!! Ambient external modules cannot be nested in other modules.
+!!! error TS2435: Ambient external modules cannot be nested in other modules.
         }
     }
     
     module m2 {
         import m3 = require("use_glo_M1_public");
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declarations in an internal module cannot reference an external module.
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
         module m4 {
             var a = 10;
             import m2 = require("use_glo_M1_public");
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declarations in an internal module cannot reference an external module.
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
         }
     
     }

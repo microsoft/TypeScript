@@ -1,3 +1,11 @@
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(5,14): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(13,12): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(23,24): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(32,14): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(40,12): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(50,24): error TS1014: A rest parameter must be last in a parameter list.
+
+
 ==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts (6 errors) ====
     // Rest parameters must be an array type if they have a type annotation, errors only for the functions with 2 rest params
     
@@ -5,7 +13,7 @@
     var f = function foo(...x: number[]) { }
     var f2 = (...x: number[], ...y: number[]) => { }
                  ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
     
     class C {
         foo(...x: number[]) { }
@@ -15,7 +23,7 @@
         (...x: number[]);
         foo(...x: number[], ...y: number[]);
                ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
     }
     
     var a: {
@@ -27,7 +35,7 @@
         foo(...x: number[]) { },
         a: function foo(...x: number[], ...y: number[]) { },
                            ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
         b: (...x: number[]) => { }
     }
     
@@ -38,7 +46,7 @@
     var f3 = function foo(...x: Array<string>) { }
     var f4 = (...x: Array<string>, ...y: Array<string>) => { }
                  ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
     
     class C2 {
         foo(...x: Array<string>) { }
@@ -48,7 +56,7 @@
         (...x: Array<string>);
         foo(...x: Array<string>, ...y: Array<string>);
                ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
     }
     
     var a2: {
@@ -60,6 +68,6 @@
         foo(...x: Array<string>) { },
         a: function foo(...x: Array<string>, ...y: Array<string>) { },
                            ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
         b: (...x: Array<string>) => { }
     }

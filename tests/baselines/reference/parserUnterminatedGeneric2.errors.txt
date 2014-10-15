@@ -1,39 +1,56 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(2,34): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(3,42): error TS1005: '=>' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,23): error TS1005: ',' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,35): error TS1005: ',' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,41): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,54): error TS1005: '>' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(2,5): error TS2304: Cannot find name 'interfaceICompiledExpression'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,9): error TS2304: Cannot find name 'assign'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,16): error TS2304: Cannot find name 'context'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,25): error TS2304: Cannot find name 'any'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,30): error TS2304: Cannot find name 'value'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,37): error TS2304: Cannot find name 'any'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,43): error TS2304: Cannot find name 'any'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,23): error TS2304: Cannot find name 'IPromise'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,45): error TS2304: Cannot find name 'IPromise'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts (15 errors) ====
     declare module ng {
         interfaceICompiledExpression {
                                      ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'interfaceICompiledExpression'.
+!!! error TS2304: Cannot find name 'interfaceICompiledExpression'.
             (context: any, locals?: any): any;
                                              ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
             assign(context: any, value: any): any;
                           ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                                       ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                                             ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
             ~~~~~~
-!!! Cannot find name 'assign'.
+!!! error TS2304: Cannot find name 'assign'.
                    ~~~~~~~
-!!! Cannot find name 'context'.
+!!! error TS2304: Cannot find name 'context'.
                             ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
                                  ~~~~~
-!!! Cannot find name 'value'.
+!!! error TS2304: Cannot find name 'value'.
                                         ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
                                               ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
         }
     
         interface IQService {
             all(promises: IPromise < any > []): IPromise<
                                                          
-!!! '>' expected.
+!!! error TS1005: '>' expected.
                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'IPromise'.
+!!! error TS2304: Cannot find name 'IPromise'.
                                                 ~~~~~~~~~
-!!! Cannot find name 'IPromise'.
+!!! error TS2304: Cannot find name 'IPromise'.

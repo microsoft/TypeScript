@@ -1,3 +1,19 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(5,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Function'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(6,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(7,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(23,14): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(x: string) => string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(24,15): error TS2345: Argument of type '(x: string[]) => string[]' is not assignable to parameter of type '(x: string) => string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(25,15): error TS2345: Argument of type 'typeof C' is not assignable to parameter of type '(x: string) => string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(26,15): error TS2345: Argument of type 'new (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(28,16): error TS2345: Argument of type '<U, V>(x: U, y: V) => U' is not assignable to parameter of type '(x: string) => string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(29,16): error TS2345: Argument of type 'typeof C2' is not assignable to parameter of type '(x: string) => string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(30,16): error TS2345: Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type '(x: string) => string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(34,16): error TS2345: Argument of type 'F2' is not assignable to parameter of type '(x: string) => string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(36,38): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(37,10): error TS2345: Argument of type 'T' is not assignable to parameter of type '(x: string) => string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(38,10): error TS2345: Argument of type 'U' is not assignable to parameter of type '(x: string) => string'.
+
+
 ==== tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts (14 errors) ====
     // satisfaction of a constraint to Function, all of these invocations are errors unless otherwise noted
     
@@ -5,13 +21,13 @@
     
     foo(1);
         ~
-!!! Argument of type 'number' is not assignable to parameter of type 'Function'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'Function'.
     foo(() => { }, 1);
     ~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     foo(1, () => { });
     ~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     function foo2<T extends (x: string) => string>(x: T): T { return x; }
     
@@ -29,41 +45,41 @@
     
     var r = foo2(new Function());
                  ~~~~~~~~~~~~~~
-!!! Argument of type 'Function' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type 'Function' is not assignable to parameter of type '(x: string) => string'.
     var r2 = foo2((x: string[]) => x);
                   ~~~~~~~~~~~~~~~~~~
-!!! Argument of type '(x: string[]) => string[]' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type '(x: string[]) => string[]' is not assignable to parameter of type '(x: string) => string'.
     var r6 = foo2(C);
                   ~
-!!! Argument of type 'typeof C' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type 'typeof C' is not assignable to parameter of type '(x: string) => string'.
     var r7 = foo2(b);
                   ~
-!!! Argument of type 'new (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type 'new (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
     var r8 = foo2(<U>(x: U) => x); // no error expected
     var r11 = foo2(<U, V>(x: U, y: V) => x);
                    ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument of type '<U, V>(x: U, y: V) => U' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type '<U, V>(x: U, y: V) => U' is not assignable to parameter of type '(x: string) => string'.
     var r13 = foo2(C2);
                    ~~
-!!! Argument of type 'typeof C2' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type 'typeof C2' is not assignable to parameter of type '(x: string) => string'.
     var r14 = foo2(b2);
                    ~~
-!!! Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type '(x: string) => string'.
     
     interface F2 extends Function { foo: string; }
     var f2: F2;
     var r16 = foo2(f2);
                    ~~
-!!! Argument of type 'F2' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type 'F2' is not assignable to parameter of type '(x: string) => string'.
     
     function fff<T extends { (): void }, U extends T>(x: T, y: U) {
                                          ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         foo2(x);
              ~
-!!! Argument of type 'T' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type 'T' is not assignable to parameter of type '(x: string) => string'.
         foo2(y);
              ~
-!!! Argument of type 'U' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type 'U' is not assignable to parameter of type '(x: string) => string'.
     }
     

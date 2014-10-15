@@ -239,7 +239,7 @@ module TypeScript {
         }
 
         private checkParameterAccessibilityModifier(parameterList: ParameterListSyntax, modifier: ISyntaxToken, modifierIndex: number): boolean {
-            if (modifier.kind() !== SyntaxKind.PublicKeyword && modifier.kind() !== SyntaxKind.PrivateKeyword) {
+            if (!SyntaxFacts.isAccessibilityModifier(modifier.kind())) {
                 this.pushDiagnostic(modifier, DiagnosticCode._0_modifier_cannot_appear_on_a_parameter, [modifier.text()]);
                 return true;
             }
@@ -319,6 +319,15 @@ module TypeScript {
             }
 
             super.visitTypeArgumentList(node);
+        }
+
+        public visitTupleType(node: TupleTypeSyntax): void {
+            if (this.checkForTrailingComma(node.types) ||
+                this.checkForAtLeastOneElement(node, node.types, node.openBracketToken, getLocalizedText(DiagnosticCode.type, null))) {
+                return
+            }
+
+            super.visitTupleType(node);
         }
 
         public visitTypeParameterList(node: TypeParameterListSyntax): void {
@@ -515,9 +524,7 @@ module TypeScript {
 
             for (var i = 0, n = list.length; i < n; i++) {
                 var modifier = list[i];
-                if (modifier.kind() === SyntaxKind.PublicKeyword ||
-                    modifier.kind() === SyntaxKind.PrivateKeyword) {
-
+                if (SyntaxFacts.isAccessibilityModifier(modifier.kind())) {
                     if (seenAccessibilityModifier) {
                         this.pushDiagnostic(modifier, DiagnosticCode.Accessibility_modifier_already_seen);
                         return true;
@@ -752,8 +759,7 @@ module TypeScript {
 
             for (var i = 0, n = modifiers.length; i < n; i++) {
                 var modifier = modifiers[i];
-                if (modifier.kind() === SyntaxKind.PublicKeyword ||
-                    modifier.kind() === SyntaxKind.PrivateKeyword ||
+                if (SyntaxFacts.isAccessibilityModifier(modifier.kind()) ||
                     modifier.kind() === SyntaxKind.StaticKeyword) {
                     this.pushDiagnostic(modifier, DiagnosticCode._0_modifier_cannot_appear_on_a_module_element, [modifier.text()]);
                     return true;

@@ -21,6 +21,7 @@ export module Database {
 
 //// [requireEmitSemicolon_0.js]
 define(["require", "exports"], function (require, exports) {
+    var Models;
     (function (Models) {
         var Person = (function () {
             function Person(name) {
@@ -28,11 +29,11 @@ define(["require", "exports"], function (require, exports) {
             return Person;
         })();
         Models.Person = Person;
-    })(exports.Models || (exports.Models = {}));
-    var Models = exports.Models;
+    })(Models = exports.Models || (exports.Models = {}));
 });
 //// [requireEmitSemicolon_1.js]
 define(["require", "exports", "requireEmitSemicolon_0"], function (require, exports, P) {
+    var Database;
     (function (Database) {
         var DB = (function () {
             function DB() {
@@ -43,6 +44,5 @@ define(["require", "exports", "requireEmitSemicolon_0"], function (require, expo
             return DB;
         })();
         Database.DB = DB;
-    })(exports.Database || (exports.Database = {}));
-    var Database = exports.Database;
+    })(Database = exports.Database || (exports.Database = {}));
 });

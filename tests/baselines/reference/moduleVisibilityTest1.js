@@ -74,24 +74,24 @@ var OuterMod;
         return -1;
     }
     OuterMod.someExportedOuterFunc = someExportedOuterFunc;
+    var OuterInnerMod;
     (function (OuterInnerMod) {
         function someExportedOuterInnerFunc() {
             return "foo";
         }
         OuterInnerMod.someExportedOuterInnerFunc = someExportedOuterInnerFunc;
-    })(OuterMod.OuterInnerMod || (OuterMod.OuterInnerMod = {}));
-    var OuterInnerMod = OuterMod.OuterInnerMod;
+    })(OuterInnerMod = OuterMod.OuterInnerMod || (OuterMod.OuterInnerMod = {}));
 })(OuterMod || (OuterMod = {}));
 var OuterInnerAlias = OuterMod.OuterInnerMod;
 var M;
 (function (M) {
+    var InnerMod;
     (function (InnerMod) {
         function someExportedInnerFunc() {
             return -2;
         }
         InnerMod.someExportedInnerFunc = someExportedInnerFunc;
-    })(M.InnerMod || (M.InnerMod = {}));
-    var InnerMod = M.InnerMod;
+    })(InnerMod = M.InnerMod || (M.InnerMod = {}));
     (function (E) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";

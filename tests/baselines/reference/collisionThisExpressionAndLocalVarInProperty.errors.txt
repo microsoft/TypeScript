@@ -1,10 +1,14 @@
+tests/cases/compiler/collisionThisExpressionAndLocalVarInProperty.ts(4,17): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+tests/cases/compiler/collisionThisExpressionAndLocalVarInProperty.ts(12,13): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+
+
 ==== tests/cases/compiler/collisionThisExpressionAndLocalVarInProperty.ts (2 errors) ====
     class class1 {
         public prop1 = {
             doStuff: (callback) => () => {
                 var _this = 2;
                     ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
                 return callback(this);
             }
         }
@@ -14,7 +18,7 @@
         constructor() {
             var _this = 2;
                 ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
         }
         public prop1 = {
             doStuff: (callback) => () => {

@@ -13,7 +13,9 @@ export module c {
 
 //// [internalAliasInitializedModuleInsideLocalModuleWithExport.js]
 define(["require", "exports"], function (require, exports) {
+    var a;
     (function (a) {
+        var b;
         (function (b) {
             var c = (function () {
                 function c() {
@@ -21,15 +23,13 @@ define(["require", "exports"], function (require, exports) {
                 return c;
             })();
             b.c = c;
-        })(a.b || (a.b = {}));
-        var b = a.b;
-    })(exports.a || (exports.a = {}));
-    var a = exports.a;
+        })(b = a.b || (a.b = {}));
+    })(a = exports.a || (exports.a = {}));
+    var c;
     (function (c) {
         c.b = a.b;
         c.x = new c.b.c();
-    })(exports.c || (exports.c = {}));
-    var c = exports.c;
+    })(c = exports.c || (exports.c = {}));
 });
 
 

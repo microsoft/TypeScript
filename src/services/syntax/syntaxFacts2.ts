@@ -26,4 +26,15 @@ module TypeScript.SyntaxFacts {
         var tokenKind = token.kind();
         return tokenKind === SyntaxKind.IdentifierName || SyntaxFacts.isAnyKeyword(tokenKind);
     }
+
+    export function isAccessibilityModifier(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.PublicKeyword:
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.ProtectedKeyword:
+                return true;
+        }
+
+        return false;
+    }
 }

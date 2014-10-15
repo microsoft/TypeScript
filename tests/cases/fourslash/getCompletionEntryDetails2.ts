@@ -15,4 +15,4 @@ edit.insert("a");
 edit.backspace();
 
 // Checking for completion details after edit should work too
-verify.completionEntryDetailIs("x", "number");
+verify.completionEntryDetailIs("x", "(var) Foo.x: number");

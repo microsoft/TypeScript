@@ -1,3 +1,9 @@
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(5,1): error TS2304: Cannot find name 'V'.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(11,1): error TS2304: Cannot find name 'C'.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(17,1): error TS2304: Cannot find name 'E'.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(23,1): error TS2304: Cannot find name 'I'.
+
+
 ==== tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts (4 errors) ====
     // none of these should work, since non are actually modules
     
@@ -5,7 +11,7 @@
     
     import v = V;
     ~~~~~~~~~~~~~
-!!! Cannot find name 'V'.
+!!! error TS2304: Cannot find name 'V'.
     
     class C {
         name: string;
@@ -13,7 +19,7 @@
     
     import c = C;
     ~~~~~~~~~~~~~
-!!! Cannot find name 'C'.
+!!! error TS2304: Cannot find name 'C'.
     
     enum E {
         Red, Blue
@@ -21,7 +27,7 @@
     
     import e = E;
     ~~~~~~~~~~~~~
-!!! Cannot find name 'E'.
+!!! error TS2304: Cannot find name 'E'.
     
     interface I {
         id: number;
@@ -29,5 +35,5 @@
     
     import i = I;
     ~~~~~~~~~~~~~
-!!! Cannot find name 'I'.
+!!! error TS2304: Cannot find name 'I'.
     

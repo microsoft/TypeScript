@@ -1,8 +1,12 @@
+tests/cases/compiler/recursiveInheritance3.ts(1,7): error TS2421: Class 'C' incorrectly implements interface 'I':
+  Property 'other' is missing in type 'C'.
+
+
 ==== tests/cases/compiler/recursiveInheritance3.ts (1 errors) ====
     class C implements I {
           ~
-!!! Class 'C' incorrectly implements interface 'I':
-!!!   Property 'other' is missing in type 'C'.
+!!! error TS2421: Class 'C' incorrectly implements interface 'I':
+!!! error TS2421:   Property 'other' is missing in type 'C'.
         public foo(x: any) { return x; }
         private x = 1;
     }

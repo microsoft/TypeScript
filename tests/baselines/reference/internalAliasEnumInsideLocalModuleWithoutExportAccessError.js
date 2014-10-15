@@ -15,6 +15,7 @@ export module c {
 var happyFriday = c.b.Friday;
 
 //// [internalAliasEnumInsideLocalModuleWithoutExportAccessError.js]
+var a;
 (function (a) {
     (function (weekend) {
         weekend[weekend["Friday"] = 0] = "Friday";
@@ -22,11 +23,10 @@ var happyFriday = c.b.Friday;
         weekend[weekend["Sunday"] = 2] = "Sunday";
     })(a.weekend || (a.weekend = {}));
     var weekend = a.weekend;
-})(exports.a || (exports.a = {}));
-var a = exports.a;
+})(a = exports.a || (exports.a = {}));
+var c;
 (function (c) {
     var b = a.weekend;
     c.bVal = 2 /* Sunday */;
-})(exports.c || (exports.c = {}));
-var c = exports.c;
+})(c = exports.c || (exports.c = {}));
 var happyFriday = c.b.Friday;

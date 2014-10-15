@@ -1,24 +1,24 @@
 //// [augmentedTypesFunction.ts]
 // function then var
-function y1() { }
+function y1() { } // error
 var y1 = 1; // error
 
 // function then function
-function y2() { }
+function y2() { } // error
 function y2() { } // error
 
-function y2a() { }
+function y2a() { }  // error
 var y2a = () => { } // error
 
 // function then class
-function y3() { }
+function y3() { } // error
 class y3 { } // error
 
-function y3a() { }
+function y3a() { } // error
 class y3a { public foo() { } } // error
 
 // function then enum
-function y4() { }
+function y4() { } // error
 enum y4 { One } // error
 
 // function then internal module
@@ -41,27 +41,27 @@ module y5c { export interface I { foo(): void } } // should be an error
 //// [augmentedTypesFunction.js]
 // function then var
 function y1() {
-}
+} // error
 var y1 = 1; // error
 // function then function
 function y2() {
-}
+} // error
 function y2() {
 } // error
 function y2a() {
-}
+} // error
 var y2a = function () {
 }; // error
 // function then class
 function y3() {
-}
+} // error
 var y3 = (function () {
     function y3() {
     }
     return y3;
 })(); // error
 function y3a() {
-}
+} // error
 var y3a = (function () {
     function y3a() {
     }
@@ -71,7 +71,7 @@ var y3a = (function () {
 })(); // error
 // function then enum
 function y4() {
-}
+} // error
 var y4;
 (function (y4) {
     y4[y4["One"] = 0] = "One";

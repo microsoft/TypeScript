@@ -1,20 +1,26 @@
+tests/cases/conformance/types/namedTypes/classWithOptionalParameter.ts(4,6): error TS1112: A class member cannot be declared optional.
+tests/cases/conformance/types/namedTypes/classWithOptionalParameter.ts(5,6): error TS1112: A class member cannot be declared optional.
+tests/cases/conformance/types/namedTypes/classWithOptionalParameter.ts(9,6): error TS1112: A class member cannot be declared optional.
+tests/cases/conformance/types/namedTypes/classWithOptionalParameter.ts(10,6): error TS1112: A class member cannot be declared optional.
+
+
 ==== tests/cases/conformance/types/namedTypes/classWithOptionalParameter.ts (4 errors) ====
     // classes do not permit optional parameters, these are errors
     
     class C {
         x?: string;
          ~
-!!! A class member cannot be declared optional.
+!!! error TS1112: A class member cannot be declared optional.
         f?() {}
          ~
-!!! A class member cannot be declared optional.
+!!! error TS1112: A class member cannot be declared optional.
     }
     
     class C2<T> {
         x?: T;
          ~
-!!! A class member cannot be declared optional.
+!!! error TS1112: A class member cannot be declared optional.
         f?(x: T) {}
          ~
-!!! A class member cannot be declared optional.
+!!! error TS1112: A class member cannot be declared optional.
     }

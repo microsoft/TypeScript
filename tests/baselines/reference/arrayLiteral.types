@@ -25,7 +25,7 @@ var y = new Array<number>();
 
 var x2: number[] = [];
 >x2 : number[]
->[] : number[]
+>[] : undefined[]
 
 var x2: number[] = new Array(1);
 >x2 : number[]

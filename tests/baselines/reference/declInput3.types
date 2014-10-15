@@ -16,9 +16,9 @@ class bar {
 >a : bar
 ><bar>null : bar
 >bar : bar
->b : any
+>b : undefined
 >undefined : undefined
->c : any
+>c : undefined
 >void 4 : undefined
 
   public h(x = 4, y = null, z = '') { x++; }

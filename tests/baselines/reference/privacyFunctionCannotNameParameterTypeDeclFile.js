@@ -169,6 +169,7 @@ function createWidget1() {
     return new Widget1();
 }
 exports.createWidget1 = createWidget1;
+var SpecializedWidget;
 (function (SpecializedWidget) {
     var Widget2 = (function () {
         function Widget2() {
@@ -181,8 +182,7 @@ exports.createWidget1 = createWidget1;
         return new Widget2();
     }
     SpecializedWidget.createWidget2 = createWidget2;
-})(exports.SpecializedWidget || (exports.SpecializedWidget = {}));
-var SpecializedWidget = exports.SpecializedWidget;
+})(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 //// [privacyFunctionCannotNameParameterTypeDeclFile_exporter.js]
 ///<reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
@@ -416,7 +416,7 @@ export declare module SpecializedWidget {
     function createWidget2(): Widget2;
 }
 //// [privacyFunctionCannotNameParameterTypeDeclFile_exporter.d.ts]
-/// <reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.d.ts' />
+/// <reference path="privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.d.ts" />
 import Widgets = require("privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;

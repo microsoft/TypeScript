@@ -30,8 +30,8 @@ var r9 = foo2(null, (x) => '', (x) => ''); // any => any
 var r10 = foo2(null, (x: Object) => '', (x: string) => ''); // Object => Object
 
 var x: (a: string) => boolean;
-var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2); // {} => {}
-var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2); // (string => boolean) => {}
+var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2); // error
+var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2); // error
 
 //// [genericCallWithGenericSignatureArguments3.js]
 // When a function expression is inferentially typed (section 4.9.3) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, 
@@ -63,5 +63,5 @@ var r8 = foo2('', function (x) { return ''; }, function (x) { return null; }); /
 var r9 = foo2(null, function (x) { return ''; }, function (x) { return ''; }); // any => any
 var r10 = foo2(null, function (x) { return ''; }, function (x) { return ''; }); // Object => Object
 var x;
-var r11 = foo2(x, function (a1) { return function (n) { return 1; }; }, function (a2) { return 2; }); // {} => {}
-var r12 = foo2(x, function (a1) { return function (n) { return 1; }; }, function (a2) { return 2; }); // (string => boolean) => {}
+var r11 = foo2(x, function (a1) { return function (n) { return 1; }; }, function (a2) { return 2; }); // error
+var r12 = foo2(x, function (a1) { return function (n) { return 1; }; }, function (a2) { return 2; }); // error

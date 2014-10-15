@@ -67,8 +67,8 @@ class TypeWriterWalker {
             case ts.SyntaxKind.ContinueStatement:
             case ts.SyntaxKind.BreakStatement:
                 return (<ts.BreakOrContinueStatement>parent).label === identifier;
-            case ts.SyntaxKind.LabelledStatement:
-                return (<ts.LabelledStatement>parent).label === identifier;
+            case ts.SyntaxKind.LabeledStatement:
+                return (<ts.LabeledStatement>parent).label === identifier;
         }
         return false;
     }
@@ -76,7 +76,7 @@ class TypeWriterWalker {
     private log(node: ts.Node, type: ts.Type): void {
         var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
         var lineAndCharacter = this.currentSourceFile.getLineAndCharacterFromPosition(actualPos);
-        var sourceText = ts.getSourceTextOfNodeFromSourceText(this.currentSourceFile.text, node);
+        var sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
         
         // If we got an unknown type, we temporarily want to fall back to just pretending the name
         // (source text) of the node is the type. This is to align with the old typeWriter to make
@@ -86,7 +86,7 @@ class TypeWriterWalker {
             column: lineAndCharacter.character,
             syntaxKind: ts.SyntaxKind[node.kind],
             sourceText: sourceText,
-            type: this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.None)
+            type: this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.WriteOwnNameForAnyLike)
         });
     }
 

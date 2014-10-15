@@ -1,4 +1,4 @@
-=== tests/cases/compiler/augmentedTypeBracketAccessIndexSignature.ts ===
+=== tests/cases/conformance/types/members/augmentedTypeBracketAccessIndexSignature.ts ===
 interface Foo { a }
 >Foo : Foo
 >a : any

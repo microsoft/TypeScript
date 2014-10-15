@@ -1,7 +1,11 @@
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly2.ts(1,7): error TS2310: Type 'C' recursively references itself as a base type.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly2.ts(13,11): error TS2310: Type 'C2<T>' recursively references itself as a base type.
+
+
 ==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly2.ts (2 errors) ====
     class C extends N.E { foo: string; } // error
           ~
-!!! Type 'C' recursively references itself as a base type.
+!!! error TS2310: Type 'C' recursively references itself as a base type.
     
     module M {
         export class D extends C { bar: string; }
@@ -15,7 +19,7 @@
     module O {
         class C2<T> extends Q.E2<T> { foo: T; } // error
               ~~
-!!! Type 'C2<T>' recursively references itself as a base type.
+!!! error TS2310: Type 'C2<T>' recursively references itself as a base type.
     
         module P {
             export class D2<T> extends C2<T> { bar: T; }

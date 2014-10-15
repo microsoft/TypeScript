@@ -7,10 +7,10 @@ export module M {
 }
 
 //// [declarationEmit_nameConflictsWithAlias.js]
+var M;
 (function (M) {
     M.w; // Gets emitted as C.I, which is the wrong interface
-})(exports.M || (exports.M = {}));
-var M = exports.M;
+})(M = exports.M || (exports.M = {}));
 
 
 //// [declarationEmit_nameConflictsWithAlias.d.ts]

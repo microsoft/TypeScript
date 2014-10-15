@@ -42,6 +42,10 @@ module TypeScript {
         walker.walk(preAst.typeArguments);
     }
 
+    function walkTupleTypeChildren(preAst: TupleTypeSyntax, walker: AstWalker): void {
+        walker.walk(preAst.types);
+    }
+
     function walkTypeOfExpressionChildren(preAst: TypeOfExpressionSyntax, walker: AstWalker): void {
         walker.walk(preAst.expression);
     }
@@ -561,6 +565,7 @@ module TypeScript {
     childrenWalkers[SyntaxKind.TriviaList] = null;
     childrenWalkers[SyntaxKind.TrueKeyword] = null;
     childrenWalkers[SyntaxKind.TryStatement] = walkTryStatementChildren;
+    childrenWalkers[SyntaxKind.TupleType] = walkTupleTypeChildren;
     childrenWalkers[SyntaxKind.TypeAnnotation] = walkTypeAnnotationChildren;
     childrenWalkers[SyntaxKind.TypeArgumentList] = walkTypeArgumentListChildren;
     childrenWalkers[SyntaxKind.TypeOfExpression] = walkTypeOfExpressionChildren;

@@ -19,7 +19,9 @@ var x = new Services.UserServices().getUserName();
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
+    var App;
     (function (App) {
+        var Services;
         (function (Services) {
             var UserServices = (function () {
                 function UserServices() {
@@ -30,10 +32,8 @@ define(["require", "exports"], function (require, exports) {
                 return UserServices;
             })();
             Services.UserServices = UserServices;
-        })(App.Services || (App.Services = {}));
-        var Services = App.Services;
-    })(exports.App || (exports.App = {}));
-    var App = exports.App;
+        })(Services = App.Services || (App.Services = {}));
+    })(App = exports.App || (exports.App = {}));
 });
 //// [file2.js]
 define(["require", "exports", "file1"], function (require, exports, appJs) {

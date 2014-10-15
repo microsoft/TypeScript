@@ -1,37 +1,63 @@
-==== tests/cases/compiler/augmentedTypesFunction.ts (6 errors) ====
+tests/cases/compiler/augmentedTypesFunction.ts(2,10): error TS2300: Duplicate identifier 'y1'.
+tests/cases/compiler/augmentedTypesFunction.ts(3,5): error TS2300: Duplicate identifier 'y1'.
+tests/cases/compiler/augmentedTypesFunction.ts(6,10): error TS2393: Duplicate function implementation.
+tests/cases/compiler/augmentedTypesFunction.ts(7,10): error TS2393: Duplicate function implementation.
+tests/cases/compiler/augmentedTypesFunction.ts(9,10): error TS2300: Duplicate identifier 'y2a'.
+tests/cases/compiler/augmentedTypesFunction.ts(10,5): error TS2300: Duplicate identifier 'y2a'.
+tests/cases/compiler/augmentedTypesFunction.ts(13,10): error TS2300: Duplicate identifier 'y3'.
+tests/cases/compiler/augmentedTypesFunction.ts(14,7): error TS2300: Duplicate identifier 'y3'.
+tests/cases/compiler/augmentedTypesFunction.ts(16,10): error TS2300: Duplicate identifier 'y3a'.
+tests/cases/compiler/augmentedTypesFunction.ts(17,7): error TS2300: Duplicate identifier 'y3a'.
+tests/cases/compiler/augmentedTypesFunction.ts(20,10): error TS2300: Duplicate identifier 'y4'.
+tests/cases/compiler/augmentedTypesFunction.ts(21,6): error TS2300: Duplicate identifier 'y4'.
+
+
+==== tests/cases/compiler/augmentedTypesFunction.ts (12 errors) ====
     // function then var
-    function y1() { }
+    function y1() { } // error
+             ~~
+!!! error TS2300: Duplicate identifier 'y1'.
     var y1 = 1; // error
         ~~
-!!! Duplicate identifier 'y1'.
+!!! error TS2300: Duplicate identifier 'y1'.
     
     // function then function
-    function y2() { }
     function y2() { } // error
-    ~~~~~~~~~~~~~~~~~
-!!! Duplicate function implementation.
+             ~~
+!!! error TS2393: Duplicate function implementation.
+    function y2() { } // error
+             ~~
+!!! error TS2393: Duplicate function implementation.
     
-    function y2a() { }
+    function y2a() { }  // error
+             ~~~
+!!! error TS2300: Duplicate identifier 'y2a'.
     var y2a = () => { } // error
         ~~~
-!!! Duplicate identifier 'y2a'.
+!!! error TS2300: Duplicate identifier 'y2a'.
     
     // function then class
-    function y3() { }
+    function y3() { } // error
+             ~~
+!!! error TS2300: Duplicate identifier 'y3'.
     class y3 { } // error
           ~~
-!!! Duplicate identifier 'y3'.
+!!! error TS2300: Duplicate identifier 'y3'.
     
-    function y3a() { }
+    function y3a() { } // error
+             ~~~
+!!! error TS2300: Duplicate identifier 'y3a'.
     class y3a { public foo() { } } // error
           ~~~
-!!! Duplicate identifier 'y3a'.
+!!! error TS2300: Duplicate identifier 'y3a'.
     
     // function then enum
-    function y4() { }
+    function y4() { } // error
+             ~~
+!!! error TS2300: Duplicate identifier 'y4'.
     enum y4 { One } // error
          ~~
-!!! Duplicate identifier 'y4'.
+!!! error TS2300: Duplicate identifier 'y4'.
     
     // function then internal module
     function y5() { }

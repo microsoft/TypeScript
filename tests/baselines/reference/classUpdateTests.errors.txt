@@ -1,3 +1,23 @@
+tests/cases/compiler/classUpdateTests.ts(93,3): error TS1129: Statement expected.
+tests/cases/compiler/classUpdateTests.ts(95,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/classUpdateTests.ts(99,3): error TS1129: Statement expected.
+tests/cases/compiler/classUpdateTests.ts(101,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/classUpdateTests.ts(105,3): error TS1129: Statement expected.
+tests/cases/compiler/classUpdateTests.ts(111,3): error TS1129: Statement expected.
+tests/cases/compiler/classUpdateTests.ts(34,2): error TS2377: Constructors for derived classes must contain a 'super' call.
+tests/cases/compiler/classUpdateTests.ts(43,18): error TS2335: 'super' can only be referenced in a derived class.
+tests/cases/compiler/classUpdateTests.ts(46,17): error TS2311: A class may only extend another class.
+tests/cases/compiler/classUpdateTests.ts(47,18): error TS2335: 'super' can only be referenced in a derived class.
+tests/cases/compiler/classUpdateTests.ts(57,2): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+tests/cases/compiler/classUpdateTests.ts(63,7): error TS2416: Class 'L' incorrectly extends base class 'G':
+  Property 'p1' is private in type 'L' but not in type 'G'.
+tests/cases/compiler/classUpdateTests.ts(69,7): error TS2416: Class 'M' incorrectly extends base class 'G':
+  Property 'p1' is private in type 'M' but not in type 'G'.
+tests/cases/compiler/classUpdateTests.ts(70,2): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+tests/cases/compiler/classUpdateTests.ts(105,15): error TS2339: Property 'p1' does not exist on type 'Q'.
+tests/cases/compiler/classUpdateTests.ts(111,16): error TS2339: Property 'p1' does not exist on type 'R'.
+
+
 ==== tests/cases/compiler/classUpdateTests.ts (16 errors) ====
     //
     // test codegen for instance properties
@@ -34,7 +54,7 @@
     class F extends E {
     	constructor() {} // ERROR - super call required
     	~~~~~~~~~~~~~~~~
-!!! Constructors for derived classes must contain a 'super' call.
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }
     
     class G extends D {
@@ -45,15 +65,15 @@
     class H {
     	constructor() { super(); } // ERROR - no super call allowed
     	                ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
     }
     
     class I extends Object {
                     ~~~~~~
-!!! A class may only extend another class.
+!!! error TS2311: A class may only extend another class.
     	constructor() { super(); } // ERROR - no super call allowed
     	                ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
     }
     
     class J extends G {
@@ -71,13 +91,13 @@
     ~~~~~~~~~~
     	}
     ~~
-!!! A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
     }
     
     class L extends G {
           ~
-!!! Class 'L' incorrectly extends base class 'G':
-!!!   Private property 'p1' cannot be reimplemented.
+!!! error TS2416: Class 'L' incorrectly extends base class 'G':
+!!! error TS2416:   Property 'p1' is private in type 'L' but not in type 'G'.
     	constructor(private p1:number) {
     		super(); // NO ERROR
     	}
@@ -85,8 +105,8 @@
     
     class M extends G {
           ~
-!!! Class 'M' incorrectly extends base class 'G':
-!!!   Private property 'p1' cannot be reimplemented.
+!!! error TS2416: Class 'M' incorrectly extends base class 'G':
+!!! error TS2416:   Property 'p1' is private in type 'M' but not in type 'G'.
     	constructor(private p1:number) { // ERROR
     	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     		var i = 0;
@@ -95,7 +115,7 @@
     ~~~~~~~~~~
     	}
     ~~
-!!! A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
     }
     
     //
@@ -117,29 +137,29 @@
     	constructor() {
     		public p1 = 0; // ERROR
     		~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
     	}
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     class P {
     	constructor() {
     		private p1 = 0; // ERROR
     		~~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
     	}
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     class Q {
     	constructor() {
     		public this.p1 = 0; // ERROR
     		~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
     		            ~~
-!!! Property 'p1' does not exist on type 'Q'.
+!!! error TS2339: Property 'p1' does not exist on type 'Q'.
     	}
     }
     
@@ -147,8 +167,8 @@
     	constructor() {
     		private this.p1 = 0; // ERROR
     		~~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
     		             ~~
-!!! Property 'p1' does not exist on type 'R'.
+!!! error TS2339: Property 'p1' does not exist on type 'R'.
     	}
     }

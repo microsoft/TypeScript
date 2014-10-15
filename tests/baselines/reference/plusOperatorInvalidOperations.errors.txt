@@ -1,3 +1,7 @@
+tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorInvalidOperations.ts(5,17): error TS1109: Expression expected.
+tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorInvalidOperations.ts(8,15): error TS1109: Expression expected.
+
+
 ==== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorInvalidOperations.ts (2 errors) ====
     // Unary operator +
     var b;
@@ -5,9 +9,9 @@
     // operand before +
     var result1 = b+;   //expect error
                     ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
     // miss  an operand
     var result2 =+;
                   ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.

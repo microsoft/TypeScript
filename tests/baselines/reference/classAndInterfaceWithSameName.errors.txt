@@ -1,17 +1,27 @@
-==== tests/cases/conformance/classes/classDeclarations/classAndInterfaceWithSameName.ts (2 errors) ====
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceWithSameName.ts(1,7): error TS2300: Duplicate identifier 'C'.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceWithSameName.ts(2,11): error TS2300: Duplicate identifier 'C'.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceWithSameName.ts(5,11): error TS2300: Duplicate identifier 'D'.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceWithSameName.ts(9,15): error TS2300: Duplicate identifier 'D'.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classAndInterfaceWithSameName.ts (4 errors) ====
     class C { foo: string; }
+          ~
+!!! error TS2300: Duplicate identifier 'C'.
     interface C { foo: string; } // error
               ~
-!!! Duplicate identifier 'C'.
+!!! error TS2300: Duplicate identifier 'C'.
     
     module M {
         class D {
+              ~
+!!! error TS2300: Duplicate identifier 'D'.
             bar: string;
         }
     
         interface D { // error
                   ~
-!!! Duplicate identifier 'D'.
+!!! error TS2300: Duplicate identifier 'D'.
             bar: string;
         }
     }

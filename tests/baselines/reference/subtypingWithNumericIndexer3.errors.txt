@@ -1,3 +1,20 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts(11,7): error TS2416: Class 'B' incorrectly extends base class 'A':
+  Index signatures are incompatible:
+    Type 'Base' is not assignable to type 'Derived':
+      Property 'bar' is missing in type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts(24,21): error TS2343: Type 'Base' does not satisfy the constraint 'Derived':
+  Property 'bar' is missing in type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts(32,11): error TS2416: Class 'B3<T>' incorrectly extends base class 'A<T>':
+  Index signatures are incompatible:
+    Type 'Base' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts(36,11): error TS2416: Class 'B4<T>' incorrectly extends base class 'A<T>':
+  Index signatures are incompatible:
+    Type 'Derived' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts(40,11): error TS2416: Class 'B5<T>' incorrectly extends base class 'A<T>':
+  Index signatures are incompatible:
+    Type 'Derived2' is not assignable to type 'T'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts (5 errors) ====
     // Derived type indexer must be subtype of base type indexer
     
@@ -11,10 +28,10 @@
     
     class B extends A {
           ~
-!!! Class 'B' incorrectly extends base class 'A':
-!!!   Index signatures are incompatible:
-!!!     Type 'Base' is not assignable to type 'Derived':
-!!!       Property 'bar' is missing in type 'Base'.
+!!! error TS2416: Class 'B' incorrectly extends base class 'A':
+!!! error TS2416:   Index signatures are incompatible:
+!!! error TS2416:     Type 'Base' is not assignable to type 'Derived':
+!!! error TS2416:       Property 'bar' is missing in type 'Base'.
         [x: number]: Base; // error
     }
     
@@ -29,8 +46,8 @@
     
         class B extends A<Base> {
                         ~~~~~~~
-!!! Type 'Base' does not satisfy the constraint 'Derived':
-!!!   Property 'bar' is missing in type 'Base'.
+!!! error TS2343: Type 'Base' does not satisfy the constraint 'Derived':
+!!! error TS2343:   Property 'bar' is missing in type 'Base'.
             [x: number]: Derived; // error
         }
     
@@ -40,25 +57,25 @@
     
         class B3<T extends Derived> extends A<T> {
               ~~
-!!! Class 'B3<T>' incorrectly extends base class 'A<T>':
-!!!   Index signatures are incompatible:
-!!!     Type 'Base' is not assignable to type 'T'.
+!!! error TS2416: Class 'B3<T>' incorrectly extends base class 'A<T>':
+!!! error TS2416:   Index signatures are incompatible:
+!!! error TS2416:     Type 'Base' is not assignable to type 'T'.
             [x: number]: Base; // error
         }
     
         class B4<T extends Derived> extends A<T> {
               ~~
-!!! Class 'B4<T>' incorrectly extends base class 'A<T>':
-!!!   Index signatures are incompatible:
-!!!     Type 'Derived' is not assignable to type 'T'.
+!!! error TS2416: Class 'B4<T>' incorrectly extends base class 'A<T>':
+!!! error TS2416:   Index signatures are incompatible:
+!!! error TS2416:     Type 'Derived' is not assignable to type 'T'.
             [x: number]: Derived; // error
         }
     
         class B5<T extends Derived2> extends A<T> {
               ~~
-!!! Class 'B5<T>' incorrectly extends base class 'A<T>':
-!!!   Index signatures are incompatible:
-!!!     Type 'Derived2' is not assignable to type 'T'.
+!!! error TS2416: Class 'B5<T>' incorrectly extends base class 'A<T>':
+!!! error TS2416:   Index signatures are incompatible:
+!!! error TS2416:     Type 'Derived2' is not assignable to type 'T'.
             [x: number]: Derived2; // error
         }
     }

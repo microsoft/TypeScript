@@ -1,7 +1,18 @@
-==== tests/cases/compiler/callOverloads2.ts (5 errors) ====
+tests/cases/compiler/callOverloads2.ts(3,7): error TS2300: Duplicate identifier 'Foo'.
+tests/cases/compiler/callOverloads2.ts(11,10): error TS2300: Duplicate identifier 'Foo'.
+tests/cases/compiler/callOverloads2.ts(13,10): error TS2389: Function implementation name must be 'Foo'.
+tests/cases/compiler/callOverloads2.ts(13,10): error TS2393: Duplicate function implementation.
+tests/cases/compiler/callOverloads2.ts(14,10): error TS2393: Duplicate function implementation.
+tests/cases/compiler/callOverloads2.ts(16,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/callOverloads2.ts(24,1): error TS2348: Value of type 'typeof Foo' is not callable. Did you mean to include 'new'?
+
+
+==== tests/cases/compiler/callOverloads2.ts (7 errors) ====
     
     
-    class Foo {    
+    class Foo { // error
+          ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
         bar1() { /*WScript.Echo("bar1");*/ }
     
         constructor(x: any) {
@@ -9,20 +20,22 @@
         }
     }
     
-    function Foo();
+    function Foo(); // error
              ~~~
-!!! Duplicate identifier 'Foo'.
+!!! error TS2300: Duplicate identifier 'Foo'.
     
-    function F1(s:string) {return s;}
+    function F1(s:string) {return s;} // error
              ~~
-!!! Function implementation name must be 'Foo'.
-    function F1(a:any) { return a;} // error -  duplicate identifier
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate function implementation.
+!!! error TS2389: Function implementation name must be 'Foo'.
+             ~~
+!!! error TS2393: Duplicate function implementation.
+    function F1(a:any) { return a;} // error
+             ~~
+!!! error TS2393: Duplicate function implementation.
     
     function Goo(s:string); // error - no implementation
              ~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     
     declare function Gar(s:String); // expect no error
     
@@ -32,5 +45,5 @@
     f1.bar1();
     Foo();
     ~~~~~
-!!! Value of type 'typeof Foo' is not callable. Did you mean to include 'new'?
+!!! error TS2348: Value of type 'typeof Foo' is not callable. Did you mean to include 'new'?
     

@@ -544,18 +544,29 @@ module TypeScript.Parser {
             }
         }
 
-        function replaceTokenInParent(oldToken: ISyntaxToken, newToken: ISyntaxToken): void {
+        function replaceTokenInParent(node: ISyntaxNode, oldToken: ISyntaxToken, newToken: ISyntaxToken): void {
             // oldToken may be parented by a node or a list.
             replaceTokenInParentWorker(oldToken, newToken);
 
             var parent = oldToken.parent;
             newToken.parent = parent;
 
-            // Parent must be a list or a node.  All of those have a 'data' element.
-            Debug.assert(isNode(parent) || isList(parent) || isSeparatedList(parent));
-            var dataElement = <{ data: number }><any>parent;
-            if (dataElement.data) {
-                dataElement.data &= SyntaxConstants.NodeParsedInStrictModeMask
+            // Walk upwards to our outermost node, clearing hte cached 'data' in it.  This will 
+            // make sure that the fullWidths and incrementally unusable bits are computed correctly
+            // when next requested.
+            while (true) {
+                // Parent must be a list or a node.  All of those have a 'data' element.
+                Debug.assert(isNode(parent) || isList(parent) || isSeparatedList(parent));
+                var dataElement = <{ data: number }><any>parent;
+                if (dataElement.data) {
+                    dataElement.data &= SyntaxConstants.NodeParsedInStrictModeMask
+                }
+
+                if (parent === node) {
+                    break;
+                }
+
+                parent = parent.parent;
             }
         }
 
@@ -602,7 +613,7 @@ module TypeScript.Parser {
             var oldToken = lastToken(node);
             var newToken = addSkippedTokenAfterToken(oldToken, skippedToken);
 
-            replaceTokenInParent(oldToken, newToken);
+            replaceTokenInParent(node, oldToken, newToken);
             return node;
         }
 
@@ -611,7 +622,7 @@ module TypeScript.Parser {
                 var oldToken = firstToken(node);
                 var newToken = addSkippedTokensBeforeToken(oldToken, skippedTokens);
 
-                replaceTokenInParent(oldToken, newToken);
+                replaceTokenInParent(node, oldToken, newToken);
             }
 
             return node;
@@ -1037,6 +1048,7 @@ module TypeScript.Parser {
                 case SyntaxKind.ExportKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.DeclareKeyword:
                     return true;
@@ -1423,6 +1435,19 @@ module TypeScript.Parser {
             return new syntaxFactory.ObjectTypeSyntax(parseNodeData, openBraceToken, typeMembers, eatToken(SyntaxKind.CloseBraceToken));
         }
 
+        function parseTupleType(currentToken: ISyntaxToken): TupleTypeSyntax {
+            var openBracket = consumeToken(currentToken);
+
+            var types = Syntax.emptySeparatedList<ITypeSyntax>();
+            if (openBracket.fullWidth() > 0) {
+                var skippedTokens: ISyntaxToken[] = getArray();
+                types = parseSeparatedSyntaxList<ITypeSyntax>(ListParsingState.TupleType_Types, skippedTokens);
+                openBracket = addSkippedTokensAfterToken(openBracket, skippedTokens);
+            }
+
+            return new syntaxFactory.TupleTypeSyntax(parseNodeData, openBracket, types, eatToken(SyntaxKind.CloseBracketToken));
+        }
+
         function isTypeMember(inErrorRecovery: boolean): boolean {
             if (SyntaxUtilities.isTypeMember(currentNode())) {
                 return true;
@@ -1652,6 +1677,7 @@ module TypeScript.Parser {
                 // ERROR RECOVERY
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
                     // None of the above are actually keywords.  And they might show up in a real
                     // statement (i.e. "public();").  However, if we see 'public <identifier>' then 
@@ -1720,6 +1746,7 @@ module TypeScript.Parser {
                 // ERROR RECOVERY
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
                     // None of the above are actually keywords.  And they might show up in a real
                     // statement (i.e. "public();").  However, if we see 'public <identifier>' then 
@@ -3122,7 +3149,7 @@ module TypeScript.Parser {
             token2 = peekToken(2); 
             token2Kind = token2.kind();
 
-            if (token1Kind === SyntaxKind.PublicKeyword || token1Kind === SyntaxKind.PrivateKeyword) {
+            if (SyntaxFacts.isAccessibilityModifier(token1Kind)) {
                 if (isIdentifier(token2)) {
                     // "(public id" or "(function id".  Definitely an arrow function.  Could never 
                     // be a parenthesized expression.  Note: this will be an *illegal* arrow 
@@ -3546,11 +3573,12 @@ module TypeScript.Parser {
 
                     return consumeToken(_currentToken);
                 case SyntaxKind.OpenParenToken:
-                case SyntaxKind.LessThanToken:  return tryParseFunctionType();
-                case SyntaxKind.VoidKeyword:    return consumeToken(_currentToken);
-                case SyntaxKind.OpenBraceToken: return parseObjectType();
-                case SyntaxKind.NewKeyword:     return parseConstructorType();
-                case SyntaxKind.TypeOfKeyword:  return parseTypeQuery(_currentToken);
+                case SyntaxKind.LessThanToken:    return tryParseFunctionType();
+                case SyntaxKind.VoidKeyword:      return consumeToken(_currentToken);
+                case SyntaxKind.OpenBraceToken:   return parseObjectType();
+                case SyntaxKind.NewKeyword:       return parseConstructorType();
+                case SyntaxKind.TypeOfKeyword:    return parseTypeQuery(_currentToken);
+                case SyntaxKind.OpenBracketToken: return parseTupleType(_currentToken);
             }
 
             return tryParseNameOrGenericType();
@@ -3962,6 +3990,7 @@ module TypeScript.Parser {
                 case ListParsingState.IndexSignature_Parameters:                            return isExpectedIndexSignature_ParametersTerminator();
                 case ListParsingState.TypeArgumentList_Types:                               return isExpectedTypeArgumentList_TypesTerminator();
                 case ListParsingState.TypeParameterList_TypeParameters:                     return isExpectedTypeParameterList_TypeParametersTerminator();
+                case ListParsingState.TupleType_Types:                                      return isExpectedTupleType_TypesTerminator();
                 default:
                     throw Errors.invalidOperation();
             }
@@ -4001,6 +4030,17 @@ module TypeScript.Parser {
             // If we're at a token that can follow the type argument list, then we'll also consider
             // the list terminated.
             if (canFollowTypeArgumentListInExpression(tokenKind)) {
+                return true;
+            }
+
+            // TODO: add more cases as necessary for error tolerance.
+            return false;
+        }
+
+        function isExpectedTupleType_TypesTerminator(): boolean {
+            var token = currentToken();
+            var tokenKind = token.kind();
+            if (tokenKind === SyntaxKind.CloseBracketToken) {
                 return true;
             }
 
@@ -4176,6 +4216,7 @@ module TypeScript.Parser {
                 case ListParsingState.IndexSignature_Parameters:                            return isParameter();
                 case ListParsingState.TypeArgumentList_Types:                               return isType();
                 case ListParsingState.TypeParameterList_TypeParameters:                     return isTypeParameter();
+                case ListParsingState.TupleType_Types:                                      return isType();
                 default: throw Errors.invalidOperation();
             }
         }
@@ -4219,6 +4260,7 @@ module TypeScript.Parser {
                 case ListParsingState.IndexSignature_Parameters:                            return tryParseParameter();
                 case ListParsingState.TypeArgumentList_Types:                               return tryParseType();
                 case ListParsingState.TypeParameterList_TypeParameters:                     return tryParseTypeParameter();
+                case ListParsingState.TupleType_Types:                                      return tryParseType();
                 default: throw Errors.invalidOperation();
             }
         }
@@ -4243,6 +4285,7 @@ module TypeScript.Parser {
                 case ListParsingState.IndexSignature_Parameters:                            return getLocalizedText(DiagnosticCode.parameter, null);
                 case ListParsingState.TypeArgumentList_Types:                               return getLocalizedText(DiagnosticCode.type, null);
                 case ListParsingState.TypeParameterList_TypeParameters:                     return getLocalizedText(DiagnosticCode.type_parameter, null);
+                case ListParsingState.TupleType_Types:                                      return getLocalizedText(DiagnosticCode.type, null);
                 case ListParsingState.ArrayLiteralExpression_AssignmentExpressions:         return getLocalizedText(DiagnosticCode.expression, null);
                 default:                                                                    throw Errors.invalidOperation();
             }
@@ -4365,9 +4408,10 @@ module TypeScript.Parser {
         IndexSignature_Parameters = 18,
         TypeArgumentList_Types = 19,
         TypeParameterList_TypeParameters = 20,
+        TupleType_Types = 21,
 
         FirstListParsingState = SourceUnit_ModuleElements,
-        LastListParsingState = TypeParameterList_TypeParameters,
+        LastListParsingState = TupleType_Types,
     }
 
     // We keep the parser around as a singleton.  This is because calling createParser is actually

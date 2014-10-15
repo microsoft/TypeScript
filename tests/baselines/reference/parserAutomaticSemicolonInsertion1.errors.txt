@@ -1,3 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts(8,1): error TS2323: Type 'Object' is not assignable to type 'I'.
+tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts(14,1): error TS2323: Type 'Object' is not assignable to type '() => void'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts (2 errors) ====
     interface I {
         (): void;
@@ -8,7 +12,7 @@
     o = i;
     i = o;
     ~
-!!! Type 'Object' is not assignable to type 'I'.
+!!! error TS2323: Type 'Object' is not assignable to type 'I'.
      
     var a: {
         (): void
@@ -16,5 +20,5 @@
     o = a;
     a = o;
     ~
-!!! Type 'Object' is not assignable to type '() => void'.
+!!! error TS2323: Type 'Object' is not assignable to type '() => void'.
     

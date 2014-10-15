@@ -17,7 +17,7 @@ interface JQuery {
 var jq:JQuery={ 0: { id : "a" }, 1: { id : "b" } };
 >jq : JQuery
 >JQuery : JQuery
->{ 0: { id : "a" }, 1: { id : "b" } } : { [x: number]: JQueryElement; 0: { id: string; }; 1: { id: string; }; }
+>{ 0: { id : "a" }, 1: { id : "b" } } : { [x: number]: { id: string; }; 0: { id: string; }; 1: { id: string; }; }
 >{ id : "a" } : { id: string; }
 >id : string
 >{ id : "b" } : { id: string; }

@@ -1,0 +1,24 @@
+tests/cases/compiler/noImplicitAnyInCastExpression.ts(16,2): error TS2353: Neither type '{ c: null; }' nor type 'IFoo' is assignable to the other:
+  Property 'a' is missing in type '{ c: null; }'.
+
+
+==== tests/cases/compiler/noImplicitAnyInCastExpression.ts (1 errors) ====
+    
+    // verify no noImplictAny errors reported with cast expression
+    
+    interface IFoo {
+        a: number;
+        b: string;
+    }
+    
+    // Expr type not assignable to target type
+    (<IFoo>{ a: null });
+    
+    // Expr type assignable to target type
+    (<IFoo>{ a: 2, b: undefined });
+    
+    // Neither types is assignable to each other
+    (<IFoo>{ c: null });
+     ~~~~~~~~~~~~~~~~~
+!!! error TS2353: Neither type '{ c: null; }' nor type 'IFoo' is assignable to the other:
+!!! error TS2353:   Property 'a' is missing in type '{ c: null; }'.

@@ -1,4 +1,8 @@
-==== tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts (1 errors) ====
+tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(16,11): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(25,1): error TS2304: Cannot find name 'runTestCase'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts (2 errors) ====
     /// Copyright (c) 2012 Ecma International.  All rights reserved. 
     /// Ecma International makes this code available under the terms and conditions set
     /// forth on http://hg.ecmascript.org/tests/test262/raw-file/tip/LICENSE (the 
@@ -15,6 +19,8 @@
       var one = 1;
       var _float = -(4/3);
       var a = new Array(false,undefined,null,"0",obj,-1.3333333333333, "str",-0,true,+0, one, 1,0, false, _float, -(4/3));
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
       if (a.indexOf(-(4/3)) === 14 &&      // a[14]=_float===-(4/3)
           a.indexOf(0) === 7      &&       // a[7] = +0, 0===+0
           a.indexOf(-0) === 7      &&     // a[7] = +0, -0===+0
@@ -25,5 +31,5 @@
      }
     runTestCase(testcase);
     ~~~~~~~~~~~
-!!! Cannot find name 'runTestCase'.
+!!! error TS2304: Cannot find name 'runTestCase'.
     

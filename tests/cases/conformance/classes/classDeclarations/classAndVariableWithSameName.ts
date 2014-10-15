@@ -1,8 +1,8 @@
-class C { foo: string; }
+class C { foo: string; } // error
 var C = ''; // error
 
 module M {
-    class D {
+    class D { // error
         bar: string;
     }
 

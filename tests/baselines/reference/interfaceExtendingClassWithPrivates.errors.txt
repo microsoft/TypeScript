@@ -1,3 +1,8 @@
+tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates.ts(5,11): error TS2429: Interface 'I' incorrectly extends interface 'Foo':
+  Property 'x' is private in type 'Foo' but not in type 'I'.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates.ts(15,10): error TS2341: Property 'x' is private and only accessible within class 'Foo'.
+
+
 ==== tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates.ts (2 errors) ====
     class Foo {
         private x: string;
@@ -5,8 +10,8 @@
     
     interface I extends Foo { // error
               ~
-!!! Interface 'I' incorrectly extends interface 'Foo':
-!!!   Private property 'x' cannot be reimplemented.
+!!! error TS2429: Interface 'I' incorrectly extends interface 'Foo':
+!!! error TS2429:   Property 'x' is private in type 'Foo' but not in type 'I'.
         x: string;
     }
     
@@ -18,4 +23,4 @@
     var r = i.y;
     var r2 = i.x; // error
              ~~~
-!!! Property 'Foo.x' is inaccessible.
+!!! error TS2341: Property 'x' is private and only accessible within class 'Foo'.

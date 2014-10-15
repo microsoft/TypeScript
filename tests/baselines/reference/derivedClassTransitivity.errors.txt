@@ -1,3 +1,10 @@
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity.ts(18,1): error TS2322: Type 'E' is not assignable to type 'C':
+  Types of property 'foo' are incompatible:
+    Type '(x?: string) => void' is not assignable to type '(x: number) => void':
+      Types of parameters 'x' and 'x' are incompatible:
+        Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity.ts (1 errors) ====
     // subclassing is not transitive when you can remove required parameters and add optional parameters
     
@@ -18,10 +25,10 @@
     var e: E;
     c = e;
     ~
-!!! Type 'E' is not assignable to type 'C':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type '(x?: string) => void' is not assignable to type '(x: number) => void':
-!!!       Types of parameters 'x' and 'x' are incompatible:
-!!!         Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'E' is not assignable to type 'C':
+!!! error TS2322:   Types of property 'foo' are incompatible:
+!!! error TS2322:     Type '(x?: string) => void' is not assignable to type '(x: number) => void':
+!!! error TS2322:       Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2322:         Type 'string' is not assignable to type 'number'.
     var r = c.foo(1);
     var r2 = e.foo('');

@@ -1,0 +1,73 @@
+tests/cases/conformance/types/tuple/castingTuple.ts(13,23): error TS2353: Neither type '[number, string]' nor type '[number, string, boolean]' is assignable to the other:
+  Property '2' is missing in type '[number, string]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(16,21): error TS2353: Neither type '[C, D]' nor type '[C, D, A]' is assignable to the other:
+  Property '2' is missing in type '[C, D]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(24,10): error TS2353: Neither type '[number, string]' nor type '[number, number]' is assignable to the other:
+  Types of property '1' are incompatible:
+    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/tuple/castingTuple.ts(25,10): error TS2353: Neither type '[C, D]' nor type '[A, I]' is assignable to the other:
+  Types of property '0' are incompatible:
+    Type 'C' is not assignable to type 'A':
+      Property 'a' is missing in type 'C'.
+tests/cases/conformance/types/tuple/castingTuple.ts(26,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(26,14): error TS2353: Neither type '[number, string]' nor type 'number[]' is assignable to the other:
+  Types of property 'pop' are incompatible:
+    Type '() => string | number' is not assignable to type '() => number':
+      Type 'string | number' is not assignable to type 'number':
+        Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/tuple/castingTuple.ts(27,1): error TS2304: Cannot find name 't4'.
+
+
+==== tests/cases/conformance/types/tuple/castingTuple.ts (7 errors) ====
+    interface I { }
+    class A { a = 10; }
+    class C implements I { c };
+    class D implements I { d };
+    class E extends A { e };
+    class F extends A { f };
+    enum E1 { one }
+    enum E2 { one }
+    
+    // no error
+    var numStrTuple: [number, string] = [5, "foo"];
+    var emptyObjTuple = <[{}, {}]>numStrTuple;
+    var numStrBoolTuple = <[number, string, boolean]>numStrTuple;
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2353: Neither type '[number, string]' nor type '[number, string, boolean]' is assignable to the other:
+!!! error TS2353:   Property '2' is missing in type '[number, string]'.
+    var classCDTuple: [C, D] = [new C(), new D()];
+    var interfaceIITuple = <[I, I]>classCDTuple;
+    var classCDATuple = <[C, D, A]>classCDTuple;
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2353: Neither type '[C, D]' nor type '[C, D, A]' is assignable to the other:
+!!! error TS2353:   Property '2' is missing in type '[C, D]'.
+    var eleFromCDA1 = classCDATuple[2]; // A
+    var eleFromCDA2 = classCDATuple[5]; // {}
+    var t10: [E1, E2] = [E1.one, E2.one];
+    var t11 = <[number, number]>t10;
+    var array1 = <{}[]>emptyObjTuple;
+    
+    // error
+    var t3 = <[number, number]>numStrTuple;
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2353: Neither type '[number, string]' nor type '[number, number]' is assignable to the other:
+!!! error TS2353:   Types of property '1' are incompatible:
+!!! error TS2353:     Type 'string' is not assignable to type 'number'.
+    var t9 = <[A, I]>classCDTuple;
+             ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2353: Neither type '[C, D]' nor type '[A, I]' is assignable to the other:
+!!! error TS2353:   Types of property '0' are incompatible:
+!!! error TS2353:     Type 'C' is not assignable to type 'A':
+!!! error TS2353:       Property 'a' is missing in type 'C'.
+    var array1 = <number[]>numStrTuple;
+        ~~~~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
+                 ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2353: Neither type '[number, string]' nor type 'number[]' is assignable to the other:
+!!! error TS2353:   Types of property 'pop' are incompatible:
+!!! error TS2353:     Type '() => string | number' is not assignable to type '() => number':
+!!! error TS2353:       Type 'string | number' is not assignable to type 'number':
+!!! error TS2353:         Type 'string' is not assignable to type 'number'.
+    t4[2] = 10;
+    ~~
+!!! error TS2304: Cannot find name 't4'.

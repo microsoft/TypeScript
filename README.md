@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/Microsoft/TypeScript.svg?branch=master)](https://travis-ci.org/Microsoft/TypeScript)
+[![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/pr)](http://issuestats.com/github/microsoft/typescript)
+[![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/issue)](http://issuestats.com/github/microsoft/typescript)
+
 # TypeScript
 
 [TypeScript](http://www.typescriptlang.org/) is a language for application-scale JavaScript. TypeScript adds optional types, classes, and modules to JavaScript. TypeScript supports tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript. Try it out at the [playground](http://www.typescriptlang.org/Playground), and stay up to date via [our blog](http://blogs.msdn.com/typescript) and [twitter account](https://twitter.com/typescriptlang).
@@ -18,7 +22,7 @@ There are many ways to [contribute](https://github.com/Microsoft/TypeScript/blob
 
 *  [Quick tutorial](http://www.typescriptlang.org/Tutorial)
 *  [Programming handbook](http://www.typescriptlang.org/Handbook)
-*  [Language specification](http://go.microsoft.com/fwlink/?LinkId=267238)
+*  [Language specification](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)
 *  [Homepage](http://www.typescriptlang.org/)
 
 ## Building
@@ -47,16 +51,18 @@ npm install
 Use one of the following to build and test:
 
 ```
-jake local           # Build the compiler into built/local 
-jake clean           # Delete the built compiler 
-jake LKG             # Replace the last known good with the built one.
-                     # Bootstrapping step to be executed when the built compiler reaches a stable state.
-jake tests           # Build the test infrastructure using the built compiler. 
-jake runtests        # Run tests using the built compiler and test infrastructure. 
-                     # You can override the host or specify a test for this command. 
-                     # Use host=<hostName> or tests=<testPath>. 
-jake baseline-accept # This replaces the baseline test results with the results obtained from jake runtests. 
-jake -T              # List the above commands. 
+jake local            # Build the compiler into built/local 
+jake clean            # Delete the built compiler 
+jake LKG              # Replace the last known good with the built one.
+                      # Bootstrapping step to be executed when the built compiler reaches a stable state.
+jake tests            # Build the test infrastructure using the built compiler. 
+jake runtests         # Run tests using the built compiler and test infrastructure. 
+                      # You can override the host or specify a test for this command. 
+                      # Use host=<hostName> or tests=<testPath>. 
+jake runtests-browser # Runs the tests using the built run.js file. Syntax is jake runtests. Optional
+                        parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.
+jake baseline-accept  # This replaces the baseline test results with the results obtained from jake runtests. 
+jake -T               # List the above commands. 
 ```
 
 

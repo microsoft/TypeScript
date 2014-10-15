@@ -17,17 +17,17 @@ verify.completionListContains("ccc");
 verify.completionListContains("ddd");
 
 // Checking for completion details before edit should work
-verify.completionEntryDetailIs("aaa", "number");
-verify.completionEntryDetailIs("ccc", "number");
+verify.completionEntryDetailIs("aaa", "(var) aaa: number");
+verify.completionEntryDetailIs("ccc", "(var) ccc: number");
 
 // Make an edit
 edit.insert("a");
 edit.backspace();
 
 // Checking for completion details after edit should work too
-verify.completionEntryDetailIs("bbb", "string");
-verify.completionEntryDetailIs("ddd", "string");
+verify.completionEntryDetailIs("bbb", "(var) bbb: string");
+verify.completionEntryDetailIs("ddd", "(var) ddd: string");
 
 // Checking for completion details again before edit should work
-verify.completionEntryDetailIs("aaa", "number");
-verify.completionEntryDetailIs("ccc", "number");
+verify.completionEntryDetailIs("aaa", "(var) aaa: number");
+verify.completionEntryDetailIs("ccc", "(var) ccc: number");

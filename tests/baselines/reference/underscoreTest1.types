@@ -104,7 +104,7 @@ var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
 >a : number[]
 >concat : { <U extends number[]>(...items: U[]): number[]; (...items: number[]): number[]; }
 >b : number[]
->[] : number[]
+>[] : undefined[]
 
 var even = _.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >even : number
@@ -176,7 +176,7 @@ _.all([true, 1, null, 'yes'], _.identity);
 >_.all : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >all : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
->[true, 1, null, 'yes'] : {}[]
+>[true, 1, null, 'yes'] : Array<string | number | boolean>
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static
 >identity : <T>(value: T) => T
@@ -186,7 +186,7 @@ _.any([null, 0, 'yes', false]);
 >_.any : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >any : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
->[null, 0, 'yes', false] : {}[]
+>[null, 0, 'yes', false] : Array<string | number | boolean>
 
 _.contains([1, 2, 3], 3);
 >_.contains([1, 2, 3], 3) : boolean
@@ -200,7 +200,7 @@ _.invoke([[5, 1, 7], [3, 2, 1]], 'sort');
 >_.invoke : { (list: any[], methodName: string, ...args: any[]): any[]; (list: Dictionary<any>, methodName: string, ...args: any[]): any[]; }
 >_ : Underscore.Static
 >invoke : { (list: any[], methodName: string, ...args: any[]): any[]; (list: Dictionary<any>, methodName: string, ...args: any[]): any[]; }
->[[5, 1, 7], [3, 2, 1]] : any[]
+>[[5, 1, 7], [3, 2, 1]] : number[][]
 >[5, 1, 7] : number[]
 >[3, 2, 1] : number[]
 
@@ -309,7 +309,7 @@ _.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd');
 >[1, 2, 3, 4, 5] : number[]
 >(num) => num % 2 == 0 ? 'even' : 'odd' : (num: number) => string
 >num : number
->num % 2 == 0 ? 'even' : 'odd' : any
+>num % 2 == 0 ? 'even' : 'odd' : string
 >num % 2 == 0 : boolean
 >num % 2 : number
 >num : number
@@ -364,25 +364,25 @@ _.rest([5, 4, 3, 2, 1]);
 >[5, 4, 3, 2, 1] : number[]
 
 _.compact([0, 1, false, 2, '', 3]);
->_.compact([0, 1, false, 2, '', 3]) : {}[]
+>_.compact([0, 1, false, 2, '', 3]) : Array<string | number | boolean>
 >_.compact : <T>(list: T[]) => T[]
 >_ : Underscore.Static
 >compact : <T>(list: T[]) => T[]
->[0, 1, false, 2, '', 3] : {}[]
+>[0, 1, false, 2, '', 3] : Array<string | number | boolean>
 
 _.flatten([1, 2, 3, 4]);
 >_.flatten([1, 2, 3, 4]) : {}[]
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, 2, 3, 4] : any[]
+>[1, 2, 3, 4] : number[]
 
 _.flatten([1, [2]]);
 >_.flatten([1, [2]]) : {}[]
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, [2]] : any[]
+>[1, [2]] : Array<number | number[]>
 >[2] : number[]
 
 // typescript doesn't like the elements being different
@@ -391,9 +391,9 @@ _.flatten([1, [2], [3, [[4]]]]);
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, [2], [3, [[4]]]] : any[]
+>[1, [2], [3, [[4]]]] : Array<number | Array<number | number[][]>>
 >[2] : number[]
->[3, [[4]]] : {}[]
+>[3, [[4]]] : Array<number | number[][]>
 >[[4]] : number[][]
 >[4] : number[]
 
@@ -402,9 +402,9 @@ _.flatten([1, [2], [3, [[4]]]], true);
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, [2], [3, [[4]]]] : any[]
+>[1, [2], [3, [[4]]]] : Array<number | Array<number | number[][]>>
 >[2] : number[]
->[3, [[4]]] : {}[]
+>[3, [[4]]] : Array<number | number[][]>
 >[[4]] : number[][]
 >[4] : number[]
 
@@ -463,17 +463,17 @@ _.object(['moe', 'larry', 'curly'], [30, 40, 50]);
 >_ : Underscore.Static
 >object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
 >['moe', 'larry', 'curly'] : string[]
->[30, 40, 50] : any[]
+>[30, 40, 50] : number[]
 
 _.object([['moe', 30], ['larry', 40], ['curly', 50]]);
 >_.object([['moe', 30], ['larry', 40], ['curly', 50]]) : any
 >_.object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
 >_ : Underscore.Static
 >object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
->[['moe', 30], ['larry', 40], ['curly', 50]] : any[][]
->['moe', 30] : any[]
->['larry', 40] : any[]
->['curly', 50] : any[]
+>[['moe', 30], ['larry', 40], ['curly', 50]] : Array<string | number>[]
+>['moe', 30] : Array<string | number>
+>['larry', 40] : Array<string | number>
+>['curly', 50] : Array<string | number>
 
 _.indexOf([1, 2, 3], 2);
 >_.indexOf([1, 2, 3], 2) : number
@@ -601,7 +601,7 @@ $('#underscore_button').bind('click', buttonView.onClick);
 >onClick : () => void
 
 var fibonacci = _.memoize(function (n) {
->fibonacci : any
+>fibonacci : (n: any) => any
 >_.memoize(function (n) {    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);}) : (n: any) => any
 >_.memoize : <T extends Function>(func: T, hashFunction?: Function) => T
 >_ : Underscore.Static
@@ -616,11 +616,11 @@ var fibonacci = _.memoize(function (n) {
 >n : any
 >fibonacci(n - 1) + fibonacci(n - 2) : any
 >fibonacci(n - 1) : any
->fibonacci : any
+>fibonacci : (n: any) => any
 >n - 1 : number
 >n : any
 >fibonacci(n - 2) : any
->fibonacci : any
+>fibonacci : (n: any) => any
 >n - 2 : number
 >n : any
 

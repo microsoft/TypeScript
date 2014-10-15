@@ -12,6 +12,7 @@ export var cProp = new xc();
 var cReturnVal = cProp.foo(10);
 
 //// [internalAliasClassInsideTopLevelModuleWithExport.js]
+var x;
 (function (x) {
     var c = (function () {
         function c() {
@@ -22,8 +23,7 @@ var cReturnVal = cProp.foo(10);
         return c;
     })();
     x.c = c;
-})(exports.x || (exports.x = {}));
-var x = exports.x;
+})(x = exports.x || (exports.x = {}));
 exports.xc = x.c;
 exports.cProp = new exports.xc();
 var cReturnVal = exports.cProp.foo(10);

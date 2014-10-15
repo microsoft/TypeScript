@@ -2,7 +2,7 @@
 // Checking class with other things in type space not value space
 
 // class then interface
-class c11 {
+class c11 { // error
     foo() {
         return 1;
     }

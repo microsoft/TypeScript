@@ -1,10 +1,14 @@
+tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(1,12): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(2,27): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/compiler/typeParamExtendsOtherTypeParam.ts (2 errors) ====
     class A<T, U extends T> { }
                ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     class B<T extends Object, U extends T> {
                               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         data: A<Object, Object>;
     }
     

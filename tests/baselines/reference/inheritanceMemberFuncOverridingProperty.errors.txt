@@ -1,3 +1,6 @@
+tests/cases/compiler/inheritanceMemberFuncOverridingProperty.ts(6,5): error TS2425: Class 'a' defines instance member property 'x', but extended class 'b' defines it as instance member function.
+
+
 ==== tests/cases/compiler/inheritanceMemberFuncOverridingProperty.ts (1 errors) ====
     class a {
         x: () => string;
@@ -6,7 +9,7 @@
     class b extends a {
         x() {
         ~
-!!! Class 'a' defines instance member property 'x', but extended class 'b' defines it as instance member function.
+!!! error TS2425: Class 'a' defines instance member property 'x', but extended class 'b' defines it as instance member function.
             return "20";
         }
     }

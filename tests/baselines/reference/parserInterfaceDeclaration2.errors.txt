@@ -1,13 +1,20 @@
+tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration2.ts(1,13): error TS1005: '{' expected.
+tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration2.ts(1,24): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration2.ts(1,26): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration2.ts(1,13): error TS2304: Cannot find name 'implements'.
+tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration2.ts(1,24): error TS2304: Cannot find name 'A'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration2.ts (5 errors) ====
     interface I implements A {
                 ~~~~~~~~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                            ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                              ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                 ~~~~~~~~~~
-!!! Cannot find name 'implements'.
+!!! error TS2304: Cannot find name 'implements'.
                            ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.
     }

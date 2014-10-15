@@ -39,7 +39,7 @@ for (var p: Point = { x: 0, y: undefined }; ;) { }
 >Point : Point
 >{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
->y : any
+>y : undefined
 >undefined : undefined
 
 for (var p = { x: 1, y: <number>undefined }; ;) { }
@@ -65,7 +65,7 @@ for (var p = <{ x: number; y: number; }>{ x: 0, y: undefined }; ;) { }
 >y : number
 >{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
->y : any
+>y : undefined
 >undefined : undefined
 
 for (var p: typeof p; ;) { }
@@ -109,11 +109,11 @@ for (var a = ['a', 'b']; ;) { }
 for (var a = <string[]>[]; ;) { }
 >a : string[]
 ><string[]>[] : string[]
->[] : string[]
+>[] : undefined[]
 
 for (var a: string[] = []; ;) { }
 >a : string[]
->[] : string[]
+>[] : undefined[]
 
 for (var a = new Array<string>(); ;) { }
 >a : string[]

@@ -1,3 +1,6 @@
+tests/cases/compiler/overloadAssignmentCompat.ts(35,1): error TS2394: Overload signature is not compatible with function implementation.
+
+
 ==== tests/cases/compiler/overloadAssignmentCompat.ts (1 errors) ====
     
     // ok - overload signatures are assignment compatible with their implementation
@@ -35,7 +38,7 @@
     // error - signatures are not assignment compatible
     function foo():number; 
     ~~~~~~~~~~~~~~~~~~~~~~
-!!! Overload signature is not compatible with function implementation.
+!!! error TS2394: Overload signature is not compatible with function implementation.
     function foo():string { return "a" };
     
     

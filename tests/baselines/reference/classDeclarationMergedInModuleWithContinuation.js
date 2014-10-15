@@ -26,10 +26,10 @@ var M;
         return N;
     })();
     M.N = N;
+    var N;
     (function (N) {
         N.v = 0;
-    })(M.N || (M.N = {}));
-    var N = M.N;
+    })(N = M.N || (M.N = {}));
 })(M || (M = {}));
 var M;
 (function (M) {

@@ -15,14 +15,16 @@
            |Foo
             |Pos: 9 SpanInfo: {"start":7,"length":3} Statement: 
             |Foo
-             |Pos: 10 SpanInfo: undefined Statement: 
+             |Pos: 10 SpanInfo: {"start":7,"length":3} Statement: 
+             |Foo
               |Pos: 11 SpanInfo: {"start":7,"length":7} Statement: 
               |Foo.Bar
                |Pos: 12 SpanInfo: {"start":7,"length":7} Statement: 
                |Foo.Bar
                 |Pos: 13 SpanInfo: {"start":7,"length":7} Statement: 
                 |Foo.Bar
-                 |Pos: 14 SpanInfo: undefined Statement: 
+                 |Pos: 14 SpanInfo: {"start":7,"length":7} Statement: 
+                 |Foo.Bar
                   |Pos: 15 SpanInfo: undefined Statement: 
                    |Pos: 16 SpanInfo: undefined Statement: 
 --------------------------------
@@ -56,7 +58,8 @@
                  |"use strict"
                   |Pos: 32 SpanInfo: {"start":21,"length":12} Statement: 
                   |"use strict"
-                   |Pos: 33 SpanInfo: undefined Statement: 
+                   |Pos: 33 SpanInfo: {"start":21,"length":12} Statement: 
+                   |"use strict"
                     |Pos: 34 SpanInfo: undefined Statement: 
 --------------------------------
 >>>>
@@ -89,7 +92,8 @@
                   |Greeter
                    |Pos: 52 SpanInfo: {"start":46,"length":7} Statement: 
                    |Greeter
-                    |Pos: 53 SpanInfo: undefined Statement: 
+                    |Pos: 53 SpanInfo: {"start":46,"length":7} Statement: 
+                    |Greeter
                      |Pos: 54 SpanInfo: undefined Statement: 
                       |Pos: 55 SpanInfo: undefined Statement: 
 --------------------------------
@@ -138,7 +142,8 @@
                                     |greeting
                                      |Pos: 90 SpanInfo: {"start":83,"length":8} Statement: 
                                      |greeting
-                                      |Pos: 91 SpanInfo: undefined Statement: 
+                                      |Pos: 91 SpanInfo: {"start":83,"length":8} Statement: 
+                                      |greeting
                                        |Pos: 92 SpanInfo: undefined Statement: 
                                         |Pos: 93 SpanInfo: undefined Statement: 
                                          |Pos: 94 SpanInfo: undefined Statement: 
@@ -188,7 +193,8 @@
               |greet
                |Pos: 126 SpanInfo: {"start":122,"length":5} Statement: 
                |greet
-                |Pos: 127 SpanInfo: undefined Statement: 
+                |Pos: 127 SpanInfo: {"start":122,"length":5} Statement: 
+                |greet
                  |Pos: 128 SpanInfo: undefined Statement: 
                   |Pos: 129 SpanInfo: undefined Statement: 
                    |Pos: 130 SpanInfo: undefined Statement: 
@@ -227,7 +233,8 @@
                           |"<h1>"
                            |Pos: 156 SpanInfo: {"start":151,"length":6} Statement: 
                            |"<h1>"
-                            |Pos: 157 SpanInfo: undefined Statement: 
+                            |Pos: 157 SpanInfo: {"start":151,"length":6} Statement: 
+                            |"<h1>"
                              |Pos: 158 SpanInfo: undefined Statement: 
                               |Pos: 159 SpanInfo: undefined Statement: 
                                |Pos: 160 SpanInfo: {"start":160,"length":4} Statement: 
@@ -238,7 +245,8 @@
                                  |this
                                   |Pos: 163 SpanInfo: {"start":160,"length":4} Statement: 
                                   |this
-                                   |Pos: 164 SpanInfo: undefined Statement: 
+                                   |Pos: 164 SpanInfo: {"start":160,"length":4} Statement: 
+                                   |this
                                     |Pos: 165 SpanInfo: {"start":160,"length":13} Statement: 
                                     |this.greeting
                                      |Pos: 166 SpanInfo: {"start":160,"length":13} Statement: 
@@ -255,7 +263,8 @@
                                           |this.greeting
                                            |Pos: 172 SpanInfo: {"start":160,"length":13} Statement: 
                                            |this.greeting
-                                            |Pos: 173 SpanInfo: undefined Statement: 
+                                            |Pos: 173 SpanInfo: {"start":160,"length":13} Statement: 
+                                            |this.greeting
                                              |Pos: 174 SpanInfo: undefined Statement: 
                                               |Pos: 175 SpanInfo: undefined Statement: 
                                                |Pos: 176 SpanInfo: {"start":176,"length":7} Statement: 
@@ -272,7 +281,8 @@
                                                     |"</h1>"
                                                      |Pos: 182 SpanInfo: {"start":176,"length":7} Statement: 
                                                      |"</h1>"
-                                                      |Pos: 183 SpanInfo: undefined Statement: 
+                                                      |Pos: 183 SpanInfo: {"start":176,"length":7} Statement: 
+                                                      |"</h1>"
                                                        |Pos: 184 SpanInfo: undefined Statement: 
 --------------------------------
 >>>>        }
@@ -326,7 +336,8 @@
                  |foo
                   |Pos: 218 SpanInfo: {"start":216,"length":3} Statement: 
                   |foo
-                   |Pos: 219 SpanInfo: undefined Statement: 
+                   |Pos: 219 SpanInfo: {"start":216,"length":3} Statement: 
+                   |foo
                     |Pos: 220 SpanInfo: {"start":220,"length":8} Statement: 
                     |greeting
                      |Pos: 221 SpanInfo: {"start":220,"length":8} Statement: 
@@ -343,7 +354,8 @@
                           |greeting
                            |Pos: 227 SpanInfo: {"start":220,"length":8} Statement: 
                            |greeting
-                            |Pos: 228 SpanInfo: undefined Statement: 
+                            |Pos: 228 SpanInfo: {"start":220,"length":8} Statement: 
+                            |greeting
                              |Pos: 229 SpanInfo: undefined Statement: 
                               |Pos: 230 SpanInfo: undefined Statement: 
                                |Pos: 231 SpanInfo: undefined Statement: 
@@ -368,7 +380,8 @@
                                             |Greeter
                                              |Pos: 245 SpanInfo: {"start":239,"length":7} Statement: 
                                              |Greeter
-                                              |Pos: 246 SpanInfo: undefined Statement: 
+                                              |Pos: 246 SpanInfo: {"start":239,"length":7} Statement: 
+                                              |Greeter
                                                |Pos: 247 SpanInfo: undefined Statement: 
                                                 |Pos: 248 SpanInfo: undefined Statement: 
 --------------------------------
@@ -407,7 +420,8 @@
                            |Greeter
                             |Pos: 274 SpanInfo: {"start":268,"length":7} Statement: 
                             |Greeter
-                             |Pos: 275 SpanInfo: undefined Statement: 
+                             |Pos: 275 SpanInfo: {"start":268,"length":7} Statement: 
+                             |Greeter
                               |Pos: 276 SpanInfo: {"start":276,"length":8} Statement: 
                               |greeting
                                |Pos: 277 SpanInfo: {"start":276,"length":8} Statement: 
@@ -424,7 +438,8 @@
                                     |greeting
                                      |Pos: 283 SpanInfo: {"start":276,"length":8} Statement: 
                                      |greeting
-                                      |Pos: 284 SpanInfo: undefined Statement: 
+                                      |Pos: 284 SpanInfo: {"start":276,"length":8} Statement: 
+                                      |greeting
                                        |Pos: 285 SpanInfo: undefined Statement: 
                                         |Pos: 286 SpanInfo: undefined Statement: 
 --------------------------------
@@ -465,7 +480,8 @@
                 |greeter
                  |Pos: 308 SpanInfo: {"start":302,"length":7} Statement: 
                  |greeter
-                  |Pos: 309 SpanInfo: undefined Statement: 
+                  |Pos: 309 SpanInfo: {"start":302,"length":7} Statement: 
+                  |greeter
                    |Pos: 310 SpanInfo: undefined Statement: 
                     |Pos: 311 SpanInfo: undefined Statement: 
                      |Pos: 312 SpanInfo: undefined Statement: 
@@ -486,7 +502,8 @@
                               |Greeter
                                |Pos: 322 SpanInfo: {"start":316,"length":7} Statement: 
                                |Greeter
-                                |Pos: 323 SpanInfo: undefined Statement: 
+                                |Pos: 323 SpanInfo: {"start":316,"length":7} Statement: 
+                                |Greeter
                                  |Pos: 324 SpanInfo: {"start":324,"length":15} Statement: 
                                  |"Hello, world!"
                                   |Pos: 325 SpanInfo: {"start":324,"length":15} Statement: 
@@ -517,7 +534,8 @@
                                               |"Hello, world!"
                                                |Pos: 338 SpanInfo: {"start":324,"length":15} Statement: 
                                                |"Hello, world!"
-                                                |Pos: 339 SpanInfo: undefined Statement: 
+                                                |Pos: 339 SpanInfo: {"start":324,"length":15} Statement: 
+                                                |"Hello, world!"
                                                  |Pos: 340 SpanInfo: undefined Statement: 
                                                   |Pos: 341 SpanInfo: undefined Statement: 
 --------------------------------
@@ -537,7 +555,8 @@
             |str
              |Pos: 352 SpanInfo: {"start":350,"length":3} Statement: 
              |str
-              |Pos: 353 SpanInfo: undefined Statement: 
+              |Pos: 353 SpanInfo: {"start":350,"length":3} Statement: 
+              |str
                |Pos: 354 SpanInfo: undefined Statement: 
                 |Pos: 355 SpanInfo: undefined Statement: 
                  |Pos: 356 SpanInfo: {"start":356,"length":7} Statement: 
@@ -554,7 +573,8 @@
                       |greeter
                        |Pos: 362 SpanInfo: {"start":356,"length":7} Statement: 
                        |greeter
-                        |Pos: 363 SpanInfo: undefined Statement: 
+                        |Pos: 363 SpanInfo: {"start":356,"length":7} Statement: 
+                        |greeter
                          |Pos: 364 SpanInfo: {"start":356,"length":13} Statement: 
                          |greeter.greet
                           |Pos: 365 SpanInfo: {"start":356,"length":13} Statement: 
@@ -565,7 +585,8 @@
                             |greeter.greet
                              |Pos: 368 SpanInfo: {"start":356,"length":13} Statement: 
                              |greeter.greet
-                              |Pos: 369 SpanInfo: undefined Statement: 
+                              |Pos: 369 SpanInfo: {"start":356,"length":13} Statement: 
+                              |greeter.greet
                                |Pos: 370 SpanInfo: undefined Statement: 
                                 |Pos: 371 SpanInfo: undefined Statement: 
                                  |Pos: 372 SpanInfo: undefined Statement: 
@@ -597,7 +618,8 @@
                   |foo2
                    |Pos: 390 SpanInfo: {"start":387,"length":4} Statement: 
                    |foo2
-                    |Pos: 391 SpanInfo: undefined Statement: 
+                    |Pos: 391 SpanInfo: {"start":387,"length":4} Statement: 
+                    |foo2
                      |Pos: 392 SpanInfo: {"start":392,"length":8} Statement: 
                      |greeting
                       |Pos: 393 SpanInfo: {"start":392,"length":8} Statement: 
@@ -614,7 +636,8 @@
                            |greeting
                             |Pos: 399 SpanInfo: {"start":392,"length":8} Statement: 
                             |greeting
-                             |Pos: 400 SpanInfo: undefined Statement: 
+                             |Pos: 400 SpanInfo: {"start":392,"length":8} Statement: 
+                             |greeting
                               |Pos: 401 SpanInfo: undefined Statement: 
                                |Pos: 402 SpanInfo: undefined Statement: 
                                 |Pos: 403 SpanInfo: undefined Statement: 
@@ -653,7 +676,8 @@
                                                      |restGreetings
                                                       |Pos: 425 SpanInfo: {"start":413,"length":13} Statement: 
                                                       |restGreetings
-                                                       |Pos: 426 SpanInfo: undefined Statement: 
+                                                       |Pos: 426 SpanInfo: {"start":413,"length":13} Statement: 
+                                                       |restGreetings
                                                         |Pos: 427 SpanInfo: undefined Statement: 
                                                          |Pos: 428 SpanInfo: undefined Statement: 
                                                           |Pos: 429 SpanInfo: undefined Statement: 
@@ -718,7 +742,8 @@
                      |greeters
                       |Pos: 479 SpanInfo: {"start":472,"length":8} Statement: 
                       |greeters
-                       |Pos: 480 SpanInfo: undefined Statement: 
+                       |Pos: 480 SpanInfo: {"start":472,"length":8} Statement: 
+                       |greeters
                         |Pos: 481 SpanInfo: undefined Statement: 
                          |Pos: 482 SpanInfo: {"start":482,"length":7} Statement: 
                          |Greeter
@@ -734,7 +759,8 @@
                               |Greeter
                                |Pos: 488 SpanInfo: {"start":482,"length":7} Statement: 
                                |Greeter
-                                |Pos: 489 SpanInfo: undefined Statement: 
+                                |Pos: 489 SpanInfo: {"start":482,"length":7} Statement: 
+                                |Greeter
                                  |Pos: 490 SpanInfo: undefined Statement: 
                                   |Pos: 491 SpanInfo: undefined Statement: 
                                    |Pos: 492 SpanInfo: undefined Statement: 
@@ -797,7 +823,8 @@
                  |greeters
                   |Pos: 540 SpanInfo: {"start":533,"length":8} Statement: 
                   |greeters
-                   |Pos: 541 SpanInfo: undefined Statement: 
+                   |Pos: 541 SpanInfo: {"start":533,"length":8} Statement: 
+                   |greeters
                     |Pos: 542 SpanInfo: undefined Statement: 
                      |Pos: 543 SpanInfo: undefined Statement: 
                       |Pos: 544 SpanInfo: undefined Statement: 
@@ -821,7 +848,8 @@
                                   |Greeter
                                    |Pos: 557 SpanInfo: {"start":551,"length":7} Statement: 
                                    |Greeter
-                                    |Pos: 558 SpanInfo: undefined Statement: 
+                                    |Pos: 558 SpanInfo: {"start":551,"length":7} Statement: 
+                                    |Greeter
                                      |Pos: 559 SpanInfo: {"start":559,"length":8} Statement: 
                                      |greeting
                                       |Pos: 560 SpanInfo: {"start":559,"length":8} Statement: 
@@ -838,7 +866,8 @@
                                            |greeting
                                             |Pos: 566 SpanInfo: {"start":559,"length":8} Statement: 
                                             |greeting
-                                             |Pos: 567 SpanInfo: undefined Statement: 
+                                             |Pos: 567 SpanInfo: {"start":559,"length":8} Statement: 
+                                             |greeting
                                               |Pos: 568 SpanInfo: undefined Statement: 
                                                |Pos: 569 SpanInfo: undefined Statement: 
 --------------------------------
@@ -863,7 +892,8 @@
                    |Pos: 586 SpanInfo: undefined Statement: 
                     |Pos: 587 SpanInfo: {"start":587,"length":1} Statement: 
                     |i
-                     |Pos: 588 SpanInfo: undefined Statement: 
+                     |Pos: 588 SpanInfo: {"start":587,"length":1} Statement: 
+                     |i
                       |Pos: 589 SpanInfo: undefined Statement: 
                        |Pos: 590 SpanInfo: undefined Statement: 
                         |Pos: 591 SpanInfo: undefined Statement: 
@@ -871,7 +901,8 @@
                           |Pos: 593 SpanInfo: undefined Statement: 
                            |Pos: 594 SpanInfo: {"start":594,"length":1} Statement: 
                            |i
-                            |Pos: 595 SpanInfo: undefined Statement: 
+                            |Pos: 595 SpanInfo: {"start":594,"length":1} Statement: 
+                            |i
                              |Pos: 596 SpanInfo: undefined Statement: 
                               |Pos: 597 SpanInfo: undefined Statement: 
                                |Pos: 598 SpanInfo: {"start":598,"length":13} Statement: 
@@ -900,7 +931,8 @@
                                           |restGreetings
                                            |Pos: 610 SpanInfo: {"start":598,"length":13} Statement: 
                                            |restGreetings
-                                            |Pos: 611 SpanInfo: undefined Statement: 
+                                            |Pos: 611 SpanInfo: {"start":598,"length":13} Statement: 
+                                            |restGreetings
                                              |Pos: 612 SpanInfo: {"start":598,"length":20} Statement: 
                                              |restGreetings.length
                                               |Pos: 613 SpanInfo: {"start":598,"length":20} Statement: 
@@ -913,11 +945,13 @@
                                                  |restGreetings.length
                                                   |Pos: 617 SpanInfo: {"start":598,"length":20} Statement: 
                                                   |restGreetings.length
-                                                   |Pos: 618 SpanInfo: undefined Statement: 
+                                                   |Pos: 618 SpanInfo: {"start":598,"length":20} Statement: 
+                                                   |restGreetings.length
                                                     |Pos: 619 SpanInfo: undefined Statement: 
                                                      |Pos: 620 SpanInfo: {"start":620,"length":1} Statement: 
                                                      |i
-                                                      |Pos: 621 SpanInfo: undefined Statement: 
+                                                      |Pos: 621 SpanInfo: {"start":620,"length":1} Statement: 
+                                                      |i
                                                        |Pos: 622 SpanInfo: undefined Statement: 
                                                         |Pos: 623 SpanInfo: undefined Statement: 
                                                          |Pos: 624 SpanInfo: undefined Statement: 
@@ -954,7 +988,8 @@
                      |greeters
                       |Pos: 646 SpanInfo: {"start":639,"length":8} Statement: 
                       |greeters
-                       |Pos: 647 SpanInfo: undefined Statement: 
+                       |Pos: 647 SpanInfo: {"start":639,"length":8} Statement: 
+                       |greeters
                         |Pos: 648 SpanInfo: {"start":639,"length":13} Statement: 
                         |greeters.push
                          |Pos: 649 SpanInfo: {"start":639,"length":13} Statement: 
@@ -963,7 +998,8 @@
                           |greeters.push
                            |Pos: 651 SpanInfo: {"start":639,"length":13} Statement: 
                            |greeters.push
-                            |Pos: 652 SpanInfo: undefined Statement: 
+                            |Pos: 652 SpanInfo: {"start":639,"length":13} Statement: 
+                            |greeters.push
                              |Pos: 653 SpanInfo: undefined Statement: 
                               |Pos: 654 SpanInfo: undefined Statement: 
                                |Pos: 655 SpanInfo: undefined Statement: 
@@ -982,7 +1018,8 @@
                                       |Greeter
                                        |Pos: 663 SpanInfo: {"start":657,"length":7} Statement: 
                                        |Greeter
-                                        |Pos: 664 SpanInfo: undefined Statement: 
+                                        |Pos: 664 SpanInfo: {"start":657,"length":7} Statement: 
+                                        |Greeter
                                          |Pos: 665 SpanInfo: {"start":665,"length":13} Statement: 
                                          |restGreetings
                                           |Pos: 666 SpanInfo: {"start":665,"length":13} Statement: 
@@ -1009,10 +1046,12 @@
                                                     |restGreetings
                                                      |Pos: 677 SpanInfo: {"start":665,"length":13} Statement: 
                                                      |restGreetings
-                                                      |Pos: 678 SpanInfo: undefined Statement: 
+                                                      |Pos: 678 SpanInfo: {"start":665,"length":13} Statement: 
+                                                      |restGreetings
                                                        |Pos: 679 SpanInfo: {"start":679,"length":1} Statement: 
                                                        |i
-                                                        |Pos: 680 SpanInfo: undefined Statement: 
+                                                        |Pos: 680 SpanInfo: {"start":679,"length":1} Statement: 
+                                                        |i
                                                          |Pos: 681 SpanInfo: undefined Statement: 
                                                           |Pos: 682 SpanInfo: undefined Statement: 
                                                            |Pos: 683 SpanInfo: undefined Statement: 
@@ -1068,7 +1107,8 @@
                         |greeters
                          |Pos: 718 SpanInfo: {"start":711,"length":8} Statement: 
                          |greeters
-                          |Pos: 719 SpanInfo: undefined Statement: 
+                          |Pos: 719 SpanInfo: {"start":711,"length":8} Statement: 
+                          |greeters
                            |Pos: 720 SpanInfo: undefined Statement: 
 --------------------------------
 >>>>    }
@@ -1096,7 +1136,8 @@
           |Pos: 735 SpanInfo: undefined Statement: 
            |Pos: 736 SpanInfo: {"start":736,"length":1} Statement: 
            |b
-            |Pos: 737 SpanInfo: undefined Statement: 
+            |Pos: 737 SpanInfo: {"start":736,"length":1} Statement: 
+            |b
              |Pos: 738 SpanInfo: undefined Statement: 
               |Pos: 739 SpanInfo: undefined Statement: 
                |Pos: 740 SpanInfo: {"start":740,"length":4} Statement: 
@@ -1107,7 +1148,8 @@
                  |foo2
                   |Pos: 743 SpanInfo: {"start":740,"length":4} Statement: 
                   |foo2
-                   |Pos: 744 SpanInfo: undefined Statement: 
+                   |Pos: 744 SpanInfo: {"start":740,"length":4} Statement: 
+                   |foo2
                     |Pos: 745 SpanInfo: {"start":745,"length":7} Statement: 
                     |"Hello"
                      |Pos: 746 SpanInfo: {"start":745,"length":7} Statement: 
@@ -1122,7 +1164,8 @@
                          |"Hello"
                           |Pos: 751 SpanInfo: {"start":745,"length":7} Statement: 
                           |"Hello"
-                           |Pos: 752 SpanInfo: undefined Statement: 
+                           |Pos: 752 SpanInfo: {"start":745,"length":7} Statement: 
+                           |"Hello"
                             |Pos: 753 SpanInfo: undefined Statement: 
                              |Pos: 754 SpanInfo: {"start":754,"length":7} Statement: 
                              |"World"
@@ -1138,7 +1181,8 @@
                                   |"World"
                                    |Pos: 760 SpanInfo: {"start":754,"length":7} Statement: 
                                    |"World"
-                                    |Pos: 761 SpanInfo: undefined Statement: 
+                                    |Pos: 761 SpanInfo: {"start":754,"length":7} Statement: 
+                                    |"World"
                                      |Pos: 762 SpanInfo: undefined Statement: 
                                       |Pos: 763 SpanInfo: {"start":763,"length":3} Statement: 
                                       |"!"
@@ -1146,7 +1190,8 @@
                                        |"!"
                                         |Pos: 765 SpanInfo: {"start":763,"length":3} Statement: 
                                         |"!"
-                                         |Pos: 766 SpanInfo: undefined Statement: 
+                                         |Pos: 766 SpanInfo: {"start":763,"length":3} Statement: 
+                                         |"!"
                                           |Pos: 767 SpanInfo: undefined Statement: 
                                            |Pos: 768 SpanInfo: undefined Statement: 
 --------------------------------
@@ -1212,7 +1257,8 @@
                |Pos: 823 SpanInfo: undefined Statement: 
                 |Pos: 824 SpanInfo: {"start":824,"length":1} Statement: 
                 |j
-                 |Pos: 825 SpanInfo: undefined Statement: 
+                 |Pos: 825 SpanInfo: {"start":824,"length":1} Statement: 
+                 |j
                   |Pos: 826 SpanInfo: undefined Statement: 
                    |Pos: 827 SpanInfo: undefined Statement: 
                     |Pos: 828 SpanInfo: undefined Statement: 
@@ -1220,12 +1266,14 @@
                       |Pos: 830 SpanInfo: undefined Statement: 
                        |Pos: 831 SpanInfo: {"start":831,"length":1} Statement: 
                        |j
-                        |Pos: 832 SpanInfo: undefined Statement: 
+                        |Pos: 832 SpanInfo: {"start":831,"length":1} Statement: 
+                        |j
                          |Pos: 833 SpanInfo: undefined Statement: 
                           |Pos: 834 SpanInfo: undefined Statement: 
                            |Pos: 835 SpanInfo: {"start":835,"length":1} Statement: 
                            |b
-                            |Pos: 836 SpanInfo: undefined Statement: 
+                            |Pos: 836 SpanInfo: {"start":835,"length":1} Statement: 
+                            |b
                              |Pos: 837 SpanInfo: {"start":835,"length":8} Statement: 
                              |b.length
                               |Pos: 838 SpanInfo: {"start":835,"length":8} Statement: 
@@ -1238,11 +1286,13 @@
                                  |b.length
                                   |Pos: 842 SpanInfo: {"start":835,"length":8} Statement: 
                                   |b.length
-                                   |Pos: 843 SpanInfo: undefined Statement: 
+                                   |Pos: 843 SpanInfo: {"start":835,"length":8} Statement: 
+                                   |b.length
                                     |Pos: 844 SpanInfo: undefined Statement: 
                                      |Pos: 845 SpanInfo: {"start":845,"length":1} Statement: 
                                      |j
-                                      |Pos: 846 SpanInfo: undefined Statement: 
+                                      |Pos: 846 SpanInfo: {"start":845,"length":1} Statement: 
+                                      |j
                                        |Pos: 847 SpanInfo: undefined Statement: 
                                         |Pos: 848 SpanInfo: undefined Statement: 
                                          |Pos: 849 SpanInfo: undefined Statement: 
@@ -1261,10 +1311,12 @@
           |Pos: 859 SpanInfo: undefined Statement: 
            |Pos: 860 SpanInfo: {"start":860,"length":1} Statement: 
            |b
-            |Pos: 861 SpanInfo: undefined Statement: 
+            |Pos: 861 SpanInfo: {"start":860,"length":1} Statement: 
+            |b
              |Pos: 862 SpanInfo: {"start":862,"length":1} Statement: 
              |j
-              |Pos: 863 SpanInfo: undefined Statement: 
+              |Pos: 863 SpanInfo: {"start":862,"length":1} Statement: 
+              |j
                |Pos: 864 SpanInfo: undefined Statement: 
                 |Pos: 865 SpanInfo: {"start":860,"length":10} Statement: 
                 |b[j].greet
@@ -1276,7 +1328,8 @@
                    |b[j].greet
                     |Pos: 869 SpanInfo: {"start":860,"length":10} Statement: 
                     |b[j].greet
-                     |Pos: 870 SpanInfo: undefined Statement: 
+                     |Pos: 870 SpanInfo: {"start":860,"length":10} Statement: 
+                     |b[j].greet
                       |Pos: 871 SpanInfo: undefined Statement: 
                        |Pos: 872 SpanInfo: undefined Statement: 
                         |Pos: 873 SpanInfo: undefined Statement: 

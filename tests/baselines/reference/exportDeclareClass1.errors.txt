@@ -1,15 +1,21 @@
+tests/cases/compiler/exportDeclareClass1.ts(2,21): error TS1037: A function implementation cannot be declared in an ambient context.
+tests/cases/compiler/exportDeclareClass1.ts(2,24): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/compiler/exportDeclareClass1.ts(3,31): error TS1037: A function implementation cannot be declared in an ambient context.
+tests/cases/compiler/exportDeclareClass1.ts(3,34): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+
+
 ==== tests/cases/compiler/exportDeclareClass1.ts (4 errors) ====
         export declare class eaC {
             static tF() { };
                         ~
-!!! A function implementation cannot be declared in an ambient context.
+!!! error TS1037: A function implementation cannot be declared in an ambient context.
                            ~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
             static tsF(param:any) { };
                                   ~
-!!! A function implementation cannot be declared in an ambient context.
+!!! error TS1037: A function implementation cannot be declared in an ambient context.
                                      ~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
         };
     	
     	export declare class eaC2 {

@@ -1,18 +1,27 @@
+tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(3,13): error TS2304: Cannot find name 'PluginUtilities'.
+tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(5,17): error TS2304: Cannot find name 'initializeProperties'.
+tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(8,17): error TS2304: Cannot find name 'initializeProperties'.
+tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(18,17): error TS2304: Cannot find name 'PluginUtilities'.
+tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(21,21): error TS2304: Cannot find name 'initializeProperties'.
+tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(24,21): error TS2304: Cannot find name 'initializeProperties'.
+tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(36,17): error TS2304: Cannot find name 'initializeProperties'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts (7 errors) ====
             function define(constructor, instanceMembers, staticMembers) {
                 constructor = constructor || function () { };
                 PluginUtilities.Utilities.markSupportedForProcessing(constructor);
                 ~~~~~~~~~~~~~~~
-!!! Cannot find name 'PluginUtilities'.
+!!! error TS2304: Cannot find name 'PluginUtilities'.
                 if (instanceMembers) {
                     initializeProperties(constructor.prototype, instanceMembers);
                     ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'initializeProperties'.
+!!! error TS2304: Cannot find name 'initializeProperties'.
                 }
                 if (staticMembers) {
                     initializeProperties(constructor, staticMembers);
                     ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'initializeProperties'.
+!!! error TS2304: Cannot find name 'initializeProperties'.
                 }
                 return constructor;
             }
@@ -24,17 +33,17 @@
                     constructor.prototype = Object.create(basePrototype);
                     PluginUtilities.Utilities.markSupportedForProcessing(constructor);
                     ~~~~~~~~~~~~~~~
-!!! Cannot find name 'PluginUtilities'.
+!!! error TS2304: Cannot find name 'PluginUtilities'.
                     Object.defineProperty(constructor.prototype, "constructor", { value: constructor, writable: true, configurable: true, enumerable: true });
                     if (instanceMembers) {
                         initializeProperties(constructor.prototype, instanceMembers);
                         ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'initializeProperties'.
+!!! error TS2304: Cannot find name 'initializeProperties'.
                     }
                     if (staticMembers) {
                         initializeProperties(constructor, staticMembers);
                         ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'initializeProperties'.
+!!! error TS2304: Cannot find name 'initializeProperties'.
                     }
                     return constructor;
                 } else {
@@ -48,7 +57,7 @@
                 for (i = 1, len = arguments.length; i < len; i++) {
                     initializeProperties(constructor.prototype, arguments[i]);
                     ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'initializeProperties'.
+!!! error TS2304: Cannot find name 'initializeProperties'.
                 }
                 return constructor;
             }

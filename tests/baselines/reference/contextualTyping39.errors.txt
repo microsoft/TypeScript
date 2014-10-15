@@ -1,4 +1,9 @@
+tests/cases/compiler/contextualTyping39.ts(1,11): error TS2353: Neither type '() => string' nor type '() => number' is assignable to the other:
+  Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/contextualTyping39.ts (1 errors) ====
     var foo = <{ (): number; }> function() { return "err"; };
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Neither type '() => number' nor type '() => string' is assignable to the other.
+!!! error TS2353: Neither type '() => string' nor type '() => number' is assignable to the other:
+!!! error TS2353:   Type 'string' is not assignable to type 'number'.

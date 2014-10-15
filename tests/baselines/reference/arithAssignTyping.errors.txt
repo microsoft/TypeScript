@@ -1,39 +1,53 @@
+tests/cases/compiler/arithAssignTyping.ts(3,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/arithAssignTyping.ts(4,1): error TS2365: Operator '+=' cannot be applied to types 'typeof f' and 'number'.
+tests/cases/compiler/arithAssignTyping.ts(5,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/arithAssignTyping.ts(6,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/arithAssignTyping.ts(7,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/arithAssignTyping.ts(8,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/arithAssignTyping.ts(9,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/arithAssignTyping.ts(10,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/arithAssignTyping.ts(11,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/arithAssignTyping.ts(12,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/arithAssignTyping.ts(13,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/arithAssignTyping.ts(14,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+
+
 ==== tests/cases/compiler/arithAssignTyping.ts (12 errors) ====
     class f { }
     
     f += ''; // error
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     f += 1; // error
     ~~~~~~
-!!! Operator '+=' cannot be applied to types 'typeof f' and 'number'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'typeof f' and 'number'.
     f -= 1; // error
     ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     f *= 1; // error
     ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     f /= 1; // error
     ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     f %= 1; // error
     ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     f &= 1; // error
     ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     f |= 1; // error
     ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     f <<= 1; // error
     ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     f >>= 1; // error
     ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     f >>>= 1; // error
     ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     f ^= 1; // error
     ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.

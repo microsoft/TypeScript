@@ -1,3 +1,7 @@
+tests/cases/compiler/multipleExportAssignments.ts(13,1): error TS2308: A module cannot have more than one export assignment.
+tests/cases/compiler/multipleExportAssignments.ts(14,1): error TS2308: A module cannot have more than one export assignment.
+
+
 ==== tests/cases/compiler/multipleExportAssignments.ts (2 errors) ====
     interface connectModule {
         (res, req, next): void;
@@ -13,9 +17,9 @@
     };
     export = server;
     ~~~~~~~~~~~~~~~~
-!!! A module cannot have more than one export assignment.
+!!! error TS2308: A module cannot have more than one export assignment.
     export = connectExport;
     ~~~~~~~~~~~~~~~~~~~~~~~
-!!! A module cannot have more than one export assignment.
+!!! error TS2308: A module cannot have more than one export assignment.
      
     

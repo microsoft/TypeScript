@@ -66,7 +66,9 @@ var p;
 var p;
 var X;
 (function (X) {
+    var Y;
     (function (Y) {
+        var Z;
         (function (Z) {
             var Line = (function () {
                 function Line() {
@@ -74,24 +76,22 @@ var X;
                 return Line;
             })();
             Z.Line = Line;
-        })(Y.Z || (Y.Z = {}));
-        var Z = Y.Z;
-    })(X.Y || (X.Y = {}));
-    var Y = X.Y;
+        })(Z = Y.Z || (Y.Z = {}));
+    })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 var X;
 (function (X) {
+    var Y;
     (function (Y) {
+        var Z;
         (function (Z) {
             var Line = (function () {
                 function Line() {
                 }
                 return Line;
             })();
-        })(Y.Z || (Y.Z = {}));
-        var Z = Y.Z;
-    })(X.Y || (X.Y = {}));
-    var Y = X.Y;
+        })(Z = Y.Z || (Y.Z = {}));
+    })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 // ensure merges as expected
 var l;

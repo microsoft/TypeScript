@@ -97,8 +97,8 @@ module ts.BreakpointResolver {
                         return spanInDebuggerStatement(statement);
                     case SyntaxKind.IfStatement:
                         return spanInIfStatement(<IfStatement>statement);
-                    case SyntaxKind.LabelledStatement:
-                        return spanInLabelledStatement(<LabelledStatement>statement);
+                    case SyntaxKind.LabeledStatement:
+                        return spanInLabeledStatement(<LabeledStatement>statement);
                     case SyntaxKind.ForStatement:
                         return spanInForStatement(<ForStatement>statement);
                     case SyntaxKind.BreakStatement:
@@ -475,7 +475,7 @@ module ts.BreakpointResolver {
                 }
             }
 
-            function spanInLabelledStatement(labelledStatement: LabelledStatement): TypeScript.TextSpan {
+            function spanInLabeledStatement(labelledStatement: LabeledStatement): TypeScript.TextSpan {
                 return spanInStatement(labelledStatement.statement);
             }
 

@@ -52,7 +52,9 @@ var __extends = this.__extends || function (d, b) {
 // Module
 var templa;
 (function (templa) {
+    var dom;
     (function (dom) {
+        var mvc;
         (function (mvc) {
             var AbstractElementController = (function (_super) {
                 __extends(AbstractElementController, _super);
@@ -62,16 +64,17 @@ var templa;
                 return AbstractElementController;
             })(templa.mvc.AbstractController);
             mvc.AbstractElementController = AbstractElementController;
-        })(dom.mvc || (dom.mvc = {}));
-        var mvc = dom.mvc;
-    })(templa.dom || (templa.dom = {}));
-    var dom = templa.dom;
+        })(mvc = dom.mvc || (dom.mvc = {}));
+    })(dom = templa.dom || (templa.dom = {}));
 })(templa || (templa = {}));
 // Module
 var templa;
 (function (templa) {
+    var dom;
     (function (dom) {
+        var mvc;
         (function (mvc) {
+            var composite;
             (function (composite) {
                 var AbstractCompositeElementController = (function (_super) {
                     __extends(AbstractCompositeElementController, _super);
@@ -82,12 +85,9 @@ var templa;
                     return AbstractCompositeElementController;
                 })(templa.dom.mvc.AbstractElementController);
                 composite.AbstractCompositeElementController = AbstractCompositeElementController;
-            })(mvc.composite || (mvc.composite = {}));
-            var composite = mvc.composite;
-        })(dom.mvc || (dom.mvc = {}));
-        var mvc = dom.mvc;
-    })(templa.dom || (templa.dom = {}));
-    var dom = templa.dom;
+            })(composite = mvc.composite || (mvc.composite = {}));
+        })(mvc = dom.mvc || (dom.mvc = {}));
+    })(dom = templa.dom || (templa.dom = {}));
 })(templa || (templa = {}));
 
 

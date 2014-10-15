@@ -1,4 +1,10 @@
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts (38 errors) ====
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(7,7): error TS2416: Class 'D1<T, U>' incorrectly extends base class 'C3<T>':
+  Types of property 'foo' are incompatible:
+    Type 'U' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(95,21): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts (2 errors) ====
     // checking whether other types are subtypes of type parameters
     
     class C3<T> {
@@ -7,19 +13,15 @@
     
     class D1<T, U> extends C3<T> {
           ~~
-!!! Class 'D1<T, U>' incorrectly extends base class 'C3<T>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'U' is not assignable to type 'T'.
+!!! error TS2416: Class 'D1<T, U>' incorrectly extends base class 'C3<T>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'U' is not assignable to type 'T'.
         foo: U; // error
     }
     
     function f1<T, U>(x: T, y: U) {
         var r = true ? x : y; // error
-                ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'U'.
         var r = true ? y : x; // error
-                ~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'T'.
     }
     
     interface I1 { foo: number; }
@@ -45,135 +47,67 @@
         var r0b = true ? x : u;
     
         var r1 = true ? 1 : x; 
-                 ~~~~~~~~~~~~
-!!! No best common type exists between 'number' and 'T'.
         var r1 = true ? x : 1;
-                 ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'number'.
     
         var r2 = true ? '' : x;
-                 ~~~~~~~~~~~~~
-!!! No best common type exists between 'string' and 'T'.
         var r2 = true ? x : '';
-                 ~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'string'.
     
         var r3 = true ? true : x;
-                 ~~~~~~~~~~~~~~~
-!!! No best common type exists between 'boolean' and 'T'.
         var r3 = true ? x : true;
-                 ~~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'boolean'.
     
         var r4 = true ? new Date() : x;
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Date' and 'T'.
         var r4 = true ? x : new Date();
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'Date'.
     
         var r5 = true ? /1/ : x;
-                 ~~~~~~~~~~~~~~
-!!! No best common type exists between 'RegExp' and 'T'.
         var r5 = true ? x : /1/;
-                 ~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'RegExp'.
     
         var r6 = true ? { foo: 1 } : x;
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between '{ foo: number; }' and 'T'.
         var r6 = true ? x : { foo: 1 };
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and '{ foo: number; }'.
     
         var r7 = true ? () => { } : x;
-                 ~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between '() => void' and 'T'.
         var r7 = true ? x : () => { };
-                 ~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and '() => void'.
     
         var r8 = true ? <T>(x: T) => { return x } : x;
-                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between '<T>(x: T) => T' and 'T'.
         var r8b = true ? x : <T>(x: T) => { return x }; // type parameters not identical across declarations
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and '<T>(x: T) => T'.
     
         var i1: I1;
         var r9 = true ? i1 : x;
-                 ~~~~~~~~~~~~~
-!!! No best common type exists between 'I1' and 'T'.
         var r9 = true ? x : i1;
-                 ~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'I1'.
     
         var c1: C1;
         var r10 = true ? c1 : x;
-                  ~~~~~~~~~~~~~
-!!! No best common type exists between 'C1' and 'T'.
         var r10 = true ? x : c1;
-                  ~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'C1'.
     
     
         var c2: C2<number>;
         var r12 = true ? c2 : x;
-                  ~~~~~~~~~~~~~
-!!! No best common type exists between 'C2<number>' and 'T'.
         var r12 = true ? x : c2;
-                  ~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'C2<number>'.
     
     
         var r13 = true ? E : x;
-                  ~~~~~~~~~~~~
-!!! No best common type exists between 'typeof E' and 'T'.
         var r13 = true ? x : E;
-                  ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'typeof E'.
     
         var r14 = true ? E.A : x;
-                  ~~~~~~~~~~~~~~
-!!! No best common type exists between 'E' and 'T'.
         var r14 = true ? x : E.A;
-                  ~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'E'.
     
         var af: typeof f;
         var r15 = true ? af : x;
-                  ~~~~~~~~~~~~~
-!!! No best common type exists between 'typeof f' and 'T'.
         var r15 = true ? x : af;
-                  ~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'typeof f'.
     
         var ac: typeof c;
         var r16 = true ? ac : x;
-                  ~~~~~~~~~~~~~
-!!! No best common type exists between 'typeof c' and 'T'.
         var r16 = true ? x : ac;
-                  ~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'typeof c'.
     
         function f17<T>(a: T) {
             var r17 = true ? x : a;
-                      ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'T'.
             var r17 = true ? a : x;
-                      ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'T'.
         }
     
         function f18<T, U extends T>(a: U) {
                         ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             var r18 = true ? x : a;
-                      ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'U'.
             var r18 = true ? a : x;
-                      ~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'T'.
         }
     
         var r19 = true ? new Object() : x; // BCT is Object

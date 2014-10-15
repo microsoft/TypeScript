@@ -1,3 +1,11 @@
+tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_GlobalFile.ts(14,82): error TS4022: Extends clause of exported interface 'publicInterfaceImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
+tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_externalModule.ts(15,82): error TS4022: Extends clause of exported interface 'publicInterfaceImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
+tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_externalModule.ts(20,84): error TS4021: Extends clause of exported interface 'publicInterfaceImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
+tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_externalModule.ts(23,83): error TS4022: Extends clause of exported interface 'publicInterfaceImplementingPrivateAndPublicInterface' has or is using private name 'privateInterfaceInPublicModule'.
+tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_externalModule.ts(63,70): error TS4022: Extends clause of exported interface 'publicInterfaceImplementingPrivateInterface' has or is using private name 'privateInterface'.
+tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_externalModule.ts(68,80): error TS4021: Extends clause of exported interface 'publicInterfaceImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
+
+
 ==== tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_externalModule.ts (5 errors) ====
     
     export module publicModule {
@@ -15,19 +23,19 @@
         }
         export interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule { // Should error
                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Extends clause of exported interface 'publicInterfaceImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
+!!! error TS4022: Extends clause of exported interface 'publicInterfaceImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
         }
     
         interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
         }
         export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
                                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Extends clause of exported interface 'publicInterfaceImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
+!!! error TS4021: Extends clause of exported interface 'publicInterfaceImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
         }
     
         export interface publicInterfaceImplementingPrivateAndPublicInterface extends privateInterfaceInPublicModule, publicInterfaceInPublicModule { // Should error
                                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Extends clause of exported interface 'publicInterfaceImplementingPrivateAndPublicInterface' has or is using private name 'privateInterfaceInPublicModule'.
+!!! error TS4022: Extends clause of exported interface 'publicInterfaceImplementingPrivateAndPublicInterface' has or is using private name 'privateInterfaceInPublicModule'.
         }
     }
     
@@ -69,14 +77,14 @@
     }
     export interface publicInterfaceImplementingPrivateInterface extends privateInterface { // Should error
                                                                          ~~~~~~~~~~~~~~~~
-!!! Extends clause of exported interface 'publicInterfaceImplementingPrivateInterface' has or is using private name 'privateInterface'.
+!!! error TS4022: Extends clause of exported interface 'publicInterfaceImplementingPrivateInterface' has or is using private name 'privateInterface'.
     }
     
     interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
     }
     export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
                                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Extends clause of exported interface 'publicInterfaceImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
+!!! error TS4021: Extends clause of exported interface 'publicInterfaceImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
     }
     
 ==== tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_GlobalFile.ts (1 errors) ====
@@ -95,7 +103,7 @@
         }
         export interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule { // Should error
                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Extends clause of exported interface 'publicInterfaceImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
+!!! error TS4022: Extends clause of exported interface 'publicInterfaceImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
         }
     }
     interface publicInterfaceInGlobal {

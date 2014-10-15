@@ -37,7 +37,7 @@ module Bugs {
                                 var tokens:IToken[]= [];
 >tokens : IToken[]
 >IToken : IToken
->[] : IToken[]
+>[] : undefined[]
 
                                 tokens.push({ startIndex: 1, type: '', bracket: 3 });
 >tokens.push({ startIndex: 1, type: '', bracket: 3 }) : number
@@ -61,7 +61,7 @@ module Bugs {
 >startIndex : number
 >type : string
 >bracket : number
->state : any
+>state : null
 >length : number
                 }
 }
