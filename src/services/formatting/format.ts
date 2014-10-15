@@ -58,8 +58,8 @@ module ts.formatting {
     function getEndLinePosition(line: number, sourceFile: SourceFile): number {
         var lineStarts = sourceFile.getLineStarts();
         if (line === lineStarts.length - 1) {
-            // last line - return EOF - <start pos of line>
-            return sourceFile.text.length - lineStarts[line];
+            // last line - return EOF
+            return sourceFile.text.length - 1;
         }
         else {
             // current line start
@@ -351,7 +351,9 @@ module ts.formatting {
                 processTrivia(currentTokenInfo.leadingTrivia, parent, contextNode, indentation);
             }
 
-            processRange(currentTokenInfo.token, parent, contextNode, indentation);
+            if (rangeContainsRange(originalRange, currentTokenInfo.token)) {
+                processRange(currentTokenInfo.token, parent, contextNode, indentation);
+            }
 
             if (currentTokenInfo.trailingTrivia) {
                 processTrivia(currentTokenInfo.trailingTrivia, parent, contextNode, indentation);
@@ -363,7 +365,7 @@ module ts.formatting {
         function processTrivia(trivia: TextRangeWithKind[], parent: Node, contextNode: Node, currentIndentation: number): void {
             for (var i = 0, len = trivia.length; i < len; ++i) {
                 var triviaItem = trivia[i];
-                if (isComment(triviaItem.kind)) {
+                if (isComment(triviaItem.kind) && rangeContainsRange(originalRange, triviaItem)) {
                     processRange(triviaItem, parent, contextNode, currentIndentation);
                 }
             }
@@ -371,8 +373,8 @@ module ts.formatting {
 
         function processRange(range: TextRangeWithKind, parent: Node, contextNode: Node, indentation: number) {
             var rangeStart = getNonAdjustedLineAndCharacterFromPosition(range.pos, sourceFile);
-            if (rangeContainsRange(originalRange, range)) {                
-                var indentToken = false;
+            if (rangeContainsRange(originalRange, range)) {
+                var indentToken = true;
                 if (!previousRange) {
                     var originalStart = getNonAdjustedLineAndCharacterFromPosition(originalRange.pos, sourceFile);
                     // TODO: implement
