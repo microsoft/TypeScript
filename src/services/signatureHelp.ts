@@ -296,24 +296,10 @@ module ts.SignatureHelp {
             var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
                 var parameters = candidateSignature.parameters;
                 var parameterHelpItems: SignatureHelpParameter[] = parameters.length === 0 ? emptyArray : map(parameters, p => {
-                    var displayParts: SymbolDisplayPart[] = [];
-
-                    if (candidateSignature.hasRestParameter && parameters[parameters.length - 1] === p) {
-                        displayParts.push(punctuationPart(SyntaxKind.DotDotDotToken));
-                    }
-
-                    displayParts.push(symbolPart(p.name, p));
+                    var displayParts = mapToDisplayParts(writer =>
+                        typeInfoResolver.getSymbolDisplayBuilder().buildParameterDisplay(p, writer, argumentListOrTypeArgumentList));
 
                     var isOptional = !!(p.valueDeclaration.flags & NodeFlags.QuestionMark);
-                    if (isOptional) {
-                        displayParts.push(punctuationPart(SyntaxKind.QuestionToken));
-                    }
-
-                    displayParts.push(punctuationPart(SyntaxKind.ColonToken));
-                    displayParts.push(spacePart());
-
-                    var typeParts = typeToDisplayParts(typeInfoResolver, typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
-                    displayParts.push.apply(displayParts, typeParts);
 
                     return {
                         name: p.name,
@@ -328,38 +314,21 @@ module ts.SignatureHelp {
 
                 var prefixParts = callTargetSymbol ? symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined) : [];
 
-                var separatorParts = [punctuationPart(SyntaxKind.CommaToken), spacePart()];
-
-                // TODO(jfreeman): Constraints?
-                if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
-                    prefixParts.push(punctuationPart(SyntaxKind.LessThanToken));
-
-                    for (var i = 0, n = candidateSignature.typeParameters.length; i < n; i++) {
-                        if (i) {
-                            prefixParts.push.apply(prefixParts, separatorParts);
-                        }
-
-                        var tp = candidateSignature.typeParameters[i].symbol;
-                        prefixParts.push(symbolPart(tp.name, tp));
-                    }
-
-                    prefixParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
-                }
-
+                var typeParameterParts = mapToDisplayParts(writer =>
+                    typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, argumentListOrTypeArgumentList));
+                prefixParts.push.apply(prefixParts, typeParameterParts);
                 prefixParts.push(punctuationPart(SyntaxKind.OpenParenToken));
 
                 var suffixParts = [punctuationPart(SyntaxKind.CloseParenToken)];
-                suffixParts.push(punctuationPart(SyntaxKind.ColonToken));
-                suffixParts.push(spacePart());
-
-                var typeParts = typeToDisplayParts(typeInfoResolver, candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
-                suffixParts.push.apply(suffixParts, typeParts);
+                var returnTypeParts = mapToDisplayParts(writer =>
+                    typeInfoResolver.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, argumentListOrTypeArgumentList));
+                suffixParts.push.apply(suffixParts, returnTypeParts);
                 
                 return {
                     isVariadic: candidateSignature.hasRestParameter,
                     prefixDisplayParts: prefixParts,
                     suffixDisplayParts: suffixParts,
-                    separatorDisplayParts: separatorParts,
+                    separatorDisplayParts: [punctuationPart(SyntaxKind.CommaToken), spacePart()],
                     parameters: parameterHelpItems,
                     documentation: candidateSignature.getDocumentationComment()
                 };
