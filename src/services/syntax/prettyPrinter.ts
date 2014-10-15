@@ -421,6 +421,12 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.greaterThanToken);
         }
 
+        public visitTupleType(node: TupleTypeSyntax): void {
+            this.appendToken(node.openBracketToken);
+            this.appendSeparatorSpaceList(node.types);
+            this.appendToken(node.closeBracketToken);
+        }
+
         public visitConstructorType(node: ConstructorTypeSyntax): void {
             this.appendToken(node.newKeyword);
             this.ensureSpace();

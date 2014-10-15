@@ -7,7 +7,7 @@ class UnitTestRunner extends RunnerBase {
     }
 
     public initializeTests() {
-        this.tests = this.enumerateFiles('tests/cases/unittests/services');
+        this.tests = this.enumerateFiles('tests/cases/unittests/services', /\.ts/i);
 
         var outfile = new Harness.Compiler.WriterAggregator()
         var outerr = new Harness.Compiler.WriterAggregator();

@@ -1,3 +1,6 @@
+tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts(16,15): error TS2305: Module '"tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.
+
+
 ==== tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
     export module a {
         export module b {
@@ -16,4 +19,4 @@
     
     export var z: c.b.I;
                   ~~~~~
-!!! Module '"tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.
+!!! error TS2305: Module '"tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.

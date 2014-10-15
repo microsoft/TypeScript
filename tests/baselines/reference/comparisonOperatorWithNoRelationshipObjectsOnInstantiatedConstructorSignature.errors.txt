@@ -1,3 +1,6 @@
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts(28,19): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts (1 errors) ====
     class Base {
         public a: string;
@@ -28,7 +31,7 @@
     
     var a6: { new <T, U extends T>(x: T, y: U): T };
                       ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     var b6: { new (x: Base, y: C): Base };
     
     // operator <

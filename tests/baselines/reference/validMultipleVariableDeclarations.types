@@ -117,11 +117,11 @@ var a = ['a', 'b']
 var a = <string[]>[];
 >a : string[]
 ><string[]>[] : string[]
->[] : string[]
+>[] : undefined[]
 
 var a: string[] = [];
 >a : string[]
->[] : string[]
+>[] : undefined[]
 
 var a = new Array<string>();
 >a : string[]

@@ -1,4 +1,12 @@
-==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts (2 errors) ====
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(10,5): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(11,24): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(18,5): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(19,25): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(26,5): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(27,27): error TS2300: Duplicate identifier 'y'.
+
+
+==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts (6 errors) ====
     class C {
         y: number;
         constructor(y: number) { } // ok
@@ -9,9 +17,11 @@
     
     class D {
         y: number;
+        ~
+!!! error TS2300: Duplicate identifier 'y'.
         constructor(public y: number) { } // error
                            ~
-!!! Duplicate identifier 'y'.
+!!! error TS2300: Duplicate identifier 'y'.
     }
     
     var d: D;
@@ -19,10 +29,25 @@
     
     class E {
         y: number;
+        ~
+!!! error TS2300: Duplicate identifier 'y'.
         constructor(private y: number) { } // error
                             ~
-!!! Duplicate identifier 'y'.
+!!! error TS2300: Duplicate identifier 'y'.
     }
     
     var e: E;
     var r3 = e.y; // error
+    
+    class F {
+        y: number;
+        ~
+!!! error TS2300: Duplicate identifier 'y'.
+        constructor(protected y: number) { } // error
+                              ~
+!!! error TS2300: Duplicate identifier 'y'.
+    }
+    
+    var f: F;
+    var r4 = f.y; // error
+    

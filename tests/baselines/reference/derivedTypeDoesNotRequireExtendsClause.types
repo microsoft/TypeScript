@@ -49,7 +49,7 @@ b = d2;
 var r: Base[] = [d1, d2];
 >r : Base[]
 >Base : Base
->[d1, d2] : Base[]
+>[d1, d2] : Array<Derived | Derived2>
 >d1 : Derived
 >d2 : Derived2
 

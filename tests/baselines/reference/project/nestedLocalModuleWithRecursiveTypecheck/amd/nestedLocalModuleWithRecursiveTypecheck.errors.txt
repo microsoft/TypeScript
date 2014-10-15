@@ -6,7 +6,7 @@ test1.ts(3,2): error TS1147: Import declarations in an internal module cannot re
      
      import foo = require("test2");
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declarations in an internal module cannot reference an external module.
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
     
      //console.log(foo.$);
     

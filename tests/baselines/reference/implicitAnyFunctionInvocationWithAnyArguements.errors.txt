@@ -1,28 +1,37 @@
+tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(2,5): error TS7005: Variable 'arg0' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(3,5): error TS7005: Variable 'anyArray' implicitly has an 'any[]' type.
+tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(4,13): error TS7008: Member 'v' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(4,16): error TS7008: Member 'w' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(5,13): error TS7006: Parameter 'y2' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(6,16): error TS7006: Parameter 'arg1' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(10,36): error TS7006: Parameter 'y2' implicitly has an 'any' type.
+
+
 ==== tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts (7 errors) ====
     // this should be errors
     var arg0 = null;  // error at "arg0"
         ~~~~
-!!! Variable 'arg0' implicitly has an 'any' type.
+!!! error TS7005: Variable 'arg0' implicitly has an 'any' type.
     var anyArray = [null, undefined];  // error at array literal
         ~~~~~~~~
-!!! Variable 'anyArray' implicitly has an 'any[]' type.
+!!! error TS7005: Variable 'anyArray' implicitly has an 'any[]' type.
     var objL: { v; w; }             // error at "y,z"
                 ~~
-!!! Member 'v' implicitly has an 'any' type.
+!!! error TS7008: Member 'v' implicitly has an 'any' type.
                    ~~
-!!! Member 'w' implicitly has an 'any' type.
+!!! error TS7008: Member 'w' implicitly has an 'any' type.
     var funcL: (y2) => number;
                 ~~
-!!! Parameter 'y2' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'y2' implicitly has an 'any' type.
     function temp1(arg1) { }  // error at "temp1"
                    ~~~~
-!!! Parameter 'arg1' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'arg1' implicitly has an 'any' type.
     function testFunctionExprC(subReplace: (s: string, ...arg: any[]) => string) { }
     function testFunctionExprC2(eq: (v1: any, v2: any) => number) { };
     function testObjLiteral(objLit: { v: any; w: any }) { }; 
     function testFuncLiteral(funcLit: (y2) => number) { };
                                        ~~
-!!! Parameter 'y2' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'y2' implicitly has an 'any' type.
     
     // this should not be an error
     testFunctionExprC2((v1, v2) => 1);

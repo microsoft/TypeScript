@@ -1,3 +1,9 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts(14,5): error TS2323: Type 'U' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts(15,5): error TS2323: Type 'T' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts(22,9): error TS2323: Type 'U' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts(23,9): error TS2323: Type 'T' is not assignable to type 'U'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts (4 errors) ====
     // type parameters are not assignable to one another unless directly or indirectly constrained to one another
     
@@ -14,10 +20,10 @@
     
         t = u; // error
         ~
-!!! Type 'U' is not assignable to type 'T'.
+!!! error TS2323: Type 'U' is not assignable to type 'T'.
         u = t; // error
         ~
-!!! Type 'T' is not assignable to type 'U'.
+!!! error TS2323: Type 'T' is not assignable to type 'U'.
     }
     
     class C<T extends Foo, U extends Foo> {
@@ -26,9 +32,9 @@
         r = () => {
             this.t = this.u; // error
             ~~~~~~
-!!! Type 'U' is not assignable to type 'T'.
+!!! error TS2323: Type 'U' is not assignable to type 'T'.
             this.u = this.t; // error
             ~~~~~~
-!!! Type 'T' is not assignable to type 'U'.
+!!! error TS2323: Type 'T' is not assignable to type 'U'.
         }
     }

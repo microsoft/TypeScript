@@ -1,38 +1,55 @@
+tests/cases/compiler/ambientWithStatements.ts(2,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(3,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(4,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(5,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(7,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(8,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(9,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(10,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(11,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(12,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(18,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(19,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(25,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(7,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+tests/cases/compiler/ambientWithStatements.ts(25,11): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+
+
 ==== tests/cases/compiler/ambientWithStatements.ts (15 errors) ====
     declare module M {
         break;
         ~~~~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
         continue;
         ~~~~~~~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
         debugger;
         ~~~~~~~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
         do { } while (true);
         ~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
         var x;
         for (x in null) { }
         ~~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
                   ~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
         if (true) { } else { }
         ~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
         1;
         ~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
         L: var y;
         ~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
         return;
         ~~~~~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
         switch (x) {
         ~~~~~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
             case 1:
                 break;
             default:
@@ -40,10 +57,10 @@
         }
         throw "nooo";
         ~~~~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
         try {
         ~~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
         }
         catch (e) {
         }
@@ -51,8 +68,8 @@
         }
         with (x) {
         ~~~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
               ~
-!!! All symbols within a 'with' block will be resolved to 'any'.
+!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
         }
     }

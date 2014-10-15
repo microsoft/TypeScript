@@ -1,0 +1,49 @@
+/// <reference path='fourslash.ts'/>
+
+////var a = {
+////    x(a: number) { }
+////};
+////
+////var b = {
+////    x: function (a: number) { }
+////};
+////
+////var c = {
+////    x: (a: number) => { }
+////};
+////a.x(/*signatureA*/1);
+////b.x(/*signatureB*/1);
+////c.x(/*signatureC*/1);
+////a./*completionA*/;
+////b./*completionB*/;
+////c./*completionC*/;
+////a./*quickInfoA*/x;
+////b./*quickInfoB*/x;
+////c./*quickInfoC*/x;
+
+goTo.marker('signatureA');
+verify.currentSignatureHelpIs('x(a: number): void');
+
+goTo.marker('signatureB');
+verify.currentSignatureHelpIs('x(a: number): void');
+
+goTo.marker('signatureC');
+verify.currentSignatureHelpIs('x(a: number): void');
+
+goTo.marker('completionA');
+verify.completionListContains("x", "(property) x: (a: number) => void");
+
+goTo.marker('completionB');
+verify.completionListContains("x", "(property) x: (a: number) => void");
+
+goTo.marker('completionC');
+verify.completionListContains("x", "(property) x: (a: number) => void");
+
+goTo.marker('quickInfoA');
+verify.quickInfoIs("(property) x: (a: number) => void", undefined);
+
+goTo.marker('quickInfoB');
+verify.quickInfoIs("(property) x: (a: number) => void", undefined);
+
+goTo.marker('quickInfoC');
+verify.quickInfoIs("(property) x: (a: number) => void", undefined);

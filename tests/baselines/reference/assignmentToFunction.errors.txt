@@ -1,8 +1,12 @@
+tests/cases/compiler/assignmentToFunction.ts(2,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/assignmentToFunction.ts(8,9): error TS2364: Invalid left-hand side of assignment expression.
+
+
 ==== tests/cases/compiler/assignmentToFunction.ts (2 errors) ====
     function fn() { }
     fn = () => 3;
     ~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     module foo {
         function xyz() {
@@ -10,6 +14,6 @@
             }
             bar = null;
             ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
         }
     }

@@ -12,6 +12,10 @@ module ts {
     export enum SyntaxKind {
         Unknown,
         EndOfFileToken,
+        SingleLineCommentTrivia,
+        MultiLineCommentTrivia,
+        NewLineTrivia,
+        WhitespaceTrivia,
         // Literals
         NumericLiteral,
         StringLiteral,
@@ -149,6 +153,8 @@ module ts {
         TypeQuery,
         TypeLiteral,
         ArrayType,
+        TupleType,
+        UnionType,
         // Expression
         ArrayLiteral,
         ObjectLiteral,
@@ -183,7 +189,7 @@ module ts {
         SwitchStatement,
         CaseClause,
         DefaultClause,
-        LabelledStatement,
+        LabeledStatement,
         ThrowStatement,
         TryStatement,
         TryBlock,
@@ -219,9 +225,13 @@ module ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
-        LastTypeNode = ArrayType,
+        LastTypeNode = UnionType,
         FirstPunctuation = OpenBraceToken,
-        LastPunctuation = CaretEqualsToken
+        LastPunctuation = CaretEqualsToken,
+        FirstToken = EndOfFileToken,
+        LastToken = StringKeyword,
+        FirstTriviaToken = SingleLineCommentTrivia,
+        LastTriviaToken = WhitespaceTrivia
     }
 
     export enum NodeFlags {
@@ -231,12 +241,14 @@ module ts {
         Rest             = 0x00000008,  // Parameter
         Public           = 0x00000010,  // Property/Method
         Private          = 0x00000020,  // Property/Method
-        Static           = 0x00000040,  // Property/Method
-        MultiLine        = 0x00000080,  // Multi-line array or object literal
-        Synthetic        = 0x00000100,  // Synthetic node (for full fidelity)
-        DeclarationFile  = 0x00000200,  // Node is a .d.ts file
+        Protected        = 0x00000040,  // Property/Method
+        Static           = 0x00000080,  // Property/Method
+        MultiLine        = 0x00000100,  // Multi-line array or object literal
+        Synthetic        = 0x00000200,  // Synthetic node (for full fidelity)
+        DeclarationFile  = 0x00000400,  // Node is a .d.ts file
 
-        Modifier = Export | Ambient | Public | Private | Static
+        Modifier = Export | Ambient | Public | Private | Protected | Static,
+        AccessibilityModifier = Public | Private | Protected
     }
 
     export interface Node extends TextRange {
@@ -250,7 +262,9 @@ module ts {
         localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
-    export interface NodeArray<T> extends Array<T>, TextRange { }
+    export interface NodeArray<T> extends Array<T>, TextRange {
+        hasTrailingComma?: boolean;
+    }
 
     export interface Identifier extends Node {
         text: string;                 // Text of identifier (with escapes converted to characters)
@@ -318,6 +332,14 @@ module ts {
 
     export interface ArrayTypeNode extends TypeNode {
         elementType: TypeNode;
+    }
+
+    export interface TupleTypeNode extends TypeNode {
+        elementTypes: NodeArray<TypeNode>;
+    }
+
+    export interface UnionTypeNode extends TypeNode {
+        types: NodeArray<TypeNode>;
     }
 
     export interface StringLiteralTypeNode extends TypeNode {
@@ -459,7 +481,7 @@ module ts {
         statements: NodeArray<Statement>;
     }
 
-    export interface LabelledStatement extends Statement {
+    export interface LabeledStatement extends Statement {
         label: Identifier;
         statement: Statement;
     }
@@ -516,7 +538,7 @@ module ts {
         filename: string;
     }
 
-    export interface Comment extends TextRange {
+    export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
     }
 
@@ -569,7 +591,7 @@ module ts {
     export interface SourceMapData {
         /** Where the sourcemap file is written */
         sourceMapFilePath: string;
-        /** source map url written in the js file */
+        /** source map URL written in the js file */
         jsSourceMappingURL: string;
         /** Source map's file field - js file name*/
         sourceMapFile: string;
@@ -588,7 +610,18 @@ module ts {
         sourceMapDecodedMappings: SourceMapSpan[];
     }
 
+    // Return code used by getEmitOutput function to indicate status of the function
+    export enum EmitReturnStatus {
+        Succeeded = 0,                      // All outputs generated as requested (.js, .map, .d.ts), no errors reported
+        AllOutputGenerationSkipped = 1,     // No .js generated because of syntax errors, nothing generated
+        JSGeneratedWithSemanticErrors = 2,  // .js and .map generated with semantic errors
+        DeclarationGenerationSkipped = 3,   // .d.ts generation skipped because of semantic errors or declaration emitter specific errors; Output .js with semantic errors
+        EmitErrorsEncountered = 4,          // Emitter errors occurred during emitting process
+        CompilerOptionsErrors = 5,          // Errors occurred in parsing compiler options, nothing generated
+    }
+
     export interface EmitResult {
+        emitResultStatus: EmitReturnStatus;
         errors: Diagnostic[];
         sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
@@ -602,7 +635,7 @@ module ts {
         getSymbolCount(): number;
         getTypeCount(): number;
         checkProgram(): void;
-        emitFiles(): EmitResult;
+        emitFiles(targetSourceFile?: SourceFile): EmitResult;
         getParentOfSymbol(symbol: Symbol): Symbol;
         getTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
@@ -615,26 +648,63 @@ module ts {
         getTypeOfNode(node: Node): Type;
         getApparentType(type: Type): ApparentType;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        writeType(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
+        writeSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
+        getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
-        getRootSymbol(symbol: Symbol): Symbol;
+        getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Node): Type;
+        getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature;
+        getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
+        writeSignature(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        writeTypeParameter(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        writeTypeParametersOfSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
+        isImplementationOfOverload(node: FunctionDeclaration): boolean;
+        isUndefinedSymbol(symbol: Symbol): boolean;
+        isArgumentsSymbol(symbol: Symbol): boolean;
+
+        // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
+        // computed value.
+        getEnumMemberValue(node: EnumMember): number;
+
+        isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean;
+        getAliasedSymbol(symbol: Symbol): Symbol;
     }
 
-    export interface TextWriter {
-        write(s: string): void;
-        writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+    export interface SymbolWriter {
+        writeKind(text: string, kind: SymbolDisplayPartKind): void;
+        writeSymbol(text: string, symbol: Symbol): void;
         writeLine(): void;
         increaseIndent(): void;
         decreaseIndent(): void;
-        getText(): string;
+        clear(): void;
+
+        // Called when the symbol writer encounters a symbol to write.  Currently only used by the
+        // declaration emitter to help determine if it should patch up the final declaration file
+        // with import statements it previously saw (but chose not to emit).
+        trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
     }
 
     export enum TypeFormatFlags {
-        None                    = 0x00000000, 
-        WriteArrayAsGenericType = 0x00000001,  // Write Array<T> instead T[]
-        UseTypeOfFunction       = 0x00000002,  // Write typeof instead of function type literal
-        NoTruncation            = 0x00000004,  // Don't truncate typeToString result
+        None                            = 0x00000000, 
+        WriteArrayAsGenericType         = 0x00000001,  // Write Array<T> instead T[]
+        UseTypeOfFunction               = 0x00000002,  // Write typeof instead of function type literal
+        NoTruncation                    = 0x00000004,  // Don't truncate typeToString result
+        WriteArrowStyleSignature        = 0x00000008,  // Write arrow style signature
+        WriteOwnNameForAnyLike          = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
+        WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
+    }
+
+    export enum SymbolFormatFlags {
+        None                            = 0x00000000,
+        WriteTypeParametersOrArguments  = 0x00000001,  // Write symbols's type argument if it is instantiated symbol
+                                                       // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
+                                                       //     var a: C<number>; 
+                                                       //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
+        UseOnlyExternalAliasing         = 0x00000002,  // Use only external alias information to get the symbol name in the given context
+                                                       // eg.  module m { export class c { } } import x = m.c; 
+                                                       // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
     }
 
     export enum SymbolAccessibility {
@@ -654,20 +724,22 @@ module ts {
         getProgram(): Program;
         getLocalNameOfContainer(container: Declaration): string;
         getExpressionNamePrefix(node: Identifier): string;
-        getPropertyAccessSubstitution(node: PropertyAccess): string;
         getExportAssignmentName(node: SourceFile): string;
         isReferencedImportDeclaration(node: ImportDeclaration): boolean;
         isTopLevelValueImportedViaEntityName(node: ImportDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
-        shouldEmitDeclarations(): boolean;
+        hasSemanticErrors(): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
-        writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
-        writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
-        writeSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, writer: TextWriter): void;
+        writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+        writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult;
+
+        // Returns the constant value this property access resolves to, or 'undefined' if it does 
+        // resolve to a constant.
+        getConstantValue(node: PropertyAccess): number;
     }
 
     export enum SymbolFlags {
@@ -690,19 +762,22 @@ module ts {
         ConstructSignature = 0x00010000,  // Construct signature
         IndexSignature     = 0x00020000,  // Index signature
         TypeParameter      = 0x00040000,  // Type parameter
+        UnionProperty      = 0x00080000,  // Property in union type
 
         // Export markers (see comment in declareModuleMember in binder)
-        ExportValue        = 0x00080000,  // Exported value marker
-        ExportType         = 0x00100000,  // Exported type marker
-        ExportNamespace    = 0x00200000,  // Exported namespace marker
+        ExportValue        = 0x00100000,  // Exported value marker
+        ExportType         = 0x00200000,  // Exported type marker
+        ExportNamespace    = 0x00400000,  // Exported namespace marker
 
-        Import             = 0x00400000,  // Import
-        Instantiated       = 0x00800000,  // Instantiated symbol
-        Merged             = 0x01000000,  // Merged symbol (created during program binding)
-        Transient          = 0x02000000,  // Transient symbol (created during type check)
-        Prototype          = 0x04000000,  // Symbol for the prototype property (without source code representation)
+        Import             = 0x00800000,  // Import
+        Instantiated       = 0x01000000,  // Instantiated symbol
+        Merged             = 0x02000000,  // Merged symbol (created during program binding)
+        Transient          = 0x04000000,  // Transient symbol (created during type check)
+        Prototype          = 0x08000000,  // Prototype property (no source representation)
+        Undefined          = 0x10000000,  // Symbol for the undefined
 
-        Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
+        Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | UnionProperty,
+
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,
         Namespace = ValueModule | NamespaceModule,
         Module    = ValueModule | NamespaceModule,
@@ -760,6 +835,7 @@ module ts {
         mapper?: TypeMapper;           // Type mapper for instantiation alias
         referenced?: boolean;          // True if alias symbol has been referenced as a value
         exportAssignSymbol?: Symbol;   // Symbol exported from external module
+        unionType?: UnionType;         // Containing union type for union property
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
@@ -769,24 +845,28 @@ module ts {
     }
 
     export enum NodeCheckFlags {
-        TypeChecked    = 0x00000001,  // Node has been type checked
-        LexicalThis    = 0x00000002,  // Lexical 'this' reference
-        CaptureThis    = 0x00000004,  // Lexical 'this' used in body
-        EmitExtends    = 0x00000008,  // Emit __extends
-        SuperInstance  = 0x00000010,  // Instance 'super' reference
-        SuperStatic    = 0x00000020,  // Static 'super' reference
-        ContextChecked = 0x00000040,  // Contextual types have been assigned
+        TypeChecked        = 0x00000001,  // Node has been type checked
+        LexicalThis        = 0x00000002,  // Lexical 'this' reference
+        CaptureThis        = 0x00000004,  // Lexical 'this' used in body
+        EmitExtends        = 0x00000008,  // Emit __extends
+        SuperInstance      = 0x00000010,  // Instance 'super' reference
+        SuperStatic        = 0x00000020,  // Static 'super' reference
+        ContextChecked     = 0x00000040,  // Contextual types have been assigned
+
+        // Values for enum members have been computed, and any errors have been reported for them.
+        EnumValuesComputed = 0x00000080,
     }
 
     export interface NodeLinks {
-        resolvedType?: Type;            // Cached type of type node
-        resolvedSignature?: Signature;  // Cached signature of signature node or call expression
-        resolvedSymbol?: Symbol;        // Cached name resolution result
-        flags?: NodeCheckFlags;         // Set of flags specific to Node
-        enumMemberValue?: number;       // Constant value of enum member
+        resolvedType?: Type;              // Cached type of type node
+        resolvedSignature?: Signature;    // Cached signature of signature node or call expression
+        resolvedSymbol?: Symbol;          // Cached name resolution result
+        flags?: NodeCheckFlags;           // Set of flags specific to Node
+        enumMemberValue?: number;         // Constant value of enum member
         isIllegalTypeReferenceInConstraint?: boolean; // Is type reference in constraint refers to the type parameter from the same list
-        isVisible?: boolean;            // Is this node visible
-        localModuleName?: string;       // Local name for module instance
+        isVisible?: boolean;              // Is this node visible
+        localModuleName?: string;         // Local name for module instance
+        assignmentChecks?: Map<boolean>;  // Cache of assignment checks
     }
 
     export enum TypeFlags {
@@ -803,13 +883,15 @@ module ts {
         Class              = 0x00000400,  // Class
         Interface          = 0x00000800,  // Interface
         Reference          = 0x00001000,  // Generic type reference
-        Anonymous          = 0x00002000,  // Anonymous
-        FromSignature      = 0x00004000,  // Created for signature assignment check
+        Tuple              = 0x00002000,  // Tuple
+        Union              = 0x00004000,  // Union
+        Anonymous          = 0x00008000,  // Anonymous
+        FromSignature      = 0x00010000,  // Created for signature assignment check
 
-        Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
+        Intrinsic  = Any | String | Number | Boolean | Void | Undefined | Null,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
-        ObjectType = Class | Interface | Reference | Anonymous
+        ObjectType = Class | Interface | Reference | Tuple | Union | Anonymous,
     }
 
     // Properties common to all types
@@ -862,6 +944,15 @@ module ts {
         openReferenceChecks: Map<boolean>;    // Open type reference check cache
     }
 
+    export interface TupleType extends ObjectType {
+        elementTypes: Type[];          // Element types
+        baseArrayType: TypeReference;  // Array<T> where T is best common type of element types
+    }
+
+    export interface UnionType extends ObjectType {
+        types: Type[];  // Constituent types
+    }
+
     // Resolved object type
     export interface ResolvedObjectType extends ObjectType {
         members: SymbolTable;              // Properties by name
@@ -891,9 +982,10 @@ module ts {
         resolvedReturnType: Type;           // Resolved return type
         minArgumentCount: number;           // Number of non-optional parameters
         hasRestParameter: boolean;          // True if last parameter is rest parameter
-        hasStringLiterals: boolean;         // True if instantiated
+        hasStringLiterals: boolean;         // True if specialized
         target?: Signature;                 // Instantiation target
         mapper?: TypeMapper;                // Instantiation mapper
+        unionSignatures?: Signature[];      // Underlying signatures of a union signature
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
     }
@@ -908,9 +1000,10 @@ module ts {
     }
 
     export interface InferenceContext {
-        typeParameters: TypeParameter[];
-        inferences: Type[][];
-        inferredTypes: Type[];
+        typeParameters: TypeParameter[];  // Type parameters for which inferences are made
+        inferenceCount: number;           // Incremented for every inference made (whether new or not)
+        inferences: Type[][];             // Inferences made for each type parameter
+        inferredTypes: Type[];            // Inferred type for each type parameter
     }
 
     export interface DiagnosticMessage {
@@ -976,6 +1069,15 @@ module ts {
         CommonJS,
         AMD,
     }
+
+    export interface LineAndCharacter {
+        line: number;
+        /*
+         * This value denotes the character position in line and is different from the 'column' because of tab characters.
+         */
+        character: number;
+    }
+
 
     export enum ScriptTarget {
         ES3,
@@ -1129,6 +1231,31 @@ module ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
+    }
+
+    export enum SymbolDisplayPartKind {
+        aliasName,
+        className,
+        enumName,
+        fieldName,
+        interfaceName,
+        keyword,
+        lineBreak,
+        numericLiteral,
+        stringLiteral,
+        localName,
+        methodName,
+        moduleName,
+        operator,
+        parameterName,
+        propertyName,
+        punctuation,
+        space,
+        text,
+        typeParameterName,
+        enumMemberName,
+        functionName,
+        regularExpressionLiteral,
     }
 
     export interface CancellationToken {

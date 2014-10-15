@@ -1,4 +1,10 @@
-==== tests/cases/compiler/contextualTyping.ts (3 errors) ====
+tests/cases/compiler/contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+tests/cases/compiler/contextualTyping.ts(197,15): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/contextualTyping.ts(207,10): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not assignable to type 'B':\n  Property 'x' is missing in type '{}'.
+
+
+==== tests/cases/compiler/contextualTyping.ts (4 errors) ====
     // DEFAULT INTERFACES
     interface IFoo {
         n: number;
@@ -189,7 +195,7 @@
     // contextually typing function declarations
     declare function EF1(a:number, b:number):number;
                      ~~~
-!!! Overload signatures must all be ambient or non-ambient.
+!!! error TS2384: Overload signatures must all be ambient or non-ambient.
     
     function EF1(a,b) { return a+b; }
     
@@ -198,6 +204,8 @@
     
     // contextually typing from ambient class declarations
     declare class Point
+                  ~~~~~
+!!! error TS2300: Duplicate identifier 'Point'.
     {
           constructor(x: number, y: number);
           x: number;
@@ -209,7 +217,7 @@
     
     function Point(x, y) {
              ~~~~~
-!!! Duplicate identifier 'Point'.
+!!! error TS2300: Duplicate identifier 'Point'.
         this.x = x;
         this.y = y;
     
@@ -234,5 +242,5 @@
     interface B extends A { }
     var x: B = { };
         ~
-!!! Type '{}' is not assignable to type 'B':\n  Property 'x' is missing in type '{}'.
+!!! error TS2322: Type '{}' is not assignable to type 'B':\n  Property 'x' is missing in type '{}'.
     

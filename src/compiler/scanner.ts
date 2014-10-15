@@ -371,8 +371,8 @@ module ts {
     // between the given position and the next line break are returned. The return value is an array containing a TextRange for each
     // comment. Single-line comment ranges include the beginning '//' characters but not the ending line break. Multi-line comment
     // ranges include the beginning '/* and ending '*/' characters. The return value is undefined if no comments were found.
-    function getCommentRanges(text: string, pos: number, trailing: boolean): Comment[] {
-        var result: Comment[];
+    function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
+        var result: CommentRange[];
         var collecting = trailing || pos === 0;
         while (true) {
             var ch = text.charCodeAt(pos);
@@ -440,11 +440,11 @@ module ts {
         }
     }
 
-    export function getLeadingComments(text: string, pos: number): Comment[] {
+    export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] {
         return getCommentRanges(text, pos, /*trailing*/ false);
     }
 
-    export function getTrailingComments(text: string, pos: number): Comment[] {
+    export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
         return getCommentRanges(text, pos, /*trailing*/ true);
     }
 
@@ -460,7 +460,7 @@ module ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
-    export function createScanner(languageVersion: ScriptTarget, text?: string, onError?: ErrorCallback, onComment?: CommentCallback): Scanner {
+    export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback, onComment?: CommentCallback): Scanner {
         var pos: number;       // Current position (end position of text of current token)
         var len: number;       // Length of text
         var startPos: number;  // Start position of whitespace before current token
@@ -694,12 +694,34 @@ module ts {
                     case CharacterCodes.lineFeed:
                     case CharacterCodes.carriageReturn:
                         precedingLineBreak = true;
+                        if (skipTrivia) {
+                            pos++;
+                            continue;
+                        }
+                        else {
+                            if (ch === CharacterCodes.carriageReturn && pos + 1 < len && text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
+                                // consume both CR and LF
+                                pos += 2;
+                            }
+                            else {
+                                pos++;
+                            }
+                            return token = SyntaxKind.NewLineTrivia;
+                        }
                     case CharacterCodes.tab:
                     case CharacterCodes.verticalTab:
                     case CharacterCodes.formFeed:
                     case CharacterCodes.space:
-                        pos++;
-                        continue;
+                        if (skipTrivia) {
+                            pos++;
+                            continue;
+                        }
+                        else {
+                            while (pos < len && isWhiteSpace(text.charCodeAt(pos))) {
+                                pos++;
+                            }
+                            return token = SyntaxKind.WhitespaceTrivia;
+                        }
                     case CharacterCodes.exclamation:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
@@ -776,7 +798,13 @@ module ts {
                             if (onComment) {
                                 onComment(tokenPos, pos);
                             }
-                            continue;
+
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.SingleLineCommentTrivia;
+                            }
                         }
                         // Multi-line comment
                         if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
@@ -806,7 +834,12 @@ module ts {
                                 onComment(tokenPos, pos);
                             }
 
-                            continue;
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.MultiLineCommentTrivia;
+                            }
                         }
 
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {

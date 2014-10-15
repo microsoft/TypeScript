@@ -1,7 +1,10 @@
+tests/cases/compiler/commentOnImportStatement3.ts(4,22): error TS2307: Cannot find external module './foo'.
+
+
 ==== tests/cases/compiler/commentOnImportStatement3.ts (1 errors) ====
     /* copyright */
     
     /* not copyright */
     import foo = require('./foo');
                          ~~~~~~~
-!!! Cannot find external module './foo'.
+!!! error TS2307: Cannot find external module './foo'.

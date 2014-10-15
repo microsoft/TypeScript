@@ -1,3 +1,10 @@
+tests/cases/compiler/noImplicitAnyForIn.ts(8,18): error TS7017: Index signature of object type implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyForIn.ts(15,18): error TS7017: Index signature of object type implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyForIn.ts(21,9): error TS7005: Variable 'b' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyForIn.ts(29,5): error TS7005: Variable 'n' implicitly has an 'any[][]' type.
+tests/cases/compiler/noImplicitAnyForIn.ts(31,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+
+
 ==== tests/cases/compiler/noImplicitAnyForIn.ts (5 errors) ====
     
     var x: {}[] = [[1, 2, 3], ["hello"]];
@@ -8,7 +15,7 @@
             //Should yield an implicit 'any' error
             var _j = x[i][j];
                      ~~~~~~~
-!!! Index signature of object type implicitly has an 'any' type.
+!!! error TS7017: Index signature of object type implicitly has an 'any' type.
         }
     
         for (var k in x[0]) {
@@ -17,7 +24,7 @@
             //Should yield an implicit 'any' error
             var k2 = k1[k];
                      ~~~~~
-!!! Index signature of object type implicitly has an 'any' type.
+!!! error TS7017: Index signature of object type implicitly has an 'any' type.
         }
     }
     
@@ -25,7 +32,7 @@
         // Should yield an implicit 'any' error.
         var b;
             ~
-!!! Variable 'b' implicitly has an 'any' type.
+!!! error TS7005: Variable 'b' implicitly has an 'any' type.
     
         var c = a || b;
     }
@@ -35,8 +42,8 @@
     // Should yield an implicit 'any' error.
     var n = [[]] || [];
         ~
-!!! Variable 'n' implicitly has an 'any[][]' type.
+!!! error TS7005: Variable 'n' implicitly has an 'any[][]' type.
     
     for (n[idx++] in m);
          ~~~~~~~~
-!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+!!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.

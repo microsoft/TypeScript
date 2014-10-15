@@ -1,3 +1,7 @@
+tests/cases/conformance/types/members/objectTypeWithConstructSignatureAppearsToBeFunctionType.ts(8,18): error TS2348: Value of type 'I' is not callable. Did you mean to include 'new'?
+tests/cases/conformance/types/members/objectTypeWithConstructSignatureAppearsToBeFunctionType.ts(16,18): error TS2348: Value of type 'new () => number' is not callable. Did you mean to include 'new'?
+
+
 ==== tests/cases/conformance/types/members/objectTypeWithConstructSignatureAppearsToBeFunctionType.ts (2 errors) ====
     // no errors expected below 
     
@@ -8,7 +12,7 @@
     var i: I;
     var r2: number = i();
                      ~~~
-!!! Value of type 'I' is not callable. Did you mean to include 'new'?
+!!! error TS2348: Value of type 'I' is not callable. Did you mean to include 'new'?
     var r2b: number = new i();
     var r2c: (x: any, y?: any) => any = i.apply;
     
@@ -18,6 +22,6 @@
     
     var r4: number = b();
                      ~~~
-!!! Value of type 'new () => number' is not callable. Did you mean to include 'new'?
+!!! error TS2348: Value of type 'new () => number' is not callable. Did you mean to include 'new'?
     var r4b: number = new b();
     var r4c: (x: any, y?: any) => any = b.apply;

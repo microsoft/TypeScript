@@ -1,17 +1,28 @@
+tests/cases/compiler/propertyWrappedInTry.ts(3,5): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/compiler/propertyWrappedInTry.ts(5,9): error TS1129: Statement expected.
+tests/cases/compiler/propertyWrappedInTry.ts(11,5): error TS1128: Declaration or statement expected.
+tests/cases/compiler/propertyWrappedInTry.ts(11,18): error TS1005: ';' expected.
+tests/cases/compiler/propertyWrappedInTry.ts(13,9): error TS1108: A 'return' statement can only be used within a function body.
+tests/cases/compiler/propertyWrappedInTry.ts(17,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/propertyWrappedInTry.ts(5,16): error TS2304: Cannot find name 'bar'.
+tests/cases/compiler/propertyWrappedInTry.ts(5,22): error TS2304: Cannot find name 'someInitThatMightFail'.
+tests/cases/compiler/propertyWrappedInTry.ts(11,12): error TS2304: Cannot find name 'baz'.
+
+
 ==== tests/cases/compiler/propertyWrappedInTry.ts (9 errors) ====
     class Foo {
     
         try {
         ~~~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
     
             public bar = someInitThatMightFail();
             ~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
                    ~~~
-!!! Cannot find name 'bar'.
+!!! error TS2304: Cannot find name 'bar'.
                          ~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'someInitThatMightFail'.
+!!! error TS2304: Cannot find name 'someInitThatMightFail'.
     
         } catch(e) {}
     
@@ -19,20 +30,20 @@
     
         public baz() {
         ~~~~~~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
                      ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                ~~~
-!!! Cannot find name 'baz'.
+!!! error TS2304: Cannot find name 'baz'.
     
             return this.bar; // doesn't get rewritten to Foo.bar.
             ~~~~~~
-!!! A 'return' statement can only be used within a function body.
+!!! error TS1108: A 'return' statement can only be used within a function body.
     
         }
     
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     

@@ -1,3 +1,6 @@
+tests/cases/compiler/overloadsInDifferentContainersDisagreeOnAmbient.ts(7,21): error TS2384: Overload signatures must all be ambient or non-ambient.
+
+
 ==== tests/cases/compiler/overloadsInDifferentContainersDisagreeOnAmbient.ts (1 errors) ====
     declare module M {
         // Error because body is not ambient and this overload is
@@ -7,5 +10,5 @@
     module M {
         export function f() { }
                         ~
-!!! Overload signatures must all be ambient or non-ambient.
+!!! error TS2384: Overload signatures must all be ambient or non-ambient.
     }

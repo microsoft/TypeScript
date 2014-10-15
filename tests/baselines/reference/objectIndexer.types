@@ -23,11 +23,11 @@ class Emitter {
 
     constructor () {
         this.listeners = {};
->this.listeners = {} : { [x: string]: Callback; }
+>this.listeners = {} : { [x: string]: undefined; }
 >this.listeners : IMap
 >this : Emitter
 >listeners : IMap
->{} : { [x: string]: Callback; }
+>{} : { [x: string]: undefined; }
     }
 }
 

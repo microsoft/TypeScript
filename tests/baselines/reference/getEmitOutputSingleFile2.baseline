@@ -1,0 +1,8 @@
+EmitOutputStatus : Succeeded
+Filename : tests/cases/fourslash/inputFile3.js
+exports.foo = 10;
+exports.bar = "hello world";
+Filename : tests/cases/fourslash/inputFile3.d.ts
+export declare var foo: number;
+export declare var bar: string;
+

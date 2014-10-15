@@ -1,65 +1,48 @@
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts (29 errors) ====
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts(3,13): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts(9,13): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts(9,26): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts(23,13): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts(143,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts (5 errors) ====
     // checking whether other types are subtypes of type parameters with constraints
     
     function f1<T extends U, U>(x: T, y: U) {
                 ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         var r = true ? x : y;
-                ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'U'.
         var r = true ? y : x;
-                ~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'T'.
     }
     
     // V > U > T
     function f2<T extends U, U extends V, V>(x: T, y: U, z: V) {
                 ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                              ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         var r = true ? x : y;
-                ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'U'.
         var r = true ? y : x;
-                ~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'T'.
     
         // ok
         var r2 = true ? z : y;
-                 ~~~~~~~~~~~~
-!!! No best common type exists between 'V' and 'U'.
         var r2 = true ? y : z;
-                 ~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'V'.
     
         // ok
-        var r2 = true ? z : x;
-                 ~~~~~~~~~~~~
-!!! No best common type exists between 'V' and 'T'.
-        var r2 = true ? x : z;
-                 ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'V'.
+        var r2a = true ? z : x;
+        var r2b = true ? x : z;
     }
     
     // Date > U > T
     function f3<T extends U, U extends Date>(x: T, y: U) {
                 ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         var r = true ? x : y;
-                ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'U'.
         var r = true ? y : x;
-                ~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'T'.
     
         // ok
         var r2 = true ? x : new Date(); 
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'Date'.
         var r2 = true ? new Date() : x;
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Date' and 'T'.
     
         // ok
         var r3 = true ? y : new Date(); 
@@ -90,30 +73,18 @@
     }
     
     function f5<T extends Number>(x: T) {
-        var r1 = true ? 1 : x; // error
-                 ~~~~~~~~~~~~
-!!! No best common type exists between 'number' and 'T'.
-        var r1 = true ? x : 1; // error
-                 ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'number'.
+        var r1 = true ? 1 : x; // ok
+        var r1 = true ? x : 1; // ok
     }
     
     function f6<T extends String>(x: T) {
-        var r2 = true ? '' : x; // error
-                 ~~~~~~~~~~~~~
-!!! No best common type exists between 'string' and 'T'.
-        var r2 = true ? x : ''; // error
-                 ~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'string'.
+        var r2 = true ? '' : x; // ok
+        var r2 = true ? x : ''; // ok
     }
     
     function f7<T extends Boolean>(x: T) {
-        var r3 = true ? true : x; // error
-                 ~~~~~~~~~~~~~~~
-!!! No best common type exists between 'boolean' and 'T'.
-        var r3 = true ? x : true; // error
-                 ~~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'boolean'.
+        var r3 = true ? true : x; // ok
+        var r3 = true ? x : true; // ok
     }
     
     function f8<T extends Date>(x: T) {
@@ -160,19 +131,11 @@
     }
     
     function f16<T extends E>(x: T) {
-        var r13 = true ? E : x; // BUG 831833
-                  ~~~~~~~~~~~~
-!!! No best common type exists between 'typeof E' and 'T'.
-        var r13 = true ? x : E; // BUG 831833
-                  ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'typeof E'.
+        var r13 = true ? E : x; // ok
+        var r13 = true ? x : E; // ok
     
-        var r14 = true ? E.A : x; // BUG 831833
-                  ~~~~~~~~~~~~~~
-!!! No best common type exists between 'E' and 'T'.
-        var r14 = true ? x : E.A; // BUG 831833
-                  ~~~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'E'.
+        var r14 = true ? E.A : x; // ok
+        var r14 = true ? x : E.A; // ok
     }
     
     function f17<T extends typeof f>(x: T) {
@@ -195,13 +158,9 @@
     
         function f18<V extends U, U extends T>(a: V) {
                      ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             var r18 = true ? x : a; // ok
-                      ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'V'.
             var r18 = true ? a : x; // ok
-                      ~~~~~~~~~~~~
-!!! No best common type exists between 'V' and 'T'.
         }
     }
     

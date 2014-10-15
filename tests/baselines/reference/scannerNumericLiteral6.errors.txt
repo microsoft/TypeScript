@@ -1,4 +1,7 @@
+tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral6.ts(1,4): error TS1124: Digit expected.
+
+
 ==== tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral6.ts (1 errors) ====
     1e+
        
-!!! Digit expected.
+!!! error TS1124: Digit expected.

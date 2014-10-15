@@ -18,6 +18,6 @@
 ////x./**/
 
 goTo.marker();
-verify.completionListContains('watch', '() => void');
-verify.completionListContains('moveUp', '() => void');
-verify.completionListContains('family', 'number');
+verify.completionListContains('watch', '(property) iBaseScope.watch: () => void');
+verify.completionListContains('moveUp', '(property) iMover.moveUp: () => void');
+verify.completionListContains('family', '(property) iScope<number>.family: number');

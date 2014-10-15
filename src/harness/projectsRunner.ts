@@ -4,7 +4,7 @@
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase {
     scenario: string;
-    projectRoot: string; // project where it lives - this also is the current dictory when compiling
+    projectRoot: string; // project where it lives - this also is the current directory when compiling
     inputFiles: string[]; // list of input files to be given to program
     out?: string; // --out
     outDir?: string; // --outDir
@@ -22,7 +22,7 @@ interface ProjectRunnerTestCase {
 interface ProjectRunnerTestCaseResolutionInfo extends ProjectRunnerTestCase {
     // Apart from actual test case the results of the resolution
     resolvedInputFiles: string[]; // List of files that were asked to read by compiler
-    emittedFiles: string[]; // List of files that wre emitted by the compiler
+    emittedFiles: string[]; // List of files that were emitted by the compiler
 }
 
 interface BatchCompileProjectTestCaseEmittedFile extends Harness.Compiler.GeneratedFile {
@@ -69,7 +69,7 @@ class ProjectRunner extends RunnerBase {
             testCase = <ProjectRunnerTestCase>JSON.parse(testFileText);
         }
         catch (e) {
-            assert(false, "Testcase: " + testCaseFileName + " doesnt not contain valid json format: " + e.message);
+            assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
         }
         var testCaseJustName = testCaseFileName.replace(/^.*[\\\/]/, '').replace(/\.json/, "");
 
@@ -87,7 +87,7 @@ class ProjectRunner extends RunnerBase {
         }
 
         // When test case output goes to tests/baselines/local/projectOutput/testCaseName/moduleKind/
-        // We have these two separate locations because when compairing baselines the baseline verifier will delete the existing file 
+        // We have these two separate locations because when comparing baselines the baseline verifier will delete the existing file 
         // so even if it was created by compiler in that location, the file will be deleted by verified before we can read it
         // so lets keep these two locations separate
         function getProjectOutputFolder(filename: string, moduleKind: ts.ModuleKind) {
@@ -226,9 +226,10 @@ class ProjectRunner extends RunnerBase {
                     ? filename
                     : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(filename);
 
-                var diskRelativeName = ts.getRelativePathToDirectoryOrUrl(testCase.projectRoot, diskFileName, getCurrentDirectory(), false);
+                var diskRelativeName = ts.getRelativePathToDirectoryOrUrl(testCase.projectRoot, diskFileName,
+                    getCurrentDirectory(), Harness.Compiler.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
                 if (ts.isRootedDiskPath(diskRelativeName) || diskRelativeName.substr(0, 3) === "../") {
-                    // If the generated output file recides in the parent folder or is rooted path, 
+                    // If the generated output file resides in the parent folder or is rooted path, 
                     // we need to instead create files that can live in the project reference folder
                     // but make sure extension of these files matches with the filename the compiler asked to write
                     diskRelativeName = "diskFile" + nonSubfolderDiskFiles++ +
@@ -299,13 +300,11 @@ class ProjectRunner extends RunnerBase {
                     return { unitName: sourceFile.filename, content: sourceFile.text };
                 });
             var diagnostics = ts.map(compilerResult.errors, error => Harness.Compiler.getMinimalDiagnostic(error));
-            var errors = Harness.Compiler.minimalDiagnosticsToString(diagnostics);
-            errors += sys.newLine + sys.newLine + Harness.Compiler.getErrorBaseline(inputFiles, diagnostics);
 
-            return errors;
+            return Harness.Compiler.getErrorBaseline(inputFiles, diagnostics);
         }
 
-        describe('Compiling project for ' + testCase.scenario +': testcase ' + testCaseFileName, () => {
+        describe('Compiling project for ' + testCase.scenario + ': testcase ' + testCaseFileName, () => {
             function verifyCompilerResults(compilerResult: BatchCompileProjectTestCaseResult) {
                 function getCompilerResolutionInfo() {
                     var resolutionInfo: ProjectRunnerTestCaseResolutionInfo = {

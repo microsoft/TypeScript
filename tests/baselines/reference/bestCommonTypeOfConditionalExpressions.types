@@ -54,8 +54,8 @@ var r4 = true ? a : b; // typeof a
 >b : { x: number; z?: number; }
 
 var r5 = true ? b : a; // typeof b
->r5 : { x: number; z?: number; }
->true ? b : a : { x: number; z?: number; }
+>r5 : { x: number; y?: number; }
+>true ? b : a : { x: number; y?: number; }
 >b : { x: number; z?: number; }
 >a : { x: number; y?: number; }
 
@@ -72,7 +72,7 @@ var r7: (x: Object) => void = true ? (x: number) => { } : (x: Object) => { };
 >r7 : (x: Object) => void
 >x : Object
 >Object : Object
->true ? (x: number) => { } : (x: Object) => { } : (x: Object) => void
+>true ? (x: number) => { } : (x: Object) => { } : (x: number) => void
 >(x: number) => { } : (x: number) => void
 >x : number
 >(x: Object) => { } : (x: Object) => void
@@ -91,7 +91,7 @@ var r8 = true ? (x: Object) => { } : (x: number) => { }; // returns Object => vo
 var r10: Base = true ? derived : derived2; // no error since we use the contextual type in BCT
 >r10 : Base
 >Base : Base
->true ? derived : derived2 : Base
+>true ? derived : derived2 : Derived | Derived2
 >derived : Derived
 >derived2 : Derived2
 
@@ -112,7 +112,7 @@ function foo5<T, U>(t: T, u: U): Object {
 >Object : Object
 
     return true ? t : u; // BCT is Object
->true ? t : u : Object
+>true ? t : u : T | U
 >t : T
 >u : U
 }

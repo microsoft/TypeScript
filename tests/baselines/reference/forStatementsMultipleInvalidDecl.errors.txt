@@ -1,3 +1,17 @@
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(32,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(33,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(34,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'C'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(35,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'D<string>'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(36,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'typeof M'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(39,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(40,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C2'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(43,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'f' must be of type '(x: string) => number', but here has type '(x: number) => string'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(46,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'number[]'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(47,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'Array<C | D<string>>'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(50,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr2' must be of type 'D<string>[]', but here has type 'D<number>[]'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(53,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'm' must be of type 'typeof M', but here has type 'typeof A'.
+
+
 ==== tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts (12 errors) ====
     interface I {
         id: number;
@@ -32,47 +46,47 @@
     for( var a: any;;){}
     for( var a = 1;;){}
              ~
-!!! Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'number'.
     for( var a = 'a string';;){}
              ~
-!!! Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
     for( var a = new C();;){}
              ~
-!!! Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'C'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'C'.
     for( var a = new D<string>();;){}
              ~
-!!! Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'D<string>'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'D<string>'.
     for( var a = M;;){}
              ~
-!!! Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'typeof M'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'typeof M'.
     
     for( var b: I;;){}
     for( var b = new C();;){}
              ~
-!!! Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C'.
     for( var b = new C2();;){}
              ~
-!!! Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C2'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C2'.
     
     for(var f = F;;){}
     for( var f = (x: number) => '';;){}
              ~
-!!! Subsequent variable declarations must have the same type.  Variable 'f' must be of type '(x: string) => number', but here has type '(x: number) => string'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'f' must be of type '(x: string) => number', but here has type '(x: number) => string'.
     
     for(var arr: string[];;){}
     for( var arr = [1, 2, 3, 4];;){}
              ~~~
-!!! Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'number[]'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'number[]'.
     for( var arr = [new C(), new C2(), new D<string>()];;){}
              ~~~
-!!! Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type '{}[]'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'Array<C | D<string>>'.
     
     for(var arr2 = [new D<string>()];;){}
     for( var arr2 = new Array<D<number>>();;){}
              ~~~~
-!!! Subsequent variable declarations must have the same type.  Variable 'arr2' must be of type 'D<string>[]', but here has type 'D<number>[]'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr2' must be of type 'D<string>[]', but here has type 'D<number>[]'.
     
     for(var m: typeof M;;){}
     for( var m = M.A;;){}
              ~
-!!! Subsequent variable declarations must have the same type.  Variable 'm' must be of type 'typeof M', but here has type 'typeof A'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'm' must be of type 'typeof M', but here has type 'typeof A'.

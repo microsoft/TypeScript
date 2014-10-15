@@ -1,0 +1,114 @@
+tests/cases/compiler/tupleTypes.ts(1,9): error TS1122: A tuple type element list cannot be empty.
+tests/cases/compiler/tupleTypes.ts(14,1): error TS2322: Type 'undefined[]' is not assignable to type '[number, string]':
+  Property '0' is missing in type 'undefined[]'.
+tests/cases/compiler/tupleTypes.ts(15,1): error TS2322: Type '[number]' is not assignable to type '[number, string]':
+  Property '1' is missing in type '[number]'.
+tests/cases/compiler/tupleTypes.ts(17,1): error TS2322: Type '[string, number]' is not assignable to type '[number, string]':
+  Types of property '0' are incompatible:
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/tupleTypes.ts(41,1): error TS2323: Type 'undefined[]' is not assignable to type '[number, string]'.
+tests/cases/compiler/tupleTypes.ts(47,1): error TS2322: Type '[number, string]' is not assignable to type 'number[]':
+  Types of property 'pop' are incompatible:
+    Type '() => string | number' is not assignable to type '() => number':
+      Type 'string | number' is not assignable to type 'number':
+        Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/tupleTypes.ts(49,1): error TS2322: Type '[number, {}]' is not assignable to type 'number[]':
+  Types of property 'pop' are incompatible:
+    Type '() => {}' is not assignable to type '() => number':
+      Type '{}' is not assignable to type 'number'.
+tests/cases/compiler/tupleTypes.ts(50,1): error TS2322: Type '[number, number]' is not assignable to type '[number, string]':
+  Types of property '1' are incompatible:
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is not assignable to type '[number, string]':
+  Types of property '1' are incompatible:
+    Type '{}' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/tupleTypes.ts (9 errors) ====
+    var v1: [];  // Error
+            ~~
+!!! error TS1122: A tuple type element list cannot be empty.
+    var v2: [number];
+    var v3: [number, string];
+    var v4: [number, [string, string]];
+    
+    var t: [number, string];
+    var t0 = t[0];   // number
+    var t0: number;
+    var t1 = t[1];   // string
+    var t1: string;
+    var t2 = t[2];   // number|string
+    var t2: number|string;
+    
+    t = [];               // Error
+    ~
+!!! error TS2322: Type 'undefined[]' is not assignable to type '[number, string]':
+!!! error TS2322:   Property '0' is missing in type 'undefined[]'.
+    t = [1];              // Error
+    ~
+!!! error TS2322: Type '[number]' is not assignable to type '[number, string]':
+!!! error TS2322:   Property '1' is missing in type '[number]'.
+    t = [1, "hello"];     // Ok
+    t = ["hello", 1];     // Error
+    ~
+!!! error TS2322: Type '[string, number]' is not assignable to type '[number, string]':
+!!! error TS2322:   Types of property '0' are incompatible:
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+    t = [1, "hello", 2];  // Ok
+    
+    var tf: [string, (x: string) => number] = ["hello", x => x.length];
+    
+    declare function ff<T, U>(a: T, b: [T, (x: T) => U]): U;
+    var ff1 = ff("hello", ["foo", x => x.length]);
+    var ff1: number;
+    
+    function tuple2<T0, T1>(item0: T0, item1: T1): [T0, T1]{
+        return [item0, item1];
+    }
+    
+    var tt = tuple2(1, "string");
+    var tt0 = tt[0];
+    var tt0: number;
+    var tt1 = tt[1];
+    var tt1: string;
+    var tt2 = tt[2]; 
+    var tt2: number | string;
+    
+    tt = tuple2(1, undefined);
+    tt = [1, undefined];
+    tt = [undefined, undefined];
+    tt = [];  // Error
+    ~~
+!!! error TS2323: Type 'undefined[]' is not assignable to type '[number, string]'.
+    
+    var a: number[];
+    var a1: [number, string];
+    var a2: [number, number];
+    var a3: [number, {}];
+    a = a1;   // Error
+    ~
+!!! error TS2322: Type '[number, string]' is not assignable to type 'number[]':
+!!! error TS2322:   Types of property 'pop' are incompatible:
+!!! error TS2322:     Type '() => string | number' is not assignable to type '() => number':
+!!! error TS2322:       Type 'string | number' is not assignable to type 'number':
+!!! error TS2322:         Type 'string' is not assignable to type 'number'.
+    a = a2;
+    a = a3;   // Error
+    ~
+!!! error TS2322: Type '[number, {}]' is not assignable to type 'number[]':
+!!! error TS2322:   Types of property 'pop' are incompatible:
+!!! error TS2322:     Type '() => {}' is not assignable to type '() => number':
+!!! error TS2322:       Type '{}' is not assignable to type 'number'.
+    a1 = a2;  // Error
+    ~~
+!!! error TS2322: Type '[number, number]' is not assignable to type '[number, string]':
+!!! error TS2322:   Types of property '1' are incompatible:
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    a1 = a3;  // Error
+    ~~
+!!! error TS2322: Type '[number, {}]' is not assignable to type '[number, string]':
+!!! error TS2322:   Types of property '1' are incompatible:
+!!! error TS2322:     Type '{}' is not assignable to type 'string'.
+    a3 = a1;
+    a3 = a2;
+    

@@ -1,3 +1,7 @@
+tests/cases/compiler/lambdaArgCrash.ts(27,25): error TS2304: Cannot find name 'ItemSet'.
+tests/cases/compiler/lambdaArgCrash.ts(29,14): error TS2345: Argument of type '(items: any) => void' is not assignable to parameter of type '() => any'.
+
+
 ==== tests/cases/compiler/lambdaArgCrash.ts (2 errors) ====
     class Event {
     
@@ -27,11 +31,11 @@
     
     	 add(listener: (items: ItemSet) => void ) {
     	                       ~~~~~~~
-!!! Cannot find name 'ItemSet'.
+!!! error TS2304: Cannot find name 'ItemSet'.
     
     	 	super.add(listener);
     	 	          ~~~~~~~~
-!!! Argument of type '(items: unknown) => void' is not assignable to parameter of type '() => any'.
+!!! error TS2345: Argument of type '(items: any) => void' is not assignable to parameter of type '() => any'.
     
     	}
     

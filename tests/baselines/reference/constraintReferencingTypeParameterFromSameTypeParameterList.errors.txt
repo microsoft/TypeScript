@@ -1,3 +1,11 @@
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(5,15): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(8,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(10,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(13,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(21,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(21,28): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts (6 errors) ====
     // used to be valid, now an error to do this
     
@@ -5,21 +13,21 @@
     }
     function f<T, I extends IComparable<T>>() {
                   ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
     
     interface I1<T, U extends I1<T, any>> { // Error, any does not satisfy the constraint I1<T, any>
                     ~~~~~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
     interface I2<T, U extends T> {
                     ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
     
     interface I4<T, U extends () => T> {
                     ~~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
     
     // No error
@@ -29,9 +37,9 @@
     
     function foo<T, U extends <V extends T>(v: V) => void>() {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
     
     

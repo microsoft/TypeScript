@@ -22,7 +22,7 @@ goTo.marker("4");
 verify.currentLineContentIs("    c");
 goTo.marker("1");
 edit.insert("\r\n");
-verify.indentationIs(0);
+verify.indentationIs(4);
 goTo.marker("5");
 verify.currentLineContentIs("    //comment");
 goTo.marker("6");

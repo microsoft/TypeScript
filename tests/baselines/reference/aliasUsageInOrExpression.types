@@ -53,7 +53,7 @@ var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x
 >f : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
 >IHasVisualizationModel : IHasVisualizationModel
-><{ x: IHasVisualizationModel }>null ? { x: moduleA } : null : { x: IHasVisualizationModel; }
+><{ x: IHasVisualizationModel }>null ? { x: moduleA } : null : { x: typeof moduleA; }
 ><{ x: IHasVisualizationModel }>null : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
 >IHasVisualizationModel : IHasVisualizationModel

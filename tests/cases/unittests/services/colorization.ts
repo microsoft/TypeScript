@@ -36,7 +36,7 @@ describe('Colorization', function () {
         }
         var finalEndOfLineState = classResult[classResult.length - 1];
 
-        assert.equal(position, code.length, "Expected accumilative length of all entries to match the length of the source. expected: " + code.length + ", but got: " + position);
+        assert.equal(position, code.length, "Expected cumulative length of all entries to match the length of the source. expected: " + code.length + ", but got: " + position);
 
         return {
             tuples: tuples,
@@ -84,8 +84,8 @@ describe('Colorization', function () {
                 var actualEntry = getEntryAtPosistion(result, actualEntryPosition);
 
                 assert(actualEntry, "Could not find classification entry for '" + expectedEntry.value + "' at position: " + actualEntryPosition);
-                assert.equal(actualEntry.length, expectedEntry.value.length, "Classification class does not match expected.");
-                assert.equal(actualEntry.class, expectedEntry.class,  "Classification class does not match expected.");
+                assert.equal(actualEntry.class, expectedEntry.class, "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.class] + ", Actual: " + ts.TokenClass[actualEntry.class]);
+                assert.equal(actualEntry.length, expectedEntry.value.length, "Classification length does not match expected. Expected: " + ts.TokenClass[expectedEntry.value.length] + ", Actual: " + ts.TokenClass[actualEntry.length]);
             }
         }
     }
@@ -105,7 +105,7 @@ describe('Colorization', function () {
                 punctuation(";"));
         });
 
-        it("classifies correctelly a comment after a divide operator", function () {
+        it("correctly classifies a comment after a divide operator", function () {
             test("1 / 2 // comment",
                 ts.EndOfLineState.Start,
                 numberLiteral("1"),
@@ -115,7 +115,7 @@ describe('Colorization', function () {
                 comment("// comment"));
         });
 
-        it("classifies correctelly a literal after a divide operator", function () {
+        it("correctly classifies a literal after a divide operator", function () {
             test("1 / 2, 3 / 4",
                 ts.EndOfLineState.Start,
                 numberLiteral("1"),
@@ -127,51 +127,146 @@ describe('Colorization', function () {
                 operator(","));
         });
 
-        it("classifies correctelly an unterminated multi-line string", function () {
+        it("correctly classifies an unterminated multi-line string", function () {
             test("'line1\\",
                 ts.EndOfLineState.Start,
                 stringLiteral("'line1\\"),
                 finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
         });
 
-        it("classifies correctelly the second line of an unterminated multi-line string", function () {
+        it("correctly classifies the second line of an unterminated multi-line string", function () {
             test("\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\"),
                 finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
         });
 
-        it("classifies correctelly the last line of a multi-line string", function () {
+        it("correctly classifies the last line of a multi-line string", function () {
             test("'",
                 ts.EndOfLineState.InSingleQuoteStringLiteral,
                 stringLiteral("'"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
         });
 
-        it("classifies correctelly an unterminated multiline comment", function () {
+        it("correctly classifies an unterminated multiline comment", function () {
             test("/*",
                 ts.EndOfLineState.Start,
                 comment("/*"),
                 finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
-        it("classifies correctelly an unterminated multiline comment with trailing space", function () {
+        it("correctly classifies the termination of a multiline comment", function () {
+            test("   */     ",
+                ts.EndOfLineState.InMultiLineCommentTrivia,
+                comment("   */"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("correctly classifies the continuation of a multiline comment", function () {
+            test("LOREM IPSUM DOLOR   ",
+                ts.EndOfLineState.InMultiLineCommentTrivia,
+                comment("LOREM IPSUM DOLOR   "),
+                finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
+        });
+
+        it("correctly classifies an unterminated multiline comment on a line ending in '/*/'", function () {
+            test("   /*/",
+                ts.EndOfLineState.Start,
+                comment("/*/"),
+                finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
+        });
+
+        it("correctly classifies an unterminated multiline comment with trailing space", function () {
             test("/* ",
                 ts.EndOfLineState.Start,
                 comment("/* "),
                 finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
-        it("classifies correctelly a keyword after a dot", function () {
+        it("correctly classifies a keyword after a dot", function () {
             test("a.var",
                 ts.EndOfLineState.Start,
                 identifier("var"));
         });
 
-        it("classifies keyword after a dot on previous line", function () {
+        it("correctly classifies a string literal after a dot", function () {
+            test("a.\"var\"",
+                ts.EndOfLineState.Start,
+                stringLiteral("\"var\""));
+        });
+
+        it("correctly classifies a keyword after a dot separated by comment trivia", function () {
+            test("a./*hello world*/ var",
+                ts.EndOfLineState.Start,
+                identifier("a"),
+                punctuation("."),
+                comment("/*hello world*/"),
+                identifier("var"));
+        });
+
+        it("classifies a property access with whitespace around the dot", function () {
+            test("   x  .\tfoo ()",
+                ts.EndOfLineState.Start,
+                identifier("x"),
+                identifier("foo"));
+        });
+
+        it("classifies a keyword after a dot on previous line", function () {
             test("var",
-                ts.EndOfLineState.EndingWithDotToken,
+                ts.EndOfLineState.Start,
+                keyword("var"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("classifies multiple keywords properly", function () {
+            test("public static",
+                ts.EndOfLineState.Start,
+                keyword("public"),
+                keyword("static"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+
+            test("public var",
+                ts.EndOfLineState.Start,
+                keyword("public"),
                 identifier("var"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("classifies partially written generics correctly.", function () {
+            test("Foo<number",
+                ts.EndOfLineState.Start,
+                identifier("Foo"),
+                operator("<"),
+                identifier("number"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+
+            // Looks like a cast, should get classified as a keyword.
+            test("<number",
+                ts.EndOfLineState.Start,
+                operator("<"),
+                keyword("number"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+
+            // handle nesting properly.
+            test("Foo<Foo,Foo<number",
+                ts.EndOfLineState.Start,
+                identifier("Foo"),
+                operator("<"),
+                identifier("Foo"),
+                punctuation(","),
+                identifier("Foo"),
+                operator("<"),
+                identifier("number"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+
+            // no longer in something that looks generic.
+            test("Foo<Foo> number",
+                ts.EndOfLineState.Start,
+                identifier("Foo"),
+                operator("<"),
+                identifier("Foo"),
+                operator(">"
+                identifier("keyword"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
         });
     });

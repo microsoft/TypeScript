@@ -1,3 +1,6 @@
+tests/cases/compiler/importedModuleAddToGlobal.ts(15,23): error TS2304: Cannot find name 'b'.
+
+
 ==== tests/cases/compiler/importedModuleAddToGlobal.ts (1 errors) ====
     // Binding for an import statement in a typeref position is being added to the global scope
     // Shouldn't compile b.B is not defined in C
@@ -15,5 +18,5 @@
         import a = A;
         function hello(): b.B { return null; }
                           ~~~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
     }

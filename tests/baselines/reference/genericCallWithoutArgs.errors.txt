@@ -1,13 +1,19 @@
+tests/cases/compiler/genericCallWithoutArgs.ts(4,17): error TS1109: Expression expected.
+tests/cases/compiler/genericCallWithoutArgs.ts(4,18): error TS1003: Identifier expected.
+tests/cases/compiler/genericCallWithoutArgs.ts(4,3): error TS2304: Cannot find name 'number'.
+tests/cases/compiler/genericCallWithoutArgs.ts(4,10): error TS2304: Cannot find name 'string'.
+
+
 ==== tests/cases/compiler/genericCallWithoutArgs.ts (4 errors) ====
     function f<X, Y>(x: X, y: Y) {
     }
     
     f<number,string>.
                     ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
                      
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
       ~~~~~~
-!!! Cannot find name 'number'.
+!!! error TS2304: Cannot find name 'number'.
              ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.

@@ -164,9 +164,7 @@ module RWC {
                     return null;
                 }
 
-                return Harness.Compiler.minimalDiagnosticsToString(compilerResult.errors) +
-                    sys.newLine + sys.newLine +
-                    Harness.Compiler.getErrorBaseline(inputFiles.concat(otherFiles), compilerResult.errors);
+                return Harness.Compiler.getErrorBaseline(inputFiles.concat(otherFiles), compilerResult.errors);
             }, false, baselineOpts);
         });
 

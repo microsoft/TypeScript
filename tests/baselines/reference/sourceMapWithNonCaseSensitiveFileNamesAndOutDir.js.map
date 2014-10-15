@@ -1,0 +1,3 @@
+//// [app.js.map]
+{"version":3,"file":"app.js","sourceRoot":"","sources":["app.ts"],"names":["c","c.constructor"],"mappings":"AAEA,AAFA,gFAAgF;AAChF,0GAA0G;IACpG,CAAC;IAAPA,SAAMA,CAACA;IACPC,CAACA;IAADD,QAACA;AAADA,CAACA,AADD,IACC"}//// [app2.js.map]
+{"version":3,"file":"app2.js","sourceRoot":"","sources":["app2.ts"],"names":["d","d.constructor"],"mappings":"AAAA,IAAM,CAAC;IAAPA,SAAMA,CAACA;IACPC,CAACA;IAADD,QAACA;AAADA,CAACA,AADD,IACC"}

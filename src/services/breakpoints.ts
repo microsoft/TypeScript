@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 
-///<reference path='references.ts' />
-
 module TypeScript.Services.Breakpoints {
     function createBreakpointSpanInfo(parentElement: TypeScript.ISyntaxElement, ...childElements: TypeScript.ISyntaxElement[]): TextSpan {
         if (!parentElement) {
@@ -798,7 +796,6 @@ module TypeScript.Services.Breakpoints {
             var container = Syntax.containingNode(varDeclarationNode);
             var varDeclarationSyntax = <TypeScript.VariableDeclarationSyntax>varDeclarationNode;
             var varDeclarators = varDeclarationSyntax.variableDeclarators;
-            var varDeclaratorsCount = childCount(varDeclarators); // varDeclarators has to be non null because its checked in canHaveBreakpoint
 
             if (container && container.kind() == TypeScript.SyntaxKind.VariableStatement) {
                 return this.breakpointSpanOfVariableStatement(container);

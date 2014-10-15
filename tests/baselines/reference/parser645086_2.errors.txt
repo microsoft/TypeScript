@@ -1,8 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser645086_2.ts(1,14): error TS1005: ',' expected.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser645086_2.ts(1,15): error TS1134: Variable declaration expected.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser645086_2.ts(1,16): error TS1109: Expression expected.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser645086_2.ts (3 errors) ====
     var v = /[^]/]/
                  ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                   ~
-!!! Variable declaration expected.
+!!! error TS1134: Variable declaration expected.
                    
-!!! Expression expected.
+!!! error TS1109: Expression expected.

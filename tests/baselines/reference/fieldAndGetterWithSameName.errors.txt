@@ -1,9 +1,16 @@
-==== tests/cases/compiler/fieldAndGetterWithSameName.ts (2 errors) ====
+tests/cases/compiler/fieldAndGetterWithSameName.ts(3,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/fieldAndGetterWithSameName.ts(2,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/fieldAndGetterWithSameName.ts(3,7): error TS2300: Duplicate identifier 'x'.
+
+
+==== tests/cases/compiler/fieldAndGetterWithSameName.ts (3 errors) ====
     export class C {
         x: number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
       get x(): number { return 1; }
           ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
           ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }

@@ -1,8 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity4.ts(1,5): error TS1109: Expression expected.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity4.ts(1,1): error TS2304: Cannot find name 'foo'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity4.ts(1,6): error TS2304: Cannot find name 'notregexp'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity4.ts (3 errors) ====
     foo(/notregexp);
         ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     ~~~
-!!! Cannot find name 'foo'.
+!!! error TS2304: Cannot find name 'foo'.
          ~~~~~~~~~
-!!! Cannot find name 'notregexp'.
+!!! error TS2304: Cannot find name 'notregexp'.

@@ -1,3 +1,6 @@
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeInGenericConstraint.ts(5,11): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+
+
 ==== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeInGenericConstraint.ts (1 errors) ====
     class G<T> {
         x: G<G<T>>; // infinitely expanding type reference
@@ -5,7 +8,7 @@
     
     class Foo<T extends G<T>> { // error, constraint referencing itself
               ~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         bar: T;
     }
     

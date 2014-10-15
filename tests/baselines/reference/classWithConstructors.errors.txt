@@ -1,3 +1,11 @@
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(6,13): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(15,14): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(21,13): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(31,13): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(40,14): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(46,13): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts (6 errors) ====
     module NonGeneric {
         class C {
@@ -6,7 +14,7 @@
     
         var c = new C(); // error
                 ~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
         var c2 = new C(''); // ok
     
         class C2 {
@@ -17,7 +25,7 @@
     
         var c3 = new C2(); // error
                  ~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
         var c4 = new C2(''); // ok
         var c5 = new C2(1); // ok
     
@@ -25,7 +33,7 @@
     
         var d = new D(); // error
                 ~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
         var d2 = new D(1); // ok
         var d3 = new D(''); // ok
     }
@@ -37,7 +45,7 @@
     
         var c = new C(); // error
                 ~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
         var c2 = new C(''); // ok
     
         class C2<T,U> {
@@ -48,7 +56,7 @@
     
         var c3 = new C2(); // error
                  ~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
         var c4 = new C2(''); // ok
         var c5 = new C2(1, 2); // ok
     
@@ -56,7 +64,7 @@
     
         var d = new D(); // error
                 ~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
         var d2 = new D(1); // ok
         var d3 = new D(''); // ok
     }

@@ -9,7 +9,7 @@ interface i {
 }
 
 // interface then class
-interface i2 {
+interface i2 { // error
     foo(): void;
 }
 
@@ -20,7 +20,7 @@ class i2 {  // error
 }
 
 // interface then enum
-interface i3 {
+interface i3 { // error
     foo(): void;
 }
 enum i3 { One }; // error

@@ -1,7 +1,10 @@
+tests/cases/compiler/amdDependencyComment1.ts(3,21): error TS2307: Cannot find external module 'm2'.
+
+
 ==== tests/cases/compiler/amdDependencyComment1.ts (1 errors) ====
     ///<amd-dependency path='bar'/>
     
     import m1 = require("m2")
                         ~~~~
-!!! Cannot find external module 'm2'.
+!!! error TS2307: Cannot find external module 'm2'.
     m1.f();

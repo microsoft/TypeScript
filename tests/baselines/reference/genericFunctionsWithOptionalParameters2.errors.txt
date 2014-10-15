@@ -1,3 +1,6 @@
+tests/cases/compiler/genericFunctionsWithOptionalParameters2.ts(7,1): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/compiler/genericFunctionsWithOptionalParameters2.ts (1 errors) ====
     interface Utils {
        fold<T, S>(c: Array<T>, folder?: (s: S, t: T) => T, init?: S): T;
@@ -7,7 +10,7 @@
     
     utils.fold(); // error
     ~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     utils.fold(null); // no error
     utils.fold(null, null); // no error
     utils.fold(null, null, null); // error: Unable to invoke type with no call signatures

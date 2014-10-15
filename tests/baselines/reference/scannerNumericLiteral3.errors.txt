@@ -1,6 +1,10 @@
+tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral3.ts(1,1): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral3.ts(1,3): error TS1005: ';' expected.
+
+
 ==== tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral3.ts (2 errors) ====
     01.0
     ~~
-!!! Octal literals are not available when targeting ECMAScript 5 and higher.
+!!! error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
       ~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
