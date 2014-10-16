@@ -1366,14 +1366,14 @@ module ts {
                 }
             }
 
-            function buildDisplayForParametersAndDelimiters(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            function buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
                 writePunctuation(writer, SyntaxKind.OpenParenToken);
-                for (var i = 0; i < signature.parameters.length; i++) {
+                for (var i = 0; i < parameters.length; i++) {
                     if (i > 0) {
                         writePunctuation(writer, SyntaxKind.CommaToken);
                         writeSpace(writer);
                     }
-                    buildParameterDisplay(signature.parameters[i], writer, enclosingDeclaration, flags, typeStack);
+                    buildParameterDisplay(parameters[i], writer, enclosingDeclaration, flags, typeStack);
                 }
                 writePunctuation(writer, SyntaxKind.CloseParenToken);
             }
@@ -1400,7 +1400,7 @@ module ts {
                     buildDisplayForTypeParametersAndDelimiters(signature.typeParameters, writer, enclosingDeclaration, flags, typeStack);
                 }
 
-                buildDisplayForParametersAndDelimiters(signature, writer, enclosingDeclaration, flags, typeStack);
+                buildDisplayForParametersAndDelimiters(signature.parameters, writer, enclosingDeclaration, flags, typeStack);
                 buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, typeStack);
             }
 
@@ -1411,6 +1411,7 @@ module ts {
                 buildTypeDisplay: buildTypeDisplay,
                 buildTypeParameterDisplay: buildTypeParameterDisplay,
                 buildParameterDisplay: buildParameterDisplay,
+                buildDisplayForParametersAndDelimiters: buildDisplayForParametersAndDelimiters,
                 buildDisplayForTypeParametersAndDelimiters: buildDisplayForTypeParametersAndDelimiters,
                 buildDisplayForTypeArgumentsAndDelimiters: buildDisplayForTypeArgumentsAndDelimiters,
                 buildTypeParameterDisplayFromSymbol: buildTypeParameterDisplayFromSymbol,

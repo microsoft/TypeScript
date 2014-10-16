@@ -293,33 +293,41 @@ module ts.SignatureHelp {
 
         function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentInfoOrTypeArgumentInfo: ListItemInfo): SignatureHelpItems {
             var argumentListOrTypeArgumentList = argumentInfoOrTypeArgumentInfo.list;
+            var parent = <CallExpression>argumentListOrTypeArgumentList.parent;
+            var isTypeParameterHelp = parent.typeArguments && parent.typeArguments.pos === argumentListOrTypeArgumentList.pos;
+            Debug.assert(isTypeParameterHelp || parent.arguments.pos === argumentListOrTypeArgumentList.pos);
+
+            var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
+            var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
+            var callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
             var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
-                var parameters = candidateSignature.parameters;
-                var parameterHelpItems: SignatureHelpParameter[] = parameters.length === 0 ? emptyArray : map(parameters, p => {
-                    var displayParts = mapToDisplayParts(writer =>
-                        typeInfoResolver.getSymbolDisplayBuilder().buildParameterDisplay(p, writer, argumentListOrTypeArgumentList));
+                var signatureHelpParameters: SignatureHelpParameter[];
+                var prefixParts: SymbolDisplayPart[] = [];
+                var suffixParts: SymbolDisplayPart[] = [];
 
-                    var isOptional = !!(p.valueDeclaration.flags & NodeFlags.QuestionMark);
+                if (callTargetDisplayParts) {
+                    prefixParts.push.apply(prefixParts, callTargetDisplayParts);
+                }
 
-                    return {
-                        name: p.name,
-                        documentation: p.getDocumentationComment(),
-                        displayParts: displayParts,
-                        isOptional: isOptional
-                    };
-                });
+                if (isTypeParameterHelp) {
+                    prefixParts.push(punctuationPart(SyntaxKind.LessThanToken));
+                    var typeParameters = candidateSignature.typeParameters;
+                    signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
+                    suffixParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
+                    var parameterParts = mapToDisplayParts(writer =>
+                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, argumentListOrTypeArgumentList));
+                    suffixParts.push.apply(suffixParts, parameterParts);
+                }
+                else {
+                    var typeParameterParts = mapToDisplayParts(writer =>
+                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, argumentListOrTypeArgumentList));
+                    prefixParts.push.apply(prefixParts, typeParameterParts);
+                    prefixParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                    var parameters = candidateSignature.parameters;
+                    signatureHelpParameters = parameters.length > 0 ? map(parameters, createSignatureHelpParameterForParameter) : emptyArray;
+                    suffixParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                }
 
-                var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
-                var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
-
-                var prefixParts = callTargetSymbol ? symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined) : [];
-
-                var typeParameterParts = mapToDisplayParts(writer =>
-                    typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, argumentListOrTypeArgumentList));
-                prefixParts.push.apply(prefixParts, typeParameterParts);
-                prefixParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-
-                var suffixParts = [punctuationPart(SyntaxKind.CloseParenToken)];
                 var returnTypeParts = mapToDisplayParts(writer =>
                     typeInfoResolver.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, argumentListOrTypeArgumentList));
                 suffixParts.push.apply(suffixParts, returnTypeParts);
@@ -329,7 +337,7 @@ module ts.SignatureHelp {
                     prefixDisplayParts: prefixParts,
                     suffixDisplayParts: suffixParts,
                     separatorDisplayParts: [punctuationPart(SyntaxKind.CommaToken), spacePart()],
-                    parameters: parameterHelpItems,
+                    parameters: signatureHelpParameters,
                     documentation: candidateSignature.getDocumentationComment()
                 };
             });
@@ -375,6 +383,32 @@ module ts.SignatureHelp {
                 argumentIndex: argumentIndex,
                 argumentCount: argumentCount
             };
+
+            function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
+                var displayParts = mapToDisplayParts(writer =>
+                    typeInfoResolver.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, argumentListOrTypeArgumentList));
+
+                var isOptional = !!(parameter.valueDeclaration.flags & NodeFlags.QuestionMark);
+
+                return {
+                    name: parameter.name,
+                    documentation: parameter.getDocumentationComment(),
+                    displayParts: displayParts,
+                    isOptional: isOptional
+                };
+            }
+
+            function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter): SignatureHelpParameter {
+                var displayParts = mapToDisplayParts(writer =>
+                    typeInfoResolver.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, argumentListOrTypeArgumentList));
+
+                return {
+                    name: typeParameter.symbol.name,
+                    documentation: emptyArray,
+                    displayParts: displayParts,
+                    isOptional: false
+                };
+            }
         }
     }
 }
