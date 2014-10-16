@@ -84,7 +84,6 @@ module TypeScript {
         private cacheSyntaxTreeInfo(): void {
             // If we're not keeping around the syntax tree, store the diagnostics and line
             // map so they don't have to be recomputed.
-            var sourceUnit = this.sourceUnit();
             var firstToken = firstSyntaxTreeToken(this);
             var leadingTrivia = firstToken.leadingTrivia(this.text);
 

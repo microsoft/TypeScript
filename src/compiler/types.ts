@@ -673,7 +673,12 @@ module ts {
     }
 
     export interface SymbolWriter {
-        writeKind(text: string, kind: SymbolDisplayPartKind): void;
+        writeKeyword(text: string): void;
+        writeOperator(text: string): void;
+        writePunctuation(text: string): void;
+        writeSpace(text: string): void;
+        writeStringLiteral(text: string): void;
+        writeParameter(text: string): void;
         writeSymbol(text: string, symbol: Symbol): void;
         writeLine(): void;
         increaseIndent(): void;
@@ -1232,32 +1237,7 @@ module ts {
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
     }
-
-    export enum SymbolDisplayPartKind {
-        aliasName,
-        className,
-        enumName,
-        fieldName,
-        interfaceName,
-        keyword,
-        lineBreak,
-        numericLiteral,
-        stringLiteral,
-        localName,
-        methodName,
-        moduleName,
-        operator,
-        parameterName,
-        propertyName,
-        punctuation,
-        space,
-        text,
-        typeParameterName,
-        enumMemberName,
-        functionName,
-        regularExpressionLiteral,
-    }
-
+    
     export interface CancellationToken {
         isCancellationRequested(): boolean;
     }
