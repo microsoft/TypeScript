@@ -109,11 +109,11 @@ for (var a = ['a', 'b']; ;) { }
 for (var a = <string[]>[]; ;) { }
 >a : string[]
 ><string[]>[] : string[]
->[] : string[]
+>[] : undefined[]
 
 for (var a: string[] = []; ;) { }
 >a : string[]
->[] : string[]
+>[] : undefined[]
 
 for (var a = new Array<string>(); ;) { }
 >a : string[]

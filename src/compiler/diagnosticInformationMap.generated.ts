@@ -188,8 +188,6 @@ module ts {
         The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type: { code: 2363, category: DiagnosticCategory.Error, key: "The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type." },
         Invalid_left_hand_side_of_assignment_expression: { code: 2364, category: DiagnosticCategory.Error, key: "Invalid left-hand side of assignment expression." },
         Operator_0_cannot_be_applied_to_types_1_and_2: { code: 2365, category: DiagnosticCategory.Error, key: "Operator '{0}' cannot be applied to types '{1}' and '{2}'." },
-        No_best_common_type_exists_between_0_1_and_2: { code: 2366, category: DiagnosticCategory.Error, key: "No best common type exists between '{0}', '{1}', and '{2}'." },
-        No_best_common_type_exists_between_0_and_1: { code: 2367, category: DiagnosticCategory.Error, key: "No best common type exists between '{0}' and '{1}'." },
         Type_parameter_name_cannot_be_0: { code: 2368, category: DiagnosticCategory.Error, key: "Type parameter name cannot be '{0}'" },
         A_parameter_property_is_only_allowed_in_a_constructor_implementation: { code: 2369, category: DiagnosticCategory.Error, key: "A parameter property is only allowed in a constructor implementation." },
         A_rest_parameter_must_be_of_an_array_type: { code: 2370, category: DiagnosticCategory.Error, key: "A rest parameter must be of an array type." },
