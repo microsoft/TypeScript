@@ -1022,10 +1022,6 @@ module Harness {
         }
         */
 
-        /** Recreate the harness compiler instance to its default settings */
-        export function recreate(options?: { useMinimalDefaultLib: boolean; noImplicitAny: boolean; }) {
-        }
-
         /** The harness' compiler instance used when tests are actually run. Reseting or changing settings of this compiler instance must be done within a test case (i.e., describe/it) */
         var harnessCompiler: HarnessCompiler;
 

@@ -47,6 +47,19 @@ module RWC {
 
     export function runRWCTest(jsonPath: string) {
         describe("Testing a RWC project: " + jsonPath, () => {
+            var inputFiles: { unitName: string; content: string; }[] = [];
+            var otherFiles: { unitName: string; content: string; }[] = [];
+            var compilerResult: Harness.Compiler.CompilerResult;
+            var compilerOptions: ts.CompilerOptions;
+            var baselineOpts: Harness.Baseline.BaselineOptions = { Subfolder: 'rwc' };
+            var baseName = /(.*)\/(.*).json/.exec(Harness.Path.switchToForwardSlashes(jsonPath))[2];
+            // Compile .d.ts files
+            var declFileCompilationResult: {
+                declInputFiles: { unitName: string; content: string }[];
+                declOtherFiles: { unitName: string; content: string }[];
+                declResult: Harness.Compiler.CompilerResult;
+            };
+
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
@@ -57,20 +70,8 @@ module RWC {
                 baselineOpts = undefined;
                 baseName = undefined;
                 declFileCompilationResult = undefined;
-                //if (Harness.IO.getMemoryUsage) {
-                //    console.log(Harness.IO.getMemoryUsage());
-                //}
             });
 
-            //var startTime: number;
-            //it('getTimeStart', () => {
-            //    startTime = new Date().getTime();
-            //});
-
-            var inputFiles: { unitName: string; content: string; }[] = [];
-            var otherFiles: { unitName: string; content: string; }[] = [];
-            var compilerResult: Harness.Compiler.CompilerResult;
-            var compilerOptions: ts.CompilerOptions;
             it('can compile', () => {
                 var harnessCompiler = Harness.Compiler.getCompiler();
                 var opts: ts.ParsedCommandLine;
@@ -128,15 +129,6 @@ module RWC {
             });
 
             // Baselines
-            var baselineOpts: Harness.Baseline.BaselineOptions = { Subfolder: 'rwc' };
-            var baseName = /(.*)\/(.*).json/.exec(Harness.Path.switchToForwardSlashes(jsonPath))[2];
-
-            // Compile .d.ts files
-            var declFileCompilationResult: {
-                declInputFiles: { unitName: string; content: string }[];
-                declOtherFiles: { unitName: string; content: string }[];
-                declResult: Harness.Compiler.CompilerResult;
-            };
             it('Correct compiler generated.d.ts', () => {
                 declFileCompilationResult = Harness.Compiler.getCompiler().compileDeclarationFiles(inputFiles, otherFiles, compilerResult, /*settingscallback*/ undefined, compilerOptions);
             });
@@ -167,13 +159,13 @@ module RWC {
                 }, false, baselineOpts);
             });
 
-            it('has correct source map record', () => {
-                if (compilerOptions.sourceMap) {
-                    Harness.Baseline.runBaseline('has correct source map record', baseName + '.sourcemap.txt', () => {
-                        return compilerResult.getSourceMapRecord();
-                    }, false, baselineOpts);
-                }
-            });
+            //it('has correct source map record', () => {
+            //    if (compilerOptions.sourceMap) {
+            //        Harness.Baseline.runBaseline('has correct source map record', baseName + '.sourcemap.txt', () => {
+            //            return compilerResult.getSourceMapRecord();
+            //        }, false, baselineOpts);
+            //    }
+            //});
 
             it('has the expected errors', () => {
                 Harness.Baseline.runBaseline('has the expected errors', baseName + '.errors.txt', () => {
@@ -199,31 +191,20 @@ module RWC {
                 }
             });
 
-            //it('EndTIme', () => {
-            //    console.log("Parse time:" + baseName+ " ("  + (new Date().getTime() - startTime) + ")");
-            //});
-
             // TODO: Type baselines (need to refactor out from compilerRunner)
         });
     }
 }
 
 class RWCRunner extends RunnerBase {
-    private runnerPath = "tests/runners/rwc";
-    private sourcePath = "tests/cases/rwc/";
-
-    private harnessCompiler: Harness.Compiler.HarnessCompiler;
+    private static sourcePath = "tests/cases/rwc/";
 
     /** Setup the runner's tests so that they are ready to be executed by the harness
      *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately
      */
     public initializeTests(): void {
-        // Recreate the compiler with the default lib
-        Harness.Compiler.recreate({ useMinimalDefaultLib: false, noImplicitAny: false });
-        this.harnessCompiler = Harness.Compiler.getCompiler();
-
         // Read in and evaluate the test list
-        var testList = Harness.IO.listFiles(this.sourcePath, /.+\.json$/);
+        var testList = Harness.IO.listFiles(RWCRunner.sourcePath, /.+\.json$/);
         for (var i = 0; i < testList.length; i++) {
             this.runTest(testList[i]);
         }
