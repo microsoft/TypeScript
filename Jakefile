@@ -294,7 +294,7 @@ compileFile(word2mdJs,
 file(specMd, [word2mdJs, specWord], function () {
     jake.cpR(headerMd, specMd, {silent: true});
     var specWordFullPath = path.resolve(specWord);
-    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" >>' + specMd;
+    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + specMd;
     console.log(cmd);
     child_process.exec(cmd, function () {
         complete();

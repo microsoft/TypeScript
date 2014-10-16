@@ -1,5 +1,3 @@
-# TypeScript Language Specification
-
 Version 1.4
 
 October, 2014
@@ -103,13 +101,13 @@ TypeScript is a trademark of Microsoft Corporation.
   * [4.13 Type Assertions](#4.13)
   * [4.14 Unary Operators](#4.14)
     * [4.14.1 The ++ and -- operators](#4.14.1)
-    * [4.14.2 The +, –, and ~ operators](#4.14.2)
+    * [4.14.2 The +, â€“, and ~ operators](#4.14.2)
     * [4.14.3 The ! operator](#4.14.3)
     * [4.14.4 The delete Operator](#4.14.4)
     * [4.14.5 The void Operator](#4.14.5)
     * [4.14.6 The typeof Operator](#4.14.6)
   * [4.15 Binary Operators](#4.15)
-    * [4.15.1 The *, /, %, –, &lt;&lt;, >>, >>>, &, ^, and | operators](#4.15.1)
+    * [4.15.1 The *, /, %, â€“, &lt;&lt;, >>, >>>, &, ^, and | operators](#4.15.1)
     * [4.15.2 The + operator](#4.15.2)
     * [4.15.3 The &lt;, >, &lt;=, >=, ==, !=, ===, and !== operators](#4.15.3)
     * [4.15.4 The instanceof operator](#4.15.4)
@@ -758,11 +756,11 @@ The remainder of this document is the formal specification of the TypeScript pro
 The syntactic grammar added by TypeScript language is specified throughout this document using the existing conventions and production names of the ECMAScript grammar. In places where TypeScript augments an existing grammar production it is so noted. For example:
 
 &emsp;&emsp;*CallExpression:*  *( Modified )*  
-&emsp;&emsp;&emsp;…  
+&emsp;&emsp;&emsp;â€¦  
 &emsp;&emsp;&emsp;`super`&emsp;`(`&emsp;*ArgumentList<sub>opt</sub>*&emsp;`)`  
 &emsp;&emsp;&emsp;`super`&emsp;`.`&emsp;*IdentifierName*
 
-The '*( Modified )*' annotation indicates that an existing grammar production is being replaced, and the '…' references the contents of the original grammar production.
+The '*( Modified )*' annotation indicates that an existing grammar production is being replaced, and the 'â€¦' references the contents of the original grammar production.
 
 Similar to the ECMAScript grammar, if the phrase "*[no LineTerminator here]*" appears in the right-hand side of a production of the syntactic grammar, it indicates that the production is not a match if a *LineTerminator* occurs in the input stream at the indicated position.
 
@@ -876,7 +874,7 @@ When an identifier is resolved as a *ModuleName* (section [3.6.2](#3.6.2)), only
 
 When an identifier is resolved as a *PrimaryExpression* (section [4.3](#4.3)), only instantiated modules (section [10.1](#10.1)), classes, enums, functions, variables, and parameters are considered and other entities in scope are ignored.
 
-Note that class and enum members are never directly in scope—they can only be accessed by applying the dot ('.') operator to a class instance or enum object. This even includes members of the current instance in a constructor or member function, which are accessed by applying the dot operator to `this`.
+Note that class and enum members are never directly in scopeâ€”they can only be accessed by applying the dot ('.') operator to a class instance or enum object. This even includes members of the current instance in a constructor or member function, which are accessed by applying the dot operator to `this`.
 
 As the rules above imply, locally declared entities in an internal module are closer in scope than exported entities declared in other module declarations for the same internal module. For example:
 
@@ -903,7 +901,7 @@ TypeScript adds optional static types to JavaScript. Types are used to place sta
 
 All types in TypeScript are subtypes of a single top type called the Any type. The `any` keyword references this type. The Any type is the one type that can represent *any* JavaScript value with no constraints. All other types are categorized as ***primitive types***, ***object types***, or ***type parameters***. These types introduce various static constraints on their values.
 
-The primitive types are the Number, Boolean, String, Void, Null, and Undefined types along with user defined enum types. The `number`, `boolean`, `string`, and `void` keywords reference the Number, Boolean, String, and Void primitive types respectively. The Void type exists purely to indicate the absence of a value, such as in a function with no return value. It is not possible to explicitly reference the Null and Undefined types—only *values* of those types can be referenced, using the `null` and `undefined` literals.
+The primitive types are the Number, Boolean, String, Void, Null, and Undefined types along with user defined enum types. The `number`, `boolean`, `string`, and `void` keywords reference the Number, Boolean, String, and Void primitive types respectively. The Void type exists purely to indicate the absence of a value, such as in a function with no return value. It is not possible to explicitly reference the Null and Undefined typesâ€”only *values* of those types can be referenced, using the `null` and `undefined` literals.
 
 The object types are all class, interface, array, and literal types. Class and interface types are introduced through class and interface declarations and are referenced by the name given to them in their declarations. Class and interface types may be ***generic types*** which have one or more type parameters. Literal types are written as object, array, function, or constructor type literals and are used to compose new types from other types.
 
@@ -1309,7 +1307,7 @@ Interface declarations only introduce named types, whereas class declarations in
 
 Named types are referenced through ***type references*** (section [3.6.2](#3.6.2)) that specify a type name and, if applicable, the type arguments to be substituted for the type parameters of the named type.
 
-Named types are technically not types—only *references* to named types are. This distinction is particularly evident with generic types: Generic types are "templates" from which multiple *actual* types can be created by writing type references that supply type arguments to substitute in place of the generic type's type parameters. This substitution process is known as ***instantiating*** a generic type. Only once a generic type is instantiated does it denote an actual type.
+Named types are technically not typesâ€”only *references* to named types are. This distinction is particularly evident with generic types: Generic types are "templates" from which multiple *actual* types can be created by writing type references that supply type arguments to substitute in place of the generic type's type parameters. This substitution process is known as ***instantiating*** a generic type. Only once a generic type is instantiated does it denote an actual type.
 
 TypeScript has a structural type system, and therefore an instantiation of a generic type is indistinguishable from an equivalent manually written expansion. For example, given the declaration
 
@@ -1331,7 +1329,7 @@ is indistinguishable from the type
 
 ### <a name="3.5.1"/>3.5.1 Instance Types
 
-Each named type has an associated actual type known as the ***instance type***. For a non-generic type, the instance type is simply a type reference to the non-generic type. For a generic type, the instance type is an instantiation of the generic type where each of the type arguments is the corresponding type parameter. Since the instance type uses the type parameters it can be used only where the type parameters are in scope—that is, inside the declaration of the generic type. Within the constructor and instance member functions of a class, the type of `this` is the instance type of the class.
+Each named type has an associated actual type known as the ***instance type***. For a non-generic type, the instance type is simply a type reference to the non-generic type. For a generic type, the instance type is an instantiation of the generic type where each of the type arguments is the corresponding type parameter. Since the instance type uses the type parameters it can be used only where the type parameters are in scopeâ€”that is, inside the declaration of the generic type. Within the constructor and instance member functions of a class, the type of `this` is the instance type of the class.
 
 The following example illustrates the concept of an instance type:
 
@@ -1876,7 +1874,7 @@ The apparent type of a type *T* is defined as follows:
 
 The augmented form of an object type *T* adds to *T* those properties of the global interface type 'Object' that aren't hidden by properties in *T*. Furthermore, if *T* has one or more call or construct signatures, the augmented form of *T* adds to *T* the properties of the global interface type 'Function' that aren't hidden by properties in *T*. Properties in *T* hide 'Object' or 'Function' interface properties with the same name.
 
-In effect, a type's apparent type is a subtype of the 'Object' or 'Function' interface unless the type defines members that are incompatible with those of the 'Object' or 'Function' interface—which, for example, occurs if the type defines a property with the same name as a property in the 'Object' or 'Function' interface but with a type that isn't a subtype of that in the 'Object' or 'Function' interface.
+In effect, a type's apparent type is a subtype of the 'Object' or 'Function' interface unless the type defines members that are incompatible with those of the 'Object' or 'Function' interfaceâ€”which, for example, occurs if the type defines a property with the same name as a property in the 'Object' or 'Function' interface but with a type that isn't a subtype of that in the 'Object' or 'Function' interface.
 
 Some examples:
 
@@ -2241,7 +2239,7 @@ has the same type and classification as the contained expression itself. Specifi
 The `super` keyword can be used in expressions to reference base class properties and the base class constructor.
 
 &emsp;&emsp;*CallExpression:*  *( Modified )*  
-&emsp;&emsp;&emsp;…  
+&emsp;&emsp;&emsp;â€¦  
 &emsp;&emsp;&emsp;`super`&emsp;`(`&emsp;*ArgumentList<sub>opt</sub>*&emsp;`)`  
 &emsp;&emsp;&emsp;`super`&emsp;`.`&emsp;*IdentifierName*
 
@@ -2276,7 +2274,7 @@ Function expressions are extended from JavaScript to optionally include paramete
 &emsp;&emsp;&emsp;`function`&emsp;*Identifier<sub>opt</sub>*&emsp;*CallSignature*&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
 
 &emsp;&emsp;*AssignmentExpression:*  *( Modified )*  
-&emsp;&emsp;&emsp;…  
+&emsp;&emsp;&emsp;â€¦  
 &emsp;&emsp;&emsp;*ArrowFunctionExpression*
 
 &emsp;&emsp;*ArrowFunctionExpression:*  
@@ -2508,7 +2506,7 @@ A signature is said to be an ***applicable signature*** with respect to an argum
 
 ### <a name="4.12.2"/>4.12.2 Type Argument Inference
 
-Given a signature &lt; *T<sub>1</sub>* , *T<sub>2</sub>* , … , *T<sub>n</sub>* > ( *p<sub>1</sub>* : *P<sub>1</sub>* , *p<sub>2</sub>* : *P<sub>2</sub>* , … , *p<sub>m</sub>* : *P<sub>m</sub>* ), where each parameter type *P* references zero or more of the type parameters *T*, and an argument list ( *e<sub>1</sub>* , *e<sub>2</sub>* , … , *e<sub>m</sub>* ), the task of type argument inference is to find a set of type arguments *A<sub>1</sub>*…*A<sub>n</sub>* to substitute for *T<sub>1</sub>*…*T<sub>n</sub>* such that the argument list becomes an applicable signature.
+Given a signature &lt; *T<sub>1</sub>* , *T<sub>2</sub>* , â€¦ , *T<sub>n</sub>* > ( *p<sub>1</sub>* : *P<sub>1</sub>* , *p<sub>2</sub>* : *P<sub>2</sub>* , â€¦ , *p<sub>m</sub>* : *P<sub>m</sub>* ), where each parameter type *P* references zero or more of the type parameters *T*, and an argument list ( *e<sub>1</sub>* , *e<sub>2</sub>* , â€¦ , *e<sub>m</sub>* ), the task of type argument inference is to find a set of type arguments *A<sub>1</sub>*â€¦*A<sub>n</sub>* to substitute for *T<sub>1</sub>*â€¦*T<sub>n</sub>* such that the argument list becomes an applicable signature.
 
 Type argument inference produces a set of candidate types for each type parameter. Given a type parameter *T* and set of candidate types, the actual inferred type argument is determined as follows:
 
@@ -2617,7 +2615,7 @@ are both interpreted as calls to 'f' with two arguments.
 TypeScript extends the JavaScript expression grammar with the ability to assert a type for an expression:
 
 &emsp;&emsp;*UnaryExpression:*  *( Modified )*  
-&emsp;&emsp;&emsp;…  
+&emsp;&emsp;&emsp;â€¦  
 &emsp;&emsp;&emsp;`<`&emsp;*Type*&emsp;`>`&emsp;*UnaryExpression*
 
 A type assertion expression consists of a type enclosed in `<` and `>` followed by a unary expression. Type assertion expressions are purely a compile-time construct. Type assertions are *not* checked at run-time and have no impact on the emitted JavaScript (and therefore no run-time cost). The type and the enclosing `<` and `>` are simply removed from the generated code.
@@ -2659,7 +2657,7 @@ The subsections that follow specify the compile-time processing rules of the una
 
 These operators, in prefix or postfix form, require their operand to be of type Any, the Number primitive type, or an enum type, and classified as a reference (section [4.1](#4.1)). They produce a result of the Number primitive type.
 
-### <a name="4.14.2"/>4.14.2 The +, –, and ~ operators
+### <a name="4.14.2"/>4.14.2 The +, â€“, and ~ operators
 
 These operators permit their operand to be of any type and produce a result of the Number primitive type.
 
@@ -2711,7 +2709,7 @@ In the example above, 'x' is of type 'number', 'y' is of type 'string' because w
 
 The subsections that follow specify the compile-time processing rules of the binary operators. In general, if the operands of a binary operator do not meet the stated requirements, a compile-time error occurs and the result of the operation defaults to type any in further processing. Tables that summarize the compile-time processing rules for operands of the Any type, the Boolean, Number, and String primitive types, and all object types and type parameters (the Object column in the tables) are provided.
 
-### <a name="4.15.1"/>4.15.1 The *, /, %, –, &lt;&lt;, >>, >>>, &, ^, and | operators
+### <a name="4.15.1"/>4.15.1 The *, /, %, â€“, &lt;&lt;, >>, >>>, &, ^, and | operators
 
 These operators require their operands to be of type Any, the Number primitive type, or an enum type. Operands of an enum type are treated as having the primitive type Number. If one operand is the `null` or `undefined` value, it is treated as having the type of the other operand. The result is always of the Number primitive type.
 
@@ -2962,7 +2960,7 @@ A type guard is simply an expression that follows a particular pattern. The proc
 
 A primitive type *P* is removed from a type *T* as follows:
 
-* If *T* is a union type *P* | *T<sub>1</sub>* | *T<sub>2</sub>* | … | *T<sub>n</sub>*, the result is the type *T<sub>1</sub>* | *T<sub>2</sub>* | … | *T<sub>n</sub>*.
+* If *T* is a union type *P* | *T<sub>1</sub>* | *T<sub>2</sub>* | â€¦ | *T<sub>n</sub>*, the result is the type *T<sub>1</sub>* | *T<sub>2</sub>* | â€¦ | *T<sub>n</sub>*.
 * Otherwise, the result is *T*.
 
 Note that type guards affect types of variables and parameters only and have no effect on members of objects such as properties. Also note that it is possible to defeat a type guard by calling a function that changes the type of the guarded variable.
@@ -3270,7 +3268,7 @@ the local variable 'x' is in scope in the parameter initializer (thus hiding the
 
 ## <a name="6.4"/>6.4 Generic Functions
 
-A function implementation may include type parameters in its signature (section [3.7.2.1](#3.7.2.1)) and is then called a ***generic function***. Type parameters provide a mechanism for expressing relationships between parameter and return types in call operations. Type parameters have no run-time representation—they are purely a compile-time construct.
+A function implementation may include type parameters in its signature (section [3.7.2.1](#3.7.2.1)) and is then called a ***generic function***. Type parameters provide a mechanism for expressing relationships between parameter and return types in call operations. Type parameters have no run-time representationâ€”they are purely a compile-time construct.
 
 Type parameters declared in the signature of a function implementation are in scope in the signature and body of that function implementation.
 
@@ -3334,7 +3332,7 @@ where *Parameter* is the parameter name and *Default* is the default value expre
 
 Interfaces provide the ability to name and parameterize object types and to compose existing named object types into new ones.
 
-Interfaces have no run-time representation—they are purely a compile-time construct. Interfaces are particularly useful for documenting and validating the required shape of properties, objects passed as parameters, and objects returned from functions.
+Interfaces have no run-time representationâ€”they are purely a compile-time construct. Interfaces are particularly useful for documenting and validating the required shape of properties, objects passed as parameters, and objects returned from functions.
 
 Because TypeScript has a structural type system, an interface type with a particular set of members is considered identical to, and can be substituted for, another interface type or object type literal with an identical set of members (see section [3.8.2](#3.8.2)).
 
@@ -3600,11 +3598,11 @@ When evaluated as an expression, the type reference 'A' in the `extends` clause 
 
 The only situation in which the last two constraints above are violated is when a class overrides one or more base class members with incompatible new members.
 
-Note that because TypeScript has a structural type system, a class doesn't need to explicitly state that it implements an interface—it suffices for the class to simply contain the appropriate set of instance members. The `implements` clause of a class provides a mechanism to assert and validate that the class contains the appropriate sets of instance members, but otherwise it has no effect on the class type.
+Note that because TypeScript has a structural type system, a class doesn't need to explicitly state that it implements an interfaceâ€”it suffices for the class to simply contain the appropriate set of instance members. The `implements` clause of a class provides a mechanism to assert and validate that the class contains the appropriate sets of instance members, but otherwise it has no effect on the class type.
 
 ### <a name="8.1.2"/>8.1.2 Class Body
 
-The class body consists of zero or more constructor or member declarations. Statements are not allowed in the body of a class—they must be placed in the constructor or in members.
+The class body consists of zero or more constructor or member declarations. Statements are not allowed in the body of a classâ€”they must be placed in the constructor or in members.
 
 &emsp;&emsp;*ClassBody:*  
 &emsp;&emsp;&emsp;*ClassElements<sub>opt</sub>*
@@ -3738,7 +3736,7 @@ interface B {
 }
 ```
 
-Note that static declarations in a class do not contribute to the class type and its instance type—rather, static declarations introduce properties on the constructor function object. Also note that the declaration of 'g' in 'B' overrides the member inherited from 'A'.
+Note that static declarations in a class do not contribute to the class type and its instance typeâ€”rather, static declarations introduce properties on the constructor function object. Also note that the declaration of 'g' in 'B' overrides the member inherited from 'A'.
 
 ### <a name="8.2.5"/>8.2.5 Constructor Function Types
 
@@ -4520,7 +4518,7 @@ Import declarations are used to create local aliases for entities in other modul
 
 An *EntityName* consisting of a single identifier is resolved as a *ModuleName* and is thus required to reference an internal module. The resulting local alias references the given internal module and is itself classified as an internal module.
 
-An *EntityName* consisting of more than one identifier is resolved as a *ModuleName* followed by an identifier that names one or more exported entities in the given module. The resulting local alias has all the meanings and classifications of the referenced entity or entities. (As many as three distinct meanings are possible for an entity name—namespace, type, and member.) In effect, it is as if the imported entity or entities were declared locally with the local alias name.
+An *EntityName* consisting of more than one identifier is resolved as a *ModuleName* followed by an identifier that names one or more exported entities in the given module. The resulting local alias has all the meanings and classifications of the referenced entity or entities. (As many as three distinct meanings are possible for an entity nameâ€”namespace, type, and member.) In effect, it is as if the imported entity or entities were declared locally with the local alias name.
 
 In the example
 
@@ -4597,7 +4595,7 @@ interface A { x: string; }
 module M {  
     export interface B { x: A; }  
     export interface C { x: B; }  
-    export function foo(c: C) { … }  
+    export function foo(c: C) { â€¦ }  
 }
 ```
 
@@ -4777,7 +4775,7 @@ External modules can additionally be declared using *AmbientExternalModuleDeclar
 
 The TypeScript compiler automatically determines a source file's dependencies and includes those dependencies in the program being compiled. The determination is made from "reference comments" and external import declarations as follows:
 
-* A comment of the form /// &lt;reference path="…"/> adds a dependency on the source file specified in the path argument. The path is resolved relative to the directory of the containing source file.
+* A comment of the form /// &lt;reference path="â€¦"/> adds a dependency on the source file specified in the path argument. The path is resolved relative to the directory of the containing source file.
 * An external import declaration that specifies a relative external module name (section [11.2.1](#11.2.1)) resolves the name relative to the directory of the containing source file. If a source file with the resulting path and file extension '.ts' exists, that file is added as a dependency. Otherwise, if a source file with the resulting path and file extension '.d.ts' exists, that file is added as a dependency.
 * An external import declaration that specifies a top-level external module name (section [11.2.1](#11.2.1)) resolves the name in a host dependent manner (typically by resolving the name relative to a module name space root or searching for the name in a series of directories). If a source file with extension '.ts' or '.d.ts' corresponding to the reference is located, that file is added as a dependency.
 
@@ -5326,7 +5324,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;`set`&emsp;*PropertyName*&emsp;`(`&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
 
 &emsp;&emsp;*CallExpression:*  *( Modified )*  
-&emsp;&emsp;&emsp;…  
+&emsp;&emsp;&emsp;â€¦  
 &emsp;&emsp;&emsp;`super`&emsp;`(`&emsp;*ArgumentList<sub>opt</sub>*&emsp;`)`  
 &emsp;&emsp;&emsp;`super`&emsp;`.`&emsp;*IdentifierName*
 
@@ -5334,7 +5332,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;`function`&emsp;*Identifier<sub>opt</sub>*&emsp;*CallSignature*&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
 
 &emsp;&emsp;*AssignmentExpression:*  *( Modified )*  
-&emsp;&emsp;&emsp;…  
+&emsp;&emsp;&emsp;â€¦  
 &emsp;&emsp;&emsp;*ArrowFunctionExpression*
 
 &emsp;&emsp;*ArrowFunctionExpression:*  
@@ -5349,7 +5347,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*TypeArguments<sub>opt</sub>*&emsp;`(`&emsp;*ArgumentList<sub>opt</sub>*&emsp;`)`
 
 &emsp;&emsp;*UnaryExpression:*  *( Modified )*  
-&emsp;&emsp;&emsp;…  
+&emsp;&emsp;&emsp;â€¦  
 &emsp;&emsp;&emsp;`<`&emsp;*Type*&emsp;`>`&emsp;*UnaryExpression*
 
 ## <a name="A.3"/>A.3 Statements

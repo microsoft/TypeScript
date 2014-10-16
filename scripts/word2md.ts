@@ -103,6 +103,7 @@ module Word {
     export interface Document {
         fields: Fields;
         paragraphs: Paragraphs;
+        builtInDocumentProperties: Collection<string>;
         close(saveChanges: boolean): void;
         range(): Range;
     }
@@ -118,6 +119,11 @@ module Word {
 }
 
 var sys = (function () {
+    var fso = new ActiveXObject("Scripting.FileSystemObject");
+    var fileStream = new ActiveXObject("ADODB.Stream");
+    fileStream.Type = 2 /*text*/;
+    var binaryStream = new ActiveXObject("ADODB.Stream");
+    binaryStream.Type = 1 /*binary*/;
     var args: string[] = [];
     for (var i = 0; i < WScript.Arguments.length; i++) {
         args[i] = WScript.Arguments.Item(i);
@@ -125,7 +131,26 @@ var sys = (function () {
     return {
         args: args,
         createObject: (typeName: string) => new ActiveXObject(typeName),
-        write: (s: string) => WScript.StdOut.Write(s)
+        write(s: string): void {
+            WScript.StdOut.Write(s);
+        },
+        writeFile: (fileName: string, data: string): void => {
+            fileStream.Open();
+            binaryStream.Open();
+            try {
+                // Write characters in UTF-8 encoding
+                fileStream.Charset = "utf-8";
+                fileStream.WriteText(data);
+                // We don't want the BOM, skip it by setting the starting location to 3 (size of BOM).
+                fileStream.Position = 3;
+                fileStream.CopyTo(binaryStream);
+                binaryStream.SaveToFile(fileName, 2 /*overwrite*/);
+            }
+            finally {
+                binaryStream.Close();
+                fileStream.Close();
+            }
+        }
     };
 })();
 
@@ -298,6 +323,10 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     }
 
     function writeDocument() {
+        var title = doc.builtInDocumentProperties.item(1);
+        if (title.length) {
+            write("# " + title + "\n\n");
+        }
         for (var p = doc.paragraphs.first; p; p = p.next()) {
             writeParagraph(p);
         }
@@ -321,17 +350,21 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
 
     writeDocument();
 
+    result = result.replace(/\x85/g, "\u2026");
+    result = result.replace(/\x96/g, "\u2013");
+    result = result.replace(/\x97/g, "\u2014");
+
     return result;
 }
 
 function main(args: string[]) {
-    if (args.length !== 1) {
-        sys.write("Syntax: word2md <filename>\n");
+    if (args.length !== 2) {
+        sys.write("Syntax: word2md <inputfile> <outputfile>\n");
         return;
     }
     var app: Word.Application = sys.createObject("Word.Application");
     var doc = app.documents.open(args[0]);
-    sys.write(convertDocumentToMarkdown(doc));
+    sys.writeFile(args[1], convertDocumentToMarkdown(doc));
     doc.close(false);
     app.quit();
 }
