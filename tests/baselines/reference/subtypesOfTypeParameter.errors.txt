@@ -1,46 +1,10 @@
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(7,7): error TS2416: Class 'D1<T, U>' incorrectly extends base class 'C3<T>':
   Types of property 'foo' are incompatible:
     Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(12,13): error TS2367: No best common type exists between 'T' and 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(13,13): error TS2367: No best common type exists between 'U' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(38,14): error TS2367: No best common type exists between 'number' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(39,14): error TS2367: No best common type exists between 'T' and 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(41,14): error TS2367: No best common type exists between 'string' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(42,14): error TS2367: No best common type exists between 'T' and 'string'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(44,14): error TS2367: No best common type exists between 'boolean' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(45,14): error TS2367: No best common type exists between 'T' and 'boolean'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(47,14): error TS2367: No best common type exists between 'Date' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(48,14): error TS2367: No best common type exists between 'T' and 'Date'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(50,14): error TS2367: No best common type exists between 'RegExp' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(51,14): error TS2367: No best common type exists between 'T' and 'RegExp'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(53,14): error TS2367: No best common type exists between '{ foo: number; }' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(54,14): error TS2367: No best common type exists between 'T' and '{ foo: number; }'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(56,14): error TS2367: No best common type exists between '() => void' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(57,14): error TS2367: No best common type exists between 'T' and '() => void'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(59,14): error TS2367: No best common type exists between '<T>(x: T) => T' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(60,15): error TS2367: No best common type exists between 'T' and '<T>(x: T) => T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(63,14): error TS2367: No best common type exists between 'I1' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(64,14): error TS2367: No best common type exists between 'T' and 'I1'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(67,15): error TS2367: No best common type exists between 'C1' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(68,15): error TS2367: No best common type exists between 'T' and 'C1'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(72,15): error TS2367: No best common type exists between 'C2<number>' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(73,15): error TS2367: No best common type exists between 'T' and 'C2<number>'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(76,15): error TS2367: No best common type exists between 'typeof E' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(77,15): error TS2367: No best common type exists between 'T' and 'typeof E'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(79,15): error TS2367: No best common type exists between 'E' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(80,15): error TS2367: No best common type exists between 'T' and 'E'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(83,15): error TS2367: No best common type exists between 'typeof f' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(84,15): error TS2367: No best common type exists between 'T' and 'typeof f'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(87,15): error TS2367: No best common type exists between 'typeof c' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(88,15): error TS2367: No best common type exists between 'T' and 'typeof c'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(91,19): error TS2367: No best common type exists between 'T' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(92,19): error TS2367: No best common type exists between 'T' and 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(95,21): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(96,19): error TS2367: No best common type exists between 'T' and 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(97,19): error TS2367: No best common type exists between 'U' and 'T'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts (38 errors) ====
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts (2 errors) ====
     // checking whether other types are subtypes of type parameters
     
     class C3<T> {
@@ -57,11 +21,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
     
     function f1<T, U>(x: T, y: U) {
         var r = true ? x : y; // error
-                ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'U'.
         var r = true ? y : x; // error
-                ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'U' and 'T'.
     }
     
     interface I1 { foo: number; }
@@ -87,135 +47,67 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         var r0b = true ? x : u;
     
         var r1 = true ? 1 : x; 
-                 ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'number' and 'T'.
         var r1 = true ? x : 1;
-                 ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'number'.
     
         var r2 = true ? '' : x;
-                 ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'string' and 'T'.
         var r2 = true ? x : '';
-                 ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'string'.
     
         var r3 = true ? true : x;
-                 ~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'boolean' and 'T'.
         var r3 = true ? x : true;
-                 ~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'boolean'.
     
         var r4 = true ? new Date() : x;
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'Date' and 'T'.
         var r4 = true ? x : new Date();
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'Date'.
     
         var r5 = true ? /1/ : x;
-                 ~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'RegExp' and 'T'.
         var r5 = true ? x : /1/;
-                 ~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'RegExp'.
     
         var r6 = true ? { foo: 1 } : x;
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between '{ foo: number; }' and 'T'.
         var r6 = true ? x : { foo: 1 };
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and '{ foo: number; }'.
     
         var r7 = true ? () => { } : x;
-                 ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between '() => void' and 'T'.
         var r7 = true ? x : () => { };
-                 ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and '() => void'.
     
         var r8 = true ? <T>(x: T) => { return x } : x;
-                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between '<T>(x: T) => T' and 'T'.
         var r8b = true ? x : <T>(x: T) => { return x }; // type parameters not identical across declarations
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and '<T>(x: T) => T'.
     
         var i1: I1;
         var r9 = true ? i1 : x;
-                 ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'I1' and 'T'.
         var r9 = true ? x : i1;
-                 ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'I1'.
     
         var c1: C1;
         var r10 = true ? c1 : x;
-                  ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'C1' and 'T'.
         var r10 = true ? x : c1;
-                  ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'C1'.
     
     
         var c2: C2<number>;
         var r12 = true ? c2 : x;
-                  ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'C2<number>' and 'T'.
         var r12 = true ? x : c2;
-                  ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'C2<number>'.
     
     
         var r13 = true ? E : x;
-                  ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'typeof E' and 'T'.
         var r13 = true ? x : E;
-                  ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'typeof E'.
     
         var r14 = true ? E.A : x;
-                  ~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'E' and 'T'.
         var r14 = true ? x : E.A;
-                  ~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'E'.
     
         var af: typeof f;
         var r15 = true ? af : x;
-                  ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'typeof f' and 'T'.
         var r15 = true ? x : af;
-                  ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'typeof f'.
     
         var ac: typeof c;
         var r16 = true ? ac : x;
-                  ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'typeof c' and 'T'.
         var r16 = true ? x : ac;
-                  ~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'typeof c'.
     
         function f17<T>(a: T) {
             var r17 = true ? x : a;
-                      ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'T'.
             var r17 = true ? a : x;
-                      ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'T'.
         }
     
         function f18<T, U extends T>(a: U) {
                         ~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             var r18 = true ? x : a;
-                      ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'U'.
             var r18 = true ? a : x;
-                      ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'U' and 'T'.
         }
     
         var r19 = true ? new Object() : x; // BCT is Object

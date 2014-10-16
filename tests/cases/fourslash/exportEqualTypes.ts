@@ -15,7 +15,7 @@
 ////var /*3*/r2 = t./*4*/foo; // t should have 'foo' in dropdown list and be of type 'string'
 
 goTo.marker('1');
-verify.quickInfoIs('(alias) test');
+verify.quickInfoIs("import test = require('exportEqualTypes_file0')");
 goTo.marker('2');
 verify.quickInfoIs('(var) r1: Date');
 goTo.marker('3');

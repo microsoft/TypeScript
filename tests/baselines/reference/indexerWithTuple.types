@@ -26,19 +26,19 @@ var ele11 = strNumTuple[1]; // number
 >strNumTuple : [string, number]
 
 var ele12 = strNumTuple[2]; // {}
->ele12 : {}
->strNumTuple[2] : {}
+>ele12 : string | number
+>strNumTuple[2] : string | number
 >strNumTuple : [string, number]
 
 var ele13 = strNumTuple[idx0]; // {}
->ele13 : {}
->strNumTuple[idx0] : {}
+>ele13 : string | number
+>strNumTuple[idx0] : string | number
 >strNumTuple : [string, number]
 >idx0 : number
 
 var ele14 = strNumTuple[idx1]; // {}
->ele14 : {}
->strNumTuple[idx1] : {}
+>ele14 : string | number
+>strNumTuple[idx1] : string | number
 >strNumTuple : [string, number]
 >idx1 : number
 
@@ -58,7 +58,7 @@ var strNumTuple1 = numTupleTuple[1];  //[string, number];
 >numTupleTuple : [number, [string, number]]
 
 var ele17 = numTupleTuple[2]; // {}
->ele17 : {}
->numTupleTuple[2] : {}
+>ele17 : number | [string, number]
+>numTupleTuple[2] : number | [string, number]
 >numTupleTuple : [number, [string, number]]
 

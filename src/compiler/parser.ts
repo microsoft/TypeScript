@@ -111,6 +111,10 @@ module ts {
         return file.externalModuleIndicator !== undefined;
     }
 
+    export function isDeclarationFile(file: SourceFile): boolean {
+        return (file.flags & NodeFlags.DeclarationFile) !== 0;
+    }
+
     export function isPrologueDirective(node: Node): boolean {
         return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
@@ -221,6 +225,8 @@ module ts {
                 return child((<ArrayTypeNode>node).elementType);
             case SyntaxKind.TupleType:
                 return children((<TupleTypeNode>node).elementTypes);
+            case SyntaxKind.UnionType:
+                return children((<UnionTypeNode>node).types);
             case SyntaxKind.ArrayLiteral:
                 return children((<ArrayLiteral>node).elements);
             case SyntaxKind.ObjectLiteral:
@@ -1725,12 +1731,28 @@ module ts {
             }
         }
 
-        function parseType(): TypeNode {
+        function parseNonUnionType(): TypeNode {
             var type = parseNonArrayType();
-            while (type && !scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
+            while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
                 parseExpected(SyntaxKind.CloseBracketToken);
                 var node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.pos);
                 node.elementType = type;
+                type = finishNode(node);
+            }
+            return type;
+        }
+
+        function parseType(): TypeNode {
+            var type = parseNonUnionType();
+            if (token === SyntaxKind.BarToken) {
+                var types = <NodeArray<TypeNode>>[type];
+                types.pos = type.pos;
+                while (parseOptional(SyntaxKind.BarToken)) {
+                    types.push(parseNonUnionType());
+                }
+                types.end = getNodeEnd();
+                var node = <UnionTypeNode>createNode(SyntaxKind.UnionType, type.pos);
+                node.types = types;
                 type = finishNode(node);
             }
             return type;
@@ -4031,7 +4053,7 @@ module ts {
                         }
                     }
                 }
-                else if (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || file.flags & NodeFlags.DeclarationFile)) {
+                else if (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
                     // TypeScript 1.0 spec (April 2014): 12.1.6
                     // An AmbientExternalModuleDeclaration declares an external module. 
                     // This type of declaration is permitted only in the global module.

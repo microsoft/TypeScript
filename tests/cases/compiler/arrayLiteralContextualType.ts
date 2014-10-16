@@ -25,5 +25,5 @@ bar([
 ]); // Legal because of the contextual type IAnimal provided by the parameter
 
 var arr = [new Giraffe(), new Elephant()];
-foo(arr); // Error because of no contextual type
-bar(arr); // Error because of no contextual type
+foo(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
+bar(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]

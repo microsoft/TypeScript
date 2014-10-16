@@ -22,7 +22,7 @@ var x: {
 >A : A
 
 } = { data: new B() }
->{ data: new B() } : { [x: number]: A; data: B; }
+>{ data: new B() } : { [x: number]: undefined; data: B; }
 >data : B
 >new B() : B
 >B : typeof B

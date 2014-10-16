@@ -1,11 +1,3 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(6,13): error TS2367: No best common type exists between 'T' and 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(7,13): error TS2367: No best common type exists between 'U' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(10,14): error TS2367: No best common type exists between 'T' and 'V'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(11,14): error TS2367: No best common type exists between 'V' and 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(14,14): error TS2367: No best common type exists between 'V' and 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(15,14): error TS2367: No best common type exists between 'U' and 'V'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(26,14): error TS2367: No best common type exists between 'V' and 'Foo'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(27,14): error TS2367: No best common type exists between 'Foo' and 'V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(45,7): error TS2416: Class 'D3<T, U, V>' incorrectly extends base class 'B1<Foo>':
   Types of property 'foo' are incompatible:
     Type 'V' is not assignable to type 'Foo':
@@ -29,34 +21,22 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(77,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts (18 errors) ====
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts (10 errors) ====
     // checking whether other types are subtypes of type parameters with constraints
     
     class Foo { foo: number; }
     function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
-        // error
+        // ok
         var r = true ? t : u;
-                ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'U'.
         var r = true ? u : t;
-                ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'U' and 'T'.
     
-        // error
+        // ok
         var r2 = true ? t : v;
-                 ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'T' and 'V'.
         var r2 = true ? v : t;
-                 ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'V' and 'T'.
     
-        // error
+        // ok
         var r3 = true ? v : u;
-                 ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'V' and 'U'.
         var r3 = true ? u : v;
-                 ~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'U' and 'V'.
     
         // ok
         var r4 = true ? t : new Foo();
@@ -66,13 +46,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         var r5 = true ? u : new Foo();
         var r5 = true ? new Foo() : u;
     
-        // BUG, should be error
+        // ok
         var r6 = true ? v : new Foo();
-                 ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'V' and 'Foo'.
         var r6 = true ? new Foo() : v;
-                 ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'Foo' and 'V'.
     
     }
     
