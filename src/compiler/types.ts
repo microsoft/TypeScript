@@ -1006,6 +1006,7 @@ module ts {
 
     export interface InferenceContext {
         typeParameters: TypeParameter[];  // Type parameters for which inferences are made
+        inferUnionTypes: boolean;         // Infer union types for disjoint candidates (otherwise undefinedType)
         inferenceCount: number;           // Incremented for every inference made (whether new or not)
         inferences: Type[][];             // Inferences made for each type parameter
         inferredTypes: Type[];            // Inferred type for each type parameter

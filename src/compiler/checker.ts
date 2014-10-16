@@ -3746,11 +3746,12 @@ module ts {
             }
         }
 
-        function createInferenceContext(typeParameters: TypeParameter[]): InferenceContext {
+        function createInferenceContext(typeParameters: TypeParameter[], inferUnionTypes: boolean): InferenceContext {
             var inferences: Type[][] = [];
             for (var i = 0; i < typeParameters.length; i++) inferences.push([]);
             return {
                 typeParameters: typeParameters,
+                inferUnionTypes: inferUnionTypes,
                 inferenceCount: 0,
                 inferences: inferences,
                 inferredTypes: new Array(typeParameters.length),
@@ -3897,10 +3898,9 @@ module ts {
             if (!result) {
                 var inferences = context.inferences[index];
                 if (inferences.length) {
-                    // Find type that is supertype of all others
-                    var supertype = getCommonSupertype(inferences);
-                    // Infer widened supertype, or the undefined type for no common supertype
-                    var inferredType = supertype ? getWidenedType(supertype) : undefinedType;
+                    // Infer widened union or supertype, or the undefined type for no common supertype
+                    var unionOrSuperType = context.inferUnionTypes ? getUnionType(inferences) : getCommonSupertype(inferences);
+                    var inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : undefinedType;
                 }
                 else {
                     // Infer the empty object type when no inferences were made
@@ -4941,7 +4941,7 @@ module ts {
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
-            var context = createInferenceContext(signature.typeParameters);
+            var context = createInferenceContext(signature.typeParameters, /*inferUnionTypes*/ true);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypes(context, instantiateType(source, contextualMapper), target);
@@ -4951,7 +4951,7 @@ module ts {
 
         function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): Type[] {
             var typeParameters = signature.typeParameters;
-            var context = createInferenceContext(typeParameters);
+            var context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false);
             var mapper = createInferenceMapper(context);
             // First infer from arguments that are not context sensitive
             for (var i = 0; i < args.length; i++) {
