@@ -1235,7 +1235,9 @@ module ts {
 
         static label = "label";
 
-        static alias = "alias"
+        static alias = "alias";
+
+        static constantElement = "constant";
     }
 
     export class ScriptElementKindModifier {
@@ -2720,6 +2722,9 @@ module ts {
                 if (isFirstDeclarationOfSymbolParameter(symbol)) {
                     return ScriptElementKind.parameterElement;
                 }
+                else if(forEach(symbol.declarations, d => d.flags & NodeFlags.Const)) {
+                    return ScriptElementKind.constantElement;
+                }
                 return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
             }
             if (flags & SymbolFlags.Function) return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
@@ -2751,7 +2756,7 @@ module ts {
                 case SyntaxKind.ClassDeclaration: return ScriptElementKind.classElement;
                 case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
                 case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
-                case SyntaxKind.VariableDeclaration: return ScriptElementKind.variableElement;
+                case SyntaxKind.VariableDeclaration: return node.flags & NodeFlags.Const ? ScriptElementKind.constantElement: ScriptElementKind.variableElement;
                 case SyntaxKind.FunctionDeclaration: return ScriptElementKind.functionElement;
                 case SyntaxKind.GetAccessor: return ScriptElementKind.memberGetAccessorElement;
                 case SyntaxKind.SetAccessor: return ScriptElementKind.memberSetAccessorElement;
@@ -2840,6 +2845,7 @@ module ts {
                             switch (symbolKind) {
                                 case ScriptElementKind.memberVariableElement:
                                 case ScriptElementKind.variableElement:
+                                case ScriptElementKind.constantElement:
                                 case ScriptElementKind.parameterElement:
                                 case ScriptElementKind.localVariableElement:
                                     // If it is call or construct signature of lambda's write type name
