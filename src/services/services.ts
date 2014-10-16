@@ -2709,10 +2709,6 @@ module ts {
                     if (rootSymbolFlags & SymbolFlags.SetAccessor) return ScriptElementKind.memberVariableElement;
                     Debug.assert(rootSymbolFlags & SymbolFlags.Method);
                 }) || ScriptElementKind.memberFunctionElement;
-
-                
-                //? 
-                //: ScriptElementKind.memberFunctionElement
             }
 
             return ScriptElementKind.unknown;

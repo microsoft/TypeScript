@@ -608,7 +608,7 @@ module ts {
             // If it is an instantiated symbol, then it is a value if the symbol it is an
             // instantiation of is a value.
             if (symbol.flags & SymbolFlags.Instantiated) {
-                return (getSymbolLinks(symbol).target.flags & SymbolFlags.Value) !== 0;
+                return symbolIsValue(getSymbolLinks(symbol).target);
             }
 
             // If the symbol has the value flag, it is trivially a value.
