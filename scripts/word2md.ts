@@ -103,7 +103,7 @@ module Word {
     export interface Document {
         fields: Fields;
         paragraphs: Paragraphs;
-        builtInDocumentProperties: Collection<string>;
+        builtInDocumentProperties: Collection<any>;
         close(saveChanges: boolean): void;
         range(): Range;
     }
@@ -119,7 +119,6 @@ module Word {
 }
 
 var sys = (function () {
-    var fso = new ActiveXObject("Scripting.FileSystemObject");
     var fileStream = new ActiveXObject("ADODB.Stream");
     fileStream.Type = 2 /*text*/;
     var binaryStream = new ActiveXObject("ADODB.Stream");
@@ -323,7 +322,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     }
 
     function writeDocument() {
-        var title = doc.builtInDocumentProperties.item(1);
+        var title = doc.builtInDocumentProperties.item(1) + "";
         if (title.length) {
             write("# " + title + "\n\n");
         }

@@ -1,3 +1,5 @@
+# TypeScript Language Specification
+
 Version 1.4
 
 October, 2014

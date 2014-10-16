@@ -1,5 +1,4 @@
 var sys = (function () {
-    var fso = new ActiveXObject("Scripting.FileSystemObject");
     var fileStream = new ActiveXObject("ADODB.Stream");
     fileStream.Type = 2;
     var binaryStream = new ActiveXObject("ADODB.Stream");
@@ -171,7 +170,7 @@ function convertDocumentToMarkdown(doc) {
         lastInTable = inTable;
     }
     function writeDocument() {
-        var title = doc.builtInDocumentProperties.item(1);
+        var title = doc.builtInDocumentProperties.item(1) + "";
         if (title.length) {
             write("# " + title + "\n\n");
         }
