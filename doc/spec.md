@@ -1,8 +1,8 @@
 # TypeScript Language Specification
 
-Version 1.3
+Version 1.4
 
-September, 2014
+October, 2014
 
 <br/>
 
@@ -45,9 +45,10 @@ TypeScript is a trademark of Microsoft Corporation.
     * [3.3.1 Named Type References](#3.3.1)
     * [3.3.2 Array Types](#3.3.2)
     * [3.3.3 Tuple Types](#3.3.3)
-    * [3.3.4 Function Types](#3.3.4)
-    * [3.3.5 Constructor Types](#3.3.5)
-    * [3.3.6 Members](#3.3.6)
+    * [3.3.4 Union Types](#3.3.4)
+    * [3.3.5 Function Types](#3.3.5)
+    * [3.3.6 Constructor Types](#3.3.6)
+    * [3.3.7 Members](#3.3.7)
   * [3.4 Type Parameters](#3.4)
     * [3.4.1 Type Parameter Lists](#3.4.1)
     * [3.4.2 Type Argument Lists](#3.4.2)
@@ -59,9 +60,10 @@ TypeScript is a trademark of Microsoft Corporation.
     * [3.6.3 Object Type Literals](#3.6.3)
     * [3.6.4 Array Type Literals](#3.6.4)
     * [3.6.5 Tuple Type Literals](#3.6.5)
-    * [3.6.6 Function Type Literals](#3.6.6)
-    * [3.6.7 Constructor Type Literals](#3.6.7)
-    * [3.6.8 Type Queries](#3.6.8)
+    * [3.6.6 Union Type Literals](#3.6.6)
+    * [3.6.7 Function Type Literals](#3.6.7)
+    * [3.6.8 Constructor Type Literals](#3.6.8)
+    * [3.6.9 Type Queries](#3.6.9)
   * [3.7 Specifying Members](#3.7)
     * [3.7.1 Property Signatures](#3.7.1)
     * [3.7.2 Call Signatures](#3.7.2)
@@ -77,7 +79,6 @@ TypeScript is a trademark of Microsoft Corporation.
     * [3.8.6 Type Inference](#3.8.6)
     * [3.8.7 Recursive Types](#3.8.7)
   * [3.9 Widened Types](#3.9)
-  * [3.10 Best Common Type](#3.10)
 * [4 Expressions](#4)
   * [4.1 Values and References](#4.1)
   * [4.2 The this Keyword](#4.2)
@@ -119,6 +120,7 @@ TypeScript is a trademark of Microsoft Corporation.
   * [4.17 Assignment Operators](#4.17)
   * [4.18 The Comma Operator](#4.18)
   * [4.19 Contextually Typed Expressions](#4.19)
+  * [4.20 Type Guards](#4.20)
 * [5 Statements](#5)
   * [5.1 Variable Statements](#5.1)
   * [5.2 If, Do, and While Statements](#5.2)
@@ -1049,13 +1051,14 @@ All string literal types are subtypes of the String primitive type.
 
 Object types are composed from properties, call signatures, construct signatures, and index signatures, collectively called members.
 
-Class and interface type references, array types, tuple types, function types, and constructor types are all classified as object types. Multiple constructs in the TypeScript language create object types, including:
+Class and interface type references, array types, tuple types, union types, function types, and constructor types are all classified as object types. Multiple constructs in the TypeScript language create object types, including:
 
 * Object type literals (section [3.6.3](#3.6.3)).
 * Array type literals (section [3.6.4](#3.6.4)).
 * Tuple type literals (section [3.6.5](#3.6.5)).
-* Function type literals (section [3.6.6](#3.6.6)).
-* Constructor type literals (section [3.6.7](#3.6.7)).
+* Union type literals (section [3.6.6](#3.6.6)).
+* Function type literals (section [3.6.7](#3.6.7)).
+* Constructor type literals (section [3.6.8](#3.6.8)).
 * Object literals (section [4.5](#4.5)).
 * Array literals (section [4.6](#4.6)).
 * Function expressions (section [4.9](#4.9)) and function declarations ([6.1](#6.1)).
@@ -1105,23 +1108,111 @@ combines the set of properties
 }
 ```
 
-with the members of an array type whose element type is the best common type (section [3.10](#3.10)) of the tuple element types.
+with the members of an array type whose element type is the union type (section [3.3.4](#3.3.4)) of the tuple element types.
 
-Array literals (section [4.6](#4.6)) may be used to create values of tuple types. For example
+Array literals (section [4.6](#4.6)) may be used to create values of tuple types.
+
+An example:
 
 ```TypeScript
-var t: [number, string] = [1, "one"];
+var t: [number, string] = [3, "three"];  
+var n = t[0];  // Type of n is number  
+var s = t[1];  // Type of s is string  
+var i: number;  
+var x = t[i];  // Type of x is number | string
 ```
 
-### <a name="3.3.4"/>3.3.4 Function Types
+### <a name="3.3.4"/>3.3.4 Union Types
 
-An object type containing one or more call signatures is said to be a ***function type***. Function types may be written using function type literals (section [3.6.6](#3.6.6)) or by including call signatures in object type literals.
+***Union types*** represent values that may have one of several disjoint representations. A value of a union type *A* | *B* is a value that is *either* of type *A* or type *B*. Union types are written using union type literals (section [3.6.6](#3.6.6)).
 
-### <a name="3.3.5"/>3.3.5 Constructor Types
+A union type encompasses an unordered set of unrelated types (that is, types that aren’t subtypes of each other). The following rules govern union types:
 
-An object type containing one or more construct signatures is said to be a ***constructor type***. Constructor types may be written using constructor type literals (section [3.6.7](#3.6.7)) or by including construct signatures in object type literals.
+* *A* | *B* is equivalent to *A* if *B* is a subtype of *A*.
+* *A* | *B* is equivalent to *B* | *A*.
+* *AB* | *C* is equivalent to *A* | *BC*, where *AB* is *A* | *B* and *BC* is *B* | *C*.
 
-### <a name="3.3.6"/>3.3.6 Members
+Union types are reduced to the smallest possible set of constituent types using these rules.
+
+Union types have the following subtype relationships:
+
+* A union type *U* is a subtype of a type *T* if each type in *U* is a subtype of *T*.
+* A type *T* is a subtype of a union type *U* if *T* is a subtype of any type in *U*.
+
+Similarly, union types have the following assignability relationships:
+
+* A union type *U* is assignable to a type *T* if each type in *U* is assignable to *T*.
+* A type *T* is assignable to a union type *U* if *T* is assignable to any type in *U*.
+
+For purposes of property access (section [4.10](#4.10)) and function calls ([4.12](#4.12)), a union type *U* has those members that are present in every one of its constituent types, with types that are unions of the respective members in the constituent types. Specifically:
+
+* If each type in *U* has a property *P*, *U* has a property *P* of a union type of the types of *P* from each type in *U*.
+* If each type in *U* has call signatures and the sets of call signatures are identical ignoring return types, *U* has the same set of call signatures, but with return types that are unions of the return types of the respective call signatures from each type in *U*.
+* If each type in *U* has construct signatures and the sets of construct signatures are identical ignoring return types, *U* has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in *U*.
+* If each type in *U* has a string index signature, *U* has a string index signature of a union type of the types of the string index signatures from each type in *U*.
+* If each type in *U* has a numeric index signature, *U* has a numeric index signature of a union type of the types of the numeric index signatures from each type in *U*.
+
+When used as a contextual type (section [4.19](#4.19)), a union type *U* has those members that are present in any of its constituent types, with types that are unions of the respective members in the constituent types. Specifically:
+
+* Let *S* be the set of types in *U* that has a property *P*. If *S* is not empty, *U* has a property *P* of a union type of the types of *P* from each type in *S*.
+* Let *S* be the set of types in *U* that have call signatures. If *S* is not empty and the sets of call signatures of the types in *S* are identical ignoring return types,* U* has the same set of call signatures, but with return types that are unions of the return types of the respective call signatures from each type in *S*.
+* Let *S* be the set of types in *U* that have construct signatures. If *S* is not empty and the sets of construct signatures of the types in *S* are identical ignoring return types,* U* has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in *S*.
+* Let *S* be the set of types in *U* that has a string index signature. If *S* is not empty, *U* has a string index signature of a union type of the types of the string index signatures from each type in *S*.
+* Let *S* be the set of types in *U* that has a numeric index signature. If *S* is not empty, *U* has a numeric index signature of a union type of the types of the numeric index signatures from each type in *S*.
+
+The || and conditional operators (section [4.15.7](#4.15.7) and [4.16](#4.16)) may produce values of union types, and array literals (section [4.6](#4.6)) may produce array values that have union types as their element types.
+
+Type guards (section [4.20](#4.20)) may be used to narrow a union type to a more specific type. In particular, type guards are useful for narrowing union type values to a non-union type values.
+
+In the example
+
+```TypeScript
+var x: string | number;  
+var test: boolean;  
+x = "hello";            // Ok  
+x = 42;                 // Ok  
+x = test;               // Error, boolean not assignable  
+x = test ? 5 : "five";  // Ok  
+x = test ? 0 : false;   // Error, number | boolean not asssignable
+```
+
+it is possible to assign ‘x’ a value of type string, number, or the union type string | number, but not any other type. To access a value in ‘x’, a type guard can be used to first narrow the type of ‘x’ to either string or number:
+
+```TypeScript
+var n = typeof x === "string" ? x.length : x;  // Type of n is number
+```
+
+The following example illustrates the merging of member types that occurs when union types are created from object types.
+
+```TypeScript
+interface A {  
+    a: string;  
+    b: number;  
+}
+
+interface B {  
+    a: number;  
+    b: number;  
+    c: number;  
+}
+
+var x: A | B;  
+var a = x.a;  // a has type string | number  
+var b = x.b;  // b has type number  
+var c = x.c;  // Error, no property c in union type
+```
+
+Note that ‘x.a’ has a union type because the type of ‘a’ is different in ‘A’ and ‘B’, whereas ‘x.b’ simply has type number because that is the type of ‘b’ in both ‘A’ and ‘B’. Also note that there is no property ‘x.c’ because only ‘A’ has a property ‘c’.
+
+### <a name="3.3.5"/>3.3.5 Function Types
+
+An object type containing one or more call signatures is said to be a ***function type***. Function types may be written using function type literals (section [3.6.7](#3.6.7)) or by including call signatures in object type literals.
+
+### <a name="3.3.6"/>3.3.6 Constructor Types
+
+An object type containing one or more construct signatures is said to be a ***constructor type***. Constructor types may be written using constructor type literals (section [3.6.8](#3.6.8)) or by including construct signatures in object type literals.
+
+### <a name="3.3.7"/>3.3.7 Members
 
 Every object type is composed from zero or more of the following kinds of members:
 
@@ -1263,6 +1354,7 @@ Types are specified either by referencing their keyword or name, or by writing o
 &emsp;&emsp;&emsp;*ObjectType*  
 &emsp;&emsp;&emsp;*ArrayType*  
 &emsp;&emsp;&emsp;*TupleType*  
+&emsp;&emsp;&emsp;*UnionType*  
 &emsp;&emsp;&emsp;*FunctionType*  
 &emsp;&emsp;&emsp;*ConstructorType*  
 &emsp;&emsp;&emsp;*TypeQuery*
@@ -1381,7 +1473,7 @@ An array type literal is written as an element type followed by an open and clos
 
 An array type literal references an array type (section [3.3.2](#3.3.2)) with the given element type. An array type literal is simply shorthand notation for a reference to the generic interface type ‘Array’ in the global module with the element type as a type argument.
 
-In order to avoid grammar ambiguities, array type literals permit only a restricted set of notations for the element type. Specifically, an *ArrayType* cannot start with a *FunctionType* or *ConstructorType*. To use one of those forms for the element type, an array type must be written using the ‘Array&lt;T>’ notation. For example, the type
+In order to avoid grammar ambiguities, array type literals permit only a restricted set of notations for the element type. Specifically, an *ArrayType* cannot start with a *UnionType*, *FunctionType* or *ConstructorType*. To use one of those forms for the element type, an array type must be written using the ‘Array&lt;T>’ notation. For example, the type
 
 ```TypeScript
 () => string[]
@@ -1415,7 +1507,34 @@ A tuple type literal is written as a sequence of element types, separated by com
 
 A tuple type literal references a tuple type (section [3.3.3](#3.3.3)).
 
-### <a name="3.6.6"/>3.6.6 Function Type Literals
+### <a name="3.6.6"/>3.6.6 Union Type Literals
+
+A union type literal is written as a sequence of types separated by vertical bars.
+
+&emsp;&emsp;*UnionType:*  
+&emsp;&emsp;&emsp;*ElementType*&emsp;`|`&emsp;*UnionOrElementType*
+
+&emsp;&emsp;*UnionOrElementType:*  
+&emsp;&emsp;&emsp;*UnionType*  
+&emsp;&emsp;&emsp;*ElementType*
+
+A union typle literal references a union type (section [3.3.4](#3.3.4)).
+
+In order to avoid grammar ambiguities, union type literals permit only a restricted set of notations for the element types. Specifically, an element of a *UnionType* cannot be written as a *FunctionType* or *ConstructorType*. To include function or constructor types in a union type the function or constructor types must be written as object type literals. For example
+
+```TypeScript
+() => string | () => number
+```
+
+denotes a function whose return value is either a string or a function returning number, whereas
+
+```TypeScript
+{ (): string } | { (): number }
+```
+
+denotes either a function returning string or a function returning number.
+
+### <a name="3.6.7"/>3.6.7 Function Type Literals
 
 A function type literal specifies the type parameters, regular parameters, and return type of a call signature.
 
@@ -1436,7 +1555,7 @@ is exactly equivalent to the object type literal
 
 Note that function types with multiple call or construct signatures cannot be written as function type literals but must instead be written as object type literals.
 
-### <a name="3.6.7"/>3.6.7 Constructor Type Literals
+### <a name="3.6.8"/>3.6.8 Constructor Type Literals
 
 A constructor type literal specifies the type parameters, regular parameters, and return type of a construct signature.
 
@@ -1457,7 +1576,7 @@ is exactly equivalent to the object type literal
 
 Note that constructor types with multiple construct signatures cannot be written as constructor type literals but must instead be written as object type literals.
 
-### <a name="3.6.8"/>3.6.8 Type Queries
+### <a name="3.6.9"/>3.6.9 Type Queries
 
 A type query obtains the type of an expression.
 
@@ -1775,8 +1894,9 @@ Two types are considered ***identical*** when
 
 * they are both the Any type,
 * they are the same primitive type,
-* they are the same type parameter, or
-* they are object types with identical sets of members.
+* they are the same type parameter,
+* they are union types with identical sets of constituent types, or
+* they are non-union object types with identical sets of members.
 
 Two members are considered identical when
 
@@ -1816,6 +1936,8 @@ the variables ‘a’ and ‘b’ are of identical types because the two type references
 * *S* is an enum type and *T* is the primitive type Number.
 * *S* is a string literal type and *T* is the primitive type String.
 * *S* and *T* are type parameters, and *S* is directly or indirectly constrained to *T*.
+* *S* is a union type and each constituent type of *S* is a subtype of *T*.
+* *T* is a union type and *S* is a subtype of at least one constituent type of *T*.
 * *S’* and *T* are object types and, for each member *M* in *T*, one of the following is true:
   * *M* is a property and *S’* contains a property *N* where
     * *M* and *N* have the same name,
@@ -1850,6 +1972,8 @@ Types are required to be assignment compatible in certain circumstances, such as
 * *S* or *T* is an enum type and* *the other is the primitive type Number.
 * *S* is a string literal type and *T* is the primitive type String.
 * *S* and *T* are type parameters, and *S* is directly or indirectly constrained to *T*.
+* *S* is a union type and each constituent type of *S* is assignable to *T*.
+* *T* is a union type and *S* is assignable to at least one constituent type of *T*.
 * *S’* and *T* are object types and, for each member *M* in *T*, one of the following is true:
   * *M* is a property and *S’* contains a property *N* where
     * *M* and *N* have the same name,
@@ -1890,13 +2014,18 @@ foo({ name: "hello" });            // Error, id required but missing
 During type argument inference in a function call (section [4.12.2](#4.12.2)) it is in certain circumstances necessary to instantiate a generic call signature of an argument expression in the context of a non-generic call signature of a parameter such that further inferences can be made. A generic call signature *A* is ***instantiated in the context of*** non-generic call signature *B* as follows:
 
 * Using the process described in [3.8.6](#3.8.6), inferences for *A*’s type parameters are made from each parameter type in *B* to the corresponding parameter type in *A* for those parameter positions that are present in both signatures, where rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
-* The inferred type argument for each type parameter is the best common type (section [3.10](#3.10)) of the set of inferences made for that type parameter. However, if the best common type does not satisfy the constraint of the type parameter, the inferred type argument is instead the constraint.
+* The inferred type argument for each type parameter is the union type of the set of inferences made for that type parameter. However, if the union type does not satisfy the constraint of the type parameter, the inferred type argument is instead the constraint.
 
 ### <a name="3.8.6"/>3.8.6 Type Inference
 
 In certain contexts, inferences for a given set of type parameters are made *from* a type *S*, in which those type parameters do not occur, *to* another type *T*, in which those type parameters do occur. Inferences consist of a set of candidate type arguments collected for each of the type parameters. The inference process recursively relates *S* and *T* to gather as many inferences as possible:
 
 * If *T* is one of the type parameters for which inferences are being made, *S* is added to the set of inferences for that type parameter.
+* Otherwise, if *S* and *T* are references to the same generic type, inferences are made from each type argument in *S* to each corresponding type argument in *T*.
+* Otherwise, if *T* is a union type:
+  * First, inferences are made from *S* to each constituent type in *T* that isn’t simply one of the type parameters for which inferences are being made.
+  * If the first step produced no inferences and exactly one constituent type in *T* is simply a type parameter for which inferences are being made, inferences are made from *S* to that type parameter.
+* Otherwise, if *S* is a union type, inferences are made from each constituent type in *S* to *T*.
 * Otherwise, if *S* and *T* are object types, then for each member *M* in *T*:
   * If *M* is a property and *S* contains a property *N* with the same name as *M*, inferences are made from the type of *N* to the type of *M*.
   * If *M* is a call signature and a corresponding call signature *N* exists in *S*, *N* is instantiated with the Any type as an argument for each type parameter (if any) and inferences are made from parameter types in *N* to the corresponding parameter types in *M* for positions that are present in both signatures, and from the return type of *N* to the return type of *M*.
@@ -1954,28 +2083,11 @@ infers the type of ‘name’ to be the String primitive type since that is the type
 The following example shows the results of widening types to produce inferred variable types.
 
 ```TypeScript
-var a = null;                    // var a: any  
-var b = undefined;               // var b: any  
-var c = { x: 0, y: null };	       // var c: { x: number, y: any }  
-var d = [ null, undefined ];     // var d: any[]
+var a = null;                 // var a: any  
+var b = undefined;            // var b: any  
+var c = { x: 0, y: null };	    // var c: { x: number, y: any }  
+var d = [ null, undefined ];  // var d: any[]
 ```
-
-## <a name="3.10"/>3.10 Best Common Type
-
-In several situations a ***best common type*** needs to be inferred from a set of types. In particular, return types of functions with multiple return statements and element types of array literals are found this way. The determination of a best common type may in some cases factor in a contextual type.
-
-Given a set of types { *T<sub>1</sub>*, *T<sub>2</sub>*, …, *T<sub>n</sub>* } and a contextual type *C*, the best common type is determined as follows:
-
-* If the set of types is empty, the best common type is *C*.
-* Otherwise, if C is a supertype of every *T<sub>n</sub>*, the best common type is C.
-* Otherwise, if one exists, the first *T<sub>x</sub>* that is a supertype of every *T<sub>n</sub>* is the best common type.
-* Otherwise, the best common type is an empty object type (the type `{}`).
-
-Given a set of types { *T<sub>1</sub>*, *T<sub>2</sub>*, …, *T<sub>n</sub>* } and no contextual type, the best common type is determined as follows:
-
-* If the set of types is empty, the best common type is an empty object type.
-* Otherwise, if one exists, the first *T<sub>x</sub>* that is a supertype of every *T<sub>n</sub>* is the best common type.
-* Otherwise, the best common type is an empty object type (the type `{}`).
 
 <br/>
 
@@ -2068,7 +2180,7 @@ f : function ( ... ) { ... }
 Each property assignment in an object literal is processed as follows:
 
 * If the object literal is contextually typed and the contextual type contains a property with a matching name, the property assignment is contextually typed by the type of that property.
-* Otherwise, if the object literal is contextually typed, the contextual type contains a numeric index signature, and the property assignment specifies a numeric property name, the property assignment is contextually typed by the type of the numeric index signature.
+* Otherwise, if the object literal is contextually typed, if the contextual type contains a numeric index signature, and if the property assignment specifies a numeric property name, the property assignment is contextually typed by the type of the numeric index signature.
 * Otherwise, if the object literal is contextually typed and the contextual type contains a string index signature, the property assignment is contextually typed by the type of the string index signature.
 * Otherwise, the property assignment is processed without a contextual type.
 
@@ -2082,14 +2194,14 @@ A get accessor declaration is processed in the same manner as an ordinary functi
 
 If a get accessor is declared for a property, the return type of the get accessor becomes the type of the property. If only a set accessor is declared for a property, the parameter type (which may be type Any if no type annotation is present) of the set accessor becomes the type of the property.
 
-When an object literal is contextually typed by a type that includes a string index signature of type *T*, the resulting type of the object literal includes a string index signature with the widened form of the best common type of the contextual type *T* and the types of the properties declared in the object literal. Likewise, when an object literal is contextually typed by a type that includes a numeric index signature of type *T*, the resulting type of the object literal includes a numeric index signature with the widened form of the best common type of the contextual type *T* and the types of the numerically named properties (section [3.7.4](#3.7.4)) declared in the object literal.
+When an object literal is contextually typed by a type that includes a string index signature, the resulting type of the object literal includes a string index signature with the union type of the types of the properties declared in the object literal, or the Undefined type if the object literal is empty. Likewise, when an object literal is contextually typed by a type that includes a numeric index signature, the resulting type of the object literal includes a numeric index signature with the union type of the types of the numerically named properties (section [3.7.4](#3.7.4)) declared in the object literal, or the Undefined type if the object literal declares no numerically named properties.
 
 ## <a name="4.6"/>4.6 Array Literals
 
 An array literal
 
 ```TypeScript
-[expr1, expr2, ..., exprN]
+[ expr1, expr2, ..., exprN ]
 ```
 
 denotes a value of an array type (section [3.3.2](#3.3.2)) or a tuple type (section [3.3.3](#3.3.3)) depending on context.
@@ -2100,22 +2212,17 @@ Each element expression in a non-empty array literal is processed as follows:
 * Otherwise, if the array literal is contextually typed by a type *T* with a numeric index signature, the element expression is contextually typed by the type of the numeric index signature.
 * Otherwise, the element expression is not contextually typed.
 
-The resulting type of a non-empty array literal expression is determined as follows:
+The resulting type an array literal expression is determined as follows:
 
-* If the array literal is contextually typed by a type *T* and *T* has at least one property with a numeric name that matches the index of an element expression in the array literal, the resulting type is a tuple type constructed from the types of the element expressions.
-* Otherwise, if the array literal is contextually typed by a type T with a numeric index signature of type *S*, the resulting type is an array type where the element type is the best common type of the contextual type *S* and the types of the element expressions.
-* Otherwise, if the array literal is not contextually typed, the resulting type is an array type where the element type is the best common type of the types of the element expressions.
-
-The resulting type of an empty array literal expression is determined as follows:
-
-* If the array literal is contextually typed by a type *T* with a numeric index signature of type *S*, the resulting type is an array type with element type *S*.
-* Otherwise, the resulting type is an array type with the element type Undefined.
+* If the array literal is empty, the resulting type is an array type with the element type Undefined.
+* Otherwise, if the array literal is contextually typed by a type that has a property with the numeric name ‘0’, the resulting type is a tuple type constructed from the types of the element expressions.
+* Otherwise, the resulting type is an array type with an element type that is the union of the types of the element expressions.
 
 The rules above mean that an array literal is always of an array type, unless it is contextually typed by a type with numerically named properties (such as a tuple type). For example
 
 ```TypeScript
-var a = [1, 2];                          // number[]  
-var b = ["hello", true];                 // {}[]  
+var a = [1, 2];                          // Array<number>  
+var b = ["hello", true];                 // Array<string | boolean>  
 var c: [number, string] = [3, "three"];  // [number, string]
 ```
 
@@ -2336,7 +2443,7 @@ var s = data[0];  // string
 var n = data[1];  // number
 ```
 
-## <a name="4.11"/>4.11 The new Operator
+## <a name="4.11"/>4.11 The new Operator
 
 A `new` operation has one of the following forms:
 
@@ -2383,8 +2490,7 @@ The compile-time processing of a typed function call consists of the following s
     * the function call has no type arguments, and
     * the signature is applicable with respect to the argument list of the function call.
   * A generic signature is a candidate in a function call without type arguments when
-    * type inference (section [4.12.2](#4.12.2)) succeeds in inferring a list of type arguments,
-    * the inferred type arguments satisfy their constraints, and
+    * type inference (section [4.12.2](#4.12.2)) succeeds for each type parameter,
     * once the inferred type arguments are substituted for their associated type parameters, the signature is applicable with respect to the argument list of the function call.
   * A generic signature is a candidate in a function call with type arguments when
     * The signature has the same number of type parameters as were supplied in the type argument list,
@@ -2404,10 +2510,11 @@ A signature is said to be an ***applicable signature*** with respect to an argum
 
 Given a signature &lt; *T<sub>1</sub>* , *T<sub>2</sub>* , … , *T<sub>n</sub>* > ( *p<sub>1</sub>* : *P<sub>1</sub>* , *p<sub>2</sub>* : *P<sub>2</sub>* , … , *p<sub>m</sub>* : *P<sub>m</sub>* ), where each parameter type *P* references zero or more of the type parameters *T*, and an argument list ( *e<sub>1</sub>* , *e<sub>2</sub>* , … , *e<sub>m</sub>* ), the task of type argument inference is to find a set of type arguments *A<sub>1</sub>*…*A<sub>n</sub>* to substitute for *T<sub>1</sub>*…*T<sub>n</sub>* such that the argument list becomes an applicable signature.
 
-The inferred type argument for a particular type parameter is determined from a set of candidate types. Given a type parameter *T*, let *C* denote the widened form (section [3.9](#3.9)) of the best common type (section [3.10](#3.10)) of the set of candidate types *T*. Then,
+Type argument inference produces a set of candidate types for each type parameter. Given a type parameter *T* and set of candidate types, the actual inferred type argument is determined as follows:
 
-* If *C* satisfies *T*’s constraint, the inferred type argument for *T* is *C*.
-* Otherwise, the inferred type argument for *T* is *T*’s constraint.
+* If the set of candidate argument types is empty, the inferred type argument for *T* is *T*’s constraint.
+* Otherwise, if at least one of the candidate types is a supertype of all of the other candidate types, let *C* denote the first such candidate type. If *C* satisfies *T*’s constraint, the inferred type argument for *T* is *C*. Otherwise, the inferred type argument for *T* is *T*’s constraint.
+* Otherwise, if no candidate type is a supertype of all of the other candidate types, type inference has fails and no type argument is inferred for *T*.
 
 In order to compute candidate types, the argument list is processed as follows:
 
@@ -2417,27 +2524,27 @@ In order to compute candidate types, the argument list is processed as follows:
 The process of inferentially typing an expression *e* by a type *T* is the same as that of contextually typing *e* by *T*, with the following exceptions:
 
 * Where expressions contained within *e* would be contextually typed, they are instead inferentially typed.
-* Where a contextual type would be included in a best common type determination (such as when inferentially typing an object or array literal), an inferential type is not.
 * When a function expression is inferentially typed (section [4.9.3](#4.9.3)) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, the corresponding inferred type arguments to become ***fixed*** and no further candidate inferences are made for them.
 * If *e* is an expression of a function type that contains exactly one generic call signature and no other members, and *T* is a function type with exactly one non-generic call signature and no other members, then any inferences made for type parameters referenced by the parameters of *T*’s call signature are ***fixed***, and *e*’s type is changed to a function type with *e*’s call signature instantiated in the context of *T*’s call signature (section [3.8.5](#3.8.5)).
 
-In the example
+An example:
 
 ```TypeScript
 function choose<T>(x: T, y: T): T {  
     return Math.random() < 0.5 ? x : y;  
 }
 
-var x = choose("Five", 5);
+var x = choose(10, 20);     // Ok, x of type number  
+var y = choose("Five", 5);  // Error
 ```
 
-inferences for ‘T’ in the call to ‘choose’ are made as follows: For the first parameter, an inference is made from type ‘string’ to ‘T’. For the second parameter, an inference is made from type ‘number’ to ‘T’. Since the best common type (section [3.10](#3.10)) of ‘string’ and ‘number’ is the empty object type, the call to ‘choose’ is equivalent to
+In the first call to ‘choose’, two inferences are made from ‘number’ to ‘T’, one for each parameter. Thus, ‘number’ is inferred for ‘T’ and the call is equivalent to
 
 ```TypeScript
-var x = choose<{}>("Five", 5);
+var x = choose<number>(10, 20);
 ```
 
-and the resulting type of ‘x’ is therefore the empty object type. Note that had both arguments been of type ‘string’ or ‘number’, ‘x’ would have been of that type.
+In the second call to ‘choose’, an inference is made from type ‘string’ to ‘T’ for the first parameter and an inference is made from type ‘number’ to ‘T’ for the second parameter. Since neither ‘string’ nor ‘number’ is a supertype of the other, type inference fails. That in turn means there are no applicable signatures and the function call is an error.
 
 In the example
 
@@ -2590,7 +2697,7 @@ The ‘void’ operator takes an operand of any type and produces the value ‘undefin
 
 ### <a name="4.14.6"/>4.14.6 The typeof Operator
 
-The ‘typeof’ operator takes an operand of any type and produces a value of the String primitive type. In positions where a type is expected, ‘typeof’ can also be used in a type query (section [3.6.8](#3.6.8)) to produce the type of an expression.
+The ‘typeof’ operator takes an operand of any type and produces a value of the String primitive type. In positions where a type is expected, ‘typeof’ can also be used in a type query (section [3.6.9](#3.6.9)) to produce the type of an expression.
 
 ```TypeScript
 var x = 5;  
@@ -2676,9 +2783,9 @@ The && operator permits the operands to be of any type and produces a result of 
 
 The || operator permits the operands to be of any type.
 
-If the || expression is contextually typed (section [4.19](#4.19)), the operands are contextually typed by the same type and the result is of the best common type (section [3.10](#3.10)) of the contextual type and the two operand types.
+If the || expression is contextually typed (section [4.19](#4.19)), the operands are contextually typed by the same type. Otherwise, the left operand is not contextually typed and the right operand is contextually typed by the type of the left operand. 
 
-If the || expression is not contextually typed, the right operand is contextually typed by the type of the left operand and the result is of the best common type of the two operand types.
+The type of the result is the union type of the two operand types.
 
 ||Any|Boolean|Number|String|Object|
 |:---:|:---:|:---:|:---:|:---:|:---:|
@@ -2698,9 +2805,9 @@ test ? expr1 : expr2
 
 the *test* expression may be of any type.
 
-If the conditional expression is contextually typed (section [4.19](#4.19)), *expr1* and *expr2* are contextually typed by the same type and the result is of the best common type (section [3.10](#3.10)) of the contextual type and the types of *expr1* and *expr2*. An error occurs if the best common type is not identical to at least one of the three candidate types.
+If the conditional expression is contextually typed (section [4.19](#4.19)), *expr1* and *expr2* are contextually typed by the same type. Otherwise, *expr1* and *expr2* are not contextually typed.
 
-If the conditional expression is not contextually typed, the result is of the best common type of the types of *Expr1* and *Expr2*. An error occurs if the best common type is not identical to at least one of the two candidate types.
+The type of the result is the union type of the types of *expr1* and *expr2*.
 
 ## <a name="4.17"/>4.17 Assignment Operators
 
@@ -2803,6 +2910,112 @@ setEventHandlers({
 ```
 
 the object literal passed to ‘setEventHandlers’ is contextually typed to the ‘EventHandlers’ type. This causes the two property assignments to be contextually typed to the unnamed function type ‘(event: EventObject) => void’, which in turn causes the ‘e’ parameters in the arrow function expressions to automatically be typed as ‘EventObject’.
+
+## <a name="4.20"/>4.20 Type Guards
+
+Type guards are particular expression patterns involving the ‘typeof’ and ‘instanceof’ operators that cause the types of variables or parameters to be ***narrowed*** to more specific types. For example, in the code below, knowledge of the static type of ‘x’ in combination with a ‘typeof’ check makes it safe to narrow the type of ‘x’ to string in the first branch of the ‘if’ statement and number in the second branch of the ‘if’ statement.
+
+```TypeScript
+function foo(x: number | string) {  
+    if (typeof x === "string") {  
+        return x.length;  // x has type string here  
+    }  
+    else {  
+        return x + 1;     // x has type number here  
+    }  
+}
+```
+
+The type of a variable or parameter is narrowed in the following situations:
+
+* In the true branch statement of an ‘if’ statement, the type of a variable or parameter is *narrowed* by any type guard in the ‘if’ condition *when true*, provided the true branch statement contains no assignments to the variable or parameter.
+* In the false branch statement of an ‘if’ statement, the type of a variable or parameter is *narrowed* by any type guard in the ‘if’ condition *when false*, provided the false branch statement contains no assignments to the variable or parameter.
+* In the true expression of a conditional expression, the type of a variable or parameter is *narrowed* by any type guard in the condition *when true*, provided the true expression contains no assignments to the variable or parameter.
+* In the false expression of a conditional expression, the type of a variable or parameter is *narrowed* by any type guard in the condition *when false*, provided the false expression contains no assignments to the variable or parameter.
+* In the right operand of a && operation, the type of a variable or parameter is *narrowed* by any type guard in the left operand *when true*, provided the right operand contains no assignments to the variable or parameter.
+* In the right operand of a || operation, the type of a variable or parameter is *narrowed* by any type guard in the left operand *when false*, provided the right operand contains no assignments to the variable or parameter.
+
+A type guard is simply an expression that follows a particular pattern. The process of narrowing the type of a variable *x* by a type guard *when true* or *when false* depends on the type guard as follows:
+
+* A type guard of the form `x instanceof C`, where *C* is of a subtype of the global type ‘Function’ and *C* has a property named ‘prototype’
+  * *when true*, narrows the type of *x* to the type of the ‘prototype’ property in *C* provided it is a subtype of the type of *x*, or
+  * *when false*, has no effect on the type of *x*.
+* A type guard of the form `typeof x === s`, where *s* is a string literal with the value ‘string’, ‘number’, or ‘boolean’,
+  * *when true*, narrows the type of *x* to the given primitive type, or
+  * *when false*, removes the primitive type from the type of *x*.
+* A type guard of the form `typeof x === s`, where *s* is a string literal with any value but ‘string’, ‘number’, or ‘boolean’,
+  * *when true*, removes the primitive types string, number, and boolean from the type of *x*, or
+  * *when false*, has no effect on the type of *x*.
+* A type guard of the form `typeof x !== s`, where *s* is a string literal,
+  * *when true*, narrows the type of x by `typeof x === s` *when false*, or
+  * *when false*, narrows the type of x by `typeof x === s` *when true*.
+* A type guard of the form `!expr`
+  * *when true*, narrows the type of *x* by *expr* *when false*, or
+  * *when false*, narrows the type of *x* by *expr* *when true*.
+* A type guard of the form `expr1 && expr2`
+  * *when true*, narrows the type of *x* by *expr<sub>1</sub>* *when true* and then by *expr<sub>2</sub>* *when true*, or
+  * *when false*, narrows the type of *x* to *T<sub>1</sub>* | *T<sub>2</sub>*, where *T<sub>1</sub>* is the type of *x* narrowed by *expr<sub>1</sub>* *when false*, and *T<sub>2</sub>* is the type of *x* narrowed by *expr<sub>1</sub>* *when true* and then by *expr<sub>2</sub>* *when false*.
+* A type guard of the form `expr1 || expr2`
+  * *when true*, narrows the type of *x* to *T<sub>1</sub>* | *T<sub>2</sub>*, where *T<sub>1</sub>* is the type of *x* narrowed by *expr<sub>1</sub>* *when true*, and *T<sub>2</sub>* is the type of *x* narrowed by *expr<sub>1</sub>* *when false* and then by *expr<sub>2</sub>* *when true*, or
+  * *when false*, narrows the type of *x* by *expr<sub>1</sub>* *when false* and then by *expr<sub>2</sub>* *when false*.
+* A type guard of any other form has no effect on the type of *x*.
+
+A primitive type *P* is removed from a type *T* as follows:
+
+* If *T* is a union type *P* | *T<sub>1</sub>* | *T<sub>2</sub>* | … | *T<sub>n</sub>*, the result is the type *T<sub>1</sub>* | *T<sub>2</sub>* | … | *T<sub>n</sub>*.
+* Otherwise, the result is *T*.
+
+Note that type guards affect types of variables and parameters only and have no effect on members of objects such as properties. Also note that it is possible to defeat a type guard by calling a function that changes the type of the guarded variable.
+
+In the example
+
+```TypeScript
+function isLongString(obj: any) {  
+    return typeof obj === "string" && obj.length > 100;  
+}
+```
+
+the ‘obj’ parameter has type string in the right operand of the && operator.
+
+In the example
+
+```TypeScript
+function f(x: string | number | boolean) {  
+    if (typeof x === "string" || typeof x === "number") {  
+        var y = x;  // Type of y is string | number  
+    }  
+    else {  
+        var z = x;  // Type of z is boolean  
+    }  
+}
+```
+
+the type of ‘x’ is string | number | boolean in left operand of the || operator, number | boolean in the right operand of the || operator, string | number in the first branch of the ‘if’ statement, and boolean in the second branch of the ‘if’ statement.
+
+In the example
+
+```TypeScript
+function processData(data: string | { (): string }) {  
+    var d = typeof data !== "string" ? data() : data;  
+    // Process string in d  
+}
+```
+
+the inferred type of ‘d’ is string.
+
+In the example
+
+```TypeScript
+class NamedItem {  
+    name: string;  
+}
+
+function getName(obj: any) {  
+    return obj instanceof NamedItem ? obj.name : "unknown";  
+}
+```
+
+the inferred type of the ‘getName’ function is string.
 
 <br/>
 
@@ -3000,7 +3213,8 @@ A function implementation without a return type annotation is said to be an ***i
 
 * If there are no return statements with expressions in *f*’s function body, the inferred return type is Void.
 * Otherwise, if *f*’s function body directly references *f* or references any implicitly typed functions that through this same analysis reference *f*, the inferred return type is Any.
-* Otherwise, the inferred return type is the widened form (section [3.9](#3.9)) of the best common type (section [3.10](#3.10)) of the types of the return statement expression in the function body, ignoring return statements with no expressions. A compile-time error occurs if the best common type isn’t one of the return statement expression types (i.e. if the best common type is an empty type).
+* Otherwise, if *f* is a contextually typed function expression (section [4.9.3](#4.9.3)), the inferred return type is the union type (section [3.3.4](#3.3.4)) of the types of the return statement expressions in the function body, ignoring return statements with no expressions.
+* Otherwise, the inferred return type is the first of the types of the return statement expressions in the function body that is a supertype (section [3.8.3](#3.8.3)) of each of the others, ignoring return statements with no expressions. A compile-time error occurs if no return statement expression has a type that is a supertype of each of the others.
 
 In the example
 
@@ -4961,6 +5175,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*ObjectType*  
 &emsp;&emsp;&emsp;*ArrayType*  
 &emsp;&emsp;&emsp;*TupleType*  
+&emsp;&emsp;&emsp;*UnionType*  
 &emsp;&emsp;&emsp;*FunctionType*  
 &emsp;&emsp;&emsp;*ConstructorType*  
 &emsp;&emsp;&emsp;*TypeQuery*
@@ -5020,6 +5235,13 @@ This appendix contains a summary of the grammar found in the main document. As d
 
 &emsp;&emsp;*TupleElementType:*  
 &emsp;&emsp;&emsp;*Type*
+
+&emsp;&emsp;*UnionType:*  
+&emsp;&emsp;&emsp;*ElementType*&emsp;`|`&emsp;*UnionOrElementType*
+
+&emsp;&emsp;*UnionOrElementType:*  
+&emsp;&emsp;&emsp;*UnionType*  
+&emsp;&emsp;&emsp;*ElementType*
 
 &emsp;&emsp;*FunctionType:*  
 &emsp;&emsp;&emsp;*TypeParameters<sub>opt</sub>*&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`=>`&emsp;*Type*

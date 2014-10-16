@@ -146,7 +146,7 @@ module FourSlash {
 
     function convertGlobalOptionsToCompilationSettings(globalOptions: { [idx: string]: string }): ts.CompilationSettings {
         var settings: ts.CompilationSettings = {};
-    // Convert all property in globalOptions into ts.CompilationSettings
+        // Convert all property in globalOptions into ts.CompilationSettings
         for (var prop in globalOptions) {
             if (globalOptions.hasOwnProperty(prop)) {
                 switch (prop) {
@@ -1610,7 +1610,7 @@ module FourSlash {
             Harness.IO.log(this.getNameOrDottedNameSpan(pos));
         }
 
-        private verifyClassifications(expected: { classificationType: string; text: string }[], actual: ts.ClassifiedSpan[]) {
+        private verifyClassifications(expected: { classificationType: string; text: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[]) {
             if (actual.length !== expected.length) {
                 this.raiseError('verifyClassifications failed - expected total classifications to be ' + expected.length + ', but was ' + actual.length);
             }
@@ -1626,7 +1626,19 @@ module FourSlash {
                         actualClassification.classificationType);
                 }
 
+                var expectedSpan = expectedClassification.textSpan;
                 var actualSpan = actualClassification.textSpan;
+
+                if (expectedSpan) {
+                    var expectedLength = expectedSpan.end - expectedSpan.start;
+
+                    if (expectedSpan.start !== actualSpan.start() || expectedLength !== actualSpan.length()) {
+                        this.raiseError("verifyClassifications failed - expected span of text to be " +
+                            "{start=" + expectedSpan.start + ", length=" + expectedLength + "}, but was " +
+                            "{start=" + actualSpan.start() + ", length=" + actualSpan.length() + "}");
+                    }
+                }
+
                 var actualText = this.activeFile.content.substr(actualSpan.start(), actualSpan.length());
                 if (expectedClassification.text !== actualText) {
                     this.raiseError('verifyClassifications failed - expected classificatied text to be ' +

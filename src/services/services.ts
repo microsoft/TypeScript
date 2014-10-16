@@ -994,12 +994,37 @@ module ts {
         containerKind: string;
         containerName: string;
     }
-    
+
+    export enum SymbolDisplayPartKind {
+        aliasName,
+        className,
+        enumName,
+        fieldName,
+        interfaceName,
+        keyword,
+        lineBreak,
+        numericLiteral,
+        stringLiteral,
+        localName,
+        methodName,
+        moduleName,
+        operator,
+        parameterName,
+        propertyName,
+        punctuation,
+        space,
+        text,
+        typeParameterName,
+        enumMemberName,
+        functionName,
+        regularExpressionLiteral,
+    }
+
     export interface SymbolDisplayPart {
         text: string;
         kind: string;
     }
-
+    
     export interface QuickInfo {
         kind: string;
         kindModifiers: string;
@@ -1306,7 +1331,12 @@ module ts {
         resetWriter();
         return {
             displayParts: () => displayParts,
-            writeKind: writeKind,
+            writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
+            writeOperator: text => writeKind(text, SymbolDisplayPartKind.operator),
+            writePunctuation: text => writeKind(text, SymbolDisplayPartKind.punctuation),
+            writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
+            writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
+            writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
             writeSymbol: writeSymbol,
             writeLine: writeLine,
             increaseIndent: () => { indent++; },
@@ -4747,7 +4777,24 @@ module ts {
                     }
                 }
                 else if (flags & SymbolFlags.Module) {
-                    return ClassificationTypeNames.moduleName;
+                    // Only classify a module as such if
+                    //  - It appears in a namespace context.
+                    //  - There exists a module declaration which actually impacts the value side.
+                    if (meaningAtPosition & SemanticMeaning.Namespace ||
+                        (meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol))) {
+                        return ClassificationTypeNames.moduleName;
+                    }
+                }
+
+                return undefined;
+
+                /**
+                 * Returns true if there exists a module that introduces entities on the value side.
+                 */
+                function hasValueSideModule(symbol: Symbol): boolean {
+                    return forEach(symbol.declarations, declaration => {
+                        return declaration.kind === SyntaxKind.ModuleDeclaration && isInstantiated(declaration);
+                    });
                 }
             }
 
