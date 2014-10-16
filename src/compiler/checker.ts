@@ -4103,11 +4103,11 @@ module ts {
             }
             return createArrayType(elementType);
         }
-
+        
         function isNumericName(name: string) {
             return (name !== "") && !isNaN(<number><any>name);
         }
-
+        
         function checkObjectLiteral(node: ObjectLiteral, contextualMapper?: TypeMapper): Type {
             var members = node.symbol.members;
             var properties: SymbolTable = {};
@@ -5227,6 +5227,12 @@ module ts {
             return resultType;
         }
 
+        function checkTemplateExpression(node: TemplateExpression): void {
+            forEach((<TemplateExpression>node).templateSpans, templateSpan => {
+                checkExpression(templateSpan.expression);
+            });
+        }
+
         function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper?: TypeMapper): Type {
             var saveContextualType = node.contextualType;
             node.contextualType = contextualType;
@@ -5280,7 +5286,11 @@ module ts {
                     return booleanType;
                 case SyntaxKind.NumericLiteral:
                     return numberType;
+                case SyntaxKind.TemplateExpression:
+                    checkTemplateExpression(<TemplateExpression>node);
+                    // fall through
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return stringType;
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
@@ -7227,77 +7237,6 @@ module ts {
             var node: Node = entityName;
             while (node.parent && node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
             return node.parent && node.parent.kind === SyntaxKind.TypeReference;
-        }
-
-        function isExpression(node: Node): boolean {
-            switch (node.kind) {
-                case SyntaxKind.ThisKeyword:
-                case SyntaxKind.SuperKeyword:
-                case SyntaxKind.NullKeyword:
-                case SyntaxKind.TrueKeyword:
-                case SyntaxKind.FalseKeyword:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.ArrayLiteral:
-                case SyntaxKind.ObjectLiteral:
-                case SyntaxKind.PropertyAccess:
-                case SyntaxKind.IndexedAccess:
-                case SyntaxKind.CallExpression:
-                case SyntaxKind.NewExpression:
-                case SyntaxKind.TypeAssertion:
-                case SyntaxKind.ParenExpression:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.PrefixOperator:
-                case SyntaxKind.PostfixOperator:
-                case SyntaxKind.BinaryExpression:
-                case SyntaxKind.ConditionalExpression:
-                case SyntaxKind.OmittedExpression:
-                    return true;
-                case SyntaxKind.QualifiedName:
-                    while (node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
-                    return node.parent.kind === SyntaxKind.TypeQuery;
-                case SyntaxKind.Identifier:
-                    if (node.parent.kind === SyntaxKind.TypeQuery) {
-                        return true;
-                    }
-                // Fall through
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.StringLiteral:
-                    var parent = node.parent;
-                    switch (parent.kind) {
-                        case SyntaxKind.VariableDeclaration:
-                        case SyntaxKind.Parameter:
-                        case SyntaxKind.Property:
-                        case SyntaxKind.EnumMember:
-                        case SyntaxKind.PropertyAssignment:
-                            return (<VariableDeclaration>parent).initializer === node;
-                        case SyntaxKind.ExpressionStatement:
-                        case SyntaxKind.IfStatement:
-                        case SyntaxKind.DoStatement:
-                        case SyntaxKind.WhileStatement:
-                        case SyntaxKind.ReturnStatement:
-                        case SyntaxKind.WithStatement:
-                        case SyntaxKind.SwitchStatement:
-                        case SyntaxKind.CaseClause:
-                        case SyntaxKind.ThrowStatement:
-                        case SyntaxKind.SwitchStatement:
-                            return (<ExpressionStatement>parent).expression === node;
-                        case SyntaxKind.ForStatement:
-                            return (<ForStatement>parent).initializer === node ||
-                                (<ForStatement>parent).condition === node ||
-                                (<ForStatement>parent).iterator === node;
-                        case SyntaxKind.ForInStatement:
-                            return (<ForInStatement>parent).variable === node ||
-                                (<ForInStatement>parent).expression === node;
-                        case SyntaxKind.TypeAssertion:
-                            return node === (<TypeAssertion>parent).operand;
-                        default:
-                            if (isExpression(parent)) {
-                                return true;
-                            }
-                    }
-            }
-            return false;
         }
 
         function isTypeNode(node: Node): boolean {

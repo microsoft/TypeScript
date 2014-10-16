@@ -344,6 +344,10 @@ module ts {
                     child((<ImportDeclaration>node).externalModuleName);
             case SyntaxKind.ExportAssignment:
                 return child((<ExportAssignment>node).exportName);
+            case SyntaxKind.TemplateExpression:
+                return child((<TemplateExpression>node).head) || children((<TemplateExpression>node).templateSpans);
+            case SyntaxKind.TemplateSpan:
+                return child((<TemplateSpan>node).expression) || child((<TemplateSpan>node).literal);
         }
     }
 
@@ -448,8 +452,93 @@ module ts {
         }
     }
 
+    export function isExpression(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ThisKeyword:
+            case SyntaxKind.SuperKeyword:
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.TrueKeyword:
+            case SyntaxKind.FalseKeyword:
+            case SyntaxKind.RegularExpressionLiteral:
+            case SyntaxKind.ArrayLiteral:
+            case SyntaxKind.ObjectLiteral:
+            case SyntaxKind.PropertyAccess:
+            case SyntaxKind.IndexedAccess:
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+            case SyntaxKind.TypeAssertion:
+            case SyntaxKind.ParenExpression:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.PrefixOperator:
+            case SyntaxKind.PostfixOperator:
+            case SyntaxKind.BinaryExpression:
+            case SyntaxKind.ConditionalExpression:
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.OmittedExpression:
+                return true;
+            case SyntaxKind.QualifiedName:
+                while (node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
+                return node.parent.kind === SyntaxKind.TypeQuery;
+            case SyntaxKind.Identifier:
+                if (node.parent.kind === SyntaxKind.TypeQuery) {
+                    return true;
+                }
+            // fall through
+            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                var parent = node.parent;
+                switch (parent.kind) {
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.Parameter:
+                    case SyntaxKind.Property:
+                    case SyntaxKind.EnumMember:
+                    case SyntaxKind.PropertyAssignment:
+                        return (<VariableDeclaration>parent).initializer === node;
+                    case SyntaxKind.ExpressionStatement:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.ReturnStatement:
+                    case SyntaxKind.WithStatement:
+                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.CaseClause:
+                    case SyntaxKind.ThrowStatement:
+                    case SyntaxKind.SwitchStatement:
+                        return (<ExpressionStatement>parent).expression === node;
+                    case SyntaxKind.ForStatement:
+                        return (<ForStatement>parent).initializer === node ||
+                            (<ForStatement>parent).condition === node ||
+                            (<ForStatement>parent).iterator === node;
+                    case SyntaxKind.ForInStatement:
+                        return (<ForInStatement>parent).variable === node ||
+                            (<ForInStatement>parent).expression === node;
+                    case SyntaxKind.TypeAssertion:
+                        return node === (<TypeAssertion>parent).operand;
+                    default:
+                        if (isExpression(parent)) {
+                            return true;
+                        }
+                }
+        }
+        return false;
+    }
+
     export function hasRestParameters(s: SignatureDeclaration): boolean {
         return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
+    }
+
+    export function isLiteralKind(kind: SyntaxKind): boolean {
+        return SyntaxKind.FirstLiteralToken <= kind && kind <= SyntaxKind.LastLiteralToken;
+    }
+
+    export function isTextualLiteralKind(kind: SyntaxKind): boolean {
+        return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
+    }
+
+    export function isTemplateLiteralKind(kind: SyntaxKind): boolean {
+        return SyntaxKind.FirstTemplateToken <= kind && kind <= SyntaxKind.LastTemplateToken;
     }
 
     export function isInAmbientContext(node: Node): boolean {
@@ -459,6 +548,7 @@ module ts {
         }
         return false;
     }
+
 
     export function isDeclaration(node: Node): boolean {
         switch (node.kind) {
@@ -875,6 +965,10 @@ module ts {
             return token = scanner.reScanSlashToken();
         }
 
+        function reScanTemplateToken(): SyntaxKind {
+            return token = scanner.reScanTemplateToken();
+        }
+
         function lookAheadHelper<T>(callback: () => T, alwaysResetState: boolean): T {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the 
             // caller asked us to always reset our state).
@@ -1021,7 +1115,9 @@ module ts {
         }
 
         function isPropertyName(): boolean {
-            return token >= SyntaxKind.Identifier || token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral;
+            return token >= SyntaxKind.Identifier ||
+                token === SyntaxKind.StringLiteral ||
+                token === SyntaxKind.NumericLiteral;
         }
 
         function parsePropertyName(): Identifier {
@@ -1296,7 +1392,44 @@ module ts {
             return finishNode(node);
         }
 
-        function parseLiteralNode(internName?:boolean): LiteralExpression {
+        function parseTemplateExpression() {
+            var template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
+
+            template.head = parseLiteralNode();
+            Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
+
+            var templateSpans: TemplateSpan[] = [];
+            do {
+                templateSpans.push(parseTemplateSpan());
+            }
+            while (templateSpans[templateSpans.length - 1].literal.kind === SyntaxKind.TemplateMiddle)
+
+            template.templateSpans = templateSpans;
+            return finishNode(template);
+        }
+
+        function parseTemplateSpan(): TemplateSpan {
+            var span = <TemplateSpan>createNode(SyntaxKind.TemplateSpan);
+            span.expression = parseExpression(/*noIn*/ false);
+
+            var literal: LiteralExpression;
+
+            if (token === SyntaxKind.CloseBraceToken) {
+                reScanTemplateToken()
+                literal = parseLiteralNode();
+            }
+            else {
+                error(Diagnostics.Invalid_template_literal_expected);
+                literal = <LiteralExpression>createMissingNode();
+                literal.text = "";
+            }
+
+            span.literal = literal;
+
+            return finishNode(span);
+        }
+
+        function parseLiteralNode(internName?: boolean): LiteralExpression {
             var node = <LiteralExpression>createNode(token);
             var text = scanner.getTokenValue();
             node.text = internName ? internIdentifier(text) : text;
@@ -1308,7 +1441,7 @@ module ts {
             // Octal literals are not allowed in strict mode or ES5
             // Note that theoretically the following condition would hold true literals like 009,
             // which is not octal.But because of how the scanner separates the tokens, we would
-            // never get a token like this.Instead, we would get 00 and 9 as two separate tokens.
+            // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
             if (node.kind === SyntaxKind.NumericLiteral
@@ -1327,7 +1460,9 @@ module ts {
         }
 
         function parseStringLiteral(): LiteralExpression {
-            if (token === SyntaxKind.StringLiteral) return parseLiteralNode(/*internName:*/ true);
+            if (token === SyntaxKind.StringLiteral) {
+                return parseLiteralNode(/*internName:*/ true);
+            }
             error(Diagnostics.String_literal_expected);
             return <LiteralExpression>createMissingNode();
         }
@@ -1755,6 +1890,8 @@ module ts {
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
                 case SyntaxKind.OpenParenToken:
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.OpenBraceToken:
@@ -1846,8 +1983,8 @@ module ts {
             }
 
             // Now see if we might be in cases '2' or '3'.
-            // If the expression was a LHS expression, and we  have an assignment operator, then 
-            // we're in '2' or '3'.  Consume the assignment and return.
+            // If the expression was a LHS expression, and we have an assignment operator, then 
+            // we're in '2' or '3'. Consume the assignment and return.
             if (isLeftHandSideExpression(expr) && isAssignmentOperator()) {
                 if (isInStrictMode && isEvalOrArgumentsIdentifier(expr)) {
                     // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
@@ -1879,6 +2016,8 @@ module ts {
                     case SyntaxKind.RegularExpressionLiteral:
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.StringLiteral:
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    case SyntaxKind.TemplateExpression:
                     case SyntaxKind.FalseKeyword:
                     case SyntaxKind.NullKeyword:
                     case SyntaxKind.ThisKeyword:
@@ -2343,6 +2482,7 @@ module ts {
                     return parseTokenNode();
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return parseLiteralNode();
                 case SyntaxKind.OpenParenToken:
                     return parseParenExpression();
@@ -2360,6 +2500,9 @@ module ts {
                         return parseLiteralNode();
                     }
                     break;
+                case SyntaxKind.TemplateHead:
+                    return parseTemplateExpression();
+                    
                 default:
                     if (isIdentifier()) {
                         return parseIdentifier();

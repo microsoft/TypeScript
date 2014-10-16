@@ -122,6 +122,7 @@ module ts {
         const_must_be_declared_inside_a_block: { code: 1156, category: DiagnosticCategory.Error, key: "const must be declared inside a block." },
         let_must_be_declared_inside_a_block: { code: 1157, category: DiagnosticCategory.Error, key: "let must be declared inside a block." },
         Only_var_declarations_can_be_exported: { code: 1158, category: DiagnosticCategory.Error, key: "Only var declarations can be exported." },
+        Invalid_template_literal_expected: { code: 1159, category: DiagnosticCategory.Error, key: "Invalid template literal; expected '}'" },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

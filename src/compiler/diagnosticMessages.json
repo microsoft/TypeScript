@@ -449,7 +449,7 @@
     },
     "An enum member cannot have a numeric name.": {
         "category": "Error",
-        "code":  1151
+        "code": 1151
     },
     "'var', 'let' or 'const' expected.": {
         "category": "Error",
@@ -478,6 +478,10 @@
     "Only var declarations can be exported.": {
         "category": "Error",
         "code": 1158
+    },
+    "Invalid template literal; expected '}'": {
+        "category": "Error",
+        "code":  1159
     },
 
     "Duplicate identifier '{0}'.": {
