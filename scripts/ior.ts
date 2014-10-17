@@ -8,6 +8,7 @@ interface IOLog {
         path: string;
         result: { contents: string; };
     }[];
+    arguments: string[];
 }
 
 module Commands {
@@ -43,6 +44,63 @@ module Commands {
         });
     }
     grab['description'] = ' filename.ts: writes out the specified file to disk';
+
+    export function extract(obj: IOLog, outputFolder: string) {
+        var directorySeparator = "/";
+        function directoryExists(path: string): boolean {
+            return fs.existsSync(path) && fs.statSync(path).isDirectory();
+        }
+        function getDirectoryPath(path: string) {
+            return path.substr(0, Math.max(getRootLength(path), path.lastIndexOf(directorySeparator)));
+        }
+        function getRootLength(path: string): number {
+            if (path.charAt(0) === directorySeparator) {
+                if (path.charAt(1) !== directorySeparator) return 1;
+                var p1 = path.indexOf(directorySeparator, 2);
+                if (p1 < 0) return 2;
+                var p2 = path.indexOf(directorySeparator, p1 + 1);
+                if (p2 < 0) return p1 + 1;
+                return p2 + 1;
+            }
+            if (path.charAt(1) === ":") {
+                if (path.charAt(2) === directorySeparator) return 3;
+                return 2;
+            }
+            return 0;
+        }
+        function ensureDirectoriesExist(directoryPath: string) {
+            if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
+                var parentDirectory = getDirectoryPath(directoryPath);
+                ensureDirectoriesExist(parentDirectory);
+                console.log("creating directory: " + directoryPath);
+                fs.mkdirSync(directoryPath);
+            }
+        }
+        function transalatePath(outputFolder:string, path: string): string {
+            return outputFolder + directorySeparator + path.replace(":", "");
+        }
+        function fileExists(path: string): boolean {
+            return fs.existsSync(path);
+        }
+        obj.filesRead.forEach(f => {
+            var filename = transalatePath(outputFolder, f.path);
+            ensureDirectoriesExist(getDirectoryPath(filename));
+            console.log("writing filename:   " + filename);
+            fs.writeFile(filename, f.result.contents, (err) => { });
+        });
+
+        console.log("Command:   tsc ");
+        obj.arguments.forEach(a => {
+            if (getRootLength(a) > 0) {
+                console.log(transalatePath(outputFolder, a));
+            }
+            else {
+                console.log(a);
+            }
+            console.log(" ");
+        });
+    }
+    extract['description'] = ' outputFolder: extract all input files to <outputFolder>';
 }
 
 var args = process.argv.slice(2);
