@@ -24,19 +24,21 @@ module ts.formatting {
         }
         else {
             var spacesString: string;
-            var index = indentation / options.IndentSize;
+            var quotient = Math.floor(indentation / options.IndentSize);
+            var remainder = indentation % options.IndentSize;
             if (!internedSpacesIndentation) {
                 internedSpacesIndentation = [];
             }
 
-            if (internedSpacesIndentation[index] === undefined) {
-                internedSpacesIndentation[index] = spacesString = repeat(" ", indentation);;
+            if (internedSpacesIndentation[quotient] === undefined) {
+                spacesString = repeat(" ", options.IndentSize * quotient);
+                internedSpacesIndentation[quotient] = spacesString;
             }
             else {
-                spacesString = internedSpacesIndentation[index];
+                spacesString = internedSpacesIndentation[quotient];
             }
 
-            var remainder = indentation % options.IndentSize;
+            
             return remainder ? spacesString + repeat(" ", remainder) : spacesString;
         }
 

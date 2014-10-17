@@ -65,41 +65,7 @@ module ts.formatting {
                 return 0;
             }
 
-
-            var parent: Node = current.parent;
-            var parentStart: LineAndCharacter;
-
-            // walk upwards and collect indentations for pairs of parent-child nodes
-            // indentation is not added if parent and child nodes start on the same line or if parent is IfStatement and child starts on the same line with 'else clause'
-            while (parent) {
-                // check if current node is a list item - if yes, take indentation from it
-                var actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
-                if (actualIndentation !== -1) {
-                    return actualIndentation + indentationDelta;
-                }
-
-                parentStart = sourceFile.getLineAndCharacterFromPosition(parent.getStart(sourceFile));
-                var parentAndChildShareLine = 
-                    parentStart.line === currentStart.line || 
-                    childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
-
-                // try to fetch actual indentation for current node from source text
-                var actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
-                if (actualIndentation !== -1) {
-                    return actualIndentation + indentationDelta;
-                }
-
-                // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                if (nodeContentIsIndented(parent, current) && !parentAndChildShareLine) {
-                    indentationDelta += options.IndentSize;
-                }
-
-                current = parent;
-                currentStart = parentStart;
-                parent = current.parent;
-            }
-
-            return indentationDelta;
+            return getIndentationForNode(current, currentStart, indentationDelta, sourceFile, options);
         }
 
         export function getIndentationForNode(current: Node, currentStart: LineAndCharacter, indentationDelta: number, sourceFile: SourceFile, options: EditorOptions): number {
@@ -287,21 +253,24 @@ module ts.formatting {
 
         function findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter: LineAndCharacter, sourceFile: SourceFile, options: EditorOptions): number {
             var lineStart = sourceFile.getPositionFromLineAndCharacter(lineAndCharacter.line, 1);
+            return findFirstNonWhitespaceColumn(lineStart, lineStart + lineAndCharacter.character, sourceFile, options);
+        }
+
+        export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): number {
             var column = 0;
-            for (var i = 0; i < lineAndCharacter.character; ++i) {
-                var charCode = sourceFile.text.charCodeAt(lineStart + i);
-                if (!isWhiteSpace(charCode)) {
+            for (var pos = startPos; pos < endPos; ++pos) {
+                var ch = sourceFile.text.charCodeAt(pos);
+                if (!isWhiteSpace(ch)) {
                     return column;
                 }
 
-                if (charCode === CharacterCodes.tab) {
-                    column += options.TabSize;
+                if (ch === CharacterCodes.tab) {
+                    column += options.TabSize + (column % options.TabSize);
                 }
                 else {
                     column++;
                 }
             }
-
             return column;
         }
 

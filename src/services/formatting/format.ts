@@ -362,21 +362,19 @@ module ts.formatting {
             }
 
             if (lastTriviaWasNewLine && indentToken) {
-
                 var indentNextTokenOrTrivia = true;
-
                 if (currentTokenInfo.leadingTrivia) {
                     for (var i = 0, len = currentTokenInfo.leadingTrivia.length; i < len; ++i) {
                         var triviaItem = currentTokenInfo.leadingTrivia[i];
                         if (rangeContainsRange(originalRange, triviaItem)) {
                             switch (triviaItem.kind) {
                                 case SyntaxKind.MultiLineCommentTrivia:
-                                    // TODO
+                                    indentMultilineComment(triviaItem, indentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
                                     indentNextTokenOrTrivia = false;
                                     break;
                                 case SyntaxKind.SingleLineCommentTrivia:
                                     if (indentNextTokenOrTrivia) {
-                                        insertIndentation(triviaItem.pos, indentation, sourceFile);
+                                        insertIndentation(triviaItem.pos, indentation);
                                         indentNextTokenOrTrivia = false;
                                     }
                                     break;
@@ -391,7 +389,7 @@ module ts.formatting {
                     }
                 }
 
-                insertIndentation(currentTokenInfo.token.pos, indentation, sourceFile);
+                insertIndentation(currentTokenInfo.token.pos, indentation);
                 //// TODO: remove
                 //var tokenRange = getNonAdjustedLineAndCharacterFromPosition(currentTokenInfo.token.pos, sourceFile);
 
@@ -408,12 +406,71 @@ module ts.formatting {
             return fetchNextTokenInfo();
         }
 
-        function insertIndentation(pos: number, indentation: number, sourceFile: SourceFile): void {
+        function insertIndentation(pos: number, indentation: number): void {
             var tokenRange = getNonAdjustedLineAndCharacterFromPosition(pos, sourceFile);
             if (indentation !== tokenRange.character) {
                 var indentationString = getIndentationString(indentation, options);
                 var startLinePosition = getStartPositionOfLine(tokenRange.line, sourceFile);
                 recordReplace(startLinePosition, tokenRange.character, indentationString);
+            }
+        }
+
+        function indentMultilineComment(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean) {
+            // split comment in lines
+            var startLine = getNonAdjustedLineAndCharacterFromPosition(commentRange.pos, sourceFile).line;
+            var endLine = getNonAdjustedLineAndCharacterFromPosition(commentRange.end, sourceFile).line;
+
+            if (startLine === endLine) {
+                if (!firstLineIsIndented) {
+                    // treat as single line comment
+                    insertIndentation(commentRange.pos, indentation);
+                }
+                return;
+            }
+            else {
+                var parts: TextRange[] = [];
+                var startPos = commentRange.pos;
+                for (var line = startLine; line < endLine; ++line) {
+                    var endOfLine = getEndLinePosition(line, sourceFile);
+                    parts.push( {pos: startPos, end: endOfLine} );
+                    startPos = getStartPositionOfLine(line + 1, sourceFile);
+                }
+
+                parts.push( {pos: startPos, end: commentRange.end} );
+            }
+
+            var startLinePos = getStartPositionOfLine(startLine, sourceFile);
+
+            var nonWhitespaceColumnInFirstPart =
+                SmartIndenter.findFirstNonWhitespaceColumn(startLinePos, parts[0].pos, sourceFile, options);
+
+            if (indentation === nonWhitespaceColumnInFirstPart) {
+                return;
+            }
+
+            var startIndex = 0;
+            if (firstLineIsIndented) {
+                startIndex = 1;
+                startLine++;
+            }
+
+            // shift all parts on the delta size
+            var delta = indentation - nonWhitespaceColumnInFirstPart;
+            for (var i = startIndex, len = parts.length; i < len; ++i, ++startLine) {
+                var startLinePos = getStartPositionOfLine(startLine, sourceFile);
+                var nonWhitespaceColumn =
+                    i === 0
+                        ? nonWhitespaceColumnInFirstPart
+                        : SmartIndenter.findFirstNonWhitespaceColumn(parts[i].pos, parts[i].end, sourceFile, options);
+
+                var newIndentation = nonWhitespaceColumn + delta;
+                if (newIndentation > 0) {
+                    var indentationString = getIndentationString(newIndentation, options);
+                    recordReplace(startLinePos, nonWhitespaceColumn, indentationString);
+                }
+                else {
+                    recordDelete(startLinePos, nonWhitespaceColumn);
+                }
             }
         }
 
