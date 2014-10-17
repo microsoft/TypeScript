@@ -80,6 +80,9 @@ module ts.BreakpointResolver {
                     case SyntaxKind.DoStatement:
                         return spanInDoStatement(<DoStatement>node);
 
+                    case SyntaxKind.DebuggerStatement:
+                        return spanInDebuggerStatement(node);
+
                     // Tokens:
                     case SyntaxKind.SemicolonToken:
                     case SyntaxKind.EndOfFileToken:
@@ -233,6 +236,11 @@ module ts.BreakpointResolver {
 
             function spanInDoStatement(doStatement: DoStatement): TypeScript.TextSpan {
                 return spanInNode(doStatement.statement);
+            }
+
+            function spanInDebuggerStatement(node: Node): TypeScript.TextSpan {
+                // Set breakpoint on debugger keyword
+                return textSpan(node.getChildAt(0, sourceFile));
             }
 
             // Tokens:
