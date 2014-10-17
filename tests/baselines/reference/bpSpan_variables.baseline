@@ -1,0 +1,23 @@
+
+1  >var a = 10;
+
+    ~~~~~~~~~~~~                                  => Pos: (0 to 11)  SpanInfo: {"start":0,"length":10}
+    >var a = 10
+    >:=> (line 1, col 0) to (line 1, col 10)
+--------------------------------
+2  >var b;
+
+    ~~~~~~~                                       => Pos: (12 to 18)  SpanInfo: undefined
+--------------------------------
+3  >var c = 10, d, e;
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (19 to 36)  SpanInfo: {"start":19,"length":10}
+    >var c = 10
+    >:=> (line 3, col 0) to (line 3, col 10)
+--------------------------------
+4  >var c2, d2 = 10;
+    ~~~~~~~                                       => Pos: (37 to 43)  SpanInfo: undefined
+4  >var c2, d2 = 10;
+           ~~~~~~~~~                              => Pos: (44 to 52)  SpanInfo: {"start":45,"length":7}
+    >d2 = 10
+    >:=> (line 4, col 8) to (line 4, col 15)
