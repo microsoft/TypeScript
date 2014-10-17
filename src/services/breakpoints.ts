@@ -36,10 +36,11 @@ module ts.BreakpointResolver {
             return TypeScript.TextSpan.fromBounds(startNode.getStart(), (endNode || startNode).getEnd());
         }
 
-        function spanInNodeIfStartsOnSameLine(node: Node): TypeScript.TextSpan {
+        function spanInNodeIfStartsOnSameLine(node: Node, otherwiseOnNode?: Node): TypeScript.TextSpan {
             if (node && sourceFile.getLineAndCharacterFromPosition(position).line === sourceFile.getLineAndCharacterFromPosition(node.getStart()).line) {
                 return spanInNode(node);
             }
+            return spanInNode(otherwiseOnNode);
         }
 
         function spanInPreviousNode(node: Node): TypeScript.TextSpan {
@@ -62,13 +63,16 @@ module ts.BreakpointResolver {
                         return spanInFunctionDeclaration(<FunctionDeclaration>node);
 
                     case SyntaxKind.FunctionBlock:
-                        return spanInBlock(<Block>node);
+                        return spanInFirstStatementOfBlock(<Block>node);
 
                     case SyntaxKind.ExpressionStatement:
                         return spanInExpressionStatement(<ExpressionStatement>node);
 
                     case SyntaxKind.ReturnStatement:
                         return spanInReturnStatement(<ReturnStatement>node);
+
+                    case SyntaxKind.WhileStatement:
+                        return spanInWhileStatement(<WhileStatement>node);
 
                     // Tokens:
                     case SyntaxKind.SemicolonToken:
@@ -173,9 +177,25 @@ module ts.BreakpointResolver {
                 return spanInNode(functionDeclaration.body);
             }
 
-            function spanInBlock(block: Block): TypeScript.TextSpan {
+            function spanInFirstStatementOfBlock(block: Block): TypeScript.TextSpan {
                 // Set breakpoint in first statement
                 return spanInNode(block.statements[0]);
+            }
+
+            function spanInLastStatementOfBlock(block: Block): TypeScript.TextSpan {
+                // Set breakpoint in first statement
+                return spanInNode(block.statements[block.statements.length - 1]);
+            }
+
+            function spanInBlock(block: Block): TypeScript.TextSpan {
+                switch (block.parent.kind) {
+                    // Set on parent if on same line otherwise on first statement
+                    case SyntaxKind.WhileStatement:
+                        return spanInNodeIfStartsOnSameLine(block.parent, block.statements[0]);
+                }
+
+                // Default action is to set on first statement
+                return spanInFirstStatementOfBlock(block);
             }
 
             function spanInExpressionStatement(expressionStatement: ExpressionStatement): TypeScript.TextSpan {
@@ -184,6 +204,10 @@ module ts.BreakpointResolver {
 
             function spanInReturnStatement(returnStatement: ReturnStatement): TypeScript.TextSpan {
                 return textSpan(returnStatement.getChildAt(0, sourceFile), returnStatement.expression);
+            }
+
+            function spanInWhileStatement(whileStatement: WhileStatement): TypeScript.TextSpan {
+                return textSpan(whileStatement, findNextToken(whileStatement.expression, whileStatement));
             }
 
             // Tokens:
@@ -202,6 +226,10 @@ module ts.BreakpointResolver {
             function spanInOpenBraceToken(node: Node): TypeScript.TextSpan {
                 switch (node.parent.kind) {
                     case SyntaxKind.FunctionBlock:
+                        // Span on first statement
+                        return spanInFirstStatementOfBlock(<Block>node.parent);
+
+                    case SyntaxKind.Block:
                         return spanInBlock(<Block>node.parent);
 
                     // Default to parent node
@@ -216,6 +244,9 @@ module ts.BreakpointResolver {
                         // Span on close brace token
                         return textSpan(node);
 
+                    case SyntaxKind.Block:
+                        return spanInLastStatementOfBlock(<Block>node.parent);
+
                     // Default to parent node
                     default:
                         return spanInNode(node.parent);
@@ -224,7 +255,8 @@ module ts.BreakpointResolver {
 
             function spanInCloseParenToken(node: Node): TypeScript.TextSpan {
                 // Is this close paren token of parameter list, set span in previous token
-                if (isAnyFunction(node.parent)) {
+                if (isAnyFunction(node.parent) ||
+                    node.parent.kind === SyntaxKind.WhileStatement) {
                     return spanInPreviousNode(node);
                 }
 

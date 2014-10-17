@@ -10,4 +10,7 @@
 ////{
 ////    a++;
 ////}
+////while (a == 10)  a++;
+////while (a == 10) 
+////    a++;
 verify.baselineCurrentFileBreakpointLocations();
