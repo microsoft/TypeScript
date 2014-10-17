@@ -3180,14 +3180,11 @@ module ts {
             }
             else if (!allowLetAndConstDeclarations) {
                 if (node.flags & NodeFlags.Let) {
-                    grammarErrorOnNode(node, Diagnostics.let_must_be_declared_inside_a_block);
+                    grammarErrorOnNode(node, Diagnostics.let_declarations_must_be_declared_inside_a_block);
                 }
                 else if (node.flags & NodeFlags.Const) {
-                    grammarErrorOnNode(node, Diagnostics.const_must_be_declared_inside_a_block);
+                    grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_declared_inside_a_block);
                 }
-            }
-            else if (node.flags & NodeFlags.Export && node.flags & NodeFlags.BlockScoped) {
-                grammarErrorOnNode(node, Diagnostics.Only_var_declarations_can_be_exported);
             }
             return node;
         }

@@ -5550,12 +5550,27 @@ module ts {
                 }
             }
 
-            function isConstVariableReference(n: Node) {
-                if (n.kind === SyntaxKind.Identifier) {
-                    var symbol = findSymbol(n);
-                    return symbol && (symbol.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
+            function isConstVariableReference(n: Node): boolean {
+                switch (n.kind) {
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.PropertyAccess:
+                        var symbol = findSymbol(n);
+                        return symbol && (symbol.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
+                    case SyntaxKind.IndexedAccess:
+                        var index = (<IndexedAccess>n).index;
+                        var symbol = findSymbol((<IndexedAccess>n).object);
+                        if (symbol && index.kind === SyntaxKind.StringLiteral) {
+                            var name = (<LiteralExpression>index).text;
+                            var apparentType = getApparentType(getTypeOfSymbol(symbol));
+                            var prop = getPropertyOfApparentType(apparentType, name);
+                            return prop && (prop.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(prop) & NodeFlags.Const) !== 0;
+                        }
+                        return false;
+                    case SyntaxKind.ParenExpression:
+                        return isConstVariableReference((<ParenExpression>n).expression);
+                    default:
+                        return false;
                 }
-                return false;
             }
 
             if (!isReferenceOrErrorExpression(n)) {

@@ -14,9 +14,10 @@ tests/cases/compiler/constDeclarations-access2.ts(18,1): error TS2449: The opera
 tests/cases/compiler/constDeclarations-access2.ts(19,1): error TS2449: The operand of an increment or decrement operator cannot be a constant.
 tests/cases/compiler/constDeclarations-access2.ts(20,3): error TS2449: The operand of an increment or decrement operator cannot be a constant.
 tests/cases/compiler/constDeclarations-access2.ts(21,3): error TS2449: The operand of an increment or decrement operator cannot be a constant.
+tests/cases/compiler/constDeclarations-access2.ts(23,3): error TS2449: The operand of an increment or decrement operator cannot be a constant.
 
 
-==== tests/cases/compiler/constDeclarations-access2.ts (16 errors) ====
+==== tests/cases/compiler/constDeclarations-access2.ts (17 errors) ====
     
     const x = 0
     
@@ -69,6 +70,10 @@ tests/cases/compiler/constDeclarations-access2.ts(21,3): error TS2449: The opera
 !!! error TS2449: The operand of an increment or decrement operator cannot be a constant.
     --x;
       ~
+!!! error TS2449: The operand of an increment or decrement operator cannot be a constant.
+    
+    ++((x));
+      ~~~~~
 !!! error TS2449: The operand of an increment or decrement operator cannot be a constant.
     
     // OK
