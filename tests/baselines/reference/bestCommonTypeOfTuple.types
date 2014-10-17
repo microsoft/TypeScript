@@ -75,8 +75,8 @@ t4 = [E1.one, E2.two, 20];
 >two : E2
 
 var e1 = t1[2];  // {}
->e1 : { (x: number): string; } | { (x: number): number; }
->t1[2] : { (x: number): string; } | { (x: number): number; }
+>e1 : ((x: number) => string) | ((x: number) => number)
+>t1[2] : ((x: number) => string) | ((x: number) => number)
 >t1 : [(x: number) => string, (x: number) => number]
 
 var e2 = t2[2];  // {}

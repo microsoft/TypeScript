@@ -708,6 +708,7 @@ module ts {
         WriteArrowStyleSignature        = 0x00000008,  // Write arrow style signature
         WriteOwnNameForAnyLike          = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
         WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
+        InElementType                   = 0x00000040,  // Writing an array or union element type
     }
 
     export enum SymbolFormatFlags {

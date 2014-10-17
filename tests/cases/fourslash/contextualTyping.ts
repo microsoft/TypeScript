@@ -242,7 +242,7 @@ verify.quickInfoIs("(var) c3t9: number[][]");
 goTo.marker('23');
 verify.quickInfoIs("(var) c3t10: IFoo[]");
 goTo.marker('24');
-verify.quickInfoIs("(var) c3t11: {\n    (n: number, s: string): string;\n}[]");
+verify.quickInfoIs("(var) c3t11: ((n: number, s: string) => string)[]");
 goTo.marker('25');
 verify.quickInfoIs("(parameter) n: number");
 goTo.marker('26');

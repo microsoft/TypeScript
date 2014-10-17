@@ -224,14 +224,14 @@ module Errors {
 >r1arg1 : new <T, U>(x: T) => U[]
 
     var r1a = [r1arg2, r1arg1];
->r1a : { new <T, U>(x: T): U[]; }[]
->[r1arg2, r1arg1] : { new <T, U>(x: T): U[]; }[]
+>r1a : (new <T, U>(x: T) => U[])[]
+>[r1arg2, r1arg1] : (new <T, U>(x: T) => U[])[]
 >r1arg2 : new (x: number) => string[]
 >r1arg1 : new <T, U>(x: T) => U[]
 
     var r1b = [r1arg1, r1arg2];
->r1b : { new <T, U>(x: T): U[]; }[]
->[r1arg1, r1arg2] : { new <T, U>(x: T): U[]; }[]
+>r1b : (new <T, U>(x: T) => U[])[]
+>[r1arg1, r1arg2] : (new <T, U>(x: T) => U[])[]
 >r1arg1 : new <T, U>(x: T) => U[]
 >r1arg2 : new (x: number) => string[]
 
@@ -268,14 +268,14 @@ module Errors {
 >r2arg1 : new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V
 
     var r2a = [r2arg2, r2arg1];
->r2a : { new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U): new (r: T) => V; }[]
->[r2arg2, r2arg1] : { new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U): new (r: T) => V; }[]
+>r2a : (new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V)[]
+>[r2arg2, r2arg1] : (new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V)[]
 >r2arg2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
 >r2arg1 : new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V
 
     var r2b = [r2arg1, r2arg2];
->r2b : { new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U): new (r: T) => V; }[]
->[r2arg1, r2arg2] : { new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U): new (r: T) => V; }[]
+>r2b : (new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V)[]
+>[r2arg1, r2arg2] : (new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V)[]
 >r2arg1 : new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V
 >r2arg2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
 
@@ -318,14 +318,14 @@ module Errors {
 >r3arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U
 
     var r3a = [r3arg2, r3arg1];
->r3a : Array<{ new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U): new (r: T) => U; } | { new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived): new (r: Base) => Derived; }>
->[r3arg2, r3arg1] : Array<{ new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U): new (r: T) => U; } | { new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived): new (r: Base) => Derived; }>
+>r3a : ((new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U) | (new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived))[]
+>[r3arg2, r3arg1] : ((new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U) | (new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived))[]
 >r3arg2 : new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
 >r3arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U
 
     var r3b = [r3arg1, r3arg2];
->r3b : Array<{ new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U): new (r: T) => U; } | { new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived): new (r: Base) => Derived; }>
->[r3arg1, r3arg2] : Array<{ new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U): new (r: T) => U; } | { new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived): new (r: Base) => Derived; }>
+>r3b : ((new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U) | (new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived))[]
+>[r3arg1, r3arg2] : ((new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U) | (new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived))[]
 >r3arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U
 >r3arg2 : new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
 
@@ -350,14 +350,14 @@ module Errors {
 >r4arg1 : new <T extends Derived>(...x: T[]) => T
 
     var r4a = [r4arg2, r4arg1];
->r4a : { new <T extends Derived>(...x: T[]): T; }[]
->[r4arg2, r4arg1] : { new <T extends Derived>(...x: T[]): T; }[]
+>r4a : (new <T extends Derived>(...x: T[]) => T)[]
+>[r4arg2, r4arg1] : (new <T extends Derived>(...x: T[]) => T)[]
 >r4arg2 : new (...x: Base[]) => Base
 >r4arg1 : new <T extends Derived>(...x: T[]) => T
 
     var r4b = [r4arg1, r4arg2];
->r4b : { new <T extends Derived>(...x: T[]): T; }[]
->[r4arg1, r4arg2] : { new <T extends Derived>(...x: T[]): T; }[]
+>r4b : (new <T extends Derived>(...x: T[]) => T)[]
+>[r4arg1, r4arg2] : (new <T extends Derived>(...x: T[]) => T)[]
 >r4arg1 : new <T extends Derived>(...x: T[]) => T
 >r4arg2 : new (...x: Base[]) => Base
 
@@ -387,14 +387,14 @@ module Errors {
 >r5arg1 : new <T extends Derived>(x: T, y: T) => T
 
     var r5a = [r5arg2, r5arg1];
->r5a : { new <T extends Derived>(x: T, y: T): T; }[]
->[r5arg2, r5arg1] : { new <T extends Derived>(x: T, y: T): T; }[]
+>r5a : (new <T extends Derived>(x: T, y: T) => T)[]
+>[r5arg2, r5arg1] : (new <T extends Derived>(x: T, y: T) => T)[]
 >r5arg2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >r5arg1 : new <T extends Derived>(x: T, y: T) => T
 
     var r5b = [r5arg1, r5arg2];
->r5b : { new <T extends Derived>(x: T, y: T): T; }[]
->[r5arg1, r5arg2] : { new <T extends Derived>(x: T, y: T): T; }[]
+>r5b : (new <T extends Derived>(x: T, y: T) => T)[]
+>[r5arg1, r5arg2] : (new <T extends Derived>(x: T, y: T) => T)[]
 >r5arg1 : new <T extends Derived>(x: T, y: T) => T
 >r5arg2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 
@@ -429,14 +429,14 @@ module Errors {
 >r6arg1 : new (x: Base[], y: Derived2[]) => Derived[]
 
     var r6a = [r6arg2, r6arg1];
->r6a : { new <T extends Derived2[]>(x: Base[], y: Base[]): T; }[]
->[r6arg2, r6arg1] : { new <T extends Derived2[]>(x: Base[], y: Base[]): T; }[]
+>r6a : (new <T extends Derived2[]>(x: Base[], y: Base[]) => T)[]
+>[r6arg2, r6arg1] : (new <T extends Derived2[]>(x: Base[], y: Base[]) => T)[]
 >r6arg2 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
 >r6arg1 : new (x: Base[], y: Derived2[]) => Derived[]
 
     var r6b = [r6arg1, r6arg2];
->r6b : { new <T extends Derived2[]>(x: Base[], y: Base[]): T; }[]
->[r6arg1, r6arg2] : { new <T extends Derived2[]>(x: Base[], y: Base[]): T; }[]
+>r6b : (new <T extends Derived2[]>(x: Base[], y: Base[]) => T)[]
+>[r6arg1, r6arg2] : (new <T extends Derived2[]>(x: Base[], y: Base[]) => T)[]
 >r6arg1 : new (x: Base[], y: Derived2[]) => Derived[]
 >r6arg2 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
 
@@ -463,14 +463,14 @@ module Errors {
 >r7arg1 : new <T>(x: { a: T; b: T; }) => T
 
     var r7a = [r7arg2, r7arg1];
->r7a : { new <T>(x: { a: T; b: T; }): T; }[]
->[r7arg2, r7arg1] : { new <T>(x: { a: T; b: T; }): T; }[]
+>r7a : (new <T>(x: { a: T; b: T; }) => T)[]
+>[r7arg2, r7arg1] : (new <T>(x: { a: T; b: T; }) => T)[]
 >r7arg2 : new (x: { a: string; b: number; }) => number
 >r7arg1 : new <T>(x: { a: T; b: T; }) => T
 
     var r7b = [r7arg1, r7arg2];
->r7b : { new <T>(x: { a: T; b: T; }): T; }[]
->[r7arg1, r7arg2] : { new <T>(x: { a: T; b: T; }): T; }[]
+>r7b : (new <T>(x: { a: T; b: T; }) => T)[]
+>[r7arg1, r7arg2] : (new <T>(x: { a: T; b: T; }) => T)[]
 >r7arg1 : new <T>(x: { a: T; b: T; }) => T
 >r7arg2 : new (x: { a: string; b: number; }) => number
 
@@ -491,14 +491,14 @@ module Errors {
 >r7arg3 : new <T extends Base>(x: { a: T; b: T; }) => number
 
     var r7d = [r7arg2, r7arg3];
->r7d : { new (x: { a: string; b: number; }): number; }[]
->[r7arg2, r7arg3] : { new (x: { a: string; b: number; }): number; }[]
+>r7d : (new (x: { a: string; b: number; }) => number)[]
+>[r7arg2, r7arg3] : (new (x: { a: string; b: number; }) => number)[]
 >r7arg2 : new (x: { a: string; b: number; }) => number
 >r7arg3 : new <T extends Base>(x: { a: T; b: T; }) => number
 
     var r7e = [r7arg3, r7arg2];
->r7e : { new (x: { a: string; b: number; }): number; }[]
->[r7arg3, r7arg2] : { new (x: { a: string; b: number; }): number; }[]
+>r7e : (new (x: { a: string; b: number; }) => number)[]
+>[r7arg3, r7arg2] : (new (x: { a: string; b: number; }) => number)[]
 >r7arg3 : new <T extends Base>(x: { a: T; b: T; }) => number
 >r7arg2 : new (x: { a: string; b: number; }) => number
 
