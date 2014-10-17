@@ -37,7 +37,7 @@ module ts.BreakpointResolver {
         }
 
         function spanInNodeIfStartsOnSameLine(node: Node, otherwiseOnNode?: Node): TypeScript.TextSpan {
-            if (node && sourceFile.getLineAndCharacterFromPosition(position).line === sourceFile.getLineAndCharacterFromPosition(node.getStart()).line) {
+            if (node && lineOfPosition === sourceFile.getLineAndCharacterFromPosition(node.getStart()).line) {
                 return spanInNode(node);
             }
             return spanInNode(otherwiseOnNode);
@@ -97,6 +97,14 @@ module ts.BreakpointResolver {
                     case SyntaxKind.ContinueStatement:
                         return spanInBreakOrContinueStatement(<BreakOrContinueStatement>node);
 
+                    case SyntaxKind.ForStatement:
+                        return spanInForStatement(<ForStatement>node);
+                        
+                    case SyntaxKind.BinaryExpression:
+                    case SyntaxKind.PostfixOperator:
+                    case SyntaxKind.PrefixOperator:
+                        return spanInExpression(node);
+
                     // Tokens:
                     case SyntaxKind.SemicolonToken:
                     case SyntaxKind.EndOfFileToken:
@@ -127,14 +135,6 @@ module ts.BreakpointResolver {
                     case SyntaxKind.ElseKeyword:
                         return spanInNextNode(node);
 
-                    case SyntaxKind.BinaryExpression:
-                        //TODO (pick this up later) for now lets fix do-while baseline
-                        if (node.parent.kind === SyntaxKind.DoStatement) {
-                            // Set span as if on while keyword
-                            return spanInPreviousNode(node);
-                        }
-                        // Default action for now
-
                     default:
                         // Default go to parent to set the breakpoint
                         return spanInNode(node.parent);
@@ -143,25 +143,35 @@ module ts.BreakpointResolver {
 
             function spanInVariableDeclaration(variableDeclaration: VariableDeclaration): TypeScript.TextSpan {
                 var isParentVariableStatement = variableDeclaration.parent.kind === SyntaxKind.VariableStatement;
-                var isfirstDeclarationOfVariableStatement = isParentVariableStatement &&
-                    (<VariableStatement>variableDeclaration.parent).declarations[0] === variableDeclaration;
+                var isDeclarationOfForStatement = variableDeclaration.parent.kind === SyntaxKind.ForStatement && contains((<ForStatement>variableDeclaration.parent).declarations, variableDeclaration);
+                var declarations = isParentVariableStatement
+                    ? (<VariableStatement>variableDeclaration.parent).declarations
+                    : isDeclarationOfForStatement 
+                    ? (<ForStatement>variableDeclaration.parent).declarations
+                    : undefined;
 
                 // Breakpoint is possible in variableDeclaration only if there is initialization
                 if (variableDeclaration.initializer) {
-                    if (isfirstDeclarationOfVariableStatement) {
-                        // First declaration - include var keyword
-                        return textSpan(variableDeclaration.parent, variableDeclaration);
+                    if (declarations && declarations[0] === variableDeclaration) {
+                        if (isParentVariableStatement) {
+                            // First declaration - include var keyword
+                            return textSpan(variableDeclaration.parent, variableDeclaration);
+                        }
+                        else {
+                            Debug.assert(isDeclarationOfForStatement);
+                            // Include var keyword from for statement declarations in the span
+                            return textSpan(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent), variableDeclaration);
+                        }
                     }
                     else {
                         // Span only on this declaration
                         return textSpan(variableDeclaration);
                     }
                 }
-                else if (!isfirstDeclarationOfVariableStatement && isParentVariableStatement) {
+                else if (declarations && declarations[0] !== variableDeclaration) {
                     // If we cant set breakpoint on this declaration, set it on previous one
-                    var variableStatement = <VariableStatement>variableDeclaration.parent;
-                    var indexOfCurrentDeclaration = indexOf(variableStatement.declarations, variableDeclaration);
-                    return spanInVariableDeclaration(variableStatement.declarations[indexOfCurrentDeclaration - 1]);
+                    var indexOfCurrentDeclaration = indexOf(declarations, variableDeclaration);
+                    return spanInVariableDeclaration(declarations[indexOfCurrentDeclaration - 1]);
                 }
             }
 
@@ -234,6 +244,10 @@ module ts.BreakpointResolver {
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.IfStatement:
                         return spanInNodeIfStartsOnSameLine(block.parent, block.statements[0]);
+
+                    // Set span on previous token if it starts on same line otherwise on the first statement of the block
+                    case SyntaxKind.ForStatement:
+                        return spanInNodeIfStartsOnSameLine(findPrecedingToken(block.pos, sourceFile, block.parent), block.statements[0]);
                 }
 
                 // Default action is to set on first statement
@@ -272,6 +286,37 @@ module ts.BreakpointResolver {
 
             function spanInBreakOrContinueStatement(breakOrContinueStatement: BreakOrContinueStatement): TypeScript.TextSpan {
                 return textSpan(breakOrContinueStatement, breakOrContinueStatement.label || breakOrContinueStatement.getChildAt(0));
+            }
+
+            function spanInForStatement(forStatement: ForStatement): TypeScript.TextSpan {
+                if (forStatement.declarations) {
+                    return spanInNode(forStatement.declarations[0]);
+                }
+                if (forStatement.initializer) {
+                    return spanInNode(forStatement.initializer);
+                }
+                if (forStatement.condition) {
+                    return textSpan(forStatement.condition);
+                }
+
+                if (forStatement.iterator) {
+                    return textSpan(forStatement.iterator);
+                }
+            }
+
+            function spanInExpression(expression: Expression): TypeScript.TextSpan {
+                //TODO (pick this up later) for now lets fix do-while baseline                if (node.parent.kind === SyntaxKind.DoStatement) {
+                    // Set span as if on while keyword
+                    return spanInPreviousNode(node);
+                }
+
+                if (node.parent.kind === SyntaxKind.ForStatement) {
+                    // For now lets set the span on this expression, fix it later
+                    return textSpan(expression);
+                }
+
+                // Default action for now:
+                return spanInNode(expression.parent);
             }
             
             // Tokens:
@@ -339,6 +384,7 @@ module ts.BreakpointResolver {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.DoStatement:
+                    case SyntaxKind.ForStatement:
                         return spanInPreviousNode(node);
 
                     // Default to parent node
