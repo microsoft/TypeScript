@@ -90,6 +90,9 @@ module ts.BreakpointResolver {
                     case SyntaxKind.IfStatement:
                         return spanInIfStatement(<IfStatement>node);
 
+                    case SyntaxKind.LabeledStatement:
+                        return spanInLabeledStatement(<LabeledStatement>node);
+
                     // Tokens:
                     case SyntaxKind.SemicolonToken:
                     case SyntaxKind.EndOfFileToken:
@@ -257,6 +260,10 @@ module ts.BreakpointResolver {
             function spanInIfStatement(ifStatement: IfStatement): TypeScript.TextSpan {
                 // set on if(..) span
                 return textSpan(ifStatement, findNextToken(ifStatement.expression, ifStatement));
+            }
+
+            function spanInLabeledStatement(labeledStatement: LabeledStatement): TypeScript.TextSpan {
+                return spanInNode(labeledStatement.statement);
             }
             
             // Tokens:
