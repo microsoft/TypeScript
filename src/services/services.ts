@@ -2722,7 +2722,7 @@ module ts {
                 if (isFirstDeclarationOfSymbolParameter(symbol)) {
                     return ScriptElementKind.parameterElement;
                 }
-                else if(forEach(symbol.declarations, d => d.flags & NodeFlags.Const)) {
+                else if(symbol.valueDeclaration && symbol.valueDeclaration.flags & NodeFlags.Const) {
                     return ScriptElementKind.constantElement;
                 }
                 return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;

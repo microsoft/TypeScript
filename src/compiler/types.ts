@@ -783,7 +783,7 @@ module ts {
         Transient          = 0x04000000,  // Transient symbol (created during type check)
         Prototype          = 0x08000000,  // Prototype property (no source representation)
 
-        BlockScoped        = 0x10000000,
+        BlockScoped        = 0x10000000,  // A block-scoped declaration
 
         Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | UnionProperty,
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,
@@ -793,8 +793,11 @@ module ts {
         Signature = CallSignature | ConstructSignature | IndexSignature,
 
         ParameterExcludes       = Value,
-        VariableExcludes        = (Value | BlockScoped) & ~Variable,
-        BlockScopedExcludes     = Value,
+        VariableExcludes        = (Value | BlockScoped) & ~Variable,    // Variables can be redeclared, but can not redeclare a block-scoped 
+                                                                        // declaration with the same name, or any other value that is not a
+                                                                        // variable, e.g. ValueModule or Class
+        BlockScopedExcludes     = Value,                                // Block-scoped declarations are not allowed to be re-declared
+                                                                        // they can not merge with anything in the value space
         PropertyExcludes        = Value,
         EnumMemberExcludes      = Value,
         FunctionExcludes        = Value & ~(Function | ValueModule),

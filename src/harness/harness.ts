@@ -686,7 +686,7 @@ module Harness {
                                 } else if (setting.value.toLowerCase() === 'es5') {
                                     options.target = ts.ScriptTarget.ES5;
                                 } else if (setting.value.toLowerCase() === 'es6') {
-                                        options.target = ts.ScriptTarget.ES6;
+                                    options.target = ts.ScriptTarget.ES6;
                                 } else {
                                     throw new Error('Unknown compile target ' + setting.value);
                                 }
