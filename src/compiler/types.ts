@@ -155,6 +155,7 @@ module ts {
         ArrayType,
         TupleType,
         UnionType,
+        ParenType,
         // Expression
         ArrayLiteral,
         ObjectLiteral,
@@ -225,7 +226,7 @@ module ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
-        LastTypeNode = UnionType,
+        LastTypeNode = ParenType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = EndOfFileToken,
@@ -340,6 +341,10 @@ module ts {
 
     export interface UnionTypeNode extends TypeNode {
         types: NodeArray<TypeNode>;
+    }
+
+    export interface ParenTypeNode extends TypeNode {
+        type: TypeNode;
     }
 
     export interface StringLiteralTypeNode extends TypeNode {
