@@ -10,6 +10,7 @@ var servicesDirectory = "src/services/";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
+var unittestsDirectory = "tests/cases/unittests/";
 var docDirectory = "doc/";
 
 var builtDirectory = "built/";
@@ -74,13 +75,16 @@ var harnessSources = [
     "typeWriter.ts",
     "fourslashRunner.ts",
     "projectsRunner.ts",
-    "unittestrunner.ts",
     "loggedIO.ts",
     "rwcRunner.ts",
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
-});
+}).concat([
+    "services/colorization.ts"
+].map(function (f) {
+    return path.join(unittestsDirectory, f);
+}));
 
 var librarySourceMap = [
         { target: "lib.core.d.ts", sources: ["core.d.ts"] },
