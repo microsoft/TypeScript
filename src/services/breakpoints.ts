@@ -93,6 +93,10 @@ module ts.BreakpointResolver {
                     case SyntaxKind.LabeledStatement:
                         return spanInLabeledStatement(<LabeledStatement>node);
 
+                    case SyntaxKind.BreakStatement:
+                    case SyntaxKind.ContinueStatement:
+                        return spanInBreakOrContinueStatement(<BreakOrContinueStatement>node);
+
                     // Tokens:
                     case SyntaxKind.SemicolonToken:
                     case SyntaxKind.EndOfFileToken:
@@ -264,6 +268,10 @@ module ts.BreakpointResolver {
 
             function spanInLabeledStatement(labeledStatement: LabeledStatement): TypeScript.TextSpan {
                 return spanInNode(labeledStatement.statement);
+            }
+
+            function spanInBreakOrContinueStatement(breakOrContinueStatement: BreakOrContinueStatement): TypeScript.TextSpan {
+                return textSpan(breakOrContinueStatement, breakOrContinueStatement.label || breakOrContinueStatement.getChildAt(0));
             }
             
             // Tokens:
