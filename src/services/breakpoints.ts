@@ -47,6 +47,10 @@ module ts.BreakpointResolver {
             return spanInNode(findPrecedingToken(node.pos, sourceFile));
         }
 
+        function spanInNextNode(node: Node): TypeScript.TextSpan {
+            return spanInNode(findNextToken(node, node.parent));
+        }
+
         function spanInNode(node: Node): TypeScript.TextSpan {
             if (node) {
                 switch (node.kind) {
@@ -83,6 +87,9 @@ module ts.BreakpointResolver {
                     case SyntaxKind.DebuggerStatement:
                         return spanInDebuggerStatement(node);
 
+                    case SyntaxKind.IfStatement:
+                        return spanInIfStatement(<IfStatement>node);
+
                     // Tokens:
                     case SyntaxKind.SemicolonToken:
                     case SyntaxKind.EndOfFileToken:
@@ -109,6 +116,9 @@ module ts.BreakpointResolver {
                     // Keywords:
                     case SyntaxKind.WhileKeyword:
                         return spanInWhileKeyword(node);
+
+                    case SyntaxKind.ElseKeyword:
+                        return spanInNextNode(node);
 
                     case SyntaxKind.BinaryExpression:
                         //TODO (pick this up later) for now lets fix do-while baseline
@@ -215,6 +225,7 @@ module ts.BreakpointResolver {
                 switch (block.parent.kind) {
                     // Set on parent if on same line otherwise on first statement
                     case SyntaxKind.WhileStatement:
+                    case SyntaxKind.IfStatement:
                         return spanInNodeIfStartsOnSameLine(block.parent, block.statements[0]);
                 }
 
@@ -243,6 +254,11 @@ module ts.BreakpointResolver {
                 return textSpan(node.getChildAt(0, sourceFile));
             }
 
+            function spanInIfStatement(ifStatement: IfStatement): TypeScript.TextSpan {
+                // set on if(..) span
+                return textSpan(ifStatement, findNextToken(ifStatement.expression, ifStatement));
+            }
+            
             // Tokens:
             function spanInCommaToken(node: Node): TypeScript.TextSpan {
                 switch (node.parent.kind) {
