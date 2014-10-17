@@ -169,6 +169,16 @@ module ts.formatting {
         return { line: lineAndChar.line - 1, character: lineAndChar.character - 1 };
     }
 
+    function rescanIfNecessary(scanner: Scanner, parent: Node): void {
+        var t = scanner.getToken();
+        if (parent.kind === SyntaxKind.BinaryExpression && t === SyntaxKind.GreaterThanToken) {
+            scanner.reScanGreaterToken();
+        }
+        else if (parent.kind === SyntaxKind.RegularExpressionLiteral && t === SyntaxKind.SlashToken) {
+            scanner.reScanSlashToken();
+        }
+    }
+
     function formatSpan(originalRange: TextRange,
         sourceFile: SourceFile,
         options: FormatCodeOptions,
@@ -192,9 +202,9 @@ module ts.formatting {
         var lastTriviaWasNewLine = true;
         var edits: TextChange[] = [];
 
-        // advance the scaner
         scanner.scan();
-        var currentTokenInfo = fetchNextTokenInfo();
+
+        var currentTokenInfo = fetchNextTokenInfo(enclosingNode);
 
         if (currentTokenInfo.token) {
             var startLine =  getNonAdjustedLineAndCharacterFromPosition(enclosingNode.getStart(sourceFile), sourceFile).line;
@@ -225,7 +235,12 @@ module ts.formatting {
             );
 
             while (currentTokenInfo.token && node.end >= currentTokenInfo.token.end) {
-                currentTokenInfo = consumeCurrentToken(node, childContextNode, indentation);
+                if (SmartIndenter.nodeContentIsAlwaysIndented(node)) {
+                    currentTokenInfo = consumeCurrentToken(node, childContextNode, indentation);
+                }
+                else {
+                    currentTokenInfo = consumeCurrentToken(node, childContextNode, indentation);
+                }
                 childContextNode = node;
             }
 
@@ -273,7 +288,7 @@ module ts.formatting {
                     var increaseIndentation =
                         childStartLine !== nodeStartLine &&
                         !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStartLine, sourceFile) &&
-                        SmartIndenter.nodeContentIsIndented(node, child);                    
+                        SmartIndenter.shouldIndentChildNode(node, child);                    
 
                     processNode(child, childContextNode, childStartLine, increaseIndentation ? indentation + options.IndentSize : indentation);
                     childContextNode = node;
@@ -281,11 +296,12 @@ module ts.formatting {
             }
         }
 
-        function fetchNextTokenInfo(): TokenInfo {
+        function fetchNextTokenInfo(parent: Node): TokenInfo {
             if (currentTokenInfo) {
+                var trivia = currentTokenInfo.trailingTrivia;
                 lastTriviaWasNewLine =
-                    currentTokenInfo.trailingTrivia &&
-                    currentTokenInfo.trailingTrivia[currentTokenInfo.trailingTrivia.length - 1].kind === SyntaxKind.NewLineTrivia;
+                    trivia &&
+                    trivia[trivia.length - 1].kind === SyntaxKind.NewLineTrivia;
             }
 
             var leadingTrivia: TextRangeWithKind[];
@@ -296,6 +312,8 @@ module ts.formatting {
             var initialStartPos = startPos;
 
             while (startPos < originalRange.end) {
+                rescanIfNecessary(scanner, parent);
+
                 var t = scanner.getToken();
 
                 if (tokenRange && !isTrivia(t)) {
@@ -303,7 +321,6 @@ module ts.formatting {
                     break;
                 }
 
-                // advance the cursor
                 scanner.scan();
 
                 var item = { pos: startPos, end: scanner.getStartPos(), kind: t };
@@ -403,7 +420,7 @@ module ts.formatting {
             }
 
 
-            return fetchNextTokenInfo();
+            return fetchNextTokenInfo(parent);
         }
 
         function insertIndentation(pos: number, indentation: number): void {

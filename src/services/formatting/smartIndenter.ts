@@ -37,7 +37,7 @@ module ts.formatting {
             var indentationDelta: number;
 
             while (current) {
-                if (positionBelongsToNode(current, position, sourceFile) && nodeContentIsIndented(current, previous)) {
+                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current, previous)) {
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
                     if (nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
@@ -93,7 +93,7 @@ module ts.formatting {
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                if (nodeContentIsIndented(parent, current) && !parentAndChildShareLine) {
+                if (shouldIndentChildNode(parent, current) && !parentAndChildShareLine) {
                     indentationDelta += options.IndentSize;
                 }
 
@@ -274,33 +274,11 @@ module ts.formatting {
             return column;
         }
 
-        export function nodeContentIsIndented(parent: Node, child: Node): boolean {
-            switch (parent.kind) {
+        export function nodeContentIsAlwaysIndented(n: Node): boolean {
+            switch (n.kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
-                    return true;
-                case SyntaxKind.ModuleDeclaration:
-                    // ModuleBlock should take care of indentation
-                    return false;
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.Method:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.Constructor:
-                    // FunctionBlock should take care of indentation
-                    return false;
-                case SyntaxKind.DoStatement:
-                case SyntaxKind.WhileStatement:
-                case SyntaxKind.ForInStatement:
-                case SyntaxKind.ForStatement:
-                    return child && child.kind !== SyntaxKind.Block;
-                case SyntaxKind.IfStatement:
-                    return child && child.kind !== SyntaxKind.Block;
-                case SyntaxKind.TryStatement:
-                    // TryBlock\CatchBlock\FinallyBlock should take care of indentation
-                    return false;
                 case SyntaxKind.ArrayLiteral:
                 case SyntaxKind.Block:
                 case SyntaxKind.FunctionBlock:
@@ -319,6 +297,22 @@ module ts.formatting {
                 case SyntaxKind.VariableStatement:
                 case SyntaxKind.VariableDeclaration:
                     return true;
+                default:
+                    return false;
+            }
+        }
+
+        export function shouldIndentChildNode(parent: Node, child: Node): boolean {
+            if (nodeContentIsAlwaysIndented(parent)) {
+                return true;
+            }
+            switch (parent.kind) {
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.IfStatement:
+                    return child && child.kind !== SyntaxKind.Block;
                 default:
                     return false;
             }
