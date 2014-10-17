@@ -65,6 +65,9 @@ module ts.BreakpointResolver {
                     case SyntaxKind.FunctionBlock:
                         return spanInFirstStatementOfBlock(<Block>node);
 
+                    case SyntaxKind.Block:
+                        return spanInBlock(<Block>node);
+
                     case SyntaxKind.ExpressionStatement:
                         return spanInExpressionStatement(<ExpressionStatement>node);
 
@@ -73,6 +76,9 @@ module ts.BreakpointResolver {
 
                     case SyntaxKind.WhileStatement:
                         return spanInWhileStatement(<WhileStatement>node);
+
+                    case SyntaxKind.DoStatement:
+                        return spanInDoStatement(<DoStatement>node);
 
                     // Tokens:
                     case SyntaxKind.SemicolonToken:
@@ -88,11 +94,26 @@ module ts.BreakpointResolver {
                     case SyntaxKind.CloseBraceToken:
                         return spanInCloseBraceToken(node);
 
+                    case SyntaxKind.OpenParenToken: 
+                        return spanInOpenParenToken(node);
+
                     case SyntaxKind.CloseParenToken:
                         return spanInCloseParenToken(node);
 
                     case SyntaxKind.ColonToken:
                         return spanInColonToken(node);
+
+                    // Keywords:
+                    case SyntaxKind.WhileKeyword:
+                        return spanInWhileKeyword(node);
+
+                    case SyntaxKind.BinaryExpression:
+                        //TODO (pick this up later) for now lets fix do-while baseline
+                        if (node.parent.kind === SyntaxKind.DoStatement) {
+                            // Set span as if on while keyword
+                            return spanInPreviousNode(node);
+                        }
+                        // Default action for now
 
                     default:
                         // Default go to parent to set the breakpoint
@@ -210,6 +231,10 @@ module ts.BreakpointResolver {
                 return textSpan(whileStatement, findNextToken(whileStatement.expression, whileStatement));
             }
 
+            function spanInDoStatement(doStatement: DoStatement): TypeScript.TextSpan {
+                return spanInNode(doStatement.statement);
+            }
+
             // Tokens:
             function spanInCommaToken(node: Node): TypeScript.TextSpan {
                 switch (node.parent.kind) {
@@ -253,11 +278,33 @@ module ts.BreakpointResolver {
                 }
             }
 
+            function spanInOpenParenToken(node: Node): TypeScript.TextSpan {
+                if (node.parent.kind === SyntaxKind.DoStatement) {
+                    // Go to while keyword and do action instead
+                    return spanInPreviousNode(node);
+                }
+
+                // Default to parent node
+                return spanInNode(node.parent);
+            }
+
             function spanInCloseParenToken(node: Node): TypeScript.TextSpan {
                 // Is this close paren token of parameter list, set span in previous token
-                if (isAnyFunction(node.parent) ||
-                    node.parent.kind === SyntaxKind.WhileStatement) {
-                    return spanInPreviousNode(node);
+                switch (node.parent.kind) {
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.DoStatement:
+                        return spanInPreviousNode(node);
+
+                    // Default to parent node
+                    default:
+                        return spanInNode(node.parent);
                 }
 
                 // Default to parent node
@@ -270,6 +317,16 @@ module ts.BreakpointResolver {
                     return spanInPreviousNode(node);
                 }
 
+                return spanInNode(node.parent);
+            }
+
+            function spanInWhileKeyword(node: Node): TypeScript.TextSpan {
+                if (node.parent.kind === SyntaxKind.DoStatement) {
+                    // Set span on while expression
+                    return textSpan(node, findNextToken((<DoStatement>node.parent).expression, node.parent));
+                }
+
+                // Default to parent node
                 return spanInNode(node.parent);
             }
         }
