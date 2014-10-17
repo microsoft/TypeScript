@@ -751,68 +751,72 @@ module ts {
     }
 
     export enum SymbolFlags {
-        Variable           = 0x00000001,  // Variable or parameter
-        Property           = 0x00000002,  // Property or enum member
-        EnumMember         = 0x00000004,  // Enum member
-        Function           = 0x00000008,  // Function
-        Class              = 0x00000010,  // Class
-        Interface          = 0x00000020,  // Interface
-        Enum               = 0x00000040,  // Enum
-        ValueModule        = 0x00000080,  // Instantiated module
-        NamespaceModule    = 0x00000100,  // Uninstantiated module
-        TypeLiteral        = 0x00000200,  // Type Literal
-        ObjectLiteral      = 0x00000400,  // Object Literal
-        Method             = 0x00000800,  // Method
-        Constructor        = 0x00001000,  // Constructor
-        GetAccessor        = 0x00002000,  // Get accessor
-        SetAccessor        = 0x00004000,  // Set accessor
-        CallSignature      = 0x00008000,  // Call signature
-        ConstructSignature = 0x00010000,  // Construct signature
-        IndexSignature     = 0x00020000,  // Index signature
-        TypeParameter      = 0x00040000,  // Type parameter
-        UnionProperty      = 0x00080000,  // Property in union type
+        FunctionScopedVariable = 0x00000001, // Variable (var) or parameter
+        Property              = 0x00000002,  // Property or enum member
+        EnumMember            = 0x00000004,  // Enum member
+        Function              = 0x00000008,  // Function
+        Class                 = 0x00000010,  // Class
+        Interface             = 0x00000020,  // Interface
+        Enum                  = 0x00000040,  // Enum
+        ValueModule           = 0x00000080,  // Instantiated module
+        NamespaceModule       = 0x00000100,  // Uninstantiated module
+        TypeLiteral           = 0x00000200,  // Type Literal
+        ObjectLiteral         = 0x00000400,  // Object Literal
+        Method                = 0x00000800,  // Method
+        Constructor           = 0x00001000,  // Constructor
+        GetAccessor           = 0x00002000,  // Get accessor
+        SetAccessor           = 0x00004000,  // Set accessor
+        CallSignature         = 0x00008000,  // Call signature
+        ConstructSignature    = 0x00010000,  // Construct signature
+        IndexSignature        = 0x00020000,  // Index signature
+        TypeParameter         = 0x00040000,  // Type parameter
+        UnionProperty         = 0x00080000,  // Property in union type
 
         // Export markers (see comment in declareModuleMember in binder)
-        ExportValue        = 0x00100000,  // Exported value marker
-        ExportType         = 0x00200000,  // Exported type marker
-        ExportNamespace    = 0x00400000,  // Exported namespace marker
+        ExportValue           = 0x00100000,  // Exported value marker
+        ExportType            = 0x00200000,  // Exported type marker
+        ExportNamespace       = 0x00400000,  // Exported namespace marker
 
-        Import             = 0x00800000,  // Import
-        Instantiated       = 0x01000000,  // Instantiated symbol
-        Merged             = 0x02000000,  // Merged symbol (created during program binding)
-        Transient          = 0x04000000,  // Transient symbol (created during type check)
-        Prototype          = 0x08000000,  // Prototype property (no source representation)
+        Import                = 0x00800000,  // Import
+        Instantiated          = 0x01000000,  // Instantiated symbol
+        Merged                = 0x02000000,  // Merged symbol (created during program binding)
+        Transient             = 0x04000000,  // Transient symbol (created during type check)
+        Prototype             = 0x08000000,  // Prototype property (no source representation)
 
-        BlockScoped        = 0x10000000,  // A block-scoped declaration
+        BlockScopedVariable   = 0x10000000,  // A block-scoped variable (let ot const)
 
-        Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | UnionProperty,
-        Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,
-        Namespace = ValueModule | NamespaceModule,
-        Module    = ValueModule | NamespaceModule,
-        Accessor  = GetAccessor | SetAccessor,
-        Signature = CallSignature | ConstructSignature | IndexSignature,
+        Variable    = FunctionScopedVariable | BlockScopedVariable,
+        Value       = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | UnionProperty,
+        Type        = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,
+        Namespace   = ValueModule | NamespaceModule,
+        Module      = ValueModule | NamespaceModule,
+        Accessor    = GetAccessor | SetAccessor,
+        Signature   = CallSignature | ConstructSignature | IndexSignature,
 
-        ParameterExcludes       = Value,
-        VariableExcludes        = (Value | BlockScoped) & ~Variable,    // Variables can be redeclared, but can not redeclare a block-scoped 
-                                                                        // declaration with the same name, or any other value that is not a
-                                                                        // variable, e.g. ValueModule or Class
-        BlockScopedExcludes     = Value,                                // Block-scoped declarations are not allowed to be re-declared
-                                                                        // they can not merge with anything in the value space
-        PropertyExcludes        = Value,
-        EnumMemberExcludes      = Value,
-        FunctionExcludes        = Value & ~(Function | ValueModule),
-        ClassExcludes           = (Value | Type) & ~ValueModule,
-        InterfaceExcludes       = Type & ~Interface,
-        EnumExcludes            = (Value | Type) & ~(Enum | ValueModule),
-        ValueModuleExcludes     = Value & ~(Function | Class | Enum | ValueModule),
-        NamespaceModuleExcludes = 0,
-        MethodExcludes          = Value & ~Method,
-        GetAccessorExcludes     = Value & ~SetAccessor,
-        SetAccessorExcludes     = Value & ~GetAccessor,
-        TypeParameterExcludes   = Type & ~TypeParameter,
+        ParameterExcludes              = Value,
+
+        // Variables can be redeclared, but can not redeclare a block-scoped declaration with the 
+        // same name, or any other value that is not a variable, e.g. ValueModule or Class
+        FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,    
+
+        // Block-scoped declarations are not allowed to be re-declared
+        // they can not merge with anything in the value space
+        BlockScopedVariableExcludes    = Value,
+        PropertyExcludes               = Value,
+        EnumMemberExcludes             = Value,
+        FunctionExcludes               = Value & ~(Function | ValueModule),
+        ClassExcludes                  = (Value | Type) & ~ValueModule,
+        InterfaceExcludes              = Type & ~Interface,
+        EnumExcludes                   = (Value | Type) & ~(Enum | ValueModule),
+        ValueModuleExcludes            = Value & ~(Function | Class | Enum | ValueModule),
+        NamespaceModuleExcludes        = 0,
+        MethodExcludes                 = Value & ~Method,
+        GetAccessorExcludes            = Value & ~SetAccessor,
+        SetAccessorExcludes            = Value & ~GetAccessor,
+        TypeParameterExcludes          = Type & ~TypeParameter,
 
         // Imports collide with all other imports with the same name.
-        ImportExcludes          = Import,
+        ImportExcludes                 = Import,
 
         ModuleMember = Variable | Function | Class | Interface | Enum | Module | Import,
 

@@ -181,8 +181,8 @@ module ts {
 
         function getExcludedSymbolFlags(flags: SymbolFlags): SymbolFlags {
             var result: SymbolFlags = 0;
-            if (flags & SymbolFlags.BlockScoped) result |= SymbolFlags.BlockScopedExcludes;
-            if (flags & SymbolFlags.Variable) result |= SymbolFlags.VariableExcludes;
+            if (flags & SymbolFlags.BlockScopedVariable) result |= SymbolFlags.BlockScopedVariableExcludes;
+            if (flags & SymbolFlags.FunctionScopedVariable) result |= SymbolFlags.FunctionScopedVariableExcludes;
             if (flags & SymbolFlags.Property) result |= SymbolFlags.PropertyExcludes;
             if (flags & SymbolFlags.EnumMember) result |= SymbolFlags.EnumMemberExcludes;
             if (flags & SymbolFlags.Function) result |= SymbolFlags.FunctionExcludes;
@@ -328,8 +328,8 @@ module ts {
                     error(errorLocation, nameNotFoundMessage, nameArg);
                 }
 
-                if (s && s.flags & SymbolFlags.BlockScoped) {
-                    // Block-scoped variables can not be used before thier definition
+                if (s && s.flags & SymbolFlags.BlockScopedVariable) {
+                    // Block-scoped variables can not be used before their definition
                     var declaration = forEach(s.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
                     Debug.assert(declaration, "Bock-scoped variable declaration is undefined");
                     var declarationSourceFile = getSourceFileOfNode(declaration);
@@ -6792,7 +6792,7 @@ module ts {
             if (node.initializer && (node.flags & NodeFlags.BlockScoped) === 0) {
                 var symbol = getSymbolOfNode(node);
                 var localDeclarationSymbol = resolveName(node, node.name.text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
-                if (localDeclarationSymbol && localDeclarationSymbol !== symbol && localDeclarationSymbol.flags & SymbolFlags.BlockScoped) {
+                if (localDeclarationSymbol && localDeclarationSymbol !== symbol && localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
                     if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.Const) {
                         error(node, Diagnostics.Cannot_redeclare_constant_0, symbolToString(localDeclarationSymbol));
                     }
