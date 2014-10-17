@@ -6776,8 +6776,8 @@ module ts {
             //      }
             if (node.initializer && (node.flags & NodeFlags.BlockScoped) === 0) {
                 var symbol = getSymbolOfNode(node);
-                var localDeclarationSymbol = resolveName(node, node.name.text, SymbolFlags.BlockScoped, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
-                if (localDeclarationSymbol && localDeclarationSymbol !== symbol) {
+                var localDeclarationSymbol = resolveName(node, node.name.text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
+                if (localDeclarationSymbol && localDeclarationSymbol !== symbol && localDeclarationSymbol.flags & SymbolFlags.BlockScoped) {
                     if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.Const) {
                         error(node, Diagnostics.Cannot_redeclare_constant_0, symbolToString(localDeclarationSymbol));
                     }
