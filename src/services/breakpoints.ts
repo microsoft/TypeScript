@@ -42,6 +42,10 @@ module ts.BreakpointResolver {
             }
         }
 
+        function spanInPreviousNode(node: Node): TypeScript.TextSpan {
+            return spanInNode(findPrecedingToken(node.pos, sourceFile));
+        }
+
         function spanInNode(node: Node): TypeScript.TextSpan {
             if (node) {
                 switch (node.kind) {
@@ -51,9 +55,40 @@ module ts.BreakpointResolver {
                     case SyntaxKind.VariableDeclaration:
                         return spanInVariableDeclaration(<VariableDeclaration>node);
 
+                    case SyntaxKind.Parameter:
+                        return spanInParameterDeclaration(<ParameterDeclaration>node);
+
+                    case SyntaxKind.FunctionDeclaration:
+                        return spanInFunctionDeclaration(<FunctionDeclaration>node);
+
+                    case SyntaxKind.FunctionBlock:
+                        return spanInBlock(<Block>node);
+
+                    case SyntaxKind.ExpressionStatement:
+                        return spanInExpressionStatement(<ExpressionStatement>node);
+
+                    case SyntaxKind.ReturnStatement:
+                        return spanInReturnStatement(<ReturnStatement>node);
+
+                    // Tokens:
                     case SyntaxKind.SemicolonToken:
                     case SyntaxKind.EndOfFileToken:
                         return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile));
+
+                    case SyntaxKind.CommaToken:
+                        return spanInCommaToken(node);
+
+                    case SyntaxKind.OpenBraceToken:
+                        return spanInOpenBraceToken(node);
+
+                    case SyntaxKind.CloseBraceToken:
+                        return spanInCloseBraceToken(node);
+
+                    case SyntaxKind.CloseParenToken:
+                        return spanInCloseParenToken(node);
+
+                    case SyntaxKind.ColonToken:
+                        return spanInColonToken(node);
 
                     default:
                         // Default go to parent to set the breakpoint
@@ -87,6 +122,123 @@ module ts.BreakpointResolver {
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
                 return spanInVariableDeclaration(variableStatement.declarations[0]);
+            }
+
+            function canHaveSpanInParameterDeclaration(parameter: ParameterDeclaration): boolean {
+                // Breakpoint is possible on parameter only if it has initializer, is a rest parameter, or has public or private modifier
+                return !!parameter.initializer || !!(parameter.flags & NodeFlags.Rest) ||
+                    !!(parameter.flags & NodeFlags.Public) || !!(parameter.flags & NodeFlags.Private);
+            }
+
+            function spanInParameterDeclaration(parameter: ParameterDeclaration): TypeScript.TextSpan {
+                if (canHaveSpanInParameterDeclaration(parameter)) {
+                    return textSpan(parameter);
+                }
+                else {
+                    var functionDeclaration = <FunctionDeclaration>parameter.parent;
+                    var indexOfParameter = indexOf(functionDeclaration.parameters, parameter);
+                    if (indexOfParameter) {
+                        // Not a first parameter, go to previous parameter
+                        return spanInParameterDeclaration(functionDeclaration.parameters[indexOfParameter - 1]);
+                    }
+                    else {
+                        // Set breakpoint in the function declaration body
+                        return spanInNode(functionDeclaration.body);
+                    }
+                }
+            }
+
+            function spanInFunctionDeclaration(functionDeclaration: FunctionDeclaration): TypeScript.TextSpan {
+                // No breakpoints in the function signature
+                if (!functionDeclaration.body) {
+                    return;
+                }
+
+                // Is this coming because the touchingToken was in typeAnnotation of return type
+                if (functionDeclaration.type) {
+                    for (var node = tokenAtLocation; node; node = node.parent) {
+                        if (node.parent === functionDeclaration && functionDeclaration.type === node) {
+                            if (functionDeclaration.parameters && functionDeclaration.parameters.length) {
+                                // Set breakpoint in last parameter
+                                return spanInParameterDeclaration(functionDeclaration.parameters[functionDeclaration.parameters.length - 1]);
+                            }
+
+                            // Set breakpoint in function body
+                            break;
+                        }
+                    }
+                }
+
+                // Set span in function body
+                return spanInNode(functionDeclaration.body);
+            }
+
+            function spanInBlock(block: Block): TypeScript.TextSpan {
+                // Set breakpoint in first statement
+                return spanInNode(block.statements[0]);
+            }
+
+            function spanInExpressionStatement(expressionStatement: ExpressionStatement): TypeScript.TextSpan {
+                return textSpan(expressionStatement.expression);
+            }
+
+            function spanInReturnStatement(returnStatement: ReturnStatement): TypeScript.TextSpan {
+                return textSpan(returnStatement.getChildAt(0, sourceFile), returnStatement.expression);
+            }
+
+            // Tokens:
+            function spanInCommaToken(node: Node): TypeScript.TextSpan {
+                switch (node.parent.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.VariableStatement:
+                        return spanInPreviousNode(node);
+
+                    // Default to parent node
+                    default:
+                        return spanInNode(node.parent);
+                }
+            }
+
+            function spanInOpenBraceToken(node: Node): TypeScript.TextSpan {
+                switch (node.parent.kind) {
+                    case SyntaxKind.FunctionBlock:
+                        return spanInBlock(<Block>node.parent);
+
+                    // Default to parent node
+                    default:
+                        return spanInNode(node.parent);
+                }
+            }
+
+            function spanInCloseBraceToken(node: Node): TypeScript.TextSpan {
+                switch (node.parent.kind) {
+                    case SyntaxKind.FunctionBlock:
+                        // Span on close brace token
+                        return textSpan(node);
+
+                    // Default to parent node
+                    default:
+                        return spanInNode(node.parent);
+                }
+            }
+
+            function spanInCloseParenToken(node: Node): TypeScript.TextSpan {
+                // Is this close paren token of parameter list, set span in previous token
+                if (isAnyFunction(node.parent)) {
+                    return spanInPreviousNode(node);
+                }
+
+                // Default to parent node
+                return spanInNode(node.parent);
+            }
+
+            function spanInColonToken(node: Node): TypeScript.TextSpan {
+                // Is this : specifying return annotation of the function declaration
+                if (isAnyFunction(node.parent)) {
+                    return spanInPreviousNode(node);
+                }
+
+                return spanInNode(node.parent);
             }
         }
    }

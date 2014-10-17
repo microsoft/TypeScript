@@ -1,0 +1,102 @@
+
+1  >var greetings = 0;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (0 to 18)  SpanInfo: {"start":0,"length":17}
+    >var greetings = 0
+    >:=> (line 1, col 0) to (line 1, col 17)
+--------------------------------
+2  >function greet(greeting: string): number {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   => Pos: (19 to 61)  SpanInfo: {"start":66,"length":11}
+    >greetings++
+    >:=> (line 3, col 4) to (line 3, col 15)
+--------------------------------
+3  >    greetings++;
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (62 to 78)  SpanInfo: {"start":66,"length":11}
+    >greetings++
+    >:=> (line 3, col 4) to (line 3, col 15)
+--------------------------------
+4  >    return greetings;
+
+    ~~~~~~~~~~~~~~~~~~~~~~                        => Pos: (79 to 100)  SpanInfo: {"start":83,"length":16}
+    >return greetings
+    >:=> (line 4, col 4) to (line 4, col 20)
+--------------------------------
+5  >}
+
+    ~~                                            => Pos: (101 to 102)  SpanInfo: {"start":101,"length":1}
+    >}
+    >:=> (line 5, col 0) to (line 5, col 1)
+--------------------------------
+6  >function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): number {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             => Pos: (103 to 135)  SpanInfo: {"start":196,"length":11}
+    >greetings++
+    >:=> (line 7, col 4) to (line 7, col 15)
+6  >function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): number {
+
+                                     ~~~~~~~~~~~~~~~~~~~~=> Pos: (136 to 155)  SpanInfo: {"start":137,"length":6}
+    >n = 10
+    >:=> (line 6, col 34) to (line 6, col 40)
+6  >function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): number {
+
+                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (156 to 188)  SpanInfo: {"start":157,"length":23}
+    >...restParams: string[]
+    >:=> (line 6, col 54) to (line 6, col 77)
+6  >function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): number {
+
+                                                                                          ~~~=> Pos: (189 to 191)  SpanInfo: {"start":196,"length":11}
+    >greetings++
+    >:=> (line 7, col 4) to (line 7, col 15)
+--------------------------------
+7  >    greetings++;
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (192 to 208)  SpanInfo: {"start":196,"length":11}
+    >greetings++
+    >:=> (line 7, col 4) to (line 7, col 15)
+--------------------------------
+8  >    return greetings;
+
+    ~~~~~~~~~~~~~~~~~~~~~~                        => Pos: (209 to 230)  SpanInfo: {"start":213,"length":16}
+    >return greetings
+    >:=> (line 8, col 4) to (line 8, col 20)
+--------------------------------
+9  >}
+
+    ~~                                            => Pos: (231 to 232)  SpanInfo: {"start":231,"length":1}
+    >}
+    >:=> (line 9, col 0) to (line 9, col 1)
+--------------------------------
+10 >function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (233 to 262)  SpanInfo: {"start":315,"length":6}
+    >return
+    >:=> (line 12, col 4) to (line 12, col 10)
+10 >function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
+
+                                  ~~~~~~~~~~~~~~~~~~~~=> Pos: (263 to 282)  SpanInfo: {"start":264,"length":6}
+    >n = 10
+    >:=> (line 10, col 31) to (line 10, col 37)
+10 >function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
+
+                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (283 to 308)  SpanInfo: {"start":284,"length":23}
+    >...restParams: string[]
+    >:=> (line 10, col 51) to (line 10, col 74)
+--------------------------------
+11 >{
+
+    ~~                                            => Pos: (309 to 310)  SpanInfo: {"start":315,"length":6}
+    >return
+    >:=> (line 12, col 4) to (line 12, col 10)
+--------------------------------
+12 >    return;
+
+    ~~~~~~~~~~~~                                  => Pos: (311 to 322)  SpanInfo: {"start":315,"length":6}
+    >return
+    >:=> (line 12, col 4) to (line 12, col 10)
+--------------------------------
+13 >}
+    ~                                             => Pos: (323 to 323)  SpanInfo: {"start":323,"length":1}
+    >}
+    >:=> (line 13, col 0) to (line 13, col 1)
