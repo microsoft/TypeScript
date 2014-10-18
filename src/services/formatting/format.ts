@@ -1,5 +1,6 @@
 ///<reference path='..\services.ts' />
 ///<reference path='stringUtilities.ts' />
+///<reference path='formattingScanner.ts' />
 ///<reference path='new\rulesProvider.ts' />
 
 module ts.formatting {
@@ -8,15 +9,12 @@ module ts.formatting {
         kind: SyntaxKind;
     }
 
-    export interface TokenInfo extends TextRange {
+    export interface TokenInfo {
         leadingTrivia: TextRangeWithKind[];
         token: TextRangeWithKind;
         trailingTrivia: TextRangeWithKind[];
-        pos: number;
-        end: number;
     }
 
-    var formattingScanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false);
 
     export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[]{
         var line = getNonAdjustedLineAndCharacterFromPosition(position, sourceFile).line;
@@ -27,7 +25,7 @@ module ts.formatting {
             // get end position for the current line (end value is exclusive so add 1 to the result)
             end: getEndLinePosition(line, sourceFile) + 1
         }        
-        return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnEnter, formattingScanner);
+        return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnEnter);
     }
 
     export function formatOnSemicolon(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[]{
@@ -43,7 +41,7 @@ module ts.formatting {
             pos: 0,
             end: sourceFile.text.length
         };
-        return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatDocument, formattingScanner);
+        return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatDocument);
     }
     
     export function formatSelection(start: number, end: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[]{
@@ -52,7 +50,7 @@ module ts.formatting {
             pos: getStartLinePositionForPosition(start, sourceFile),
             end: end
         };
-        return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatSelection, formattingScanner);
+        return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatSelection);
     }
 
     function getEndLinePosition(line: number, sourceFile: SourceFile): number {
@@ -97,7 +95,7 @@ module ts.formatting {
             pos: getStartLinePositionForPosition(parent.pos, sourceFile),
             end: parent.end
         };
-        return formatSpan(span, sourceFile, options, rulesProvider, requestKind, formattingScanner);
+        return formatSpan(span, sourceFile, options, rulesProvider, requestKind);
     }
 
     function findOutermostParent(position: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node {
@@ -169,22 +167,11 @@ module ts.formatting {
         return { line: lineAndChar.line - 1, character: lineAndChar.character - 1 };
     }
 
-    function rescanIfNecessary(scanner: Scanner, parent: Node): void {
-        var t = scanner.getToken();
-        if (parent.kind === SyntaxKind.BinaryExpression && t === SyntaxKind.GreaterThanToken) {
-            scanner.reScanGreaterToken();
-        }
-        else if (parent.kind === SyntaxKind.RegularExpressionLiteral && t === SyntaxKind.SlashToken) {
-            scanner.reScanSlashToken();
-        }
-    }
-
     function formatSpan(originalRange: TextRange,
         sourceFile: SourceFile,
         options: FormatCodeOptions,
         rulesProvider: RulesProvider,
-        requestKind: FormattingRequestKind,
-        scanner: Scanner): TextChange[] {
+        requestKind: FormattingRequestKind): TextChange[] {
 
         // formatting context to be used by rules provider to get rules
         var formattingContext = new FormattingContext(sourceFile, requestKind);
@@ -192,21 +179,18 @@ module ts.formatting {
         var enclosingNode = findEnclosingNode(originalRange, sourceFile);
         var initialIndentation = getIndentationForNode(enclosingNode, sourceFile, options);
 
-        scanner.setText(sourceFile.text);
-        scanner.setTextPos(enclosingNode.pos);
+        var formattingScanner = getFormattingScanner(sourceFile, enclosingNode, originalRange);        
 
         var previousRange: TextRangeWithKind;
         var previousParent: Node;
         var previousRangeStartLine: number;
 
-        var lastTriviaWasNewLine = true;
         var edits: TextChange[] = [];
+        var lastTriviaWasNewLine: boolean;
 
-        scanner.scan();
+        formattingScanner.advance();
 
-        var currentTokenInfo = fetchNextTokenInfo(enclosingNode);
-
-        if (currentTokenInfo.token) {
+        if (formattingScanner.hasToken()) {
             var startLine =  getNonAdjustedLineAndCharacterFromPosition(enclosingNode.getStart(sourceFile), sourceFile).line;
             processNode(enclosingNode, enclosingNode, startLine, initialIndentation);
         }
@@ -215,11 +199,6 @@ module ts.formatting {
         function processNode(node: Node, contextNode: Node, nodeStartLine: number, indentation: number) {
             // TODO: skip nodes that has skipped or missing tokens
             if (!rangeOverlapsWithRange(originalRange, node)) {
-                return;
-            }
-
-            if (!rangeContainsRange(node, currentTokenInfo.token)) {
-                // node and its descendents don't contain current token from the scanner - skip it
                 return;
             }
 
@@ -234,15 +213,27 @@ module ts.formatting {
                 }
             );
 
-            while (currentTokenInfo.token && node.end >= currentTokenInfo.token.end) {
-                if (SmartIndenter.nodeContentIsAlwaysIndented(node)) {
-                    currentTokenInfo = consumeCurrentToken(node, childContextNode, indentation);
+            // this eats up last tokens in the node
+            // TODO: resync token info and consume it
+            while (formattingScanner.hasToken()) {
+                var tokenInfo = formattingScanner.consumeTokenAndTrailingTrivia(node);
+                if (node.end >= tokenInfo.token.end) {
+                    consumeTokenAndAdvance(tokenInfo, node, childContextNode, indentation);
+                    childContextNode = node;
                 }
                 else {
-                    currentTokenInfo = consumeCurrentToken(node, childContextNode, indentation);
+                    break;
                 }
-                childContextNode = node;
             }
+            //while (currentTokenInfo.token && node.end >= currentTokenInfo.token.end) {
+            //    if (SmartIndenter.nodeContentIsAlwaysIndented(node)) {
+            //        currentTokenInfo = consumeCurrentToken(node, childContextNode, indentation);
+            //    }
+            //    else {
+            //        currentTokenInfo = consumeCurrentToken(node, childContextNode, indentation);
+            //    }
+            //    childContextNode = node;
+            //}
 
             /// Local functions
 
@@ -252,122 +243,100 @@ module ts.formatting {
                 }
 
                 var start = child.getStart(sourceFile);
-                
-                while (currentTokenInfo.token && start >= currentTokenInfo.token.end) {
-                    // we've walked past the current token
-                    // ask parent to handle it
-                    currentTokenInfo = consumeCurrentToken(node, childContextNode, indentation);
-                    childContextNode = node;
+                while (formattingScanner.hasToken()) {
+                    var tokenInfo = formattingScanner.consumeTokenAndTrailingTrivia(node);
+                    if (start >= tokenInfo.token.end) {
+                        consumeTokenAndAdvance(tokenInfo, node, childContextNode, indentation);
+                    }
+                    else {
+                        break;
+                    }
                 }
 
-                if (!currentTokenInfo.token) {
+                //while (currentTokenInfo.token && start >= currentTokenInfo.token.end) {
+                //    // we've walked past the current token
+                //    // ask parent to handle it
+                //    currentTokenInfo = consumeCurrentToken(node, childContextNode, indentation);
+                //    childContextNode = node;
+                //}
+
+                if (!formattingScanner.hasToken()) {
                     return;
                 }
 
+                //if (!currentTokenInfo.token) {
+                //    return;
+                //}
+
                 // ensure that current token is inside child node
-                Debug.assert(currentTokenInfo.token.end <= child.end);
-                if (isToken(child) && currentTokenInfo.token.end === child.end) {
-                    // tokens belong to parent nodes                    
-                    currentTokenInfo = consumeCurrentToken(node, childContextNode, indentation);
-                    childContextNode = node;
+                if (isToken(child)) {
+                    var tokenInfo = formattingScanner.consumeTokenAndTrailingTrivia(node);
+                    if (tokenInfo.token.end === child.end) {
+                        consumeTokenAndAdvance(tokenInfo, node, childContextNode, indentation);
+                        childContextNode = node;
+                        return;
+                    }
+                }
+
+                var childStartLine = getNonAdjustedLineAndCharacterFromPosition(start, sourceFile).line;
+
+                var childIndentation = indentation;
+                if (listElementIndex === -1) {
+                // child is not list element
+
                 }
                 else {
-                    var childStartLine = getNonAdjustedLineAndCharacterFromPosition(start, sourceFile).line;
-
-                    var childIndentation = indentation;
-                    if (listElementIndex === -1) {
-                        // child is not list element
-
-                    }
-                    else {
-                        // child is a list element
-                    }
-                    // determine child indentation
-                    // if child
-                    // TODO: share this code with SmartIndenter
-                    var increaseIndentation =
-                        childStartLine !== nodeStartLine &&
-                        !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStartLine, sourceFile) &&
-                        SmartIndenter.shouldIndentChildNode(node, child);                    
-
-                    processNode(child, childContextNode, childStartLine, increaseIndentation ? indentation + options.IndentSize : indentation);
-                    childContextNode = node;
+                // child is a list element
                 }
+                // determine child indentation
+                // if child
+                // TODO: share this code with SmartIndenter
+                var increaseIndentation =
+                    childStartLine !== nodeStartLine &&
+                    !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStartLine, sourceFile) &&
+                    SmartIndenter.shouldIndentChildNode(node, child);
+
+                processNode(child, childContextNode, childStartLine, increaseIndentation ? indentation + options.IndentSize : indentation);
+                childContextNode = node;
+
+                //if (isToken(child) && currentTokenInfo.token.end === child.end) {
+                //    // tokens belong to parent nodes                    
+                //    currentTokenInfo = consumeCurrentToken(node, childContextNode, indentation);
+                //    childContextNode = node;
+                //}
+                //else {
+                //    var childStartLine = getNonAdjustedLineAndCharacterFromPosition(start, sourceFile).line;
+
+                //    var childIndentation = indentation;
+                //    if (listElementIndex === -1) {
+                //        // child is not list element
+
+                //    }
+                //    else {
+                //        // child is a list element
+                //    }
+                //    // determine child indentation
+                //    // if child
+                //    // TODO: share this code with SmartIndenter
+                //    var increaseIndentation =
+                //        childStartLine !== nodeStartLine &&
+                //        !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStartLine, sourceFile) &&
+                //        SmartIndenter.shouldIndentChildNode(node, child);                    
+
+                //    processNode(child, childContextNode, childStartLine, increaseIndentation ? indentation + options.IndentSize : indentation);
+                //    childContextNode = node;
+                //}
             }
         }
 
-        function fetchNextTokenInfo(parent: Node): TokenInfo {
-            if (currentTokenInfo) {
-                var trivia = currentTokenInfo.trailingTrivia;
-                lastTriviaWasNewLine =
-                    trivia &&
-                    trivia[trivia.length - 1].kind === SyntaxKind.NewLineTrivia;
-            }
-
-            var leadingTrivia: TextRangeWithKind[];
-            var trailingTrivia: TextRangeWithKind[];
-            var tokenRange: TextRangeWithKind;
-
-            var startPos = scanner.getStartPos();
-            var initialStartPos = startPos;
-
-            while (startPos < originalRange.end) {
-                rescanIfNecessary(scanner, parent);
-
-                var t = scanner.getToken();
-
-                if (tokenRange && !isTrivia(t)) {
-                    // have already seen the token and item under cursor is not a trivia
-                    break;
-                }
-
-                scanner.scan();
-
-                var item = { pos: startPos, end: scanner.getStartPos(), kind: t };
-                startPos = item.end;
-
-                if (isTrivia(t)) {
-                    if (tokenRange) {
-
-                        if (!trailingTrivia) {
-                            trailingTrivia = [];
-                        }
-
-                        trailingTrivia.push(item);
-
-                        if (t === SyntaxKind.NewLineTrivia) {
-                            // trailing trivia is cut at the new line
-                            break;
-                        }
-                    }
-                    else {
-                        if (!leadingTrivia) {
-                            leadingTrivia = [];
-                        }
-
-                        leadingTrivia.push(item);
-                    }
-                }
-                else {
-                    tokenRange = item;
-                }
-            }
-
-            return {
-                leadingTrivia: leadingTrivia,
-                token: tokenRange,
-                trailingTrivia: trailingTrivia,
-                pos: initialStartPos,
-                end: scanner.getStartPos()
-            };
-        }
-
-        function consumeCurrentToken(parent: Node, contextNode: Node, indentation: number): TokenInfo {
+        function consumeTokenAndAdvance(currentTokenInfo: TokenInfo, parent: Node, contextNode: Node, indentation: number): void {
             Debug.assert(rangeContainsRange(parent, currentTokenInfo.token));
+
+            lastTriviaWasNewLine = formattingScanner.lastTrailingTriviaWasNewLine();
+
             if (currentTokenInfo.leadingTrivia) {
                 processTrivia(currentTokenInfo.leadingTrivia, parent, contextNode, indentation);
             }
-
 
             var indentToken: boolean;
             if (rangeContainsRange(originalRange, currentTokenInfo.token)) {
@@ -378,7 +347,7 @@ module ts.formatting {
                 processTrivia(currentTokenInfo.trailingTrivia, parent, contextNode, indentation);
             }
 
-            if (lastTriviaWasNewLine && indentToken) {
+            if (formattingScanner.lastTrailingTriviaWasNewLine() && indentToken) {
                 var indentNextTokenOrTrivia = true;
                 if (currentTokenInfo.leadingTrivia) {
                     for (var i = 0, len = currentTokenInfo.leadingTrivia.length; i < len; ++i) {
@@ -419,8 +388,7 @@ module ts.formatting {
                 //}
             }
 
-
-            return fetchNextTokenInfo(parent);
+            formattingScanner.advance();
         }
 
         function insertIndentation(pos: number, indentation: number): void {
