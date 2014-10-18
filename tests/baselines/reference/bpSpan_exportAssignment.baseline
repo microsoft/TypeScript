@@ -1,0 +1,17 @@
+
+1  >class a {
+
+    ~~~~~~~~~~                                    => Pos: (0 to 9)  SpanInfo: undefined
+--------------------------------
+2  >    public c;
+
+    ~~~~~~~~~~~~~~                                => Pos: (10 to 23)  SpanInfo: undefined
+--------------------------------
+3  >}
+
+    ~~                                            => Pos: (24 to 25)  SpanInfo: undefined
+--------------------------------
+4  >export = a;
+    ~~~~~~~~~~~                                   => Pos: (26 to 36)  SpanInfo: {"start":26,"length":10}
+    >export = a
+    >:=> (line 4, col 0) to (line 4, col 10)
