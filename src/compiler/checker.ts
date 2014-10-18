@@ -5153,13 +5153,51 @@ module ts {
                     excludeArgument[i] = true;
                 }
             }
-            var relation = candidates.length === 1 ? assignableRelation : subtypeRelation;
+
             var lastCandidate: Signature;
-            while (true) {
+            var result: Signature;
+            if (candidates.length > 1) {
+                result = chooseOverload(candidates, subtypeRelation, excludeArgument);
+            }
+            if (!result) {
+                result = chooseOverload(candidates, assignableRelation, excludeArgument);
+            }
+            if (result) {
+                return result;
+            }
+
+            // No signatures were applicable. Now report errors based on the last applicable signature with
+            // no arguments excluded from assignability checks.
+            // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
+            // skip the checkApplicableSignature check.
+            if (lastCandidate) {
+                checkApplicableSignature(node, lastCandidate, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+            }
+            else {
+                error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
+            }
+
+            // No signature was applicable. We have already reported the errors for the invalid signature.
+            // If this is a type resolution session, e.g. Language Service, try to get better information that anySignature.
+            // Pick the first candidate that matches the arity. This way we can get a contextual type for cases like:
+            //  declare function f(a: { xa: number; xb: number; });
+            //  f({ |
+            if (!fullTypeCheck) {
+                for (var i = 0, n = candidates.length; i < n; i++) {
+                    if (signatureHasCorrectArity(node, candidates[i])) {
+                        return candidates[i];
+                    }
+                }
+            }
+
+            return resolveErrorCall(node);
+
+            function chooseOverload(candidates: Signature[], relation: Map<boolean>, excludeArgument: boolean[]) {
                 for (var i = 0; i < candidates.length; i++) {
                     if (!signatureHasCorrectArity(node, candidates[i])) {
                         continue;
                     }
+
                     while (true) {
                         var candidate = candidates[i];
                         if (candidate.typeParameters) {
@@ -5182,37 +5220,9 @@ module ts {
                         excludeArgument[index] = false;
                     }
                 }
-                if (relation === assignableRelation) {
-                    break;
-                }
-                relation = assignableRelation;
-            }
 
-            // No signatures were applicable. Now report errors based on the last applicable signature with
-            // no arguments excluded from assignability checks.
-            // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
-            // skip the checkApplicableSignature check.
-            if (lastCandidate) {
-                checkApplicableSignature(node, lastCandidate, relation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+                return undefined;
             }
-            else {
-                error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
-            }
-
-            // No signature was applicable. We have already reported the errors for the invalid signature.
-            // If this is a type resolution session, e.g. Language Service, try to get better information that anySignature.
-            // Pick the first candidate that matches the arity. This way we can get a contextual type for cases like:
-            //  declare function f(a: { xa: number; xb: number; });
-            //  f({ |
-            if (!fullTypeCheck) {
-                for (var i = 0, n = candidates.length; i < n; i++) {
-                    if (signatureHasCorrectArity(node, candidates[i])) {
-                        return candidates[i];
-                    }
-                }
-            }
-
-            return resolveErrorCall(node);
 
             // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
             // A nit here is that we reorder only signatures that belong to the same symbol,
