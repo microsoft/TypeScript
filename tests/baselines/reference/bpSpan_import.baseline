@@ -13,7 +13,9 @@
 --------------------------------
 4  >}
 
-    ~~                                            => Pos: (31 to 32)  SpanInfo: undefined
+    ~~                                            => Pos: (31 to 32)  SpanInfo: {"start":31,"length":1}
+    >}
+    >:=> (line 4, col 0) to (line 4, col 1)
 --------------------------------
 5  >import a = m.c;
 

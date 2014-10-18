@@ -73,6 +73,7 @@ module ts.BreakpointResolver {
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.CatchBlock:
                     case SyntaxKind.FinallyBlock:
+                    case SyntaxKind.ModuleBlock:
                         return spanInBlock(<Block>node);
 
                     case SyntaxKind.ExpressionStatement:
@@ -130,6 +131,13 @@ module ts.BreakpointResolver {
 
                     case SyntaxKind.EnumMember:
                         return spanInEnumMember(<EnumMember>node);
+
+                    case SyntaxKind.ModuleDeclaration:
+                        return spanInModuleDeclaration(<ModuleDeclaration>node);
+
+                    case SyntaxKind.ClassDeclaration:
+                        // TODO
+                        return;
 
                     case SyntaxKind.BinaryExpression:
                     case SyntaxKind.PostfixOperator:
@@ -384,6 +392,10 @@ module ts.BreakpointResolver {
                 return textSpan(enumMember);
             }
 
+            function spanInModuleDeclaration(moduleDeclaration: ModuleDeclaration): TypeScript.TextSpan {
+                return spanInNode(moduleDeclaration.body);
+            }
+
             function spanInExpression(expression: Expression): TypeScript.TextSpan {
                 //TODO (pick this up later) for now lets fix do-while baseline                if (node.parent.kind === SyntaxKind.DoStatement) {
                     // Set span as if on while keyword
@@ -419,12 +431,6 @@ module ts.BreakpointResolver {
                         // Span on first statement
                         return spanInFirstStatementOfBlock(<Block>node.parent);
 
-                    case SyntaxKind.Block:
-                    case SyntaxKind.TryBlock:
-                    case SyntaxKind.CatchBlock:
-                    case SyntaxKind.FinallyBlock:
-                        return spanInBlock(<Block>node.parent);
-
                     case SyntaxKind.SwitchStatement:
                         return spanInNodeIfStartsOnSameLine(node.parent, (<SwitchStatement>node.parent).clauses[0]);
 
@@ -440,6 +446,16 @@ module ts.BreakpointResolver {
                     case SyntaxKind.EnumDeclaration:
                         // Span on close brace token
                         return textSpan(node);
+
+                    case SyntaxKind.ModuleBlock:
+                        var moduleBlock = <Block>node.parent;
+                        if (moduleBlock.statements.length || // there are statements in the module block
+                            moduleBlock.parent.parent.kind === SyntaxKind.ModuleDeclaration) { // this is a dotted module body 
+                            return textSpan(node);
+                        }
+
+                        // No span 
+                        return;
 
                     case SyntaxKind.Block:
                     case SyntaxKind.TryBlock:
