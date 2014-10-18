@@ -1,0 +1,135 @@
+
+1  >var x = 10;
+
+    ~~~~~~~~~~~~                                  => Pos: (0 to 11)  SpanInfo: {"start":0,"length":10}
+    >var x = 10
+    >:=> (line 1, col 0) to (line 1, col 10)
+--------------------------------
+2  >try {
+
+    ~~~~~~                                        => Pos: (12 to 17)  SpanInfo: {"start":22,"length":9}
+    >x = x + 1
+    >:=> (line 3, col 4) to (line 3, col 13)
+--------------------------------
+3  >    x = x + 1;
+
+    ~~~~~~~~~~~~~~~                               => Pos: (18 to 32)  SpanInfo: {"start":22,"length":9}
+    >x = x + 1
+    >:=> (line 3, col 4) to (line 3, col 13)
+--------------------------------
+4  >} catch (e) {
+
+    ~                                             => Pos: (33 to 33)  SpanInfo: {"start":22,"length":9}
+    >x = x + 1
+    >:=> (line 3, col 4) to (line 3, col 13)
+4  >} catch (e) {
+
+     ~~~~~~~~~~~~~                                => Pos: (34 to 46)  SpanInfo: {"start":51,"length":9}
+    >x = x - 1
+    >:=> (line 5, col 4) to (line 5, col 13)
+--------------------------------
+5  >    x = x - 1;
+
+    ~~~~~~~~~~~~~~~                               => Pos: (47 to 61)  SpanInfo: {"start":51,"length":9}
+    >x = x - 1
+    >:=> (line 5, col 4) to (line 5, col 13)
+--------------------------------
+6  >} finally {
+
+    ~                                             => Pos: (62 to 62)  SpanInfo: {"start":51,"length":9}
+    >x = x - 1
+    >:=> (line 5, col 4) to (line 5, col 13)
+6  >} finally {
+
+     ~~~~~~~~~~~                                  => Pos: (63 to 73)  SpanInfo: {"start":78,"length":10}
+    >x = x * 10
+    >:=> (line 7, col 4) to (line 7, col 14)
+--------------------------------
+7  >    x = x * 10;
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (74 to 89)  SpanInfo: {"start":78,"length":10}
+    >x = x * 10
+    >:=> (line 7, col 4) to (line 7, col 14)
+--------------------------------
+8  >}
+
+    ~~                                            => Pos: (90 to 91)  SpanInfo: {"start":78,"length":10}
+    >x = x * 10
+    >:=> (line 7, col 4) to (line 7, col 14)
+--------------------------------
+9  >try
+
+    ~~~~                                          => Pos: (92 to 95)  SpanInfo: {"start":102,"length":9}
+    >x = x + 1
+    >:=> (line 11, col 4) to (line 11, col 13)
+--------------------------------
+10 >{
+
+    ~~                                            => Pos: (96 to 97)  SpanInfo: {"start":102,"length":9}
+    >x = x + 1
+    >:=> (line 11, col 4) to (line 11, col 13)
+--------------------------------
+11 >    x = x + 1;
+
+    ~~~~~~~~~~~~~~~                               => Pos: (98 to 112)  SpanInfo: {"start":102,"length":9}
+    >x = x + 1
+    >:=> (line 11, col 4) to (line 11, col 13)
+--------------------------------
+12 >    throw new Error();
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (113 to 135)  SpanInfo: {"start":117,"length":17}
+    >throw new Error()
+    >:=> (line 12, col 4) to (line 12, col 21)
+--------------------------------
+13 >}
+
+    ~~                                            => Pos: (136 to 137)  SpanInfo: {"start":117,"length":17}
+    >throw new Error()
+    >:=> (line 12, col 4) to (line 12, col 21)
+--------------------------------
+14 >catch (e)
+
+    ~~~~~~~~~~                                    => Pos: (138 to 147)  SpanInfo: {"start":154,"length":9}
+    >x = x - 1
+    >:=> (line 16, col 4) to (line 16, col 13)
+--------------------------------
+15 >{
+
+    ~~                                            => Pos: (148 to 149)  SpanInfo: {"start":154,"length":9}
+    >x = x - 1
+    >:=> (line 16, col 4) to (line 16, col 13)
+--------------------------------
+16 >    x = x - 1;
+
+    ~~~~~~~~~~~~~~~                               => Pos: (150 to 164)  SpanInfo: {"start":154,"length":9}
+    >x = x - 1
+    >:=> (line 16, col 4) to (line 16, col 13)
+--------------------------------
+17 >}
+
+    ~~                                            => Pos: (165 to 166)  SpanInfo: {"start":154,"length":9}
+    >x = x - 1
+    >:=> (line 16, col 4) to (line 16, col 13)
+--------------------------------
+18 >finally
+
+    ~~~~~~~~                                      => Pos: (167 to 174)  SpanInfo: {"start":181,"length":10}
+    >x = x * 10
+    >:=> (line 20, col 4) to (line 20, col 14)
+--------------------------------
+19 >{
+
+    ~~                                            => Pos: (175 to 176)  SpanInfo: {"start":181,"length":10}
+    >x = x * 10
+    >:=> (line 20, col 4) to (line 20, col 14)
+--------------------------------
+20 >    x = x * 10;
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (177 to 192)  SpanInfo: {"start":181,"length":10}
+    >x = x * 10
+    >:=> (line 20, col 4) to (line 20, col 14)
+--------------------------------
+21 >}
+    ~                                             => Pos: (193 to 193)  SpanInfo: {"start":181,"length":10}
+    >x = x * 10
+    >:=> (line 20, col 4) to (line 20, col 14)

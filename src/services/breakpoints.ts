@@ -70,6 +70,9 @@ module ts.BreakpointResolver {
                         return spanInFirstStatementOfBlock(<Block>node);
 
                     case SyntaxKind.Block:
+                    case SyntaxKind.TryBlock:
+                    case SyntaxKind.CatchBlock:
+                    case SyntaxKind.FinallyBlock:
                         return spanInBlock(<Block>node);
 
                     case SyntaxKind.ExpressionStatement:
@@ -110,6 +113,12 @@ module ts.BreakpointResolver {
                     case SyntaxKind.DefaultClause:
                         return spanInCaseOrDefaultClause(<CaseOrDefaultClause>node);
 
+                    case SyntaxKind.TryStatement:
+                        return spanInTryStatement(<TryStatement>node);
+
+                    case SyntaxKind.ThrowStatement:
+                        return spanInThrowStatement(<ThrowStatement>node);
+
                     case SyntaxKind.BinaryExpression:
                     case SyntaxKind.PostfixOperator:
                     case SyntaxKind.PrefixOperator:
@@ -143,6 +152,8 @@ module ts.BreakpointResolver {
                         return spanInWhileKeyword(node);
 
                     case SyntaxKind.ElseKeyword:
+                    case SyntaxKind.CatchKeyword:
+                    case SyntaxKind.FinallyKeyword:
                         return spanInNextNode(node);
 
                     default:
@@ -332,6 +343,14 @@ module ts.BreakpointResolver {
                 return spanInNode(caseOrDefaultClause.statements[0]);
             }
 
+            function spanInTryStatement(tryStatement: TryStatement): TypeScript.TextSpan {
+                return spanInBlock(tryStatement.tryBlock);
+            }
+
+            function spanInThrowStatement(throwStatement: ThrowStatement): TypeScript.TextSpan {
+                return textSpan(throwStatement, throwStatement.expression);
+            }
+
             function spanInExpression(expression: Expression): TypeScript.TextSpan {
                 //TODO (pick this up later) for now lets fix do-while baseline                if (node.parent.kind === SyntaxKind.DoStatement) {
                     // Set span as if on while keyword
@@ -367,6 +386,9 @@ module ts.BreakpointResolver {
                         return spanInFirstStatementOfBlock(<Block>node.parent);
 
                     case SyntaxKind.Block:
+                    case SyntaxKind.TryBlock:
+                    case SyntaxKind.CatchBlock:
+                    case SyntaxKind.FinallyBlock:
                         return spanInBlock(<Block>node.parent);
 
                     case SyntaxKind.SwitchStatement:
@@ -385,6 +407,9 @@ module ts.BreakpointResolver {
                         return textSpan(node);
 
                     case SyntaxKind.Block:
+                    case SyntaxKind.TryBlock:
+                    case SyntaxKind.CatchBlock:
+                    case SyntaxKind.FinallyBlock:
                         return spanInLastStatementOfBlock(<Block>node.parent);
 
                     case SyntaxKind.SwitchStatement:
