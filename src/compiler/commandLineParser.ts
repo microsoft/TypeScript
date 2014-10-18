@@ -24,7 +24,7 @@ module ts {
             type: "boolean",
         },
         {
-            name: "emitBOM", 
+            name: "emitBOM",
             type: "boolean"
         },
         {
@@ -197,9 +197,25 @@ module ts {
                     }
                 }
                 else {
-                    filenames.push(s);
+                    testPathsAndPush(s);
                 }
             }
+        }
+
+        function testPathsAndPush(filenameOrPattern: string) {
+            var fs = require("fs");
+            var path = require("path");
+
+            if (fs.existsSync(path.resolve(process.cwd(), filenameOrPattern))) {
+                filenames.push(filenameOrPattern);
+                return;
+            }
+
+            var glob = require("glob");
+
+            glob.sync(filenameOrPattern).forEach(function(filename) {
+                filenames.push(filename);
+            });
         }
 
         function parseResponseFile(filename: string) {

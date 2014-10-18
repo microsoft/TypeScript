@@ -32,6 +32,9 @@
 	"engines" : { 
 		"node" : ">=0.8.0" 
 	},
+    "dependencies": {
+        "glob": "latest"
+    },
 	"devDependencies": {
 		"jake" : "latest",
 		"mocha" : "latest",
