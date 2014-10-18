@@ -1,15 +1,21 @@
 
 1  >module m {
 
-    ~~~~~~~~~~~                                   => Pos: (0 to 10)  SpanInfo: undefined
+    ~~~~~~~~~~~                                   => Pos: (0 to 10)  SpanInfo: {"start":29,"length":1}
+    >}
+    >:=> (line 3, col 4) to (line 3, col 5)
 --------------------------------
 2  >    class c {
 
-    ~~~~~~~~~~~~~~                                => Pos: (11 to 24)  SpanInfo: undefined
+    ~~~~~~~~~~~~~~                                => Pos: (11 to 24)  SpanInfo: {"start":29,"length":1}
+    >}
+    >:=> (line 3, col 4) to (line 3, col 5)
 --------------------------------
 3  >    }
 
-    ~~~~~~                                        => Pos: (25 to 30)  SpanInfo: undefined
+    ~~~~~~                                        => Pos: (25 to 30)  SpanInfo: {"start":29,"length":1}
+    >}
+    >:=> (line 3, col 4) to (line 3, col 5)
 --------------------------------
 4  >}
 
