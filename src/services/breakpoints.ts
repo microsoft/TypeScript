@@ -103,6 +103,13 @@ module ts.BreakpointResolver {
                     case SyntaxKind.ForInStatement:
                         return spanInForInStatement(<ForInStatement>node);
 
+                    case SyntaxKind.SwitchStatement:
+                        return spanInSwitchStatement(<SwitchStatement>node);
+
+                    case SyntaxKind.CaseClause:
+                    case SyntaxKind.DefaultClause:
+                        return spanInCaseOrDefaultClause(<CaseOrDefaultClause>node);
+
                     case SyntaxKind.BinaryExpression:
                     case SyntaxKind.PostfixOperator:
                     case SyntaxKind.PrefixOperator:
@@ -317,6 +324,14 @@ module ts.BreakpointResolver {
                 return textSpan(forInStatement, findNextToken(forInStatement.expression, forInStatement));
             }
 
+            function spanInSwitchStatement(switchStatement: SwitchStatement): TypeScript.TextSpan {
+                return textSpan(switchStatement, findNextToken(switchStatement.expression, switchStatement));
+            }
+
+            function spanInCaseOrDefaultClause(caseOrDefaultClause: CaseOrDefaultClause): TypeScript.TextSpan {
+                return spanInNode(caseOrDefaultClause.statements[0]);
+            }
+
             function spanInExpression(expression: Expression): TypeScript.TextSpan {
                 //TODO (pick this up later) for now lets fix do-while baseline                if (node.parent.kind === SyntaxKind.DoStatement) {
                     // Set span as if on while keyword
@@ -354,6 +369,9 @@ module ts.BreakpointResolver {
                     case SyntaxKind.Block:
                         return spanInBlock(<Block>node.parent);
 
+                    case SyntaxKind.SwitchStatement:
+                        return spanInNodeIfStartsOnSameLine(node.parent, (<SwitchStatement>node.parent).clauses[0]);
+
                     // Default to parent node
                     default:
                         return spanInNode(node.parent);
@@ -368,6 +386,15 @@ module ts.BreakpointResolver {
 
                     case SyntaxKind.Block:
                         return spanInLastStatementOfBlock(<Block>node.parent);
+
+                    case SyntaxKind.SwitchStatement:
+                        // breakpoint in last statement of the last clause
+                        var switchStatement = <SwitchStatement>node.parent;
+                        var lastClause = switchStatement.clauses[switchStatement.clauses.length - 1];
+                        if (lastClause) {
+                            return spanInNode(lastClause.statements[lastClause.statements.length - 1]);
+                        }
+                        return undefined;
 
                     // Default to parent node
                     default:
