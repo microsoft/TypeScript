@@ -1349,15 +1349,32 @@ class G<T> {               // Introduce type parameter T
 Types are specified either by referencing their keyword or name, or by writing object type literals, array type literals, tuple type literals, function type literals, constructor type literals, or type queries.
 
 &emsp;&emsp;*Type:*  
+&emsp;&emsp;&emsp;*PrimaryOrUnionType*  
+&emsp;&emsp;&emsp;*FunctionType*  
+&emsp;&emsp;&emsp;*ConstructorType*
+
+&emsp;&emsp;*PrimaryOrUnionType:*  
+&emsp;&emsp;&emsp;*PrimaryType*  
+&emsp;&emsp;&emsp;*UnionType*
+
+&emsp;&emsp;*PrimaryType:*  
+&emsp;&emsp;&emsp;*ParenthesizedType*  
 &emsp;&emsp;&emsp;*PredefinedType*  
 &emsp;&emsp;&emsp;*TypeReference*  
 &emsp;&emsp;&emsp;*ObjectType*  
 &emsp;&emsp;&emsp;*ArrayType*  
 &emsp;&emsp;&emsp;*TupleType*  
-&emsp;&emsp;&emsp;*UnionType*  
-&emsp;&emsp;&emsp;*FunctionType*  
-&emsp;&emsp;&emsp;*ConstructorType*  
 &emsp;&emsp;&emsp;*TypeQuery*
+
+&emsp;&emsp;*ParenthesizedType:*  
+&emsp;&emsp;&emsp;`(`&emsp;*Type*&emsp;`)`
+
+Parentheses are required around union, function, or constructor types when they are used as array element types, and parentheses are required around function or constructor types in union types. For example:
+
+```TypeScript
+(string | number)[]  
+((x: string) => string) | (x: number) => number)
+```
 
 The different forms of type notations are described in the following sections.
 
@@ -1461,34 +1478,22 @@ The members of an object type literal are specified as a combination of property
 An array type literal is written as an element type followed by an open and close square bracket.
 
 &emsp;&emsp;*ArrayType:*  
-&emsp;&emsp;&emsp;*ElementType*&emsp;*[no LineTerminator here]*&emsp;`[`&emsp;`]`
-
-&emsp;&emsp;*ElementType:*  
-&emsp;&emsp;&emsp;*PredefinedType*  
-&emsp;&emsp;&emsp;*TypeReference*  
-&emsp;&emsp;&emsp;*ObjectType*  
-&emsp;&emsp;&emsp;*ArrayType*  
-&emsp;&emsp;&emsp;*TupleType*  
-&emsp;&emsp;&emsp;*TypeQuery*
+&emsp;&emsp;&emsp;*PrimaryType*&emsp;*[no LineTerminator here]*&emsp;`[`&emsp;`]`
 
 An array type literal references an array type (section [3.3.2](#3.3.2)) with the given element type. An array type literal is simply shorthand notation for a reference to the generic interface type 'Array' in the global module with the element type as a type argument.
 
-In order to avoid grammar ambiguities, array type literals permit only a restricted set of notations for the element type. Specifically, an *ArrayType* cannot start with a *UnionType*, *FunctionType* or *ConstructorType*. To use one of those forms for the element type, an array type must be written using the 'Array&lt;T>' notation. For example, the type
+When union, function, or constructor types are used as array element types they must be enclosed in parentheses. For example:
 
 ```TypeScript
-() => string[]
+(string | number)[]  
+(() => string))[]
 ```
 
-denotes a function returning a string array, not an array of functions returning string. The latter can be expressed using 'Array&lt;T>' notation
+Alternatively, array types can be written using the 'Array&lt;T>' notation. For example, the types above are equivalent to
 
 ```TypeScript
+Array<string | number>  
 Array<() => string>
-```
-
-or by writing the element type as an object type literal
-
-```TypeScript
-{ (): string }[]
 ```
 
 ### <a name="3.6.5"/>3.6.5 Tuple Type Literals
@@ -1512,27 +1517,21 @@ A tuple type literal references a tuple type (section [3.3.3](#3.3.3)).
 A union type literal is written as a sequence of types separated by vertical bars.
 
 &emsp;&emsp;*UnionType:*  
-&emsp;&emsp;&emsp;*ElementType*&emsp;`|`&emsp;*UnionOrElementType*
-
-&emsp;&emsp;*UnionOrElementType:*  
-&emsp;&emsp;&emsp;*UnionType*  
-&emsp;&emsp;&emsp;*ElementType*
+&emsp;&emsp;&emsp;*PrimaryOrUnionType*&emsp;`|`&emsp;*PrimaryType*
 
 A union typle literal references a union type (section [3.3.4](#3.3.4)).
 
-In order to avoid grammar ambiguities, union type literals permit only a restricted set of notations for the element types. Specifically, an element of a *UnionType* cannot be written as a *FunctionType* or *ConstructorType*. To include function or constructor types in a union type the function or constructor types must be written as object type literals. For example
+When function or constructor types are included in union types they must be enclosed in parentheses. For example:
 
 ```TypeScript
-() => string | () => number
+((x: string) => string) | ((x: number) => number)
 ```
 
-denotes a function whose return value is either a string or a function returning number, whereas
+Alternatively, function or constructor types in union types can be written using object literals:
 
 ```TypeScript
-{ (): string } | { (): number }
+{ (x: string): string } | { (x: number): number }
 ```
-
-denotes either a function returning string or a function returning number.
 
 ### <a name="3.6.7"/>3.6.7 Function Type Literals
 
@@ -2221,8 +2220,8 @@ The resulting type an array literal expression is determined as follows:
 The rules above mean that an array literal is always of an array type, unless it is contextually typed by a type with numerically named properties (such as a tuple type). For example
 
 ```TypeScript
-var a = [1, 2];                          // Array<number>  
-var b = ["hello", true];                 // Array<string | boolean>  
+var a = [1, 2];                          // number[]  
+var b = ["hello", true];                 // (string | boolean)[]  
 var c: [number, string] = [3, "three"];  // [number, string]
 ```
 
@@ -5170,15 +5169,25 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*Type*
 
 &emsp;&emsp;*Type:*  
+&emsp;&emsp;&emsp;*PrimaryOrUnionType*  
+&emsp;&emsp;&emsp;*FunctionType*  
+&emsp;&emsp;&emsp;*ConstructorType*
+
+&emsp;&emsp;*PrimaryOrUnionType:*  
+&emsp;&emsp;&emsp;*PrimaryType*  
+&emsp;&emsp;&emsp;*UnionType*
+
+&emsp;&emsp;*PrimaryType:*  
+&emsp;&emsp;&emsp;*ParenthesizedType*  
 &emsp;&emsp;&emsp;*PredefinedType*  
 &emsp;&emsp;&emsp;*TypeReference*  
 &emsp;&emsp;&emsp;*ObjectType*  
 &emsp;&emsp;&emsp;*ArrayType*  
 &emsp;&emsp;&emsp;*TupleType*  
-&emsp;&emsp;&emsp;*UnionType*  
-&emsp;&emsp;&emsp;*FunctionType*  
-&emsp;&emsp;&emsp;*ConstructorType*  
 &emsp;&emsp;&emsp;*TypeQuery*
+
+&emsp;&emsp;*ParenthesizedType:*  
+&emsp;&emsp;&emsp;`(`&emsp;*Type*&emsp;`)`
 
 &emsp;&emsp;*PredefinedType:*  
 &emsp;&emsp;&emsp;`any`  
@@ -5216,15 +5225,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*MethodSignature*
 
 &emsp;&emsp;*ArrayType:*  
-&emsp;&emsp;&emsp;*ElementType*&emsp;*[no LineTerminator here]*&emsp;`[`&emsp;`]`
-
-&emsp;&emsp;*ElementType:*  
-&emsp;&emsp;&emsp;*PredefinedType*  
-&emsp;&emsp;&emsp;*TypeReference*  
-&emsp;&emsp;&emsp;*ObjectType*  
-&emsp;&emsp;&emsp;*ArrayType*  
-&emsp;&emsp;&emsp;*TupleType*  
-&emsp;&emsp;&emsp;*TypeQuery*
+&emsp;&emsp;&emsp;*PrimaryType*&emsp;*[no LineTerminator here]*&emsp;`[`&emsp;`]`
 
 &emsp;&emsp;*TupleType:*  
 &emsp;&emsp;&emsp;`[`&emsp;*TupleElementTypes*&emsp;`]`
@@ -5237,11 +5238,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*Type*
 
 &emsp;&emsp;*UnionType:*  
-&emsp;&emsp;&emsp;*ElementType*&emsp;`|`&emsp;*UnionOrElementType*
-
-&emsp;&emsp;*UnionOrElementType:*  
-&emsp;&emsp;&emsp;*UnionType*  
-&emsp;&emsp;&emsp;*ElementType*
+&emsp;&emsp;&emsp;*PrimaryOrUnionType*&emsp;`|`&emsp;*PrimaryType*
 
 &emsp;&emsp;*FunctionType:*  
 &emsp;&emsp;&emsp;*TypeParameters<sub>opt</sub>*&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`=>`&emsp;*Type*
