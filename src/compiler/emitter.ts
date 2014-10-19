@@ -2868,7 +2868,7 @@ module ts {
                         }
                         return {
                             diagnosticMessage: diagnosticMessage,
-                            errorNode: node.parameters[0],
+                            errorNode: <Node>node.parameters[0],
                             typeName: node.name
                         };
                     }
@@ -2889,7 +2889,7 @@ module ts {
                         }
                         return {
                             diagnosticMessage: diagnosticMessage,
-                            errorNode: node.name,
+                            errorNode: <Node>node.name,
                             typeName: undefined
                         };
                     }

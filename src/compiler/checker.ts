@@ -3357,7 +3357,7 @@ module ts {
                     var sourceProp = getPropertyOfApparentType(<ApparentType>source, targetProp.name);
                     if (sourceProp !== targetProp) {
                         if (!sourceProp) {
-                            if (!isOptionalProperty(targetProp)) {
+                            if (relation ===subtypeRelation || !isOptionalProperty(targetProp)) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(targetProp), typeToString(source));
                                 }
@@ -3644,10 +3644,6 @@ module ts {
 
         function getCommonSupertype(types: Type[]): Type {
             return forEach(types, t => isSupertypeOfEach(t, types) ? t : undefined);
-        }
-
-        function getBestCommonType(types: Type[], contextualType: Type): Type {
-            return contextualType && isSupertypeOfEach(contextualType, types) ? contextualType : getUnionType(types);
         }
 
         function isTypeOfObjectLiteral(type: Type): boolean {
@@ -5736,7 +5732,7 @@ module ts {
                 case SyntaxKind.GreaterThanToken:
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanEqualsToken:
-                    if (!isTypeSubtypeOf(leftType, rightType) && !isTypeSubtypeOf(rightType, leftType)) {
+                    if (!isTypeAssignableTo(leftType, rightType) && !isTypeAssignableTo(rightType, leftType)) {
                         reportOperatorError();
                     }
                     return booleanType;
