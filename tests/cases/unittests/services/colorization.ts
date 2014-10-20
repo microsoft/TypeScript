@@ -256,7 +256,7 @@ describe('Colorization', function () {
                 identifier("Foo"),
                 operator("<"),
                 identifier("Foo"),
-                punctuation(","),
+                operator(","),
                 identifier("Foo"),
                 operator("<"),
                 identifier("number"),
@@ -269,7 +269,7 @@ describe('Colorization', function () {
                 operator("<"),
                 identifier("Foo"),
                 operator(">"),
-                identifier("keyword"),
+                keyword("number"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
         });
     });
