@@ -3357,7 +3357,7 @@ module ts {
                     var sourceProp = getPropertyOfApparentType(<ApparentType>source, targetProp.name);
                     if (sourceProp !== targetProp) {
                         if (!sourceProp) {
-                            if (relation ===subtypeRelation || !isOptionalProperty(targetProp)) {
+                            if (relation === subtypeRelation || !isOptionalProperty(targetProp)) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(targetProp), typeToString(source));
                                 }
