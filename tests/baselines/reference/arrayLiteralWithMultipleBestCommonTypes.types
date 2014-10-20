@@ -17,27 +17,27 @@ var c: { x: number; a?: number };
 >a : number
 
 var as = [a, b]; // { x: number; y?: number };[]
->as : Array<{ x: number; y?: number; } | { x: number; z?: number; }>
->[a, b] : Array<{ x: number; y?: number; } | { x: number; z?: number; }>
+>as : ({ x: number; y?: number; } | { x: number; z?: number; })[]
+>[a, b] : ({ x: number; y?: number; } | { x: number; z?: number; })[]
 >a : { x: number; y?: number; }
 >b : { x: number; z?: number; }
 
 var bs = [b, a]; // { x: number; z?: number };[]
->bs : Array<{ x: number; y?: number; } | { x: number; z?: number; }>
->[b, a] : Array<{ x: number; y?: number; } | { x: number; z?: number; }>
+>bs : ({ x: number; y?: number; } | { x: number; z?: number; })[]
+>[b, a] : ({ x: number; y?: number; } | { x: number; z?: number; })[]
 >b : { x: number; z?: number; }
 >a : { x: number; y?: number; }
 
 var cs = [a, b, c]; // { x: number; y?: number };[]
->cs : Array<{ x: number; y?: number; } | { x: number; z?: number; } | { x: number; a?: number; }>
->[a, b, c] : Array<{ x: number; y?: number; } | { x: number; z?: number; } | { x: number; a?: number; }>
+>cs : ({ x: number; y?: number; } | { x: number; z?: number; } | { x: number; a?: number; })[]
+>[a, b, c] : ({ x: number; y?: number; } | { x: number; z?: number; } | { x: number; a?: number; })[]
 >a : { x: number; y?: number; }
 >b : { x: number; z?: number; }
 >c : { x: number; a?: number; }
 
 var ds = [(x: Object) => 1, (x: string) => 2]; // { (x:Object) => number }[]
->ds : { (x: Object): number; }[]
->[(x: Object) => 1, (x: string) => 2] : { (x: Object): number; }[]
+>ds : ((x: Object) => number)[]
+>[(x: Object) => 1, (x: string) => 2] : ((x: Object) => number)[]
 >(x: Object) => 1 : (x: Object) => number
 >x : Object
 >Object : Object
@@ -45,8 +45,8 @@ var ds = [(x: Object) => 1, (x: string) => 2]; // { (x:Object) => number }[]
 >x : string
 
 var es = [(x: string) => 2, (x: Object) => 1]; // { (x:string) => number }[]
->es : { (x: string): number; }[]
->[(x: string) => 2, (x: Object) => 1] : { (x: string): number; }[]
+>es : ((x: string) => number)[]
+>[(x: string) => 2, (x: Object) => 1] : ((x: string) => number)[]
 >(x: string) => 2 : (x: string) => number
 >x : string
 >(x: Object) => 1 : (x: Object) => number
@@ -54,8 +54,8 @@ var es = [(x: string) => 2, (x: Object) => 1]; // { (x:string) => number }[]
 >Object : Object
 
 var fs = [(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) => 2]; // (a: { x: number; y?: number }) => number[]
->fs : Array<{ (a: { x: number; y?: number; }): number; } | { (b: { x: number; z?: number; }): number; }>
->[(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) => 2] : Array<{ (a: { x: number; y?: number; }): number; } | { (b: { x: number; z?: number; }): number; }>
+>fs : (((a: { x: number; y?: number; }) => number) | ((b: { x: number; z?: number; }) => number))[]
+>[(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) => 2] : (((a: { x: number; y?: number; }) => number) | ((b: { x: number; z?: number; }) => number))[]
 >(a: { x: number; y?: number }) => 1 : (a: { x: number; y?: number; }) => number
 >a : { x: number; y?: number; }
 >x : number
@@ -66,8 +66,8 @@ var fs = [(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) =>
 >z : number
 
 var gs = [(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) => 1]; // (b: { x: number; z?: number }) => number[]
->gs : Array<{ (b: { x: number; z?: number; }): number; } | { (a: { x: number; y?: number; }): number; }>
->[(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) => 1] : Array<{ (b: { x: number; z?: number; }): number; } | { (a: { x: number; y?: number; }): number; }>
+>gs : (((b: { x: number; z?: number; }) => number) | ((a: { x: number; y?: number; }) => number))[]
+>[(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) => 1] : (((b: { x: number; z?: number; }) => number) | ((a: { x: number; y?: number; }) => number))[]
 >(b: { x: number; z?: number }) => 2 : (b: { x: number; z?: number; }) => number
 >b : { x: number; z?: number; }
 >x : number

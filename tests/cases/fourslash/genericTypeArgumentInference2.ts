@@ -20,7 +20,7 @@
 goTo.marker('1');
 verify.quickInfoIs('(var) r: string | number | boolean');
 goTo.marker('11');
-verify.quickInfoIs('(method) Underscore.Static.all<string | number | boolean>(list: Array<string | number | boolean>, iterator?: Underscore.Iterator<string | number | boolean, boolean>, context?: any): string | number | boolean');
+verify.quickInfoIs('(method) Underscore.Static.all<string | number | boolean>(list: (string | number | boolean)[], iterator?: Underscore.Iterator<string | number | boolean, boolean>, context?: any): string | number | boolean');
 
 goTo.marker('2');
 verify.quickInfoIs('(var) r2: boolean');
