@@ -279,7 +279,6 @@ var word2mdJs = path.join(scriptsDirectory, "word2md.js");
 var word2mdTs = path.join(scriptsDirectory, "word2md.ts");
 var specWord = path.join(docDirectory, "TypeScript Language Specification.docx");
 var specMd = path.join(docDirectory, "spec.md");
-var headerMd = path.join(docDirectory, "header.md");
 
 file(word2mdTs);
 
@@ -292,7 +291,6 @@ compileFile(word2mdJs,
 
 // The generated spec.md; built for the 'generate-spec' task
 file(specMd, [word2mdJs, specWord], function () {
-    jake.cpR(headerMd, specMd, {silent: true});
     var specWordFullPath = path.resolve(specWord);
     var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + specMd;
     console.log(cmd);

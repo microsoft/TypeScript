@@ -1077,18 +1077,19 @@ module ts {
                 return writeSymbolName(symbol);
             }
 
-            function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
-                return writeType(type, flags | TypeFormatFlags.WriteArrowStyleSignature);
+            function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, typeStack?: Type[]) {
+                var globalFlagsToPass = globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike;
+                return writeType(type, globalFlags);
 
                 function writeType(type: Type, flags: TypeFormatFlags) {
                     // Write undefined/null type as any
                     if (type.flags & TypeFlags.Intrinsic) {
                         // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
-                        writer.writeKeyword(!(flags & TypeFormatFlags.WriteOwnNameForAnyLike) &&
+                        writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) &&
                             (type.flags & TypeFlags.Any) ? "any" : (<IntrinsicType>type).intrinsicName);
                     }
                     else if (type.flags & TypeFlags.Reference) {
-                        writeTypeReference(<TypeReference>type);
+                        writeTypeReference(<TypeReference>type, flags);
                     }
                     else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type);
@@ -1097,7 +1098,7 @@ module ts {
                         writeTupleType(<TupleType>type);
                     }
                     else if (type.flags & TypeFlags.Union) {
-                        writeUnionType(<UnionType>type);
+                        writeUnionType(<UnionType>type, flags);
                     }
                     else if (type.flags & TypeFlags.Anonymous) {
                         writeAnonymousType(<ObjectType>type, flags);
@@ -1125,17 +1126,13 @@ module ts {
                             writePunctuation(writer, union ? SyntaxKind.BarToken : SyntaxKind.CommaToken);
                             writeSpace(writer);
                         }
-                        // Don't output function type literals in unions because '() => string | () => number' would be parsed
-                        // as a function type that returns a union type. Instead output '{ (): string; } | { (): number; }'.
-                        writeType(types[i], union ? flags & ~TypeFormatFlags.WriteArrowStyleSignature : flags | TypeFormatFlags.WriteArrowStyleSignature);
+                        writeType(types[i], union ? TypeFormatFlags.InElementType : TypeFormatFlags.None);
                     }
                 }
 
-                function writeTypeReference(type: TypeReference) {
-                    if (type.target === globalArrayType && !(flags & TypeFormatFlags.WriteArrayAsGenericType) && !(type.typeArguments[0].flags & TypeFlags.Union)) {
-                        // If we are writing array element type the arrow style signatures are not allowed as 
-                        // we need to surround it by curlies, e.g. { (): T; }[]; as () => T[] would mean something different
-                        writeType(type.typeArguments[0], flags & ~TypeFormatFlags.WriteArrowStyleSignature);
+                function writeTypeReference(type: TypeReference, flags: TypeFormatFlags) {
+                    if (type.target === globalArrayType && !(flags & TypeFormatFlags.WriteArrayAsGenericType)) {
+                        writeType(type.typeArguments[0], TypeFormatFlags.InElementType);
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
@@ -1153,8 +1150,14 @@ module ts {
                     writePunctuation(writer, SyntaxKind.CloseBracketToken);
                 }
 
-                function writeUnionType(type: UnionType) {
+                function writeUnionType(type: UnionType, flags: TypeFormatFlags) {
+                    if (flags & TypeFormatFlags.InElementType) {
+                        writePunctuation(writer, SyntaxKind.OpenParenToken);
+                    }
                     writeTypeList(type.types, /*union*/ true);
+                    if (flags & TypeFormatFlags.InElementType) {
+                        writePunctuation(writer, SyntaxKind.CloseParenToken);
+                    }
                 }
 
                 function writeAnonymousType(type: ObjectType, flags: TypeFormatFlags) {
@@ -1212,17 +1215,27 @@ module ts {
                             return;
                         }
 
-                        if (flags & TypeFormatFlags.WriteArrowStyleSignature) {
-                            if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
-                                buildSignatureDisplay(resolved.callSignatures[0], writer, enclosingDeclaration, flags, typeStack);
-                                return;
+                        if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
+                            if (flags & TypeFormatFlags.InElementType) {
+                                writePunctuation(writer, SyntaxKind.OpenParenToken);
                             }
-                            if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
-                                writeKeyword(writer, SyntaxKind.NewKeyword);
-                                writeSpace(writer);
-                                buildSignatureDisplay(resolved.constructSignatures[0], writer, enclosingDeclaration, flags, typeStack);
-                                return;
+                            buildSignatureDisplay(resolved.callSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | TypeFormatFlags.WriteArrowStyleSignature , typeStack);
+                            if (flags & TypeFormatFlags.InElementType) {
+                                writePunctuation(writer, SyntaxKind.CloseParenToken);
                             }
+                            return;
+                        }
+                        if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
+                            if (flags & TypeFormatFlags.InElementType) {
+                                writePunctuation(writer, SyntaxKind.OpenParenToken);
+                            }
+                            writeKeyword(writer, SyntaxKind.NewKeyword);
+                            writeSpace(writer);
+                            buildSignatureDisplay(resolved.constructSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | TypeFormatFlags.WriteArrowStyleSignature, typeStack);
+                            if (flags & TypeFormatFlags.InElementType) {
+                                writePunctuation(writer, SyntaxKind.CloseParenToken);
+                            }
+                            return;
                         }
                     }
 
@@ -1230,7 +1243,7 @@ module ts {
                     writer.writeLine();
                     writer.increaseIndent();
                     for (var i = 0; i < resolved.callSignatures.length; i++) {
-                        buildSignatureDisplay(resolved.callSignatures[i], writer, enclosingDeclaration, flags & ~TypeFormatFlags.WriteArrowStyleSignature, typeStack);
+                        buildSignatureDisplay(resolved.callSignatures[i], writer, enclosingDeclaration, globalFlagsToPass, typeStack);
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
@@ -1238,7 +1251,7 @@ module ts {
                         writeKeyword(writer, SyntaxKind.NewKeyword);
                         writeSpace(writer);
 
-                        buildSignatureDisplay(resolved.constructSignatures[i], writer, enclosingDeclaration, flags & ~TypeFormatFlags.WriteArrowStyleSignature, typeStack);
+                        buildSignatureDisplay(resolved.constructSignatures[i], writer, enclosingDeclaration, globalFlagsToPass, typeStack);
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
@@ -1252,7 +1265,7 @@ module ts {
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                         writePunctuation(writer, SyntaxKind.ColonToken);
                         writeSpace(writer);
-                        writeType(resolved.stringIndexType, flags | TypeFormatFlags.WriteArrowStyleSignature);
+                        writeType(resolved.stringIndexType, TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
@@ -1266,7 +1279,7 @@ module ts {
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                         writePunctuation(writer, SyntaxKind.ColonToken);
                         writeSpace(writer);
-                        writeType(resolved.numberIndexType, flags | TypeFormatFlags.WriteArrowStyleSignature);
+                        writeType(resolved.numberIndexType, TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
@@ -1280,7 +1293,7 @@ module ts {
                                 if (isOptionalProperty(p)) {
                                     writePunctuation(writer, SyntaxKind.QuestionToken);
                                 }
-                                buildSignatureDisplay(signatures[j], writer, enclosingDeclaration, flags & ~TypeFormatFlags.WriteArrowStyleSignature, typeStack);
+                                buildSignatureDisplay(signatures[j], writer, enclosingDeclaration, globalFlagsToPass, typeStack);
                                 writePunctuation(writer, SyntaxKind.SemicolonToken);
                                 writer.writeLine();
                             }
@@ -1292,7 +1305,7 @@ module ts {
                             }
                             writePunctuation(writer, SyntaxKind.ColonToken);
                             writeSpace(writer);
-                            writeType(t, flags | TypeFormatFlags.WriteArrowStyleSignature);
+                            writeType(t, TypeFormatFlags.None);
                             writePunctuation(writer, SyntaxKind.SemicolonToken);
                             writer.writeLine();
                         }
@@ -1335,7 +1348,7 @@ module ts {
                             writePunctuation(writer, SyntaxKind.CommaToken);
                             writeSpace(writer);
                         }
-                        buildTypeDisplay(mapper(typeParameters[i]), writer, enclosingDeclaration, TypeFormatFlags.WriteArrowStyleSignature);
+                        buildTypeDisplay(mapper(typeParameters[i]), writer, enclosingDeclaration, TypeFormatFlags.None);
                     }
                     writePunctuation(writer, SyntaxKind.GreaterThanToken);
                 }
@@ -2831,6 +2844,8 @@ module ts {
                     return getTypeFromTupleTypeNode(<TupleTypeNode>node);
                 case SyntaxKind.UnionType:
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
+                case SyntaxKind.ParenType:
+                    return getTypeFromTypeNode((<ParenTypeNode>node).type);
                 case SyntaxKind.TypeLiteral:
                     return getTypeFromTypeLiteralNode(<TypeLiteralNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
@@ -7480,6 +7495,8 @@ module ts {
                     return checkTupleType(<TupleTypeNode>node);
                 case SyntaxKind.UnionType:
                     return checkUnionType(<UnionTypeNode>node);
+                case SyntaxKind.ParenType:
+                    return checkSourceElement((<ParenTypeNode>node).type);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:
