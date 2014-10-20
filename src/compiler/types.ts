@@ -155,6 +155,7 @@ module ts {
         ArrayType,
         TupleType,
         UnionType,
+        ParenType,
         // Expression
         ArrayLiteral,
         ObjectLiteral,
@@ -225,7 +226,7 @@ module ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
-        LastTypeNode = UnionType,
+        LastTypeNode = ParenType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = EndOfFileToken,
@@ -340,6 +341,10 @@ module ts {
 
     export interface UnionTypeNode extends TypeNode {
         types: NodeArray<TypeNode>;
+    }
+
+    export interface ParenTypeNode extends TypeNode {
+        type: TypeNode;
     }
 
     export interface StringLiteralTypeNode extends TypeNode {
@@ -707,6 +712,7 @@ module ts {
         WriteArrowStyleSignature        = 0x00000008,  // Write arrow style signature
         WriteOwnNameForAnyLike          = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
         WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
+        InElementType                   = 0x00000040,  // Writing an array or union element type
     }
 
     export enum SymbolFormatFlags {
@@ -1014,6 +1020,7 @@ module ts {
 
     export interface InferenceContext {
         typeParameters: TypeParameter[];  // Type parameters for which inferences are made
+        inferUnionTypes: boolean;         // Infer union types for disjoint candidates (otherwise undefinedType)
         inferenceCount: number;           // Incremented for every inference made (whether new or not)
         inferences: Type[][];             // Inferences made for each type parameter
         inferredTypes: Type[];            // Inferred type for each type parameter
