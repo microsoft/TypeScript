@@ -261,6 +261,7 @@ module ts.SignatureHelp {
         function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {
             var children = parent.getChildren(sourceFile);
             var indexOfOpenerToken = children.indexOf(openerToken);
+            Debug.assert(indexOfOpenerToken >= 0 && children.length > indexOfOpenerToken + 1);
             return children[indexOfOpenerToken + 1];
         }
 

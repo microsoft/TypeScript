@@ -993,9 +993,11 @@ module ts {
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
         var _displayBuilder: SymbolDisplayBuilder;
         function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
-            // Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
-            // Meaning needs to be specified if the enclosing declaration is given
-            function buildPlainSymbolName(symbol: Symbol, writer: SymbolWriter): void {
+            /**
+             * Writes only the name of the symbol out to the writer. Uses the original source text
+             * for the name of the symbol if it is available to match how the user inputted the name.
+             */
+            function appendSymbolNameOnly(symbol: Symbol, writer: SymbolWriter): void {
                 if (symbol.declarations && symbol.declarations.length > 0) {
                     var declaration = symbol.declarations[0];
                     if (declaration.name) {
@@ -1007,9 +1009,13 @@ module ts {
                 writer.writeSymbol(symbol.name, symbol);
             }
 
+            /**
+             * Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
+             * Meaning needs to be specified if the enclosing declaration is given
+             */
             function buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void {
                 var parentSymbol: Symbol;
-                function appendSymbolName(symbol: Symbol): void {
+                function appendParentTypeArgumentsAndSymbolName(symbol: Symbol): void {
                     if (parentSymbol) {
                         // Write type arguments of instantiated class/interface here
                         if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
@@ -1024,7 +1030,7 @@ module ts {
                         writePunctuation(writer, SyntaxKind.DotToken);
                     }
                     parentSymbol = symbol;
-                    buildPlainSymbolName(symbol, writer);
+                    appendSymbolNameOnly(symbol, writer);
                 }
 
                 // Let the writer know we just wrote out a symbol.  The declaration emitter writer uses 
@@ -1050,7 +1056,7 @@ module ts {
 
                         if (accessibleSymbolChain) {
                             for (var i = 0, n = accessibleSymbolChain.length; i < n; i++) {
-                                appendSymbolName(accessibleSymbolChain[i]);
+                                appendParentTypeArgumentsAndSymbolName(accessibleSymbolChain[i]);
                             }
                         }
                         else {
@@ -1064,7 +1070,7 @@ module ts {
                                 return;
                             }
 
-                            appendSymbolName(symbol);
+                            appendParentTypeArgumentsAndSymbolName(symbol);
                         }
                     }
                 }
@@ -1078,7 +1084,7 @@ module ts {
                     return;
                 }
 
-                return appendSymbolName(symbol);
+                return appendParentTypeArgumentsAndSymbolName(symbol);
             }
 
             function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
@@ -1314,7 +1320,7 @@ module ts {
             }
 
             function buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
-                buildPlainSymbolName(tp.symbol, writer);
+                appendSymbolNameOnly(tp.symbol, writer);
                 var constraint = getConstraintOfTypeParameter(tp);
                 if (constraint) {
                     writeSpace(writer);
@@ -1328,7 +1334,7 @@ module ts {
                 if (getDeclarationFlagsFromSymbol(p) & NodeFlags.Rest) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
-                buildPlainSymbolName(p, writer);
+                appendSymbolNameOnly(p, writer);
                 if (p.valueDeclaration.flags & NodeFlags.QuestionMark || (<VariableDeclaration>p.valueDeclaration).initializer) {
                     writePunctuation(writer, SyntaxKind.QuestionToken);
                 }
