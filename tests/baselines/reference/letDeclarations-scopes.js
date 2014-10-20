@@ -100,12 +100,12 @@ function F() {
 
 var F2 = () => {
     let l = 0;
-n = l;
+    n = l;
 };
 
 var F3 = function () {
     let l = 0;
-n = l;
+    n = l;
 };
 
 // modules
@@ -115,8 +115,10 @@ module m {
 
     {
        let l = false;
-        var b2: boolean = l;
+       var b2: boolean = l;
     }
+
+    lable: let l2 = 0;
 }
 
 // methods
@@ -147,11 +149,11 @@ class C {
 var o = {
     f() {
         let l = 0;
-n = l;
+        n = l;
     },
-f2: () => {
+    f2: () => {
         let l = 0;
-    n = l;
+        n = l;
     }
 }
 
@@ -251,6 +253,7 @@ var m;
         let l = false;
         var b2 = l;
     }
+    lable: let l2 = 0;
 })(m || (m = {}));
 // methods
 var C = (function () {

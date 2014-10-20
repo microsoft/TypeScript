@@ -105,12 +105,12 @@ tests/cases/compiler/letDeclarations-scopes.ts(28,7): error TS2410: All symbols 
     
     var F2 = () => {
         let l = 0;
-    n = l;
+        n = l;
     };
     
     var F3 = function () {
         let l = 0;
-    n = l;
+        n = l;
     };
     
     // modules
@@ -120,8 +120,10 @@ tests/cases/compiler/letDeclarations-scopes.ts(28,7): error TS2410: All symbols 
     
         {
            let l = false;
-            var b2: boolean = l;
+           var b2: boolean = l;
         }
+    
+        lable: let l2 = 0;
     }
     
     // methods
@@ -152,10 +154,10 @@ tests/cases/compiler/letDeclarations-scopes.ts(28,7): error TS2410: All symbols 
     var o = {
         f() {
             let l = 0;
-    n = l;
+            n = l;
         },
-    f2: () => {
+        f2: () => {
             let l = 0;
-        n = l;
+            n = l;
         }
     }
