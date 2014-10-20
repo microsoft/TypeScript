@@ -2726,13 +2726,13 @@ module ts {
             parseExpected(SyntaxKind.OpenParenToken);
             if (token !== SyntaxKind.SemicolonToken) {
                 if (parseOptional(SyntaxKind.VarKeyword)) {
-                    var declarations = parseVariableDeclarationList(0, true);
+                    var declarations = parseVariableDeclarationList(0, /*noIn*/ true);
                     if (!declarations.length) {
                         error(Diagnostics.Variable_declaration_list_cannot_be_empty);
                     }
                 }
                 else if (parseOptional(SyntaxKind.LetKeyword)) {
-                    var declarations = parseVariableDeclarationList(NodeFlags.Let, true);
+                    var declarations = parseVariableDeclarationList(NodeFlags.Let, /*noIn*/ true);
                     if (!declarations.length) {
                         error(Diagnostics.Variable_declaration_list_cannot_be_empty);
                     }
@@ -2741,7 +2741,7 @@ module ts {
                     }
                 }
                 else if (parseOptional(SyntaxKind.ConstKeyword)) {
-                    var declarations = parseVariableDeclarationList(NodeFlags.Const, true);
+                    var declarations = parseVariableDeclarationList(NodeFlags.Const, /*noIn*/ true);
                     if (!declarations.length) {
                         error(Diagnostics.Variable_declaration_list_cannot_be_empty);
                     }
@@ -3200,7 +3200,7 @@ module ts {
                 grammarErrorAtPos(initializerStart, initializerFirstTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
             }
             if (!inAmbientContext && !node.initializer && flags & NodeFlags.Const) {
-                grammarErrorOnNode(node, Diagnostics.const_must_be_intialized);
+                grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
             }
             if (isInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
                 // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
@@ -3245,10 +3245,10 @@ module ts {
             }
             else if (!allowLetAndConstDeclarations) {
                 if (node.flags & NodeFlags.Let) {
-                    grammarErrorOnNode(node, Diagnostics.let_declarations_must_be_declared_inside_a_block);
+                    grammarErrorOnNode(node, Diagnostics.let_declarations_can_only_be_declared_inside_a_block);
                 }
                 else if (node.flags & NodeFlags.Const) {
-                    grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_declared_inside_a_block);
+                    grammarErrorOnNode(node, Diagnostics.const_declarations_can_only_be_declared_inside_a_block);
                 }
             }
             return node;

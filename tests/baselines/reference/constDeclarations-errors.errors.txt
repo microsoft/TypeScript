@@ -1,12 +1,12 @@
-tests/cases/compiler/constDeclarations-errors.ts(3,7): error TS1155: const must be intialized.
-tests/cases/compiler/constDeclarations-errors.ts(4,7): error TS1155: const must be intialized.
-tests/cases/compiler/constDeclarations-errors.ts(5,7): error TS1155: const must be intialized.
-tests/cases/compiler/constDeclarations-errors.ts(5,11): error TS1155: const must be intialized.
-tests/cases/compiler/constDeclarations-errors.ts(5,15): error TS1155: const must be intialized.
-tests/cases/compiler/constDeclarations-errors.ts(5,27): error TS1155: const must be intialized.
-tests/cases/compiler/constDeclarations-errors.ts(8,11): error TS1155: const must be intialized.
-tests/cases/compiler/constDeclarations-errors.ts(14,11): error TS1155: const must be intialized.
-tests/cases/compiler/constDeclarations-errors.ts(17,20): error TS1155: const must be intialized.
+tests/cases/compiler/constDeclarations-errors.ts(3,7): error TS1155: 'const' declarations must be initialized
+tests/cases/compiler/constDeclarations-errors.ts(4,7): error TS1155: 'const' declarations must be initialized
+tests/cases/compiler/constDeclarations-errors.ts(5,7): error TS1155: 'const' declarations must be initialized
+tests/cases/compiler/constDeclarations-errors.ts(5,11): error TS1155: 'const' declarations must be initialized
+tests/cases/compiler/constDeclarations-errors.ts(5,15): error TS1155: 'const' declarations must be initialized
+tests/cases/compiler/constDeclarations-errors.ts(5,27): error TS1155: 'const' declarations must be initialized
+tests/cases/compiler/constDeclarations-errors.ts(8,11): error TS1155: 'const' declarations must be initialized
+tests/cases/compiler/constDeclarations-errors.ts(14,11): error TS1155: 'const' declarations must be initialized
+tests/cases/compiler/constDeclarations-errors.ts(17,20): error TS1155: 'const' declarations must be initialized
 tests/cases/compiler/constDeclarations-errors.ts(11,27): error TS2449: The operand of an increment or decrement operator cannot be a constant.
 
 
@@ -15,24 +15,24 @@ tests/cases/compiler/constDeclarations-errors.ts(11,27): error TS2449: The opera
     // error, missing intialicer
     const c1;
           ~~
-!!! error TS1155: const must be intialized.
+!!! error TS1155: 'const' declarations must be initialized
     const c2: number;
           ~~
-!!! error TS1155: const must be intialized.
+!!! error TS1155: 'const' declarations must be initialized
     const c3, c4, c5 :string, c6;  // error, missing initialicer
           ~~
-!!! error TS1155: const must be intialized.
+!!! error TS1155: 'const' declarations must be initialized
               ~~
-!!! error TS1155: const must be intialized.
+!!! error TS1155: 'const' declarations must be initialized
                   ~~
-!!! error TS1155: const must be intialized.
+!!! error TS1155: 'const' declarations must be initialized
                               ~~
-!!! error TS1155: const must be intialized.
+!!! error TS1155: 'const' declarations must be initialized
     
     // error, can not be unintalized
     for(const c in {}) { }
               ~
-!!! error TS1155: const must be intialized.
+!!! error TS1155: 'const' declarations must be initialized
     
     // error, assigning to a const
     for(const c8 = 0; c8 < 1; c8++) { }
@@ -42,9 +42,9 @@ tests/cases/compiler/constDeclarations-errors.ts(11,27): error TS2449: The opera
     // error, can not be unintalized
     for(const c9; c9 < 1;) { }
               ~~
-!!! error TS1155: const must be intialized.
+!!! error TS1155: 'const' declarations must be initialized
     
     // error, can not be unintalized
     for(const c10 = 0, c11; c10 < 1;) { }
                        ~~~
-!!! error TS1155: const must be intialized.
+!!! error TS1155: 'const' declarations must be initialized

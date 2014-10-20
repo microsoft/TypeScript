@@ -463,15 +463,15 @@
         "category": "Error",
         "code": 1154
     },
-    "const must be intialized.": {
+    "'const' declarations must be initialized": {
         "category": "Error",
         "code": 1155
     },
-    "'const' declarations must be declared inside a block.": {
+    "'const' declarations can only be declared inside a block.": {
         "category": "Error",
         "code": 1156
     },
-    "'let' declarations must be declared inside a block.": {
+    "'let' declarations can only be declared inside a block.": {
         "category": "Error",
         "code": 1157
     },
