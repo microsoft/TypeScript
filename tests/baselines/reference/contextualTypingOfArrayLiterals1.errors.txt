@@ -1,4 +1,4 @@
-tests/cases/compiler/contextualTypingOfArrayLiterals1.ts(5,5): error TS2322: Type 'Array<number | Date>' is not assignable to type 'I':
+tests/cases/compiler/contextualTypingOfArrayLiterals1.ts(5,5): error TS2322: Type '(number | Date)[]' is not assignable to type 'I':
   Index signatures are incompatible:
     Type 'number | Date' is not assignable to type 'Date':
       Type 'number' is not assignable to type 'Date':
@@ -12,7 +12,7 @@ tests/cases/compiler/contextualTypingOfArrayLiterals1.ts(5,5): error TS2322: Typ
     
     var x3: I = [new Date(), 1]; 
         ~~
-!!! error TS2322: Type 'Array<number | Date>' is not assignable to type 'I':
+!!! error TS2322: Type '(number | Date)[]' is not assignable to type 'I':
 !!! error TS2322:   Index signatures are incompatible:
 !!! error TS2322:     Type 'number | Date' is not assignable to type 'Date':
 !!! error TS2322:       Type 'number' is not assignable to type 'Date':

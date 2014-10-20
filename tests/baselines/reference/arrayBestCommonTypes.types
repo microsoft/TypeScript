@@ -557,7 +557,7 @@ module NonEmptyTypes {
 >x : string
 >y : base
 >base : base
->[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : Array<{ x: undefined; y: base; } | { x: string; y: derived; }>
+>[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : ({ x: undefined; y: base; } | { x: string; y: derived; })[]
 >{ x: undefined, y: new base() } : { x: undefined; y: base; }
 >x : undefined
 >undefined : undefined

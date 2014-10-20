@@ -169,7 +169,7 @@ var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 >result10 : (t: X) => any
 >t : X
 >X : X
->true ? (m) => m.propertyX1 : (n) => n.propertyX2 : { (m: X): number; } | { (n: X): string; }
+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
 >(m) => m.propertyX1 : (m: X) => number
 >m : X
 >m.propertyX1 : number

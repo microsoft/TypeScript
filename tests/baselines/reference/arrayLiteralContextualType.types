@@ -40,7 +40,7 @@ function bar(animals: { [n: number]: IAnimal }) { }
 foo([
 >foo([    new Giraffe(),    new Elephant()]) : void
 >foo : (animals: IAnimal[]) => void
->[    new Giraffe(),    new Elephant()] : Array<Giraffe | Elephant>
+>[    new Giraffe(),    new Elephant()] : (Giraffe | Elephant)[]
 
     new Giraffe(),
 >new Giraffe() : Giraffe
@@ -54,7 +54,7 @@ foo([
 bar([
 >bar([    new Giraffe(),    new Elephant()]) : void
 >bar : (animals: { [x: number]: IAnimal; }) => void
->[    new Giraffe(),    new Elephant()] : Array<Giraffe | Elephant>
+>[    new Giraffe(),    new Elephant()] : (Giraffe | Elephant)[]
 
     new Giraffe(),
 >new Giraffe() : Giraffe
@@ -67,8 +67,8 @@ bar([
 ]); // Legal because of the contextual type IAnimal provided by the parameter
 
 var arr = [new Giraffe(), new Elephant()];
->arr : Array<Giraffe | Elephant>
->[new Giraffe(), new Elephant()] : Array<Giraffe | Elephant>
+>arr : (Giraffe | Elephant)[]
+>[new Giraffe(), new Elephant()] : (Giraffe | Elephant)[]
 >new Giraffe() : Giraffe
 >Giraffe : typeof Giraffe
 >new Elephant() : Elephant
@@ -77,10 +77,10 @@ var arr = [new Giraffe(), new Elephant()];
 foo(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 >foo(arr) : void
 >foo : (animals: IAnimal[]) => void
->arr : Array<Giraffe | Elephant>
+>arr : (Giraffe | Elephant)[]
 
 bar(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 >bar(arr) : void
 >bar : (animals: { [x: number]: IAnimal; }) => void
->arr : Array<Giraffe | Elephant>
+>arr : (Giraffe | Elephant)[]
 
