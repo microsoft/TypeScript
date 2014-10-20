@@ -190,7 +190,7 @@ module ts.formatting {
 
         formattingScanner.advance();
 
-        if (formattingScanner.hasToken()) {
+        if (formattingScanner.isOnToken()) {
             var startLine =  getNonAdjustedLineAndCharacterFromPosition(enclosingNode.getStart(sourceFile), sourceFile).line;
             processNode(enclosingNode, enclosingNode, startLine, initialIndentation);
         }
@@ -215,8 +215,8 @@ module ts.formatting {
 
             // this eats up last tokens in the node
             // TODO: resync token info and consume it
-            while (formattingScanner.hasToken()) {
-                var tokenInfo = formattingScanner.consumeTokenAndTrailingTrivia(node);
+            while (formattingScanner.isOnToken()) {
+                var tokenInfo = formattingScanner.readTokenInfo(node);
                 if (node.end >= tokenInfo.token.end) {
                     consumeTokenAndAdvance(tokenInfo, node, childContextNode, indentation);
                     childContextNode = node;
@@ -243,10 +243,11 @@ module ts.formatting {
                 }
 
                 var start = child.getStart(sourceFile);
-                while (formattingScanner.hasToken()) {
-                    var tokenInfo = formattingScanner.consumeTokenAndTrailingTrivia(node);
+                while (formattingScanner.isOnToken()) {
+                    var tokenInfo = formattingScanner.readTokenInfo(node);
                     if (start >= tokenInfo.token.end) {
                         consumeTokenAndAdvance(tokenInfo, node, childContextNode, indentation);
+                        childContextNode = node;
                     }
                     else {
                         break;
@@ -260,7 +261,7 @@ module ts.formatting {
                 //    childContextNode = node;
                 //}
 
-                if (!formattingScanner.hasToken()) {
+                if (!formattingScanner.isOnToken()) {
                     return;
                 }
 
@@ -270,7 +271,7 @@ module ts.formatting {
 
                 // ensure that current token is inside child node
                 if (isToken(child)) {
-                    var tokenInfo = formattingScanner.consumeTokenAndTrailingTrivia(node);
+                    var tokenInfo = formattingScanner.readTokenInfo(node);
                     if (tokenInfo.token.end === child.end) {
                         consumeTokenAndAdvance(tokenInfo, node, childContextNode, indentation);
                         childContextNode = node;
@@ -347,7 +348,7 @@ module ts.formatting {
                 processTrivia(currentTokenInfo.trailingTrivia, parent, contextNode, indentation);
             }
 
-            if (formattingScanner.lastTrailingTriviaWasNewLine() && indentToken) {
+            if (lastTriviaWasNewLine && indentToken) {
                 var indentNextTokenOrTrivia = true;
                 if (currentTokenInfo.leadingTrivia) {
                     for (var i = 0, len = currentTokenInfo.leadingTrivia.length; i < len; ++i) {

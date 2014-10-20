@@ -618,6 +618,11 @@ module ts.formatting {
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.Block:
+                case SyntaxKind.TryBlock:
+                case SyntaxKind.CatchBlock:
+                case SyntaxKind.FinallyBlock:
+                case SyntaxKind.FunctionBlock:
+                case SyntaxKind.ModuleBlock:
                 case SyntaxKind.SwitchStatement:
                     return true;
             }

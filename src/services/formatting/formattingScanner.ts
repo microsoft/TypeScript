@@ -3,8 +3,8 @@ module ts.formatting {
 
     export interface FormattingScanner {
         advance(): void;
-        hasToken(): boolean;
-        consumeTokenAndTrailingTrivia(n: Node): TokenInfo;
+        isOnToken(): boolean;
+        readTokenInfo(n: Node): TokenInfo;
         lastTrailingTriviaWasNewLine(): boolean;
     }
 
@@ -13,20 +13,23 @@ module ts.formatting {
         scanner.setText(sourceFile.text);
         scanner.setTextPos(enclosingNode.pos);
 
+        var wasNewLine: boolean = true;
+        var leadingTrivia: TextRangeWithKind[];
+        var trailingTrivia: TextRangeWithKind[];
+        var savedStartPos: number;
+        var lastTokenInfo: TokenInfo;
+
         return {
             advance: advance,
-            consumeTokenAndTrailingTrivia: consumeTokenAndTrailingTrivia,
-            hasToken: hasToken,
+            readTokenInfo: readTokenInfo,
+            isOnToken: isOnToken,
             lastTrailingTriviaWasNewLine: lastTrailingTriviaWasNewLine
         }
 
-        var leadingTrivia: TextRangeWithKind[];
-        var trailingTrivia: TextRangeWithKind[];
-        var token: TextRangeWithKind;
-        var wasNewLine: boolean = true;
-        var savedStartPos: number;
 
         function advance(): void {
+            lastTokenInfo = undefined;
+
             // accumulate leading trivia and token
             if (trailingTrivia) {
                 Debug.assert(trailingTrivia.length);
@@ -35,7 +38,6 @@ module ts.formatting {
 
             leadingTrivia = undefined;
             trailingTrivia = undefined;
-            token = undefined;
 
             if (scanner.getStartPos() === enclosingNode.pos) {
                 scanner.scan();
@@ -46,99 +48,116 @@ module ts.formatting {
 
             while (startPos < range.end) {
                 var t = scanner.getToken();
-                if (token && !isTrivia(t)) {
+                if (!isTrivia(t)) {
                     break;
                 }
 
-                // advance to the next token
+                // consume leading trivia
                 scanner.scan();
-
                 var item = {
                     pos: startPos,
                     end: scanner.getStartPos(),
                     kind: t
-                };
+                }
 
                 startPos = scanner.getStartPos();
-    
-                if (isTrivia(t)) {
-                    if (token) {
-                        break;
-                    }
-                    else {
-                        if (!leadingTrivia) {
-                            leadingTrivia = [];
-                        }
-                        leadingTrivia.push(item);
-                    }
+
+                if (!leadingTrivia) {
+                    leadingTrivia = [];
                 }
-                else {
-                    token = item;
-                }
+                leadingTrivia.push(item);
             }
 
             savedStartPos = scanner.getStartPos();
         }
 
-        function consumeTokenAndTrailingTrivia(n: Node): TokenInfo {
-            Debug.assert(hasToken());
+        function startsWithGreaterThanToken(t: SyntaxKind): boolean {
+            switch(t) {
+                case SyntaxKind.GreaterThanEqualsToken:
+                case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                case SyntaxKind.GreaterThanGreaterThanToken:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        function readTokenInfo(n: Node): TokenInfo {
+            if (!isOnToken()) {
+                return {
+                    leadingTrivia: leadingTrivia,
+                    trailingTrivia: undefined,
+                    token: undefined
+                };
+
+            }
+            if (lastTokenInfo) {
+                //return lastTokenInfo;
+            }
+
             if (scanner.getStartPos() !== savedStartPos) {
-                scanner.setTextPos(savedStartPos)
-            }
-
-            if (n.kind === SyntaxKind.BinaryExpression && token.kind === SyntaxKind.GreaterThanToken) {
-                scanner.setTextPos(token.pos);
-                scanner.scan();
-                token.kind = scanner.reScanGreaterToken();
-                token.end = scanner.getTextPos();
-                scanner.scan();
-            }
-            else if (n.kind === SyntaxKind.RegularExpressionLiteral && token.kind === SyntaxKind.SlashToken) {
-                scanner.setTextPos(token.pos);
-                scanner.scan();
-                token.kind = scanner.reScanSlashToken();
-                token.end = scanner.getTextPos();
+                scanner.setTextPos(savedStartPos);
                 scanner.scan();
             }
 
-            // scan trailing trivia
-            var startPos = scanner.getStartPos();
-            while (startPos < range.end) {
-                var t = scanner.getToken();                
+            var current = scanner.getToken();
+            var endPos: number;
+            if (n.kind === SyntaxKind.BinaryExpression && startsWithGreaterThanToken((<BinaryExpression>n).operator) && current === SyntaxKind.GreaterThanToken) {
+                current = scanner.reScanGreaterToken();
+                Debug.assert((<BinaryExpression>n).operator === current);
+            }
+            else if (n.kind === SyntaxKind.RegularExpressionLiteral && current === SyntaxKind.SlashToken) {
+                current = scanner.reScanSlashToken();
+                Debug.assert(n.kind === current);
+            }
 
-                if (isTrivia(t) && t !== SyntaxKind.NewLineTrivia) {
-                    if (!trailingTrivia) {
-                        trailingTrivia = [];
-                    }
+            endPos = scanner.getTextPos();
 
-                    var trivia = {
-                        pos: startPos,
-                        end: scanner.getStartPos(),
-                        kind: t
-                    }
-                    trailingTrivia.push(trivia);
-                }
-                else {
+            var token: TextRangeWithKind = {
+                pos: scanner.getStartPos(),
+                end: scanner.getTextPos(),
+                kind: current
+            }
+
+            while(scanner.getStartPos() < range.end) {
+                current = scanner.scan();
+                if (!isTrivia(current)) {
                     break;
                 }
-                scanner.scan();
-                startPos = scanner.getStartPos();
+                var trivia = {
+                    pos: scanner.getStartPos(),
+                    end: scanner.getTextPos(),
+                    kind: current
+                };
+
+                if (!trailingTrivia) {
+                    trailingTrivia = [];
+                }
+
+                trailingTrivia.push(trivia);
+
+                if (current === SyntaxKind.NewLineTrivia) {
+                    break;
+                }
             }
 
-            return {
+            return lastTokenInfo = {
                 leadingTrivia: leadingTrivia,
                 trailingTrivia: trailingTrivia,
                 token: token
             }
         }
 
-        function hasToken(): boolean {
-            return token !== undefined;
+        function isOnToken(): boolean {
+            var current = (lastTokenInfo && lastTokenInfo.token.kind) ||  scanner.getToken();
+            var startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
+            return startPos < range.end && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }
 
         function lastTrailingTriviaWasNewLine(): boolean {
             return wasNewLine;
         }
     }
-
 }
