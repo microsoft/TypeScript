@@ -1,4 +1,7 @@
-﻿interface Classification {
+﻿/// <reference path="..\..\..\..\src\harness\external\mocha.d.ts" />
+/// <reference path="..\..\..\..\src\harness\harnessLanguageService.ts" />
+
+interface Classification {
     position: number;
     length: number;
     class: ts.TokenClass;
@@ -66,7 +69,7 @@ describe('Colorization', function () {
     function numberLiteral(text: string) { return { value: text, class: ts.TokenClass.NumberLiteral }; }
     function stringLiteral(text: string) { return { value: text, class: ts.TokenClass.StringLiteral }; }
     function regExpLiteral(text: string) { return { value: text, class: ts.TokenClass.RegExpLiteral }; }
-    function finalEndOfLineState(value: number) { return { value: value, class: undefined }; }
+    function finalEndOfLineState(value: number) { return { value: value, class: <ts.TokenClass>undefined }; }
 
     function test(text: string, initialEndOfLineState: ts.EndOfLineState, ...expectedEntries: ClassificationEntry[]): void {
         var result = getClassifications(text, initialEndOfLineState);
@@ -253,7 +256,7 @@ describe('Colorization', function () {
                 identifier("Foo"),
                 operator("<"),
                 identifier("Foo"),
-                punctuation(","),
+                operator(","),
                 identifier("Foo"),
                 operator("<"),
                 identifier("number"),
@@ -265,8 +268,8 @@ describe('Colorization', function () {
                 identifier("Foo"),
                 operator("<"),
                 identifier("Foo"),
-                operator(">"
-                identifier("keyword"),
+                operator(">"),
+                keyword("number"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
         });
     });
