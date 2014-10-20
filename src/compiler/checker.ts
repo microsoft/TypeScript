@@ -993,16 +993,34 @@ module ts {
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
         var _displayBuilder: SymbolDisplayBuilder;
         function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
-            // Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
-            // Meaning needs to be specified if the enclosing declaration is given
+            /**
+             * Writes only the name of the symbol out to the writer. Uses the original source text
+             * for the name of the symbol if it is available to match how the user inputted the name.
+             */
+            function appendSymbolNameOnly(symbol: Symbol, writer: SymbolWriter): void {
+                if (symbol.declarations && symbol.declarations.length > 0) {
+                    var declaration = symbol.declarations[0];
+                    if (declaration.name) {
+                        writer.writeSymbol(identifierToString(declaration.name), symbol);
+                        return;
+                    }
+                }
+
+                writer.writeSymbol(symbol.name, symbol);
+            }
+
+            /**
+             * Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
+             * Meaning needs to be specified if the enclosing declaration is given
+             */
             function buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void {
                 var parentSymbol: Symbol;
-                function writeSymbolName(symbol: Symbol): void {
+                function appendParentTypeArgumentsAndSymbolName(symbol: Symbol): void {
                     if (parentSymbol) {
                         // Write type arguments of instantiated class/interface here
                         if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
                             if (symbol.flags & SymbolFlags.Instantiated) {
-                                buildTypeArgumentListDisplay(getTypeParametersOfClassOrInterface(parentSymbol),
+                                buildDisplayForTypeArgumentsAndDelimiters(getTypeParametersOfClassOrInterface(parentSymbol),
                                     (<TransientSymbol>symbol).mapper, writer, enclosingDeclaration);
                             }
                             else {
@@ -1012,15 +1030,7 @@ module ts {
                         writePunctuation(writer, SyntaxKind.DotToken);
                     }
                     parentSymbol = symbol;
-                    if (symbol.declarations && symbol.declarations.length > 0) {
-                        var declaration = symbol.declarations[0];
-                        if (declaration.name) {
-                            writer.writeSymbol(identifierToString(declaration.name), symbol);
-                            return;
-                        }
-                    }
-
-                    writer.writeSymbol(symbol.name, symbol);
+                    appendSymbolNameOnly(symbol, writer);
                 }
 
                 // Let the writer know we just wrote out a symbol.  The declaration emitter writer uses 
@@ -1046,7 +1056,7 @@ module ts {
 
                         if (accessibleSymbolChain) {
                             for (var i = 0, n = accessibleSymbolChain.length; i < n; i++) {
-                                writeSymbolName(accessibleSymbolChain[i]);
+                                appendParentTypeArgumentsAndSymbolName(accessibleSymbolChain[i]);
                             }
                         }
                         else {
@@ -1060,7 +1070,7 @@ module ts {
                                 return;
                             }
 
-                            writeSymbolName(symbol);
+                            appendParentTypeArgumentsAndSymbolName(symbol);
                         }
                     }
                 }
@@ -1074,7 +1084,7 @@ module ts {
                     return;
                 }
 
-                return writeSymbolName(symbol);
+                return appendParentTypeArgumentsAndSymbolName(symbol);
             }
 
             function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, typeStack?: Type[]) {
@@ -1315,8 +1325,15 @@ module ts {
                 }
             }
 
+            function buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags) {
+                var targetSymbol = getTargetSymbol(symbol);
+                if (targetSymbol.flags & SymbolFlags.Class || targetSymbol.flags & SymbolFlags.Interface) {
+                    buildDisplayForTypeParametersAndDelimiters(getTypeParametersOfClassOrInterface(symbol), writer, enclosingDeclaraiton, flags);
+                }
+            }
+
             function buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
-                buildSymbolDisplay(tp.symbol, writer);
+                appendSymbolNameOnly(tp.symbol, writer);
                 var constraint = getConstraintOfTypeParameter(tp);
                 if (constraint) {
                     writeSpace(writer);
@@ -1326,7 +1343,21 @@ module ts {
                 }
             }
 
-            function buildTypeParameterListDisplay(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+                if (getDeclarationFlagsFromSymbol(p) & NodeFlags.Rest) {
+                    writePunctuation(writer, SyntaxKind.DotDotDotToken);
+                }
+                appendSymbolNameOnly(p, writer);
+                if (p.valueDeclaration.flags & NodeFlags.QuestionMark || (<VariableDeclaration>p.valueDeclaration).initializer) {
+                    writePunctuation(writer, SyntaxKind.QuestionToken);
+                }
+                writePunctuation(writer, SyntaxKind.ColonToken);
+                writeSpace(writer);
+
+                buildTypeDisplay(getTypeOfSymbol(p), writer, enclosingDeclaration, flags, typeStack);
+            }
+
+            function buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
                 if (typeParameters && typeParameters.length) {
                     writePunctuation(writer, SyntaxKind.LessThanToken);
                     for (var i = 0; i < typeParameters.length; i++) {
@@ -1340,7 +1371,7 @@ module ts {
                 }
             }
 
-            function buildTypeArgumentListDisplay(typeParameters: TypeParameter[], mapper: TypeMapper, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            function buildDisplayForTypeArgumentsAndDelimiters(typeParameters: TypeParameter[], mapper: TypeMapper, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
                 if (typeParameters && typeParameters.length) {
                     writePunctuation(writer, SyntaxKind.LessThanToken);
                     for (var i = 0; i < typeParameters.length; i++) {
@@ -1354,42 +1385,19 @@ module ts {
                 }
             }
 
-            function buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags) {
-                var targetSymbol = getTargetSymbol(symbol);
-                if (targetSymbol.flags & SymbolFlags.Class || targetSymbol.flags & SymbolFlags.Interface) {
-                    buildTypeParameterListDisplay(getTypeParametersOfClassOrInterface(symbol), writer, enclosingDeclaraiton, flags);
-                }
-            }
-
-            function buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
-                if (signature.target && (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature)) {
-                    // Instantiated signature, write type arguments instead
-                    buildTypeArgumentListDisplay(signature.target.typeParameters, signature.mapper, writer, enclosingDeclaration);
-                }
-                else {
-                    buildTypeParameterListDisplay(signature.typeParameters, writer, enclosingDeclaration, flags, typeStack);
-                }
+            function buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
                 writePunctuation(writer, SyntaxKind.OpenParenToken);
-                for (var i = 0; i < signature.parameters.length; i++) {
+                for (var i = 0; i < parameters.length; i++) {
                     if (i > 0) {
                         writePunctuation(writer, SyntaxKind.CommaToken);
                         writeSpace(writer);
                     }
-                    var p = signature.parameters[i];
-                    if (getDeclarationFlagsFromSymbol(p) & NodeFlags.Rest) {
-                        writePunctuation(writer, SyntaxKind.DotDotDotToken);
-                    }
-                    buildSymbolDisplay(p, writer);
-                    if (p.valueDeclaration.flags & NodeFlags.QuestionMark || (<VariableDeclaration>p.valueDeclaration).initializer) {
-                        writePunctuation(writer, SyntaxKind.QuestionToken);
-                    }
-                    writePunctuation(writer, SyntaxKind.ColonToken);
-                    writeSpace(writer);
-
-                    buildTypeDisplay(getTypeOfSymbol(p), writer, enclosingDeclaration, flags, typeStack);
+                    buildParameterDisplay(parameters[i], writer, enclosingDeclaration, flags, typeStack);
                 }
-
                 writePunctuation(writer, SyntaxKind.CloseParenToken);
+            }
+
+            function buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
                 if (flags & TypeFormatFlags.WriteArrowStyleSignature) {
                     writeSpace(writer);
                     writePunctuation(writer, SyntaxKind.EqualsGreaterThanToken);
@@ -1398,8 +1406,21 @@ module ts {
                     writePunctuation(writer, SyntaxKind.ColonToken);
                 }
                 writeSpace(writer);
-
                 buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags, typeStack);
+            }
+            
+            function buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+                if (signature.target && (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature)) {
+                    // Instantiated signature, write type arguments instead
+                    // This is achieved by passing in the mapper separately
+                    buildDisplayForTypeArgumentsAndDelimiters(signature.target.typeParameters, signature.mapper, writer, enclosingDeclaration);
+                }
+                else {
+                    buildDisplayForTypeParametersAndDelimiters(signature.typeParameters, writer, enclosingDeclaration, flags, typeStack);
+                }
+
+                buildDisplayForParametersAndDelimiters(signature.parameters, writer, enclosingDeclaration, flags, typeStack);
+                buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, typeStack);
             }
 
             return _displayBuilder || (_displayBuilder = {
@@ -1408,10 +1429,13 @@ module ts {
                 buildSymbolDisplay: buildSymbolDisplay,
                 buildTypeDisplay: buildTypeDisplay,
                 buildTypeParameterDisplay: buildTypeParameterDisplay,
-                buildTypeParameterListDisplay: buildTypeParameterListDisplay,
-                buildTypeArgumentListDisplay: buildTypeArgumentListDisplay,
+                buildParameterDisplay: buildParameterDisplay,
+                buildDisplayForParametersAndDelimiters: buildDisplayForParametersAndDelimiters,
+                buildDisplayForTypeParametersAndDelimiters: buildDisplayForTypeParametersAndDelimiters,
+                buildDisplayForTypeArgumentsAndDelimiters: buildDisplayForTypeArgumentsAndDelimiters,
                 buildTypeParameterDisplayFromSymbol: buildTypeParameterDisplayFromSymbol,
-                buildSignatureDisplay: buildSignatureDisplay
+                buildSignatureDisplay: buildSignatureDisplay,
+                buildReturnTypeDisplay: buildReturnTypeDisplay
             });
         }
 

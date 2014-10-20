@@ -1080,7 +1080,7 @@ module ts {
                     return isParameter();
                 case ParsingContext.TypeArguments:
                 case ParsingContext.TupleElementTypes:
-                    return isType();
+                    return token === SyntaxKind.CommaToken || isType();
             }
 
             Debug.fail("Non-exhaustive case in 'isListElement'.");
@@ -2393,11 +2393,27 @@ module ts {
         function parseTypeArguments(): NodeArray<TypeNode> {
             var typeArgumentListStart = scanner.getTokenPos();
             var errorCountBeforeTypeParameterList = file.syntacticErrors.length;
-            var result = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+            // We pass parseSingleTypeArgument instead of parseType as the element parser
+            // because parseSingleTypeArgument knows how to parse a missing type argument.
+            // This is useful for signature help. parseType has the disadvantage that when
+            // it sees a missing type, it changes the LookAheadMode to Error, and the result
+            // is a broken binary expression, which breaks signature help.
+            var result = parseBracketedList(ParsingContext.TypeArguments, parseSingleTypeArgument, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             if (!result.length && file.syntacticErrors.length === errorCountBeforeTypeParameterList) {
                 grammarErrorAtPos(typeArgumentListStart, scanner.getStartPos() - typeArgumentListStart, Diagnostics.Type_argument_list_cannot_be_empty);
             }
             return result;
+        }
+
+        function parseSingleTypeArgument(): TypeNode {
+            if (token === SyntaxKind.CommaToken) {
+                var errorStart = scanner.getTokenPos();
+                var errorLength = scanner.getTextPos() - errorStart;
+                grammarErrorAtPos(errorStart, errorLength, Diagnostics.Type_expected);
+                return createNode(SyntaxKind.Missing);
+            }
+
+            return parseType();
         }
 
         function parsePrimaryExpression(): Expression {

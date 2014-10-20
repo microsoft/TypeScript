@@ -1460,7 +1460,7 @@ module ts {
         }
     }
 
-    function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
+    export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
         writeDisplayParts(displayPartWriter);
         var result = displayPartWriter.displayParts();
         displayPartWriter.clear();
