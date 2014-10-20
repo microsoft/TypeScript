@@ -293,7 +293,6 @@ module ts {
         }
 
         function bind(node: Node) {
-            var isBlockScopeContainer: boolean;
             node.parent = parent;
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
@@ -382,16 +381,14 @@ module ts {
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.SwitchStatement:
-                    isBlockScopeContainer = true;
+                    bindChildren(node, 0 , true);
+                    break;
 
                 default:
                     var saveParent = parent;
-                    var savedBlockScopeContainer = blockScopeContainer;
                     parent = node;
-                    if (isBlockScopeContainer) blockScopeContainer = node;
                     forEachChild(node, bind);
                     parent = saveParent;
-                    blockScopeContainer = savedBlockScopeContainer;
             }
         }
     }
