@@ -27,6 +27,10 @@ declare var module: any;
 declare var process: any;
 declare var global: any;
 
+enum SystemError {
+    UnsupportedFileEncoding
+}
+
 var sys: System = (function () {
 
     function getWScriptSystem(): System {
@@ -68,7 +72,9 @@ var sys: System = (function () {
                 return fileStream.ReadText();
             }
             catch (e) {
-                throw e.number === -2147024809 ? new Error(ts.Diagnostics.Unsupported_file_encoding.key) : e;
+                if (e.number === -2147024809) {
+                    e.systemError = SystemError.UnsupportedFileEncoding;
+                }
             }
             finally {
                 fileStream.Close();

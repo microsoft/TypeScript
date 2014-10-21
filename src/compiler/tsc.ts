@@ -71,6 +71,15 @@ module ts {
 
         return true;
     }
+    
+    function getSystemErrorMessage(e: SystemError): string {
+        switch (e) {
+            case SystemError.UnsupportedFileEncoding:
+                return getDiagnosticText(Diagnostics.Unsupported_file_encoding);
+            default:
+                Debug.assert("Unreachable code in 'getSystemErrorMessage'");
+        }
+    }
 
     function countLines(program: Program): number {
         var count = 0;
@@ -149,7 +158,7 @@ module ts {
             }
             catch (e) {
                 if (onError) {
-                    onError(e.message);
+                    onError(e.systemError ? getSystemErrorMessage(e.systemError) : e.message);
                 }
                 text = "";
             }
