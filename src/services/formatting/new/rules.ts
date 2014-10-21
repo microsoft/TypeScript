@@ -703,8 +703,6 @@ module ts.formatting {
                     return false;
 
             }
-            //return ((token.kind === SyntaxKind.LessThanToken || token.kind === SyntaxKind.GreaterThanToken) &&
-            //    (parentKind === SyntaxKind.TypeParameterList || parentKind === SyntaxKind.TypeArgumentList));
         }
 
         static IsTypeArgumentOrParameterContext(context: FormattingContext): boolean {

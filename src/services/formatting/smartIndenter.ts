@@ -65,31 +65,47 @@ module ts.formatting {
                 return 0;
             }
 
-            return getIndentationForNode(current, currentStart, indentationDelta, sourceFile, options);
+            return getIndentationForNode(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
         }
 
-        export function getIndentationForNode(current: Node, currentStart: LineAndCharacter, indentationDelta: number, sourceFile: SourceFile, options: EditorOptions): number {
-         var parent: Node = current.parent;
+        export function getIndentationForNode(
+            current: Node,
+            currentStart: LineAndCharacter,
+            ignoreActualIndentationRange: TextRange,
+            indentationDelta: number,
+            sourceFile: SourceFile,
+            options: EditorOptions): number {
+
+            var parent: Node = current.parent;
             var parentStart: LineAndCharacter;
 
             // walk upwards and collect indentations for pairs of parent-child nodes
             // indentation is not added if parent and child nodes start on the same line or if parent is IfStatement and child starts on the same line with 'else clause'
             while (parent) {
-                // check if current node is a list item - if yes, take indentation from it
-                var actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
-                if (actualIndentation !== -1) {
-                    return actualIndentation + indentationDelta;
+                var useActualIndentation = true;
+                if (ignoreActualIndentationRange) {
+                    var start = current.getStart(sourceFile);
+                    useActualIndentation = start < ignoreActualIndentationRange.pos || start > ignoreActualIndentationRange.end;
                 }
 
+                if (useActualIndentation) {
+                    // check if current node is a list item - if yes, take indentation from it
+                    var actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
+                    if (actualIndentation !== -1) {
+                        return actualIndentation + indentationDelta;
+                    }
+                }
                 parentStart = sourceFile.getLineAndCharacterFromPosition(parent.getStart(sourceFile));
                 var parentAndChildShareLine = 
                     parentStart.line === currentStart.line || 
                     childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
 
-                // try to fetch actual indentation for current node from source text
-                var actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
-                if (actualIndentation !== -1) {
-                    return actualIndentation + indentationDelta;
+                if (useActualIndentation) {
+                    // try to fetch actual indentation for current node from source text
+                    var actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
+                    if (actualIndentation !== -1) {
+                        return actualIndentation + indentationDelta;
+                    }
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
@@ -104,6 +120,7 @@ module ts.formatting {
 
             return indentationDelta;
         }
+
 
         /*
          * Function returns -1 if indentation cannot be determined
