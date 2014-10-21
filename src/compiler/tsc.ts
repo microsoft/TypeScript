@@ -356,13 +356,18 @@ module ts {
         else {
             var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
-            var semanticErrors = checker.getDiagnostics();
-            var emitStart = new Date().getTime();
-            var emitOutput = checker.emitFiles();
-            var emitErrors = emitOutput.errors;
-            exitStatus = emitOutput.emitResultStatus;
-            var reportStart = new Date().getTime();
-            errors = concatenate(semanticErrors, emitErrors);
+            errors = checker.getDiagnostics();
+            if (!checker.hasEarlyErrors()) {
+                var emitStart = new Date().getTime();
+                var emitOutput = checker.emitFiles();
+                var emitErrors = emitOutput.errors;
+                exitStatus = emitOutput.emitResultStatus;
+                var reportStart = new Date().getTime();
+                errors = concatenate(errors, emitErrors);
+            }
+            else {
+                exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
+            }
         }
 
         reportDiagnostics(errors);

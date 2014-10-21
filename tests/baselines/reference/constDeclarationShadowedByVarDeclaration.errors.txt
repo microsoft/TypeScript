@@ -1,6 +1,6 @@
-tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts(7,9): error TS2451: Cannot redeclare constant 'x'.
-tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts(15,13): error TS2451: Cannot redeclare constant 'y'.
-tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts(22,7): error TS2451: Cannot redeclare constant 'z'.
+tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts(7,9): error TS2451: Cannot redeclare block-scoped variable 'x'.
+tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts(15,13): error TS2451: Cannot redeclare block-scoped variable 'y'.
+tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts(22,7): error TS2451: Cannot redeclare block-scoped variable 'z'.
 
 
 ==== tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts (3 errors) ====
@@ -12,7 +12,7 @@ tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts(22,7): error TS
     
         var x = 0;
             ~
-!!! error TS2451: Cannot redeclare constant 'x'.
+!!! error TS2451: Cannot redeclare block-scoped variable 'x'.
     }
     
     
@@ -22,7 +22,7 @@ tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts(22,7): error TS
         {
             var y = 0;
                 ~
-!!! error TS2451: Cannot redeclare constant 'y'.
+!!! error TS2451: Cannot redeclare block-scoped variable 'y'.
         }
     }
     
@@ -31,5 +31,5 @@ tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts(22,7): error TS
       const z = 0;
       var z = 0
           ~
-!!! error TS2451: Cannot redeclare constant 'z'.
+!!! error TS2451: Cannot redeclare block-scoped variable 'z'.
     }

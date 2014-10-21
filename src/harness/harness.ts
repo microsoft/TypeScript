@@ -801,9 +801,11 @@ module Harness {
                 var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
                 checker.checkProgram();
 
+                var hasEarlyErrors = checker.hasEarlyErrors();
+
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
-                if (!hadParseErrors) {
+                if (!hadParseErrors && !hasEarlyErrors) {
                     emitResult = checker.emitFiles();
                 }
 

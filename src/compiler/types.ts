@@ -667,6 +667,7 @@ module ts {
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
+        hasEarlyErrors(sourceFile?: SourceFile): boolean;
 
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
         // computed value.
@@ -762,6 +763,7 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' if it does 
         // resolve to a constant.
         getConstantValue(node: PropertyAccess): number;
+        hasEarlyErrors(sourceFile?: SourceFile): boolean;
     }
 
     export enum SymbolFlags {
@@ -1041,6 +1043,7 @@ module ts {
         key: string;
         category: DiagnosticCategory;
         code: number;
+        isEarly?: boolean;
     }
 
     // A linked list of formatted diagnostic messages to be used as part of a multiline message.
@@ -1061,6 +1064,7 @@ module ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
+        isEarly?: boolean;
     }
 
     export enum DiagnosticCategory {

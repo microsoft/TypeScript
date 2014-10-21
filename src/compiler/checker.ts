@@ -109,7 +109,8 @@ module ts {
             isImplementationOfOverload: isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
-            isArgumentsSymbol: symbol => symbol === argumentsSymbol
+            isArgumentsSymbol: symbol => symbol === argumentsSymbol,
+            hasEarlyErrors: hasEarlyErrors
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -228,11 +229,13 @@ module ts {
                 recordMergedSymbol(target, source);
             }
             else {
+                var message = target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable
+                     ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
                 forEach(source.declarations, node => {
-                    error(node.name ? node.name : node, Diagnostics.Duplicate_identifier_0, symbolToString(source));
+                    error(node.name ? node.name : node, message, symbolToString(source));
                 });
                 forEach(target.declarations, node => {
-                    error(node.name ? node.name : node, Diagnostics.Duplicate_identifier_0, symbolToString(source));
+                    error(node.name ? node.name : node, message, symbolToString(source));
                 });
             }
         }
@@ -327,7 +330,7 @@ module ts {
                 if (s && s.flags & SymbolFlags.BlockScopedVariable) {
                     // Block-scoped variables can not be used before their definition
                     var declaration = forEach(s.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
-                    Debug.assert(declaration, "Bock-scoped variable declaration is undefined");
+                    Debug.assert(declaration, "Block-scoped variable declaration is undefined");
                     var declarationSourceFile = getSourceFileOfNode(declaration);
                     var referenceSourceFile = getSourceFileOfNode(errorLocation);
                     if (declarationSourceFile === referenceSourceFile && declaration.pos > errorLocation.pos) {
@@ -6864,7 +6867,7 @@ module ts {
                 var localDeclarationSymbol = resolveName(node, node.name.text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
                 if (localDeclarationSymbol && localDeclarationSymbol !== symbol && localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
                     if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.Const) {
-                        error(node, Diagnostics.Cannot_redeclare_constant_0, symbolToString(localDeclarationSymbol));
+                        error(node, Diagnostics.Cannot_redeclare_block_scoped_variable_0, symbolToString(localDeclarationSymbol));
                     }
                 }
             }
@@ -8363,6 +8366,10 @@ module ts {
             return getDiagnostics().length > 0 || getGlobalDiagnostics().length > 0;
         }
 
+        function hasEarlyErrors(sourceFile?: SourceFile): boolean {
+            return forEach(getDiagnostics(sourceFile), d => d.isEarly);
+        }
+
         function isReferencedImportDeclaration(node: ImportDeclaration): boolean {
             var symbol = getSymbolOfNode(node);
             if (getSymbolLinks(symbol).referenced) {
@@ -8446,6 +8453,7 @@ module ts {
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
                 hasSemanticErrors: hasSemanticErrors,
+                hasEarlyErrors: hasEarlyErrors,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
                 writeTypeAtLocation: writeTypeAtLocation,
