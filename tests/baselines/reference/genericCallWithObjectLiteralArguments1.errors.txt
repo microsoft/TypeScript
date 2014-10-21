@@ -1,4 +1,4 @@
-tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(2,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(3,9): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
 tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(4,22): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type '{ x: number; y: number; }'.
   Types of property 'y' are incompatible:
     Type 'string' is not assignable to type 'number'.
@@ -15,10 +15,10 @@ tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(7,22): error TS23
 
 ==== tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts (5 errors) ====
     function foo<T>(n: { x: T; y: T }, m: T) { return m; }
-    var x = foo({ x: 3, y: "" }, 4); // no error, x is Object, the best common type
-            ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
     // these are all errors
+    var x = foo({ x: 3, y: "" }, 4);
+            ~~~
+!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
     var x2 = foo<number>({ x: 3, y: "" }, 4); 
                          ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type '{ x: number; y: number; }'.

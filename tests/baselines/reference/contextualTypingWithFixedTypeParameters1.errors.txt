@@ -1,5 +1,5 @@
 tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts(2,22): error TS2339: Property 'foo' does not exist on type 'string'.
-tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts(3,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts(3,10): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
 
 
 ==== tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts (2 errors) ====
@@ -8,5 +8,5 @@ tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts(3,10): error TS
                          ~~~
 !!! error TS2339: Property 'foo' does not exist on type 'string'.
     var r9 = f10('', () => (a => a.foo), 1); // error
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+             ~~~
+!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.

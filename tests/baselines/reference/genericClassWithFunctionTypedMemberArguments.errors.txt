@@ -1,8 +1,7 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(57,19): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(60,19): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(61,20): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(62,30): error TS2345: Argument of type '(a: number) => string' is not assignable to parameter of type '(a: number) => number'.
-  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(57,19): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(60,19): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(61,20): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(62,19): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts (4 errors) ====
@@ -63,19 +62,18 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFu
     
         function other<T, U>(t: T, u: U) {
             var r10 = c.foo2(1, (x: T) => ''); // error
-                      ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+                      ~~~~~~
+!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
             var r10 = c.foo2(1, (x) => ''); // string
     
             var r11 = c3.foo3(1, (x: T) => '', ''); // error
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+                      ~~~~~~~
+!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
             var r11b = c3.foo3(1, (x: T) => '', 1); // error
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+                       ~~~~~~~
+!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
             var r12 = c3.foo3(1, function (a) { return '' }, 1); // error
-                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(a: number) => string' is not assignable to parameter of type '(a: number) => number'.
-!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+                      ~~~~~~~
+!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
         }
     }

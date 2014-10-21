@@ -1,4 +1,4 @@
-tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts(7,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts(7,1): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
 
 
 ==== tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts (1 errors) ====
@@ -9,5 +9,5 @@ tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts(7,1): er
     var g: Giraffe;
     var e: Elephant;
     f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is Animal
-    ~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+    ~
+!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.

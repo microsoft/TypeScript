@@ -5159,16 +5159,16 @@ module ts {
                 }
             }
 
-            var lastCandidateWithCorrectArity: Signature;
-            var lastCandidateWithValidTypeArguments: Signature;
+            var candidateForArgumentError: Signature;
+            var candidateForTypeArgumentError: Signature;
             var result: Signature;
             if (candidates.length > 1) {
                 result = chooseOverload(candidates, subtypeRelation, excludeArgument);
             }
             if (!result) {
                 // Reinitialize these pointers for round two
-                lastCandidateWithCorrectArity = undefined;
-                lastCandidateWithValidTypeArguments = undefined;
+                candidateForArgumentError = undefined;
+                candidateForTypeArgumentError = undefined;
                 result = chooseOverload(candidates, assignableRelation, excludeArgument);
             }
             if (result) {
@@ -5179,8 +5179,16 @@ module ts {
             // no arguments excluded from assignability checks.
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
-            if (lastCandidateWithValidTypeArguments || lastCandidateWithCorrectArity) {
-                checkApplicableSignature(node, lastCandidateWithValidTypeArguments || lastCandidateWithCorrectArity, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+            if (candidateForArgumentError) {
+                checkApplicableSignature(node, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+            }
+            else if (candidateForTypeArgumentError) {
+                if (node.typeArguments) {
+                    checkTypeArguments(candidateForTypeArgumentError, node.typeArguments, [], /*reportErrors*/ true)
+                }
+                else {
+                    error(node.func, Diagnostics.The_type_arguments_cannot_be_inferred_from_the_usage_Try_specifying_the_type_arguments_explicitly);
+                }
             }
             else {
                 error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
@@ -5206,10 +5214,11 @@ module ts {
                     if (!signatureHasCorrectArity(node, candidates[i])) {
                         continue;
                     }
-                    lastCandidateWithCorrectArity = candidates[i];
+
+                    var originalCandidate = candidates[i];
 
                     while (true) {
-                        var candidate = lastCandidateWithCorrectArity;
+                        var candidate = originalCandidate;
                         if (candidate.typeParameters) {
                             var typeArgumentTypes = new Array<Type>(candidate.typeParameters.length);
                             var typeArgumentsAreValid = node.typeArguments ?
@@ -5230,13 +5239,23 @@ module ts {
                         excludeArgument[index] = false;
                     }
 
-                    // This candidate was not applicable, but it may have had valid type arguments.
-                    // If it did, update the signature to point to the instantiated signature.
-                    if (lastCandidateWithCorrectArity.typeParameters) {
-                        candidates[i] = candidate; // Replace with instantiated
+                    // A post-mortem of this iteration of the loop. The signature was not applicable,
+                    // so we want to track it as a candidate for reporting an error. If the candidate
+                    // had no type parameters, or had no issues related to type arguments, we can
+                    // report an error based on the arguments. If there was an issue with type
+                    // arguments, then we can only report an error based on the type arguments.
+                    if (originalCandidate.typeParameters) {
+                        var instantiatedCandidate = candidate;
+                        candidates[i] = instantiatedCandidate;
                         if (typeArgumentsAreValid) {
-                            lastCandidateWithValidTypeArguments = candidate;
+                            candidateForArgumentError = instantiatedCandidate;
                         }
+                        else {
+                            candidateForTypeArgumentError = originalCandidate;
+                        }
+                    }
+                    else {
+                        candidateForArgumentError = originalCandidate; // Could be candidate too
                     }
                 }
 

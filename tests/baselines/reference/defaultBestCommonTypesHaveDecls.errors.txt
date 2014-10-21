@@ -1,6 +1,6 @@
 tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(2,6): error TS2339: Property 'length' does not exist on type '{}'.
 tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(5,6): error TS2339: Property 'length' does not exist on type 'Object'.
-tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(8,14): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(8,14): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
 
 
 ==== tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts (3 errors) ====
@@ -16,8 +16,8 @@ tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(8,14): error TS2346: Sup
     
     function concat<T>(x: T, y: T): T { return null; }
     var result = concat(1, ""); // error
-                 ~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+                 ~~~~~~
+!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
     var elementCount = result.length; 
     
     function concat2<T, U>(x: T, y: U) { return null; }

@@ -1,8 +1,8 @@
-tests/cases/compiler/fixTypeParameterInSignatureWithRestParameters.ts(2,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/fixTypeParameterInSignatureWithRestParameters.ts(2,1): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
 
 
 ==== tests/cases/compiler/fixTypeParameterInSignatureWithRestParameters.ts (1 errors) ====
     function bar<T>(item1: T, item2: T) { }
     bar(1, ""); // Should be ok
-    ~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+    ~~~
+!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.

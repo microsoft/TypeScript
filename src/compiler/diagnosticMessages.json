@@ -1036,6 +1036,10 @@
         "category": "Error",
         "code": 2447
     },
+    "The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.": {
+        "category": "Error",
+        "code": 2448
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
