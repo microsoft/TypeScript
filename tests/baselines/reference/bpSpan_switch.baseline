@@ -162,6 +162,111 @@
     >:=> (line 26, col 12) to (line 26, col 22)
 --------------------------------
 28 >}
-    ~                                             => Pos: (347 to 347)  SpanInfo: {"start":325,"length":10}
+
+    ~~                                            => Pos: (347 to 348)  SpanInfo: {"start":325,"length":10}
     >x = x * 10
     >:=> (line 26, col 12) to (line 26, col 22)
+--------------------------------
+29 >switch ((function foo() {
+
+    ~~~~~~~~                                      => Pos: (349 to 356)  SpanInfo: {"start":349,"length":50}
+    >switch ((function foo() {
+    >    return x * 30;
+    >})())
+    >:=> (line 29, col 0) to (line 31, col 5)
+29 >switch ((function foo() {
+
+            ~                                     => Pos: (357 to 357)  SpanInfo: {"start":357,"length":41}
+    >(function foo() {
+    >    return x * 30;
+    >})()
+    >:=> (line 29, col 8) to (line 31, col 4)
+29 >switch ((function foo() {
+
+             ~~~~~~~~~~~~~~~~~                    => Pos: (358 to 374)  SpanInfo: {"start":379,"length":13}
+    >return x * 30
+    >:=> (line 30, col 4) to (line 30, col 17)
+--------------------------------
+30 >    return x * 30;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (375 to 393)  SpanInfo: {"start":379,"length":13}
+    >return x * 30
+    >:=> (line 30, col 4) to (line 30, col 17)
+--------------------------------
+31 >})()) {
+
+    ~                                             => Pos: (394 to 394)  SpanInfo: {"start":394,"length":1}
+    >}
+    >:=> (line 31, col 0) to (line 31, col 1)
+31 >})()) {
+
+     ~~~                                          => Pos: (395 to 397)  SpanInfo: {"start":357,"length":41}
+    >(function foo() {
+    >    return x * 30;
+    >})()
+    >:=> (line 29, col 8) to (line 31, col 4)
+31 >})()) {
+
+        ~                                         => Pos: (398 to 398)  SpanInfo: {"start":349,"length":50}
+    >switch ((function foo() {
+    >    return x * 30;
+    >})())
+    >:=> (line 29, col 0) to (line 31, col 5)
+31 >})()) {
+
+         ~~~                                      => Pos: (399 to 401)  SpanInfo: {"start":466,"length":3}
+    >x++
+    >:=> (line 35, col 8) to (line 35, col 11)
+--------------------------------
+32 >    case (function bar() {
+
+    ~~~~~~~~                                      => Pos: (402 to 409)  SpanInfo: {"start":466,"length":3}
+    >x++
+    >:=> (line 35, col 8) to (line 35, col 11)
+32 >    case (function bar() {
+
+            ~~                                    => Pos: (410 to 411)  SpanInfo: {"start":411,"length":45}
+    >(function bar() {
+    >        return 30;
+    >    })()
+    >:=> (line 32, col 9) to (line 34, col 8)
+32 >    case (function bar() {
+
+              ~~~~~~~~~~~~~~~~~                   => Pos: (412 to 428)  SpanInfo: {"start":437,"length":9}
+    >return 30
+    >:=> (line 33, col 8) to (line 33, col 17)
+--------------------------------
+33 >        return 30;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (429 to 447)  SpanInfo: {"start":437,"length":9}
+    >return 30
+    >:=> (line 33, col 8) to (line 33, col 17)
+--------------------------------
+34 >    })():
+
+    ~~~~~                                         => Pos: (448 to 452)  SpanInfo: {"start":452,"length":1}
+    >}
+    >:=> (line 34, col 4) to (line 34, col 5)
+34 >    })():
+
+         ~~~                                      => Pos: (453 to 455)  SpanInfo: {"start":411,"length":45}
+    >(function bar() {
+    >        return 30;
+    >    })()
+    >:=> (line 32, col 9) to (line 34, col 8)
+34 >    })():
+
+            ~~                                    => Pos: (456 to 457)  SpanInfo: {"start":466,"length":3}
+    >x++
+    >:=> (line 35, col 8) to (line 35, col 11)
+--------------------------------
+35 >        x++;
+
+    ~~~~~~~~~~~~~                                 => Pos: (458 to 470)  SpanInfo: {"start":466,"length":3}
+    >x++
+    >:=> (line 35, col 8) to (line 35, col 11)
+--------------------------------
+36 >}
+    ~                                             => Pos: (471 to 471)  SpanInfo: {"start":466,"length":3}
+    >x++
+    >:=> (line 35, col 8) to (line 35, col 11)

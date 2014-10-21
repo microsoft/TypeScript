@@ -24,5 +24,13 @@
 ////{
 ////    x = x * 10;
 ////}
+////try {
+////    throw (function foo() {
+////        new Error(x.toString());
+////    })();
+////}
+////finally {
+////    x++;
+////}
 
 verify.baselineCurrentFileBreakpointLocations();

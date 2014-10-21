@@ -37,11 +37,20 @@
 --------------------------------
 7  >var x = new a();
 
-    ~~~~~~~~~~~~~~~~~                             => Pos: (72 to 88)  SpanInfo: {"start":72,"length":15}
+    ~~~~~~~                                       => Pos: (72 to 78)  SpanInfo: {"start":72,"length":15}
     >var x = new a()
     >:=> (line 7, col 0) to (line 7, col 15)
+7  >var x = new a();
+
+           ~~~~~~~~~~                             => Pos: (79 to 88)  SpanInfo: {"start":80,"length":7}
+    >new a()
+    >:=> (line 7, col 8) to (line 7, col 15)
 --------------------------------
 8  >var y = new b();
-    ~~~~~~~~~~~~~~~~                              => Pos: (89 to 104)  SpanInfo: {"start":89,"length":15}
+    ~~~~~~~                                       => Pos: (89 to 95)  SpanInfo: {"start":89,"length":15}
     >var y = new b()
     >:=> (line 8, col 0) to (line 8, col 15)
+8  >var y = new b();
+           ~~~~~~~~~                              => Pos: (96 to 104)  SpanInfo: {"start":97,"length":7}
+    >new b()
+    >:=> (line 8, col 8) to (line 8, col 15)

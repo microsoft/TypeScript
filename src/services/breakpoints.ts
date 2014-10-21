@@ -53,6 +53,28 @@ module ts.BreakpointResolver {
 
         function spanInNode(node: Node): TypeScript.TextSpan {
             if (node) {
+                if (isExpression(node)) {
+                    if (node.parent.kind === SyntaxKind.DoStatement) {
+                        // Set span as if on while keyword
+                        return spanInPreviousNode(node);
+                    }
+
+                    if (node.parent.kind === SyntaxKind.ForStatement) {
+                        // For now lets set the span on this expression, fix it later
+                        return textSpan(node);
+                    }
+
+                    if (node.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.parent).operator === SyntaxKind.CommaToken) {
+                        // if this is comma expression, the breakpoint is possible in this expression
+                        return textSpan(node);
+                    }
+
+                    if (node.parent.kind == SyntaxKind.ArrowFunction && (<FunctionDeclaration>node.parent).body == node) {
+                        // If this is body of arrow function, it is allowed to have the breakpoint
+                        return textSpan(node);
+                    }
+                }
+
                 switch (node.kind) {
                     case SyntaxKind.VariableStatement:
                         return spanInVariableStatement(<VariableStatement>node);
@@ -69,6 +91,8 @@ module ts.BreakpointResolver {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.Constructor:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
                         return spanInFunctionDeclaration(<FunctionDeclaration>node);
 
                     case SyntaxKind.FunctionBlock:
@@ -143,10 +167,12 @@ module ts.BreakpointResolver {
                     case SyntaxKind.ClassDeclaration:
                         return spanInClassDeclaration(<ClassDeclaration>node);
 
-                    case SyntaxKind.BinaryExpression:
-                    case SyntaxKind.PostfixOperator:
-                    case SyntaxKind.PrefixOperator:
-                        return spanInExpression(node);
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                        return spanInCallOrNewExpression(<CallExpression>node);
+
+                    case SyntaxKind.WithStatement:
+                        return spanInWithStatement(<WithStatement>node);
 
                     // Tokens:
                     case SyntaxKind.SemicolonToken:
@@ -154,8 +180,8 @@ module ts.BreakpointResolver {
                         return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile));
 
                     case SyntaxKind.CommaToken:
-                        return spanInCommaToken(node);
-
+                        return spanInPreviousNode(node)
+                        
                     case SyntaxKind.OpenBraceToken:
                         return spanInOpenBraceToken(node);
 
@@ -171,6 +197,10 @@ module ts.BreakpointResolver {
                     case SyntaxKind.ColonToken:
                         return spanInColonToken(node);
 
+                    case SyntaxKind.GreaterThanToken:
+                    case SyntaxKind.LessThanToken:
+                        return spanInGreaterThanOrLessThanToken(node);
+
                     // Keywords:
                     case SyntaxKind.WhileKeyword:
                         return spanInWhileKeyword(node);
@@ -181,6 +211,21 @@ module ts.BreakpointResolver {
                         return spanInNextNode(node);
 
                     default:
+                        // If this is name of property assignment, set breakpoint in the initializer
+                        if (node.parent.kind === SyntaxKind.PropertyAssignment && (<PropertyDeclaration>node.parent).name === node) {
+                            return spanInNode((<PropertyDeclaration>node.parent).initializer);
+                        }
+
+                        // Breakpoint in type assertion goes to its operand
+                        if (node.parent.kind === SyntaxKind.TypeAssertion && (<TypeAssertion>node.parent).type === node) {
+                            return spanInNode((<TypeAssertion>node.parent).operand);
+                        }
+
+                        // return type of function go to previous token
+                        if (isAnyFunction(node.parent) && (<FunctionDeclaration>node.parent).type === node) {
+                            return spanInPreviousNode(node);
+                        }
+
                         // Default go to parent to set the breakpoint
                         return spanInNode(node.parent);
                 }
@@ -257,21 +302,6 @@ module ts.BreakpointResolver {
                 // No breakpoints in the function signature
                 if (!functionDeclaration.body) {
                     return;
-                }
-
-                // Is this coming because the touchingToken was in typeAnnotation of return type
-                if (functionDeclaration.type) {
-                    for (var node = tokenAtLocation; node; node = node.parent) {
-                        if (node.parent === functionDeclaration && functionDeclaration.type === node) {
-                            if (functionDeclaration.parameters && functionDeclaration.parameters.length) {
-                                // Set breakpoint in last parameter
-                                return spanInParameterDeclaration(functionDeclaration.parameters[functionDeclaration.parameters.length - 1]);
-                            }
-
-                            // Set breakpoint in function body
-                            break;
-                        }
-                    }
                 }
 
                 // Set span in function body
@@ -417,39 +447,15 @@ module ts.BreakpointResolver {
                 return spanInNode(classDeclaration.getLastToken());
             }
 
-            function spanInExpression(expression: Expression): TypeScript.TextSpan {
-                //TODO (pick this up later) for now lets fix do-while baseline                if (node.parent.kind === SyntaxKind.DoStatement) {
-                    // Set span as if on while keyword
-                    return spanInPreviousNode(node);
-                }
-
-                if (node.parent.kind === SyntaxKind.ForStatement) {
-                    // For now lets set the span on this expression, fix it later
-                    return textSpan(expression);
-                }
-
-                // Default action for now:
-                return spanInNode(expression.parent);
+            function spanInCallOrNewExpression(callOrNewExpression: CallExpression): TypeScript.TextSpan {
+                return textSpan(callOrNewExpression);
             }
-            
+
+            function spanInWithStatement(withStatement: WithStatement): TypeScript.TextSpan {
+                return spanInNode(withStatement.statement);
+            }
+
             // Tokens:
-            function spanInCommaToken(node: Node): TypeScript.TextSpan {
-                switch (node.parent.kind) {
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.Method:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.VariableStatement:
-                    case SyntaxKind.EnumDeclaration:
-                        return spanInPreviousNode(node);
-
-                    // Default to parent node
-                    default:
-                        return spanInNode(node.parent);
-                }
-            }
-
             function spanInOpenBraceToken(node: Node): TypeScript.TextSpan {
                 if (node.parent.kind === SyntaxKind.SwitchStatement) {
                     return spanInNodeIfStartsOnSameLine(node.parent, (<SwitchStatement>node.parent).clauses[0]);
@@ -534,12 +540,21 @@ module ts.BreakpointResolver {
 
             function spanInColonToken(node: Node): TypeScript.TextSpan {
                 // Is this : specifying return annotation of the function declaration
-                if (isAnyFunction(node.parent)) {
+                if (isAnyFunction(node.parent) || node.parent.kind === SyntaxKind.PropertyAssignment) {
                     return spanInPreviousNode(node);
                 }
 
                 return spanInNode(node.parent);
             }
+
+            function spanInGreaterThanOrLessThanToken(node: Node): TypeScript.TextSpan {
+                if (node.parent.kind === SyntaxKind.TypeAssertion) {
+                    return spanInNode((<TypeAssertion>node.parent).operand);
+                }
+
+                return spanInNode(node.parent);
+            }
+
 
             function spanInWhileKeyword(node: Node): TypeScript.TextSpan {
                 if (node.parent.kind === SyntaxKind.DoStatement) {

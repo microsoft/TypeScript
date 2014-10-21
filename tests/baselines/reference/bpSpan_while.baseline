@@ -65,6 +65,69 @@
     >:=> (line 10, col 0) to (line 10, col 15)
 --------------------------------
 11 >    a++;
-    ~~~~~~~~                                      => Pos: (110 to 117)  SpanInfo: {"start":114,"length":3}
+
+    ~~~~~~~~~                                     => Pos: (110 to 118)  SpanInfo: {"start":114,"length":3}
     >a++
     >:=> (line 11, col 4) to (line 11, col 7)
+--------------------------------
+12 >while ((function () {
+
+    ~~~~~~~                                       => Pos: (119 to 125)  SpanInfo: {"start":119,"length":52}
+    >while ((function () {
+    >    return 30 * a;
+    >})() !== a)
+    >:=> (line 12, col 0) to (line 14, col 11)
+12 >while ((function () {
+
+           ~                                      => Pos: (126 to 126)  SpanInfo: {"start":126,"length":38}
+    >(function () {
+    >    return 30 * a;
+    >})()
+    >:=> (line 12, col 7) to (line 14, col 4)
+12 >while ((function () {
+
+            ~~~~~~~~~~~~~~                        => Pos: (127 to 140)  SpanInfo: {"start":145,"length":13}
+    >return 30 * a
+    >:=> (line 13, col 4) to (line 13, col 17)
+--------------------------------
+13 >    return 30 * a;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (141 to 159)  SpanInfo: {"start":145,"length":13}
+    >return 30 * a
+    >:=> (line 13, col 4) to (line 13, col 17)
+--------------------------------
+14 >})() !== a) {
+
+    ~                                             => Pos: (160 to 160)  SpanInfo: {"start":160,"length":1}
+    >}
+    >:=> (line 14, col 0) to (line 14, col 1)
+14 >})() !== a) {
+
+     ~~~                                          => Pos: (161 to 163)  SpanInfo: {"start":126,"length":38}
+    >(function () {
+    >    return 30 * a;
+    >})()
+    >:=> (line 12, col 7) to (line 14, col 4)
+14 >})() !== a) {
+
+        ~~~~~~~                                   => Pos: (164 to 170)  SpanInfo: {"start":119,"length":52}
+    >while ((function () {
+    >    return 30 * a;
+    >})() !== a)
+    >:=> (line 12, col 0) to (line 14, col 11)
+14 >})() !== a) {
+
+               ~~~                                => Pos: (171 to 173)  SpanInfo: {"start":178,"length":3}
+    >a--
+    >:=> (line 15, col 4) to (line 15, col 7)
+--------------------------------
+15 >    a--;
+
+    ~~~~~~~~~                                     => Pos: (174 to 182)  SpanInfo: {"start":178,"length":3}
+    >a--
+    >:=> (line 15, col 4) to (line 15, col 7)
+--------------------------------
+16 >}
+    ~                                             => Pos: (183 to 183)  SpanInfo: {"start":178,"length":3}
+    >a--
+    >:=> (line 15, col 4) to (line 15, col 7)

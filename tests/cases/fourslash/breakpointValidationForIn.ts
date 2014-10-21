@@ -16,5 +16,11 @@
 ////{
 ////    WScript.Echo(x);
 ////}
+////var z = 10;
+////for (x in function foo() {
+////    return new String();
+////}) {
+////    z++;
+////}
 
 verify.baselineCurrentFileBreakpointLocations();

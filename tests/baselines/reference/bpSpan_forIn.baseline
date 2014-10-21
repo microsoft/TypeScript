@@ -78,6 +78,66 @@
     >:=> (line 13, col 4) to (line 13, col 19)
 --------------------------------
 14 >}
-    ~                                             => Pos: (180 to 180)  SpanInfo: {"start":163,"length":15}
+
+    ~~                                            => Pos: (180 to 181)  SpanInfo: {"start":163,"length":15}
     >WScript.Echo(x)
     >:=> (line 13, col 4) to (line 13, col 19)
+--------------------------------
+15 >var z = 10;
+
+    ~~~~~~~~~~~~                                  => Pos: (182 to 193)  SpanInfo: {"start":182,"length":10}
+    >var z = 10
+    >:=> (line 15, col 0) to (line 15, col 10)
+--------------------------------
+16 >for (x in function foo() {
+
+    ~~~~~~~~~                                     => Pos: (194 to 202)  SpanInfo: {"start":194,"length":54}
+    >for (x in function foo() {
+    >    return new String();
+    >})
+    >:=> (line 16, col 0) to (line 18, col 2)
+16 >for (x in function foo() {
+
+             ~~~~~~~~~~~~~~~~~~                   => Pos: (203 to 220)  SpanInfo: {"start":225,"length":19}
+    >return new String()
+    >:=> (line 17, col 4) to (line 17, col 23)
+--------------------------------
+17 >    return new String();
+
+    ~~~~~~~~~~                                    => Pos: (221 to 230)  SpanInfo: {"start":225,"length":19}
+    >return new String()
+    >:=> (line 17, col 4) to (line 17, col 23)
+17 >    return new String();
+
+              ~~~~~~~~~~~~~~~                     => Pos: (231 to 245)  SpanInfo: {"start":232,"length":12}
+    >new String()
+    >:=> (line 17, col 11) to (line 17, col 23)
+--------------------------------
+18 >}) {
+
+    ~                                             => Pos: (246 to 246)  SpanInfo: {"start":246,"length":1}
+    >}
+    >:=> (line 18, col 0) to (line 18, col 1)
+18 >}) {
+
+     ~                                            => Pos: (247 to 247)  SpanInfo: {"start":194,"length":54}
+    >for (x in function foo() {
+    >    return new String();
+    >})
+    >:=> (line 16, col 0) to (line 18, col 2)
+18 >}) {
+
+      ~~~                                         => Pos: (248 to 250)  SpanInfo: {"start":255,"length":3}
+    >z++
+    >:=> (line 19, col 4) to (line 19, col 7)
+--------------------------------
+19 >    z++;
+
+    ~~~~~~~~~                                     => Pos: (251 to 259)  SpanInfo: {"start":255,"length":3}
+    >z++
+    >:=> (line 19, col 4) to (line 19, col 7)
+--------------------------------
+20 >}
+    ~                                             => Pos: (260 to 260)  SpanInfo: {"start":255,"length":3}
+    >z++
+    >:=> (line 19, col 4) to (line 19, col 7)
