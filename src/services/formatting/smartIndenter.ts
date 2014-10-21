@@ -335,6 +335,9 @@ module ts.formatting {
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.IfStatement:
                     return child && child.kind !== SyntaxKind.Block;
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                    return child && child.kind !== SyntaxKind.FunctionBlock;
                 default:
                     return false;
             }
