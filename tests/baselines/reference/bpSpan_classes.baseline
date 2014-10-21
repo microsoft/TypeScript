@@ -131,9 +131,11 @@
 --------------------------------
 8  >        greet() {
 
-    ~~~~~~~~~~~~~~~~~~                            => Pos: (114 to 131)  SpanInfo: {"start":144,"length":39}
-    >return "<h1>" + this.greeting + "</h1>"
-    >:=> (line 9, col 12) to (line 9, col 51)
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (114 to 131)  SpanInfo: {"start":122,"length":72}
+    >greet() {
+    >            return "<h1>" + this.greeting + "</h1>";
+    >        }
+    >:=> (line 8, col 8) to (line 10, col 9)
 --------------------------------
 9  >            return "<h1>" + this.greeting + "</h1>";
 

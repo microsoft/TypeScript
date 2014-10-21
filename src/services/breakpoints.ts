@@ -319,7 +319,8 @@ module ts.BreakpointResolver {
             }
 
             function canFunctionHaveSpanInWholeDeclaration(functionDeclaration: FunctionDeclaration) {
-                return !!(functionDeclaration.flags & NodeFlags.Export);
+                return !!(functionDeclaration.flags & NodeFlags.Export) ||
+                    (functionDeclaration.parent.kind === SyntaxKind.ClassDeclaration && functionDeclaration.kind !== SyntaxKind.Constructor);
             }
 
             function spanInFunctionDeclaration(functionDeclaration: FunctionDeclaration): TypeScript.TextSpan {
