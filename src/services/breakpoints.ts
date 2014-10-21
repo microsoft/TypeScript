@@ -82,7 +82,8 @@ module ts.BreakpointResolver {
 
                 switch (node.kind) {
                     case SyntaxKind.VariableStatement:
-                        return spanInVariableStatement(<VariableStatement>node);
+                        // Span on first variable declaration
+                        return spanInVariableDeclaration((<VariableStatement>node).declarations[0]);
 
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.Property:
@@ -111,71 +112,87 @@ module ts.BreakpointResolver {
                         return spanInBlock(<Block>node);
 
                     case SyntaxKind.ExpressionStatement:
-                        return spanInExpressionStatement(<ExpressionStatement>node);
+                        // span on the expression
+                        return textSpan((<ExpressionStatement>node).expression);
 
                     case SyntaxKind.ReturnStatement:
-                        return spanInReturnStatement(<ReturnStatement>node);
+                        // span on return keyword and expression if present
+                        return textSpan(node.getChildAt(0), (<ReturnStatement>node).expression);
 
                     case SyntaxKind.WhileStatement:
-                        return spanInWhileStatement(<WhileStatement>node);
+                        // Span on while(...)
+                        return textSpan(node, findNextToken((<WhileStatement>node).expression, node));
 
                     case SyntaxKind.DoStatement:
-                        return spanInDoStatement(<DoStatement>node);
+                        // span in statement of the do statement
+                        return spanInNode((<DoStatement>node).statement);
 
                     case SyntaxKind.DebuggerStatement:
-                        return spanInDebuggerStatement(node);
+                        // span on debugger keyword
+                        return textSpan(node.getChildAt(0));
 
                     case SyntaxKind.IfStatement:
-                        return spanInIfStatement(<IfStatement>node);
+                        // set on if(..) span
+                        return textSpan(node, findNextToken((<IfStatement>node).expression, node));
 
                     case SyntaxKind.LabeledStatement:
-                        return spanInLabeledStatement(<LabeledStatement>node);
+                        // span in statement
+                        return spanInNode((<LabeledStatement>node).statement);
 
                     case SyntaxKind.BreakStatement:
                     case SyntaxKind.ContinueStatement:
-                        return spanInBreakOrContinueStatement(<BreakOrContinueStatement>node);
+                        // On break or continue keyword and label if present
+                        return textSpan(node.getChildAt(0), (<BreakOrContinueStatement>node).label);
 
                     case SyntaxKind.ForStatement:
                         return spanInForStatement(<ForStatement>node);
                         
                     case SyntaxKind.ForInStatement:
-                        return spanInForInStatement(<ForInStatement>node);
+                        // span on for (a in ...)
+                        return textSpan(node, findNextToken((<ForInStatement>node).expression, node));
 
                     case SyntaxKind.SwitchStatement:
-                        return spanInSwitchStatement(<SwitchStatement>node);
+                        // span on switch(...)
+                        return textSpan(node, findNextToken((<SwitchStatement>node).expression, node));
 
                     case SyntaxKind.CaseClause:
                     case SyntaxKind.DefaultClause:
-                        return spanInCaseOrDefaultClause(<CaseOrDefaultClause>node);
+                        // span in first statement of the clause
+                        return spanInNode((<CaseOrDefaultClause>node).statements[0]);
 
                     case SyntaxKind.TryStatement:
-                        return spanInTryStatement(<TryStatement>node);
+                        // span in try block
+                        return spanInBlock((<TryStatement>node).tryBlock);
 
                     case SyntaxKind.ThrowStatement:
-                        return spanInThrowStatement(<ThrowStatement>node);
+                        // span in throw ...
+                        return textSpan(node, (<ThrowStatement>node).expression);
 
                     case SyntaxKind.ExportAssignment:
-                        return spanInExportAssignment(<ExportAssignment>node);
+                        // span on export = id
+                        return textSpan(node, (<ExportAssignment>node).exportName);
 
                     case SyntaxKind.ImportDeclaration:
-                        return spanInImportDeclaration(<ImportDeclaration>node);
+                        // import statement without including semicolon
+                        return textSpan(node, (<ImportDeclaration>node).entityName || (<ImportDeclaration>node).externalModuleName);
 
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.EnumMember:
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                        // span on complete node
                         return textSpan(node);
 
                     case SyntaxKind.ModuleDeclaration:
-                        return spanInModuleDeclaration(<ModuleDeclaration>node);
+                        // span in module body
+                        return spanInNode((<ModuleDeclaration>node).body);
 
                     case SyntaxKind.ClassDeclaration:
                         return spanInClassDeclaration(<ClassDeclaration>node);
 
-                    case SyntaxKind.CallExpression:
-                    case SyntaxKind.NewExpression:
-                        return spanInCallOrNewExpression(<CallExpression>node);
-
                     case SyntaxKind.WithStatement:
-                        return spanInWithStatement(<WithStatement>node);
+                        // span in statement
+                        return spanInNode((<WithStatement>node).statement);
 
                     // No breakpoint in interface
                     case SyntaxKind.InterfaceDeclaration:
@@ -241,7 +258,7 @@ module ts.BreakpointResolver {
             function spanInVariableDeclaration(variableDeclaration: VariableDeclaration): TypeScript.TextSpan {
                 // If declaration of for in statement, just set the span in parent
                 if (variableDeclaration.parent.kind === SyntaxKind.ForInStatement) {
-                    return spanInForInStatement(<ForInStatement>variableDeclaration.parent);
+                    return spanInNode(variableDeclaration.parent);
                 }
 
                 var isParentVariableStatement = variableDeclaration.parent.kind === SyntaxKind.VariableStatement;
@@ -275,10 +292,6 @@ module ts.BreakpointResolver {
                     var indexOfCurrentDeclaration = indexOf(declarations, variableDeclaration);
                     return spanInVariableDeclaration(declarations[indexOfCurrentDeclaration - 1]);
                 }
-            }
-
-            function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
-                return spanInVariableDeclaration(variableStatement.declarations[0]);
             }
 
             function canHaveSpanInParameterDeclaration(parameter: ParameterDeclaration): boolean {
@@ -351,40 +364,6 @@ module ts.BreakpointResolver {
                 return spanInFirstStatementOfBlock(block);
             }
 
-            function spanInExpressionStatement(expressionStatement: ExpressionStatement): TypeScript.TextSpan {
-                return textSpan(expressionStatement.expression);
-            }
-
-            function spanInReturnStatement(returnStatement: ReturnStatement): TypeScript.TextSpan {
-                return textSpan(returnStatement.getChildAt(0, sourceFile), returnStatement.expression);
-            }
-
-            function spanInWhileStatement(whileStatement: WhileStatement): TypeScript.TextSpan {
-                return textSpan(whileStatement, findNextToken(whileStatement.expression, whileStatement));
-            }
-
-            function spanInDoStatement(doStatement: DoStatement): TypeScript.TextSpan {
-                return spanInNode(doStatement.statement);
-            }
-
-            function spanInDebuggerStatement(node: Node): TypeScript.TextSpan {
-                // Set breakpoint on debugger keyword
-                return textSpan(node.getChildAt(0, sourceFile));
-            }
-
-            function spanInIfStatement(ifStatement: IfStatement): TypeScript.TextSpan {
-                // set on if(..) span
-                return textSpan(ifStatement, findNextToken(ifStatement.expression, ifStatement));
-            }
-
-            function spanInLabeledStatement(labeledStatement: LabeledStatement): TypeScript.TextSpan {
-                return spanInNode(labeledStatement.statement);
-            }
-
-            function spanInBreakOrContinueStatement(breakOrContinueStatement: BreakOrContinueStatement): TypeScript.TextSpan {
-                return textSpan(breakOrContinueStatement, breakOrContinueStatement.label || breakOrContinueStatement.getChildAt(0));
-            }
-
             function spanInForStatement(forStatement: ForStatement): TypeScript.TextSpan {
                 if (forStatement.declarations) {
                     return spanInNode(forStatement.declarations[0]);
@@ -401,52 +380,12 @@ module ts.BreakpointResolver {
                 }
             }
 
-            function spanInForInStatement(forInStatement: ForInStatement): TypeScript.TextSpan {
-                return textSpan(forInStatement, findNextToken(forInStatement.expression, forInStatement));
-            }
-
-            function spanInSwitchStatement(switchStatement: SwitchStatement): TypeScript.TextSpan {
-                return textSpan(switchStatement, findNextToken(switchStatement.expression, switchStatement));
-            }
-
-            function spanInCaseOrDefaultClause(caseOrDefaultClause: CaseOrDefaultClause): TypeScript.TextSpan {
-                return spanInNode(caseOrDefaultClause.statements[0]);
-            }
-
-            function spanInTryStatement(tryStatement: TryStatement): TypeScript.TextSpan {
-                return spanInBlock(tryStatement.tryBlock);
-            }
-
-            function spanInThrowStatement(throwStatement: ThrowStatement): TypeScript.TextSpan {
-                return textSpan(throwStatement, throwStatement.expression);
-            }
-
-            function spanInExportAssignment(exportAssignment: ExportAssignment): TypeScript.TextSpan {
-                return textSpan(exportAssignment, exportAssignment.exportName);
-            }
-
-            function spanInImportDeclaration(importDeclaration: ImportDeclaration): TypeScript.TextSpan {
-                return textSpan(importDeclaration, importDeclaration.entityName || importDeclaration.externalModuleName);
-            }
-
-            function spanInModuleDeclaration(moduleDeclaration: ModuleDeclaration): TypeScript.TextSpan {
-                return spanInNode(moduleDeclaration.body);
-            }
-
             function spanInClassDeclaration(classDeclaration: ClassDeclaration): TypeScript.TextSpan {
                 if (classDeclaration.members.length) {
                     return spanInNode(classDeclaration.members[0]);
                 }
 
                 return spanInNode(classDeclaration.getLastToken());
-            }
-
-            function spanInCallOrNewExpression(callOrNewExpression: CallExpression): TypeScript.TextSpan {
-                return textSpan(callOrNewExpression);
-            }
-
-            function spanInWithStatement(withStatement: WithStatement): TypeScript.TextSpan {
-                return spanInNode(withStatement.statement);
             }
 
             // Tokens:
