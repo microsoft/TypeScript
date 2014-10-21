@@ -92,9 +92,16 @@
 --------------------------------
 4  >    class Greeter {
 
-    ~~~~~~~~~~~~~~~~~~~~                          => Pos: (36 to 55)  SpanInfo: {"start":111,"length":1}
-    >}
-    >:=> (line 6, col 8) to (line 6, col 9)
+    ~~~~~~~~~~~~~~~~~~~~                          => Pos: (36 to 55)  SpanInfo: {"start":40,"length":160}
+    >class Greeter {
+    >        constructor(public greeting: string) {
+    >        }
+    >
+    >        greet() {
+    >            return "<h1>" + this.greeting + "</h1>";
+    >        }
+    >    }
+    >:=> (line 4, col 4) to (line 11, col 5)
 --------------------------------
 5  >        constructor(public greeting: string) {
 

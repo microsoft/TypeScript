@@ -1,9 +1,10 @@
 
 1  >class Greeter {
 
-    ~~~~~~~~~~~~~~~~                              => Pos: (0 to 15)  SpanInfo: {"start":16,"length":1}
+    ~~~~~~~~~~~~~~~~                              => Pos: (0 to 15)  SpanInfo: {"start":0,"length":17}
+    >class Greeter {
     >}
-    >:=> (line 2, col 0) to (line 2, col 1)
+    >:=> (line 1, col 0) to (line 2, col 1)
 --------------------------------
 2  >}
 

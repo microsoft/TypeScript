@@ -10,9 +10,10 @@
 --------------------------------
 2  >    class c {
 
-    ~~~~~~~~~~~~~~                                => Pos: (11 to 24)  SpanInfo: {"start":29,"length":1}
-    >}
-    >:=> (line 3, col 4) to (line 3, col 5)
+    ~~~~~~~~~~~~~~                                => Pos: (11 to 24)  SpanInfo: {"start":15,"length":15}
+    >class c {
+    >    }
+    >:=> (line 2, col 4) to (line 3, col 5)
 --------------------------------
 3  >    }
 

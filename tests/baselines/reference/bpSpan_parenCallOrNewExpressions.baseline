@@ -128,9 +128,12 @@
 --------------------------------
 10 >class greeter {
 
-    ~~~~~~~~~~~~~~~~                              => Pos: (146 to 161)  SpanInfo: {"start":195,"length":1}
+    ~~~~~~~~~~~~~~~~                              => Pos: (146 to 161)  SpanInfo: {"start":146,"length":52}
+    >class greeter {
+    >    constructor(a: number) {
+    >    }
     >}
-    >:=> (line 12, col 4) to (line 12, col 5)
+    >:=> (line 10, col 0) to (line 13, col 1)
 --------------------------------
 11 >    constructor(a: number) {
 

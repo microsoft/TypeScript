@@ -182,15 +182,13 @@ module ts.BreakpointResolver {
                             return undefined;
                         }
 
+                    case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.NewExpression:
                         // span on complete node
                         return textSpan(node);
-
-                    case SyntaxKind.ClassDeclaration:
-                        return spanInClassDeclaration(<ClassDeclaration>node);
 
                     case SyntaxKind.WithStatement:
                         // span in statement
@@ -387,20 +385,16 @@ module ts.BreakpointResolver {
                 }
             }
 
-            function spanInClassDeclaration(classDeclaration: ClassDeclaration): TypeScript.TextSpan {
-                if (classDeclaration.members.length) {
-                    return spanInNode(classDeclaration.members[0]);
-                }
-
-                return spanInNode(classDeclaration.getLastToken());
-            }
-
             // Tokens:
             function spanInOpenBraceToken(node: Node): TypeScript.TextSpan {
                 switch (node.parent.kind) {
                     case SyntaxKind.EnumDeclaration:
                         var enumDeclaration = <EnumDeclaration>node.parent;
                         return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile));
+
+                    case SyntaxKind.ClassDeclaration:
+                        var classDeclaration = <ClassDeclaration>node.parent;
+                        return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile));
 
                     case SyntaxKind.SwitchStatement:
                         return spanInNodeIfStartsOnSameLine(node.parent, (<SwitchStatement>node.parent).clauses[0]);
