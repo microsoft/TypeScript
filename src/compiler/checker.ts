@@ -3845,7 +3845,7 @@ module ts {
             }
         }
 
-        function createInferenceContext(typeParameters: TypeParameter[], inferUnionTypes: boolean): InferenceContext {
+        function createInferenceContext(typeParameters: TypeParameter[], inferUnionTypes: boolean, typeArgumentResultTypes?: Type[]): InferenceContext {
             var inferences: Type[][] = [];
             for (var i = 0; i < typeParameters.length; i++) inferences.push([]);
             return {
@@ -3853,7 +3853,7 @@ module ts {
                 inferUnionTypes: inferUnionTypes,
                 inferenceCount: 0,
                 inferences: inferences,
-                inferredTypes: new Array(typeParameters.length),
+                inferredTypes: typeArgumentResultTypes || new Array(typeParameters.length),
             };
         }
 
@@ -5066,9 +5066,9 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): Type[] {
+        function inferTypeArguments(signature: Signature, args: Expression[], typeArgumentResultTypes: Type[], excludeArgument?: boolean[]): boolean {
             var typeParameters = signature.typeParameters;
-            var context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false);
+            var context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false, typeArgumentResultTypes);
             var mapper = createInferenceMapper(context);
             // First infer from arguments that are not context sensitive
             for (var i = 0; i < args.length; i++) {
@@ -5094,22 +5094,27 @@ module ts {
             }
             var inferredTypes = getInferredTypes(context);
             // Inference has failed if the undefined type is in list of inferences
-            return contains(inferredTypes, undefinedType) ? undefined : inferredTypes;
+            return !contains(inferredTypes, undefinedType);
         }
 
-        function checkTypeArguments(signature: Signature, typeArguments: TypeNode[]): Type[] {
+        function checkTypeArguments(signature: Signature, typeArguments: TypeNode[], typeArgumentResultTypes: Type[], reportErrors: boolean): boolean {
             var typeParameters = signature.typeParameters;
-            var result: Type[] = [];
+            var typeArgumentsAreAssignable = true;
             for (var i = 0; i < typeParameters.length; i++) {
                 var typeArgNode = typeArguments[i];
                 var typeArgument = getTypeFromTypeNode(typeArgNode);
-                var constraint = getConstraintOfTypeParameter(typeParameters[i]);
-                if (constraint && fullTypeCheck) {
-                    checkTypeAssignableTo(typeArgument, constraint, typeArgNode, Diagnostics.Type_0_does_not_satisfy_the_constraint_1_Colon, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                // Do not push on this array! It has a preallocated length
+                typeArgumentResultTypes[i] = typeArgument;
+                if (typeArgumentsAreAssignable /* so far */) {
+                    var constraint = getConstraintOfTypeParameter(typeParameters[i]);
+                    if (constraint) {
+                        typeArgumentsAreAssignable = typeArgumentsAreAssignable &&
+                            checkTypeAssignableTo(typeArgument, constraint, reportErrors ? typeArgNode : undefined,
+                                Diagnostics.Type_0_does_not_satisfy_the_constraint_1_Colon, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                    }
                 }
-                result.push(typeArgument);
             }
-            return result;
+            return typeArgumentsAreAssignable;
         }
 
         function checkApplicableSignature(node: CallExpression, signature: Signature, relation: Map<boolean>, excludeArgument: boolean[], reportErrors: boolean) {
@@ -5154,12 +5159,16 @@ module ts {
                 }
             }
 
-            var lastCandidate: Signature;
+            var lastCandidateWithCorrectArity: Signature;
+            var lastCandidateWithValidTypeArguments: Signature;
             var result: Signature;
             if (candidates.length > 1) {
                 result = chooseOverload(candidates, subtypeRelation, excludeArgument);
             }
             if (!result) {
+                // Reinitialize these pointers for round two
+                lastCandidateWithCorrectArity = undefined;
+                lastCandidateWithValidTypeArguments = undefined;
                 result = chooseOverload(candidates, assignableRelation, excludeArgument);
             }
             if (result) {
@@ -5170,8 +5179,8 @@ module ts {
             // no arguments excluded from assignability checks.
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
-            if (lastCandidate) {
-                checkApplicableSignature(node, lastCandidate, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+            if (lastCandidateWithValidTypeArguments || lastCandidateWithCorrectArity) {
+                checkApplicableSignature(node, lastCandidateWithValidTypeArguments || lastCandidateWithCorrectArity, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else {
                 error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
@@ -5197,27 +5206,37 @@ module ts {
                     if (!signatureHasCorrectArity(node, candidates[i])) {
                         continue;
                     }
+                    lastCandidateWithCorrectArity = candidates[i];
 
                     while (true) {
-                        var candidate = candidates[i];
+                        var candidate = lastCandidateWithCorrectArity;
                         if (candidate.typeParameters) {
-                            var typeArguments = node.typeArguments ?
-                                checkTypeArguments(candidate, node.typeArguments) :
-                                inferTypeArguments(candidate, args, excludeArgument);
-                            if (!typeArguments) {
+                            var typeArgumentTypes = new Array<Type>(candidate.typeParameters.length);
+                            var typeArgumentsAreValid = node.typeArguments ?
+                                checkTypeArguments(candidate, node.typeArguments, typeArgumentTypes, /*reportErrors*/ false) :
+                                inferTypeArguments(candidate, args, typeArgumentTypes, excludeArgument);
+                            if (!typeArgumentsAreValid) {
                                 break;
                             }
-                            candidate = getSignatureInstantiation(candidate, typeArguments);
+                            candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
                         }
-                        lastCandidate = candidate;
                         if (!checkApplicableSignature(node, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             break;
                         }
                         var index = excludeArgument ? indexOf(excludeArgument, true) : -1;
                         if (index < 0) {
-                            return candidate;
+                            return candidates[i] = candidate;
                         }
                         excludeArgument[index] = false;
+                    }
+
+                    // This candidate was not applicable, but it may have had valid type arguments.
+                    // If it did, update the signature to point to the instantiated signature.
+                    if (lastCandidateWithCorrectArity.typeParameters) {
+                        candidates[i] = candidate; // Replace with instantiated
+                        if (typeArgumentsAreValid) {
+                            lastCandidateWithValidTypeArguments = candidate;
+                        }
                     }
                 }
 
