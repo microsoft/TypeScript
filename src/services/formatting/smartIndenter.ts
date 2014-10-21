@@ -65,10 +65,15 @@ module ts.formatting {
                 return 0;
             }
 
-            return getIndentationForNode(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
+            return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
         }
 
-        export function getIndentationForNode(
+        export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number {
+            var start = sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile));
+            return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
+        }
+
+        function getIndentationForNodeWorker(
             current: Node,
             currentStart: LineAndCharacter,
             ignoreActualIndentationRange: TextRange,

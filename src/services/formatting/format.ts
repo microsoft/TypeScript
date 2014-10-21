@@ -1,5 +1,6 @@
 ///<reference path='..\services.ts' />
 ///<reference path='stringUtilities.ts' />
+///<reference path='lineMapUtilities.ts' />
 ///<reference path='formattingScanner.ts' />
 ///<reference path='new\rulesProvider.ts' />
 
@@ -52,39 +53,6 @@ module ts.formatting {
         return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatSelection);
     }
 
-    function getEndLinePosition(line: number, sourceFile: SourceFile): number {
-        var lineStarts = sourceFile.getLineStarts();
-        if (line === lineStarts.length - 1) {
-            // last line - return EOF
-            return sourceFile.text.length - 1;
-        }
-        else {
-            // current line start
-            var start = lineStarts[line];
-            // take the start position of the next line -1 = it should be some line break
-            var pos = lineStarts[line + 1] - 1;
-            Debug.assert(isLineBreak(sourceFile.text.charCodeAt(pos)));
-            // walk backwards skipping line breaks, stop the the beginning of current line.
-            // i.e:
-            // <some text>
-            // $ <- end of line for this position should match the start position
-            while (start <= pos && isLineBreak(sourceFile.text.charCodeAt(pos))) {
-                pos--;
-            }
-            return pos;
-        }
-    }
-
-    function getStartPositionOfLine(line: number, sourceFile: SourceFile): number {
-        return sourceFile.getLineStarts()[line];
-    }
-
-    function getStartLinePositionForPosition(position: number, sourceFile: SourceFile): number {
-        var lineStarts = sourceFile.getLineStarts();
-        var line = getNonAdjustedLineAndCharacterFromPosition(position, sourceFile).line;
-        return lineStarts[line];
-    }
-
     function formatOutermostParent(position: number, expectedLastToken: SyntaxKind, sourceFile: SourceFile, options: FormatCodeOptions, rulesProvider: RulesProvider, requestKind: FormattingRequestKind): TextChange[]{
         var parent = findOutermostParent(position, expectedLastToken, sourceFile);
         if (!parent) {
@@ -115,20 +83,6 @@ module ts.formatting {
         return current;
     }
 
-    function rangeContainsRange(initial: TextRange, candidate: TextRange): boolean {
-        return startEndContainsRange(initial.pos, initial.end, candidate);
-    }
-
-    function startEndContainsRange(start: number, end: number, candidate: TextRange): boolean {
-        return start <= candidate.pos && end >= candidate.end;
-    }
-
-    function rangeOverlapsWithRange(r1: TextRange, r2: TextRange): boolean {
-        var start = Math.max(r1.pos, r2.pos);
-        var end = Math.min(r1.end, r2.end);
-        return start < end;
-    }
-
     function isListElement(parent: Node, node: Node): boolean {
         switch (parent.kind) {
             case SyntaxKind.ClassDeclaration:
@@ -156,16 +110,6 @@ module ts.formatting {
         }
     }
 
-    function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number {
-        var start = sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile));
-        return SmartIndenter.getIndentationForNode(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
-    }
-
-    function getNonAdjustedLineAndCharacterFromPosition(position: number, sourceFile: SourceFile): LineAndCharacter {
-        var lineAndChar = sourceFile.getLineAndCharacterFromPosition(position);
-        return { line: lineAndChar.line - 1, character: lineAndChar.character - 1 };
-    }
-
     function formatSpan(originalRange: TextRange,
         sourceFile: SourceFile,
         options: FormatCodeOptions,
@@ -176,7 +120,7 @@ module ts.formatting {
         var formattingContext = new FormattingContext(sourceFile, requestKind);
 
         var enclosingNode = findEnclosingNode(originalRange, sourceFile);
-        var initialIndentation = getIndentationForNode(enclosingNode, originalRange, sourceFile, options);
+        var initialIndentation = SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, options);
 
         var formattingScanner = getFormattingScanner(sourceFile, enclosingNode, originalRange);        
 

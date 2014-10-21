@@ -5,6 +5,20 @@ module ts {
         list: Node;
     }
 
+    export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
+        return startEndContainsRange(r1.pos, r1.end, r2);
+    }
+
+    export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
+        return start <= range.pos && end >= range.end;
+    }
+
+    export function rangeOverlapsWithRange(r1: TextRange, r2: TextRange): boolean {
+        var start = Math.max(r1.pos, r2.pos);
+        var end = Math.min(r1.end, r2.end);
+        return start < end;
+    }
+
     export function findListItemInfo(node: Node): ListItemInfo {
         var syntaxList = findContainingList(node);
         var children = syntaxList.getChildren();
