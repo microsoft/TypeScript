@@ -21,5 +21,28 @@
 ////    z,
 ////    x2
 ////}
+////enum e11 
+////{
+////    x,
+////    y,
+////    x
+////}
+////enum e12
+////{
+////    x = 10,
+////    y = 10,
+////    z,
+////    x2
+////}
+////enum e13
+////{
+////}
+////declare enum e14
+////{
+////    x,
+////    y,
+////    z,
+////    x2
+////}
 
 verify.baselineCurrentFileBreakpointLocations();

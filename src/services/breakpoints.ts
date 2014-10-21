@@ -161,10 +161,8 @@ module ts.BreakpointResolver {
                         return spanInImportDeclaration(<ImportDeclaration>node);
 
                     case SyntaxKind.EnumDeclaration:
-                        return spanInEnumDeclaration(<EnumDeclaration>node);
-
                     case SyntaxKind.EnumMember:
-                        return spanInEnumMember(<EnumMember>node);
+                        return textSpan(node);
 
                     case SyntaxKind.ModuleDeclaration:
                         return spanInModuleDeclaration(<ModuleDeclaration>node);
@@ -431,19 +429,6 @@ module ts.BreakpointResolver {
                 return textSpan(importDeclaration, importDeclaration.entityName || importDeclaration.externalModuleName);
             }
 
-            function spanInEnumDeclaration(enumDeclaration: EnumDeclaration): TypeScript.TextSpan {
-                if (enumDeclaration.members.length) {
-                    return spanInEnumMember(enumDeclaration.members[0]);
-                }
-
-                // On close brace
-                return spanInNode(enumDeclaration.getLastToken(sourceFile));
-            }
-
-            function spanInEnumMember(enumMember: EnumMember) {
-                return textSpan(enumMember);
-            }
-
             function spanInModuleDeclaration(moduleDeclaration: ModuleDeclaration): TypeScript.TextSpan {
                 return spanInNode(moduleDeclaration.body);
             }
@@ -466,8 +451,13 @@ module ts.BreakpointResolver {
 
             // Tokens:
             function spanInOpenBraceToken(node: Node): TypeScript.TextSpan {
-                if (node.parent.kind === SyntaxKind.SwitchStatement) {
-                    return spanInNodeIfStartsOnSameLine(node.parent, (<SwitchStatement>node.parent).clauses[0]);
+                switch (node.parent.kind) {
+                    case SyntaxKind.EnumDeclaration:
+                        var enumDeclaration = <EnumDeclaration>node.parent;
+                        return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile));
+
+                    case SyntaxKind.SwitchStatement:
+                        return spanInNodeIfStartsOnSameLine(node.parent, (<SwitchStatement>node.parent).clauses[0]);
                 }
 
                 // Default to parent node
