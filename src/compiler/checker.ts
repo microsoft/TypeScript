@@ -5234,7 +5234,7 @@ module ts {
                         }
                         var index = excludeArgument ? indexOf(excludeArgument, true) : -1;
                         if (index < 0) {
-                            return candidates[i] = candidate;
+                            return candidate;
                         }
                         excludeArgument[index] = false;
                     }
@@ -5246,7 +5246,6 @@ module ts {
                     // arguments, then we can only report an error based on the type arguments.
                     if (originalCandidate.typeParameters) {
                         var instantiatedCandidate = candidate;
-                        candidates[i] = instantiatedCandidate;
                         if (typeArgumentsAreValid) {
                             candidateForArgumentError = instantiatedCandidate;
                         }

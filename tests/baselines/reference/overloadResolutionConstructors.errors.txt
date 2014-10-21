@@ -1,8 +1,8 @@
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(27,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(43,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(43,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(67,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(77,9): error TS2344: Type 'string' does not satisfy the constraint 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(78,9): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(77,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(78,25): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(88,9): error TS2344: Type 'boolean' does not satisfy the constraint 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(91,9): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(92,15): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
@@ -56,8 +56,8 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors
     
     // Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
     new fn2<Date>('', 0); // Error
-    ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+                  ~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
     // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
     new fn2('', 0); // OK
@@ -94,11 +94,11 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors
     
     new fn4<string, number>('', 3);
     new fn4<string, number>(3, ''); // Error
-            ~~~~~~
-!!! error TS2344: Type 'string' does not satisfy the constraint 'number'.
+                            ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     new fn4<number, string>('', 3); // Error
-            ~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
+                            ~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     new fn4<number, string>(3, ''); 
     
     // Generic overloads with constraints called without type arguments but with types that satisfy the constraints
