@@ -1,0 +1,1669 @@
+
+--------------------------------
+>>>>function f() {
+
+   |Pos: 0 SpanInfo: undefined Statement: 
+    |Pos: 1 SpanInfo: undefined Statement: 
+     |Pos: 2 SpanInfo: undefined Statement: 
+      |Pos: 3 SpanInfo: undefined Statement: 
+       |Pos: 4 SpanInfo: undefined Statement: 
+        |Pos: 5 SpanInfo: undefined Statement: 
+         |Pos: 6 SpanInfo: undefined Statement: 
+          |Pos: 7 SpanInfo: undefined Statement: 
+           |Pos: 8 SpanInfo: undefined Statement: 
+            |Pos: 9 SpanInfo: {"start":9,"length":1} Statement: 
+            |f
+             |Pos: 10 SpanInfo: {"start":9,"length":1} Statement: 
+             |f
+              |Pos: 11 SpanInfo: undefined Statement: 
+               |Pos: 12 SpanInfo: undefined Statement: 
+                |Pos: 13 SpanInfo: undefined Statement: 
+                 |Pos: 14 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    var y;
+
+   |Pos: 15 SpanInfo: undefined Statement: 
+    |Pos: 16 SpanInfo: undefined Statement: 
+     |Pos: 17 SpanInfo: undefined Statement: 
+      |Pos: 18 SpanInfo: undefined Statement: 
+       |Pos: 19 SpanInfo: undefined Statement: 
+        |Pos: 20 SpanInfo: undefined Statement: 
+         |Pos: 21 SpanInfo: undefined Statement: 
+          |Pos: 22 SpanInfo: undefined Statement: 
+           |Pos: 23 SpanInfo: {"start":23,"length":1} Statement: 
+           |y
+            |Pos: 24 SpanInfo: {"start":23,"length":1} Statement: 
+            |y
+             |Pos: 25 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    var x = 0;
+
+   |Pos: 26 SpanInfo: undefined Statement: 
+    |Pos: 27 SpanInfo: undefined Statement: 
+     |Pos: 28 SpanInfo: undefined Statement: 
+      |Pos: 29 SpanInfo: undefined Statement: 
+       |Pos: 30 SpanInfo: undefined Statement: 
+        |Pos: 31 SpanInfo: undefined Statement: 
+         |Pos: 32 SpanInfo: undefined Statement: 
+          |Pos: 33 SpanInfo: undefined Statement: 
+           |Pos: 34 SpanInfo: {"start":34,"length":1} Statement: 
+           |x
+            |Pos: 35 SpanInfo: {"start":34,"length":1} Statement: 
+            |x
+             |Pos: 36 SpanInfo: undefined Statement: 
+              |Pos: 37 SpanInfo: undefined Statement: 
+               |Pos: 38 SpanInfo: undefined Statement: 
+                |Pos: 39 SpanInfo: undefined Statement: 
+                 |Pos: 40 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    for (var i = 0; i < 10; i++) {
+
+   |Pos: 41 SpanInfo: undefined Statement: 
+    |Pos: 42 SpanInfo: undefined Statement: 
+     |Pos: 43 SpanInfo: undefined Statement: 
+      |Pos: 44 SpanInfo: undefined Statement: 
+       |Pos: 45 SpanInfo: undefined Statement: 
+        |Pos: 46 SpanInfo: undefined Statement: 
+         |Pos: 47 SpanInfo: undefined Statement: 
+          |Pos: 48 SpanInfo: undefined Statement: 
+           |Pos: 49 SpanInfo: undefined Statement: 
+            |Pos: 50 SpanInfo: undefined Statement: 
+             |Pos: 51 SpanInfo: undefined Statement: 
+              |Pos: 52 SpanInfo: undefined Statement: 
+               |Pos: 53 SpanInfo: undefined Statement: 
+                |Pos: 54 SpanInfo: {"start":54,"length":1} Statement: 
+                |i
+                 |Pos: 55 SpanInfo: {"start":54,"length":1} Statement: 
+                 |i
+                  |Pos: 56 SpanInfo: undefined Statement: 
+                   |Pos: 57 SpanInfo: undefined Statement: 
+                    |Pos: 58 SpanInfo: undefined Statement: 
+                     |Pos: 59 SpanInfo: undefined Statement: 
+                      |Pos: 60 SpanInfo: undefined Statement: 
+                       |Pos: 61 SpanInfo: {"start":61,"length":1} Statement: 
+                       |i
+                        |Pos: 62 SpanInfo: {"start":61,"length":1} Statement: 
+                        |i
+                         |Pos: 63 SpanInfo: undefined Statement: 
+                          |Pos: 64 SpanInfo: undefined Statement: 
+                           |Pos: 65 SpanInfo: undefined Statement: 
+                            |Pos: 66 SpanInfo: undefined Statement: 
+                             |Pos: 67 SpanInfo: undefined Statement: 
+                              |Pos: 68 SpanInfo: undefined Statement: 
+                               |Pos: 69 SpanInfo: {"start":69,"length":1} Statement: 
+                               |i
+                                |Pos: 70 SpanInfo: {"start":69,"length":1} Statement: 
+                                |i
+                                 |Pos: 71 SpanInfo: undefined Statement: 
+                                  |Pos: 72 SpanInfo: undefined Statement: 
+                                   |Pos: 73 SpanInfo: undefined Statement: 
+                                    |Pos: 74 SpanInfo: undefined Statement: 
+                                     |Pos: 75 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        x += i;
+
+   |Pos: 76 SpanInfo: undefined Statement: 
+    |Pos: 77 SpanInfo: undefined Statement: 
+     |Pos: 78 SpanInfo: undefined Statement: 
+      |Pos: 79 SpanInfo: undefined Statement: 
+       |Pos: 80 SpanInfo: undefined Statement: 
+        |Pos: 81 SpanInfo: undefined Statement: 
+         |Pos: 82 SpanInfo: undefined Statement: 
+          |Pos: 83 SpanInfo: undefined Statement: 
+           |Pos: 84 SpanInfo: {"start":84,"length":1} Statement: 
+           |x
+            |Pos: 85 SpanInfo: {"start":84,"length":1} Statement: 
+            |x
+             |Pos: 86 SpanInfo: undefined Statement: 
+              |Pos: 87 SpanInfo: undefined Statement: 
+               |Pos: 88 SpanInfo: undefined Statement: 
+                |Pos: 89 SpanInfo: {"start":89,"length":1} Statement: 
+                |i
+                 |Pos: 90 SpanInfo: {"start":89,"length":1} Statement: 
+                 |i
+                  |Pos: 91 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        x *= 0;
+
+   |Pos: 92 SpanInfo: undefined Statement: 
+    |Pos: 93 SpanInfo: undefined Statement: 
+     |Pos: 94 SpanInfo: undefined Statement: 
+      |Pos: 95 SpanInfo: undefined Statement: 
+       |Pos: 96 SpanInfo: undefined Statement: 
+        |Pos: 97 SpanInfo: undefined Statement: 
+         |Pos: 98 SpanInfo: undefined Statement: 
+          |Pos: 99 SpanInfo: undefined Statement: 
+           |Pos: 100 SpanInfo: {"start":100,"length":1} Statement: 
+           |x
+            |Pos: 101 SpanInfo: {"start":100,"length":1} Statement: 
+            |x
+             |Pos: 102 SpanInfo: undefined Statement: 
+              |Pos: 103 SpanInfo: undefined Statement: 
+               |Pos: 104 SpanInfo: undefined Statement: 
+                |Pos: 105 SpanInfo: undefined Statement: 
+                 |Pos: 106 SpanInfo: undefined Statement: 
+                  |Pos: 107 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    }
+
+   |Pos: 108 SpanInfo: undefined Statement: 
+    |Pos: 109 SpanInfo: undefined Statement: 
+     |Pos: 110 SpanInfo: undefined Statement: 
+      |Pos: 111 SpanInfo: undefined Statement: 
+       |Pos: 112 SpanInfo: undefined Statement: 
+        |Pos: 113 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    if (x > 17) {
+
+   |Pos: 114 SpanInfo: undefined Statement: 
+    |Pos: 115 SpanInfo: undefined Statement: 
+     |Pos: 116 SpanInfo: undefined Statement: 
+      |Pos: 117 SpanInfo: undefined Statement: 
+       |Pos: 118 SpanInfo: undefined Statement: 
+        |Pos: 119 SpanInfo: undefined Statement: 
+         |Pos: 120 SpanInfo: undefined Statement: 
+          |Pos: 121 SpanInfo: undefined Statement: 
+           |Pos: 122 SpanInfo: {"start":122,"length":1} Statement: 
+           |x
+            |Pos: 123 SpanInfo: {"start":122,"length":1} Statement: 
+            |x
+             |Pos: 124 SpanInfo: undefined Statement: 
+              |Pos: 125 SpanInfo: undefined Statement: 
+               |Pos: 126 SpanInfo: undefined Statement: 
+                |Pos: 127 SpanInfo: undefined Statement: 
+                 |Pos: 128 SpanInfo: undefined Statement: 
+                  |Pos: 129 SpanInfo: undefined Statement: 
+                   |Pos: 130 SpanInfo: undefined Statement: 
+                    |Pos: 131 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        x /= 9;
+
+   |Pos: 132 SpanInfo: undefined Statement: 
+    |Pos: 133 SpanInfo: undefined Statement: 
+     |Pos: 134 SpanInfo: undefined Statement: 
+      |Pos: 135 SpanInfo: undefined Statement: 
+       |Pos: 136 SpanInfo: undefined Statement: 
+        |Pos: 137 SpanInfo: undefined Statement: 
+         |Pos: 138 SpanInfo: undefined Statement: 
+          |Pos: 139 SpanInfo: undefined Statement: 
+           |Pos: 140 SpanInfo: {"start":140,"length":1} Statement: 
+           |x
+            |Pos: 141 SpanInfo: {"start":140,"length":1} Statement: 
+            |x
+             |Pos: 142 SpanInfo: undefined Statement: 
+              |Pos: 143 SpanInfo: undefined Statement: 
+               |Pos: 144 SpanInfo: undefined Statement: 
+                |Pos: 145 SpanInfo: undefined Statement: 
+                 |Pos: 146 SpanInfo: undefined Statement: 
+                  |Pos: 147 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    } else {
+
+   |Pos: 148 SpanInfo: undefined Statement: 
+    |Pos: 149 SpanInfo: undefined Statement: 
+     |Pos: 150 SpanInfo: undefined Statement: 
+      |Pos: 151 SpanInfo: undefined Statement: 
+       |Pos: 152 SpanInfo: undefined Statement: 
+        |Pos: 153 SpanInfo: undefined Statement: 
+         |Pos: 154 SpanInfo: undefined Statement: 
+          |Pos: 155 SpanInfo: undefined Statement: 
+           |Pos: 156 SpanInfo: undefined Statement: 
+            |Pos: 157 SpanInfo: undefined Statement: 
+             |Pos: 158 SpanInfo: undefined Statement: 
+              |Pos: 159 SpanInfo: undefined Statement: 
+               |Pos: 160 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        x += 10;
+
+   |Pos: 161 SpanInfo: undefined Statement: 
+    |Pos: 162 SpanInfo: undefined Statement: 
+     |Pos: 163 SpanInfo: undefined Statement: 
+      |Pos: 164 SpanInfo: undefined Statement: 
+       |Pos: 165 SpanInfo: undefined Statement: 
+        |Pos: 166 SpanInfo: undefined Statement: 
+         |Pos: 167 SpanInfo: undefined Statement: 
+          |Pos: 168 SpanInfo: undefined Statement: 
+           |Pos: 169 SpanInfo: {"start":169,"length":1} Statement: 
+           |x
+            |Pos: 170 SpanInfo: {"start":169,"length":1} Statement: 
+            |x
+             |Pos: 171 SpanInfo: undefined Statement: 
+              |Pos: 172 SpanInfo: undefined Statement: 
+               |Pos: 173 SpanInfo: undefined Statement: 
+                |Pos: 174 SpanInfo: undefined Statement: 
+                 |Pos: 175 SpanInfo: undefined Statement: 
+                  |Pos: 176 SpanInfo: undefined Statement: 
+                   |Pos: 177 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        x++;
+
+   |Pos: 178 SpanInfo: undefined Statement: 
+    |Pos: 179 SpanInfo: undefined Statement: 
+     |Pos: 180 SpanInfo: undefined Statement: 
+      |Pos: 181 SpanInfo: undefined Statement: 
+       |Pos: 182 SpanInfo: undefined Statement: 
+        |Pos: 183 SpanInfo: undefined Statement: 
+         |Pos: 184 SpanInfo: undefined Statement: 
+          |Pos: 185 SpanInfo: undefined Statement: 
+           |Pos: 186 SpanInfo: {"start":186,"length":1} Statement: 
+           |x
+            |Pos: 187 SpanInfo: {"start":186,"length":1} Statement: 
+            |x
+             |Pos: 188 SpanInfo: undefined Statement: 
+              |Pos: 189 SpanInfo: undefined Statement: 
+               |Pos: 190 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    }
+
+   |Pos: 191 SpanInfo: undefined Statement: 
+    |Pos: 192 SpanInfo: undefined Statement: 
+     |Pos: 193 SpanInfo: undefined Statement: 
+      |Pos: 194 SpanInfo: undefined Statement: 
+       |Pos: 195 SpanInfo: undefined Statement: 
+        |Pos: 196 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    var a = [
+
+   |Pos: 197 SpanInfo: undefined Statement: 
+    |Pos: 198 SpanInfo: undefined Statement: 
+     |Pos: 199 SpanInfo: undefined Statement: 
+      |Pos: 200 SpanInfo: undefined Statement: 
+       |Pos: 201 SpanInfo: undefined Statement: 
+        |Pos: 202 SpanInfo: undefined Statement: 
+         |Pos: 203 SpanInfo: undefined Statement: 
+          |Pos: 204 SpanInfo: undefined Statement: 
+           |Pos: 205 SpanInfo: {"start":205,"length":1} Statement: 
+           |a
+            |Pos: 206 SpanInfo: {"start":205,"length":1} Statement: 
+            |a
+             |Pos: 207 SpanInfo: undefined Statement: 
+              |Pos: 208 SpanInfo: undefined Statement: 
+               |Pos: 209 SpanInfo: undefined Statement: 
+                |Pos: 210 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        1,
+
+   |Pos: 211 SpanInfo: undefined Statement: 
+    |Pos: 212 SpanInfo: undefined Statement: 
+     |Pos: 213 SpanInfo: undefined Statement: 
+      |Pos: 214 SpanInfo: undefined Statement: 
+       |Pos: 215 SpanInfo: undefined Statement: 
+        |Pos: 216 SpanInfo: undefined Statement: 
+         |Pos: 217 SpanInfo: undefined Statement: 
+          |Pos: 218 SpanInfo: undefined Statement: 
+           |Pos: 219 SpanInfo: undefined Statement: 
+            |Pos: 220 SpanInfo: undefined Statement: 
+             |Pos: 221 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        2,
+
+   |Pos: 222 SpanInfo: undefined Statement: 
+    |Pos: 223 SpanInfo: undefined Statement: 
+     |Pos: 224 SpanInfo: undefined Statement: 
+      |Pos: 225 SpanInfo: undefined Statement: 
+       |Pos: 226 SpanInfo: undefined Statement: 
+        |Pos: 227 SpanInfo: undefined Statement: 
+         |Pos: 228 SpanInfo: undefined Statement: 
+          |Pos: 229 SpanInfo: undefined Statement: 
+           |Pos: 230 SpanInfo: undefined Statement: 
+            |Pos: 231 SpanInfo: undefined Statement: 
+             |Pos: 232 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        3
+
+   |Pos: 233 SpanInfo: undefined Statement: 
+    |Pos: 234 SpanInfo: undefined Statement: 
+     |Pos: 235 SpanInfo: undefined Statement: 
+      |Pos: 236 SpanInfo: undefined Statement: 
+       |Pos: 237 SpanInfo: undefined Statement: 
+        |Pos: 238 SpanInfo: undefined Statement: 
+         |Pos: 239 SpanInfo: undefined Statement: 
+          |Pos: 240 SpanInfo: undefined Statement: 
+           |Pos: 241 SpanInfo: undefined Statement: 
+            |Pos: 242 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    ];
+
+   |Pos: 243 SpanInfo: undefined Statement: 
+    |Pos: 244 SpanInfo: undefined Statement: 
+     |Pos: 245 SpanInfo: undefined Statement: 
+      |Pos: 246 SpanInfo: undefined Statement: 
+       |Pos: 247 SpanInfo: undefined Statement: 
+        |Pos: 248 SpanInfo: undefined Statement: 
+         |Pos: 249 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    var obj = {
+
+   |Pos: 250 SpanInfo: undefined Statement: 
+    |Pos: 251 SpanInfo: undefined Statement: 
+     |Pos: 252 SpanInfo: undefined Statement: 
+      |Pos: 253 SpanInfo: undefined Statement: 
+       |Pos: 254 SpanInfo: undefined Statement: 
+        |Pos: 255 SpanInfo: undefined Statement: 
+         |Pos: 256 SpanInfo: undefined Statement: 
+          |Pos: 257 SpanInfo: undefined Statement: 
+           |Pos: 258 SpanInfo: {"start":258,"length":3} Statement: 
+           |obj
+            |Pos: 259 SpanInfo: {"start":258,"length":3} Statement: 
+            |obj
+             |Pos: 260 SpanInfo: {"start":258,"length":3} Statement: 
+             |obj
+              |Pos: 261 SpanInfo: {"start":258,"length":3} Statement: 
+              |obj
+               |Pos: 262 SpanInfo: undefined Statement: 
+                |Pos: 263 SpanInfo: undefined Statement: 
+                 |Pos: 264 SpanInfo: undefined Statement: 
+                  |Pos: 265 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        z: 1,
+
+   |Pos: 266 SpanInfo: undefined Statement: 
+    |Pos: 267 SpanInfo: undefined Statement: 
+     |Pos: 268 SpanInfo: undefined Statement: 
+      |Pos: 269 SpanInfo: undefined Statement: 
+       |Pos: 270 SpanInfo: undefined Statement: 
+        |Pos: 271 SpanInfo: undefined Statement: 
+         |Pos: 272 SpanInfo: undefined Statement: 
+          |Pos: 273 SpanInfo: undefined Statement: 
+           |Pos: 274 SpanInfo: {"start":274,"length":1} Statement: 
+           |z
+            |Pos: 275 SpanInfo: {"start":274,"length":1} Statement: 
+            |z
+             |Pos: 276 SpanInfo: undefined Statement: 
+              |Pos: 277 SpanInfo: undefined Statement: 
+               |Pos: 278 SpanInfo: undefined Statement: 
+                |Pos: 279 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        q: "hello"
+
+   |Pos: 280 SpanInfo: undefined Statement: 
+    |Pos: 281 SpanInfo: undefined Statement: 
+     |Pos: 282 SpanInfo: undefined Statement: 
+      |Pos: 283 SpanInfo: undefined Statement: 
+       |Pos: 284 SpanInfo: undefined Statement: 
+        |Pos: 285 SpanInfo: undefined Statement: 
+         |Pos: 286 SpanInfo: undefined Statement: 
+          |Pos: 287 SpanInfo: undefined Statement: 
+           |Pos: 288 SpanInfo: {"start":288,"length":1} Statement: 
+           |q
+            |Pos: 289 SpanInfo: {"start":288,"length":1} Statement: 
+            |q
+             |Pos: 290 SpanInfo: undefined Statement: 
+              |Pos: 291 SpanInfo: {"start":291,"length":7} Statement: 
+              |"hello"
+               |Pos: 292 SpanInfo: {"start":291,"length":7} Statement: 
+               |"hello"
+                |Pos: 293 SpanInfo: {"start":291,"length":7} Statement: 
+                |"hello"
+                 |Pos: 294 SpanInfo: {"start":291,"length":7} Statement: 
+                 |"hello"
+                  |Pos: 295 SpanInfo: {"start":291,"length":7} Statement: 
+                  |"hello"
+                   |Pos: 296 SpanInfo: {"start":291,"length":7} Statement: 
+                   |"hello"
+                    |Pos: 297 SpanInfo: {"start":291,"length":7} Statement: 
+                    |"hello"
+                     |Pos: 298 SpanInfo: {"start":291,"length":7} Statement: 
+                     |"hello"
+--------------------------------
+>>>>    };
+
+   |Pos: 299 SpanInfo: undefined Statement: 
+    |Pos: 300 SpanInfo: undefined Statement: 
+     |Pos: 301 SpanInfo: undefined Statement: 
+      |Pos: 302 SpanInfo: undefined Statement: 
+       |Pos: 303 SpanInfo: undefined Statement: 
+        |Pos: 304 SpanInfo: undefined Statement: 
+         |Pos: 305 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    for (var j in a) {
+
+   |Pos: 306 SpanInfo: undefined Statement: 
+    |Pos: 307 SpanInfo: undefined Statement: 
+     |Pos: 308 SpanInfo: undefined Statement: 
+      |Pos: 309 SpanInfo: undefined Statement: 
+       |Pos: 310 SpanInfo: undefined Statement: 
+        |Pos: 311 SpanInfo: undefined Statement: 
+         |Pos: 312 SpanInfo: undefined Statement: 
+          |Pos: 313 SpanInfo: undefined Statement: 
+           |Pos: 314 SpanInfo: undefined Statement: 
+            |Pos: 315 SpanInfo: undefined Statement: 
+             |Pos: 316 SpanInfo: undefined Statement: 
+              |Pos: 317 SpanInfo: undefined Statement: 
+               |Pos: 318 SpanInfo: undefined Statement: 
+                |Pos: 319 SpanInfo: {"start":319,"length":1} Statement: 
+                |j
+                 |Pos: 320 SpanInfo: {"start":319,"length":1} Statement: 
+                 |j
+                  |Pos: 321 SpanInfo: undefined Statement: 
+                   |Pos: 322 SpanInfo: undefined Statement: 
+                    |Pos: 323 SpanInfo: undefined Statement: 
+                     |Pos: 324 SpanInfo: {"start":324,"length":1} Statement: 
+                     |a
+                      |Pos: 325 SpanInfo: {"start":324,"length":1} Statement: 
+                      |a
+                       |Pos: 326 SpanInfo: undefined Statement: 
+                        |Pos: 327 SpanInfo: undefined Statement: 
+                         |Pos: 328 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        obj.z = a[j];
+
+   |Pos: 329 SpanInfo: undefined Statement: 
+    |Pos: 330 SpanInfo: undefined Statement: 
+     |Pos: 331 SpanInfo: undefined Statement: 
+      |Pos: 332 SpanInfo: undefined Statement: 
+       |Pos: 333 SpanInfo: undefined Statement: 
+        |Pos: 334 SpanInfo: undefined Statement: 
+         |Pos: 335 SpanInfo: undefined Statement: 
+          |Pos: 336 SpanInfo: undefined Statement: 
+           |Pos: 337 SpanInfo: {"start":337,"length":3} Statement: 
+           |obj
+            |Pos: 338 SpanInfo: {"start":337,"length":3} Statement: 
+            |obj
+             |Pos: 339 SpanInfo: {"start":337,"length":3} Statement: 
+             |obj
+              |Pos: 340 SpanInfo: {"start":337,"length":3} Statement: 
+              |obj
+               |Pos: 341 SpanInfo: {"start":337,"length":5} Statement: 
+               |obj.z
+                |Pos: 342 SpanInfo: {"start":337,"length":5} Statement: 
+                |obj.z
+                 |Pos: 343 SpanInfo: undefined Statement: 
+                  |Pos: 344 SpanInfo: undefined Statement: 
+                   |Pos: 345 SpanInfo: {"start":345,"length":1} Statement: 
+                   |a
+                    |Pos: 346 SpanInfo: {"start":345,"length":1} Statement: 
+                    |a
+                     |Pos: 347 SpanInfo: {"start":347,"length":1} Statement: 
+                     |j
+                      |Pos: 348 SpanInfo: {"start":347,"length":1} Statement: 
+                      |j
+                       |Pos: 349 SpanInfo: undefined Statement: 
+                        |Pos: 350 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        var v = 10;
+
+   |Pos: 351 SpanInfo: undefined Statement: 
+    |Pos: 352 SpanInfo: undefined Statement: 
+     |Pos: 353 SpanInfo: undefined Statement: 
+      |Pos: 354 SpanInfo: undefined Statement: 
+       |Pos: 355 SpanInfo: undefined Statement: 
+        |Pos: 356 SpanInfo: undefined Statement: 
+         |Pos: 357 SpanInfo: undefined Statement: 
+          |Pos: 358 SpanInfo: undefined Statement: 
+           |Pos: 359 SpanInfo: undefined Statement: 
+            |Pos: 360 SpanInfo: undefined Statement: 
+             |Pos: 361 SpanInfo: undefined Statement: 
+              |Pos: 362 SpanInfo: undefined Statement: 
+               |Pos: 363 SpanInfo: {"start":363,"length":1} Statement: 
+               |v
+                |Pos: 364 SpanInfo: {"start":363,"length":1} Statement: 
+                |v
+                 |Pos: 365 SpanInfo: undefined Statement: 
+                  |Pos: 366 SpanInfo: undefined Statement: 
+                   |Pos: 367 SpanInfo: undefined Statement: 
+                    |Pos: 368 SpanInfo: undefined Statement: 
+                     |Pos: 369 SpanInfo: undefined Statement: 
+                      |Pos: 370 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    }
+
+   |Pos: 371 SpanInfo: undefined Statement: 
+    |Pos: 372 SpanInfo: undefined Statement: 
+     |Pos: 373 SpanInfo: undefined Statement: 
+      |Pos: 374 SpanInfo: undefined Statement: 
+       |Pos: 375 SpanInfo: undefined Statement: 
+        |Pos: 376 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    try {
+
+   |Pos: 377 SpanInfo: undefined Statement: 
+    |Pos: 378 SpanInfo: undefined Statement: 
+     |Pos: 379 SpanInfo: undefined Statement: 
+      |Pos: 380 SpanInfo: undefined Statement: 
+       |Pos: 381 SpanInfo: undefined Statement: 
+        |Pos: 382 SpanInfo: undefined Statement: 
+         |Pos: 383 SpanInfo: undefined Statement: 
+          |Pos: 384 SpanInfo: undefined Statement: 
+           |Pos: 385 SpanInfo: undefined Statement: 
+            |Pos: 386 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        obj.q = "ohhh";
+
+   |Pos: 387 SpanInfo: undefined Statement: 
+    |Pos: 388 SpanInfo: undefined Statement: 
+     |Pos: 389 SpanInfo: undefined Statement: 
+      |Pos: 390 SpanInfo: undefined Statement: 
+       |Pos: 391 SpanInfo: undefined Statement: 
+        |Pos: 392 SpanInfo: undefined Statement: 
+         |Pos: 393 SpanInfo: undefined Statement: 
+          |Pos: 394 SpanInfo: undefined Statement: 
+           |Pos: 395 SpanInfo: {"start":395,"length":3} Statement: 
+           |obj
+            |Pos: 396 SpanInfo: {"start":395,"length":3} Statement: 
+            |obj
+             |Pos: 397 SpanInfo: {"start":395,"length":3} Statement: 
+             |obj
+              |Pos: 398 SpanInfo: {"start":395,"length":3} Statement: 
+              |obj
+               |Pos: 399 SpanInfo: {"start":395,"length":5} Statement: 
+               |obj.q
+                |Pos: 400 SpanInfo: {"start":395,"length":5} Statement: 
+                |obj.q
+                 |Pos: 401 SpanInfo: undefined Statement: 
+                  |Pos: 402 SpanInfo: undefined Statement: 
+                   |Pos: 403 SpanInfo: {"start":403,"length":6} Statement: 
+                   |"ohhh"
+                    |Pos: 404 SpanInfo: {"start":403,"length":6} Statement: 
+                    |"ohhh"
+                     |Pos: 405 SpanInfo: {"start":403,"length":6} Statement: 
+                     |"ohhh"
+                      |Pos: 406 SpanInfo: {"start":403,"length":6} Statement: 
+                      |"ohhh"
+                       |Pos: 407 SpanInfo: {"start":403,"length":6} Statement: 
+                       |"ohhh"
+                        |Pos: 408 SpanInfo: {"start":403,"length":6} Statement: 
+                        |"ohhh"
+                         |Pos: 409 SpanInfo: {"start":403,"length":6} Statement: 
+                         |"ohhh"
+                          |Pos: 410 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    } catch (e) {
+
+   |Pos: 411 SpanInfo: undefined Statement: 
+    |Pos: 412 SpanInfo: undefined Statement: 
+     |Pos: 413 SpanInfo: undefined Statement: 
+      |Pos: 414 SpanInfo: undefined Statement: 
+       |Pos: 415 SpanInfo: undefined Statement: 
+        |Pos: 416 SpanInfo: undefined Statement: 
+         |Pos: 417 SpanInfo: undefined Statement: 
+          |Pos: 418 SpanInfo: undefined Statement: 
+           |Pos: 419 SpanInfo: undefined Statement: 
+            |Pos: 420 SpanInfo: undefined Statement: 
+             |Pos: 421 SpanInfo: undefined Statement: 
+              |Pos: 422 SpanInfo: undefined Statement: 
+               |Pos: 423 SpanInfo: undefined Statement: 
+                |Pos: 424 SpanInfo: {"start":424,"length":1} Statement: 
+                |e
+                 |Pos: 425 SpanInfo: {"start":424,"length":1} Statement: 
+                 |e
+                  |Pos: 426 SpanInfo: undefined Statement: 
+                   |Pos: 427 SpanInfo: undefined Statement: 
+                    |Pos: 428 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        if (obj.z < 10) {
+
+   |Pos: 429 SpanInfo: undefined Statement: 
+    |Pos: 430 SpanInfo: undefined Statement: 
+     |Pos: 431 SpanInfo: undefined Statement: 
+      |Pos: 432 SpanInfo: undefined Statement: 
+       |Pos: 433 SpanInfo: undefined Statement: 
+        |Pos: 434 SpanInfo: undefined Statement: 
+         |Pos: 435 SpanInfo: undefined Statement: 
+          |Pos: 436 SpanInfo: undefined Statement: 
+           |Pos: 437 SpanInfo: undefined Statement: 
+            |Pos: 438 SpanInfo: undefined Statement: 
+             |Pos: 439 SpanInfo: undefined Statement: 
+              |Pos: 440 SpanInfo: undefined Statement: 
+               |Pos: 441 SpanInfo: {"start":441,"length":3} Statement: 
+               |obj
+                |Pos: 442 SpanInfo: {"start":441,"length":3} Statement: 
+                |obj
+                 |Pos: 443 SpanInfo: {"start":441,"length":3} Statement: 
+                 |obj
+                  |Pos: 444 SpanInfo: {"start":441,"length":3} Statement: 
+                  |obj
+                   |Pos: 445 SpanInfo: {"start":441,"length":5} Statement: 
+                   |obj.z
+                    |Pos: 446 SpanInfo: {"start":441,"length":5} Statement: 
+                    |obj.z
+                     |Pos: 447 SpanInfo: undefined Statement: 
+                      |Pos: 448 SpanInfo: undefined Statement: 
+                       |Pos: 449 SpanInfo: undefined Statement: 
+                        |Pos: 450 SpanInfo: undefined Statement: 
+                         |Pos: 451 SpanInfo: undefined Statement: 
+                          |Pos: 452 SpanInfo: undefined Statement: 
+                           |Pos: 453 SpanInfo: undefined Statement: 
+                            |Pos: 454 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>            obj.z = 12;
+
+   |Pos: 455 SpanInfo: undefined Statement: 
+    |Pos: 456 SpanInfo: undefined Statement: 
+     |Pos: 457 SpanInfo: undefined Statement: 
+      |Pos: 458 SpanInfo: undefined Statement: 
+       |Pos: 459 SpanInfo: undefined Statement: 
+        |Pos: 460 SpanInfo: undefined Statement: 
+         |Pos: 461 SpanInfo: undefined Statement: 
+          |Pos: 462 SpanInfo: undefined Statement: 
+           |Pos: 463 SpanInfo: undefined Statement: 
+            |Pos: 464 SpanInfo: undefined Statement: 
+             |Pos: 465 SpanInfo: undefined Statement: 
+              |Pos: 466 SpanInfo: undefined Statement: 
+               |Pos: 467 SpanInfo: {"start":467,"length":3} Statement: 
+               |obj
+                |Pos: 468 SpanInfo: {"start":467,"length":3} Statement: 
+                |obj
+                 |Pos: 469 SpanInfo: {"start":467,"length":3} Statement: 
+                 |obj
+                  |Pos: 470 SpanInfo: {"start":467,"length":3} Statement: 
+                  |obj
+                   |Pos: 471 SpanInfo: {"start":467,"length":5} Statement: 
+                   |obj.z
+                    |Pos: 472 SpanInfo: {"start":467,"length":5} Statement: 
+                    |obj.z
+                     |Pos: 473 SpanInfo: undefined Statement: 
+                      |Pos: 474 SpanInfo: undefined Statement: 
+                       |Pos: 475 SpanInfo: undefined Statement: 
+                        |Pos: 476 SpanInfo: undefined Statement: 
+                         |Pos: 477 SpanInfo: undefined Statement: 
+                          |Pos: 478 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        } else {
+
+   |Pos: 479 SpanInfo: undefined Statement: 
+    |Pos: 480 SpanInfo: undefined Statement: 
+     |Pos: 481 SpanInfo: undefined Statement: 
+      |Pos: 482 SpanInfo: undefined Statement: 
+       |Pos: 483 SpanInfo: undefined Statement: 
+        |Pos: 484 SpanInfo: undefined Statement: 
+         |Pos: 485 SpanInfo: undefined Statement: 
+          |Pos: 486 SpanInfo: undefined Statement: 
+           |Pos: 487 SpanInfo: undefined Statement: 
+            |Pos: 488 SpanInfo: undefined Statement: 
+             |Pos: 489 SpanInfo: undefined Statement: 
+              |Pos: 490 SpanInfo: undefined Statement: 
+               |Pos: 491 SpanInfo: undefined Statement: 
+                |Pos: 492 SpanInfo: undefined Statement: 
+                 |Pos: 493 SpanInfo: undefined Statement: 
+                  |Pos: 494 SpanInfo: undefined Statement: 
+                   |Pos: 495 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>            obj.q = "hmm";
+
+   |Pos: 496 SpanInfo: undefined Statement: 
+    |Pos: 497 SpanInfo: undefined Statement: 
+     |Pos: 498 SpanInfo: undefined Statement: 
+      |Pos: 499 SpanInfo: undefined Statement: 
+       |Pos: 500 SpanInfo: undefined Statement: 
+        |Pos: 501 SpanInfo: undefined Statement: 
+         |Pos: 502 SpanInfo: undefined Statement: 
+          |Pos: 503 SpanInfo: undefined Statement: 
+           |Pos: 504 SpanInfo: undefined Statement: 
+            |Pos: 505 SpanInfo: undefined Statement: 
+             |Pos: 506 SpanInfo: undefined Statement: 
+              |Pos: 507 SpanInfo: undefined Statement: 
+               |Pos: 508 SpanInfo: {"start":508,"length":3} Statement: 
+               |obj
+                |Pos: 509 SpanInfo: {"start":508,"length":3} Statement: 
+                |obj
+                 |Pos: 510 SpanInfo: {"start":508,"length":3} Statement: 
+                 |obj
+                  |Pos: 511 SpanInfo: {"start":508,"length":3} Statement: 
+                  |obj
+                   |Pos: 512 SpanInfo: {"start":508,"length":5} Statement: 
+                   |obj.q
+                    |Pos: 513 SpanInfo: {"start":508,"length":5} Statement: 
+                    |obj.q
+                     |Pos: 514 SpanInfo: undefined Statement: 
+                      |Pos: 515 SpanInfo: undefined Statement: 
+                       |Pos: 516 SpanInfo: {"start":516,"length":5} Statement: 
+                       |"hmm"
+                        |Pos: 517 SpanInfo: {"start":516,"length":5} Statement: 
+                        |"hmm"
+                         |Pos: 518 SpanInfo: {"start":516,"length":5} Statement: 
+                         |"hmm"
+                          |Pos: 519 SpanInfo: {"start":516,"length":5} Statement: 
+                          |"hmm"
+                           |Pos: 520 SpanInfo: {"start":516,"length":5} Statement: 
+                           |"hmm"
+                            |Pos: 521 SpanInfo: {"start":516,"length":5} Statement: 
+                            |"hmm"
+                             |Pos: 522 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        }
+
+   |Pos: 523 SpanInfo: undefined Statement: 
+    |Pos: 524 SpanInfo: undefined Statement: 
+     |Pos: 525 SpanInfo: undefined Statement: 
+      |Pos: 526 SpanInfo: undefined Statement: 
+       |Pos: 527 SpanInfo: undefined Statement: 
+        |Pos: 528 SpanInfo: undefined Statement: 
+         |Pos: 529 SpanInfo: undefined Statement: 
+          |Pos: 530 SpanInfo: undefined Statement: 
+           |Pos: 531 SpanInfo: undefined Statement: 
+            |Pos: 532 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    }
+
+   |Pos: 533 SpanInfo: undefined Statement: 
+    |Pos: 534 SpanInfo: undefined Statement: 
+     |Pos: 535 SpanInfo: undefined Statement: 
+      |Pos: 536 SpanInfo: undefined Statement: 
+       |Pos: 537 SpanInfo: undefined Statement: 
+        |Pos: 538 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    try {
+
+   |Pos: 539 SpanInfo: undefined Statement: 
+    |Pos: 540 SpanInfo: undefined Statement: 
+     |Pos: 541 SpanInfo: undefined Statement: 
+      |Pos: 542 SpanInfo: undefined Statement: 
+       |Pos: 543 SpanInfo: undefined Statement: 
+        |Pos: 544 SpanInfo: undefined Statement: 
+         |Pos: 545 SpanInfo: undefined Statement: 
+          |Pos: 546 SpanInfo: undefined Statement: 
+           |Pos: 547 SpanInfo: undefined Statement: 
+            |Pos: 548 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        throw new Error();
+
+   |Pos: 549 SpanInfo: undefined Statement: 
+    |Pos: 550 SpanInfo: undefined Statement: 
+     |Pos: 551 SpanInfo: undefined Statement: 
+      |Pos: 552 SpanInfo: undefined Statement: 
+       |Pos: 553 SpanInfo: undefined Statement: 
+        |Pos: 554 SpanInfo: undefined Statement: 
+         |Pos: 555 SpanInfo: undefined Statement: 
+          |Pos: 556 SpanInfo: undefined Statement: 
+           |Pos: 557 SpanInfo: undefined Statement: 
+            |Pos: 558 SpanInfo: undefined Statement: 
+             |Pos: 559 SpanInfo: undefined Statement: 
+              |Pos: 560 SpanInfo: undefined Statement: 
+               |Pos: 561 SpanInfo: undefined Statement: 
+                |Pos: 562 SpanInfo: undefined Statement: 
+                 |Pos: 563 SpanInfo: undefined Statement: 
+                  |Pos: 564 SpanInfo: undefined Statement: 
+                   |Pos: 565 SpanInfo: undefined Statement: 
+                    |Pos: 566 SpanInfo: undefined Statement: 
+                     |Pos: 567 SpanInfo: {"start":567,"length":5} Statement: 
+                     |Error
+                      |Pos: 568 SpanInfo: {"start":567,"length":5} Statement: 
+                      |Error
+                       |Pos: 569 SpanInfo: {"start":567,"length":5} Statement: 
+                       |Error
+                        |Pos: 570 SpanInfo: {"start":567,"length":5} Statement: 
+                        |Error
+                         |Pos: 571 SpanInfo: {"start":567,"length":5} Statement: 
+                         |Error
+                          |Pos: 572 SpanInfo: {"start":567,"length":5} Statement: 
+                          |Error
+                           |Pos: 573 SpanInfo: undefined Statement: 
+                            |Pos: 574 SpanInfo: undefined Statement: 
+                             |Pos: 575 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    } catch (e1) {
+
+   |Pos: 576 SpanInfo: undefined Statement: 
+    |Pos: 577 SpanInfo: undefined Statement: 
+     |Pos: 578 SpanInfo: undefined Statement: 
+      |Pos: 579 SpanInfo: undefined Statement: 
+       |Pos: 580 SpanInfo: undefined Statement: 
+        |Pos: 581 SpanInfo: undefined Statement: 
+         |Pos: 582 SpanInfo: undefined Statement: 
+          |Pos: 583 SpanInfo: undefined Statement: 
+           |Pos: 584 SpanInfo: undefined Statement: 
+            |Pos: 585 SpanInfo: undefined Statement: 
+             |Pos: 586 SpanInfo: undefined Statement: 
+              |Pos: 587 SpanInfo: undefined Statement: 
+               |Pos: 588 SpanInfo: undefined Statement: 
+                |Pos: 589 SpanInfo: {"start":589,"length":2} Statement: 
+                |e1
+                 |Pos: 590 SpanInfo: {"start":589,"length":2} Statement: 
+                 |e1
+                  |Pos: 591 SpanInfo: {"start":589,"length":2} Statement: 
+                  |e1
+                   |Pos: 592 SpanInfo: undefined Statement: 
+                    |Pos: 593 SpanInfo: undefined Statement: 
+                     |Pos: 594 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        var b = e1;
+
+   |Pos: 595 SpanInfo: undefined Statement: 
+    |Pos: 596 SpanInfo: undefined Statement: 
+     |Pos: 597 SpanInfo: undefined Statement: 
+      |Pos: 598 SpanInfo: undefined Statement: 
+       |Pos: 599 SpanInfo: undefined Statement: 
+        |Pos: 600 SpanInfo: undefined Statement: 
+         |Pos: 601 SpanInfo: undefined Statement: 
+          |Pos: 602 SpanInfo: undefined Statement: 
+           |Pos: 603 SpanInfo: undefined Statement: 
+            |Pos: 604 SpanInfo: undefined Statement: 
+             |Pos: 605 SpanInfo: undefined Statement: 
+              |Pos: 606 SpanInfo: undefined Statement: 
+               |Pos: 607 SpanInfo: {"start":607,"length":1} Statement: 
+               |b
+                |Pos: 608 SpanInfo: {"start":607,"length":1} Statement: 
+                |b
+                 |Pos: 609 SpanInfo: undefined Statement: 
+                  |Pos: 610 SpanInfo: undefined Statement: 
+                   |Pos: 611 SpanInfo: {"start":611,"length":2} Statement: 
+                   |e1
+                    |Pos: 612 SpanInfo: {"start":611,"length":2} Statement: 
+                    |e1
+                     |Pos: 613 SpanInfo: {"start":611,"length":2} Statement: 
+                     |e1
+                      |Pos: 614 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    } finally {
+
+   |Pos: 615 SpanInfo: undefined Statement: 
+    |Pos: 616 SpanInfo: undefined Statement: 
+     |Pos: 617 SpanInfo: undefined Statement: 
+      |Pos: 618 SpanInfo: undefined Statement: 
+       |Pos: 619 SpanInfo: undefined Statement: 
+        |Pos: 620 SpanInfo: undefined Statement: 
+         |Pos: 621 SpanInfo: undefined Statement: 
+          |Pos: 622 SpanInfo: undefined Statement: 
+           |Pos: 623 SpanInfo: undefined Statement: 
+            |Pos: 624 SpanInfo: undefined Statement: 
+             |Pos: 625 SpanInfo: undefined Statement: 
+              |Pos: 626 SpanInfo: undefined Statement: 
+               |Pos: 627 SpanInfo: undefined Statement: 
+                |Pos: 628 SpanInfo: undefined Statement: 
+                 |Pos: 629 SpanInfo: undefined Statement: 
+                  |Pos: 630 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        y = 70;
+
+   |Pos: 631 SpanInfo: undefined Statement: 
+    |Pos: 632 SpanInfo: undefined Statement: 
+     |Pos: 633 SpanInfo: undefined Statement: 
+      |Pos: 634 SpanInfo: undefined Statement: 
+       |Pos: 635 SpanInfo: undefined Statement: 
+        |Pos: 636 SpanInfo: undefined Statement: 
+         |Pos: 637 SpanInfo: undefined Statement: 
+          |Pos: 638 SpanInfo: undefined Statement: 
+           |Pos: 639 SpanInfo: {"start":639,"length":1} Statement: 
+           |y
+            |Pos: 640 SpanInfo: {"start":639,"length":1} Statement: 
+            |y
+             |Pos: 641 SpanInfo: undefined Statement: 
+              |Pos: 642 SpanInfo: undefined Statement: 
+               |Pos: 643 SpanInfo: undefined Statement: 
+                |Pos: 644 SpanInfo: undefined Statement: 
+                 |Pos: 645 SpanInfo: undefined Statement: 
+                  |Pos: 646 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    }
+
+   |Pos: 647 SpanInfo: undefined Statement: 
+    |Pos: 648 SpanInfo: undefined Statement: 
+     |Pos: 649 SpanInfo: undefined Statement: 
+      |Pos: 650 SpanInfo: undefined Statement: 
+       |Pos: 651 SpanInfo: undefined Statement: 
+        |Pos: 652 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    with (obj) {
+
+   |Pos: 653 SpanInfo: undefined Statement: 
+    |Pos: 654 SpanInfo: undefined Statement: 
+     |Pos: 655 SpanInfo: undefined Statement: 
+      |Pos: 656 SpanInfo: undefined Statement: 
+       |Pos: 657 SpanInfo: undefined Statement: 
+        |Pos: 658 SpanInfo: undefined Statement: 
+         |Pos: 659 SpanInfo: undefined Statement: 
+          |Pos: 660 SpanInfo: undefined Statement: 
+           |Pos: 661 SpanInfo: undefined Statement: 
+            |Pos: 662 SpanInfo: undefined Statement: 
+             |Pos: 663 SpanInfo: {"start":663,"length":3} Statement: 
+             |obj
+              |Pos: 664 SpanInfo: {"start":663,"length":3} Statement: 
+              |obj
+               |Pos: 665 SpanInfo: {"start":663,"length":3} Statement: 
+               |obj
+                |Pos: 666 SpanInfo: {"start":663,"length":3} Statement: 
+                |obj
+                 |Pos: 667 SpanInfo: undefined Statement: 
+                  |Pos: 668 SpanInfo: undefined Statement: 
+                   |Pos: 669 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        i = 2;
+
+   |Pos: 670 SpanInfo: undefined Statement: 
+    |Pos: 671 SpanInfo: undefined Statement: 
+     |Pos: 672 SpanInfo: undefined Statement: 
+      |Pos: 673 SpanInfo: undefined Statement: 
+       |Pos: 674 SpanInfo: undefined Statement: 
+        |Pos: 675 SpanInfo: undefined Statement: 
+         |Pos: 676 SpanInfo: undefined Statement: 
+          |Pos: 677 SpanInfo: undefined Statement: 
+           |Pos: 678 SpanInfo: {"start":678,"length":1} Statement: 
+           |i
+            |Pos: 679 SpanInfo: {"start":678,"length":1} Statement: 
+            |i
+             |Pos: 680 SpanInfo: undefined Statement: 
+              |Pos: 681 SpanInfo: undefined Statement: 
+               |Pos: 682 SpanInfo: undefined Statement: 
+                |Pos: 683 SpanInfo: undefined Statement: 
+                 |Pos: 684 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        z = 10;
+
+   |Pos: 685 SpanInfo: undefined Statement: 
+    |Pos: 686 SpanInfo: undefined Statement: 
+     |Pos: 687 SpanInfo: undefined Statement: 
+      |Pos: 688 SpanInfo: undefined Statement: 
+       |Pos: 689 SpanInfo: undefined Statement: 
+        |Pos: 690 SpanInfo: undefined Statement: 
+         |Pos: 691 SpanInfo: undefined Statement: 
+          |Pos: 692 SpanInfo: undefined Statement: 
+           |Pos: 693 SpanInfo: {"start":693,"length":1} Statement: 
+           |z
+            |Pos: 694 SpanInfo: {"start":693,"length":1} Statement: 
+            |z
+             |Pos: 695 SpanInfo: undefined Statement: 
+              |Pos: 696 SpanInfo: undefined Statement: 
+               |Pos: 697 SpanInfo: undefined Statement: 
+                |Pos: 698 SpanInfo: undefined Statement: 
+                 |Pos: 699 SpanInfo: undefined Statement: 
+                  |Pos: 700 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    }
+
+   |Pos: 701 SpanInfo: undefined Statement: 
+    |Pos: 702 SpanInfo: undefined Statement: 
+     |Pos: 703 SpanInfo: undefined Statement: 
+      |Pos: 704 SpanInfo: undefined Statement: 
+       |Pos: 705 SpanInfo: undefined Statement: 
+        |Pos: 706 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    switch (obj.z) {
+
+   |Pos: 707 SpanInfo: undefined Statement: 
+    |Pos: 708 SpanInfo: undefined Statement: 
+     |Pos: 709 SpanInfo: undefined Statement: 
+      |Pos: 710 SpanInfo: undefined Statement: 
+       |Pos: 711 SpanInfo: undefined Statement: 
+        |Pos: 712 SpanInfo: undefined Statement: 
+         |Pos: 713 SpanInfo: undefined Statement: 
+          |Pos: 714 SpanInfo: undefined Statement: 
+           |Pos: 715 SpanInfo: undefined Statement: 
+            |Pos: 716 SpanInfo: undefined Statement: 
+             |Pos: 717 SpanInfo: undefined Statement: 
+              |Pos: 718 SpanInfo: undefined Statement: 
+               |Pos: 719 SpanInfo: {"start":719,"length":3} Statement: 
+               |obj
+                |Pos: 720 SpanInfo: {"start":719,"length":3} Statement: 
+                |obj
+                 |Pos: 721 SpanInfo: {"start":719,"length":3} Statement: 
+                 |obj
+                  |Pos: 722 SpanInfo: {"start":719,"length":3} Statement: 
+                  |obj
+                   |Pos: 723 SpanInfo: {"start":719,"length":5} Statement: 
+                   |obj.z
+                    |Pos: 724 SpanInfo: {"start":719,"length":5} Statement: 
+                    |obj.z
+                     |Pos: 725 SpanInfo: undefined Statement: 
+                      |Pos: 726 SpanInfo: undefined Statement: 
+                       |Pos: 727 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        case 0: {
+
+   |Pos: 728 SpanInfo: undefined Statement: 
+    |Pos: 729 SpanInfo: undefined Statement: 
+     |Pos: 730 SpanInfo: undefined Statement: 
+      |Pos: 731 SpanInfo: undefined Statement: 
+       |Pos: 732 SpanInfo: undefined Statement: 
+        |Pos: 733 SpanInfo: undefined Statement: 
+         |Pos: 734 SpanInfo: undefined Statement: 
+          |Pos: 735 SpanInfo: undefined Statement: 
+           |Pos: 736 SpanInfo: undefined Statement: 
+            |Pos: 737 SpanInfo: undefined Statement: 
+             |Pos: 738 SpanInfo: undefined Statement: 
+              |Pos: 739 SpanInfo: undefined Statement: 
+               |Pos: 740 SpanInfo: undefined Statement: 
+                |Pos: 741 SpanInfo: undefined Statement: 
+                 |Pos: 742 SpanInfo: undefined Statement: 
+                  |Pos: 743 SpanInfo: undefined Statement: 
+                   |Pos: 744 SpanInfo: undefined Statement: 
+                    |Pos: 745 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>            x++;
+
+   |Pos: 746 SpanInfo: undefined Statement: 
+    |Pos: 747 SpanInfo: undefined Statement: 
+     |Pos: 748 SpanInfo: undefined Statement: 
+      |Pos: 749 SpanInfo: undefined Statement: 
+       |Pos: 750 SpanInfo: undefined Statement: 
+        |Pos: 751 SpanInfo: undefined Statement: 
+         |Pos: 752 SpanInfo: undefined Statement: 
+          |Pos: 753 SpanInfo: undefined Statement: 
+           |Pos: 754 SpanInfo: undefined Statement: 
+            |Pos: 755 SpanInfo: undefined Statement: 
+             |Pos: 756 SpanInfo: undefined Statement: 
+              |Pos: 757 SpanInfo: undefined Statement: 
+               |Pos: 758 SpanInfo: {"start":758,"length":1} Statement: 
+               |x
+                |Pos: 759 SpanInfo: {"start":758,"length":1} Statement: 
+                |x
+                 |Pos: 760 SpanInfo: undefined Statement: 
+                  |Pos: 761 SpanInfo: undefined Statement: 
+                   |Pos: 762 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>            break;
+
+   |Pos: 763 SpanInfo: undefined Statement: 
+    |Pos: 764 SpanInfo: undefined Statement: 
+     |Pos: 765 SpanInfo: undefined Statement: 
+      |Pos: 766 SpanInfo: undefined Statement: 
+       |Pos: 767 SpanInfo: undefined Statement: 
+        |Pos: 768 SpanInfo: undefined Statement: 
+         |Pos: 769 SpanInfo: undefined Statement: 
+          |Pos: 770 SpanInfo: undefined Statement: 
+           |Pos: 771 SpanInfo: undefined Statement: 
+            |Pos: 772 SpanInfo: undefined Statement: 
+             |Pos: 773 SpanInfo: undefined Statement: 
+              |Pos: 774 SpanInfo: undefined Statement: 
+               |Pos: 775 SpanInfo: undefined Statement: 
+                |Pos: 776 SpanInfo: undefined Statement: 
+                 |Pos: 777 SpanInfo: undefined Statement: 
+                  |Pos: 778 SpanInfo: undefined Statement: 
+                   |Pos: 779 SpanInfo: undefined Statement: 
+                    |Pos: 780 SpanInfo: undefined Statement: 
+                     |Pos: 781 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>
+
+   |Pos: 782 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        }
+
+   |Pos: 783 SpanInfo: undefined Statement: 
+    |Pos: 784 SpanInfo: undefined Statement: 
+     |Pos: 785 SpanInfo: undefined Statement: 
+      |Pos: 786 SpanInfo: undefined Statement: 
+       |Pos: 787 SpanInfo: undefined Statement: 
+        |Pos: 788 SpanInfo: undefined Statement: 
+         |Pos: 789 SpanInfo: undefined Statement: 
+          |Pos: 790 SpanInfo: undefined Statement: 
+           |Pos: 791 SpanInfo: undefined Statement: 
+            |Pos: 792 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        case 1: {
+
+   |Pos: 793 SpanInfo: undefined Statement: 
+    |Pos: 794 SpanInfo: undefined Statement: 
+     |Pos: 795 SpanInfo: undefined Statement: 
+      |Pos: 796 SpanInfo: undefined Statement: 
+       |Pos: 797 SpanInfo: undefined Statement: 
+        |Pos: 798 SpanInfo: undefined Statement: 
+         |Pos: 799 SpanInfo: undefined Statement: 
+          |Pos: 800 SpanInfo: undefined Statement: 
+           |Pos: 801 SpanInfo: undefined Statement: 
+            |Pos: 802 SpanInfo: undefined Statement: 
+             |Pos: 803 SpanInfo: undefined Statement: 
+              |Pos: 804 SpanInfo: undefined Statement: 
+               |Pos: 805 SpanInfo: undefined Statement: 
+                |Pos: 806 SpanInfo: undefined Statement: 
+                 |Pos: 807 SpanInfo: undefined Statement: 
+                  |Pos: 808 SpanInfo: undefined Statement: 
+                   |Pos: 809 SpanInfo: undefined Statement: 
+                    |Pos: 810 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>            x--;
+
+   |Pos: 811 SpanInfo: undefined Statement: 
+    |Pos: 812 SpanInfo: undefined Statement: 
+     |Pos: 813 SpanInfo: undefined Statement: 
+      |Pos: 814 SpanInfo: undefined Statement: 
+       |Pos: 815 SpanInfo: undefined Statement: 
+        |Pos: 816 SpanInfo: undefined Statement: 
+         |Pos: 817 SpanInfo: undefined Statement: 
+          |Pos: 818 SpanInfo: undefined Statement: 
+           |Pos: 819 SpanInfo: undefined Statement: 
+            |Pos: 820 SpanInfo: undefined Statement: 
+             |Pos: 821 SpanInfo: undefined Statement: 
+              |Pos: 822 SpanInfo: undefined Statement: 
+               |Pos: 823 SpanInfo: {"start":823,"length":1} Statement: 
+               |x
+                |Pos: 824 SpanInfo: {"start":823,"length":1} Statement: 
+                |x
+                 |Pos: 825 SpanInfo: undefined Statement: 
+                  |Pos: 826 SpanInfo: undefined Statement: 
+                   |Pos: 827 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>            break;
+
+   |Pos: 828 SpanInfo: undefined Statement: 
+    |Pos: 829 SpanInfo: undefined Statement: 
+     |Pos: 830 SpanInfo: undefined Statement: 
+      |Pos: 831 SpanInfo: undefined Statement: 
+       |Pos: 832 SpanInfo: undefined Statement: 
+        |Pos: 833 SpanInfo: undefined Statement: 
+         |Pos: 834 SpanInfo: undefined Statement: 
+          |Pos: 835 SpanInfo: undefined Statement: 
+           |Pos: 836 SpanInfo: undefined Statement: 
+            |Pos: 837 SpanInfo: undefined Statement: 
+             |Pos: 838 SpanInfo: undefined Statement: 
+              |Pos: 839 SpanInfo: undefined Statement: 
+               |Pos: 840 SpanInfo: undefined Statement: 
+                |Pos: 841 SpanInfo: undefined Statement: 
+                 |Pos: 842 SpanInfo: undefined Statement: 
+                  |Pos: 843 SpanInfo: undefined Statement: 
+                   |Pos: 844 SpanInfo: undefined Statement: 
+                    |Pos: 845 SpanInfo: undefined Statement: 
+                     |Pos: 846 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>
+
+   |Pos: 847 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        }
+
+   |Pos: 848 SpanInfo: undefined Statement: 
+    |Pos: 849 SpanInfo: undefined Statement: 
+     |Pos: 850 SpanInfo: undefined Statement: 
+      |Pos: 851 SpanInfo: undefined Statement: 
+       |Pos: 852 SpanInfo: undefined Statement: 
+        |Pos: 853 SpanInfo: undefined Statement: 
+         |Pos: 854 SpanInfo: undefined Statement: 
+          |Pos: 855 SpanInfo: undefined Statement: 
+           |Pos: 856 SpanInfo: undefined Statement: 
+            |Pos: 857 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        default: {
+
+   |Pos: 858 SpanInfo: undefined Statement: 
+    |Pos: 859 SpanInfo: undefined Statement: 
+     |Pos: 860 SpanInfo: undefined Statement: 
+      |Pos: 861 SpanInfo: undefined Statement: 
+       |Pos: 862 SpanInfo: undefined Statement: 
+        |Pos: 863 SpanInfo: undefined Statement: 
+         |Pos: 864 SpanInfo: undefined Statement: 
+          |Pos: 865 SpanInfo: undefined Statement: 
+           |Pos: 866 SpanInfo: undefined Statement: 
+            |Pos: 867 SpanInfo: undefined Statement: 
+             |Pos: 868 SpanInfo: undefined Statement: 
+              |Pos: 869 SpanInfo: undefined Statement: 
+               |Pos: 870 SpanInfo: undefined Statement: 
+                |Pos: 871 SpanInfo: undefined Statement: 
+                 |Pos: 872 SpanInfo: undefined Statement: 
+                  |Pos: 873 SpanInfo: undefined Statement: 
+                   |Pos: 874 SpanInfo: undefined Statement: 
+                    |Pos: 875 SpanInfo: undefined Statement: 
+                     |Pos: 876 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>            x *= 2;
+
+   |Pos: 877 SpanInfo: undefined Statement: 
+    |Pos: 878 SpanInfo: undefined Statement: 
+     |Pos: 879 SpanInfo: undefined Statement: 
+      |Pos: 880 SpanInfo: undefined Statement: 
+       |Pos: 881 SpanInfo: undefined Statement: 
+        |Pos: 882 SpanInfo: undefined Statement: 
+         |Pos: 883 SpanInfo: undefined Statement: 
+          |Pos: 884 SpanInfo: undefined Statement: 
+           |Pos: 885 SpanInfo: undefined Statement: 
+            |Pos: 886 SpanInfo: undefined Statement: 
+             |Pos: 887 SpanInfo: undefined Statement: 
+              |Pos: 888 SpanInfo: undefined Statement: 
+               |Pos: 889 SpanInfo: {"start":889,"length":1} Statement: 
+               |x
+                |Pos: 890 SpanInfo: {"start":889,"length":1} Statement: 
+                |x
+                 |Pos: 891 SpanInfo: undefined Statement: 
+                  |Pos: 892 SpanInfo: undefined Statement: 
+                   |Pos: 893 SpanInfo: undefined Statement: 
+                    |Pos: 894 SpanInfo: undefined Statement: 
+                     |Pos: 895 SpanInfo: undefined Statement: 
+                      |Pos: 896 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>            x = 50;
+
+   |Pos: 897 SpanInfo: undefined Statement: 
+    |Pos: 898 SpanInfo: undefined Statement: 
+     |Pos: 899 SpanInfo: undefined Statement: 
+      |Pos: 900 SpanInfo: undefined Statement: 
+       |Pos: 901 SpanInfo: undefined Statement: 
+        |Pos: 902 SpanInfo: undefined Statement: 
+         |Pos: 903 SpanInfo: undefined Statement: 
+          |Pos: 904 SpanInfo: undefined Statement: 
+           |Pos: 905 SpanInfo: undefined Statement: 
+            |Pos: 906 SpanInfo: undefined Statement: 
+             |Pos: 907 SpanInfo: undefined Statement: 
+              |Pos: 908 SpanInfo: undefined Statement: 
+               |Pos: 909 SpanInfo: {"start":909,"length":1} Statement: 
+               |x
+                |Pos: 910 SpanInfo: {"start":909,"length":1} Statement: 
+                |x
+                 |Pos: 911 SpanInfo: undefined Statement: 
+                  |Pos: 912 SpanInfo: undefined Statement: 
+                   |Pos: 913 SpanInfo: undefined Statement: 
+                    |Pos: 914 SpanInfo: undefined Statement: 
+                     |Pos: 915 SpanInfo: undefined Statement: 
+                      |Pos: 916 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>            break;
+
+   |Pos: 917 SpanInfo: undefined Statement: 
+    |Pos: 918 SpanInfo: undefined Statement: 
+     |Pos: 919 SpanInfo: undefined Statement: 
+      |Pos: 920 SpanInfo: undefined Statement: 
+       |Pos: 921 SpanInfo: undefined Statement: 
+        |Pos: 922 SpanInfo: undefined Statement: 
+         |Pos: 923 SpanInfo: undefined Statement: 
+          |Pos: 924 SpanInfo: undefined Statement: 
+           |Pos: 925 SpanInfo: undefined Statement: 
+            |Pos: 926 SpanInfo: undefined Statement: 
+             |Pos: 927 SpanInfo: undefined Statement: 
+              |Pos: 928 SpanInfo: undefined Statement: 
+               |Pos: 929 SpanInfo: undefined Statement: 
+                |Pos: 930 SpanInfo: undefined Statement: 
+                 |Pos: 931 SpanInfo: undefined Statement: 
+                  |Pos: 932 SpanInfo: undefined Statement: 
+                   |Pos: 933 SpanInfo: undefined Statement: 
+                    |Pos: 934 SpanInfo: undefined Statement: 
+                     |Pos: 935 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>
+
+   |Pos: 936 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        }
+
+   |Pos: 937 SpanInfo: undefined Statement: 
+    |Pos: 938 SpanInfo: undefined Statement: 
+     |Pos: 939 SpanInfo: undefined Statement: 
+      |Pos: 940 SpanInfo: undefined Statement: 
+       |Pos: 941 SpanInfo: undefined Statement: 
+        |Pos: 942 SpanInfo: undefined Statement: 
+         |Pos: 943 SpanInfo: undefined Statement: 
+          |Pos: 944 SpanInfo: undefined Statement: 
+           |Pos: 945 SpanInfo: undefined Statement: 
+            |Pos: 946 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    }
+
+   |Pos: 947 SpanInfo: undefined Statement: 
+    |Pos: 948 SpanInfo: undefined Statement: 
+     |Pos: 949 SpanInfo: undefined Statement: 
+      |Pos: 950 SpanInfo: undefined Statement: 
+       |Pos: 951 SpanInfo: undefined Statement: 
+        |Pos: 952 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    while (x < 10) {
+
+   |Pos: 953 SpanInfo: undefined Statement: 
+    |Pos: 954 SpanInfo: undefined Statement: 
+     |Pos: 955 SpanInfo: undefined Statement: 
+      |Pos: 956 SpanInfo: undefined Statement: 
+       |Pos: 957 SpanInfo: undefined Statement: 
+        |Pos: 958 SpanInfo: undefined Statement: 
+         |Pos: 959 SpanInfo: undefined Statement: 
+          |Pos: 960 SpanInfo: undefined Statement: 
+           |Pos: 961 SpanInfo: undefined Statement: 
+            |Pos: 962 SpanInfo: undefined Statement: 
+             |Pos: 963 SpanInfo: undefined Statement: 
+              |Pos: 964 SpanInfo: {"start":964,"length":1} Statement: 
+              |x
+               |Pos: 965 SpanInfo: {"start":964,"length":1} Statement: 
+               |x
+                |Pos: 966 SpanInfo: undefined Statement: 
+                 |Pos: 967 SpanInfo: undefined Statement: 
+                  |Pos: 968 SpanInfo: undefined Statement: 
+                   |Pos: 969 SpanInfo: undefined Statement: 
+                    |Pos: 970 SpanInfo: undefined Statement: 
+                     |Pos: 971 SpanInfo: undefined Statement: 
+                      |Pos: 972 SpanInfo: undefined Statement: 
+                       |Pos: 973 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        x++;
+
+   |Pos: 974 SpanInfo: undefined Statement: 
+    |Pos: 975 SpanInfo: undefined Statement: 
+     |Pos: 976 SpanInfo: undefined Statement: 
+      |Pos: 977 SpanInfo: undefined Statement: 
+       |Pos: 978 SpanInfo: undefined Statement: 
+        |Pos: 979 SpanInfo: undefined Statement: 
+         |Pos: 980 SpanInfo: undefined Statement: 
+          |Pos: 981 SpanInfo: undefined Statement: 
+           |Pos: 982 SpanInfo: {"start":982,"length":1} Statement: 
+           |x
+            |Pos: 983 SpanInfo: {"start":982,"length":1} Statement: 
+            |x
+             |Pos: 984 SpanInfo: undefined Statement: 
+              |Pos: 985 SpanInfo: undefined Statement: 
+               |Pos: 986 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    }
+
+   |Pos: 987 SpanInfo: undefined Statement: 
+    |Pos: 988 SpanInfo: undefined Statement: 
+     |Pos: 989 SpanInfo: undefined Statement: 
+      |Pos: 990 SpanInfo: undefined Statement: 
+       |Pos: 991 SpanInfo: undefined Statement: 
+        |Pos: 992 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    do {
+
+   |Pos: 993 SpanInfo: undefined Statement: 
+    |Pos: 994 SpanInfo: undefined Statement: 
+     |Pos: 995 SpanInfo: undefined Statement: 
+      |Pos: 996 SpanInfo: undefined Statement: 
+       |Pos: 997 SpanInfo: undefined Statement: 
+        |Pos: 998 SpanInfo: undefined Statement: 
+         |Pos: 999 SpanInfo: undefined Statement: 
+          |Pos: 1000 SpanInfo: undefined Statement: 
+           |Pos: 1001 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>        x--;
+
+   |Pos: 1002 SpanInfo: undefined Statement: 
+    |Pos: 1003 SpanInfo: undefined Statement: 
+     |Pos: 1004 SpanInfo: undefined Statement: 
+      |Pos: 1005 SpanInfo: undefined Statement: 
+       |Pos: 1006 SpanInfo: undefined Statement: 
+        |Pos: 1007 SpanInfo: undefined Statement: 
+         |Pos: 1008 SpanInfo: undefined Statement: 
+          |Pos: 1009 SpanInfo: undefined Statement: 
+           |Pos: 1010 SpanInfo: {"start":1010,"length":1} Statement: 
+           |x
+            |Pos: 1011 SpanInfo: {"start":1010,"length":1} Statement: 
+            |x
+             |Pos: 1012 SpanInfo: undefined Statement: 
+              |Pos: 1013 SpanInfo: undefined Statement: 
+               |Pos: 1014 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    } while (x > 4)
+
+   |Pos: 1015 SpanInfo: undefined Statement: 
+    |Pos: 1016 SpanInfo: undefined Statement: 
+     |Pos: 1017 SpanInfo: undefined Statement: 
+      |Pos: 1018 SpanInfo: undefined Statement: 
+       |Pos: 1019 SpanInfo: undefined Statement: 
+        |Pos: 1020 SpanInfo: undefined Statement: 
+         |Pos: 1021 SpanInfo: undefined Statement: 
+          |Pos: 1022 SpanInfo: undefined Statement: 
+           |Pos: 1023 SpanInfo: undefined Statement: 
+            |Pos: 1024 SpanInfo: undefined Statement: 
+             |Pos: 1025 SpanInfo: undefined Statement: 
+              |Pos: 1026 SpanInfo: undefined Statement: 
+               |Pos: 1027 SpanInfo: undefined Statement: 
+                |Pos: 1028 SpanInfo: {"start":1028,"length":1} Statement: 
+                |x
+                 |Pos: 1029 SpanInfo: {"start":1028,"length":1} Statement: 
+                 |x
+                  |Pos: 1030 SpanInfo: undefined Statement: 
+                   |Pos: 1031 SpanInfo: undefined Statement: 
+                    |Pos: 1032 SpanInfo: undefined Statement: 
+                     |Pos: 1033 SpanInfo: undefined Statement: 
+                      |Pos: 1034 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    x = y;
+
+   |Pos: 1035 SpanInfo: undefined Statement: 
+    |Pos: 1036 SpanInfo: undefined Statement: 
+     |Pos: 1037 SpanInfo: undefined Statement: 
+      |Pos: 1038 SpanInfo: undefined Statement: 
+       |Pos: 1039 SpanInfo: {"start":1039,"length":1} Statement: 
+       |x
+        |Pos: 1040 SpanInfo: {"start":1039,"length":1} Statement: 
+        |x
+         |Pos: 1041 SpanInfo: undefined Statement: 
+          |Pos: 1042 SpanInfo: undefined Statement: 
+           |Pos: 1043 SpanInfo: {"start":1043,"length":1} Statement: 
+           |y
+            |Pos: 1044 SpanInfo: {"start":1043,"length":1} Statement: 
+            |y
+             |Pos: 1045 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    var z = (x == 1) ? x + 1 : x - 1;
+
+   |Pos: 1046 SpanInfo: undefined Statement: 
+    |Pos: 1047 SpanInfo: undefined Statement: 
+     |Pos: 1048 SpanInfo: undefined Statement: 
+      |Pos: 1049 SpanInfo: undefined Statement: 
+       |Pos: 1050 SpanInfo: undefined Statement: 
+        |Pos: 1051 SpanInfo: undefined Statement: 
+         |Pos: 1052 SpanInfo: undefined Statement: 
+          |Pos: 1053 SpanInfo: undefined Statement: 
+           |Pos: 1054 SpanInfo: {"start":1054,"length":1} Statement: 
+           |z
+            |Pos: 1055 SpanInfo: {"start":1054,"length":1} Statement: 
+            |z
+             |Pos: 1056 SpanInfo: undefined Statement: 
+              |Pos: 1057 SpanInfo: undefined Statement: 
+               |Pos: 1058 SpanInfo: undefined Statement: 
+                |Pos: 1059 SpanInfo: {"start":1059,"length":1} Statement: 
+                |x
+                 |Pos: 1060 SpanInfo: {"start":1059,"length":1} Statement: 
+                 |x
+                  |Pos: 1061 SpanInfo: undefined Statement: 
+                   |Pos: 1062 SpanInfo: undefined Statement: 
+                    |Pos: 1063 SpanInfo: undefined Statement: 
+                     |Pos: 1064 SpanInfo: undefined Statement: 
+                      |Pos: 1065 SpanInfo: undefined Statement: 
+                       |Pos: 1066 SpanInfo: undefined Statement: 
+                        |Pos: 1067 SpanInfo: undefined Statement: 
+                         |Pos: 1068 SpanInfo: undefined Statement: 
+                          |Pos: 1069 SpanInfo: {"start":1069,"length":1} Statement: 
+                          |x
+                           |Pos: 1070 SpanInfo: {"start":1069,"length":1} Statement: 
+                           |x
+                            |Pos: 1071 SpanInfo: undefined Statement: 
+                             |Pos: 1072 SpanInfo: undefined Statement: 
+                              |Pos: 1073 SpanInfo: undefined Statement: 
+                               |Pos: 1074 SpanInfo: undefined Statement: 
+                                |Pos: 1075 SpanInfo: undefined Statement: 
+                                 |Pos: 1076 SpanInfo: undefined Statement: 
+                                  |Pos: 1077 SpanInfo: {"start":1077,"length":1} Statement: 
+                                  |x
+                                   |Pos: 1078 SpanInfo: {"start":1077,"length":1} Statement: 
+                                   |x
+                                    |Pos: 1079 SpanInfo: undefined Statement: 
+                                     |Pos: 1080 SpanInfo: undefined Statement: 
+                                      |Pos: 1081 SpanInfo: undefined Statement: 
+                                       |Pos: 1082 SpanInfo: undefined Statement: 
+                                        |Pos: 1083 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    (x == 1) ? x + 1 : x - 1;
+
+   |Pos: 1084 SpanInfo: undefined Statement: 
+    |Pos: 1085 SpanInfo: undefined Statement: 
+     |Pos: 1086 SpanInfo: undefined Statement: 
+      |Pos: 1087 SpanInfo: undefined Statement: 
+       |Pos: 1088 SpanInfo: undefined Statement: 
+        |Pos: 1089 SpanInfo: {"start":1089,"length":1} Statement: 
+        |x
+         |Pos: 1090 SpanInfo: {"start":1089,"length":1} Statement: 
+         |x
+          |Pos: 1091 SpanInfo: undefined Statement: 
+           |Pos: 1092 SpanInfo: undefined Statement: 
+            |Pos: 1093 SpanInfo: undefined Statement: 
+             |Pos: 1094 SpanInfo: undefined Statement: 
+              |Pos: 1095 SpanInfo: undefined Statement: 
+               |Pos: 1096 SpanInfo: undefined Statement: 
+                |Pos: 1097 SpanInfo: undefined Statement: 
+                 |Pos: 1098 SpanInfo: undefined Statement: 
+                  |Pos: 1099 SpanInfo: {"start":1099,"length":1} Statement: 
+                  |x
+                   |Pos: 1100 SpanInfo: {"start":1099,"length":1} Statement: 
+                   |x
+                    |Pos: 1101 SpanInfo: undefined Statement: 
+                     |Pos: 1102 SpanInfo: undefined Statement: 
+                      |Pos: 1103 SpanInfo: undefined Statement: 
+                       |Pos: 1104 SpanInfo: undefined Statement: 
+                        |Pos: 1105 SpanInfo: undefined Statement: 
+                         |Pos: 1106 SpanInfo: undefined Statement: 
+                          |Pos: 1107 SpanInfo: {"start":1107,"length":1} Statement: 
+                          |x
+                           |Pos: 1108 SpanInfo: {"start":1107,"length":1} Statement: 
+                           |x
+                            |Pos: 1109 SpanInfo: undefined Statement: 
+                             |Pos: 1110 SpanInfo: undefined Statement: 
+                              |Pos: 1111 SpanInfo: undefined Statement: 
+                               |Pos: 1112 SpanInfo: undefined Statement: 
+                                |Pos: 1113 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    x === 1;
+
+   |Pos: 1114 SpanInfo: undefined Statement: 
+    |Pos: 1115 SpanInfo: undefined Statement: 
+     |Pos: 1116 SpanInfo: undefined Statement: 
+      |Pos: 1117 SpanInfo: undefined Statement: 
+       |Pos: 1118 SpanInfo: {"start":1118,"length":1} Statement: 
+       |x
+        |Pos: 1119 SpanInfo: {"start":1118,"length":1} Statement: 
+        |x
+         |Pos: 1120 SpanInfo: undefined Statement: 
+          |Pos: 1121 SpanInfo: undefined Statement: 
+           |Pos: 1122 SpanInfo: undefined Statement: 
+            |Pos: 1123 SpanInfo: undefined Statement: 
+             |Pos: 1124 SpanInfo: undefined Statement: 
+              |Pos: 1125 SpanInfo: undefined Statement: 
+               |Pos: 1126 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    x = z = 40;
+
+   |Pos: 1127 SpanInfo: undefined Statement: 
+    |Pos: 1128 SpanInfo: undefined Statement: 
+     |Pos: 1129 SpanInfo: undefined Statement: 
+      |Pos: 1130 SpanInfo: undefined Statement: 
+       |Pos: 1131 SpanInfo: {"start":1131,"length":1} Statement: 
+       |x
+        |Pos: 1132 SpanInfo: {"start":1131,"length":1} Statement: 
+        |x
+         |Pos: 1133 SpanInfo: undefined Statement: 
+          |Pos: 1134 SpanInfo: undefined Statement: 
+           |Pos: 1135 SpanInfo: {"start":1135,"length":1} Statement: 
+           |z
+            |Pos: 1136 SpanInfo: {"start":1135,"length":1} Statement: 
+            |z
+             |Pos: 1137 SpanInfo: undefined Statement: 
+              |Pos: 1138 SpanInfo: undefined Statement: 
+               |Pos: 1139 SpanInfo: undefined Statement: 
+                |Pos: 1140 SpanInfo: undefined Statement: 
+                 |Pos: 1141 SpanInfo: undefined Statement: 
+                  |Pos: 1142 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    eval("y");
+
+   |Pos: 1143 SpanInfo: undefined Statement: 
+    |Pos: 1144 SpanInfo: undefined Statement: 
+     |Pos: 1145 SpanInfo: undefined Statement: 
+      |Pos: 1146 SpanInfo: undefined Statement: 
+       |Pos: 1147 SpanInfo: {"start":1147,"length":4} Statement: 
+       |eval
+        |Pos: 1148 SpanInfo: {"start":1147,"length":4} Statement: 
+        |eval
+         |Pos: 1149 SpanInfo: {"start":1147,"length":4} Statement: 
+         |eval
+          |Pos: 1150 SpanInfo: {"start":1147,"length":4} Statement: 
+          |eval
+           |Pos: 1151 SpanInfo: {"start":1147,"length":4} Statement: 
+           |eval
+            |Pos: 1152 SpanInfo: {"start":1152,"length":3} Statement: 
+            |"y"
+             |Pos: 1153 SpanInfo: {"start":1152,"length":3} Statement: 
+             |"y"
+              |Pos: 1154 SpanInfo: {"start":1152,"length":3} Statement: 
+              |"y"
+               |Pos: 1155 SpanInfo: {"start":1152,"length":3} Statement: 
+               |"y"
+                |Pos: 1156 SpanInfo: undefined Statement: 
+                 |Pos: 1157 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    return;
+
+   |Pos: 1158 SpanInfo: undefined Statement: 
+    |Pos: 1159 SpanInfo: undefined Statement: 
+     |Pos: 1160 SpanInfo: undefined Statement: 
+      |Pos: 1161 SpanInfo: undefined Statement: 
+       |Pos: 1162 SpanInfo: undefined Statement: 
+        |Pos: 1163 SpanInfo: undefined Statement: 
+         |Pos: 1164 SpanInfo: undefined Statement: 
+          |Pos: 1165 SpanInfo: undefined Statement: 
+           |Pos: 1166 SpanInfo: undefined Statement: 
+            |Pos: 1167 SpanInfo: undefined Statement: 
+             |Pos: 1168 SpanInfo: undefined Statement: 
+              |Pos: 1169 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>}
+
+   |Pos: 1170 SpanInfo: undefined Statement: 
+    |Pos: 1171 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>var b = function () {
+
+   |Pos: 1172 SpanInfo: undefined Statement: 
+    |Pos: 1173 SpanInfo: undefined Statement: 
+     |Pos: 1174 SpanInfo: undefined Statement: 
+      |Pos: 1175 SpanInfo: undefined Statement: 
+       |Pos: 1176 SpanInfo: {"start":1176,"length":1} Statement: 
+       |b
+        |Pos: 1177 SpanInfo: {"start":1176,"length":1} Statement: 
+        |b
+         |Pos: 1178 SpanInfo: undefined Statement: 
+          |Pos: 1179 SpanInfo: undefined Statement: 
+           |Pos: 1180 SpanInfo: undefined Statement: 
+            |Pos: 1181 SpanInfo: undefined Statement: 
+             |Pos: 1182 SpanInfo: undefined Statement: 
+              |Pos: 1183 SpanInfo: undefined Statement: 
+               |Pos: 1184 SpanInfo: undefined Statement: 
+                |Pos: 1185 SpanInfo: undefined Statement: 
+                 |Pos: 1186 SpanInfo: undefined Statement: 
+                  |Pos: 1187 SpanInfo: undefined Statement: 
+                   |Pos: 1188 SpanInfo: undefined Statement: 
+                    |Pos: 1189 SpanInfo: undefined Statement: 
+                     |Pos: 1190 SpanInfo: undefined Statement: 
+                      |Pos: 1191 SpanInfo: undefined Statement: 
+                       |Pos: 1192 SpanInfo: undefined Statement: 
+                        |Pos: 1193 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    var x = 10;
+
+   |Pos: 1194 SpanInfo: undefined Statement: 
+    |Pos: 1195 SpanInfo: undefined Statement: 
+     |Pos: 1196 SpanInfo: undefined Statement: 
+      |Pos: 1197 SpanInfo: undefined Statement: 
+       |Pos: 1198 SpanInfo: undefined Statement: 
+        |Pos: 1199 SpanInfo: undefined Statement: 
+         |Pos: 1200 SpanInfo: undefined Statement: 
+          |Pos: 1201 SpanInfo: undefined Statement: 
+           |Pos: 1202 SpanInfo: {"start":1202,"length":1} Statement: 
+           |x
+            |Pos: 1203 SpanInfo: {"start":1202,"length":1} Statement: 
+            |x
+             |Pos: 1204 SpanInfo: undefined Statement: 
+              |Pos: 1205 SpanInfo: undefined Statement: 
+               |Pos: 1206 SpanInfo: undefined Statement: 
+                |Pos: 1207 SpanInfo: undefined Statement: 
+                 |Pos: 1208 SpanInfo: undefined Statement: 
+                  |Pos: 1209 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    x = x + 1;
+
+   |Pos: 1210 SpanInfo: undefined Statement: 
+    |Pos: 1211 SpanInfo: undefined Statement: 
+     |Pos: 1212 SpanInfo: undefined Statement: 
+      |Pos: 1213 SpanInfo: undefined Statement: 
+       |Pos: 1214 SpanInfo: {"start":1214,"length":1} Statement: 
+       |x
+        |Pos: 1215 SpanInfo: {"start":1214,"length":1} Statement: 
+        |x
+         |Pos: 1216 SpanInfo: undefined Statement: 
+          |Pos: 1217 SpanInfo: undefined Statement: 
+           |Pos: 1218 SpanInfo: {"start":1218,"length":1} Statement: 
+           |x
+            |Pos: 1219 SpanInfo: {"start":1218,"length":1} Statement: 
+            |x
+             |Pos: 1220 SpanInfo: undefined Statement: 
+              |Pos: 1221 SpanInfo: undefined Statement: 
+               |Pos: 1222 SpanInfo: undefined Statement: 
+                |Pos: 1223 SpanInfo: undefined Statement: 
+                 |Pos: 1224 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>};
+
+   |Pos: 1225 SpanInfo: undefined Statement: 
+    |Pos: 1226 SpanInfo: undefined Statement: 
+     |Pos: 1227 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>f();
+   |Pos: 1228 SpanInfo: {"start":1228,"length":1} Statement: 
+   |f
+    |Pos: 1229 SpanInfo: {"start":1228,"length":1} Statement: 
+    |f
+     |Pos: 1230 SpanInfo: undefined Statement: 
+      |Pos: 1231 SpanInfo: undefined Statement: 

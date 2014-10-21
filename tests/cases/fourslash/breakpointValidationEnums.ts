@@ -15,5 +15,11 @@
 ////}
 ////enum e3 {
 ////}
+////declare enum e4 {
+////    x,
+////    y,
+////    z,
+////    x2
+////}
 
 verify.baselineCurrentFileBreakpointLocations();

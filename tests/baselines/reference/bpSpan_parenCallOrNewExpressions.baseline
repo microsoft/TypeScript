@@ -1,0 +1,1247 @@
+
+--------------------------------
+>>>>function foo(a: number) {
+
+   |Pos: 0 SpanInfo: {"start":30,"length":8} Statement: 
+   |return a
+    |Pos: 1 SpanInfo: {"start":30,"length":8} Statement: 
+    |return a
+     |Pos: 2 SpanInfo: {"start":30,"length":8} Statement: 
+     |return a
+      |Pos: 3 SpanInfo: {"start":30,"length":8} Statement: 
+      |return a
+       |Pos: 4 SpanInfo: {"start":30,"length":8} Statement: 
+       |return a
+        |Pos: 5 SpanInfo: {"start":30,"length":8} Statement: 
+        |return a
+         |Pos: 6 SpanInfo: {"start":30,"length":8} Statement: 
+         |return a
+          |Pos: 7 SpanInfo: {"start":30,"length":8} Statement: 
+          |return a
+           |Pos: 8 SpanInfo: {"start":30,"length":8} Statement: 
+           |return a
+            |Pos: 9 SpanInfo: {"start":30,"length":8} Statement: 
+            |return a
+             |Pos: 10 SpanInfo: {"start":30,"length":8} Statement: 
+             |return a
+              |Pos: 11 SpanInfo: {"start":30,"length":8} Statement: 
+              |return a
+               |Pos: 12 SpanInfo: {"start":30,"length":8} Statement: 
+               |return a
+                |Pos: 13 SpanInfo: {"start":30,"length":8} Statement: 
+                |return a
+                 |Pos: 14 SpanInfo: {"start":30,"length":8} Statement: 
+                 |return a
+                  |Pos: 15 SpanInfo: {"start":30,"length":8} Statement: 
+                  |return a
+                   |Pos: 16 SpanInfo: {"start":30,"length":8} Statement: 
+                   |return a
+                    |Pos: 17 SpanInfo: {"start":30,"length":8} Statement: 
+                    |return a
+                     |Pos: 18 SpanInfo: {"start":30,"length":8} Statement: 
+                     |return a
+                      |Pos: 19 SpanInfo: {"start":30,"length":8} Statement: 
+                      |return a
+                       |Pos: 20 SpanInfo: {"start":30,"length":8} Statement: 
+                       |return a
+                        |Pos: 21 SpanInfo: {"start":30,"length":8} Statement: 
+                        |return a
+                         |Pos: 22 SpanInfo: {"start":30,"length":8} Statement: 
+                         |return a
+                          |Pos: 23 SpanInfo: {"start":30,"length":8} Statement: 
+                          |return a
+                           |Pos: 24 SpanInfo: {"start":30,"length":8} Statement: 
+                           |return a
+                            |Pos: 25 SpanInfo: {"start":30,"length":8} Statement: 
+                            |return a
+--------------------------------
+>>>>    return a;
+
+   |Pos: 26 SpanInfo: {"start":30,"length":8} Statement: 
+   |return a
+    |Pos: 27 SpanInfo: {"start":30,"length":8} Statement: 
+    |return a
+     |Pos: 28 SpanInfo: {"start":30,"length":8} Statement: 
+     |return a
+      |Pos: 29 SpanInfo: {"start":30,"length":8} Statement: 
+      |return a
+       |Pos: 30 SpanInfo: {"start":30,"length":8} Statement: 
+       |return a
+        |Pos: 31 SpanInfo: {"start":30,"length":8} Statement: 
+        |return a
+         |Pos: 32 SpanInfo: {"start":30,"length":8} Statement: 
+         |return a
+          |Pos: 33 SpanInfo: {"start":30,"length":8} Statement: 
+          |return a
+           |Pos: 34 SpanInfo: {"start":30,"length":8} Statement: 
+           |return a
+            |Pos: 35 SpanInfo: {"start":30,"length":8} Statement: 
+            |return a
+             |Pos: 36 SpanInfo: {"start":30,"length":8} Statement: 
+             |return a
+              |Pos: 37 SpanInfo: {"start":30,"length":8} Statement: 
+              |return a
+               |Pos: 38 SpanInfo: {"start":30,"length":8} Statement: 
+               |return a
+                |Pos: 39 SpanInfo: {"start":30,"length":8} Statement: 
+                |return a
+--------------------------------
+>>>>}
+
+   |Pos: 40 SpanInfo: {"start":40,"length":1} Statement: 
+   |}
+    |Pos: 41 SpanInfo: {"start":40,"length":1} Statement: 
+    |}
+--------------------------------
+>>>>foo((function bar() {
+
+   |Pos: 42 SpanInfo: {"start":42,"length":47} Statement: 
+   |foo((function bar() {
+   |    return foo(40);
+   |})())
+    |Pos: 43 SpanInfo: {"start":42,"length":47} Statement: 
+    |foo((function bar() {
+    |    return foo(40);
+    |})())
+     |Pos: 44 SpanInfo: {"start":42,"length":47} Statement: 
+     |foo((function bar() {
+     |    return foo(40);
+     |})())
+      |Pos: 45 SpanInfo: {"start":42,"length":47} Statement: 
+      |foo((function bar() {
+      |    return foo(40);
+      |})())
+       |Pos: 46 SpanInfo: {"start":42,"length":47} Statement: 
+       |foo((function bar() {
+       |    return foo(40);
+       |})())
+        |Pos: 47 SpanInfo: {"start":68,"length":14} Statement: 
+        |return foo(40)
+         |Pos: 48 SpanInfo: {"start":68,"length":14} Statement: 
+         |return foo(40)
+          |Pos: 49 SpanInfo: {"start":68,"length":14} Statement: 
+          |return foo(40)
+           |Pos: 50 SpanInfo: {"start":68,"length":14} Statement: 
+           |return foo(40)
+            |Pos: 51 SpanInfo: {"start":68,"length":14} Statement: 
+            |return foo(40)
+             |Pos: 52 SpanInfo: {"start":68,"length":14} Statement: 
+             |return foo(40)
+              |Pos: 53 SpanInfo: {"start":68,"length":14} Statement: 
+              |return foo(40)
+               |Pos: 54 SpanInfo: {"start":68,"length":14} Statement: 
+               |return foo(40)
+                |Pos: 55 SpanInfo: {"start":68,"length":14} Statement: 
+                |return foo(40)
+                 |Pos: 56 SpanInfo: {"start":68,"length":14} Statement: 
+                 |return foo(40)
+                  |Pos: 57 SpanInfo: {"start":68,"length":14} Statement: 
+                  |return foo(40)
+                   |Pos: 58 SpanInfo: {"start":68,"length":14} Statement: 
+                   |return foo(40)
+                    |Pos: 59 SpanInfo: {"start":68,"length":14} Statement: 
+                    |return foo(40)
+                     |Pos: 60 SpanInfo: {"start":68,"length":14} Statement: 
+                     |return foo(40)
+                      |Pos: 61 SpanInfo: {"start":68,"length":14} Statement: 
+                      |return foo(40)
+                       |Pos: 62 SpanInfo: {"start":68,"length":14} Statement: 
+                       |return foo(40)
+                        |Pos: 63 SpanInfo: {"start":68,"length":14} Statement: 
+                        |return foo(40)
+--------------------------------
+>>>>    return foo(40);
+
+   |Pos: 64 SpanInfo: {"start":68,"length":14} Statement: 
+   |return foo(40)
+    |Pos: 65 SpanInfo: {"start":68,"length":14} Statement: 
+    |return foo(40)
+     |Pos: 66 SpanInfo: {"start":68,"length":14} Statement: 
+     |return foo(40)
+      |Pos: 67 SpanInfo: {"start":68,"length":14} Statement: 
+      |return foo(40)
+       |Pos: 68 SpanInfo: {"start":68,"length":14} Statement: 
+       |return foo(40)
+        |Pos: 69 SpanInfo: {"start":68,"length":14} Statement: 
+        |return foo(40)
+         |Pos: 70 SpanInfo: {"start":68,"length":14} Statement: 
+         |return foo(40)
+          |Pos: 71 SpanInfo: {"start":68,"length":14} Statement: 
+          |return foo(40)
+           |Pos: 72 SpanInfo: {"start":68,"length":14} Statement: 
+           |return foo(40)
+            |Pos: 73 SpanInfo: {"start":68,"length":14} Statement: 
+            |return foo(40)
+             |Pos: 74 SpanInfo: {"start":68,"length":14} Statement: 
+             |return foo(40)
+              |Pos: 75 SpanInfo: {"start":68,"length":14} Statement: 
+              |return foo(40)
+               |Pos: 76 SpanInfo: {"start":68,"length":14} Statement: 
+               |return foo(40)
+                |Pos: 77 SpanInfo: {"start":68,"length":14} Statement: 
+                |return foo(40)
+                 |Pos: 78 SpanInfo: {"start":68,"length":14} Statement: 
+                 |return foo(40)
+                  |Pos: 79 SpanInfo: {"start":68,"length":14} Statement: 
+                  |return foo(40)
+                   |Pos: 80 SpanInfo: {"start":68,"length":14} Statement: 
+                   |return foo(40)
+                    |Pos: 81 SpanInfo: {"start":68,"length":14} Statement: 
+                    |return foo(40)
+                     |Pos: 82 SpanInfo: {"start":68,"length":14} Statement: 
+                     |return foo(40)
+                      |Pos: 83 SpanInfo: {"start":68,"length":14} Statement: 
+                      |return foo(40)
+--------------------------------
+>>>>})());
+
+   |Pos: 84 SpanInfo: {"start":84,"length":1} Statement: 
+   |}
+    |Pos: 85 SpanInfo: {"start":42,"length":47} Statement: 
+    |foo((function bar() {
+    |    return foo(40);
+    |})())
+     |Pos: 86 SpanInfo: {"start":42,"length":47} Statement: 
+     |foo((function bar() {
+     |    return foo(40);
+     |})())
+      |Pos: 87 SpanInfo: {"start":42,"length":47} Statement: 
+      |foo((function bar() {
+      |    return foo(40);
+      |})())
+       |Pos: 88 SpanInfo: {"start":42,"length":47} Statement: 
+       |foo((function bar() {
+       |    return foo(40);
+       |})())
+        |Pos: 89 SpanInfo: {"start":42,"length":47} Statement: 
+        |foo((function bar() {
+        |    return foo(40);
+        |})())
+         |Pos: 90 SpanInfo: {"start":42,"length":47} Statement: 
+         |foo((function bar() {
+         |    return foo(40);
+         |})())
+--------------------------------
+>>>>var y = foo((function () {
+
+   |Pos: 91 SpanInfo: {"start":91,"length":52} Statement: 
+   |var y = foo((function () {
+   |    return foo(40);
+   |})())
+    |Pos: 92 SpanInfo: {"start":91,"length":52} Statement: 
+    |var y = foo((function () {
+    |    return foo(40);
+    |})())
+     |Pos: 93 SpanInfo: {"start":91,"length":52} Statement: 
+     |var y = foo((function () {
+     |    return foo(40);
+     |})())
+      |Pos: 94 SpanInfo: {"start":91,"length":52} Statement: 
+      |var y = foo((function () {
+      |    return foo(40);
+      |})())
+       |Pos: 95 SpanInfo: {"start":91,"length":52} Statement: 
+       |var y = foo((function () {
+       |    return foo(40);
+       |})())
+        |Pos: 96 SpanInfo: {"start":91,"length":52} Statement: 
+        |var y = foo((function () {
+        |    return foo(40);
+        |})())
+         |Pos: 97 SpanInfo: {"start":91,"length":52} Statement: 
+         |var y = foo((function () {
+         |    return foo(40);
+         |})())
+          |Pos: 98 SpanInfo: {"start":91,"length":52} Statement: 
+          |var y = foo((function () {
+          |    return foo(40);
+          |})())
+           |Pos: 99 SpanInfo: {"start":91,"length":52} Statement: 
+           |var y = foo((function () {
+           |    return foo(40);
+           |})())
+            |Pos: 100 SpanInfo: {"start":91,"length":52} Statement: 
+            |var y = foo((function () {
+            |    return foo(40);
+            |})())
+             |Pos: 101 SpanInfo: {"start":91,"length":52} Statement: 
+             |var y = foo((function () {
+             |    return foo(40);
+             |})())
+              |Pos: 102 SpanInfo: {"start":91,"length":52} Statement: 
+              |var y = foo((function () {
+              |    return foo(40);
+              |})())
+               |Pos: 103 SpanInfo: {"start":91,"length":52} Statement: 
+               |var y = foo((function () {
+               |    return foo(40);
+               |})())
+                |Pos: 104 SpanInfo: {"start":122,"length":14} Statement: 
+                |return foo(40)
+                 |Pos: 105 SpanInfo: {"start":122,"length":14} Statement: 
+                 |return foo(40)
+                  |Pos: 106 SpanInfo: {"start":122,"length":14} Statement: 
+                  |return foo(40)
+                   |Pos: 107 SpanInfo: {"start":122,"length":14} Statement: 
+                   |return foo(40)
+                    |Pos: 108 SpanInfo: {"start":122,"length":14} Statement: 
+                    |return foo(40)
+                     |Pos: 109 SpanInfo: {"start":122,"length":14} Statement: 
+                     |return foo(40)
+                      |Pos: 110 SpanInfo: {"start":122,"length":14} Statement: 
+                      |return foo(40)
+                       |Pos: 111 SpanInfo: {"start":122,"length":14} Statement: 
+                       |return foo(40)
+                        |Pos: 112 SpanInfo: {"start":122,"length":14} Statement: 
+                        |return foo(40)
+                         |Pos: 113 SpanInfo: {"start":122,"length":14} Statement: 
+                         |return foo(40)
+                          |Pos: 114 SpanInfo: {"start":122,"length":14} Statement: 
+                          |return foo(40)
+                           |Pos: 115 SpanInfo: {"start":122,"length":14} Statement: 
+                           |return foo(40)
+                            |Pos: 116 SpanInfo: {"start":122,"length":14} Statement: 
+                            |return foo(40)
+                             |Pos: 117 SpanInfo: {"start":122,"length":14} Statement: 
+                             |return foo(40)
+--------------------------------
+>>>>    return foo(40);
+
+   |Pos: 118 SpanInfo: {"start":122,"length":14} Statement: 
+   |return foo(40)
+    |Pos: 119 SpanInfo: {"start":122,"length":14} Statement: 
+    |return foo(40)
+     |Pos: 120 SpanInfo: {"start":122,"length":14} Statement: 
+     |return foo(40)
+      |Pos: 121 SpanInfo: {"start":122,"length":14} Statement: 
+      |return foo(40)
+       |Pos: 122 SpanInfo: {"start":122,"length":14} Statement: 
+       |return foo(40)
+        |Pos: 123 SpanInfo: {"start":122,"length":14} Statement: 
+        |return foo(40)
+         |Pos: 124 SpanInfo: {"start":122,"length":14} Statement: 
+         |return foo(40)
+          |Pos: 125 SpanInfo: {"start":122,"length":14} Statement: 
+          |return foo(40)
+           |Pos: 126 SpanInfo: {"start":122,"length":14} Statement: 
+           |return foo(40)
+            |Pos: 127 SpanInfo: {"start":122,"length":14} Statement: 
+            |return foo(40)
+             |Pos: 128 SpanInfo: {"start":122,"length":14} Statement: 
+             |return foo(40)
+              |Pos: 129 SpanInfo: {"start":122,"length":14} Statement: 
+              |return foo(40)
+               |Pos: 130 SpanInfo: {"start":122,"length":14} Statement: 
+               |return foo(40)
+                |Pos: 131 SpanInfo: {"start":122,"length":14} Statement: 
+                |return foo(40)
+                 |Pos: 132 SpanInfo: {"start":122,"length":14} Statement: 
+                 |return foo(40)
+                  |Pos: 133 SpanInfo: {"start":122,"length":14} Statement: 
+                  |return foo(40)
+                   |Pos: 134 SpanInfo: {"start":122,"length":14} Statement: 
+                   |return foo(40)
+                    |Pos: 135 SpanInfo: {"start":122,"length":14} Statement: 
+                    |return foo(40)
+                     |Pos: 136 SpanInfo: {"start":122,"length":14} Statement: 
+                     |return foo(40)
+                      |Pos: 137 SpanInfo: {"start":122,"length":14} Statement: 
+                      |return foo(40)
+--------------------------------
+>>>>})());;
+
+   |Pos: 138 SpanInfo: {"start":138,"length":1} Statement: 
+   |}
+    |Pos: 139 SpanInfo: {"start":91,"length":52} Statement: 
+    |var y = foo((function () {
+    |    return foo(40);
+    |})())
+     |Pos: 140 SpanInfo: {"start":91,"length":52} Statement: 
+     |var y = foo((function () {
+     |    return foo(40);
+     |})())
+      |Pos: 141 SpanInfo: {"start":91,"length":52} Statement: 
+      |var y = foo((function () {
+      |    return foo(40);
+      |})())
+       |Pos: 142 SpanInfo: {"start":91,"length":52} Statement: 
+       |var y = foo((function () {
+       |    return foo(40);
+       |})())
+        |Pos: 143 SpanInfo: {"start":91,"length":52} Statement: 
+        |var y = foo((function () {
+        |    return foo(40);
+        |})())
+         |Pos: 144 SpanInfo: undefined Statement: 
+          |Pos: 145 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>class greeter {
+
+   |Pos: 146 SpanInfo: {"start":195,"length":1} Statement: 
+   |}
+    |Pos: 147 SpanInfo: {"start":195,"length":1} Statement: 
+    |}
+     |Pos: 148 SpanInfo: {"start":195,"length":1} Statement: 
+     |}
+      |Pos: 149 SpanInfo: {"start":195,"length":1} Statement: 
+      |}
+       |Pos: 150 SpanInfo: {"start":195,"length":1} Statement: 
+       |}
+        |Pos: 151 SpanInfo: {"start":195,"length":1} Statement: 
+        |}
+         |Pos: 152 SpanInfo: {"start":195,"length":1} Statement: 
+         |}
+          |Pos: 153 SpanInfo: {"start":195,"length":1} Statement: 
+          |}
+           |Pos: 154 SpanInfo: {"start":195,"length":1} Statement: 
+           |}
+            |Pos: 155 SpanInfo: {"start":195,"length":1} Statement: 
+            |}
+             |Pos: 156 SpanInfo: {"start":195,"length":1} Statement: 
+             |}
+              |Pos: 157 SpanInfo: {"start":195,"length":1} Statement: 
+              |}
+               |Pos: 158 SpanInfo: {"start":195,"length":1} Statement: 
+               |}
+                |Pos: 159 SpanInfo: {"start":195,"length":1} Statement: 
+                |}
+                 |Pos: 160 SpanInfo: {"start":195,"length":1} Statement: 
+                 |}
+                  |Pos: 161 SpanInfo: {"start":195,"length":1} Statement: 
+                  |}
+--------------------------------
+>>>>    constructor(a: number) {
+
+   |Pos: 162 SpanInfo: {"start":195,"length":1} Statement: 
+   |}
+    |Pos: 163 SpanInfo: {"start":195,"length":1} Statement: 
+    |}
+     |Pos: 164 SpanInfo: {"start":195,"length":1} Statement: 
+     |}
+      |Pos: 165 SpanInfo: {"start":195,"length":1} Statement: 
+      |}
+       |Pos: 166 SpanInfo: {"start":195,"length":1} Statement: 
+       |}
+        |Pos: 167 SpanInfo: {"start":195,"length":1} Statement: 
+        |}
+         |Pos: 168 SpanInfo: {"start":195,"length":1} Statement: 
+         |}
+          |Pos: 169 SpanInfo: {"start":195,"length":1} Statement: 
+          |}
+           |Pos: 170 SpanInfo: {"start":195,"length":1} Statement: 
+           |}
+            |Pos: 171 SpanInfo: {"start":195,"length":1} Statement: 
+            |}
+             |Pos: 172 SpanInfo: {"start":195,"length":1} Statement: 
+             |}
+              |Pos: 173 SpanInfo: {"start":195,"length":1} Statement: 
+              |}
+               |Pos: 174 SpanInfo: {"start":195,"length":1} Statement: 
+               |}
+                |Pos: 175 SpanInfo: {"start":195,"length":1} Statement: 
+                |}
+                 |Pos: 176 SpanInfo: {"start":195,"length":1} Statement: 
+                 |}
+                  |Pos: 177 SpanInfo: {"start":195,"length":1} Statement: 
+                  |}
+                   |Pos: 178 SpanInfo: {"start":195,"length":1} Statement: 
+                   |}
+                    |Pos: 179 SpanInfo: {"start":195,"length":1} Statement: 
+                    |}
+                     |Pos: 180 SpanInfo: {"start":195,"length":1} Statement: 
+                     |}
+                      |Pos: 181 SpanInfo: {"start":195,"length":1} Statement: 
+                      |}
+                       |Pos: 182 SpanInfo: {"start":195,"length":1} Statement: 
+                       |}
+                        |Pos: 183 SpanInfo: {"start":195,"length":1} Statement: 
+                        |}
+                         |Pos: 184 SpanInfo: {"start":195,"length":1} Statement: 
+                         |}
+                          |Pos: 185 SpanInfo: {"start":195,"length":1} Statement: 
+                          |}
+                           |Pos: 186 SpanInfo: {"start":195,"length":1} Statement: 
+                           |}
+                            |Pos: 187 SpanInfo: {"start":195,"length":1} Statement: 
+                            |}
+                             |Pos: 188 SpanInfo: {"start":195,"length":1} Statement: 
+                             |}
+                              |Pos: 189 SpanInfo: {"start":195,"length":1} Statement: 
+                              |}
+                               |Pos: 190 SpanInfo: {"start":195,"length":1} Statement: 
+                               |}
+--------------------------------
+>>>>    }
+
+   |Pos: 191 SpanInfo: {"start":195,"length":1} Statement: 
+   |}
+    |Pos: 192 SpanInfo: {"start":195,"length":1} Statement: 
+    |}
+     |Pos: 193 SpanInfo: {"start":195,"length":1} Statement: 
+     |}
+      |Pos: 194 SpanInfo: {"start":195,"length":1} Statement: 
+      |}
+       |Pos: 195 SpanInfo: {"start":195,"length":1} Statement: 
+       |}
+        |Pos: 196 SpanInfo: {"start":195,"length":1} Statement: 
+        |}
+--------------------------------
+>>>>}
+
+   |Pos: 197 SpanInfo: {"start":197,"length":1} Statement: 
+   |}
+    |Pos: 198 SpanInfo: {"start":197,"length":1} Statement: 
+    |}
+--------------------------------
+>>>>foo(30);
+
+   |Pos: 199 SpanInfo: {"start":199,"length":7} Statement: 
+   |foo(30)
+    |Pos: 200 SpanInfo: {"start":199,"length":7} Statement: 
+    |foo(30)
+     |Pos: 201 SpanInfo: {"start":199,"length":7} Statement: 
+     |foo(30)
+      |Pos: 202 SpanInfo: {"start":199,"length":7} Statement: 
+      |foo(30)
+       |Pos: 203 SpanInfo: {"start":199,"length":7} Statement: 
+       |foo(30)
+        |Pos: 204 SpanInfo: {"start":199,"length":7} Statement: 
+        |foo(30)
+         |Pos: 205 SpanInfo: {"start":199,"length":7} Statement: 
+         |foo(30)
+          |Pos: 206 SpanInfo: {"start":199,"length":7} Statement: 
+          |foo(30)
+           |Pos: 207 SpanInfo: {"start":199,"length":7} Statement: 
+           |foo(30)
+--------------------------------
+>>>>foo(40 + y);
+
+   |Pos: 208 SpanInfo: {"start":208,"length":11} Statement: 
+   |foo(40 + y)
+    |Pos: 209 SpanInfo: {"start":208,"length":11} Statement: 
+    |foo(40 + y)
+     |Pos: 210 SpanInfo: {"start":208,"length":11} Statement: 
+     |foo(40 + y)
+      |Pos: 211 SpanInfo: {"start":208,"length":11} Statement: 
+      |foo(40 + y)
+       |Pos: 212 SpanInfo: {"start":208,"length":11} Statement: 
+       |foo(40 + y)
+        |Pos: 213 SpanInfo: {"start":208,"length":11} Statement: 
+        |foo(40 + y)
+         |Pos: 214 SpanInfo: {"start":208,"length":11} Statement: 
+         |foo(40 + y)
+          |Pos: 215 SpanInfo: {"start":208,"length":11} Statement: 
+          |foo(40 + y)
+           |Pos: 216 SpanInfo: {"start":208,"length":11} Statement: 
+           |foo(40 + y)
+            |Pos: 217 SpanInfo: {"start":208,"length":11} Statement: 
+            |foo(40 + y)
+             |Pos: 218 SpanInfo: {"start":208,"length":11} Statement: 
+             |foo(40 + y)
+              |Pos: 219 SpanInfo: {"start":208,"length":11} Statement: 
+              |foo(40 + y)
+               |Pos: 220 SpanInfo: {"start":208,"length":11} Statement: 
+               |foo(40 + y)
+--------------------------------
+>>>>y = foo(30);
+
+   |Pos: 221 SpanInfo: {"start":221,"length":11} Statement: 
+   |y = foo(30)
+    |Pos: 222 SpanInfo: {"start":221,"length":11} Statement: 
+    |y = foo(30)
+     |Pos: 223 SpanInfo: {"start":221,"length":11} Statement: 
+     |y = foo(30)
+      |Pos: 224 SpanInfo: {"start":221,"length":11} Statement: 
+      |y = foo(30)
+       |Pos: 225 SpanInfo: {"start":221,"length":11} Statement: 
+       |y = foo(30)
+        |Pos: 226 SpanInfo: {"start":221,"length":11} Statement: 
+        |y = foo(30)
+         |Pos: 227 SpanInfo: {"start":221,"length":11} Statement: 
+         |y = foo(30)
+          |Pos: 228 SpanInfo: {"start":221,"length":11} Statement: 
+          |y = foo(30)
+           |Pos: 229 SpanInfo: {"start":221,"length":11} Statement: 
+           |y = foo(30)
+            |Pos: 230 SpanInfo: {"start":221,"length":11} Statement: 
+            |y = foo(30)
+             |Pos: 231 SpanInfo: {"start":221,"length":11} Statement: 
+             |y = foo(30)
+              |Pos: 232 SpanInfo: {"start":221,"length":11} Statement: 
+              |y = foo(30)
+               |Pos: 233 SpanInfo: {"start":221,"length":11} Statement: 
+               |y = foo(30)
+--------------------------------
+>>>>y = foo(500 + y);
+
+   |Pos: 234 SpanInfo: {"start":234,"length":16} Statement: 
+   |y = foo(500 + y)
+    |Pos: 235 SpanInfo: {"start":234,"length":16} Statement: 
+    |y = foo(500 + y)
+     |Pos: 236 SpanInfo: {"start":234,"length":16} Statement: 
+     |y = foo(500 + y)
+      |Pos: 237 SpanInfo: {"start":234,"length":16} Statement: 
+      |y = foo(500 + y)
+       |Pos: 238 SpanInfo: {"start":234,"length":16} Statement: 
+       |y = foo(500 + y)
+        |Pos: 239 SpanInfo: {"start":234,"length":16} Statement: 
+        |y = foo(500 + y)
+         |Pos: 240 SpanInfo: {"start":234,"length":16} Statement: 
+         |y = foo(500 + y)
+          |Pos: 241 SpanInfo: {"start":234,"length":16} Statement: 
+          |y = foo(500 + y)
+           |Pos: 242 SpanInfo: {"start":234,"length":16} Statement: 
+           |y = foo(500 + y)
+            |Pos: 243 SpanInfo: {"start":234,"length":16} Statement: 
+            |y = foo(500 + y)
+             |Pos: 244 SpanInfo: {"start":234,"length":16} Statement: 
+             |y = foo(500 + y)
+              |Pos: 245 SpanInfo: {"start":234,"length":16} Statement: 
+              |y = foo(500 + y)
+               |Pos: 246 SpanInfo: {"start":234,"length":16} Statement: 
+               |y = foo(500 + y)
+                |Pos: 247 SpanInfo: {"start":234,"length":16} Statement: 
+                |y = foo(500 + y)
+                 |Pos: 248 SpanInfo: {"start":234,"length":16} Statement: 
+                 |y = foo(500 + y)
+                  |Pos: 249 SpanInfo: {"start":234,"length":16} Statement: 
+                  |y = foo(500 + y)
+                   |Pos: 250 SpanInfo: {"start":234,"length":16} Statement: 
+                   |y = foo(500 + y)
+                    |Pos: 251 SpanInfo: {"start":234,"length":16} Statement: 
+                    |y = foo(500 + y)
+--------------------------------
+>>>>new greeter((function bar() {
+
+   |Pos: 252 SpanInfo: {"start":252,"length":55} Statement: 
+   |new greeter((function bar() {
+   |    return foo(40);
+   |})())
+    |Pos: 253 SpanInfo: {"start":252,"length":55} Statement: 
+    |new greeter((function bar() {
+    |    return foo(40);
+    |})())
+     |Pos: 254 SpanInfo: {"start":252,"length":55} Statement: 
+     |new greeter((function bar() {
+     |    return foo(40);
+     |})())
+      |Pos: 255 SpanInfo: {"start":252,"length":55} Statement: 
+      |new greeter((function bar() {
+      |    return foo(40);
+      |})())
+       |Pos: 256 SpanInfo: {"start":252,"length":55} Statement: 
+       |new greeter((function bar() {
+       |    return foo(40);
+       |})())
+        |Pos: 257 SpanInfo: {"start":252,"length":55} Statement: 
+        |new greeter((function bar() {
+        |    return foo(40);
+        |})())
+         |Pos: 258 SpanInfo: {"start":252,"length":55} Statement: 
+         |new greeter((function bar() {
+         |    return foo(40);
+         |})())
+          |Pos: 259 SpanInfo: {"start":252,"length":55} Statement: 
+          |new greeter((function bar() {
+          |    return foo(40);
+          |})())
+           |Pos: 260 SpanInfo: {"start":252,"length":55} Statement: 
+           |new greeter((function bar() {
+           |    return foo(40);
+           |})())
+            |Pos: 261 SpanInfo: {"start":252,"length":55} Statement: 
+            |new greeter((function bar() {
+            |    return foo(40);
+            |})())
+             |Pos: 262 SpanInfo: {"start":252,"length":55} Statement: 
+             |new greeter((function bar() {
+             |    return foo(40);
+             |})())
+              |Pos: 263 SpanInfo: {"start":252,"length":55} Statement: 
+              |new greeter((function bar() {
+              |    return foo(40);
+              |})())
+               |Pos: 264 SpanInfo: {"start":252,"length":55} Statement: 
+               |new greeter((function bar() {
+               |    return foo(40);
+               |})())
+                |Pos: 265 SpanInfo: {"start":286,"length":14} Statement: 
+                |return foo(40)
+                 |Pos: 266 SpanInfo: {"start":286,"length":14} Statement: 
+                 |return foo(40)
+                  |Pos: 267 SpanInfo: {"start":286,"length":14} Statement: 
+                  |return foo(40)
+                   |Pos: 268 SpanInfo: {"start":286,"length":14} Statement: 
+                   |return foo(40)
+                    |Pos: 269 SpanInfo: {"start":286,"length":14} Statement: 
+                    |return foo(40)
+                     |Pos: 270 SpanInfo: {"start":286,"length":14} Statement: 
+                     |return foo(40)
+                      |Pos: 271 SpanInfo: {"start":286,"length":14} Statement: 
+                      |return foo(40)
+                       |Pos: 272 SpanInfo: {"start":286,"length":14} Statement: 
+                       |return foo(40)
+                        |Pos: 273 SpanInfo: {"start":286,"length":14} Statement: 
+                        |return foo(40)
+                         |Pos: 274 SpanInfo: {"start":286,"length":14} Statement: 
+                         |return foo(40)
+                          |Pos: 275 SpanInfo: {"start":286,"length":14} Statement: 
+                          |return foo(40)
+                           |Pos: 276 SpanInfo: {"start":286,"length":14} Statement: 
+                           |return foo(40)
+                            |Pos: 277 SpanInfo: {"start":286,"length":14} Statement: 
+                            |return foo(40)
+                             |Pos: 278 SpanInfo: {"start":286,"length":14} Statement: 
+                             |return foo(40)
+                              |Pos: 279 SpanInfo: {"start":286,"length":14} Statement: 
+                              |return foo(40)
+                               |Pos: 280 SpanInfo: {"start":286,"length":14} Statement: 
+                               |return foo(40)
+                                |Pos: 281 SpanInfo: {"start":286,"length":14} Statement: 
+                                |return foo(40)
+--------------------------------
+>>>>    return foo(40);
+
+   |Pos: 282 SpanInfo: {"start":286,"length":14} Statement: 
+   |return foo(40)
+    |Pos: 283 SpanInfo: {"start":286,"length":14} Statement: 
+    |return foo(40)
+     |Pos: 284 SpanInfo: {"start":286,"length":14} Statement: 
+     |return foo(40)
+      |Pos: 285 SpanInfo: {"start":286,"length":14} Statement: 
+      |return foo(40)
+       |Pos: 286 SpanInfo: {"start":286,"length":14} Statement: 
+       |return foo(40)
+        |Pos: 287 SpanInfo: {"start":286,"length":14} Statement: 
+        |return foo(40)
+         |Pos: 288 SpanInfo: {"start":286,"length":14} Statement: 
+         |return foo(40)
+          |Pos: 289 SpanInfo: {"start":286,"length":14} Statement: 
+          |return foo(40)
+           |Pos: 290 SpanInfo: {"start":286,"length":14} Statement: 
+           |return foo(40)
+            |Pos: 291 SpanInfo: {"start":286,"length":14} Statement: 
+            |return foo(40)
+             |Pos: 292 SpanInfo: {"start":286,"length":14} Statement: 
+             |return foo(40)
+              |Pos: 293 SpanInfo: {"start":286,"length":14} Statement: 
+              |return foo(40)
+               |Pos: 294 SpanInfo: {"start":286,"length":14} Statement: 
+               |return foo(40)
+                |Pos: 295 SpanInfo: {"start":286,"length":14} Statement: 
+                |return foo(40)
+                 |Pos: 296 SpanInfo: {"start":286,"length":14} Statement: 
+                 |return foo(40)
+                  |Pos: 297 SpanInfo: {"start":286,"length":14} Statement: 
+                  |return foo(40)
+                   |Pos: 298 SpanInfo: {"start":286,"length":14} Statement: 
+                   |return foo(40)
+                    |Pos: 299 SpanInfo: {"start":286,"length":14} Statement: 
+                    |return foo(40)
+                     |Pos: 300 SpanInfo: {"start":286,"length":14} Statement: 
+                     |return foo(40)
+                      |Pos: 301 SpanInfo: {"start":286,"length":14} Statement: 
+                      |return foo(40)
+--------------------------------
+>>>>})());
+
+   |Pos: 302 SpanInfo: {"start":302,"length":1} Statement: 
+   |}
+    |Pos: 303 SpanInfo: {"start":252,"length":55} Statement: 
+    |new greeter((function bar() {
+    |    return foo(40);
+    |})())
+     |Pos: 304 SpanInfo: {"start":252,"length":55} Statement: 
+     |new greeter((function bar() {
+     |    return foo(40);
+     |})())
+      |Pos: 305 SpanInfo: {"start":252,"length":55} Statement: 
+      |new greeter((function bar() {
+      |    return foo(40);
+      |})())
+       |Pos: 306 SpanInfo: {"start":252,"length":55} Statement: 
+       |new greeter((function bar() {
+       |    return foo(40);
+       |})())
+        |Pos: 307 SpanInfo: {"start":252,"length":55} Statement: 
+        |new greeter((function bar() {
+        |    return foo(40);
+        |})())
+         |Pos: 308 SpanInfo: {"start":252,"length":55} Statement: 
+         |new greeter((function bar() {
+         |    return foo(40);
+         |})())
+--------------------------------
+>>>>var anotherGreeter = new greeter((function bar() {
+
+   |Pos: 309 SpanInfo: {"start":309,"length":76} Statement: 
+   |var anotherGreeter = new greeter((function bar() {
+   |    return foo(40);
+   |})())
+    |Pos: 310 SpanInfo: {"start":309,"length":76} Statement: 
+    |var anotherGreeter = new greeter((function bar() {
+    |    return foo(40);
+    |})())
+     |Pos: 311 SpanInfo: {"start":309,"length":76} Statement: 
+     |var anotherGreeter = new greeter((function bar() {
+     |    return foo(40);
+     |})())
+      |Pos: 312 SpanInfo: {"start":309,"length":76} Statement: 
+      |var anotherGreeter = new greeter((function bar() {
+      |    return foo(40);
+      |})())
+       |Pos: 313 SpanInfo: {"start":309,"length":76} Statement: 
+       |var anotherGreeter = new greeter((function bar() {
+       |    return foo(40);
+       |})())
+        |Pos: 314 SpanInfo: {"start":309,"length":76} Statement: 
+        |var anotherGreeter = new greeter((function bar() {
+        |    return foo(40);
+        |})())
+         |Pos: 315 SpanInfo: {"start":309,"length":76} Statement: 
+         |var anotherGreeter = new greeter((function bar() {
+         |    return foo(40);
+         |})())
+          |Pos: 316 SpanInfo: {"start":309,"length":76} Statement: 
+          |var anotherGreeter = new greeter((function bar() {
+          |    return foo(40);
+          |})())
+           |Pos: 317 SpanInfo: {"start":309,"length":76} Statement: 
+           |var anotherGreeter = new greeter((function bar() {
+           |    return foo(40);
+           |})())
+            |Pos: 318 SpanInfo: {"start":309,"length":76} Statement: 
+            |var anotherGreeter = new greeter((function bar() {
+            |    return foo(40);
+            |})())
+             |Pos: 319 SpanInfo: {"start":309,"length":76} Statement: 
+             |var anotherGreeter = new greeter((function bar() {
+             |    return foo(40);
+             |})())
+              |Pos: 320 SpanInfo: {"start":309,"length":76} Statement: 
+              |var anotherGreeter = new greeter((function bar() {
+              |    return foo(40);
+              |})())
+               |Pos: 321 SpanInfo: {"start":309,"length":76} Statement: 
+               |var anotherGreeter = new greeter((function bar() {
+               |    return foo(40);
+               |})())
+                |Pos: 322 SpanInfo: {"start":309,"length":76} Statement: 
+                |var anotherGreeter = new greeter((function bar() {
+                |    return foo(40);
+                |})())
+                 |Pos: 323 SpanInfo: {"start":309,"length":76} Statement: 
+                 |var anotherGreeter = new greeter((function bar() {
+                 |    return foo(40);
+                 |})())
+                  |Pos: 324 SpanInfo: {"start":309,"length":76} Statement: 
+                  |var anotherGreeter = new greeter((function bar() {
+                  |    return foo(40);
+                  |})())
+                   |Pos: 325 SpanInfo: {"start":309,"length":76} Statement: 
+                   |var anotherGreeter = new greeter((function bar() {
+                   |    return foo(40);
+                   |})())
+                    |Pos: 326 SpanInfo: {"start":309,"length":76} Statement: 
+                    |var anotherGreeter = new greeter((function bar() {
+                    |    return foo(40);
+                    |})())
+                     |Pos: 327 SpanInfo: {"start":309,"length":76} Statement: 
+                     |var anotherGreeter = new greeter((function bar() {
+                     |    return foo(40);
+                     |})())
+                      |Pos: 328 SpanInfo: {"start":309,"length":76} Statement: 
+                      |var anotherGreeter = new greeter((function bar() {
+                      |    return foo(40);
+                      |})())
+                       |Pos: 329 SpanInfo: {"start":309,"length":76} Statement: 
+                       |var anotherGreeter = new greeter((function bar() {
+                       |    return foo(40);
+                       |})())
+                        |Pos: 330 SpanInfo: {"start":309,"length":76} Statement: 
+                        |var anotherGreeter = new greeter((function bar() {
+                        |    return foo(40);
+                        |})())
+                         |Pos: 331 SpanInfo: {"start":309,"length":76} Statement: 
+                         |var anotherGreeter = new greeter((function bar() {
+                         |    return foo(40);
+                         |})())
+                          |Pos: 332 SpanInfo: {"start":309,"length":76} Statement: 
+                          |var anotherGreeter = new greeter((function bar() {
+                          |    return foo(40);
+                          |})())
+                           |Pos: 333 SpanInfo: {"start":309,"length":76} Statement: 
+                           |var anotherGreeter = new greeter((function bar() {
+                           |    return foo(40);
+                           |})())
+                            |Pos: 334 SpanInfo: {"start":309,"length":76} Statement: 
+                            |var anotherGreeter = new greeter((function bar() {
+                            |    return foo(40);
+                            |})())
+                             |Pos: 335 SpanInfo: {"start":309,"length":76} Statement: 
+                             |var anotherGreeter = new greeter((function bar() {
+                             |    return foo(40);
+                             |})())
+                              |Pos: 336 SpanInfo: {"start":309,"length":76} Statement: 
+                              |var anotherGreeter = new greeter((function bar() {
+                              |    return foo(40);
+                              |})())
+                               |Pos: 337 SpanInfo: {"start":309,"length":76} Statement: 
+                               |var anotherGreeter = new greeter((function bar() {
+                               |    return foo(40);
+                               |})())
+                                |Pos: 338 SpanInfo: {"start":309,"length":76} Statement: 
+                                |var anotherGreeter = new greeter((function bar() {
+                                |    return foo(40);
+                                |})())
+                                 |Pos: 339 SpanInfo: {"start":309,"length":76} Statement: 
+                                 |var anotherGreeter = new greeter((function bar() {
+                                 |    return foo(40);
+                                 |})())
+                                  |Pos: 340 SpanInfo: {"start":309,"length":76} Statement: 
+                                  |var anotherGreeter = new greeter((function bar() {
+                                  |    return foo(40);
+                                  |})())
+                                   |Pos: 341 SpanInfo: {"start":309,"length":76} Statement: 
+                                   |var anotherGreeter = new greeter((function bar() {
+                                   |    return foo(40);
+                                   |})())
+                                    |Pos: 342 SpanInfo: {"start":309,"length":76} Statement: 
+                                    |var anotherGreeter = new greeter((function bar() {
+                                    |    return foo(40);
+                                    |})())
+                                     |Pos: 343 SpanInfo: {"start":364,"length":14} Statement: 
+                                     |return foo(40)
+                                      |Pos: 344 SpanInfo: {"start":364,"length":14} Statement: 
+                                      |return foo(40)
+                                       |Pos: 345 SpanInfo: {"start":364,"length":14} Statement: 
+                                       |return foo(40)
+                                        |Pos: 346 SpanInfo: {"start":364,"length":14} Statement: 
+                                        |return foo(40)
+                                         |Pos: 347 SpanInfo: {"start":364,"length":14} Statement: 
+                                         |return foo(40)
+                                          |Pos: 348 SpanInfo: {"start":364,"length":14} Statement: 
+                                          |return foo(40)
+                                           |Pos: 349 SpanInfo: {"start":364,"length":14} Statement: 
+                                           |return foo(40)
+                                            |Pos: 350 SpanInfo: {"start":364,"length":14} Statement: 
+                                            |return foo(40)
+                                             |Pos: 351 SpanInfo: {"start":364,"length":14} Statement: 
+                                             |return foo(40)
+                                              |Pos: 352 SpanInfo: {"start":364,"length":14} Statement: 
+                                              |return foo(40)
+                                               |Pos: 353 SpanInfo: {"start":364,"length":14} Statement: 
+                                               |return foo(40)
+                                                |Pos: 354 SpanInfo: {"start":364,"length":14} Statement: 
+                                                |return foo(40)
+                                                 |Pos: 355 SpanInfo: {"start":364,"length":14} Statement: 
+                                                 |return foo(40)
+                                                  |Pos: 356 SpanInfo: {"start":364,"length":14} Statement: 
+                                                  |return foo(40)
+                                                   |Pos: 357 SpanInfo: {"start":364,"length":14} Statement: 
+                                                   |return foo(40)
+                                                    |Pos: 358 SpanInfo: {"start":364,"length":14} Statement: 
+                                                    |return foo(40)
+                                                     |Pos: 359 SpanInfo: {"start":364,"length":14} Statement: 
+                                                     |return foo(40)
+--------------------------------
+>>>>    return foo(40);
+
+   |Pos: 360 SpanInfo: {"start":364,"length":14} Statement: 
+   |return foo(40)
+    |Pos: 361 SpanInfo: {"start":364,"length":14} Statement: 
+    |return foo(40)
+     |Pos: 362 SpanInfo: {"start":364,"length":14} Statement: 
+     |return foo(40)
+      |Pos: 363 SpanInfo: {"start":364,"length":14} Statement: 
+      |return foo(40)
+       |Pos: 364 SpanInfo: {"start":364,"length":14} Statement: 
+       |return foo(40)
+        |Pos: 365 SpanInfo: {"start":364,"length":14} Statement: 
+        |return foo(40)
+         |Pos: 366 SpanInfo: {"start":364,"length":14} Statement: 
+         |return foo(40)
+          |Pos: 367 SpanInfo: {"start":364,"length":14} Statement: 
+          |return foo(40)
+           |Pos: 368 SpanInfo: {"start":364,"length":14} Statement: 
+           |return foo(40)
+            |Pos: 369 SpanInfo: {"start":364,"length":14} Statement: 
+            |return foo(40)
+             |Pos: 370 SpanInfo: {"start":364,"length":14} Statement: 
+             |return foo(40)
+              |Pos: 371 SpanInfo: {"start":364,"length":14} Statement: 
+              |return foo(40)
+               |Pos: 372 SpanInfo: {"start":364,"length":14} Statement: 
+               |return foo(40)
+                |Pos: 373 SpanInfo: {"start":364,"length":14} Statement: 
+                |return foo(40)
+                 |Pos: 374 SpanInfo: {"start":364,"length":14} Statement: 
+                 |return foo(40)
+                  |Pos: 375 SpanInfo: {"start":364,"length":14} Statement: 
+                  |return foo(40)
+                   |Pos: 376 SpanInfo: {"start":364,"length":14} Statement: 
+                   |return foo(40)
+                    |Pos: 377 SpanInfo: {"start":364,"length":14} Statement: 
+                    |return foo(40)
+                     |Pos: 378 SpanInfo: {"start":364,"length":14} Statement: 
+                     |return foo(40)
+                      |Pos: 379 SpanInfo: {"start":364,"length":14} Statement: 
+                      |return foo(40)
+--------------------------------
+>>>>})());
+
+   |Pos: 380 SpanInfo: {"start":380,"length":1} Statement: 
+   |}
+    |Pos: 381 SpanInfo: {"start":309,"length":76} Statement: 
+    |var anotherGreeter = new greeter((function bar() {
+    |    return foo(40);
+    |})())
+     |Pos: 382 SpanInfo: {"start":309,"length":76} Statement: 
+     |var anotherGreeter = new greeter((function bar() {
+     |    return foo(40);
+     |})())
+      |Pos: 383 SpanInfo: {"start":309,"length":76} Statement: 
+      |var anotherGreeter = new greeter((function bar() {
+      |    return foo(40);
+      |})())
+       |Pos: 384 SpanInfo: {"start":309,"length":76} Statement: 
+       |var anotherGreeter = new greeter((function bar() {
+       |    return foo(40);
+       |})())
+        |Pos: 385 SpanInfo: {"start":309,"length":76} Statement: 
+        |var anotherGreeter = new greeter((function bar() {
+        |    return foo(40);
+        |})())
+         |Pos: 386 SpanInfo: {"start":309,"length":76} Statement: 
+         |var anotherGreeter = new greeter((function bar() {
+         |    return foo(40);
+         |})())
+--------------------------------
+>>>>anotherGreeter = new greeter(30);
+
+   |Pos: 387 SpanInfo: {"start":387,"length":32} Statement: 
+   |anotherGreeter = new greeter(30)
+    |Pos: 388 SpanInfo: {"start":387,"length":32} Statement: 
+    |anotherGreeter = new greeter(30)
+     |Pos: 389 SpanInfo: {"start":387,"length":32} Statement: 
+     |anotherGreeter = new greeter(30)
+      |Pos: 390 SpanInfo: {"start":387,"length":32} Statement: 
+      |anotherGreeter = new greeter(30)
+       |Pos: 391 SpanInfo: {"start":387,"length":32} Statement: 
+       |anotherGreeter = new greeter(30)
+        |Pos: 392 SpanInfo: {"start":387,"length":32} Statement: 
+        |anotherGreeter = new greeter(30)
+         |Pos: 393 SpanInfo: {"start":387,"length":32} Statement: 
+         |anotherGreeter = new greeter(30)
+          |Pos: 394 SpanInfo: {"start":387,"length":32} Statement: 
+          |anotherGreeter = new greeter(30)
+           |Pos: 395 SpanInfo: {"start":387,"length":32} Statement: 
+           |anotherGreeter = new greeter(30)
+            |Pos: 396 SpanInfo: {"start":387,"length":32} Statement: 
+            |anotherGreeter = new greeter(30)
+             |Pos: 397 SpanInfo: {"start":387,"length":32} Statement: 
+             |anotherGreeter = new greeter(30)
+              |Pos: 398 SpanInfo: {"start":387,"length":32} Statement: 
+              |anotherGreeter = new greeter(30)
+               |Pos: 399 SpanInfo: {"start":387,"length":32} Statement: 
+               |anotherGreeter = new greeter(30)
+                |Pos: 400 SpanInfo: {"start":387,"length":32} Statement: 
+                |anotherGreeter = new greeter(30)
+                 |Pos: 401 SpanInfo: {"start":387,"length":32} Statement: 
+                 |anotherGreeter = new greeter(30)
+                  |Pos: 402 SpanInfo: {"start":387,"length":32} Statement: 
+                  |anotherGreeter = new greeter(30)
+                   |Pos: 403 SpanInfo: {"start":387,"length":32} Statement: 
+                   |anotherGreeter = new greeter(30)
+                    |Pos: 404 SpanInfo: {"start":387,"length":32} Statement: 
+                    |anotherGreeter = new greeter(30)
+                     |Pos: 405 SpanInfo: {"start":387,"length":32} Statement: 
+                     |anotherGreeter = new greeter(30)
+                      |Pos: 406 SpanInfo: {"start":387,"length":32} Statement: 
+                      |anotherGreeter = new greeter(30)
+                       |Pos: 407 SpanInfo: {"start":387,"length":32} Statement: 
+                       |anotherGreeter = new greeter(30)
+                        |Pos: 408 SpanInfo: {"start":387,"length":32} Statement: 
+                        |anotherGreeter = new greeter(30)
+                         |Pos: 409 SpanInfo: {"start":387,"length":32} Statement: 
+                         |anotherGreeter = new greeter(30)
+                          |Pos: 410 SpanInfo: {"start":387,"length":32} Statement: 
+                          |anotherGreeter = new greeter(30)
+                           |Pos: 411 SpanInfo: {"start":387,"length":32} Statement: 
+                           |anotherGreeter = new greeter(30)
+                            |Pos: 412 SpanInfo: {"start":387,"length":32} Statement: 
+                            |anotherGreeter = new greeter(30)
+                             |Pos: 413 SpanInfo: {"start":387,"length":32} Statement: 
+                             |anotherGreeter = new greeter(30)
+                              |Pos: 414 SpanInfo: {"start":387,"length":32} Statement: 
+                              |anotherGreeter = new greeter(30)
+                               |Pos: 415 SpanInfo: {"start":387,"length":32} Statement: 
+                               |anotherGreeter = new greeter(30)
+                                |Pos: 416 SpanInfo: {"start":387,"length":32} Statement: 
+                                |anotherGreeter = new greeter(30)
+                                 |Pos: 417 SpanInfo: {"start":387,"length":32} Statement: 
+                                 |anotherGreeter = new greeter(30)
+                                  |Pos: 418 SpanInfo: {"start":387,"length":32} Statement: 
+                                  |anotherGreeter = new greeter(30)
+                                   |Pos: 419 SpanInfo: {"start":387,"length":32} Statement: 
+                                   |anotherGreeter = new greeter(30)
+                                    |Pos: 420 SpanInfo: {"start":387,"length":32} Statement: 
+                                    |anotherGreeter = new greeter(30)
+--------------------------------
+>>>>anotherGreeter = new greeter(40 + y);
+
+   |Pos: 421 SpanInfo: {"start":421,"length":36} Statement: 
+   |anotherGreeter = new greeter(40 + y)
+    |Pos: 422 SpanInfo: {"start":421,"length":36} Statement: 
+    |anotherGreeter = new greeter(40 + y)
+     |Pos: 423 SpanInfo: {"start":421,"length":36} Statement: 
+     |anotherGreeter = new greeter(40 + y)
+      |Pos: 424 SpanInfo: {"start":421,"length":36} Statement: 
+      |anotherGreeter = new greeter(40 + y)
+       |Pos: 425 SpanInfo: {"start":421,"length":36} Statement: 
+       |anotherGreeter = new greeter(40 + y)
+        |Pos: 426 SpanInfo: {"start":421,"length":36} Statement: 
+        |anotherGreeter = new greeter(40 + y)
+         |Pos: 427 SpanInfo: {"start":421,"length":36} Statement: 
+         |anotherGreeter = new greeter(40 + y)
+          |Pos: 428 SpanInfo: {"start":421,"length":36} Statement: 
+          |anotherGreeter = new greeter(40 + y)
+           |Pos: 429 SpanInfo: {"start":421,"length":36} Statement: 
+           |anotherGreeter = new greeter(40 + y)
+            |Pos: 430 SpanInfo: {"start":421,"length":36} Statement: 
+            |anotherGreeter = new greeter(40 + y)
+             |Pos: 431 SpanInfo: {"start":421,"length":36} Statement: 
+             |anotherGreeter = new greeter(40 + y)
+              |Pos: 432 SpanInfo: {"start":421,"length":36} Statement: 
+              |anotherGreeter = new greeter(40 + y)
+               |Pos: 433 SpanInfo: {"start":421,"length":36} Statement: 
+               |anotherGreeter = new greeter(40 + y)
+                |Pos: 434 SpanInfo: {"start":421,"length":36} Statement: 
+                |anotherGreeter = new greeter(40 + y)
+                 |Pos: 435 SpanInfo: {"start":421,"length":36} Statement: 
+                 |anotherGreeter = new greeter(40 + y)
+                  |Pos: 436 SpanInfo: {"start":421,"length":36} Statement: 
+                  |anotherGreeter = new greeter(40 + y)
+                   |Pos: 437 SpanInfo: {"start":421,"length":36} Statement: 
+                   |anotherGreeter = new greeter(40 + y)
+                    |Pos: 438 SpanInfo: {"start":421,"length":36} Statement: 
+                    |anotherGreeter = new greeter(40 + y)
+                     |Pos: 439 SpanInfo: {"start":421,"length":36} Statement: 
+                     |anotherGreeter = new greeter(40 + y)
+                      |Pos: 440 SpanInfo: {"start":421,"length":36} Statement: 
+                      |anotherGreeter = new greeter(40 + y)
+                       |Pos: 441 SpanInfo: {"start":421,"length":36} Statement: 
+                       |anotherGreeter = new greeter(40 + y)
+                        |Pos: 442 SpanInfo: {"start":421,"length":36} Statement: 
+                        |anotherGreeter = new greeter(40 + y)
+                         |Pos: 443 SpanInfo: {"start":421,"length":36} Statement: 
+                         |anotherGreeter = new greeter(40 + y)
+                          |Pos: 444 SpanInfo: {"start":421,"length":36} Statement: 
+                          |anotherGreeter = new greeter(40 + y)
+                           |Pos: 445 SpanInfo: {"start":421,"length":36} Statement: 
+                           |anotherGreeter = new greeter(40 + y)
+                            |Pos: 446 SpanInfo: {"start":421,"length":36} Statement: 
+                            |anotherGreeter = new greeter(40 + y)
+                             |Pos: 447 SpanInfo: {"start":421,"length":36} Statement: 
+                             |anotherGreeter = new greeter(40 + y)
+                              |Pos: 448 SpanInfo: {"start":421,"length":36} Statement: 
+                              |anotherGreeter = new greeter(40 + y)
+                               |Pos: 449 SpanInfo: {"start":421,"length":36} Statement: 
+                               |anotherGreeter = new greeter(40 + y)
+                                |Pos: 450 SpanInfo: {"start":421,"length":36} Statement: 
+                                |anotherGreeter = new greeter(40 + y)
+                                 |Pos: 451 SpanInfo: {"start":421,"length":36} Statement: 
+                                 |anotherGreeter = new greeter(40 + y)
+                                  |Pos: 452 SpanInfo: {"start":421,"length":36} Statement: 
+                                  |anotherGreeter = new greeter(40 + y)
+                                   |Pos: 453 SpanInfo: {"start":421,"length":36} Statement: 
+                                   |anotherGreeter = new greeter(40 + y)
+                                    |Pos: 454 SpanInfo: {"start":421,"length":36} Statement: 
+                                    |anotherGreeter = new greeter(40 + y)
+                                     |Pos: 455 SpanInfo: {"start":421,"length":36} Statement: 
+                                     |anotherGreeter = new greeter(40 + y)
+                                      |Pos: 456 SpanInfo: {"start":421,"length":36} Statement: 
+                                      |anotherGreeter = new greeter(40 + y)
+                                       |Pos: 457 SpanInfo: {"start":421,"length":36} Statement: 
+                                       |anotherGreeter = new greeter(40 + y)
+                                        |Pos: 458 SpanInfo: {"start":421,"length":36} Statement: 
+                                        |anotherGreeter = new greeter(40 + y)
+--------------------------------
+>>>>new greeter(30);
+
+   |Pos: 459 SpanInfo: {"start":459,"length":15} Statement: 
+   |new greeter(30)
+    |Pos: 460 SpanInfo: {"start":459,"length":15} Statement: 
+    |new greeter(30)
+     |Pos: 461 SpanInfo: {"start":459,"length":15} Statement: 
+     |new greeter(30)
+      |Pos: 462 SpanInfo: {"start":459,"length":15} Statement: 
+      |new greeter(30)
+       |Pos: 463 SpanInfo: {"start":459,"length":15} Statement: 
+       |new greeter(30)
+        |Pos: 464 SpanInfo: {"start":459,"length":15} Statement: 
+        |new greeter(30)
+         |Pos: 465 SpanInfo: {"start":459,"length":15} Statement: 
+         |new greeter(30)
+          |Pos: 466 SpanInfo: {"start":459,"length":15} Statement: 
+          |new greeter(30)
+           |Pos: 467 SpanInfo: {"start":459,"length":15} Statement: 
+           |new greeter(30)
+            |Pos: 468 SpanInfo: {"start":459,"length":15} Statement: 
+            |new greeter(30)
+             |Pos: 469 SpanInfo: {"start":459,"length":15} Statement: 
+             |new greeter(30)
+              |Pos: 470 SpanInfo: {"start":459,"length":15} Statement: 
+              |new greeter(30)
+               |Pos: 471 SpanInfo: {"start":459,"length":15} Statement: 
+               |new greeter(30)
+                |Pos: 472 SpanInfo: {"start":459,"length":15} Statement: 
+                |new greeter(30)
+                 |Pos: 473 SpanInfo: {"start":459,"length":15} Statement: 
+                 |new greeter(30)
+                  |Pos: 474 SpanInfo: {"start":459,"length":15} Statement: 
+                  |new greeter(30)
+                   |Pos: 475 SpanInfo: {"start":459,"length":15} Statement: 
+                   |new greeter(30)
+--------------------------------
+>>>>new greeter(40 + y);
+   |Pos: 476 SpanInfo: {"start":476,"length":19} Statement: 
+   |new greeter(40 + y)
+    |Pos: 477 SpanInfo: {"start":476,"length":19} Statement: 
+    |new greeter(40 + y)
+     |Pos: 478 SpanInfo: {"start":476,"length":19} Statement: 
+     |new greeter(40 + y)
+      |Pos: 479 SpanInfo: {"start":476,"length":19} Statement: 
+      |new greeter(40 + y)
+       |Pos: 480 SpanInfo: {"start":476,"length":19} Statement: 
+       |new greeter(40 + y)
+        |Pos: 481 SpanInfo: {"start":476,"length":19} Statement: 
+        |new greeter(40 + y)
+         |Pos: 482 SpanInfo: {"start":476,"length":19} Statement: 
+         |new greeter(40 + y)
+          |Pos: 483 SpanInfo: {"start":476,"length":19} Statement: 
+          |new greeter(40 + y)
+           |Pos: 484 SpanInfo: {"start":476,"length":19} Statement: 
+           |new greeter(40 + y)
+            |Pos: 485 SpanInfo: {"start":476,"length":19} Statement: 
+            |new greeter(40 + y)
+             |Pos: 486 SpanInfo: {"start":476,"length":19} Statement: 
+             |new greeter(40 + y)
+              |Pos: 487 SpanInfo: {"start":476,"length":19} Statement: 
+              |new greeter(40 + y)
+               |Pos: 488 SpanInfo: {"start":476,"length":19} Statement: 
+               |new greeter(40 + y)
+                |Pos: 489 SpanInfo: {"start":476,"length":19} Statement: 
+                |new greeter(40 + y)
+                 |Pos: 490 SpanInfo: {"start":476,"length":19} Statement: 
+                 |new greeter(40 + y)
+                  |Pos: 491 SpanInfo: {"start":476,"length":19} Statement: 
+                  |new greeter(40 + y)
+                   |Pos: 492 SpanInfo: {"start":476,"length":19} Statement: 
+                   |new greeter(40 + y)
+                    |Pos: 493 SpanInfo: {"start":476,"length":19} Statement: 
+                    |new greeter(40 + y)
+                     |Pos: 494 SpanInfo: {"start":476,"length":19} Statement: 
+                     |new greeter(40 + y)
+                      |Pos: 495 SpanInfo: {"start":476,"length":19} Statement: 
+                      |new greeter(40 + y)

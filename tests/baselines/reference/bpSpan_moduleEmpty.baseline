@@ -1,0 +1,20 @@
+
+--------------------------------
+>>>>module Bar {
+
+   |Pos: 0 SpanInfo: undefined Statement: 
+    |Pos: 1 SpanInfo: undefined Statement: 
+     |Pos: 2 SpanInfo: undefined Statement: 
+      |Pos: 3 SpanInfo: undefined Statement: 
+       |Pos: 4 SpanInfo: undefined Statement: 
+        |Pos: 5 SpanInfo: undefined Statement: 
+         |Pos: 6 SpanInfo: undefined Statement: 
+          |Pos: 7 SpanInfo: undefined Statement: 
+           |Pos: 8 SpanInfo: undefined Statement: 
+            |Pos: 9 SpanInfo: undefined Statement: 
+             |Pos: 10 SpanInfo: undefined Statement: 
+              |Pos: 11 SpanInfo: undefined Statement: 
+               |Pos: 12 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>}
+   |Pos: 13 SpanInfo: undefined Statement: 

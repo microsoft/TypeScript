@@ -1,0 +1,230 @@
+
+--------------------------------
+>>>>declare class Greeter {
+
+   |Pos: 0 SpanInfo: undefined Statement: 
+    |Pos: 1 SpanInfo: undefined Statement: 
+     |Pos: 2 SpanInfo: undefined Statement: 
+      |Pos: 3 SpanInfo: undefined Statement: 
+       |Pos: 4 SpanInfo: undefined Statement: 
+        |Pos: 5 SpanInfo: undefined Statement: 
+         |Pos: 6 SpanInfo: undefined Statement: 
+          |Pos: 7 SpanInfo: undefined Statement: 
+           |Pos: 8 SpanInfo: undefined Statement: 
+            |Pos: 9 SpanInfo: undefined Statement: 
+             |Pos: 10 SpanInfo: undefined Statement: 
+              |Pos: 11 SpanInfo: undefined Statement: 
+               |Pos: 12 SpanInfo: undefined Statement: 
+                |Pos: 13 SpanInfo: undefined Statement: 
+                 |Pos: 14 SpanInfo: undefined Statement: 
+                  |Pos: 15 SpanInfo: undefined Statement: 
+                   |Pos: 16 SpanInfo: undefined Statement: 
+                    |Pos: 17 SpanInfo: undefined Statement: 
+                     |Pos: 18 SpanInfo: undefined Statement: 
+                      |Pos: 19 SpanInfo: undefined Statement: 
+                       |Pos: 20 SpanInfo: undefined Statement: 
+                        |Pos: 21 SpanInfo: undefined Statement: 
+                         |Pos: 22 SpanInfo: undefined Statement: 
+                          |Pos: 23 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    public greeting: string;
+
+   |Pos: 24 SpanInfo: undefined Statement: 
+    |Pos: 25 SpanInfo: undefined Statement: 
+     |Pos: 26 SpanInfo: undefined Statement: 
+      |Pos: 27 SpanInfo: undefined Statement: 
+       |Pos: 28 SpanInfo: undefined Statement: 
+        |Pos: 29 SpanInfo: undefined Statement: 
+         |Pos: 30 SpanInfo: undefined Statement: 
+          |Pos: 31 SpanInfo: undefined Statement: 
+           |Pos: 32 SpanInfo: undefined Statement: 
+            |Pos: 33 SpanInfo: undefined Statement: 
+             |Pos: 34 SpanInfo: undefined Statement: 
+              |Pos: 35 SpanInfo: undefined Statement: 
+               |Pos: 36 SpanInfo: undefined Statement: 
+                |Pos: 37 SpanInfo: undefined Statement: 
+                 |Pos: 38 SpanInfo: undefined Statement: 
+                  |Pos: 39 SpanInfo: undefined Statement: 
+                   |Pos: 40 SpanInfo: undefined Statement: 
+                    |Pos: 41 SpanInfo: undefined Statement: 
+                     |Pos: 42 SpanInfo: undefined Statement: 
+                      |Pos: 43 SpanInfo: undefined Statement: 
+                       |Pos: 44 SpanInfo: undefined Statement: 
+                        |Pos: 45 SpanInfo: undefined Statement: 
+                         |Pos: 46 SpanInfo: undefined Statement: 
+                          |Pos: 47 SpanInfo: undefined Statement: 
+                           |Pos: 48 SpanInfo: undefined Statement: 
+                            |Pos: 49 SpanInfo: undefined Statement: 
+                             |Pos: 50 SpanInfo: undefined Statement: 
+                              |Pos: 51 SpanInfo: undefined Statement: 
+                               |Pos: 52 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    constructor(greeting: string, ...b: string[]);
+
+   |Pos: 53 SpanInfo: undefined Statement: 
+    |Pos: 54 SpanInfo: undefined Statement: 
+     |Pos: 55 SpanInfo: undefined Statement: 
+      |Pos: 56 SpanInfo: undefined Statement: 
+       |Pos: 57 SpanInfo: undefined Statement: 
+        |Pos: 58 SpanInfo: undefined Statement: 
+         |Pos: 59 SpanInfo: undefined Statement: 
+          |Pos: 60 SpanInfo: undefined Statement: 
+           |Pos: 61 SpanInfo: undefined Statement: 
+            |Pos: 62 SpanInfo: undefined Statement: 
+             |Pos: 63 SpanInfo: undefined Statement: 
+              |Pos: 64 SpanInfo: undefined Statement: 
+               |Pos: 65 SpanInfo: undefined Statement: 
+                |Pos: 66 SpanInfo: undefined Statement: 
+                 |Pos: 67 SpanInfo: undefined Statement: 
+                  |Pos: 68 SpanInfo: undefined Statement: 
+                   |Pos: 69 SpanInfo: undefined Statement: 
+                    |Pos: 70 SpanInfo: undefined Statement: 
+                     |Pos: 71 SpanInfo: undefined Statement: 
+                      |Pos: 72 SpanInfo: undefined Statement: 
+                       |Pos: 73 SpanInfo: undefined Statement: 
+                        |Pos: 74 SpanInfo: undefined Statement: 
+                         |Pos: 75 SpanInfo: undefined Statement: 
+                          |Pos: 76 SpanInfo: undefined Statement: 
+                           |Pos: 77 SpanInfo: undefined Statement: 
+                            |Pos: 78 SpanInfo: undefined Statement: 
+                             |Pos: 79 SpanInfo: undefined Statement: 
+                              |Pos: 80 SpanInfo: undefined Statement: 
+                               |Pos: 81 SpanInfo: undefined Statement: 
+                                |Pos: 82 SpanInfo: undefined Statement: 
+                                 |Pos: 83 SpanInfo: undefined Statement: 
+                                  |Pos: 84 SpanInfo: undefined Statement: 
+                                   |Pos: 85 SpanInfo: undefined Statement: 
+                                    |Pos: 86 SpanInfo: undefined Statement: 
+                                     |Pos: 87 SpanInfo: undefined Statement: 
+                                      |Pos: 88 SpanInfo: undefined Statement: 
+                                       |Pos: 89 SpanInfo: undefined Statement: 
+                                        |Pos: 90 SpanInfo: undefined Statement: 
+                                         |Pos: 91 SpanInfo: undefined Statement: 
+                                          |Pos: 92 SpanInfo: undefined Statement: 
+                                           |Pos: 93 SpanInfo: undefined Statement: 
+                                            |Pos: 94 SpanInfo: undefined Statement: 
+                                             |Pos: 95 SpanInfo: undefined Statement: 
+                                              |Pos: 96 SpanInfo: undefined Statement: 
+                                               |Pos: 97 SpanInfo: undefined Statement: 
+                                                |Pos: 98 SpanInfo: undefined Statement: 
+                                                 |Pos: 99 SpanInfo: undefined Statement: 
+                                                  |Pos: 100 SpanInfo: undefined Statement: 
+                                                   |Pos: 101 SpanInfo: undefined Statement: 
+                                                    |Pos: 102 SpanInfo: undefined Statement: 
+                                                     |Pos: 103 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    greet(): string;
+
+   |Pos: 104 SpanInfo: undefined Statement: 
+    |Pos: 105 SpanInfo: undefined Statement: 
+     |Pos: 106 SpanInfo: undefined Statement: 
+      |Pos: 107 SpanInfo: undefined Statement: 
+       |Pos: 108 SpanInfo: undefined Statement: 
+        |Pos: 109 SpanInfo: undefined Statement: 
+         |Pos: 110 SpanInfo: undefined Statement: 
+          |Pos: 111 SpanInfo: undefined Statement: 
+           |Pos: 112 SpanInfo: undefined Statement: 
+            |Pos: 113 SpanInfo: undefined Statement: 
+             |Pos: 114 SpanInfo: undefined Statement: 
+              |Pos: 115 SpanInfo: undefined Statement: 
+               |Pos: 116 SpanInfo: undefined Statement: 
+                |Pos: 117 SpanInfo: undefined Statement: 
+                 |Pos: 118 SpanInfo: undefined Statement: 
+                  |Pos: 119 SpanInfo: undefined Statement: 
+                   |Pos: 120 SpanInfo: undefined Statement: 
+                    |Pos: 121 SpanInfo: undefined Statement: 
+                     |Pos: 122 SpanInfo: undefined Statement: 
+                      |Pos: 123 SpanInfo: undefined Statement: 
+                       |Pos: 124 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    private val;
+
+   |Pos: 125 SpanInfo: undefined Statement: 
+    |Pos: 126 SpanInfo: undefined Statement: 
+     |Pos: 127 SpanInfo: undefined Statement: 
+      |Pos: 128 SpanInfo: undefined Statement: 
+       |Pos: 129 SpanInfo: undefined Statement: 
+        |Pos: 130 SpanInfo: undefined Statement: 
+         |Pos: 131 SpanInfo: undefined Statement: 
+          |Pos: 132 SpanInfo: undefined Statement: 
+           |Pos: 133 SpanInfo: undefined Statement: 
+            |Pos: 134 SpanInfo: undefined Statement: 
+             |Pos: 135 SpanInfo: undefined Statement: 
+              |Pos: 136 SpanInfo: undefined Statement: 
+               |Pos: 137 SpanInfo: undefined Statement: 
+                |Pos: 138 SpanInfo: undefined Statement: 
+                 |Pos: 139 SpanInfo: undefined Statement: 
+                  |Pos: 140 SpanInfo: undefined Statement: 
+                   |Pos: 141 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    static x: number;
+
+   |Pos: 142 SpanInfo: undefined Statement: 
+    |Pos: 143 SpanInfo: undefined Statement: 
+     |Pos: 144 SpanInfo: undefined Statement: 
+      |Pos: 145 SpanInfo: undefined Statement: 
+       |Pos: 146 SpanInfo: undefined Statement: 
+        |Pos: 147 SpanInfo: undefined Statement: 
+         |Pos: 148 SpanInfo: undefined Statement: 
+          |Pos: 149 SpanInfo: undefined Statement: 
+           |Pos: 150 SpanInfo: undefined Statement: 
+            |Pos: 151 SpanInfo: undefined Statement: 
+             |Pos: 152 SpanInfo: undefined Statement: 
+              |Pos: 153 SpanInfo: undefined Statement: 
+               |Pos: 154 SpanInfo: undefined Statement: 
+                |Pos: 155 SpanInfo: undefined Statement: 
+                 |Pos: 156 SpanInfo: undefined Statement: 
+                  |Pos: 157 SpanInfo: undefined Statement: 
+                   |Pos: 158 SpanInfo: undefined Statement: 
+                    |Pos: 159 SpanInfo: undefined Statement: 
+                     |Pos: 160 SpanInfo: undefined Statement: 
+                      |Pos: 161 SpanInfo: undefined Statement: 
+                       |Pos: 162 SpanInfo: undefined Statement: 
+                        |Pos: 163 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    static fn(a: number, ...b:string[]);
+
+   |Pos: 164 SpanInfo: undefined Statement: 
+    |Pos: 165 SpanInfo: undefined Statement: 
+     |Pos: 166 SpanInfo: undefined Statement: 
+      |Pos: 167 SpanInfo: undefined Statement: 
+       |Pos: 168 SpanInfo: undefined Statement: 
+        |Pos: 169 SpanInfo: undefined Statement: 
+         |Pos: 170 SpanInfo: undefined Statement: 
+          |Pos: 171 SpanInfo: undefined Statement: 
+           |Pos: 172 SpanInfo: undefined Statement: 
+            |Pos: 173 SpanInfo: undefined Statement: 
+             |Pos: 174 SpanInfo: undefined Statement: 
+              |Pos: 175 SpanInfo: undefined Statement: 
+               |Pos: 176 SpanInfo: undefined Statement: 
+                |Pos: 177 SpanInfo: undefined Statement: 
+                 |Pos: 178 SpanInfo: undefined Statement: 
+                  |Pos: 179 SpanInfo: undefined Statement: 
+                   |Pos: 180 SpanInfo: undefined Statement: 
+                    |Pos: 181 SpanInfo: undefined Statement: 
+                     |Pos: 182 SpanInfo: undefined Statement: 
+                      |Pos: 183 SpanInfo: undefined Statement: 
+                       |Pos: 184 SpanInfo: undefined Statement: 
+                        |Pos: 185 SpanInfo: undefined Statement: 
+                         |Pos: 186 SpanInfo: undefined Statement: 
+                          |Pos: 187 SpanInfo: undefined Statement: 
+                           |Pos: 188 SpanInfo: undefined Statement: 
+                            |Pos: 189 SpanInfo: undefined Statement: 
+                             |Pos: 190 SpanInfo: undefined Statement: 
+                              |Pos: 191 SpanInfo: undefined Statement: 
+                               |Pos: 192 SpanInfo: undefined Statement: 
+                                |Pos: 193 SpanInfo: undefined Statement: 
+                                 |Pos: 194 SpanInfo: undefined Statement: 
+                                  |Pos: 195 SpanInfo: undefined Statement: 
+                                   |Pos: 196 SpanInfo: undefined Statement: 
+                                    |Pos: 197 SpanInfo: undefined Statement: 
+                                     |Pos: 198 SpanInfo: undefined Statement: 
+                                      |Pos: 199 SpanInfo: undefined Statement: 
+                                       |Pos: 200 SpanInfo: undefined Statement: 
+                                        |Pos: 201 SpanInfo: undefined Statement: 
+                                         |Pos: 202 SpanInfo: undefined Statement: 
+                                          |Pos: 203 SpanInfo: undefined Statement: 
+                                           |Pos: 204 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>}
+   |Pos: 205 SpanInfo: undefined Statement: 

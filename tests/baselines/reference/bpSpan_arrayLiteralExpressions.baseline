@@ -1,0 +1,625 @@
+
+--------------------------------
+>>>>var a = [10, 20, 30];
+
+   |Pos: 0 SpanInfo: {"start":0,"length":20} Statement: 
+   |var a = [10, 20, 30]
+    |Pos: 1 SpanInfo: {"start":0,"length":20} Statement: 
+    |var a = [10, 20, 30]
+     |Pos: 2 SpanInfo: {"start":0,"length":20} Statement: 
+     |var a = [10, 20, 30]
+      |Pos: 3 SpanInfo: {"start":0,"length":20} Statement: 
+      |var a = [10, 20, 30]
+       |Pos: 4 SpanInfo: {"start":0,"length":20} Statement: 
+       |var a = [10, 20, 30]
+        |Pos: 5 SpanInfo: {"start":0,"length":20} Statement: 
+        |var a = [10, 20, 30]
+         |Pos: 6 SpanInfo: {"start":0,"length":20} Statement: 
+         |var a = [10, 20, 30]
+          |Pos: 7 SpanInfo: {"start":0,"length":20} Statement: 
+          |var a = [10, 20, 30]
+           |Pos: 8 SpanInfo: {"start":0,"length":20} Statement: 
+           |var a = [10, 20, 30]
+            |Pos: 9 SpanInfo: {"start":0,"length":20} Statement: 
+            |var a = [10, 20, 30]
+             |Pos: 10 SpanInfo: {"start":0,"length":20} Statement: 
+             |var a = [10, 20, 30]
+              |Pos: 11 SpanInfo: {"start":0,"length":20} Statement: 
+              |var a = [10, 20, 30]
+               |Pos: 12 SpanInfo: {"start":0,"length":20} Statement: 
+               |var a = [10, 20, 30]
+                |Pos: 13 SpanInfo: {"start":0,"length":20} Statement: 
+                |var a = [10, 20, 30]
+                 |Pos: 14 SpanInfo: {"start":0,"length":20} Statement: 
+                 |var a = [10, 20, 30]
+                  |Pos: 15 SpanInfo: {"start":0,"length":20} Statement: 
+                  |var a = [10, 20, 30]
+                   |Pos: 16 SpanInfo: {"start":0,"length":20} Statement: 
+                   |var a = [10, 20, 30]
+                    |Pos: 17 SpanInfo: {"start":0,"length":20} Statement: 
+                    |var a = [10, 20, 30]
+                     |Pos: 18 SpanInfo: {"start":0,"length":20} Statement: 
+                     |var a = [10, 20, 30]
+                      |Pos: 19 SpanInfo: {"start":0,"length":20} Statement: 
+                      |var a = [10, 20, 30]
+                       |Pos: 20 SpanInfo: {"start":0,"length":20} Statement: 
+                       |var a = [10, 20, 30]
+                        |Pos: 21 SpanInfo: {"start":0,"length":20} Statement: 
+                        |var a = [10, 20, 30]
+--------------------------------
+>>>>function foo(a: number) {
+
+   |Pos: 22 SpanInfo: {"start":52,"length":8} Statement: 
+   |return a
+    |Pos: 23 SpanInfo: {"start":52,"length":8} Statement: 
+    |return a
+     |Pos: 24 SpanInfo: {"start":52,"length":8} Statement: 
+     |return a
+      |Pos: 25 SpanInfo: {"start":52,"length":8} Statement: 
+      |return a
+       |Pos: 26 SpanInfo: {"start":52,"length":8} Statement: 
+       |return a
+        |Pos: 27 SpanInfo: {"start":52,"length":8} Statement: 
+        |return a
+         |Pos: 28 SpanInfo: {"start":52,"length":8} Statement: 
+         |return a
+          |Pos: 29 SpanInfo: {"start":52,"length":8} Statement: 
+          |return a
+           |Pos: 30 SpanInfo: {"start":52,"length":8} Statement: 
+           |return a
+            |Pos: 31 SpanInfo: {"start":52,"length":8} Statement: 
+            |return a
+             |Pos: 32 SpanInfo: {"start":52,"length":8} Statement: 
+             |return a
+              |Pos: 33 SpanInfo: {"start":52,"length":8} Statement: 
+              |return a
+               |Pos: 34 SpanInfo: {"start":52,"length":8} Statement: 
+               |return a
+                |Pos: 35 SpanInfo: {"start":52,"length":8} Statement: 
+                |return a
+                 |Pos: 36 SpanInfo: {"start":52,"length":8} Statement: 
+                 |return a
+                  |Pos: 37 SpanInfo: {"start":52,"length":8} Statement: 
+                  |return a
+                   |Pos: 38 SpanInfo: {"start":52,"length":8} Statement: 
+                   |return a
+                    |Pos: 39 SpanInfo: {"start":52,"length":8} Statement: 
+                    |return a
+                     |Pos: 40 SpanInfo: {"start":52,"length":8} Statement: 
+                     |return a
+                      |Pos: 41 SpanInfo: {"start":52,"length":8} Statement: 
+                      |return a
+                       |Pos: 42 SpanInfo: {"start":52,"length":8} Statement: 
+                       |return a
+                        |Pos: 43 SpanInfo: {"start":52,"length":8} Statement: 
+                        |return a
+                         |Pos: 44 SpanInfo: {"start":52,"length":8} Statement: 
+                         |return a
+                          |Pos: 45 SpanInfo: {"start":52,"length":8} Statement: 
+                          |return a
+                           |Pos: 46 SpanInfo: {"start":52,"length":8} Statement: 
+                           |return a
+                            |Pos: 47 SpanInfo: {"start":52,"length":8} Statement: 
+                            |return a
+--------------------------------
+>>>>    return a;
+
+   |Pos: 48 SpanInfo: {"start":52,"length":8} Statement: 
+   |return a
+    |Pos: 49 SpanInfo: {"start":52,"length":8} Statement: 
+    |return a
+     |Pos: 50 SpanInfo: {"start":52,"length":8} Statement: 
+     |return a
+      |Pos: 51 SpanInfo: {"start":52,"length":8} Statement: 
+      |return a
+       |Pos: 52 SpanInfo: {"start":52,"length":8} Statement: 
+       |return a
+        |Pos: 53 SpanInfo: {"start":52,"length":8} Statement: 
+        |return a
+         |Pos: 54 SpanInfo: {"start":52,"length":8} Statement: 
+         |return a
+          |Pos: 55 SpanInfo: {"start":52,"length":8} Statement: 
+          |return a
+           |Pos: 56 SpanInfo: {"start":52,"length":8} Statement: 
+           |return a
+            |Pos: 57 SpanInfo: {"start":52,"length":8} Statement: 
+            |return a
+             |Pos: 58 SpanInfo: {"start":52,"length":8} Statement: 
+             |return a
+              |Pos: 59 SpanInfo: {"start":52,"length":8} Statement: 
+              |return a
+               |Pos: 60 SpanInfo: {"start":52,"length":8} Statement: 
+               |return a
+                |Pos: 61 SpanInfo: {"start":52,"length":8} Statement: 
+                |return a
+--------------------------------
+>>>>}
+
+   |Pos: 62 SpanInfo: {"start":62,"length":1} Statement: 
+   |}
+    |Pos: 63 SpanInfo: {"start":62,"length":1} Statement: 
+    |}
+--------------------------------
+>>>>a = [foo(30), (function () {
+
+   |Pos: 64 SpanInfo: {"start":64,"length":49} Statement: 
+   |a = [foo(30), (function () {
+   |    return 30;
+   |})()]
+    |Pos: 65 SpanInfo: {"start":64,"length":49} Statement: 
+    |a = [foo(30), (function () {
+    |    return 30;
+    |})()]
+     |Pos: 66 SpanInfo: {"start":64,"length":49} Statement: 
+     |a = [foo(30), (function () {
+     |    return 30;
+     |})()]
+      |Pos: 67 SpanInfo: {"start":64,"length":49} Statement: 
+      |a = [foo(30), (function () {
+      |    return 30;
+      |})()]
+       |Pos: 68 SpanInfo: {"start":64,"length":49} Statement: 
+       |a = [foo(30), (function () {
+       |    return 30;
+       |})()]
+        |Pos: 69 SpanInfo: {"start":64,"length":49} Statement: 
+        |a = [foo(30), (function () {
+        |    return 30;
+        |})()]
+         |Pos: 70 SpanInfo: {"start":64,"length":49} Statement: 
+         |a = [foo(30), (function () {
+         |    return 30;
+         |})()]
+          |Pos: 71 SpanInfo: {"start":64,"length":49} Statement: 
+          |a = [foo(30), (function () {
+          |    return 30;
+          |})()]
+           |Pos: 72 SpanInfo: {"start":64,"length":49} Statement: 
+           |a = [foo(30), (function () {
+           |    return 30;
+           |})()]
+            |Pos: 73 SpanInfo: {"start":64,"length":49} Statement: 
+            |a = [foo(30), (function () {
+            |    return 30;
+            |})()]
+             |Pos: 74 SpanInfo: {"start":64,"length":49} Statement: 
+             |a = [foo(30), (function () {
+             |    return 30;
+             |})()]
+              |Pos: 75 SpanInfo: {"start":64,"length":49} Statement: 
+              |a = [foo(30), (function () {
+              |    return 30;
+              |})()]
+               |Pos: 76 SpanInfo: {"start":64,"length":49} Statement: 
+               |a = [foo(30), (function () {
+               |    return 30;
+               |})()]
+                |Pos: 77 SpanInfo: {"start":64,"length":49} Statement: 
+                |a = [foo(30), (function () {
+                |    return 30;
+                |})()]
+                 |Pos: 78 SpanInfo: {"start":64,"length":49} Statement: 
+                 |a = [foo(30), (function () {
+                 |    return 30;
+                 |})()]
+                  |Pos: 79 SpanInfo: {"start":97,"length":9} Statement: 
+                  |return 30
+                   |Pos: 80 SpanInfo: {"start":97,"length":9} Statement: 
+                   |return 30
+                    |Pos: 81 SpanInfo: {"start":97,"length":9} Statement: 
+                    |return 30
+                     |Pos: 82 SpanInfo: {"start":97,"length":9} Statement: 
+                     |return 30
+                      |Pos: 83 SpanInfo: {"start":97,"length":9} Statement: 
+                      |return 30
+                       |Pos: 84 SpanInfo: {"start":97,"length":9} Statement: 
+                       |return 30
+                        |Pos: 85 SpanInfo: {"start":97,"length":9} Statement: 
+                        |return 30
+                         |Pos: 86 SpanInfo: {"start":97,"length":9} Statement: 
+                         |return 30
+                          |Pos: 87 SpanInfo: {"start":97,"length":9} Statement: 
+                          |return 30
+                           |Pos: 88 SpanInfo: {"start":97,"length":9} Statement: 
+                           |return 30
+                            |Pos: 89 SpanInfo: {"start":97,"length":9} Statement: 
+                            |return 30
+                             |Pos: 90 SpanInfo: {"start":97,"length":9} Statement: 
+                             |return 30
+                              |Pos: 91 SpanInfo: {"start":97,"length":9} Statement: 
+                              |return 30
+                               |Pos: 92 SpanInfo: {"start":97,"length":9} Statement: 
+                               |return 30
+--------------------------------
+>>>>    return 30;
+
+   |Pos: 93 SpanInfo: {"start":97,"length":9} Statement: 
+   |return 30
+    |Pos: 94 SpanInfo: {"start":97,"length":9} Statement: 
+    |return 30
+     |Pos: 95 SpanInfo: {"start":97,"length":9} Statement: 
+     |return 30
+      |Pos: 96 SpanInfo: {"start":97,"length":9} Statement: 
+      |return 30
+       |Pos: 97 SpanInfo: {"start":97,"length":9} Statement: 
+       |return 30
+        |Pos: 98 SpanInfo: {"start":97,"length":9} Statement: 
+        |return 30
+         |Pos: 99 SpanInfo: {"start":97,"length":9} Statement: 
+         |return 30
+          |Pos: 100 SpanInfo: {"start":97,"length":9} Statement: 
+          |return 30
+           |Pos: 101 SpanInfo: {"start":97,"length":9} Statement: 
+           |return 30
+            |Pos: 102 SpanInfo: {"start":97,"length":9} Statement: 
+            |return 30
+             |Pos: 103 SpanInfo: {"start":97,"length":9} Statement: 
+             |return 30
+              |Pos: 104 SpanInfo: {"start":97,"length":9} Statement: 
+              |return 30
+               |Pos: 105 SpanInfo: {"start":97,"length":9} Statement: 
+               |return 30
+                |Pos: 106 SpanInfo: {"start":97,"length":9} Statement: 
+                |return 30
+                 |Pos: 107 SpanInfo: {"start":97,"length":9} Statement: 
+                 |return 30
+--------------------------------
+>>>>})()];
+
+   |Pos: 108 SpanInfo: {"start":108,"length":1} Statement: 
+   |}
+    |Pos: 109 SpanInfo: {"start":64,"length":49} Statement: 
+    |a = [foo(30), (function () {
+    |    return 30;
+    |})()]
+     |Pos: 110 SpanInfo: {"start":64,"length":49} Statement: 
+     |a = [foo(30), (function () {
+     |    return 30;
+     |})()]
+      |Pos: 111 SpanInfo: {"start":64,"length":49} Statement: 
+      |a = [foo(30), (function () {
+      |    return 30;
+      |})()]
+       |Pos: 112 SpanInfo: {"start":64,"length":49} Statement: 
+       |a = [foo(30), (function () {
+       |    return 30;
+       |})()]
+        |Pos: 113 SpanInfo: {"start":64,"length":49} Statement: 
+        |a = [foo(30), (function () {
+        |    return 30;
+        |})()]
+         |Pos: 114 SpanInfo: {"start":64,"length":49} Statement: 
+         |a = [foo(30), (function () {
+         |    return 30;
+         |})()]
+--------------------------------
+>>>>function bar() {
+
+   |Pos: 115 SpanInfo: {"start":136,"length":8} Statement: 
+   |return a
+    |Pos: 116 SpanInfo: {"start":136,"length":8} Statement: 
+    |return a
+     |Pos: 117 SpanInfo: {"start":136,"length":8} Statement: 
+     |return a
+      |Pos: 118 SpanInfo: {"start":136,"length":8} Statement: 
+      |return a
+       |Pos: 119 SpanInfo: {"start":136,"length":8} Statement: 
+       |return a
+        |Pos: 120 SpanInfo: {"start":136,"length":8} Statement: 
+        |return a
+         |Pos: 121 SpanInfo: {"start":136,"length":8} Statement: 
+         |return a
+          |Pos: 122 SpanInfo: {"start":136,"length":8} Statement: 
+          |return a
+           |Pos: 123 SpanInfo: {"start":136,"length":8} Statement: 
+           |return a
+            |Pos: 124 SpanInfo: {"start":136,"length":8} Statement: 
+            |return a
+             |Pos: 125 SpanInfo: {"start":136,"length":8} Statement: 
+             |return a
+              |Pos: 126 SpanInfo: {"start":136,"length":8} Statement: 
+              |return a
+               |Pos: 127 SpanInfo: {"start":136,"length":8} Statement: 
+               |return a
+                |Pos: 128 SpanInfo: {"start":136,"length":8} Statement: 
+                |return a
+                 |Pos: 129 SpanInfo: {"start":136,"length":8} Statement: 
+                 |return a
+                  |Pos: 130 SpanInfo: {"start":136,"length":8} Statement: 
+                  |return a
+                   |Pos: 131 SpanInfo: {"start":136,"length":8} Statement: 
+                   |return a
+--------------------------------
+>>>>    return a;
+
+   |Pos: 132 SpanInfo: {"start":136,"length":8} Statement: 
+   |return a
+    |Pos: 133 SpanInfo: {"start":136,"length":8} Statement: 
+    |return a
+     |Pos: 134 SpanInfo: {"start":136,"length":8} Statement: 
+     |return a
+      |Pos: 135 SpanInfo: {"start":136,"length":8} Statement: 
+      |return a
+       |Pos: 136 SpanInfo: {"start":136,"length":8} Statement: 
+       |return a
+        |Pos: 137 SpanInfo: {"start":136,"length":8} Statement: 
+        |return a
+         |Pos: 138 SpanInfo: {"start":136,"length":8} Statement: 
+         |return a
+          |Pos: 139 SpanInfo: {"start":136,"length":8} Statement: 
+          |return a
+           |Pos: 140 SpanInfo: {"start":136,"length":8} Statement: 
+           |return a
+            |Pos: 141 SpanInfo: {"start":136,"length":8} Statement: 
+            |return a
+             |Pos: 142 SpanInfo: {"start":136,"length":8} Statement: 
+             |return a
+              |Pos: 143 SpanInfo: {"start":136,"length":8} Statement: 
+              |return a
+               |Pos: 144 SpanInfo: {"start":136,"length":8} Statement: 
+               |return a
+                |Pos: 145 SpanInfo: {"start":136,"length":8} Statement: 
+                |return a
+--------------------------------
+>>>>}
+
+   |Pos: 146 SpanInfo: {"start":146,"length":1} Statement: 
+   |}
+    |Pos: 147 SpanInfo: {"start":146,"length":1} Statement: 
+    |}
+--------------------------------
+>>>>var x = bar()[0];
+
+   |Pos: 148 SpanInfo: {"start":148,"length":16} Statement: 
+   |var x = bar()[0]
+    |Pos: 149 SpanInfo: {"start":148,"length":16} Statement: 
+    |var x = bar()[0]
+     |Pos: 150 SpanInfo: {"start":148,"length":16} Statement: 
+     |var x = bar()[0]
+      |Pos: 151 SpanInfo: {"start":148,"length":16} Statement: 
+      |var x = bar()[0]
+       |Pos: 152 SpanInfo: {"start":148,"length":16} Statement: 
+       |var x = bar()[0]
+        |Pos: 153 SpanInfo: {"start":148,"length":16} Statement: 
+        |var x = bar()[0]
+         |Pos: 154 SpanInfo: {"start":148,"length":16} Statement: 
+         |var x = bar()[0]
+          |Pos: 155 SpanInfo: {"start":148,"length":16} Statement: 
+          |var x = bar()[0]
+           |Pos: 156 SpanInfo: {"start":148,"length":16} Statement: 
+           |var x = bar()[0]
+            |Pos: 157 SpanInfo: {"start":148,"length":16} Statement: 
+            |var x = bar()[0]
+             |Pos: 158 SpanInfo: {"start":148,"length":16} Statement: 
+             |var x = bar()[0]
+              |Pos: 159 SpanInfo: {"start":148,"length":16} Statement: 
+              |var x = bar()[0]
+               |Pos: 160 SpanInfo: {"start":148,"length":16} Statement: 
+               |var x = bar()[0]
+                |Pos: 161 SpanInfo: {"start":148,"length":16} Statement: 
+                |var x = bar()[0]
+                 |Pos: 162 SpanInfo: {"start":148,"length":16} Statement: 
+                 |var x = bar()[0]
+                  |Pos: 163 SpanInfo: {"start":148,"length":16} Statement: 
+                  |var x = bar()[0]
+                   |Pos: 164 SpanInfo: {"start":148,"length":16} Statement: 
+                   |var x = bar()[0]
+                    |Pos: 165 SpanInfo: {"start":148,"length":16} Statement: 
+                    |var x = bar()[0]
+--------------------------------
+>>>>x = (function () {
+
+   |Pos: 166 SpanInfo: {"start":166,"length":40} Statement: 
+   |x = (function () {
+   |    return a;
+   |})()[x]
+    |Pos: 167 SpanInfo: {"start":166,"length":40} Statement: 
+    |x = (function () {
+    |    return a;
+    |})()[x]
+     |Pos: 168 SpanInfo: {"start":166,"length":40} Statement: 
+     |x = (function () {
+     |    return a;
+     |})()[x]
+      |Pos: 169 SpanInfo: {"start":166,"length":40} Statement: 
+      |x = (function () {
+      |    return a;
+      |})()[x]
+       |Pos: 170 SpanInfo: {"start":166,"length":40} Statement: 
+       |x = (function () {
+       |    return a;
+       |})()[x]
+        |Pos: 171 SpanInfo: {"start":189,"length":8} Statement: 
+        |return a
+         |Pos: 172 SpanInfo: {"start":189,"length":8} Statement: 
+         |return a
+          |Pos: 173 SpanInfo: {"start":189,"length":8} Statement: 
+          |return a
+           |Pos: 174 SpanInfo: {"start":189,"length":8} Statement: 
+           |return a
+            |Pos: 175 SpanInfo: {"start":189,"length":8} Statement: 
+            |return a
+             |Pos: 176 SpanInfo: {"start":189,"length":8} Statement: 
+             |return a
+              |Pos: 177 SpanInfo: {"start":189,"length":8} Statement: 
+              |return a
+               |Pos: 178 SpanInfo: {"start":189,"length":8} Statement: 
+               |return a
+                |Pos: 179 SpanInfo: {"start":189,"length":8} Statement: 
+                |return a
+                 |Pos: 180 SpanInfo: {"start":189,"length":8} Statement: 
+                 |return a
+                  |Pos: 181 SpanInfo: {"start":189,"length":8} Statement: 
+                  |return a
+                   |Pos: 182 SpanInfo: {"start":189,"length":8} Statement: 
+                   |return a
+                    |Pos: 183 SpanInfo: {"start":189,"length":8} Statement: 
+                    |return a
+                     |Pos: 184 SpanInfo: {"start":189,"length":8} Statement: 
+                     |return a
+--------------------------------
+>>>>    return a;
+
+   |Pos: 185 SpanInfo: {"start":189,"length":8} Statement: 
+   |return a
+    |Pos: 186 SpanInfo: {"start":189,"length":8} Statement: 
+    |return a
+     |Pos: 187 SpanInfo: {"start":189,"length":8} Statement: 
+     |return a
+      |Pos: 188 SpanInfo: {"start":189,"length":8} Statement: 
+      |return a
+       |Pos: 189 SpanInfo: {"start":189,"length":8} Statement: 
+       |return a
+        |Pos: 190 SpanInfo: {"start":189,"length":8} Statement: 
+        |return a
+         |Pos: 191 SpanInfo: {"start":189,"length":8} Statement: 
+         |return a
+          |Pos: 192 SpanInfo: {"start":189,"length":8} Statement: 
+          |return a
+           |Pos: 193 SpanInfo: {"start":189,"length":8} Statement: 
+           |return a
+            |Pos: 194 SpanInfo: {"start":189,"length":8} Statement: 
+            |return a
+             |Pos: 195 SpanInfo: {"start":189,"length":8} Statement: 
+             |return a
+              |Pos: 196 SpanInfo: {"start":189,"length":8} Statement: 
+              |return a
+               |Pos: 197 SpanInfo: {"start":189,"length":8} Statement: 
+               |return a
+                |Pos: 198 SpanInfo: {"start":189,"length":8} Statement: 
+                |return a
+--------------------------------
+>>>>})()[x];
+
+   |Pos: 199 SpanInfo: {"start":199,"length":1} Statement: 
+   |}
+    |Pos: 200 SpanInfo: {"start":166,"length":40} Statement: 
+    |x = (function () {
+    |    return a;
+    |})()[x]
+     |Pos: 201 SpanInfo: {"start":166,"length":40} Statement: 
+     |x = (function () {
+     |    return a;
+     |})()[x]
+      |Pos: 202 SpanInfo: {"start":166,"length":40} Statement: 
+      |x = (function () {
+      |    return a;
+      |})()[x]
+       |Pos: 203 SpanInfo: {"start":166,"length":40} Statement: 
+       |x = (function () {
+       |    return a;
+       |})()[x]
+        |Pos: 204 SpanInfo: {"start":166,"length":40} Statement: 
+        |x = (function () {
+        |    return a;
+        |})()[x]
+         |Pos: 205 SpanInfo: {"start":166,"length":40} Statement: 
+         |x = (function () {
+         |    return a;
+         |})()[x]
+          |Pos: 206 SpanInfo: {"start":166,"length":40} Statement: 
+          |x = (function () {
+          |    return a;
+          |})()[x]
+           |Pos: 207 SpanInfo: {"start":166,"length":40} Statement: 
+           |x = (function () {
+           |    return a;
+           |})()[x]
+--------------------------------
+>>>>a[(function () {
+
+   |Pos: 208 SpanInfo: {"start":208,"length":36} Statement: 
+   |a[(function () {
+   |    return x;
+   |})()]
+    |Pos: 209 SpanInfo: {"start":208,"length":36} Statement: 
+    |a[(function () {
+    |    return x;
+    |})()]
+     |Pos: 210 SpanInfo: {"start":208,"length":36} Statement: 
+     |a[(function () {
+     |    return x;
+     |})()]
+      |Pos: 211 SpanInfo: {"start":229,"length":8} Statement: 
+      |return x
+       |Pos: 212 SpanInfo: {"start":229,"length":8} Statement: 
+       |return x
+        |Pos: 213 SpanInfo: {"start":229,"length":8} Statement: 
+        |return x
+         |Pos: 214 SpanInfo: {"start":229,"length":8} Statement: 
+         |return x
+          |Pos: 215 SpanInfo: {"start":229,"length":8} Statement: 
+          |return x
+           |Pos: 216 SpanInfo: {"start":229,"length":8} Statement: 
+           |return x
+            |Pos: 217 SpanInfo: {"start":229,"length":8} Statement: 
+            |return x
+             |Pos: 218 SpanInfo: {"start":229,"length":8} Statement: 
+             |return x
+              |Pos: 219 SpanInfo: {"start":229,"length":8} Statement: 
+              |return x
+               |Pos: 220 SpanInfo: {"start":229,"length":8} Statement: 
+               |return x
+                |Pos: 221 SpanInfo: {"start":229,"length":8} Statement: 
+                |return x
+                 |Pos: 222 SpanInfo: {"start":229,"length":8} Statement: 
+                 |return x
+                  |Pos: 223 SpanInfo: {"start":229,"length":8} Statement: 
+                  |return x
+                   |Pos: 224 SpanInfo: {"start":229,"length":8} Statement: 
+                   |return x
+--------------------------------
+>>>>    return x;
+
+   |Pos: 225 SpanInfo: {"start":229,"length":8} Statement: 
+   |return x
+    |Pos: 226 SpanInfo: {"start":229,"length":8} Statement: 
+    |return x
+     |Pos: 227 SpanInfo: {"start":229,"length":8} Statement: 
+     |return x
+      |Pos: 228 SpanInfo: {"start":229,"length":8} Statement: 
+      |return x
+       |Pos: 229 SpanInfo: {"start":229,"length":8} Statement: 
+       |return x
+        |Pos: 230 SpanInfo: {"start":229,"length":8} Statement: 
+        |return x
+         |Pos: 231 SpanInfo: {"start":229,"length":8} Statement: 
+         |return x
+          |Pos: 232 SpanInfo: {"start":229,"length":8} Statement: 
+          |return x
+           |Pos: 233 SpanInfo: {"start":229,"length":8} Statement: 
+           |return x
+            |Pos: 234 SpanInfo: {"start":229,"length":8} Statement: 
+            |return x
+             |Pos: 235 SpanInfo: {"start":229,"length":8} Statement: 
+             |return x
+              |Pos: 236 SpanInfo: {"start":229,"length":8} Statement: 
+              |return x
+               |Pos: 237 SpanInfo: {"start":229,"length":8} Statement: 
+               |return x
+                |Pos: 238 SpanInfo: {"start":229,"length":8} Statement: 
+                |return x
+--------------------------------
+>>>>})()];
+   |Pos: 239 SpanInfo: {"start":239,"length":1} Statement: 
+   |}
+    |Pos: 240 SpanInfo: {"start":208,"length":36} Statement: 
+    |a[(function () {
+    |    return x;
+    |})()]
+     |Pos: 241 SpanInfo: {"start":208,"length":36} Statement: 
+     |a[(function () {
+     |    return x;
+     |})()]
+      |Pos: 242 SpanInfo: {"start":208,"length":36} Statement: 
+      |a[(function () {
+      |    return x;
+      |})()]
+       |Pos: 243 SpanInfo: {"start":208,"length":36} Statement: 
+       |a[(function () {
+       |    return x;
+       |})()]
+        |Pos: 244 SpanInfo: {"start":208,"length":36} Statement: 
+        |a[(function () {
+        |    return x;
+        |})()]

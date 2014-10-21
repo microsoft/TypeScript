@@ -985,15 +985,42 @@ module FourSlash {
             return item.parameters[currentParam];
         }
 
-        public getBreakpointStatementLocation(pos: number) {
-            this.taoInvalidReason = 'getBreakpointStatementLocation NYI';
+        private spanInfoToString(pos: number, spanInfo: TypeScript.TextSpan, prefixString: string) {
+            var resultString = "\n" + prefixString + "Pos: " + pos + " SpanInfo: " + JSON.stringify(spanInfo) + " Statement: ";
+            if (spanInfo) {
+                var spanString = this.activeFile.content.substr(spanInfo.start(), spanInfo.length());
+                var spanLineMap = ts.getLineStarts(spanString);
+                for (var i = 0; i < spanLineMap.length; i++) {
+                    if (!i) {
+                        resultString += "\n";
+                    }
+                    resultString += prefixString + spanString.substring(spanLineMap[i], spanLineMap[i + 1]);
+                }
+            }
 
-            var spanInfo = this.languageService.getBreakpointStatementAtPosition(this.activeFile.fileName, pos);
-            var resultString = "\n**Pos: " + pos + " SpanInfo: " + JSON.stringify(spanInfo) + "\n** Statement: ";
-            if (spanInfo !== null) {
-                resultString = resultString + this.activeFile.content.substr(spanInfo.start(), spanInfo.length());
+            return resultString;
+        }
+
+        private baselineCurrentFileLocations(getSpanAtPos: (pos: number) => TypeScript.TextSpan): string {
+            var fileLineMap = ts.getLineStarts(this.activeFile.content);
+            var nextLine = 0;
+            var resultString = "";
+            var currentLinePrefix: string;
+            for (var pos = 0; pos < this.activeFile.content.length; pos++) {
+                if (pos === 0 || pos === fileLineMap[nextLine]) {
+                    nextLine++;
+                    resultString += "\n--------------------------------\n>>>>" + this.activeFile.content.substring(pos, fileLineMap[nextLine]);
+                    currentLinePrefix = "   |";
+                }
+                resultString = resultString + this.spanInfoToString(pos, getSpanAtPos(pos), currentLinePrefix);
+                currentLinePrefix = " " + currentLinePrefix;
             }
             return resultString;
+        }
+
+        public getBreakpointStatementLocation(pos: number) {
+            this.taoInvalidReason = 'getBreakpointStatementLocation NYI';
+            return this.languageService.getBreakpointStatementAtPosition(this.activeFile.fileName, pos);
         }
 
         public baselineCurrentFileBreakpointLocations() {
@@ -1003,12 +1030,7 @@ module FourSlash {
                 "Breakpoint Locations for " + this.activeFile.fileName,
                 this.testData.globalOptions[testOptMetadataNames.baselineFile],
                 () => {
-                    var fileLength = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
-                    var resultString = "";
-                    for (var pos = 0; pos < fileLength; pos++) {
-                        resultString = resultString + this.getBreakpointStatementLocation(pos);
-                    }
-                    return resultString;
+                    return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos));
                 },
                 true /* run immediately */);
         }
@@ -1056,7 +1078,7 @@ module FourSlash {
         }
 
         public printBreakpointLocation(pos: number) {
-            Harness.IO.log(this.getBreakpointStatementLocation(pos));
+            Harness.IO.log(this.spanInfoToString(pos, this.getBreakpointStatementLocation(pos), "**"));
         }
 
         public printBreakpointAtCurrentLocation() {
@@ -1566,10 +1588,10 @@ module FourSlash {
             this.taoInvalidReason = 'verifyCurrentNameOrDottedNameSpanText NYI';
 
             var span = this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition);
-            if (span === null) {
+            if (!span) {
                 this.raiseError('verifyCurrentNameOrDottedNameSpanText\n' +
                     '\tExpected: "' + text + '"\n' +
-                    '\t  Actual: null');
+                    '\t  Actual: undefined');
             }
 
             var actual = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getText(span.start(), span.end());
@@ -1581,12 +1603,8 @@ module FourSlash {
         }
 
         private getNameOrDottedNameSpan(pos: number) {
-            var spanInfo = this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, pos, pos);
-            var resultString = "\n**Pos: " + pos + " SpanInfo: " + JSON.stringify(spanInfo) + "\n** Statement: ";
-            if (spanInfo !== null) {
-                resultString = resultString + this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getText(spanInfo.start(), spanInfo.end());
-            }
-            return resultString;
+            this.taoInvalidReason = 'getNameOrDottedNameSpan NYI';
+            return this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, pos, pos);
         }
 
         public baselineCurrentFileNameOrDottedNameSpans() {
@@ -1596,18 +1614,14 @@ module FourSlash {
                 "Name OrDottedNameSpans for " + this.activeFile.fileName,
                 this.testData.globalOptions[testOptMetadataNames.baselineFile],
                 () => {
-                    var fileLength = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
-                    var resultString = "";
-                    for (var pos = 0; pos < fileLength; pos++) {
-                        resultString = resultString + this.getNameOrDottedNameSpan(pos);
-                    }
-                    return resultString;
+                    return this.baselineCurrentFileLocations(pos =>
+                        this.getNameOrDottedNameSpan(pos));
                 },
                 true /* run immediately */);
         }
 
         public printNameOrDottedNameSpans(pos: number) {
-            Harness.IO.log(this.getNameOrDottedNameSpan(pos));
+            Harness.IO.log(this.spanInfoToString(pos, this.getNameOrDottedNameSpan(pos), "**"));
         }
 
         private verifyClassifications(expected: { classificationType: string; text: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[]) {

@@ -1,0 +1,21 @@
+
+--------------------------------
+>>>>debugger;
+   |Pos: 0 SpanInfo: {"start":0,"length":8} Statement: 
+   |debugger
+    |Pos: 1 SpanInfo: {"start":0,"length":8} Statement: 
+    |debugger
+     |Pos: 2 SpanInfo: {"start":0,"length":8} Statement: 
+     |debugger
+      |Pos: 3 SpanInfo: {"start":0,"length":8} Statement: 
+      |debugger
+       |Pos: 4 SpanInfo: {"start":0,"length":8} Statement: 
+       |debugger
+        |Pos: 5 SpanInfo: {"start":0,"length":8} Statement: 
+        |debugger
+         |Pos: 6 SpanInfo: {"start":0,"length":8} Statement: 
+         |debugger
+          |Pos: 7 SpanInfo: {"start":0,"length":8} Statement: 
+          |debugger
+           |Pos: 8 SpanInfo: {"start":0,"length":8} Statement: 
+           |debugger

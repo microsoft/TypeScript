@@ -1,0 +1,104 @@
+
+--------------------------------
+>>>>var a = 10;
+
+   |Pos: 0 SpanInfo: {"start":0,"length":10} Statement: 
+   |var a = 10
+    |Pos: 1 SpanInfo: {"start":0,"length":10} Statement: 
+    |var a = 10
+     |Pos: 2 SpanInfo: {"start":0,"length":10} Statement: 
+     |var a = 10
+      |Pos: 3 SpanInfo: {"start":0,"length":10} Statement: 
+      |var a = 10
+       |Pos: 4 SpanInfo: {"start":0,"length":10} Statement: 
+       |var a = 10
+        |Pos: 5 SpanInfo: {"start":0,"length":10} Statement: 
+        |var a = 10
+         |Pos: 6 SpanInfo: {"start":0,"length":10} Statement: 
+         |var a = 10
+          |Pos: 7 SpanInfo: {"start":0,"length":10} Statement: 
+          |var a = 10
+           |Pos: 8 SpanInfo: {"start":0,"length":10} Statement: 
+           |var a = 10
+            |Pos: 9 SpanInfo: {"start":0,"length":10} Statement: 
+            |var a = 10
+             |Pos: 10 SpanInfo: {"start":0,"length":10} Statement: 
+             |var a = 10
+              |Pos: 11 SpanInfo: {"start":0,"length":10} Statement: 
+              |var a = 10
+--------------------------------
+>>>>var b;
+
+   |Pos: 12 SpanInfo: undefined Statement: 
+    |Pos: 13 SpanInfo: undefined Statement: 
+     |Pos: 14 SpanInfo: undefined Statement: 
+      |Pos: 15 SpanInfo: undefined Statement: 
+       |Pos: 16 SpanInfo: undefined Statement: 
+        |Pos: 17 SpanInfo: undefined Statement: 
+         |Pos: 18 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>var c = 10, d, e;
+
+   |Pos: 19 SpanInfo: {"start":19,"length":10} Statement: 
+   |var c = 10
+    |Pos: 20 SpanInfo: {"start":19,"length":10} Statement: 
+    |var c = 10
+     |Pos: 21 SpanInfo: {"start":19,"length":10} Statement: 
+     |var c = 10
+      |Pos: 22 SpanInfo: {"start":19,"length":10} Statement: 
+      |var c = 10
+       |Pos: 23 SpanInfo: {"start":19,"length":10} Statement: 
+       |var c = 10
+        |Pos: 24 SpanInfo: {"start":19,"length":10} Statement: 
+        |var c = 10
+         |Pos: 25 SpanInfo: {"start":19,"length":10} Statement: 
+         |var c = 10
+          |Pos: 26 SpanInfo: {"start":19,"length":10} Statement: 
+          |var c = 10
+           |Pos: 27 SpanInfo: {"start":19,"length":10} Statement: 
+           |var c = 10
+            |Pos: 28 SpanInfo: {"start":19,"length":10} Statement: 
+            |var c = 10
+             |Pos: 29 SpanInfo: {"start":19,"length":10} Statement: 
+             |var c = 10
+              |Pos: 30 SpanInfo: {"start":19,"length":10} Statement: 
+              |var c = 10
+               |Pos: 31 SpanInfo: {"start":19,"length":10} Statement: 
+               |var c = 10
+                |Pos: 32 SpanInfo: {"start":19,"length":10} Statement: 
+                |var c = 10
+                 |Pos: 33 SpanInfo: {"start":19,"length":10} Statement: 
+                 |var c = 10
+                  |Pos: 34 SpanInfo: {"start":19,"length":10} Statement: 
+                  |var c = 10
+                   |Pos: 35 SpanInfo: {"start":19,"length":10} Statement: 
+                   |var c = 10
+                    |Pos: 36 SpanInfo: {"start":19,"length":10} Statement: 
+                    |var c = 10
+--------------------------------
+>>>>var c2, d2 = 10;
+   |Pos: 37 SpanInfo: undefined Statement: 
+    |Pos: 38 SpanInfo: undefined Statement: 
+     |Pos: 39 SpanInfo: undefined Statement: 
+      |Pos: 40 SpanInfo: undefined Statement: 
+       |Pos: 41 SpanInfo: undefined Statement: 
+        |Pos: 42 SpanInfo: undefined Statement: 
+         |Pos: 43 SpanInfo: undefined Statement: 
+          |Pos: 44 SpanInfo: {"start":45,"length":7} Statement: 
+          |d2 = 10
+           |Pos: 45 SpanInfo: {"start":45,"length":7} Statement: 
+           |d2 = 10
+            |Pos: 46 SpanInfo: {"start":45,"length":7} Statement: 
+            |d2 = 10
+             |Pos: 47 SpanInfo: {"start":45,"length":7} Statement: 
+             |d2 = 10
+              |Pos: 48 SpanInfo: {"start":45,"length":7} Statement: 
+              |d2 = 10
+               |Pos: 49 SpanInfo: {"start":45,"length":7} Statement: 
+               |d2 = 10
+                |Pos: 50 SpanInfo: {"start":45,"length":7} Statement: 
+                |d2 = 10
+                 |Pos: 51 SpanInfo: {"start":45,"length":7} Statement: 
+                 |d2 = 10
+                  |Pos: 52 SpanInfo: {"start":45,"length":7} Statement: 
+                  |d2 = 10
