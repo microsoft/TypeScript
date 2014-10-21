@@ -88,6 +88,4 @@
     ~~~~~~                                        => Pos: (472 to 477)  SpanInfo: undefined
 --------------------------------
 23 >}
-    ~                                             => Pos: (478 to 478)  SpanInfo: {"start":478,"length":1}
-    >}
-    >:=> (line 23, col 0) to (line 23, col 1)
+    ~                                             => Pos: (478 to 478)  SpanInfo: undefined

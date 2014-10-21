@@ -146,7 +146,7 @@ module ts.BreakpointResolver {
 
                     case SyntaxKind.ForStatement:
                         return spanInForStatement(<ForStatement>node);
-                        
+
                     case SyntaxKind.ForInStatement:
                         // span on for (a in ...)
                         return textSpan(node, findNextToken((<ForInStatement>node).expression, node));
@@ -176,16 +176,18 @@ module ts.BreakpointResolver {
                         // import statement without including semicolon
                         return textSpan(node, (<ImportDeclaration>node).entityName || (<ImportDeclaration>node).externalModuleName);
 
+                    case SyntaxKind.ModuleDeclaration:
+                        // span on complete module if it is instantiated
+                        if (!isInstantiated(node)) {
+                            return undefined;
+                        }
+
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.NewExpression:
                         // span on complete node
                         return textSpan(node);
-
-                    case SyntaxKind.ModuleDeclaration:
-                        // span in module body
-                        return spanInNode((<ModuleDeclaration>node).body);
 
                     case SyntaxKind.ClassDeclaration:
                         return spanInClassDeclaration(<ClassDeclaration>node);
@@ -349,6 +351,11 @@ module ts.BreakpointResolver {
 
             function spanInBlock(block: Block): TypeScript.TextSpan {
                 switch (block.parent.kind) {
+                    case SyntaxKind.ModuleDeclaration:
+                        if (!isInstantiated(block.parent)) {
+                            return undefined;
+                        }
+
                     // Set on parent if on same line otherwise on first statement
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.IfStatement:
@@ -405,21 +412,17 @@ module ts.BreakpointResolver {
 
             function spanInCloseBraceToken(node: Node): TypeScript.TextSpan {
                 switch (node.parent.kind) {
+                    case SyntaxKind.ModuleBlock:
+                        // If this is not instantiated module block no bp span
+                        if (!isInstantiated(node.parent.parent)) {
+                            return undefined;
+                        }
+
                     case SyntaxKind.FunctionBlock:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ClassDeclaration:
                         // Span on close brace token
                         return textSpan(node);
-
-                    case SyntaxKind.ModuleBlock:
-                        var moduleBlock = <Block>node.parent;
-                        if (moduleBlock.statements.length || // there are statements in the module block
-                            moduleBlock.parent.parent.kind === SyntaxKind.ModuleDeclaration) { // this is a dotted module body 
-                            return textSpan(node);
-                        }
-
-                        // No span 
-                        return;
 
                     case SyntaxKind.Block:
                     case SyntaxKind.TryBlock:
