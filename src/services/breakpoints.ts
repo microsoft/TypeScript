@@ -179,6 +179,10 @@ module ts.BreakpointResolver {
                     case SyntaxKind.WithStatement:
                         return spanInWithStatement(<WithStatement>node);
 
+                    // No breakpoint in interface
+                    case SyntaxKind.InterfaceDeclaration:
+                        return undefined;
+
                     // Tokens:
                     case SyntaxKind.SemicolonToken:
                     case SyntaxKind.EndOfFileToken:
@@ -559,7 +563,6 @@ module ts.BreakpointResolver {
 
                 return spanInNode(node.parent);
             }
-
 
             function spanInWhileKeyword(node: Node): TypeScript.TextSpan {
                 if (node.parent.kind === SyntaxKind.DoStatement) {
