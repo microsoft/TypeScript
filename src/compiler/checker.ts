@@ -333,8 +333,10 @@ module ts {
                     Debug.assert(declaration, "Block-scoped variable declaration is undefined");
                     var declarationSourceFile = getSourceFileOfNode(declaration);
                     var referenceSourceFile = getSourceFileOfNode(errorLocation);
-                    if (declarationSourceFile === referenceSourceFile && declaration.pos > errorLocation.pos) {
-                        error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
+                    if (declarationSourceFile === referenceSourceFile) {
+                        if (declaration.pos > errorLocation.pos) {
+                            error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
+                        }
                     }
                     else if (compilerOptions.out) {
                         var sourceFiles = program.getSourceFiles();
