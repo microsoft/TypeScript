@@ -10,7 +10,7 @@ module ts.BreakpointResolver {
     export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: number) {
         // Cannot set breakpoint in dts file
         if (sourceFile.flags & NodeFlags.DeclarationFile) {
-            return;
+            return undefined;
         }
 
         var tokenAtLocation = getTokenAtPosition(sourceFile, position);
@@ -22,11 +22,16 @@ module ts.BreakpointResolver {
             // token at position will return var keyword on second line as the token but we would like to use 
             // token on same line if trailing trivia (comments or white spaces on same line) part of the last token on that line
             tokenAtLocation = findPrecedingToken(tokenAtLocation.pos, sourceFile);
+
+            // Its a blank line
+            if (!tokenAtLocation || sourceFile.getLineAndCharacterFromPosition(tokenAtLocation.getEnd()).line !== lineOfPosition) {
+                return undefined;
+            }
         }
 
         // Cannot set breakpoint in ambient declarations
         if (isInAmbientContext(tokenAtLocation)) {
-            return;
+            return undefined;
         }
 
         // Get the span in the node based on its syntax

@@ -49,9 +49,7 @@
 --------------------------------
 9  >
 
-    ~                                             => Pos: (100 to 100)  SpanInfo: {"start":98,"length":1}
-    >}
-    >:=> (line 8, col 4) to (line 8, col 5)
+    ~                                             => Pos: (100 to 100)  SpanInfo: undefined
 --------------------------------
 10 >    export function foo() {
 

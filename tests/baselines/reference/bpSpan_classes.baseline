@@ -45,9 +45,7 @@
 --------------------------------
 7  >
 
-    ~                                             => Pos: (113 to 113)  SpanInfo: {"start":111,"length":1}
-    >}
-    >:=> (line 6, col 8) to (line 6, col 9)
+    ~                                             => Pos: (113 to 113)  SpanInfo: undefined
 --------------------------------
 8  >        greet() {
 
@@ -75,15 +73,11 @@
 --------------------------------
 12 >
 
-    ~                                             => Pos: (201 to 201)  SpanInfo: {"start":199,"length":1}
-    >}
-    >:=> (line 11, col 4) to (line 11, col 5)
+    ~                                             => Pos: (201 to 201)  SpanInfo: undefined
 --------------------------------
 13 >
 
-    ~                                             => Pos: (202 to 202)  SpanInfo: {"start":199,"length":1}
-    >}
-    >:=> (line 11, col 4) to (line 11, col 5)
+    ~                                             => Pos: (202 to 202)  SpanInfo: undefined
 --------------------------------
 14 >    function foo(greeting: string): Greeter {
 
@@ -110,9 +104,7 @@
 --------------------------------
 17 >
 
-    ~                                             => Pos: (293 to 293)  SpanInfo: {"start":291,"length":1}
-    >}
-    >:=> (line 16, col 4) to (line 16, col 5)
+    ~                                             => Pos: (293 to 293)  SpanInfo: undefined
 --------------------------------
 18 >    var greeter = new Greeter("Hello, world!");
 
@@ -213,9 +205,7 @@
 --------------------------------
 27 >
 
-    ~                                             => Pos: (695 to 695)  SpanInfo: {"start":639,"length":44}
-    >greeters.push(new Greeter(restGreetings[i]))
-    >:=> (line 25, col 12) to (line 25, col 56)
+    ~                                             => Pos: (695 to 695)  SpanInfo: undefined
 --------------------------------
 28 >        return greeters;
 
@@ -231,9 +221,7 @@
 --------------------------------
 30 >
 
-    ~                                             => Pos: (727 to 727)  SpanInfo: {"start":725,"length":1}
-    >}
-    >:=> (line 29, col 4) to (line 29, col 5)
+    ~                                             => Pos: (727 to 727)  SpanInfo: undefined
 --------------------------------
 31 >    var b = foo2("Hello", "World", "!");
 
