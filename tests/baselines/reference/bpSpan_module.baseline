@@ -66,9 +66,11 @@
 --------------------------------
 10 >    export function foo() {
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (101 to 128)  SpanInfo: {"start":137,"length":11}
-    >return m4.x
-    >:=> (line 11, col 8) to (line 11, col 19)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (101 to 128)  SpanInfo: {"start":105,"length":50}
+    >export function foo() {
+    >        return m4.x;
+    >    }
+    >:=> (line 10, col 4) to (line 12, col 5)
 --------------------------------
 11 >        return m4.x;
 
@@ -192,9 +194,11 @@
 --------------------------------
 29 >    export function foo() {
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (301 to 328)  SpanInfo: {"start":337,"length":11}
-    >return m4.x
-    >:=> (line 30, col 8) to (line 30, col 19)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (301 to 328)  SpanInfo: {"start":305,"length":50}
+    >export function foo() {
+    >        return m4.x;
+    >    }
+    >:=> (line 29, col 4) to (line 31, col 5)
 --------------------------------
 30 >        return m4.x;
 

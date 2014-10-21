@@ -318,10 +318,19 @@ module ts.BreakpointResolver {
                 }
             }
 
+            function canFunctionHaveSpanInWholeDeclaration(functionDeclaration: FunctionDeclaration) {
+                return !!(functionDeclaration.flags & NodeFlags.Export);
+            }
+
             function spanInFunctionDeclaration(functionDeclaration: FunctionDeclaration): TypeScript.TextSpan {
                 // No breakpoints in the function signature
                 if (!functionDeclaration.body) {
-                    return;
+                    return undefined;
+                }
+
+                if (canFunctionHaveSpanInWholeDeclaration(functionDeclaration)) {
+                    // Set the span on whole function declaration
+                    return textSpan(functionDeclaration);
                 }
 
                 // Set span in function body
@@ -329,12 +338,12 @@ module ts.BreakpointResolver {
             }
 
             function spanInFunctionBlock(block: Block): TypeScript.TextSpan {
-                if (block.statements.length) {
-                    return spanInFirstStatementOfBlock(block);
+                var nodeForSpanInBlock = block.statements.length ? block.statements[0] : block.getLastToken();
+                if (canFunctionHaveSpanInWholeDeclaration(<FunctionDeclaration>block.parent)) {
+                    return spanInNodeIfStartsOnSameLine(block.parent, nodeForSpanInBlock);
                 }
 
-                // On close parenthesis
-                return spanInNode(block.getLastToken());
+                return spanInNode(nodeForSpanInBlock);
             }
 
             function spanInFirstStatementOfBlock(block: Block): TypeScript.TextSpan {
