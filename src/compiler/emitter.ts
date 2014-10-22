@@ -345,13 +345,22 @@ module ts {
             var oldWriter = writer;
             forEach(importDeclarations, aliasToWrite => {
                 var aliasEmitInfo = forEach(aliasDeclarationEmitInfo, declEmitInfo => declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined);
-                writer = createTextWriter(newLine, trackSymbol);
-                for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
-                    writer.increaseIndent();
-                }
+                // If the alias was marked as not visible when we saw its declaration, we would have saved the aliasEmitInfo, but if we haven't yet visited the alias declaration
+                // then we don't need to write it at this point. We will write it when we actually see its declaration
+                // Eg.
+                // export function bar(a: foo.Foo) { }
+                // import foo = require("foo");
+                // Writing of function bar would mark alias declaration foo as visible but we haven't yet visited that declaration so do nothing, 
+                // we would write alias foo declaration when we visit it since it would now be marked as visible
+                if (aliasEmitInfo) {
+                    writer = createTextWriter(newLine, trackSymbol);
+                    for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
+                        writer.increaseIndent();
+                    }
 
-                writeImportDeclaration(aliasToWrite);
-                aliasEmitInfo.asynchronousOutput = writer.getText();
+                    writeImportDeclaration(aliasToWrite);
+                    aliasEmitInfo.asynchronousOutput = writer.getText();
+                }
             });
             writer = oldWriter;
         }
