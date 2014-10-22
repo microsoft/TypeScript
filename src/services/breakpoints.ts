@@ -270,7 +270,7 @@ module ts.BreakpointResolver {
                     : undefined;
 
                 // Breakpoint is possible in variableDeclaration only if there is initialization
-                if (variableDeclaration.initializer) {
+                if (variableDeclaration.initializer || (variableDeclaration.flags & NodeFlags.Export)) {
                     if (declarations && declarations[0] === variableDeclaration) {
                         if (isParentVariableStatement) {
                             // First declaration - include var keyword
