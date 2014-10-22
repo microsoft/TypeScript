@@ -129,6 +129,7 @@ module ts {
         var emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        var typeArgumentInferenceFailureType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
         var anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, false, false);
         var unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, false, false);
@@ -3993,23 +3994,26 @@ module ts {
         }
 
         function getInferredType(context: InferenceContext, index: number): Type {
-            var result = context.inferredTypes[index];
-            if (!result) {
+            var inferredType = context.inferredTypes[index];
+            if (!inferredType) {
                 var inferences = context.inferences[index];
                 if (inferences.length) {
                     // Infer widened union or supertype, or the undefined type for no common supertype
                     var unionOrSuperType = context.inferUnionTypes ? getUnionType(inferences) : getCommonSupertype(inferences);
-                    var inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : undefinedType;
+                    inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : typeArgumentInferenceFailureType;
                 }
                 else {
                     // Infer the empty object type when no inferences were made
                     inferredType = emptyObjectType;
                 }
-                var constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
-                var result = constraint && !isTypeAssignableTo(inferredType, constraint) ? constraint : inferredType;
-                context.inferredTypes[index] = result;
+
+                if (inferredType !== typeArgumentInferenceFailureType) {
+                    var constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
+                    inferredType = constraint && !isTypeAssignableTo(inferredType, constraint) ? constraint : inferredType;
+                }
+                context.inferredTypes[index] = inferredType;
             }
-            return result;
+            return inferredType;
         }
 
         function getInferredTypes(context: InferenceContext): Type[] {
@@ -5094,7 +5098,7 @@ module ts {
             }
             var inferredTypes = getInferredTypes(context);
             // Inference has failed if the undefined type is in list of inferences
-            return !contains(inferredTypes, undefinedType);
+            return !contains(inferredTypes, typeArgumentInferenceFailureType);
         }
 
         function checkTypeArguments(signature: Signature, typeArguments: TypeNode[], typeArgumentResultTypes: Type[], reportErrors: boolean): boolean {
@@ -5161,6 +5165,7 @@ module ts {
 
             var candidateForArgumentError: Signature;
             var candidateForTypeArgumentError: Signature;
+            var indexOfUninferredTypeParameter: number;
             var result: Signature;
             if (candidates.length > 1) {
                 result = chooseOverload(candidates, subtypeRelation, excludeArgument);
@@ -5169,6 +5174,7 @@ module ts {
                 // Reinitialize these pointers for round two
                 candidateForArgumentError = undefined;
                 candidateForTypeArgumentError = undefined;
+                indexOfUninferredTypeParameter = undefined;
                 result = chooseOverload(candidates, assignableRelation, excludeArgument);
             }
             if (result) {
@@ -5187,7 +5193,8 @@ module ts {
                     checkTypeArguments(candidateForTypeArgumentError, node.typeArguments, [], /*reportErrors*/ true)
                 }
                 else {
-                    error(node.func, Diagnostics.The_type_arguments_cannot_be_inferred_from_the_usage_Try_specifying_the_type_arguments_explicitly);
+                    error(node.func, Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Try_specifying_the_type_arguments_explicitly,
+                        typeToString(candidateForTypeArgumentError.typeParameters[indexOfUninferredTypeParameter]));
                 }
             }
             else {
@@ -5251,6 +5258,9 @@ module ts {
                         }
                         else {
                             candidateForTypeArgumentError = originalCandidate;
+                            if (!node.typeArguments) {
+                                indexOfUninferredTypeParameter = typeArgumentTypes.indexOf(typeArgumentInferenceFailureType);
+                            }
                         }
                     }
                     else {

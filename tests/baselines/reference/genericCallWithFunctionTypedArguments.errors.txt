@@ -1,8 +1,8 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts(26,10): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts(30,15): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts(33,15): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts(34,16): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts(35,15): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts(26,10): error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts(30,15): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts(33,15): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts(34,16): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts(35,15): error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts (5 errors) ====
@@ -33,22 +33,22 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFun
     
     var r8 = foo3(1, function (a) { return '' }, 1); // error
              ~~~~
-!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
     var r9 = foo3<number, string>(1, (a) => '', ''); // string
     
     function other<T, U>(t: T, u: U) {
         var r10 = foo2(1, (x: T) => ''); // error
                   ~~~~
-!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
         var r10 = foo2(1, (x) => ''); // string
     
         var r11 = foo3(1, (x: T) => '', ''); // error
                   ~~~~
-!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
         var r11b = foo3(1, (x: T) => '', 1); // error
                    ~~~~
-!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
         var r12 = foo3(1, function (a) { return '' }, 1); // error
                   ~~~~
-!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
     }

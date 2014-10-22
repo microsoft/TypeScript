@@ -1,5 +1,5 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(32,11): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(33,11): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(32,11): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(33,11): error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts (2 errors) ====
@@ -36,7 +36,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
     var x: (a: string) => boolean;
     var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2); // error
               ~~~~
-!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
     var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2); // error
               ~~~~
-!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.

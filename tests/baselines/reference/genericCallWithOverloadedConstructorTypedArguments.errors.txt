@@ -1,4 +1,4 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments.ts(36,14): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments.ts(36,14): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments.ts (1 errors) ====
@@ -39,7 +39,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOve
     
         var r8 = foo6(a); // error
                  ~~~~
-!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
         var r9 = foo6(b); // new any => string; new(x:any, y?:any) => string
     
         function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {

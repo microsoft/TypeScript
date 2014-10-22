@@ -1,4 +1,4 @@
-tests/cases/compiler/typeArgInference2WithError.ts(7,10): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/compiler/typeArgInference2WithError.ts(7,10): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
 
 
 ==== tests/cases/compiler/typeArgInference2WithError.ts (1 errors) ====
@@ -10,4 +10,4 @@ tests/cases/compiler/typeArgInference2WithError.ts(7,10): error TS2448: The type
     
     var z7 = foo("abc", 5); // Error
              ~~~
-!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.

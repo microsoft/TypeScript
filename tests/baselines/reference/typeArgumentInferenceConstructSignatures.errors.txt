@@ -3,9 +3,9 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(61,39): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(71,39): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(81,45): error TS2345: Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(106,15): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(106,15): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(118,9): error TS2304: Cannot find name 'Window'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,15): error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,15): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,51): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(122,56): error TS2304: Cannot find name 'window'.
 
@@ -128,7 +128,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
     var someGenerics9: someGenerics9;
     var a9a = new someGenerics9('', 0, []);
                   ~~~~~~~~~~~~~
-!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
     var a9a: {};
     var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
     var a9b: { a?: number; b?: string; };
@@ -146,7 +146,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
     }
     var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
                   ~~~~~~~~~~~~~
-!!! error TS2448: The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
                                                       ~~~~~~
 !!! error TS2304: Cannot find name 'window'.
     var a9e: {};

@@ -1,5 +1,5 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithNonSymmetricSubtypes.ts(12,9): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithNonSymmetricSubtypes.ts(13,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithNonSymmetricSubtypes.ts(12,9): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithNonSymmetricSubtypes.ts(13,10): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithNonSymmetricSubtypes.ts (2 errors) ====
@@ -15,11 +15,11 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithNon
     var b: { x: number; z?: number; };
     
     var r = foo(a, b); // { x: number; y?: number; };
-            ~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+            ~~~
+!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
     var r2 = foo(b, a); // { x: number; z?: number; };
-             ~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+             ~~~
+!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
     
     var x: { x: number; };
     var y: { x?: number; };

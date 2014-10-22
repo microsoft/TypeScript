@@ -1036,7 +1036,7 @@
         "category": "Error",
         "code": 2447
     },
-    "The type arguments cannot be inferred from the usage. Try specifying the type arguments explicitly.": {
+    "The type argument for type parameter '{0}' cannot be inferred from the usage. Try specifying the type arguments explicitly.": {
         "category": "Error",
         "code": 2448
     },
