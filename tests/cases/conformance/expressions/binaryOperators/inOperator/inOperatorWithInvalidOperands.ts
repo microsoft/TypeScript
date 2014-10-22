@@ -25,16 +25,19 @@ var b1: number;
 var b2: boolean;
 var b3: string;
 var b4: void;
+var b5: string | number;
 
 var rb1 = x in b1;
 var rb2 = x in b2;
 var rb3 = x in b3;
 var rb4 = x in b4;
-var rb5 = x in 0;
-var rb6 = x in false;
-var rb7 = x in '';
-var rb8 = x in null;
-var rb9 = x in undefined;
+var rb5 = x in b5;
+var rb6 = x in 0;
+var rb7 = x in false;
+var rb8 = x in '';
+var rb9 = x in null;
+var rb10 = x in undefined;
+
 
 // both operands are invalid
 var rc1 = {} in '';
