@@ -67,3 +67,40 @@ function foo<T>(t: T) {
 >x : any
 >t : T
 }
+
+interface X { x: number }
+>X : X
+>x : number
+
+interface Y { y: number }
+>Y : Y
+>y : number
+
+var c1: X | Y;
+>c1 : X | Y
+>X : X
+>Y : Y
+
+var c2: X;
+>c2 : X
+>X : X
+
+var c3: Y;
+>c3 : Y
+>Y : Y
+
+var rc1 = x in c1;
+>rc1 : boolean
+>x in c1 : boolean
+>x : any
+>c1 : X | Y
+
+var rc2 = x in (c2 || c3);
+>rc2 : boolean
+>x in (c2 || c3) : boolean
+>x : any
+>(c2 || c3) : X | Y
+>c2 || c3 : X | Y
+>c2 : X
+>c3 : Y
+
