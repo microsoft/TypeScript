@@ -258,6 +258,13 @@ module ts.SignatureHelp {
             return undefined;
         }
 
+        function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {
+            var children = parent.getChildren(sourceFile);
+            var indexOfOpenerToken = children.indexOf(openerToken);
+            Debug.assert(indexOfOpenerToken >= 0 && children.length > indexOfOpenerToken + 1);
+            return children[indexOfOpenerToken + 1];
+        }
+
         /**
          * The selectedItemIndex could be negative for several reasons.
          *     1. There are too many arguments for all of the overloads
@@ -287,74 +294,51 @@ module ts.SignatureHelp {
 
         function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentInfoOrTypeArgumentInfo: ListItemInfo): SignatureHelpItems {
             var argumentListOrTypeArgumentList = argumentInfoOrTypeArgumentInfo.list;
+            var parent = <CallExpression>argumentListOrTypeArgumentList.parent;
+            var isTypeParameterHelp = parent.typeArguments && parent.typeArguments.pos === argumentListOrTypeArgumentList.pos;
+            Debug.assert(isTypeParameterHelp || parent.arguments.pos === argumentListOrTypeArgumentList.pos);
+
+            var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
+            var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
+            var callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
             var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
-                var parameters = candidateSignature.parameters;
-                var parameterHelpItems: SignatureHelpParameter[] = parameters.length === 0 ? emptyArray : map(parameters, p => {
-                    var displayParts: SymbolDisplayPart[] = [];
+                var signatureHelpParameters: SignatureHelpParameter[];
+                var prefixParts: SymbolDisplayPart[] = [];
+                var suffixParts: SymbolDisplayPart[] = [];
 
-                    if (candidateSignature.hasRestParameter && parameters[parameters.length - 1] === p) {
-                        displayParts.push(punctuationPart(SyntaxKind.DotDotDotToken));
-                    }
-
-                    displayParts.push(symbolPart(p.name, p));
-
-                    var isOptional = !!(p.valueDeclaration.flags & NodeFlags.QuestionMark);
-                    if (isOptional) {
-                        displayParts.push(punctuationPart(SyntaxKind.QuestionToken));
-                    }
-
-                    displayParts.push(punctuationPart(SyntaxKind.ColonToken));
-                    displayParts.push(spacePart());
-
-                    var typeParts = typeToDisplayParts(typeInfoResolver, typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
-                    displayParts.push.apply(displayParts, typeParts);
-
-                    return {
-                        name: p.name,
-                        documentation: p.getDocumentationComment(),
-                        displayParts: displayParts,
-                        isOptional: isOptional
-                    };
-                });
-
-                var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
-                var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
-
-                var prefixParts = callTargetSymbol ? symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined) : [];
-
-                var separatorParts = [punctuationPart(SyntaxKind.CommaToken), spacePart()];
-
-                // TODO(jfreeman): Constraints?
-                if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
-                    prefixParts.push(punctuationPart(SyntaxKind.LessThanToken));
-
-                    for (var i = 0, n = candidateSignature.typeParameters.length; i < n; i++) {
-                        if (i) {
-                            prefixParts.push.apply(prefixParts, separatorParts);
-                        }
-
-                        var tp = candidateSignature.typeParameters[i].symbol;
-                        prefixParts.push(symbolPart(tp.name, tp));
-                    }
-
-                    prefixParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
+                if (callTargetDisplayParts) {
+                    prefixParts.push.apply(prefixParts, callTargetDisplayParts);
                 }
 
-                prefixParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                if (isTypeParameterHelp) {
+                    prefixParts.push(punctuationPart(SyntaxKind.LessThanToken));
+                    var typeParameters = candidateSignature.typeParameters;
+                    signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
+                    suffixParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
+                    var parameterParts = mapToDisplayParts(writer =>
+                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, argumentListOrTypeArgumentList));
+                    suffixParts.push.apply(suffixParts, parameterParts);
+                }
+                else {
+                    var typeParameterParts = mapToDisplayParts(writer =>
+                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, argumentListOrTypeArgumentList));
+                    prefixParts.push.apply(prefixParts, typeParameterParts);
+                    prefixParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                    var parameters = candidateSignature.parameters;
+                    signatureHelpParameters = parameters.length > 0 ? map(parameters, createSignatureHelpParameterForParameter) : emptyArray;
+                    suffixParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                }
 
-                var suffixParts = [punctuationPart(SyntaxKind.CloseParenToken)];
-                suffixParts.push(punctuationPart(SyntaxKind.ColonToken));
-                suffixParts.push(spacePart());
-
-                var typeParts = typeToDisplayParts(typeInfoResolver, candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
-                suffixParts.push.apply(suffixParts, typeParts);
+                var returnTypeParts = mapToDisplayParts(writer =>
+                    typeInfoResolver.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, argumentListOrTypeArgumentList));
+                suffixParts.push.apply(suffixParts, returnTypeParts);
                 
                 return {
                     isVariadic: candidateSignature.hasRestParameter,
                     prefixDisplayParts: prefixParts,
                     suffixDisplayParts: suffixParts,
-                    separatorDisplayParts: separatorParts,
-                    parameters: parameterHelpItems,
+                    separatorDisplayParts: [punctuationPart(SyntaxKind.CommaToken), spacePart()],
+                    parameters: signatureHelpParameters,
                     documentation: candidateSignature.getDocumentationComment()
                 };
             });
@@ -400,12 +384,32 @@ module ts.SignatureHelp {
                 argumentIndex: argumentIndex,
                 argumentCount: argumentCount
             };
-        }
-    }
 
-    function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {
-        var children = parent.getChildren(sourceFile);
-        var indexOfOpenerToken = children.indexOf(openerToken);
-        return children[indexOfOpenerToken + 1];
+            function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
+                var displayParts = mapToDisplayParts(writer =>
+                    typeInfoResolver.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, argumentListOrTypeArgumentList));
+
+                var isOptional = !!(parameter.valueDeclaration.flags & NodeFlags.QuestionMark);
+
+                return {
+                    name: parameter.name,
+                    documentation: parameter.getDocumentationComment(),
+                    displayParts: displayParts,
+                    isOptional: isOptional
+                };
+            }
+
+            function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter): SignatureHelpParameter {
+                var displayParts = mapToDisplayParts(writer =>
+                    typeInfoResolver.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, argumentListOrTypeArgumentList));
+
+                return {
+                    name: typeParameter.symbol.name,
+                    documentation: emptyArray,
+                    displayParts: displayParts,
+                    isOptional: false
+                };
+            }
+        }
     }
 }

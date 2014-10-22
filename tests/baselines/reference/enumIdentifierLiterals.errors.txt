@@ -1,11 +1,10 @@
 tests/cases/compiler/enumIdentifierLiterals.ts(2,5): error TS1151: An enum member cannot have a numeric name.
 tests/cases/compiler/enumIdentifierLiterals.ts(3,5): error TS1151: An enum member cannot have a numeric name.
 tests/cases/compiler/enumIdentifierLiterals.ts(4,5): error TS1151: An enum member cannot have a numeric name.
-tests/cases/compiler/enumIdentifierLiterals.ts(5,5): error TS1151: An enum member cannot have a numeric name.
 tests/cases/compiler/enumIdentifierLiterals.ts(6,5): error TS1151: An enum member cannot have a numeric name.
 
 
-==== tests/cases/compiler/enumIdentifierLiterals.ts (5 errors) ====
+==== tests/cases/compiler/enumIdentifierLiterals.ts (4 errors) ====
     enum Nums {
         1.0,
         ~~~
@@ -17,8 +16,6 @@ tests/cases/compiler/enumIdentifierLiterals.ts(6,5): error TS1151: An enum membe
         ~~~~~~
 !!! error TS1151: An enum member cannot have a numeric name.
         "13e-1",
-        ~~~~~~~
-!!! error TS1151: An enum member cannot have a numeric name.
         0xF00D
         ~~~~~~
 !!! error TS1151: An enum member cannot have a numeric name.

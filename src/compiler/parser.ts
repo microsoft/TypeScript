@@ -227,6 +227,8 @@ module ts {
                 return children((<TupleTypeNode>node).elementTypes);
             case SyntaxKind.UnionType:
                 return children((<UnionTypeNode>node).types);
+            case SyntaxKind.ParenType:
+                return child((<ParenTypeNode>node).type);
             case SyntaxKind.ArrayLiteral:
                 return children((<ArrayLiteral>node).elements);
             case SyntaxKind.ObjectLiteral:
@@ -1078,7 +1080,7 @@ module ts {
                     return isParameter();
                 case ParsingContext.TypeArguments:
                 case ParsingContext.TupleElementTypes:
-                    return isType();
+                    return token === SyntaxKind.CommaToken || isType();
             }
 
             Debug.fail("Non-exhaustive case in 'isListElement'.");
@@ -1660,6 +1662,14 @@ module ts {
             return finishNode(node);
         }
 
+        function parseParenType(): ParenTypeNode {
+            var node = <ParenTypeNode>createNode(SyntaxKind.ParenType);
+            parseExpected(SyntaxKind.OpenParenToken);
+            node.type = parseType();
+            parseExpected(SyntaxKind.CloseParenToken);
+            return finishNode(node);
+        }
+
         function parseFunctionType(signatureKind: SyntaxKind): TypeLiteralNode {
             var node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
             var member = <SignatureDeclaration>createNode(signatureKind);
@@ -1693,10 +1703,7 @@ module ts {
                 case SyntaxKind.OpenBracketToken:
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:
-                case SyntaxKind.LessThanToken:
-                    return parseFunctionType(SyntaxKind.CallSignature);
-                case SyntaxKind.NewKeyword:
-                    return parseFunctionType(SyntaxKind.ConstructSignature);
+                    return parseParenType();
                 default:
                     if (isIdentifier()) {
                         return parseTypeReference();
@@ -1720,18 +1727,18 @@ module ts {
                 case SyntaxKind.NewKeyword:
                     return true;
                 case SyntaxKind.OpenParenToken:
-                    // Only consider an ( as the start of a type if we have  ()  or  (id
-                    // We don't want to consider things like  (1)  as a function type.
+                    // Only consider '(' the start of a type if followed by ')', '...', an identifier, a modifier,
+                    // or something that starts a type. We don't want to consider things like '(1)' a type.
                     return lookAhead(() => {
                         nextToken();
-                        return token === SyntaxKind.CloseParenToken || isParameter();
+                        return token === SyntaxKind.CloseParenToken || isParameter() || isType();
                     });
                 default:
                     return isIdentifier();
             }
         }
 
-        function parseNonUnionType(): TypeNode {
+        function parsePrimaryType(): TypeNode {
             var type = parseNonArrayType();
             while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
                 parseExpected(SyntaxKind.CloseBracketToken);
@@ -1742,13 +1749,13 @@ module ts {
             return type;
         }
 
-        function parseType(): TypeNode {
-            var type = parseNonUnionType();
+        function parseUnionType(): TypeNode {
+            var type = parsePrimaryType();
             if (token === SyntaxKind.BarToken) {
                 var types = <NodeArray<TypeNode>>[type];
                 types.pos = type.pos;
                 while (parseOptional(SyntaxKind.BarToken)) {
-                    types.push(parseNonUnionType());
+                    types.push(parsePrimaryType());
                 }
                 types.end = getNodeEnd();
                 var node = <UnionTypeNode>createNode(SyntaxKind.UnionType, type.pos);
@@ -1756,6 +1763,48 @@ module ts {
                 type = finishNode(node);
             }
             return type;
+        }
+
+        function isFunctionType(): boolean {
+            return token === SyntaxKind.LessThanToken || token === SyntaxKind.OpenParenToken && lookAhead(() => {
+                nextToken();
+                if (token === SyntaxKind.CloseParenToken || token === SyntaxKind.DotDotDotToken) {
+                    // ( )
+                    // ( ...
+                    return true;
+                }
+                if (isIdentifier() || isModifier(token)) {
+                    nextToken();
+                    if (token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken ||
+                        token === SyntaxKind.QuestionToken || token === SyntaxKind.EqualsToken ||
+                        isIdentifier() || isModifier(token)) {
+                        // ( id :
+                        // ( id ,
+                        // ( id ?
+                        // ( id =
+                        // ( modifier id
+                        return true;
+                    }
+                    if (token === SyntaxKind.CloseParenToken) {
+                        nextToken();
+                        if (token === SyntaxKind.EqualsGreaterThanToken) {
+                            // ( id ) =>
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            });
+        }
+
+        function parseType(): TypeNode {
+            if (isFunctionType()) {
+                return parseFunctionType(SyntaxKind.CallSignature);
+            }
+            if (token === SyntaxKind.NewKeyword) {
+                return parseFunctionType(SyntaxKind.ConstructSignature);
+            }
+            return parseUnionType();
         }
 
         function parseTypeAnnotation(): TypeNode {
@@ -2344,11 +2393,27 @@ module ts {
         function parseTypeArguments(): NodeArray<TypeNode> {
             var typeArgumentListStart = scanner.getTokenPos();
             var errorCountBeforeTypeParameterList = file.syntacticErrors.length;
-            var result = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+            // We pass parseSingleTypeArgument instead of parseType as the element parser
+            // because parseSingleTypeArgument knows how to parse a missing type argument.
+            // This is useful for signature help. parseType has the disadvantage that when
+            // it sees a missing type, it changes the LookAheadMode to Error, and the result
+            // is a broken binary expression, which breaks signature help.
+            var result = parseBracketedList(ParsingContext.TypeArguments, parseSingleTypeArgument, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             if (!result.length && file.syntacticErrors.length === errorCountBeforeTypeParameterList) {
                 grammarErrorAtPos(typeArgumentListStart, scanner.getStartPos() - typeArgumentListStart, Diagnostics.Type_argument_list_cannot_be_empty);
             }
             return result;
+        }
+
+        function parseSingleTypeArgument(): TypeNode {
+            if (token === SyntaxKind.CommaToken) {
+                var errorStart = scanner.getTokenPos();
+                var errorLength = scanner.getTextPos() - errorStart;
+                grammarErrorAtPos(errorStart, errorLength, Diagnostics.Type_expected);
+                return createNode(SyntaxKind.Missing);
+            }
+
+            return parseType();
         }
 
         function parsePrimaryExpression(): Expression {

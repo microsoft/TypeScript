@@ -419,6 +419,16 @@ class ProjectRunner extends RunnerBase {
                 //    })
                 //});
             }
+
+            after(() => {
+                // Mocha holds onto the closure environment of the describe callback even after the test is done.
+                // Therefore we have to clean out large objects after the test is done.
+                nodeCompilerResult = undefined;
+                amdCompilerResult = undefined;
+                testCase = undefined;
+                testFileText = undefined;
+                testCaseJustName = undefined;
+            });
         });
     }
 }
