@@ -644,7 +644,7 @@ module ts {
         getParentOfSymbol(symbol: Symbol): Symbol;
         getTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
-        getApparentPropertyOfType(type: Type, propertyName: string): Symbol;
+        getPropertyOfType(type: Type, propertyName: string): Symbol;
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getReturnTypeOfSignature(signature: Signature): Type;

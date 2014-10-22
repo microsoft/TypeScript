@@ -87,7 +87,7 @@ module ts {
             getParentOfSymbol: getParentOfSymbol,
             getTypeOfSymbol: getTypeOfSymbol,
             getPropertiesOfType: getPropertiesOfType,
-            getApparentPropertyOfType: getApparentPropertyOfType,
+            getPropertyOfType: getPropertyOfType,
             getSignaturesOfType: getSignaturesOfType,
             getIndexTypeOfType: getIndexTypeOfType,
             getReturnTypeOfSignature: getReturnTypeOfSignature,
@@ -2109,7 +2109,7 @@ module ts {
 
         function resolveUnionTypeMembers(type: UnionType) {
             // The members and properties collections are empty for union types. To get all properties of a union
-            // type use getApparentPropertiesOfType (only the language service uses this).
+            // type use getPropertiesOfType (only the language service uses this).
             var callSignatures = getUnionSignatures(type.types, SignatureKind.Call);
             var constructSignatures = getUnionSignatures(type.types, SignatureKind.Construct);
             var stringIndexType = getUnionIndexType(type.types, IndexKind.String);
@@ -2200,7 +2200,7 @@ module ts {
         function getPropertiesOfUnionType(type: UnionType): Symbol[] {
             var result: Symbol[] = [];
             forEach(getPropertiesOfType(type.types[0]), prop => {
-                var unionProp = getApparentPropertyOfUnionType(type, prop.name);
+                var unionProp = getPropertyOfUnionType(type, prop.name);
                 if (unionProp) {
                     result.push(unionProp);
                 }
@@ -2245,7 +2245,7 @@ module ts {
             for (var i = 0; i < types.length; i++) {
                 var type = getApparentType(types[i]);
                 if (type !== unknownType) {
-                    var prop = getApparentPropertyOfType(type, name);
+                    var prop = getPropertyOfType(type, name);
                     if (!prop) {
                         return undefined;
                     }
@@ -2256,9 +2256,6 @@ module ts {
                         props.push(prop);
                     }
                 }
-            }
-            if (!props) {
-                return unknownSymbol;
             }
             var propTypes: Type[] = [];
             var declarations: Declaration[] = [];
@@ -2276,7 +2273,7 @@ module ts {
             return result;
         }
 
-        function getApparentPropertyOfUnionType(type: UnionType, name: string): Symbol {
+        function getPropertyOfUnionType(type: UnionType, name: string): Symbol {
             var properties = type.resolvedProperties || (type.resolvedProperties = {});
             if (hasProperty(properties, name)) {
                 return properties[name];
@@ -2288,9 +2285,12 @@ module ts {
             return property;
         }
 
-        function getApparentPropertyOfType(type: Type, name: string): Symbol {
+        // Return the symbol for the property with the given name in the given type. Creates synthetic union properties when
+        // necessary, maps primtive types and type parameters are to their apparent types, and augments with properties from
+        // Object and Function as appropriate.
+        function getPropertyOfType(type: Type, name: string): Symbol {
             if (type.flags & TypeFlags.Union) {
-                return getApparentPropertyOfUnionType(<UnionType>type, name);
+                return getPropertyOfUnionType(<UnionType>type, name);
             }
             if (!(type.flags & TypeFlags.ObjectType)) {
                 type = getApparentType(type);
@@ -2320,6 +2320,8 @@ module ts {
             return emptyArray;
         }
 
+        // Return the signatures of the given kind in the given type. Creates synthetic union signatures when necessary and
+        // maps primtive types and type parameters are to their apparent types.
         function getSignaturesOfType(type: Type, kind: SignatureKind): Signature[] {
             return getSignaturesOfObjectOrUnionType(getApparentType(type), kind);
         }
@@ -2331,6 +2333,8 @@ module ts {
             }
         }
 
+        // Return the index type of the given kind in the given type. Creates synthetic union index types when necessary and
+        // maps primtive types and type parameters are to their apparent types.
         function getIndexTypeOfType(type: Type, kind: IndexKind): Type {
             return getIndexTypeOfObjectOrUnionType(getApparentType(type), kind);
         }
@@ -3417,7 +3421,7 @@ module ts {
                 var properties = getPropertiesOfObjectType(target);
                 for (var i = 0; i < properties.length; i++) {
                     var targetProp = properties[i];
-                    var sourceProp = getApparentPropertyOfType(source, targetProp.name);
+                    var sourceProp = getPropertyOfType(source, targetProp.name);
                     if (sourceProp !== targetProp) {
                         if (!sourceProp) {
                             if (relation === subtypeRelation || !isOptionalProperty(targetProp)) {
@@ -4227,7 +4231,7 @@ module ts {
                 if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
                     return type;
                 }
-                var prototypeProperty = getApparentPropertyOfType(rightType, "prototype");
+                var prototypeProperty = getPropertyOfType(rightType, "prototype");
                 if (!prototypeProperty) {
                     return type;
                 }
@@ -4873,7 +4877,7 @@ module ts {
                     // handle cases when type is Type parameter with invalid constraint
                     return unknownType;
                 }
-                var prop = getApparentPropertyOfType(apparentType, node.right.text);
+                var prop = getPropertyOfType(apparentType, node.right.text);
                 if (!prop) {
                     if (node.right.text) {
                         error(node.right, Diagnostics.Property_0_does_not_exist_on_type_1, identifierToString(node.right), typeToString(type));
@@ -4904,7 +4908,7 @@ module ts {
         function isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean {
             var type = checkExpression(node.left);
             if (type !== unknownType && type !== anyType) {
-                var prop = getApparentPropertyOfType(getWidenedType(type), propertyName);
+                var prop = getPropertyOfType(getWidenedType(type), propertyName);
                 if (prop && prop.parent && prop.parent.flags & SymbolFlags.Class) {
                     if (node.left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.Method) {
                         return false;
@@ -4938,7 +4942,7 @@ module ts {
             // See if we can index as a property.
             if (node.index.kind === SyntaxKind.StringLiteral || node.index.kind === SyntaxKind.NumericLiteral) {
                 var name = (<LiteralExpression>node.index).text;
-                var prop = getApparentPropertyOfType(objectType, name);
+                var prop = getPropertyOfType(objectType, name);
                 if (prop) {
                     return getTypeOfSymbol(prop);
                 }
@@ -8089,7 +8093,7 @@ module ts {
                         if (objectType === unknownType) return undefined;
                         var apparentType = getApparentType(objectType);
                         if (apparentType === unknownType) return undefined;
-                        return getApparentPropertyOfType(apparentType, (<LiteralExpression>node).text);
+                        return getPropertyOfType(apparentType, (<LiteralExpression>node).text);
                     }
                     break;
             }
@@ -8168,7 +8172,7 @@ module ts {
                 var symbols: Symbol[] = [];
                 var name = symbol.name;
                 forEach(getSymbolLinks(symbol).unionType.types, t => {
-                    symbols.push(getApparentPropertyOfType(t, name));
+                    symbols.push(getPropertyOfType(t, name));
                 });
                 return symbols;
             }

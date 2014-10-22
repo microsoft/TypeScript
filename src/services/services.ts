@@ -572,7 +572,7 @@ module ts {
             return this.checker.getPropertiesOfType(this);
         }
         getProperty(propertyName: string): Symbol {
-            return this.checker.getApparentPropertyOfType(this, propertyName);
+            return this.checker.getPropertyOfType(this, propertyName);
         }
         getApparentProperties(): Symbol[] {
             return this.checker.getAugmentedPropertiesOfType(this);
@@ -4186,7 +4186,7 @@ module ts {
                     if (typeReference) {
                         var type = typeInfoResolver.getTypeOfNode(typeReference);
                         if (type) {
-                            var propertySymbol = typeInfoResolver.getApparentPropertyOfType(type, propertyName);
+                            var propertySymbol = typeInfoResolver.getPropertyOfType(type, propertyName);
                             if (propertySymbol) {
                                 result.push(propertySymbol);
                             }
