@@ -237,9 +237,10 @@ module ts.formatting {
 
                 // determine child indentation
                 // TODO: share this code with SmartIndenter
+                // NOTE: SI uses non-adjusted lines
                 var increaseIndentation =
                     childStartLine !== nodeStartLine &&
-                    !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStartLine, sourceFile) &&
+                    !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStartLine + 1, sourceFile) &&
                     SmartIndenter.shouldIndentChildNode(node, child);
 
                 processNode(child, childContextNode, childStartLine, increaseIndentation ? indentation + options.IndentSize : indentation);
