@@ -4782,7 +4782,7 @@ module ts {
             var sourceFile = getCurrentSourceFile(fileName);
 
             var result: ClassifiedSpan[] = [];
-            processElement(sourceFile, sourceFile);
+            processElement(sourceFile);
 
             return result;
 
@@ -4796,11 +4796,11 @@ module ts {
                 }
             }
 
-            function classifyToken(token: Node, tokenOwner: Node, sourceFile: SourceFile): void {
+            function classifyToken(token: Node): void {
                 forEach(getLeadingCommentRanges(sourceFile.text, token.getFullStart()), classifyComment);
 
                 if (token.getWidth() > 0) {
-                    var type = classifyTokenType(token, tokenOwner);
+                    var type = classifyTokenType(token);
                     if (type) {
                         result.push({
                             textSpan: new TypeScript.TextSpan(token.getStart(), token.getWidth()),
@@ -4812,7 +4812,7 @@ module ts {
                 forEach(getTrailingCommentRanges(sourceFile.text, token.getEnd()), classifyComment);
             }
 
-            function classifyTokenType(token: Node, tokenOwner: Node): string {
+            function classifyTokenType(token: Node): string {
                 var tokenKind = token.kind;
                 if (isKeyword(tokenKind)) {
                     return ClassificationTypeNames.keyword;
@@ -4821,20 +4821,20 @@ module ts {
                 // Special case < and >  If they appear in a generic context they are punctuation,
                 // not operators.
                 if (tokenKind === SyntaxKind.LessThanToken || tokenKind === SyntaxKind.GreaterThanToken) {
-                    var tokenParentKind = token.parent.kind;
                     // If the node owning the token has a type argument list or type parameter list, then
                     // we can effectively assume that a '<' and '>' belong to those lists.
-                    if (getTypeArgumentOrTypeParameterList(tokenOwner)) {
+                    if (getTypeArgumentOrTypeParameterList(token.parent)) {
                         return ClassificationTypeNames.punctuation;
                     }
                 }
 
                 if (isPunctuation(token)) {
-                    if (tokenOwner.kind === SyntaxKind.BinaryExpression ||
-                        tokenOwner.kind === SyntaxKind.VariableDeclaration || // the '=' in a variable declaration is special cased here.
-                        tokenOwner.kind === SyntaxKind.PrefixOperator ||
-                        tokenOwner.kind === SyntaxKind.PostfixOperator ||
-                        tokenOwner.kind === SyntaxKind.ConditionalExpression) {
+                    // the '=' in a variable declaration is special cased here.
+                    if (token.parent.kind === SyntaxKind.BinaryExpression ||
+                        token.parent.kind === SyntaxKind.VariableDeclaration ||
+                        token.parent.kind === SyntaxKind.PrefixOperator ||
+                        token.parent.kind === SyntaxKind.PostfixOperator ||
+                        token.parent.kind === SyntaxKind.ConditionalExpression) {
                         return ClassificationTypeNames.operator;
                     }
                     else {
@@ -4852,29 +4852,29 @@ module ts {
                     return ClassificationTypeNames.stringLiteral;
                 }
                 else if (tokenKind === SyntaxKind.Identifier) {
-                    switch (tokenOwner.kind) {
+                    switch (token.parent.kind) {
                         case SyntaxKind.ClassDeclaration:
-                            if ((<ClassDeclaration>tokenOwner).name === token) {
+                            if ((<ClassDeclaration>token.parent).name === token) {
                                 return ClassificationTypeNames.className;
                             }
                             return;
                         case SyntaxKind.TypeParameter:
-                            if ((<TypeParameterDeclaration>tokenOwner).name === token) {
+                            if ((<TypeParameterDeclaration>token.parent).name === token) {
                                 return ClassificationTypeNames.typeParameterName;
                             }
                             return;
                         case SyntaxKind.InterfaceDeclaration:
-                            if ((<InterfaceDeclaration>tokenOwner).name === token) {
+                            if ((<InterfaceDeclaration>token.parent).name === token) {
                                 return ClassificationTypeNames.interfaceName;
                             }
                             return;
                         case SyntaxKind.EnumDeclaration:
-                            if ((<EnumDeclaration>tokenOwner).name === token) {
+                            if ((<EnumDeclaration>token.parent).name === token) {
                                 return ClassificationTypeNames.enumName;
                             }
                             return;
                         case SyntaxKind.ModuleDeclaration:
-                            if ((<ModuleDeclaration>tokenOwner).name === token) {
+                            if ((<ModuleDeclaration>token.parent).name === token) {
                                 return ClassificationTypeNames.moduleName;
                             }
                             return;
@@ -4884,18 +4884,18 @@ module ts {
                 }
             }
 
-            function processElement(element: Node, sourceFile: SourceFile) {
+            function processElement(element: Node) {
                 // Ignore nodes that don't intersect the original span to classify.
                 if (span.intersectsWith(element.getFullStart(), element.getFullWidth())) {
                     var children = element.getChildren();
                     for (var i = 0, n = children.length; i < n; i++) {
                         var child = children[i];
                         if (isToken(child)) {
-                            classifyToken(child, element, sourceFile);
+                            classifyToken(child);
                         }
                         else {
                             // Recurse into our child nodes.
-                            processElement(child, sourceFile);
+                            processElement(child);
                         }
                     }
                 }
