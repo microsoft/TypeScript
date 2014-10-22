@@ -139,6 +139,8 @@ module ts.formatting {
                 trailingTrivia.push(trivia);
 
                 if (current === SyntaxKind.NewLineTrivia) {
+                    // move past new line
+                    scanner.scan();
                     break;
                 }
             }

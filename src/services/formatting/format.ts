@@ -16,6 +16,12 @@ module ts.formatting {
         trailingTrivia: TextRangeWithKind[];
     }
 
+    interface DynamicIndentation {
+        getIndentation(): number;
+        getCommentIndentation(): number;
+        recomputeIndentation(lineAddedByFormatting: boolean): void;
+    }
+
     export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[]{
         var line = getNonAdjustedLineAndCharacterFromPosition(position, sourceFile).line;
         // get the span for the previous\current line
@@ -139,19 +145,39 @@ module ts.formatting {
         }
         return edits;
 
+        function getIndentationDelta(node: Node, lineAdded: boolean): number {
+            if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
+                return lineAdded ? options.IndentSize : - options.IndentSize;
+            }
+            return 0;
+        }
+
         function processNode(node: Node, contextNode: Node, nodeStartLine: number, indentation: number) {
             // TODO: skip nodes that has skipped or missing tokens
             if (!rangeOverlapsWithRange(originalRange, node)) {
                 return;
             }
+            var commentIndentation = indentation;
+
+            var parentIndentation: DynamicIndentation = {
+                getCommentIndentation: () => commentIndentation,
+                getIndentation: () => indentation,
+                recomputeIndentation: (lineAdded) => {
+                    var delta = getIndentationDelta(node, lineAdded);
+                    if (delta) {
+                        indentation += delta;
+                        commentIndentation += delta;
+                    }
+                }
+            };
 
             var childContextNode = contextNode;
             forEachChild(
                 node,
-                child => processChildNode(child, indentation, /*containingList*/ undefined, /*listElementIndex*/ -1),
+                child => processChildNode(child, /*containingList*/ undefined, /*listElementIndex*/ -1),
                 nodes => {
                     for (var i = 0, len = nodes.length; i < len; ++i) {
-                        processChildNode(nodes[i], indentation, /*containingList*/ nodes, /*listElementIndex*/ i)
+                        processChildNode(nodes[i], /*containingList*/ nodes, /*listElementIndex*/ i)
                     }
                 }
             );
@@ -162,17 +188,18 @@ module ts.formatting {
                 if (tokenInfo.token.end > node.end) {
                     break;
                 }
-                var commentIndentation =
+
+                commentIndentation =
                     SmartIndenter.nodeContentIsAlwaysIndented(node) && node.end === tokenInfo.token.end
                     ? indentation + options.IndentSize
                     : indentation;
 
-                doConsumeTokenAndAdvanceScanner(tokenInfo, node, indentation, commentIndentation);
+                doConsumeTokenAndAdvanceScanner(tokenInfo, node, parentIndentation);
             }
 
             /// Local functions
 
-            function processChildNode(child: Node, indentation: number, containingList: Node[], listElementIndex: number): void {
+            function processChildNode(child: Node, containingList: Node[], listElementIndex: number): void {
                 if (child.kind === SyntaxKind.Missing) {
                     return;
                 }
@@ -184,7 +211,7 @@ module ts.formatting {
                         break;
                     }
 
-                    doConsumeTokenAndAdvanceScanner(tokenInfo, node, indentation, indentation);
+                    doConsumeTokenAndAdvanceScanner(tokenInfo, node, parentIndentation);
                 }
 
                 if (!formattingScanner.isOnToken()) {
@@ -195,21 +222,20 @@ module ts.formatting {
                 if (isToken(child)) {
                     var tokenInfo = formattingScanner.readTokenInfo(node);
                     Debug.assert(tokenInfo.token.end === child.end);
-                    doConsumeTokenAndAdvanceScanner(tokenInfo, node, indentation, indentation);
+                    doConsumeTokenAndAdvanceScanner(tokenInfo, node, parentIndentation);
                     return;
                 }
 
                 var childStartLine = getNonAdjustedLineAndCharacterFromPosition(start, sourceFile).line;
 
-                var childIndentation = indentation;
                 if (listElementIndex === -1) {
                     // child is not list element
                 }
                 else {
                     // child is a list element
                 }
+
                 // determine child indentation
-                // if child
                 // TODO: share this code with SmartIndenter
                 var increaseIndentation =
                     childStartLine !== nodeStartLine &&
@@ -220,13 +246,13 @@ module ts.formatting {
                 childContextNode = node;
             }
 
-            function doConsumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, indentation: number, commentIndentation: number): void {
-                consumeTokenAndAdvanceScanner(currentTokenInfo, parent, childContextNode, indentation, commentIndentation);
+            function doConsumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, indentation: DynamicIndentation): void {
+                consumeTokenAndAdvanceScanner(currentTokenInfo, parent, childContextNode, indentation);
                 childContextNode = parent;
             }
         }
 
-        function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, contextNode: Node, indentation: number, commentIndentation: number): void {
+        function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, contextNode: Node, indentation: DynamicIndentation): void {
             Debug.assert(rangeContainsRange(parent, currentTokenInfo.token));
 
             lastTriviaWasNewLine = formattingScanner.lastTrailingTriviaWasNewLine();
@@ -235,15 +261,25 @@ module ts.formatting {
                 processTrivia(currentTokenInfo.leadingTrivia, parent, contextNode, indentation);
             }
 
-            var indentToken: boolean;
+            var lineAdded: boolean;
             var isTokenInRange = rangeContainsRange(originalRange, currentTokenInfo.token);
+            var indentToken: boolean = true;
             if (isTokenInRange) {
-                indentToken = processRange(currentTokenInfo.token, parent, contextNode, indentation);
+                var prevStartLine = previousRangeStartLine;
+                var tokenStart = getNonAdjustedLineAndCharacterFromPosition(currentTokenInfo.token.pos, sourceFile);
+                lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, contextNode, indentation);
+                if (lineAdded !== undefined) {
+                    indentToken = lineAdded;
+                }                
+                else {
+                    indentToken = tokenStart.line !== prevStartLine;
+                }
             }
 
             if (currentTokenInfo.trailingTrivia) {
                 processTrivia(currentTokenInfo.trailingTrivia, parent, contextNode, indentation);
             }
+
 
             if (lastTriviaWasNewLine && indentToken) {
                 var indentNextTokenOrTrivia = true;
@@ -253,12 +289,12 @@ module ts.formatting {
                         if (rangeContainsRange(originalRange, triviaItem)) {
                             switch (triviaItem.kind) {
                                 case SyntaxKind.MultiLineCommentTrivia:
-                                    indentMultilineComment(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                                    indentMultilineComment(triviaItem, indentation.getCommentIndentation(), /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
                                     indentNextTokenOrTrivia = false;
                                     break;
                                 case SyntaxKind.SingleLineCommentTrivia:
                                     if (indentNextTokenOrTrivia) {
-                                        insertIndentation(triviaItem.pos, commentIndentation);
+                                        insertIndentation(triviaItem.pos, indentation.getCommentIndentation(), /*lineAdded*/ false);
                                         indentNextTokenOrTrivia = false;
                                     }
                                     break;
@@ -273,19 +309,110 @@ module ts.formatting {
                     }
                 }
                 if (isTokenInRange) {
-                    insertIndentation(currentTokenInfo.token.pos, indentation);
+                    insertIndentation(currentTokenInfo.token.pos, indentation.getIndentation(), lineAdded);
                 }
             }
 
             formattingScanner.advance();
         }
 
-        function insertIndentation(pos: number, indentation: number): void {
-            var tokenRange = getNonAdjustedLineAndCharacterFromPosition(pos, sourceFile);
-            if (indentation !== tokenRange.character) {
-                var indentationString = getIndentationString(indentation, options);
-                var startLinePosition = getStartPositionOfLine(tokenRange.line, sourceFile);
-                recordReplace(startLinePosition, tokenRange.character, indentationString);
+        function processTrivia(trivia: TextRangeWithKind[], parent: Node, contextNode: Node, indentation: DynamicIndentation): void {
+            for (var i = 0, len = trivia.length; i < len; ++i) {
+                var triviaItem = trivia[i];
+                if (isComment(triviaItem.kind) && rangeContainsRange(originalRange, triviaItem)) {
+                    var triviaItemStart = getNonAdjustedLineAndCharacterFromPosition(triviaItem.pos, sourceFile);
+                    processRange(triviaItem, triviaItemStart, parent, contextNode, indentation);
+                }
+            }
+        }
+
+        function processRange(range: TextRangeWithKind, rangeStart: LineAndCharacter, parent: Node, contextNode: Node, indentation: DynamicIndentation): boolean {
+            
+            var lineAdded: boolean;
+            if (!previousRange) {
+                // trim whitespaces starting from the beginning of the span up to the current line
+                var originalStart = getNonAdjustedLineAndCharacterFromPosition(originalRange.pos, sourceFile);
+                trimTrailingWhitespacesForLines(originalStart.line, rangeStart.line);
+            }
+            else {
+                lineAdded = processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode, indentation)
+            }
+
+            previousRange = range;
+            previousParent = parent;
+            previousRangeStartLine = rangeStart.line;
+
+            return lineAdded;
+        }
+
+        function processPair(currentItem: TextRangeWithKind,
+            currentStartLine: number,
+            currentParent: Node,
+            previousItem: TextRangeWithKind,
+            previousStartLine: number,
+            previousParent: Node,
+            contextNode: Node,
+            indentation: DynamicIndentation): boolean {
+
+            formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
+            var rule = rulesProvider.getRulesMap().GetRule(formattingContext);
+
+            var trimTrailingWhitespaces: boolean;
+            var lineAdded: boolean;
+            if (rule) {
+                applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
+
+                if (rule.Operation.Action & (RuleAction.Space | RuleAction.Delete) && currentStartLine !== previousStartLine) {
+                    // Old code:
+                    // Handle the case where the next line is moved to be the end of this line. 
+                    // In this case we don't indent the next line in the next pass.                    
+                    lastTriviaWasNewLine = false;
+                    if (currentParent.getStart(sourceFile) === currentItem.pos) {
+                        lineAdded = false;
+                    }
+                }
+                else if (rule.Operation.Action & RuleAction.NewLine && currentStartLine === previousStartLine) {
+                    // Old code:
+                    // Handle the case where token2 is moved to the new line. 
+                    // In this case we indent token2 in the next pass but we set
+                    // sameLineIndent flag to notify the indenter that the indentation is within the line.
+                    lastTriviaWasNewLine = true;
+                    if (currentParent.getStart(sourceFile) === currentItem.pos) {
+                        lineAdded = true;
+                    }
+                }
+
+                if (lineAdded !== undefined) {
+                    indentation.recomputeIndentation(lineAdded);
+                }
+
+                // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
+                trimTrailingWhitespaces =
+                    (rule.Operation.Action & (RuleAction.NewLine | RuleAction.Space)) &&
+                    rule.Flag !== RuleFlags.CanDeleteNewLines;
+            }
+            else {
+                trimTrailingWhitespaces = true;
+            }
+
+            if (currentStartLine !== previousStartLine && trimTrailingWhitespaces) {
+                // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
+                trimTrailingWhitespacesForLines(previousStartLine, currentStartLine, previousItem);
+            }
+
+            return lineAdded;
+        }
+        function insertIndentation(pos: number, indentation: number, lineAdded: boolean): void {
+            var indentationString = getIndentationString(indentation, options);
+            if (lineAdded) {
+                recordReplace(pos, 0, indentationString);
+            }
+            else {
+                var tokenRange = getNonAdjustedLineAndCharacterFromPosition(pos, sourceFile);
+                if (indentation !== tokenRange.character) {
+                    var startLinePosition = getStartPositionOfLine(tokenRange.line, sourceFile);
+                    recordReplace(startLinePosition, tokenRange.character, indentationString);
+                }
             }
         }
 
@@ -297,7 +424,7 @@ module ts.formatting {
             if (startLine === endLine) {
                 if (!firstLineIsIndented) {
                     // treat as single line comment
-                    insertIndentation(commentRange.pos, indentation);
+                    insertIndentation(commentRange.pos, indentation, /*lineAdded*/ false);
                 }
                 return;
             }
@@ -348,96 +475,13 @@ module ts.formatting {
             }
         }
 
-        function processTrivia(trivia: TextRangeWithKind[], parent: Node, contextNode: Node, currentIndentation: number): void {
-            for (var i = 0, len = trivia.length; i < len; ++i) {
-                var triviaItem = trivia[i];
-                if (isComment(triviaItem.kind) && rangeContainsRange(originalRange, triviaItem)) {
-                    processRange(triviaItem, parent, contextNode, currentIndentation);
-                }
-            }
-        }
-
-        function processRange(range: TextRangeWithKind, parent: Node, contextNode: Node, indentation: number): boolean {
-            var rangeStart = getNonAdjustedLineAndCharacterFromPosition(range.pos, sourceFile);
-            var indentToken = true;
-
-            if (!previousRange) {
-                var originalStart = getNonAdjustedLineAndCharacterFromPosition(originalRange.pos, sourceFile);
-                // TODO: implement
-                if (isTrivia(range.kind)) {
-                    trimTrailingWhitespacesForLines(originalStart.line, rangeStart.line);
-                }
-                else {
-                    trimTrailingWhitespacesForLines(originalStart.line, rangeStart.line);
-                }
-            }
-            else {
-                processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode)
-                indentToken = rangeStart.line !== previousRangeStartLine;
-            }
-
-            previousRange = range;
-            previousParent = parent;
-            previousRangeStartLine = rangeStart.line;
-
-            return indentToken;
-        }
-
-        function processPair(currentItem: TextRangeWithKind,
-            currentStartLine: number,
-            currentParent: Node,
-            previousItem: TextRangeWithKind,
-            previousStartLine: number,
-            previousParent: Node,
-            contextNode: Node): void {
-
-            // TODO: compute common parent
-            formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
-            var rule = rulesProvider.getRulesMap().GetRule(formattingContext);
-
-            var trimTrailingWhitespaces: boolean;
-            if (rule) {
-                applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
-
-                if (rule.Operation.Action & (RuleAction.Space | RuleAction.Delete) && currentStartLine !== previousStartLine) {
-                    // Old code:
-                    // Handle the case where the next line is moved to be the end of this line. 
-                    // In this case we don't indent the next line in the next pass.                    
-                    // this.forceSkipIndentingNextToken(t2.start());
-                    lastTriviaWasNewLine = false;
-                }
-                else if (rule.Operation.Action & RuleAction.NewLine && currentStartLine === previousStartLine) {
-                    // Old code:
-                    // Handle the case where token2 is moved to the new line. 
-                    // In this case we indent token2 in the next pass but we set
-                    // sameLineIndent flag to notify the indenter that the indentation is within the line.
-                    // this.forceIndentNextToken(t2.start());
-                    lastTriviaWasNewLine = true;
-                }
-
-                // TODO: check if this is still needed
-                trimTrailingWhitespaces =
-                    (rule.Operation.Action & (RuleAction.NewLine | RuleAction.Space)) &&
-                    rule.Flag !== RuleFlags.CanDeleteNewLines;
-            }
-            else {
-                trimTrailingWhitespaces = true;
-            }
-
-            if (currentStartLine !== previousStartLine && trimTrailingWhitespaces) {
-                // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
-                trimTrailingWhitespacesForLines(previousStartLine, currentStartLine, previousItem);
-            }
-        }
-
         function trimTrailingWhitespacesForLines(line1: number, line2: number, range?: TextRangeWithKind) {
             for (var line = line1; line < line2; ++line) {
                 var lineStartPosition = getStartPositionOfLine(line, sourceFile);
                 var lineEndPosition = getEndLinePosition(line, sourceFile);
 
-                // if (token && (token.kind == SyntaxKind.MultiLineCommentTrivia || token.kind == SyntaxKind.SingleLineCommentTrivia) && token.start() <= line.endPosition() && token.end() >= line.endPosition())
-
-                if (range && isComment(range.kind)&& false) {
+                // do not trim whitespaces in comments
+                if (range && isComment(range.kind) && range.pos <= lineEndPosition && range.end > lineEndPosition) {
                     continue;
                 }
 
