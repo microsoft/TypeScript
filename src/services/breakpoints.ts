@@ -265,9 +265,9 @@ module ts.BreakpointResolver {
                 var isDeclarationOfForStatement = variableDeclaration.parent.kind === SyntaxKind.ForStatement && contains((<ForStatement>variableDeclaration.parent).declarations, variableDeclaration);
                 var declarations = isParentVariableStatement
                     ? (<VariableStatement>variableDeclaration.parent).declarations
-                    : isDeclarationOfForStatement 
-                    ? (<ForStatement>variableDeclaration.parent).declarations
-                    : undefined;
+                    : isDeclarationOfForStatement
+                        ? (<ForStatement>variableDeclaration.parent).declarations
+                        : undefined;
 
                 // Breakpoint is possible in variableDeclaration only if there is initialization
                 if (variableDeclaration.initializer || (variableDeclaration.flags & NodeFlags.Export)) {
@@ -347,16 +347,6 @@ module ts.BreakpointResolver {
                 return spanInNode(nodeForSpanInBlock);
             }
 
-            function spanInFirstStatementOfBlock(block: Block): TypeScript.TextSpan {
-                // Set breakpoint in first statement
-                return spanInNode(block.statements[0]);
-            }
-
-            function spanInLastStatementOfBlock(block: Block): TypeScript.TextSpan {
-                // Set breakpoint in first statement
-                return spanInNode(block.statements[block.statements.length - 1]);
-            }
-
             function spanInBlock(block: Block): TypeScript.TextSpan {
                 switch (block.parent.kind) {
                     case SyntaxKind.ModuleDeclaration:
@@ -376,7 +366,7 @@ module ts.BreakpointResolver {
                 }
 
                 // Default action is to set on first statement
-                return spanInFirstStatementOfBlock(block);
+                return spanInNode(block.statements[0]);
             }
 
             function spanInForStatement(forStatement: ForStatement): TypeScript.TextSpan {
@@ -389,7 +379,6 @@ module ts.BreakpointResolver {
                 if (forStatement.condition) {
                     return textSpan(forStatement.condition);
                 }
-
                 if (forStatement.iterator) {
                     return textSpan(forStatement.iterator);
                 }
@@ -432,7 +421,7 @@ module ts.BreakpointResolver {
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.CatchBlock:
                     case SyntaxKind.FinallyBlock:
-                        return spanInLastStatementOfBlock(<Block>node.parent);
+                        return spanInNode((<Block>node.parent).statements[(<Block>node.parent).statements.length - 1]);;
 
                     case SyntaxKind.SwitchStatement:
                         // breakpoint in last statement of the last clause
