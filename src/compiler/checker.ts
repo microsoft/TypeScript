@@ -87,18 +87,17 @@ module ts {
             getParentOfSymbol: getParentOfSymbol,
             getTypeOfSymbol: getTypeOfSymbol,
             getPropertiesOfType: getPropertiesOfType,
-            getPropertyOfType: getPropertyOfType,
+            getApparentPropertyOfType: getApparentPropertyOfType,
             getSignaturesOfType: getSignaturesOfType,
             getIndexTypeOfType: getIndexTypeOfType,
             getReturnTypeOfSignature: getReturnTypeOfSignature,
             getSymbolsInScope: getSymbolsInScope,
             getSymbolInfo: getSymbolInfo,
             getTypeOfNode: getTypeOfNode,
-            getApparentType: getApparentType,
             typeToString: typeToString,
             getSymbolDisplayBuilder: getSymbolDisplayBuilder,
             symbolToString: symbolToString,
-            getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
+            getAugmentedPropertiesOfType: getAugmentedPropertiesOfType,
             getRootSymbols: getRootSymbols,
             getContextualType: getContextualType,
             getFullyQualifiedName: getFullyQualifiedName,
@@ -679,17 +678,17 @@ module ts {
             return result || emptyArray;
         }
 
-        function setObjectTypeMembers(type: ObjectType, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexType: Type, numberIndexType: Type): ResolvedObjectType {
-            (<ResolvedObjectType>type).members = members;
-            (<ResolvedObjectType>type).properties = getNamedMembers(members);
-            (<ResolvedObjectType>type).callSignatures = callSignatures;
-            (<ResolvedObjectType>type).constructSignatures = constructSignatures;
-            if (stringIndexType) (<ResolvedObjectType>type).stringIndexType = stringIndexType;
-            if (numberIndexType) (<ResolvedObjectType>type).numberIndexType = numberIndexType;
-            return <ResolvedObjectType>type;
+        function setObjectTypeMembers(type: ObjectType, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexType: Type, numberIndexType: Type): ResolvedType {
+            (<ResolvedType>type).members = members;
+            (<ResolvedType>type).properties = getNamedMembers(members);
+            (<ResolvedType>type).callSignatures = callSignatures;
+            (<ResolvedType>type).constructSignatures = constructSignatures;
+            if (stringIndexType) (<ResolvedType>type).stringIndexType = stringIndexType;
+            if (numberIndexType) (<ResolvedType>type).numberIndexType = numberIndexType;
+            return <ResolvedType>type;
         }
 
-        function createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexType: Type, numberIndexType: Type): ResolvedObjectType {
+        function createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexType: Type, numberIndexType: Type): ResolvedType {
             return setObjectTypeMembers(createObjectType(TypeFlags.Anonymous, symbol),
                 members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
@@ -1207,7 +1206,7 @@ module ts {
                 }
 
                 function writeLiteralType(type: ObjectType, flags: TypeFormatFlags) {
-                    var resolved = resolveObjectTypeMembers(type);
+                    var resolved = resolveObjectOrUnionTypeMembers(type);
                     if (!resolved.properties.length && !resolved.stringIndexType && !resolved.numberIndexType) {
                         if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
                             writePunctuation(writer, SyntaxKind.OpenBraceToken);
@@ -1286,7 +1285,7 @@ module ts {
                     for (var i = 0; i < resolved.properties.length; i++) {
                         var p = resolved.properties[i];
                         var t = getTypeOfSymbol(p);
-                        if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfType(t).length) {
+                        if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
                             var signatures = getSignaturesOfType(t, SignatureKind.Call);
                             for (var j = 0; j < signatures.length; j++) {
                                 buildSymbolDisplay(p, writer);
@@ -1528,25 +1527,6 @@ module ts {
             }
         }
 
-        function getApparentType(type: Type): ApparentType {
-            if (type.flags & TypeFlags.TypeParameter) {
-                do {
-                    type = getConstraintOfTypeParameter(<TypeParameter>type);
-                } while (type && type.flags & TypeFlags.TypeParameter);
-                if (!type) type = emptyObjectType;
-            }
-            if (type.flags & TypeFlags.StringLike) {
-                type = globalStringType;
-            }
-            else if (type.flags & TypeFlags.NumberLike) {
-                type = globalNumberType;
-            }
-            else if (type.flags & TypeFlags.Boolean) {
-                type = globalBooleanType;
-            }
-            return <ApparentType>type;
-        }
-
         function getTypeOfPrototypeProperty(prototype: Symbol): Type {
             // TypeScript 1.0 spec (April 2014): 8.4
             // Every class automatically contains a static property member named 'prototype', 
@@ -1762,15 +1742,6 @@ module ts {
             return links.type;
         }
 
-        function getTypeOfUnionProperty(symbol: Symbol): Type {
-            var links = getSymbolLinks(symbol);
-            if (!links.type) {
-                var types = map(links.unionType.types, t => getTypeOfSymbol(getPropertyOfType(getApparentType(t), symbol.name)));
-                links.type = getUnionType(types);
-            }
-            return links.type;
-        }
-
         function getTypeOfSymbol(symbol: Symbol): Type {
             if (symbol.flags & SymbolFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
@@ -1789,9 +1760,6 @@ module ts {
             }
             if (symbol.flags & SymbolFlags.Import) {
                 return getTypeOfImport(symbol);
-            }
-            if (symbol.flags & SymbolFlags.UnionProperty) {
-                return getTypeOfUnionProperty(symbol);
             }
             return unknownType;
         }
@@ -2010,7 +1978,7 @@ module ts {
             if (type.baseTypes.length) {
                 members = createSymbolTable(type.declaredProperties);
                 forEach(type.baseTypes, baseType => {
-                    addInheritedMembers(members, getPropertiesOfType(baseType));
+                    addInheritedMembers(members, getPropertiesOfObjectType(baseType));
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(baseType, SignatureKind.Call));
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(baseType, SignatureKind.Construct));
                     stringIndexType = stringIndexType || getIndexTypeOfType(baseType, IndexKind.String);
@@ -2030,7 +1998,7 @@ module ts {
             var numberIndexType = target.declaredNumberIndexType ? instantiateType(target.declaredNumberIndexType, mapper) : undefined;
             forEach(target.baseTypes, baseType => {
                 var instantiatedBaseType = instantiateType(baseType, mapper);
-                addInheritedMembers(members, getPropertiesOfType(instantiatedBaseType));
+                addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
                 callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
                 constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
                 stringIndexType = stringIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.String);
@@ -2083,7 +2051,7 @@ module ts {
         }
 
         function resolveTupleTypeMembers(type: TupleType) {
-            var arrayType = resolveObjectTypeMembers(createArrayType(getUnionType(type.elementTypes)));
+            var arrayType = resolveObjectOrUnionTypeMembers(createArrayType(getUnionType(type.elementTypes)));
             var members = createTupleTypeMemberSymbols(type.elementTypes);
             addInheritedMembers(members, arrayType.properties);
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexType, arrayType.numberIndexType);
@@ -2140,42 +2108,13 @@ module ts {
         }
 
         function resolveUnionTypeMembers(type: UnionType) {
-            var types: Type[] = [];
-            forEach(type.types, t => {
-                var apparentType = getApparentType(t);
-                if (!contains(types, apparentType)) {
-                    types.push(apparentType);
-                }
-            });
-            if (types.length <= 1) {
-                var resolved = types.length ? resolveObjectTypeMembers(types[0]) : emptyObjectType;
-                setObjectTypeMembers(type, resolved.members, resolved.callSignatures, resolved.constructSignatures, resolved.stringIndexType, resolved.numberIndexType);
-                return;
-            }
-            var members: SymbolTable = {};
-            forEach(getPropertiesOfType(types[0]), prop => {
-                for (var i = 1; i < types.length; i++) {
-                    if (!getPropertyOfType(types[i], prop.name)) {
-                        return;
-                    }
-                }
-                var symbol = <TransientSymbol>createSymbol(SymbolFlags.UnionProperty | SymbolFlags.Transient, prop.name);
-                symbol.unionType = type;
-
-                symbol.declarations = [];
-                for (var i = 0; i < types.length; i++) {
-                    var s = getPropertyOfType(types[i], prop.name);
-                    if (s.declarations)
-                        symbol.declarations.push.apply(symbol.declarations, s.declarations);
-                }
-
-                members[prop.name] = symbol;
-            });
-            var callSignatures = getUnionSignatures(types, SignatureKind.Call);
-            var constructSignatures = getUnionSignatures(types, SignatureKind.Construct);
-            var stringIndexType = getUnionIndexType(types, IndexKind.String);
-            var numberIndexType = getUnionIndexType(types, IndexKind.Number);
-            setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
+            // The members and properties collections are empty for union types. To get all properties of a union
+            // type use getApparentPropertiesOfType (only the language service uses this).
+            var callSignatures = getUnionSignatures(type.types, SignatureKind.Call);
+            var constructSignatures = getUnionSignatures(type.types, SignatureKind.Construct);
+            var stringIndexType = getUnionIndexType(type.types, IndexKind.String);
+            var numberIndexType = getUnionIndexType(type.types, IndexKind.Number);
+            setObjectTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
 
         function resolveAnonymousTypeMembers(type: ObjectType) {
@@ -2206,7 +2145,7 @@ module ts {
                     }
                     if (classType.baseTypes.length) {
                         members = createSymbolTable(getNamedMembers(members));
-                        addInheritedMembers(members, getPropertiesOfType(getTypeOfSymbol(classType.baseTypes[0].symbol)));
+                        addInheritedMembers(members, getPropertiesOfObjectType(getTypeOfSymbol(classType.baseTypes[0].symbol)));
                     }
                 }
                 var stringIndexType: Type = undefined;
@@ -2215,8 +2154,8 @@ module ts {
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
 
-        function resolveObjectTypeMembers(type: ObjectType): ResolvedObjectType {
-            if (!(<ResolvedObjectType>type).members) {
+        function resolveObjectOrUnionTypeMembers(type: ObjectType): ResolvedType {
+            if (!(<ResolvedType>type).members) {
                 if (type.flags & (TypeFlags.Class | TypeFlags.Interface)) {
                     resolveClassOrInterfaceMembers(<InterfaceType>type);
                 }
@@ -2233,19 +2172,22 @@ module ts {
                     resolveTypeReferenceMembers(<TypeReference>type);
                 }
             }
-            return <ResolvedObjectType>type;
+            return <ResolvedType>type;
         }
 
-        function getPropertiesOfType(type: Type): Symbol[] {
+        // Return properties of an object type or an empty array for other types
+        function getPropertiesOfObjectType(type: Type): Symbol[] {
             if (type.flags & TypeFlags.ObjectType) {
-                return resolveObjectTypeMembers(<ObjectType>type).properties;
+                return resolveObjectOrUnionTypeMembers(<ObjectType>type).properties;
             }
             return emptyArray;
         }
 
-        function getPropertyOfType(type: Type, name: string): Symbol {
+        // If the given type is an object type and that type has a property by the given name, return
+        // the symbol for that property. Otherwise return undefined.
+        function getPropertyOfObjectType(type: Type, name: string): Symbol {
             if (type.flags & TypeFlags.ObjectType) {
-                var resolved = resolveObjectTypeMembers(<ObjectType>type);
+                var resolved = resolveObjectOrUnionTypeMembers(<ObjectType>type);
                 if (hasProperty(resolved.members, name)) {
                     var symbol = resolved.members[name];
                     if (symbolIsValue(symbol)) {
@@ -2255,36 +2197,142 @@ module ts {
             }
         }
 
-        function getPropertyOfApparentType(type: ApparentType, name: string): Symbol {
-            if (type.flags & TypeFlags.ObjectType) {
-                var resolved = resolveObjectTypeMembers(<ObjectType>type);
-                if (hasProperty(resolved.members, name)) {
-                    var symbol = resolved.members[name];
-                    if (symbolIsValue(symbol)) {
-                        return symbol;
-                    }
+        function getPropertiesOfUnionType(type: UnionType): Symbol[] {
+            var result: Symbol[] = [];
+            forEach(getPropertiesOfType(type.types[0]), prop => {
+                var unionProp = getApparentPropertyOfUnionType(type, prop.name);
+                if (unionProp) {
+                    result.push(unionProp);
                 }
-                if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
-                    var symbol = getPropertyOfType(globalFunctionType, name);
-                    if (symbol) return symbol;
-                }
-                return getPropertyOfType(globalObjectType, name);
-            }
+            });
+            return result;
         }
 
-        function getSignaturesOfType(type: Type, kind: SignatureKind): Signature[] {
-            if (type.flags & TypeFlags.ObjectType) {
-                var resolved = resolveObjectTypeMembers(<ObjectType>type);
+        function getPropertiesOfType(type: Type): Symbol[] {
+            if (type.flags & TypeFlags.Union) {
+                return getPropertiesOfUnionType(<UnionType>type);
+            }
+            return getPropertiesOfObjectType(getApparentType(type));
+        }
+
+        // For a type parameter, return the base constraint of the type parameter. For the string, number, and
+        // boolean primitive types, return the corresponding object types.Otherwise return the type itself.
+        // Note that the apparent type of a union type is the union type itself.
+        function getApparentType(type: Type): Type {
+            if (type.flags & TypeFlags.TypeParameter) {
+                do {
+                    type = getConstraintOfTypeParameter(<TypeParameter>type);
+                } while (type && type.flags & TypeFlags.TypeParameter);
+                if (!type) {
+                    type = emptyObjectType;
+                }
+            }
+            if (type.flags & TypeFlags.StringLike) {
+                type = globalStringType;
+            }
+            else if (type.flags & TypeFlags.NumberLike) {
+                type = globalNumberType;
+            }
+            else if (type.flags & TypeFlags.Boolean) {
+                type = globalBooleanType;
+            }
+            return type;
+        }
+
+        function createUnionProperty(unionType: UnionType, name: string): Symbol {
+            var types = unionType.types;
+            var props: Symbol[];
+            for (var i = 0; i < types.length; i++) {
+                var type = getApparentType(types[i]);
+                if (type !== unknownType) {
+                    var prop = getApparentPropertyOfType(type, name);
+                    if (!prop) {
+                        return undefined;
+                    }
+                    if (!props) {
+                        props = [prop];
+                    }
+                    else {
+                        props.push(prop);
+                    }
+                }
+            }
+            if (!props) {
+                return unknownSymbol;
+            }
+            var propTypes: Type[] = [];
+            var declarations: Declaration[] = [];
+            for (var i = 0; i < props.length; i++) {
+                var prop = props[i];
+                if (prop.declarations) {
+                    declarations.push.apply(declarations, prop.declarations);
+                }
+                propTypes.push(getTypeOfSymbol(prop));
+            }
+            var result = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | SymbolFlags.UnionProperty, name);
+            result.unionType = unionType;
+            result.declarations = declarations;
+            result.type = getUnionType(propTypes);
+            return result;
+        }
+
+        function getApparentPropertyOfUnionType(type: UnionType, name: string): Symbol {
+            var properties = type.resolvedProperties || (type.resolvedProperties = {});
+            if (hasProperty(properties, name)) {
+                return properties[name];
+            }
+            var property = createUnionProperty(type, name);
+            if (property) {
+                properties[name] = property;
+            }
+            return property;
+        }
+
+        function getApparentPropertyOfType(type: Type, name: string): Symbol {
+            if (type.flags & TypeFlags.Union) {
+                return getApparentPropertyOfUnionType(<UnionType>type, name);
+            }
+            if (!(type.flags & TypeFlags.ObjectType)) {
+                type = getApparentType(type);
+                if (!(type.flags & TypeFlags.ObjectType)) {
+                    return undefined;
+                }
+            }
+            var resolved = resolveObjectOrUnionTypeMembers(type);
+            if (hasProperty(resolved.members, name)) {
+                var symbol = resolved.members[name];
+                if (symbolIsValue(symbol)) {
+                    return symbol;
+                }
+            }
+            if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
+                var symbol = getPropertyOfObjectType(globalFunctionType, name);
+                if (symbol) return symbol;
+            }
+            return getPropertyOfObjectType(globalObjectType, name);
+        }
+
+        function getSignaturesOfObjectOrUnionType(type: Type, kind: SignatureKind): Signature[] {
+            if (type.flags & (TypeFlags.ObjectType | TypeFlags.Union)) {
+                var resolved = resolveObjectOrUnionTypeMembers(<ObjectType>type);
                 return kind === SignatureKind.Call ? resolved.callSignatures : resolved.constructSignatures;
             }
             return emptyArray;
         }
 
-        function getIndexTypeOfType(type: Type, kind: IndexKind): Type {
-            if (type.flags & TypeFlags.ObjectType) {
-                var resolved = resolveObjectTypeMembers(<ObjectType>type);
+        function getSignaturesOfType(type: Type, kind: SignatureKind): Signature[] {
+            return getSignaturesOfObjectOrUnionType(getApparentType(type), kind);
+        }
+
+        function getIndexTypeOfObjectOrUnionType(type: Type, kind: IndexKind): Type {
+            if (type.flags & (TypeFlags.ObjectType | TypeFlags.Union)) {
+                var resolved = resolveObjectOrUnionTypeMembers(<ObjectType>type);
                 return kind === IndexKind.String ? resolved.stringIndexType : resolved.numberIndexType;
             }
+        }
+
+        function getIndexTypeOfType(type: Type, kind: IndexKind): Type {
+            return getIndexTypeOfObjectOrUnionType(getApparentType(type), kind);
         }
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
@@ -2448,7 +2496,7 @@ module ts {
             // will result in a different declaration kind.
             if (!signature.isolatedSignatureType) {
                 var isConstructor = signature.declaration.kind === SyntaxKind.Constructor || signature.declaration.kind === SyntaxKind.ConstructSignature;
-                var type = <ResolvedObjectType>createObjectType(TypeFlags.Anonymous | TypeFlags.FromSignature);
+                var type = <ResolvedType>createObjectType(TypeFlags.Anonymous | TypeFlags.FromSignature);
                 type.members = emptySymbols;
                 type.properties = emptyArray;
                 type.callSignatures = !isConstructor ? [signature] : emptyArray;
@@ -2983,8 +3031,8 @@ module ts {
         }
 
         function instantiateAnonymousType(type: ObjectType, mapper: TypeMapper): ObjectType {
-            var result = <ResolvedObjectType>createObjectType(TypeFlags.Anonymous, type.symbol);
-            result.properties = instantiateList(getPropertiesOfType(type), mapper, instantiateSymbol);
+            var result = <ResolvedType>createObjectType(TypeFlags.Anonymous, type.symbol);
+            result.properties = instantiateList(getPropertiesOfObjectType(type), mapper, instantiateSymbol);
             result.members = createSymbolTable(result.properties);
             result.callSignatures = instantiateList(getSignaturesOfType(type, SignatureKind.Call), mapper, instantiateSignature);
             result.constructSignatures = instantiateList(getSignaturesOfType(type, SignatureKind.Construct), mapper, instantiateSignature);
@@ -3041,9 +3089,9 @@ module ts {
 
         function getTypeWithoutConstructors(type: Type): Type {
             if (type.flags & TypeFlags.ObjectType) {
-                var resolved = resolveObjectTypeMembers(<ObjectType>type);
+                var resolved = resolveObjectOrUnionTypeMembers(<ObjectType>type);
                 if (resolved.constructSignatures.length) {
-                    var result = <ResolvedObjectType>createObjectType(TypeFlags.Anonymous, type.symbol);
+                    var result = <ResolvedType>createObjectType(TypeFlags.Anonymous, type.symbol);
                     result.members = resolved.members;
                     result.properties = resolved.properties;
                     result.callSignatures = resolved.callSignatures;
@@ -3105,7 +3153,7 @@ module ts {
 
             for (var i = 0, len = type.baseTypes.length; i < len; ++i) {
                 var base = type.baseTypes[i];
-                var properties = getPropertiesOfType(base);
+                var properties = getPropertiesOfObjectType(base);
                 for (var j = 0, proplen = properties.length; j < proplen; ++j) {
                     var prop = properties[j];
                     if (!hasProperty(seen, prop.name)) {
@@ -3366,10 +3414,10 @@ module ts {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target, reportErrors);
                 }
-                var properties = getPropertiesOfType(target);
+                var properties = getPropertiesOfObjectType(target);
                 for (var i = 0; i < properties.length; i++) {
                     var targetProp = properties[i];
-                    var sourceProp = getPropertyOfApparentType(<ApparentType>source, targetProp.name);
+                    var sourceProp = getApparentPropertyOfType(source, targetProp.name);
                     if (sourceProp !== targetProp) {
                         if (!sourceProp) {
                             if (relation === subtypeRelation || !isOptionalProperty(targetProp)) {
@@ -3443,14 +3491,14 @@ module ts {
             }
 
             function propertiesIdenticalTo(source: ObjectType, target: ObjectType, reportErrors: boolean): boolean {
-                var sourceProperties = getPropertiesOfType(source);
-                var targetProperties = getPropertiesOfType(target);
+                var sourceProperties = getPropertiesOfObjectType(source);
+                var targetProperties = getPropertiesOfObjectType(target);
                 if (sourceProperties.length !== targetProperties.length) {
                     return false;
                 }
                 for (var i = 0, len = sourceProperties.length; i < len; ++i) {
                     var sourceProp = sourceProperties[i];
-                    var targetProp = getPropertyOfType(target, sourceProp.name);
+                    var targetProp = getPropertyOfObjectType(target, sourceProp.name);
                     if (!targetProp || !isPropertyIdenticalToRecursive(sourceProp, targetProp, reportErrors, isRelatedTo)) {
                         return false;
                     }
@@ -3697,7 +3745,7 @@ module ts {
             }
 
             function getWidenedTypeOfObjectLiteral(type: Type): Type {
-                var properties = getPropertiesOfType(type);
+                var properties = getPropertiesOfObjectType(type);
                 if (properties.length) {
                     var widenedTypes: Type[] = [];
                     var propTypeWasWidened: boolean = false;
@@ -3879,10 +3927,10 @@ module ts {
             }
 
             function inferFromProperties(source: Type, target: Type) {
-                var properties = getPropertiesOfType(target);
+                var properties = getPropertiesOfObjectType(target);
                 for (var i = 0; i < properties.length; i++) {
                     var targetProp = properties[i];
-                    var sourceProp = getPropertyOfType(source, targetProp.name);
+                    var sourceProp = getPropertyOfObjectType(source, targetProp.name);
                     if (sourceProp) {
                         inferFromTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
                     }
@@ -4179,7 +4227,7 @@ module ts {
                 if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
                     return type;
                 }
-                var prototypeProperty = getPropertyOfType(getApparentType(rightType), "prototype");
+                var prototypeProperty = getApparentPropertyOfType(rightType, "prototype");
                 if (!prototypeProperty) {
                     return type;
                 }
@@ -4535,23 +4583,23 @@ module ts {
 
         function getTypeOfPropertyOfContextualType(type: Type, name: string) {
             return applyToContextualType(type, t => {
-                var prop = getPropertyOfType(t, name);
+                var prop = getPropertyOfObjectType(t, name);
                 return prop ? getTypeOfSymbol(prop) : undefined;
             });
         }
 
         function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
-            return applyToContextualType(type, t => getIndexTypeOfType(t, kind));
+            return applyToContextualType(type, t => getIndexTypeOfObjectOrUnionType(t, kind));
         }
 
         // Return true if the given contextual type is a tuple-like type
         function contextualTypeIsTupleType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, t => getPropertyOfType(t, "0")) : getPropertyOfType(type, "0"));
+            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, t => getPropertyOfObjectType(t, "0")) : getPropertyOfObjectType(type, "0"));
         }
 
         // Return true if the given contextual type provides an index signature of the given kind
         function contextualTypeHasIndexSignature(type: Type, kind: IndexKind): boolean {
-            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, t => getIndexTypeOfType(t, kind)) : getIndexTypeOfType(type, kind));
+            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, t => getIndexTypeOfObjectOrUnionType(t, kind)) : getIndexTypeOfObjectOrUnionType(type, kind));
         }
 
         // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
@@ -4625,17 +4673,16 @@ module ts {
             return undefined;
         }
 
-        // Return the single non-generic signature in the given type, or undefined if none exists
+        // If the given type is an object or union type, if that type has a single signature, and if
+        // that signature is non-generic, return the signature. Otherwise return undefined.
         function getNonGenericSignature(type: Type): Signature {
-            var signatures = getSignaturesOfType(type, SignatureKind.Call);
-            if (signatures.length !== 1) {
-                return undefined;
+            var signatures = getSignaturesOfObjectOrUnionType(type, SignatureKind.Call);
+            if (signatures.length === 1) {
+                var signature = signatures[0];
+                if (!signature.typeParameters) {
+                    return signature;
+                }
             }
-            var signature = signatures[0];
-            if (signature.typeParameters) {
-                return undefined;
-            }
-            return signature;
         }
 
         // Return the contextual signature for a given expression node. A contextual type provides a
@@ -4822,11 +4869,11 @@ module ts {
             if (type === unknownType) return type;
             if (type !== anyType) {
                 var apparentType = getApparentType(getWidenedType(type));
-                if (<Type>apparentType === unknownType) {
+                if (apparentType === unknownType) {
                     // handle cases when type is Type parameter with invalid constraint
                     return unknownType;
                 }
-                var prop = getPropertyOfApparentType(apparentType, node.right.text);
+                var prop = getApparentPropertyOfType(apparentType, node.right.text);
                 if (!prop) {
                     if (node.right.text) {
                         error(node.right, Diagnostics.Property_0_does_not_exist_on_type_1, identifierToString(node.right), typeToString(type));
@@ -4857,8 +4904,7 @@ module ts {
         function isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean {
             var type = checkExpression(node.left);
             if (type !== unknownType && type !== anyType) {
-                var apparentType = getApparentType(getWidenedType(type));
-                var prop = getPropertyOfApparentType(apparentType, propertyName);
+                var prop = getApparentPropertyOfType(getWidenedType(type), propertyName);
                 if (prop && prop.parent && prop.parent.flags & SymbolFlags.Class) {
                     if (node.left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.Method) {
                         return false;
@@ -4874,8 +4920,10 @@ module ts {
         }
 
         function checkIndexedAccess(node: IndexedAccess): Type {
-            var objectType = checkExpression(node.object);
+            // Obtain base constraint such that we can bail out if the constraint is an unknown type
+            var objectType = getApparentType(checkExpression(node.object));
             var indexType = checkExpression(node.index);
+
             if (objectType === unknownType) return unknownType;
 
             // TypeScript 1.0 spec (April 2014): 4.10 Property Access
@@ -4888,14 +4936,9 @@ module ts {
             // - Otherwise, if IndexExpr is of type Any, the String or Number primitive type, or an enum type, the property access is of type Any.
 
             // See if we can index as a property.
-            var apparentType = getApparentType(objectType);
-            if (<Type>apparentType === unknownType) {
-                // handle cases when objectType is type parameter with invalid type
-                return unknownType;
-            }
             if (node.index.kind === SyntaxKind.StringLiteral || node.index.kind === SyntaxKind.NumericLiteral) {
                 var name = (<LiteralExpression>node.index).text;
-                var prop = getPropertyOfApparentType(apparentType, name);
+                var prop = getApparentPropertyOfType(objectType, name);
                 if (prop) {
                     return getTypeOfSymbol(prop);
                 }
@@ -4906,14 +4949,14 @@ module ts {
 
                 // Try to use a number indexer.
                 if (indexType.flags & (TypeFlags.Any | TypeFlags.NumberLike)) {
-                    var numberIndexType = getIndexTypeOfType(apparentType, IndexKind.Number);
+                    var numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
                     if (numberIndexType) {
                         return numberIndexType;
                     }
                 }
 
                 // Try to use string indexing.
-                var stringIndexType = getIndexTypeOfType(apparentType, IndexKind.String);
+                var stringIndexType = getIndexTypeOfType(objectType, IndexKind.String);
                 if (stringIndexType) {
                     return stringIndexType;
                 }
@@ -4976,7 +5019,7 @@ module ts {
         // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
         function getSingleCallSignature(type: Type): Signature {
             if (type.flags & TypeFlags.ObjectType) {
-                var resolved = resolveObjectTypeMembers(<ObjectType>type);
+                var resolved = resolveObjectOrUnionTypeMembers(<ObjectType>type);
                 if (resolved.callSignatures.length === 1 && resolved.constructSignatures.length === 0 &&
                     resolved.properties.length === 0 && !resolved.stringIndexType && !resolved.numberIndexType) {
                     return resolved.callSignatures[0];
@@ -5198,18 +5241,13 @@ module ts {
             }
 
             var funcType = checkExpression(node.func);
-            if (funcType === unknownType) {
+            var apparentType = getApparentType(funcType);
+
+            if (apparentType === unknownType) {
                 // Another error has already been reported
                 return resolveErrorCall(node);
             }
             
-            var apparentType = getApparentType(funcType);
-            if (<Type>apparentType === unknownType) {
-                // handler cases when funcType is type parameter with invalid constraint
-                // Another error was already reported
-                return resolveErrorCall(node);
-            }
-
             // Technically, this signatures list may be incomplete. We are taking the apparent type,
             // but we are not including call signatures that may have been added to the Object or
             // Function interface, since they have none by default. This is a bit of a leap of faith
@@ -5247,10 +5285,7 @@ module ts {
 
         function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
             var expressionType = checkExpression(node.func);
-            if (expressionType === unknownType) {
-                // Another error has already been reported
-                return resolveErrorCall(node);
-            }
+
             // TS 1.0 spec: 4.11
             // If ConstructExpr is of type Any, Args can be any argument
             // list and the result of the operation is of type Any.
@@ -5258,7 +5293,6 @@ module ts {
                 if (node.typeArguments) {
                     error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
                 }
-
                 return resolveUntypedCall(node);
             }
 
@@ -5268,9 +5302,8 @@ module ts {
             // signatures for overload resolution.The result type of the function call becomes
             // the result type of the operation.
             expressionType = getApparentType(expressionType);
-            if (<Type>expressionType === unknownType) {
-                // handler cases when original expressionType is a type parameter with invalid constraint
-                // another error has already been reported
+            if (expressionType === unknownType) {
+                // Another error has already been reported
                 return resolveErrorCall(node);
             }
 
@@ -6972,7 +7005,7 @@ module ts {
                     // for interfaces property and indexer might be inherited from different bases
                     // check if any base class already has both property and indexer.
                     // check should be performed only if 'type' is the first type that brings property\indexer together
-                    var someBaseClassHasBothPropertyAndIndexer = forEach((<InterfaceType>type).baseTypes, base => getPropertyOfType(base, prop.name) && getIndexTypeOfType(base, indexKind));
+                    var someBaseClassHasBothPropertyAndIndexer = forEach((<InterfaceType>type).baseTypes, base => getPropertyOfObjectType(base, prop.name) && getIndexTypeOfType(base, indexKind));
                     errorNode = someBaseClassHasBothPropertyAndIndexer ? undefined : type.symbol.declarations[0];
                 }
 
@@ -6992,7 +7025,7 @@ module ts {
             var numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
 
             if (stringIndexType || numberIndexType) {
-                forEach(getPropertiesOfType(type), prop => {
+                forEach(getPropertiesOfObjectType(type), prop => {
                     var propType = getTypeOfSymbol(prop);
                     checkIndexConstraintForProperty(prop, propType, declaredStringIndexer, stringIndexType, IndexKind.String);
                     checkIndexConstraintForProperty(prop, propType, declaredNumberIndexer, numberIndexType, IndexKind.Number);
@@ -7124,7 +7157,7 @@ module ts {
             // derived class instance member variables and accessors, but not by other kinds of members.
 
             // NOTE: assignability is checked in checkClassDeclaration
-            var baseProperties = getPropertiesOfType(baseType);
+            var baseProperties = getPropertiesOfObjectType(baseType);
             for (var i = 0, len = baseProperties.length; i < len; ++i) {
                 var base = getTargetSymbol(baseProperties[i]);
 
@@ -7132,7 +7165,7 @@ module ts {
                     continue;
                 }
 
-                var derived = getTargetSymbol(getPropertyOfType(type, base.name));
+                var derived = getTargetSymbol(getPropertyOfObjectType(type, base.name));
                 if (derived) {
                     var baseDeclarationFlags = getDeclarationFlagsFromSymbol(base);
                     var derivedDeclarationFlags = getDeclarationFlagsFromSymbol(derived);
@@ -8055,8 +8088,8 @@ module ts {
                         var objectType = checkExpression((<IndexedAccess>node.parent).object);
                         if (objectType === unknownType) return undefined;
                         var apparentType = getApparentType(objectType);
-                        if (<Type>apparentType === unknownType) return undefined;
-                        return getPropertyOfApparentType(apparentType, (<LiteralExpression>node).text);
+                        if (apparentType === unknownType) return undefined;
+                        return getApparentPropertyOfType(apparentType, (<LiteralExpression>node).text);
                     }
                     break;
             }
@@ -8115,49 +8148,27 @@ module ts {
             return checkExpression(expr);
         }
 
-        function getAugmentedPropertiesOfApparentType(type: Type): Symbol[]{
-            var apparentType = getApparentType(type);
-
-            if (apparentType.flags & TypeFlags.ObjectType) {
-                // Augment the apparent type with Function and Object members as applicable
-                var propertiesByName: Map<Symbol> = {};
-                var results: Symbol[] = [];
-
-                forEach(getPropertiesOfType(apparentType), s => {
-                    propertiesByName[s.name] = s;
-                    results.push(s);
-                });
-
-                var resolved = resolveObjectTypeMembers(<ObjectType>type);
-                forEachValue(resolved.members, s => {
-                    if (symbolIsValue(s) && !propertiesByName[s.name]) {
-                        propertiesByName[s.name] = s;
-                        results.push(s);
+        // Return the list of properties of the given type, augmented with properties from Function
+        // if the type has call or construct signatures
+        function getAugmentedPropertiesOfType(type: Type): Symbol[] {
+            var type = getApparentType(type);
+            var propsByName = createSymbolTable(getPropertiesOfType(type));
+            if (getSignaturesOfType(type, SignatureKind.Call).length || getSignaturesOfType(type, SignatureKind.Construct).length) {
+                forEach(getPropertiesOfType(globalFunctionType), p => {
+                    if (!hasProperty(propsByName, p.name)) {
+                        propsByName[p.name] = p;
                     }
                 });
-
-                if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
-                    forEach(getPropertiesOfType(globalFunctionType), s => {
-                        if (!propertiesByName[s.name]) {
-                            propertiesByName[s.name] = s;
-                            results.push(s);
-                        }
-                    });
-                }
-
-                return results;
             }
-            else {
-                return getPropertiesOfType(<Type>apparentType);
-            }
+            return getNamedMembers(propsByName);
         }
 
-        function getRootSymbols(symbol: Symbol): Symbol[] {
+        function getRootSymbols(symbol: Symbol): Symbol[]{
             if (symbol.flags & SymbolFlags.UnionProperty) {
                 var symbols: Symbol[] = [];
                 var name = symbol.name;
                 forEach(getSymbolLinks(symbol).unionType.types, t => {
-                    symbols.push(getPropertyOfType(getApparentType(t), name));
+                    symbols.push(getApparentPropertyOfType(t, name));
                 });
                 return symbols;
             }

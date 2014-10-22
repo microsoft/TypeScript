@@ -572,10 +572,10 @@ module ts {
             return this.checker.getPropertiesOfType(this);
         }
         getProperty(propertyName: string): Symbol {
-            return this.checker.getPropertyOfType(this, propertyName);
+            return this.checker.getApparentPropertyOfType(this, propertyName);
         }
         getApparentProperties(): Symbol[] {
-            return this.checker.getAugmentedPropertiesOfApparentType(this);
+            return this.checker.getAugmentedPropertiesOfType(this);
         }
         getCallSignatures(): Signature[] {
             return this.checker.getSignaturesOfType(this, SignatureKind.Call);
@@ -2569,10 +2569,9 @@ module ts {
                 }
 
                 var type = typeInfoResolver.getTypeOfNode(mappedNode);
-                var apparentType = type && typeInfoResolver.getApparentType(type);
-                if (apparentType) {
+                if (type) {
                     // Filter private properties
-                    forEach(apparentType.getApparentProperties(), symbol => {
+                    forEach(type.getApparentProperties(), symbol => {
                         if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(mappedNode.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
@@ -2726,19 +2725,21 @@ module ts {
             if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
             if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
             if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
-            if (flags & SymbolFlags.Property) return ScriptElementKind.memberVariableElement;
             if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
 
-            if (flags & SymbolFlags.UnionProperty) {
-                return forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
-                    var rootSymbolFlags = rootSymbol.getFlags();
-                    if (rootSymbolFlags & SymbolFlags.Property) {
-                        return ScriptElementKind.memberVariableElement;
-                    }
-                    if (rootSymbolFlags & SymbolFlags.GetAccessor) return ScriptElementKind.memberVariableElement;
-                    if (rootSymbolFlags & SymbolFlags.SetAccessor) return ScriptElementKind.memberVariableElement;
-                    Debug.assert(rootSymbolFlags & SymbolFlags.Method);
-                }) || ScriptElementKind.memberFunctionElement;
+            if (flags & SymbolFlags.Property) {
+                if (flags & SymbolFlags.UnionProperty) {
+                    return forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
+                        var rootSymbolFlags = rootSymbol.getFlags();
+                        if (rootSymbolFlags & SymbolFlags.Property) {
+                            return ScriptElementKind.memberVariableElement;
+                        }
+                        if (rootSymbolFlags & SymbolFlags.GetAccessor) return ScriptElementKind.memberVariableElement;
+                        if (rootSymbolFlags & SymbolFlags.SetAccessor) return ScriptElementKind.memberVariableElement;
+                        Debug.assert(rootSymbolFlags & SymbolFlags.Method);
+                    }) || ScriptElementKind.memberFunctionElement;
+                }
+                return ScriptElementKind.memberVariableElement;
             }
 
             return ScriptElementKind.unknown;
@@ -4185,7 +4186,7 @@ module ts {
                     if (typeReference) {
                         var type = typeInfoResolver.getTypeOfNode(typeReference);
                         if (type) {
-                            var propertySymbol = typeInfoResolver.getPropertyOfType(type, propertyName);
+                            var propertySymbol = typeInfoResolver.getApparentPropertyOfType(type, propertyName);
                             if (propertySymbol) {
                                 result.push(propertySymbol);
                             }
