@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/templates/templateStringInDeleteExpressionES6.ts ===
+delete `abc${0}abc`;
+>delete `abc${0}abc` : boolean
+
