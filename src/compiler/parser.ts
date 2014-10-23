@@ -333,6 +333,9 @@ module ts {
                     children((<InterfaceDeclaration>node).typeParameters) ||
                     children((<InterfaceDeclaration>node).baseTypes) ||
                     children((<InterfaceDeclaration>node).members);
+            case SyntaxKind.TypeAliasDeclaration:
+                return child((<TypeAliasDeclaration>node).name) ||
+                    child((<TypeAliasDeclaration>node).type);
             case SyntaxKind.EnumDeclaration:
                 return child((<EnumDeclaration>node).name) ||
                     children((<EnumDeclaration>node).members);
@@ -478,6 +481,7 @@ module ts {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.ImportDeclaration:
@@ -540,6 +544,7 @@ module ts {
                             return <ClassDeclaration>node;
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
+                        case SyntaxKind.TypeAliasDeclaration:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ImportDeclaration:
                             // early exit cases - declarations cannot be nested in classes
@@ -3075,6 +3080,7 @@ module ts {
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.EnumKeyword:
+                case SyntaxKind.TypeKeyword:
                     // When followed by an identifier, these do not start a statement but might
                     // instead be following declarations
                     if (isDeclaration()) {
@@ -3626,7 +3632,18 @@ module ts {
             }
             return finishNode(node);
         }
-        
+
+        function parseTypeAliasDeclaration(pos: number, flags: NodeFlags): TypeAliasDeclaration {
+            var node = <TypeAliasDeclaration>createNode(SyntaxKind.TypeAliasDeclaration, pos);
+            node.flags = flags;
+            parseExpected(SyntaxKind.TypeKeyword);
+            node.name = parseIdentifier();
+            parseExpected(SyntaxKind.EqualsToken);
+            node.type = parseType();
+            parseSemicolon();
+            return finishNode(node);
+        }
+
         function parseAndCheckEnumDeclaration(pos: number, flags: NodeFlags): EnumDeclaration {
             function isIntegerLiteral(expression: Expression): boolean {
                 function isInteger(literalExpression: LiteralExpression): boolean {
@@ -3786,6 +3803,7 @@ module ts {
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.ImportKeyword:
+                case SyntaxKind.TypeKeyword:
                     // Not true keywords so ensure an identifier follows
                     return lookAhead(() => nextToken() >= SyntaxKind.Identifier);
                 case SyntaxKind.ModuleKeyword:
@@ -3840,6 +3858,9 @@ module ts {
                     break;
                 case SyntaxKind.InterfaceKeyword:
                     result = parseInterfaceDeclaration(pos, flags);
+                    break;
+                case SyntaxKind.TypeKeyword:
+                    result = parseTypeAliasDeclaration(pos, flags);
                     break;
                 case SyntaxKind.EnumKeyword:
                     result = parseAndCheckEnumDeclaration(pos, flags);

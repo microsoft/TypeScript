@@ -132,6 +132,7 @@ module ts {
         NumberKeyword,
         SetKeyword,
         StringKeyword,
+        TypeKeyword,
         // Parse tree nodes
         Missing,
         // Names
@@ -202,6 +203,7 @@ module ts {
         FunctionBlock,
         ClassDeclaration,
         InterfaceDeclaration,
+        TypeAliasDeclaration,
         EnumDeclaration,
         ModuleDeclaration,
         ModuleBlock,
@@ -518,6 +520,10 @@ module ts {
         members: NodeArray<Node>;
     }
 
+    export interface TypeAliasDeclaration extends Declaration {
+        type: TypeNode;
+    }
+
     export interface EnumMember extends Declaration {
         initializer?: Expression;
     }
@@ -643,6 +649,7 @@ module ts {
         emitFiles(targetSourceFile?: SourceFile): EmitResult;
         getParentOfSymbol(symbol: Symbol): Symbol;
         getTypeOfSymbol(symbol: Symbol): Type;
+        getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol;
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
@@ -780,22 +787,23 @@ module ts {
         ConstructSignature = 0x00010000,  // Construct signature
         IndexSignature     = 0x00020000,  // Index signature
         TypeParameter      = 0x00040000,  // Type parameter
+        TypeAlias          = 0x00080000,  // Type alias
 
         // Export markers (see comment in declareModuleMember in binder)
-        ExportValue        = 0x00080000,  // Exported value marker
-        ExportType         = 0x00100000,  // Exported type marker
-        ExportNamespace    = 0x00200000,  // Exported namespace marker
+        ExportValue        = 0x00100000,  // Exported value marker
+        ExportType         = 0x00200000,  // Exported type marker
+        ExportNamespace    = 0x00400000,  // Exported namespace marker
 
-        Import             = 0x00400000,  // Import
-        Instantiated       = 0x00800000,  // Instantiated symbol
-        Merged             = 0x01000000,  // Merged symbol (created during program binding)
-        Transient          = 0x02000000,  // Transient symbol (created during type check)
-        Prototype          = 0x04000000,  // Prototype property (no source representation)
-        UnionProperty      = 0x08000000,  // Property in union type
+        Import             = 0x00800000,  // Import
+        Instantiated       = 0x01000000,  // Instantiated symbol
+        Merged             = 0x02000000,  // Merged symbol (created during program binding)
+        Transient          = 0x04000000,  // Transient symbol (created during type check)
+        Prototype          = 0x08000000,  // Prototype property (no source representation)
+        UnionProperty      = 0x10000000,  // Property in union type
 
         Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
 
-        Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,
+        Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,
         Namespace = ValueModule | NamespaceModule,
         Module    = ValueModule | NamespaceModule,
         Accessor  = GetAccessor | SetAccessor,
@@ -815,11 +823,12 @@ module ts {
         GetAccessorExcludes     = Value & ~SetAccessor,
         SetAccessorExcludes     = Value & ~GetAccessor,
         TypeParameterExcludes   = Type & ~TypeParameter,
+        TypeAliasExcludes       = Type,
 
         // Imports collide with all other imports with the same name.
         ImportExcludes          = Import,
 
-        ModuleMember = Variable | Function | Class | Interface | Enum | Module | Import,
+        ModuleMember = Variable | Function | Class | Interface | Enum | Module | TypeAlias | Import,
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 

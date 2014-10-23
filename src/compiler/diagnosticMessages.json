@@ -1036,6 +1036,10 @@
         "category": "Error",
         "code": 2447
     },
+    "Type alias '{0}' circularly references itself.": {
+        "category": "Error",
+        "code": 2448
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

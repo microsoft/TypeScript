@@ -326,6 +326,9 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration:
                     bindDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
                     break;
+                case SyntaxKind.TypeAliasDeclaration:
+                    bindDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                    break;
                 case SyntaxKind.EnumDeclaration:
                     bindDeclaration(<Declaration>node, SymbolFlags.Enum, SymbolFlags.EnumExcludes);
                     break;

@@ -86,6 +86,7 @@ module ts {
             emitFiles: invokeEmitter,
             getParentOfSymbol: getParentOfSymbol,
             getTypeOfSymbol: getTypeOfSymbol,
+            getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
             getPropertiesOfType: getPropertiesOfType,
             getPropertyOfType: getPropertyOfType,
             getSignaturesOfType: getSignaturesOfType,
@@ -188,6 +189,7 @@ module ts {
             if (flags & SymbolFlags.GetAccessor) result |= SymbolFlags.GetAccessorExcludes;
             if (flags & SymbolFlags.SetAccessor) result |= SymbolFlags.SetAccessorExcludes;
             if (flags & SymbolFlags.TypeParameter) result |= SymbolFlags.TypeParameterExcludes;
+            if (flags & SymbolFlags.TypeAlias) result |= SymbolFlags.TypeAliasExcludes;
             if (flags & SymbolFlags.Import) result |= SymbolFlags.ImportExcludes;
             return result;
         }
@@ -1907,6 +1909,24 @@ module ts {
             return <InterfaceType>links.declaredType;
         }
 
+        function getDeclaredTypeOfTypeAlias(symbol: Symbol): Type {
+            var links = getSymbolLinks(symbol);
+            if (!links.declaredType) {
+                links.declaredType = resolvingType;
+                var declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
+                var type = getTypeFromTypeNode(declaration.type);
+                if (links.declaredType === resolvingType) {
+                    links.declaredType = type;
+                }
+            }
+            else if (links.declaredType === resolvingType) {
+                links.declaredType = unknownType;
+                var declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
+                error(declaration.name, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+            }
+            return links.declaredType;
+        }
+
         function getDeclaredTypeOfEnum(symbol: Symbol): Type {
             var links = getSymbolLinks(symbol);
             if (!links.declaredType) {
@@ -1945,6 +1965,9 @@ module ts {
             }
             if (symbol.flags & SymbolFlags.Interface) {
                 return getDeclaredTypeOfInterface(symbol);
+            }
+            if (symbol.flags & SymbolFlags.TypeAlias) {
+                return getDeclaredTypeOfTypeAlias(symbol);
             }
             if (symbol.flags & SymbolFlags.Enum) {
                 return getDeclaredTypeOfEnum(symbol);
@@ -7304,6 +7327,10 @@ module ts {
             }
         }
 
+        function checkTypeAliasDeclaration(node: TypeAliasDeclaration) {
+            checkSourceElement(node.type);
+        }
+
         function getConstantValueForExpression(node: Expression): number {
             var isNegative = false;
             if (node.kind === SyntaxKind.PrefixOperator) {
@@ -7596,6 +7623,8 @@ module ts {
                     return checkClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
                     return checkInterfaceDeclaration(<InterfaceDeclaration>node);
+                case SyntaxKind.TypeAliasDeclaration:
+                    return checkTypeAliasDeclaration(<TypeAliasDeclaration>node);
                 case SyntaxKind.EnumDeclaration:
                     return checkEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
@@ -7840,6 +7869,7 @@ module ts {
                 case SyntaxKind.TypeParameter:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.EnumDeclaration:
                     return true;
             }
