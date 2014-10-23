@@ -4143,8 +4143,8 @@ module ts {
         // Get the narrowed type of a given symbol at a given location
         function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
             var type = getTypeOfSymbol(symbol);
-            // Only narrow when symbol is variable of a non-primitive type
-            if (symbol.flags & SymbolFlags.Variable && isTypeAnyOrObjectOrTypeParameter(type)) {
+            // Only narrow when symbol is variable of a structured type
+            if (symbol.flags & SymbolFlags.Variable && type.flags & TypeFlags.Structured) {
                 while (true) {
                     var child = node;
                     node = node.parent;
@@ -5679,8 +5679,12 @@ module ts {
             return numberType;
         }
 
-        function isTypeAnyOrObjectOrTypeParameter(type: Type): boolean {
-            return (type.flags & (TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) !== 0;
+        // Return true if type is any, an object type, a type parameter, or a union type composed of only those kinds of types
+        function isStructuredType(type: Type): boolean {
+            if (type.flags & TypeFlags.Union) {
+                return !forEach((<UnionType>type).types, t => !isStructuredType(t));
+            }
+            return (type.flags & TypeFlags.Structured) !== 0;
         }
 
         function checkInstanceOfExpression(node: BinaryExpression, leftType: Type, rightType: Type): Type {
@@ -5689,7 +5693,7 @@ module ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (leftType !== unknownType && !isTypeAnyOrObjectOrTypeParameter(leftType)) {
+            if (leftType !== unknownType && !isStructuredType(leftType)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
@@ -5707,7 +5711,7 @@ module ts {
             if (leftType !== anyType && leftType !== stringType && leftType !== numberType) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_types_any_string_or_number);
             }
-            if (!isTypeAnyOrObjectOrTypeParameter(rightType)) {
+            if (!isStructuredType(rightType)) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -6928,7 +6932,7 @@ module ts {
             var exprType = checkExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeAnyOrObjectOrTypeParameter(exprType) && exprType !== unknownType) {
+            if (!isStructuredType(exprType) && exprType !== unknownType) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
