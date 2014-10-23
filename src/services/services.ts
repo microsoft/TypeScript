@@ -2003,8 +2003,8 @@ module ts {
     }
 
     /** Returns true if the position is within a comment */
-    function isInsideComment(sourceFile: SourceFile, position: number): boolean {
-        var token = getTokenAtPosition(sourceFile, position);
+    function isInsideComment(token: Node, position: number): boolean {
+        var sourceFile = token.getSourceFile();
 
         // The position has to be: 1. in the leading trivia (before tokek.getStart()), and 2. within a comment
         return position <= token.getStart() &&
@@ -2348,48 +2348,38 @@ module ts {
                 });
             }
 
-            function isCompletionListBlocker(sourceFile: SourceFile, position: number): boolean {
-                // We shouldn't be getting a position that is outside the file because
-                // isEntirelyInsideComment can't handle when the position is out of bounds, 
-                // callers should be fixed, however we should be resilient to bad inputs
-                // so we return true (this position is a blocker for getting completions)
-                if (position < 0 || position > sourceFile.end) {
-                    return true;
-                }
-
-                // This method uses Fidelity completely. Some information can be reached using the AST, but not everything.
-                return isInsideComment(sourceFile, position) ||
-                    isEntirelyInStringOrRegularExpressionLiteral(sourceFile, position) ||
-                    isIdentifierDefinitionLocation(sourceFile, position) ||
-                    isRightOfIllegalDot(sourceFile, position);
+            function isCompletionListBlocker(previousToken: Node): boolean {
+                return isInStringOrRegularExpressionLiteral(previousToken) ||
+                    isIdentifierDefinitionLocation(previousToken) ||
+                    isRightOfIllegalDot(previousToken);
             }
 
-            function isEntirelyInStringOrRegularExpressionLiteral(sourceFile: SourceFile, position: number): boolean {
-                var token = getTouchingPropertyName(sourceFile, position);
+            function isInStringOrRegularExpressionLiteral(previousToken: Node): boolean {
+                //var token = getTouchingPropertyName(sourceFile, position);
 
                 //  || token.kind === SyntaxKind.RegularExpressionLiteral
-                if (token.kind === SyntaxKind.StringLiteral) {
+                if (previousToken.kind === SyntaxKind.StringLiteral) {
                     // The position has to be either: 1. entirely within the token text, or 
                     // 2. at the end position, and the string literal is not terminated
-                    var start = token.getStart();
-                    var end = token.getEnd();
+                    var start = previousToken.getStart();
+                    var end = previousToken.getEnd();
                     if (start < position && position < end) {
                         return true;
                     }
                     else if (position === end) {
                         var width = end - start;
-                        return width <= 1 || sourceFile.text.charCodeAt(start) !== sourceFile.text.charCodeAt(end - 1);
+                        var text = previousToken.getSourceFile().text;
+                        return width <= 1 || text.charCodeAt(start) !== text.charCodeAt(end - 1);
                     }
                 }
-                else if (token.kind === SyntaxKind.RegularExpressionLiteral) {
-                    return token.getStart() < position && position < token.getEnd();
+                else if (previousToken.kind === SyntaxKind.RegularExpressionLiteral) {
+                    return previousToken.getStart() < position && position < previousToken.getEnd();
                 }
                 return false;
             }
 
-            function getContainingObjectLiteralApplicableForCompletion(sourceFile: SourceFile, position: number): ObjectLiteral {
+            function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteral {
                 // The locations in an object literal expression that are applicable for completion are property name definition locations.
-                var previousToken = getNonIdentifierCompleteTokenOnLeft(sourceFile, position);
 
                 if (previousToken) {
                     var parent = previousToken.parent;
@@ -2424,8 +2414,7 @@ module ts {
                 return false;
             }
 
-            function isIdentifierDefinitionLocation(sourceFile: SourceFile, position: number): boolean {
-                var previousToken = getNonIdentifierCompleteTokenOnLeft(sourceFile, position);
+            function isIdentifierDefinitionLocation(previousToken: Node): boolean {
                 if (previousToken) {
                     var containingNodeKind = previousToken.parent.kind;
                     switch (previousToken.kind) {
@@ -2480,20 +2469,7 @@ module ts {
                 return false;
             }
 
-            function getNonIdentifierCompleteTokenOnLeft(sourceFile: SourceFile, position: number): Node {
-                var previousToken = findTokenOnLeftOfPosition(sourceFile, position);
-
-                if (previousToken && position <= previousToken.end && previousToken.kind === SyntaxKind.Identifier) {
-                    // The caret is at the end of an identifier, the decision to provide completion depends on the previous token
-                    previousToken = findPrecedingToken(previousToken.pos, sourceFile);
-                }
-
-                return previousToken;
-            }
-
-            function isRightOfIllegalDot(sourceFile: SourceFile, position: number): boolean {
-                var previousToken = getNonIdentifierCompleteTokenOnLeft(sourceFile, position);
-
+            function isRightOfIllegalDot(previousToken: Node): boolean {
                 if (previousToken && previousToken.kind === SyntaxKind.NumericLiteral) {
                     var text = previousToken.getFullText();
                     return text.charAt(text.length - 1) === ".";
@@ -2538,33 +2514,45 @@ module ts {
 
             var sourceFile = getSourceFile(filename);
 
-            if (isCompletionListBlocker(sourceFile, position)) {
+            var currentToken = getTokenAtPosition(sourceFile, position);
+
+            // Completion not allowed inside comments, bail out if this is the case
+            if (isInsideComment(currentToken, position)) {
                 host.log("Returning an empty list because completion was blocked.");
-                return null;
+                return undefined;
             }
 
-            var node: Node;
-            var location: Node;
-            var isRightOfDot: boolean;
-            var token = getNonIdentifierCompleteTokenOnLeft(sourceFile, position);
+            // The decision to provide completion depends on the previous token, so find it
+            // Note: previousToken can be undefined if we are the beginning of the file
+            var previousToken = findPrecedingToken(position, sourceFile);
 
-            if (token && token.kind === SyntaxKind.DotToken &&
-                (token.parent.kind === SyntaxKind.PropertyAccess || token.parent.kind === SyntaxKind.QualifiedName)) {
-                node = (<PropertyAccess>token.parent).left;
+            // The caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
+            // Skip this partial identifier to the previous token
+            if (previousToken && position <= previousToken.end && previousToken.kind === SyntaxKind.Identifier) {
+                previousToken = findPrecedingToken(previousToken.pos, sourceFile);
+            }
+
+            // Check if this is a valid completion location
+            if (previousToken && isCompletionListBlocker(previousToken)) {
+                host.log("Returning an empty list because completion was blocked.");
+                return undefined;
+            }
+
+            // Find the node where completion is requested on, in the case of a completion after a dot, it is the member access expression
+            // other wise, it is a request for all visible symbols in the scope, and the node is the current location
+            var node: Node;
+            var isRightOfDot: boolean;
+            if (previousToken && previousToken.kind === SyntaxKind.DotToken &&
+                (previousToken.parent.kind === SyntaxKind.PropertyAccess || previousToken.parent.kind === SyntaxKind.QualifiedName)) {
+                node = (<PropertyAccess>previousToken.parent).left;
                 isRightOfDot = true;
             }
             else {
-                node = !token ? sourceFile : token.parent;
+                node = currentToken;
                 isRightOfDot = false;
-
-                // we are at the end of a container node, we do not want to be inside it, as that would affect our completion results
-                // e.g. function f(a) {}| <- 'a' should not be visible here
-                if (token && position === token.end && (token.kind === SyntaxKind.CloseBraceToken || token.kind === SyntaxKind.SemicolonToken)) {
-                    node = getTokenAtPosition(sourceFile, position);
-                }
             }
 
-            // Get the completions
+            // Clear the current activeCompletionSession for this session
             activeCompletionSession = {
                 filename: filename,
                 position: position,
@@ -2573,8 +2561,9 @@ module ts {
                 typeChecker: typeInfoResolver
             };
 
-            // Right of dot member completion list
+            // Populate the completion list
             if (isRightOfDot) {
+                // Right of dot member completion list
                 var symbols: Symbol[] = [];
                 isMemberCompletion = true;
 
@@ -2609,10 +2598,9 @@ module ts {
                 getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }
             else {
-                var containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(sourceFile, position);
-
-                // Object literal expression, look up possible property names from contextual type
+                var containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(previousToken);
                 if (containingObjectLiteral) {
+                    // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
 
                     var contextualType = typeInfoResolver.getContextualType(containingObjectLiteral);
@@ -2627,9 +2615,10 @@ module ts {
                         getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
                     }
                 }
-                // Get scope members
                 else {
+                    // Get scope members
                     isMemberCompletion = false;
+
                     /// TODO filter meaning based on the current context
                     var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Import;
                     var symbols = typeInfoResolver.getSymbolsInScope(node, symbolMeanings);
@@ -5150,7 +5139,8 @@ module ts {
 
                     // OK, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
-                    if (!isInsideComment(sourceFile, matchPosition)) {
+                    var token = getTokenAtPosition(sourceFile, matchPosition);
+                    if (!isInsideComment(token, matchPosition)) {
                         continue;
                     }
 
