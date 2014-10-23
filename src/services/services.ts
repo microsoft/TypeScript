@@ -2338,176 +2338,6 @@ module ts {
         }
 
         function getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
-            function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
-                forEach(symbols, symbol => {
-                    var entry = createCompletionEntry(symbol, session.typeChecker);
-                    if (entry && !lookUp(session.symbols, entry.name)) {
-                        session.entries.push(entry);
-                        session.symbols[entry.name] = symbol;
-                    }
-                });
-            }
-
-            function isCompletionListBlocker(previousToken: Node): boolean {
-                return isInStringOrRegularExpressionLiteral(previousToken) ||
-                    isIdentifierDefinitionLocation(previousToken) ||
-                    isRightOfIllegalDot(previousToken);
-            }
-
-            function isInStringOrRegularExpressionLiteral(previousToken: Node): boolean {
-                //var token = getTouchingPropertyName(sourceFile, position);
-
-                //  || token.kind === SyntaxKind.RegularExpressionLiteral
-                if (previousToken.kind === SyntaxKind.StringLiteral) {
-                    // The position has to be either: 1. entirely within the token text, or 
-                    // 2. at the end position, and the string literal is not terminated
-                    var start = previousToken.getStart();
-                    var end = previousToken.getEnd();
-                    if (start < position && position < end) {
-                        return true;
-                    }
-                    else if (position === end) {
-                        var width = end - start;
-                        var text = previousToken.getSourceFile().text;
-                        return width <= 1 || text.charCodeAt(start) !== text.charCodeAt(end - 1);
-                    }
-                }
-                else if (previousToken.kind === SyntaxKind.RegularExpressionLiteral) {
-                    return previousToken.getStart() < position && position < previousToken.getEnd();
-                }
-                return false;
-            }
-
-            function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteral {
-                // The locations in an object literal expression that are applicable for completion are property name definition locations.
-
-                if (previousToken) {
-                    var parent = previousToken.parent;
-
-                    switch (previousToken.kind) {
-                        case SyntaxKind.OpenBraceToken:  // var x = { |
-                        case SyntaxKind.CommaToken:      // var x = { a: 0, |
-                            if (parent && parent.kind === SyntaxKind.ObjectLiteral) {
-                                return <ObjectLiteral>parent;
-                            }
-                            break;
-                    }
-                }
-
-                return undefined;
-            }
-
-            function isFunction(kind: SyntaxKind): boolean {
-                switch (kind) {
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.Method:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.CallSignature:
-                    case SyntaxKind.ConstructSignature:
-                    case SyntaxKind.IndexSignature:
-                        return true;
-                }
-                return false;
-            }
-
-            function isIdentifierDefinitionLocation(previousToken: Node): boolean {
-                if (previousToken) {
-                    var containingNodeKind = previousToken.parent.kind;
-                    switch (previousToken.kind) {
-                        case SyntaxKind.CommaToken:
-                            return containingNodeKind === SyntaxKind.VariableDeclaration ||
-                                containingNodeKind === SyntaxKind.VariableStatement ||
-                                containingNodeKind === SyntaxKind.EnumDeclaration ||           // enum a { foo, |
-                                isFunction(containingNodeKind);
-
-                        case SyntaxKind.OpenParenToken:
-                            return containingNodeKind === SyntaxKind.CatchBlock ||
-                                isFunction(containingNodeKind);
-
-                        case SyntaxKind.OpenBraceToken:
-                            return containingNodeKind === SyntaxKind.EnumDeclaration ||       // enum a { |
-                               containingNodeKind === SyntaxKind.InterfaceDeclaration;        // interface a { |
-
-                        case SyntaxKind.SemicolonToken:
-                            return containingNodeKind === SyntaxKind.Property &&
-                            previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration;    // interface a { f; |
-
-                        case SyntaxKind.PublicKeyword:
-                        case SyntaxKind.PrivateKeyword:
-                        case SyntaxKind.StaticKeyword:
-                        case SyntaxKind.DotDotDotToken:
-                            return containingNodeKind === SyntaxKind.Parameter;
-
-                        case SyntaxKind.ClassKeyword:
-                        case SyntaxKind.ModuleKeyword:
-                        case SyntaxKind.EnumKeyword:
-                        case SyntaxKind.InterfaceKeyword:
-                        case SyntaxKind.FunctionKeyword:
-                        case SyntaxKind.VarKeyword:
-                        case SyntaxKind.GetKeyword:
-                        case SyntaxKind.SetKeyword:
-                            return true;
-                    }
-
-                    // Previous token may have been a keyword that was converted to an identifier.
-                    switch (previousToken.getText()) {
-                        case "class":
-                        case "interface":
-                        case "enum":
-                        case "module":
-                        case "function":
-                        case "var":
-                            // TODO: add let and const
-                            return true;
-                    }
-                }
-
-                return false;
-            }
-
-            function isRightOfIllegalDot(previousToken: Node): boolean {
-                if (previousToken && previousToken.kind === SyntaxKind.NumericLiteral) {
-                    var text = previousToken.getFullText();
-                    return text.charAt(text.length - 1) === ".";
-                }
-
-                return false;
-            }
-
-            function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
-                if (!existingMembers || existingMembers.length === 0) {
-                    return contextualMemberSymbols;
-                }
-
-                var existingMemberNames: Map<boolean> = {};
-                forEach(existingMembers, m => {
-                    if (m.kind !== SyntaxKind.PropertyAssignment) {
-                        // Ignore omitted expressions for missing members in the object literal
-                        return;
-                    }
-
-                    if (m.getStart() <= position && position <= m.getEnd()) {
-                        // If this is the current item we are editing right now, do not filter it out
-                        return;
-                    }
-
-                    existingMemberNames[m.name.text] = true;
-                });
-
-                var filteredMembers: Symbol[] = [];
-                forEach(contextualMemberSymbols, s => {
-                    if (!existingMemberNames[s.name]) {
-                        filteredMembers.push(s);
-                    }
-                });
-
-                return filteredMembers;
-            }
-
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -2636,6 +2466,176 @@ module ts {
                 isMemberCompletion: isMemberCompletion,
                 entries: activeCompletionSession.entries
             };
+
+            function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
+                forEach(symbols, symbol => {
+                    var entry = createCompletionEntry(symbol, session.typeChecker);
+                    if (entry && !lookUp(session.symbols, entry.name)) {
+                        session.entries.push(entry);
+                        session.symbols[entry.name] = symbol;
+                    }
+                });
+            }
+
+            function isCompletionListBlocker(previousToken: Node): boolean {
+                return isInStringOrRegularExpressionLiteral(previousToken) ||
+                    isIdentifierDefinitionLocation(previousToken) ||
+                    isRightOfIllegalDot(previousToken);
+            }
+
+            function isInStringOrRegularExpressionLiteral(previousToken: Node): boolean {
+                //var token = getTouchingPropertyName(sourceFile, position);
+
+                //  || token.kind === SyntaxKind.RegularExpressionLiteral
+                if (previousToken.kind === SyntaxKind.StringLiteral) {
+                    // The position has to be either: 1. entirely within the token text, or 
+                    // 2. at the end position, and the string literal is not terminated
+                    var start = previousToken.getStart();
+                    var end = previousToken.getEnd();
+                    if (start < position && position < end) {
+                        return true;
+                    }
+                    else if (position === end) {
+                        var width = end - start;
+                        var text = previousToken.getSourceFile().text;
+                        return width <= 1 || text.charCodeAt(start) !== text.charCodeAt(end - 1);
+                    }
+                }
+                else if (previousToken.kind === SyntaxKind.RegularExpressionLiteral) {
+                    return previousToken.getStart() < position && position < previousToken.getEnd();
+                }
+                return false;
+            }
+
+            function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteral {
+                // The locations in an object literal expression that are applicable for completion are property name definition locations.
+
+                if (previousToken) {
+                    var parent = previousToken.parent;
+
+                    switch (previousToken.kind) {
+                        case SyntaxKind.OpenBraceToken:  // var x = { |
+                        case SyntaxKind.CommaToken:      // var x = { a: 0, |
+                            if (parent && parent.kind === SyntaxKind.ObjectLiteral) {
+                                return <ObjectLiteral>parent;
+                            }
+                            break;
+                    }
+                }
+
+                return undefined;
+            }
+
+            function isFunction(kind: SyntaxKind): boolean {
+                switch (kind) {
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.CallSignature:
+                    case SyntaxKind.ConstructSignature:
+                    case SyntaxKind.IndexSignature:
+                        return true;
+                }
+                return false;
+            }
+
+            function isIdentifierDefinitionLocation(previousToken: Node): boolean {
+                if (previousToken) {
+                    var containingNodeKind = previousToken.parent.kind;
+                    switch (previousToken.kind) {
+                        case SyntaxKind.CommaToken:
+                            return containingNodeKind === SyntaxKind.VariableDeclaration ||
+                                containingNodeKind === SyntaxKind.VariableStatement ||
+                                containingNodeKind === SyntaxKind.EnumDeclaration ||           // enum a { foo, |
+                                isFunction(containingNodeKind);
+
+                        case SyntaxKind.OpenParenToken:
+                            return containingNodeKind === SyntaxKind.CatchBlock ||
+                                isFunction(containingNodeKind);
+
+                        case SyntaxKind.OpenBraceToken:
+                            return containingNodeKind === SyntaxKind.EnumDeclaration ||       // enum a { |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration;        // interface a { |
+
+                        case SyntaxKind.SemicolonToken:
+                            return containingNodeKind === SyntaxKind.Property &&
+                                previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration;    // interface a { f; |
+
+                        case SyntaxKind.PublicKeyword:
+                        case SyntaxKind.PrivateKeyword:
+                        case SyntaxKind.StaticKeyword:
+                        case SyntaxKind.DotDotDotToken:
+                            return containingNodeKind === SyntaxKind.Parameter;
+
+                        case SyntaxKind.ClassKeyword:
+                        case SyntaxKind.ModuleKeyword:
+                        case SyntaxKind.EnumKeyword:
+                        case SyntaxKind.InterfaceKeyword:
+                        case SyntaxKind.FunctionKeyword:
+                        case SyntaxKind.VarKeyword:
+                        case SyntaxKind.GetKeyword:
+                        case SyntaxKind.SetKeyword:
+                            return true;
+                    }
+
+                    // Previous token may have been a keyword that was converted to an identifier.
+                    switch (previousToken.getText()) {
+                        case "class":
+                        case "interface":
+                        case "enum":
+                        case "module":
+                        case "function":
+                        case "var":
+                            // TODO: add let and const
+                            return true;
+                    }
+                }
+
+                return false;
+            }
+
+            function isRightOfIllegalDot(previousToken: Node): boolean {
+                if (previousToken && previousToken.kind === SyntaxKind.NumericLiteral) {
+                    var text = previousToken.getFullText();
+                    return text.charAt(text.length - 1) === ".";
+                }
+
+                return false;
+            }
+
+            function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
+                if (!existingMembers || existingMembers.length === 0) {
+                    return contextualMemberSymbols;
+                }
+
+                var existingMemberNames: Map<boolean> = {};
+                forEach(existingMembers, m => {
+                    if (m.kind !== SyntaxKind.PropertyAssignment) {
+                        // Ignore omitted expressions for missing members in the object literal
+                        return;
+                    }
+
+                    if (m.getStart() <= position && position <= m.getEnd()) {
+                        // If this is the current item we are editing right now, do not filter it out
+                        return;
+                    }
+
+                    existingMemberNames[m.name.text] = true;
+                });
+
+                var filteredMembers: Symbol[] = [];
+                forEach(contextualMemberSymbols, s => {
+                    if (!existingMemberNames[s.name]) {
+                        filteredMembers.push(s);
+                    }
+                });
+
+                return filteredMembers;
+            }
         }
 
         function getCompletionEntryDetails(filename: string, position: number, entryName: string): CompletionEntryDetails {
