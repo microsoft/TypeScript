@@ -244,6 +244,9 @@ module ts {
                 return child((<CallExpression>node).func) ||
                     children((<CallExpression>node).typeArguments) ||
                     children((<CallExpression>node).arguments);
+            case SyntaxKind.TaggedTemplateExpression:
+                return child((<TaggedTemplateExpression>node).tag) ||
+                    child((<TaggedTemplateExpression>node).template);
             case SyntaxKind.TypeAssertion:
                 return child((<TypeAssertion>node).type) ||
                     child((<TypeAssertion>node).operand);
@@ -470,6 +473,7 @@ module ts {
             case SyntaxKind.IndexedAccess:
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
+            case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.TypeAssertion:
             case SyntaxKind.ParenExpression:
             case SyntaxKind.FunctionExpression:
@@ -2074,6 +2078,7 @@ module ts {
                     case SyntaxKind.IndexedAccess:
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.CallExpression:
+                    case SyntaxKind.TaggedTemplateExpression:
                     case SyntaxKind.ArrayLiteral:
                     case SyntaxKind.ParenExpression:
                     case SyntaxKind.ObjectLiteral:
@@ -2440,7 +2445,7 @@ module ts {
 
         function parseCallAndAccess(expr: Expression, inNewExpression: boolean): Expression {
             while (true) {
-                var dotStart = scanner.getTokenPos();
+                var dotOrBracketStart = scanner.getTokenPos();
                 if (parseOptional(SyntaxKind.DotToken)) {
                     var propertyAccess = <PropertyAccess>createNode(SyntaxKind.PropertyAccess, expr.pos);
                     // Technically a keyword is valid here as all keywords are identifier names.
@@ -2463,7 +2468,7 @@ module ts {
                     // In the first case though, ASI will not take effect because there is not a
                     // line terminator after the keyword.
                     if (scanner.hasPrecedingLineBreak() && scanner.isReservedWord() && lookAhead(() => scanner.isReservedWord())) {
-                        grammarErrorAtPos(dotStart, scanner.getStartPos() - dotStart, Diagnostics.Identifier_expected);
+                        grammarErrorAtPos(dotOrBracketStart, scanner.getStartPos() - dotOrBracketStart, Diagnostics.Identifier_expected);
                         var id = <Identifier>createMissingNode();
                     }
                     else {
@@ -2476,7 +2481,6 @@ module ts {
                     continue;
                 }
 
-                var bracketStart = scanner.getTokenPos();
                 if (parseOptional(SyntaxKind.OpenBracketToken)) {
 
                     var indexedAccess = <IndexedAccess>createNode(SyntaxKind.IndexedAccess, expr.pos);
@@ -2486,7 +2490,7 @@ module ts {
                     // Check for that common pattern and report a better error message.
                     if (inNewExpression && parseOptional(SyntaxKind.CloseBracketToken)) {
                         indexedAccess.index = createMissingNode();
-                        grammarErrorAtPos(bracketStart, scanner.getStartPos() - bracketStart, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
+                        grammarErrorAtPos(dotOrBracketStart, scanner.getStartPos() - dotOrBracketStart, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
                     }
                     else {
                         indexedAccess.index = parseExpression();
@@ -2519,6 +2523,22 @@ module ts {
                     expr = finishNode(callExpr);
                     continue;
                 }
+
+                if (token === SyntaxKind.NoSubstitutionTemplateLiteral || token === SyntaxKind.TemplateHead) {
+                    var tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expr.pos);
+                    tagExpression.tag = expr;
+                    tagExpression.template = token === SyntaxKind.NoSubstitutionTemplateLiteral
+                        ? parseLiteralNode()
+                        : parseTemplateExpression();
+                    expr = finishNode(tagExpression);
+
+                    if (languageVersion < ScriptTarget.ES6) {
+                        grammarErrorOnNode(expr, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                    }
+
+                    continue;
+                }
+
                 return expr;
             }
         }

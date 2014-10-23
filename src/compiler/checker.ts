@@ -5422,6 +5422,13 @@ module ts {
             return getReturnTypeOfSignature(signature);
         }
 
+        function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
+            // TODO (drosen): Make sure substitutions are assignable to the tag's arguments.
+            checkExpression(node.tag);
+            checkExpression(node.template);
+            return anyType;
+        }
+
         function checkTypeAssertion(node: TypeAssertion): Type {
             var exprType = checkExpression(node.operand);
             var targetType = getTypeFromTypeNode(node.type);
@@ -6012,6 +6019,8 @@ module ts {
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.TypeAssertion:
                     return checkTypeAssertion(<TypeAssertion>node);
                 case SyntaxKind.ParenExpression:
@@ -7744,6 +7753,7 @@ module ts {
                 case SyntaxKind.IndexedAccess:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.TypeAssertion:
                 case SyntaxKind.ParenExpression:
                 case SyntaxKind.PrefixOperator:
@@ -8020,6 +8030,9 @@ module ts {
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
                             return (<CallExpression>parent).typeArguments && (<CallExpression>parent).typeArguments.indexOf(node) >= 0;
+                        case SyntaxKind.TaggedTemplateExpression:
+                            // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
+                            return false;
                     }
             }
 

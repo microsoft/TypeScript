@@ -169,6 +169,7 @@ module ts {
         IndexedAccess,
         CallExpression,
         NewExpression,
+        TaggedTemplateExpression,
         TypeAssertion,
         ParenExpression,
         FunctionExpression,
@@ -436,6 +437,12 @@ module ts {
     }
 
     export interface NewExpression extends CallExpression { }
+
+    export interface TaggedTemplateExpression extends Expression {
+        tag: Expression;
+        // Either a LiteralExpression of kind NoSubstitutionTemplateLiteral, or a TemplateExpression
+        template: Expression;
+    }
 
     export interface TypeAssertion extends Expression {
         type: TypeNode;
@@ -819,10 +826,11 @@ module ts {
         Prototype              = 0x04000000,  // Prototype property (no source representation)
         UnionProperty          = 0x08000000,  // Property in union type
 
-        BlockScopedVariable    = 0x10000000,  // A block-scoped variable (let ot const)
+        BlockScopedVariable    = 0x10000000,  // A block-scoped variable (let or const)
 
         Variable  = FunctionScopedVariable | BlockScopedVariable,
         Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
+
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,
         Namespace = ValueModule | NamespaceModule,
         Module    = ValueModule | NamespaceModule,

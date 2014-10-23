@@ -1,8 +1,8 @@
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,9): error TS1005: ';' expected.
-tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,16): error TS1005: ';' expected.
+tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,21): error TS1005: ';' expected.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,9): error TS1005: ';' expected.
-tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,16): error TS1005: ';' expected.
+tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,24): error TS1005: ';' expected.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,1): error TS2304: Cannot find name 'declare'.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,9): error TS2304: Cannot find name 'module'.
@@ -14,8 +14,8 @@ tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,9): error 
     declare module `M1` {
             ~~~~~~
 !!! error TS1005: ';' expected.
-                   ~~~~
-!!! error TS1005: ';' expected.
+            ~~~~~~~~~~~
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
                         ~
 !!! error TS1005: ';' expected.
     ~~~~~~~
@@ -27,8 +27,8 @@ tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,9): error 
     declare module `M${2}` {
             ~~~~~~
 !!! error TS1005: ';' expected.
-                   ~~~~
-!!! error TS1005: ';' expected.
+            ~~~~~~~~~~~~~~
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
                            ~
 !!! error TS1005: ';' expected.
     ~~~~~~~

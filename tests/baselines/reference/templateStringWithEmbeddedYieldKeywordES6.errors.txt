@@ -1,14 +1,13 @@
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(1,9): error TS1003: Identifier expected.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(1,17): error TS1005: ';' expected.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(3,26): error TS1158: Invalid template literal; expected '}'
-tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(3,33): error TS1005: ';' expected.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(5,1): error TS1126: Unexpected end of text.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(1,11): error TS2304: Cannot find name 'gen'.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(3,20): error TS2304: Cannot find name 'yield'.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(3,30): error TS2304: Cannot find name 'def'.
 
 
-==== tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts (8 errors) ====
+==== tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts (7 errors) ====
     function* gen() {
             ~
 !!! error TS1003: Identifier expected.
@@ -20,15 +19,11 @@ tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.
         var x = `abc${ yield 10 }def`;
                              ~~
 !!! error TS1158: Invalid template literal; expected '}'
-                                    ~~
                        ~~~~~
 !!! error TS2304: Cannot find name 'yield'.
                                  ~~~
 !!! error TS2304: Cannot find name 'def'.
     }
-    ~
     
-    
-!!! error TS1005: ';' expected.
     
 !!! error TS1126: Unexpected end of text.

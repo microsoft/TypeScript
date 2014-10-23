@@ -1064,6 +1064,13 @@ module ts {
                 }
             }
 
+            function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
+                Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Trying to emit a tagged template in pre-ES6 mode.");
+                emit(node.tag);
+                write(" ");
+                emit(node.template);
+            }
+
             function emitParenExpression(node: ParenExpression) {
                 if (node.expression.kind === SyntaxKind.TypeAssertion) {
                     var operand = (<TypeAssertion>node.expression).operand;
@@ -2197,6 +2204,8 @@ module ts {
                         return emitCallExpression(<CallExpression>node);
                     case SyntaxKind.NewExpression:
                         return emitNewExpression(<NewExpression>node);
+                    case SyntaxKind.TaggedTemplateExpression:
+                        return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                     case SyntaxKind.TypeAssertion:
                         return emit((<TypeAssertion>node).operand);
                     case SyntaxKind.ParenExpression:
