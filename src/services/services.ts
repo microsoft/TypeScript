@@ -1927,6 +1927,7 @@ module ts {
             return isNoDefaultLibRegex.exec(comment);
         }
 
+        // TODO : merge this function with processReferenceComments in parser as both do similar functionality
         function getFileReferenceFromReferencePath(comment: string): IFileReference {
             var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
 
