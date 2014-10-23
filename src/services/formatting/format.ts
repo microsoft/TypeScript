@@ -23,7 +23,8 @@ module ts.formatting {
     }
 
     export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[]{
-        var line = getNonAdjustedLineAndCharacterFromPosition(position, sourceFile).line;
+        var line = sourceFile.getLineAndCharacterFromPosition(position).line;
+        Debug.assert(line >= 2);
         // get the span for the previous\current line
         var span = {
             // get start position for the previous line
@@ -140,7 +141,7 @@ module ts.formatting {
         formattingScanner.advance();
 
         if (formattingScanner.isOnToken()) {
-            var startLine =  getNonAdjustedLineAndCharacterFromPosition(enclosingNode.getStart(sourceFile), sourceFile).line;
+            var startLine = sourceFile.getLineAndCharacterFromPosition(enclosingNode.getStart(sourceFile)).line;
             processNode(enclosingNode, enclosingNode, startLine, initialIndentation);
         }
         return edits;
@@ -226,7 +227,7 @@ module ts.formatting {
                     return;
                 }
 
-                var childStartLine = getNonAdjustedLineAndCharacterFromPosition(start, sourceFile).line;
+                var childStartLine = sourceFile.getLineAndCharacterFromPosition(start).line;
 
                 if (listElementIndex === -1) {
                     // child is not list element
@@ -240,7 +241,7 @@ module ts.formatting {
                 // NOTE: SI uses non-adjusted lines
                 var increaseIndentation =
                     childStartLine !== nodeStartLine &&
-                    !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStartLine + 1, sourceFile) &&
+                    !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStartLine, sourceFile) &&
                     SmartIndenter.shouldIndentChildNode(node, child);
 
                 processNode(child, childContextNode, childStartLine, increaseIndentation ? indentation + options.IndentSize : indentation);
@@ -267,7 +268,7 @@ module ts.formatting {
             var indentToken: boolean = true;
             if (isTokenInRange) {
                 var prevStartLine = previousRangeStartLine;
-                var tokenStart = getNonAdjustedLineAndCharacterFromPosition(currentTokenInfo.token.pos, sourceFile);
+                var tokenStart = sourceFile.getLineAndCharacterFromPosition(currentTokenInfo.token.pos);
                 lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, contextNode, indentation);
                 if (lineAdded !== undefined) {
                     indentToken = lineAdded;
@@ -321,7 +322,7 @@ module ts.formatting {
             for (var i = 0, len = trivia.length; i < len; ++i) {
                 var triviaItem = trivia[i];
                 if (isComment(triviaItem.kind) && rangeContainsRange(originalRange, triviaItem)) {
-                    var triviaItemStart = getNonAdjustedLineAndCharacterFromPosition(triviaItem.pos, sourceFile);
+                    var triviaItemStart = sourceFile.getLineAndCharacterFromPosition(triviaItem.pos);
                     processRange(triviaItem, triviaItemStart, parent, contextNode, indentation);
                 }
             }
@@ -332,7 +333,7 @@ module ts.formatting {
             var lineAdded: boolean;
             if (!previousRange) {
                 // trim whitespaces starting from the beginning of the span up to the current line
-                var originalStart = getNonAdjustedLineAndCharacterFromPosition(originalRange.pos, sourceFile);
+                var originalStart = sourceFile.getLineAndCharacterFromPosition(originalRange.pos);
                 trimTrailingWhitespacesForLines(originalStart.line, rangeStart.line);
             }
             else {
@@ -409,18 +410,18 @@ module ts.formatting {
                 recordReplace(pos, 0, indentationString);
             }
             else {
-                var tokenRange = getNonAdjustedLineAndCharacterFromPosition(pos, sourceFile);
-                if (indentation !== tokenRange.character) {
+                var tokenRange = sourceFile.getLineAndCharacterFromPosition(pos);
+                if (indentation !== tokenRange.character - 1) {
                     var startLinePosition = getStartPositionOfLine(tokenRange.line, sourceFile);
-                    recordReplace(startLinePosition, tokenRange.character, indentationString);
+                    recordReplace(startLinePosition, tokenRange.character - 1, indentationString);
                 }
             }
         }
 
         function indentMultilineComment(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean) {
             // split comment in lines
-            var startLine = getNonAdjustedLineAndCharacterFromPosition(commentRange.pos, sourceFile).line;
-            var endLine = getNonAdjustedLineAndCharacterFromPosition(commentRange.end, sourceFile).line;
+            var startLine = sourceFile.getLineAndCharacterFromPosition(commentRange.pos).line;
+            var endLine = sourceFile.getLineAndCharacterFromPosition(commentRange.end).line;
 
             if (startLine === endLine) {
                 if (!firstLineIsIndented) {

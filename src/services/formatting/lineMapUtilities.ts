@@ -3,7 +3,10 @@
 module ts.formatting {
 
     export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
+        Debug.assert(line >= 1);
         var lineStarts = sourceFile.getLineStarts();
+
+        line = line - 1;
         if (line === lineStarts.length - 1) {
             // last line - return EOF
             return sourceFile.text.length - 1;
@@ -25,18 +28,14 @@ module ts.formatting {
         }
     }
 
-    export function getNonAdjustedLineAndCharacterFromPosition(position: number, sourceFile: SourceFile): LineAndCharacter {
-        var lineAndChar = sourceFile.getLineAndCharacterFromPosition(position);
-        return { line: lineAndChar.line - 1, character: lineAndChar.character - 1 };
-    }
-
     export function getStartPositionOfLine(line: number, sourceFile: SourceFile): number {
-        return sourceFile.getLineStarts()[line];
+        Debug.assert(line >= 1);
+        return sourceFile.getLineStarts()[line - 1];
     }
 
     export function getStartLinePositionForPosition(position: number, sourceFile: SourceFile): number {
         var lineStarts = sourceFile.getLineStarts();
-        var line = getNonAdjustedLineAndCharacterFromPosition(position, sourceFile).line;
-        return lineStarts[line];
+        var line = sourceFile.getLineAndCharacterFromPosition(position).line;
+        return lineStarts[line - 1];
     }
 }
