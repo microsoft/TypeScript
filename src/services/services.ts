@@ -2025,9 +2025,9 @@ module ts {
                         return true;
                     }
                     else {
-                        // is unterminated multiline comment
-                        return text.charCodeAt(comment.end - 1) !== CharacterCodes.slash &&
-                            text.charCodeAt(comment.end - 2) !== CharacterCodes.asterisk;
+                        // is unterminated multi-line comment
+                        return !(text.charCodeAt(comment.end - 1) === CharacterCodes.slash &&
+                            text.charCodeAt(comment.end - 2) === CharacterCodes.asterisk);
                     }
                 }
                 return false;

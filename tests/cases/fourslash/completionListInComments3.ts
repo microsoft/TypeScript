@@ -10,6 +10,8 @@
 
 //// {| "name": "5" |}/*  */
 
+/////* {| "name": "6" |}
+
 goTo.marker("1");
 verify.completionListIsEmpty();
 
@@ -22,5 +24,8 @@ verify.completionListIsEmpty();
 goTo.marker("4");
 verify.not.completionListIsEmpty();
 
-//goTo.marker("5");
-//verify.not.completionListIsEmpty();
+goTo.marker("5");
+verify.not.completionListIsEmpty();
+
+goTo.marker("6");
+verify.completionListIsEmpty();
