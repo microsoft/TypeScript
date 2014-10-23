@@ -2403,7 +2403,7 @@ module ts {
                         case SyntaxKind.CommaToken:
                             return containingNodeKind === SyntaxKind.VariableDeclaration ||
                                 containingNodeKind === SyntaxKind.VariableStatement ||
-                                containingNodeKind === SyntaxKind.EnumDeclaration ||           // enum { foo, |
+                                containingNodeKind === SyntaxKind.EnumDeclaration ||           // enum a { foo, |
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.OpenParenToken:
@@ -2411,8 +2411,12 @@ module ts {
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.OpenBraceToken:
-                            return containingNodeKind === SyntaxKind.EnumDeclaration;        // enum { |
-                               // containingNodeKind === SyntaxKind.InterfaceDeclaration;
+                            return containingNodeKind === SyntaxKind.EnumDeclaration ||       // enum a { |
+                               containingNodeKind === SyntaxKind.InterfaceDeclaration;        // interface a { |
+
+                        case SyntaxKind.SemicolonToken:
+                            return containingNodeKind === SyntaxKind.Property &&
+                            previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration;    // interface a { f; |
 
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
