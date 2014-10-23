@@ -80,10 +80,20 @@ module ts {
     ///
     /// Pre-processing
     ///
-    interface ITripleSlashDirectiveProperties {
-        noDefaultLib: boolean;
+    // Note: This is being using by the host (VS) and is marshaled back and forth. When changing this make sure the changes
+    // are reflected in the managed side as well
+    // TODO (yuisu) : Consider merge with FileReference in types.ts
+    export interface IFileReference {
+        path: string;
+        position: number;
+        length: number;
+    }
+
+    export interface PreProcessedFileInfo {
+        referencedFiles: IFileReference[];
+        importedFiles: IFileReference[];
         diagnostics: TypeScript.Diagnostic[];
-        referencedFiles: TypeScript.IFileReference[];
+        isLibFile: boolean
     }
 
     var scanner: Scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ true);
@@ -1905,159 +1915,94 @@ module ts {
     }
 
     export var tripleSlashReferenceRegExp = /^(\/\/\/\s*<reference\s+path=)('|")(.+?)\2\s*(static=('|")(.+?)\5\s*)*\/>/;
-    export function preProcessFile(fileName: string, sourceText: TypeScript.IScriptSnapshot, readImportFiles = true): TypeScript.IPreProcessedFileInfo {
+    export function preProcessFile(fileName: string, sourceText: TypeScript.IScriptSnapshot, readImportFiles = true): PreProcessedFileInfo {
+
         var reportDiagnostic = () => { }
+        var text = sourceText.getText(0, sourceText.getLength());
+        var referencedFiles: IFileReference[] = [];
+        var importedFiles: IFileReference[] = [];
+
         function isNoDefaultLibMatch(comment: string): RegExpExecArray {
             var isNoDefaultLibRegex = /^(\/\/\/\s*<reference\s+no-default-lib=)('|")(.+?)\2\s*\/>/gim;
             return isNoDefaultLibRegex.exec(comment);
         }
 
-        function getFileReferenceFromReferencePath(fileName: string, text: TypeScript.ISimpleText, position: number, comment: string, diagnostics: TypeScript.Diagnostic[]): TypeScript.IFileReference {
-            // First, just see if they've written: /// <reference\s+
-            // If so, then we'll consider this a reference directive and we'll report errors if it's
-            // malformed.  Otherwise, we'll completely ignore this.
-            var lineMap = text.lineMap();
-
+        function getFileReferenceFromReferencePath(comment: string): IFileReference {
             var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
+
             if (simpleReferenceRegEx.exec(comment)) {
                 var isNoDefaultLib = isNoDefaultLibMatch(comment);
-
                 if (!isNoDefaultLib) {
                     var fullReferenceRegEx = tripleSlashReferenceRegExp;
                     var fullReference = fullReferenceRegEx.exec(comment);
+                    var path: string = TypeScript.normalizePath(fullReference[3]);
+                    if (fullReference) {
+                        var path: string = TypeScript.normalizePath(fullReference[3]);
+                        var adjustedPath = TypeScript.normalizePath(path);
 
-                    if (!fullReference) {
-                        // It matched the start of a reference directive, but wasn't well formed.  Report
-                        // an appropriate error to the user.
-                        diagnostics.push(new TypeScript.Diagnostic(fileName, lineMap, position, comment.length, TypeScript.DiagnosticCode.Invalid_reference_directive_syntax));
-                    }
-                    else {
-                        var path: string = normalizePath(fullReference[3]);
-                        var adjustedPath = normalizePath(path);
-
-                        var isResident = fullReference.length >= 7 && fullReference[6] === "true";
                         return {
-                            line: 0,
-                            character: 0,
+                            // TODO (yuisu) : Move the function to util
+                            path: TypeScript.switchToForwardSlashes(adjustedPath),
                             position: 0,
                             length: 0,
-                            path: TypeScript.switchToForwardSlashes(adjustedPath),
-                            isResident: isResident
                         };
                     }
                 }
             }
-
-            return null;
         }
 
-        function processImports(text: TypeScript.ISimpleText, scanner: TypeScript.Scanner.IScanner, token: TypeScript.ISyntaxToken, importedFiles: TypeScript.IFileReference[]): void {
-            var lineChar = { line: -1, character: -1 };
+        function processTripleSlashDirectives(): void {
+            var commentRanges = getLeadingCommentRanges(text, 0);
+            forEach(commentRanges, commentRange => {
+                var comment = text.substring(commentRange.pos, commentRange.end);
+                var referencedFile = getFileReferenceFromReferencePath(comment);
+                if (referencedFile) {
+                    referencedFile.position = commentRange.pos;
+                    referencedFile.length = commentRange.end - commentRange.pos;
+                    referencedFiles.push(referencedFile);
+                }
+            });
+        }
 
-            var lineMap = text.lineMap();
-            var start = new Date().getTime();
+        function processImport(): void {
+            var scanner = createScanner(getDefaultCompilerOptions().target, /*skipTrivia*/true, text);
+
+            var token = scanner.scan();
             // Look for:
-            // import foo = module("foo")
-            while (token.kind() !== TypeScript.SyntaxKind.EndOfFileToken) {
-                if (token.kind() === TypeScript.SyntaxKind.ImportKeyword) {
-                    var importToken = token;
-                    token = scanner.scan(/*allowRegularExpression:*/ false);
-
-                    if (TypeScript.SyntaxFacts.isIdentifierNameOrAnyKeyword(token)) {
-                        token = scanner.scan(/*allowRegularExpression:*/ false);
-
-                        if (token.kind() === TypeScript.SyntaxKind.EqualsToken) {
-                            token = scanner.scan(/*allowRegularExpression:*/ false);
-
-                            if (token.kind() === TypeScript.SyntaxKind.ModuleKeyword || token.kind() === TypeScript.SyntaxKind.RequireKeyword) {
-                                token = scanner.scan(/*allowRegularExpression:*/ false);
-
-                                if (token.kind() === TypeScript.SyntaxKind.OpenParenToken) {
-                                    token = scanner.scan(/*allowRegularExpression:*/ false);
-
-                                    lineMap.fillLineAndCharacterFromPosition(TypeScript.start(importToken, text), lineChar);
-
-                                    if (token.kind() === TypeScript.SyntaxKind.StringLiteral) {
-                                        var ref = {
-                                            line: lineChar.line,
-                                            character: lineChar.character,
-                                            position: TypeScript.start(token, text),
-                                            length: TypeScript.width(token),
-                                            path: TypeScript.stripStartAndEndQuotes(TypeScript.switchToForwardSlashes(token.text())),
-                                            isResident: false
+            // import foo = module("foo");
+            while (token !== SyntaxKind.EndOfFileToken) {
+                if (token === SyntaxKind.ImportKeyword) {
+                    var startPosition = scanner.getTokenPos();
+                    token = scanner.scan();
+                    if (token === SyntaxKind.Identifier) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.EqualsToken) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.RequireKeyword) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.OpenParenToken) {
+                                    token = scanner.scan();
+                                    if (token === SyntaxKind.StringLiteral) {
+                                        var importPath = scanner.getTokenValue();
+                                        var referencedFile = {
+                                            // TODO (yuisu) : Move the function to util
+                                            path: TypeScript.switchToForwardSlashes(importPath),
+                                            position: startPosition,
+                                            length: importPath.length
                                         };
-                                        importedFiles.push(ref);
+                                        importedFiles.push(referencedFile);
                                     }
                                 }
                             }
                         }
                     }
                 }
-
-                token = scanner.scan(/*allowRegularExpression:*/ false);
+                token = scanner.scan();
             }
-
-            var totalTime = new Date().getTime() - start;
-            //TypeScript.fileResolutionScanImportsTime += totalTime
         }
-
-        function processTripleSlashDirectives(fileName: string, text: TypeScript.ISimpleText, firstToken: TypeScript.ISyntaxToken): ITripleSlashDirectiveProperties {
-            var leadingTrivia = firstToken.leadingTrivia(text);
-
-            var position = 0;
-            var lineChar = { line: -1, character: -1 };
-            var noDefaultLib = false;
-            var diagnostics: TypeScript.Diagnostic[] = [];
-            var referencedFiles: TypeScript.IFileReference[] = [];
-            var lineMap = text.lineMap();
-
-            for (var i = 0, n = leadingTrivia.count(); i < n; i++) {
-                var trivia = leadingTrivia.syntaxTriviaAt(i);
-
-                if (trivia.kind() === TypeScript.SyntaxKind.SingleLineCommentTrivia) {
-                    var triviaText = trivia.fullText();
-                    var referencedCode = getFileReferenceFromReferencePath(fileName, text, position, triviaText, diagnostics);
-
-                    if (referencedCode) {
-                        lineMap.fillLineAndCharacterFromPosition(position, lineChar);
-                        referencedCode.position = position;
-                        referencedCode.length = trivia.fullWidth();
-                        referencedCode.line = lineChar.line;
-                        referencedCode.character = lineChar.character;
-
-                        referencedFiles.push(referencedCode);
-                    }
-
-                    // is it a lib file?
-                    var isNoDefaultLib = isNoDefaultLibMatch(triviaText);
-                    if (isNoDefaultLib) {
-                        noDefaultLib = isNoDefaultLib[3] === "true";
-                    }
-                }
-
-                position += trivia.fullWidth();
-            }
-
-            return { noDefaultLib: noDefaultLib, diagnostics: diagnostics, referencedFiles: referencedFiles };
-        }
-
-        var text = TypeScript.SimpleText.fromScriptSnapshot(sourceText);
-        var scanner = TypeScript.Scanner.createScanner(ts.ScriptTarget.ES5, text, reportDiagnostic);
-
-        var firstToken = scanner.scan(/*allowRegularExpression:*/ false);
-
-        // only search out dynamic mods
-        // if you find a dynamic mod, ignore every other mod inside, until you balance rcurlies
-        // var position
-
-        var importedFiles: TypeScript.IFileReference[] = [];
-        if (readImportFiles) {
-            processImports(text, scanner, firstToken, importedFiles);
-        }
-
-        var properties = processTripleSlashDirectives(fileName, text, firstToken);
-
-        return { referencedFiles: properties.referencedFiles, importedFiles: importedFiles, isLibFile: properties.noDefaultLib, diagnostics: properties.diagnostics };
+        processImport();
+        processTripleSlashDirectives();
+        return { referencedFiles: referencedFiles, importedFiles: importedFiles, isLibFile: false, diagnostics: [] };
     }
 
     /// Helpers

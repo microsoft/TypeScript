@@ -1,6 +1,11 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
+    export interface ILineAndCharacter {
+        line: number;
+        character: number;
+    }
+
     export class LineMap {
         public static empty = new LineMap(() => [0], 0);
         private _lineStarts: number[] = null;

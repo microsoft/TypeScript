@@ -16,7 +16,6 @@
 /// <reference path='services.ts' />
 
 /// <reference path='compiler\pathUtils.ts' />
-/// <reference path='compiler\precompile.ts' />
 
 var debugObjectHost = (<any>this);
 
@@ -847,7 +846,7 @@ module ts {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
-                    var result = ts.preProcessFile(fileName, sourceText); //TypeScript.preProcessFile(fileName, sourceText);
+                    var result = preProcessFile(fileName, sourceText); //TypeScript.preProcessFile(fileName, sourceText);
                     return result;
                 });
         }
