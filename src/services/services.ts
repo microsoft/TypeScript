@@ -2529,7 +2529,8 @@ module ts {
 
                 // we are at the end of a container node, we do not want to be inside it, as that would affect our completion results
                 // e.g. function f(a) {}| <- 'a' should not be visible here
-                if (token && token.kind === SyntaxKind.CloseBraceToken && position === token.end) {
+                if (token && position === token.end && (token.kind === SyntaxKind.CloseBraceToken || token.kind === SyntaxKind.SemicolonToken)) {
+                    node = getTokenAtPosition(sourceFile, position);
                 }
             }
 
