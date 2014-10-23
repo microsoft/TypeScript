@@ -2439,6 +2439,7 @@ module ts {
                         case "module":
                         case "function":
                         case "var":
+                            // TODO: add let and const
                             return true;
                     }
                 }
@@ -2503,7 +2504,6 @@ module ts {
             filename = TypeScript.switchToForwardSlashes(filename);
 
             var sourceFile = getSourceFile(filename);
-            var sourceUnit = sourceFile.getSourceUnit();
 
             if (isCompletionListBlocker(sourceFile, position)) {
                 host.log("Returning an empty list because completion was blocked.");
