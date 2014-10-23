@@ -64,7 +64,7 @@ goTo.marker('7');
 verify.quickInfoIs("(var) myvar: m1.m2.c", "");
 
 goTo.marker('8');
-verify.memberListContains("c", "class m1.m2.c", "class comment;");
+verify.memberListContains("c", "(constructor) m1.m2.c(): m1.m2.c", "");
 verify.memberListContains("i", "(var) m1.m2.i: m1.m2.c", "i");
 
 goTo.file("commentsExternalModules_file1.ts");
@@ -91,5 +91,5 @@ goTo.marker('14');
 verify.quickInfoIs("(var) newVar: extMod.m1.m2.c", "");
 
 goTo.marker('15');
-verify.memberListContains("c", "class extMod.m1.m2.c", "class comment;");
+verify.memberListContains("c", "(constructor) extMod.m1.m2.c(): extMod.m1.m2.c", "");
 verify.memberListContains("i", "(var) extMod.m1.m2.i: extMod.m1.m2.c", "i");

@@ -47,5 +47,5 @@ goTo.marker('9');
 verify.quickInfoIs("(var) newVar: extMod.m1.m2.c", "");
 
 goTo.marker('10');
-verify.memberListContains("c", "class extMod.m1.m2.c", "class comment;");
+verify.memberListContains("c", "(constructor) extMod.m1.m2.c(): extMod.m1.m2.c", "");
 verify.memberListContains("i", "(var) extMod.m1.m2.i: extMod.m1.m2.c", "i");

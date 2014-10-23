@@ -74,7 +74,7 @@ goTo.marker('12');
 verify.quickInfoIs("(var) lambddaNoVarComment: (a: number, b: number) => number", "");
 
 goTo.marker('13');
-verify.completionListContains('lambdaFoo', '(var) lambdaFoo: (a: number, b: number) => number', 'lamdaFoo var comment');
+verify.completionListContains('lambdaFoo', '(var) lambdaFoo: (a: number, b: number) => number', '');
 verify.completionListContains('lambddaNoVarComment', '(var) lambddaNoVarComment: (a: number, b: number) => number', '');
 
 goTo.marker('14');

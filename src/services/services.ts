@@ -1265,7 +1265,6 @@ module ts {
         position: number;           // position in the file where the completion was requested
         entries: CompletionEntry[]; // entries for this completion
         symbols: Map<Symbol>;       // symbols by entry name map
-        location: Node;             // the node where the completion was requested
         typeChecker: TypeChecker;   // the typeChecker used to generate this completion
     }
 
@@ -2515,8 +2514,10 @@ module ts {
             }
 
             var node: Node;
+            var location: Node;
             var isRightOfDot: boolean;
             var token = getNonIdentifierCompleteTokenOnLeft(sourceFile, position);
+
             if (token && token.kind === SyntaxKind.DotToken &&
                 (token.parent.kind === SyntaxKind.PropertyAccess || token.parent.kind === SyntaxKind.QualifiedName)) {
                 node = (<PropertyAccess>token.parent).left;
@@ -2538,7 +2539,6 @@ module ts {
                 position: position,
                 entries: [],
                 symbols: {},
-                location: node,
                 typeChecker: typeInfoResolver
             };
 
@@ -2624,6 +2624,8 @@ module ts {
             //       in the getCompletionsAtPosition earlier
             filename = TypeScript.switchToForwardSlashes(filename);
 
+            var sourceFile = getSourceFile(filename);
+
             var session = activeCompletionSession;
 
             // Ensure that the current active completion session is still valid for this request
@@ -2640,7 +2642,8 @@ module ts {
                 //               which is permissible given that it is backwards compatible; but really we should consider
                 //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
                 //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
-                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location, SemanticMeaning.All);
+                var location = getTouchingPropertyName(sourceFile, position);
+                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), location, session.typeChecker, location, SemanticMeaning.All);
                 return {
                     name: entryName,
                     kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
@@ -2790,15 +2793,20 @@ module ts {
 
                 var type = typeResolver.getTypeOfSymbol(symbol);
                 if (type) {
+                    if (location.parent && location.parent.kind === SyntaxKind.PropertyAccess) {
+                        var right = (<PropertyAccess>location.parent).right;
+                        // Either the location is on the right of a property access, or on the left and the right is missing
+                        if (right === location || (right && right.kind === SyntaxKind.Missing)){
+                            location = location.parent;
+                        }
+                    }
+
                     // try get the call/construct signature from the type if it matches
                     var callExpression: CallExpression;
                     if (location.kind === SyntaxKind.CallExpression || location.kind === SyntaxKind.NewExpression) {
                         callExpression = <CallExpression> location;
                     }
                     else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
-                        if (location.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>location.parent).right === location) {
-                            location = location.parent;
-                        }
                         callExpression = <CallExpression>location.parent;
                     }
 

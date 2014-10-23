@@ -125,7 +125,7 @@ verify.quickInfoIs("(var) myvar: m1.m2.c", "");
 
 goTo.marker('8');
 verify.quickInfoIs("(constructor) m1.m2.c(): m1.m2.c", "");
-verify.memberListContains("c", "class m1.m2.c", "class comment;");
+verify.memberListContains("c", "(constructor) m1.m2.c(): m1.m2.c", "");
 verify.memberListContains("i", "(var) m1.m2.i: m1.m2.c", "i");
 
 goTo.marker('9');
@@ -138,7 +138,7 @@ verify.quickInfoIs("module m2.m3", "module comment of m2.m3");
 
 goTo.marker('11');
 verify.quickInfoIs("(constructor) m2.m3.c(): m2.m3.c", "");
-verify.memberListContains("c", "class m2.m3.c", "Exported class comment");
+verify.memberListContains("c", "(constructor) m2.m3.c(): m2.m3.c", "");
 
 goTo.marker('12');
 verify.completionListContains("m3", "module m3", "");
@@ -153,8 +153,8 @@ verify.memberListContains("m5", "module m3.m4.m5");
 verify.quickInfoIs("module m3.m4.m5", "module comment of m3.m4.m5");
 
 goTo.marker('15');
-verify.memberListContains("c", "class m3.m4.m5.c", "Exported class comment");
 verify.quickInfoIs("(constructor) m3.m4.m5.c(): m3.m4.m5.c", "");
+verify.memberListContains("c", "(constructor) m3.m4.m5.c(): m3.m4.m5.c", "");
 
 goTo.marker('16');
 verify.completionListContains("m4", "module m4", "");
@@ -173,7 +173,7 @@ verify.memberListContains("m7", "module m4.m5.m6.m7");
 verify.quickInfoIs("module m4.m5.m6.m7", "");
 
 goTo.marker('20');
-verify.memberListContains("c", "class m4.m5.m6.m7.c", "Exported class comment");
+verify.memberListContains("c", "(constructor) m4.m5.m6.m7.c(): m4.m5.m6.m7.c", "");
 verify.quickInfoIs("(constructor) m4.m5.m6.m7.c(): m4.m5.m6.m7.c", "");
 
 goTo.marker('21');
@@ -193,7 +193,7 @@ verify.memberListContains("m8", "module m5.m6.m7.m8");
 verify.quickInfoIs("module m5.m6.m7.m8", "module m8 comment");
 
 goTo.marker('25');
-verify.memberListContains("c", "class m5.m6.m7.m8.c", "Exported class comment");
+verify.memberListContains("c", "(constructor) m5.m6.m7.m8.c(): m5.m6.m7.m8.c", "");
 verify.quickInfoIs("(constructor) m5.m6.m7.m8.c(): m5.m6.m7.m8.c", "");
 
 goTo.marker('26');
@@ -209,7 +209,7 @@ verify.memberListContains("m8", "module m6.m7.m8");
 verify.quickInfoIs("module m6.m7.m8", "");
 
 goTo.marker('29');
-verify.memberListContains("c", "class m6.m7.m8.c", "Exported class comment");
+verify.memberListContains("c", "(constructor) m6.m7.m8.c(): m6.m7.m8.c", "");
 verify.quickInfoIs("(constructor) m6.m7.m8.c(): m6.m7.m8.c", "");
 
 goTo.marker('30');
@@ -225,7 +225,7 @@ verify.memberListContains("m9", "module m7.m8.m9");
 verify.quickInfoIs("module m7.m8.m9", "module m9 comment");
 
 goTo.marker('33');
-verify.memberListContains("c", "class m7.m8.m9.c", "Exported class comment");
+verify.memberListContains("c", "(constructor) m7.m8.m9.c(): m7.m8.m9.c", "");
 verify.quickInfoIs("(constructor) m7.m8.m9.c(): m7.m8.m9.c", "");
 
 goTo.marker('34');
