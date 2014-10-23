@@ -29,5 +29,5 @@ var r9 = foo2(null, (x) => '', (x) => ''); // any => any
 var r10 = foo2(null, (x: Object) => '', (x: string) => ''); // Object => Object
 
 var x: (a: string) => boolean;
-var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2); // {} => {}
-var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2); // (string => boolean) => {}
+var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2); // error
+var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2); // error

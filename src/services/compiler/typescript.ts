@@ -512,7 +512,7 @@ module TypeScript {
             for (var i = 0, n = fileNames.length; i < n; i++) {
                 var fileName = fileNames[i];
 
-                var document = this.getDocument(fileNames[i]);
+                var document = this.getDocument(fileName);
 
                 sharedEmitter = this._emitDocumentDeclarations(document, emitOptions,
                     file => emitOutput.outputFiles.push(file), sharedEmitter);
@@ -578,7 +578,6 @@ module TypeScript {
             var sourceUnit = document.sourceUnit();
             Debug.assert(this._shouldEmit(document));
 
-            var typeScriptFileName = document.fileName;
             if (!emitter) {
                 var javaScriptFileName = this.mapOutputFileName(document, emitOptions, TypeScriptCompiler.mapToJSFileName);
                 var outFile = new TextWriter(javaScriptFileName, this.writeByteOrderMarkForDocument(document), OutputFileType.JavaScript);
@@ -799,8 +798,6 @@ module TypeScript {
         }
 
         private extractResolutionContextFromAST(resolver: PullTypeResolver, ast: ISyntaxElement, document: Document, propagateContextualTypes: boolean): { ast: ISyntaxElement; enclosingDecl: PullDecl; resolutionContext: PullTypeResolutionContext; inContextuallyTypedAssignment: boolean; inWithBlock: boolean; } {
-            var scriptName = document.fileName;
-
             var enclosingDecl: PullDecl = null;
             var enclosingDeclAST: ISyntaxElement = null;
             var inContextuallyTypedAssignment = false;
@@ -981,7 +978,6 @@ module TypeScript {
 
                     case SyntaxKind.ReturnStatement:
                         if (propagateContextualTypes) {
-                            var returnStatement = <ReturnStatementSyntax>current;
                             var contextualType: PullTypeSymbol = null;
 
                             if (enclosingDecl && (enclosingDecl.kind & PullElementKind.SomeFunction)) {

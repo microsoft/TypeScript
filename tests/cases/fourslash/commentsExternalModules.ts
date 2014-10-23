@@ -69,10 +69,10 @@ verify.memberListContains("i", "(var) m1.m2.i: m1.m2.c", "i");
 
 goTo.file("commentsExternalModules_file1.ts");
 goTo.marker('9');
-verify.quickInfoIs('(alias) extMod', "This is on import declaration");
+verify.quickInfoIs('import extMod = require("commentsExternalModules_file0")', "This is on import declaration");
 
 goTo.marker('10');
-verify.completionListContains("extMod", "(alias) extMod", "This is on import declaration");
+verify.completionListContains("extMod", 'import extMod = require("commentsExternalModules_file0")', "This is on import declaration");
 
 goTo.marker('11');
 verify.memberListContains("m1", "module extMod.m1");

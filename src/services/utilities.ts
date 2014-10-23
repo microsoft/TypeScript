@@ -230,19 +230,35 @@ module ts {
         return n.kind !== SyntaxKind.SyntaxList || n.getChildCount() !== 0;
     }
 
+    export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> {
+        if (node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.CallExpression) {
+            return (<CallExpression>node).typeArguments;
+        }
+
+        if (isAnyFunction(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
+            return (<FunctionDeclaration>node).typeParameters;
+        }
+
+        return undefined;
+    }
+
     export function isToken(n: Node): boolean {
         return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
     }
 
-    function isKeyword(n: Node): boolean {
-        return n.kind >= SyntaxKind.FirstKeyword && n.kind <= SyntaxKind.LastKeyword;
-    }
-
     function isWord(n: Node): boolean {
-        return n.kind === SyntaxKind.Identifier || isKeyword(n);
+        return n.kind === SyntaxKind.Identifier || isKeyword(n.kind);
     }
 
     function isPropertyName(n: Node): boolean {
         return n.kind === SyntaxKind.StringLiteral || n.kind === SyntaxKind.NumericLiteral || isWord(n);
+    }
+
+    export function isComment(n: Node): boolean {
+        return n.kind === SyntaxKind.SingleLineCommentTrivia || n.kind === SyntaxKind.MultiLineCommentTrivia;
+    }
+
+    export function isPunctuation(n: Node): boolean {
+        return SyntaxKind.FirstPunctuation <= n.kind && n.kind <= SyntaxKind.LastPunctuation;
     }
 }

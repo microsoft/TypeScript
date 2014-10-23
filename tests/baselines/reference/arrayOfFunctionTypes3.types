@@ -2,8 +2,8 @@
 // valid uses of arrays of function types
 
 var x = [() => 1, () => { }];
->x : { (): void; }[]
->[() => 1, () => { }] : { (): void; }[]
+>x : (() => void)[]
+>[() => 1, () => { }] : (() => void)[]
 >() => 1 : () => number
 >() => { } : () => void
 
@@ -11,7 +11,7 @@ var r2 = x[0]();
 >r2 : void
 >x[0]() : void
 >x[0] : () => void
->x : { (): void; }[]
+>x : (() => void)[]
 
 class C {
 >C : C

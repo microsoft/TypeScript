@@ -28,10 +28,19 @@ goTo.marker('2');
 verify.quickInfoIs('(var) c1: {\n    name: string;\n    age: number;\n}[]');
 
 goTo.marker('3');
-verify.quickInfoIs('(var) c2: {}[]');
+verify.quickInfoIs('(var) c2: ({\n\
+    name: string;\n\
+    age: number;\n\
+    address: string;\n\
+} | {\n\
+    name: string;\n\
+    age: number;\n\
+    dob: Date;\n\
+})[]');
 
 goTo.marker('4');
 verify.quickInfoIs('(var) c2a: {\n    name: string;\n    age: number;\n}[]');
 
 goTo.marker('5');
 verify.quickInfoIs('(var) c3: I[]');
+

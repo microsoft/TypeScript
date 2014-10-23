@@ -1,4 +1,8 @@
 var sys = (function () {
+    var fileStream = new ActiveXObject("ADODB.Stream");
+    fileStream.Type = 2;
+    var binaryStream = new ActiveXObject("ADODB.Stream");
+    binaryStream.Type = 1;
     var args = [];
     for (var i = 0; i < WScript.Arguments.length; i++) {
         args[i] = WScript.Arguments.Item(i);
@@ -6,7 +10,24 @@ var sys = (function () {
     return {
         args: args,
         createObject: function (typeName) { return new ActiveXObject(typeName); },
-        write: function (s) { return WScript.StdOut.Write(s); }
+        write: function (s) {
+            WScript.StdOut.Write(s);
+        },
+        writeFile: function (fileName, data) {
+            fileStream.Open();
+            binaryStream.Open();
+            try {
+                fileStream.Charset = "utf-8";
+                fileStream.WriteText(data);
+                fileStream.Position = 3;
+                fileStream.CopyTo(binaryStream);
+                binaryStream.SaveToFile(fileName, 2);
+            }
+            finally {
+                binaryStream.Close();
+                fileStream.Close();
+            }
+        }
     };
 })();
 function convertDocumentToMarkdown(doc) {
@@ -149,6 +170,10 @@ function convertDocumentToMarkdown(doc) {
         lastInTable = inTable;
     }
     function writeDocument() {
+        var title = doc.builtInDocumentProperties.item(1) + "";
+        if (title.length) {
+            write("# " + title + "\n\n");
+        }
         for (var p = doc.paragraphs.first; p; p = p.next()) {
             writeParagraph(p);
         }
@@ -168,16 +193,19 @@ function convertDocumentToMarkdown(doc) {
     findReplace("^19 REF", {}, "[^&](#^&)", {});
     doc.fields.toggleShowCodes();
     writeDocument();
+    result = result.replace(/\x85/g, "\u2026");
+    result = result.replace(/\x96/g, "\u2013");
+    result = result.replace(/\x97/g, "\u2014");
     return result;
 }
 function main(args) {
-    if (args.length !== 1) {
-        sys.write("Syntax: word2md <filename>\n");
+    if (args.length !== 2) {
+        sys.write("Syntax: word2md <inputfile> <outputfile>\n");
         return;
     }
     var app = sys.createObject("Word.Application");
     var doc = app.documents.open(args[0]);
-    sys.write(convertDocumentToMarkdown(doc));
+    sys.writeFile(args[1], convertDocumentToMarkdown(doc));
     doc.close(false);
     app.quit();
 }

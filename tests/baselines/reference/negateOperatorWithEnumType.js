@@ -2,19 +2,19 @@
 // - operator on enum type
 
 enum ENUM { };
-enum ENUM1 { 1, 2, "" };
+enum ENUM1 { A, B, "" };
 
 // enum type var
 var ResultIsNumber1 = -ENUM;
 
 // expressions
-var ResultIsNumber2 = -ENUM1[1];
-var ResultIsNumber3 = -(ENUM1[1] + ENUM1[2]);
+var ResultIsNumber2 = -ENUM1["B"];
+var ResultIsNumber3 = -(ENUM1.B + ENUM1[""]);
 
 // miss assignment operators
 -ENUM;
 -ENUM1;
--ENUM1[1];
+-ENUM1["B"];
 -ENUM, ENUM1;
 
 //// [negateOperatorWithEnumType.js]
@@ -25,18 +25,18 @@ var ENUM;
 ;
 var ENUM1;
 (function (ENUM1) {
-    ENUM1[ENUM1["1"] = 0] = "1";
-    ENUM1[ENUM1["2"] = 1] = "2";
+    ENUM1[ENUM1["A"] = 0] = "A";
+    ENUM1[ENUM1["B"] = 1] = "B";
     ENUM1[ENUM1[""] = 2] = "";
 })(ENUM1 || (ENUM1 = {}));
 ;
 // enum type var
 var ResultIsNumber1 = -ENUM;
 // expressions
-var ResultIsNumber2 = -ENUM1[1];
-var ResultIsNumber3 = -(ENUM1[1] + ENUM1[2]);
+var ResultIsNumber2 = -ENUM1["B"];
+var ResultIsNumber3 = -(1 /* B */ + ENUM1[""]);
 // miss assignment operators
 -ENUM;
 -ENUM1;
--ENUM1[1];
+-ENUM1["B"];
 -ENUM, ENUM1;

@@ -12,4 +12,4 @@
 ////}
 
 goTo.marker();
-verify.quickInfoIs('');
+verify.quickInfoIs('any');
