@@ -1,5 +1,5 @@
 tests/cases/compiler/functionTypesLackingReturnTypes.ts(3,17): error TS1005: '=>' expected.
-tests/cases/compiler/functionTypesLackingReturnTypes.ts(7,15): error TS1005: '=>' expected.
+tests/cases/compiler/functionTypesLackingReturnTypes.ts(7,9): error TS2304: Cannot find name 'param'.
 
 
 ==== tests/cases/compiler/functionTypesLackingReturnTypes.ts (2 errors) ====
@@ -12,8 +12,8 @@ tests/cases/compiler/functionTypesLackingReturnTypes.ts(7,15): error TS1005: '=>
     
     // Error (no '=>')
     var g: (param);
-                  ~
-!!! error TS1005: '=>' expected.
+            ~~~~~
+!!! error TS2304: Cannot find name 'param'.
     
     // Okay
     var h: { () }

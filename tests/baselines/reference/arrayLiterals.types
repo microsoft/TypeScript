@@ -2,24 +2,18 @@
 // Empty array literal with no contextual type has type Undefined[]
 
 var arr1= [[], [1], ['']];
->arr1 : {}[]
->[[], [1], ['']] : {}[]
+>arr1 : (string[] | number[])[]
+>[[], [1], ['']] : (string[] | number[])[]
 >[] : undefined[]
 >[1] : number[]
 >[''] : string[]
 
-var arr1: {}[]; // Bug 825172: Error ({}[] does not match {}[]), but should be OK
->arr1 : {}[]
-
 var arr2 = [[null], [1], ['']];
->arr2 : {}[]
->[[null], [1], ['']] : {}[]
+>arr2 : (string[] | number[])[]
+>[[null], [1], ['']] : (string[] | number[])[]
 >[null] : null[]
 >[1] : number[]
 >[''] : string[]
-
-var arr2: {}[]; // Bug 825172: Error ({}[] does not match {}[]), but should be OK
->arr2 : {}[]
 
 
 // Array literal with elements of only EveryType E has type E[]
@@ -29,29 +23,17 @@ var stringArrArr = [[''], [""]];
 >[''] : string[]
 >[""] : string[]
 
-var stringArrArr: string[][];
->stringArrArr : string[][]
-
 var stringArr = ['', ""];
 >stringArr : string[]
 >['', ""] : string[]
-
-var stringArr: string[];
->stringArr : string[]
 
 var numberArr = [0, 0.0, 0x00, 1e1];
 >numberArr : number[]
 >[0, 0.0, 0x00, 1e1] : number[]
 
-var numberArr: number[];
->numberArr : number[]
-
 var boolArr = [false, true, false, true];
 >boolArr : boolean[]
 >[false, true, false, true] : boolean[]
-
-var boolArr: boolean[];
->boolArr : boolean[]
 
 class C { private p; }
 >C : C
@@ -64,10 +46,6 @@ var classArr = [new C(), new C()];
 >C : typeof C
 >new C() : C
 >C : typeof C
-
-var classArr: C[]; // Should be OK
->classArr : C[]
->C : C
 
 var classTypeArray = [C, C, C];
 >classTypeArray : typeof C[]
@@ -87,7 +65,7 @@ var context1: { [n: number]: { a: string; b: number; }; } = [{ a: '', b: 0, c: '
 >n : number
 >a : string
 >b : number
->[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : { a: string; b: number; }[]
+>[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
 >{ a: '', b: 0, c: '' } : { a: string; b: number; c: string; }
 >a : string
 >b : number
@@ -98,8 +76,8 @@ var context1: { [n: number]: { a: string; b: number; }; } = [{ a: '', b: 0, c: '
 >c : number
 
 var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
->context2 : {}[]
->[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : {}[]
+>context2 : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
+>[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
 >{ a: '', b: 0, c: '' } : { a: string; b: number; c: string; }
 >a : string
 >b : number
@@ -108,10 +86,6 @@ var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
 >a : string
 >b : number
 >c : number
-
-var context2: Array<{}>; // Should be OK
->context2 : {}[]
->Array : T[]
 
 // Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]
 class Base { private p; }
@@ -131,7 +105,7 @@ class Derived2 extends Base { private n };
 var context3: Base[] = [new Derived1(), new Derived2()];
 >context3 : Base[]
 >Base : Base
->[new Derived1(), new Derived2()] : Base[]
+>[new Derived1(), new Derived2()] : (Derived1 | Derived2)[]
 >new Derived1() : Derived1
 >Derived1 : typeof Derived1
 >new Derived2() : Derived2
@@ -141,7 +115,7 @@ var context3: Base[] = [new Derived1(), new Derived2()];
 var context4: Base[] = [new Derived1(), new Derived1()];
 >context4 : Base[]
 >Base : Base
->[new Derived1(), new Derived1()] : Base[]
+>[new Derived1(), new Derived1()] : Derived1[]
 >new Derived1() : Derived1
 >Derived1 : typeof Derived1
 >new Derived1() : Derived1

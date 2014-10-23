@@ -89,7 +89,7 @@ module ts {
         return array1.concat(array2);
     }
 
-    export function uniqueElements<T>(array: T[]): T[] {
+    export function deduplicate<T>(array: T[]): T[] {
         if (array) {
             var result: T[] = [];
             for (var i = 0, len = array.length; i < len; i++) {
@@ -239,7 +239,8 @@ module ts {
 
             messageText: text,
             category: message.category,
-            code: message.code
+            code: message.code,
+            isEarly: message.isEarly
         };
     }
 
@@ -258,7 +259,8 @@ module ts {
 
             messageText: text,
             category: message.category,
-            code: message.code
+            code: message.code,
+            isEarly: message.isEarly
         };
     }
 

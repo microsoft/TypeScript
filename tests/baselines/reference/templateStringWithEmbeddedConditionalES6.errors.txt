@@ -1,7 +1,0 @@
-tests/cases/conformance/es6/templates/templateStringWithEmbeddedConditionalES6.ts(1,16): error TS2367: No best common type exists between 'boolean' and 'string'.
-
-
-==== tests/cases/conformance/es6/templates/templateStringWithEmbeddedConditionalES6.ts (1 errors) ====
-    var x = `abc${ true ? false : " " }def`;
-                   ~~~~~~~~~~~~~~~~~~
-!!! error TS2367: No best common type exists between 'boolean' and 'string'.

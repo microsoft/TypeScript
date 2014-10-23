@@ -9,7 +9,7 @@ var ANY1;
 
 var ANY2: any[] = ["", ""];
 >ANY2 : any[]
->["", ""] : any[]
+>["", ""] : string[]
 
 var obj: () => {}
 >obj : () => {}

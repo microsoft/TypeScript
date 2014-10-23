@@ -1,4 +1,3 @@
-/// <reference path="diagnosticInformationMap.generated.ts"/>
 
 interface System {
     args: string[];
@@ -68,7 +67,7 @@ var sys: System = (function () {
                 return fileStream.ReadText();
             }
             catch (e) {
-                throw e.number === -2147024809 ? new Error(ts.Diagnostics.Unsupported_file_encoding.key) : e;
+                throw e;
             }
             finally {
                 fileStream.Close();

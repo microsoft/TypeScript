@@ -87,10 +87,11 @@ module ts {
                     }
                     // Report errors every position with duplicate declaration
                     // Report errors on previous encountered declarations
+                    var message = symbol.flags & SymbolFlags.BlockScopedVariable ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
                     forEach(symbol.declarations, (declaration) => {
-                        file.semanticErrors.push(createDiagnosticForNode(declaration.name, Diagnostics.Duplicate_identifier_0, getDisplayName(declaration)));
+                        file.semanticErrors.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
                     });
-                    file.semanticErrors.push(createDiagnosticForNode(node.name, Diagnostics.Duplicate_identifier_0, getDisplayName(node)));
+                    file.semanticErrors.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
 
                     symbol = createSymbol(0, name);
                 }
@@ -262,8 +263,8 @@ module ts {
         }
 
         function bindCatchVariableDeclaration(node: CatchBlock) {
-            var symbol = createSymbol(SymbolFlags.Variable, node.variable.text || "__missing");
-            addDeclarationToSymbol(symbol, node, SymbolFlags.Variable);
+            var symbol = createSymbol(SymbolFlags.FunctionScopedVariable, node.variable.text || "__missing");
+            addDeclarationToSymbol(symbol, node, SymbolFlags.FunctionScopedVariable);
             var saveParent = parent;
             var savedBlockScopeContainer = blockScopeContainer;
             parent = blockScopeContainer = node;
@@ -273,42 +274,40 @@ module ts {
         }
 
         function bindBlockScopedVariableDeclaration(node: Declaration) {
-            var symbolKind = SymbolFlags.Variable | SymbolFlags.BlockScoped;
             switch (blockScopeContainer.kind) {
                 case SyntaxKind.ModuleDeclaration:
-                    declareModuleMember(node, symbolKind, SymbolFlags.BlockScopedExcludes);
+                    declareModuleMember(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>container)) {
-                        declareModuleMember(node, symbolKind, SymbolFlags.BlockScopedExcludes);
+                        declareModuleMember(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
                         break;
                     }
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = {};
                     }
-                    declareSymbol(blockScopeContainer.locals, undefined, node, symbolKind, SymbolFlags.BlockScopedExcludes);
+                    declareSymbol(blockScopeContainer.locals, undefined, node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
             }
 
-            bindChildren(node, symbolKind, /*isBlockScopeContainer*/ false);
+            bindChildren(node, SymbolFlags.BlockScopedVariable, /*isBlockScopeContainer*/ false);
         }
 
         function bind(node: Node) {
-            var isBlockScopeContainer: boolean;
             node.parent = parent;
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.Parameter:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Variable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
+                    bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.VariableDeclaration:
                     if (node.flags & NodeFlags.BlockScoped) {
                         bindBlockScopedVariableDeclaration(<Declaration>node);
                     }
                     else {
-                        bindDeclaration(<Declaration>node, SymbolFlags.Variable, SymbolFlags.VariableExcludes, /*isBlockScopeContainer*/ false);
+                        bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes, /*isBlockScopeContainer*/ false);
                     }
                     break;
                 case SyntaxKind.Property:
@@ -383,16 +382,14 @@ module ts {
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.SwitchStatement:
-                    isBlockScopeContainer = true;
+                    bindChildren(node, 0 , true);
+                    break;
 
                 default:
                     var saveParent = parent;
-                    var savedBlockScopeContainer = blockScopeContainer;
                     parent = node;
-                    if (isBlockScopeContainer) blockScopeContainer = node;
                     forEachChild(node, bind);
                     parent = saveParent;
-                    blockScopeContainer = savedBlockScopeContainer;
             }
         }
     }

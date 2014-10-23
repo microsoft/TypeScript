@@ -61,9 +61,11 @@ class CompilerBaselineRunner extends RunnerBase {
             var otherFiles: { unitName: string; content: string }[];
             var harnessCompiler: Harness.Compiler.HarnessCompiler;
 
-            var declToBeCompiled: { unitName: string; content: string }[] = [];
-            var declOtherFiles: { unitName: string; content: string }[] = [];
-            var declResult: Harness.Compiler.CompilerResult;
+            var declFileCompilationResult: {
+                declInputFiles: { unitName: string; content: string }[];
+                declOtherFiles: { unitName: string; content: string }[];
+                declResult: Harness.Compiler.CompilerResult;
+            };
 
             var createNewInstance = false;
 
@@ -147,9 +149,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 toBeCompiled = undefined;
                 otherFiles = undefined;
                 harnessCompiler = undefined;
-                declToBeCompiled = undefined;
-                declOtherFiles = undefined;
-                declResult = undefined;
+                declFileCompilationResult = undefined;
             });
 
             function getByteOrderMarkText(file: Harness.Compiler.GeneratedFile): string {
@@ -173,61 +173,18 @@ class CompilerBaselineRunner extends RunnerBase {
 
             // Source maps?
             it('Correct sourcemap content for ' + fileName, () => {
-                if (result.sourceMapRecord) {
+                if (options.sourceMap) {
                     Harness.Baseline.runBaseline('Correct sourcemap content for ' + fileName, justName.replace(/\.ts$/, '.sourcemap.txt'), () => {
-                        return result.sourceMapRecord;
+                        return result.getSourceMapRecord();
                     });
                 }
             });
 
             // Compile .d.ts files
             it('Correct compiler generated.d.ts for ' + fileName, () => {
-                if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
-                    throw new Error('There were no errors and declFiles generated did not match number of js files generated');
-                }
-
-                // if the .d.ts is non-empty, confirm it compiles correctly as well
-                if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
-                    function addDtsFile(file: { unitName: string; content: string }, dtsFiles: { unitName: string; content: string }[]) {
-                        if (Harness.Compiler.isDTS(file.unitName)) {
-                            dtsFiles.push(file);
-                        }
-                        else {
-                            var declFile = findResultCodeFile(file.unitName);
-                            // Look if there is --out file corresponding to this ts file
-                            if (!declFile && options.out) {
-                                declFile = findResultCodeFile(options.out);
-                                if (!declFile || findUnit(declFile.fileName, declToBeCompiled) ||
-                                    findUnit(declFile.fileName, declOtherFiles)) {
-                                    return;
-                                }
-                            }
-
-                            if (declFile) {
-                                dtsFiles.push({ unitName: declFile.fileName, content: declFile.code });
-                                return;
-                            }
-                        }
-
-                        function findResultCodeFile(fileName: string) {
-                            return ts.forEach(result.declFilesCode,
-                                declFile => declFile.fileName === (fileName.substr(0, fileName.length - ".ts".length) + ".d.ts")
-                                    ? declFile : undefined);
-                        }
-
-                        function findUnit(fileName: string, units: { unitName: string; content: string }[]) {
-                            return ts.forEach(units, unit => unit.unitName === fileName ? unit : undefined);
-                        }
-                    }
-
-                    ts.forEach(toBeCompiled, file => addDtsFile(file, declToBeCompiled));
-                    ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-                    harnessCompiler.compileFiles(declToBeCompiled, declOtherFiles, function (compileResult) {
-                        declResult = compileResult;
-                    }, function (settings) {
-                            harnessCompiler.setCompilerSettings(tcSettings);
-                    });
-                }
+                declFileCompilationResult = harnessCompiler.compileDeclarationFiles(toBeCompiled, otherFiles, result, function (settings) {
+                    harnessCompiler.setCompilerSettings(tcSettings);
+                }, options);
             });
 
 
@@ -267,10 +224,10 @@ class CompilerBaselineRunner extends RunnerBase {
                             }
                         }
 
-                        if (declResult && declResult.errors.length) {
+                        if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
                             jsCode += '\r\n\r\n//// [DtsFileErrors]\r\n';
                             jsCode += '\r\n\r\n';
-                            jsCode += getErrorBaseline(declToBeCompiled, declOtherFiles, declResult);
+                            jsCode += getErrorBaseline(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles, declFileCompilationResult.declResult);
                         }
 
                         if (jsCode.length > 0) {

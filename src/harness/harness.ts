@@ -139,6 +139,7 @@ module Harness {
         deleteFile(filename: string): void;
         listFiles(path: string, filter: RegExp, options?: { recursive?: boolean }): string[];
         log(text: string): void;
+        getMemoryUsage? (): number;
     }
 
     module IOImpl {
@@ -274,6 +275,13 @@ module Harness {
                 }
 
                 return filesInFolder(path);
+            }
+
+            export var getMemoryUsage: typeof IO.getMemoryUsage = () => {
+                if (global.gc) {
+                    global.gc();
+                }
+                return process.memoryUsage().heapUsed;
             }
         }
 
@@ -686,7 +694,7 @@ module Harness {
                                 } else if (setting.value.toLowerCase() === 'es5') {
                                     options.target = ts.ScriptTarget.ES5;
                                 } else if (setting.value.toLowerCase() === 'es6') {
-                                        options.target = ts.ScriptTarget.ES6;
+                                    options.target = ts.ScriptTarget.ES6;
                                 } else {
                                     throw new Error('Unknown compile target ' + setting.value);
                                 }
@@ -793,9 +801,11 @@ module Harness {
                 var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
                 checker.checkProgram();
 
+                var hasEarlyErrors = checker.hasEarlyErrors();
+
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
-                if (!hadParseErrors) {
+                if (!hadParseErrors && !hasEarlyErrors) {
                     emitResult = checker.emitFiles();
                 }
 
@@ -806,14 +816,80 @@ module Harness {
                 });
                 this.lastErrors = errors;
 
-                var result = new CompilerResult(fileOutputs, errors, []);
-                // Covert the source Map data into the baseline
-                result.updateSourceMapRecord(program, emitResult ? emitResult.sourceMaps : undefined);
+                var result = new CompilerResult(fileOutputs, errors, program, sys.getCurrentDirectory(), emitResult ? emitResult.sourceMaps : undefined);
                 onComplete(result, checker);
 
                 // reset what newline means in case the last test changed it
                 sys.newLine = '\r\n';
                 return options;
+            }
+
+            public compileDeclarationFiles(inputFiles: { unitName: string; content: string; }[],
+                otherFiles: { unitName: string; content: string; }[],
+                result: CompilerResult,
+                settingsCallback?: (settings: ts.CompilerOptions) => void,
+                options?: ts.CompilerOptions) {
+                if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
+                    throw new Error('There were no errors and declFiles generated did not match number of js files generated');
+                }
+
+                // if the .d.ts is non-empty, confirm it compiles correctly as well
+                if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
+                    var declInputFiles: { unitName: string; content: string }[] = [];
+                    var declOtherFiles: { unitName: string; content: string }[] = [];
+                    var declResult: Harness.Compiler.CompilerResult;
+
+                    ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
+                    ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
+                    this.compileFiles(declInputFiles, declOtherFiles, function (compileResult) {
+                        declResult = compileResult;
+                    }, settingsCallback, options);
+
+                    return { declInputFiles: declInputFiles, declOtherFiles: declOtherFiles, declResult: declResult };
+                }
+
+                function addDtsFile(file: { unitName: string; content: string }, dtsFiles: { unitName: string; content: string }[]) {
+                    if (isDTS(file.unitName)) {
+                        dtsFiles.push(file);
+                    }
+                    else if (isTS(file.unitName)) {
+                        var declFile = findResultCodeFile(file.unitName);
+                        if (!findUnit(declFile.fileName, declInputFiles) && !findUnit(declFile.fileName, declOtherFiles)) {
+                            dtsFiles.push({ unitName: declFile.fileName, content: declFile.code });
+                        }
+                    }
+
+                    function findResultCodeFile(fileName: string) {
+                        var dTsFileName = ts.forEach(result.program.getSourceFiles(), sourceFile => {
+                            if (sourceFile.filename === fileName) {
+                                // Is this file going to be emitted separately
+                                var sourceFileName: string;
+                                if (ts.isExternalModule(sourceFile) || !options.out) {
+                                    if (options.outDir) {
+                                        var sourceFilePath = ts.getNormalizedPathFromPathComponents(ts.getNormalizedPathComponents(sourceFile.filename, result.currentDirectoryForProgram));
+                                        sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
+                                        sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
+                                    }
+                                    else {
+                                        sourceFileName = sourceFile.filename;
+                                    }
+                                }
+                                else {
+                                    // Goes to single --out file
+                                    sourceFileName = options.out;
+                                }
+
+                                return ts.removeFileExtension(sourceFileName) + ".d.ts";
+                            }
+                        });
+                        
+                        return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
+                    }
+
+                    function findUnit(fileName: string, units: { unitName: string; content: string; }[]) {
+                        return ts.forEach(units, unit => unit.unitName === fileName ? unit : undefined);
+                    }
+                }
             }
         }
 
@@ -950,10 +1026,6 @@ module Harness {
         }
         */
 
-        /** Recreate the harness compiler instance to its default settings */
-        export function recreate(options?: { useMinimalDefaultLib: boolean; noImplicitAny: boolean; }) {
-        }
-
         /** The harness' compiler instance used when tests are actually run. Reseting or changing settings of this compiler instance must be done within a test case (i.e., describe/it) */
         var harnessCompiler: HarnessCompiler;
 
@@ -993,6 +1065,10 @@ module Harness {
             return str.substr(str.length - end.length) === end;
         }
 
+        export function isTS(fileName: string) {
+            return stringEndsWith(fileName, '.ts');
+        }
+
         export function isDTS(fileName: string) {
             return stringEndsWith(fileName, '.d.ts');
         }
@@ -1011,10 +1087,10 @@ module Harness {
             public errors: HarnessDiagnostic[] = [];
             public declFilesCode: GeneratedFile[] = [];
             public sourceMaps: GeneratedFile[] = [];
-            public sourceMapRecord: string;
 
             /** @param fileResults an array of strings for the fileName and an ITextWriter with its code */
-            constructor(fileResults: GeneratedFile[], errors: HarnessDiagnostic[], sourceMapRecordLines: string[]) {
+            constructor(fileResults: GeneratedFile[], errors: HarnessDiagnostic[], public program: ts.Program,
+                public currentDirectoryForProgram: string, private sourceMapData: ts.SourceMapData[]) {
                 var lines: string[] = [];
 
                 fileResults.forEach(emittedFile => {
@@ -1032,12 +1108,11 @@ module Harness {
                 });
 
                 this.errors = errors;
-                this.sourceMapRecord = sourceMapRecordLines.join('\r\n');
             }
 
-            public updateSourceMapRecord(program: ts.Program, sourceMapData: ts.SourceMapData[]) {
-                if (sourceMapData) {
-                    this.sourceMapRecord = Harness.SourceMapRecoder.getSourceMapRecord(sourceMapData, program, this.files);
+            public getSourceMapRecord() {
+                if (this.sourceMapData) {
+                    return Harness.SourceMapRecoder.getSourceMapRecord(this.sourceMapData, this.program, this.files);
                 }
             }
 

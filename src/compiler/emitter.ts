@@ -4,8 +4,11 @@
 /// <reference path="parser.ts"/>
 
 module ts {
-    interface EmitTextWriter extends SymbolWriter {
+    interface EmitTextWriter {
         write(s: string): void;
+        writeLine(): void;
+        increaseIndent(): void;
+        decreaseIndent(): void;
         getText(): string;
         rawWrite(s: string): void;
         writeLiteral(s: string): void;
@@ -13,6 +16,9 @@ module ts {
         getLine(): number;
         getColumn(): number;
         getIndent(): number;
+    }
+
+    interface EmitTextWriterWithSymbolWriter extends EmitTextWriter, SymbolWriter{
     }
 
     var indentStrings: string[] = ["", "    "];
@@ -103,7 +109,7 @@ module ts {
             };
         }
 
-        function createTextWriter(trackSymbol: (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags)=> void): EmitTextWriter {
+        function createTextWriter(): EmitTextWriter {
             var output = "";
             var indent = 0;
             var lineStart = true;
@@ -149,17 +155,8 @@ module ts {
                 }
             }
 
-            function writeKind(text: string, kind: SymbolDisplayPartKind) {
-                write(text);
-            }
-            function writeSymbol(text: string, symbol: Symbol) {
-                write(text);
-            }
             return {
                 write: write,
-                trackSymbol: trackSymbol,
-                writeKind: writeKind,
-                writeSymbol: writeSymbol,
                 rawWrite: rawWrite,
                 writeLiteral: writeLiteral,
                 writeLine: writeLine,
@@ -170,7 +167,6 @@ module ts {
                 getLine: () => lineCount + 1,
                 getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
                 getText: () => output,
-                clear: () => { }
             };
         }
 
@@ -318,7 +314,7 @@ module ts {
         }
 
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
-            var writer = createTextWriter(trackSymbol);
+            var writer = createTextWriter();
             var write = writer.write;
             var writeLine = writer.writeLine;
             var increaseIndent = writer.increaseIndent;
@@ -373,8 +369,6 @@ module ts {
 
             /** Sourcemap data that will get encoded */
             var sourceMapData: SourceMapData;
-
-            function trackSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) { }
 
             function initializeEmitterWithSourceMaps() {
                 var sourceMapDir: string; // The directory in which sourcemap will be
@@ -2432,7 +2426,7 @@ module ts {
         }
 
         function emitDeclarations(jsFilePath: string, root?: SourceFile) {
-            var writer = createTextWriter(trackSymbol);
+            var writer = createTextWriterWithSymbolWriter();
             var write = writer.write;
             var writeLine = writer.writeLine;
             var increaseIndent = writer.increaseIndent;
@@ -2456,11 +2450,24 @@ module ts {
                 typeName?: Identifier
             }
 
+            function createTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
+                var writer = <EmitTextWriterWithSymbolWriter>createTextWriter();
+                writer.trackSymbol = trackSymbol;
+                writer.writeKeyword = writer.write;
+                writer.writeOperator = writer.write;
+                writer.writePunctuation = writer.write;
+                writer.writeSpace = writer.write;
+                writer.writeStringLiteral = writer.writeLiteral;
+                writer.writeParameter = writer.write;
+                writer.writeSymbol = writer.write;
+                return writer;
+            }
+
             function writeAsychronousImportDeclarations(importDeclarations: ImportDeclaration[]) {
                 var oldWriter = writer;
                 forEach(importDeclarations, aliasToWrite => {
                     var aliasEmitInfo = forEach(aliasDeclarationEmitInfo, declEmitInfo => declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined);
-                    writer = createTextWriter(trackSymbol);
+                    writer = createTextWriterWithSymbolWriter();
                     for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
                         writer.increaseIndent();
                     }
@@ -2987,7 +2994,7 @@ module ts {
                         }
                         return {
                             diagnosticMessage: diagnosticMessage,
-                            errorNode: node.parameters[0],
+                            errorNode: <Node>node.parameters[0],
                             typeName: node.name
                         };
                     }
@@ -3008,7 +3015,7 @@ module ts {
                         }
                         return {
                             diagnosticMessage: diagnosticMessage,
-                            errorNode: node.name,
+                            errorNode: <Node>node.name,
                             typeName: undefined
                         };
                     }
@@ -3359,11 +3366,14 @@ module ts {
         }
 
         var hasSemanticErrors = resolver.hasSemanticErrors();
+        var hasEarlyErrors = resolver.hasEarlyErrors(targetSourceFile);
 
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
-            emitJavaScript(jsFilePath, sourceFile);
-            if (!hasSemanticErrors && compilerOptions.declaration) {
-                emitDeclarations(jsFilePath, sourceFile);
+            if (!hasEarlyErrors) {
+                emitJavaScript(jsFilePath, sourceFile);
+                if (!hasSemanticErrors && compilerOptions.declaration) {
+                    emitDeclarations(jsFilePath, sourceFile);
+                }
             }
         }
 
@@ -3403,7 +3413,9 @@ module ts {
 
         // Check and update returnCode for syntactic and semantic
         var returnCode: EmitReturnStatus;
-        if (hasEmitterError) {
+        if (hasEarlyErrors) {
+            returnCode = EmitReturnStatus.AllOutputGenerationSkipped;
+        } else if (hasEmitterError) {
             returnCode = EmitReturnStatus.EmitErrorsEncountered;
         } else if (hasSemanticErrors && compilerOptions.declaration) {
             returnCode = EmitReturnStatus.DeclarationGenerationSkipped;

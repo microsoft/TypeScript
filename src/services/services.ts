@@ -575,7 +575,7 @@ module ts {
             return this.checker.getPropertyOfType(this, propertyName);
         }
         getApparentProperties(): Symbol[] {
-            return this.checker.getAugmentedPropertiesOfApparentType(this);
+            return this.checker.getAugmentedPropertiesOfType(this);
         }
         getCallSignatures(): Signature[] {
             return this.checker.getSignaturesOfType(this, SignatureKind.Call);
@@ -994,12 +994,37 @@ module ts {
         containerKind: string;
         containerName: string;
     }
-    
+
+    export enum SymbolDisplayPartKind {
+        aliasName,
+        className,
+        enumName,
+        fieldName,
+        interfaceName,
+        keyword,
+        lineBreak,
+        numericLiteral,
+        stringLiteral,
+        localName,
+        methodName,
+        moduleName,
+        operator,
+        parameterName,
+        propertyName,
+        punctuation,
+        space,
+        text,
+        typeParameterName,
+        enumMemberName,
+        functionName,
+        regularExpressionLiteral,
+    }
+
     export interface SymbolDisplayPart {
         text: string;
         kind: string;
     }
-
+    
     export interface QuickInfo {
         kind: string;
         kindModifiers: string;
@@ -1210,7 +1235,9 @@ module ts {
 
         static label = "label";
 
-        static alias = "alias"
+        static alias = "alias";
+
+        static constantElement = "constant";
     }
 
     export class ScriptElementKindModifier {
@@ -1306,7 +1333,12 @@ module ts {
         resetWriter();
         return {
             displayParts: () => displayParts,
-            writeKind: writeKind,
+            writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
+            writeOperator: text => writeKind(text, SymbolDisplayPartKind.operator),
+            writePunctuation: text => writeKind(text, SymbolDisplayPartKind.punctuation),
+            writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
+            writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
+            writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
             writeSymbol: writeSymbol,
             writeLine: writeLine,
             increaseIndent: () => { indent++; },
@@ -1430,7 +1462,7 @@ module ts {
         }
     }
 
-    function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
+    export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
         writeDisplayParts(displayPartWriter);
         var result = displayPartWriter.displayParts();
         displayPartWriter.clear();
@@ -1439,19 +1471,19 @@ module ts {
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typechecker.writeType(type, writer, enclosingDeclaration, flags);
+            typechecker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         });
     }
 
     export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typeChecker.writeSymbol(symbol, writer, enclosingDeclaration, meaning, flags);
+            typeChecker.getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning, flags);
         });
     }
 
     function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[]{
         return mapToDisplayParts(writer => {
-            typechecker.writeSignature(signature, writer, enclosingDeclaration, flags);
+            typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
         });
     }
 
@@ -2250,7 +2282,7 @@ module ts {
             return undefined;
         }
 
-        function createCompletionEntry(symbol: Symbol): CompletionEntry {
+        function createCompletionEntry(symbol: Symbol, typeChecker: TypeChecker): CompletionEntry {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
@@ -2259,9 +2291,13 @@ module ts {
                 return undefined;
             }
 
+            // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
+            //               which is permissible given that it is backwards compatible; but really we should consider
+            //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
+            //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
             return {
                 name: displayName,
-                kind: getSymbolKind(symbol),
+                kind: getSymbolKind(symbol, typeChecker),
                 kindModifiers: getSymbolModifiers(symbol)
             };
         }
@@ -2269,7 +2305,7 @@ module ts {
         function getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
                 forEach(symbols, symbol => {
-                    var entry = createCompletionEntry(symbol);
+                    var entry = createCompletionEntry(symbol, session.typeChecker);
                     if (entry && !lookUp(session.symbols, entry.name)) {
                         session.entries.push(entry);
                         session.symbols[entry.name] = symbol;
@@ -2535,10 +2571,9 @@ module ts {
                 }
 
                 var type = typeInfoResolver.getTypeOfNode(mappedNode);
-                var apparentType = type && typeInfoResolver.getApparentType(type);
-                if (apparentType) {
+                if (type) {
                     // Filter private properties
-                    forEach(apparentType.getApparentProperties(), symbol => {
+                    forEach(type.getApparentProperties(), symbol => {
                         if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(mappedNode.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
@@ -2608,12 +2643,12 @@ module ts {
             if (symbol) {
                 var type = session.typeChecker.getTypeOfSymbol(symbol);
                 Debug.assert(type, "Could not find type for symbol");
-                var completionEntry = createCompletionEntry(symbol);
+                var completionEntry = createCompletionEntry(symbol, session.typeChecker);
                 // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
                 //               which is permissible given that it is backwards compatible; but really we should consider
                 //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
                 //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
-                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location);
+                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), session.location, session.typeChecker, session.location, SemanticMeaning.All);
                 return {
                     name: entryName,
                     kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
@@ -2657,15 +2692,15 @@ module ts {
         }
 
         // TODO(drosen): use contextual SemanticMeaning.
-        function getSymbolKind(symbol: Symbol): string {
-            var flags = typeInfoResolver.getRootSymbol(symbol).getFlags();
+        function getSymbolKind(symbol: Symbol, typeResolver: TypeChecker): string {
+            var flags = symbol.getFlags();
 
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
             if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
             
-            var result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags);
+            var result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags, typeResolver);
             if (result === ScriptElementKind.unknown) {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
                 if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
@@ -2675,22 +2710,42 @@ module ts {
             return result;
         }
 
-        function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol: Symbol, flags: SymbolFlags) {
+        function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol: Symbol, flags: SymbolFlags, typeResolver: TypeChecker) {
+            if (typeResolver.isUndefinedSymbol(symbol)) {
+                return ScriptElementKind.variableElement;
+            }
+            if (typeResolver.isArgumentsSymbol(symbol)) {
+                return ScriptElementKind.localVariableElement;
+            }
             if (flags & SymbolFlags.Variable) {
                 if (isFirstDeclarationOfSymbolParameter(symbol)) {
                     return ScriptElementKind.parameterElement;
                 }
+                else if(symbol.valueDeclaration && symbol.valueDeclaration.flags & NodeFlags.Const) {
+                    return ScriptElementKind.constantElement;
+                }
                 return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
-            }
-            if (flags & SymbolFlags.Undefined) {
-                return ScriptElementKind.variableElement;
             }
             if (flags & SymbolFlags.Function) return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
             if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
             if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
             if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
-            if (flags & SymbolFlags.Property) return ScriptElementKind.memberVariableElement;
             if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
+
+            if (flags & SymbolFlags.Property) {
+                if (flags & SymbolFlags.UnionProperty) {
+                    return forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
+                        var rootSymbolFlags = rootSymbol.getFlags();
+                        if (rootSymbolFlags & SymbolFlags.Property) {
+                            return ScriptElementKind.memberVariableElement;
+                        }
+                        if (rootSymbolFlags & SymbolFlags.GetAccessor) return ScriptElementKind.memberVariableElement;
+                        if (rootSymbolFlags & SymbolFlags.SetAccessor) return ScriptElementKind.memberVariableElement;
+                        Debug.assert(rootSymbolFlags & SymbolFlags.Method);
+                    }) || ScriptElementKind.memberFunctionElement;
+                }
+                return ScriptElementKind.memberVariableElement;
+            }
 
             return ScriptElementKind.unknown;
         }
@@ -2714,7 +2769,7 @@ module ts {
                 case SyntaxKind.ClassDeclaration: return ScriptElementKind.classElement;
                 case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
                 case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
-                case SyntaxKind.VariableDeclaration: return ScriptElementKind.variableElement;
+                case SyntaxKind.VariableDeclaration: return node.flags & NodeFlags.Const ? ScriptElementKind.constantElement: ScriptElementKind.variableElement;
                 case SyntaxKind.FunctionDeclaration: return ScriptElementKind.functionElement;
                 case SyntaxKind.GetAccessor: return ScriptElementKind.memberGetAccessorElement;
                 case SyntaxKind.SetAccessor: return ScriptElementKind.memberSetAccessorElement;
@@ -2737,26 +2792,20 @@ module ts {
                 : ScriptElementKindModifier.none;
         }
 
-        // TODO(drosen): use contextual SemanticMeaning.
-        function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol,
-                                                                sourceFile: SourceFile,
-                                                                enclosingDeclaration: Node,
-                                                                typeResolver: TypeChecker,
-                                                                location: Node) {
+        function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
+            typeResolver: TypeChecker, location: Node,
+            // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
+            semanticMeaning = getMeaningFromLocation(location)) {
             var displayParts: SymbolDisplayPart[] = [];
             var documentation: SymbolDisplayPart[];
-            var symbolFlags = typeResolver.getRootSymbol(symbol).flags;
-            var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags);
+            var symbolFlags = symbol.flags;
+            var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, typeResolver);
             var hasAddedSymbolInfo: boolean;
             // Class at constructor site need to be shown as constructor apart from property,method, vars
-            if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Signature || symbolFlags & SymbolFlags.Class) {
+            if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Import) {
                 // If it is accessor they are allowed only if location is at name of the accessor
                 if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
                     symbolKind = ScriptElementKind.memberVariableElement;
-                }
-                else if (symbol.name === "undefined") {
-                    // undefined is symbol and not property
-                    symbolKind = ScriptElementKind.variableElement;
                 }
 
                 var type = typeResolver.getTypeOfSymbol(symbol);
@@ -2790,6 +2839,18 @@ module ts {
                                 symbolKind = ScriptElementKind.constructorImplementationElement;
                                 addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
                             }
+                            else if (symbolFlags & SymbolFlags.Import) {
+                                symbolKind = ScriptElementKind.alias;
+                                displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                                displayParts.push(textPart(symbolKind));
+                                displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                                displayParts.push(spacePart());
+                                if (useConstructSignatures) {
+                                    displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                                    displayParts.push(spacePart());
+                                }
+                                addFullSymbolName(symbol);
+                            }
                             else {
                                 addPrefixForAnyFunctionOrVar(symbol, symbolKind);
                             }
@@ -2797,6 +2858,7 @@ module ts {
                             switch (symbolKind) {
                                 case ScriptElementKind.memberVariableElement:
                                 case ScriptElementKind.variableElement:
+                                case ScriptElementKind.constantElement:
                                 case ScriptElementKind.parameterElement:
                                 case ScriptElementKind.localVariableElement:
                                     // If it is call or construct signature of lambda's write type name
@@ -2847,45 +2909,44 @@ module ts {
                     }
                 }
             }
-
             if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                addFullSymbolName(symbol);
                 writeTypeParametersOfSymbol(symbol, sourceFile);
             }
-            if (symbolFlags & SymbolFlags.Interface) {
+            if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                addFullSymbolName(symbol);
                 writeTypeParametersOfSymbol(symbol, sourceFile);
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.EnumKeyword));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
+                addFullSymbolName(symbol);
             }
             if (symbolFlags & SymbolFlags.Module) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.ModuleKeyword));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
+                addFullSymbolName(symbol);
             }
-            if (symbolFlags & SymbolFlags.TypeParameter) {
+            if ((symbolFlags & SymbolFlags.TypeParameter) && (semanticMeaning & SemanticMeaning.Type)) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                 displayParts.push(textPart("type parameter"));
                 displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, enclosingDeclaration));
+                addFullSymbolName(symbol);
                 displayParts.push(spacePart());
                 displayParts.push(keywordPart(SyntaxKind.InKeyword));
                 displayParts.push(spacePart());
                 if (symbol.parent) {
                     // Class/Interface type parameter
-                    displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol.parent, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments))
+                    addFullSymbolName(symbol.parent, enclosingDeclaration);
                     writeTypeParametersOfSymbol(symbol.parent, enclosingDeclaration);
                 }
                 else {
@@ -2897,7 +2958,7 @@ module ts {
                         displayParts.push(spacePart());
                     }
                     else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
-                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, signatureDeclaration.symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments))
+                        addFullSymbolName(signatureDeclaration.symbol);
                     }
                     displayParts.push.apply(displayParts, signatureToDisplayParts(typeResolver, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 }
@@ -2917,24 +2978,43 @@ module ts {
             }
             if (symbolFlags & SymbolFlags.Import) {
                 addNewLineIfDisplayPartsExist();
-                displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                displayParts.push(textPart("alias"));
-                displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile));
+                addFullSymbolName(symbol);
+                displayParts.push(spacePart());
+                displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                displayParts.push(spacePart());
+                ts.forEach(symbol.declarations, declaration => {
+                    if (declaration.kind === SyntaxKind.ImportDeclaration) {
+                        var importDeclaration = <ImportDeclaration>declaration;
+                        if (importDeclaration.externalModuleName) {
+                            displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
+                            displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                            displayParts.push(displayPart(getTextOfNode(importDeclaration.externalModuleName), SymbolDisplayPartKind.stringLiteral));
+                            displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                        }
+                        else {
+                            var internalAliasSymbol = typeResolver.getSymbolInfo(importDeclaration.entityName);
+                            addFullSymbolName(internalAliasSymbol, enclosingDeclaration);
+                        }
+                        return true;
+                    }
+                });
             }
             if (!hasAddedSymbolInfo) {
                 if (symbolKind !== ScriptElementKind.unknown) {
                     if (type) {
                         addPrefixForAnyFunctionOrVar(symbol, symbolKind);
+                        // For properties, variables and local vars: show the type
                         if (symbolKind === ScriptElementKind.memberVariableElement ||
-                            symbolFlags & SymbolFlags.Variable) {
+                            symbolFlags & SymbolFlags.Variable ||
+                            symbolKind === ScriptElementKind.localVariableElement) {
                             displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                             displayParts.push(spacePart());
                             // If the type is type parameter, format it specially
                             if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
                                 var typeParameterParts = mapToDisplayParts(writer => {
-                                    typeResolver.writeTypeParameter(<TypeParameter>type, writer, enclosingDeclaration);
+                                    typeResolver.getSymbolDisplayBuilder().buildTypeParameterDisplay(<TypeParameter>type, writer, enclosingDeclaration);
                                 });
                                 displayParts.push.apply(displayParts, typeParameterParts);
                             }
@@ -2946,14 +3026,15 @@ module ts {
                             symbolFlags & SymbolFlags.Method ||
                             symbolFlags & SymbolFlags.Constructor ||
                             symbolFlags & SymbolFlags.Signature ||
-                            symbolFlags & SymbolFlags.Accessor) {
+                            symbolFlags & SymbolFlags.Accessor || 
+                            symbolKind === ScriptElementKind.memberFunctionElement) {
                             var allSignatures = type.getCallSignatures();
                             addSignatureDisplayParts(allSignatures[0], allSignatures);
                         }
                     }
                 }
                 else {
-                    symbolKind = getSymbolKind(symbol);
+                    symbolKind = getSymbolKind(symbol, typeResolver);
                 }
             }
 
@@ -2969,6 +3050,12 @@ module ts {
                 }
             }
 
+            function addFullSymbolName(symbol: Symbol, enclosingDeclaration?: Node) {
+                var fullSymbolDisplayParts = symbolToDisplayParts(typeResolver, symbol, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
+                    SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing);
+                displayParts.push.apply(displayParts, fullSymbolDisplayParts);
+            }
+
             function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
                 addNewLineIfDisplayPartsExist();
                 if (symbolKind) {
@@ -2976,8 +3063,7 @@ module ts {
                     displayParts.push(textPart(symbolKind));
                     displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                     displayParts.push(spacePart());
-                    // Write type parameters of class/Interface if it is property/method of the generic class/interface
-                    displayParts.push.apply(displayParts, symbolToDisplayParts(typeResolver, symbol, sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                    addFullSymbolName(symbol);
                 }
             }
 
@@ -2997,7 +3083,7 @@ module ts {
 
             function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
                 var typeParameterParts = mapToDisplayParts(writer => {
-                    typeResolver.writeTypeParametersOfSymbol(symbol, writer, enclosingDeclaration);
+                    typeResolver.getSymbolDisplayBuilder().buildTypeParameterDisplayFromSymbol(symbol, writer, enclosingDeclaration);
                 });
                 displayParts.push.apply(displayParts, typeParameterParts);
             }
@@ -3015,7 +3101,6 @@ module ts {
 
             var symbol = typeInfoResolver.getSymbolInfo(node);
             if (!symbol) {
-                
                 // Try getting just type at this position and show
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
@@ -3023,7 +3108,7 @@ module ts {
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
                     case SyntaxKind.SuperKeyword:
-                        // For the identifiers/this/usper etc get the type at position
+                        // For the identifiers/this/super etc get the type at position
                         var type = typeInfoResolver.getTypeOfNode(node);
                         if (type) {
                             return {
@@ -3050,7 +3135,7 @@ module ts {
         }
 
         /// Goto definition
-        function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[]{
+        function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[] {
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
                 return {
                     fileName: node.getSourceFile().filename,
@@ -3082,7 +3167,7 @@ module ts {
                     result.push(getDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
                     return true;
                 }
-                
+
                 return false;
             }
 
@@ -3146,7 +3231,7 @@ module ts {
 
             // Could not find a symbol e.g. node is string or number keyword,
             // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-            if (!symbol || !(symbol.getDeclarations())) {
+            if (!symbol) {
                 return undefined;
             }
 
@@ -3154,7 +3239,7 @@ module ts {
 
             var declarations = symbol.getDeclarations();
             var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            var symbolKind = getSymbolKind(symbol);
+            var symbolKind = getSymbolKind(symbol, typeInfoResolver);
             var containerSymbol = symbol.parent;
             var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
 
@@ -3679,18 +3764,20 @@ module ts {
                 return [getReferenceEntryFromNode(node)];
             }
 
-            // the symbol was an internal symbol and does not have a declaration e.g.undefined symbol
-            if (!symbol.getDeclarations()) {
+            var declarations = symbol.declarations;
+
+            // The symbol was an internal symbol and does not have a declaration e.g.undefined symbol
+            if (!declarations || !declarations.length) {
                 return undefined;
             }
 
             var result: ReferenceEntry[];
 
             // Compute the meaning from the location and the symbol it references
-            var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.getDeclarations());
+            var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
             // Get the text to search for, we need to normalize it as external module names will have quote
-            var symbolName = getNormalizedSymbolName(symbol);
+            var symbolName = getNormalizedSymbolName(symbol.name, declarations);
 
             // Get syntactic diagnostics
             var scope = getSymbolScope(symbol);
@@ -3712,15 +3799,15 @@ module ts {
 
             return result;
 
-            function getNormalizedSymbolName(symbol: Symbol): string {
+            function getNormalizedSymbolName(symbolName: string, declarations: Declaration[]): string {
                 // Special case for function expressions, whose names are solely local to their bodies.
-                var functionExpression = getDeclarationOfKind(symbol, SyntaxKind.FunctionExpression);
+                var functionExpression = forEach(declarations, d => d.kind === SyntaxKind.FunctionExpression ? d : undefined);
 
                 if (functionExpression && functionExpression.name) {
                     var name = functionExpression.name.text;
                 }
                 else {
-                    var name = symbol.name;
+                    var name = symbolName;
                 }
 
                 var length = name.length;
@@ -3747,22 +3834,24 @@ module ts {
                 var scope: Node = undefined;
 
                 var declarations = symbol.getDeclarations();
-                for (var i = 0, n = declarations.length; i < n; i++) {
-                    var container = getContainerNode(declarations[i]);
+                if (declarations) {
+                    for (var i = 0, n = declarations.length; i < n; i++) {
+                        var container = getContainerNode(declarations[i]);
 
-                    if (scope && scope !== container) {
-                        // Different declarations have different containers, bail out
-                        return undefined;
+                        if (scope && scope !== container) {
+                            // Different declarations have different containers, bail out
+                            return undefined;
+                        }
+
+                        if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
+                            // This is a global variable and not an external module, any declaration defined
+                            // within this scope is visible outside the file
+                            return undefined;
+                        }
+
+                        // The search scope is the container node
+                        scope = container;
                     }
-
-                    if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
-                        // This is a global variable and not an external module, any declaration defined
-                        // within this scope is visible outside the file
-                        return undefined;
-                    }
-
-                    // The search scope is the container node
-                    scope = container;
                 }
 
                 return scope;
@@ -3898,14 +3987,7 @@ module ts {
                         }
 
                         var referenceSymbol = typeInfoResolver.getSymbolInfo(referenceLocation);
-
-                        // Could not find a symbol e.g. node is string or number keyword,
-                        // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-                        if (!referenceSymbol || !(referenceSymbol.getDeclarations())) {
-                            return;
-                        }
-
-                        if (isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
+                        if (referenceSymbol && isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
                             result.push(getReferenceEntryFromNode(referenceLocation));
                         }
                     });
@@ -4067,24 +4149,27 @@ module ts {
                 // The search set contains at least the current symbol
                 var result = [symbol];
 
-                // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
-                var rootSymbol = typeInfoResolver.getRootSymbol(symbol);
-                if (rootSymbol && rootSymbol !== symbol) {
-                    result.push(rootSymbol);
-                }
-
                 // If the location is in a context sensitive location (i.e. in an object literal) try
                 // to get a contextual type for it, and add the property symbol from the contextual
                 // type to the search set
                 if (isNameOfPropertyAssignment(location)) {
-                    var symbolFromContextualType = getPropertySymbolFromContextualType(location);
-                    if (symbolFromContextualType) result.push(typeInfoResolver.getRootSymbol(symbolFromContextualType));
+                    forEach(getPropertySymbolsFromContextualType(location), contextualSymbol => {
+                        result.push.apply(result, typeInfoResolver.getRootSymbols(contextualSymbol));
+                    });
                 }
 
-                // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
-                if (symbol.parent && symbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    getPropertySymbolsFromBaseTypes(symbol.parent, symbol.getName(), result);
-                }
+                // If this is a union property, add all the symbols from all its source symbols in all unioned types.
+                // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
+                forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
+                    if (rootSymbol !== symbol) {
+                        result.push(rootSymbol);
+                    }
+
+                    // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
+                    if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
+                    }
+                });
 
                 return result;
             }
@@ -4120,11 +4205,7 @@ module ts {
             }
 
             function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
-                // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
-                var referenceSymbolTarget = typeInfoResolver.getRootSymbol(referenceSymbol);
-
-                // if it is in the list, then we are done
-                if (searchSymbols.indexOf(referenceSymbolTarget) >= 0) {
+                if (searchSymbols.indexOf(referenceSymbol) >= 0) {
                     return true;
                 }
 
@@ -4132,29 +4213,61 @@ module ts {
                 // object literal, lookup the property symbol in the contextual type, and use this symbol to
                 // compare to our searchSymbol
                 if (isNameOfPropertyAssignment(referenceLocation)) {
-                    var symbolFromContextualType = getPropertySymbolFromContextualType(referenceLocation);
-                    if (symbolFromContextualType && searchSymbols.indexOf(typeInfoResolver.getRootSymbol(symbolFromContextualType)) >= 0) {
+                    return forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
+                        return forEach(typeInfoResolver.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0);
+                    });
+                }
+
+                // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
+                // Or a union property, use its underlying unioned symbols
+                return forEach(typeInfoResolver.getRootSymbols(referenceSymbol), rootSymbol => {
+                    // if it is in the list, then we are done
+                    if (searchSymbols.indexOf(rootSymbol) >= 0) {
                         return true;
                     }
-                }
 
-                // Finally, try all properties with the same name in any type the containing type extend or implemented, and 
-                // see if any is in the list
-                if (referenceSymbol.parent && referenceSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    var result: Symbol[] = [];
-                    getPropertySymbolsFromBaseTypes(referenceSymbol.parent, referenceSymbol.getName(), result);
-                    return forEach(result, s => searchSymbols.indexOf(s) >= 0);
-                }
+                    // Finally, try all properties with the same name in any type the containing type extended or implemented, and 
+                    // see if any is in the list
+                    if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                        var result: Symbol[] = [];
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
+                        return forEach(result, s => searchSymbols.indexOf(s) >= 0);
+                    }
 
-                return false;
+                    return false;
+                });
             }
 
-            function getPropertySymbolFromContextualType(node: Node): Symbol {
+            function getPropertySymbolsFromContextualType(node: Node): Symbol[] {
                 if (isNameOfPropertyAssignment(node)) {
                     var objectLiteral = node.parent.parent;
                     var contextualType = typeInfoResolver.getContextualType(objectLiteral);
+                    var name = (<Identifier>node).text;
                     if (contextualType) {
-                        return typeInfoResolver.getPropertyOfType(contextualType, (<Identifier>node).text);
+                        if (contextualType.flags & TypeFlags.Union) {
+                            // This is a union type, first see if the property we are looking for is a union property (i.e. exists in all types)
+                            // if not, search the constituent types for the property
+                            var unionProperty = contextualType.getProperty(name)
+                            if (unionProperty) {
+                                return [unionProperty];
+                            }
+                            else {
+                                var result: Symbol[] = [];
+                                forEach((<UnionType>contextualType).types, t => {
+                                    var symbol = t.getProperty(name);
+                                    if (symbol) {
+                                        result.push(symbol);
+                                    }
+                                });
+                                return result;
+                            }
+                        }
+                        else {
+                            var symbol = contextualType.getProperty(name);
+                            if (symbol) {
+                                return [symbol];
+                            }
+                        }
                     }
                 }
                 return undefined;
@@ -4656,7 +4769,6 @@ module ts {
             function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning) {
                 var flags = symbol.getFlags();
 
-                // TODO(drosen): use meaningAtPosition.
                 if (flags & SymbolFlags.Class) {
                     return ClassificationTypeNames.className;
                 }
@@ -4672,10 +4784,25 @@ module ts {
                     }
                 }
                 else if (flags & SymbolFlags.Module) {
-                    return ClassificationTypeNames.moduleName;
+                    // Only classify a module as such if
+                    //  - It appears in a namespace context.
+                    //  - There exists a module declaration which actually impacts the value side.
+                    if (meaningAtPosition & SemanticMeaning.Namespace ||
+                        (meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol))) {
+                        return ClassificationTypeNames.moduleName;
+                    }
                 }
 
                 return undefined;
+
+                /**
+                 * Returns true if there exists a module that introduces entities on the value side.
+                 */
+                function hasValueSideModule(symbol: Symbol): boolean {
+                    return forEach(symbol.declarations, declaration => {
+                        return declaration.kind === SyntaxKind.ModuleDeclaration && isInstantiated(declaration);
+                    });
+                }
             }
 
             function processNode(node: Node) {
@@ -4705,115 +4832,99 @@ module ts {
             var sourceFile = getCurrentSourceFile(fileName);
 
             var result: ClassifiedSpan[] = [];
-            processElement(sourceFile.getSourceUnit());
+            processElement(sourceFile);
 
             return result;
 
-            function classifyTrivia(trivia: TypeScript.ISyntaxTrivia) {
-                if (trivia.isComment() && span.intersectsWith(trivia.fullStart(), trivia.fullWidth())) {
+            function classifyComment(comment: CommentRange) {
+                var width = comment.end - comment.pos;
+                if (span.intersectsWith(comment.pos, width)) {
                     result.push({
-                        textSpan: new TypeScript.TextSpan(trivia.fullStart(), trivia.fullWidth()),
+                        textSpan: new TypeScript.TextSpan(comment.pos, width),
                         classificationType: ClassificationTypeNames.comment
                     });
                 }
             }
 
-            function classifyTriviaList(trivia: TypeScript.ISyntaxTriviaList) {
-                for (var i = 0, n = trivia.count(); i < n; i++) {
-                    classifyTrivia(trivia.syntaxTriviaAt(i));
-                }
-            }
+            function classifyToken(token: Node): void {
+                forEach(getLeadingCommentRanges(sourceFile.text, token.getFullStart()), classifyComment);
 
-            function classifyToken(token: TypeScript.ISyntaxToken) {
-                if (token.hasLeadingComment()) {
-                    classifyTriviaList(token.leadingTrivia());
-                }
-
-                if (TypeScript.width(token) > 0) {
+                if (token.getWidth() > 0) {
                     var type = classifyTokenType(token);
                     if (type) {
                         result.push({
-                            textSpan: new TypeScript.TextSpan(TypeScript.start(token), TypeScript.width(token)),
+                            textSpan: new TypeScript.TextSpan(token.getStart(), token.getWidth()),
                             classificationType: type
                         });
                     }
                 }
 
-                if (token.hasTrailingComment()) {
-                    classifyTriviaList(token.trailingTrivia());
-                }
+                forEach(getTrailingCommentRanges(sourceFile.text, token.getEnd()), classifyComment);
             }
 
-            function classifyTokenType(token: TypeScript.ISyntaxToken): string {
-                var tokenKind = token.kind();
-                if (TypeScript.SyntaxFacts.isAnyKeyword(token.kind())) {
+            function classifyTokenType(token: Node): string {
+                var tokenKind = token.kind;
+                if (isKeyword(tokenKind)) {
                     return ClassificationTypeNames.keyword;
                 }
 
-                // Special case < and >  If they appear in a generic context they are punctation,
+                // Special case < and >  If they appear in a generic context they are punctuation,
                 // not operators.
-                if (tokenKind === TypeScript.SyntaxKind.LessThanToken || tokenKind === TypeScript.SyntaxKind.GreaterThanToken) {
-                    var tokenParentKind = token.parent.kind();
-                    if (tokenParentKind === TypeScript.SyntaxKind.TypeArgumentList ||
-                        tokenParentKind === TypeScript.SyntaxKind.TypeParameterList) {
-
+                if (tokenKind === SyntaxKind.LessThanToken || tokenKind === SyntaxKind.GreaterThanToken) {
+                    // If the node owning the token has a type argument list or type parameter list, then
+                    // we can effectively assume that a '<' and '>' belong to those lists.
+                    if (getTypeArgumentOrTypeParameterList(token.parent)) {
                         return ClassificationTypeNames.punctuation;
                     }
                 }
 
-                if (TypeScript.SyntaxFacts.isBinaryExpressionOperatorToken(tokenKind) ||
-                    TypeScript.SyntaxFacts.isPrefixUnaryExpressionOperatorToken(tokenKind)) {
-                    return ClassificationTypeNames.operator;
+                if (isPunctuation(token)) {
+                    // the '=' in a variable declaration is special cased here.
+                    if (token.parent.kind === SyntaxKind.BinaryExpression ||
+                        token.parent.kind === SyntaxKind.VariableDeclaration ||
+                        token.parent.kind === SyntaxKind.PrefixOperator ||
+                        token.parent.kind === SyntaxKind.PostfixOperator ||
+                        token.parent.kind === SyntaxKind.ConditionalExpression) {
+                        return ClassificationTypeNames.operator;
+                    }
+                    else {
+                        return ClassificationTypeNames.punctuation;
+                    }
                 }
-                else if (TypeScript.SyntaxFacts.isAnyPunctuation(tokenKind)) {
-                    return ClassificationTypeNames.punctuation;
-                }
-                else if (tokenKind === TypeScript.SyntaxKind.NumericLiteral) {
+                else if (tokenKind === SyntaxKind.NumericLiteral) {
                     return ClassificationTypeNames.numericLiteral;
                 }
-                else if (tokenKind === TypeScript.SyntaxKind.StringLiteral) {
+                else if (tokenKind === SyntaxKind.StringLiteral) {
                     return ClassificationTypeNames.stringLiteral;
                 }
-                else if (tokenKind === TypeScript.SyntaxKind.RegularExpressionLiteral) {
-                    // TODO: we shoudl get another classification type for these literals.
+                else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
+                    // TODO: we should get another classification type for these literals.
                     return ClassificationTypeNames.stringLiteral;
                 }
-                else if (tokenKind === TypeScript.SyntaxKind.IdentifierName) {
-                    var current: TypeScript.ISyntaxNodeOrToken = token;
-                    var parent = token.parent;
-                    while (parent.kind() === TypeScript.SyntaxKind.QualifiedName) {
-                        current = parent;
-                        parent = parent.parent;
-                    }
-
-                    switch (parent.kind()) {
-                        case TypeScript.SyntaxKind.SimplePropertyAssignment:
-                            if ((<TypeScript.SimplePropertyAssignmentSyntax>parent).propertyName === token) {
-                                return ClassificationTypeNames.identifier;
-                            }
-                            return;
-                        case TypeScript.SyntaxKind.ClassDeclaration:
-                            if ((<TypeScript.ClassDeclarationSyntax>parent).identifier === token) {
+                else if (tokenKind === SyntaxKind.Identifier) {
+                    switch (token.parent.kind) {
+                        case SyntaxKind.ClassDeclaration:
+                            if ((<ClassDeclaration>token.parent).name === token) {
                                 return ClassificationTypeNames.className;
                             }
                             return;
-                        case TypeScript.SyntaxKind.TypeParameter:
-                            if ((<TypeScript.TypeParameterSyntax>parent).identifier === token) {
+                        case SyntaxKind.TypeParameter:
+                            if ((<TypeParameterDeclaration>token.parent).name === token) {
                                 return ClassificationTypeNames.typeParameterName;
                             }
                             return;
-                        case TypeScript.SyntaxKind.InterfaceDeclaration:
-                            if ((<TypeScript.InterfaceDeclarationSyntax>parent).identifier === token) {
+                        case SyntaxKind.InterfaceDeclaration:
+                            if ((<InterfaceDeclaration>token.parent).name === token) {
                                 return ClassificationTypeNames.interfaceName;
                             }
                             return;
-                        case TypeScript.SyntaxKind.EnumDeclaration:
-                            if ((<TypeScript.EnumDeclarationSyntax>parent).identifier === token) {
+                        case SyntaxKind.EnumDeclaration:
+                            if ((<EnumDeclaration>token.parent).name === token) {
                                 return ClassificationTypeNames.enumName;
                             }
                             return;
-                        case TypeScript.SyntaxKind.ModuleDeclaration:
-                            if ((<TypeScript.ModuleDeclarationSyntax>parent).name === current) {
+                        case SyntaxKind.ModuleDeclaration:
+                            if ((<ModuleDeclaration>token.parent).name === token) {
                                 return ClassificationTypeNames.moduleName;
                             }
                             return;
@@ -4823,19 +4934,18 @@ module ts {
                 }
             }
 
-            function processElement(element: TypeScript.ISyntaxElement) {
+            function processElement(element: Node) {
                 // Ignore nodes that don't intersect the original span to classify.
-                if (!TypeScript.isShared(element) && span.intersectsWith(TypeScript.fullStart(element), TypeScript.fullWidth(element))) {
-                    for (var i = 0, n = TypeScript.childCount(element); i < n; i++) {
-                        var child = TypeScript.childAt(element, i);
-                        if (child) {
-                            if (TypeScript.isToken(child)) {
-                                classifyToken(<TypeScript.ISyntaxToken>child);
-                            }
-                            else {
-                                // Recurse into our child nodes.
-                                processElement(child);
-                            }
+                if (span.intersectsWith(element.getFullStart(), element.getFullWidth())) {
+                    var children = element.getChildren();
+                    for (var i = 0, n = children.length; i < n; i++) {
+                        var child = children[i];
+                        if (isToken(child)) {
+                            classifyToken(child);
+                        }
+                        else {
+                            // Recurse into our child nodes.
+                            processElement(child);
                         }
                     }
                 }
@@ -5145,7 +5255,7 @@ module ts {
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
                 if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
-                    var kind = getSymbolKind(symbol);
+                    var kind = getSymbolKind(symbol, typeInfoResolver);
                     if (kind) {
                         return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),

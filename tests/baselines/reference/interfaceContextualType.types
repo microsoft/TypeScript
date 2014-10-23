@@ -27,11 +27,11 @@ class Bug {
 >ok : () => void
 
         this.values = {};
->this.values = {} : { [x: string]: IOptions; }
+>this.values = {} : { [x: string]: undefined; }
 >this.values : IMap
 >this : Bug
 >values : IMap
->{} : { [x: string]: IOptions; }
+>{} : { [x: string]: undefined; }
 
         this.values['comments'] = { italic: true };
 >this.values['comments'] = { italic: true } : { italic: boolean; }
@@ -46,11 +46,11 @@ class Bug {
 >shouldBeOK : () => void
 
         this.values = {
->this.values = {            comments: { italic: true }        } : { [x: string]: IOptions; comments: { italic: boolean; }; }
+>this.values = {            comments: { italic: true }        } : { [x: string]: { italic: boolean; }; comments: { italic: boolean; }; }
 >this.values : IMap
 >this : Bug
 >values : IMap
->{            comments: { italic: true }        } : { [x: string]: IOptions; comments: { italic: boolean; }; }
+>{            comments: { italic: true }        } : { [x: string]: { italic: boolean; }; comments: { italic: boolean; }; }
 
             comments: { italic: true }
 >comments : { italic: boolean; }

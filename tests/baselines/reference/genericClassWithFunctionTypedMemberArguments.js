@@ -55,12 +55,12 @@ module WithCandidates {
     var c3: C3<number, string>;
 
     function other<T, U>(t: T, u: U) {
-        var r10 = c.foo2(1, (x: T) => ''); // string, non-generic signature allows inferences to be made
+        var r10 = c.foo2(1, (x: T) => ''); // error
         var r10 = c.foo2(1, (x) => ''); // string
 
-        var r11 = c3.foo3(1, (x: T) => '', ''); // string
-        var r11b = c3.foo3(1, (x: T) => '', 1); // {}
-        var r12 = c3.foo3(1, function (a) { return '' }, 1); // {}
+        var r11 = c3.foo3(1, (x: T) => '', ''); // error
+        var r11b = c3.foo3(1, (x: T) => '', 1); // error
+        var r12 = c3.foo3(1, function (a) { return '' }, 1); // error
     }
 }
 
@@ -132,12 +132,12 @@ var WithCandidates;
     })();
     var c3;
     function other(t, u) {
-        var r10 = c.foo2(1, function (x) { return ''; }); // string, non-generic signature allows inferences to be made
+        var r10 = c.foo2(1, function (x) { return ''; }); // error
         var r10 = c.foo2(1, function (x) { return ''; }); // string
-        var r11 = c3.foo3(1, function (x) { return ''; }, ''); // string
-        var r11b = c3.foo3(1, function (x) { return ''; }, 1); // {}
+        var r11 = c3.foo3(1, function (x) { return ''; }, ''); // error
+        var r11b = c3.foo3(1, function (x) { return ''; }, 1); // error
         var r12 = c3.foo3(1, function (a) {
             return '';
-        }, 1); // {}
+        }, 1); // error
     }
 })(WithCandidates || (WithCandidates = {}));

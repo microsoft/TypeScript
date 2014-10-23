@@ -75,13 +75,13 @@ t4 = [E1.one, E2.two, 20];
 >two : E2
 
 var e1 = t1[2];  // {}
->e1 : {}
->t1[2] : {}
+>e1 : ((x: number) => string) | ((x: number) => number)
+>t1[2] : ((x: number) => string) | ((x: number) => number)
 >t1 : [(x: number) => string, (x: number) => number]
 
 var e2 = t2[2];  // {}
->e2 : {}
->t2[2] : {}
+>e2 : E1 | E2
+>t2[2] : E1 | E2
 >t2 : [E1, E2]
 
 var e3 = t3[2];  // any
