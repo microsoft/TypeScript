@@ -5070,7 +5070,7 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(signature: Signature, args: Expression[], typeArgumentResultTypes: Type[], excludeArgument?: boolean[]): boolean {
+        function inferTypeArguments(signature: Signature, args: Expression[], typeArgumentResultTypes: Type[], excludeArgument?: boolean[]): InferenceContext {
             var typeParameters = signature.typeParameters;
             var context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false, typeArgumentResultTypes);
             var mapper = createInferenceMapper(context);
@@ -5097,8 +5097,17 @@ module ts {
                 }
             }
             var inferredTypes = getInferredTypes(context);
-            // Inference has failed if the undefined type is in list of inferences
-            return !contains(inferredTypes, typeArgumentInferenceFailureType);
+            // Inference has failed if the typeArgumentInferenceFailureType type is in list of inferences
+            context.failureIndex = indexOf(inferredTypes, typeArgumentInferenceFailureType);
+
+            // Wipe out the typeArgumentInferenceFailureType from the array so that error recovery can work properly
+            for (var i = 0; i < inferredTypes.length; i++) {
+                if (inferredTypes[i] === typeArgumentInferenceFailureType) {
+                    inferredTypes[i] = unknownType;
+                }
+            }
+
+            return context;
         }
 
         function checkTypeArguments(signature: Signature, typeArguments: TypeNode[], typeArgumentResultTypes: Type[], reportErrors: boolean): boolean {
@@ -5165,7 +5174,7 @@ module ts {
 
             var candidateForArgumentError: Signature;
             var candidateForTypeArgumentError: Signature;
-            var indexOfUninferredTypeParameter: number;
+            var resultOfFailedInference: InferenceContext;
             var result: Signature;
             if (candidates.length > 1) {
                 result = chooseOverload(candidates, subtypeRelation, excludeArgument);
@@ -5174,7 +5183,7 @@ module ts {
                 // Reinitialize these pointers for round two
                 candidateForArgumentError = undefined;
                 candidateForTypeArgumentError = undefined;
-                indexOfUninferredTypeParameter = undefined;
+                resultOfFailedInference = undefined;
                 result = chooseOverload(candidates, assignableRelation, excludeArgument);
             }
             if (result) {
@@ -5193,8 +5202,9 @@ module ts {
                     checkTypeArguments(candidateForTypeArgumentError, node.typeArguments, [], /*reportErrors*/ true)
                 }
                 else {
+                    Debug.assert(resultOfFailedInference.failureIndex >= 0);
                     error(node.func, Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Try_specifying_the_type_arguments_explicitly,
-                        typeToString(candidateForTypeArgumentError.typeParameters[indexOfUninferredTypeParameter]));
+                        typeToString(candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failureIndex]));
                 }
             }
             else {
@@ -5223,14 +5233,20 @@ module ts {
                     }
 
                     var originalCandidate = candidates[i];
+                    var inferenceResult: InferenceContext;
 
                     while (true) {
                         var candidate = originalCandidate;
                         if (candidate.typeParameters) {
                             var typeArgumentTypes = new Array<Type>(candidate.typeParameters.length);
-                            var typeArgumentsAreValid = node.typeArguments ?
-                                checkTypeArguments(candidate, node.typeArguments, typeArgumentTypes, /*reportErrors*/ false) :
-                                inferTypeArguments(candidate, args, typeArgumentTypes, excludeArgument);
+                            var typeArgumentsAreValid: boolean;
+                            if (node.typeArguments) {
+                                typeArgumentsAreValid = checkTypeArguments(candidate, node.typeArguments, typeArgumentTypes, /*reportErrors*/ false)
+                            }
+                            else {
+                                inferenceResult = inferTypeArguments(candidate, args, typeArgumentTypes, excludeArgument);
+                                typeArgumentsAreValid = inferenceResult.failureIndex < 0;
+                            }
                             if (!typeArgumentsAreValid) {
                                 break;
                             }
@@ -5259,7 +5275,7 @@ module ts {
                         else {
                             candidateForTypeArgumentError = originalCandidate;
                             if (!node.typeArguments) {
-                                indexOfUninferredTypeParameter = typeArgumentTypes.indexOf(typeArgumentInferenceFailureType);
+                                resultOfFailedInference = inferenceResult;
                             }
                         }
                     }
