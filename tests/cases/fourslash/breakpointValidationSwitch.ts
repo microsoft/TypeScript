@@ -31,4 +31,12 @@
 ////            x = x * 10;
 ////        }
 ////}
+////switch ((function foo() {
+////    return x * 30;
+////})()) {
+////    case (function bar() {
+////        return 30;
+////    })():
+////        x++;
+////}
 verify.baselineCurrentFileBreakpointLocations();

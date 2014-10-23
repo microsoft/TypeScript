@@ -985,15 +985,85 @@ module FourSlash {
             return item.parameters[currentParam];
         }
 
+        private alignmentForExtraInfo = 50;
+
+        private spanInfoToString(pos: number, spanInfo: TypeScript.TextSpan, prefixString: string) {
+            var resultString = "SpanInfo: " + JSON.stringify(spanInfo);
+            if (spanInfo) {
+                var spanString = this.activeFile.content.substr(spanInfo.start(), spanInfo.length());
+                var spanLineMap = ts.getLineStarts(spanString);
+                for (var i = 0; i < spanLineMap.length; i++) {
+                    if (!i) {
+                        resultString += "\n";
+                    }
+                    resultString += prefixString + spanString.substring(spanLineMap[i], spanLineMap[i + 1]);
+                }
+                resultString += "\n" + prefixString + ":=> (" + this.getLineColStringAtPosition(spanInfo.start()) + ") to (" + this.getLineColStringAtPosition(spanInfo.end()) + ")";
+            }
+
+            return resultString;
+        }
+
+        private baselineCurrentFileLocations(getSpanAtPos: (pos: number) => TypeScript.TextSpan): string {
+            var fileLineMap = ts.getLineStarts(this.activeFile.content);
+            var nextLine = 0;
+            var resultString = "";
+            var currentLine: string;
+            var previousSpanInfo: string;
+            var startColumn: number;
+            var length: number;
+            var prefixString = "    >";
+
+            var addSpanInfoString = () => {
+                if (previousSpanInfo) {
+                    resultString += currentLine;
+                    var thisLineMarker = repeatString(startColumn, " ") + repeatString(length, "~");
+                    thisLineMarker += repeatString(this.alignmentForExtraInfo - thisLineMarker.length - prefixString.length + 1, " ");
+                    resultString += thisLineMarker;
+                    resultString += "=> Pos: (" + (pos - length) + " to " + (pos - 1) + ") ";
+                    resultString += " " + previousSpanInfo;
+                    previousSpanInfo = undefined;
+                }
+            };
+
+            for (var pos = 0; pos < this.activeFile.content.length; pos++) {
+                if (pos === 0 || pos === fileLineMap[nextLine]) {
+                    nextLine++;
+                    addSpanInfoString();
+                    if (resultString.length) {
+                        resultString += "\n--------------------------------";
+                    }
+                    currentLine = "\n" + nextLine.toString() + repeatString(3 - nextLine.toString().length, " ") + ">" + this.activeFile.content.substring(pos, fileLineMap[nextLine]) + "\n    ";
+                    startColumn = 0;
+                    length = 0;
+                }
+                var spanInfo = this.spanInfoToString(pos, getSpanAtPos(pos), prefixString);
+                if (previousSpanInfo && previousSpanInfo !== spanInfo) {
+                    addSpanInfoString();
+                    previousSpanInfo = spanInfo;
+                    startColumn = startColumn + length;
+                    length = 1;
+                }
+                else {
+                    previousSpanInfo = spanInfo;
+                    length++;
+                }
+            }
+            addSpanInfoString();
+            return resultString;
+
+            function repeatString(count: number, char: string) {
+                var result = "";
+                for (var i = 0; i < count; i++) {
+                    result += char;
+                }
+                return result;
+            }
+        }
+
         public getBreakpointStatementLocation(pos: number) {
             this.taoInvalidReason = 'getBreakpointStatementLocation NYI';
-
-            var spanInfo = this.languageService.getBreakpointStatementAtPosition(this.activeFile.fileName, pos);
-            var resultString = "\n**Pos: " + pos + " SpanInfo: " + JSON.stringify(spanInfo) + "\n** Statement: ";
-            if (spanInfo !== null) {
-                resultString = resultString + this.activeFile.content.substr(spanInfo.start(), spanInfo.length());
-            }
-            return resultString;
+            return this.languageService.getBreakpointStatementAtPosition(this.activeFile.fileName, pos);
         }
 
         public baselineCurrentFileBreakpointLocations() {
@@ -1003,12 +1073,7 @@ module FourSlash {
                 "Breakpoint Locations for " + this.activeFile.fileName,
                 this.testData.globalOptions[testOptMetadataNames.baselineFile],
                 () => {
-                    var fileLength = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
-                    var resultString = "";
-                    for (var pos = 0; pos < fileLength; pos++) {
-                        resultString = resultString + this.getBreakpointStatementLocation(pos);
-                    }
-                    return resultString;
+                    return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos));
                 },
                 true /* run immediately */);
         }
@@ -1056,7 +1121,7 @@ module FourSlash {
         }
 
         public printBreakpointLocation(pos: number) {
-            Harness.IO.log(this.getBreakpointStatementLocation(pos));
+            Harness.IO.log("\n**Pos: " + pos + " " + this.spanInfoToString(pos, this.getBreakpointStatementLocation(pos), "  "));
         }
 
         public printBreakpointAtCurrentLocation() {
@@ -1502,7 +1567,7 @@ module FourSlash {
                 throw new Error('verifyCaretAtMarker failed - expected to be in file "' + pos.fileName + '", but was in file "' + this.activeFile.fileName + '"');
             }
             if (pos.position !== this.currentCaretPosition) {
-                throw new Error('verifyCaretAtMarker failed - expected to be at marker "/*' + markerName + '*/, but was at position ' + this.currentCaretPosition + '(' + this.getLineColStringAtCaret() + ')');
+                throw new Error('verifyCaretAtMarker failed - expected to be at marker "/*' + markerName + '*/, but was at position ' + this.currentCaretPosition + '(' + this.getLineColStringAtPosition(this.currentCaretPosition) + ')');
             }
         }
 
@@ -1566,10 +1631,10 @@ module FourSlash {
             this.taoInvalidReason = 'verifyCurrentNameOrDottedNameSpanText NYI';
 
             var span = this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition);
-            if (span === null) {
+            if (!span) {
                 this.raiseError('verifyCurrentNameOrDottedNameSpanText\n' +
                     '\tExpected: "' + text + '"\n' +
-                    '\t  Actual: null');
+                    '\t  Actual: undefined');
             }
 
             var actual = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getText(span.start(), span.end());
@@ -1581,12 +1646,8 @@ module FourSlash {
         }
 
         private getNameOrDottedNameSpan(pos: number) {
-            var spanInfo = this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, pos, pos);
-            var resultString = "\n**Pos: " + pos + " SpanInfo: " + JSON.stringify(spanInfo) + "\n** Statement: ";
-            if (spanInfo !== null) {
-                resultString = resultString + this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getText(spanInfo.start(), spanInfo.end());
-            }
-            return resultString;
+            this.taoInvalidReason = 'getNameOrDottedNameSpan NYI';
+            return this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, pos, pos);
         }
 
         public baselineCurrentFileNameOrDottedNameSpans() {
@@ -1596,18 +1657,14 @@ module FourSlash {
                 "Name OrDottedNameSpans for " + this.activeFile.fileName,
                 this.testData.globalOptions[testOptMetadataNames.baselineFile],
                 () => {
-                    var fileLength = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
-                    var resultString = "";
-                    for (var pos = 0; pos < fileLength; pos++) {
-                        resultString = resultString + this.getNameOrDottedNameSpan(pos);
-                    }
-                    return resultString;
+                    return this.baselineCurrentFileLocations(pos =>
+                        this.getNameOrDottedNameSpan(pos));
                 },
                 true /* run immediately */);
         }
 
         public printNameOrDottedNameSpans(pos: number) {
-            Harness.IO.log(this.getNameOrDottedNameSpan(pos));
+            Harness.IO.log(this.spanInfoToString(pos, this.getNameOrDottedNameSpan(pos), "**"));
         }
 
         private verifyClassifications(expected: { classificationType: string; text: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[]) {
@@ -2114,8 +2171,8 @@ module FourSlash {
             return this.languageServiceShimHost.positionToZeroBasedLineCol(this.activeFile.fileName, this.currentCaretPosition).line + 1;
         }
 
-        private getLineColStringAtCaret() {
-            var pos = this.languageServiceShimHost.positionToZeroBasedLineCol(this.activeFile.fileName, this.currentCaretPosition);
+        private getLineColStringAtPosition(position: number) {
+            var pos = this.languageServiceShimHost.positionToZeroBasedLineCol(this.activeFile.fileName, position);
             return 'line ' + (pos.line + 1) + ', col ' + pos.character;
         }
 
