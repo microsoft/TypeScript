@@ -1560,7 +1560,7 @@ module ts {
             var filenames = host.getScriptFileNames();
             for (var i = 0, n = filenames.length; i < n; i++) {
                 var filename = filenames[i];
-                this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)] = {
+                this.filenameToEntry[switchToForwardSlashes(filename)] = {
                     filename: filename,
                     version: host.getScriptVersion(filename),
                     isOpen: host.getScriptIsOpen(filename)
@@ -1575,7 +1575,7 @@ module ts {
         }
 
         public getEntry(filename: string): HostFileInformation {
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
             return lookUp(this.filenameToEntry, filename);
         }
 
@@ -1935,14 +1935,13 @@ module ts {
                 if (!isNoDefaultLib) {
                     var fullReferenceRegEx = tripleSlashReferenceRegExp;
                     var fullReference = fullReferenceRegEx.exec(comment);
-                    var path: string = TypeScript.normalizePath(fullReference[3]);
+                    var path: string = normalizePath(fullReference[3]);
                     if (fullReference) {
-                        var path: string = TypeScript.normalizePath(fullReference[3]);
-                        var adjustedPath = TypeScript.normalizePath(path);
+                        var path: string = normalizePath(fullReference[3]);
+                        var adjustedPath = normalizePath(path);
 
                         return {
-                            // TODO (yuisu) : Move the function to util
-                            path: TypeScript.switchToForwardSlashes(adjustedPath),
+                            path: switchToForwardSlashes(adjustedPath),
                             position: 0,
                             length: 0,
                         };
@@ -1985,8 +1984,7 @@ module ts {
                                     if (token === SyntaxKind.StringLiteral) {
                                         var importPath = scanner.getTokenValue();
                                         var referencedFile = {
-                                            // TODO (yuisu) : Move the function to util
-                                            path: TypeScript.switchToForwardSlashes(importPath),
+                                            path: switchToForwardSlashes(importPath),
                                             position: startPosition,
                                             length: importPath.length
                                         };
@@ -2320,7 +2318,7 @@ module ts {
         function getSyntacticDiagnostics(filename: string) {
             synchronizeHostData();
 
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
 
             return program.getDiagnostics(getSourceFile(filename).getSourceFile());
         }
@@ -2332,7 +2330,7 @@ module ts {
         function getSemanticDiagnostics(filename: string) {
             synchronizeHostData();
 
-            filename = TypeScript.switchToForwardSlashes(filename)
+            filename = switchToForwardSlashes(filename)
             var compilerOptions = program.getCompilerOptions();
             var checker = getFullTypeCheckChecker();
             var targetSourceFile = getSourceFile(filename);
@@ -2580,7 +2578,7 @@ module ts {
 
             synchronizeHostData();
 
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
 
             var sourceFile = getSourceFile(filename);
             var sourceUnit = sourceFile.getSourceUnit();
@@ -2739,7 +2737,7 @@ module ts {
         function getCompletionEntryDetails(filename: string, position: number, entryName: string): CompletionEntryDetails {
             // Note: No need to call synchronizeHostData, as we have captured all the data we need
             //       in the getCompletionsAtPosition earlier
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
 
             var session = activeCompletionSession;
 
@@ -3195,7 +3193,7 @@ module ts {
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             synchronizeHostData();
 
-            fileName = TypeScript.switchToForwardSlashes(fileName);
+            fileName = switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
             var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
@@ -3297,7 +3295,7 @@ module ts {
 
             synchronizeHostData();
 
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
             var node = getTouchingPropertyName(sourceFile, position);
@@ -3361,7 +3359,7 @@ module ts {
         function getOccurrencesAtPosition(filename: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
             var node = getTouchingWord(sourceFile, position);
@@ -3814,7 +3812,7 @@ module ts {
         function findReferences(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
             synchronizeHostData();
 
-            fileName = TypeScript.switchToForwardSlashes(fileName);
+            fileName = switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
 
             var node = getTouchingPropertyName(sourceFile, position);
@@ -4533,7 +4531,7 @@ module ts {
 
         function getEmitOutput(filename: string): EmitOutput {
             synchronizeHostData();
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
             var compilerOptions = program.getCompilerOptions();
             var targetSourceFile = program.getSourceFile(filename);  // Current selected file to be output
             // If --out flag is not specified, shouldEmitToOwnFile is true. Otherwise shouldEmitToOwnFile is false.
@@ -4708,7 +4706,7 @@ module ts {
         function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
             synchronizeHostData();
 
-            fileName = TypeScript.switchToForwardSlashes(fileName);
+            fileName = switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
 
             return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
@@ -4778,12 +4776,12 @@ module ts {
 
         /// Syntactic features
         function getSyntaxTree(filename: string): TypeScript.SyntaxTree {
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
             return syntaxTreeCache.getCurrentFileSyntaxTree(filename);
         }
 
         function getCurrentSourceFile(filename: string): SourceFile {
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
             var currentSourceFile = syntaxTreeCache.getCurrentSourceFile(filename);
             return currentSourceFile;
         }
@@ -4824,7 +4822,7 @@ module ts {
                 }
             }
 
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
 
             var node = getTypeInfoEligiblePath(filename, startPos, false);
             if (!node) return null;
@@ -4846,21 +4844,21 @@ module ts {
 
         function getBreakpointStatementAtPosition(filename: string, position: number) {
             // doesn't use compiler - no need to synchronize with host
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
 
             var syntaxtree = getSyntaxTree(filename);
             return TypeScript.Services.Breakpoints.getBreakpointLocation(syntaxtree, position);
         }
 
         function getNavigationBarItems(filename: string): NavigationBarItem[] {
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
 
             return NavigationBar.getNavigationBarItems(getCurrentSourceFile(filename));
         }
 
         function getSemanticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[] {
             synchronizeHostData();
-            fileName = TypeScript.switchToForwardSlashes(fileName);
+            fileName = switchToForwardSlashes(fileName);
 
             var sourceFile = getSourceFile(fileName);
 
@@ -4931,7 +4929,7 @@ module ts {
 
         function getSyntacticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            fileName = TypeScript.switchToForwardSlashes(fileName);
+            fileName = switchToForwardSlashes(fileName);
             var sourceFile = getCurrentSourceFile(fileName);
 
             var result: ClassifiedSpan[] = [];
@@ -5074,7 +5072,7 @@ module ts {
 
         function getOutliningSpans(filename: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
             var sourceFile = getCurrentSourceFile(filename);
             return OutliningElementsCollector.collectElements(sourceFile);
         }
@@ -5133,7 +5131,7 @@ module ts {
         }
 
         function getIndentationAtPosition(filename: string, position: number, editorOptions: EditorOptions) {
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
 
             var sourceFile = getCurrentSourceFile(filename);
             var options = new TypeScript.FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
@@ -5163,21 +5161,21 @@ module ts {
         }
 
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
-            fileName = TypeScript.switchToForwardSlashes(fileName);
+            fileName = switchToForwardSlashes(fileName);
 
             var manager = getFormattingManager(fileName, options);
             return manager.formatSelection(start, end);
         }
 
         function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
-            fileName = TypeScript.switchToForwardSlashes(fileName);
+            fileName = switchToForwardSlashes(fileName);
 
             var manager = getFormattingManager(fileName, options);
             return manager.formatDocument();
         }
 
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[] {
-            fileName = TypeScript.switchToForwardSlashes(fileName);
+            fileName = switchToForwardSlashes(fileName);
 
             var manager = getFormattingManager(fileName, options);
 
@@ -5195,7 +5193,7 @@ module ts {
         }
 
         function getTodoComments(filename: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = switchToForwardSlashes(filename);
 
             var sourceFile = getCurrentSourceFile(filename);
 
@@ -5364,7 +5362,7 @@ module ts {
         function getRenameInfo(fileName: string, position: number): RenameInfo {
             synchronizeHostData();
 
-            fileName = TypeScript.switchToForwardSlashes(fileName);
+            fileName = switchToForwardSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
 
             var node = getTouchingWord(sourceFile, position);
