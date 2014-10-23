@@ -1612,7 +1612,9 @@ module FourSlash {
 
         private verifyClassifications(expected: { classificationType: string; text: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[]) {
             if (actual.length !== expected.length) {
-                this.raiseError('verifyClassifications failed - expected total classifications to be ' + expected.length + ', but was ' + actual.length);
+                this.raiseError('verifyClassifications failed - expected total classifications to be ' + expected.length +
+                                ', but was ' + actual.length +
+                                jsonMismatchString());
             }
 
             for (var i = 0; i < expected.length; i++) {
@@ -1623,7 +1625,8 @@ module FourSlash {
                 if (expectedType !== actualClassification.classificationType) {
                     this.raiseError('verifyClassifications failed - expected classifications type to be ' +
                         expectedType + ', but was ' +
-                        actualClassification.classificationType);
+                        actualClassification.classificationType +
+                        jsonMismatchString());
                 }
 
                 var expectedSpan = expectedClassification.textSpan;
@@ -1635,16 +1638,24 @@ module FourSlash {
                     if (expectedSpan.start !== actualSpan.start() || expectedLength !== actualSpan.length()) {
                         this.raiseError("verifyClassifications failed - expected span of text to be " +
                             "{start=" + expectedSpan.start + ", length=" + expectedLength + "}, but was " +
-                            "{start=" + actualSpan.start() + ", length=" + actualSpan.length() + "}");
+                            "{start=" + actualSpan.start() + ", length=" + actualSpan.length() + "}" +
+                            jsonMismatchString());
                     }
                 }
 
                 var actualText = this.activeFile.content.substr(actualSpan.start(), actualSpan.length());
                 if (expectedClassification.text !== actualText) {
-                    this.raiseError('verifyClassifications failed - expected classificatied text to be ' +
+                    this.raiseError('verifyClassifications failed - expected classified text to be ' +
                         expectedClassification.text + ', but was ' +
-                        actualText);
+                        actualText +
+                        jsonMismatchString());
                 }
+            }
+
+            function jsonMismatchString() {
+                return sys.newLine +
+                    "expected: '" + sys.newLine + JSON.stringify(expected, (k,v) => v, 2) + "'" + sys.newLine +
+                    "actual:   '" + sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
             }
         }
 
@@ -1996,7 +2007,8 @@ module FourSlash {
             var newlinePos = text.indexOf('\n');
             if (newlinePos === -1) {
                 return text;
-            } else {
+            }
+            else {
                 if (text.charAt(newlinePos - 1) === '\r') {
                     newlinePos--;
                 }

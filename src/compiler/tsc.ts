@@ -142,14 +142,19 @@ module ts {
             // otherwise use toLowerCase as a canonical form.
             return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
-
+        
+        // returned by CScript sys environment
+        var unsupportedFileEncodingErrorCode = -2147024809;
+        
         function getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             try {
                 var text = sys.readFile(filename, options.charset);
             }
             catch (e) {
                 if (onError) {
-                    onError(e.message);
+                    onError(e.number === unsupportedFileEncodingErrorCode ? 
+                                getDiagnosticText(Diagnostics.Unsupported_file_encoding) :
+                                e.message);
                 }
                 text = "";
             }
