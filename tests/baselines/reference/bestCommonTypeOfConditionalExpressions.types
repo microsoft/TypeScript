@@ -48,14 +48,14 @@ var r3 = true ? 1 : {};
 >{} : {}
 
 var r4 = true ? a : b; // typeof a
->r4 : { x: number; y?: number; }
->true ? a : b : { x: number; y?: number; }
+>r4 : { x: number; y?: number; } | { x: number; z?: number; }
+>true ? a : b : { x: number; y?: number; } | { x: number; z?: number; }
 >a : { x: number; y?: number; }
 >b : { x: number; z?: number; }
 
 var r5 = true ? b : a; // typeof b
->r5 : { x: number; y?: number; }
->true ? b : a : { x: number; y?: number; }
+>r5 : { x: number; y?: number; } | { x: number; z?: number; }
+>true ? b : a : { x: number; y?: number; } | { x: number; z?: number; }
 >b : { x: number; z?: number; }
 >a : { x: number; y?: number; }
 

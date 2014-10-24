@@ -155,6 +155,7 @@ module ts {
         ArrayType,
         TupleType,
         UnionType,
+        ParenType,
         // Expression
         ArrayLiteral,
         ObjectLiteral,
@@ -225,7 +226,7 @@ module ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
-        LastTypeNode = UnionType,
+        LastTypeNode = ParenType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = EndOfFileToken,
@@ -250,9 +251,12 @@ module ts {
         MultiLine        = 0x00000100,  // Multi-line array or object literal
         Synthetic        = 0x00000200,  // Synthetic node (for full fidelity)
         DeclarationFile  = 0x00000400,  // Node is a .d.ts file
+        Let              = 0x00000800,  // Variable declaration
+        Const            = 0x00001000,  // Variable declaration
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
-        AccessibilityModifier = Public | Private | Protected
+        AccessibilityModifier = Public | Private | Protected,
+        BlockScoped = Let | Const
     }
 
     export interface Node extends TextRange {
@@ -344,6 +348,10 @@ module ts {
 
     export interface UnionTypeNode extends TypeNode {
         types: NodeArray<TypeNode>;
+    }
+
+    export interface ParenTypeNode extends TypeNode {
+        type: TypeNode;
     }
 
     export interface StringLiteralTypeNode extends TypeNode {
@@ -644,30 +652,26 @@ module ts {
         getParentOfSymbol(symbol: Symbol): Symbol;
         getTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
-        getPropertyOfType(type: Type, propetyName: string): Symbol;
+        getPropertyOfType(type: Type, propertyName: string): Symbol;
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getReturnTypeOfSignature(signature: Signature): Type;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolInfo(node: Node): Symbol;
         getTypeOfNode(node: Node): Type;
-        getApparentType(type: Type): ApparentType;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
-        writeType(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
-        writeSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
+        getSymbolDisplayBuilder(): SymbolDisplayBuilder;
         getFullyQualifiedName(symbol: Symbol): string;
-        getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
+        getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Node): Type;
         getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
-        writeSignature(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        writeTypeParameter(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        writeTypeParametersOfSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
+        hasEarlyErrors(sourceFile?: SourceFile): boolean;
 
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
         // computed value.
@@ -677,8 +681,25 @@ module ts {
         getAliasedSymbol(symbol: Symbol): Symbol;
     }
 
+    export interface SymbolDisplayBuilder {
+        buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
+        buildSignatureDisplay(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
+        buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+    }
+
     export interface SymbolWriter {
-        writeKind(text: string, kind: SymbolDisplayPartKind): void;
+        writeKeyword(text: string): void;
+        writeOperator(text: string): void;
+        writePunctuation(text: string): void;
+        writeSpace(text: string): void;
+        writeStringLiteral(text: string): void;
+        writeParameter(text: string): void;
         writeSymbol(text: string, symbol: Symbol): void;
         writeLine(): void;
         increaseIndent(): void;
@@ -699,6 +720,7 @@ module ts {
         WriteArrowStyleSignature        = 0x00000008,  // Write arrow style signature
         WriteOwnNameForAnyLike          = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
         WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
+        InElementType                   = 0x00000040,  // Writing an array or union element type
     }
 
     export enum SymbolFormatFlags {
@@ -745,52 +767,62 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' if it does 
         // resolve to a constant.
         getConstantValue(node: PropertyAccess): number;
+        hasEarlyErrors(sourceFile?: SourceFile): boolean;
     }
 
     export enum SymbolFlags {
-        Variable           = 0x00000001,  // Variable or parameter
-        Property           = 0x00000002,  // Property or enum member
-        EnumMember         = 0x00000004,  // Enum member
-        Function           = 0x00000008,  // Function
-        Class              = 0x00000010,  // Class
-        Interface          = 0x00000020,  // Interface
-        Enum               = 0x00000040,  // Enum
-        ValueModule        = 0x00000080,  // Instantiated module
-        NamespaceModule    = 0x00000100,  // Uninstantiated module
-        TypeLiteral        = 0x00000200,  // Type Literal
-        ObjectLiteral      = 0x00000400,  // Object Literal
-        Method             = 0x00000800,  // Method
-        Constructor        = 0x00001000,  // Constructor
-        GetAccessor        = 0x00002000,  // Get accessor
-        SetAccessor        = 0x00004000,  // Set accessor
-        CallSignature      = 0x00008000,  // Call signature
-        ConstructSignature = 0x00010000,  // Construct signature
-        IndexSignature     = 0x00020000,  // Index signature
-        TypeParameter      = 0x00040000,  // Type parameter
-        UnionProperty      = 0x00080000,  // Property in union type
+        FunctionScopedVariable = 0x00000001, // Variable (var) or parameter
+        Property               = 0x00000002,  // Property or enum member
+        EnumMember             = 0x00000004,  // Enum member
+        Function               = 0x00000008,  // Function
+        Class                  = 0x00000010,  // Class
+        Interface              = 0x00000020,  // Interface
+        Enum                   = 0x00000040,  // Enum
+        ValueModule            = 0x00000080,  // Instantiated module
+        NamespaceModule        = 0x00000100,  // Uninstantiated module
+        TypeLiteral            = 0x00000200,  // Type Literal
+        ObjectLiteral          = 0x00000400,  // Object Literal
+        Method                 = 0x00000800,  // Method
+        Constructor            = 0x00001000,  // Constructor
+        GetAccessor            = 0x00002000,  // Get accessor
+        SetAccessor            = 0x00004000,  // Set accessor
+        CallSignature          = 0x00008000,  // Call signature
+        ConstructSignature     = 0x00010000,  // Construct signature
+        IndexSignature         = 0x00020000,  // Index signature
+        TypeParameter          = 0x00040000,  // Type parameter
 
         // Export markers (see comment in declareModuleMember in binder)
-        ExportValue        = 0x00100000,  // Exported value marker
-        ExportType         = 0x00200000,  // Exported type marker
-        ExportNamespace    = 0x00400000,  // Exported namespace marker
+        ExportValue            = 0x00080000,  // Exported value marker
+        ExportType             = 0x00100000,  // Exported type marker
+        ExportNamespace        = 0x00200000,  // Exported namespace marker
 
-        Import             = 0x00800000,  // Import
-        Instantiated       = 0x01000000,  // Instantiated symbol
-        Merged             = 0x02000000,  // Merged symbol (created during program binding)
-        Transient          = 0x04000000,  // Transient symbol (created during type check)
-        Prototype          = 0x08000000,  // Prototype property (no source representation)
-        Undefined          = 0x10000000,  // Symbol for the undefined
+        Import                 = 0x00400000,  // Import
+        Instantiated           = 0x00800000,  // Instantiated symbol
+        Merged                 = 0x01000000,  // Merged symbol (created during program binding)
+        Transient              = 0x02000000,  // Transient symbol (created during type check)
+        Prototype              = 0x04000000,  // Prototype property (no source representation)
+        UnionProperty          = 0x08000000,  // Property in union type
 
-        Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | UnionProperty,
+        BlockScopedVariable    = 0x10000000,  // A block-scoped variable (let ot const)
 
+        Variable  = FunctionScopedVariable | BlockScopedVariable,
+        Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,
         Namespace = ValueModule | NamespaceModule,
         Module    = ValueModule | NamespaceModule,
         Accessor  = GetAccessor | SetAccessor,
         Signature = CallSignature | ConstructSignature | IndexSignature,
 
+
+        // Variables can be redeclared, but can not redeclare a block-scoped declaration with the 
+        // same name, or any other value that is not a variable, e.g. ValueModule or Class
+        FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,   
+
+        // Block-scoped declarations are not allowed to be re-declared
+        // they can not merge with anything in the value space
+        BlockScopedVariableExcludes    = Value,
+
         ParameterExcludes       = Value,
-        VariableExcludes        = Value & ~Variable,
         PropertyExcludes        = Value,
         EnumMemberExcludes      = Value,
         FunctionExcludes        = Value & ~(Function | ValueModule),
@@ -804,8 +836,9 @@ module ts {
         SetAccessorExcludes     = Value & ~GetAccessor,
         TypeParameterExcludes   = Type & ~TypeParameter,
 
+
         // Imports collide with all other imports with the same name.
-        ImportExcludes          = Import,
+        ImportExcludes                 = Import,
 
         ModuleMember = Variable | Function | Class | Interface | Enum | Module | Import,
 
@@ -896,7 +929,8 @@ module ts {
         Intrinsic  = Any | String | Number | Boolean | Void | Undefined | Null,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
-        ObjectType = Class | Interface | Reference | Tuple | Union | Anonymous,
+        ObjectType = Class | Interface | Reference | Tuple | Anonymous,
+        Structured = Any | ObjectType | Union | TypeParameter
     }
 
     // Properties common to all types
@@ -918,12 +952,6 @@ module ts {
 
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type { }
-
-    export interface ApparentType extends Type {
-        // This property is not used. It is just to make the type system think ApparentType
-        // is a strict subtype of Type.
-        _apparentTypeBrand: any;
-    }
 
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
@@ -954,12 +982,13 @@ module ts {
         baseArrayType: TypeReference;  // Array<T> where T is best common type of element types
     }
 
-    export interface UnionType extends ObjectType {
-        types: Type[];  // Constituent types
+    export interface UnionType extends Type {
+        types: Type[];                    // Constituent types
+        resolvedProperties: SymbolTable;  // Cache of resolved properties
     }
 
-    // Resolved object type
-    export interface ResolvedObjectType extends ObjectType {
+    // Resolved object or union type
+    export interface ResolvedType extends ObjectType, UnionType {
         members: SymbolTable;              // Properties by name
         properties: Symbol[];              // Properties
         callSignatures: Signature[];       // Call signatures of type
@@ -1006,6 +1035,7 @@ module ts {
 
     export interface InferenceContext {
         typeParameters: TypeParameter[];  // Type parameters for which inferences are made
+        inferUnionTypes: boolean;         // Infer union types for disjoint candidates (otherwise undefinedType)
         inferenceCount: number;           // Incremented for every inference made (whether new or not)
         inferences: Type[][];             // Inferences made for each type parameter
         inferredTypes: Type[];            // Inferred type for each type parameter
@@ -1015,6 +1045,7 @@ module ts {
         key: string;
         category: DiagnosticCategory;
         code: number;
+        isEarly?: boolean;
     }
 
     // A linked list of formatted diagnostic messages to be used as part of a multiline message.
@@ -1035,6 +1066,7 @@ module ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
+        isEarly?: boolean;
     }
 
     export enum DiagnosticCategory {
@@ -1087,6 +1119,8 @@ module ts {
     export enum ScriptTarget {
         ES3,
         ES5,
+        ES6,
+        Latest = ES6,
     }
 
     export interface ParsedCommandLine {
@@ -1237,32 +1271,7 @@ module ts {
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
     }
-
-    export enum SymbolDisplayPartKind {
-        aliasName,
-        className,
-        enumName,
-        fieldName,
-        interfaceName,
-        keyword,
-        lineBreak,
-        numericLiteral,
-        stringLiteral,
-        localName,
-        methodName,
-        moduleName,
-        operator,
-        parameterName,
-        propertyName,
-        punctuation,
-        space,
-        text,
-        typeParameterName,
-        enumMemberName,
-        functionName,
-        regularExpressionLiteral,
-    }
-
+    
     export interface CancellationToken {
         isCancellationRequested(): boolean;
     }

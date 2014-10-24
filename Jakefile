@@ -10,6 +10,7 @@ var servicesDirectory = "src/services/";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
+var unittestsDirectory = "tests/cases/unittests/";
 var docDirectory = "doc/";
 
 var builtDirectory = "built/";
@@ -54,6 +55,7 @@ var servicesSources = [
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 }).concat([
+    "breakpoints.ts",
     "services.ts",
     "shims.ts",
     "signatureHelp.ts",
@@ -74,13 +76,17 @@ var harnessSources = [
     "typeWriter.ts",
     "fourslashRunner.ts",
     "projectsRunner.ts",
-    "unittestrunner.ts",
     "loggedIO.ts",
     "rwcRunner.ts",
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
-});
+}).concat([
+	"services/colorization.ts",
+    "services/documentRegistry.ts"
+].map(function (f) {
+    return path.join(unittestsDirectory, f);
+}));
 
 var librarySourceMap = [
         { target: "lib.core.d.ts", sources: ["core.d.ts"] },
@@ -279,7 +285,6 @@ var word2mdJs = path.join(scriptsDirectory, "word2md.js");
 var word2mdTs = path.join(scriptsDirectory, "word2md.ts");
 var specWord = path.join(docDirectory, "TypeScript Language Specification.docx");
 var specMd = path.join(docDirectory, "spec.md");
-var headerMd = path.join(docDirectory, "header.md");
 
 file(word2mdTs);
 
@@ -292,9 +297,8 @@ compileFile(word2mdJs,
 
 // The generated spec.md; built for the 'generate-spec' task
 file(specMd, [word2mdJs, specWord], function () {
-    jake.cpR(headerMd, specMd, {silent: true});
     var specWordFullPath = path.resolve(specWord);
-    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" >>' + specMd;
+    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + specMd;
     console.log(cmd);
     child_process.exec(cmd, function () {
         complete();

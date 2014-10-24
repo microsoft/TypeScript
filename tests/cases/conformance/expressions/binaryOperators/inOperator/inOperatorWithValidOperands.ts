@@ -21,3 +21,13 @@ var rb2 = x in {};
 function foo<T>(t: T) {
     var rb3 = x in t;
 }
+
+interface X { x: number }
+interface Y { y: number }
+
+var c1: X | Y;
+var c2: X;
+var c3: Y;
+
+var rc1 = x in c1;
+var rc2 = x in (c2 || c3);

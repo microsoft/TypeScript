@@ -1,15 +1,20 @@
 //// [functionTypeArgumentArrayAssignment.ts]
-interface Array<T> {
-	foo: T;
-	length: number;
-}
+module test {
+    interface Array<T> {
+        foo: T;
+        length: number;
+    }
 
-function map<U>() {
-var ys: U[] = [];
+    function map<U>() {
+        var ys: U[] = [];
+    }
 }
 
 
 //// [functionTypeArgumentArrayAssignment.js]
-function map() {
-    var ys = [];
-}
+var test;
+(function (test) {
+    function map() {
+        var ys = [];
+    }
+})(test || (test = {}));

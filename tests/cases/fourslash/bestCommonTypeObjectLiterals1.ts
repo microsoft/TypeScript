@@ -28,7 +28,7 @@ goTo.marker('2');
 verify.quickInfoIs('(var) c1: {\n    name: string;\n    age: number;\n}[]');
 
 goTo.marker('3');
-verify.quickInfoIs('(var) c2: Array<{\n\
+verify.quickInfoIs('(var) c2: ({\n\
     name: string;\n\
     age: number;\n\
     address: string;\n\
@@ -36,7 +36,7 @@ verify.quickInfoIs('(var) c2: Array<{\n\
     name: string;\n\
     age: number;\n\
     dob: Date;\n\
-}>');
+})[]');
 
 goTo.marker('4');
 verify.quickInfoIs('(var) c2a: {\n    name: string;\n    age: number;\n}[]');

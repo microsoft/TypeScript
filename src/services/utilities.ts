@@ -75,14 +75,14 @@ module ts {
      * position >= start and (position < end or (position === end && token is keyword or identifier))
      */
     export function getTouchingWord(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, isWord);
+        return getTouchingToken(sourceFile, position, n => isWord(n.kind));
     }
 
     /* Gets the token whose text has range [start, end) and position >= start 
      * and (position < end or (position === end && token is keyword or identifier or numeric\string litera))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, isPropertyName);
+        return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind));
     }
 
     /** Returns the token if position is in [start, end) or if position === end and includeItemAtEndPosition(token) === true */
@@ -243,23 +243,35 @@ module ts {
         return n.kind !== SyntaxKind.SyntaxList || n.getChildCount() !== 0;
     }
 
+   export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> {
+        if (node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.CallExpression) {
+            return (<CallExpression>node).typeArguments;
+        }
+
+        if (isAnyFunction(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
+            return (<FunctionDeclaration>node).typeParameters;
+        }
+
+        return undefined;
+    }
+
     export function isToken(n: Node): boolean {
         return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
+    }
+
+    function isWord(kind: SyntaxKind): boolean {
+        return kind === SyntaxKind.Identifier || isKeyword(kind);
+    }
+
+    function isPropertyName(kind: SyntaxKind): boolean {
+        return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral || isWord(kind);
     }
 
     export function isComment(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.SingleLineCommentTrivia || kind === SyntaxKind.MultiLineCommentTrivia;
     }
 
-    function isKeyword(n: Node): boolean {
-        return n.kind >= SyntaxKind.FirstKeyword && n.kind <= SyntaxKind.LastKeyword;
-    }
-
-    function isWord(n: Node): boolean {
-        return n.kind === SyntaxKind.Identifier || isKeyword(n);
-    }
-
-    function isPropertyName(n: Node): boolean {
-        return n.kind === SyntaxKind.StringLiteral || n.kind === SyntaxKind.NumericLiteral || isWord(n);
+    export function isPunctuation(kind: SyntaxKind): boolean {
+        return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
     }
 }

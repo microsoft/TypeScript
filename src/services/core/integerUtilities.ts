@@ -7,12 +7,6 @@ module TypeScript {
         }
 
         export function integerMultiplyLow32Bits(n1: number, n2: number): number {
-            var n1Low16 = n1 & 0x0000ffff;
-            var n1High16 = n1 >>> 16;
-
-            var n2Low16 = n2 & 0x0000ffff;
-            var n2High16 = n2 >>> 16;
-
             var resultLow32 = (((n1 & 0xffff0000) * n2) >>> 0) + (((n1 & 0x0000ffff) * n2) >>> 0) >>> 0;
             return resultLow32;
         }
