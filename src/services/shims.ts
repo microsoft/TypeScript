@@ -174,6 +174,7 @@ module ts {
     export enum LanguageVersion {
         EcmaScript3 = 0,
         EcmaScript5 = 1,
+        EcmaScript6 = 2,
     }
 
     export enum ModuleGenTarget {
@@ -213,6 +214,7 @@ module ts {
         switch (languageVersion) {
             case LanguageVersion.EcmaScript3: return ScriptTarget.ES3
             case LanguageVersion.EcmaScript5: return ScriptTarget.ES5;
+            case LanguageVersion.EcmaScript6: return ScriptTarget.ES6;
             default: throw Error("unsupported LanguageVersion value: " + languageVersion);
         }
     }
@@ -234,6 +236,7 @@ module ts {
         switch (scriptTarget) {
             case ScriptTarget.ES3: return LanguageVersion.EcmaScript3;
             case ScriptTarget.ES5: return LanguageVersion.EcmaScript5;
+            case ScriptTarget.ES6: return LanguageVersion.EcmaScript6;
             default: throw Error("unsupported ScriptTarget value: " + scriptTarget);
         }
     }

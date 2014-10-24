@@ -1,0 +1,11 @@
+tests/cases/compiler/file2.ts(1,1): error TS2449: The operand of an increment or decrement operator cannot be a constant.
+
+
+==== tests/cases/compiler/file1.ts (0 errors) ====
+    
+    const x = 0
+    
+==== tests/cases/compiler/file2.ts (1 errors) ====
+    x++;
+    ~
+!!! error TS2449: The operand of an increment or decrement operator cannot be a constant.

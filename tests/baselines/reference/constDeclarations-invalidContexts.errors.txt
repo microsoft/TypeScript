@@ -1,0 +1,66 @@
+tests/cases/compiler/constDeclarations-invalidContexts.ts(4,5): error TS1156: 'const' declarations can only be declared inside a block.
+tests/cases/compiler/constDeclarations-invalidContexts.ts(6,5): error TS1156: 'const' declarations can only be declared inside a block.
+tests/cases/compiler/constDeclarations-invalidContexts.ts(9,5): error TS1156: 'const' declarations can only be declared inside a block.
+tests/cases/compiler/constDeclarations-invalidContexts.ts(12,5): error TS1156: 'const' declarations can only be declared inside a block.
+tests/cases/compiler/constDeclarations-invalidContexts.ts(17,5): error TS1156: 'const' declarations can only be declared inside a block.
+tests/cases/compiler/constDeclarations-invalidContexts.ts(20,5): error TS1156: 'const' declarations can only be declared inside a block.
+tests/cases/compiler/constDeclarations-invalidContexts.ts(23,5): error TS1156: 'const' declarations can only be declared inside a block.
+tests/cases/compiler/constDeclarations-invalidContexts.ts(26,12): error TS1156: 'const' declarations can only be declared inside a block.
+tests/cases/compiler/constDeclarations-invalidContexts.ts(29,29): error TS1156: 'const' declarations can only be declared inside a block.
+tests/cases/compiler/constDeclarations-invalidContexts.ts(16,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+
+
+==== tests/cases/compiler/constDeclarations-invalidContexts.ts (10 errors) ====
+    
+    // Errors, const must be defined inside a block
+    if (true) 
+        const c1 = 0;
+        ~~~~~~~~~~~~~
+!!! error TS1156: 'const' declarations can only be declared inside a block.
+    else 
+        const c2 = 0;
+        ~~~~~~~~~~~~~
+!!! error TS1156: 'const' declarations can only be declared inside a block.
+    
+    while (true) 
+        const c3 = 0;
+        ~~~~~~~~~~~~~
+!!! error TS1156: 'const' declarations can only be declared inside a block.
+    
+    do 
+        const c4 = 0;
+        ~~~~~~~~~~~~~
+!!! error TS1156: 'const' declarations can only be declared inside a block.
+    while (true);
+    
+    var obj;
+    with (obj) 
+          ~~~
+!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+        const c5 = 0;
+        ~~~~~~~~~~~~~
+!!! error TS1156: 'const' declarations can only be declared inside a block.
+    
+    for (var i = 0; i < 10; i++)
+        const c6 = 0;
+        ~~~~~~~~~~~~~
+!!! error TS1156: 'const' declarations can only be declared inside a block.
+    
+    for (var i2 in {}) 
+        const c7 = 0;
+        ~~~~~~~~~~~~~
+!!! error TS1156: 'const' declarations can only be declared inside a block.
+    
+    if (true) 
+        label: const c8 = 0;
+               ~~~~~~~~~~~~~
+!!! error TS1156: 'const' declarations can only be declared inside a block.
+    
+    while (false)
+        label2: label3: label4: const c9 = 0;
+                                ~~~~~~~~~~~~~
+!!! error TS1156: 'const' declarations can only be declared inside a block.
+    
+    
+    
+    
