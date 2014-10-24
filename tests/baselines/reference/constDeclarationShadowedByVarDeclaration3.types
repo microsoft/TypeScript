@@ -1,0 +1,25 @@
+=== tests/cases/compiler/constDeclarationShadowedByVarDeclaration3.ts ===
+// Ensure only checking for const declarations shadowed by vars
+class Rule {
+>Rule : Rule
+
+    public regex: RegExp = new RegExp('');
+>regex : RegExp
+>RegExp : RegExp
+>new RegExp('') : RegExp
+>RegExp : { (pattern: string, flags?: string): RegExp; new (pattern: string, flags?: string): RegExp; $1: string; $2: string; $3: string; $4: string; $5: string; $6: string; $7: string; $8: string; $9: string; lastMatch: string; }
+
+    public name: string = '';
+>name : string
+
+    constructor(name: string) {
+>name : string
+
+        this.name = name;
+>this.name = name : string
+>this.name : string
+>this : Rule
+>name : string
+>name : string
+    }
+}
