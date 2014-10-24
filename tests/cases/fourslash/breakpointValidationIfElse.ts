@@ -19,4 +19,9 @@
 ////} else {
 ////    i--;
 ////}
+////if (function foo() {
+////    return 30;
+////} ()) {
+////    i++;
+////}
 verify.baselineCurrentFileBreakpointLocations();

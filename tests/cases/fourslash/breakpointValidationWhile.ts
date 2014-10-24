@@ -10,4 +10,13 @@
 ////{
 ////    a++;
 ////}
+////while (a == 10)  a++;
+////while (a == 10) 
+////    a++;
+////while ((function () {
+////    return 30 * a;
+////})() !== a) {
+////    a--;
+////}
+
 verify.baselineCurrentFileBreakpointLocations();
