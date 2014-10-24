@@ -224,7 +224,7 @@ module ts {
         FirstReservedWord = BreakKeyword,
         LastReservedWord = WithKeyword,
         FirstKeyword = BreakKeyword,
-        LastKeyword = StringKeyword,
+        LastKeyword = TypeKeyword,
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
@@ -232,7 +232,7 @@ module ts {
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = EndOfFileToken,
-        LastToken = StringKeyword,
+        LastToken = TypeKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = WhitespaceTrivia
     }

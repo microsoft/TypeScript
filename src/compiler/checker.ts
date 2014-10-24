@@ -991,6 +991,19 @@ module ts {
             return result;
         }
 
+        function getTypeAliasForTypeLiteral(type: Type): Symbol {
+            if (type.symbol && type.symbol.flags & SymbolFlags.TypeLiteral) {
+                var node = type.symbol.declarations[0].parent;
+                while (node.kind === SyntaxKind.ParenType) {
+                    node = node.parent;
+                }
+                if (node.kind === SyntaxKind.TypeAliasDeclaration) {
+                    return getSymbolOfNode(node);
+                }
+            }
+            return undefined;
+        }
+
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
         var _displayBuilder: SymbolDisplayBuilder;
         function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
@@ -1181,8 +1194,15 @@ module ts {
                         writeTypeofSymbol(type);
                     }
                     else if (typeStack && contains(typeStack, type)) {
-                        // Recursive usage, use any
-                        writeKeyword(writer, SyntaxKind.AnyKeyword);
+                        // If type is an anonymous type literal in a type alias declaration, use type alias name
+                        var typeAlias = getTypeAliasForTypeLiteral(type);
+                        if (typeAlias) {
+                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type);
+                        }
+                        else {
+                            // Recursive usage, use any
+                            writeKeyword(writer, SyntaxKind.AnyKeyword);
+                        }
                     }
                     else {
                         if (!typeStack) {
