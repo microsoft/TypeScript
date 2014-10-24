@@ -109,7 +109,8 @@ module ts {
             isImplementationOfOverload: isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
-            isArgumentsSymbol: symbol => symbol === argumentsSymbol
+            isArgumentsSymbol: symbol => symbol === argumentsSymbol,
+            hasEarlyErrors: hasEarlyErrors
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -177,7 +178,8 @@ module ts {
 
         function getExcludedSymbolFlags(flags: SymbolFlags): SymbolFlags {
             var result: SymbolFlags = 0;
-            if (flags & SymbolFlags.Variable) result |= SymbolFlags.VariableExcludes;
+            if (flags & SymbolFlags.BlockScopedVariable) result |= SymbolFlags.BlockScopedVariableExcludes;
+            if (flags & SymbolFlags.FunctionScopedVariable) result |= SymbolFlags.FunctionScopedVariableExcludes;
             if (flags & SymbolFlags.Property) result |= SymbolFlags.PropertyExcludes;
             if (flags & SymbolFlags.EnumMember) result |= SymbolFlags.EnumMemberExcludes;
             if (flags & SymbolFlags.Function) result |= SymbolFlags.FunctionExcludes;
@@ -228,8 +230,13 @@ module ts {
                 recordMergedSymbol(target, source);
             }
             else {
+                var message = target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable
+                     ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
                 forEach(source.declarations, node => {
-                    error(node.name ? node.name : node, Diagnostics.Duplicate_identifier_0, symbolToString(source));
+                    error(node.name ? node.name : node, message, symbolToString(source));
+                });
+                forEach(target.declarations, node => {
+                    error(node.name ? node.name : node, message, symbolToString(source));
                 });
             }
         }
@@ -319,6 +326,25 @@ module ts {
                 }
                 if (!s && nameNotFoundMessage) {
                     error(errorLocation, nameNotFoundMessage, nameArg);
+                }
+
+                if (s && s.flags & SymbolFlags.BlockScopedVariable) {
+                    // Block-scoped variables can not be used before their definition
+                    var declaration = forEach(s.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
+                    Debug.assert(declaration, "Block-scoped variable declaration is undefined");
+                    var declarationSourceFile = getSourceFileOfNode(declaration);
+                    var referenceSourceFile = getSourceFileOfNode(errorLocation);
+                    if (declarationSourceFile === referenceSourceFile) {
+                        if (declaration.pos > errorLocation.pos) {
+                            error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
+                        }
+                    }
+                    else if (compilerOptions.out) {
+                        var sourceFiles = program.getSourceFiles();
+                        if (sourceFiles.indexOf(referenceSourceFile) < sourceFiles.indexOf(declarationSourceFile)) {
+                            error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
+                        }
+                    }
                 }
                 return s;
             }
@@ -4186,8 +4212,8 @@ module ts {
         // Get the narrowed type of a given symbol at a given location
         function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
             var type = getTypeOfSymbol(symbol);
-            // Only narrow when symbol is variable of a non-primitive type
-            if (symbol.flags & SymbolFlags.Variable && isTypeAnyOrObjectOrTypeParameter(type)) {
+            // Only narrow when symbol is variable of a structured type
+            if (symbol.flags & SymbolFlags.Variable && type.flags & TypeFlags.Structured) {
                 while (true) {
                     var child = node;
                     node = node.parent;
@@ -5640,7 +5666,7 @@ module ts {
             return true;
         }
 
-        function checkReferenceExpression(n: Node, message: DiagnosticMessage): boolean {
+        function checkReferenceExpression(n: Node, invalidReferenceMessage: DiagnosticMessage, constantVarianleMessage: DiagnosticMessage): boolean {
             function findSymbol(n: Node): Symbol {
                 var symbol = getNodeLinks(n).resolvedSymbol;
                 // Because we got the symbol from the resolvedSymbol property, it might be of kind
@@ -5679,8 +5705,34 @@ module ts {
                 }
             }
 
+            function isConstVariableReference(n: Node): boolean {
+                switch (n.kind) {
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.PropertyAccess:
+                        var symbol = findSymbol(n);
+                        return symbol && (symbol.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
+                    case SyntaxKind.IndexedAccess:
+                        var index = (<IndexedAccess>n).index;
+                        var symbol = findSymbol((<IndexedAccess>n).object);
+                        if (symbol && index.kind === SyntaxKind.StringLiteral) {
+                            var name = (<LiteralExpression>index).text;
+                            var prop = getPropertyOfType(getTypeOfSymbol(symbol), name);
+                            return prop && (prop.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(prop) & NodeFlags.Const) !== 0;
+                        }
+                        return false;
+                    case SyntaxKind.ParenExpression:
+                        return isConstVariableReference((<ParenExpression>n).expression);
+                    default:
+                        return false;
+                }
+            }
+
             if (!isReferenceOrErrorExpression(n)) {
-                error(n, message);
+                error(n, invalidReferenceMessage);
+                return false;
+            }
+            if (isConstVariableReference(n)) {
+                error(n, constantVarianleMessage);
                 return false;
             }
             return true;
@@ -5705,7 +5757,9 @@ module ts {
                     var ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
                     if (ok) {
                         // run check only if former checks succeeded to avoid reporting cascading errors
-                        checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer);
+                        checkReferenceExpression(node.operand,
+                            Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer,
+                            Diagnostics.The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant);
                     }
                     return numberType;
             }
@@ -5717,13 +5771,19 @@ module ts {
             var ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
                 // run check only if former checks succeeded to avoid reporting cascading errors
-                checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer);
+                checkReferenceExpression(node.operand,
+                    Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer,
+                    Diagnostics.The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant);
             }
             return numberType;
         }
 
-        function isTypeAnyOrObjectOrTypeParameter(type: Type): boolean {
-            return (type.flags & (TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) !== 0;
+        // Return true if type is any, an object type, a type parameter, or a union type composed of only those kinds of types
+        function isStructuredType(type: Type): boolean {
+            if (type.flags & TypeFlags.Union) {
+                return !forEach((<UnionType>type).types, t => !isStructuredType(t));
+            }
+            return (type.flags & TypeFlags.Structured) !== 0;
         }
 
         function checkInstanceOfExpression(node: BinaryExpression, leftType: Type, rightType: Type): Type {
@@ -5732,7 +5792,7 @@ module ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (leftType !== unknownType && !isTypeAnyOrObjectOrTypeParameter(leftType)) {
+            if (leftType !== unknownType && !isStructuredType(leftType)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
@@ -5750,7 +5810,7 @@ module ts {
             if (leftType !== anyType && leftType !== stringType && leftType !== numberType) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_types_any_string_or_number);
             }
-            if (!isTypeAnyOrObjectOrTypeParameter(rightType)) {
+            if (!isStructuredType(rightType)) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -5894,7 +5954,7 @@ module ts {
                     // requires VarExpr to be classified as a reference
                     // A compound assignment furthermore requires VarExpr to be classified as a reference (section 4.1) 
                     // and the type of the non - compound operation to be assignable to the type of VarExpr.
-                    var ok = checkReferenceExpression(node.left, Diagnostics.Invalid_left_hand_side_of_assignment_expression);
+                    var ok = checkReferenceExpression(node.left, Diagnostics.Invalid_left_hand_side_of_assignment_expression, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant);
                     // Use default messages
                     if (ok) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
@@ -6868,6 +6928,38 @@ module ts {
             }
         }
 
+        function checkCollisionWithConstDeclarations(node: VariableDeclaration) {
+            // Variable declarations are hoisted to the top of their function scope. They can shadow
+            // block scoped declarations, which bind tighter. this will not be flagged as duplicate definition
+            // by the binder as the declaration scope is different.
+            // A non-initialized declaration is a no-op as the block declaration will resolve before the var
+            // declaration. the problem is if the declaration has an initializer. this will act as a write to the
+            // block declared value. this is fine for let, but not const.
+            //
+            // Only consider declarations with initializers, uninitialized var declarations will not 
+            // step on a const variable.
+            // Do not consider let and const declarations, as duplicate block-scoped declarations 
+            // are handled by the binder.
+            // We are only looking for var declarations that step on const declarations from a 
+            // different scope. e.g.:
+            //      var x = 0;
+            //      {
+            //          const x = 0;
+            //          var x = 0;
+            //      }
+            if (node.initializer && (node.flags & NodeFlags.BlockScoped) === 0) {
+                var symbol = getSymbolOfNode(node);
+                if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
+                    var localDeclarationSymbol = resolveName(node, node.name.text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
+                    if (localDeclarationSymbol && localDeclarationSymbol !== symbol && localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
+                        if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.Const) {
+                            error(node, Diagnostics.Cannot_redeclare_block_scoped_variable_0, symbolToString(localDeclarationSymbol));
+                        }
+                    }
+                }
+            }
+        }
+
         function checkVariableDeclaration(node: VariableDeclaration) {
             checkSourceElement(node.type);
             checkExportsOnMergedDeclarations(node);
@@ -6891,6 +6983,7 @@ module ts {
                         // Use default messages
                         checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
                     }
+                    checkCollisionWithConstDeclarations(node);
                 }
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
@@ -6964,14 +7057,14 @@ module ts {
                 }
                 else {
                     // run check only former check succeeded to avoid cascading errors
-                    checkReferenceExpression(node.variable, Diagnostics.Invalid_left_hand_side_in_for_in_statement); 
+                    checkReferenceExpression(node.variable, Diagnostics.Invalid_left_hand_side_in_for_in_statement, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant); 
                 }
             }
 
             var exprType = checkExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeAnyOrObjectOrTypeParameter(exprType) && exprType !== unknownType) {
+            if (!isStructuredType(exprType) && exprType !== unknownType) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
@@ -7902,77 +7995,6 @@ module ts {
             return node.parent && node.parent.kind === SyntaxKind.TypeReference;
         }
 
-        function isExpression(node: Node): boolean {
-            switch (node.kind) {
-                case SyntaxKind.ThisKeyword:
-                case SyntaxKind.SuperKeyword:
-                case SyntaxKind.NullKeyword:
-                case SyntaxKind.TrueKeyword:
-                case SyntaxKind.FalseKeyword:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.ArrayLiteral:
-                case SyntaxKind.ObjectLiteral:
-                case SyntaxKind.PropertyAccess:
-                case SyntaxKind.IndexedAccess:
-                case SyntaxKind.CallExpression:
-                case SyntaxKind.NewExpression:
-                case SyntaxKind.TypeAssertion:
-                case SyntaxKind.ParenExpression:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.PrefixOperator:
-                case SyntaxKind.PostfixOperator:
-                case SyntaxKind.BinaryExpression:
-                case SyntaxKind.ConditionalExpression:
-                case SyntaxKind.OmittedExpression:
-                    return true;
-                case SyntaxKind.QualifiedName:
-                    while (node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
-                    return node.parent.kind === SyntaxKind.TypeQuery;
-                case SyntaxKind.Identifier:
-                    if (node.parent.kind === SyntaxKind.TypeQuery) {
-                        return true;
-                    }
-                // Fall through
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.StringLiteral:
-                    var parent = node.parent;
-                    switch (parent.kind) {
-                        case SyntaxKind.VariableDeclaration:
-                        case SyntaxKind.Parameter:
-                        case SyntaxKind.Property:
-                        case SyntaxKind.EnumMember:
-                        case SyntaxKind.PropertyAssignment:
-                            return (<VariableDeclaration>parent).initializer === node;
-                        case SyntaxKind.ExpressionStatement:
-                        case SyntaxKind.IfStatement:
-                        case SyntaxKind.DoStatement:
-                        case SyntaxKind.WhileStatement:
-                        case SyntaxKind.ReturnStatement:
-                        case SyntaxKind.WithStatement:
-                        case SyntaxKind.SwitchStatement:
-                        case SyntaxKind.CaseClause:
-                        case SyntaxKind.ThrowStatement:
-                        case SyntaxKind.SwitchStatement:
-                            return (<ExpressionStatement>parent).expression === node;
-                        case SyntaxKind.ForStatement:
-                            return (<ForStatement>parent).initializer === node ||
-                                (<ForStatement>parent).condition === node ||
-                                (<ForStatement>parent).iterator === node;
-                        case SyntaxKind.ForInStatement:
-                            return (<ForInStatement>parent).variable === node ||
-                                (<ForInStatement>parent).expression === node;
-                        case SyntaxKind.TypeAssertion:
-                            return node === (<TypeAssertion>parent).operand;
-                        default:
-                            if (isExpression(parent)) {
-                                return true;
-                            }
-                    }
-            }
-            return false;
-        }
-
         function isTypeNode(node: Node): boolean {
             if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
                 return true;
@@ -8344,6 +8366,10 @@ module ts {
             return getDiagnostics().length > 0 || getGlobalDiagnostics().length > 0;
         }
 
+        function hasEarlyErrors(sourceFile?: SourceFile): boolean {
+            return forEach(getDiagnostics(sourceFile), d => d.isEarly);
+        }
+
         function isReferencedImportDeclaration(node: ImportDeclaration): boolean {
             var symbol = getSymbolOfNode(node);
             if (getSymbolLinks(symbol).referenced) {
@@ -8427,6 +8453,7 @@ module ts {
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
                 hasSemanticErrors: hasSemanticErrors,
+                hasEarlyErrors: hasEarlyErrors,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
                 writeTypeAtLocation: writeTypeAtLocation,
