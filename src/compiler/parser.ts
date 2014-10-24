@@ -20,7 +20,7 @@ module ts {
     interface ReferenceComments {
         referencedFiles: FileReference[];
         amdDependencies: string[];
-}
+    }
 
     export function getSourceFileOfNode(node: Node): SourceFile {
         while (node && node.kind !== SyntaxKind.SourceFile) node = node.parent;
@@ -640,8 +640,6 @@ module ts {
         pop(): void;
         nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
     }
-
-
 
     interface ReferencePathMatchResult {
         fileReference: FileReference
