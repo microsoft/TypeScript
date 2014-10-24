@@ -549,7 +549,7 @@ module ts {
     export interface SourceFile extends Block {
         filename: string;
         text: string;
-        getLineAndCharacterFromPosition(position: number): { line: number; character: number };
+        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
         getPositionFromLineAndCharacter(line: number, character: number): number;
         getLineStarts(): number[];
         amdDependencies: string[];

@@ -121,7 +121,12 @@ module ts.formatting {
         sourceFile: SourceFile,
         options: FormatCodeOptions,
         rulesProvider: RulesProvider,
-        requestKind: FormattingRequestKind): TextChange[] {
+        requestKind: FormattingRequestKind): TextChange[]{
+
+        var syntacticErrors = sourceFile.syntacticErrors.length !== 0 && sourceFile.syntacticErrors.slice(0);
+        if (syntacticErrors) {
+            syntacticErrors.sort((d1, d2) => d1.start - d2.start);
+        }
 
         // formatting context to be used by rules provider to get rules
         var formattingContext = new FormattingContext(sourceFile, requestKind);
@@ -131,6 +136,7 @@ module ts.formatting {
 
         var formattingScanner = getFormattingScanner(sourceFile, enclosingNode, originalRange);        
 
+        var previousRangeHasError: boolean;
         var previousRange: TextRangeWithKind;
         var previousParent: Node;
         var previousRangeStartLine: number;
@@ -144,6 +150,9 @@ module ts.formatting {
             var startLine = sourceFile.getLineAndCharacterFromPosition(enclosingNode.getStart(sourceFile)).line;
             processNode(enclosingNode, enclosingNode, startLine, initialIndentation);
         }
+
+        formattingScanner.close();
+
         return edits;
 
         function getIndentationDelta(node: Node, lineAdded: boolean): number {
@@ -238,7 +247,6 @@ module ts.formatting {
 
                 // determine child indentation
                 // TODO: share this code with SmartIndenter
-                // NOTE: SI uses non-adjusted lines
                 var increaseIndentation =
                     childStartLine !== nodeStartLine &&
                     !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStartLine, sourceFile) &&
@@ -254,6 +262,14 @@ module ts.formatting {
             }
         }
 
+        function rangeContainsError(range: TextRange): boolean {
+            if (!syntacticErrors.length) {
+                return false;
+            }
+
+            binarySearch
+        }
+
         function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, contextNode: Node, indentation: DynamicIndentation): void {
             Debug.assert(rangeContainsRange(parent, currentTokenInfo.token));
 
@@ -266,13 +282,14 @@ module ts.formatting {
             var lineAdded: boolean;
             var isTokenInRange = rangeContainsRange(originalRange, currentTokenInfo.token);
             var indentToken: boolean = true;
+
             if (isTokenInRange) {
                 var prevStartLine = previousRangeStartLine;
                 var tokenStart = sourceFile.getLineAndCharacterFromPosition(currentTokenInfo.token.pos);
                 lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, contextNode, indentation);
                 if (lineAdded !== undefined) {
                     indentToken = lineAdded;
-                }                
+                }
                 else {
                     indentToken = tokenStart.line !== prevStartLine;
                 }
@@ -329,20 +346,23 @@ module ts.formatting {
         }
 
         function processRange(range: TextRangeWithKind, rangeStart: LineAndCharacter, parent: Node, contextNode: Node, indentation: DynamicIndentation): boolean {
-            
+            var rangeHasError = rangeContainsError(range);
             var lineAdded: boolean;
-            if (!previousRange) {
-                // trim whitespaces starting from the beginning of the span up to the current line
-                var originalStart = sourceFile.getLineAndCharacterFromPosition(originalRange.pos);
-                trimTrailingWhitespacesForLines(originalStart.line, rangeStart.line);
-            }
-            else {
-                lineAdded = processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode, indentation)
+            if (!rangeHasError && !previousRangeHasError) {                
+                if (!previousRange) {
+                    // trim whitespaces starting from the beginning of the span up to the current line
+                    var originalStart = sourceFile.getLineAndCharacterFromPosition(originalRange.pos);
+                    trimTrailingWhitespacesForLines(originalStart.line, rangeStart.line);
+                }
+                else {
+                    lineAdded = processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode, indentation)
+                }
             }
 
             previousRange = range;
             previousParent = parent;
             previousRangeStartLine = rangeStart.line;
+            previousRangeHasError = rangeHasError;
 
             return lineAdded;
         }

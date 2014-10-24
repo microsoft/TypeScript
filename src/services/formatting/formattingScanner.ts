@@ -6,6 +6,7 @@ module ts.formatting {
         isOnToken(): boolean;
         readTokenInfo(n: Node): TokenInfo;
         lastTrailingTriviaWasNewLine(): boolean;
+        close(): void;
     }
 
     export function getFormattingScanner(sourceFile: SourceFile, enclosingNode: Node, range: TextRange): FormattingScanner {
@@ -23,7 +24,8 @@ module ts.formatting {
             advance: advance,
             readTokenInfo: readTokenInfo,
             isOnToken: isOnToken,
-            lastTrailingTriviaWasNewLine: lastTrailingTriviaWasNewLine
+            lastTrailingTriviaWasNewLine: lastTrailingTriviaWasNewLine,
+            close: () => scanner.setText(undefined)
         }
 
 
