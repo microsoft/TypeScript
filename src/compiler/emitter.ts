@@ -1143,7 +1143,15 @@ module ts {
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 if (node.declarations) {
-                    emitToken(SyntaxKind.VarKeyword, endPos);
+                    if (node.declarations[0] && node.declarations[0].flags & NodeFlags.Let) {
+                        emitToken(SyntaxKind.LetKeyword, endPos);
+                    }
+                    else if (node.declarations[0] && node.declarations[0].flags & NodeFlags.Const) {
+                        emitToken(SyntaxKind.ConstKeyword, endPos);
+                    }
+                    else {
+                        emitToken(SyntaxKind.VarKeyword, endPos);
+                    }
                     write(" ");
                     emitCommaList(node.declarations, /*includeTrailingComma*/ false);
                 }
@@ -1163,7 +1171,12 @@ module ts {
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 if (node.declaration) {
-                    emitToken(SyntaxKind.VarKeyword, endPos);
+                    if (node.declaration.flags & NodeFlags.Let) {
+                        emitToken(SyntaxKind.LetKeyword, endPos);
+                    }
+                    else {
+                        emitToken(SyntaxKind.VarKeyword, endPos);
+                    }
                     write(" ");
                     emit(node.declaration);
                 }
@@ -1292,7 +1305,17 @@ module ts {
 
             function emitVariableStatement(node: VariableStatement) {
                 emitLeadingComments(node);
-                if (!(node.flags & NodeFlags.Export)) write("var ");
+                if (!(node.flags & NodeFlags.Export)) {
+                    if (node.flags & NodeFlags.Let) {
+                        write("let ");
+                    }
+                    else if (node.flags & NodeFlags.Const) {
+                        write("const ");
+                    }
+                    else {
+                        write("var ");
+                    }
+                }
                 emitCommaList(node.declarations, /*includeTrailingComma*/ false);
                 write(";");
                 emitTrailingComments(node);
@@ -2829,7 +2852,15 @@ module ts {
                 if (hasDeclarationWithEmit) {
                     emitJsDocComments(node);
                     emitDeclarationFlags(node);
-                    write("var ");
+                    if (node.flags & NodeFlags.Let) {
+                        write("let ");
+                    }
+                    else if (node.flags & NodeFlags.Const) {
+                        write("const ");
+                    }
+                    else {
+                        write("var ");
+                    }
                     emitCommaList(node.declarations, emitVariableDeclaration);
                     write(";");
                     writeLine();
@@ -3240,11 +3271,14 @@ module ts {
         }
 
         var hasSemanticErrors = resolver.hasSemanticErrors();
+        var hasEarlyErrors = resolver.hasEarlyErrors(targetSourceFile);
 
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
-            emitJavaScript(jsFilePath, sourceFile);
-            if (!hasSemanticErrors && compilerOptions.declaration) {
-                emitDeclarations(jsFilePath, sourceFile);
+            if (!hasEarlyErrors) {
+                emitJavaScript(jsFilePath, sourceFile);
+                if (!hasSemanticErrors && compilerOptions.declaration) {
+                    emitDeclarations(jsFilePath, sourceFile);
+                }
             }
         }
 
@@ -3284,7 +3318,9 @@ module ts {
 
         // Check and update returnCode for syntactic and semantic
         var returnCode: EmitReturnStatus;
-        if (hasEmitterError) {
+        if (hasEarlyErrors) {
+            returnCode = EmitReturnStatus.AllOutputGenerationSkipped;
+        } else if (hasEmitterError) {
             returnCode = EmitReturnStatus.EmitErrorsEncountered;
         } else if (hasSemanticErrors && compilerOptions.declaration) {
             returnCode = EmitReturnStatus.DeclarationGenerationSkipped;

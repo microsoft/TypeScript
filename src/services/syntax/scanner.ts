@@ -186,7 +186,7 @@ module TypeScript.Scanner {
     var lastTokenInfo = { leadingTriviaWidth: -1, width: -1 };
     var lastTokenInfoTokenID: number = -1;
 
-    var triviaScanner = createScannerInternal(ts.ScriptTarget.ES5, SimpleText.fromString(""), () => { });
+    var triviaScanner = createScannerInternal(ts.ScriptTarget.Latest, SimpleText.fromString(""), () => { });
 
     interface IScannerToken extends ISyntaxToken {
     }

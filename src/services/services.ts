@@ -77,7 +77,7 @@ module ts {
         update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
-    var scanner: Scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ true);
+    var scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
     var emptyArray: any[] = [];
 
@@ -1235,7 +1235,9 @@ module ts {
 
         static label = "label";
 
-        static alias = "alias"
+        static alias = "alias";
+
+        static constantElement = "constant";
     }
 
     export class ScriptElementKindModifier {
@@ -1486,9 +1488,9 @@ module ts {
     }
 
     export function getDefaultCompilerOptions(): CompilerOptions {
-        // Set "ES5" target by default for language service
+        // Set "ScriptTarget.Latest" target by default for language service
         return {
-            target: ScriptTarget.ES5,
+            target: ScriptTarget.Latest,
             module: ModuleKind.None,
         };
     }
@@ -2733,6 +2735,9 @@ module ts {
                 if (isFirstDeclarationOfSymbolParameter(symbol)) {
                     return ScriptElementKind.parameterElement;
                 }
+                else if(symbol.valueDeclaration && symbol.valueDeclaration.flags & NodeFlags.Const) {
+                    return ScriptElementKind.constantElement;
+                }
                 return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
             }
             if (flags & SymbolFlags.Function) return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
@@ -2778,7 +2783,7 @@ module ts {
                 case SyntaxKind.ClassDeclaration: return ScriptElementKind.classElement;
                 case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
                 case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
-                case SyntaxKind.VariableDeclaration: return ScriptElementKind.variableElement;
+                case SyntaxKind.VariableDeclaration: return node.flags & NodeFlags.Const ? ScriptElementKind.constantElement: ScriptElementKind.variableElement;
                 case SyntaxKind.FunctionDeclaration: return ScriptElementKind.functionElement;
                 case SyntaxKind.GetAccessor: return ScriptElementKind.memberGetAccessorElement;
                 case SyntaxKind.SetAccessor: return ScriptElementKind.memberSetAccessorElement;
@@ -2867,6 +2872,7 @@ module ts {
                             switch (symbolKind) {
                                 case ScriptElementKind.memberVariableElement:
                                 case ScriptElementKind.variableElement:
+                                case ScriptElementKind.constantElement:
                                 case ScriptElementKind.parameterElement:
                                 case ScriptElementKind.localVariableElement:
                                     // If it is call or construct signature of lambda's write type name
@@ -3891,8 +3897,8 @@ module ts {
                     // before and after it have to be a non-identifier char).
                     var endPosition = position + symbolNameLength;
 
-                    if ((position === 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.ES5)) &&
-                        (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.ES5))) {
+                    if ((position === 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.Latest)) &&
+                        (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.Latest))) {
                         // Found a real match.  Keep searching.  
                         positions.push(position);
                     }
@@ -5333,7 +5339,7 @@ module ts {
 
     /// Classifier
     export function createClassifier(host: Logger): Classifier {
-        var scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false);
+        var scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
         /// We do not have a full parser support to know when we should parse a regex or not
         /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where

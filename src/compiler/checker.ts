@@ -108,7 +108,8 @@ module ts {
             isImplementationOfOverload: isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
-            isArgumentsSymbol: symbol => symbol === argumentsSymbol
+            isArgumentsSymbol: symbol => symbol === argumentsSymbol,
+            hasEarlyErrors: hasEarlyErrors
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -176,7 +177,8 @@ module ts {
 
         function getExcludedSymbolFlags(flags: SymbolFlags): SymbolFlags {
             var result: SymbolFlags = 0;
-            if (flags & SymbolFlags.Variable) result |= SymbolFlags.VariableExcludes;
+            if (flags & SymbolFlags.BlockScopedVariable) result |= SymbolFlags.BlockScopedVariableExcludes;
+            if (flags & SymbolFlags.FunctionScopedVariable) result |= SymbolFlags.FunctionScopedVariableExcludes;
             if (flags & SymbolFlags.Property) result |= SymbolFlags.PropertyExcludes;
             if (flags & SymbolFlags.EnumMember) result |= SymbolFlags.EnumMemberExcludes;
             if (flags & SymbolFlags.Function) result |= SymbolFlags.FunctionExcludes;
@@ -226,8 +228,13 @@ module ts {
                 recordMergedSymbol(target, source);
             }
             else {
+                var message = target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable
+                     ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
                 forEach(source.declarations, node => {
-                    error(node.name ? node.name : node, Diagnostics.Duplicate_identifier_0, symbolToString(source));
+                    error(node.name ? node.name : node, message, symbolToString(source));
+                });
+                forEach(target.declarations, node => {
+                    error(node.name ? node.name : node, message, symbolToString(source));
                 });
             }
         }
@@ -317,6 +324,25 @@ module ts {
                 }
                 if (!s && nameNotFoundMessage) {
                     error(errorLocation, nameNotFoundMessage, nameArg);
+                }
+
+                if (s && s.flags & SymbolFlags.BlockScopedVariable) {
+                    // Block-scoped variables can not be used before their definition
+                    var declaration = forEach(s.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
+                    Debug.assert(declaration, "Block-scoped variable declaration is undefined");
+                    var declarationSourceFile = getSourceFileOfNode(declaration);
+                    var referenceSourceFile = getSourceFileOfNode(errorLocation);
+                    if (declarationSourceFile === referenceSourceFile) {
+                        if (declaration.pos > errorLocation.pos) {
+                            error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
+                        }
+                    }
+                    else if (compilerOptions.out) {
+                        var sourceFiles = program.getSourceFiles();
+                        if (sourceFiles.indexOf(referenceSourceFile) < sourceFiles.indexOf(declarationSourceFile)) {
+                            error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
+                        }
+                    }
                 }
                 return s;
             }
@@ -5597,7 +5623,7 @@ module ts {
             return true;
         }
 
-        function checkReferenceExpression(n: Node, message: DiagnosticMessage): boolean {
+        function checkReferenceExpression(n: Node, invalidReferenceMessage: DiagnosticMessage, constantVarianleMessage: DiagnosticMessage): boolean {
             function findSymbol(n: Node): Symbol {
                 var symbol = getNodeLinks(n).resolvedSymbol;
                 // Because we got the symbol from the resolvedSymbol property, it might be of kind
@@ -5636,8 +5662,34 @@ module ts {
                 }
             }
 
+            function isConstVariableReference(n: Node): boolean {
+                switch (n.kind) {
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.PropertyAccess:
+                        var symbol = findSymbol(n);
+                        return symbol && (symbol.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
+                    case SyntaxKind.IndexedAccess:
+                        var index = (<IndexedAccess>n).index;
+                        var symbol = findSymbol((<IndexedAccess>n).object);
+                        if (symbol && index.kind === SyntaxKind.StringLiteral) {
+                            var name = (<LiteralExpression>index).text;
+                            var prop = getPropertyOfType(getTypeOfSymbol(symbol), name);
+                            return prop && (prop.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(prop) & NodeFlags.Const) !== 0;
+                        }
+                        return false;
+                    case SyntaxKind.ParenExpression:
+                        return isConstVariableReference((<ParenExpression>n).expression);
+                    default:
+                        return false;
+                }
+            }
+
             if (!isReferenceOrErrorExpression(n)) {
-                error(n, message);
+                error(n, invalidReferenceMessage);
+                return false;
+            }
+            if (isConstVariableReference(n)) {
+                error(n, constantVarianleMessage);
                 return false;
             }
             return true;
@@ -5662,7 +5714,9 @@ module ts {
                     var ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
                     if (ok) {
                         // run check only if former checks succeeded to avoid reporting cascading errors
-                        checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer);
+                        checkReferenceExpression(node.operand,
+                            Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer,
+                            Diagnostics.The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant);
                     }
                     return numberType;
             }
@@ -5674,7 +5728,9 @@ module ts {
             var ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
                 // run check only if former checks succeeded to avoid reporting cascading errors
-                checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer);
+                checkReferenceExpression(node.operand,
+                    Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer,
+                    Diagnostics.The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant);
             }
             return numberType;
         }
@@ -5855,7 +5911,7 @@ module ts {
                     // requires VarExpr to be classified as a reference
                     // A compound assignment furthermore requires VarExpr to be classified as a reference (section 4.1) 
                     // and the type of the non - compound operation to be assignable to the type of VarExpr.
-                    var ok = checkReferenceExpression(node.left, Diagnostics.Invalid_left_hand_side_of_assignment_expression);
+                    var ok = checkReferenceExpression(node.left, Diagnostics.Invalid_left_hand_side_of_assignment_expression, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant);
                     // Use default messages
                     if (ok) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
@@ -6829,6 +6885,38 @@ module ts {
             }
         }
 
+        function checkCollisionWithConstDeclarations(node: VariableDeclaration) {
+            // Variable declarations are hoisted to the top of their function scope. They can shadow
+            // block scoped declarations, which bind tighter. this will not be flagged as duplicate definition
+            // by the binder as the declaration scope is different.
+            // A non-initialized declaration is a no-op as the block declaration will resolve before the var
+            // declaration. the problem is if the declaration has an initializer. this will act as a write to the
+            // block declared value. this is fine for let, but not const.
+            //
+            // Only consider declarations with initializers, uninitialized var declarations will not 
+            // step on a const variable.
+            // Do not consider let and const declarations, as duplicate block-scoped declarations 
+            // are handled by the binder.
+            // We are only looking for var declarations that step on const declarations from a 
+            // different scope. e.g.:
+            //      var x = 0;
+            //      {
+            //          const x = 0;
+            //          var x = 0;
+            //      }
+            if (node.initializer && (node.flags & NodeFlags.BlockScoped) === 0) {
+                var symbol = getSymbolOfNode(node);
+                if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
+                    var localDeclarationSymbol = resolveName(node, node.name.text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
+                    if (localDeclarationSymbol && localDeclarationSymbol !== symbol && localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
+                        if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.Const) {
+                            error(node, Diagnostics.Cannot_redeclare_block_scoped_variable_0, symbolToString(localDeclarationSymbol));
+                        }
+                    }
+                }
+            }
+        }
+
         function checkVariableDeclaration(node: VariableDeclaration) {
             checkSourceElement(node.type);
             checkExportsOnMergedDeclarations(node);
@@ -6852,6 +6940,7 @@ module ts {
                         // Use default messages
                         checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
                     }
+                    checkCollisionWithConstDeclarations(node);
                 }
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
@@ -6925,7 +7014,7 @@ module ts {
                 }
                 else {
                     // run check only former check succeeded to avoid cascading errors
-                    checkReferenceExpression(node.variable, Diagnostics.Invalid_left_hand_side_in_for_in_statement); 
+                    checkReferenceExpression(node.variable, Diagnostics.Invalid_left_hand_side_in_for_in_statement, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant); 
                 }
             }
 
@@ -8227,6 +8316,10 @@ module ts {
             return getDiagnostics().length > 0 || getGlobalDiagnostics().length > 0;
         }
 
+        function hasEarlyErrors(sourceFile?: SourceFile): boolean {
+            return forEach(getDiagnostics(sourceFile), d => d.isEarly);
+        }
+
         function isReferencedImportDeclaration(node: ImportDeclaration): boolean {
             var symbol = getSymbolOfNode(node);
             if (getSymbolLinks(symbol).referenced) {
@@ -8310,6 +8403,7 @@ module ts {
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
                 hasSemanticErrors: hasSemanticErrors,
+                hasEarlyErrors: hasEarlyErrors,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
                 writeTypeAtLocation: writeTypeAtLocation,

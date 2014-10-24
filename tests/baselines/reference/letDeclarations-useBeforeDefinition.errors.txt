@@ -1,0 +1,21 @@
+tests/cases/compiler/letDeclarations-useBeforeDefinition.ts(3,5): error TS2448: Block-scoped variable 'l1' used before its declaration.
+tests/cases/compiler/letDeclarations-useBeforeDefinition.ts(9,5): error TS2448: Block-scoped variable 'v1' used before its declaration.
+
+
+==== tests/cases/compiler/letDeclarations-useBeforeDefinition.ts (2 errors) ====
+    
+    {
+        l1;
+        ~~
+!!! error TS2448: Block-scoped variable 'l1' used before its declaration.
+        let l1;
+    }
+    
+    var v1;
+    {
+        v1;
+        ~~
+!!! error TS2448: Block-scoped variable 'v1' used before its declaration.
+        let v1 = 0;
+    }
+    

@@ -247,9 +247,12 @@ module ts {
         MultiLine        = 0x00000100,  // Multi-line array or object literal
         Synthetic        = 0x00000200,  // Synthetic node (for full fidelity)
         DeclarationFile  = 0x00000400,  // Node is a .d.ts file
+        Let              = 0x00000800,  // Variable declaration
+        Const            = 0x00001000,  // Variable declaration
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
-        AccessibilityModifier = Public | Private | Protected
+        AccessibilityModifier = Public | Private | Protected,
+        BlockScoped = Let | Const
     }
 
     export interface Node extends TextRange {
@@ -663,6 +666,7 @@ module ts {
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
+        hasEarlyErrors(sourceFile?: SourceFile): boolean;
 
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
         // computed value.
@@ -758,51 +762,62 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' if it does 
         // resolve to a constant.
         getConstantValue(node: PropertyAccess): number;
+        hasEarlyErrors(sourceFile?: SourceFile): boolean;
     }
 
     export enum SymbolFlags {
-        Variable           = 0x00000001,  // Variable or parameter
-        Property           = 0x00000002,  // Property or enum member
-        EnumMember         = 0x00000004,  // Enum member
-        Function           = 0x00000008,  // Function
-        Class              = 0x00000010,  // Class
-        Interface          = 0x00000020,  // Interface
-        Enum               = 0x00000040,  // Enum
-        ValueModule        = 0x00000080,  // Instantiated module
-        NamespaceModule    = 0x00000100,  // Uninstantiated module
-        TypeLiteral        = 0x00000200,  // Type Literal
-        ObjectLiteral      = 0x00000400,  // Object Literal
-        Method             = 0x00000800,  // Method
-        Constructor        = 0x00001000,  // Constructor
-        GetAccessor        = 0x00002000,  // Get accessor
-        SetAccessor        = 0x00004000,  // Set accessor
-        CallSignature      = 0x00008000,  // Call signature
-        ConstructSignature = 0x00010000,  // Construct signature
-        IndexSignature     = 0x00020000,  // Index signature
-        TypeParameter      = 0x00040000,  // Type parameter
+        FunctionScopedVariable = 0x00000001, // Variable (var) or parameter
+        Property               = 0x00000002,  // Property or enum member
+        EnumMember             = 0x00000004,  // Enum member
+        Function               = 0x00000008,  // Function
+        Class                  = 0x00000010,  // Class
+        Interface              = 0x00000020,  // Interface
+        Enum                   = 0x00000040,  // Enum
+        ValueModule            = 0x00000080,  // Instantiated module
+        NamespaceModule        = 0x00000100,  // Uninstantiated module
+        TypeLiteral            = 0x00000200,  // Type Literal
+        ObjectLiteral          = 0x00000400,  // Object Literal
+        Method                 = 0x00000800,  // Method
+        Constructor            = 0x00001000,  // Constructor
+        GetAccessor            = 0x00002000,  // Get accessor
+        SetAccessor            = 0x00004000,  // Set accessor
+        CallSignature          = 0x00008000,  // Call signature
+        ConstructSignature     = 0x00010000,  // Construct signature
+        IndexSignature         = 0x00020000,  // Index signature
+        TypeParameter          = 0x00040000,  // Type parameter
 
         // Export markers (see comment in declareModuleMember in binder)
-        ExportValue        = 0x00080000,  // Exported value marker
-        ExportType         = 0x00100000,  // Exported type marker
-        ExportNamespace    = 0x00200000,  // Exported namespace marker
+        ExportValue            = 0x00080000,  // Exported value marker
+        ExportType             = 0x00100000,  // Exported type marker
+        ExportNamespace        = 0x00200000,  // Exported namespace marker
 
-        Import             = 0x00400000,  // Import
-        Instantiated       = 0x00800000,  // Instantiated symbol
-        Merged             = 0x01000000,  // Merged symbol (created during program binding)
-        Transient          = 0x02000000,  // Transient symbol (created during type check)
-        Prototype          = 0x04000000,  // Prototype property (no source representation)
-        UnionProperty      = 0x08000000,  // Property in union type
+        Import                 = 0x00400000,  // Import
+        Instantiated           = 0x00800000,  // Instantiated symbol
+        Merged                 = 0x01000000,  // Merged symbol (created during program binding)
+        Transient              = 0x02000000,  // Transient symbol (created during type check)
+        Prototype              = 0x04000000,  // Prototype property (no source representation)
+        UnionProperty          = 0x08000000,  // Property in union type
 
+        BlockScopedVariable    = 0x10000000,  // A block-scoped variable (let ot const)
+
+        Variable  = FunctionScopedVariable | BlockScopedVariable,
         Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
-
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter,
         Namespace = ValueModule | NamespaceModule,
         Module    = ValueModule | NamespaceModule,
         Accessor  = GetAccessor | SetAccessor,
         Signature = CallSignature | ConstructSignature | IndexSignature,
 
+
+        // Variables can be redeclared, but can not redeclare a block-scoped declaration with the 
+        // same name, or any other value that is not a variable, e.g. ValueModule or Class
+        FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,   
+
+        // Block-scoped declarations are not allowed to be re-declared
+        // they can not merge with anything in the value space
+        BlockScopedVariableExcludes    = Value,
+
         ParameterExcludes       = Value,
-        VariableExcludes        = Value & ~Variable,
         PropertyExcludes        = Value,
         EnumMemberExcludes      = Value,
         FunctionExcludes        = Value & ~(Function | ValueModule),
@@ -816,8 +831,9 @@ module ts {
         SetAccessorExcludes     = Value & ~GetAccessor,
         TypeParameterExcludes   = Type & ~TypeParameter,
 
+
         // Imports collide with all other imports with the same name.
-        ImportExcludes          = Import,
+        ImportExcludes                 = Import,
 
         ModuleMember = Variable | Function | Class | Interface | Enum | Module | Import,
 
@@ -1024,6 +1040,7 @@ module ts {
         key: string;
         category: DiagnosticCategory;
         code: number;
+        isEarly?: boolean;
     }
 
     // A linked list of formatted diagnostic messages to be used as part of a multiline message.
@@ -1044,6 +1061,7 @@ module ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
+        isEarly?: boolean;
     }
 
     export enum DiagnosticCategory {
@@ -1096,6 +1114,8 @@ module ts {
     export enum ScriptTarget {
         ES3,
         ES5,
+        ES6,
+        Latest = ES6,
     }
 
     export interface ParsedCommandLine {
