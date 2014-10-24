@@ -1915,57 +1915,32 @@ module ts {
     }
 
     export var tripleSlashReferenceRegExp = /^(\/\/\/\s*<reference\s+path=)('|")(.+?)\2\s*(static=('|")(.+?)\5\s*)*\/>/;
-    export function preProcessFile(fileName: string, sourceText: TypeScript.IScriptSnapshot, readImportFiles = true): PreProcessedFileInfo {
-
-        var reportDiagnostic = () => { }
-        var text = sourceText.getText(0, sourceText.getLength());
+    export function preProcessFile(sourceText: string, readImportFiles = true): PreProcessedFileInfo {
         var referencedFiles: IFileReference[] = [];
         var importedFiles: IFileReference[] = [];
-
-        function isNoDefaultLibMatch(comment: string): RegExpExecArray {
-            var isNoDefaultLibRegex = /^(\/\/\/\s*<reference\s+no-default-lib=)('|")(.+?)\2\s*\/>/gim;
-            return isNoDefaultLibRegex.exec(comment);
-        }
-
-        // TODO : merge this function with processReferenceComments in parser as both do similar functionality
-        function getFileReferenceFromReferencePath(comment: string): IFileReference {
-            var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-
-            if (simpleReferenceRegEx.exec(comment)) {
-                var isNoDefaultLib = isNoDefaultLibMatch(comment);
-                if (!isNoDefaultLib) {
-                    var fullReferenceRegEx = tripleSlashReferenceRegExp;
-                    var fullReference = fullReferenceRegEx.exec(comment);
-                    var path: string = normalizePath(fullReference[3]);
-                    if (fullReference) {
-                        var path: string = normalizePath(fullReference[3]);
-                        var adjustedPath = normalizePath(path);
-
-                        return {
-                            path: switchToForwardSlashes(adjustedPath),
-                            position: 0,
-                            length: 0,
-                        };
-                    }
-                }
-            }
-        }
+        var isNoDefaultLib = false;
 
         function processTripleSlashDirectives(): void {
-            var commentRanges = getLeadingCommentRanges(text, 0);
+            var commentRanges = getLeadingCommentRanges(sourceText, 0);
             forEach(commentRanges, commentRange => {
-                var comment = text.substring(commentRange.pos, commentRange.end);
-                var referencedFile = getFileReferenceFromReferencePath(comment);
-                if (referencedFile) {
-                    referencedFile.position = commentRange.pos;
-                    referencedFile.length = commentRange.end - commentRange.pos;
-                    referencedFiles.push(referencedFile);
+                var comment = sourceText.substring(commentRange.pos, commentRange.end);
+                var referencePathMatchResult = getFileReferenceFromReferencePath(comment, commentRange);
+                if (referencePathMatchResult) {
+                    isNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
+                    var fileReference = referencePathMatchResult.fileReference;
+                    if (fileReference) {
+                        referencedFiles.push({
+                            path: switchToForwardSlashes(normalizePath(fileReference.filename)),
+                            position: fileReference.pos,
+                            length: fileReference.end - fileReference.pos,
+                        });
+                    }
                 }
             });
         }
 
         function processImport(): void {
-            var scanner = createScanner(getDefaultCompilerOptions().target, /*skipTrivia*/true, text);
+            var scanner = createScanner(getDefaultCompilerOptions().target, /*skipTrivia*/true, sourceText);
 
             var token = scanner.scan();
             // Look for:
@@ -1999,9 +1974,13 @@ module ts {
                 token = scanner.scan();
             }
         }
-        processImport();
+
+        if (readImportFiles) {
+            processImport();
+        }
         processTripleSlashDirectives();
-        return { referencedFiles: referencedFiles, importedFiles: importedFiles, isLibFile: false, diagnostics: [] };
+        // TODO (yuisu) : remove diagnostics array
+        return { referencedFiles: referencedFiles, importedFiles: importedFiles, isLibFile: isNoDefaultLib, diagnostics: [] };
     }
 
     /// Helpers

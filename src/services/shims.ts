@@ -842,11 +842,11 @@ module ts {
             return forwardJSONCall(this.logger, actionDescription, action);
         }
 
-        public getPreProcessedFileInfo(fileName: string, sourceText: TypeScript.IScriptSnapshot): string {
+        public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: TypeScript.IScriptSnapshot): string {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
-                    var result = preProcessFile(fileName, sourceText); //TypeScript.preProcessFile(fileName, sourceText);
+                    var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()));
                     return result;
                 });
         }
