@@ -1036,9 +1036,18 @@
         "category": "Error",
         "code": 2447
     },
-    "The type argument for type parameter '{0}' cannot be inferred from the usage. Try specifying the type arguments explicitly.": {
+    "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly:": {
         "category": "Error",
         "code": 2448
+    },
+
+    "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}':": {
+        "category": "Error",
+        "code": 2449
+    },
+    "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'.": {
+        "category": "Error",
+        "code": 2450
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

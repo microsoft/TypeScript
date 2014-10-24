@@ -1,4 +1,5 @@
-tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(3,9): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(3,9): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+  Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
 tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(4,22): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type '{ x: number; y: number; }'.
   Types of property 'y' are incompatible:
     Type 'string' is not assignable to type 'number'.
@@ -18,7 +19,8 @@ tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(7,22): error TS23
     // these are all errors
     var x = foo({ x: 3, y: "" }, 4);
             ~~~
-!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+!!! error TS2448:   Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
     var x2 = foo<number>({ x: 3, y: "" }, 4); 
                          ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type '{ x: number; y: number; }'.

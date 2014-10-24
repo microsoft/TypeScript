@@ -1,4 +1,5 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts(20,9): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts(20,9): error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+  Type argument candidate 'C' is not a valid type argument because it is not a supertype of candidate 'D'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts (1 errors) ====
@@ -23,5 +24,6 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
     var d1 = new X<D>();
     var r = foo(c1, d1); // error
             ~~~
-!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+!!! error TS2448:   Type argument candidate 'C' is not a valid type argument because it is not a supertype of candidate 'D'.
     var r2 = foo(c1, c1); // ok

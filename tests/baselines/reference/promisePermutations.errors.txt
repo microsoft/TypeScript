@@ -20,13 +20,20 @@ tests/cases/compiler/promisePermutations.ts(120,19): error TS2345: Argument of t
 tests/cases/compiler/promisePermutations.ts(121,19): error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => Promise<T>' is not assignable to parameter of type '(value: number) => Promise<number>'.
 tests/cases/compiler/promisePermutations.ts(122,19): error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => Promise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
 tests/cases/compiler/promisePermutations.ts(126,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<number>'.
-tests/cases/compiler/promisePermutations.ts(129,11): error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/compiler/promisePermutations.ts(129,11): error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+  Type argument candidate 'IPromise<number>' is not a valid type argument because it is not a supertype of candidate 'IPromise<string>':
+    Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/promisePermutations.ts(132,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<number>'.
 tests/cases/compiler/promisePermutations.ts(133,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => Promise<T>' is not assignable to parameter of type '(value: number) => Promise<number>'.
 tests/cases/compiler/promisePermutations.ts(134,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => Promise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
-tests/cases/compiler/promisePermutations.ts(137,11): error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
-tests/cases/compiler/promisePermutations.ts(144,12): error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
-tests/cases/compiler/promisePermutations.ts(152,12): error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+tests/cases/compiler/promisePermutations.ts(137,11): error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+  Type argument candidate 'IPromise<number>' is not a valid type argument because it is not a supertype of candidate 'IPromise<string>':
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/promisePermutations.ts(144,12): error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+  Type argument candidate 'IPromise<number>' is not a valid type argument because it is not a supertype of candidate 'IPromise<string>':
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/promisePermutations.ts(152,12): error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+  Type argument candidate 'Promise<number>' is not a valid type argument because it is not a supertype of candidate 'IPromise<string>'.
 tests/cases/compiler/promisePermutations.ts(156,21): error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
 tests/cases/compiler/promisePermutations.ts(158,21): error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
 tests/cases/compiler/promisePermutations.ts(159,21): error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => Promise<string>'.
@@ -208,7 +215,9 @@ tests/cases/compiler/promisePermutations.ts(160,21): error TS2345: Argument of t
     var r9c = r9.then(nIPromise, nIPromise, nIPromise); // ok
     var r9d = r9.then(testFunction, sIPromise, nIPromise); // ok
               ~~~~~~~
-!!! error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+!!! error TS2448:   Type argument candidate 'IPromise<number>' is not a valid type argument because it is not a supertype of candidate 'IPromise<string>':
+!!! error TS2448:     Type 'string' is not assignable to type 'number'.
     var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s9: Promise<number>;
     var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
@@ -224,7 +233,9 @@ tests/cases/compiler/promisePermutations.ts(160,21): error TS2345: Argument of t
     var s9e = s9.then(nPromise, nPromise, nPromise); // ok
     var s9f = s9.then(testFunction, sIPromise, nIPromise); // error
               ~~~~~~~
-!!! error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+!!! error TS2448:   Type argument candidate 'IPromise<number>' is not a valid type argument because it is not a supertype of candidate 'IPromise<string>':
+!!! error TS2448:     Type 'string' is not assignable to type 'number'.
     var s9g = s9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     
     var r10 = testFunction10(x => x);
@@ -233,7 +244,9 @@ tests/cases/compiler/promisePermutations.ts(160,21): error TS2345: Argument of t
     var r10c = r10.then(nIPromise, nIPromise, nIPromise); // ok
     var r10d = r10.then(testFunction, sIPromise, nIPromise); // ok
                ~~~~~~~~
-!!! error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+!!! error TS2448:   Type argument candidate 'IPromise<number>' is not a valid type argument because it is not a supertype of candidate 'IPromise<string>':
+!!! error TS2448:     Type 'string' is not assignable to type 'number'.
     var r10e = r10.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s10 = testFunction10P(x => x);
     var s10a = s10.then(testFunction10, testFunction10, testFunction10); // ok
@@ -243,7 +256,8 @@ tests/cases/compiler/promisePermutations.ts(160,21): error TS2345: Argument of t
     var s10e = s10.then(nIPromise, nPromise, nIPromise); // ok
     var s10f = s10.then(testFunctionP, sIPromise, nIPromise); // error
                ~~~~~~~~
-!!! error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+!!! error TS2448: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+!!! error TS2448:   Type argument candidate 'Promise<number>' is not a valid type argument because it is not a supertype of candidate 'IPromise<string>'.
     var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
     
     var r11: IPromise<number>;

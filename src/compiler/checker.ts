@@ -3138,15 +3138,23 @@ module ts {
         var identityRelation: Map<boolean> = {};
 
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
-            return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+            return checkTypeRelatedTo(source, target, identityRelation,
+                /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined, /*containingMessageChain*/ undefined);
         }
 
         function isTypeSubtypeOf(source: Type, target: Type): boolean {
-            return checkTypeSubtypeOf(source, target, /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+            return checkTypeSubtypeOf(source, target, /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined, /*containingMessageChain*/ undefined);
         }
 
-        function checkTypeSubtypeOf(source: Type, target: Type, errorNode: Node, chainedMessage: DiagnosticMessage, terminalMessage: DiagnosticMessage): boolean {
-            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, chainedMessage, terminalMessage);
+        function checkTypeSubtypeOf(
+            source: Type,
+            target: Type,
+            errorNode: Node,
+            chainedMessage: DiagnosticMessage,
+            terminalMessage: DiagnosticMessage,
+            containingMessageChain: DiagnosticMessageChain): boolean {
+
+            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, chainedMessage, terminalMessage, containingMessageChain);
         }
 
         function isTypeAssignableTo(source: Type, target: Type): boolean {
@@ -3154,17 +3162,19 @@ module ts {
         }
 
         function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, chainedMessage: DiagnosticMessage, terminalMessage: DiagnosticMessage): boolean {
-            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, chainedMessage, terminalMessage);
+            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, chainedMessage, terminalMessage, /*containingMessageChain*/ undefined);
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<boolean>): boolean {
-            return checkTypeRelatedTo(source, target, relation, /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+            return checkTypeRelatedTo(source, target, relation,
+                /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined, /*containingMessageChain*/ undefined);
         }
 
         function isSignatureAssignableTo(source: Signature, target: Signature): boolean {
             var sourceType = getOrCreateTypeFromSignature(source);
             var targetType = getOrCreateTypeFromSignature(target);
-            return checkTypeRelatedTo(sourceType, targetType, assignableRelation, /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+            return checkTypeRelatedTo(sourceType, targetType, assignableRelation,
+                /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined, /*containingMessageChain*/ undefined);
         }
 
         function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
@@ -3228,7 +3238,15 @@ module ts {
             }
         }
 
-        function checkTypeRelatedTo(source: Type, target: Type, relation: Map<boolean>, errorNode: Node, chainedMessage: DiagnosticMessage, terminalMessage: DiagnosticMessage): boolean {
+        function checkTypeRelatedTo(
+            source: Type,
+            target: Type,
+            relation: Map<boolean>,
+            errorNode: Node,
+            chainedMessage: DiagnosticMessage,
+            terminalMessage: DiagnosticMessage,
+            containingMessageChain: DiagnosticMessageChain): boolean {
+
             var errorInfo: DiagnosticMessageChain;
             var sourceStack: ObjectType[];
             var targetStack: ObjectType[];
@@ -3243,6 +3261,9 @@ module ts {
                 error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
             else if (errorInfo) {
+                if (containingMessageChain) {
+                    errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
+                }
                 addDiagnostic(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, program.getCompilerHost().getNewLine()));
             }
             return result;
@@ -3738,6 +3759,43 @@ module ts {
             return forEach(types, t => isSupertypeOfEach(t, types) ? t : undefined);
         }
 
+        function reportNoCommonSupertypeError(types: Type[], errorLocation: Node, errorMessageChainHead: DiagnosticMessageChain): void {
+            var bestSupertype: Type;
+            var bestSupertypeDownfallType: Type; // The type that caused bestSupertype not to be the common supertype
+            var bestSupertypeScore = 0;
+
+            for (var i = 0; i < types.length; i++) {
+                var score = 0;
+                var downfallType: Type = undefined;
+                for (var j = 0; j < types.length; j++) {
+                    if (types[i] === types[j] || isTypeSubtypeOf(types[j], types[i])) {
+                        score++;
+                    }
+                    else if (!downfallType) {
+                        downfallType = types[j];
+                    }
+                }
+
+                if (score > bestSupertypeScore) {
+                    bestSupertype = types[i];
+                    bestSupertypeDownfallType = downfallType;
+                    bestSupertypeScore = score;
+                }
+
+                // types.length - 1 is the maximum score, given that getCommonSupertype returned false
+                if (bestSupertypeScore === types.length - 1) {
+                    break;
+                }
+            }
+
+            // In the following errors, the {1} slot is before the {0} slot because checkTypeSubtypeOf supplies the
+            // subtype as the first argument to the error
+            checkTypeSubtypeOf(bestSupertypeDownfallType, bestSupertype, errorLocation, 
+                Diagnostics.Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0_Colon,
+                Diagnostics.Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0,
+                errorMessageChainHead);
+        }
+
         function isTypeOfObjectLiteral(type: Type): boolean {
             return (type.flags & TypeFlags.Anonymous) && type.symbol && (type.symbol.flags & SymbolFlags.ObjectLiteral) ? true : false;
         }
@@ -4020,7 +4078,7 @@ module ts {
             for (var i = 0; i < context.inferredTypes.length; i++) {
                 getInferredType(context, i);
             }
-            context.inferences = undefined;
+
             return context.inferredTypes;
         }
 
@@ -5145,7 +5203,8 @@ module ts {
                     // Use argument expression as error location when reporting errors
                     var isValidArgument = checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
                         Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1,
-                        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1);
+                        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1,
+                        /*containingMessageChain*/ undefined);
                     if (!isValidArgument) {
                         return false;
                     }
@@ -5203,8 +5262,14 @@ module ts {
                 }
                 else {
                     Debug.assert(resultOfFailedInference.failureIndex >= 0);
-                    error(node.func, Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Try_specifying_the_type_arguments_explicitly,
-                        typeToString(candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failureIndex]));
+                    var failedTypeParameter = candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failureIndex];
+                    var inferenceCandidates = resultOfFailedInference.inferences[resultOfFailedInference.failureIndex];
+
+                    var diagnosticChainHead = chainDiagnosticMessages(/*details*/ undefined, // details will be provided by call to reportNoCommonSupertypeError
+                        Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly_Colon,
+                        typeToString(failedTypeParameter));
+
+                    reportNoCommonSupertypeError(inferenceCandidates, node.func, diagnosticChainHead);
                 }
             }
             else {
