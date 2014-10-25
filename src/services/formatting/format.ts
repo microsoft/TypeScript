@@ -117,16 +117,50 @@ module ts.formatting {
         }
     }
 
+    function prepareRangeContainsErrorFunction(errors: Diagnostic[], originalRange: TextRange): (r: TextRange) => boolean {
+        if (!errors.length) {
+            // no errors - always return false
+            return r => false;
+        }
+        else {
+            var sorted = errors.slice(0).filter(d => d.isParseError).sort((e1, e2) => e1.start - e2.start);
+            var index = 0; // TODO: set based on the range
+            var endIndex = sorted.length; // TODO: set based on the range
+            if (endIndex === 0 || index === sorted.length) {
+                // errors are outside the interesting span - always return false
+                return r => false;
+            }
+            return r => {
+                while (true) {
+                    if (index >= endIndex) {
+                        return false;
+                    }
+                    else {
+                        var curr = sorted[index];
+                        if (r.end <= curr.start) {
+                            return false;
+                        }
+                        else {
+                            var s = Math.max(r.pos, curr.start);
+                            var e = Math.min(r.end, curr.start + curr.length);
+                            if (s < e) {
+                                return true;
+                            }
+                            index++;
+                        }
+                    }
+                }
+            };
+        }
+    }
+
     function formatSpan(originalRange: TextRange,
         sourceFile: SourceFile,
         options: FormatCodeOptions,
         rulesProvider: RulesProvider,
         requestKind: FormattingRequestKind): TextChange[]{
 
-        var syntacticErrors = sourceFile.syntacticErrors.length !== 0 && sourceFile.syntacticErrors.slice(0);
-        if (syntacticErrors) {
-            syntacticErrors.sort((d1, d2) => d1.start - d2.start);
-        }
+        var rangeContainsError = prepareRangeContainsErrorFunction(sourceFile.syntacticErrors, originalRange);
 
         // formatting context to be used by rules provider to get rules
         var formattingContext = new FormattingContext(sourceFile, requestKind);
@@ -260,14 +294,6 @@ module ts.formatting {
                 consumeTokenAndAdvanceScanner(currentTokenInfo, parent, childContextNode, indentation);
                 childContextNode = parent;
             }
-        }
-
-        function rangeContainsError(range: TextRange): boolean {
-            if (!syntacticErrors.length) {
-                return false;
-            }
-
-            binarySearch
         }
 
         function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, contextNode: Node, indentation: DynamicIndentation): void {
@@ -424,6 +450,7 @@ module ts.formatting {
 
             return lineAdded;
         }
+
         function insertIndentation(pos: number, indentation: number, lineAdded: boolean): void {
             var indentationString = getIndentationString(indentation, options);
             if (lineAdded) {

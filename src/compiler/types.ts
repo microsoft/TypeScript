@@ -1067,6 +1067,7 @@ module ts {
         category: DiagnosticCategory;
         code: number;
         isEarly?: boolean;
+        isParseError?: boolean;
     }
 
     export enum DiagnosticCategory {

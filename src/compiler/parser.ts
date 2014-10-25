@@ -907,7 +907,9 @@ module ts {
                 ? file.syntacticErrors[file.syntacticErrors.length - 1].start
                 : -1;
             if (start !== lastErrorPos) {
-                file.syntacticErrors.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
+                var diagnostic = createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
+                diagnostic.isParseError = true;
+                file.syntacticErrors.push(diagnostic);
             }
 
             if (lookAheadMode === LookAheadMode.NoErrorYet) {
