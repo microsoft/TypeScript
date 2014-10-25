@@ -1552,6 +1552,7 @@ module ts {
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ImportDeclaration:

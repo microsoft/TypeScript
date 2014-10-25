@@ -1401,6 +1401,18 @@
         "category": "Error",
         "code": 4078
     },
+    "Exported type alias '{0}' has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4079
+    },
+    "Exported type alias '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4080
+    },
+    "Exported type alias '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4081
+    },
 
     
     "The current host does not support the '{0}' option.": {
