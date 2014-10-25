@@ -1406,13 +1406,17 @@ module ts {
             template.head = parseLiteralNode();
             Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
-            var templateSpans: TemplateSpan[] = [];
+            var templateSpans = <NodeArray<TemplateSpan>>[];
+            templateSpans.pos = getNodePos();
+            
             do {
                 templateSpans.push(parseTemplateSpan());
             }
             while (templateSpans[templateSpans.length - 1].literal.kind === SyntaxKind.TemplateMiddle)
-
+            
+            templateSpans.end = getNodeEnd();
             template.templateSpans = templateSpans;
+
             return finishNode(template);
         }
 

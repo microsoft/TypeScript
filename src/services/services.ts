@@ -4901,6 +4901,10 @@ module ts {
                     // TODO: we should get another classification type for these literals.
                     return ClassificationTypeNames.stringLiteral;
                 }
+                else if (isTemplateLiteralKind(tokenKind)) {
+                    // TODO (drosen): we should *also* get another classification type for these literals.
+                    return ClassificationTypeNames.stringLiteral;
+                }
                 else if (tokenKind === SyntaxKind.Identifier) {
                     switch (token.parent.kind) {
                         case SyntaxKind.ClassDeclaration:

@@ -400,7 +400,7 @@ module ts {
 
     export interface TemplateExpression extends Expression {
         head: LiteralExpression;
-        templateSpans: TemplateSpan[]
+        templateSpans: NodeArray<TemplateSpan>;
     }
 
     export interface TemplateSpan extends Node {
