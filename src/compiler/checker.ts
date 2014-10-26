@@ -489,10 +489,12 @@ module ts {
         }
 
         // Resolves a qualified name and any involved import aliases
-        function resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags): Symbol {
+        function resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags, suppressErrors?: boolean): Symbol {
             if (name.kind === SyntaxKind.Identifier) {
                 // TODO: Investigate error recovery for symbols not found
-                var symbol = resolveName(location, (<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, identifierToString(<Identifier>name));
+                var nameNotFoundMessage = !suppressErrors && Diagnostics.Cannot_find_name_0;
+                var nameArg = !suppressErrors && identifierToString(<Identifier>name);
+                var symbol = resolveName(location, (<Identifier>name).text, meaning, nameNotFoundMessage, nameArg);
                 if (!symbol) {
                     return;
                 }
@@ -502,8 +504,10 @@ module ts {
                 if (!namespace || namespace === unknownSymbol || (<QualifiedName>name).right.kind === SyntaxKind.Missing) return;
                 var symbol = getSymbol(namespace.exports, (<QualifiedName>name).right.text, meaning);
                 if (!symbol) {
-                    error(location, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(namespace),
-                        identifierToString((<QualifiedName>name).right));
+                    if (!suppressErrors) {
+                        error(location, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(namespace),
+                            identifierToString((<QualifiedName>name).right));
+                    }
                     return;
                 }
             }
@@ -7397,23 +7401,6 @@ module ts {
             }
         }
 
-        function getConstantValueForExpression(node: Expression): number {
-            var isNegative = false;
-            if (node.kind === SyntaxKind.PrefixOperator) {
-                var unaryExpression = <UnaryExpression>node;
-                if (unaryExpression.operator === SyntaxKind.MinusToken || unaryExpression.operator === SyntaxKind.PlusToken) {
-                    node = unaryExpression.operand;
-                    isNegative = unaryExpression.operator === SyntaxKind.MinusToken;
-                }
-            }
-            if (node.kind === SyntaxKind.NumericLiteral) {
-                var literalText = (<LiteralExpression>node).text;
-                return isNegative ? -literalText : +literalText;
-            }
-
-            return undefined;
-        }
-
         function computeEnumMemberValues(node: EnumDeclaration) {
             var nodeLinks = getNodeLinks(node);
 
@@ -7423,13 +7410,13 @@ module ts {
                 var autoValue = 0;
                 var ambient = isInAmbientContext(node);
 
-                forEach(node.members, member => {
+                forEach(node.members, member =>  {
                     if(isNumericName(member.name.text)) {
                         error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
                     var initializer = member.initializer;
                     if (initializer) {
-                        autoValue = getConstantValueForExpression(initializer);
+                        autoValue = getConstantValueForEnumMemberInitializer(member, initializer);
                         if (autoValue === undefined && !ambient) {
                             // Only here do we need to check that the initializer is assignable to the enum type.
                             // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
@@ -7448,6 +7435,48 @@ module ts {
                 });
 
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
+            }
+
+            function getConstantValueForEnumMemberInitializer(member: EnumMember, initializer: Expression): number {
+                return evalConstant(initializer);
+
+                function evalConstant(e: Node): number {
+                    switch (e.kind) {
+                        case SyntaxKind.PrefixOperator:
+                            var value = evalConstant((<UnaryExpression>e).operand);
+                            if (value === undefined) return undefined;
+                            switch ((<UnaryExpression>e).operator) {
+                                case SyntaxKind.PlusToken: return value;
+                                case SyntaxKind.MinusToken: return -value;
+                                case SyntaxKind.TildeToken: return ~value;
+                            }
+                            return undefined;
+                        case SyntaxKind.BinaryExpression:
+                            var left = evalConstant((<BinaryExpression>e).left);
+                            if (left === undefined) return undefined;
+                            var right = evalConstant((<BinaryExpression>e).right);
+                            if (right === undefined) return undefined;
+                            switch ((<BinaryExpression>e).operator) {
+                                case SyntaxKind.BarToken: return left | right;
+                                case SyntaxKind.AmpersandToken: return left & right;
+                                case SyntaxKind.PlusToken: return left + right;
+                                case SyntaxKind.MinusToken: return left - right;
+                                case SyntaxKind.GreaterThanGreaterThanToken: return left >> right;
+                                case SyntaxKind.LessThanLessThanToken: return left << right;
+                            }
+                            return undefined;
+                        case SyntaxKind.NumericLiteral:
+                            return +(<LiteralExpression>e).text;
+                        case SyntaxKind.PropertyAccess:
+                            var refSymbol = resolveEntityName(member, e, SymbolFlags.EnumMember, /*suppressErrors*/ true);
+                            if (!refSymbol) return undefined;
+                            var refDecl = <EnumMember>refSymbol.valueDeclaration;
+                            // self references are not permitted
+                            if (member === refDecl) return undefined;
+                            // enumMemberValue might be undefined if corresponding enum value was not yet computed and it is ok to return undefined in this case
+                            return <number>getNodeLinks(refDecl).enumMemberValue;
+                    }
+                }
             }
         }
 
