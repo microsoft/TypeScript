@@ -114,6 +114,11 @@ module ts {
             description: Diagnostics.Print_the_compiler_s_version,
         },
         {
+            name: "warnAsError",
+            type: "boolean",
+            description: Diagnostics.Report_all_warnings_as_errors,
+        },
+        {
             name: "watch",
             shortName: "w",
             type: "boolean",

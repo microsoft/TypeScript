@@ -1092,6 +1092,7 @@ module ts {
         sourceRoot?: string;
         target?: ScriptTarget;
         version?: boolean;
+        warnAsError?: boolean;
         watch?: boolean;
         [option: string]: any;
     }

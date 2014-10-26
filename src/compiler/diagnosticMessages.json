@@ -1456,6 +1456,10 @@
         "category": "Message",
         "code": 6006
     },
+    "Report all warnings as errors.": {
+        "category": "Message",
+        "code": 6007
+    },
     "Do not emit comments to output.": {
         "category": "Message",
         "code": 6009
