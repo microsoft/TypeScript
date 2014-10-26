@@ -1,0 +1,306 @@
+=== tests/cases/compiler/constantsInEnumMembers.ts ===
+
+enum Enum1 {
+>Enum1 : Enum1
+
+   A0 = 100,
+>A0 : Enum1
+}
+
+enum Enum1 {
+>Enum1 : Enum1
+
+    // correct cases
+    A,
+>A : Enum1
+
+    B,
+>B : Enum1
+
+    C = 10,
+>C : Enum1
+
+    D = A + B,
+>D : Enum1
+>A + B : number
+>A : Enum1
+>B : Enum1
+
+    E = A + 1,
+>E : Enum1
+>A + 1 : number
+>A : Enum1
+
+    F = 1 + A,
+>F : Enum1
+>1 + A : number
+>A : Enum1
+
+    G = 1 + 1,
+>G : Enum1
+>1 + 1 : number
+
+    H = A - B,
+>H : Enum1
+>A - B : number
+>A : Enum1
+>B : Enum1
+
+    I = A - 1,
+>I : Enum1
+>A - 1 : number
+>A : Enum1
+
+    J = 1 - A,
+>J : Enum1
+>1 - A : number
+>A : Enum1
+
+    K = 1 - 1,
+>K : Enum1
+>1 - 1 : number
+
+    L = ~D,
+>L : Enum1
+>~D : number
+>D : Enum1
+
+    M = E << B,
+>M : Enum1
+>E << B : number
+>E : Enum1
+>B : Enum1
+
+    N = E << 1,
+>N : Enum1
+>E << 1 : number
+>E : Enum1
+
+    O = E >> B,
+>O : Enum1
+>E >> B : number
+>E : Enum1
+>B : Enum1
+
+    P = E >> 1,
+>P : Enum1
+>E >> 1 : number
+>E : Enum1
+
+    Q = -D,
+>Q : Enum1
+>-D : number
+>D : Enum1
+
+    R = C & 5,
+>R : Enum1
+>C & 5 : number
+>C : Enum1
+
+    S = 5 & C,
+>S : Enum1
+>5 & C : number
+>C : Enum1
+
+    T = C | D,
+>T : Enum1
+>C | D : number
+>C : Enum1
+>D : Enum1
+
+    U = C | 1,
+>U : Enum1
+>C | 1 : number
+>C : Enum1
+
+    V = 10 | D,
+>V : Enum1
+>10 | D : number
+>D : Enum1
+
+    W = Enum1.V,
+>W : Enum1
+>Enum1.V : Enum1
+>Enum1 : typeof Enum1
+>V : Enum1
+
+    // correct cases: reference to the enum member from different enum declaration
+    W1 = A0,
+>W1 : Enum1
+>A0 : Enum1
+
+    W2 = Enum1.A0,
+>W2 : Enum1
+>Enum1.A0 : Enum1
+>Enum1 : typeof Enum1
+>A0 : Enum1
+
+    // illegal case
+    // forward reference to the element of the same enum
+    X = Y, 
+>X : Enum1
+>Y : Enum1
+
+    // forward reference to the element of the same enum
+    Y = Enum1.Z,
+>Y : Enum1
+>Enum1.Z : Enum1
+>Enum1 : typeof Enum1
+>Z : Enum1
+
+    Z = 100,
+>Z : Enum1
+}
+
+
+function foo(x: Enum1) {
+>foo : (x: Enum1) => void
+>x : Enum1
+>Enum1 : Enum1
+
+    switch (x) {
+>x : Enum1
+
+        case Enum1.A:
+>Enum1.A : Enum1
+>Enum1 : typeof Enum1
+>A : Enum1
+
+        case Enum1.B:
+>Enum1.B : Enum1
+>Enum1 : typeof Enum1
+>B : Enum1
+
+        case Enum1.C:
+>Enum1.C : Enum1
+>Enum1 : typeof Enum1
+>C : Enum1
+
+        case Enum1.D:
+>Enum1.D : Enum1
+>Enum1 : typeof Enum1
+>D : Enum1
+
+        case Enum1.E:
+>Enum1.E : Enum1
+>Enum1 : typeof Enum1
+>E : Enum1
+
+        case Enum1.F:
+>Enum1.F : Enum1
+>Enum1 : typeof Enum1
+>F : Enum1
+
+        case Enum1.G:
+>Enum1.G : Enum1
+>Enum1 : typeof Enum1
+>G : Enum1
+
+        case Enum1.H:
+>Enum1.H : Enum1
+>Enum1 : typeof Enum1
+>H : Enum1
+
+        case Enum1.I:
+>Enum1.I : Enum1
+>Enum1 : typeof Enum1
+>I : Enum1
+
+        case Enum1.J:
+>Enum1.J : Enum1
+>Enum1 : typeof Enum1
+>J : Enum1
+
+        case Enum1.K:
+>Enum1.K : Enum1
+>Enum1 : typeof Enum1
+>K : Enum1
+
+        case Enum1.L:
+>Enum1.L : Enum1
+>Enum1 : typeof Enum1
+>L : Enum1
+
+        case Enum1.M:
+>Enum1.M : Enum1
+>Enum1 : typeof Enum1
+>M : Enum1
+
+        case Enum1.N:
+>Enum1.N : Enum1
+>Enum1 : typeof Enum1
+>N : Enum1
+
+        case Enum1.O:
+>Enum1.O : Enum1
+>Enum1 : typeof Enum1
+>O : Enum1
+
+        case Enum1.P:
+>Enum1.P : Enum1
+>Enum1 : typeof Enum1
+>P : Enum1
+
+        case Enum1.Q:
+>Enum1.Q : Enum1
+>Enum1 : typeof Enum1
+>Q : Enum1
+
+        case Enum1.R:
+>Enum1.R : Enum1
+>Enum1 : typeof Enum1
+>R : Enum1
+
+        case Enum1.S:
+>Enum1.S : Enum1
+>Enum1 : typeof Enum1
+>S : Enum1
+
+        case Enum1.T:
+>Enum1.T : Enum1
+>Enum1 : typeof Enum1
+>T : Enum1
+
+        case Enum1.U:
+>Enum1.U : Enum1
+>Enum1 : typeof Enum1
+>U : Enum1
+
+        case Enum1.V:
+>Enum1.V : Enum1
+>Enum1 : typeof Enum1
+>V : Enum1
+
+        case Enum1.W:
+>Enum1.W : Enum1
+>Enum1 : typeof Enum1
+>W : Enum1
+
+        case Enum1.W1:
+>Enum1.W1 : Enum1
+>Enum1 : typeof Enum1
+>W1 : Enum1
+
+        case Enum1.W2:
+>Enum1.W2 : Enum1
+>Enum1 : typeof Enum1
+>W2 : Enum1
+
+        case Enum1.X:
+>Enum1.X : Enum1
+>Enum1 : typeof Enum1
+>X : Enum1
+
+        case Enum1.Y:
+>Enum1.Y : Enum1
+>Enum1 : typeof Enum1
+>Y : Enum1
+
+        case Enum1.Z:
+>Enum1.Z : Enum1
+>Enum1 : typeof Enum1
+>Z : Enum1
+
+            break;
+    }
+}

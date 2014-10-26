@@ -7473,18 +7473,31 @@ module ts {
                         case SyntaxKind.PropertyAccess:
                             if (!program.getCompilerOptions().propagateEnumConstants) return undefined;
 
-                            var refSymbol =
-                                e.kind === SyntaxKind.Identifier
-                                ? resolveName(member, (<Identifier>e).text, SymbolFlags.EnumMember, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined) 
-                                : resolveEntityName(member, e, SymbolFlags.EnumMember, /*suppressErrors*/ true);
+                            var enumSymbol: Symbol;
+                            var propertyName: string;
 
-                            if (!refSymbol) return undefined;
-                            var refDecl = <EnumMember>refSymbol.valueDeclaration;
-                            // self references are not permitted
-                            // non-qualified names are permitted only to members defined in the same enum
-                            if (member === refDecl || (e.kind === SyntaxKind.Identifier && refDecl.parent !== member.parent)) return undefined;
-                            // enumMemberValue might be undefined if corresponding enum value was not yet computed and it is ok to return undefined in this case
-                            return <number>getNodeLinks(refDecl).enumMemberValue;
+                            if (e.kind === SyntaxKind.Identifier) {
+                                // unqualified names can refer to member that reside in different declaration of the enum so just doing name resolution won't work.
+                                // instead pick symbol that correspond of enum declaration and later try to fetch member from the symbol
+                                enumSymbol = getSymbolOfNode(member.parent);
+                                propertyName = (<Identifier>e).text;
+                            }
+                            else {
+                                // left part in PropertyAccess should be resolved to the symbol of enum that declared 'member' 
+                                enumSymbol = resolveEntityName(member, (<PropertyAccess>e).left, SymbolFlags.Enum, /*suppressErrors*/ true);
+                                
+                                if (enumSymbol !== getSymbolOfNode(member.parent)) return undefined;
+                                propertyName = (<Identifier>(<PropertyAccess>e).right).text;
+                            }
+
+                            var propertySymbol = enumSymbol.exports[propertyName];
+                            if (!propertyName || !(propertySymbol.flags & SymbolFlags.EnumMember)) return undefined;
+                            var propertyDecl = <EnumMember>propertySymbol.valueDeclaration;
+                            // self references are illegal
+                            if (member === propertyDecl) return undefined;
+                            // enumMemberValue might be undefined if corresponding enum value was not yet computed 
+                            // and it is ok to return undefined in this case (use before defition)
+                            return <number>getNodeLinks(propertyDecl).enumMemberValue;
                     }
                 }
             }
