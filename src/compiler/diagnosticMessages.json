@@ -1476,6 +1476,10 @@
         "category": "Message",
         "code": 6019
     },
+    "Propagate constant values in enum member initializers.": {
+        "category": "Message",
+        "code": 6020
+    },
     "Syntax: {0}": {
         "category": "Message",
         "code": 6023

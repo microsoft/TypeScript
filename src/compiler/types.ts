@@ -1093,6 +1093,7 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        propagateEnumConstants?: boolean;
         [option: string]: any;
     }
 

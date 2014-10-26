@@ -369,6 +369,7 @@ module ts {
         Specify_module_code_generation_Colon_commonjs_or_amd: { code: 6016, category: DiagnosticCategory.Message, key: "Specify module code generation: 'commonjs' or 'amd'" },
         Print_this_message: { code: 6017, category: DiagnosticCategory.Message, key: "Print this message." },
         Print_the_compiler_s_version: { code: 6019, category: DiagnosticCategory.Message, key: "Print the compiler's version." },
+        Propagate_constant_values_in_enum_member_initializers: { code: 6020, category: DiagnosticCategory.Message, key: "Propagate constant values in enum member initializers." },
         Syntax_Colon_0: { code: 6023, category: DiagnosticCategory.Message, key: "Syntax: {0}" },
         options: { code: 6024, category: DiagnosticCategory.Message, key: "options" },
         file: { code: 6025, category: DiagnosticCategory.Message, key: "file" },

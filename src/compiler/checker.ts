@@ -7452,6 +7452,8 @@ module ts {
                             }
                             return undefined;
                         case SyntaxKind.BinaryExpression:
+                            if (!program.getCompilerOptions().propagateEnumConstants) return undefined;
+
                             var left = evalConstant((<BinaryExpression>e).left);
                             if (left === undefined) return undefined;
                             var right = evalConstant((<BinaryExpression>e).right);
@@ -7467,12 +7469,20 @@ module ts {
                             return undefined;
                         case SyntaxKind.NumericLiteral:
                             return +(<LiteralExpression>e).text;
+                        case SyntaxKind.Identifier:
                         case SyntaxKind.PropertyAccess:
-                            var refSymbol = resolveEntityName(member, e, SymbolFlags.EnumMember, /*suppressErrors*/ true);
+                            if (!program.getCompilerOptions().propagateEnumConstants) return undefined;
+
+                            var refSymbol =
+                                e.kind === SyntaxKind.Identifier
+                                ? resolveName(member, (<Identifier>e).text, SymbolFlags.EnumMember, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined) 
+                                : resolveEntityName(member, e, SymbolFlags.EnumMember, /*suppressErrors*/ true);
+
                             if (!refSymbol) return undefined;
                             var refDecl = <EnumMember>refSymbol.valueDeclaration;
                             // self references are not permitted
-                            if (member === refDecl) return undefined;
+                            // non-qualified names are permitted only to members defined in the same enum
+                            if (member === refDecl || (e.kind === SyntaxKind.Identifier && refDecl.parent !== member.parent)) return undefined;
                             // enumMemberValue might be undefined if corresponding enum value was not yet computed and it is ok to return undefined in this case
                             return <number>getNodeLinks(refDecl).enumMemberValue;
                     }
