@@ -340,14 +340,14 @@ module ts {
                         // TypeScript 1.0 spec (April 2014): 8.4.1
                         // Initializer expressions for instance member variables are evaluated in the scope 
                         // of the class constructor body but are not permitted to reference parameters or 
-                        // local variables of the constructor.This effectively means that entities from outer scopes 
+                        // local variables of the constructor. This effectively means that entities from outer scopes 
                         // by the same name as a constructor parameter or local variable are inaccessible 
                         // in initializer expressions for instance member variables.
                         if (location.parent.kind === SyntaxKind.ClassDeclaration && !(location.flags & NodeFlags.Static)) {
                             var ctor = findConstructorDeclaration(<ClassDeclaration>location.parent);
                             if (ctor && ctor.locals) {
                                 if (getSymbol(ctor.locals, name, meaning & SymbolFlags.Value)) {
-                                    // save the property node - later it will be used by 'returnResolvedSymbol' to report appropriate error
+                                    // Remember the property node, it will be used later to report appropriate error
                                     propertyWithInvalidInitializer = location;
                                 }
                             }
@@ -358,8 +358,8 @@ module ts {
                         if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
                             if (lastLocation && lastLocation.flags & NodeFlags.Static) {
                                 // TypeScript 1.0 spec (April 2014): 3.4.1
-                                // The scope of a type parameter extends over the entire declaration 
-                                // with which the type parameter list is associated, with the exception of static member declarations in classes.
+                                // The scope of a type parameter extends over the entire declaration with which the type
+                                // parameter list is associated, with the exception of static member declarations in classes.
                                 error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
                                 return undefined;
                             }
