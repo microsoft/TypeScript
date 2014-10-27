@@ -1,7 +1,7 @@
 ﻿/// <reference path="..\..\..\..\src\harness\external\mocha.d.ts" />
 /// <reference path="..\..\..\..\src\harness\harnessLanguageService.ts" />
 
-describe('preProcessFile', function () {
+describe('PreProcessFile:', function () {
     function test(sourceText: string, readImportFile: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
         debugger
         var resultPreProcess = ts.preProcessFile(sourceText, readImportFile);
@@ -44,7 +44,7 @@ describe('preProcessFile', function () {
             assert.equal(resultReferencedFile.length, expectedReferencedFile.length, "Referenced file length does not match expected. Expected: " + expectedReferencedFile.length + ". Actual: " + resultReferencedFile.length + ".");
         }
     }
-    describe("test preProcessFiles", function () {
+    describe("Test preProcessFiles,", function () {
         it("Correctly return referenced files from triple slash", function () {
            test("///<reference path = \"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\"/>" + "\n" + "///<reference path=\"refFile3.ts\" />" + "\n" + "///<reference path= \"refFile4d.ts\" />", true,
                 {
@@ -70,8 +70,8 @@ describe('preProcessFile', function () {
             test("import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\"); import i3= require(\"r3.ts\"); import i4=require(\"r4.ts\"); import i5 = require  (\"r5.ts\");", true,
                 {
                     referencedFiles: <ts.IFileReference[]>[],
-                    importedFiles: [{ path: "r1.ts", position: 0, length: 5 }, { path: "r2.ts", position: 30, length: 5 }, { path: "r3.ts", position: 59, length: 5 },
-                        { path: "r4.ts", position: 88, length: 5 }, { path: "r5.ts", position: 116, length: 5 }],
+                    importedFiles: [{ path: "r1.ts", position: 20, length: 5 }, { path: "r2.ts", position: 49, length: 5 }, { path: "r3.ts", position: 78, length: 5 },
+                        { path: "r4.ts", position: 106, length: 5 }, { path: "r5.ts", position: 138, length: 5 }],
                     diagnostics: <TypeScript.Diagnostic[]>[],
                     isLibFile: false
                 });
@@ -91,7 +91,7 @@ describe('preProcessFile', function () {
             test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\");", true,
                 {
                     referencedFiles: [{ path: "refFile1.ts", position: 0, length: 35 }, { path: "refFile2.ts", position: 36, length: 35 }],
-                    importedFiles: [{ path: "r1.ts", position: 72, length: 5 }, { path: "r2.ts", position: 102, length: 5 }],
+                    importedFiles: [{ path: "r1.ts", position: 92, length: 5 }, { path: "r2.ts", position: 121, length: 5 }],
                     diagnostics: <TypeScript.Diagnostic[]>[],
                     isLibFile: false
                 });

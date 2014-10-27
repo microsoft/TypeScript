@@ -80,8 +80,8 @@ module ts {
     ///
     /// Pre-processing
     ///
-    // Note: This is being using by the host (VS) and is marshaled back and forth. When changing this make sure the changes
-    // are reflected in the managed side as well
+    // Note: This is being using by the host (VS) and is marshaled back and forth.
+    // When changing this make sure the changes are reflected in the managed side as well
     // TODO (yuisu) : Consider merge with FileReference in types.ts
     export interface IFileReference {
         path: string;
@@ -1947,7 +1947,6 @@ module ts {
             // import foo = module("foo");
             while (token !== SyntaxKind.EndOfFileToken) {
                 if (token === SyntaxKind.ImportKeyword) {
-                    var startPosition = scanner.getTokenPos();
                     token = scanner.scan();
                     if (token === SyntaxKind.Identifier) {
                         token = scanner.scan();
@@ -1959,9 +1958,10 @@ module ts {
                                     token = scanner.scan();
                                     if (token === SyntaxKind.StringLiteral) {
                                         var importPath = scanner.getTokenValue();
+                                        var pos = scanner.getTokenPos();
                                         var referencedFile = {
                                             path: switchToForwardSlashes(importPath),
-                                            position: startPosition,
+                                            position: pos,
                                             length: importPath.length
                                         };
                                         importedFiles.push(referencedFile);
