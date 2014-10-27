@@ -6310,12 +6310,14 @@ var ts;
             var oldWriter = writer;
             ts.forEach(importDeclarations, function (aliasToWrite) {
                 var aliasEmitInfo = ts.forEach(aliasDeclarationEmitInfo, function (declEmitInfo) { return declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined; });
-                writer = createTextWriter(newLine, trackSymbol);
-                for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
-                    writer.increaseIndent();
+                if (aliasEmitInfo) {
+                    writer = createTextWriter(newLine, trackSymbol);
+                    for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
+                        writer.increaseIndent();
+                    }
+                    writeImportDeclaration(aliasToWrite);
+                    aliasEmitInfo.asynchronousOutput = writer.getText();
                 }
-                writeImportDeclaration(aliasToWrite);
-                aliasEmitInfo.asynchronousOutput = writer.getText();
             });
             writer = oldWriter;
         }
