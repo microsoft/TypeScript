@@ -4,21 +4,17 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstru
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(65,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(73,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(74,9): error TS2344: Type 'number' does not satisfy the constraint 'string'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(74,17): error TS2344: Type 'string' does not satisfy the constraint 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(74,25): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(75,9): error TS2344: Type 'number' does not satisfy the constraint 'string'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(75,17): error TS2344: Type 'string' does not satisfy the constraint 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(79,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(80,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(84,9): error TS2344: Type 'boolean' does not satisfy the constraint 'string'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(84,18): error TS2344: Type 'Date' does not satisfy the constraint 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(87,9): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(88,15): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(96,18): error TS2339: Property 'toFixed' does not exist on type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(98,18): error TS2339: Property 'blah' does not exist on type 'string'.
 
 
-==== tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts (18 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts (14 errors) ====
     class SomeBase {
         private n;
     
@@ -105,15 +101,9 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstru
     new fn4<number, string>('', 3); // Error
             ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
-                    ~~~~~~
-!!! error TS2344: Type 'string' does not satisfy the constraint 'number'.
-                            ~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     new fn4<number, string>(3, ''); // Error
             ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
-                    ~~~~~~
-!!! error TS2344: Type 'string' does not satisfy the constraint 'number'.
     
     // Generic overloads with constraints called without type arguments but with types that satisfy the constraints
     new fn4('', 3);
@@ -129,8 +119,6 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstru
     new fn4<boolean, Date>(null, null); // Error
             ~~~~~~~
 !!! error TS2344: Type 'boolean' does not satisfy the constraint 'string'.
-                     ~~~~
-!!! error TS2344: Type 'Date' does not satisfy the constraint 'number'.
     
     // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
     new fn4(true, null); // Error

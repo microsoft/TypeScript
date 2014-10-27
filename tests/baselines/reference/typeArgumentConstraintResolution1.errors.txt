@@ -1,6 +1,5 @@
-tests/cases/compiler/typeArgumentConstraintResolution1.ts(4,6): error TS2343: Type 'Date' does not satisfy the constraint 'Number':
-  Property 'toFixed' is missing in type 'Date'.
-tests/cases/compiler/typeArgumentConstraintResolution1.ts(11,6): error TS2344: Type 'Date' does not satisfy the constraint 'Number'.
+tests/cases/compiler/typeArgumentConstraintResolution1.ts(4,12): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Date'.
+tests/cases/compiler/typeArgumentConstraintResolution1.ts(11,12): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Date'.
 
 
 ==== tests/cases/compiler/typeArgumentConstraintResolution1.ts (2 errors) ====
@@ -8,9 +7,8 @@ tests/cases/compiler/typeArgumentConstraintResolution1.ts(11,6): error TS2344: T
     function foo1<T extends Number>(test: string);
     function foo1<T extends String>(test: any) { }
     foo1<Date>(""); // should error
-         ~~~~
-!!! error TS2343: Type 'Date' does not satisfy the constraint 'Number':
-!!! error TS2343:   Property 'toFixed' is missing in type 'Date'.
+               ~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'Date'.
     
     
     
@@ -18,6 +16,6 @@ tests/cases/compiler/typeArgumentConstraintResolution1.ts(11,6): error TS2344: T
     function foo2<T extends Number>(test: string): T; 
     function foo2<T extends String>(test: any): any { return null; }
     foo2<Date>(""); // Type Date does not satisfy the constraint 'Number' for type parameter 'T extends Number'
-         ~~~~
-!!! error TS2344: Type 'Date' does not satisfy the constraint 'Number'.
+               ~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'Date'.
     

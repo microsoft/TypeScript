@@ -3,9 +3,11 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(61,39): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(71,39): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(81,45): error TS2345: Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(106,11): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(106,15): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+  Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(118,9): error TS2304: Cannot find name 'Window'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,11): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,15): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+  Type argument candidate '{ x: number; z: any; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,51): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(122,56): error TS2304: Cannot find name 'window'.
 
@@ -127,8 +129,9 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
     }
     var someGenerics9: someGenerics9;
     var a9a = new someGenerics9('', 0, []);
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+                  ~~~~~~~~~~~~~
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+!!! error TS2453:   Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
     var a9a: {};
     var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
     var a9b: { a?: number; b?: string; };
@@ -145,8 +148,9 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
 !!! error TS2304: Cannot find name 'Window'.
     }
     var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+                  ~~~~~~~~~~~~~
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+!!! error TS2453:   Type argument candidate '{ x: number; z: any; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
                                                       ~~~~~~
 !!! error TS2304: Cannot find name 'window'.
     var a9e: {};
