@@ -519,10 +519,10 @@ module ts {
             return +(text.substring(start, pos));
         }
 
-        function scanHexDigits(count: number, useExactCount?: boolean): number {
+        function scanHexDigits(count: number, mustMatchCount?: boolean): number {
             var digits = 0;
             var value = 0;
-            while (digits < count || !useExactCount) {
+            while (digits < count || !mustMatchCount) {
                 var ch = text.charCodeAt(pos);
                 if (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) {
                     value = value * 16 + ch - CharacterCodes._0;
@@ -582,18 +582,18 @@ module ts {
          * a literal component of a TemplateExpression.
          */
         function scanTemplateAndSetTokenValue(): SyntaxKind {
-            var isStartOfTemplate = text.charCodeAt(pos) === CharacterCodes.backtick;
+            var startedWithBacktick = text.charCodeAt(pos) === CharacterCodes.backtick;
 
             pos++;
             var start = pos;
             var contents = ""
-            var resultingToken = SyntaxKind.Unknown;
+            var resultingToken: SyntaxKind;
 
             while (true) {
                 if (pos >= len) {
                     contents += text.substring(start, pos);
                     error(Diagnostics.Unexpected_end_of_text);
-                    resultingToken = isStartOfTemplate ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
+                    resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
                     break;
                 }
 
@@ -603,7 +603,7 @@ module ts {
                 if (currChar === CharacterCodes.backtick) {
                     contents += text.substring(start, pos);
                     pos++;
-                    resultingToken = isStartOfTemplate ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
+                    resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
                     break;
                 }
 
@@ -611,7 +611,7 @@ module ts {
                 if (currChar === CharacterCodes.$ && pos + 1 < len && text.charCodeAt(pos + 1) === CharacterCodes.openBrace) {
                     contents += text.substring(start, pos);
                     pos += 2;
-                    resultingToken = isStartOfTemplate ? SyntaxKind.TemplateHead : SyntaxKind.TemplateMiddle;
+                    resultingToken = startedWithBacktick ? SyntaxKind.TemplateHead : SyntaxKind.TemplateMiddle;
                     break;
                 }
 
@@ -640,6 +640,8 @@ module ts {
 
                 pos++;
             }
+
+            Debug.assert(resultingToken !== undefined);
 
             tokenValue = contents;
             return resultingToken;
@@ -673,7 +675,7 @@ module ts {
                     return "\"";
                 case CharacterCodes.x:
                 case CharacterCodes.u:
-                    var ch = scanHexDigits(ch === CharacterCodes.x ? 2 : 4, /*useExactCount*/ true);
+                    var ch = scanHexDigits(ch === CharacterCodes.x ? 2 : 4, /*mustMatchCount*/ true);
                     if (ch >= 0) {
                         return String.fromCharCode(ch);
                     }
@@ -704,7 +706,7 @@ module ts {
             if (pos + 5 < len && text.charCodeAt(pos + 1) === CharacterCodes.u) {
                 var start = pos;
                 pos += 2;
-                var value = scanHexDigits(4, /*useExactCount*/ true);
+                var value = scanHexDigits(4, /*mustMatchCount*/ true);
                 pos = start;
                 return value;
             }
@@ -922,7 +924,7 @@ module ts {
                     case CharacterCodes._0:
                         if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
                             pos += 2;
-                            var value = scanHexDigits(1, /*useExactCount*/ false);
+                            var value = scanHexDigits(1, /*mustMatchCount*/ false);
                             if (value < 0) {
                                 error(Diagnostics.Hexadecimal_digit_expected);
                                 value = 0;
@@ -1112,7 +1114,7 @@ module ts {
          * Unconditionally back up and scan a template expression portion.
          */
         function reScanTemplateToken(): SyntaxKind {
-            Debug.assert("'reScanTemplateToken' should only be called on a '}'");
+            Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
             pos = tokenPos;
             return token = scanTemplateAndSetTokenValue();
         }

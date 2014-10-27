@@ -5945,10 +5945,17 @@ module ts {
             return getUnionType([type1, type2]);
         }
 
-        function checkTemplateExpression(node: TemplateExpression): void {
+        function checkTemplateExpression(node: TemplateExpression): Type {
+            // We just want to check each expressions, but we are unconcerned with
+            // the type of each expression, as any value may be coerced into a string.
+            // It is worth asking whether this is what we really want though.
+            // A place where we actually *are* concerned with the expressions' types are
+            // in tagged templates.
             forEach((<TemplateExpression>node).templateSpans, templateSpan => {
                 checkExpression(templateSpan.expression);
             });
+
+            return stringType;
         }
 
         function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper?: TypeMapper): Type {
@@ -6005,8 +6012,7 @@ module ts {
                 case SyntaxKind.NumericLiteral:
                     return numberType;
                 case SyntaxKind.TemplateExpression:
-                    checkTemplateExpression(<TemplateExpression>node);
-                    // fall through
+                    return checkTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return stringType;

@@ -806,12 +806,14 @@ module ts {
             }
 
             function getTemplateLiteralAsStringLiteral(node: LiteralExpression): string {
-                return "\"" + escapeString(node.text) + "\"";
+                return '"' + escapeString(node.text) + '"';
             }
             
             function emitTemplateExpression(node: TemplateExpression): void {
+                // In ES6 mode and above, we can simply emit each portion of a template in order, but in
+                // ES3 & ES5 we must convert the template expression into a series of string concatenations.
                 if (compilerOptions.target >= ScriptTarget.ES6) {
-                    forEachChild(node, emitNode);
+                    forEachChild(node, emit);
                     return;
                 }
 
@@ -825,6 +827,15 @@ module ts {
                 emitLiteral(node.head);
 
                 forEach(node.templateSpans, templateSpan => {
+                    // Check if the expression has operands and binds its operands less closely than binary '+'.
+                    // If it does, we need to wrap the expression in parentheses. Otherwise, something like
+                    //    `abc${ 1 << 2}`
+                    // becomes
+                    //    "abc" + 1 << 2 + ""
+                    // which is really
+                    //    ("abc" + 1) << (2 + "")
+                    // rather than
+                    //    "abc" + (1 << 2) + ""
                     var needsParens = comparePrecedenceToBinaryPlus(templateSpan.expression) !== Comparison.GreaterThan;
 
                     write(" + ");
@@ -858,6 +869,7 @@ module ts {
                     // 
                     // TODO (drosen): Note that we need to account for the upcoming 'yield' and
                     //                spread ('...') unary operators that are anticipated for ES6.
+                    Debug.assert(compilerOptions.target <= ScriptTarget.ES5);
                     switch (expression.kind) {
                         case SyntaxKind.BinaryExpression:
                             switch ((<BinaryExpression>expression).operator) {
@@ -880,7 +892,8 @@ module ts {
             }
 
             function emitTemplateSpan(span: TemplateSpan) {
-                forEachChild(span, emitNode);
+                emit(span.expression);
+                emit(span.literal);
             }
 
             // This function specifically handles numeric/string literals for enum and accessor 'identifiers'.
