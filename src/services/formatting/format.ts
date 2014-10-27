@@ -262,16 +262,37 @@ module ts.formatting {
                     return;
                 }
 
+                var childStartLine = sourceFile.getLineAndCharacterFromPosition(start).line;
+                // determine child indentation
+                // TODO: share this code with SmartIndenter
+                var increaseIndentation =
+                    childStartLine !== nodeStartLine &&
+                    !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStartLine, sourceFile) &&
+                    SmartIndenter.shouldIndentChildNode(node, child);
+                
+
+                var childIndentationValue = increaseIndentation ? indentation + options.IndentSize : indentation;
+                var childIndentation: DynamicIndentation = {
+                    getIndentation: () => childIndentationValue,
+                    getCommentIndentation: () => childIndentationValue,
+                    recomputeIndentation: lineAdded => {
+                        parentIndentation.recomputeIndentation(lineAdded);
+                        var delta = getIndentationDelta(node, lineAdded); //? 
+                        if (delta) {
+                            childIndentationValue += delta;
+                        }
+                    },
+                };
                 // ensure that current token is inside child node
                 if (isToken(child)) {
                     var tokenInfo = formattingScanner.readTokenInfo(node);
                     Debug.assert(tokenInfo.token.end === child.end);
-                    doConsumeTokenAndAdvanceScanner(tokenInfo, node, parentIndentation);
+                    doConsumeTokenAndAdvanceScanner(tokenInfo, node, childIndentation);
                     return;
                 }
 
-                var childStartLine = sourceFile.getLineAndCharacterFromPosition(start).line;
-
+                
+                var newIndentation: number;
                 if (listElementIndex === -1) {
                     // child is not list element
                 }
@@ -279,14 +300,8 @@ module ts.formatting {
                     // child is a list element
                 }
 
-                // determine child indentation
-                // TODO: share this code with SmartIndenter
-                var increaseIndentation =
-                    childStartLine !== nodeStartLine &&
-                    !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStartLine, sourceFile) &&
-                    SmartIndenter.shouldIndentChildNode(node, child);
 
-                processNode(child, childContextNode, childStartLine, increaseIndentation ? indentation + options.IndentSize : indentation);
+                processNode(child, childContextNode, childStartLine, childIndentationValue);
                 childContextNode = node;
             }
 
