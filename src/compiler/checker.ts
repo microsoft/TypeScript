@@ -306,6 +306,22 @@ module ts {
             // return undefined if we can't find a symbol.
         }
 
+        /** Returns true if node1 is defined before node 2**/
+        function isDefinedBefore(node1: Node, node2: Node): boolean {
+            var file1 = getSourceFileOfNode(node1);
+            var file2 = getSourceFileOfNode(node2);
+            if (file1 === file2) {
+                return node1.pos <= node2.pos;
+            }
+
+            if (!compilerOptions.out) {
+                return true;
+            }
+
+            var sourceFiles = program.getSourceFiles();
+            return sourceFiles.indexOf(file1) <= sourceFiles.indexOf(file2);
+        }
+
         function resolveName(location: Node, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string): Symbol {
             var errorLocation = location;
             var result: Symbol;
@@ -330,18 +346,8 @@ module ts {
                     // Block-scoped variables can not be used before their definition
                     var declaration = forEach(s.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
                     Debug.assert(declaration, "Block-scoped variable declaration is undefined");
-                    var declarationSourceFile = getSourceFileOfNode(declaration);
-                    var referenceSourceFile = getSourceFileOfNode(errorLocation);
-                    if (declarationSourceFile === referenceSourceFile) {
-                        if (declaration.pos > errorLocation.pos) {
-                            error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
-                        }
-                    }
-                    else if (compilerOptions.out) {
-                        var sourceFiles = program.getSourceFiles();
-                        if (sourceFiles.indexOf(referenceSourceFile) < sourceFiles.indexOf(declarationSourceFile)) {
-                            error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
-                        }
+                    if (!isDefinedBefore(declaration, errorLocation)) {
+                        error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
                     }
                 }
                 return s;
@@ -489,12 +495,10 @@ module ts {
         }
 
         // Resolves a qualified name and any involved import aliases
-        function resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags, suppressErrors?: boolean): Symbol {
+        function resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags): Symbol {
             if (name.kind === SyntaxKind.Identifier) {
                 // TODO: Investigate error recovery for symbols not found
-                var nameNotFoundMessage = !suppressErrors && Diagnostics.Cannot_find_name_0;
-                var nameArg = !suppressErrors && identifierToString(<Identifier>name);
-                var symbol = resolveName(location, (<Identifier>name).text, meaning, nameNotFoundMessage, nameArg);
+                var symbol = resolveName(location, (<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, identifierToString(<Identifier>name));
                 if (!symbol) {
                     return;
                 }
@@ -504,10 +508,8 @@ module ts {
                 if (!namespace || namespace === unknownSymbol || (<QualifiedName>name).right.kind === SyntaxKind.Missing) return;
                 var symbol = getSymbol(namespace.exports, (<QualifiedName>name).right.text, meaning);
                 if (!symbol) {
-                    if (!suppressErrors) {
-                        error(location, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(namespace),
-                            identifierToString((<QualifiedName>name).right));
-                    }
+                    error(location, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(namespace),
+                        identifierToString((<QualifiedName>name).right));
                     return;
                 }
             }
@@ -7410,13 +7412,13 @@ module ts {
                 var autoValue = 0;
                 var ambient = isInAmbientContext(node);
 
-                forEach(node.members, member =>  {
+                forEach(node.members, member => {
                     if(isNumericName(member.name.text)) {
                         error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
                     var initializer = member.initializer;
                     if (initializer) {
-                        autoValue = getConstantValueForEnumMemberInitializer(member, initializer);
+                        autoValue = getConstantValueForEnumMemberInitializer(initializer);
                         if (autoValue === undefined && !ambient) {
                             // Only here do we need to check that the initializer is assignable to the enum type.
                             // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
@@ -7437,66 +7439,101 @@ module ts {
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             }
 
-            function getConstantValueForEnumMemberInitializer(member: EnumMember, initializer: Expression): number {
+            function getConstantValueForEnumMemberInitializer(initializer: Expression): number {
                 return evalConstant(initializer);
 
                 function evalConstant(e: Node): number {
                     switch (e.kind) {
                         case SyntaxKind.PrefixOperator:
                             var value = evalConstant((<UnaryExpression>e).operand);
-                            if (value === undefined) return undefined;
+                            if (value === undefined) {
+                                return undefined;
+                            }
                             switch ((<UnaryExpression>e).operator) {
                                 case SyntaxKind.PlusToken: return value;
                                 case SyntaxKind.MinusToken: return -value;
-                                case SyntaxKind.TildeToken: return ~value;
+                                case SyntaxKind.TildeToken: return compilerOptions.propagateEnumConstants ? ~value : undefined;
                             }
                             return undefined;
                         case SyntaxKind.BinaryExpression:
-                            if (!program.getCompilerOptions().propagateEnumConstants) return undefined;
+                            if (!compilerOptions.propagateEnumConstants) {
+                                return undefined;
+                            }
 
                             var left = evalConstant((<BinaryExpression>e).left);
-                            if (left === undefined) return undefined;
+                            if (left === undefined) {
+                                return undefined;
+                            }
                             var right = evalConstant((<BinaryExpression>e).right);
-                            if (right === undefined) return undefined;
+                            if (right === undefined) {
+                                return undefined;
+                            }
                             switch ((<BinaryExpression>e).operator) {
                                 case SyntaxKind.BarToken: return left | right;
                                 case SyntaxKind.AmpersandToken: return left & right;
                                 case SyntaxKind.PlusToken: return left + right;
                                 case SyntaxKind.MinusToken: return left - right;
                                 case SyntaxKind.GreaterThanGreaterThanToken: return left >> right;
+                                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken: return left >>> right;
                                 case SyntaxKind.LessThanLessThanToken: return left << right;
                             }
                             return undefined;
                         case SyntaxKind.NumericLiteral:
                             return +(<LiteralExpression>e).text;
                         case SyntaxKind.Identifier:
+                        case SyntaxKind.IndexedAccess:
                         case SyntaxKind.PropertyAccess:
-                            if (!program.getCompilerOptions().propagateEnumConstants) return undefined;
+                            if (!compilerOptions.propagateEnumConstants) {
+                                return undefined;
+                            }
 
-                            var enumSymbol: Symbol;
+                            var member = initializer.parent;
+                            var currentType = getTypeOfSymbol(getSymbolOfNode(member.parent));
+                            var enumType: Type;
                             var propertyName: string;
 
                             if (e.kind === SyntaxKind.Identifier) {
                                 // unqualified names can refer to member that reside in different declaration of the enum so just doing name resolution won't work.
                                 // instead pick symbol that correspond of enum declaration and later try to fetch member from the symbol
-                                enumSymbol = getSymbolOfNode(member.parent);
+                                enumType = currentType;
                                 propertyName = (<Identifier>e).text;
+                            }
+                            else if (e.kind === SyntaxKind.IndexedAccess) {
+                                if ((<IndexedAccess>e).index.kind !== SyntaxKind.StringLiteral) {
+                                    return undefined;
+                                }
+                                var enumType = getTypeOfNode((<IndexedAccess>e).object);
+                                if (enumType !== currentType) {
+                                    return undefined;
+                                }
+                                propertyName = (<LiteralExpression>(<IndexedAccess>e).index).text;
                             }
                             else {
                                 // left part in PropertyAccess should be resolved to the symbol of enum that declared 'member' 
-                                enumSymbol = resolveEntityName(member, (<PropertyAccess>e).left, SymbolFlags.Enum, /*suppressErrors*/ true);
-                                
-                                if (enumSymbol !== getSymbolOfNode(member.parent)) return undefined;
-                                propertyName = (<Identifier>(<PropertyAccess>e).right).text;
+                                var enumType = getTypeOfNode((<PropertyAccess>e).left);
+                                if (enumType !== currentType) {
+                                    return undefined;
+                                }
+                                propertyName = (<PropertyAccess>e).right.text;
                             }
 
-                            var propertySymbol = enumSymbol.exports[propertyName];
-                            if (!propertyName || !(propertySymbol.flags & SymbolFlags.EnumMember)) return undefined;
-                            var propertyDecl = <EnumMember>propertySymbol.valueDeclaration;
+                            if (propertyName === undefined) {
+                                return undefined;
+                            }
+                            var property = getPropertyOfObjectType(enumType, propertyName);
+                            if (!(property.flags & SymbolFlags.EnumMember)) {
+                                return undefined;
+                            }
+                            var propertyDecl = <EnumMember>property.valueDeclaration;
                             // self references are illegal
-                            if (member === propertyDecl) return undefined;
-                            // enumMemberValue might be undefined if corresponding enum value was not yet computed 
-                            // and it is ok to return undefined in this case (use before defition)
+                            if (member === propertyDecl) {
+                                return undefined;
+                            }
+
+                            // illegal case: forward reference
+                            if (!isDefinedBefore(propertyDecl, member)) {
+                                return undefined;
+                            }
                             return <number>getNodeLinks(propertyDecl).enumMemberValue;
                     }
                 }

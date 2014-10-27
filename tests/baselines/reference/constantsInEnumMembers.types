@@ -135,6 +135,16 @@ enum Enum1 {
 >Enum1 : typeof Enum1
 >A0 : Enum1
 
+    W3 = Enum1["A0"],
+>W3 : Enum1
+>Enum1["A0"] : Enum1
+>Enum1 : typeof Enum1
+
+    W4 = Enum1["W"],
+>W4 : Enum1
+>Enum1["W"] : Enum1
+>Enum1 : typeof Enum1
+
     // illegal case
     // forward reference to the element of the same enum
     X = Y, 
@@ -148,10 +158,75 @@ enum Enum1 {
 >Enum1 : typeof Enum1
 >Z : Enum1
 
+    Y1 = Enum1["Z"],
+>Y1 : Enum1
+>Enum1["Z"] : Enum1
+>Enum1 : typeof Enum1
+
     Z = 100,
 >Z : Enum1
 }
 
+
+module A {
+>A : typeof A
+
+    export module B {
+>B : typeof B
+
+        export module C {
+>C : typeof C
+
+            export enum E {
+>E : E
+
+                V1 = 1,
+>V1 : E
+
+                V2 = A.B.C.E.V1 + 100
+>V2 : E
+>A.B.C.E.V1 + 100 : number
+>A.B.C.E.V1 : E
+>A.B.C.E : typeof E
+>A.B.C : typeof C
+>A.B : typeof B
+>A : typeof A
+>B : typeof B
+>C : typeof C
+>E : typeof E
+>V1 : E
+            }
+        }
+    }
+}
+
+module A {
+>A : typeof A
+
+    export module B {
+>B : typeof B
+
+        export module C {
+>C : typeof C
+
+            export enum E {
+>E : E
+
+                V3 = A.B.C.E["V2"] + 200,
+>V3 : E
+>A.B.C.E["V2"] + 200 : number
+>A.B.C.E["V2"] : E
+>A.B.C.E : typeof E
+>A.B.C : typeof C
+>A.B : typeof B
+>A : typeof A
+>B : typeof B
+>C : typeof C
+>E : typeof E
+            }
+        }
+    }
+}
 
 function foo(x: Enum1) {
 >foo : (x: Enum1) => void
@@ -286,6 +361,16 @@ function foo(x: Enum1) {
 >Enum1 : typeof Enum1
 >W2 : Enum1
 
+        case Enum1.W3:
+>Enum1.W3 : Enum1
+>Enum1 : typeof Enum1
+>W3 : Enum1
+
+        case Enum1.W4:
+>Enum1.W4 : Enum1
+>Enum1 : typeof Enum1
+>W4 : Enum1
+
         case Enum1.X:
 >Enum1.X : Enum1
 >Enum1 : typeof Enum1
@@ -296,11 +381,62 @@ function foo(x: Enum1) {
 >Enum1 : typeof Enum1
 >Y : Enum1
 
+        case Enum1.Y1:
+>Enum1.Y1 : Enum1
+>Enum1 : typeof Enum1
+>Y1 : Enum1
+
         case Enum1.Z:
 >Enum1.Z : Enum1
 >Enum1 : typeof Enum1
 >Z : Enum1
 
             break;
+    }
+}
+
+function bar(e: A.B.C.E): number {
+>bar : (e: A.B.C.E) => number
+>e : A.B.C.E
+>A : unknown
+>B : unknown
+>C : unknown
+>E : A.B.C.E
+
+    switch (e) {
+>e : A.B.C.E
+
+        case A.B.C.E.V1: return 1;
+>A.B.C.E.V1 : A.B.C.E
+>A.B.C.E : typeof A.B.C.E
+>A.B.C : typeof A.B.C
+>A.B : typeof A.B
+>A : typeof A
+>B : typeof A.B
+>C : typeof A.B.C
+>E : typeof A.B.C.E
+>V1 : A.B.C.E
+
+        case A.B.C.E.V2: return 1;
+>A.B.C.E.V2 : A.B.C.E
+>A.B.C.E : typeof A.B.C.E
+>A.B.C : typeof A.B.C
+>A.B : typeof A.B
+>A : typeof A
+>B : typeof A.B
+>C : typeof A.B.C
+>E : typeof A.B.C.E
+>V2 : A.B.C.E
+
+        case A.B.C.E.V3: return 1;
+>A.B.C.E.V3 : A.B.C.E
+>A.B.C.E : typeof A.B.C.E
+>A.B.C : typeof A.B.C
+>A.B : typeof A.B
+>A : typeof A
+>B : typeof A.B
+>C : typeof A.B.C
+>E : typeof A.B.C.E
+>V3 : A.B.C.E
     }
 }

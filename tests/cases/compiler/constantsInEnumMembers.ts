@@ -33,15 +33,38 @@ enum Enum1 {
     // correct cases: reference to the enum member from different enum declaration
     W1 = A0,
     W2 = Enum1.A0,
-
+    W3 = Enum1["A0"],
+    W4 = Enum1["W"],
     // illegal case
     // forward reference to the element of the same enum
     X = Y, 
     // forward reference to the element of the same enum
     Y = Enum1.Z,
+    Y1 = Enum1["Z"],
     Z = 100,
 }
 
+
+module A {
+    export module B {
+        export module C {
+            export enum E {
+                V1 = 1,
+                V2 = A.B.C.E.V1 + 100
+            }
+        }
+    }
+}
+
+module A {
+    export module B {
+        export module C {
+            export enum E {
+                V3 = A.B.C.E["V2"] + 200,
+            }
+        }
+    }
+}
 
 function foo(x: Enum1) {
     switch (x) {
@@ -70,9 +93,20 @@ function foo(x: Enum1) {
         case Enum1.W:
         case Enum1.W1:
         case Enum1.W2:
+        case Enum1.W3:
+        case Enum1.W4:
         case Enum1.X:
         case Enum1.Y:
+        case Enum1.Y1:
         case Enum1.Z:
             break;
+    }
+}
+
+function bar(e: A.B.C.E): number {
+    switch (e) {
+        case A.B.C.E.V1: return 1;
+        case A.B.C.E.V2: return 1;
+        case A.B.C.E.V3: return 1;
     }
 }

@@ -33,15 +33,38 @@ enum Enum1 {
     // correct cases: reference to the enum member from different enum declaration
     W1 = A0,
     W2 = Enum1.A0,
-
+    W3 = Enum1["A0"],
+    W4 = Enum1["W"],
     // illegal case
     // forward reference to the element of the same enum
     X = Y, 
     // forward reference to the element of the same enum
     Y = Enum1.Z,
+    Y1 = Enum1["Z"],
     Z = 100,
 }
 
+
+module A {
+    export module B {
+        export module C {
+            export enum E {
+                V1 = 1,
+                V2 = A.B.C.E.V1 + 100
+            }
+        }
+    }
+}
+
+module A {
+    export module B {
+        export module C {
+            export enum E {
+                V3 = A.B.C.E["V2"] + 200,
+            }
+        }
+    }
+}
 
 function foo(x: Enum1) {
     switch (x) {
@@ -70,10 +93,21 @@ function foo(x: Enum1) {
         case Enum1.W:
         case Enum1.W1:
         case Enum1.W2:
+        case Enum1.W3:
+        case Enum1.W4:
         case Enum1.X:
         case Enum1.Y:
+        case Enum1.Y1:
         case Enum1.Z:
             break;
+    }
+}
+
+function bar(e: A.B.C.E): number {
+    switch (e) {
+        case A.B.C.E.V1: return 1;
+        case A.B.C.E.V2: return 1;
+        case A.B.C.E.V3: return 1;
     }
 }
 
@@ -111,13 +145,43 @@ var Enum1;
     // correct cases: reference to the enum member from different enum declaration
     Enum1[Enum1["W1"] = A0] = "W1";
     Enum1[Enum1["W2"] = Enum1.A0] = "W2";
+    Enum1[Enum1["W3"] = Enum1["A0"]] = "W3";
+    Enum1[Enum1["W4"] = Enum1["W"]] = "W4";
     // illegal case
     // forward reference to the element of the same enum
     Enum1[Enum1["X"] = Enum1.Y] = "X";
     // forward reference to the element of the same enum
     Enum1[Enum1["Y"] = 100 /* Z */] = "Y";
+    Enum1[Enum1["Y1"] = Enum1["Z"]] = "Y1";
     Enum1[Enum1["Z"] = 100] = "Z";
 })(Enum1 || (Enum1 = {}));
+var A;
+(function (A) {
+    var B;
+    (function (B) {
+        var C;
+        (function (C) {
+            (function (E) {
+                E[E["V1"] = 1] = "V1";
+                E[E["V2"] = A.B.C.E.V1 + 100] = "V2";
+            })(C.E || (C.E = {}));
+            var E = C.E;
+        })(C = B.C || (B.C = {}));
+    })(B = A.B || (A.B = {}));
+})(A || (A = {}));
+var A;
+(function (A) {
+    var B;
+    (function (B) {
+        var C;
+        (function (C) {
+            (function (E) {
+                E[E["V3"] = A.B.C.E["V2"] + 200] = "V3";
+            })(C.E || (C.E = {}));
+            var E = C.E;
+        })(C = B.C || (B.C = {}));
+    })(B = A.B || (A.B = {}));
+})(A || (A = {}));
 function foo(x) {
     switch (x) {
         case 0 /* A */:
@@ -145,9 +209,22 @@ function foo(x) {
         case 11 /* W */:
         case 100 /* W1 */:
         case 100 /* W2 */:
+        case 100 /* W3 */:
+        case 11 /* W4 */:
         case Enum1.X:
         case Enum1.Y:
+        case Enum1.Y1:
         case 100 /* Z */:
             break;
+    }
+}
+function bar(e) {
+    switch (e) {
+        case 1 /* V1 */:
+            return 1;
+        case 101 /* V2 */:
+            return 1;
+        case 301 /* V3 */:
+            return 1;
     }
 }
