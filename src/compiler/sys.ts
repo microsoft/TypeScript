@@ -1,4 +1,3 @@
-/// <reference path="diagnosticInformationMap.generated.ts"/>
 
 interface System {
     args: string[];
