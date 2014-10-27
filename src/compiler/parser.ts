@@ -4083,14 +4083,14 @@ module ts {
         }
 
         function parseSourceElement() {
-            return parseSourceElementOrModuleElement(ModifierContext.SourceElements, /*allowLetAndConstDeclarations*/ false);
+            return parseSourceElementOrModuleElement(ModifierContext.SourceElements);
         }
 
         function parseModuleElement() {
-            return parseSourceElementOrModuleElement(ModifierContext.ModuleElements, /*allowLetAndConstDeclarations*/ true);
+            return parseSourceElementOrModuleElement(ModifierContext.ModuleElements);
         }
 
-        function parseSourceElementOrModuleElement(modifierContext: ModifierContext, allowLetAndConstDeclarations: boolean): Statement {
+        function parseSourceElementOrModuleElement(modifierContext: ModifierContext): Statement {
             if (isDeclaration()) {
                 return parseDeclaration(modifierContext);
             }
@@ -4098,7 +4098,7 @@ module ts {
             var statementStart = scanner.getTokenPos();
             var statementFirstTokenLength = scanner.getTextPos() - statementStart;
             var errorCountBeforeStatement = file.syntacticErrors.length;
-            var statement = parseStatement(allowLetAndConstDeclarations);
+            var statement = parseStatement(/*allowLetAndConstDeclarations*/ true);
 
             if (inAmbientContext && file.syntacticErrors.length === errorCountBeforeStatement) {
                 grammarErrorAtPos(statementStart, statementFirstTokenLength, Diagnostics.Statements_are_not_allowed_in_ambient_contexts);

@@ -26,6 +26,7 @@ Your pull request should:
     * Include baseline changes with your change
     * All changed code must have 100% code coverage
 * Follow the code conventions descriped in [Coding guidlines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidlines)
+* To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
 
 ## Running the Tests
 To run all tests, invoke the runtests target using jake:

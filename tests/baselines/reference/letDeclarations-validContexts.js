@@ -123,6 +123,26 @@ var o = {
     }
 }
 
+// labels
+label: let l30 = 0;
+{
+    label2: let l31 = 0;
+}
+
+function f3() {
+    label: let l32 = 0;
+    {
+        label2: let l33 = 0;
+    }
+}
+
+module m3 {
+    label: let l34 = 0;
+    {
+        label2: let l35 = 0;
+    }
+}
+
 //// [letDeclarations-validContexts.js]
 // Control flow statements with blocks
 if (true) {
@@ -227,3 +247,20 @@ var o = {
         let l29 = 0;
     }
 };
+label: let l30 = 0;
+{
+    label2: let l31 = 0;
+}
+function f3() {
+    label: let l32 = 0;
+    {
+        label2: let l33 = 0;
+    }
+}
+var m3;
+(function (m3) {
+    label: let l34 = 0;
+    {
+        label2: let l35 = 0;
+    }
+})(m3 || (m3 = {}));
