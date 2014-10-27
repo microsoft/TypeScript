@@ -307,29 +307,124 @@ module ts {
             // return undefined if we can't find a symbol.
         }
 
-        function resolveName(location: Node, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string): Symbol {
-            var errorLocation = location;
+        // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
+        // the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
+        // the given name can be found.
+        function resolveName(location: Node, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string | Identifier): Symbol {
+
             var result: Symbol;
             var lastLocation: Node;
+            var propertyWithInvalidInitializer: Node;
+            var errorLocation = location;
 
-            var memberWithInitializerThatReferencesIdentifierFromConstructor: Node;
+            loop: while (location) {
+                // Locals of a source file are not in scope (because they get merged into the global symbol table)
+                if (location.locals && !isGlobalSourceFile(location)) {
+                    if (result = getSymbol(location.locals, name, meaning)) {
+                        break loop;
+                    }
+                }
+                switch (location.kind) {
+                    case SyntaxKind.SourceFile:
+                        if (!isExternalModule(<SourceFile>location)) break;
+                    case SyntaxKind.ModuleDeclaration:
+                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.ModuleMember)) {
+                            break loop;
+                        }
+                        break;
+                    case SyntaxKind.EnumDeclaration:
+                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.EnumMember)) {
+                            break loop;
+                        }
+                        break;
+                    case SyntaxKind.Property:
+                        // TypeScript 1.0 spec (April 2014): 8.4.1
+                        // Initializer expressions for instance member variables are evaluated in the scope 
+                        // of the class constructor body but are not permitted to reference parameters or 
+                        // local variables of the constructor. This effectively means that entities from outer scopes 
+                        // by the same name as a constructor parameter or local variable are inaccessible 
+                        // in initializer expressions for instance member variables.
+                        if (location.parent.kind === SyntaxKind.ClassDeclaration && !(location.flags & NodeFlags.Static)) {
+                            var ctor = findConstructorDeclaration(<ClassDeclaration>location.parent);
+                            if (ctor && ctor.locals) {
+                                if (getSymbol(ctor.locals, name, meaning & SymbolFlags.Value)) {
+                                    // Remember the property node, it will be used later to report appropriate error
+                                    propertyWithInvalidInitializer = location;
+                                }
+                            }
+                        }
+                        break;
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                        if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
+                            if (lastLocation && lastLocation.flags & NodeFlags.Static) {
+                                // TypeScript 1.0 spec (April 2014): 3.4.1
+                                // The scope of a type parameter extends over the entire declaration with which the type
+                                // parameter list is associated, with the exception of static member declarations in classes.
+                                error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
+                                return undefined;
+                            }
+                            break loop;
+                        }
+                        break;
+                    case SyntaxKind.Method:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ArrowFunction:
+                        if (name === "arguments") {
+                            result = argumentsSymbol;
+                            break loop;
+                        }
+                        break;
+                    case SyntaxKind.FunctionExpression:
+                        if (name === "arguments") {
+                            result = argumentsSymbol;
+                            break loop;
+                        }
+                        var id = (<FunctionExpression>location).name;
+                        if (id && name === id.text) {
+                            result = location.symbol;
+                            break loop;
+                        }
+                        break;
+                    case SyntaxKind.CatchBlock:
+                        var id = (<CatchBlock>location).variable;
+                        if (name === id.text) {
+                            result = location.symbol;
+                            break loop;
+                        }
+                        break;
+                }
+                lastLocation = location;
+                location = location.parent;
+            }
 
-            function returnResolvedSymbol(s: Symbol) {
-                // we've seen member with initializer that references identifier defined in constructor during the search.
-                // if this was the only result with given name then just report default 'nameNotFound' message.
-                // however if we met something else that was 'shadowed' by the identifier in constructor - report more specific error
-                if (s && memberWithInitializerThatReferencesIdentifierFromConstructor) {
-                    var propertyName = (<PropertyDeclaration>memberWithInitializerThatReferencesIdentifierFromConstructor).name;
-                    error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor, identifierToString(propertyName), nameArg);
+            if (!result) {
+                result = getSymbol(globals, name, meaning);
+            }
+
+            if (!result) {
+                if (nameNotFoundMessage) {
+                    error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : identifierToString(nameArg));
+                }
+                return undefined;
+            }
+
+            // Perform extra checks only if error reporting was requested
+            if (nameNotFoundMessage) {
+                if (propertyWithInvalidInitializer) {
+                    // We have a match, but the reference occurred within a property initializer and the identifier also binds
+                    // to a local variable in the constructor where the code will be emitted.
+                    var propertyName = (<PropertyDeclaration>propertyWithInvalidInitializer).name;
+                    error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
+                        identifierToString(propertyName), typeof nameArg === "string" ? nameArg : identifierToString(nameArg));
                     return undefined;
                 }
-                if (!s && nameNotFoundMessage) {
-                    error(errorLocation, nameNotFoundMessage, nameArg);
-                }
-
-                if (s && s.flags & SymbolFlags.BlockScopedVariable) {
-                    // Block-scoped variables can not be used before their definition
-                    var declaration = forEach(s.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
+                if (result.flags & SymbolFlags.BlockScopedVariable) {
+                    // Block-scoped variables cannot be used before their definition
+                    var declaration = forEach(result.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
                     Debug.assert(declaration, "Block-scoped variable declaration is undefined");
                     var declarationSourceFile = getSourceFileOfNode(declaration);
                     var referenceSourceFile = getSourceFileOfNode(errorLocation);
@@ -345,95 +440,8 @@ module ts {
                         }
                     }
                 }
-                return s;
             }
-
-            while (location) {
-                // Locals of a source file are not in scope (because they get merged into the global symbol table)
-                if (location.locals && !isGlobalSourceFile(location)) {
-                    if (result = getSymbol(location.locals, name, meaning)) {
-                        return returnResolvedSymbol(result);
-                    }
-                }
-                switch (location.kind) {
-                    case SyntaxKind.SourceFile:
-                        if (!isExternalModule(<SourceFile>location)) break;
-                    case SyntaxKind.ModuleDeclaration:
-                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.ModuleMember)) {
-                            return returnResolvedSymbol(result);
-                        }
-                        break;
-                    case SyntaxKind.EnumDeclaration:
-                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.EnumMember)) {
-                            return returnResolvedSymbol(result);
-                        }
-                        break;
-                    case SyntaxKind.Property:
-                        // TypeScript 1.0 spec (April 2014): 8.4.1
-                        // Initializer expressions for instance member variables are evaluated in the scope 
-                        // of the class constructor body but are not permitted to reference parameters or 
-                        // local variables of the constructor.This effectively means that entities from outer scopes 
-                        // by the same name as a constructor parameter or local variable are inaccessible 
-                        // in initializer expressions for instance member variables.
-                        if (location.parent.kind === SyntaxKind.ClassDeclaration && !(location.flags & NodeFlags.Static)) {
-                            var ctor = findConstructorDeclaration(<ClassDeclaration>location.parent);
-                            if (ctor && ctor.locals) {
-                                if (getSymbol(ctor.locals, name, meaning & SymbolFlags.Value)) {
-                                    // save the property node - later it will be used by 'returnResolvedSymbol' to report appropriate error
-                                    memberWithInitializerThatReferencesIdentifierFromConstructor = location;
-                                }
-                            }
-                        }
-                        break;
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                        if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
-                            if (lastLocation && lastLocation.flags & NodeFlags.Static) {
-                                // TypeScript 1.0 spec (April 2014): 3.4.1
-                                // The scope of a type parameter extends over the entire declaration 
-                                // with which the type parameter list is associated, with the exception of static member declarations in classes.
-                                error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
-                                return undefined;
-                            }
-                            else {
-                                return returnResolvedSymbol(result);
-                            }
-                        }
-                        break;
-                    case SyntaxKind.Method:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ArrowFunction:
-                        if (name === "arguments") {
-                            return returnResolvedSymbol(argumentsSymbol);
-                        }
-                        break;
-                    case SyntaxKind.FunctionExpression:
-                        if (name === "arguments") {
-                            return returnResolvedSymbol(argumentsSymbol);
-                        }
-                        var id = (<FunctionExpression>location).name;
-                        if (id && name === id.text) {
-                            return returnResolvedSymbol(location.symbol);
-                        }
-                        break;
-                    case SyntaxKind.CatchBlock:
-                        var id = (<CatchBlock>location).variable;
-                        if (name === id.text) {
-                            return returnResolvedSymbol(location.symbol);
-                        }
-                        break;
-                }
-                lastLocation = location;
-                location = location.parent;
-            }
-            if (result = getSymbol(globals, name, meaning)) {
-                return returnResolvedSymbol(result);
-            }
-
-            return returnResolvedSymbol(undefined);
+            return result;
         }
 
         function resolveImport(symbol: Symbol): Symbol {
@@ -492,8 +500,7 @@ module ts {
         // Resolves a qualified name and any involved import aliases
         function resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags): Symbol {
             if (name.kind === SyntaxKind.Identifier) {
-                // TODO: Investigate error recovery for symbols not found
-                var symbol = resolveName(location, (<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, identifierToString(<Identifier>name));
+                var symbol = resolveName(location, (<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, <Identifier>name);
                 if (!symbol) {
                     return;
                 }
@@ -590,7 +597,7 @@ module ts {
                     }
                     if (node.exportName.text) {
                         var meaning = SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace;
-                        var exportSymbol = resolveName(node, node.exportName.text, meaning, Diagnostics.Cannot_find_name_0, identifierToString(node.exportName));
+                        var exportSymbol = resolveName(node, node.exportName.text, meaning, Diagnostics.Cannot_find_name_0, node.exportName);
                     }
                 }
                 symbolLinks.exportAssignSymbol = exportSymbol || unknownSymbol;
@@ -961,13 +968,12 @@ module ts {
 
         function isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult {
             var firstIdentifier = getFirstIdentifier(entityName);
-            var firstIdentifierName = identifierToString(<Identifier>firstIdentifier);
-            var symbolOfNameSpace = resolveName(entityName.parent, (<Identifier>firstIdentifier).text, SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, firstIdentifierName);
+            var symbolOfNameSpace = resolveName(entityName.parent, (<Identifier>firstIdentifier).text, SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, firstIdentifier);
             // Verify if the symbol is accessible
             var hasNamespaceDeclarationsVisibile = hasVisibleDeclarations(symbolOfNameSpace);
             return hasNamespaceDeclarationsVisibile ?
                 { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible: hasNamespaceDeclarationsVisibile.aliasesToMakeVisible } :
-                { accessibility: SymbolAccessibility.NotAccessible, errorSymbolName: firstIdentifierName };
+                { accessibility: SymbolAccessibility.NotAccessible, errorSymbolName: identifierToString(<Identifier>firstIdentifier) };
         }
 
         function releaseStringWriter(writer: StringSymbolWriter) {
@@ -4114,7 +4120,7 @@ module ts {
         function getResolvedSymbol(node: Identifier): Symbol {
             var links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
-                links.resolvedSymbol = resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, identifierToString(node)) || unknownSymbol;
+                links.resolvedSymbol = resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
