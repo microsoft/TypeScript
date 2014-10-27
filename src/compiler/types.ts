@@ -1034,7 +1034,7 @@ module ts {
         inferenceCount: number;           // Incremented for every inference made (whether new or not)
         inferences: Type[][];             // Inferences made for each type parameter
         inferredTypes: Type[];            // Inferred type for each type parameter
-        failureIndex?: number;            // Index of type parameter for which inference failed
+        failedTypeParameterIndex?: number;            // Index of type parameter for which inference failed
                                           // It is optional because in contextual signature instantiation, nothing fails
     }
 

@@ -130,7 +130,7 @@ module ts {
         var emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        var typeArgumentInferenceFailureType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        var inferenceFailureType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
         var anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, false, false);
         var unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, false, false);
@@ -3797,7 +3797,7 @@ module ts {
                 var score = 0;
                 var downfallType: Type = undefined;
                 for (var j = 0; j < types.length; j++) {
-                    if (types[i] === types[j] || isTypeSubtypeOf(types[j], types[i])) {
+                    if (isTypeSubtypeOf(types[j], types[i])) {
                         score++;
                     }
                     else if (!downfallType) {
@@ -4087,14 +4087,14 @@ module ts {
                 if (inferences.length) {
                     // Infer widened union or supertype, or the undefined type for no common supertype
                     var unionOrSuperType = context.inferUnionTypes ? getUnionType(inferences) : getCommonSupertype(inferences);
-                    inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : typeArgumentInferenceFailureType;
+                    inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : inferenceFailureType;
                 }
                 else {
                     // Infer the empty object type when no inferences were made
                     inferredType = emptyObjectType;
                 }
 
-                if (inferredType !== typeArgumentInferenceFailureType) {
+                if (inferredType !== inferenceFailureType) {
                     var constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
                     inferredType = constraint && !isTypeAssignableTo(inferredType, constraint) ? constraint : inferredType;
                 }
@@ -5184,12 +5184,12 @@ module ts {
                 }
             }
             var inferredTypes = getInferredTypes(context);
-            // Inference has failed if the typeArgumentInferenceFailureType type is in list of inferences
-            context.failureIndex = indexOf(inferredTypes, typeArgumentInferenceFailureType);
+            // Inference has failed if the inferenceFailureType type is in list of inferences
+            context.failedTypeParameterIndex = indexOf(inferredTypes, inferenceFailureType);
 
-            // Wipe out the typeArgumentInferenceFailureType from the array so that error recovery can work properly
+            // Wipe out the inferenceFailureType from the array so that error recovery can work properly
             for (var i = 0; i < inferredTypes.length; i++) {
-                if (inferredTypes[i] === typeArgumentInferenceFailureType) {
+                if (inferredTypes[i] === inferenceFailureType) {
                     inferredTypes[i] = unknownType;
                 }
             }
@@ -5314,7 +5314,7 @@ module ts {
             // skip the checkApplicableSignature check.
             if (candidateForArgumentError) {
                 // excludeArgument is undefined, in this case also equivalent to [undefined, undefined, ...]
-                // The importance of exlcludeArgument is to prevent us from typing function expression parameters
+                // The importance of excludeArgument is to prevent us from typing function expression parameters
                 // in arguments too early. If possible, we'd like to only type them once we know the correct
                 // overload. However, this matters for the case where the call is correct. When the call is
                 // an error, we don't need to exclude any arguments, although it would cause no harm to do so.
@@ -5325,9 +5325,9 @@ module ts {
                     checkTypeArguments(candidateForTypeArgumentError, node.typeArguments, [], /*reportErrors*/ true)
                 }
                 else {
-                    Debug.assert(resultOfFailedInference.failureIndex >= 0);
-                    var failedTypeParameter = candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failureIndex];
-                    var inferenceCandidates = resultOfFailedInference.inferences[resultOfFailedInference.failureIndex];
+                    Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
+                    var failedTypeParameter = candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failedTypeParameterIndex];
+                    var inferenceCandidates = resultOfFailedInference.inferences[resultOfFailedInference.failedTypeParameterIndex];
 
                     var diagnosticChainHead = chainDiagnosticMessages(/*details*/ undefined, // details will be provided by call to reportNoCommonSupertypeError
                         Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly_Colon,
@@ -5375,7 +5375,7 @@ module ts {
                             }
                             else {
                                 inferenceResult = inferTypeArguments(candidate, args, excludeArgument);
-                                typeArgumentsAreValid = inferenceResult.failureIndex < 0;
+                                typeArgumentsAreValid = inferenceResult.failedTypeParameterIndex < 0;
                                 typeArgumentTypes = inferenceResult.inferredTypes;
                             }
                             if (!typeArgumentsAreValid) {
