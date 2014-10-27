@@ -2021,7 +2021,7 @@ module ts {
                     var text = sourceFile.text;
                     var width = comment.end - comment.pos;
                     // is single line comment or just /*
-                    if (width <=2 || text.charCodeAt(comment.pos + 1) === CharacterCodes.slash) {
+                    if (width <= 2 || text.charCodeAt(comment.pos + 1) === CharacterCodes.slash) {
                         return true;
                     }
                     else {
@@ -2484,9 +2484,6 @@ module ts {
             }
 
             function isInStringOrRegularExpressionLiteral(previousToken: Node): boolean {
-                //var token = getTouchingPropertyName(sourceFile, position);
-
-                //  || token.kind === SyntaxKind.RegularExpressionLiteral
                 if (previousToken.kind === SyntaxKind.StringLiteral) {
                     // The position has to be either: 1. entirely within the token text, or 
                     // 2. at the end position, and the string literal is not terminated
@@ -2498,7 +2495,9 @@ module ts {
                     else if (position === end) {
                         var width = end - start;
                         var text = previousToken.getSourceFile().text;
-                        return width <= 1 || text.charCodeAt(start) !== text.charCodeAt(end - 1);
+                        return width <= 1 ||
+                            text.charCodeAt(start) !== text.charCodeAt(end - 1) ||
+                            text.charCodeAt(end - 2) === CharacterCodes.backslash;
                     }
                 }
                 else if (previousToken.kind === SyntaxKind.RegularExpressionLiteral) {
