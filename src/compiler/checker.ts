@@ -7519,10 +7519,10 @@ module ts {
                                 return undefined;
                             }
                             var property = getPropertyOfObjectType(enumType, propertyName);
-                            if (!(property.flags & SymbolFlags.EnumMember)) {
+                            if (!property || !(property.flags & SymbolFlags.EnumMember)) {
                                 return undefined;
                             }
-                            var propertyDecl = <EnumMember>property.valueDeclaration;
+                            var propertyDecl = property.valueDeclaration;
                             // self references are illegal
                             if (member === propertyDecl) {
                                 return undefined;
