@@ -1656,7 +1656,7 @@ module ts {
             }
 
             if (syntaxTree !== null) {
-                Debug.assert(sourceFile);
+                Debug.assert(sourceFile !== undefined);
                 // All done, ensure state is up to date
                 this.currentFileVersion = version;
                 this.currentFilename = filename;
@@ -1864,9 +1864,9 @@ module ts {
             ): SourceFile {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
-            Debug.assert(bucket);
+            Debug.assert(bucket !== undefined);
             var entry = lookUp(bucket, filename);
-            Debug.assert(entry);
+            Debug.assert(entry !== undefined);
 
             if (entry.sourceFile.isOpen === isOpen && entry.sourceFile.version === version) {
                 return entry.sourceFile;
@@ -1878,7 +1878,7 @@ module ts {
 
         function releaseDocument(filename: string, compilationSettings: CompilerOptions): void {
             var bucket = getBucketForCompilationSettings(compilationSettings, false);
-            Debug.assert(bucket);
+            Debug.assert(bucket !== undefined);
 
             var entry = lookUp(bucket, filename);
             entry.refCount--;
@@ -2549,7 +2549,7 @@ module ts {
                 mappedNode = precedingToken;
             }
 
-            Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
+            Debug.assert(mappedNode !== undefined, "Could not map a Fidelity node to an AST node");
 
             // Get the completions
             activeCompletionSession = {
@@ -2603,7 +2603,7 @@ module ts {
                 if (containingObjectLiteral) {
                     var objectLiteral = <ObjectLiteral>(mappedNode.kind === SyntaxKind.ObjectLiteral ? mappedNode : getAncestor(mappedNode, SyntaxKind.ObjectLiteral));
 
-                    Debug.assert(objectLiteral);
+                    Debug.assert(objectLiteral !== undefined);
 
                     isMemberCompletion = true;
 
@@ -2656,7 +2656,7 @@ module ts {
             var symbol = lookUp(activeCompletionSession.symbols, entryName);
             if (symbol) {
                 var type = session.typeChecker.getTypeOfSymbol(symbol);
-                Debug.assert(type, "Could not find type for symbol");
+                Debug.assert(type !== undefined, "Could not find type for symbol");
                 var completionEntry = createCompletionEntry(symbol, session.typeChecker);
                 // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
                 //               which is permissible given that it is backwards compatible; but really we should consider
@@ -2755,7 +2755,7 @@ module ts {
                         }
                         if (rootSymbolFlags & SymbolFlags.GetAccessor) return ScriptElementKind.memberVariableElement;
                         if (rootSymbolFlags & SymbolFlags.SetAccessor) return ScriptElementKind.memberVariableElement;
-                        Debug.assert(rootSymbolFlags & SymbolFlags.Method);
+                        Debug.assert((rootSymbolFlags & SymbolFlags.Method) !== undefined);
                     }) || ScriptElementKind.memberFunctionElement;
                 }
                 return ScriptElementKind.memberVariableElement;
@@ -5155,7 +5155,7 @@ module ts {
                             descriptor = descriptors[i];
                         }
                     }
-                    Debug.assert(descriptor);
+                    Debug.assert(descriptor !== undefined);
 
                     // We don't want to match something like 'TODOBY', so we make sure a non 
                     // letter/digit follows the match.

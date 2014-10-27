@@ -424,7 +424,7 @@ module ts {
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
                     // Block-scoped variables cannot be used before their definition
                     var declaration = forEach(result.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
-                    Debug.assert(declaration, "Block-scoped variable declaration is undefined");
+                    Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
                     var declarationSourceFile = getSourceFileOfNode(declaration);
                     var referenceSourceFile = getSourceFileOfNode(errorLocation);
                     if (declarationSourceFile === referenceSourceFile) {
@@ -469,7 +469,7 @@ module ts {
         function getSymbolOfPartOfRightHandSideOfImport(entityName: EntityName, importDeclaration?: ImportDeclaration): Symbol {
             if (!importDeclaration) {
                 importDeclaration = getAncestor(entityName, SyntaxKind.ImportDeclaration);
-                Debug.assert(importDeclaration);
+                Debug.assert(importDeclaration !== undefined);
             }
             // There are three things we might try to look for. In the following examples,
             // the search term is enclosed in |...|:
@@ -3345,7 +3345,7 @@ module ts {
                     chainedMessage = chainedMessage || Diagnostics.Type_0_is_not_assignable_to_type_1_Colon;
                     terminalMessage = terminalMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
                     var diagnosticKey = errorInfo ? chainedMessage : terminalMessage;
-                    Debug.assert(diagnosticKey);
+                    Debug.assert(diagnosticKey !== undefined);
                     reportError(diagnosticKey, typeToString(source), typeToString(target));
                 }
                 return false;
@@ -7342,17 +7342,17 @@ module ts {
                             errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
                         }
                         else {
-                            Debug.assert(derived.flags & SymbolFlags.Property);
+                            Debug.assert((derived.flags & SymbolFlags.Property) !== 0);
                             errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_property;
                         }
                     }
                     else if (base.flags & SymbolFlags.Property) {
-                        Debug.assert(derived.flags & SymbolFlags.Method);
+                        Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
                         errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_function;
                     }
                     else {
-                        Debug.assert(base.flags & SymbolFlags.Accessor);
-                        Debug.assert(derived.flags & SymbolFlags.Method);
+                        Debug.assert((base.flags & SymbolFlags.Accessor) !== 0);
+                        Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
                         errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function;
                     }
 

@@ -35,7 +35,7 @@ module ts {
         // syntaxList should not be undefined here. If it is, there is a problem. Find out if
         // there at least is a child that is a list.
         if (!syntaxList) {
-            Debug.assert(findChildOfKind(node.parent, SyntaxKind.SyntaxList),
+            Debug.assert(findChildOfKind(node.parent, SyntaxKind.SyntaxList) !== undefined,
                 "Node of kind " + SyntaxKind[node.parent.kind] + " has no list children");
         }
 
@@ -194,7 +194,7 @@ module ts {
                 }
             }
 
-            Debug.assert(startNode || n.kind === SyntaxKind.SourceFile);
+            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile);
 
             // Here we know that none of child token nodes embrace the position, 
             // the only known case is when position is at the end of the file.

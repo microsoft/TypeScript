@@ -631,7 +631,7 @@ module ts {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: any, message?: string, verboseDebugInfo?: () => string): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string): void {
             if (!expression) {
                 var verboseDebugString = "";
                 if (verboseDebugInfo) {
