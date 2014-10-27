@@ -852,8 +852,13 @@ module ts {
                         write(")");
                     }
 
-                    write(" + ")
-                    emitLiteral(templateSpan.literal);
+                    // Only emit if the literal is non-empty.
+                    // The binary '+' operator is left-associative, so the first string concatenation will force
+                    // the result up to this point to be a string. Emitting a '+ ""' has no semantic effect.
+                    if (templateSpan.literal.text.length !== 0) {
+                        write(" + ")
+                        emitLiteral(templateSpan.literal);
+                    }
                 });
                 
                 if (templateNeedsParens) {
