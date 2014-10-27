@@ -364,7 +364,7 @@ module ts {
         Specifies_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations: { code: 6004, category: DiagnosticCategory.Message, key: "Specifies the location where debugger should locate TypeScript files instead of source locations." },
         Watch_input_files: { code: 6005, category: DiagnosticCategory.Message, key: "Watch input files." },
         Redirect_output_structure_to_the_directory: { code: 6006, category: DiagnosticCategory.Message, key: "Redirect output structure to the directory." },
-        Report_all_warnings_as_errors: { code: 6007, category: DiagnosticCategory.Message, key: "Report all warnings as errors." },
+        Do_not_emit_JavaScript_on_error: { code: 6007, category: DiagnosticCategory.Message, key: "Do not emit JavaScript on error." },
         Do_not_emit_comments_to_output: { code: 6009, category: DiagnosticCategory.Message, key: "Do not emit comments to output." },
         Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental: { code: 6015, category: DiagnosticCategory.Message, key: "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES6' (experimental)" },
         Specify_module_code_generation_Colon_commonjs_or_amd: { code: 6016, category: DiagnosticCategory.Message, key: "Specify module code generation: 'commonjs' or 'amd'" },

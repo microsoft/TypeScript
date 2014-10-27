@@ -1080,6 +1080,7 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
         noLib?: boolean;
@@ -1092,7 +1093,6 @@ module ts {
         sourceRoot?: string;
         target?: ScriptTarget;
         version?: boolean;
-        warnAsError?: boolean;
         watch?: boolean;
         [option: string]: any;
     }

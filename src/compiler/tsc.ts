@@ -362,7 +362,7 @@ module ts {
             var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
             errors = checker.getDiagnostics();
-            if (checker.hasEarlyErrors() || (compilerOptions.warnAsError && errors.length > 0)) {
+            if (checker.hasEarlyErrors() || (compilerOptions.noEmitOnError && errors.length > 0)) {
                 exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
             }
             else {

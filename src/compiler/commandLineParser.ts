@@ -55,6 +55,11 @@ module ts {
             error: Diagnostics.Argument_for_module_option_must_be_commonjs_or_amd
         },
         {
+            name: "noEmitOnError",
+            type: "boolean",
+            description: Diagnostics.Do_not_emit_JavaScript_on_error,
+        },
+        {
             name: "noImplicitAny",
             type: "boolean",
             description: Diagnostics.Warn_on_expressions_and_declarations_with_an_implied_any_type,
@@ -112,11 +117,6 @@ module ts {
             shortName: "v",
             type: "boolean",
             description: Diagnostics.Print_the_compiler_s_version,
-        },
-        {
-            name: "warnAsError",
-            type: "boolean",
-            description: Diagnostics.Report_all_warnings_as_errors,
         },
         {
             name: "watch",

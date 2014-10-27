@@ -1456,7 +1456,7 @@
         "category": "Message",
         "code": 6006
     },
-    "Report all warnings as errors.": {
+    "Do not emit JavaScript on error.": {
         "category": "Message",
         "code": 6007
     },
