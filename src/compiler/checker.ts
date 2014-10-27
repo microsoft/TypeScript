@@ -3930,7 +3930,7 @@ module ts {
             }
         }
 
-        function createInferenceContext(typeParameters: TypeParameter[], inferUnionTypes: boolean, typeArgumentResultTypes?: Type[]): InferenceContext {
+        function createInferenceContext(typeParameters: TypeParameter[], inferUnionTypes: boolean): InferenceContext {
             var inferences: Type[][] = [];
             for (var i = 0; i < typeParameters.length; i++) inferences.push([]);
             return {
@@ -3938,7 +3938,7 @@ module ts {
                 inferUnionTypes: inferUnionTypes,
                 inferenceCount: 0,
                 inferences: inferences,
-                inferredTypes: typeArgumentResultTypes || new Array(typeParameters.length),
+                inferredTypes: new Array(typeParameters.length),
             };
         }
 
@@ -5154,9 +5154,9 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(signature: Signature, args: Expression[], typeArgumentResultTypes: Type[], excludeArgument?: boolean[]): InferenceContext {
+        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): InferenceContext {
             var typeParameters = signature.typeParameters;
-            var context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false, typeArgumentResultTypes);
+            var context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false);
             var mapper = createInferenceMapper(context);
             // First infer from arguments that are not context sensitive
             for (var i = 0; i < args.length; i++) {
@@ -5205,8 +5205,7 @@ module ts {
                 if (typeArgumentsAreAssignable /* so far */) {
                     var constraint = getConstraintOfTypeParameter(typeParameters[i]);
                     if (constraint) {
-                        typeArgumentsAreAssignable = typeArgumentsAreAssignable &&
-                            checkTypeAssignableTo(typeArgument, constraint, reportErrors ? typeArgNode : undefined,
+                        typeArgumentsAreAssignable = checkTypeAssignableTo(typeArgument, constraint, reportErrors ? typeArgNode : undefined,
                                 Diagnostics.Type_0_does_not_satisfy_the_constraint_1_Colon, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                     }
                 }
@@ -5257,10 +5256,42 @@ module ts {
                 }
             }
 
+            // The following variables are captured and modified by calls to chooseOverload.
+            // If overload resolution or type argument inference fails, we want to report the
+            // best error possible. The best error is one which says that an argument was not
+            // assignable to a parameter. This implies that everything else about the overload
+            // was fine. So if there is any overload that is only incorrect because of an
+            // argument, we will report an error on that one.
+            //
+            //     function foo(s: string) {}
+            //     function foo(n: number) {} // Report argument error on this overload
+            //     function foo() {}
+            //     foo(true);
+            //
+            // If none of the overloads even made it that far, there are two possibilities.
+            // There was a problem with type arguments for some overload, in which case
+            // report an error on that. Or none of the overloads even had correct arity,
+            // in which case give an arity error.
+            //
+            //     function foo<T>(x: T, y: T) {} // Report type argument inference error
+            //     function foo() {}
+            //     foo(0, true);
+            //
             var candidateForArgumentError: Signature;
             var candidateForTypeArgumentError: Signature;
             var resultOfFailedInference: InferenceContext;
             var result: Signature;
+
+            // Section 4.12.1:
+            // if the candidate list contains one or more signatures for which the type of each argument
+            // expression is a subtype of each corresponding parameter type, the return type of the first
+            // of those signatures becomes the return type of the function call.
+            // Otherwise, the return type of the first signature in the candidate list becomes the return
+            // type of the function call.
+            //
+            // Whether the call is an error is determined by assignability of the arguments. The subtype pass
+            // is just important for choosing the best signature. So in the case where there is only one
+            // signature, the subtype pass is useless. So skipping it is an optimization.
             if (candidates.length > 1) {
                 result = chooseOverload(candidates, subtypeRelation, excludeArgument);
             }
@@ -5280,6 +5311,11 @@ module ts {
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
             if (candidateForArgumentError) {
+                // excludeArgument is undefined, in this case also equivalent to [undefined, undefined, ...]
+                // The importance of exlcludeArgument is to prevent us from typing function expression parameters
+                // in arguments too early. If possible, we'd like to only type them once we know the correct
+                // overload. However, this matters for the case where the call is correct. When the call is
+                // an error, we don't need to exclude any arguments, although it would cause no harm to do so.
                 checkApplicableSignature(node, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else if (candidateForTypeArgumentError) {
@@ -5329,14 +5365,16 @@ module ts {
                     while (true) {
                         var candidate = originalCandidate;
                         if (candidate.typeParameters) {
-                            var typeArgumentTypes = new Array<Type>(candidate.typeParameters.length);
+                            var typeArgumentTypes: Type[];
                             var typeArgumentsAreValid: boolean;
                             if (node.typeArguments) {
+                                typeArgumentTypes = new Array<Type>(candidate.typeParameters.length);
                                 typeArgumentsAreValid = checkTypeArguments(candidate, node.typeArguments, typeArgumentTypes, /*reportErrors*/ false)
                             }
                             else {
-                                inferenceResult = inferTypeArguments(candidate, args, typeArgumentTypes, excludeArgument);
+                                inferenceResult = inferTypeArguments(candidate, args, excludeArgument);
                                 typeArgumentsAreValid = inferenceResult.failureIndex < 0;
+                                typeArgumentTypes = inferenceResult.inferredTypes;
                             }
                             if (!typeArgumentsAreValid) {
                                 break;
@@ -5371,7 +5409,8 @@ module ts {
                         }
                     }
                     else {
-                        candidateForArgumentError = originalCandidate; // Could be candidate too
+                        Debug.assert(originalCandidate === candidate);
+                        candidateForArgumentError = originalCandidate;
                     }
                 }
 
