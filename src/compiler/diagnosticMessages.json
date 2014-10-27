@@ -471,6 +471,10 @@
         "category": "Error",
         "code": 1157
     },
+    "Aliased type cannot be an object type literal. Use an interface declaration instead.": {
+        "category": "Error",
+        "code": 1158
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
