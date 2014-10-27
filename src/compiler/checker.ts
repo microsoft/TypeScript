@@ -3164,43 +3164,40 @@ module ts {
         var identityRelation: Map<boolean> = {};
 
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
-            return checkTypeRelatedTo(source, target, identityRelation,
-                /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined, /*containingMessageChain*/ undefined);
+            return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined);
         }
 
         function isTypeSubtypeOf(source: Type, target: Type): boolean {
-            return checkTypeSubtypeOf(source, target, /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined, /*containingMessageChain*/ undefined);
+            return checkTypeSubtypeOf(source, target, /*errorNode*/ undefined);
         }
 
         function checkTypeSubtypeOf(
             source: Type,
             target: Type,
             errorNode: Node,
-            chainedMessage: DiagnosticMessage,
-            terminalMessage: DiagnosticMessage,
-            containingMessageChain: DiagnosticMessageChain): boolean {
+            chainedMessage?: DiagnosticMessage,
+            terminalMessage?: DiagnosticMessage,
+            containingMessageChain?: DiagnosticMessageChain): boolean {
 
             return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, chainedMessage, terminalMessage, containingMessageChain);
         }
 
         function isTypeAssignableTo(source: Type, target: Type): boolean {
-            return checkTypeAssignableTo(source, target, /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+            return checkTypeAssignableTo(source, target, /*errorNode*/ undefined);
         }
 
-        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, chainedMessage: DiagnosticMessage, terminalMessage: DiagnosticMessage): boolean {
-            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, chainedMessage, terminalMessage, /*containingMessageChain*/ undefined);
+        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, chainedMessage?: DiagnosticMessage, terminalMessage?: DiagnosticMessage): boolean {
+            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, chainedMessage, terminalMessage);
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<boolean>): boolean {
-            return checkTypeRelatedTo(source, target, relation,
-                /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined, /*containingMessageChain*/ undefined);
+            return checkTypeRelatedTo(source, target, relation, /*errorNode*/ undefined);
         }
 
         function isSignatureAssignableTo(source: Signature, target: Signature): boolean {
             var sourceType = getOrCreateTypeFromSignature(source);
             var targetType = getOrCreateTypeFromSignature(target);
-            return checkTypeRelatedTo(sourceType, targetType, assignableRelation,
-                /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined, /*containingMessageChain*/ undefined);
+            return checkTypeRelatedTo(sourceType, targetType, assignableRelation, /*errorNode*/ undefined);
         }
 
         function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
@@ -3269,9 +3266,9 @@ module ts {
             target: Type,
             relation: Map<boolean>,
             errorNode: Node,
-            chainedMessage: DiagnosticMessage,
-            terminalMessage: DiagnosticMessage,
-            containingMessageChain: DiagnosticMessageChain): boolean {
+            chainedMessage?: DiagnosticMessage,
+            terminalMessage?: DiagnosticMessage,
+            containingMessageChain?: DiagnosticMessageChain): boolean {
 
             var errorInfo: DiagnosticMessageChain;
             var sourceStack: ObjectType[];
@@ -5228,8 +5225,7 @@ module ts {
                     // Use argument expression as error location when reporting errors
                     var isValidArgument = checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
                         Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1,
-                        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1,
-                        /*containingMessageChain*/ undefined);
+                        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1);
                     if (!isValidArgument) {
                         return false;
                     }
