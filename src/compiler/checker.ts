@@ -7494,27 +7494,25 @@ module ts {
 
                             if (e.kind === SyntaxKind.Identifier) {
                                 // unqualified names can refer to member that reside in different declaration of the enum so just doing name resolution won't work.
-                                // instead pick symbol that correspond of enum declaration and later try to fetch member from the symbol
+                                // instead pick current enum type and later try to fetch member from the type
                                 enumType = currentType;
                                 propertyName = (<Identifier>e).text;
                             }
-                            else if (e.kind === SyntaxKind.IndexedAccess) {
-                                if ((<IndexedAccess>e).index.kind !== SyntaxKind.StringLiteral) {
-                                    return undefined;
-                                }
-                                var enumType = getTypeOfNode((<IndexedAccess>e).object);
-                                if (enumType !== currentType) {
-                                    return undefined;
-                                }
-                                propertyName = (<LiteralExpression>(<IndexedAccess>e).index).text;
-                            }
                             else {
-                                // left part in PropertyAccess should be resolved to the symbol of enum that declared 'member' 
-                                var enumType = getTypeOfNode((<PropertyAccess>e).left);
+                                if (e.kind === SyntaxKind.IndexedAccess) {
+                                    if ((<IndexedAccess>e).index.kind !== SyntaxKind.StringLiteral) {
+                                        return undefined;
+                                    }
+                                    var enumType = getTypeOfNode((<IndexedAccess>e).object);
+                                    propertyName = (<LiteralExpression>(<IndexedAccess>e).index).text;
+                                }
+                                else {
+                                    var enumType = getTypeOfNode((<PropertyAccess>e).left);
+                                    propertyName = (<PropertyAccess>e).right.text;
+                                }
                                 if (enumType !== currentType) {
                                     return undefined;
                                 }
-                                propertyName = (<PropertyAccess>e).right.text;
                             }
 
                             if (propertyName === undefined) {
