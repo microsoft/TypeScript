@@ -817,8 +817,11 @@ module ts {
                     return;
                 }
 
-                var templateNeedsParens = isExpression(node.parent) &&
-                    comparePrecedenceToBinaryPlus(node.parent) !== Comparison.LessThan;
+                Debug.assert(node.parent.kind !== SyntaxKind.TaggedTemplateExpression);
+
+                var templateNeedsParens = isExpression(node.parent)
+                    && node.parent.kind !== SyntaxKind.ParenExpression
+                    && comparePrecedenceToBinaryPlus(node.parent) !== Comparison.LessThan;
 
                 if (templateNeedsParens) {
                     write("(");
@@ -836,7 +839,8 @@ module ts {
                     //    ("abc" + 1) << (2 + "")
                     // rather than
                     //    "abc" + (1 << 2) + ""
-                    var needsParens = comparePrecedenceToBinaryPlus(templateSpan.expression) !== Comparison.GreaterThan;
+                    var needsParens = templateSpan.expression.kind !== SyntaxKind.ParenExpression
+                        && comparePrecedenceToBinaryPlus(templateSpan.expression) !== Comparison.GreaterThan;
 
                     write(" + ");
 
