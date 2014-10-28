@@ -55,7 +55,7 @@ describe('PreProcessFile:', function () {
                 });
        }),
 
-       it("Invalid referenced files from triple slash", function () {
+       it("Do not return reference path because of invalid triple-slash syntax", function () {
            test("///<reference path\"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\">" + "\n" + "///<referencepath=\"refFile3.ts\" />" + "\n" + "///<reference pat= \"refFile4d.ts\" />", true,
                 {
                     referencedFiles: <ts.IFileReference[]>[],
@@ -83,11 +83,29 @@ describe('PreProcessFile:', function () {
                 });
         });
 
+        it("Do not return import path because of invalid import syntax", function () {
+            test("import i1 require(\"r1.ts\"); import = require(\"r2.ts\") import i3= require(\"r3.ts\"); import i5", true,
+                {
+                    referencedFiles: <ts.IFileReference[]>[],
+                    importedFiles: <ts.IFileReference[]>[{ path: "r3.ts", position: 73, length: 5 }],
+                    isLibFile: false
+                });
+        });
+
         it("Correctly return referenced files and import files", function () {
             test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\");", true,
                 {
                     referencedFiles: [{ path: "refFile1.ts", position: 0, length: 35 }, { path: "refFile2.ts", position: 36, length: 35 }],
                     importedFiles: [{ path: "r1.ts", position: 92, length: 5 }, { path: "r2.ts", position: 121, length: 5 }],
+                    isLibFile: false
+                });
+        });
+
+        it("Correctly return referenced files and import files even with some invalid syntax", function () {
+            test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path \"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import = require(\"r2.ts\"); import i2 = require(\"r3.ts\");", true,
+                {
+                    referencedFiles: [{ path: "refFile1.ts", position: 0, length: 35 }],
+                    importedFiles: [{ path: "r1.ts", position: 91, length: 5 }, { path: "r3.ts", position: 148, length: 5 }],
                     isLibFile: false
                 });
         });
