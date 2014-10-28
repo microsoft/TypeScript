@@ -3836,7 +3836,7 @@ module ts {
                 if (symbol.getFlags() && (SymbolFlags.Property | SymbolFlags.Method)) {
                     var privateDeclaration = forEach(symbol.getDeclarations(), d => (d.flags & NodeFlags.Private) ? d : undefined);
                     if (privateDeclaration) {
-                        return privateDeclaration.parent;
+                        return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
                     }
                 }
 

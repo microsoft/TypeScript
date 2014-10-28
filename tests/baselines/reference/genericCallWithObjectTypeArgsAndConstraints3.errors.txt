@@ -1,4 +1,5 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts(18,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts(18,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+  Type argument candidate 'Derived' is not a valid type argument because it is not a supertype of candidate 'Derived2'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts(20,29): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 
 
@@ -20,9 +21,10 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
         return r;
     }
     
-    var r1 = f({ x: new Derived(), y: new Derived2() }); // ok, both extend Base
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+    var r1 = f({ x: new Derived(), y: new Derived2() }); // error because neither is supertype of the other
+             ~
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+!!! error TS2453:   Type argument candidate 'Derived' is not a valid type argument because it is not a supertype of candidate 'Derived2'.
     
     function f2<T extends Base, U extends { x: T; y: T }>(a: U) {
                                 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -39,7 +41,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
         return y(null);
     }
     
-    // all ok - T gets fixed too early, but then defaults to Base and everything works out
+    // all ok - second argument is processed before x is fixed
     var r4 = f3(x => x, new Base());
     var r5 = f3(x => x, new Derived());
     var r6 = f3(x => x, null);
