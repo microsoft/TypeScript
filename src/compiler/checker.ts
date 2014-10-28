@@ -4255,6 +4255,15 @@ module ts {
             var objectType = checkExpression(node.object);
             var indexType = checkExpression(node.index);
             if (objectType === unknownType) return unknownType;
+                
+            // if we are making an indexed access into something like an enum, module, or object
+            // make sure we set the resolved symbol here so that we can use it for checking later
+            if ((<any>node.index).text) {
+                var type = checkExpression(node.object);
+                var apparentType = getApparentType(getWidenedType(type));
+                var prop = getPropertyOfType(apparentType, (<any>node.index).text);
+                getNodeLinks(node).resolvedSymbol = prop; 
+            }
 
             // TypeScript 1.0 spec (April 2014): 4.10 Property Access
             // - If IndexExpr is a string literal or a numeric literal and ObjExpr's apparent type has a property with the name 
@@ -4934,9 +4943,13 @@ module ts {
                         // NOTE (not in spec): assignment to enum members should not be allowed
                         return !symbol || symbol === unknownSymbol || (symbol.flags & ~SymbolFlags.EnumMember) !== 0;
                     case SyntaxKind.IndexedAccess:
-                        // special case indexed access to enums here and return false
-                        var symbol = findSymbol((<IndexedAccess>n).object);
-                        return !symbol || symbol === unknownSymbol || ((symbol.flags & ~SymbolFlags.Enum) !== 0);
+                        var symbol = findSymbol(n);
+                        if (symbol) {
+                            return symbol === unknownSymbol || (symbol.flags & ~SymbolFlags.EnumMember) !== 0;
+                        } 
+                        
+                        var objectSymbol = findSymbol((<IndexedAccess>n).object);
+                        return !objectSymbol || objectSymbol === unknownSymbol || ((objectSymbol.flags & SymbolFlags.Enum) === 0);
                     case SyntaxKind.ParenExpression:
                         return isReferenceOrErrorExpression((<ParenExpression>n).expression);
                     default:

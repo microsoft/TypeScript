@@ -1,0 +1,40 @@
+tests/cases/compiler/enumMergedWithModuleAssignment.ts(12,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/enumMergedWithModuleAssignment.ts(13,1): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+tests/cases/compiler/enumMergedWithModuleAssignment.ts(14,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+tests/cases/compiler/enumMergedWithModuleAssignment.ts(17,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/enumMergedWithModuleAssignment.ts(18,3): error TS2339: Property 'expr' does not exist on type 'typeof M'.
+tests/cases/compiler/enumMergedWithModuleAssignment.ts(19,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+
+
+==== tests/cases/compiler/enumMergedWithModuleAssignment.ts (6 errors) ====
+    module M {
+        export var x;
+    }
+    enum M {
+        y
+    }
+    var expr: string;
+    M["x"] = 1; // want to allow this one
+    --M.x; // want to allow this one
+    M["x"]++; // want to allow this one
+    
+    M["y"] = 1; // want to disallow this one
+    ~~~~~~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+    M.y--; // want to disallow this one
+    ~~~
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+    ++M["y"]; // want to disallow this one
+      ~~~~~~
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    
+    M[expr] = 1; // err on the side of too strict and disallow this
+    ~~~~~~~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+    M.expr++; // err on the side of too strict and disallow this
+      ~~~~
+!!! error TS2339: Property 'expr' does not exist on type 'typeof M'.
+    --M[expr]; // err on the side of too strict and disallow this
+      ~~~~~~~
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
