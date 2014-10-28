@@ -1,6 +1,6 @@
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,5): error TS2323: Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,37): error TS2345: Argument of type 'D' is not assignable to parameter of type 'A'.
-tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,27): error TS2345: Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
+tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,5): error TS2323: Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,38): error TS2344: Type 'D' does not satisfy the constraint 'A'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(18,27): error TS2345: Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,12): error TS2344: Type 'D' does not satisfy the constraint 'A'.
@@ -20,22 +20,22 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,12):
     declare function foo(arg: (x: C) => any): string;
     declare function foo(arg: (x: B) => any): number;
     
-    var result: number = foo(x => new G(x)); // No error, returns number
+    var result: number = foo(x => new G(x)); // x has type D, new G(x) fails, so first overload is picked.
         ~~~~~~
 !!! error TS2323: Type 'string' is not assignable to type 'number'.
                                         ~
 !!! error TS2345: Argument of type 'D' is not assignable to parameter of type 'A'.
     
-    var result2: number = foo(x => new G<typeof x>(x)); // No error, returns number
-                              ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
+    var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fails, so first overload is picked.
+        ~~~~~~~
+!!! error TS2323: Type 'string' is not assignable to type 'number'.
                                          ~~~~~~~~
 !!! error TS2344: Type 'D' does not satisfy the constraint 'A'.
     
-    var result3: string = foo(x => { // returns string because the C overload is picked
-                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        var y: G<typeof x>; // error that C does not satisfy constraint
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    var result3: string = foo(x => { // x has type D
+                              ~~~~~~~~~~~~~~~~~~~~~~
+        var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                ~~~~~~~~~~~
 !!! error TS2344: Type 'D' does not satisfy the constraint 'A'.
         return y;

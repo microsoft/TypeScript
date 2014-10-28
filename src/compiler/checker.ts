@@ -131,6 +131,7 @@ module ts {
         var emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        var inferenceFailureType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
         var anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, false, false);
         var unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, false, false);
@@ -308,29 +309,124 @@ module ts {
             // return undefined if we can't find a symbol.
         }
 
-        function resolveName(location: Node, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string): Symbol {
-            var errorLocation = location;
+        // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
+        // the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
+        // the given name can be found.
+        function resolveName(location: Node, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string | Identifier): Symbol {
+
             var result: Symbol;
             var lastLocation: Node;
+            var propertyWithInvalidInitializer: Node;
+            var errorLocation = location;
 
-            var memberWithInitializerThatReferencesIdentifierFromConstructor: Node;
+            loop: while (location) {
+                // Locals of a source file are not in scope (because they get merged into the global symbol table)
+                if (location.locals && !isGlobalSourceFile(location)) {
+                    if (result = getSymbol(location.locals, name, meaning)) {
+                        break loop;
+                    }
+                }
+                switch (location.kind) {
+                    case SyntaxKind.SourceFile:
+                        if (!isExternalModule(<SourceFile>location)) break;
+                    case SyntaxKind.ModuleDeclaration:
+                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.ModuleMember)) {
+                            break loop;
+                        }
+                        break;
+                    case SyntaxKind.EnumDeclaration:
+                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.EnumMember)) {
+                            break loop;
+                        }
+                        break;
+                    case SyntaxKind.Property:
+                        // TypeScript 1.0 spec (April 2014): 8.4.1
+                        // Initializer expressions for instance member variables are evaluated in the scope 
+                        // of the class constructor body but are not permitted to reference parameters or 
+                        // local variables of the constructor. This effectively means that entities from outer scopes 
+                        // by the same name as a constructor parameter or local variable are inaccessible 
+                        // in initializer expressions for instance member variables.
+                        if (location.parent.kind === SyntaxKind.ClassDeclaration && !(location.flags & NodeFlags.Static)) {
+                            var ctor = findConstructorDeclaration(<ClassDeclaration>location.parent);
+                            if (ctor && ctor.locals) {
+                                if (getSymbol(ctor.locals, name, meaning & SymbolFlags.Value)) {
+                                    // Remember the property node, it will be used later to report appropriate error
+                                    propertyWithInvalidInitializer = location;
+                                }
+                            }
+                        }
+                        break;
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                        if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
+                            if (lastLocation && lastLocation.flags & NodeFlags.Static) {
+                                // TypeScript 1.0 spec (April 2014): 3.4.1
+                                // The scope of a type parameter extends over the entire declaration with which the type
+                                // parameter list is associated, with the exception of static member declarations in classes.
+                                error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
+                                return undefined;
+                            }
+                            break loop;
+                        }
+                        break;
+                    case SyntaxKind.Method:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ArrowFunction:
+                        if (name === "arguments") {
+                            result = argumentsSymbol;
+                            break loop;
+                        }
+                        break;
+                    case SyntaxKind.FunctionExpression:
+                        if (name === "arguments") {
+                            result = argumentsSymbol;
+                            break loop;
+                        }
+                        var id = (<FunctionExpression>location).name;
+                        if (id && name === id.text) {
+                            result = location.symbol;
+                            break loop;
+                        }
+                        break;
+                    case SyntaxKind.CatchBlock:
+                        var id = (<CatchBlock>location).variable;
+                        if (name === id.text) {
+                            result = location.symbol;
+                            break loop;
+                        }
+                        break;
+                }
+                lastLocation = location;
+                location = location.parent;
+            }
 
-            function returnResolvedSymbol(s: Symbol) {
-                // we've seen member with initializer that references identifier defined in constructor during the search.
-                // if this was the only result with given name then just report default 'nameNotFound' message.
-                // however if we met something else that was 'shadowed' by the identifier in constructor - report more specific error
-                if (s && memberWithInitializerThatReferencesIdentifierFromConstructor) {
-                    var propertyName = (<PropertyDeclaration>memberWithInitializerThatReferencesIdentifierFromConstructor).name;
-                    error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor, identifierToString(propertyName), nameArg);
+            if (!result) {
+                result = getSymbol(globals, name, meaning);
+            }
+
+            if (!result) {
+                if (nameNotFoundMessage) {
+                    error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : identifierToString(nameArg));
+                }
+                return undefined;
+            }
+
+            // Perform extra checks only if error reporting was requested
+            if (nameNotFoundMessage) {
+                if (propertyWithInvalidInitializer) {
+                    // We have a match, but the reference occurred within a property initializer and the identifier also binds
+                    // to a local variable in the constructor where the code will be emitted.
+                    var propertyName = (<PropertyDeclaration>propertyWithInvalidInitializer).name;
+                    error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
+                        identifierToString(propertyName), typeof nameArg === "string" ? nameArg : identifierToString(nameArg));
                     return undefined;
                 }
-                if (!s && nameNotFoundMessage) {
-                    error(errorLocation, nameNotFoundMessage, nameArg);
-                }
-
-                if (s && s.flags & SymbolFlags.BlockScopedVariable) {
-                    // Block-scoped variables can not be used before their definition
-                    var declaration = forEach(s.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
+                if (result.flags & SymbolFlags.BlockScopedVariable) {
+                    // Block-scoped variables cannot be used before their definition
+                    var declaration = forEach(result.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
                     Debug.assert(declaration, "Block-scoped variable declaration is undefined");
                     var declarationSourceFile = getSourceFileOfNode(declaration);
                     var referenceSourceFile = getSourceFileOfNode(errorLocation);
@@ -346,95 +442,8 @@ module ts {
                         }
                     }
                 }
-                return s;
             }
-
-            while (location) {
-                // Locals of a source file are not in scope (because they get merged into the global symbol table)
-                if (location.locals && !isGlobalSourceFile(location)) {
-                    if (result = getSymbol(location.locals, name, meaning)) {
-                        return returnResolvedSymbol(result);
-                    }
-                }
-                switch (location.kind) {
-                    case SyntaxKind.SourceFile:
-                        if (!isExternalModule(<SourceFile>location)) break;
-                    case SyntaxKind.ModuleDeclaration:
-                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.ModuleMember)) {
-                            return returnResolvedSymbol(result);
-                        }
-                        break;
-                    case SyntaxKind.EnumDeclaration:
-                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.EnumMember)) {
-                            return returnResolvedSymbol(result);
-                        }
-                        break;
-                    case SyntaxKind.Property:
-                        // TypeScript 1.0 spec (April 2014): 8.4.1
-                        // Initializer expressions for instance member variables are evaluated in the scope 
-                        // of the class constructor body but are not permitted to reference parameters or 
-                        // local variables of the constructor.This effectively means that entities from outer scopes 
-                        // by the same name as a constructor parameter or local variable are inaccessible 
-                        // in initializer expressions for instance member variables.
-                        if (location.parent.kind === SyntaxKind.ClassDeclaration && !(location.flags & NodeFlags.Static)) {
-                            var ctor = findConstructorDeclaration(<ClassDeclaration>location.parent);
-                            if (ctor && ctor.locals) {
-                                if (getSymbol(ctor.locals, name, meaning & SymbolFlags.Value)) {
-                                    // save the property node - later it will be used by 'returnResolvedSymbol' to report appropriate error
-                                    memberWithInitializerThatReferencesIdentifierFromConstructor = location;
-                                }
-                            }
-                        }
-                        break;
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                        if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
-                            if (lastLocation && lastLocation.flags & NodeFlags.Static) {
-                                // TypeScript 1.0 spec (April 2014): 3.4.1
-                                // The scope of a type parameter extends over the entire declaration 
-                                // with which the type parameter list is associated, with the exception of static member declarations in classes.
-                                error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
-                                return undefined;
-                            }
-                            else {
-                                return returnResolvedSymbol(result);
-                            }
-                        }
-                        break;
-                    case SyntaxKind.Method:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ArrowFunction:
-                        if (name === "arguments") {
-                            return returnResolvedSymbol(argumentsSymbol);
-                        }
-                        break;
-                    case SyntaxKind.FunctionExpression:
-                        if (name === "arguments") {
-                            return returnResolvedSymbol(argumentsSymbol);
-                        }
-                        var id = (<FunctionExpression>location).name;
-                        if (id && name === id.text) {
-                            return returnResolvedSymbol(location.symbol);
-                        }
-                        break;
-                    case SyntaxKind.CatchBlock:
-                        var id = (<CatchBlock>location).variable;
-                        if (name === id.text) {
-                            return returnResolvedSymbol(location.symbol);
-                        }
-                        break;
-                }
-                lastLocation = location;
-                location = location.parent;
-            }
-            if (result = getSymbol(globals, name, meaning)) {
-                return returnResolvedSymbol(result);
-            }
-
-            return returnResolvedSymbol(undefined);
+            return result;
         }
 
         function resolveImport(symbol: Symbol): Symbol {
@@ -493,8 +502,7 @@ module ts {
         // Resolves a qualified name and any involved import aliases
         function resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags): Symbol {
             if (name.kind === SyntaxKind.Identifier) {
-                // TODO: Investigate error recovery for symbols not found
-                var symbol = resolveName(location, (<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, identifierToString(<Identifier>name));
+                var symbol = resolveName(location, (<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, <Identifier>name);
                 if (!symbol) {
                     return;
                 }
@@ -591,7 +599,7 @@ module ts {
                     }
                     if (node.exportName.text) {
                         var meaning = SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace;
-                        var exportSymbol = resolveName(node, node.exportName.text, meaning, Diagnostics.Cannot_find_name_0, identifierToString(node.exportName));
+                        var exportSymbol = resolveName(node, node.exportName.text, meaning, Diagnostics.Cannot_find_name_0, node.exportName);
                     }
                 }
                 symbolLinks.exportAssignSymbol = exportSymbol || unknownSymbol;
@@ -962,13 +970,12 @@ module ts {
 
         function isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult {
             var firstIdentifier = getFirstIdentifier(entityName);
-            var firstIdentifierName = identifierToString(<Identifier>firstIdentifier);
-            var symbolOfNameSpace = resolveName(entityName.parent, (<Identifier>firstIdentifier).text, SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, firstIdentifierName);
+            var symbolOfNameSpace = resolveName(entityName.parent, (<Identifier>firstIdentifier).text, SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, firstIdentifier);
             // Verify if the symbol is accessible
             var hasNamespaceDeclarationsVisibile = hasVisibleDeclarations(symbolOfNameSpace);
             return hasNamespaceDeclarationsVisibile ?
                 { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible: hasNamespaceDeclarationsVisibile.aliasesToMakeVisible } :
-                { accessibility: SymbolAccessibility.NotAccessible, errorSymbolName: firstIdentifierName };
+                { accessibility: SymbolAccessibility.NotAccessible, errorSymbolName: identifierToString(<Identifier>firstIdentifier) };
         }
 
         function releaseStringWriter(writer: StringSymbolWriter) {
@@ -3207,33 +3214,39 @@ module ts {
         var identityRelation: Map<boolean> = {};
 
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
-            return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+            return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined);
         }
 
         function isTypeSubtypeOf(source: Type, target: Type): boolean {
-            return checkTypeSubtypeOf(source, target, /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+            return checkTypeSubtypeOf(source, target, /*errorNode*/ undefined);
         }
 
-        function checkTypeSubtypeOf(source: Type, target: Type, errorNode: Node, chainedMessage: DiagnosticMessage, terminalMessage: DiagnosticMessage): boolean {
-            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, chainedMessage, terminalMessage);
+        function checkTypeSubtypeOf(
+            source: Type,
+            target: Type,
+            errorNode: Node,
+            headMessage?: DiagnosticMessage,
+            containingMessageChain?: DiagnosticMessageChain): boolean {
+
+            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
         }
 
         function isTypeAssignableTo(source: Type, target: Type): boolean {
-            return checkTypeAssignableTo(source, target, /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+            return checkTypeAssignableTo(source, target, /*errorNode*/ undefined);
         }
 
-        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, chainedMessage: DiagnosticMessage, terminalMessage: DiagnosticMessage): boolean {
-            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, chainedMessage, terminalMessage);
+        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage): boolean {
+            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage);
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<boolean>): boolean {
-            return checkTypeRelatedTo(source, target, relation, /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+            return checkTypeRelatedTo(source, target, relation, /*errorNode*/ undefined);
         }
 
         function isSignatureAssignableTo(source: Signature, target: Signature): boolean {
             var sourceType = getOrCreateTypeFromSignature(source);
             var targetType = getOrCreateTypeFromSignature(target);
-            return checkTypeRelatedTo(sourceType, targetType, assignableRelation, /*errorNode*/ undefined, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+            return checkTypeRelatedTo(sourceType, targetType, assignableRelation, /*errorNode*/ undefined);
         }
 
         function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
@@ -3267,7 +3280,7 @@ module ts {
                             var typeName2 = typeToString(base);
 
                             var errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
-                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2_Colon, typeToString(type), typeName1, typeName2);
+                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
                             addDiagnostic(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, program.getCompilerHost().getNewLine()));
                         }
                     }
@@ -3297,7 +3310,14 @@ module ts {
             }
         }
 
-        function checkTypeRelatedTo(source: Type, target: Type, relation: Map<boolean>, errorNode: Node, chainedMessage: DiagnosticMessage, terminalMessage: DiagnosticMessage): boolean {
+        function checkTypeRelatedTo(
+            source: Type,
+            target: Type,
+            relation: Map<boolean>,
+            errorNode: Node,
+            headMessage?: DiagnosticMessage,
+            containingMessageChain?: DiagnosticMessageChain): boolean {
+
             var errorInfo: DiagnosticMessageChain;
             var sourceStack: ObjectType[];
             var targetStack: ObjectType[];
@@ -3307,11 +3327,14 @@ module ts {
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
-            var result = isRelatedToWithCustomErrors(source, target, errorNode !== undefined, chainedMessage, terminalMessage);
+            var result = isRelatedToWithCustomErrors(source, target, errorNode !== undefined, headMessage);
             if (overflow) {
                 error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
             else if (errorInfo) {
+                if (containingMessageChain) {
+                    errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
+                }
                 addDiagnostic(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, program.getCompilerHost().getNewLine()));
             }
             return result;
@@ -3321,10 +3344,10 @@ module ts {
             }
 
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean): boolean {
-                return isRelatedToWithCustomErrors(source, target, reportErrors, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                return isRelatedToWithCustomErrors(source, target, reportErrors, /*headMessage*/ undefined);
             }
 
-            function isRelatedToWithCustomErrors(source: Type, target: Type, reportErrors: boolean, chainedMessage: DiagnosticMessage, terminalMessage: DiagnosticMessage): boolean {
+            function isRelatedToWithCustomErrors(source: Type, target: Type, reportErrors: boolean, headMessage: DiagnosticMessage): boolean {
                 if (relation === identityRelation) {
                     // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                     if (source === target) return true;
@@ -3376,15 +3399,9 @@ module ts {
                     }
                 }
                 if (reportErrors) {
-                    // The error should end in a period when this is the deepest error in the chain
-                    // (when errorInfo is undefined). Otherwise, it has a colon before the nested
-                    // error.
-
-                    chainedMessage = chainedMessage || Diagnostics.Type_0_is_not_assignable_to_type_1_Colon;
-                    terminalMessage = terminalMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
-                    var diagnosticKey = errorInfo ? chainedMessage : terminalMessage;
-                    Debug.assert(diagnosticKey);
-                    reportError(diagnosticKey, typeToString(source), typeToString(target));
+                    headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
+                    Debug.assert(headMessage);
+                    reportError(headMessage, typeToString(source), typeToString(target));
                 }
                 return false;
             }
@@ -3564,7 +3581,7 @@ module ts {
                             }
                             if (!isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors)) {
                                 if (reportErrors) {
-                                    reportError(Diagnostics.Types_of_property_0_are_incompatible_Colon, symbolToString(targetProp));
+                                    reportError(Diagnostics.Types_of_property_0_are_incompatible, symbolToString(targetProp));
                                 }
                                 return false;
                             }
@@ -3670,7 +3687,7 @@ module ts {
                     if (!isRelatedTo(s, t, reportErrors)) {
                         if (!isRelatedTo(t, s, false)) {
                             if (reportErrors) {
-                                reportError(Diagnostics.Types_of_parameters_0_and_1_are_incompatible_Colon,
+                                reportError(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
                                     source.parameters[i < sourceMax ? i : sourceMax].name,
                                     target.parameters[i < targetMax ? i : targetMax].name);
                             }
@@ -3714,7 +3731,7 @@ module ts {
                     }
                     if (!isRelatedTo(sourceType, targetType, reportErrors)) {
                         if (reportErrors) {
-                            reportError(Diagnostics.Index_signatures_are_incompatible_Colon);
+                            reportError(Diagnostics.Index_signatures_are_incompatible);
                         }
                         return false;
                     }
@@ -3745,7 +3762,7 @@ module ts {
                     }
                     if (!compatible) {
                         if (reportErrors) {
-                            reportError(Diagnostics.Index_signatures_are_incompatible_Colon);
+                            reportError(Diagnostics.Index_signatures_are_incompatible);
                         }
                         return false;
                     }
@@ -3805,6 +3822,42 @@ module ts {
 
         function getCommonSupertype(types: Type[]): Type {
             return forEach(types, t => isSupertypeOfEach(t, types) ? t : undefined);
+        }
+
+        function reportNoCommonSupertypeError(types: Type[], errorLocation: Node, errorMessageChainHead: DiagnosticMessageChain): void {
+            var bestSupertype: Type;
+            var bestSupertypeDownfallType: Type; // The type that caused bestSupertype not to be the common supertype
+            var bestSupertypeScore = 0;
+
+            for (var i = 0; i < types.length; i++) {
+                var score = 0;
+                var downfallType: Type = undefined;
+                for (var j = 0; j < types.length; j++) {
+                    if (isTypeSubtypeOf(types[j], types[i])) {
+                        score++;
+                    }
+                    else if (!downfallType) {
+                        downfallType = types[j];
+                    }
+                }
+
+                if (score > bestSupertypeScore) {
+                    bestSupertype = types[i];
+                    bestSupertypeDownfallType = downfallType;
+                    bestSupertypeScore = score;
+                }
+
+                // types.length - 1 is the maximum score, given that getCommonSupertype returned false
+                if (bestSupertypeScore === types.length - 1) {
+                    break;
+                }
+            }
+
+            // In the following errors, the {1} slot is before the {0} slot because checkTypeSubtypeOf supplies the
+            // subtype as the first argument to the error
+            checkTypeSubtypeOf(bestSupertypeDownfallType, bestSupertype, errorLocation,
+                Diagnostics.Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0,
+                errorMessageChainHead);
         }
 
         function isTypeOfObjectLiteral(type: Type): boolean {
@@ -4063,30 +4116,33 @@ module ts {
         }
 
         function getInferredType(context: InferenceContext, index: number): Type {
-            var result = context.inferredTypes[index];
-            if (!result) {
+            var inferredType = context.inferredTypes[index];
+            if (!inferredType) {
                 var inferences = context.inferences[index];
                 if (inferences.length) {
                     // Infer widened union or supertype, or the undefined type for no common supertype
                     var unionOrSuperType = context.inferUnionTypes ? getUnionType(inferences) : getCommonSupertype(inferences);
-                    var inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : undefinedType;
+                    inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : inferenceFailureType;
                 }
                 else {
                     // Infer the empty object type when no inferences were made
                     inferredType = emptyObjectType;
                 }
-                var constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
-                var result = constraint && !isTypeAssignableTo(inferredType, constraint) ? constraint : inferredType;
-                context.inferredTypes[index] = result;
+
+                if (inferredType !== inferenceFailureType) {
+                    var constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
+                    inferredType = constraint && !isTypeAssignableTo(inferredType, constraint) ? constraint : inferredType;
+                }
+                context.inferredTypes[index] = inferredType;
             }
-            return result;
+            return inferredType;
         }
 
         function getInferredTypes(context: InferenceContext): Type[] {
             for (var i = 0; i < context.inferredTypes.length; i++) {
                 getInferredType(context, i);
             }
-            context.inferences = undefined;
+
             return context.inferredTypes;
         }
 
@@ -4099,7 +4155,7 @@ module ts {
         function getResolvedSymbol(node: Identifier): Symbol {
             var links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
-                links.resolvedSymbol = resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, identifierToString(node)) || unknownSymbol;
+                links.resolvedSymbol = resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
@@ -5136,7 +5192,7 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): Type[] {
+        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): InferenceContext {
             var typeParameters = signature.typeParameters;
             var context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false);
             var mapper = createInferenceMapper(context);
@@ -5163,23 +5219,36 @@ module ts {
                 }
             }
             var inferredTypes = getInferredTypes(context);
-            // Inference has failed if the undefined type is in list of inferences
-            return contains(inferredTypes, undefinedType) ? undefined : inferredTypes;
+            // Inference has failed if the inferenceFailureType type is in list of inferences
+            context.failedTypeParameterIndex = indexOf(inferredTypes, inferenceFailureType);
+
+            // Wipe out the inferenceFailureType from the array so that error recovery can work properly
+            for (var i = 0; i < inferredTypes.length; i++) {
+                if (inferredTypes[i] === inferenceFailureType) {
+                    inferredTypes[i] = unknownType;
+                }
+            }
+
+            return context;
         }
 
-        function checkTypeArguments(signature: Signature, typeArguments: TypeNode[]): Type[] {
+        function checkTypeArguments(signature: Signature, typeArguments: TypeNode[], typeArgumentResultTypes: Type[], reportErrors: boolean): boolean {
             var typeParameters = signature.typeParameters;
-            var result: Type[] = [];
+            var typeArgumentsAreAssignable = true;
             for (var i = 0; i < typeParameters.length; i++) {
                 var typeArgNode = typeArguments[i];
                 var typeArgument = getTypeFromTypeNode(typeArgNode);
-                var constraint = getConstraintOfTypeParameter(typeParameters[i]);
-                if (constraint && fullTypeCheck) {
-                    checkTypeAssignableTo(typeArgument, constraint, typeArgNode, Diagnostics.Type_0_does_not_satisfy_the_constraint_1_Colon, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                // Do not push on this array! It has a preallocated length
+                typeArgumentResultTypes[i] = typeArgument;
+                if (typeArgumentsAreAssignable /* so far */) {
+                    var constraint = getConstraintOfTypeParameter(typeParameters[i]);
+                    if (constraint) {
+                        typeArgumentsAreAssignable = checkTypeAssignableTo(typeArgument, constraint, reportErrors ? typeArgNode : undefined,
+                                Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                    }
                 }
-                result.push(typeArgument);
             }
-            return result;
+            return typeArgumentsAreAssignable;
         }
 
         function checkApplicableSignature(node: CallExpression, signature: Signature, relation: Map<boolean>, excludeArgument: boolean[], reportErrors: boolean) {
@@ -5196,7 +5265,6 @@ module ts {
                         checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                     // Use argument expression as error location when reporting errors
                     var isValidArgument = checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
-                        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1,
                         Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1);
                     if (!isValidArgument) {
                         return false;
@@ -5223,47 +5291,84 @@ module ts {
                     excludeArgument[i] = true;
                 }
             }
-            var relation = candidates.length === 1 ? assignableRelation : subtypeRelation;
-            var lastCandidate: Signature;
-            while (true) {
-                for (var i = 0; i < candidates.length; i++) {
-                    if (!signatureHasCorrectArity(node, candidates[i])) {
-                        continue;
-                    }
-                    while (true) {
-                        var candidate = candidates[i];
-                        if (candidate.typeParameters) {
-                            var typeArguments = node.typeArguments ?
-                                checkTypeArguments(candidate, node.typeArguments) :
-                                inferTypeArguments(candidate, args, excludeArgument);
-                            if (!typeArguments) {
-                                break;
-                            }
-                            candidate = getSignatureInstantiation(candidate, typeArguments);
-                        }
-                        lastCandidate = candidate;
-                        if (!checkApplicableSignature(node, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
-                            break;
-                        }
-                        var index = excludeArgument ? indexOf(excludeArgument, true) : -1;
-                        if (index < 0) {
-                            return candidate;
-                        }
-                        excludeArgument[index] = false;
-                    }
-                }
-                if (relation === assignableRelation) {
-                    break;
-                }
-                relation = assignableRelation;
+
+            // The following variables are captured and modified by calls to chooseOverload.
+            // If overload resolution or type argument inference fails, we want to report the
+            // best error possible. The best error is one which says that an argument was not
+            // assignable to a parameter. This implies that everything else about the overload
+            // was fine. So if there is any overload that is only incorrect because of an
+            // argument, we will report an error on that one.
+            //
+            //     function foo(s: string) {}
+            //     function foo(n: number) {} // Report argument error on this overload
+            //     function foo() {}
+            //     foo(true);
+            //
+            // If none of the overloads even made it that far, there are two possibilities.
+            // There was a problem with type arguments for some overload, in which case
+            // report an error on that. Or none of the overloads even had correct arity,
+            // in which case give an arity error.
+            //
+            //     function foo<T>(x: T, y: T) {} // Report type argument inference error
+            //     function foo() {}
+            //     foo(0, true);
+            //
+            var candidateForArgumentError: Signature;
+            var candidateForTypeArgumentError: Signature;
+            var resultOfFailedInference: InferenceContext;
+            var result: Signature;
+
+            // Section 4.12.1:
+            // if the candidate list contains one or more signatures for which the type of each argument
+            // expression is a subtype of each corresponding parameter type, the return type of the first
+            // of those signatures becomes the return type of the function call.
+            // Otherwise, the return type of the first signature in the candidate list becomes the return
+            // type of the function call.
+            //
+            // Whether the call is an error is determined by assignability of the arguments. The subtype pass
+            // is just important for choosing the best signature. So in the case where there is only one
+            // signature, the subtype pass is useless. So skipping it is an optimization.
+            if (candidates.length > 1) {
+                result = chooseOverload(candidates, subtypeRelation, excludeArgument);
+            }
+            if (!result) {
+                // Reinitialize these pointers for round two
+                candidateForArgumentError = undefined;
+                candidateForTypeArgumentError = undefined;
+                resultOfFailedInference = undefined;
+                result = chooseOverload(candidates, assignableRelation, excludeArgument);
+            }
+            if (result) {
+                return result;
             }
 
             // No signatures were applicable. Now report errors based on the last applicable signature with
             // no arguments excluded from assignability checks.
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
-            if (lastCandidate) {
-                checkApplicableSignature(node, lastCandidate, relation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+            if (candidateForArgumentError) {
+                // excludeArgument is undefined, in this case also equivalent to [undefined, undefined, ...]
+                // The importance of excludeArgument is to prevent us from typing function expression parameters
+                // in arguments too early. If possible, we'd like to only type them once we know the correct
+                // overload. However, this matters for the case where the call is correct. When the call is
+                // an error, we don't need to exclude any arguments, although it would cause no harm to do so.
+                checkApplicableSignature(node, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+            }
+            else if (candidateForTypeArgumentError) {
+                if (node.typeArguments) {
+                    checkTypeArguments(candidateForTypeArgumentError, node.typeArguments, [], /*reportErrors*/ true)
+                }
+                else {
+                    Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
+                    var failedTypeParameter = candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failedTypeParameterIndex];
+                    var inferenceCandidates = resultOfFailedInference.inferences[resultOfFailedInference.failedTypeParameterIndex];
+
+                    var diagnosticChainHead = chainDiagnosticMessages(/*details*/ undefined, // details will be provided by call to reportNoCommonSupertypeError
+                        Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
+                        typeToString(failedTypeParameter));
+
+                    reportNoCommonSupertypeError(inferenceCandidates, node.func, diagnosticChainHead);
+                }
             }
             else {
                 error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
@@ -5283,6 +5388,70 @@ module ts {
             }
 
             return resolveErrorCall(node);
+
+            function chooseOverload(candidates: Signature[], relation: Map<boolean>, excludeArgument: boolean[]) {
+                for (var i = 0; i < candidates.length; i++) {
+                    if (!signatureHasCorrectArity(node, candidates[i])) {
+                        continue;
+                    }
+
+                    var originalCandidate = candidates[i];
+                    var inferenceResult: InferenceContext;
+
+                    while (true) {
+                        var candidate = originalCandidate;
+                        if (candidate.typeParameters) {
+                            var typeArgumentTypes: Type[];
+                            var typeArgumentsAreValid: boolean;
+                            if (node.typeArguments) {
+                                typeArgumentTypes = new Array<Type>(candidate.typeParameters.length);
+                                typeArgumentsAreValid = checkTypeArguments(candidate, node.typeArguments, typeArgumentTypes, /*reportErrors*/ false)
+                            }
+                            else {
+                                inferenceResult = inferTypeArguments(candidate, args, excludeArgument);
+                                typeArgumentsAreValid = inferenceResult.failedTypeParameterIndex < 0;
+                                typeArgumentTypes = inferenceResult.inferredTypes;
+                            }
+                            if (!typeArgumentsAreValid) {
+                                break;
+                            }
+                            candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
+                        }
+                        if (!checkApplicableSignature(node, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                            break;
+                        }
+                        var index = excludeArgument ? indexOf(excludeArgument, true) : -1;
+                        if (index < 0) {
+                            return candidate;
+                        }
+                        excludeArgument[index] = false;
+                    }
+
+                    // A post-mortem of this iteration of the loop. The signature was not applicable,
+                    // so we want to track it as a candidate for reporting an error. If the candidate
+                    // had no type parameters, or had no issues related to type arguments, we can
+                    // report an error based on the arguments. If there was an issue with type
+                    // arguments, then we can only report an error based on the type arguments.
+                    if (originalCandidate.typeParameters) {
+                        var instantiatedCandidate = candidate;
+                        if (typeArgumentsAreValid) {
+                            candidateForArgumentError = instantiatedCandidate;
+                        }
+                        else {
+                            candidateForTypeArgumentError = originalCandidate;
+                            if (!node.typeArguments) {
+                                resultOfFailedInference = inferenceResult;
+                            }
+                        }
+                    }
+                    else {
+                        Debug.assert(originalCandidate === candidate);
+                        candidateForArgumentError = originalCandidate;
+                    }
+                }
+
+                return undefined;
+            }
 
             // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
             // A nit here is that we reorder only signatures that belong to the same symbol,
@@ -5472,7 +5641,7 @@ module ts {
             if (fullTypeCheck && targetType !== unknownType) {
                 var widenedType = getWidenedType(exprType, /*supressNoImplicitAnyErrors*/ true);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
-                    checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other_Colon, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
+                    checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
             }
             return targetType;
@@ -5653,7 +5822,7 @@ module ts {
             else {
                 var exprType = checkExpression(node.body);
                 if (node.type) {
-                    checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, undefined, undefined);
+                    checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*headMessage*/ undefined);
                 }
                 checkFunctionExpressionBodies(node.body);
             }
@@ -5959,7 +6128,7 @@ module ts {
                     // Use default messages
                     if (ok) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-                        checkTypeAssignableTo(valueType, leftType, node.left, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                        checkTypeAssignableTo(valueType, leftType, node.left, /*headMessage*/ undefined);
                     }
                 }
             }
@@ -6340,7 +6509,7 @@ module ts {
                     var constraint = getConstraintOfTypeParameter((<TypeReference>type).target.typeParameters[i]);
                     if (fullTypeCheck && constraint) {
                         var typeArgument = (<TypeReference>type).typeArguments[i];
-                        checkTypeAssignableTo(typeArgument, constraint, node, Diagnostics.Type_0_does_not_satisfy_the_constraint_1_Colon, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                        checkTypeAssignableTo(typeArgument, constraint, node, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                     }
                 }
             }
@@ -6982,7 +7151,7 @@ module ts {
                 if (node.initializer) {
                     if (!(getNodeLinks(node.initializer).flags & NodeCheckFlags.TypeChecked)) {
                         // Use default messages
-                        checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                        checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*headMessage*/ undefined);
                     }
                     checkCollisionWithConstDeclarations(node);
                 }
@@ -7095,7 +7264,7 @@ module ts {
                             func.type ||
                             (func.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(<AccessorDeclaration>getDeclarationOfKind(func.symbol, SyntaxKind.SetAccessor)));
                         if (checkAssignability) {
-                            checkTypeAssignableTo(checkExpression(node.expression), returnType, node.expression, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                            checkTypeAssignableTo(checkExpression(node.expression), returnType, node.expression, /*headMessage*/ undefined);
                         }
                         else if (func.kind == SyntaxKind.Constructor) {
                             // constructor doesn't have explicit return type annotation and yet its return type is known - declaring type
@@ -7123,7 +7292,7 @@ module ts {
                     var caseType = checkExpression(clause.expression);
                     if (!isTypeAssignableTo(expressionType, caseType)) {
                         // check 'expressionType isAssignableTo caseType' failed, try the reversed check and report errors if it fails
-                        checkTypeAssignableTo(caseType, expressionType, clause.expression, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                        checkTypeAssignableTo(caseType, expressionType, clause.expression, /*headMessage*/ undefined);
                     }
                 }
                 checkBlock(clause);
@@ -7260,10 +7429,10 @@ module ts {
             if (type.baseTypes.length) {
                 if (fullTypeCheck) {
                     var baseType = type.baseTypes[0];
-                    checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Class_0_incorrectly_extends_base_class_1_Colon, Diagnostics.Class_0_incorrectly_extends_base_class_1);
+                    checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     var staticBaseType = getTypeOfSymbol(baseType.symbol);
                     checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name,
-                        Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1_Colon, Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+                        Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
                     if (baseType.symbol !== resolveEntityName(node, node.baseType.typeName, SymbolFlags.Value)) {
                         error(node.baseType, Diagnostics.Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0, typeToString(baseType));
                     }
@@ -7282,7 +7451,7 @@ module ts {
                         if (t !== unknownType) {
                             var declaredType = (t.flags & TypeFlags.Reference) ? (<TypeReference>t).target : t;
                             if (declaredType.flags & (TypeFlags.Class | TypeFlags.Interface)) {
-                                checkTypeAssignableTo(type, t, node.name, Diagnostics.Class_0_incorrectly_implements_interface_1_Colon, Diagnostics.Class_0_incorrectly_implements_interface_1);
+                                checkTypeAssignableTo(type, t, node.name, Diagnostics.Class_0_incorrectly_implements_interface_1);
                             }
                             else {
                                 error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
@@ -7427,7 +7596,7 @@ module ts {
                     // run subsequent checks only if first set succeeded
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
                         forEach(type.baseTypes, baseType => {
-                            checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1_Colon, Diagnostics.Interface_0_incorrectly_extends_interface_1);
+                            checkTypeAssignableTo(type, baseType, node.name , Diagnostics.Interface_0_incorrectly_extends_interface_1);
                         });
                         checkIndexConstraints(type);
                     }
@@ -7483,7 +7652,7 @@ module ts {
                             // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
                             // Also, we do not need to check this for ambients because there is already
                             // a syntax error if it is not a constant.
-                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
                         }
                     }
                     else if (ambient) {

@@ -1,8 +1,8 @@
 tests/cases/compiler/indexer2A.ts(4,5): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/indexer2A.ts(7,25): error TS2353: Neither type '{ [x: number]: undefined; }' nor type 'IDirectChildrenMap' is assignable to the other:
-  Types of property 'hasOwnProperty' are incompatible:
-    Type '(v: string) => boolean' is not assignable to type '(objectId: number) => boolean':
-      Types of parameters 'v' and 'objectId' are incompatible:
+tests/cases/compiler/indexer2A.ts(7,25): error TS2352: Neither type '{ [x: number]: undefined; }' nor type 'IDirectChildrenMap' is assignable to the other.
+  Types of property 'hasOwnProperty' are incompatible.
+    Type '(v: string) => boolean' is not assignable to type '(objectId: number) => boolean'.
+      Types of parameters 'v' and 'objectId' are incompatible.
         Type 'string' is not assignable to type 'number'.
 
 
@@ -17,8 +17,8 @@ tests/cases/compiler/indexer2A.ts(7,25): error TS2353: Neither type '{ [x: numbe
     }
     var directChildrenMap = <IDirectChildrenMap>{}; 
                             ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2353: Neither type '{ [x: number]: undefined; }' nor type 'IDirectChildrenMap' is assignable to the other:
-!!! error TS2353:   Types of property 'hasOwnProperty' are incompatible:
-!!! error TS2353:     Type '(v: string) => boolean' is not assignable to type '(objectId: number) => boolean':
-!!! error TS2353:       Types of parameters 'v' and 'objectId' are incompatible:
-!!! error TS2353:         Type 'string' is not assignable to type 'number'.
+!!! error TS2352: Neither type '{ [x: number]: undefined; }' nor type 'IDirectChildrenMap' is assignable to the other.
+!!! error TS2352:   Types of property 'hasOwnProperty' are incompatible.
+!!! error TS2352:     Type '(v: string) => boolean' is not assignable to type '(objectId: number) => boolean'.
+!!! error TS2352:       Types of parameters 'v' and 'objectId' are incompatible.
+!!! error TS2352:         Type 'string' is not assignable to type 'number'.

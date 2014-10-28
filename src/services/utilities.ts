@@ -95,11 +95,12 @@ module ts {
                 var child = current.getChildAt(i);
                 var start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile);
                 if (start <= position) {
-                    if (position < child.getEnd()) {
+                    var end = child.getEnd();
+                    if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
                         current = child;
                         continue outer;
                     }
-                    else if (includeItemAtEndPosition && child.getEnd() === position) {
+                    else if (includeItemAtEndPosition && end === position) {
                         var previousToken = findPrecedingToken(position, sourceFile, child);
                         if (previousToken && includeItemAtEndPosition(previousToken)) {
                             return previousToken;
@@ -180,7 +181,7 @@ module ts {
             for (var i = 0, len = children.length; i < len; ++i) {
                 var child = children[i];
                 if (nodeHasTokens(child)) {
-                    if (position < child.end) {
+                    if (position <= child.end) {
                         if (child.getStart(sourceFile) >= position) {
                             // actual start of the node is past the position - previous token should be at the end of previous child
                             var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);

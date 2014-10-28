@@ -3,4 +3,4 @@
 ////5../**/
 
 goTo.marker();
-verify.completionListIsEmpty();
+verify.completionListContains("toFixed");

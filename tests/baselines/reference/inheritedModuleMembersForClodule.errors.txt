@@ -1,6 +1,6 @@
-tests/cases/compiler/inheritedModuleMembersForClodule.ts(7,7): error TS2418: Class static side 'typeof D' incorrectly extends base class static side 'typeof C':
-  Types of property 'foo' are incompatible:
-    Type '() => number' is not assignable to type '() => string':
+tests/cases/compiler/inheritedModuleMembersForClodule.ts(7,7): error TS2417: Class static side 'typeof D' incorrectly extends base class static side 'typeof C'.
+  Types of property 'foo' are incompatible.
+    Type '() => number' is not assignable to type '() => string'.
       Type 'number' is not assignable to type 'string'.
 
 
@@ -13,10 +13,10 @@ tests/cases/compiler/inheritedModuleMembersForClodule.ts(7,7): error TS2418: Cla
     
     class D extends C {
           ~
-!!! error TS2418: Class static side 'typeof D' incorrectly extends base class static side 'typeof C':
-!!! error TS2418:   Types of property 'foo' are incompatible:
-!!! error TS2418:     Type '() => number' is not assignable to type '() => string':
-!!! error TS2418:       Type 'number' is not assignable to type 'string'.
+!!! error TS2417: Class static side 'typeof D' incorrectly extends base class static side 'typeof C'.
+!!! error TS2417:   Types of property 'foo' are incompatible.
+!!! error TS2417:     Type '() => number' is not assignable to type '() => string'.
+!!! error TS2417:       Type 'number' is not assignable to type 'string'.
     }
     
     module D {

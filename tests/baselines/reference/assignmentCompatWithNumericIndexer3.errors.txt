@@ -1,13 +1,13 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts(14,1): error TS2322: Type '{ [x: number]: Base; }' is not assignable to type 'A':
-  Index signatures are incompatible:
-    Type 'Base' is not assignable to type 'Derived':
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts(14,1): error TS2323: Type '{ [x: number]: Base; }' is not assignable to type 'A'.
+  Index signatures are incompatible.
+    Type 'Base' is not assignable to type 'Derived'.
       Property 'bar' is missing in type 'Base'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts(23,1): error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived2; }':
-  Index signatures are incompatible:
-    Type 'Derived' is not assignable to type 'Derived2':
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts(23,1): error TS2323: Type 'A' is not assignable to type '{ [x: number]: Derived2; }'.
+  Index signatures are incompatible.
+    Type 'Derived' is not assignable to type 'Derived2'.
       Property 'baz' is missing in type 'Derived'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts(33,9): error TS2322: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>':
-  Index signatures are incompatible:
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts(33,9): error TS2323: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>'.
+  Index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
 
 
@@ -27,10 +27,10 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     
     a = b; // error
     ~
-!!! error TS2322: Type '{ [x: number]: Base; }' is not assignable to type 'A':
-!!! error TS2322:   Index signatures are incompatible:
-!!! error TS2322:     Type 'Base' is not assignable to type 'Derived':
-!!! error TS2322:       Property 'bar' is missing in type 'Base'.
+!!! error TS2323: Type '{ [x: number]: Base; }' is not assignable to type 'A'.
+!!! error TS2323:   Index signatures are incompatible.
+!!! error TS2323:     Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2323:       Property 'bar' is missing in type 'Base'.
     b = a; // ok
     
     class B2 extends A {
@@ -41,10 +41,10 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     a = b2; // ok
     b2 = a; // error
     ~~
-!!! error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived2; }':
-!!! error TS2322:   Index signatures are incompatible:
-!!! error TS2322:     Type 'Derived' is not assignable to type 'Derived2':
-!!! error TS2322:       Property 'baz' is missing in type 'Derived'.
+!!! error TS2323: Type 'A' is not assignable to type '{ [x: number]: Derived2; }'.
+!!! error TS2323:   Index signatures are incompatible.
+!!! error TS2323:     Type 'Derived' is not assignable to type 'Derived2'.
+!!! error TS2323:       Property 'baz' is missing in type 'Derived'.
     
     module Generics {
         class A<T extends Derived> {
@@ -56,9 +56,9 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
             var b: { [x: number]: Derived; };
             a = b; // error
             ~
-!!! error TS2322: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>':
-!!! error TS2322:   Index signatures are incompatible:
-!!! error TS2322:     Type 'Derived' is not assignable to type 'T'.
+!!! error TS2323: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>'.
+!!! error TS2323:   Index signatures are incompatible.
+!!! error TS2323:     Type 'Derived' is not assignable to type 'T'.
             b = a; // ok
     
             var b2: { [x: number]: T; };
