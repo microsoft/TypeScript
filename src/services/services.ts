@@ -77,21 +77,9 @@ module ts {
         update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
-    ///
-    /// Pre-processing
-    ///
-    // Note: This is being using by the host (VS) and is marshaled back and forth.
-    // When changing this make sure the changes are reflected in the managed side as well
-    // TODO (yuisu) : Consider merge with FileReference in types.ts
-    export interface IFileReference {
-        path: string;
-        position: number;
-        length: number;
-    }
-
     export interface PreProcessedFileInfo {
-        referencedFiles: IFileReference[];
-        importedFiles: IFileReference[];
+        referencedFiles: FileReference[];
+        importedFiles: FileReference[];
         isLibFile: boolean
     }
 
@@ -1915,8 +1903,8 @@ module ts {
 
     export var tripleSlashReferenceRegExp = /^(\/\/\/\s*<reference\s+path=)('|")(.+?)\2\s*(static=('|")(.+?)\5\s*)*\/>/;
     export function preProcessFile(sourceText: string, readImportFiles = true): PreProcessedFileInfo {
-        var referencedFiles: IFileReference[] = [];
-        var importedFiles: IFileReference[] = [];
+        var referencedFiles: FileReference[] = [];
+        var importedFiles: FileReference[] = [];
         var isNoDefaultLib = false;
 
         function processTripleSlashDirectives(): void {
@@ -1928,11 +1916,12 @@ module ts {
                     isNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
                     var fileReference = referencePathMatchResult.fileReference;
                     if (fileReference) {
-                        referencedFiles.push({
+                        referencedFiles.push(fileReference);
+                       /* referencedFiles.push({
                             path: switchToForwardSlashes(normalizePath(fileReference.filename)),
                             position: fileReference.pos,
                             length: fileReference.end - fileReference.pos,
-                        });
+                        }); */
                     }
                 }
             });
@@ -1958,12 +1947,11 @@ module ts {
                                     if (token === SyntaxKind.StringLiteral) {
                                         var importPath = scanner.getTokenValue();
                                         var pos = scanner.getTokenPos();
-                                        var referencedFile = {
-                                            path: switchToForwardSlashes(importPath),
-                                            position: pos,
-                                            length: importPath.length
-                                        };
-                                        importedFiles.push(referencedFile);
+                                        importedFiles.push({
+                                            filename: importPath,
+                                            pos: pos,
+                                            end: pos + importPath.length
+                                        });
                                     }
                                 }
                             }

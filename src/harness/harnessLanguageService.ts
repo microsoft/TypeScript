@@ -258,6 +258,10 @@ module Harness.LanguageService {
             return new TypeScript.Services.TypeScriptServicesFactory().createClassifierShim(this);
         }
 
+        public getCoreService(): ts.CoreServicesShim {
+            return new TypeScript.Services.TypeScriptServicesFactory().createCoreServicesShim(this);
+        }
+
         /** Parse file given its source text */
         public parseSourceText(fileName: string, sourceText: TypeScript.IScriptSnapshot): TypeScript.SourceUnitSyntax {
             return TypeScript.Parser.parse(fileName, TypeScript.SimpleText.fromScriptSnapshot(sourceText), ts.ScriptTarget.ES5, TypeScript.isDTSFile(fileName)).sourceUnit();

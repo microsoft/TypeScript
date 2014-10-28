@@ -54,6 +54,17 @@ module ts {
         getDefaultLibFilename(): string;
     }
 
+    ///
+    /// Pre-processing
+    ///
+    // Note: This is being using by the host (VS) and is marshaled back and forth.
+    // When changing this make sure the changes are reflected in the managed side as well
+    interface IFileReference {
+        path: string;
+        position: number;
+        length: number;
+    }
+
     /** Public interface of a language service instance shim. */
     export interface ShimFactory {
         registerShim(shim: Shim): void;
@@ -847,7 +858,28 @@ module ts {
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
                     var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()));
-                    return result;
+                    var convertResult = {
+                        referencedFiles: <IFileReference[]>[],
+                        importedFiles: <IFileReference[]>[],
+                        isLibFile: result.isLibFile
+                    };
+
+                    forEach(result.referencedFiles, refFile => {
+                        convertResult.referencedFiles.push({
+                            path: switchToForwardSlashes(normalizePath(refFile.filename)),
+                            position: refFile.pos,
+                            length: refFile.end - refFile.pos
+                        });
+                    });
+
+                    forEach(result.importedFiles, importedFile => {
+                        convertResult.importedFiles.push({
+                            path: switchToForwardSlashes(importedFile.filename),
+                            position: importedFile.pos,
+                            length: importedFile.end - importedFile.pos
+                        });
+                    });
+                    return convertResult;
                 });
         }
 
