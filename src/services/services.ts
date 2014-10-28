@@ -2019,17 +2019,15 @@ module ts {
     }
 
     /** Returns true if the position is within a comment */
-    function isInsideComment(token: Node, position: number): boolean {
-        var sourceFile = token.getSourceFile();
-
-        // The position has to be: 1. in the leading trivia (before tokek.getStart()), and 2. within a comment
-        return position <= token.getStart() &&
+    function isInsideComment(sourceFile: SourceFile, token: Node, position: number): boolean {
+        // The position has to be: 1. in the leading trivia (before token.getStart()), and 2. within a comment
+        return position <= token.getStart(sourceFile) &&
             (isInsideCommentRange(getTrailingCommentRanges(sourceFile.text, token.getFullStart())) ||
             isInsideCommentRange(getLeadingCommentRanges(sourceFile.text, token.getFullStart())));
 
         function isInsideCommentRange(comments: CommentRange[]): boolean {
             return forEach(comments, comment => {
-                // either we are 1. completely inside the comment, or 2. at the end of 
+                // either we are 1. completely inside the comment, or 2. at the end of the comment
                 if (comment.pos < position && position < comment.end) {
                     return true;
                 }
@@ -2363,8 +2361,8 @@ module ts {
             var currentToken = getTokenAtPosition(sourceFile, position);
 
             // Completion not allowed inside comments, bail out if this is the case
-            if (isInsideComment(currentToken, position)) {
-                host.log("Returning an empty list because completion was blocked.");
+            if (isInsideComment(sourceFile, currentToken, position)) {
+                host.log("Returning an empty list because completion was inside a comment.");
                 return undefined;
             }
 
@@ -2380,7 +2378,7 @@ module ts {
 
             // Check if this is a valid completion location
             if (previousToken && isCompletionListBlocker(previousToken)) {
-                host.log("Returning an empty list because completion was blocked.");
+                host.log("Returning an empty list because completion was requested in an invalid position.");
                 return undefined;
             }
 
@@ -5157,7 +5155,7 @@ module ts {
                     // OK, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
                     var token = getTokenAtPosition(sourceFile, matchPosition);
-                    if (!isInsideComment(token, matchPosition)) {
+                    if (!isInsideComment(sourceFile, token, matchPosition)) {
                         continue;
                     }
 
