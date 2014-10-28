@@ -1,13 +1,16 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512097.ts(1,14): error TS1005: ':' expected.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512097.ts(1,14): error TS1005: ',' expected.
 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512097.ts(1,16): error TS1128: Declaration or statement expected.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512097.ts(1,12): error TS2304: Cannot find name 'aa'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512097.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512097.ts (3 errors) ====
     var tt = { aa; } // After this point, no useful parsing occurs in the entire file
                  ~
-!!! error TS1005: ':' expected.
+!!! error TS1005: ',' expected.
                    ~
 !!! error TS1128: Declaration or statement expected.
+               ~~
+!!! error TS2304: Cannot find name 'aa'.
     
     if (true) {
     }
