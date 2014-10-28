@@ -51,7 +51,6 @@ describe('PreProcessFile:', function () {
                     referencedFiles: [{ path: "refFile1.ts", position: 0, length: 37  }, { path: "refFile2.ts", position: 38, length: 35 },
                         { path: "refFile3.ts", position: 74, length: 35 }, { path: "refFile4d.ts", position: 110, length: 37 }],
                     importedFiles: <ts.IFileReference[]>[],
-                    diagnostics: <TypeScript.Diagnostic[]>[],
                     isLibFile: false
                 });
        }),
@@ -61,7 +60,6 @@ describe('PreProcessFile:', function () {
                 {
                     referencedFiles: <ts.IFileReference[]>[],
                     importedFiles: <ts.IFileReference[]>[],
-                    diagnostics: <TypeScript.Diagnostic[]>[],
                     isLibFile: false
                 });
         });
@@ -72,7 +70,6 @@ describe('PreProcessFile:', function () {
                     referencedFiles: <ts.IFileReference[]>[],
                     importedFiles: [{ path: "r1.ts", position: 20, length: 5 }, { path: "r2.ts", position: 49, length: 5 }, { path: "r3.ts", position: 78, length: 5 },
                         { path: "r4.ts", position: 106, length: 5 }, { path: "r5.ts", position: 138, length: 5 }],
-                    diagnostics: <TypeScript.Diagnostic[]>[],
                     isLibFile: false
                 });
         });
@@ -82,7 +79,6 @@ describe('PreProcessFile:', function () {
                 {
                     referencedFiles: <ts.IFileReference[]>[],
                     importedFiles: <ts.IFileReference[]>[],
-                    diagnostics: <TypeScript.Diagnostic[]>[],
                     isLibFile: false
                 });
         });
@@ -92,7 +88,6 @@ describe('PreProcessFile:', function () {
                 {
                     referencedFiles: [{ path: "refFile1.ts", position: 0, length: 35 }, { path: "refFile2.ts", position: 36, length: 35 }],
                     importedFiles: [{ path: "r1.ts", position: 92, length: 5 }, { path: "r2.ts", position: 121, length: 5 }],
-                    diagnostics: <TypeScript.Diagnostic[]>[],
                     isLibFile: false
                 });
         });

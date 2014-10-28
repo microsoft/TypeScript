@@ -92,7 +92,6 @@ module ts {
     export interface PreProcessedFileInfo {
         referencedFiles: IFileReference[];
         importedFiles: IFileReference[];
-        diagnostics: TypeScript.Diagnostic[];
         isLibFile: boolean
     }
 
@@ -1980,7 +1979,7 @@ module ts {
         }
         processTripleSlashDirectives();
         // TODO (yuisu) : remove diagnostics array
-        return { referencedFiles: referencedFiles, importedFiles: importedFiles, isLibFile: isNoDefaultLib, diagnostics: [] };
+        return { referencedFiles: referencedFiles, importedFiles: importedFiles, isLibFile: isNoDefaultLib };
     }
 
     /// Helpers
