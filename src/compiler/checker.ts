@@ -3181,18 +3181,18 @@ module ts {
             source: Type,
             target: Type,
             errorNode: Node,
-            chainedMessage?: DiagnosticMessage,
+            headMessage?: DiagnosticMessage,
             containingMessageChain?: DiagnosticMessageChain): boolean {
 
-            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, chainedMessage, containingMessageChain);
+            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
         }
 
         function isTypeAssignableTo(source: Type, target: Type): boolean {
             return checkTypeAssignableTo(source, target, /*errorNode*/ undefined);
         }
 
-        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, chainedMessage?: DiagnosticMessage): boolean {
-            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, chainedMessage);
+        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage): boolean {
+            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage);
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<boolean>): boolean {
@@ -3271,7 +3271,7 @@ module ts {
             target: Type,
             relation: Map<boolean>,
             errorNode: Node,
-            chainedMessage?: DiagnosticMessage,
+            headMessage?: DiagnosticMessage,
             containingMessageChain?: DiagnosticMessageChain): boolean {
 
             var errorInfo: DiagnosticMessageChain;
@@ -3283,7 +3283,7 @@ module ts {
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
-            var result = isRelatedToWithCustomErrors(source, target, errorNode !== undefined, chainedMessage);
+            var result = isRelatedToWithCustomErrors(source, target, errorNode !== undefined, headMessage);
             if (overflow) {
                 error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
@@ -3300,10 +3300,10 @@ module ts {
             }
 
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean): boolean {
-                return isRelatedToWithCustomErrors(source, target, reportErrors, /*chainedMessage*/ undefined);
+                return isRelatedToWithCustomErrors(source, target, reportErrors, /*headMessage*/ undefined);
             }
 
-            function isRelatedToWithCustomErrors(source: Type, target: Type, reportErrors: boolean, chainedMessage: DiagnosticMessage): boolean {
+            function isRelatedToWithCustomErrors(source: Type, target: Type, reportErrors: boolean, headMessage: DiagnosticMessage): boolean {
                 if (relation === identityRelation) {
                     // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                     if (source === target) return true;
@@ -3355,9 +3355,9 @@ module ts {
                     }
                 }
                 if (reportErrors) {
-                    chainedMessage = chainedMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
-                    Debug.assert(chainedMessage);
-                    reportError(chainedMessage, typeToString(source), typeToString(target));
+                    headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
+                    Debug.assert(headMessage);
+                    reportError(headMessage, typeToString(source), typeToString(target));
                 }
                 return false;
             }
@@ -5778,7 +5778,7 @@ module ts {
             else {
                 var exprType = checkExpression(node.body);
                 if (node.type) {
-                    checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*chainedMessage*/ undefined);
+                    checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*headMessage*/ undefined);
                 }
                 checkFunctionExpressionBodies(node.body);
             }
@@ -6084,7 +6084,7 @@ module ts {
                     // Use default messages
                     if (ok) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-                        checkTypeAssignableTo(valueType, leftType, node.left, /*chainedMessage*/ undefined);
+                        checkTypeAssignableTo(valueType, leftType, node.left, /*headMessage*/ undefined);
                     }
                 }
             }
@@ -7107,7 +7107,7 @@ module ts {
                 if (node.initializer) {
                     if (!(getNodeLinks(node.initializer).flags & NodeCheckFlags.TypeChecked)) {
                         // Use default messages
-                        checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*chainedMessage*/ undefined);
+                        checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*headMessage*/ undefined);
                     }
                     checkCollisionWithConstDeclarations(node);
                 }
@@ -7220,7 +7220,7 @@ module ts {
                             func.type ||
                             (func.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(<AccessorDeclaration>getDeclarationOfKind(func.symbol, SyntaxKind.SetAccessor)));
                         if (checkAssignability) {
-                            checkTypeAssignableTo(checkExpression(node.expression), returnType, node.expression, /*chainedMessage*/ undefined);
+                            checkTypeAssignableTo(checkExpression(node.expression), returnType, node.expression, /*headMessage*/ undefined);
                         }
                         else if (func.kind == SyntaxKind.Constructor) {
                             // constructor doesn't have explicit return type annotation and yet its return type is known - declaring type
@@ -7248,7 +7248,7 @@ module ts {
                     var caseType = checkExpression(clause.expression);
                     if (!isTypeAssignableTo(expressionType, caseType)) {
                         // check 'expressionType isAssignableTo caseType' failed, try the reversed check and report errors if it fails
-                        checkTypeAssignableTo(caseType, expressionType, clause.expression, /*chainedMessage*/ undefined);
+                        checkTypeAssignableTo(caseType, expressionType, clause.expression, /*headMessage*/ undefined);
                     }
                 }
                 checkBlock(clause);
@@ -7604,7 +7604,7 @@ module ts {
                             // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
                             // Also, we do not need to check this for ambients because there is already
                             // a syntax error if it is not a constant.
-                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*chainedMessage*/ undefined);
+                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
                         }
                     }
                     else if (ambient) {
