@@ -766,7 +766,7 @@ module ts {
     }
 
     export enum SymbolFlags {
-        FunctionScopedVariable = 0x00000001, // Variable (var) or parameter
+        FunctionScopedVariable = 0x00000001,  // Variable (var) or parameter
         Property               = 0x00000002,  // Property or enum member
         EnumMember             = 0x00000004,  // Enum member
         Function               = 0x00000008,  // Function
