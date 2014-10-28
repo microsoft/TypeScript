@@ -3271,10 +3271,10 @@ module ts {
         }
 
         var hasSemanticErrors = resolver.hasSemanticErrors();
-        var hasEarlyErrors = resolver.hasEarlyErrors(targetSourceFile);
+        var isEmitBlocked = resolver.isEmitBlocked(targetSourceFile);
 
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
-            if (!hasEarlyErrors) {
+            if (!isEmitBlocked) {
                 emitJavaScript(jsFilePath, sourceFile);
                 if (!hasSemanticErrors && compilerOptions.declaration) {
                     emitDeclarations(jsFilePath, sourceFile);
@@ -3318,7 +3318,7 @@ module ts {
 
         // Check and update returnCode for syntactic and semantic
         var returnCode: EmitReturnStatus;
-        if (hasEarlyErrors) {
+        if (isEmitBlocked) {
             returnCode = EmitReturnStatus.AllOutputGenerationSkipped;
         } else if (hasEmitterError) {
             returnCode = EmitReturnStatus.EmitErrorsEncountered;

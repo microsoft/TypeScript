@@ -666,7 +666,7 @@ module ts {
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
-        hasEarlyErrors(sourceFile?: SourceFile): boolean;
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
 
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
         // computed value.
@@ -762,7 +762,7 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' if it does 
         // resolve to a constant.
         getConstantValue(node: PropertyAccess): number;
-        hasEarlyErrors(sourceFile?: SourceFile): boolean;
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
     }
 
     export enum SymbolFlags {

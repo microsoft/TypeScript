@@ -57,7 +57,7 @@ module ts {
         {
             name: "noEmitOnError",
             type: "boolean",
-            description: Diagnostics.Do_not_emit_JavaScript_on_error,
+            description: Diagnostics.Do_not_emit_outputs_if_any_type_checking_errors_were_reported,
         },
         {
             name: "noImplicitAny",

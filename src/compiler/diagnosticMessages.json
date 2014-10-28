@@ -1456,7 +1456,7 @@
         "category": "Message",
         "code": 6006
     },
-    "Do not emit JavaScript on error.": {
+    "Do not emit outputs if any type checking errors were reported.": {
         "category": "Message",
         "code": 6007
     },

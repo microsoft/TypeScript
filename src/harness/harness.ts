@@ -796,16 +796,14 @@ module Harness {
                     options.target,
                     useCaseSensitiveFileNames));
 
-                var hadParseErrors = program.getDiagnostics().length > 0;
-
                 var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
                 checker.checkProgram();
 
-                var hasEarlyErrors = checker.hasEarlyErrors();
+                var isEmitBlocked = checker.isEmitBlocked();
 
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
-                if (!hadParseErrors && !hasEarlyErrors) {
+                if (!isEmitBlocked) {
                     emitResult = checker.emitFiles();
                 }
 
