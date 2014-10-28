@@ -123,16 +123,20 @@ module ts.formatting {
             return r => false;
         }
         else {
-            var sorted = errors.slice(0).filter(d => d.isParseError).sort((e1, e2) => e1.start - e2.start);
-            var index = 0; // TODO: set based on the range
-            var endIndex = sorted.length; // TODO: set based on the range
-            if (endIndex === 0 || index === sorted.length) {
-                // errors are outside the interesting span - always return false
+            // pick only errors that fall in range
+            var sorted = errors
+                .filter(d => d.isParseError && (d.start >= originalRange.pos && d.start + d.length < originalRange.end))
+                .sort((e1, e2) => e1.start - e2.start);
+            
+            if (!sorted.length) {
+                // no errors in interesting span - always return false
                 return r => false;
             }
+
+            var index = 0;
             return r => {
                 while (true) {
-                    if (index >= endIndex) {
+                    if (index >= sorted.length) {
                         return false;
                     }
                     else {
@@ -196,14 +200,24 @@ module ts.formatting {
             return 0;
         }
 
+        function getListItemIndentation(nodes: Node[], index: number, parentStartLine: number, options: EditorOptions): number {
+            Debug.assert(index >= 0 && index < nodes.length);
+            var node = nodes[index];
+            var start = node.getStart(sourceFile);
+            var nodeStartLine = sourceFile.getLineAndCharacterFromPosition(start).line;
+            var startLinePosition = getStartPositionOfLine(nodeStartLine, sourceFile);
+            var shareLine = nodeStartLine === parentStartLine;
+            var column = SmartIndenter.findFirstNonWhitespaceColumn(startLinePosition, start, sourceFile, options); // ?
+            return shareLine && start !== column? -1 : column;
+        }
+
         function processNode(node: Node, contextNode: Node, nodeStartLine: number, indentation: number) {
-            // TODO: skip nodes that has skipped or missing tokens
-            if (!rangeOverlapsWithRange(originalRange, node)) {
+            if (!rangeOverlapsWithStartEnd(originalRange, node.getStart(sourceFile), node.getEnd())) {
                 return;
             }
             var commentIndentation = indentation;
 
-            var parentIndentation: DynamicIndentation = {
+            var nodeIndentation: DynamicIndentation = {
                 getCommentIndentation: () => commentIndentation,
                 getIndentation: () => indentation,
                 recomputeIndentation: (lineAdded) => {
@@ -218,10 +232,13 @@ module ts.formatting {
             var childContextNode = contextNode;
             forEachChild(
                 node,
-                child => processChildNode(child, /*containingList*/ undefined, /*listElementIndex*/ -1),
+                child => { 
+                    processChildNode(child, undefined, /*containingList*/ undefined, /*listElementIndex*/ -1)
+                },
                 nodes => {
+                    var inheritedIndentation: number = undefined;
                     for (var i = 0, len = nodes.length; i < len; ++i) {
-                        processChildNode(nodes[i], /*containingList*/ nodes, /*listElementIndex*/ i)
+                        inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, /*containingList*/ nodes, /*listElementIndex*/ i)
                     }
                 }
             );
@@ -238,14 +255,14 @@ module ts.formatting {
                     ? indentation + options.IndentSize
                     : indentation;
 
-                doConsumeTokenAndAdvanceScanner(tokenInfo, node, parentIndentation);
+                doConsumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
             }
 
             /// Local functions
 
-            function processChildNode(child: Node, containingList: Node[], listElementIndex: number): void {
+            function processChildNode(child: Node, inheritedIndentation: number, containingList: Node[], listElementIndex: number): number {
                 if (child.kind === SyntaxKind.Missing) {
-                    return;
+                    return inheritedIndentation;
                 }
 
                 var start = child.getStart(sourceFile);
@@ -255,54 +272,66 @@ module ts.formatting {
                         break;
                     }
 
-                    doConsumeTokenAndAdvanceScanner(tokenInfo, node, parentIndentation);
+                    doConsumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
                 }
 
                 if (!formattingScanner.isOnToken()) {
-                    return;
+                    return inheritedIndentation;
                 }
 
-                var childStartLine = sourceFile.getLineAndCharacterFromPosition(start).line;
-                // determine child indentation
-                // TODO: share this code with SmartIndenter
-                var increaseIndentation =
-                    childStartLine !== nodeStartLine &&
-                    !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStartLine, sourceFile) &&
-                    SmartIndenter.shouldIndentChildNode(node, child);
-                
+                var childStart = sourceFile.getLineAndCharacterFromPosition(start);
+                var actualIndentation = inheritedIndentation;
 
-                var childIndentationValue = increaseIndentation ? indentation + options.IndentSize : indentation;
+                var isChildInRange = rangeOverlapsWithStartEnd(originalRange, start, child.getEnd());
+
+                var childIndentationValue: number;
+                if (containingList && !isChildInRange) {
+                    // child is a list item that is not in span being formatted
+                    // fetch actual indentation for the child item to push it downstream
+                    // TODO: ensure that indentation is picked correctly
+                    var actualIndentation = getListItemIndentation(containingList, listElementIndex, nodeStartLine, options);
+                    if (actualIndentation !== -1) {
+                        inheritedIndentation = actualIndentation;
+                    }
+                    var childIndentationValue = increaseIndentation || indentation;
+                }
+                else {
+                    if (inheritedIndentation !== undefined) {
+                        var childIndentationValue = inheritedIndentation;
+                    }
+                    else {
+                        var shareLine = nodeStartLine === childStart.line;
+                        var increaseIndentation =
+                            !shareLine &&
+                            !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStart.line, sourceFile) &&
+                            SmartIndenter.shouldIndentChildNode(node, child);
+                        var childIndentationValue = increaseIndentation ? indentation + options.IndentSize : indentation;
+                    }
+                }
+
                 var childIndentation: DynamicIndentation = {
                     getIndentation: () => childIndentationValue,
                     getCommentIndentation: () => childIndentationValue,
                     recomputeIndentation: lineAdded => {
-                        parentIndentation.recomputeIndentation(lineAdded);
-                        var delta = getIndentationDelta(node, lineAdded); //? 
+                        nodeIndentation.recomputeIndentation(lineAdded);
+                        var delta = getIndentationDelta(node, lineAdded);
                         if (delta) {
                             childIndentationValue += delta;
                         }
                     },
                 };
+
                 // ensure that current token is inside child node
                 if (isToken(child)) {
                     var tokenInfo = formattingScanner.readTokenInfo(node);
                     Debug.assert(tokenInfo.token.end === child.end);
                     doConsumeTokenAndAdvanceScanner(tokenInfo, node, childIndentation);
-                    return;
-                }
-
-                
-                var newIndentation: number;
-                if (listElementIndex === -1) {
-                    // child is not list element
                 }
                 else {
-                    // child is a list element
+                    processNode(child, childContextNode, childStart.line, childIndentationValue);
+                    childContextNode = node;
                 }
-
-
-                processNode(child, childContextNode, childStartLine, childIndentationValue);
-                childContextNode = node;
+                return inheritedIndentation;
             }
 
             function doConsumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, indentation: DynamicIndentation): void {

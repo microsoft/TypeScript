@@ -13,9 +13,13 @@ module ts {
         return start <= range.pos && end >= range.end;
     }
 
-    export function rangeOverlapsWithRange(r1: TextRange, r2: TextRange): boolean {
-        var start = Math.max(r1.pos, r2.pos);
-        var end = Math.min(r1.end, r2.end);
+    export function rangeContainsStartEnd(range: TextRange, start: number, end: number): boolean {
+        return range.pos <= start && range.end >= end;
+    }
+
+    export function rangeOverlapsWithStartEnd(r1: TextRange, start: number, end: number) {
+        var start = Math.max(r1.pos, start);
+        var end = Math.min(r1.end, end);
         return start < end;
     }
 
