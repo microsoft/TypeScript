@@ -472,7 +472,7 @@ module ts {
             //     import a = |b.c|; // Value, type, namespace
             //     import a = |b.c|.d; // Namespace
             if (entityName.kind === SyntaxKind.Identifier && isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
-                entityName = entityName.parent;
+                entityName = <QualifiedName>entityName.parent;
             }
             // Check for case 1 and 3 in the above example
             if (entityName.kind === SyntaxKind.Identifier || entityName.parent.kind === SyntaxKind.QualifiedName) {
@@ -8070,7 +8070,7 @@ module ts {
 
         function isInRightSideOfImportOrExportAssignment(node: EntityName) {
             while (node.parent.kind === SyntaxKind.QualifiedName) {
-                node = node.parent;
+                node = <QualifiedName>node.parent;
             }
 
             if (node.parent.kind === SyntaxKind.ImportDeclaration) {
@@ -8104,7 +8104,7 @@ module ts {
             }
 
             if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
-                entityName = entityName.parent;
+                entityName = <QualifiedName>entityName.parent;
             }
 
             if (isExpression(entityName)) {
@@ -8117,7 +8117,7 @@ module ts {
                 else if (entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccess) {
                     var symbol = getNodeLinks(entityName).resolvedSymbol;
                     if (!symbol) {
-                        checkPropertyAccess(<PropertyAccess>entityName);
+                        checkPropertyAccess(<QualifiedName>entityName);
                     }
                     return getNodeLinks(entityName).resolvedSymbol;
                 }
@@ -8149,10 +8149,10 @@ module ts {
                 return getSymbolOfNode(node.parent);
             }
 
-            if (node.kind === SyntaxKind.Identifier && isInRightSideOfImportOrExportAssignment(node)) {
+            if (node.kind === SyntaxKind.Identifier && isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
                 return node.parent.kind === SyntaxKind.ExportAssignment
                     ? getSymbolOfEntityName(<Identifier>node)
-                    : getSymbolOfPartOfRightHandSideOfImport(node);
+                    : getSymbolOfPartOfRightHandSideOfImport(<Identifier>node);
             }
 
             switch (node.kind) {
@@ -8233,7 +8233,7 @@ module ts {
                 return symbol && getTypeOfSymbol(symbol);
             }
 
-            if (isInRightSideOfImportOrExportAssignment(node)) {
+            if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
                 var symbol = getSymbolInfo(node);
                 var declaredType = symbol && getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);

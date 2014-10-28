@@ -282,9 +282,7 @@ module ts {
         right: Identifier;
     }
 
-    export interface EntityName extends Node {
-        // Identifier, QualifiedName, or Missing
-    }
+    export type EntityName = Identifier | QualifiedName;
 
     export interface ParsedSignature {
         typeParameters?: NodeArray<TypeParameterDeclaration>;
@@ -312,7 +310,7 @@ module ts {
     export interface ParameterDeclaration extends VariableDeclaration { }
 
     export interface FunctionDeclaration extends Declaration, ParsedSignature {
-        body?: Node;  // Block or Expression
+        body?: Block | Expression;
     }
 
     export interface MethodDeclaration extends FunctionDeclaration { }
@@ -378,7 +376,7 @@ module ts {
     }
 
     export interface FunctionExpression extends Expression, FunctionDeclaration {
-        body: Node; // Required, whereas the member inherited from FunctionDeclaration is optional
+        body: Block | Expression;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral
@@ -536,7 +534,7 @@ module ts {
     }
 
     export interface ModuleDeclaration extends Declaration {
-        body: Node;  // Block or ModuleDeclaration
+        body: Block | ModuleDeclaration;
     }
 
     export interface ImportDeclaration extends Declaration {
@@ -588,40 +586,24 @@ module ts {
     }
 
     export interface SourceMapSpan {
-        /** Line number in the js file*/
-        emittedLine: number;
-        /** Column number in the js file */
-        emittedColumn: number;
-        /** Line number in the ts file */
-        sourceLine: number;
-        /** Column number in the ts file */
-        sourceColumn: number;
-        /** Optional name (index into names array) associated with this span */
-        nameIndex?: number;
-        /** ts file (index into sources array) associated with this span*/
-        sourceIndex: number;
+        emittedLine: number;    // Line number in the .js file
+        emittedColumn: number;  // Column number in the .js file
+        sourceLine: number;     // Line number in the .ts file
+        sourceColumn: number;   // Column number in the .ts file
+        nameIndex?: number;     // Optional name (index into names array) associated with this span
+        sourceIndex: number;    // .ts file (index into sources array) associated with this span*/
     }
 
     export interface SourceMapData {
-        /** Where the sourcemap file is written */
-        sourceMapFilePath: string;
-        /** source map URL written in the js file */
-        jsSourceMappingURL: string;
-        /** Source map's file field - js file name*/
-        sourceMapFile: string;
-        /** Source map's sourceRoot field - location where the sources will be present if not "" */
-        sourceMapSourceRoot: string;
-        /** Source map's sources field - list of sources that can be indexed in this source map*/
-        sourceMapSources: string[];
-        /** input source file (which one can use on program to get the file)
-            this is one to one mapping with the sourceMapSources list*/
-        inputSourceFileNames: string[];
-        /** Source map's names field - list of names that can be indexed in this source map*/
-        sourceMapNames?: string[];
-        /** Source map's mapping field - encoded source map spans*/
-        sourceMapMappings: string;
-        /** Raw source map spans that were encoded into the sourceMapMappings*/
-        sourceMapDecodedMappings: SourceMapSpan[];
+        sourceMapFilePath: string;       // Where the sourcemap file is written
+        jsSourceMappingURL: string;      // source map URL written in the .js file
+        sourceMapFile: string;           // Source map's file field - .js file name
+        sourceMapSourceRoot: string;     // Source map's sourceRoot field - location where the sources will be present if not ""
+        sourceMapSources: string[];      // Source map's sources field - list of sources that can be indexed in this source map
+        inputSourceFileNames: string[];  // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMapSources list
+        sourceMapNames?: string[];       // Source map's names field - list of names that can be indexed in this source map
+        sourceMapMappings: string;       // Source map's mapping field - encoded source map spans
+        sourceMapDecodedMappings: SourceMapSpan[];  // Raw source map spans that were encoded into the sourceMapMappings
     }
 
     // Return code used by getEmitOutput function to indicate status of the function
@@ -674,11 +656,8 @@ module ts {
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         hasEarlyErrors(sourceFile?: SourceFile): boolean;
-
-        // Returns the constant value of this enum member, or 'undefined' if the enum member has a 
-        // computed value.
+        // Returns the constant value of this enum member, or 'undefined' if the enum member has a computed value.
         getEnumMemberValue(node: EnumMember): number;
-
         isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
     }
@@ -765,16 +744,14 @@ module ts {
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult;
-
-        // Returns the constant value this property access resolves to, or 'undefined' if it does 
-        // resolve to a constant.
+        // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccess): number;
         hasEarlyErrors(sourceFile?: SourceFile): boolean;
     }
 
     export enum SymbolFlags {
         FunctionScopedVariable = 0x00000001,  // Variable (var) or parameter
-        BlockScopedVariable    = 0x00000002,  // A block-scoped variable (let ot const)
+        BlockScopedVariable    = 0x00000002,  // A block-scoped variable (let or const)
         Property               = 0x00000004,  // Property or enum member
         EnumMember             = 0x00000008,  // Enum member
         Function               = 0x00000010,  // Function
@@ -1097,7 +1074,7 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        [option: string]: any;
+        [option: string]: string | number | boolean;
     }
 
     export enum ModuleKind {
@@ -1130,7 +1107,7 @@ module ts {
 
     export interface CommandLineOption {
         name: string;
-        type: any;                          // "string", "number", "boolean", or an object literal mapping named values to actual values
+        type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
         shortName?: string;                 // A short pneumonic for convenience - for instance, 'h' can be used in place of 'help'.
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramName?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter.

@@ -1086,7 +1086,6 @@ module ts {
                 return finishNode(node);
             }
             error(Diagnostics.Identifier_expected);
-
             var node = <Identifier>createMissingNode();
             node.text = "";
             return node;
