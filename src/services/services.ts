@@ -4586,11 +4586,10 @@ module ts {
             return root.parent.kind === SyntaxKind.TypeReference && !isLastClause;
         }
 
-        function isInRightSideOfImport(node: EntityName) {
+        function isInRightSideOfImport(node: Node) {
             while (node.parent.kind === SyntaxKind.QualifiedName) {
                 node = node.parent;
             }
-
             return node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).entityName === node;
         }
 
