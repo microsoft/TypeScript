@@ -1,4 +1,5 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(10,29): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(10,29): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+  Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(15,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(16,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(25,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
@@ -21,8 +22,9 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
         }
     
         var r1: (x: {}) => {} = foo((x: number) => 1, (x: string) => '');
-                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+                                ~~~
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+!!! error TS2453:   Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
     
         function other2<T extends Date>(x: T) {
             var r7 = foo((a: T) => a, (b: T) => b); // T => T
