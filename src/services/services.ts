@@ -711,6 +711,7 @@ module ts {
 
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
+                        case SyntaxKind.TypeAliasDeclaration:
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ImportDeclaration:
@@ -1190,6 +1191,9 @@ module ts {
 
         // interface Y {}
         static interfaceElement = "interface";
+
+        // type T = ...
+        static typeElement = "type";
 
         // enum E
         static enumElement = "enum";
@@ -2724,6 +2728,7 @@ module ts {
 
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
+            if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
             if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
             
@@ -2795,6 +2800,7 @@ module ts {
                 case SyntaxKind.ModuleDeclaration: return ScriptElementKind.moduleElement;
                 case SyntaxKind.ClassDeclaration: return ScriptElementKind.classElement;
                 case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
+                case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
                 case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
                 case SyntaxKind.VariableDeclaration: return node.flags & NodeFlags.Const ? ScriptElementKind.constantElement: ScriptElementKind.variableElement;
                 case SyntaxKind.FunctionDeclaration: return ScriptElementKind.functionElement;
@@ -2809,8 +2815,8 @@ module ts {
                 case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
                 case SyntaxKind.EnumMember: return ScriptElementKind.variableElement;
                 case SyntaxKind.Parameter: return (node.flags & NodeFlags.AccessibilityModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
-                    return ScriptElementKind.unknown;
             }
+            return ScriptElementKind.unknown;
         }
 
         function getSymbolModifiers(symbol: Symbol): string {
@@ -2958,6 +2964,16 @@ module ts {
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 writeTypeParametersOfSymbol(symbol, sourceFile);
+            }
+            if (symbolFlags & SymbolFlags.TypeAlias) {
+                addNewLineIfDisplayPartsExist();
+                displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
+                displayParts.push(spacePart());
+                addFullSymbolName(symbol);
+                displayParts.push(spacePart());
+                displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                displayParts.push(spacePart());
+                displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, typeResolver.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration));
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
@@ -4546,6 +4562,7 @@ module ts {
 
                 case SyntaxKind.TypeParameter:
                 case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.TypeLiteral:
                     return SemanticMeaning.Type;
 
@@ -4592,11 +4609,10 @@ module ts {
             return root.parent.kind === SyntaxKind.TypeReference && !isLastClause;
         }
 
-        function isInRightSideOfImport(node: EntityName) {
+        function isInRightSideOfImport(node: Node) {
             while (node.parent.kind === SyntaxKind.QualifiedName) {
                 node = node.parent;
             }
-
             return node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).entityName === node;
         }
 

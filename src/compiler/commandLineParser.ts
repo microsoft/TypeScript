@@ -183,9 +183,10 @@ module ts {
                                 break;
                             // If not a primitive, the possible types are specified in what is effectively a map of options.
                             default:
-                                var value = (args[i++] || "").toLowerCase();
-                                if (hasProperty(opt.type, value)) {
-                                    options[opt.name] = opt.type[value];
+                                var map = <Map<number>>opt.type;
+                                var key = (args[i++] || "").toLowerCase();
+                                if (hasProperty(map, key)) {
+                                    options[opt.name] = map[key];
                                 }
                                 else {
                                     errors.push(createCompilerDiagnostic(opt.error));
