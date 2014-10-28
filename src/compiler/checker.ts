@@ -4274,7 +4274,6 @@ module ts {
             if (node.index.kind === SyntaxKind.StringLiteral || node.index.kind === SyntaxKind.NumericLiteral) {
                 var name = (<LiteralExpression>node.index).text;
                 var prop = getPropertyOfApparentType(apparentType, name);
-
                 if (prop) {
                     getNodeLinks(node).resolvedSymbol = prop; 
                     return getTypeOfSymbol(prop);
