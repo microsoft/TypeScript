@@ -10,6 +10,7 @@
 //// 
 //// e./**/
 
+goTo.marker();
 verify.not.completionListContains('1');
 verify.not.completionListContains('"1"');
 verify.not.completionListContains('2');
