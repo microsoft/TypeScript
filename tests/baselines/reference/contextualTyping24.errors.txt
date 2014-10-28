@@ -1,11 +1,11 @@
-tests/cases/compiler/contextualTyping24.ts(1,55): error TS2322: Type '(a: string) => number' is not assignable to type '(a: { (): number; (i: number): number; }) => number':
-  Types of parameters 'a' and 'a' are incompatible:
+tests/cases/compiler/contextualTyping24.ts(1,55): error TS2323: Type '(a: string) => number' is not assignable to type '(a: { (): number; (i: number): number; }) => number'.
+  Types of parameters 'a' and 'a' are incompatible.
     Type 'string' is not assignable to type '{ (): number; (i: number): number; }'.
 
 
 ==== tests/cases/compiler/contextualTyping24.ts (1 errors) ====
     var foo:(a:{():number; (i:number):number; })=>number; foo = function(a:string){return 5};
                                                           ~~~
-!!! error TS2322: Type '(a: string) => number' is not assignable to type '(a: { (): number; (i: number): number; }) => number':
-!!! error TS2322:   Types of parameters 'a' and 'a' are incompatible:
-!!! error TS2322:     Type 'string' is not assignable to type '{ (): number; (i: number): number; }'.
+!!! error TS2323: Type '(a: string) => number' is not assignable to type '(a: { (): number; (i: number): number; }) => number'.
+!!! error TS2323:   Types of parameters 'a' and 'a' are incompatible.
+!!! error TS2323:     Type 'string' is not assignable to type '{ (): number; (i: number): number; }'.

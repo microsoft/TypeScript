@@ -1,7 +1,7 @@
 tests/cases/compiler/inheritanceStaticFuncOverridingAccessor.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/inheritanceStaticFuncOverridingAccessor.ts(5,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/inheritanceStaticFuncOverridingAccessor.ts(10,7): error TS2418: Class static side 'typeof b' incorrectly extends base class static side 'typeof a':
-  Types of property 'x' are incompatible:
+tests/cases/compiler/inheritanceStaticFuncOverridingAccessor.ts(10,7): error TS2417: Class static side 'typeof b' incorrectly extends base class static side 'typeof a'.
+  Types of property 'x' are incompatible.
     Type '() => string' is not assignable to type 'string'.
 
 
@@ -21,9 +21,9 @@ tests/cases/compiler/inheritanceStaticFuncOverridingAccessor.ts(10,7): error TS2
     
     class b extends a {
           ~
-!!! error TS2418: Class static side 'typeof b' incorrectly extends base class static side 'typeof a':
-!!! error TS2418:   Types of property 'x' are incompatible:
-!!! error TS2418:     Type '() => string' is not assignable to type 'string'.
+!!! error TS2417: Class static side 'typeof b' incorrectly extends base class static side 'typeof a'.
+!!! error TS2417:   Types of property 'x' are incompatible.
+!!! error TS2417:     Type '() => string' is not assignable to type 'string'.
         static x() {
             return "20";
         }

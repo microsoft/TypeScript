@@ -1,4 +1,4 @@
-tests/cases/compiler/assignmentCompatability35.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ [x: number]: number; }':
+tests/cases/compiler/assignmentCompatability35.ts(9,1): error TS2323: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ [x: number]: number; }'.
   Index signature is missing in type 'interfaceWithPublicAndOptional<number, string>'.
 
 
@@ -13,5 +13,5 @@ tests/cases/compiler/assignmentCompatability35.ts(9,1): error TS2322: Type 'inte
     }
     __test2__.__val__aa = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ [x: number]: number; }':
-!!! error TS2322:   Index signature is missing in type 'interfaceWithPublicAndOptional<number, string>'.
+!!! error TS2323: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ [x: number]: number; }'.
+!!! error TS2323:   Index signature is missing in type 'interfaceWithPublicAndOptional<number, string>'.

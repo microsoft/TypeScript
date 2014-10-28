@@ -6,14 +6,14 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(17,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(18,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(25,5): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(31,1): error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3':
-  Types of property 'x' are incompatible:
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(31,1): error TS2323: Type '{ x: string; }' is not assignable to type 'typeof M3'.
+  Types of property 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(32,1): error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3':
-  Types of property 'x' are incompatible:
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(32,1): error TS2323: Type '{ x: string; }' is not assignable to type 'typeof M3'.
+  Types of property 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(33,1): error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3':
-  Types of property 'x' are incompatible:
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(33,1): error TS2323: Type '{ x: string; }' is not assignable to type 'typeof M3'.
+  Types of property 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(37,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(38,1): error TS2364: Invalid left-hand side of assignment expression.
@@ -79,19 +79,19 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     
     M2.M3 = { x: '' }; // Error
     ~~~~~
-!!! error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3':
-!!! error TS2322:   Types of property 'x' are incompatible:
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! error TS2323: Type '{ x: string; }' is not assignable to type 'typeof M3'.
+!!! error TS2323:   Types of property 'x' are incompatible.
+!!! error TS2323:     Type 'string' is not assignable to type 'number'.
     (M2).M3 = { x: '' }; // Error
     ~~~~~~~
-!!! error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3':
-!!! error TS2322:   Types of property 'x' are incompatible:
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! error TS2323: Type '{ x: string; }' is not assignable to type 'typeof M3'.
+!!! error TS2323:   Types of property 'x' are incompatible.
+!!! error TS2323:     Type 'string' is not assignable to type 'number'.
     (M2.M3) = { x: '' }; // Error
     ~~~~~~~
-!!! error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3':
-!!! error TS2322:   Types of property 'x' are incompatible:
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! error TS2323: Type '{ x: string; }' is not assignable to type 'typeof M3'.
+!!! error TS2323:   Types of property 'x' are incompatible.
+!!! error TS2323:     Type 'string' is not assignable to type 'number'.
     
     
     function fn() { }

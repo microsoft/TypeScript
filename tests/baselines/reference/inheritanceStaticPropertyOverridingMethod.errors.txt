@@ -1,5 +1,5 @@
-tests/cases/compiler/inheritanceStaticPropertyOverridingMethod.ts(7,7): error TS2418: Class static side 'typeof b' incorrectly extends base class static side 'typeof a':
-  Types of property 'x' are incompatible:
+tests/cases/compiler/inheritanceStaticPropertyOverridingMethod.ts(7,7): error TS2417: Class static side 'typeof b' incorrectly extends base class static side 'typeof a'.
+  Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '() => string'.
 
 
@@ -12,8 +12,8 @@ tests/cases/compiler/inheritanceStaticPropertyOverridingMethod.ts(7,7): error TS
     
     class b extends a {
           ~
-!!! error TS2418: Class static side 'typeof b' incorrectly extends base class static side 'typeof a':
-!!! error TS2418:   Types of property 'x' are incompatible:
-!!! error TS2418:     Type 'string' is not assignable to type '() => string'.
+!!! error TS2417: Class static side 'typeof b' incorrectly extends base class static side 'typeof a'.
+!!! error TS2417:   Types of property 'x' are incompatible.
+!!! error TS2417:     Type 'string' is not assignable to type '() => string'.
         static x: string;
     }

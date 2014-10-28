@@ -1,9 +1,9 @@
 tests/cases/compiler/arraySigChecking.ts(11,17): error TS1023: An index signature parameter type must be 'string' or 'number'.
-tests/cases/compiler/arraySigChecking.ts(18,5): error TS2322: Type 'void[]' is not assignable to type 'string[]':
+tests/cases/compiler/arraySigChecking.ts(18,5): error TS2323: Type 'void[]' is not assignable to type 'string[]'.
   Type 'void' is not assignable to type 'string'.
-tests/cases/compiler/arraySigChecking.ts(22,1): error TS2322: Type 'number[][]' is not assignable to type 'number[][][]':
-  Type 'number[]' is not assignable to type 'number[][]':
-    Type 'number' is not assignable to type 'number[]':
+tests/cases/compiler/arraySigChecking.ts(22,1): error TS2323: Type 'number[][]' is not assignable to type 'number[][][]'.
+  Type 'number[]' is not assignable to type 'number[][]'.
+    Type 'number' is not assignable to type 'number[]'.
       Property 'length' is missing in type 'Number'.
 
 
@@ -29,17 +29,17 @@ tests/cases/compiler/arraySigChecking.ts(22,1): error TS2322: Type 'number[][]' 
     var myVar: myInt;
     var strArray: string[] = [myVar.voidFn()];
         ~~~~~~~~
-!!! error TS2322: Type 'void[]' is not assignable to type 'string[]':
-!!! error TS2322:   Type 'void' is not assignable to type 'string'.
+!!! error TS2323: Type 'void[]' is not assignable to type 'string[]'.
+!!! error TS2323:   Type 'void' is not assignable to type 'string'.
     
     
     var myArray: number[][][];
     myArray = [[1, 2]];
     ~~~~~~~
-!!! error TS2322: Type 'number[][]' is not assignable to type 'number[][][]':
-!!! error TS2322:   Type 'number[]' is not assignable to type 'number[][]':
-!!! error TS2322:     Type 'number' is not assignable to type 'number[]':
-!!! error TS2322:       Property 'length' is missing in type 'Number'.
+!!! error TS2323: Type 'number[][]' is not assignable to type 'number[][][]'.
+!!! error TS2323:   Type 'number[]' is not assignable to type 'number[][]'.
+!!! error TS2323:     Type 'number' is not assignable to type 'number[]'.
+!!! error TS2323:       Property 'length' is missing in type 'Number'.
     
     function isEmpty(l: { length: number }) {
         return l.length === 0;
