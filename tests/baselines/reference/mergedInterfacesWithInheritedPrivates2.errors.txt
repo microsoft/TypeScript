@@ -1,8 +1,8 @@
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(17,7): error TS2421: Class 'D' incorrectly implements interface 'A':
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(17,7): error TS2420: Class 'D' incorrectly implements interface 'A'.
   Types have separate declarations of a private property 'w'.
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2416: Class 'E' incorrectly extends base class 'C2':
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2415: Class 'E' incorrectly extends base class 'C2'.
   Property 'w' is private in type 'C2' but not in type 'E'.
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2421: Class 'E' incorrectly implements interface 'A':
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2420: Class 'E' incorrectly implements interface 'A'.
   Property 'x' is missing in type 'E'.
 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(30,9): error TS2341: Property 'x' is private and only accessible within class 'C'.
 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(31,10): error TS2341: Property 'w' is private and only accessible within class 'C2'.
@@ -27,8 +27,8 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheri
     
     class D extends C implements A { // error
           ~
-!!! error TS2421: Class 'D' incorrectly implements interface 'A':
-!!! error TS2421:   Types have separate declarations of a private property 'w'.
+!!! error TS2420: Class 'D' incorrectly implements interface 'A'.
+!!! error TS2420:   Types have separate declarations of a private property 'w'.
         private w: number;
         y: string;
         z: string;
@@ -36,11 +36,11 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheri
     
     class E extends C2 implements A { // error
           ~
-!!! error TS2416: Class 'E' incorrectly extends base class 'C2':
-!!! error TS2416:   Property 'w' is private in type 'C2' but not in type 'E'.
+!!! error TS2415: Class 'E' incorrectly extends base class 'C2'.
+!!! error TS2415:   Property 'w' is private in type 'C2' but not in type 'E'.
           ~
-!!! error TS2421: Class 'E' incorrectly implements interface 'A':
-!!! error TS2421:   Property 'x' is missing in type 'E'.
+!!! error TS2420: Class 'E' incorrectly implements interface 'A'.
+!!! error TS2420:   Property 'x' is missing in type 'E'.
         w: number;
         y: string;
         z: string;

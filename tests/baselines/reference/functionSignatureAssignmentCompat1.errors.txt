@@ -1,5 +1,5 @@
-tests/cases/compiler/functionSignatureAssignmentCompat1.ts(10,5): error TS2322: Type '(delimiter?: string) => ParserFunc' is not assignable to type 'ParserFunc':
-  Types of parameters 'delimiter' and 'eventEmitter' are incompatible:
+tests/cases/compiler/functionSignatureAssignmentCompat1.ts(10,5): error TS2323: Type '(delimiter?: string) => ParserFunc' is not assignable to type 'ParserFunc'.
+  Types of parameters 'delimiter' and 'eventEmitter' are incompatible.
     Type 'string' is not assignable to type 'number'.
 
 
@@ -15,7 +15,7 @@ tests/cases/compiler/functionSignatureAssignmentCompat1.ts(10,5): error TS2322: 
     var c: ParserFunc = parsers.raw; // ok!
     var d: ParserFunc = parsers.readline; // not ok
         ~
-!!! error TS2322: Type '(delimiter?: string) => ParserFunc' is not assignable to type 'ParserFunc':
-!!! error TS2322:   Types of parameters 'delimiter' and 'eventEmitter' are incompatible:
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! error TS2323: Type '(delimiter?: string) => ParserFunc' is not assignable to type 'ParserFunc'.
+!!! error TS2323:   Types of parameters 'delimiter' and 'eventEmitter' are incompatible.
+!!! error TS2323:     Type 'string' is not assignable to type 'number'.
     var e: ParserFunc = parsers.readline(); // ok

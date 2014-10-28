@@ -3181,19 +3181,18 @@ module ts {
             source: Type,
             target: Type,
             errorNode: Node,
-            chainedMessage?: DiagnosticMessage,
-            terminalMessage?: DiagnosticMessage,
+            headMessage?: DiagnosticMessage,
             containingMessageChain?: DiagnosticMessageChain): boolean {
 
-            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, chainedMessage, terminalMessage, containingMessageChain);
+            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
         }
 
         function isTypeAssignableTo(source: Type, target: Type): boolean {
             return checkTypeAssignableTo(source, target, /*errorNode*/ undefined);
         }
 
-        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, chainedMessage?: DiagnosticMessage, terminalMessage?: DiagnosticMessage): boolean {
-            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, chainedMessage, terminalMessage);
+        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage): boolean {
+            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage);
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<boolean>): boolean {
@@ -3237,7 +3236,7 @@ module ts {
                             var typeName2 = typeToString(base);
 
                             var errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
-                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2_Colon, typeToString(type), typeName1, typeName2);
+                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
                             addDiagnostic(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, program.getCompilerHost().getNewLine()));
                         }
                     }
@@ -3272,8 +3271,7 @@ module ts {
             target: Type,
             relation: Map<boolean>,
             errorNode: Node,
-            chainedMessage?: DiagnosticMessage,
-            terminalMessage?: DiagnosticMessage,
+            headMessage?: DiagnosticMessage,
             containingMessageChain?: DiagnosticMessageChain): boolean {
 
             var errorInfo: DiagnosticMessageChain;
@@ -3285,7 +3283,7 @@ module ts {
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
-            var result = isRelatedToWithCustomErrors(source, target, errorNode !== undefined, chainedMessage, terminalMessage);
+            var result = isRelatedToWithCustomErrors(source, target, errorNode !== undefined, headMessage);
             if (overflow) {
                 error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
@@ -3302,10 +3300,10 @@ module ts {
             }
 
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean): boolean {
-                return isRelatedToWithCustomErrors(source, target, reportErrors, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                return isRelatedToWithCustomErrors(source, target, reportErrors, /*headMessage*/ undefined);
             }
 
-            function isRelatedToWithCustomErrors(source: Type, target: Type, reportErrors: boolean, chainedMessage: DiagnosticMessage, terminalMessage: DiagnosticMessage): boolean {
+            function isRelatedToWithCustomErrors(source: Type, target: Type, reportErrors: boolean, headMessage: DiagnosticMessage): boolean {
                 if (relation === identityRelation) {
                     // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                     if (source === target) return true;
@@ -3357,15 +3355,9 @@ module ts {
                     }
                 }
                 if (reportErrors) {
-                    // The error should end in a period when this is the deepest error in the chain
-                    // (when errorInfo is undefined). Otherwise, it has a colon before the nested
-                    // error.
-
-                    chainedMessage = chainedMessage || Diagnostics.Type_0_is_not_assignable_to_type_1_Colon;
-                    terminalMessage = terminalMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
-                    var diagnosticKey = errorInfo ? chainedMessage : terminalMessage;
-                    Debug.assert(diagnosticKey);
-                    reportError(diagnosticKey, typeToString(source), typeToString(target));
+                    headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
+                    Debug.assert(headMessage);
+                    reportError(headMessage, typeToString(source), typeToString(target));
                 }
                 return false;
             }
@@ -3545,7 +3537,7 @@ module ts {
                             }
                             if (!isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors)) {
                                 if (reportErrors) {
-                                    reportError(Diagnostics.Types_of_property_0_are_incompatible_Colon, symbolToString(targetProp));
+                                    reportError(Diagnostics.Types_of_property_0_are_incompatible, symbolToString(targetProp));
                                 }
                                 return false;
                             }
@@ -3651,7 +3643,7 @@ module ts {
                     if (!isRelatedTo(s, t, reportErrors)) {
                         if (!isRelatedTo(t, s, false)) {
                             if (reportErrors) {
-                                reportError(Diagnostics.Types_of_parameters_0_and_1_are_incompatible_Colon,
+                                reportError(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
                                     source.parameters[i < sourceMax ? i : sourceMax].name,
                                     target.parameters[i < targetMax ? i : targetMax].name);
                             }
@@ -3695,7 +3687,7 @@ module ts {
                     }
                     if (!isRelatedTo(sourceType, targetType, reportErrors)) {
                         if (reportErrors) {
-                            reportError(Diagnostics.Index_signatures_are_incompatible_Colon);
+                            reportError(Diagnostics.Index_signatures_are_incompatible);
                         }
                         return false;
                     }
@@ -3726,7 +3718,7 @@ module ts {
                     }
                     if (!compatible) {
                         if (reportErrors) {
-                            reportError(Diagnostics.Index_signatures_are_incompatible_Colon);
+                            reportError(Diagnostics.Index_signatures_are_incompatible);
                         }
                         return false;
                     }
@@ -3819,8 +3811,7 @@ module ts {
 
             // In the following errors, the {1} slot is before the {0} slot because checkTypeSubtypeOf supplies the
             // subtype as the first argument to the error
-            checkTypeSubtypeOf(bestSupertypeDownfallType, bestSupertype, errorLocation, 
-                Diagnostics.Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0_Colon,
+            checkTypeSubtypeOf(bestSupertypeDownfallType, bestSupertype, errorLocation,
                 Diagnostics.Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0,
                 errorMessageChainHead);
         }
@@ -5209,7 +5200,7 @@ module ts {
                     var constraint = getConstraintOfTypeParameter(typeParameters[i]);
                     if (constraint) {
                         typeArgumentsAreAssignable = checkTypeAssignableTo(typeArgument, constraint, reportErrors ? typeArgNode : undefined,
-                                Diagnostics.Type_0_does_not_satisfy_the_constraint_1_Colon, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                                Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                     }
                 }
             }
@@ -5230,7 +5221,6 @@ module ts {
                         checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                     // Use argument expression as error location when reporting errors
                     var isValidArgument = checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
-                        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1,
                         Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1);
                     if (!isValidArgument) {
                         return false;
@@ -5330,7 +5320,7 @@ module ts {
                     var inferenceCandidates = resultOfFailedInference.inferences[resultOfFailedInference.failedTypeParameterIndex];
 
                     var diagnosticChainHead = chainDiagnosticMessages(/*details*/ undefined, // details will be provided by call to reportNoCommonSupertypeError
-                        Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly_Colon,
+                        Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
                         typeToString(failedTypeParameter));
 
                     reportNoCommonSupertypeError(inferenceCandidates, node.func, diagnosticChainHead);
@@ -5607,7 +5597,7 @@ module ts {
             if (fullTypeCheck && targetType !== unknownType) {
                 var widenedType = getWidenedType(exprType, /*supressNoImplicitAnyErrors*/ true);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
-                    checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other_Colon, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
+                    checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
             }
             return targetType;
@@ -5788,7 +5778,7 @@ module ts {
             else {
                 var exprType = checkExpression(node.body);
                 if (node.type) {
-                    checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, undefined, undefined);
+                    checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*headMessage*/ undefined);
                 }
                 checkFunctionExpressionBodies(node.body);
             }
@@ -6094,7 +6084,7 @@ module ts {
                     // Use default messages
                     if (ok) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-                        checkTypeAssignableTo(valueType, leftType, node.left, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                        checkTypeAssignableTo(valueType, leftType, node.left, /*headMessage*/ undefined);
                     }
                 }
             }
@@ -6475,7 +6465,7 @@ module ts {
                     var constraint = getConstraintOfTypeParameter((<TypeReference>type).target.typeParameters[i]);
                     if (fullTypeCheck && constraint) {
                         var typeArgument = (<TypeReference>type).typeArguments[i];
-                        checkTypeAssignableTo(typeArgument, constraint, node, Diagnostics.Type_0_does_not_satisfy_the_constraint_1_Colon, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                        checkTypeAssignableTo(typeArgument, constraint, node, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                     }
                 }
             }
@@ -7117,7 +7107,7 @@ module ts {
                 if (node.initializer) {
                     if (!(getNodeLinks(node.initializer).flags & NodeCheckFlags.TypeChecked)) {
                         // Use default messages
-                        checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                        checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*headMessage*/ undefined);
                     }
                     checkCollisionWithConstDeclarations(node);
                 }
@@ -7230,7 +7220,7 @@ module ts {
                             func.type ||
                             (func.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(<AccessorDeclaration>getDeclarationOfKind(func.symbol, SyntaxKind.SetAccessor)));
                         if (checkAssignability) {
-                            checkTypeAssignableTo(checkExpression(node.expression), returnType, node.expression, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                            checkTypeAssignableTo(checkExpression(node.expression), returnType, node.expression, /*headMessage*/ undefined);
                         }
                         else if (func.kind == SyntaxKind.Constructor) {
                             // constructor doesn't have explicit return type annotation and yet its return type is known - declaring type
@@ -7258,7 +7248,7 @@ module ts {
                     var caseType = checkExpression(clause.expression);
                     if (!isTypeAssignableTo(expressionType, caseType)) {
                         // check 'expressionType isAssignableTo caseType' failed, try the reversed check and report errors if it fails
-                        checkTypeAssignableTo(caseType, expressionType, clause.expression, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                        checkTypeAssignableTo(caseType, expressionType, clause.expression, /*headMessage*/ undefined);
                     }
                 }
                 checkBlock(clause);
@@ -7395,10 +7385,10 @@ module ts {
             if (type.baseTypes.length) {
                 if (fullTypeCheck) {
                     var baseType = type.baseTypes[0];
-                    checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Class_0_incorrectly_extends_base_class_1_Colon, Diagnostics.Class_0_incorrectly_extends_base_class_1);
+                    checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     var staticBaseType = getTypeOfSymbol(baseType.symbol);
                     checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name,
-                        Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1_Colon, Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+                        Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
                     if (baseType.symbol !== resolveEntityName(node, node.baseType.typeName, SymbolFlags.Value)) {
                         error(node.baseType, Diagnostics.Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0, typeToString(baseType));
                     }
@@ -7417,7 +7407,7 @@ module ts {
                         if (t !== unknownType) {
                             var declaredType = (t.flags & TypeFlags.Reference) ? (<TypeReference>t).target : t;
                             if (declaredType.flags & (TypeFlags.Class | TypeFlags.Interface)) {
-                                checkTypeAssignableTo(type, t, node.name, Diagnostics.Class_0_incorrectly_implements_interface_1_Colon, Diagnostics.Class_0_incorrectly_implements_interface_1);
+                                checkTypeAssignableTo(type, t, node.name, Diagnostics.Class_0_incorrectly_implements_interface_1);
                             }
                             else {
                                 error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
@@ -7562,7 +7552,7 @@ module ts {
                     // run subsequent checks only if first set succeeded
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
                         forEach(type.baseTypes, baseType => {
-                            checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1_Colon, Diagnostics.Interface_0_incorrectly_extends_interface_1);
+                            checkTypeAssignableTo(type, baseType, node.name , Diagnostics.Interface_0_incorrectly_extends_interface_1);
                         });
                         checkIndexConstraints(type);
                     }
@@ -7614,7 +7604,7 @@ module ts {
                             // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
                             // Also, we do not need to check this for ambients because there is already
                             // a syntax error if it is not a constant.
-                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
                         }
                     }
                     else if (ambient) {

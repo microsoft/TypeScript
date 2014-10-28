@@ -1,4 +1,4 @@
-tests/cases/compiler/interfaceImplementation4.ts(8,7): error TS2421: Class 'C5' incorrectly implements interface 'I1':
+tests/cases/compiler/interfaceImplementation4.ts(8,7): error TS2420: Class 'C5' incorrectly implements interface 'I1'.
   Property 'iObj' is missing in type 'C5'.
 
 
@@ -12,8 +12,8 @@ tests/cases/compiler/interfaceImplementation4.ts(8,7): error TS2421: Class 'C5' 
     
     class C5 implements I1 {
           ~~
-!!! error TS2421: Class 'C5' incorrectly implements interface 'I1':
-!!! error TS2421:   Property 'iObj' is missing in type 'C5'.
+!!! error TS2420: Class 'C5' incorrectly implements interface 'I1'.
+!!! error TS2420:   Property 'iObj' is missing in type 'C5'.
         public iNum:number;
         public iAny:any;
         public iFn() { }

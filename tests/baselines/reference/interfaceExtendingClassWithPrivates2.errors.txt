@@ -1,8 +1,8 @@
-tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts(9,11): error TS2320: Interface 'I3' cannot simultaneously extend types 'Foo' and 'Bar':
+tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts(9,11): error TS2320: Interface 'I3' cannot simultaneously extend types 'Foo' and 'Bar'.
   Named properties 'x' of types 'Foo' and 'Bar' are not identical.
-tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts(12,11): error TS2429: Interface 'I4' incorrectly extends interface 'Bar':
+tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts(12,11): error TS2430: Interface 'I4' incorrectly extends interface 'Bar'.
   Property 'x' is private in type 'Bar' but not in type 'I4'.
-tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts(12,11): error TS2429: Interface 'I4' incorrectly extends interface 'Foo':
+tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts(12,11): error TS2430: Interface 'I4' incorrectly extends interface 'Foo'.
   Property 'x' is private in type 'Foo' but not in type 'I4'.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts(26,10): error TS2341: Property 'x' is private and only accessible within class 'Foo'.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts(27,10): error TS2341: Property 'y' is private and only accessible within class 'Baz'.
@@ -19,17 +19,17 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtending
     
     interface I3 extends Foo, Bar { // error
               ~~
-!!! error TS2320: Interface 'I3' cannot simultaneously extend types 'Foo' and 'Bar':
+!!! error TS2320: Interface 'I3' cannot simultaneously extend types 'Foo' and 'Bar'.
 !!! error TS2320:   Named properties 'x' of types 'Foo' and 'Bar' are not identical.
     }
     
     interface I4 extends Foo, Bar { // error
               ~~
-!!! error TS2429: Interface 'I4' incorrectly extends interface 'Bar':
-!!! error TS2429:   Property 'x' is private in type 'Bar' but not in type 'I4'.
+!!! error TS2430: Interface 'I4' incorrectly extends interface 'Bar'.
+!!! error TS2430:   Property 'x' is private in type 'Bar' but not in type 'I4'.
               ~~
-!!! error TS2429: Interface 'I4' incorrectly extends interface 'Foo':
-!!! error TS2429:   Property 'x' is private in type 'Foo' but not in type 'I4'.
+!!! error TS2430: Interface 'I4' incorrectly extends interface 'Foo'.
+!!! error TS2430:   Property 'x' is private in type 'Foo' but not in type 'I4'.
         x: string;
     }
     
