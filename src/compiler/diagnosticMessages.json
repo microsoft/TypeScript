@@ -1409,13 +1409,22 @@
         "category": "Error",
         "code": 4078
     },
-
-    
+    "Enum declarations must all be const or non-const.": {
+        "category": "Error",
+        "code": 4079
+    },
+    "In 'const' enum declarations member initializer must be constant expression.": {
+        "category": "Error",
+        "code": 4079
+    },
+    "'const' enums can only be used in property access expressions.": {
+        "category": "Error",
+        "code": 4079
+    },    
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
     },
-
     "Cannot find the common subdirectory path for the input files.": {
         "category": "Error",
         "code": 5009
@@ -1487,10 +1496,6 @@
     "Print the compiler's version.": {
         "category": "Message",
         "code": 6019
-    },
-    "Propagate constant values in enum member initializers.": {
-        "category": "Message",
-        "code": 6020
     },
     "Syntax: {0}": {
         "category": "Message",

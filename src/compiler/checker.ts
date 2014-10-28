@@ -6152,6 +6152,19 @@ module ts {
                     }
                 }
             }
+
+            if (type.flags & (TypeFlags.ObjectType | TypeFlags.Anonymous) &&
+                type.symbol &&
+                (type.symbol.flags & SymbolFlags.Enum) &&
+                isConstEnumDeclaration(<EnumDeclaration>type.symbol.valueDeclaration)) {
+                // enum object type for const enums are only permitted in as 'left' in property access and 'object' in indexed access
+                var ok =
+                    (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).left === node) ||
+                    (node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).object === node);
+                if (!ok) {
+                    error(node, Diagnostics.const_enums_can_only_be_used_in_property_access_expressions);
+                }
+            }
             return type;
         }
 
@@ -7590,6 +7603,7 @@ module ts {
                 var enumType = getDeclaredTypeOfSymbol(enumSymbol);
                 var autoValue = 0;
                 var ambient = isInAmbientContext(node);
+                var enumIsConst = isConstEnumDeclaration(node);
 
                 forEach(node.members, member => {
                     if(isNumericName(member.name.text)) {
@@ -7597,16 +7611,21 @@ module ts {
                     }
                     var initializer = member.initializer;
                     if (initializer) {
-                        autoValue = getConstantValueForEnumMemberInitializer(initializer);
-                        if (autoValue === undefined && !ambient) {
-                            // Only here do we need to check that the initializer is assignable to the enum type.
-                            // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
-                            // Also, we do not need to check this for ambients because there is already
-                            // a syntax error if it is not a constant.
-                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                        autoValue = getConstantValueForEnumMemberInitializer(initializer, enumIsConst);
+                        if (autoValue === undefined) {
+                            if (enumIsConst) {
+                                error(initializer, Diagnostics.In_const_enum_declarations_member_initializer_must_be_constant_expression);
+                            }
+                            else if (!ambient) {
+                                // Only here do we need to check that the initializer is assignable to the enum type.
+                                // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
+                                // Also, we do not need to check this for ambients because there is already
+                                // a syntax error if it is not a constant.
+                                checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                            }
                         }
                     }
-                    else if (ambient) {
+                    else if (ambient && !enumIsConst) {
                         autoValue = undefined;
                     }
 
@@ -7618,7 +7637,7 @@ module ts {
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             }
 
-            function getConstantValueForEnumMemberInitializer(initializer: Expression): number {
+            function getConstantValueForEnumMemberInitializer(initializer: Expression, enumIsConst: boolean): number {
                 return evalConstant(initializer);
 
                 function evalConstant(e: Node): number {
@@ -7631,11 +7650,11 @@ module ts {
                             switch ((<UnaryExpression>e).operator) {
                                 case SyntaxKind.PlusToken: return value;
                                 case SyntaxKind.MinusToken: return -value;
-                                case SyntaxKind.TildeToken: return compilerOptions.propagateEnumConstants ? ~value : undefined;
+                                case SyntaxKind.TildeToken: return enumIsConst ? ~value : undefined;
                             }
                             return undefined;
                         case SyntaxKind.BinaryExpression:
-                            if (!compilerOptions.propagateEnumConstants) {
+                            if (!enumIsConst) {
                                 return undefined;
                             }
 
@@ -7655,14 +7674,20 @@ module ts {
                                 case SyntaxKind.GreaterThanGreaterThanToken: return left >> right;
                                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken: return left >>> right;
                                 case SyntaxKind.LessThanLessThanToken: return left << right;
+                                case SyntaxKind.AsteriskToken: return left * right;
+                                case SyntaxKind.SlashToken: return left / right;
+                                case SyntaxKind.PercentToken: return left % right;
+                                case SyntaxKind.CaretToken: return left ^ right;
                             }
                             return undefined;
                         case SyntaxKind.NumericLiteral:
                             return +(<LiteralExpression>e).text;
+                        case SyntaxKind.ParenExpression:
+                            return enumIsConst ? evalConstant((<ParenExpression>e).expression) : undefined;
                         case SyntaxKind.Identifier:
                         case SyntaxKind.IndexedAccess:
                         case SyntaxKind.PropertyAccess:
-                            if (!compilerOptions.propagateEnumConstants) {
+                            if (!enumIsConst) {
                                 return undefined;
                             }
 
@@ -7738,6 +7763,21 @@ module ts {
             var enumSymbol = getSymbolOfNode(node);
             var firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
             if (node === firstDeclaration) {
+                if (enumSymbol.declarations.length > 1) {
+                    var enumIsConst = isConstEnumDeclaration(node);
+                    // check that const is places\omitted on all enum declarations
+                    forEach(enumSymbol.declarations, decl => {
+                        if (decl.kind !== SyntaxKind.EnumDeclaration) {
+                            // TODO(vladima): do we want to allow merging for const enum declarations
+                            return;
+                        }
+
+                        if (isConstEnumDeclaration(<EnumDeclaration>decl) !== enumIsConst) {
+                            error(decl.name, Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
+                        }
+                    });
+                }
+
                 var seenEnumMissingInitialInitializer = false;
                 forEach(enumSymbol.declarations, declaration => {
                     // return true if we hit a violation of the rule, false otherwise

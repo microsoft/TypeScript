@@ -1760,6 +1760,9 @@ module ts {
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
+                if (isConstEnumDeclaration(node)) {
+                    return;
+                }
                 emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
@@ -2570,6 +2573,9 @@ module ts {
                 if (resolver.isDeclarationVisible(node)) {
                     emitJsDocComments(node);
                     emitDeclarationFlags(node);
+                    if (isConstEnumDeclaration(node)) {
+                        write("const ")
+                    }
                     write("enum ");
                     emitSourceTextOfNode(node.name);
                     write(" {");

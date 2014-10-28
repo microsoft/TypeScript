@@ -1,10 +1,8 @@
-// @propagateEnumConstants: true
-
-enum Enum1 {
+const enum Enum1 {
    A0 = 100,
 }
 
-enum Enum1 {
+const enum Enum1 {
     // correct cases
     A,
     B,
@@ -48,7 +46,7 @@ enum Enum1 {
 module A {
     export module B {
         export module C {
-            export enum E {
+            export const enum E {
                 V1 = 1,
                 V2 = A.B.C.E.V1 + 100
             }
@@ -59,7 +57,7 @@ module A {
 module A {
     export module B {
         export module C {
-            export enum E {
+            export const enum E {
                 V3 = A.B.C.E["V2"] + 200,
             }
         }

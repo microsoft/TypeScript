@@ -749,9 +749,6 @@ module Harness {
                         case 'usecasesensitivefilenames':
                             useCaseSensitiveFileNames = setting.value === 'true';
                             break;
-                        case 'propagateenumconstants':
-                            options.propagateEnumConstants = setting.value === 'true';
-                            break;
 
                         case 'mapsourcefiles':
                         case 'maproot':
@@ -1148,7 +1145,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "propagateenumconstants"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

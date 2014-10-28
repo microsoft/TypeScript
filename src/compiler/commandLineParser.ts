@@ -118,11 +118,6 @@ module ts {
             shortName: "w",
             type: "boolean",
             description: Diagnostics.Watch_input_files,
-        },
-        {
-            name: "propagateEnumConstants",
-            type: "boolean",
-            description: Diagnostics.Propagate_constant_values_in_enum_member_initializers
         }
     ];
 

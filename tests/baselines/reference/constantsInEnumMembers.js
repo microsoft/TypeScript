@@ -1,10 +1,9 @@
 //// [constantsInEnumMembers.ts]
-
-enum Enum1 {
+const enum Enum1 {
    A0 = 100,
 }
 
-enum Enum1 {
+const enum Enum1 {
     // correct cases
     A,
     B,
@@ -48,7 +47,7 @@ enum Enum1 {
 module A {
     export module B {
         export module C {
-            export enum E {
+            export const enum E {
                 V1 = 1,
                 V2 = A.B.C.E.V1 + 100
             }
@@ -59,7 +58,7 @@ module A {
 module A {
     export module B {
         export module C {
-            export enum E {
+            export const enum E {
                 V3 = A.B.C.E["V2"] + 200,
             }
         }
@@ -112,60 +111,12 @@ function bar(e: A.B.C.E): number {
 }
 
 //// [constantsInEnumMembers.js]
-var Enum1;
-(function (Enum1) {
-    Enum1[Enum1["A0"] = 100] = "A0";
-})(Enum1 || (Enum1 = {}));
-var Enum1;
-(function (Enum1) {
-    // correct cases
-    Enum1[Enum1["A"] = 0] = "A";
-    Enum1[Enum1["B"] = 1] = "B";
-    Enum1[Enum1["C"] = 10] = "C";
-    Enum1[Enum1["D"] = A + B] = "D";
-    Enum1[Enum1["E"] = A + 1] = "E";
-    Enum1[Enum1["F"] = 1 + A] = "F";
-    Enum1[Enum1["G"] = 1 + 1] = "G";
-    Enum1[Enum1["H"] = A - B] = "H";
-    Enum1[Enum1["I"] = A - 1] = "I";
-    Enum1[Enum1["J"] = 1 - A] = "J";
-    Enum1[Enum1["K"] = 1 - 1] = "K";
-    Enum1[Enum1["L"] = ~D] = "L";
-    Enum1[Enum1["M"] = E << B] = "M";
-    Enum1[Enum1["N"] = E << 1] = "N";
-    Enum1[Enum1["O"] = E >> B] = "O";
-    Enum1[Enum1["P"] = E >> 1] = "P";
-    Enum1[Enum1["Q"] = -D] = "Q";
-    Enum1[Enum1["R"] = C & 5] = "R";
-    Enum1[Enum1["S"] = 5 & C] = "S";
-    Enum1[Enum1["T"] = C | D] = "T";
-    Enum1[Enum1["U"] = C | 1] = "U";
-    Enum1[Enum1["V"] = 10 | D] = "V";
-    Enum1[Enum1["W"] = Enum1.V] = "W";
-    // correct cases: reference to the enum member from different enum declaration
-    Enum1[Enum1["W1"] = A0] = "W1";
-    Enum1[Enum1["W2"] = Enum1.A0] = "W2";
-    Enum1[Enum1["W3"] = Enum1["A0"]] = "W3";
-    Enum1[Enum1["W4"] = Enum1["W"]] = "W4";
-    // illegal case
-    // forward reference to the element of the same enum
-    Enum1[Enum1["X"] = Enum1.Y] = "X";
-    // forward reference to the element of the same enum
-    Enum1[Enum1["Y"] = 100 /* Z */] = "Y";
-    Enum1[Enum1["Y1"] = Enum1["Z"]] = "Y1";
-    Enum1[Enum1["Z"] = 100] = "Z";
-})(Enum1 || (Enum1 = {}));
 var A;
 (function (A) {
     var B;
     (function (B) {
         var C;
         (function (C) {
-            (function (E) {
-                E[E["V1"] = 1] = "V1";
-                E[E["V2"] = A.B.C.E.V1 + 100] = "V2";
-            })(C.E || (C.E = {}));
-            var E = C.E;
         })(C = B.C || (B.C = {}));
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
@@ -175,10 +126,6 @@ var A;
     (function (B) {
         var C;
         (function (C) {
-            (function (E) {
-                E[E["V3"] = A.B.C.E["V2"] + 200] = "V3";
-            })(C.E || (C.E = {}));
-            var E = C.E;
         })(C = B.C || (B.C = {}));
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
