@@ -4255,15 +4255,6 @@ module ts {
             var objectType = checkExpression(node.object);
             var indexType = checkExpression(node.index);
             if (objectType === unknownType) return unknownType;
-                
-            // if we are making an indexed access into something like an enum, module, or object
-            // make sure we set the resolved symbol here so that we can use it for checking later
-            if ((<any>node.index).text) {
-                var type = checkExpression(node.object);
-                var apparentType = getApparentType(getWidenedType(type));
-                var prop = getPropertyOfType(apparentType, (<any>node.index).text);
-                getNodeLinks(node).resolvedSymbol = prop; 
-            }
 
             // TypeScript 1.0 spec (April 2014): 4.10 Property Access
             // - If IndexExpr is a string literal or a numeric literal and ObjExpr's apparent type has a property with the name 
@@ -4283,7 +4274,9 @@ module ts {
             if (node.index.kind === SyntaxKind.StringLiteral || node.index.kind === SyntaxKind.NumericLiteral) {
                 var name = (<LiteralExpression>node.index).text;
                 var prop = getPropertyOfApparentType(apparentType, name);
+
                 if (prop) {
+                    getNodeLinks(node).resolvedSymbol = prop; 
                     return getTypeOfSymbol(prop);
                 }
             }
