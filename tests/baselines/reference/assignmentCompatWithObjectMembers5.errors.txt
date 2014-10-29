@@ -1,6 +1,6 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts(13,1): error TS2322: Type 'I' is not assignable to type 'C':
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts(13,1): error TS2323: Type 'I' is not assignable to type 'C'.
   Property 'foo' is missing in type 'I'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts(14,1): error TS2322: Type 'C' is not assignable to type 'I':
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts(14,1): error TS2323: Type 'C' is not assignable to type 'I'.
   Property 'fooo' is missing in type 'C'.
 
 
@@ -19,9 +19,9 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     
     c = i; // error
     ~
-!!! error TS2322: Type 'I' is not assignable to type 'C':
-!!! error TS2322:   Property 'foo' is missing in type 'I'.
+!!! error TS2323: Type 'I' is not assignable to type 'C'.
+!!! error TS2323:   Property 'foo' is missing in type 'I'.
     i = c; // error
     ~
-!!! error TS2322: Type 'C' is not assignable to type 'I':
-!!! error TS2322:   Property 'fooo' is missing in type 'C'.
+!!! error TS2323: Type 'C' is not assignable to type 'I'.
+!!! error TS2323:   Property 'fooo' is missing in type 'C'.

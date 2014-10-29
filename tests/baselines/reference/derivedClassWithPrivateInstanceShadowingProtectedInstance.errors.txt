@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingProtectedInstance.ts(13,7): error TS2416: Class 'Derived' incorrectly extends base class 'Base':
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingProtectedInstance.ts(13,7): error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
   Property 'x' is private in type 'Derived' but not in type 'Base'.
 
 
@@ -17,8 +17,8 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     // error, not a subtype
     class Derived extends Base {
           ~~~~~~~
-!!! error TS2416: Class 'Derived' incorrectly extends base class 'Base':
-!!! error TS2416:   Property 'x' is private in type 'Derived' but not in type 'Base'.
+!!! error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
+!!! error TS2415:   Property 'x' is private in type 'Derived' but not in type 'Base'.
         private x: string; 
         private fn(): string {
             return '';

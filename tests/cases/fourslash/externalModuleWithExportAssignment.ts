@@ -37,7 +37,7 @@ verify.quickInfoIs("(var) a: {\n    (): a1.connectExport;\n    test1: a1.connect
 
 goTo.marker('3');
 verify.quickInfoIs("(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
-verify.completionListContains("test1", "(property) test1: a1.connectModule", undefined);
+verify.completionListContains("test1", "(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
 verify.completionListContains("test2", "(method) test2(): a1.connectModule", undefined);
 verify.not.completionListContains("connectModule");
 verify.not.completionListContains("connectExport");
@@ -59,7 +59,7 @@ verify.quickInfoIs("(var) r2: a1.connectExport", undefined);
 
 goTo.marker('9');
 verify.quickInfoIs("(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
-verify.completionListContains("test1", "(property) test1: a1.connectModule", undefined);
+verify.completionListContains("test1", "(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
 verify.completionListContains("test2", "(method) test2(): a1.connectModule", undefined);
 verify.completionListContains("connectModule");
 verify.completionListContains("connectExport");

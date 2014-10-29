@@ -1,5 +1,5 @@
-tests/cases/compiler/arrayCast.ts(3,1): error TS2353: Neither type '{ foo: string; }[]' nor type '{ id: number; }[]' is assignable to the other:
-  Type '{ foo: string; }' is not assignable to type '{ id: number; }':
+tests/cases/compiler/arrayCast.ts(3,1): error TS2352: Neither type '{ foo: string; }[]' nor type '{ id: number; }[]' is assignable to the other.
+  Type '{ foo: string; }' is not assignable to type '{ id: number; }'.
     Property 'id' is missing in type '{ foo: string; }'.
 
 
@@ -8,9 +8,9 @@ tests/cases/compiler/arrayCast.ts(3,1): error TS2353: Neither type '{ foo: strin
     // has type { foo: string }[], which is not assignable to { id: number }[].
     <{ id: number; }[]>[{ foo: "s" }];
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2353: Neither type '{ foo: string; }[]' nor type '{ id: number; }[]' is assignable to the other:
-!!! error TS2353:   Type '{ foo: string; }' is not assignable to type '{ id: number; }':
-!!! error TS2353:     Property 'id' is missing in type '{ foo: string; }'.
+!!! error TS2352: Neither type '{ foo: string; }[]' nor type '{ id: number; }[]' is assignable to the other.
+!!! error TS2352:   Type '{ foo: string; }' is not assignable to type '{ id: number; }'.
+!!! error TS2352:     Property 'id' is missing in type '{ foo: string; }'.
     
     // Should succeed, as the {} element causes the type of the array to be {}[]
     <{ id: number; }[]>[{ foo: "s" }, {}]; 

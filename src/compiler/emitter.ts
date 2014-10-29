@@ -2569,6 +2569,32 @@ module ts {
                 }
             }
 
+            function emitTypeAliasDeclaration(node: TypeAliasDeclaration) {
+                if (resolver.isDeclarationVisible(node)) {
+                    emitJsDocComments(node);
+                    emitDeclarationFlags(node);
+                    write("type ");
+                    emitSourceTextOfNode(node.name);
+                    write(" = ");
+                    getSymbolVisibilityDiagnosticMessage = getTypeAliasDeclarationVisibilityError;
+                    resolver.writeTypeAtLocation(node.type, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                    write(";");
+                    writeLine();
+                }
+                function getTypeAliasDeclarationVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                    var diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Exported_type_alias_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics.Exported_type_alias_0_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1;
+                    return {
+                        diagnosticMessage: diagnosticMessage,
+                        errorNode: node,
+                        typeName: node.name
+                    };
+                }
+            }
+
             function emitEnumDeclaration(node: EnumDeclaration) {
                 if (resolver.isDeclarationVisible(node)) {
                     emitJsDocComments(node);
@@ -3169,6 +3195,8 @@ module ts {
                         return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                     case SyntaxKind.ClassDeclaration:
                         return emitClassDeclaration(<ClassDeclaration>node);
+                    case SyntaxKind.TypeAliasDeclaration:
+                        return emitTypeAliasDeclaration(<TypeAliasDeclaration>node);
                     case SyntaxKind.EnumMember:
                         return emitEnumMemberDeclaration(<EnumMember>node);
                     case SyntaxKind.EnumDeclaration:

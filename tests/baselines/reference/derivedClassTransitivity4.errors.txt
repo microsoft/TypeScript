@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity4.ts(18,1): error TS2322: Type 'E' is not assignable to type 'C':
-  Types of property 'foo' are incompatible:
-    Type '(x?: string) => void' is not assignable to type '(x: number) => void':
-      Types of parameters 'x' and 'x' are incompatible:
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity4.ts(18,1): error TS2323: Type 'E' is not assignable to type 'C'.
+  Types of property 'foo' are incompatible.
+    Type '(x?: string) => void' is not assignable to type '(x: number) => void'.
+      Types of parameters 'x' and 'x' are incompatible.
         Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity4.ts(19,9): error TS2445: Property 'foo' is protected and only accessible within class 'C' and its subclasses.
 
@@ -26,11 +26,11 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTra
     var e: E;
     c = e;
     ~
-!!! error TS2322: Type 'E' is not assignable to type 'C':
-!!! error TS2322:   Types of property 'foo' are incompatible:
-!!! error TS2322:     Type '(x?: string) => void' is not assignable to type '(x: number) => void':
-!!! error TS2322:       Types of parameters 'x' and 'x' are incompatible:
-!!! error TS2322:         Type 'string' is not assignable to type 'number'.
+!!! error TS2323: Type 'E' is not assignable to type 'C'.
+!!! error TS2323:   Types of property 'foo' are incompatible.
+!!! error TS2323:     Type '(x?: string) => void' is not assignable to type '(x: number) => void'.
+!!! error TS2323:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2323:         Type 'string' is not assignable to type 'number'.
     var r = c.foo(1);
             ~~~~~
 !!! error TS2445: Property 'foo' is protected and only accessible within class 'C' and its subclasses.

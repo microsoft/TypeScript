@@ -1,4 +1,4 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts(18,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts(18,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate 'Derived' is not a valid type argument because it is not a supertype of candidate 'Derived2'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts(20,29): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 
@@ -23,7 +23,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
     
     var r1 = f({ x: new Derived(), y: new Derived2() }); // error because neither is supertype of the other
              ~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
 !!! error TS2453:   Type argument candidate 'Derived' is not a valid type argument because it is not a supertype of candidate 'Derived2'.
     
     function f2<T extends Base, U extends { x: T; y: T }>(a: U) {

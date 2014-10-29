@@ -1,5 +1,5 @@
-tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts(9,7): error TS2416: Class 'Derived<U>' incorrectly extends base class 'Base':
-  Types of property 'x' are incompatible:
+tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts(9,7): error TS2415: Class 'Derived<U>' incorrectly extends base class 'Base'.
+  Types of property 'x' are incompatible.
     Type 'U' is not assignable to type 'string'.
 
 
@@ -14,8 +14,8 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSuperty
     // is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
     class Derived<U extends String> extends Base { // error
           ~~~~~~~
-!!! error TS2416: Class 'Derived<U>' incorrectly extends base class 'Base':
-!!! error TS2416:   Types of property 'x' are incompatible:
-!!! error TS2416:     Type 'U' is not assignable to type 'string'.
+!!! error TS2415: Class 'Derived<U>' incorrectly extends base class 'Base'.
+!!! error TS2415:   Types of property 'x' are incompatible.
+!!! error TS2415:     Type 'U' is not assignable to type 'string'.
         x: U;
     }

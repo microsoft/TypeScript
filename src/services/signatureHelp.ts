@@ -226,12 +226,12 @@ module ts.SignatureHelp {
                 };
             }
 
-            if (node.kind === SyntaxKind.GreaterThanToken
-                || node.kind === SyntaxKind.CloseParenToken
-                || node === parent.func) {
-                return undefined;
-            }
-
+            // findListItemInfo can return undefined if we are not in parent's argument list
+            // or type argument list. This includes cases where the cursor is:
+            //   - To the right of the closing paren
+            //   - Between the type arguments and the arguments (greater than token)
+            //   - On the target of the call (parent.func)
+            //   - On the 'new' keyword in a 'new' expression
             return findListItemInfo(node);
         }
 

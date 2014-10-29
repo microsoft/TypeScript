@@ -1,8 +1,8 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts(15,7): error TS2416: Class 'B' incorrectly extends base class 'A':
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts(15,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
   Property 'foo' is private in type 'B' but not in type 'A'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts(23,7): error TS2416: Class 'B2' incorrectly extends base class 'A2':
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts(23,7): error TS2415: Class 'B2' incorrectly extends base class 'A2'.
   Property '1' is private in type 'B2' but not in type 'A2'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts(31,7): error TS2416: Class 'B3' incorrectly extends base class 'A3':
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts(31,7): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
   Property ''1'' is private in type 'B3' but not in type 'A3'.
 
 
@@ -23,8 +23,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     class B extends A {
           ~
-!!! error TS2416: Class 'B' incorrectly extends base class 'A':
-!!! error TS2416:   Property 'foo' is private in type 'B' but not in type 'A'.
+!!! error TS2415: Class 'B' incorrectly extends base class 'A'.
+!!! error TS2415:   Property 'foo' is private in type 'B' but not in type 'A'.
         private foo: Derived; // error
     }
     
@@ -34,8 +34,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     class B2 extends A2 {
           ~~
-!!! error TS2416: Class 'B2' incorrectly extends base class 'A2':
-!!! error TS2416:   Property '1' is private in type 'B2' but not in type 'A2'.
+!!! error TS2415: Class 'B2' incorrectly extends base class 'A2'.
+!!! error TS2415:   Property '1' is private in type 'B2' but not in type 'A2'.
         private 1: Derived; // error
     }
     
@@ -45,7 +45,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     class B3 extends A3 {
           ~~
-!!! error TS2416: Class 'B3' incorrectly extends base class 'A3':
-!!! error TS2416:   Property ''1'' is private in type 'B3' but not in type 'A3'.
+!!! error TS2415: Class 'B3' incorrectly extends base class 'A3'.
+!!! error TS2415:   Property ''1'' is private in type 'B3' but not in type 'A3'.
         private '1': Derived; // error
     }

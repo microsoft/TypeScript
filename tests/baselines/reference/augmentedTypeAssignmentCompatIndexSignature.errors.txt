@@ -1,6 +1,6 @@
-tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts(15,5): error TS2322: Type '{}' is not assignable to type '{ [x: number]: Foo; }':
+tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts(15,5): error TS2323: Type '{}' is not assignable to type '{ [x: number]: Foo; }'.
   Index signature is missing in type '{}'.
-tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts(19,5): error TS2322: Type '() => void' is not assignable to type '{ [x: number]: Bar; }':
+tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts(19,5): error TS2323: Type '() => void' is not assignable to type '{ [x: number]: Bar; }'.
   Index signature is missing in type '() => void'.
 
 
@@ -21,14 +21,14 @@ tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignatur
     
     var v1: {
         ~~
-!!! error TS2322: Type '{}' is not assignable to type '{ [x: number]: Foo; }':
-!!! error TS2322:   Index signature is missing in type '{}'.
+!!! error TS2323: Type '{}' is not assignable to type '{ [x: number]: Foo; }'.
+!!! error TS2323:   Index signature is missing in type '{}'.
         [n: number]: Foo
     } = o; // Should be allowed
     
     var v2: {
         ~~
-!!! error TS2322: Type '() => void' is not assignable to type '{ [x: number]: Bar; }':
-!!! error TS2322:   Index signature is missing in type '() => void'.
+!!! error TS2323: Type '() => void' is not assignable to type '{ [x: number]: Bar; }'.
+!!! error TS2323:   Index signature is missing in type '() => void'.
         [n: number]: Bar
     } = f; // Should be allowed

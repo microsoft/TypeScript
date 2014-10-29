@@ -1,4 +1,4 @@
-tests/cases/compiler/typeInferenceConflictingCandidates.ts(3,1): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+tests/cases/compiler/typeInferenceConflictingCandidates.ts(3,1): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
 
 
@@ -7,5 +7,5 @@ tests/cases/compiler/typeInferenceConflictingCandidates.ts(3,1): error TS2453: T
     
     g("", 3, a => a);
     ~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly:
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
 !!! error TS2453:   Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.

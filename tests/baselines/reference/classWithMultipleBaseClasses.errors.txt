@@ -1,4 +1,4 @@
-tests/cases/compiler/classWithMultipleBaseClasses.ts(18,7): error TS2421: Class 'D' incorrectly implements interface 'I':
+tests/cases/compiler/classWithMultipleBaseClasses.ts(18,7): error TS2420: Class 'D' incorrectly implements interface 'I'.
   Property 'foo' is missing in type 'D'.
 
 
@@ -22,8 +22,8 @@ tests/cases/compiler/classWithMultipleBaseClasses.ts(18,7): error TS2421: Class 
     
     class D implements I, J {
           ~
-!!! error TS2421: Class 'D' incorrectly implements interface 'I':
-!!! error TS2421:   Property 'foo' is missing in type 'D'.
+!!! error TS2420: Class 'D' incorrectly implements interface 'I'.
+!!! error TS2420:   Property 'foo' is missing in type 'D'.
         baz() { }
         bat() { }
     }
