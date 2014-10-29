@@ -94,6 +94,7 @@ var librarySourceMap = [
         { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "extensions.d.ts", "webworker.generated.d.ts"], },
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
         { target: "lib.d.ts", sources: ["core.d.ts", "extensions.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
+        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
