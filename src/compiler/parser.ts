@@ -647,7 +647,6 @@ module ts {
         isNoDefaultLib: boolean
     }
 
-    // TODO (yuisu) : add referencedFiles array for filling in
     export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
         var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
         var isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;

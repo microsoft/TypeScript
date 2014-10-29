@@ -3,7 +3,6 @@
 
 describe('PreProcessFile:', function () {
     function test(sourceText: string, readImportFile: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
-        debugger
         var resultPreProcess = ts.preProcessFile(sourceText, readImportFile);
 
         var resultIsLibFile = resultPreProcess.isLibFile;

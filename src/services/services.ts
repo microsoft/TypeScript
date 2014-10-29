@@ -1901,7 +1901,6 @@ module ts {
         };
     }
 
-    export var tripleSlashReferenceRegExp = /^(\/\/\/\s*<reference\s+path=)('|")(.+?)\2\s*(static=('|")(.+?)\5\s*)*\/>/;
     export function preProcessFile(sourceText: string, readImportFiles = true): PreProcessedFileInfo {
         var referencedFiles: FileReference[] = [];
         var importedFiles: FileReference[] = [];
@@ -1917,11 +1916,6 @@ module ts {
                     var fileReference = referencePathMatchResult.fileReference;
                     if (fileReference) {
                         referencedFiles.push(fileReference);
-                       /* referencedFiles.push({
-                            path: switchToForwardSlashes(normalizePath(fileReference.filename)),
-                            position: fileReference.pos,
-                            length: fileReference.end - fileReference.pos,
-                        }); */
                     }
                 }
             });
