@@ -1628,13 +1628,12 @@ module TypeScript.Scanner {
                 var diagnostic = _tokenDiagnostics[tokenDiagnosticsLength - 1];
                 if (diagnostic.start() >= position) {
                     tokenDiagnosticsLength--;
+                    _tokenDiagnostics.pop();
                 }
                 else {
                     break;
                 }
             }
-
-            _tokenDiagnostics.length = tokenDiagnosticsLength;
         }
 
         function resetToPosition(absolutePosition: number): void {
