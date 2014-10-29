@@ -1286,7 +1286,7 @@ module ts {
         return "";
     }
 
-    interface DisplayPartsSymbolWriter extends SymbolWriter {
+    export interface DisplayPartsSymbolWriter extends SymbolWriter {
         displayParts(): SymbolDisplayPart[];
     }
 
