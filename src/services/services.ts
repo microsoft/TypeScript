@@ -874,7 +874,7 @@ module ts {
 
         getEmitOutput(fileName: string): EmitOutput;
 
-        //getSyntaxTree(fileName: string): TypeScript.SyntaxTree;
+        getSourceFile(filename: string): SourceFile;
 
         dispose(): void;
     }
@@ -5247,6 +5247,7 @@ module ts {
             getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
             getEmitOutput: getEmitOutput,
             getSignatureAtPosition: getSignatureAtPosition,
+            getSourceFile: getSourceFile
         };
     }
 
