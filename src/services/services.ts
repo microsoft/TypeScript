@@ -71,8 +71,6 @@ module ts {
     }
 
     export interface SourceFile {
-        getSourceUnit(): TypeScript.SourceUnitSyntax;
-        getSyntaxTree(): TypeScript.SyntaxTree;
         getScriptSnapshot(): TypeScript.IScriptSnapshot;
         getNamedDeclarations(): Declaration[];
         update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
@@ -660,21 +658,11 @@ module ts {
         public languageVersion: ScriptTarget;
         public identifiers: Map<string>;
 
-        private syntaxTree: TypeScript.SyntaxTree;
         private scriptSnapshot: TypeScript.IScriptSnapshot;
         private namedDeclarations: Declaration[];
 
-        public getSourceUnit(): TypeScript.SourceUnitSyntax {
-            // If we don't have a script, create one from our parse tree.
-            return this.getSyntaxTree().sourceUnit();
-        }
-
         public getScriptSnapshot(): TypeScript.IScriptSnapshot {
             return this.scriptSnapshot;
-        }
-
-        public getLineMap(): TypeScript.LineMap {
-            return this.getSyntaxTree().lineMap();
         }
 
         public getNamedDeclarations() {
@@ -749,32 +737,11 @@ module ts {
             return this.namedDeclarations;
         }
 
-        public getSyntaxTree(): TypeScript.SyntaxTree {
-            if (!this.syntaxTree) {
-                var start = new Date().getTime();
-
-                this.syntaxTree = TypeScript.Parser.parse(
-                    this.filename, TypeScript.SimpleText.fromScriptSnapshot(this.scriptSnapshot), this.languageVersion, this.isDeclareFile());
-
-                var time = new Date().getTime() - start;
-
-                //TypeScript.syntaxTreeParseTime += time;
-            }
-
-            return this.syntaxTree;
-        }
-
         private isDeclareFile(): boolean {
             return TypeScript.isDTSFile(this.filename);
         }
 
         public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
-            // See if we are currently holding onto a syntax tree.  We may not be because we're 
-            // either a closed file, or we've just been lazy and haven't had to create the syntax
-            // tree yet.  Access the field instead of the method so we don't accidentally realize
-            // the old syntax tree.
-            var oldSyntaxTree = this.syntaxTree;
-
             if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
                 var oldText = this.scriptSnapshot;
                 var newText = scriptSnapshot;
@@ -792,21 +759,12 @@ module ts {
                 }
             }
 
-            var text = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
-
-            // If we don't have a text change, or we don't have an old syntax tree, then do a full
-            // parse.  Otherwise, do an incremental parse.
-            var newSyntaxTree = !textChangeRange || !oldSyntaxTree
-                ? TypeScript.Parser.parse(this.filename, text, this.languageVersion, TypeScript.isDTSFile(this.filename))
-                : TypeScript.IncrementalParser.parse(oldSyntaxTree, textChangeRange, text);
-
-            return SourceFileObject.createSourceFileObject(this.filename, scriptSnapshot, this.languageVersion, version, isOpen, newSyntaxTree);
+            return SourceFileObject.createSourceFileObject(this.filename, scriptSnapshot, this.languageVersion, version, isOpen);
         }
 
-        public static createSourceFileObject(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean, syntaxTree?: TypeScript.SyntaxTree) {
+        public static createSourceFileObject(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean) {
             var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
             newSourceFile.scriptSnapshot = scriptSnapshot;
-            newSourceFile.syntaxTree = syntaxTree;
             return newSourceFile;
         }
     }
@@ -1637,7 +1595,9 @@ module ts {
         private initialize(filename: string) {
             // ensure that both source file and syntax tree are either initialized or not initialized
             Debug.assert(!!this.currentFileSyntaxTree === !!this.currentSourceFile);
+            var start = new Date().getTime();
             this.hostCache = new HostCache(this.host);
+            this.host.log("SyntaxTreeCache.Initialize: new HostCache: " + (new Date().getTime() - start));
 
             var version = this.hostCache.getVersion(filename);
             var syntaxTree: TypeScript.SyntaxTree = null;
@@ -1645,22 +1605,37 @@ module ts {
 
             if (this.currentFileSyntaxTree === null || this.currentFilename !== filename) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
+                var start = new Date().getTime();
                 syntaxTree = this.createSyntaxTree(filename, scriptSnapshot);
-                sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true);
+                this.host.log("SyntaxTreeCache.Initialize: createSyntaxTree: " + (new Date().getTime() - start));
 
+                var start = new Date().getTime();
+                sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true);
+                this.host.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
+
+                var start = new Date().getTime();
                 fixupParentReferences(sourceFile);
+                this.host.log("SyntaxTreeCache.Initialize: fixupParentRefs : " + (new Date().getTime() - start));
             }
             else if (this.currentFileVersion !== version) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
+
+                var start = new Date().getTime();
                 syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot,
                     this.currentSourceFile.getScriptSnapshot(), this.currentFileSyntaxTree, this.currentFileVersion);
+                this.host.log("SyntaxTreeCache.Initialize: updateSyntaxTree: " + (new Date().getTime() - start));
 
                 var editRange = this.hostCache.getChangeRange(filename, this.currentFileVersion, this.currentSourceFile.getScriptSnapshot());
+
+                var start = new Date().getTime();
                 sourceFile = !editRange 
                     ? createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true)
                     : this.currentSourceFile.update(scriptSnapshot, version, /*isOpen*/ true, editRange);
+                this.host.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
 
+                var start = new Date().getTime();
                 fixupParentReferences(sourceFile);
+                this.host.log("SyntaxTreeCache.Initialize: fixupParentRefs : " + (new Date().getTime() - start));
             }
 
             if (syntaxTree !== null) {
@@ -5066,10 +5041,17 @@ module ts {
         function getIndentationAtPosition(filename: string, position: number, editorOptions: EditorOptions) {
             filename = TypeScript.switchToForwardSlashes(filename);
 
+            var start = new Date().getTime();
             var sourceFile = getCurrentSourceFile(filename);
+            host.log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
+
+            var start = new Date().getTime();
             var options = new TypeScript.FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
 
-            return formatting.SmartIndenter.getIndentation(position, sourceFile, options);
+            var result = formatting.SmartIndenter.getIndentation(position, sourceFile, options);
+            host.log("getIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
+
+            return result;
         }
 
         function getFormattingManager(filename: string, options: FormatCodeOptions) {
