@@ -59,7 +59,7 @@ module ts {
     ///
     // Note: This is being using by the host (VS) and is marshaled back and forth.
     // When changing this make sure the changes are reflected in the managed side as well
-    interface IFileReference {
+    export interface IFileReference {
         path: string;
         position: number;
         length: number;

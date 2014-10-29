@@ -136,10 +136,11 @@ module FourSlash {
        outDir: 'outDir',
        sourceMap: 'sourceMap',
        sourceRoot: 'sourceRoot',
+       resolveReference: 'ResolveReference',  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
     };
 
     // List of allowed metadata names
-    var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile];
+    var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile, testOptMetadataNames.resolveReference];
     var globalMetadataNames = [testOptMetadataNames.baselineFile,  testOptMetadataNames.declaration,
         testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
         testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
@@ -236,6 +237,25 @@ module FourSlash {
         throw new Error("Operation should be cancelled");
     }
 
+    // This function creates IScriptSnapshot object for testing getPreProcessedFileInfo
+    // Return object may lack some functionalities for other purposes.
+    function createScriptSnapShot(sourceText: string): TypeScript.IScriptSnapshot {
+        return {
+            getText: (start: number, end: number) => {
+                return sourceText.substr(start, end - start);
+            },
+            getLength: () => {
+                return sourceText.length;
+            },
+            getLineStartPositions: () => {
+                return <number[]>[];
+            },
+            getChangeRange: (oldSnapshot: TypeScript.IScriptSnapshot) => {
+                return <TypeScript.TextChangeRange>undefined;
+            }
+        };
+    }
+
     export class TestState {
         // Language service instance
         public languageServiceShimHost: Harness.LanguageService.TypeScriptLS;
@@ -274,9 +294,15 @@ module FourSlash {
             this.languageServiceShimHost.setCompilationSettings(compilationSettings);
 
             var inputFiles: { unitName: string; content: string }[] = [];
+            var startResolveFileRef: FourSlashFile = undefined;
 
             testData.files.forEach(file => {
-                var fixedPath = file.fileName.substr(file.fileName.indexOf('tests/'));
+                if (!startResolveFileRef && file.fileOptions[testOptMetadataNames.resolveReference]) {
+                    startResolveFileRef = file;
+                } else if (startResolveFileRef) {
+                    // If entry point for resolving file references is already specified, report duplication error
+                    throw new Error("There exists a Fourslash file which has resolveReference flag specified; remove duplicated resolveReference flag");
+                }
             });
 
             // NEWTODO: disable resolution for now.
@@ -294,33 +320,42 @@ module FourSlash {
             });
             //}
 
+            if (startResolveFileRef) {
+                // Add the entry-point file itself into the languageServiceShimHost
+                this.languageServiceShimHost.addScript(startResolveFileRef.fileName, startResolveFileRef.content);
 
-            // NEWTODO: Re-implement commented-out section
-            //harnessCompiler.addInputFiles(inputFiles);
-            //try {
-            //    var resolvedFiles = harnessCompiler.resolve();
-
-            //    resolvedFiles.forEach(file => {
-            //        if (!Harness.isLibraryFile(file.path)) {
-            //            var fixedPath = file.path.substr(file.path.indexOf('tests/'));
-            //            var content = harnessCompiler.getContentForFile(fixedPath);
-            //            this.languageServiceShimHost.addScript(fixedPath, content);
-            //        }
-            //    });
-
-            //    this.languageServiceShimHost.addScript('lib.d.ts', Harness.Compiler.libTextMinimal);
-            //}
-            //finally {
-            //    // harness no longer needs the results of the above work, make sure the next test operations are in a clean state
-            //    harnessCompiler.reset();
-            //}
-
-            /// NEWTODO: For now do not resolve, just use the input files
-            inputFiles.forEach(file => {
-                if (!Harness.isLibraryFile(file.unitName)) {
-                    this.languageServiceShimHost.addScript(file.unitName, file.content);
-                }
-            });
+                var jsonResolvedResult = JSON.parse(this.languageServiceShimHost.getCoreService().getPreProcessedFileInfo(startResolveFileRef.fileName,
+                    createScriptSnapShot(startResolveFileRef.content)));
+                var resolvedResult = jsonResolvedResult.result;
+                var referencedFiles: ts.IFileReference[] = resolvedResult.referencedFiles;
+                var importedFiles: ts.IFileReference[] = resolvedResult.importedFiles;
+                referencedFiles.forEach(refFile => {
+                    inputFiles.forEach(inputFile => {
+                        // Fourslash insert tests/cases/fourslash into inputFile.unitName so we will properly append the same base directory to refFile path
+                        var appendRefFilePath = "tests/cases/fourslash/" + refFile.path;
+                        if (appendRefFilePath === inputFile.unitName && !Harness.isLibraryFile(inputFile.unitName)) {
+                            this.languageServiceShimHost.addScript(inputFile.unitName, inputFile.content);
+                        }
+                    });
+                });
+                importedFiles.forEach(importedFile => {
+                    inputFiles.forEach(inputFile => {
+                        // Fourslash insert tests/cases/fourslash into inputFile.unitName and import statement doesn't require ".ts"
+                        // so convert them before making appropriate comparison
+                        var appendRefFilePath = "tests/cases/fourslash/" + importedFile.path + ".ts";
+                        if (appendRefFilePath === inputFile.unitName && !Harness.isLibraryFile(inputFile.unitName)) {
+                            this.languageServiceShimHost.addScript(inputFile.unitName, inputFile.content);
+                        }
+                    });
+                });
+            } else {
+                // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
+                inputFiles.forEach(file => {
+                    if (!Harness.isLibraryFile(file.unitName)) {
+                        this.languageServiceShimHost.addScript(file.unitName, file.content);
+                    }
+                });
+            }
 
             this.languageServiceShimHost.addDefaultLibrary();
 
