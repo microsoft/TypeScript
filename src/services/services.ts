@@ -1922,8 +1922,7 @@ module ts {
         }
 
         function processImport(): void {
-            var scanner = createScanner(getDefaultCompilerOptions().target, /*skipTrivia*/true, sourceText);
-
+            scanner.setText(sourceText);
             var token = scanner.scan();
             // Look for:
             // import foo = module("foo");
@@ -1954,6 +1953,7 @@ module ts {
                 }
                 token = scanner.scan();
             }
+            scanner.setText(undefined);
         }
 
         if (readImportFiles) {
