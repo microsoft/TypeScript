@@ -1,4 +1,4 @@
-//// [constantsInEnumMembers.ts]
+//// [constEnums.ts]
 const enum Enum1 {
    A0 = 100,
 }
@@ -8,14 +8,14 @@ const enum Enum1 {
     A,
     B,
     C = 10,
-    D = A + B,
-    E = A + 1,
-    F = 1 + A,
-    G = 1 + 1,
-    H = A - B,
-    I = A - 1,
-    J = 1 - A,
-    K = 1 - 1,
+    D = A | B,
+    E = A | 1,
+    F = 1 | A,
+    G = (1 & 1),
+    H = ~(A | B),
+    I = A >>> 1,
+    J = 1 & A,
+    K = ~(1 | 5),
     L = ~D,
     M = E << B,
     N = E << 1,
@@ -34,13 +34,6 @@ const enum Enum1 {
     W2 = Enum1.A0,
     W3 = Enum1["A0"],
     W4 = Enum1["W"],
-    // illegal case
-    // forward reference to the element of the same enum
-    X = Y, 
-    // forward reference to the element of the same enum
-    Y = Enum1.Z,
-    Y1 = Enum1["Z"],
-    Z = 100,
 }
 
 
@@ -49,7 +42,7 @@ module A {
         export module C {
             export const enum E {
                 V1 = 1,
-                V2 = A.B.C.E.V1 + 100
+                V2 = A.B.C.E.V1 | 100
             }
         }
     }
@@ -59,9 +52,18 @@ module A {
     export module B {
         export module C {
             export const enum E {
-                V3 = A.B.C.E["V2"] + 200,
+                V3 = A.B.C.E["V2"] & 200,
             }
         }
+    }
+}
+
+import I = A.B.C.E;
+
+function foo0(e: I): void {
+    if (e === I.V1) {
+    }
+    else if (e === I.V2) {
     }
 }
 
@@ -94,10 +96,6 @@ function foo(x: Enum1) {
         case Enum1.W2:
         case Enum1.W3:
         case Enum1.W4:
-        case Enum1.X:
-        case Enum1.Y:
-        case Enum1.Y1:
-        case Enum1.Z:
             break;
     }
 }
@@ -110,25 +108,13 @@ function bar(e: A.B.C.E): number {
     }
 }
 
-//// [constantsInEnumMembers.js]
-var A;
-(function (A) {
-    var B;
-    (function (B) {
-        var C;
-        (function (C) {
-        })(C = B.C || (B.C = {}));
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
-var A;
-(function (A) {
-    var B;
-    (function (B) {
-        var C;
-        (function (C) {
-        })(C = B.C || (B.C = {}));
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+//// [constEnums.js]
+function foo0(e) {
+    if (e === 1 /* V1 */) {
+    }
+    else if (e === 101 /* V2 */) {
+    }
+}
 function foo(x) {
     switch (x) {
         case 0 /* A */:
@@ -137,11 +123,11 @@ function foo(x) {
         case 1 /* D */:
         case 1 /* E */:
         case 1 /* F */:
-        case 2 /* G */:
-        case -1 /* H */:
-        case -1 /* I */:
-        case 1 /* J */:
-        case 0 /* K */:
+        case 1 /* G */:
+        case -2 /* H */:
+        case 0 /* I */:
+        case 0 /* J */:
+        case -6 /* K */:
         case -2 /* L */:
         case 2 /* M */:
         case 2 /* N */:
@@ -158,10 +144,6 @@ function foo(x) {
         case 100 /* W2 */:
         case 100 /* W3 */:
         case 11 /* W4 */:
-        case Enum1.X:
-        case Enum1.Y:
-        case Enum1.Y1:
-        case 100 /* Z */:
             break;
     }
 }
@@ -171,7 +153,7 @@ function bar(e) {
             return 1;
         case 101 /* V2 */:
             return 1;
-        case 301 /* V3 */:
+        case 64 /* V3 */:
             return 1;
     }
 }

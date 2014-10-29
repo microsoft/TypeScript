@@ -783,6 +783,7 @@ module ts {
         Transient              = 0x08000000,  // Transient symbol (created during type check)
         Prototype              = 0x10000000,  // Prototype property (no source representation)
         UnionProperty          = 0x20000000,  // Property in union type
+        ConstEnum              = 0x40000000,  // Const enum marker
 
         Variable  = FunctionScopedVariable | BlockScopedVariable,
         Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
@@ -807,7 +808,8 @@ module ts {
         ClassExcludes           = (Value | Type) & ~ValueModule,
         InterfaceExcludes       = Type & ~Interface,
         EnumExcludes            = (Value | Type) & ~(Enum | ValueModule),
-        ValueModuleExcludes     = Value & ~(Function | Class | Enum | ValueModule),
+        ConstEnumExcludes       = (Value | Type) & ~Enum, // const enums merge only with enums
+        ValueModuleExcludes     = (Value | ConstEnum) & ~(Function | Class | Enum | ValueModule),
         NamespaceModuleExcludes = 0,
         MethodExcludes          = Value & ~Method,
         GetAccessorExcludes     = Value & ~SetAccessor,
@@ -1076,6 +1078,7 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        preserveConstEnums?: boolean;
         [option: string]: string | number | boolean;
     }
 

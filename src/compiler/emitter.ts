@@ -1760,7 +1760,8 @@ module ts {
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
-                if (isConstEnumDeclaration(node)) {
+                // const enums are completely erased during compilation.
+                if (isConstEnumDeclaration(node) && !compilerOptions.preserveConstEnums) {
                     return;
                 }
                 emitLeadingComments(node);
@@ -1837,7 +1838,7 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (!isInstantiated(node)) {
+                if (!isInstantiated(node, /*checkConstEnums*/ true)) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
                 emitLeadingComments(node);

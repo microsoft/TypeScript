@@ -4431,8 +4431,8 @@ module ts {
 
             if (symbol.flags & SymbolFlags.Import) {
                 // Mark the import as referenced so that we emit it in the final .js file.
-                // exception: identifiers that appear in type queries
-                getSymbolLinks(symbol).referenced = !isInTypeQuery(node);
+                // exception: identifiers that appear in type queries, const enums
+                getSymbolLinks(symbol).referenced = !isInTypeQuery(node) && !isConstEnumSymbol(resolveImport(symbol));
             }
 
             checkCollisionWithCapturedSuperVariable(node, node);
@@ -5085,6 +5085,10 @@ module ts {
             var indexType = checkExpression(node.index);
 
             if (objectType === unknownType) return unknownType;
+
+            if (isConstEnumType(objectType) && node.index.kind !== SyntaxKind.StringLiteral) {
+                error(node.index, Diagnostics.Index_expression_arguments_in_const_enums_must_be_of_type_string);
+            }
 
             // TypeScript 1.0 spec (April 2014): 4.10 Property Access
             // - If IndexExpr is a string literal or a numeric literal and ObjExpr's apparent type has a property with the name 
@@ -5962,6 +5966,14 @@ module ts {
             return (type.flags & TypeFlags.Structured) !== 0;
         }
 
+        function isConstEnumType(type: Type) : boolean {
+            return type.flags & (TypeFlags.ObjectType | TypeFlags.Anonymous) && type.symbol && isConstEnumSymbol(type.symbol);
+        }
+
+        function isConstEnumSymbol(symbol: Symbol): boolean {
+            return (symbol.flags & SymbolFlags.ConstEnum) !== 0;
+        }
+
         function checkInstanceOfExpression(node: BinaryExpression, leftType: Type, rightType: Type): Type {
             // TypeScript 1.0 spec (April 2014): 4.15.4
             // The instanceof operator requires the left operand to be of type Any, an object type, or a type parameter type,
@@ -6187,19 +6199,31 @@ module ts {
                 }
             }
 
-            if (type.flags & (TypeFlags.ObjectType | TypeFlags.Anonymous) &&
-                type.symbol &&
-                (type.symbol.flags & SymbolFlags.Enum) &&
-                isConstEnumDeclaration(<EnumDeclaration>type.symbol.valueDeclaration)) {
-                // enum object type for const enums are only permitted in as 'left' in property access and 'object' in indexed access
+            if (isConstEnumType(type)) {
+                // enum object type for const enums are only permitted in:
+                // - 'left' in property access 
+                // - 'object' in indexed access
+                // - target in rhs of import statement
                 var ok =
                     (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).left === node) ||
-                    (node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).object === node);
+                    (node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).object === node) ||
+                    isRhsOfImportStatement(node);
+
                 if (!ok) {
                     error(node, Diagnostics.const_enums_can_only_be_used_in_property_access_expressions);
                 }
             }
             return type;
+
+            function isRhsOfImportStatement(n: Node): boolean {
+                while (n.parent) {
+                    if (n.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>n.parent).entityName === n) {
+                        return true;
+                    }
+                    n = n.parent;
+                }
+                return false;
+            }
         }
 
         function checkExpressionNode(node: Expression, contextualMapper: TypeMapper): Type {
@@ -6868,7 +6892,7 @@ module ts {
                     case SyntaxKind.InterfaceDeclaration:
                         return SymbolFlags.ExportType;
                     case SyntaxKind.ModuleDeclaration:
-                        return (<ModuleDeclaration>d).name.kind === SyntaxKind.StringLiteral || isInstantiated(d)
+                        return (<ModuleDeclaration>d).name.kind === SyntaxKind.StringLiteral || isInstantiated(d, /*checkConstEnums*/ false)
                             ? SymbolFlags.ExportNamespace | SymbolFlags.ExportValue
                             : SymbolFlags.ExportNamespace;
                     case SyntaxKind.ClassDeclaration:
@@ -7105,7 +7129,7 @@ module ts {
             }
 
             // Uninstantiated modules shouldnt do this check
-            if (node.kind === SyntaxKind.ModuleDeclaration && !isInstantiated(node)) {
+            if (node.kind === SyntaxKind.ModuleDeclaration && !isInstantiated(node, /*checkConstEnums*/ true)) {
                 return;
             }
 
@@ -7707,14 +7731,9 @@ module ts {
                             switch ((<BinaryExpression>e).operator) {
                                 case SyntaxKind.BarToken: return left | right;
                                 case SyntaxKind.AmpersandToken: return left & right;
-                                case SyntaxKind.PlusToken: return left + right;
-                                case SyntaxKind.MinusToken: return left - right;
                                 case SyntaxKind.GreaterThanGreaterThanToken: return left >> right;
                                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken: return left >>> right;
                                 case SyntaxKind.LessThanLessThanToken: return left << right;
-                                case SyntaxKind.AsteriskToken: return left * right;
-                                case SyntaxKind.SlashToken: return left / right;
-                                case SyntaxKind.PercentToken: return left % right;
                                 case SyntaxKind.CaretToken: return left ^ right;
                             }
                             return undefined;
@@ -7803,13 +7822,8 @@ module ts {
             if (node === firstDeclaration) {
                 if (enumSymbol.declarations.length > 1) {
                     var enumIsConst = isConstEnumDeclaration(node);
-                    // check that const is places\omitted on all enum declarations
+                    // check that const is placed\omitted on all enum declarations
                     forEach(enumSymbol.declarations, decl => {
-                        if (decl.kind !== SyntaxKind.EnumDeclaration) {
-                            // TODO(vladima): do we want to allow merging for const enum declarations
-                            return;
-                        }
-
                         if (isConstEnumDeclaration(<EnumDeclaration>decl) !== enumIsConst) {
                             error(decl.name, Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
                         }
@@ -8655,7 +8669,7 @@ module ts {
             }
             var symbol = getSymbolOfNode(node);
             var target = resolveImport(symbol);
-            return target !== unknownSymbol && ((target.flags & SymbolFlags.Value) !== 0);
+            return target !== unknownSymbol && ((target.flags & SymbolFlags.Value) !== 0) && !isConstEnumSymbol(target);
         }
 
         function hasSemanticErrors() {
@@ -8676,7 +8690,8 @@ module ts {
             // As a consequence this might cause emitting extra.
             if (node.flags & NodeFlags.Export) {
                 var target = resolveImport(symbol);
-                if (target !== unknownSymbol && target.flags & SymbolFlags.Value) {
+                // importing const enum does not cause import to be referenced
+                if (target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumSymbol(target)) {
                     return true;
                 }
             }

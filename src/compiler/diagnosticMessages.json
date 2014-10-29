@@ -1412,7 +1412,11 @@
     "'const' enums can only be used in property access expressions.": {
         "category": "Error",
         "code": 4084
-    },    
+    },
+    "Index expression arguments in 'const' enums must be of type 'string'.": {
+        "category": "Error",
+        "code": 4085
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001

@@ -353,6 +353,7 @@ module ts {
         Enum_declarations_must_all_be_const_or_non_const: { code: 4082, category: DiagnosticCategory.Error, key: "Enum declarations must all be const or non-const." },
         In_const_enum_declarations_member_initializer_must_be_constant_expression: { code: 4083, category: DiagnosticCategory.Error, key: "In 'const' enum declarations member initializer must be constant expression." },
         const_enums_can_only_be_used_in_property_access_expressions: { code: 4084, category: DiagnosticCategory.Error, key: "'const' enums can only be used in property access expressions." },
+        Index_expression_arguments_in_const_enums_must_be_of_type_string: { code: 4085, category: DiagnosticCategory.Error, key: "Index expression arguments in 'const' enums must be of type 'string'." },
         The_current_host_does_not_support_the_0_option: { code: 5001, category: DiagnosticCategory.Error, key: "The current host does not support the '{0}' option." },
         Cannot_find_the_common_subdirectory_path_for_the_input_files: { code: 5009, category: DiagnosticCategory.Error, key: "Cannot find the common subdirectory path for the input files." },
         Cannot_read_file_0_Colon_1: { code: 5012, category: DiagnosticCategory.Error, key: "Cannot read file '{0}': {1}" },

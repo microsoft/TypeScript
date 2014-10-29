@@ -7,14 +7,14 @@ const enum Enum1 {
     A,
     B,
     C = 10,
-    D = A + B,
-    E = A + 1,
-    F = 1 + A,
-    G = 1 + 1,
-    H = A - B,
-    I = A - 1,
-    J = 1 - A,
-    K = 1 - 1,
+    D = A | B,
+    E = A | 1,
+    F = 1 | A,
+    G = (1 & 1),
+    H = ~(A | B),
+    I = A >>> 1,
+    J = 1 & A,
+    K = ~(1 | 5),
     L = ~D,
     M = E << B,
     N = E << 1,
@@ -33,13 +33,6 @@ const enum Enum1 {
     W2 = Enum1.A0,
     W3 = Enum1["A0"],
     W4 = Enum1["W"],
-    // illegal case
-    // forward reference to the element of the same enum
-    X = Y, 
-    // forward reference to the element of the same enum
-    Y = Enum1.Z,
-    Y1 = Enum1["Z"],
-    Z = 100,
 }
 
 
@@ -48,7 +41,7 @@ module A {
         export module C {
             export const enum E {
                 V1 = 1,
-                V2 = A.B.C.E.V1 + 100
+                V2 = A.B.C.E.V1 | 100
             }
         }
     }
@@ -58,9 +51,18 @@ module A {
     export module B {
         export module C {
             export const enum E {
-                V3 = A.B.C.E["V2"] + 200,
+                V3 = A.B.C.E["V2"] & 200,
             }
         }
+    }
+}
+
+import I = A.B.C.E;
+
+function foo0(e: I): void {
+    if (e === I.V1) {
+    }
+    else if (e === I.V2) {
     }
 }
 
@@ -93,10 +95,6 @@ function foo(x: Enum1) {
         case Enum1.W2:
         case Enum1.W3:
         case Enum1.W4:
-        case Enum1.X:
-        case Enum1.Y:
-        case Enum1.Y1:
-        case Enum1.Z:
             break;
     }
 }
