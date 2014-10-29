@@ -285,28 +285,39 @@ module ts.formatting {
                 var isChildInRange = rangeOverlapsWithStartEnd(originalRange, start, child.getEnd());
 
                 var childIndentationValue: number;
-                if (containingList && !isChildInRange) {
-                    // child is a list item that is not in span being formatted
-                    // fetch actual indentation for the child item to push it downstream
-                    // TODO: ensure that indentation is picked correctly
-                    var actualIndentation = getListItemIndentation(containingList, listElementIndex, nodeStartLine, options);
-                    if (actualIndentation !== -1) {
-                        inheritedIndentation = actualIndentation;
-                    }
-                    var childIndentationValue = increaseIndentation || indentation;
-                }
-                else {
-                    if (inheritedIndentation !== undefined) {
-                        var childIndentationValue = inheritedIndentation;
+                if (containingList) {
+                    if (isChildInRange) {                        
+                        if (inheritedIndentation !== undefined) {
+                            // use indentation inherited from preceding list items
+                            childIndentationValue = inheritedIndentation;
+                        }
+                        else {
+                            var increaseIndentation =
+                                node.kind !== SyntaxKind.SourceFile &&
+                                node.pos !== child.pos &&
+                                formattingScanner.lastTrailingTriviaWasNewLine();
+
+                            var childIndentationValue = increaseIndentation ? indentation + options.IndentSize : indentation;
+                        }
                     }
                     else {
-                        var shareLine = nodeStartLine === childStart.line;
-                        var increaseIndentation =
-                            !shareLine &&
-                            !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStart.line, sourceFile) &&
-                            SmartIndenter.shouldIndentChildNode(node, child);
-                        var childIndentationValue = increaseIndentation ? indentation + options.IndentSize : indentation;
+                        // child is a list item that is not in span being formatted
+                        // fetch actual indentation for the child item to push it downstream
+                        // TODO: ensure that indentation is picked correctly
+                        var actualIndentation = getListItemIndentation(containingList, listElementIndex, nodeStartLine, options);
+                        if (actualIndentation !== -1) {
+                            inheritedIndentation = actualIndentation;
+                        }
+                        var childIndentationValue = inheritedIndentation || indentation;
                     }
+                }
+                else {
+                    var shareLine = nodeStartLine === childStart.line;
+                    var increaseIndentation =
+                        !shareLine &&
+                        !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStart.line, sourceFile) &&
+                        SmartIndenter.shouldIndentChildNode(node, child);
+                    var childIndentationValue = increaseIndentation ? indentation + options.IndentSize : indentation;
                 }
 
                 var childIndentation: DynamicIndentation = {

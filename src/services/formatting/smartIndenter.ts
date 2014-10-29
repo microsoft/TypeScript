@@ -318,6 +318,7 @@ module ts.formatting {
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.VariableStatement:
                 case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.ExportAssignment:
                     return true;
                 default:
                     return false;
