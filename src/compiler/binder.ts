@@ -360,6 +360,9 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration:
                     bindDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes, /*isBlockScopeContainer*/ false);
                     break;
+                case SyntaxKind.TypeAliasDeclaration:
+                    bindDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes, /*isBlockScopeContainer*/ false);
+                    break;
                 case SyntaxKind.EnumDeclaration:
                     bindDeclaration(<Declaration>node, SymbolFlags.Enum, SymbolFlags.EnumExcludes, /*isBlockScopeContainer*/ false);
                     break;

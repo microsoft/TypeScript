@@ -1,6 +1,6 @@
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(1,9): error TS1003: Identifier expected.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(1,17): error TS1005: ';' expected.
-tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(3,26): error TS1158: Invalid template literal; expected '}'
+tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(3,26): error TS1159: Invalid template literal; expected '}'
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(5,1): error TS1126: Unexpected end of text.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(1,11): error TS2304: Cannot find name 'gen'.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts(3,20): error TS2304: Cannot find name 'yield'.
@@ -18,7 +18,7 @@ tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.
         // Once this is supported, yield *must* be parenthesized.
         var x = `abc${ yield 10 }def`;
                              ~~
-!!! error TS1158: Invalid template literal; expected '}'
+!!! error TS1159: Invalid template literal; expected '}'
                        ~~~~~
 !!! error TS2304: Cannot find name 'yield'.
                                  ~~~

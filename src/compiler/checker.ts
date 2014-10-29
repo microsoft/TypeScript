@@ -86,6 +86,7 @@ module ts {
             emitFiles: invokeEmitter,
             getParentOfSymbol: getParentOfSymbol,
             getTypeOfSymbol: getTypeOfSymbol,
+            getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
             getPropertiesOfType: getPropertiesOfType,
             getPropertyOfType: getPropertyOfType,
             getSignaturesOfType: getSignaturesOfType,
@@ -191,6 +192,7 @@ module ts {
             if (flags & SymbolFlags.GetAccessor) result |= SymbolFlags.GetAccessorExcludes;
             if (flags & SymbolFlags.SetAccessor) result |= SymbolFlags.SetAccessorExcludes;
             if (flags & SymbolFlags.TypeParameter) result |= SymbolFlags.TypeParameterExcludes;
+            if (flags & SymbolFlags.TypeAlias) result |= SymbolFlags.TypeAliasExcludes;
             if (flags & SymbolFlags.Import) result |= SymbolFlags.ImportExcludes;
             return result;
         }
@@ -479,7 +481,7 @@ module ts {
             //     import a = |b.c|; // Value, type, namespace
             //     import a = |b.c|.d; // Namespace
             if (entityName.kind === SyntaxKind.Identifier && isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
-                entityName = entityName.parent;
+                entityName = <QualifiedName>entityName.parent;
             }
             // Check for case 1 and 3 in the above example
             if (entityName.kind === SyntaxKind.Identifier || entityName.parent.kind === SyntaxKind.QualifiedName) {
@@ -1022,6 +1024,19 @@ module ts {
             return result;
         }
 
+        function getTypeAliasForTypeLiteral(type: Type): Symbol {
+            if (type.symbol && type.symbol.flags & SymbolFlags.TypeLiteral) {
+                var node = type.symbol.declarations[0].parent;
+                while (node.kind === SyntaxKind.ParenType) {
+                    node = node.parent;
+                }
+                if (node.kind === SyntaxKind.TypeAliasDeclaration) {
+                    return getSymbolOfNode(node);
+                }
+            }
+            return undefined;
+        }
+
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
         var _displayBuilder: SymbolDisplayBuilder;
         function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
@@ -1212,8 +1227,15 @@ module ts {
                         writeTypeofSymbol(type);
                     }
                     else if (typeStack && contains(typeStack, type)) {
-                        // Recursive usage, use any
-                        writeKeyword(writer, SyntaxKind.AnyKeyword);
+                        // If type is an anonymous type literal in a type alias declaration, use type alias name
+                        var typeAlias = getTypeAliasForTypeLiteral(type);
+                        if (typeAlias) {
+                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type);
+                        }
+                        else {
+                            // Recursive usage, use any
+                            writeKeyword(writer, SyntaxKind.AnyKeyword);
+                        }
                     }
                     else {
                         if (!typeStack) {
@@ -1537,6 +1559,7 @@ module ts {
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ImportDeclaration:
@@ -1940,6 +1963,24 @@ module ts {
             return <InterfaceType>links.declaredType;
         }
 
+        function getDeclaredTypeOfTypeAlias(symbol: Symbol): Type {
+            var links = getSymbolLinks(symbol);
+            if (!links.declaredType) {
+                links.declaredType = resolvingType;
+                var declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
+                var type = getTypeFromTypeNode(declaration.type);
+                if (links.declaredType === resolvingType) {
+                    links.declaredType = type;
+                }
+            }
+            else if (links.declaredType === resolvingType) {
+                links.declaredType = unknownType;
+                var declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
+                error(declaration.name, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+            }
+            return links.declaredType;
+        }
+
         function getDeclaredTypeOfEnum(symbol: Symbol): Type {
             var links = getSymbolLinks(symbol);
             if (!links.declaredType) {
@@ -1978,6 +2019,9 @@ module ts {
             }
             if (symbol.flags & SymbolFlags.Interface) {
                 return getDeclaredTypeOfInterface(symbol);
+            }
+            if (symbol.flags & SymbolFlags.TypeAlias) {
+                return getDeclaredTypeOfTypeAlias(symbol);
             }
             if (symbol.flags & SymbolFlags.Enum) {
                 return getDeclaredTypeOfEnum(symbol);
@@ -7590,6 +7634,10 @@ module ts {
             }
         }
 
+        function checkTypeAliasDeclaration(node: TypeAliasDeclaration) {
+            checkSourceElement(node.type);
+        }
+
         function getConstantValueForExpression(node: Expression): number {
             var isNegative = false;
             if (node.kind === SyntaxKind.PrefixOperator) {
@@ -7882,6 +7930,8 @@ module ts {
                     return checkClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
                     return checkInterfaceDeclaration(<InterfaceDeclaration>node);
+                case SyntaxKind.TypeAliasDeclaration:
+                    return checkTypeAliasDeclaration(<TypeAliasDeclaration>node);
                 case SyntaxKind.EnumDeclaration:
                     return checkEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
@@ -8127,6 +8177,7 @@ module ts {
                 case SyntaxKind.TypeParameter:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.EnumDeclaration:
                     return true;
             }
@@ -8216,7 +8267,7 @@ module ts {
 
         function isInRightSideOfImportOrExportAssignment(node: EntityName) {
             while (node.parent.kind === SyntaxKind.QualifiedName) {
-                node = node.parent;
+                node = <QualifiedName>node.parent;
             }
 
             if (node.parent.kind === SyntaxKind.ImportDeclaration) {
@@ -8250,7 +8301,7 @@ module ts {
             }
 
             if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
-                entityName = entityName.parent;
+                entityName = <QualifiedName>entityName.parent;
             }
 
             if (isExpression(entityName)) {
@@ -8263,7 +8314,7 @@ module ts {
                 else if (entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccess) {
                     var symbol = getNodeLinks(entityName).resolvedSymbol;
                     if (!symbol) {
-                        checkPropertyAccess(<PropertyAccess>entityName);
+                        checkPropertyAccess(<QualifiedName>entityName);
                     }
                     return getNodeLinks(entityName).resolvedSymbol;
                 }
@@ -8295,10 +8346,10 @@ module ts {
                 return getSymbolOfNode(node.parent);
             }
 
-            if (node.kind === SyntaxKind.Identifier && isInRightSideOfImportOrExportAssignment(node)) {
+            if (node.kind === SyntaxKind.Identifier && isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
                 return node.parent.kind === SyntaxKind.ExportAssignment
                     ? getSymbolOfEntityName(<Identifier>node)
-                    : getSymbolOfPartOfRightHandSideOfImport(node);
+                    : getSymbolOfPartOfRightHandSideOfImport(<Identifier>node);
             }
 
             switch (node.kind) {
@@ -8379,7 +8430,7 @@ module ts {
                 return symbol && getTypeOfSymbol(symbol);
             }
 
-            if (isInRightSideOfImportOrExportAssignment(node)) {
+            if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
                 var symbol = getSymbolInfo(node);
                 var declaredType = symbol && getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);

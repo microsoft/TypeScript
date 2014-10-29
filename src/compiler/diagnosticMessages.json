@@ -471,13 +471,17 @@
         "category": "Error",
         "code": 1157
     },
+    "Aliased type cannot be an object type literal. Use an interface declaration instead.": {
+        "category": "Error",
+        "code": 1158
+    },
     "Invalid template literal; expected '}'": {
         "category": "Error",
-        "code":  1158
+        "code": 1159
     },
     "Tagged templates are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
-        "code": 1159
+        "code": 1160
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1072,6 +1076,10 @@
         "category": "Error",
         "code": 2455
     },
+    "Type alias '{0}' circularly references itself.": {
+        "category": "Error",
+        "code": 2456
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1388,6 +1396,18 @@
     "Parameter '{0}' of exported function has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4078
+    },
+    "Exported type alias '{0}' has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4079
+    },
+    "Exported type alias '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4080
+    },
+    "Exported type alias '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4081
     },
 
     
