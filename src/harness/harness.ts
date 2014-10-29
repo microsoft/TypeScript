@@ -591,7 +591,7 @@ module Harness {
                         return null;
                     }
                 },
-                getDefaultLibFilename: () => defaultLibFileName,
+                getDefaultLibFilename: (options) => defaultLibFileName,
                 writeFile: writeFile,
                 getCanonicalFileName: getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,

@@ -52,7 +52,7 @@ module ts {
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(): string;
+        getDefaultLibFilename(options: string): string;
     }
 
     /** Public interface of a language service instance shim. */
@@ -389,8 +389,8 @@ module ts {
             return this.shimHost.getCancellationToken();
         }
 
-        public getDefaultLibFilename(): string {
-            return this.shimHost.getDefaultLibFilename();
+        public getDefaultLibFilename(options: CompilerOptions): string {
+            return this.shimHost.getDefaultLibFilename(JSON.stringify(options));
         }
 
         public getCurrentDirectory(): string {
