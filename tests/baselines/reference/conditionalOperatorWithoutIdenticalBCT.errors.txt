@@ -1,17 +1,17 @@
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(15,5): error TS2322: Type 'A | B' is not assignable to type 'A':
-  Type 'B' is not assignable to type 'A':
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(15,5): error TS2323: Type 'A | B' is not assignable to type 'A'.
+  Type 'B' is not assignable to type 'A'.
     Property 'propertyA' is missing in type 'B'.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(16,5): error TS2322: Type 'A | B' is not assignable to type 'B':
-  Type 'A' is not assignable to type 'B':
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(16,5): error TS2323: Type 'A | B' is not assignable to type 'B'.
+  Type 'A' is not assignable to type 'B'.
     Property 'propertyB' is missing in type 'A'.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(18,5): error TS2322: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => number':
-  Type '(n: X) => string' is not assignable to type '(t: X) => number':
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(18,5): error TS2323: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => number'.
+  Type '(n: X) => string' is not assignable to type '(t: X) => number'.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(19,5): error TS2322: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => string':
-  Type '(m: X) => number' is not assignable to type '(t: X) => string':
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(19,5): error TS2323: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => string'.
+  Type '(m: X) => number' is not assignable to type '(t: X) => string'.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(20,5): error TS2322: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => boolean':
-  Type '(m: X) => number' is not assignable to type '(t: X) => boolean':
+tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(20,5): error TS2323: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => boolean'.
+  Type '(m: X) => number' is not assignable to type '(t: X) => boolean'.
     Type 'number' is not assignable to type 'boolean'.
 
 
@@ -32,27 +32,27 @@ tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithou
     //Be contextually typed and and bct is not identical, results in errors that union type is not assignable to target
     var result2: A = true ? a : b;
         ~~~~~~~
-!!! error TS2322: Type 'A | B' is not assignable to type 'A':
-!!! error TS2322:   Type 'B' is not assignable to type 'A':
-!!! error TS2322:     Property 'propertyA' is missing in type 'B'.
+!!! error TS2323: Type 'A | B' is not assignable to type 'A'.
+!!! error TS2323:   Type 'B' is not assignable to type 'A'.
+!!! error TS2323:     Property 'propertyA' is missing in type 'B'.
     var result3: B = true ? a : b;
         ~~~~~~~
-!!! error TS2322: Type 'A | B' is not assignable to type 'B':
-!!! error TS2322:   Type 'A' is not assignable to type 'B':
-!!! error TS2322:     Property 'propertyB' is missing in type 'A'.
+!!! error TS2323: Type 'A | B' is not assignable to type 'B'.
+!!! error TS2323:   Type 'A' is not assignable to type 'B'.
+!!! error TS2323:     Property 'propertyB' is missing in type 'A'.
     
     var result4: (t: X) => number = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
         ~~~~~~~
-!!! error TS2322: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => number':
-!!! error TS2322:   Type '(n: X) => string' is not assignable to type '(t: X) => number':
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! error TS2323: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => number'.
+!!! error TS2323:   Type '(n: X) => string' is not assignable to type '(t: X) => number'.
+!!! error TS2323:     Type 'string' is not assignable to type 'number'.
     var result5: (t: X) => string = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
         ~~~~~~~
-!!! error TS2322: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => string':
-!!! error TS2322:   Type '(m: X) => number' is not assignable to type '(t: X) => string':
-!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+!!! error TS2323: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => string'.
+!!! error TS2323:   Type '(m: X) => number' is not assignable to type '(t: X) => string'.
+!!! error TS2323:     Type 'number' is not assignable to type 'string'.
     var result6: (t: X) => boolean = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
         ~~~~~~~
-!!! error TS2322: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => boolean':
-!!! error TS2322:   Type '(m: X) => number' is not assignable to type '(t: X) => boolean':
-!!! error TS2322:     Type 'number' is not assignable to type 'boolean'.
+!!! error TS2323: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => boolean'.
+!!! error TS2323:   Type '(m: X) => number' is not assignable to type '(t: X) => boolean'.
+!!! error TS2323:     Type 'number' is not assignable to type 'boolean'.

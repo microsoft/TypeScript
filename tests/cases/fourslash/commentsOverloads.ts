@@ -594,11 +594,7 @@ goTo.marker('64q');
 verify.quickInfoIs("(constructor) c5(b: string): c5 (+1 overload)", "c5 2");
 
 goTo.marker('65');
-//verify.completionListContains("c", "class c", "");
-// the below check is wrong and it should show it as class but currently we have a bug for adding the parameters of ambient function in the symbol list
-// eg declare function foo2(x: number);
-// completion list here
-verify.completionListContains("c", "(parameter) c: boolean", "");
+verify.completionListContains("c", "class c", "");
 verify.completionListContains("c1", "class c1", "");
 verify.completionListContains("c2", "class c2", "");
 verify.completionListContains("c3", "class c3", "");

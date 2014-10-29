@@ -281,6 +281,12 @@ module ts {
         };
     }
 
+    export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): DiagnosticMessageChain {
+        Debug.assert(!headChain.next);
+        headChain.next = tailChain;
+        return headChain;
+    }
+
     export function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain, newLine: string): Diagnostic {
         Debug.assert(start >= 0, "start must be non-negative, is " + start);
         Debug.assert(length >= 0, "length must be non-negative, is " + length);

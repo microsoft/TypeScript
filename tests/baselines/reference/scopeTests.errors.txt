@@ -1,4 +1,4 @@
-tests/cases/compiler/scopeTests.ts(2,7): error TS2416: Class 'D' incorrectly extends base class 'C':
+tests/cases/compiler/scopeTests.ts(2,7): error TS2415: Class 'D' incorrectly extends base class 'C'.
   Property 'v' is private in type 'C' but not in type 'D'.
 
 
@@ -6,8 +6,8 @@ tests/cases/compiler/scopeTests.ts(2,7): error TS2416: Class 'D' incorrectly ext
     class C { private v; public p; static s; }
     class D extends C {
           ~
-!!! error TS2416: Class 'D' incorrectly extends base class 'C':
-!!! error TS2416:   Property 'v' is private in type 'C' but not in type 'D'.
+!!! error TS2415: Class 'D' incorrectly extends base class 'C'.
+!!! error TS2415:   Property 'v' is private in type 'C' but not in type 'D'.
       public v: number;
       public p: number
       constructor() {

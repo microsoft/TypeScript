@@ -560,7 +560,7 @@
         "category": "Error",
         "code": 2319
     },
-    "Interface '{0}' cannot simultaneously extend types '{1}' and '{2}':": {
+    "Interface '{0}' cannot simultaneously extend types '{1}' and '{2}'.": {
         "category": "Error",
         "code": 2320
     },
@@ -568,7 +568,7 @@
         "category": "Error",
         "code": 2321
     },
-    "Type '{0}' is not assignable to type '{1}':": {
+    "Type '{0}' is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 2322
     },
@@ -584,7 +584,7 @@
         "category": "Error",
         "code": 2325
     },
-    "Types of property '{0}' are incompatible:": {
+    "Types of property '{0}' are incompatible.": {
         "category": "Error",
         "code": 2326
     },
@@ -592,7 +592,7 @@
         "category": "Error",
         "code": 2327
     },
-    "Types of parameters '{0}' and '{1}' are incompatible:": {
+    "Types of parameters '{0}' and '{1}' are incompatible.": {
         "category": "Error",
         "code": 2328
     },
@@ -600,7 +600,7 @@
         "category": "Error",
         "code": 2329
     },
-    "Index signatures are incompatible:": {
+    "Index signatures are incompatible.": {
         "category": "Error",
         "code": 2330
     },
@@ -652,10 +652,6 @@
         "category": "Error",
         "code": 2342
     },
-    "Type '{0}' does not satisfy the constraint '{1}':": {
-        "category": "Error",
-        "code": 2343
-    },
     "Type '{0}' does not satisfy the constraint '{1}'.": {
         "category": "Error",
         "code": 2344
@@ -691,10 +687,6 @@
     "Neither type '{0}' nor type '{1}' is assignable to the other.": {
         "category": "Error",
         "code": 2352
-    },
-    "Neither type '{0}' nor type '{1}' is assignable to the other:": {
-        "category": "Error",
-        "code": 2353
     },
     "No best common type exists among return expressions.": {
         "category": "Error",
@@ -936,17 +928,9 @@
         "category": "Error",
         "code": 2415
     },
-    "Class '{0}' incorrectly extends base class '{1}':": {
-        "category": "Error",
-        "code": 2416
-    },
     "Class static side '{0}' incorrectly extends base class static side '{1}'.": {
         "category": "Error",
         "code": 2417
-    },
-    "Class static side '{0}' incorrectly extends base class static side '{1}':": {
-        "category": "Error",
-        "code": 2418
     },
     "Type name '{0}' in extends clause does not reference constructor function for '{0}'.": {
         "category": "Error",
@@ -955,10 +939,6 @@
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
         "code": 2420
-    },
-    "Class '{0}' incorrectly implements interface '{1}':": {
-        "category": "Error",
-        "code": 2421
     },
     "A class may only implement another class or interface.": {
         "category": "Error",
@@ -987,10 +967,6 @@
     "All declarations of an interface must have identical type parameters.": {
         "category": "Error",
         "code": 2428
-    },
-    "Interface '{0}' incorrectly extends interface '{1}':": {
-        "category": "Error",
-        "code": 2429
     },
     "Interface '{0}' incorrectly extends interface '{1}'.": {
         "category": "Error",
@@ -1087,6 +1063,14 @@
     "An enum member cannot have a numeric name.": {
         "category": "Error",
         "code": 2452
+    },
+    "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.": {
+        "category": "Error",
+        "code": 2453
+    },
+    "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'.": {
+        "category": "Error",
+        "code": 2455
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

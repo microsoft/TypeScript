@@ -1,4 +1,4 @@
-tests/cases/compiler/overEagerReturnTypeSpecialization.ts(8,5): error TS2322: Type 'I1<number>' is not assignable to type 'I1<string>':
+tests/cases/compiler/overEagerReturnTypeSpecialization.ts(8,5): error TS2323: Type 'I1<number>' is not assignable to type 'I1<string>'.
   Type 'number' is not assignable to type 'string'.
 
 
@@ -12,8 +12,8 @@ tests/cases/compiler/overEagerReturnTypeSpecialization.ts(8,5): error TS2322: Ty
     declare var v1: I1<number>;
     var r1: I1<string> = v1.func(num => num.toString()) // Correctly returns an I1<string>
         ~~
-!!! error TS2322: Type 'I1<number>' is not assignable to type 'I1<string>':
-!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+!!! error TS2323: Type 'I1<number>' is not assignable to type 'I1<string>'.
+!!! error TS2323:   Type 'number' is not assignable to type 'string'.
                .func(str => str.length);    // should error
     
     var r2: I1<number> = v1.func(num => num.toString()) // Correctly returns an I1<string>

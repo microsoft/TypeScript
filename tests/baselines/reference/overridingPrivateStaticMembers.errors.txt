@@ -1,4 +1,4 @@
-tests/cases/compiler/overridingPrivateStaticMembers.ts(5,7): error TS2418: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2':
+tests/cases/compiler/overridingPrivateStaticMembers.ts(5,7): error TS2417: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2'.
   Types have separate declarations of a private property 'y'.
 
 
@@ -9,7 +9,7 @@ tests/cases/compiler/overridingPrivateStaticMembers.ts(5,7): error TS2418: Class
      
     class Derived2 extends Base2 {
           ~~~~~~~~
-!!! error TS2418: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2':
-!!! error TS2418:   Types have separate declarations of a private property 'y'.
+!!! error TS2417: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2'.
+!!! error TS2417:   Types have separate declarations of a private property 'y'.
         private static y: { foo: string; bar: string; };
     }

@@ -1,6 +1,6 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts(57,15): error TS2429: Interface 'I2' incorrectly extends interface 'Base2':
-  Types of property 'a' are incompatible:
-    Type '(x: number) => string' is not assignable to type '(x: number) => number':
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts(57,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
+  Types of property 'a' are incompatible.
+    Type '(x: number) => string' is not assignable to type '(x: number) => number'.
       Type 'string' is not assignable to type 'number'.
 
 
@@ -63,10 +63,10 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
         // S's
         interface I2 extends Base2 {
                   ~~
-!!! error TS2429: Interface 'I2' incorrectly extends interface 'Base2':
-!!! error TS2429:   Types of property 'a' are incompatible:
-!!! error TS2429:     Type '(x: number) => string' is not assignable to type '(x: number) => number':
-!!! error TS2429:       Type 'string' is not assignable to type 'number'.
+!!! error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
+!!! error TS2430:   Types of property 'a' are incompatible.
+!!! error TS2430:     Type '(x: number) => string' is not assignable to type '(x: number) => number'.
+!!! error TS2430:       Type 'string' is not assignable to type 'number'.
             // N's
             a: (x: number) => string; // error because base returns non-void;
         }

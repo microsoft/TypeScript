@@ -1,5 +1,7 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(32,11): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(33,11): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(32,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+  Type argument candidate '(y: string) => string' is not a valid type argument because it is not a supertype of candidate '(a: string) => boolean'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(33,11): error TS2453: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+  Type argument candidate '(n: Object) => number' is not a valid type argument because it is not a supertype of candidate 'number'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts (2 errors) ====
@@ -35,8 +37,10 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
     
     var x: (a: string) => boolean;
     var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+              ~~~~
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+!!! error TS2453:   Type argument candidate '(y: string) => string' is not a valid type argument because it is not a supertype of candidate '(a: string) => boolean'.
     var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+              ~~~~
+!!! error TS2453: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+!!! error TS2453:   Type argument candidate '(n: Object) => number' is not a valid type argument because it is not a supertype of candidate 'number'.
