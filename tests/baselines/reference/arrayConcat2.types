@@ -18,7 +18,7 @@ a.concat('Hello');
 var b = new Array<string>();
 >b : string[]
 >new Array<string>() : string[]
->Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
+>Array : ArrayConstructor
 
 b.concat('hello');
 >b.concat('hello') : string[]

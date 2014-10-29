@@ -343,43 +343,43 @@ var r13 = i[-01]
 >-01 : number
 
 var b = {
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
->{    "0.1": <void>null,    ".1": new Object(),    "1": 1,    "1.": "",    "1..": true,    "1.0": new Date(),    "-1.0": /123/,    "-1": Date} : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
+>{    "0.1": <void>null,    ".1": new Object(),    "1": 1,    "1.": "",    "1..": true,    "1.0": new Date(),    "-1.0": /123/,    "-1": Date} : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
 
     "0.1": <void>null,
 ><void>null : void
 
     ".1": new Object(),
 >new Object() : Object
->Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
+>Object : ObjectConstructor
 
     "1": 1,
     "1.": "",
     "1..": true,
     "1.0": new Date(),
 >new Date() : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 
     "-1.0": /123/,
     "-1": Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 
 };
 
 var r1 = b['0.1'];
 >r1 : void
 >b['0.1'] : void
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
 
 var r2 = b['.1'];
 >r2 : Object
 >b['.1'] : Object
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
 
 var r3 = b['1'];
 >r3 : number
 >b['1'] : number
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
 
 var r3 = c[1];
 >r3 : number
@@ -389,7 +389,7 @@ var r3 = c[1];
 var r4 = b['1.'];
 >r4 : string
 >b['1.'] : string
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
 
 var r3 = c[1.]; // same as indexing by 1 when done numerically
 >r3 : number
@@ -399,12 +399,12 @@ var r3 = c[1.]; // same as indexing by 1 when done numerically
 var r5 = b['1..'];
 >r5 : boolean
 >b['1..'] : boolean
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
 
 var r6 = b['1.0'];
 >r6 : Date
 >b['1.0'] : Date
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
 
 var r3 = c[1.0]; // same as indexing by 1 when done numerically
 >r3 : number

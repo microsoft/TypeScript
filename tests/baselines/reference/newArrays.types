@@ -27,7 +27,7 @@ module M {
 >this : Gar
 >fa : Foo[]
 >new Array<Foo>(this.x * this.y) : Foo[]
->Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
+>Array : ArrayConstructor
 >Foo : Foo
 >this.x * this.y : number
 >this.x : number

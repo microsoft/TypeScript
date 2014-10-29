@@ -41,7 +41,7 @@ var r = foo(new Function());
 >foo(new Function()) : Function
 >foo : <T extends Function>(x: T) => T
 >new Function() : Function
->Function : { (...args: string[]): Function; new (...args: string[]): Function; prototype: Function; }
+>Function : FunctionConstructor
 
 var r1 = foo((x) => x);
 >r1 : (x: any) => any
