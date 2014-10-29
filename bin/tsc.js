@@ -155,17 +155,16 @@ var ts;
         Global_type_0_must_have_1_type_parameter_s: { code: 2317, category: 1 /* Error */, key: "Global type '{0}' must have {1} type parameter(s)." },
         Cannot_find_global_type_0: { code: 2318, category: 1 /* Error */, key: "Cannot find global type '{0}'." },
         Named_properties_0_of_types_1_and_2_are_not_identical: { code: 2319, category: 1 /* Error */, key: "Named properties '{0}' of types '{1}' and '{2}' are not identical." },
-        Interface_0_cannot_simultaneously_extend_types_1_and_2_Colon: { code: 2320, category: 1 /* Error */, key: "Interface '{0}' cannot simultaneously extend types '{1}' and '{2}':" },
+        Interface_0_cannot_simultaneously_extend_types_1_and_2: { code: 2320, category: 1 /* Error */, key: "Interface '{0}' cannot simultaneously extend types '{1}' and '{2}'." },
         Excessive_stack_depth_comparing_types_0_and_1: { code: 2321, category: 1 /* Error */, key: "Excessive stack depth comparing types '{0}' and '{1}'." },
-        Type_0_is_not_assignable_to_type_1_Colon: { code: 2322, category: 1 /* Error */, key: "Type '{0}' is not assignable to type '{1}':" },
         Type_0_is_not_assignable_to_type_1: { code: 2323, category: 1 /* Error */, key: "Type '{0}' is not assignable to type '{1}'." },
         Property_0_is_missing_in_type_1: { code: 2324, category: 1 /* Error */, key: "Property '{0}' is missing in type '{1}'." },
         Property_0_is_private_in_type_1_but_not_in_type_2: { code: 2325, category: 1 /* Error */, key: "Property '{0}' is private in type '{1}' but not in type '{2}'." },
-        Types_of_property_0_are_incompatible_Colon: { code: 2326, category: 1 /* Error */, key: "Types of property '{0}' are incompatible:" },
+        Types_of_property_0_are_incompatible: { code: 2326, category: 1 /* Error */, key: "Types of property '{0}' are incompatible." },
         Property_0_is_optional_in_type_1_but_required_in_type_2: { code: 2327, category: 1 /* Error */, key: "Property '{0}' is optional in type '{1}' but required in type '{2}'." },
-        Types_of_parameters_0_and_1_are_incompatible_Colon: { code: 2328, category: 1 /* Error */, key: "Types of parameters '{0}' and '{1}' are incompatible:" },
+        Types_of_parameters_0_and_1_are_incompatible: { code: 2328, category: 1 /* Error */, key: "Types of parameters '{0}' and '{1}' are incompatible." },
         Index_signature_is_missing_in_type_0: { code: 2329, category: 1 /* Error */, key: "Index signature is missing in type '{0}'." },
-        Index_signatures_are_incompatible_Colon: { code: 2330, category: 1 /* Error */, key: "Index signatures are incompatible:" },
+        Index_signatures_are_incompatible: { code: 2330, category: 1 /* Error */, key: "Index signatures are incompatible." },
         this_cannot_be_referenced_in_a_module_body: { code: 2331, category: 1 /* Error */, key: "'this' cannot be referenced in a module body." },
         this_cannot_be_referenced_in_current_location: { code: 2332, category: 1 /* Error */, key: "'this' cannot be referenced in current location." },
         this_cannot_be_referenced_in_constructor_arguments: { code: 2333, category: 1 /* Error */, key: "'this' cannot be referenced in constructor arguments." },
@@ -178,7 +177,6 @@ var ts;
         Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword: { code: 2340, category: 1 /* Error */, key: "Only public and protected methods of the base class are accessible via the 'super' keyword" },
         Property_0_is_private_and_only_accessible_within_class_1: { code: 2341, category: 1 /* Error */, key: "Property '{0}' is private and only accessible within class '{1}'." },
         An_index_expression_argument_must_be_of_type_string_number_or_any: { code: 2342, category: 1 /* Error */, key: "An index expression argument must be of type 'string', 'number', or 'any'." },
-        Type_0_does_not_satisfy_the_constraint_1_Colon: { code: 2343, category: 1 /* Error */, key: "Type '{0}' does not satisfy the constraint '{1}':" },
         Type_0_does_not_satisfy_the_constraint_1: { code: 2344, category: 1 /* Error */, key: "Type '{0}' does not satisfy the constraint '{1}'." },
         Argument_of_type_0_is_not_assignable_to_parameter_of_type_1: { code: 2345, category: 1 /* Error */, key: "Argument of type '{0}' is not assignable to parameter of type '{1}'." },
         Supplied_parameters_do_not_match_any_signature_of_call_target: { code: 2346, category: 1 /* Error */, key: "Supplied parameters do not match any signature of call target." },
@@ -188,7 +186,6 @@ var ts;
         Only_a_void_function_can_be_called_with_the_new_keyword: { code: 2350, category: 1 /* Error */, key: "Only a void function can be called with the 'new' keyword." },
         Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature: { code: 2351, category: 1 /* Error */, key: "Cannot use 'new' with an expression whose type lacks a call or construct signature." },
         Neither_type_0_nor_type_1_is_assignable_to_the_other: { code: 2352, category: 1 /* Error */, key: "Neither type '{0}' nor type '{1}' is assignable to the other." },
-        Neither_type_0_nor_type_1_is_assignable_to_the_other_Colon: { code: 2353, category: 1 /* Error */, key: "Neither type '{0}' nor type '{1}' is assignable to the other:" },
         No_best_common_type_exists_among_return_expressions: { code: 2354, category: 1 /* Error */, key: "No best common type exists among return expressions." },
         A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value_or_consist_of_a_single_throw_statement: { code: 2355, category: 1 /* Error */, key: "A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement." },
         An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type: { code: 2356, category: 1 /* Error */, key: "An arithmetic operand must be of type 'any', 'number' or an enum type." },
@@ -249,12 +246,9 @@ var ts;
         Numeric_index_type_0_is_not_assignable_to_string_index_type_1: { code: 2413, category: 1 /* Error */, key: "Numeric index type '{0}' is not assignable to string index type '{1}'." },
         Class_name_cannot_be_0: { code: 2414, category: 1 /* Error */, key: "Class name cannot be '{0}'" },
         Class_0_incorrectly_extends_base_class_1: { code: 2415, category: 1 /* Error */, key: "Class '{0}' incorrectly extends base class '{1}'." },
-        Class_0_incorrectly_extends_base_class_1_Colon: { code: 2416, category: 1 /* Error */, key: "Class '{0}' incorrectly extends base class '{1}':" },
         Class_static_side_0_incorrectly_extends_base_class_static_side_1: { code: 2417, category: 1 /* Error */, key: "Class static side '{0}' incorrectly extends base class static side '{1}'." },
-        Class_static_side_0_incorrectly_extends_base_class_static_side_1_Colon: { code: 2418, category: 1 /* Error */, key: "Class static side '{0}' incorrectly extends base class static side '{1}':" },
         Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0: { code: 2419, category: 1 /* Error */, key: "Type name '{0}' in extends clause does not reference constructor function for '{0}'." },
         Class_0_incorrectly_implements_interface_1: { code: 2420, category: 1 /* Error */, key: "Class '{0}' incorrectly implements interface '{1}'." },
-        Class_0_incorrectly_implements_interface_1_Colon: { code: 2421, category: 1 /* Error */, key: "Class '{0}' incorrectly implements interface '{1}':" },
         A_class_may_only_implement_another_class_or_interface: { code: 2422, category: 1 /* Error */, key: "A class may only implement another class or interface." },
         Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor: { code: 2423, category: 1 /* Error */, key: "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member accessor." },
         Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_property: { code: 2424, category: 1 /* Error */, key: "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member property." },
@@ -262,7 +256,6 @@ var ts;
         Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function: { code: 2426, category: 1 /* Error */, key: "Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member function." },
         Interface_name_cannot_be_0: { code: 2427, category: 1 /* Error */, key: "Interface name cannot be '{0}'" },
         All_declarations_of_an_interface_must_have_identical_type_parameters: { code: 2428, category: 1 /* Error */, key: "All declarations of an interface must have identical type parameters." },
-        Interface_0_incorrectly_extends_interface_1_Colon: { code: 2429, category: 1 /* Error */, key: "Interface '{0}' incorrectly extends interface '{1}':" },
         Interface_0_incorrectly_extends_interface_1: { code: 2430, category: 1 /* Error */, key: "Interface '{0}' incorrectly extends interface '{1}'." },
         Enum_name_cannot_be_0: { code: 2431, category: 1 /* Error */, key: "Enum name cannot be '{0}'" },
         In_an_enum_with_multiple_declarations_only_one_declaration_can_omit_an_initializer_for_its_first_enum_element: { code: 2432, category: 1 /* Error */, key: "In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element." },
@@ -286,7 +279,9 @@ var ts;
         Left_hand_side_of_assignment_expression_cannot_be_a_constant: { code: 2450, category: 1 /* Error */, key: "Left-hand side of assignment expression cannot be a constant.", isEarly: true },
         Cannot_redeclare_block_scoped_variable_0: { code: 2451, category: 1 /* Error */, key: "Cannot redeclare block-scoped variable '{0}'.", isEarly: true },
         An_enum_member_cannot_have_a_numeric_name: { code: 2452, category: 1 /* Error */, key: "An enum member cannot have a numeric name." },
-        Type_alias_0_circularly_references_itself: { code: 2453, category: 1 /* Error */, key: "Type alias '{0}' circularly references itself." },
+        The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly: { code: 2453, category: 1 /* Error */, key: "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly." },
+        Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0: { code: 2455, category: 1 /* Error */, key: "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'." },
+        Type_alias_0_circularly_references_itself: { code: 2456, category: 1 /* Error */, key: "Type alias '{0}' circularly references itself." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: 1 /* Error */, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_name_1_from_private_module_2: { code: 4001, category: 1 /* Error */, key: "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: 1 /* Error */, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
@@ -2130,6 +2125,12 @@ var ts;
         };
     }
     ts.chainDiagnosticMessages = chainDiagnosticMessages;
+    function concatenateDiagnosticMessageChains(headChain, tailChain) {
+        Debug.assert(!headChain.next);
+        headChain.next = tailChain;
+        return headChain;
+    }
+    ts.concatenateDiagnosticMessageChains = concatenateDiagnosticMessageChains;
     function flattenDiagnosticChain(file, start, length, diagnosticChain, newLine) {
         Debug.assert(start >= 0, "start must be non-negative, is " + start);
         Debug.assert(length >= 0, "length must be non-negative, is " + length);
@@ -9344,6 +9345,7 @@ var ts;
         var emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        var inferenceFailureType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, false, false);
         var unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, false, false);
         var globals = {};
@@ -9517,21 +9519,100 @@ var ts;
             }
         }
         function resolveName(location, name, meaning, nameNotFoundMessage, nameArg) {
-            var errorLocation = location;
             var result;
             var lastLocation;
-            var memberWithInitializerThatReferencesIdentifierFromConstructor;
-            function returnResolvedSymbol(s) {
-                if (s && memberWithInitializerThatReferencesIdentifierFromConstructor) {
-                    var propertyName = memberWithInitializerThatReferencesIdentifierFromConstructor.name;
-                    error(errorLocation, ts.Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor, ts.identifierToString(propertyName), nameArg);
+            var propertyWithInvalidInitializer;
+            var errorLocation = location;
+            loop: while (location) {
+                if (location.locals && !isGlobalSourceFile(location)) {
+                    if (result = getSymbol(location.locals, name, meaning)) {
+                        break loop;
+                    }
+                }
+                switch (location.kind) {
+                    case 186 /* SourceFile */:
+                        if (!ts.isExternalModule(location))
+                            break;
+                    case 181 /* ModuleDeclaration */:
+                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & ts.SymbolFlags.ModuleMember)) {
+                            break loop;
+                        }
+                        break;
+                    case 180 /* EnumDeclaration */:
+                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & 8 /* EnumMember */)) {
+                            break loop;
+                        }
+                        break;
+                    case 120 /* Property */:
+                        if (location.parent.kind === 177 /* ClassDeclaration */ && !(location.flags & 128 /* Static */)) {
+                            var ctor = findConstructorDeclaration(location.parent);
+                            if (ctor && ctor.locals) {
+                                if (getSymbol(ctor.locals, name, meaning & ts.SymbolFlags.Value)) {
+                                    propertyWithInvalidInitializer = location;
+                                }
+                            }
+                        }
+                        break;
+                    case 177 /* ClassDeclaration */:
+                    case 178 /* InterfaceDeclaration */:
+                        if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & ts.SymbolFlags.Type)) {
+                            if (lastLocation && lastLocation.flags & 128 /* Static */) {
+                                error(errorLocation, ts.Diagnostics.Static_members_cannot_reference_class_type_parameters);
+                                return undefined;
+                            }
+                            break loop;
+                        }
+                        break;
+                    case 121 /* Method */:
+                    case 122 /* Constructor */:
+                    case 123 /* GetAccessor */:
+                    case 124 /* SetAccessor */:
+                    case 175 /* FunctionDeclaration */:
+                    case 145 /* ArrowFunction */:
+                        if (name === "arguments") {
+                            result = argumentsSymbol;
+                            break loop;
+                        }
+                        break;
+                    case 144 /* FunctionExpression */:
+                        if (name === "arguments") {
+                            result = argumentsSymbol;
+                            break loop;
+                        }
+                        var id = location.name;
+                        if (id && name === id.text) {
+                            result = location.symbol;
+                            break loop;
+                        }
+                        break;
+                    case 171 /* CatchBlock */:
+                        var id = location.variable;
+                        if (name === id.text) {
+                            result = location.symbol;
+                            break loop;
+                        }
+                        break;
+                }
+                lastLocation = location;
+                location = location.parent;
+            }
+            if (!result) {
+                result = getSymbol(globals, name, meaning);
+            }
+            if (!result) {
+                if (nameNotFoundMessage) {
+                    error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : ts.identifierToString(nameArg));
+                }
+                return undefined;
+            }
+            if (nameNotFoundMessage) {
+                if (propertyWithInvalidInitializer) {
+                    var propertyName = propertyWithInvalidInitializer.name;
+                    error(errorLocation, ts.Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor, ts.identifierToString(propertyName), typeof nameArg === "string" ? nameArg : ts.identifierToString(nameArg));
                     return undefined;
                 }
-                if (!s && nameNotFoundMessage) {
-                    error(errorLocation, nameNotFoundMessage, nameArg);
-                }
-                if (s && s.flags & 2 /* BlockScopedVariable */) {
-                    var declaration = ts.forEach(s.declarations, function (d) { return d.flags & ts.NodeFlags.BlockScoped ? d : undefined; });
+                if (result.flags & 2 /* BlockScopedVariable */) {
+                    var declaration = ts.forEach(result.declarations, function (d) { return d.flags & ts.NodeFlags.BlockScoped ? d : undefined; });
                     ts.Debug.assert(declaration, "Block-scoped variable declaration is undefined");
                     var declarationSourceFile = ts.getSourceFileOfNode(declaration);
                     var referenceSourceFile = ts.getSourceFileOfNode(errorLocation);
@@ -9547,83 +9628,8 @@ var ts;
                         }
                     }
                 }
-                return s;
             }
-            while (location) {
-                if (location.locals && !isGlobalSourceFile(location)) {
-                    if (result = getSymbol(location.locals, name, meaning)) {
-                        return returnResolvedSymbol(result);
-                    }
-                }
-                switch (location.kind) {
-                    case 186 /* SourceFile */:
-                        if (!ts.isExternalModule(location))
-                            break;
-                    case 181 /* ModuleDeclaration */:
-                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & ts.SymbolFlags.ModuleMember)) {
-                            return returnResolvedSymbol(result);
-                        }
-                        break;
-                    case 180 /* EnumDeclaration */:
-                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & 8 /* EnumMember */)) {
-                            return returnResolvedSymbol(result);
-                        }
-                        break;
-                    case 120 /* Property */:
-                        if (location.parent.kind === 177 /* ClassDeclaration */ && !(location.flags & 128 /* Static */)) {
-                            var ctor = findConstructorDeclaration(location.parent);
-                            if (ctor && ctor.locals) {
-                                if (getSymbol(ctor.locals, name, meaning & ts.SymbolFlags.Value)) {
-                                    memberWithInitializerThatReferencesIdentifierFromConstructor = location;
-                                }
-                            }
-                        }
-                        break;
-                    case 177 /* ClassDeclaration */:
-                    case 178 /* InterfaceDeclaration */:
-                        if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & ts.SymbolFlags.Type)) {
-                            if (lastLocation && lastLocation.flags & 128 /* Static */) {
-                                error(errorLocation, ts.Diagnostics.Static_members_cannot_reference_class_type_parameters);
-                                return undefined;
-                            }
-                            else {
-                                return returnResolvedSymbol(result);
-                            }
-                        }
-                        break;
-                    case 121 /* Method */:
-                    case 122 /* Constructor */:
-                    case 123 /* GetAccessor */:
-                    case 124 /* SetAccessor */:
-                    case 175 /* FunctionDeclaration */:
-                    case 145 /* ArrowFunction */:
-                        if (name === "arguments") {
-                            return returnResolvedSymbol(argumentsSymbol);
-                        }
-                        break;
-                    case 144 /* FunctionExpression */:
-                        if (name === "arguments") {
-                            return returnResolvedSymbol(argumentsSymbol);
-                        }
-                        var id = location.name;
-                        if (id && name === id.text) {
-                            return returnResolvedSymbol(location.symbol);
-                        }
-                        break;
-                    case 171 /* CatchBlock */:
-                        var id = location.variable;
-                        if (name === id.text) {
-                            return returnResolvedSymbol(location.symbol);
-                        }
-                        break;
-                }
-                lastLocation = location;
-                location = location.parent;
-            }
-            if (result = getSymbol(globals, name, meaning)) {
-                return returnResolvedSymbol(result);
-            }
-            return returnResolvedSymbol(undefined);
+            return result;
         }
         function resolveImport(symbol) {
             ts.Debug.assert((symbol.flags & 16777216 /* Import */) !== 0, "Should only get Imports here.");
@@ -9665,7 +9671,7 @@ var ts;
         }
         function resolveEntityName(location, name, meaning) {
             if (name.kind === 59 /* Identifier */) {
-                var symbol = resolveName(location, name.text, meaning, ts.Diagnostics.Cannot_find_name_0, ts.identifierToString(name));
+                var symbol = resolveName(location, name.text, meaning, ts.Diagnostics.Cannot_find_name_0, name);
                 if (!symbol) {
                     return;
                 }
@@ -9751,7 +9757,7 @@ var ts;
                     }
                     if (node.exportName.text) {
                         var meaning = ts.SymbolFlags.Value | ts.SymbolFlags.Type | ts.SymbolFlags.Namespace;
-                        var exportSymbol = resolveName(node, node.exportName.text, meaning, ts.Diagnostics.Cannot_find_name_0, ts.identifierToString(node.exportName));
+                        var exportSymbol = resolveName(node, node.exportName.text, meaning, ts.Diagnostics.Cannot_find_name_0, node.exportName);
                     }
                 }
                 symbolLinks.exportAssignSymbol = exportSymbol || unknownSymbol;
@@ -10022,10 +10028,9 @@ var ts;
         }
         function isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName) {
             var firstIdentifier = getFirstIdentifier(entityName);
-            var firstIdentifierName = ts.identifierToString(firstIdentifier);
-            var symbolOfNameSpace = resolveName(entityName.parent, firstIdentifier.text, ts.SymbolFlags.Namespace, ts.Diagnostics.Cannot_find_name_0, firstIdentifierName);
+            var symbolOfNameSpace = resolveName(entityName.parent, firstIdentifier.text, ts.SymbolFlags.Namespace, ts.Diagnostics.Cannot_find_name_0, firstIdentifier);
             var hasNamespaceDeclarationsVisibile = hasVisibleDeclarations(symbolOfNameSpace);
-            return hasNamespaceDeclarationsVisibile ? { accessibility: 0 /* Accessible */, aliasesToMakeVisible: hasNamespaceDeclarationsVisibile.aliasesToMakeVisible } : { accessibility: 1 /* NotAccessible */, errorSymbolName: firstIdentifierName };
+            return hasNamespaceDeclarationsVisibile ? { accessibility: 0 /* Accessible */, aliasesToMakeVisible: hasNamespaceDeclarationsVisibile.aliasesToMakeVisible } : { accessibility: 1 /* NotAccessible */, errorSymbolName: ts.identifierToString(firstIdentifier) };
         }
         function releaseStringWriter(writer) {
             writer.clear();
@@ -11925,27 +11930,27 @@ var ts;
         var assignableRelation = {};
         var identityRelation = {};
         function isTypeIdenticalTo(source, target) {
-            return checkTypeRelatedTo(source, target, identityRelation, undefined, undefined, undefined);
+            return checkTypeRelatedTo(source, target, identityRelation, undefined);
         }
         function isTypeSubtypeOf(source, target) {
-            return checkTypeSubtypeOf(source, target, undefined, undefined, undefined);
+            return checkTypeSubtypeOf(source, target, undefined);
         }
-        function checkTypeSubtypeOf(source, target, errorNode, chainedMessage, terminalMessage) {
-            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, chainedMessage, terminalMessage);
+        function checkTypeSubtypeOf(source, target, errorNode, headMessage, containingMessageChain) {
+            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
         }
         function isTypeAssignableTo(source, target) {
-            return checkTypeAssignableTo(source, target, undefined, undefined, undefined);
+            return checkTypeAssignableTo(source, target, undefined);
         }
-        function checkTypeAssignableTo(source, target, errorNode, chainedMessage, terminalMessage) {
-            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, chainedMessage, terminalMessage);
+        function checkTypeAssignableTo(source, target, errorNode, headMessage) {
+            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage);
         }
         function isTypeRelatedTo(source, target, relation) {
-            return checkTypeRelatedTo(source, target, relation, undefined, undefined, undefined);
+            return checkTypeRelatedTo(source, target, relation, undefined);
         }
         function isSignatureAssignableTo(source, target) {
             var sourceType = getOrCreateTypeFromSignature(source);
             var targetType = getOrCreateTypeFromSignature(target);
-            return checkTypeRelatedTo(sourceType, targetType, assignableRelation, undefined, undefined, undefined);
+            return checkTypeRelatedTo(sourceType, targetType, assignableRelation, undefined);
         }
         function isPropertyIdenticalTo(sourceProp, targetProp) {
             return isPropertyIdenticalToRecursive(sourceProp, targetProp, false, function (s, t, _reportErrors) { return isTypeIdenticalTo(s, t); });
@@ -11975,7 +11980,7 @@ var ts;
                             var typeName1 = typeToString(existing.containingType);
                             var typeName2 = typeToString(base);
                             var errorInfo = ts.chainDiagnosticMessages(undefined, ts.Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
-                            errorInfo = ts.chainDiagnosticMessages(errorInfo, ts.Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2_Colon, typeToString(type), typeName1, typeName2);
+                            errorInfo = ts.chainDiagnosticMessages(errorInfo, ts.Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
                             addDiagnostic(ts.createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, program.getCompilerHost().getNewLine()));
                         }
                     }
@@ -11999,7 +12004,7 @@ var ts;
                 return isOptionalProperty(sourceProp) === isOptionalProperty(targetProp) && relate(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
             }
         }
-        function checkTypeRelatedTo(source, target, relation, errorNode, chainedMessage, terminalMessage) {
+        function checkTypeRelatedTo(source, target, relation, errorNode, headMessage, containingMessageChain) {
             var errorInfo;
             var sourceStack;
             var targetStack;
@@ -12007,11 +12012,14 @@ var ts;
             var depth = 0;
             var overflow = false;
             ts.Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
-            var result = isRelatedToWithCustomErrors(source, target, errorNode !== undefined, chainedMessage, terminalMessage);
+            var result = isRelatedToWithCustomErrors(source, target, errorNode !== undefined, headMessage);
             if (overflow) {
                 error(errorNode, ts.Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
             else if (errorInfo) {
+                if (containingMessageChain) {
+                    errorInfo = ts.concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
+                }
                 addDiagnostic(ts.createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, program.getCompilerHost().getNewLine()));
             }
             return result;
@@ -12019,9 +12027,9 @@ var ts;
                 errorInfo = ts.chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
             }
             function isRelatedTo(source, target, reportErrors) {
-                return isRelatedToWithCustomErrors(source, target, reportErrors, undefined, undefined);
+                return isRelatedToWithCustomErrors(source, target, reportErrors, undefined);
             }
-            function isRelatedToWithCustomErrors(source, target, reportErrors, chainedMessage, terminalMessage) {
+            function isRelatedToWithCustomErrors(source, target, reportErrors, headMessage) {
                 if (relation === identityRelation) {
                     if (source === target)
                         return true;
@@ -12076,11 +12084,9 @@ var ts;
                     }
                 }
                 if (reportErrors) {
-                    chainedMessage = chainedMessage || ts.Diagnostics.Type_0_is_not_assignable_to_type_1_Colon;
-                    terminalMessage = terminalMessage || ts.Diagnostics.Type_0_is_not_assignable_to_type_1;
-                    var diagnosticKey = errorInfo ? chainedMessage : terminalMessage;
-                    ts.Debug.assert(diagnosticKey);
-                    reportError(diagnosticKey, typeToString(source), typeToString(target));
+                    headMessage = headMessage || ts.Diagnostics.Type_0_is_not_assignable_to_type_1;
+                    ts.Debug.assert(headMessage);
+                    reportError(headMessage, typeToString(source), typeToString(target));
                 }
                 return false;
             }
@@ -12239,7 +12245,7 @@ var ts;
                             }
                             if (!isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors)) {
                                 if (reportErrors) {
-                                    reportError(ts.Diagnostics.Types_of_property_0_are_incompatible_Colon, symbolToString(targetProp));
+                                    reportError(ts.Diagnostics.Types_of_property_0_are_incompatible, symbolToString(targetProp));
                                 }
                                 return false;
                             }
@@ -12332,7 +12338,7 @@ var ts;
                     if (!isRelatedTo(s, t, reportErrors)) {
                         if (!isRelatedTo(t, s, false)) {
                             if (reportErrors) {
-                                reportError(ts.Diagnostics.Types_of_parameters_0_and_1_are_incompatible_Colon, source.parameters[i < sourceMax ? i : sourceMax].name, target.parameters[i < targetMax ? i : targetMax].name);
+                                reportError(ts.Diagnostics.Types_of_parameters_0_and_1_are_incompatible, source.parameters[i < sourceMax ? i : sourceMax].name, target.parameters[i < targetMax ? i : targetMax].name);
                             }
                             return false;
                         }
@@ -12373,7 +12379,7 @@ var ts;
                     }
                     if (!isRelatedTo(sourceType, targetType, reportErrors)) {
                         if (reportErrors) {
-                            reportError(ts.Diagnostics.Index_signatures_are_incompatible_Colon);
+                            reportError(ts.Diagnostics.Index_signatures_are_incompatible);
                         }
                         return false;
                     }
@@ -12402,7 +12408,7 @@ var ts;
                     }
                     if (!compatible) {
                         if (reportErrors) {
-                            reportError(ts.Diagnostics.Index_signatures_are_incompatible_Colon);
+                            reportError(ts.Diagnostics.Index_signatures_are_incompatible);
                         }
                         return false;
                     }
@@ -12455,6 +12461,32 @@ var ts;
         }
         function getCommonSupertype(types) {
             return ts.forEach(types, function (t) { return isSupertypeOfEach(t, types) ? t : undefined; });
+        }
+        function reportNoCommonSupertypeError(types, errorLocation, errorMessageChainHead) {
+            var bestSupertype;
+            var bestSupertypeDownfallType;
+            var bestSupertypeScore = 0;
+            for (var i = 0; i < types.length; i++) {
+                var score = 0;
+                var downfallType = undefined;
+                for (var j = 0; j < types.length; j++) {
+                    if (isTypeSubtypeOf(types[j], types[i])) {
+                        score++;
+                    }
+                    else if (!downfallType) {
+                        downfallType = types[j];
+                    }
+                }
+                if (score > bestSupertypeScore) {
+                    bestSupertype = types[i];
+                    bestSupertypeDownfallType = downfallType;
+                    bestSupertypeScore = score;
+                }
+                if (bestSupertypeScore === types.length - 1) {
+                    break;
+                }
+            }
+            checkTypeSubtypeOf(bestSupertypeDownfallType, bestSupertype, errorLocation, ts.Diagnostics.Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0, errorMessageChainHead);
         }
         function isTypeOfObjectLiteral(type) {
             return (type.flags & 32768 /* Anonymous */) && type.symbol && (type.symbol.flags & 2048 /* ObjectLiteral */) ? true : false;
@@ -12694,27 +12726,28 @@ var ts;
             }
         }
         function getInferredType(context, index) {
-            var result = context.inferredTypes[index];
-            if (!result) {
+            var inferredType = context.inferredTypes[index];
+            if (!inferredType) {
                 var inferences = context.inferences[index];
                 if (inferences.length) {
                     var unionOrSuperType = context.inferUnionTypes ? getUnionType(inferences) : getCommonSupertype(inferences);
-                    var inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : undefinedType;
+                    inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : inferenceFailureType;
                 }
                 else {
                     inferredType = emptyObjectType;
                 }
-                var constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
-                var result = constraint && !isTypeAssignableTo(inferredType, constraint) ? constraint : inferredType;
-                context.inferredTypes[index] = result;
+                if (inferredType !== inferenceFailureType) {
+                    var constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
+                    inferredType = constraint && !isTypeAssignableTo(inferredType, constraint) ? constraint : inferredType;
+                }
+                context.inferredTypes[index] = inferredType;
             }
-            return result;
+            return inferredType;
         }
         function getInferredTypes(context) {
             for (var i = 0; i < context.inferredTypes.length; i++) {
                 getInferredType(context, i);
             }
-            context.inferences = undefined;
             return context.inferredTypes;
         }
         function hasAncestor(node, kind) {
@@ -12723,7 +12756,7 @@ var ts;
         function getResolvedSymbol(node) {
             var links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
-                links.resolvedSymbol = resolveName(node, node.text, ts.SymbolFlags.Value | 2097152 /* ExportValue */, ts.Diagnostics.Cannot_find_name_0, ts.identifierToString(node)) || unknownSymbol;
+                links.resolvedSymbol = resolveName(node, node.text, ts.SymbolFlags.Value | 2097152 /* ExportValue */, ts.Diagnostics.Cannot_find_name_0, node) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
@@ -13531,21 +13564,29 @@ var ts;
                 }
             }
             var inferredTypes = getInferredTypes(context);
-            return ts.contains(inferredTypes, undefinedType) ? undefined : inferredTypes;
+            context.failedTypeParameterIndex = ts.indexOf(inferredTypes, inferenceFailureType);
+            for (var i = 0; i < inferredTypes.length; i++) {
+                if (inferredTypes[i] === inferenceFailureType) {
+                    inferredTypes[i] = unknownType;
+                }
+            }
+            return context;
         }
-        function checkTypeArguments(signature, typeArguments) {
+        function checkTypeArguments(signature, typeArguments, typeArgumentResultTypes, reportErrors) {
             var typeParameters = signature.typeParameters;
-            var result = [];
+            var typeArgumentsAreAssignable = true;
             for (var i = 0; i < typeParameters.length; i++) {
                 var typeArgNode = typeArguments[i];
                 var typeArgument = getTypeFromTypeNode(typeArgNode);
-                var constraint = getConstraintOfTypeParameter(typeParameters[i]);
-                if (constraint && fullTypeCheck) {
-                    checkTypeAssignableTo(typeArgument, constraint, typeArgNode, ts.Diagnostics.Type_0_does_not_satisfy_the_constraint_1_Colon, ts.Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                typeArgumentResultTypes[i] = typeArgument;
+                if (typeArgumentsAreAssignable) {
+                    var constraint = getConstraintOfTypeParameter(typeParameters[i]);
+                    if (constraint) {
+                        typeArgumentsAreAssignable = checkTypeAssignableTo(typeArgument, constraint, reportErrors ? typeArgNode : undefined, ts.Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                    }
                 }
-                result.push(typeArgument);
             }
-            return result;
+            return typeArgumentsAreAssignable;
         }
         function checkApplicableSignature(node, signature, relation, excludeArgument, reportErrors) {
             if (node.arguments) {
@@ -13556,7 +13597,7 @@ var ts;
                     }
                     var paramType = getTypeAtPosition(signature, i);
                     var argType = arg.kind === 7 /* StringLiteral */ && !reportErrors ? getStringLiteralType(arg) : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
-                    var isValidArgument = checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined, ts.Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1, ts.Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1);
+                    var isValidArgument = checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined, ts.Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1);
                     if (!isValidArgument) {
                         return false;
                     }
@@ -13581,40 +13622,36 @@ var ts;
                     excludeArgument[i] = true;
                 }
             }
-            var relation = candidates.length === 1 ? assignableRelation : subtypeRelation;
-            var lastCandidate;
-            while (true) {
-                for (var i = 0; i < candidates.length; i++) {
-                    if (!signatureHasCorrectArity(node, candidates[i])) {
-                        continue;
-                    }
-                    while (true) {
-                        var candidate = candidates[i];
-                        if (candidate.typeParameters) {
-                            var typeArguments = node.typeArguments ? checkTypeArguments(candidate, node.typeArguments) : inferTypeArguments(candidate, args, excludeArgument);
-                            if (!typeArguments) {
-                                break;
-                            }
-                            candidate = getSignatureInstantiation(candidate, typeArguments);
-                        }
-                        lastCandidate = candidate;
-                        if (!checkApplicableSignature(node, candidate, relation, excludeArgument, false)) {
-                            break;
-                        }
-                        var index = excludeArgument ? ts.indexOf(excludeArgument, true) : -1;
-                        if (index < 0) {
-                            return candidate;
-                        }
-                        excludeArgument[index] = false;
-                    }
-                }
-                if (relation === assignableRelation) {
-                    break;
-                }
-                relation = assignableRelation;
+            var candidateForArgumentError;
+            var candidateForTypeArgumentError;
+            var resultOfFailedInference;
+            var result;
+            if (candidates.length > 1) {
+                result = chooseOverload(candidates, subtypeRelation, excludeArgument);
             }
-            if (lastCandidate) {
-                checkApplicableSignature(node, lastCandidate, relation, undefined, true);
+            if (!result) {
+                candidateForArgumentError = undefined;
+                candidateForTypeArgumentError = undefined;
+                resultOfFailedInference = undefined;
+                result = chooseOverload(candidates, assignableRelation, excludeArgument);
+            }
+            if (result) {
+                return result;
+            }
+            if (candidateForArgumentError) {
+                checkApplicableSignature(node, candidateForArgumentError, assignableRelation, undefined, true);
+            }
+            else if (candidateForTypeArgumentError) {
+                if (node.typeArguments) {
+                    checkTypeArguments(candidateForTypeArgumentError, node.typeArguments, [], true);
+                }
+                else {
+                    ts.Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
+                    var failedTypeParameter = candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failedTypeParameterIndex];
+                    var inferenceCandidates = resultOfFailedInference.inferences[resultOfFailedInference.failedTypeParameterIndex];
+                    var diagnosticChainHead = ts.chainDiagnosticMessages(undefined, ts.Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly, typeToString(failedTypeParameter));
+                    reportNoCommonSupertypeError(inferenceCandidates, node.func, diagnosticChainHead);
+                }
             }
             else {
                 error(node, ts.Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
@@ -13627,6 +13664,60 @@ var ts;
                 }
             }
             return resolveErrorCall(node);
+            function chooseOverload(candidates, relation, excludeArgument) {
+                for (var i = 0; i < candidates.length; i++) {
+                    if (!signatureHasCorrectArity(node, candidates[i])) {
+                        continue;
+                    }
+                    var originalCandidate = candidates[i];
+                    var inferenceResult;
+                    while (true) {
+                        var candidate = originalCandidate;
+                        if (candidate.typeParameters) {
+                            var typeArgumentTypes;
+                            var typeArgumentsAreValid;
+                            if (node.typeArguments) {
+                                typeArgumentTypes = new Array(candidate.typeParameters.length);
+                                typeArgumentsAreValid = checkTypeArguments(candidate, node.typeArguments, typeArgumentTypes, false);
+                            }
+                            else {
+                                inferenceResult = inferTypeArguments(candidate, args, excludeArgument);
+                                typeArgumentsAreValid = inferenceResult.failedTypeParameterIndex < 0;
+                                typeArgumentTypes = inferenceResult.inferredTypes;
+                            }
+                            if (!typeArgumentsAreValid) {
+                                break;
+                            }
+                            candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
+                        }
+                        if (!checkApplicableSignature(node, candidate, relation, excludeArgument, false)) {
+                            break;
+                        }
+                        var index = excludeArgument ? ts.indexOf(excludeArgument, true) : -1;
+                        if (index < 0) {
+                            return candidate;
+                        }
+                        excludeArgument[index] = false;
+                    }
+                    if (originalCandidate.typeParameters) {
+                        var instantiatedCandidate = candidate;
+                        if (typeArgumentsAreValid) {
+                            candidateForArgumentError = instantiatedCandidate;
+                        }
+                        else {
+                            candidateForTypeArgumentError = originalCandidate;
+                            if (!node.typeArguments) {
+                                resultOfFailedInference = inferenceResult;
+                            }
+                        }
+                    }
+                    else {
+                        ts.Debug.assert(originalCandidate === candidate);
+                        candidateForArgumentError = originalCandidate;
+                    }
+                }
+                return undefined;
+            }
             function collectCandidates() {
                 var result = candidates;
                 var lastParent;
@@ -13750,7 +13841,7 @@ var ts;
             if (fullTypeCheck && targetType !== unknownType) {
                 var widenedType = getWidenedType(exprType, true);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
-                    checkTypeAssignableTo(exprType, targetType, node, ts.Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other_Colon, ts.Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
+                    checkTypeAssignableTo(exprType, targetType, node, ts.Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
             }
             return targetType;
@@ -13880,7 +13971,7 @@ var ts;
             else {
                 var exprType = checkExpression(node.body);
                 if (node.type) {
-                    checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, undefined, undefined);
+                    checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, undefined);
                 }
                 checkFunctionExpressionBodies(node.body);
             }
@@ -14110,7 +14201,7 @@ var ts;
                 if (fullTypeCheck && operator >= ts.SyntaxKind.FirstAssignment && operator <= ts.SyntaxKind.LastAssignment) {
                     var ok = checkReferenceExpression(node.left, ts.Diagnostics.Invalid_left_hand_side_of_assignment_expression, ts.Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant);
                     if (ok) {
-                        checkTypeAssignableTo(valueType, leftType, node.left, undefined, undefined);
+                        checkTypeAssignableTo(valueType, leftType, node.left, undefined);
                     }
                 }
             }
@@ -14414,7 +14505,7 @@ var ts;
                     var constraint = getConstraintOfTypeParameter(type.target.typeParameters[i]);
                     if (fullTypeCheck && constraint) {
                         var typeArgument = type.typeArguments[i];
-                        checkTypeAssignableTo(typeArgument, constraint, node, ts.Diagnostics.Type_0_does_not_satisfy_the_constraint_1_Colon, ts.Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                        checkTypeAssignableTo(typeArgument, constraint, node, ts.Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                     }
                 }
             }
@@ -14852,7 +14943,7 @@ var ts;
                 }
                 if (node.initializer) {
                     if (!(getNodeLinks(node.initializer).flags & 1 /* TypeChecked */)) {
-                        checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, undefined, undefined);
+                        checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, undefined);
                     }
                     checkCollisionWithConstDeclarations(node);
                 }
@@ -14933,7 +15024,7 @@ var ts;
                         var returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(func));
                         var checkAssignability = func.type || (func.kind === 123 /* GetAccessor */ && getSetAccessorTypeAnnotationNode(getDeclarationOfKind(func.symbol, 124 /* SetAccessor */)));
                         if (checkAssignability) {
-                            checkTypeAssignableTo(checkExpression(node.expression), returnType, node.expression, undefined, undefined);
+                            checkTypeAssignableTo(checkExpression(node.expression), returnType, node.expression, undefined);
                         }
                         else if (func.kind == 122 /* Constructor */) {
                             if (!isTypeAssignableTo(checkExpression(node.expression), returnType)) {
@@ -14954,7 +15045,7 @@ var ts;
                 if (fullTypeCheck && clause.expression) {
                     var caseType = checkExpression(clause.expression);
                     if (!isTypeAssignableTo(expressionType, caseType)) {
-                        checkTypeAssignableTo(caseType, expressionType, clause.expression, undefined, undefined);
+                        checkTypeAssignableTo(caseType, expressionType, clause.expression, undefined);
                     }
                 }
                 checkBlock(clause);
@@ -15061,9 +15152,9 @@ var ts;
             if (type.baseTypes.length) {
                 if (fullTypeCheck) {
                     var baseType = type.baseTypes[0];
-                    checkTypeAssignableTo(type, baseType, node.name, ts.Diagnostics.Class_0_incorrectly_extends_base_class_1_Colon, ts.Diagnostics.Class_0_incorrectly_extends_base_class_1);
+                    checkTypeAssignableTo(type, baseType, node.name, ts.Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     var staticBaseType = getTypeOfSymbol(baseType.symbol);
-                    checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name, ts.Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1_Colon, ts.Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+                    checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name, ts.Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
                     if (baseType.symbol !== resolveEntityName(node, node.baseType.typeName, ts.SymbolFlags.Value)) {
                         error(node.baseType, ts.Diagnostics.Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0, typeToString(baseType));
                     }
@@ -15079,7 +15170,7 @@ var ts;
                         if (t !== unknownType) {
                             var declaredType = (t.flags & 4096 /* Reference */) ? t.target : t;
                             if (declaredType.flags & (1024 /* Class */ | 2048 /* Interface */)) {
-                                checkTypeAssignableTo(type, t, node.name, ts.Diagnostics.Class_0_incorrectly_implements_interface_1_Colon, ts.Diagnostics.Class_0_incorrectly_implements_interface_1);
+                                checkTypeAssignableTo(type, t, node.name, ts.Diagnostics.Class_0_incorrectly_implements_interface_1);
                             }
                             else {
                                 error(typeRefNode, ts.Diagnostics.A_class_may_only_implement_another_class_or_interface);
@@ -15184,7 +15275,7 @@ var ts;
                     var type = getDeclaredTypeOfSymbol(symbol);
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
                         ts.forEach(type.baseTypes, function (baseType) {
-                            checkTypeAssignableTo(type, baseType, node.name, ts.Diagnostics.Interface_0_incorrectly_extends_interface_1_Colon, ts.Diagnostics.Interface_0_incorrectly_extends_interface_1);
+                            checkTypeAssignableTo(type, baseType, node.name, ts.Diagnostics.Interface_0_incorrectly_extends_interface_1);
                         });
                         checkIndexConstraints(type);
                     }
@@ -15229,7 +15320,7 @@ var ts;
                     if (initializer) {
                         autoValue = getConstantValueForExpression(initializer);
                         if (autoValue === undefined && !ambient) {
-                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, undefined, undefined);
+                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, undefined);
                         }
                     }
                     else if (ambient) {
