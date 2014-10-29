@@ -745,3 +745,23 @@ declare var Proxy: {
     <T>(target: T, handeler: Handler<T>): T;
     new <T>(target: T, handeler: Handler<T>): T
 };
+
+declare type PropertyKey = string | number | Symbol;
+
+declare var Reflect: {
+    apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
+    construct(target: Function, argumentsList: ArrayLike<any>): any;
+    defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
+    deleteProperty(target: any, propertyKey: PropertyKey): boolean;
+    enumerate(target: any): Iterator<any>;
+    get(target: any, propertyKey: PropertyKey, receiver?: any): any;
+    getOwnPropertyDescriptor(target: any, propertyKey: PropertyKey): PropertyDescriptor;
+    getPrototypeOf(target: any): any;
+    has(target: any, propertyKey: string): boolean;
+    has(target: any, propertyKey: Symbol): boolean;
+    isExtensible(target: any): boolean;
+    ownKeys(target: any): Array<PropertyKey>;
+    preventExtensions(target: any): boolean;
+    set(target: any, propertyKey: PropertyKey, value: any, receiver? :any): boolean;
+    setPrototypeOf(target: any, proto: any): boolean;
+};
