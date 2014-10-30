@@ -55,8 +55,7 @@ module TypeScript {
             case SyntaxKind.CastExpression:
             case SyntaxKind.TypeArgumentList:
             case SyntaxKind.TypeParameterList:
-            case SyntaxKind.ExtendsHeritageClause:
-            case SyntaxKind.ImplementsHeritageClause:
+            case SyntaxKind.HeritageClause:
             case SyntaxKind.TypeParameter:
             case SyntaxKind.Constraint:
             case SyntaxKind.TypeAnnotation:
@@ -107,7 +106,7 @@ module TypeScript {
                 return isDoStatementTypeScriptSpecific(<DoStatementSyntax>element);
             case SyntaxKind.WithStatement:
                 return isWithStatementTypeScriptSpecific(<WithStatementSyntax>element);
-            case SyntaxKind.PreIncrementExpression: case SyntaxKind.PreDecrementExpression: case SyntaxKind.PlusExpression: case SyntaxKind.NegateExpression: case SyntaxKind.BitwiseNotExpression: case SyntaxKind.LogicalNotExpression:
+            case SyntaxKind.PrefixUnaryExpression:
                 return isPrefixUnaryExpressionTypeScriptSpecific(<PrefixUnaryExpressionSyntax>element);
             case SyntaxKind.DeleteExpression:
                 return isDeleteExpressionTypeScriptSpecific(<DeleteExpressionSyntax>element);
@@ -117,9 +116,9 @@ module TypeScript {
                 return isVoidExpressionTypeScriptSpecific(<VoidExpressionSyntax>element);
             case SyntaxKind.ConditionalExpression:
                 return isConditionalExpressionTypeScriptSpecific(<ConditionalExpressionSyntax>element);
-            case SyntaxKind.MultiplyExpression: case SyntaxKind.DivideExpression: case SyntaxKind.ModuloExpression: case SyntaxKind.AddExpression: case SyntaxKind.SubtractExpression: case SyntaxKind.LeftShiftExpression: case SyntaxKind.SignedRightShiftExpression: case SyntaxKind.UnsignedRightShiftExpression: case SyntaxKind.LessThanExpression: case SyntaxKind.GreaterThanExpression: case SyntaxKind.LessThanOrEqualExpression: case SyntaxKind.GreaterThanOrEqualExpression: case SyntaxKind.InstanceOfExpression: case SyntaxKind.InExpression: case SyntaxKind.EqualsWithTypeConversionExpression: case SyntaxKind.NotEqualsWithTypeConversionExpression: case SyntaxKind.EqualsExpression: case SyntaxKind.NotEqualsExpression: case SyntaxKind.BitwiseAndExpression: case SyntaxKind.BitwiseExclusiveOrExpression: case SyntaxKind.BitwiseOrExpression: case SyntaxKind.LogicalAndExpression: case SyntaxKind.LogicalOrExpression: case SyntaxKind.OrAssignmentExpression: case SyntaxKind.AndAssignmentExpression: case SyntaxKind.ExclusiveOrAssignmentExpression: case SyntaxKind.LeftShiftAssignmentExpression: case SyntaxKind.SignedRightShiftAssignmentExpression: case SyntaxKind.UnsignedRightShiftAssignmentExpression: case SyntaxKind.AddAssignmentExpression: case SyntaxKind.SubtractAssignmentExpression: case SyntaxKind.MultiplyAssignmentExpression: case SyntaxKind.DivideAssignmentExpression: case SyntaxKind.ModuloAssignmentExpression: case SyntaxKind.AssignmentExpression: case SyntaxKind.CommaExpression:
+            case SyntaxKind.BinaryExpression:
                 return isBinaryExpressionTypeScriptSpecific(<BinaryExpressionSyntax>element);
-            case SyntaxKind.PostIncrementExpression: case SyntaxKind.PostDecrementExpression:
+            case SyntaxKind.PostfixUnaryExpression:
                 return isPostfixUnaryExpressionTypeScriptSpecific(<PostfixUnaryExpressionSyntax>element);
             case SyntaxKind.MemberAccessExpression:
                 return isMemberAccessExpressionTypeScriptSpecific(<MemberAccessExpressionSyntax>element);
