@@ -245,27 +245,61 @@ module ts.formatting {
                     processChildNode(child, undefined, /*containingList*/ undefined, /*listElementIndex*/ -1)
                 },
                 nodes => {
-                    var inheritedIndentation: number = undefined;
-                    for (var i = 0, len = nodes.length; i < len; ++i) {
-                        inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, /*containingList*/ nodes, /*listElementIndex*/ i)
-                    }
+                    var listStartToken = SyntaxKind.Unknown;
+                    var listEndToken = SyntaxKind.Unknown;
                     switch (node.kind) {
+                        case SyntaxKind.Constructor:
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.FunctionExpression:
                         case SyntaxKind.Method:
                         case SyntaxKind.ArrowFunction:
+                            if ((<FunctionDeclaration>node).typeParameters === nodes) {                                
+                                listStartToken = SyntaxKind.LessThanToken
+                                listEndToken = SyntaxKind.GreaterThanToken;
+                            }
+                            else if ((<FunctionDeclaration>node).parameters === nodes) {
+                                listStartToken = SyntaxKind.OpenParenToken;
+                                listEndToken = SyntaxKind.CloseParenToken;
+                            }
+                            break;
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
-                            //if (formattingScanner.isOnToken()) {
-                            //    var tokenInfo = formattingScanner.readTokenInfo(node);
-                            //    Debug.assert(rangeContainsRange(node, tokenInfo.token));
-                            //    // TODO: check if token is a list terminator
-                            //    if (node.parent.kind !== SyntaxKind.SourceFile && formattingScanner.lastTrailingTriviaWasNewLine()) {
-                            //        var listTerminatorIndentation = nodeIndentation.getIndentation() + options.IndentSize;
-                            //        doConsumeTokenAndAdvanceScanner(tokenInfo, node, getDynamicIndentation(node, listTerminatorIndentation, listTerminatorIndentation, nodeIndentation));
-                            //    }
-                            //}
+                            if ((<CallExpression>node).typeArguments === nodes) {
+                                listStartToken = SyntaxKind.LessThanToken
+                                listEndToken = SyntaxKind.GreaterThanToken;
+                            }
+                            else if ((<CallExpression>node).arguments === nodes) {
+                                listStartToken = SyntaxKind.OpenParenToken;
+                                listEndToken = SyntaxKind.CloseParenToken;
+                            }
                             break;
+                    }
+
+                    if (listStartToken !== SyntaxKind.Unknown) {
+                        // try to consume open token
+                        if (formattingScanner.isOnToken()) {
+                            var tokenInfo = formattingScanner.readTokenInfo(node);
+                            if (tokenInfo.token.kind === listStartToken) {
+                                // make sure that this token does not belong to the child
+                                doConsumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
+                            }
+                        }
+                    }
+
+                    var inheritedIndentation: number = undefined;
+                    for (var i = 0, len = nodes.length; i < len; ++i) {
+                        inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, /*containingList*/ nodes, /*listElementIndex*/ i)
+                    }
+
+                    if (listEndToken !== SyntaxKind.Unknown) {
+                        if (formattingScanner.isOnToken()) {
+                            var tokenInfo = formattingScanner.readTokenInfo(node);
+                            if (tokenInfo.token.kind === listEndToken && formattingScanner.lastTrailingTriviaWasNewLine()) {
+                                
+                                var endTokenIndentation = nodeIndentation.getIndentation() + options.IndentSize;
+                                doConsumeTokenAndAdvanceScanner(tokenInfo, node, getDynamicIndentation(node, endTokenIndentation, endTokenIndentation, nodeIndentation));
+                            }
+                        }
                     }
                 }
             );
