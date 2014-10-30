@@ -31,17 +31,23 @@ module ts.formatting {
 
         function advance(): void {
             lastTokenInfo = undefined;
+            var isStarted = scanner.getStartPos() !== enclosingNode.pos;
 
             // accumulate leading trivia and token
-            if (trailingTrivia) {
-                Debug.assert(trailingTrivia.length);
-                wasNewLine = trailingTrivia[trailingTrivia.length - 1].kind === SyntaxKind.NewLineTrivia;
+            if (isStarted) {
+                if (trailingTrivia) {
+                    Debug.assert(trailingTrivia.length);
+                    wasNewLine = trailingTrivia[trailingTrivia.length - 1].kind === SyntaxKind.NewLineTrivia;
+                }
+                else {
+                    wasNewLine = false;
+                }
             }
 
             leadingTrivia = undefined;
             trailingTrivia = undefined;
 
-            if (scanner.getStartPos() === enclosingNode.pos) {
+            if (!isStarted) {
                 scanner.scan();
             }
 
