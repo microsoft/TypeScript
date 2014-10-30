@@ -1,0 +1,1 @@
+var v: () => string | number

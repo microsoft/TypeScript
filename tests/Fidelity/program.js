@@ -18531,125 +18531,127 @@ var TypeScript;
         SyntaxKind[SyntaxKind["GenericType"] = 126] = "GenericType";
         SyntaxKind[SyntaxKind["TypeQuery"] = 127] = "TypeQuery";
         SyntaxKind[SyntaxKind["TupleType"] = 128] = "TupleType";
-        SyntaxKind[SyntaxKind["InterfaceDeclaration"] = 129] = "InterfaceDeclaration";
-        SyntaxKind[SyntaxKind["FunctionDeclaration"] = 130] = "FunctionDeclaration";
-        SyntaxKind[SyntaxKind["ModuleDeclaration"] = 131] = "ModuleDeclaration";
-        SyntaxKind[SyntaxKind["ClassDeclaration"] = 132] = "ClassDeclaration";
-        SyntaxKind[SyntaxKind["EnumDeclaration"] = 133] = "EnumDeclaration";
-        SyntaxKind[SyntaxKind["ImportDeclaration"] = 134] = "ImportDeclaration";
-        SyntaxKind[SyntaxKind["ExportAssignment"] = 135] = "ExportAssignment";
-        SyntaxKind[SyntaxKind["MemberFunctionDeclaration"] = 136] = "MemberFunctionDeclaration";
-        SyntaxKind[SyntaxKind["MemberVariableDeclaration"] = 137] = "MemberVariableDeclaration";
-        SyntaxKind[SyntaxKind["ConstructorDeclaration"] = 138] = "ConstructorDeclaration";
-        SyntaxKind[SyntaxKind["IndexMemberDeclaration"] = 139] = "IndexMemberDeclaration";
-        SyntaxKind[SyntaxKind["GetAccessor"] = 140] = "GetAccessor";
-        SyntaxKind[SyntaxKind["SetAccessor"] = 141] = "SetAccessor";
-        SyntaxKind[SyntaxKind["PropertySignature"] = 142] = "PropertySignature";
-        SyntaxKind[SyntaxKind["CallSignature"] = 143] = "CallSignature";
-        SyntaxKind[SyntaxKind["ConstructSignature"] = 144] = "ConstructSignature";
-        SyntaxKind[SyntaxKind["IndexSignature"] = 145] = "IndexSignature";
-        SyntaxKind[SyntaxKind["MethodSignature"] = 146] = "MethodSignature";
-        SyntaxKind[SyntaxKind["Block"] = 147] = "Block";
-        SyntaxKind[SyntaxKind["IfStatement"] = 148] = "IfStatement";
-        SyntaxKind[SyntaxKind["VariableStatement"] = 149] = "VariableStatement";
-        SyntaxKind[SyntaxKind["ExpressionStatement"] = 150] = "ExpressionStatement";
-        SyntaxKind[SyntaxKind["ReturnStatement"] = 151] = "ReturnStatement";
-        SyntaxKind[SyntaxKind["SwitchStatement"] = 152] = "SwitchStatement";
-        SyntaxKind[SyntaxKind["BreakStatement"] = 153] = "BreakStatement";
-        SyntaxKind[SyntaxKind["ContinueStatement"] = 154] = "ContinueStatement";
-        SyntaxKind[SyntaxKind["ForStatement"] = 155] = "ForStatement";
-        SyntaxKind[SyntaxKind["ForInStatement"] = 156] = "ForInStatement";
-        SyntaxKind[SyntaxKind["EmptyStatement"] = 157] = "EmptyStatement";
-        SyntaxKind[SyntaxKind["ThrowStatement"] = 158] = "ThrowStatement";
-        SyntaxKind[SyntaxKind["WhileStatement"] = 159] = "WhileStatement";
-        SyntaxKind[SyntaxKind["TryStatement"] = 160] = "TryStatement";
-        SyntaxKind[SyntaxKind["LabeledStatement"] = 161] = "LabeledStatement";
-        SyntaxKind[SyntaxKind["DoStatement"] = 162] = "DoStatement";
-        SyntaxKind[SyntaxKind["DebuggerStatement"] = 163] = "DebuggerStatement";
-        SyntaxKind[SyntaxKind["WithStatement"] = 164] = "WithStatement";
-        SyntaxKind[SyntaxKind["PlusExpression"] = 165] = "PlusExpression";
-        SyntaxKind[SyntaxKind["NegateExpression"] = 166] = "NegateExpression";
-        SyntaxKind[SyntaxKind["BitwiseNotExpression"] = 167] = "BitwiseNotExpression";
-        SyntaxKind[SyntaxKind["LogicalNotExpression"] = 168] = "LogicalNotExpression";
-        SyntaxKind[SyntaxKind["PreIncrementExpression"] = 169] = "PreIncrementExpression";
-        SyntaxKind[SyntaxKind["PreDecrementExpression"] = 170] = "PreDecrementExpression";
-        SyntaxKind[SyntaxKind["DeleteExpression"] = 171] = "DeleteExpression";
-        SyntaxKind[SyntaxKind["TypeOfExpression"] = 172] = "TypeOfExpression";
-        SyntaxKind[SyntaxKind["VoidExpression"] = 173] = "VoidExpression";
-        SyntaxKind[SyntaxKind["CommaExpression"] = 174] = "CommaExpression";
-        SyntaxKind[SyntaxKind["AssignmentExpression"] = 175] = "AssignmentExpression";
-        SyntaxKind[SyntaxKind["AddAssignmentExpression"] = 176] = "AddAssignmentExpression";
-        SyntaxKind[SyntaxKind["SubtractAssignmentExpression"] = 177] = "SubtractAssignmentExpression";
-        SyntaxKind[SyntaxKind["MultiplyAssignmentExpression"] = 178] = "MultiplyAssignmentExpression";
-        SyntaxKind[SyntaxKind["DivideAssignmentExpression"] = 179] = "DivideAssignmentExpression";
-        SyntaxKind[SyntaxKind["ModuloAssignmentExpression"] = 180] = "ModuloAssignmentExpression";
-        SyntaxKind[SyntaxKind["AndAssignmentExpression"] = 181] = "AndAssignmentExpression";
-        SyntaxKind[SyntaxKind["ExclusiveOrAssignmentExpression"] = 182] = "ExclusiveOrAssignmentExpression";
-        SyntaxKind[SyntaxKind["OrAssignmentExpression"] = 183] = "OrAssignmentExpression";
-        SyntaxKind[SyntaxKind["LeftShiftAssignmentExpression"] = 184] = "LeftShiftAssignmentExpression";
-        SyntaxKind[SyntaxKind["SignedRightShiftAssignmentExpression"] = 185] = "SignedRightShiftAssignmentExpression";
-        SyntaxKind[SyntaxKind["UnsignedRightShiftAssignmentExpression"] = 186] = "UnsignedRightShiftAssignmentExpression";
-        SyntaxKind[SyntaxKind["ConditionalExpression"] = 187] = "ConditionalExpression";
-        SyntaxKind[SyntaxKind["LogicalOrExpression"] = 188] = "LogicalOrExpression";
-        SyntaxKind[SyntaxKind["LogicalAndExpression"] = 189] = "LogicalAndExpression";
-        SyntaxKind[SyntaxKind["BitwiseOrExpression"] = 190] = "BitwiseOrExpression";
-        SyntaxKind[SyntaxKind["BitwiseExclusiveOrExpression"] = 191] = "BitwiseExclusiveOrExpression";
-        SyntaxKind[SyntaxKind["BitwiseAndExpression"] = 192] = "BitwiseAndExpression";
-        SyntaxKind[SyntaxKind["EqualsWithTypeConversionExpression"] = 193] = "EqualsWithTypeConversionExpression";
-        SyntaxKind[SyntaxKind["NotEqualsWithTypeConversionExpression"] = 194] = "NotEqualsWithTypeConversionExpression";
-        SyntaxKind[SyntaxKind["EqualsExpression"] = 195] = "EqualsExpression";
-        SyntaxKind[SyntaxKind["NotEqualsExpression"] = 196] = "NotEqualsExpression";
-        SyntaxKind[SyntaxKind["LessThanExpression"] = 197] = "LessThanExpression";
-        SyntaxKind[SyntaxKind["GreaterThanExpression"] = 198] = "GreaterThanExpression";
-        SyntaxKind[SyntaxKind["LessThanOrEqualExpression"] = 199] = "LessThanOrEqualExpression";
-        SyntaxKind[SyntaxKind["GreaterThanOrEqualExpression"] = 200] = "GreaterThanOrEqualExpression";
-        SyntaxKind[SyntaxKind["InstanceOfExpression"] = 201] = "InstanceOfExpression";
-        SyntaxKind[SyntaxKind["InExpression"] = 202] = "InExpression";
-        SyntaxKind[SyntaxKind["LeftShiftExpression"] = 203] = "LeftShiftExpression";
-        SyntaxKind[SyntaxKind["SignedRightShiftExpression"] = 204] = "SignedRightShiftExpression";
-        SyntaxKind[SyntaxKind["UnsignedRightShiftExpression"] = 205] = "UnsignedRightShiftExpression";
-        SyntaxKind[SyntaxKind["MultiplyExpression"] = 206] = "MultiplyExpression";
-        SyntaxKind[SyntaxKind["DivideExpression"] = 207] = "DivideExpression";
-        SyntaxKind[SyntaxKind["ModuloExpression"] = 208] = "ModuloExpression";
-        SyntaxKind[SyntaxKind["AddExpression"] = 209] = "AddExpression";
-        SyntaxKind[SyntaxKind["SubtractExpression"] = 210] = "SubtractExpression";
-        SyntaxKind[SyntaxKind["PostIncrementExpression"] = 211] = "PostIncrementExpression";
-        SyntaxKind[SyntaxKind["PostDecrementExpression"] = 212] = "PostDecrementExpression";
-        SyntaxKind[SyntaxKind["MemberAccessExpression"] = 213] = "MemberAccessExpression";
-        SyntaxKind[SyntaxKind["InvocationExpression"] = 214] = "InvocationExpression";
-        SyntaxKind[SyntaxKind["ArrayLiteralExpression"] = 215] = "ArrayLiteralExpression";
-        SyntaxKind[SyntaxKind["ObjectLiteralExpression"] = 216] = "ObjectLiteralExpression";
-        SyntaxKind[SyntaxKind["ObjectCreationExpression"] = 217] = "ObjectCreationExpression";
-        SyntaxKind[SyntaxKind["ParenthesizedExpression"] = 218] = "ParenthesizedExpression";
-        SyntaxKind[SyntaxKind["ParenthesizedArrowFunctionExpression"] = 219] = "ParenthesizedArrowFunctionExpression";
-        SyntaxKind[SyntaxKind["SimpleArrowFunctionExpression"] = 220] = "SimpleArrowFunctionExpression";
-        SyntaxKind[SyntaxKind["CastExpression"] = 221] = "CastExpression";
-        SyntaxKind[SyntaxKind["ElementAccessExpression"] = 222] = "ElementAccessExpression";
-        SyntaxKind[SyntaxKind["FunctionExpression"] = 223] = "FunctionExpression";
-        SyntaxKind[SyntaxKind["OmittedExpression"] = 224] = "OmittedExpression";
-        SyntaxKind[SyntaxKind["VariableDeclaration"] = 225] = "VariableDeclaration";
-        SyntaxKind[SyntaxKind["VariableDeclarator"] = 226] = "VariableDeclarator";
-        SyntaxKind[SyntaxKind["ArgumentList"] = 227] = "ArgumentList";
-        SyntaxKind[SyntaxKind["ParameterList"] = 228] = "ParameterList";
-        SyntaxKind[SyntaxKind["TypeArgumentList"] = 229] = "TypeArgumentList";
-        SyntaxKind[SyntaxKind["TypeParameterList"] = 230] = "TypeParameterList";
-        SyntaxKind[SyntaxKind["ExtendsHeritageClause"] = 231] = "ExtendsHeritageClause";
-        SyntaxKind[SyntaxKind["ImplementsHeritageClause"] = 232] = "ImplementsHeritageClause";
-        SyntaxKind[SyntaxKind["EqualsValueClause"] = 233] = "EqualsValueClause";
-        SyntaxKind[SyntaxKind["CaseSwitchClause"] = 234] = "CaseSwitchClause";
-        SyntaxKind[SyntaxKind["DefaultSwitchClause"] = 235] = "DefaultSwitchClause";
-        SyntaxKind[SyntaxKind["ElseClause"] = 236] = "ElseClause";
-        SyntaxKind[SyntaxKind["CatchClause"] = 237] = "CatchClause";
-        SyntaxKind[SyntaxKind["FinallyClause"] = 238] = "FinallyClause";
-        SyntaxKind[SyntaxKind["TypeParameter"] = 239] = "TypeParameter";
-        SyntaxKind[SyntaxKind["Constraint"] = 240] = "Constraint";
-        SyntaxKind[SyntaxKind["SimplePropertyAssignment"] = 241] = "SimplePropertyAssignment";
-        SyntaxKind[SyntaxKind["FunctionPropertyAssignment"] = 242] = "FunctionPropertyAssignment";
-        SyntaxKind[SyntaxKind["Parameter"] = 243] = "Parameter";
-        SyntaxKind[SyntaxKind["EnumElement"] = 244] = "EnumElement";
-        SyntaxKind[SyntaxKind["TypeAnnotation"] = 245] = "TypeAnnotation";
-        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 246] = "ExternalModuleReference";
-        SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 247] = "ModuleNameModuleReference";
+        SyntaxKind[SyntaxKind["UnionType"] = 129] = "UnionType";
+        SyntaxKind[SyntaxKind["ParenthesizedType"] = 130] = "ParenthesizedType";
+        SyntaxKind[SyntaxKind["InterfaceDeclaration"] = 131] = "InterfaceDeclaration";
+        SyntaxKind[SyntaxKind["FunctionDeclaration"] = 132] = "FunctionDeclaration";
+        SyntaxKind[SyntaxKind["ModuleDeclaration"] = 133] = "ModuleDeclaration";
+        SyntaxKind[SyntaxKind["ClassDeclaration"] = 134] = "ClassDeclaration";
+        SyntaxKind[SyntaxKind["EnumDeclaration"] = 135] = "EnumDeclaration";
+        SyntaxKind[SyntaxKind["ImportDeclaration"] = 136] = "ImportDeclaration";
+        SyntaxKind[SyntaxKind["ExportAssignment"] = 137] = "ExportAssignment";
+        SyntaxKind[SyntaxKind["MemberFunctionDeclaration"] = 138] = "MemberFunctionDeclaration";
+        SyntaxKind[SyntaxKind["MemberVariableDeclaration"] = 139] = "MemberVariableDeclaration";
+        SyntaxKind[SyntaxKind["ConstructorDeclaration"] = 140] = "ConstructorDeclaration";
+        SyntaxKind[SyntaxKind["IndexMemberDeclaration"] = 141] = "IndexMemberDeclaration";
+        SyntaxKind[SyntaxKind["GetAccessor"] = 142] = "GetAccessor";
+        SyntaxKind[SyntaxKind["SetAccessor"] = 143] = "SetAccessor";
+        SyntaxKind[SyntaxKind["PropertySignature"] = 144] = "PropertySignature";
+        SyntaxKind[SyntaxKind["CallSignature"] = 145] = "CallSignature";
+        SyntaxKind[SyntaxKind["ConstructSignature"] = 146] = "ConstructSignature";
+        SyntaxKind[SyntaxKind["IndexSignature"] = 147] = "IndexSignature";
+        SyntaxKind[SyntaxKind["MethodSignature"] = 148] = "MethodSignature";
+        SyntaxKind[SyntaxKind["Block"] = 149] = "Block";
+        SyntaxKind[SyntaxKind["IfStatement"] = 150] = "IfStatement";
+        SyntaxKind[SyntaxKind["VariableStatement"] = 151] = "VariableStatement";
+        SyntaxKind[SyntaxKind["ExpressionStatement"] = 152] = "ExpressionStatement";
+        SyntaxKind[SyntaxKind["ReturnStatement"] = 153] = "ReturnStatement";
+        SyntaxKind[SyntaxKind["SwitchStatement"] = 154] = "SwitchStatement";
+        SyntaxKind[SyntaxKind["BreakStatement"] = 155] = "BreakStatement";
+        SyntaxKind[SyntaxKind["ContinueStatement"] = 156] = "ContinueStatement";
+        SyntaxKind[SyntaxKind["ForStatement"] = 157] = "ForStatement";
+        SyntaxKind[SyntaxKind["ForInStatement"] = 158] = "ForInStatement";
+        SyntaxKind[SyntaxKind["EmptyStatement"] = 159] = "EmptyStatement";
+        SyntaxKind[SyntaxKind["ThrowStatement"] = 160] = "ThrowStatement";
+        SyntaxKind[SyntaxKind["WhileStatement"] = 161] = "WhileStatement";
+        SyntaxKind[SyntaxKind["TryStatement"] = 162] = "TryStatement";
+        SyntaxKind[SyntaxKind["LabeledStatement"] = 163] = "LabeledStatement";
+        SyntaxKind[SyntaxKind["DoStatement"] = 164] = "DoStatement";
+        SyntaxKind[SyntaxKind["DebuggerStatement"] = 165] = "DebuggerStatement";
+        SyntaxKind[SyntaxKind["WithStatement"] = 166] = "WithStatement";
+        SyntaxKind[SyntaxKind["PlusExpression"] = 167] = "PlusExpression";
+        SyntaxKind[SyntaxKind["NegateExpression"] = 168] = "NegateExpression";
+        SyntaxKind[SyntaxKind["BitwiseNotExpression"] = 169] = "BitwiseNotExpression";
+        SyntaxKind[SyntaxKind["LogicalNotExpression"] = 170] = "LogicalNotExpression";
+        SyntaxKind[SyntaxKind["PreIncrementExpression"] = 171] = "PreIncrementExpression";
+        SyntaxKind[SyntaxKind["PreDecrementExpression"] = 172] = "PreDecrementExpression";
+        SyntaxKind[SyntaxKind["DeleteExpression"] = 173] = "DeleteExpression";
+        SyntaxKind[SyntaxKind["TypeOfExpression"] = 174] = "TypeOfExpression";
+        SyntaxKind[SyntaxKind["VoidExpression"] = 175] = "VoidExpression";
+        SyntaxKind[SyntaxKind["CommaExpression"] = 176] = "CommaExpression";
+        SyntaxKind[SyntaxKind["AssignmentExpression"] = 177] = "AssignmentExpression";
+        SyntaxKind[SyntaxKind["AddAssignmentExpression"] = 178] = "AddAssignmentExpression";
+        SyntaxKind[SyntaxKind["SubtractAssignmentExpression"] = 179] = "SubtractAssignmentExpression";
+        SyntaxKind[SyntaxKind["MultiplyAssignmentExpression"] = 180] = "MultiplyAssignmentExpression";
+        SyntaxKind[SyntaxKind["DivideAssignmentExpression"] = 181] = "DivideAssignmentExpression";
+        SyntaxKind[SyntaxKind["ModuloAssignmentExpression"] = 182] = "ModuloAssignmentExpression";
+        SyntaxKind[SyntaxKind["AndAssignmentExpression"] = 183] = "AndAssignmentExpression";
+        SyntaxKind[SyntaxKind["ExclusiveOrAssignmentExpression"] = 184] = "ExclusiveOrAssignmentExpression";
+        SyntaxKind[SyntaxKind["OrAssignmentExpression"] = 185] = "OrAssignmentExpression";
+        SyntaxKind[SyntaxKind["LeftShiftAssignmentExpression"] = 186] = "LeftShiftAssignmentExpression";
+        SyntaxKind[SyntaxKind["SignedRightShiftAssignmentExpression"] = 187] = "SignedRightShiftAssignmentExpression";
+        SyntaxKind[SyntaxKind["UnsignedRightShiftAssignmentExpression"] = 188] = "UnsignedRightShiftAssignmentExpression";
+        SyntaxKind[SyntaxKind["ConditionalExpression"] = 189] = "ConditionalExpression";
+        SyntaxKind[SyntaxKind["LogicalOrExpression"] = 190] = "LogicalOrExpression";
+        SyntaxKind[SyntaxKind["LogicalAndExpression"] = 191] = "LogicalAndExpression";
+        SyntaxKind[SyntaxKind["BitwiseOrExpression"] = 192] = "BitwiseOrExpression";
+        SyntaxKind[SyntaxKind["BitwiseExclusiveOrExpression"] = 193] = "BitwiseExclusiveOrExpression";
+        SyntaxKind[SyntaxKind["BitwiseAndExpression"] = 194] = "BitwiseAndExpression";
+        SyntaxKind[SyntaxKind["EqualsWithTypeConversionExpression"] = 195] = "EqualsWithTypeConversionExpression";
+        SyntaxKind[SyntaxKind["NotEqualsWithTypeConversionExpression"] = 196] = "NotEqualsWithTypeConversionExpression";
+        SyntaxKind[SyntaxKind["EqualsExpression"] = 197] = "EqualsExpression";
+        SyntaxKind[SyntaxKind["NotEqualsExpression"] = 198] = "NotEqualsExpression";
+        SyntaxKind[SyntaxKind["LessThanExpression"] = 199] = "LessThanExpression";
+        SyntaxKind[SyntaxKind["GreaterThanExpression"] = 200] = "GreaterThanExpression";
+        SyntaxKind[SyntaxKind["LessThanOrEqualExpression"] = 201] = "LessThanOrEqualExpression";
+        SyntaxKind[SyntaxKind["GreaterThanOrEqualExpression"] = 202] = "GreaterThanOrEqualExpression";
+        SyntaxKind[SyntaxKind["InstanceOfExpression"] = 203] = "InstanceOfExpression";
+        SyntaxKind[SyntaxKind["InExpression"] = 204] = "InExpression";
+        SyntaxKind[SyntaxKind["LeftShiftExpression"] = 205] = "LeftShiftExpression";
+        SyntaxKind[SyntaxKind["SignedRightShiftExpression"] = 206] = "SignedRightShiftExpression";
+        SyntaxKind[SyntaxKind["UnsignedRightShiftExpression"] = 207] = "UnsignedRightShiftExpression";
+        SyntaxKind[SyntaxKind["MultiplyExpression"] = 208] = "MultiplyExpression";
+        SyntaxKind[SyntaxKind["DivideExpression"] = 209] = "DivideExpression";
+        SyntaxKind[SyntaxKind["ModuloExpression"] = 210] = "ModuloExpression";
+        SyntaxKind[SyntaxKind["AddExpression"] = 211] = "AddExpression";
+        SyntaxKind[SyntaxKind["SubtractExpression"] = 212] = "SubtractExpression";
+        SyntaxKind[SyntaxKind["PostIncrementExpression"] = 213] = "PostIncrementExpression";
+        SyntaxKind[SyntaxKind["PostDecrementExpression"] = 214] = "PostDecrementExpression";
+        SyntaxKind[SyntaxKind["MemberAccessExpression"] = 215] = "MemberAccessExpression";
+        SyntaxKind[SyntaxKind["InvocationExpression"] = 216] = "InvocationExpression";
+        SyntaxKind[SyntaxKind["ArrayLiteralExpression"] = 217] = "ArrayLiteralExpression";
+        SyntaxKind[SyntaxKind["ObjectLiteralExpression"] = 218] = "ObjectLiteralExpression";
+        SyntaxKind[SyntaxKind["ObjectCreationExpression"] = 219] = "ObjectCreationExpression";
+        SyntaxKind[SyntaxKind["ParenthesizedExpression"] = 220] = "ParenthesizedExpression";
+        SyntaxKind[SyntaxKind["ParenthesizedArrowFunctionExpression"] = 221] = "ParenthesizedArrowFunctionExpression";
+        SyntaxKind[SyntaxKind["SimpleArrowFunctionExpression"] = 222] = "SimpleArrowFunctionExpression";
+        SyntaxKind[SyntaxKind["CastExpression"] = 223] = "CastExpression";
+        SyntaxKind[SyntaxKind["ElementAccessExpression"] = 224] = "ElementAccessExpression";
+        SyntaxKind[SyntaxKind["FunctionExpression"] = 225] = "FunctionExpression";
+        SyntaxKind[SyntaxKind["OmittedExpression"] = 226] = "OmittedExpression";
+        SyntaxKind[SyntaxKind["VariableDeclaration"] = 227] = "VariableDeclaration";
+        SyntaxKind[SyntaxKind["VariableDeclarator"] = 228] = "VariableDeclarator";
+        SyntaxKind[SyntaxKind["ArgumentList"] = 229] = "ArgumentList";
+        SyntaxKind[SyntaxKind["ParameterList"] = 230] = "ParameterList";
+        SyntaxKind[SyntaxKind["TypeArgumentList"] = 231] = "TypeArgumentList";
+        SyntaxKind[SyntaxKind["TypeParameterList"] = 232] = "TypeParameterList";
+        SyntaxKind[SyntaxKind["ExtendsHeritageClause"] = 233] = "ExtendsHeritageClause";
+        SyntaxKind[SyntaxKind["ImplementsHeritageClause"] = 234] = "ImplementsHeritageClause";
+        SyntaxKind[SyntaxKind["EqualsValueClause"] = 235] = "EqualsValueClause";
+        SyntaxKind[SyntaxKind["CaseSwitchClause"] = 236] = "CaseSwitchClause";
+        SyntaxKind[SyntaxKind["DefaultSwitchClause"] = 237] = "DefaultSwitchClause";
+        SyntaxKind[SyntaxKind["ElseClause"] = 238] = "ElseClause";
+        SyntaxKind[SyntaxKind["CatchClause"] = 239] = "CatchClause";
+        SyntaxKind[SyntaxKind["FinallyClause"] = 240] = "FinallyClause";
+        SyntaxKind[SyntaxKind["TypeParameter"] = 241] = "TypeParameter";
+        SyntaxKind[SyntaxKind["Constraint"] = 242] = "Constraint";
+        SyntaxKind[SyntaxKind["SimplePropertyAssignment"] = 243] = "SimplePropertyAssignment";
+        SyntaxKind[SyntaxKind["FunctionPropertyAssignment"] = 244] = "FunctionPropertyAssignment";
+        SyntaxKind[SyntaxKind["Parameter"] = 245] = "Parameter";
+        SyntaxKind[SyntaxKind["EnumElement"] = 246] = "EnumElement";
+        SyntaxKind[SyntaxKind["TypeAnnotation"] = 247] = "TypeAnnotation";
+        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 248] = "ExternalModuleReference";
+        SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 249] = "ModuleNameModuleReference";
         SyntaxKind[SyntaxKind["FirstStandardKeyword"] = SyntaxKind.BreakKeyword] = "FirstStandardKeyword";
         SyntaxKind[SyntaxKind["LastStandardKeyword"] = SyntaxKind.WithKeyword] = "LastStandardKeyword";
         SyntaxKind[SyntaxKind["FirstFutureReservedKeyword"] = SyntaxKind.ClassKeyword] = "FirstFutureReservedKeyword";
@@ -18822,17 +18824,17 @@ var TypeScript;
         function getPrefixUnaryExpressionFromOperatorToken(tokenKind) {
             switch (tokenKind) {
                 case 89 /* PlusToken */:
-                    return 165 /* PlusExpression */;
+                    return 167 /* PlusExpression */;
                 case 90 /* MinusToken */:
-                    return 166 /* NegateExpression */;
+                    return 168 /* NegateExpression */;
                 case 102 /* TildeToken */:
-                    return 167 /* BitwiseNotExpression */;
+                    return 169 /* BitwiseNotExpression */;
                 case 101 /* ExclamationToken */:
-                    return 168 /* LogicalNotExpression */;
+                    return 170 /* LogicalNotExpression */;
                 case 93 /* PlusPlusToken */:
-                    return 169 /* PreIncrementExpression */;
+                    return 171 /* PreIncrementExpression */;
                 case 94 /* MinusMinusToken */:
-                    return 170 /* PreDecrementExpression */;
+                    return 172 /* PreDecrementExpression */;
                 default:
                     return 0 /* None */;
             }
@@ -18841,9 +18843,9 @@ var TypeScript;
         function getPostfixUnaryExpressionFromOperatorToken(tokenKind) {
             switch (tokenKind) {
                 case 93 /* PlusPlusToken */:
-                    return 211 /* PostIncrementExpression */;
+                    return 213 /* PostIncrementExpression */;
                 case 94 /* MinusMinusToken */:
-                    return 212 /* PostDecrementExpression */;
+                    return 214 /* PostDecrementExpression */;
                 default:
                     return 0 /* None */;
             }
@@ -18852,77 +18854,77 @@ var TypeScript;
         function getBinaryExpressionFromOperatorToken(tokenKind) {
             switch (tokenKind) {
                 case 91 /* AsteriskToken */:
-                    return 206 /* MultiplyExpression */;
+                    return 208 /* MultiplyExpression */;
                 case 118 /* SlashToken */:
-                    return 207 /* DivideExpression */;
+                    return 209 /* DivideExpression */;
                 case 92 /* PercentToken */:
-                    return 208 /* ModuloExpression */;
+                    return 210 /* ModuloExpression */;
                 case 89 /* PlusToken */:
-                    return 209 /* AddExpression */;
+                    return 211 /* AddExpression */;
                 case 90 /* MinusToken */:
-                    return 210 /* SubtractExpression */;
+                    return 212 /* SubtractExpression */;
                 case 95 /* LessThanLessThanToken */:
-                    return 203 /* LeftShiftExpression */;
+                    return 205 /* LeftShiftExpression */;
                 case 96 /* GreaterThanGreaterThanToken */:
-                    return 204 /* SignedRightShiftExpression */;
+                    return 206 /* SignedRightShiftExpression */;
                 case 97 /* GreaterThanGreaterThanGreaterThanToken */:
-                    return 205 /* UnsignedRightShiftExpression */;
+                    return 207 /* UnsignedRightShiftExpression */;
                 case 80 /* LessThanToken */:
-                    return 197 /* LessThanExpression */;
+                    return 199 /* LessThanExpression */;
                 case 81 /* GreaterThanToken */:
-                    return 198 /* GreaterThanExpression */;
+                    return 200 /* GreaterThanExpression */;
                 case 82 /* LessThanEqualsToken */:
-                    return 199 /* LessThanOrEqualExpression */;
+                    return 201 /* LessThanOrEqualExpression */;
                 case 83 /* GreaterThanEqualsToken */:
-                    return 200 /* GreaterThanOrEqualExpression */;
+                    return 202 /* GreaterThanOrEqualExpression */;
                 case 30 /* InstanceOfKeyword */:
-                    return 201 /* InstanceOfExpression */;
+                    return 203 /* InstanceOfExpression */;
                 case 29 /* InKeyword */:
-                    return 202 /* InExpression */;
+                    return 204 /* InExpression */;
                 case 84 /* EqualsEqualsToken */:
-                    return 193 /* EqualsWithTypeConversionExpression */;
+                    return 195 /* EqualsWithTypeConversionExpression */;
                 case 86 /* ExclamationEqualsToken */:
-                    return 194 /* NotEqualsWithTypeConversionExpression */;
+                    return 196 /* NotEqualsWithTypeConversionExpression */;
                 case 87 /* EqualsEqualsEqualsToken */:
-                    return 195 /* EqualsExpression */;
+                    return 197 /* EqualsExpression */;
                 case 88 /* ExclamationEqualsEqualsToken */:
-                    return 196 /* NotEqualsExpression */;
+                    return 198 /* NotEqualsExpression */;
                 case 98 /* AmpersandToken */:
-                    return 192 /* BitwiseAndExpression */;
+                    return 194 /* BitwiseAndExpression */;
                 case 100 /* CaretToken */:
-                    return 191 /* BitwiseExclusiveOrExpression */;
+                    return 193 /* BitwiseExclusiveOrExpression */;
                 case 99 /* BarToken */:
-                    return 190 /* BitwiseOrExpression */;
+                    return 192 /* BitwiseOrExpression */;
                 case 103 /* AmpersandAmpersandToken */:
-                    return 189 /* LogicalAndExpression */;
+                    return 191 /* LogicalAndExpression */;
                 case 104 /* BarBarToken */:
-                    return 188 /* LogicalOrExpression */;
+                    return 190 /* LogicalOrExpression */;
                 case 116 /* BarEqualsToken */:
-                    return 183 /* OrAssignmentExpression */;
+                    return 185 /* OrAssignmentExpression */;
                 case 115 /* AmpersandEqualsToken */:
-                    return 181 /* AndAssignmentExpression */;
+                    return 183 /* AndAssignmentExpression */;
                 case 117 /* CaretEqualsToken */:
-                    return 182 /* ExclusiveOrAssignmentExpression */;
+                    return 184 /* ExclusiveOrAssignmentExpression */;
                 case 112 /* LessThanLessThanEqualsToken */:
-                    return 184 /* LeftShiftAssignmentExpression */;
+                    return 186 /* LeftShiftAssignmentExpression */;
                 case 113 /* GreaterThanGreaterThanEqualsToken */:
-                    return 185 /* SignedRightShiftAssignmentExpression */;
+                    return 187 /* SignedRightShiftAssignmentExpression */;
                 case 114 /* GreaterThanGreaterThanGreaterThanEqualsToken */:
-                    return 186 /* UnsignedRightShiftAssignmentExpression */;
+                    return 188 /* UnsignedRightShiftAssignmentExpression */;
                 case 108 /* PlusEqualsToken */:
-                    return 176 /* AddAssignmentExpression */;
+                    return 178 /* AddAssignmentExpression */;
                 case 109 /* MinusEqualsToken */:
-                    return 177 /* SubtractAssignmentExpression */;
+                    return 179 /* SubtractAssignmentExpression */;
                 case 110 /* AsteriskEqualsToken */:
-                    return 178 /* MultiplyAssignmentExpression */;
+                    return 180 /* MultiplyAssignmentExpression */;
                 case 119 /* SlashEqualsToken */:
-                    return 179 /* DivideAssignmentExpression */;
+                    return 181 /* DivideAssignmentExpression */;
                 case 111 /* PercentEqualsToken */:
-                    return 180 /* ModuloAssignmentExpression */;
+                    return 182 /* ModuloAssignmentExpression */;
                 case 107 /* EqualsToken */:
-                    return 175 /* AssignmentExpression */;
+                    return 177 /* AssignmentExpression */;
                 case 79 /* CommaToken */:
-                    return 174 /* CommaExpression */;
+                    return 176 /* CommaExpression */;
                 default:
                     return 0 /* None */;
             }
@@ -18930,77 +18932,77 @@ var TypeScript;
         SyntaxFacts.getBinaryExpressionFromOperatorToken = getBinaryExpressionFromOperatorToken;
         function getOperatorTokenFromBinaryExpression(tokenKind) {
             switch (tokenKind) {
-                case 206 /* MultiplyExpression */:
+                case 208 /* MultiplyExpression */:
                     return 91 /* AsteriskToken */;
-                case 207 /* DivideExpression */:
+                case 209 /* DivideExpression */:
                     return 118 /* SlashToken */;
-                case 208 /* ModuloExpression */:
+                case 210 /* ModuloExpression */:
                     return 92 /* PercentToken */;
-                case 209 /* AddExpression */:
+                case 211 /* AddExpression */:
                     return 89 /* PlusToken */;
-                case 210 /* SubtractExpression */:
+                case 212 /* SubtractExpression */:
                     return 90 /* MinusToken */;
-                case 203 /* LeftShiftExpression */:
+                case 205 /* LeftShiftExpression */:
                     return 95 /* LessThanLessThanToken */;
-                case 204 /* SignedRightShiftExpression */:
+                case 206 /* SignedRightShiftExpression */:
                     return 96 /* GreaterThanGreaterThanToken */;
-                case 205 /* UnsignedRightShiftExpression */:
+                case 207 /* UnsignedRightShiftExpression */:
                     return 97 /* GreaterThanGreaterThanGreaterThanToken */;
-                case 197 /* LessThanExpression */:
+                case 199 /* LessThanExpression */:
                     return 80 /* LessThanToken */;
-                case 198 /* GreaterThanExpression */:
+                case 200 /* GreaterThanExpression */:
                     return 81 /* GreaterThanToken */;
-                case 199 /* LessThanOrEqualExpression */:
+                case 201 /* LessThanOrEqualExpression */:
                     return 82 /* LessThanEqualsToken */;
-                case 200 /* GreaterThanOrEqualExpression */:
+                case 202 /* GreaterThanOrEqualExpression */:
                     return 83 /* GreaterThanEqualsToken */;
-                case 201 /* InstanceOfExpression */:
+                case 203 /* InstanceOfExpression */:
                     return 30 /* InstanceOfKeyword */;
-                case 202 /* InExpression */:
+                case 204 /* InExpression */:
                     return 29 /* InKeyword */;
-                case 193 /* EqualsWithTypeConversionExpression */:
+                case 195 /* EqualsWithTypeConversionExpression */:
                     return 84 /* EqualsEqualsToken */;
-                case 194 /* NotEqualsWithTypeConversionExpression */:
+                case 196 /* NotEqualsWithTypeConversionExpression */:
                     return 86 /* ExclamationEqualsToken */;
-                case 195 /* EqualsExpression */:
+                case 197 /* EqualsExpression */:
                     return 87 /* EqualsEqualsEqualsToken */;
-                case 196 /* NotEqualsExpression */:
+                case 198 /* NotEqualsExpression */:
                     return 88 /* ExclamationEqualsEqualsToken */;
-                case 192 /* BitwiseAndExpression */:
+                case 194 /* BitwiseAndExpression */:
                     return 98 /* AmpersandToken */;
-                case 191 /* BitwiseExclusiveOrExpression */:
+                case 193 /* BitwiseExclusiveOrExpression */:
                     return 100 /* CaretToken */;
-                case 190 /* BitwiseOrExpression */:
+                case 192 /* BitwiseOrExpression */:
                     return 99 /* BarToken */;
-                case 189 /* LogicalAndExpression */:
+                case 191 /* LogicalAndExpression */:
                     return 103 /* AmpersandAmpersandToken */;
-                case 188 /* LogicalOrExpression */:
+                case 190 /* LogicalOrExpression */:
                     return 104 /* BarBarToken */;
-                case 183 /* OrAssignmentExpression */:
+                case 185 /* OrAssignmentExpression */:
                     return 116 /* BarEqualsToken */;
-                case 181 /* AndAssignmentExpression */:
+                case 183 /* AndAssignmentExpression */:
                     return 115 /* AmpersandEqualsToken */;
-                case 182 /* ExclusiveOrAssignmentExpression */:
+                case 184 /* ExclusiveOrAssignmentExpression */:
                     return 117 /* CaretEqualsToken */;
-                case 184 /* LeftShiftAssignmentExpression */:
+                case 186 /* LeftShiftAssignmentExpression */:
                     return 112 /* LessThanLessThanEqualsToken */;
-                case 185 /* SignedRightShiftAssignmentExpression */:
+                case 187 /* SignedRightShiftAssignmentExpression */:
                     return 113 /* GreaterThanGreaterThanEqualsToken */;
-                case 186 /* UnsignedRightShiftAssignmentExpression */:
+                case 188 /* UnsignedRightShiftAssignmentExpression */:
                     return 114 /* GreaterThanGreaterThanGreaterThanEqualsToken */;
-                case 176 /* AddAssignmentExpression */:
+                case 178 /* AddAssignmentExpression */:
                     return 108 /* PlusEqualsToken */;
-                case 177 /* SubtractAssignmentExpression */:
+                case 179 /* SubtractAssignmentExpression */:
                     return 109 /* MinusEqualsToken */;
-                case 178 /* MultiplyAssignmentExpression */:
+                case 180 /* MultiplyAssignmentExpression */:
                     return 110 /* AsteriskEqualsToken */;
-                case 179 /* DivideAssignmentExpression */:
+                case 181 /* DivideAssignmentExpression */:
                     return 119 /* SlashEqualsToken */;
-                case 180 /* ModuloAssignmentExpression */:
+                case 182 /* ModuloAssignmentExpression */:
                     return 111 /* PercentEqualsToken */;
-                case 175 /* AssignmentExpression */:
+                case 177 /* AssignmentExpression */:
                     return 107 /* EqualsToken */;
-                case 174 /* CommaExpression */:
+                case 176 /* CommaExpression */:
                     return 79 /* CommaToken */;
                 default:
                     return 0 /* None */;
@@ -20758,8 +20760,8 @@ var TypeScript;
         function isIntegerLiteral(expression) {
             if (expression) {
                 switch (expression.kind()) {
-                    case 165 /* PlusExpression */:
-                    case 166 /* NegateExpression */:
+                    case 167 /* PlusExpression */:
+                    case 168 /* NegateExpression */:
                         expression = expression.operand;
                         return TypeScript.isToken(expression) && TypeScript.IntegerUtilities.isInteger(expression.text());
                     case 13 /* NumericLiteral */:
@@ -21228,7 +21230,7 @@ var TypeScript;
     var SyntaxFacts;
     (function (SyntaxFacts) {
         function isDirectivePrologueElement(node) {
-            if (node.kind() === 150 /* ExpressionStatement */) {
+            if (node.kind() === 152 /* ExpressionStatement */) {
                 var expressionStatement = node;
                 var expression = expressionStatement.expression;
                 if (expression.kind() === 14 /* StringLiteral */) {
@@ -21343,7 +21345,7 @@ var TypeScript;
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
 (function (TypeScript) {
-    TypeScript.nodeMetadata = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], ["moduleElements", "endOfFileToken"], ["left", "dotToken", "right"], ["openBraceToken", "typeMembers", "closeBraceToken"], ["typeParameterList", "parameterList", "equalsGreaterThanToken", "type"], ["type", "openBracketToken", "closeBracketToken"], ["newKeyword", "typeParameterList", "parameterList", "equalsGreaterThanToken", "type"], ["name", "typeArgumentList"], ["typeOfKeyword", "name"], ["openBracketToken", "types", "closeBracketToken"], ["modifiers", "interfaceKeyword", "identifier", "typeParameterList", "heritageClauses", "body"], ["modifiers", "functionKeyword", "identifier", "callSignature", "block", "semicolonToken"], ["modifiers", "moduleKeyword", "name", "stringLiteral", "openBraceToken", "moduleElements", "closeBraceToken"], ["modifiers", "classKeyword", "identifier", "typeParameterList", "heritageClauses", "openBraceToken", "classElements", "closeBraceToken"], ["modifiers", "enumKeyword", "identifier", "openBraceToken", "enumElements", "closeBraceToken"], ["modifiers", "importKeyword", "identifier", "equalsToken", "moduleReference", "semicolonToken"], ["exportKeyword", "equalsToken", "identifier", "semicolonToken"], ["modifiers", "propertyName", "callSignature", "block", "semicolonToken"], ["modifiers", "variableDeclarator", "semicolonToken"], ["modifiers", "constructorKeyword", "callSignature", "block", "semicolonToken"], ["modifiers", "indexSignature", "semicolonToken"], ["modifiers", "getKeyword", "propertyName", "callSignature", "block"], ["modifiers", "setKeyword", "propertyName", "callSignature", "block"], ["propertyName", "questionToken", "typeAnnotation"], ["typeParameterList", "parameterList", "typeAnnotation"], ["newKeyword", "callSignature"], ["openBracketToken", "parameters", "closeBracketToken", "typeAnnotation"], ["propertyName", "questionToken", "callSignature"], ["openBraceToken", "statements", "closeBraceToken"], ["ifKeyword", "openParenToken", "condition", "closeParenToken", "statement", "elseClause"], ["modifiers", "variableDeclaration", "semicolonToken"], ["expression", "semicolonToken"], ["returnKeyword", "expression", "semicolonToken"], ["switchKeyword", "openParenToken", "expression", "closeParenToken", "openBraceToken", "switchClauses", "closeBraceToken"], ["breakKeyword", "identifier", "semicolonToken"], ["continueKeyword", "identifier", "semicolonToken"], ["forKeyword", "openParenToken", "variableDeclaration", "initializer", "firstSemicolonToken", "condition", "secondSemicolonToken", "incrementor", "closeParenToken", "statement"], ["forKeyword", "openParenToken", "variableDeclaration", "left", "inKeyword", "expression", "closeParenToken", "statement"], ["semicolonToken"], ["throwKeyword", "expression", "semicolonToken"], ["whileKeyword", "openParenToken", "condition", "closeParenToken", "statement"], ["tryKeyword", "block", "catchClause", "finallyClause"], ["identifier", "colonToken", "statement"], ["doKeyword", "statement", "whileKeyword", "openParenToken", "condition", "closeParenToken", "semicolonToken"], ["debuggerKeyword", "semicolonToken"], ["withKeyword", "openParenToken", "condition", "closeParenToken", "statement"], ["operatorToken", "operand"], ["operatorToken", "operand"], ["operatorToken", "operand"], ["operatorToken", "operand"], ["operatorToken", "operand"], ["operatorToken", "operand"], ["deleteKeyword", "expression"], ["typeOfKeyword", "expression"], ["voidKeyword", "expression"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["condition", "questionToken", "whenTrue", "colonToken", "whenFalse"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["operand", "operatorToken"], ["operand", "operatorToken"], ["expression", "dotToken", "name"], ["expression", "argumentList"], ["openBracketToken", "expressions", "closeBracketToken"], ["openBraceToken", "propertyAssignments", "closeBraceToken"], ["newKeyword", "expression", "argumentList"], ["openParenToken", "expression", "closeParenToken"], ["callSignature", "equalsGreaterThanToken", "block", "expression"], ["parameter", "equalsGreaterThanToken", "block", "expression"], ["lessThanToken", "type", "greaterThanToken", "expression"], ["expression", "openBracketToken", "argumentExpression", "closeBracketToken"], ["functionKeyword", "identifier", "callSignature", "block"], [], ["varKeyword", "variableDeclarators"], ["propertyName", "typeAnnotation", "equalsValueClause"], ["typeArgumentList", "openParenToken", "arguments", "closeParenToken"], ["openParenToken", "parameters", "closeParenToken"], ["lessThanToken", "typeArguments", "greaterThanToken"], ["lessThanToken", "typeParameters", "greaterThanToken"], ["extendsOrImplementsKeyword", "typeNames"], ["extendsOrImplementsKeyword", "typeNames"], ["equalsToken", "value"], ["caseKeyword", "expression", "colonToken", "statements"], ["defaultKeyword", "colonToken", "statements"], ["elseKeyword", "statement"], ["catchKeyword", "openParenToken", "identifier", "typeAnnotation", "closeParenToken", "block"], ["finallyKeyword", "block"], ["identifier", "constraint"], ["extendsKeyword", "typeOrExpression"], ["propertyName", "colonToken", "expression"], ["propertyName", "callSignature", "block"], ["dotDotDotToken", "modifiers", "identifier", "questionToken", "typeAnnotation", "equalsValueClause"], ["propertyName", "equalsValueClause"], ["colonToken", "type"], ["requireKeyword", "openParenToken", "stringLiteral", "closeParenToken"], ["moduleName"],];
+    TypeScript.nodeMetadata = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], ["moduleElements", "endOfFileToken"], ["left", "dotToken", "right"], ["openBraceToken", "typeMembers", "closeBraceToken"], ["typeParameterList", "parameterList", "equalsGreaterThanToken", "type"], ["type", "openBracketToken", "closeBracketToken"], ["newKeyword", "typeParameterList", "parameterList", "equalsGreaterThanToken", "type"], ["name", "typeArgumentList"], ["typeOfKeyword", "name"], ["openBracketToken", "types", "closeBracketToken"], ["left", "barToken", "right"], ["openParenToken", "type", "closeParenToken"], ["modifiers", "interfaceKeyword", "identifier", "typeParameterList", "heritageClauses", "body"], ["modifiers", "functionKeyword", "identifier", "callSignature", "block", "semicolonToken"], ["modifiers", "moduleKeyword", "name", "stringLiteral", "openBraceToken", "moduleElements", "closeBraceToken"], ["modifiers", "classKeyword", "identifier", "typeParameterList", "heritageClauses", "openBraceToken", "classElements", "closeBraceToken"], ["modifiers", "enumKeyword", "identifier", "openBraceToken", "enumElements", "closeBraceToken"], ["modifiers", "importKeyword", "identifier", "equalsToken", "moduleReference", "semicolonToken"], ["exportKeyword", "equalsToken", "identifier", "semicolonToken"], ["modifiers", "propertyName", "callSignature", "block", "semicolonToken"], ["modifiers", "variableDeclarator", "semicolonToken"], ["modifiers", "constructorKeyword", "callSignature", "block", "semicolonToken"], ["modifiers", "indexSignature", "semicolonToken"], ["modifiers", "getKeyword", "propertyName", "callSignature", "block"], ["modifiers", "setKeyword", "propertyName", "callSignature", "block"], ["propertyName", "questionToken", "typeAnnotation"], ["typeParameterList", "parameterList", "typeAnnotation"], ["newKeyword", "callSignature"], ["openBracketToken", "parameters", "closeBracketToken", "typeAnnotation"], ["propertyName", "questionToken", "callSignature"], ["openBraceToken", "statements", "closeBraceToken"], ["ifKeyword", "openParenToken", "condition", "closeParenToken", "statement", "elseClause"], ["modifiers", "variableDeclaration", "semicolonToken"], ["expression", "semicolonToken"], ["returnKeyword", "expression", "semicolonToken"], ["switchKeyword", "openParenToken", "expression", "closeParenToken", "openBraceToken", "switchClauses", "closeBraceToken"], ["breakKeyword", "identifier", "semicolonToken"], ["continueKeyword", "identifier", "semicolonToken"], ["forKeyword", "openParenToken", "variableDeclaration", "initializer", "firstSemicolonToken", "condition", "secondSemicolonToken", "incrementor", "closeParenToken", "statement"], ["forKeyword", "openParenToken", "variableDeclaration", "left", "inKeyword", "expression", "closeParenToken", "statement"], ["semicolonToken"], ["throwKeyword", "expression", "semicolonToken"], ["whileKeyword", "openParenToken", "condition", "closeParenToken", "statement"], ["tryKeyword", "block", "catchClause", "finallyClause"], ["identifier", "colonToken", "statement"], ["doKeyword", "statement", "whileKeyword", "openParenToken", "condition", "closeParenToken", "semicolonToken"], ["debuggerKeyword", "semicolonToken"], ["withKeyword", "openParenToken", "condition", "closeParenToken", "statement"], ["operatorToken", "operand"], ["operatorToken", "operand"], ["operatorToken", "operand"], ["operatorToken", "operand"], ["operatorToken", "operand"], ["operatorToken", "operand"], ["deleteKeyword", "expression"], ["typeOfKeyword", "expression"], ["voidKeyword", "expression"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["condition", "questionToken", "whenTrue", "colonToken", "whenFalse"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["left", "operatorToken", "right"], ["operand", "operatorToken"], ["operand", "operatorToken"], ["expression", "dotToken", "name"], ["expression", "argumentList"], ["openBracketToken", "expressions", "closeBracketToken"], ["openBraceToken", "propertyAssignments", "closeBraceToken"], ["newKeyword", "expression", "argumentList"], ["openParenToken", "expression", "closeParenToken"], ["callSignature", "equalsGreaterThanToken", "block", "expression"], ["parameter", "equalsGreaterThanToken", "block", "expression"], ["lessThanToken", "type", "greaterThanToken", "expression"], ["expression", "openBracketToken", "argumentExpression", "closeBracketToken"], ["functionKeyword", "identifier", "callSignature", "block"], [], ["varKeyword", "variableDeclarators"], ["propertyName", "typeAnnotation", "equalsValueClause"], ["typeArgumentList", "openParenToken", "arguments", "closeParenToken"], ["openParenToken", "parameters", "closeParenToken"], ["lessThanToken", "typeArguments", "greaterThanToken"], ["lessThanToken", "typeParameters", "greaterThanToken"], ["extendsOrImplementsKeyword", "typeNames"], ["extendsOrImplementsKeyword", "typeNames"], ["equalsToken", "value"], ["caseKeyword", "expression", "colonToken", "statements"], ["defaultKeyword", "colonToken", "statements"], ["elseKeyword", "statement"], ["catchKeyword", "openParenToken", "identifier", "typeAnnotation", "closeParenToken", "block"], ["finallyKeyword", "block"], ["identifier", "constraint"], ["extendsKeyword", "typeOrExpression"], ["propertyName", "colonToken", "expression"], ["propertyName", "callSignature", "block"], ["dotDotDotToken", "modifiers", "identifier", "questionToken", "typeAnnotation", "equalsValueClause"], ["propertyName", "equalsValueClause"], ["colonToken", "type"], ["requireKeyword", "openParenToken", "stringLiteral", "closeParenToken"], ["moduleName"],];
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
 (function (TypeScript) {
@@ -22054,15 +22056,15 @@ var TypeScript;
         }
         SyntaxUtilities.isAnyFunctionExpressionOrDeclaration = function (ast) {
             switch (ast.kind()) {
-                case 220 /* SimpleArrowFunctionExpression */:
-                case 219 /* ParenthesizedArrowFunctionExpression */:
-                case 223 /* FunctionExpression */:
-                case 130 /* FunctionDeclaration */:
-                case 136 /* MemberFunctionDeclaration */:
-                case 242 /* FunctionPropertyAssignment */:
-                case 138 /* ConstructorDeclaration */:
-                case 140 /* GetAccessor */:
-                case 141 /* SetAccessor */:
+                case 222 /* SimpleArrowFunctionExpression */:
+                case 221 /* ParenthesizedArrowFunctionExpression */:
+                case 225 /* FunctionExpression */:
+                case 132 /* FunctionDeclaration */:
+                case 138 /* MemberFunctionDeclaration */:
+                case 244 /* FunctionPropertyAssignment */:
+                case 140 /* ConstructorDeclaration */:
+                case 142 /* GetAccessor */:
+                case 143 /* SetAccessor */:
                     return true;
             }
             return false;
@@ -22080,14 +22082,14 @@ var TypeScript;
         SyntaxUtilities.isLeftHandSizeExpression = function (element) {
             if (element) {
                 switch (element.kind()) {
-                    case 213 /* MemberAccessExpression */:
-                    case 222 /* ElementAccessExpression */:
-                    case 217 /* ObjectCreationExpression */:
-                    case 214 /* InvocationExpression */:
-                    case 215 /* ArrayLiteralExpression */:
-                    case 218 /* ParenthesizedExpression */:
-                    case 216 /* ObjectLiteralExpression */:
-                    case 223 /* FunctionExpression */:
+                    case 215 /* MemberAccessExpression */:
+                    case 224 /* ElementAccessExpression */:
+                    case 219 /* ObjectCreationExpression */:
+                    case 216 /* InvocationExpression */:
+                    case 217 /* ArrayLiteralExpression */:
+                    case 220 /* ParenthesizedExpression */:
+                    case 218 /* ObjectLiteralExpression */:
+                    case 225 /* FunctionExpression */:
                     case 11 /* IdentifierName */:
                     case 12 /* RegularExpressionLiteral */:
                     case 13 /* NumericLiteral */:
@@ -22114,66 +22116,66 @@ var TypeScript;
                     case 35 /* ThisKeyword */:
                     case 37 /* TrueKeyword */:
                     case 50 /* SuperKeyword */:
-                    case 165 /* PlusExpression */:
-                    case 166 /* NegateExpression */:
-                    case 167 /* BitwiseNotExpression */:
-                    case 168 /* LogicalNotExpression */:
-                    case 169 /* PreIncrementExpression */:
-                    case 170 /* PreDecrementExpression */:
-                    case 171 /* DeleteExpression */:
-                    case 172 /* TypeOfExpression */:
-                    case 173 /* VoidExpression */:
-                    case 174 /* CommaExpression */:
-                    case 175 /* AssignmentExpression */:
-                    case 176 /* AddAssignmentExpression */:
-                    case 177 /* SubtractAssignmentExpression */:
-                    case 178 /* MultiplyAssignmentExpression */:
-                    case 179 /* DivideAssignmentExpression */:
-                    case 180 /* ModuloAssignmentExpression */:
-                    case 181 /* AndAssignmentExpression */:
-                    case 182 /* ExclusiveOrAssignmentExpression */:
-                    case 183 /* OrAssignmentExpression */:
-                    case 184 /* LeftShiftAssignmentExpression */:
-                    case 185 /* SignedRightShiftAssignmentExpression */:
-                    case 186 /* UnsignedRightShiftAssignmentExpression */:
-                    case 187 /* ConditionalExpression */:
-                    case 188 /* LogicalOrExpression */:
-                    case 189 /* LogicalAndExpression */:
-                    case 190 /* BitwiseOrExpression */:
-                    case 191 /* BitwiseExclusiveOrExpression */:
-                    case 192 /* BitwiseAndExpression */:
-                    case 193 /* EqualsWithTypeConversionExpression */:
-                    case 194 /* NotEqualsWithTypeConversionExpression */:
-                    case 195 /* EqualsExpression */:
-                    case 196 /* NotEqualsExpression */:
-                    case 197 /* LessThanExpression */:
-                    case 198 /* GreaterThanExpression */:
-                    case 199 /* LessThanOrEqualExpression */:
-                    case 200 /* GreaterThanOrEqualExpression */:
-                    case 201 /* InstanceOfExpression */:
-                    case 202 /* InExpression */:
-                    case 203 /* LeftShiftExpression */:
-                    case 204 /* SignedRightShiftExpression */:
-                    case 205 /* UnsignedRightShiftExpression */:
-                    case 206 /* MultiplyExpression */:
-                    case 207 /* DivideExpression */:
-                    case 208 /* ModuloExpression */:
-                    case 209 /* AddExpression */:
-                    case 210 /* SubtractExpression */:
-                    case 211 /* PostIncrementExpression */:
-                    case 212 /* PostDecrementExpression */:
-                    case 213 /* MemberAccessExpression */:
-                    case 214 /* InvocationExpression */:
-                    case 215 /* ArrayLiteralExpression */:
-                    case 216 /* ObjectLiteralExpression */:
-                    case 217 /* ObjectCreationExpression */:
-                    case 218 /* ParenthesizedExpression */:
-                    case 219 /* ParenthesizedArrowFunctionExpression */:
-                    case 220 /* SimpleArrowFunctionExpression */:
-                    case 221 /* CastExpression */:
-                    case 222 /* ElementAccessExpression */:
-                    case 223 /* FunctionExpression */:
-                    case 224 /* OmittedExpression */:
+                    case 167 /* PlusExpression */:
+                    case 168 /* NegateExpression */:
+                    case 169 /* BitwiseNotExpression */:
+                    case 170 /* LogicalNotExpression */:
+                    case 171 /* PreIncrementExpression */:
+                    case 172 /* PreDecrementExpression */:
+                    case 173 /* DeleteExpression */:
+                    case 174 /* TypeOfExpression */:
+                    case 175 /* VoidExpression */:
+                    case 176 /* CommaExpression */:
+                    case 177 /* AssignmentExpression */:
+                    case 178 /* AddAssignmentExpression */:
+                    case 179 /* SubtractAssignmentExpression */:
+                    case 180 /* MultiplyAssignmentExpression */:
+                    case 181 /* DivideAssignmentExpression */:
+                    case 182 /* ModuloAssignmentExpression */:
+                    case 183 /* AndAssignmentExpression */:
+                    case 184 /* ExclusiveOrAssignmentExpression */:
+                    case 185 /* OrAssignmentExpression */:
+                    case 186 /* LeftShiftAssignmentExpression */:
+                    case 187 /* SignedRightShiftAssignmentExpression */:
+                    case 188 /* UnsignedRightShiftAssignmentExpression */:
+                    case 189 /* ConditionalExpression */:
+                    case 190 /* LogicalOrExpression */:
+                    case 191 /* LogicalAndExpression */:
+                    case 192 /* BitwiseOrExpression */:
+                    case 193 /* BitwiseExclusiveOrExpression */:
+                    case 194 /* BitwiseAndExpression */:
+                    case 195 /* EqualsWithTypeConversionExpression */:
+                    case 196 /* NotEqualsWithTypeConversionExpression */:
+                    case 197 /* EqualsExpression */:
+                    case 198 /* NotEqualsExpression */:
+                    case 199 /* LessThanExpression */:
+                    case 200 /* GreaterThanExpression */:
+                    case 201 /* LessThanOrEqualExpression */:
+                    case 202 /* GreaterThanOrEqualExpression */:
+                    case 203 /* InstanceOfExpression */:
+                    case 204 /* InExpression */:
+                    case 205 /* LeftShiftExpression */:
+                    case 206 /* SignedRightShiftExpression */:
+                    case 207 /* UnsignedRightShiftExpression */:
+                    case 208 /* MultiplyExpression */:
+                    case 209 /* DivideExpression */:
+                    case 210 /* ModuloExpression */:
+                    case 211 /* AddExpression */:
+                    case 212 /* SubtractExpression */:
+                    case 213 /* PostIncrementExpression */:
+                    case 214 /* PostDecrementExpression */:
+                    case 215 /* MemberAccessExpression */:
+                    case 216 /* InvocationExpression */:
+                    case 217 /* ArrayLiteralExpression */:
+                    case 218 /* ObjectLiteralExpression */:
+                    case 219 /* ObjectCreationExpression */:
+                    case 220 /* ParenthesizedExpression */:
+                    case 221 /* ParenthesizedArrowFunctionExpression */:
+                    case 222 /* SimpleArrowFunctionExpression */:
+                    case 223 /* CastExpression */:
+                    case 224 /* ElementAccessExpression */:
+                    case 225 /* FunctionExpression */:
+                    case 226 /* OmittedExpression */:
                         return true;
                 }
             }
@@ -22182,8 +22184,8 @@ var TypeScript;
         SyntaxUtilities.isSwitchClause = function (element) {
             if (element) {
                 switch (element.kind()) {
-                    case 234 /* CaseSwitchClause */:
-                    case 235 /* DefaultSwitchClause */:
+                    case 236 /* CaseSwitchClause */:
+                    case 237 /* DefaultSwitchClause */:
                         return true;
                 }
             }
@@ -22192,11 +22194,11 @@ var TypeScript;
         SyntaxUtilities.isTypeMember = function (element) {
             if (element) {
                 switch (element.kind()) {
-                    case 144 /* ConstructSignature */:
-                    case 146 /* MethodSignature */:
-                    case 145 /* IndexSignature */:
-                    case 142 /* PropertySignature */:
-                    case 143 /* CallSignature */:
+                    case 146 /* ConstructSignature */:
+                    case 148 /* MethodSignature */:
+                    case 147 /* IndexSignature */:
+                    case 144 /* PropertySignature */:
+                    case 145 /* CallSignature */:
                         return true;
                 }
             }
@@ -22205,13 +22207,13 @@ var TypeScript;
         SyntaxUtilities.isClassElement = function (element) {
             if (element) {
                 switch (element.kind()) {
-                    case 138 /* ConstructorDeclaration */:
-                    case 139 /* IndexMemberDeclaration */:
-                    case 136 /* MemberFunctionDeclaration */:
-                    case 140 /* GetAccessor */:
-                    case 141 /* SetAccessor */:
-                    case 136 /* MemberFunctionDeclaration */:
-                    case 137 /* MemberVariableDeclaration */:
+                    case 140 /* ConstructorDeclaration */:
+                    case 141 /* IndexMemberDeclaration */:
+                    case 138 /* MemberFunctionDeclaration */:
+                    case 142 /* GetAccessor */:
+                    case 143 /* SetAccessor */:
+                    case 138 /* MemberFunctionDeclaration */:
+                    case 139 /* MemberVariableDeclaration */:
                         return true;
                 }
             }
@@ -22220,31 +22222,31 @@ var TypeScript;
         SyntaxUtilities.isModuleElement = function (element) {
             if (element) {
                 switch (element.kind()) {
-                    case 134 /* ImportDeclaration */:
-                    case 135 /* ExportAssignment */:
-                    case 132 /* ClassDeclaration */:
-                    case 129 /* InterfaceDeclaration */:
-                    case 131 /* ModuleDeclaration */:
-                    case 133 /* EnumDeclaration */:
-                    case 130 /* FunctionDeclaration */:
-                    case 149 /* VariableStatement */:
-                    case 147 /* Block */:
-                    case 148 /* IfStatement */:
-                    case 150 /* ExpressionStatement */:
-                    case 158 /* ThrowStatement */:
-                    case 151 /* ReturnStatement */:
-                    case 152 /* SwitchStatement */:
-                    case 153 /* BreakStatement */:
-                    case 154 /* ContinueStatement */:
-                    case 156 /* ForInStatement */:
-                    case 155 /* ForStatement */:
-                    case 159 /* WhileStatement */:
-                    case 164 /* WithStatement */:
-                    case 157 /* EmptyStatement */:
-                    case 160 /* TryStatement */:
-                    case 161 /* LabeledStatement */:
-                    case 162 /* DoStatement */:
-                    case 163 /* DebuggerStatement */:
+                    case 136 /* ImportDeclaration */:
+                    case 137 /* ExportAssignment */:
+                    case 134 /* ClassDeclaration */:
+                    case 131 /* InterfaceDeclaration */:
+                    case 133 /* ModuleDeclaration */:
+                    case 135 /* EnumDeclaration */:
+                    case 132 /* FunctionDeclaration */:
+                    case 151 /* VariableStatement */:
+                    case 149 /* Block */:
+                    case 150 /* IfStatement */:
+                    case 152 /* ExpressionStatement */:
+                    case 160 /* ThrowStatement */:
+                    case 153 /* ReturnStatement */:
+                    case 154 /* SwitchStatement */:
+                    case 155 /* BreakStatement */:
+                    case 156 /* ContinueStatement */:
+                    case 158 /* ForInStatement */:
+                    case 157 /* ForStatement */:
+                    case 161 /* WhileStatement */:
+                    case 166 /* WithStatement */:
+                    case 159 /* EmptyStatement */:
+                    case 162 /* TryStatement */:
+                    case 163 /* LabeledStatement */:
+                    case 164 /* DoStatement */:
+                    case 165 /* DebuggerStatement */:
                         return true;
                 }
             }
@@ -22253,25 +22255,25 @@ var TypeScript;
         SyntaxUtilities.isStatement = function (element) {
             if (element) {
                 switch (element.kind()) {
-                    case 130 /* FunctionDeclaration */:
-                    case 149 /* VariableStatement */:
-                    case 147 /* Block */:
-                    case 148 /* IfStatement */:
-                    case 150 /* ExpressionStatement */:
-                    case 158 /* ThrowStatement */:
-                    case 151 /* ReturnStatement */:
-                    case 152 /* SwitchStatement */:
-                    case 153 /* BreakStatement */:
-                    case 154 /* ContinueStatement */:
-                    case 156 /* ForInStatement */:
-                    case 155 /* ForStatement */:
-                    case 159 /* WhileStatement */:
-                    case 164 /* WithStatement */:
-                    case 157 /* EmptyStatement */:
-                    case 160 /* TryStatement */:
-                    case 161 /* LabeledStatement */:
-                    case 162 /* DoStatement */:
-                    case 163 /* DebuggerStatement */:
+                    case 132 /* FunctionDeclaration */:
+                    case 151 /* VariableStatement */:
+                    case 149 /* Block */:
+                    case 150 /* IfStatement */:
+                    case 152 /* ExpressionStatement */:
+                    case 160 /* ThrowStatement */:
+                    case 153 /* ReturnStatement */:
+                    case 154 /* SwitchStatement */:
+                    case 155 /* BreakStatement */:
+                    case 156 /* ContinueStatement */:
+                    case 158 /* ForInStatement */:
+                    case 157 /* ForStatement */:
+                    case 161 /* WhileStatement */:
+                    case 166 /* WithStatement */:
+                    case 159 /* EmptyStatement */:
+                    case 162 /* TryStatement */:
+                    case 163 /* LabeledStatement */:
+                    case 164 /* DoStatement */:
+                    case 165 /* DebuggerStatement */:
                         return true;
                 }
             }
@@ -22282,9 +22284,9 @@ var TypeScript;
             var parent = positionedElement.parent;
             if (parent && (element.kind() === 80 /* LessThanToken */ || element.kind() === 81 /* GreaterThanToken */)) {
                 switch (parent.kind()) {
-                    case 229 /* TypeArgumentList */:
-                    case 230 /* TypeParameterList */:
-                    case 221 /* CastExpression */:
+                    case 231 /* TypeArgumentList */:
+                    case 232 /* TypeParameterList */:
+                    case 223 /* CastExpression */:
                         return true;
                 }
             }
@@ -22307,13 +22309,13 @@ var TypeScript;
         };
         SyntaxUtilities.getExportKeyword = function (moduleElement) {
             switch (moduleElement.kind()) {
-                case 131 /* ModuleDeclaration */:
-                case 132 /* ClassDeclaration */:
-                case 130 /* FunctionDeclaration */:
-                case 149 /* VariableStatement */:
-                case 133 /* EnumDeclaration */:
-                case 129 /* InterfaceDeclaration */:
-                case 134 /* ImportDeclaration */:
+                case 133 /* ModuleDeclaration */:
+                case 134 /* ClassDeclaration */:
+                case 132 /* FunctionDeclaration */:
+                case 151 /* VariableStatement */:
+                case 135 /* EnumDeclaration */:
+                case 131 /* InterfaceDeclaration */:
+                case 136 /* ImportDeclaration */:
                     return SyntaxUtilities.getToken(moduleElement.modifiers, 47 /* ExportKeyword */);
                 default:
                     return undefined;
@@ -22325,24 +22327,24 @@ var TypeScript;
             }
             var node = positionNode;
             switch (node.kind()) {
-                case 131 /* ModuleDeclaration */:
-                case 132 /* ClassDeclaration */:
-                case 130 /* FunctionDeclaration */:
-                case 149 /* VariableStatement */:
-                case 133 /* EnumDeclaration */:
+                case 133 /* ModuleDeclaration */:
+                case 134 /* ClassDeclaration */:
+                case 132 /* FunctionDeclaration */:
+                case 151 /* VariableStatement */:
+                case 135 /* EnumDeclaration */:
                     if (SyntaxUtilities.containsToken(node.modifiers, 63 /* DeclareKeyword */)) {
                         return true;
                     }
-                case 134 /* ImportDeclaration */:
-                case 138 /* ConstructorDeclaration */:
-                case 136 /* MemberFunctionDeclaration */:
-                case 140 /* GetAccessor */:
-                case 141 /* SetAccessor */:
-                case 137 /* MemberVariableDeclaration */:
+                case 136 /* ImportDeclaration */:
+                case 140 /* ConstructorDeclaration */:
+                case 138 /* MemberFunctionDeclaration */:
+                case 142 /* GetAccessor */:
+                case 143 /* SetAccessor */:
+                case 139 /* MemberVariableDeclaration */:
                     if (SyntaxUtilities.isClassElement(node) || SyntaxUtilities.isModuleElement(node)) {
                         return SyntaxUtilities.isAmbientDeclarationSyntax(TypeScript.Syntax.containingNode(positionNode));
                     }
-                case 244 /* EnumElement */:
+                case 246 /* EnumElement */:
                     return SyntaxUtilities.isAmbientDeclarationSyntax(TypeScript.Syntax.containingNode(TypeScript.Syntax.containingNode(positionNode)));
                 default:
                     return SyntaxUtilities.isAmbientDeclarationSyntax(TypeScript.Syntax.containingNode(positionNode));
@@ -22380,201 +22382,205 @@ var TypeScript;
                 return visitor.visitTypeQuery(element);
             case 128 /* TupleType */:
                 return visitor.visitTupleType(element);
-            case 129 /* InterfaceDeclaration */:
+            case 129 /* UnionType */:
+                return visitor.visitUnionType(element);
+            case 130 /* ParenthesizedType */:
+                return visitor.visitParenthesizedType(element);
+            case 131 /* InterfaceDeclaration */:
                 return visitor.visitInterfaceDeclaration(element);
-            case 130 /* FunctionDeclaration */:
+            case 132 /* FunctionDeclaration */:
                 return visitor.visitFunctionDeclaration(element);
-            case 131 /* ModuleDeclaration */:
+            case 133 /* ModuleDeclaration */:
                 return visitor.visitModuleDeclaration(element);
-            case 132 /* ClassDeclaration */:
+            case 134 /* ClassDeclaration */:
                 return visitor.visitClassDeclaration(element);
-            case 133 /* EnumDeclaration */:
+            case 135 /* EnumDeclaration */:
                 return visitor.visitEnumDeclaration(element);
-            case 134 /* ImportDeclaration */:
+            case 136 /* ImportDeclaration */:
                 return visitor.visitImportDeclaration(element);
-            case 135 /* ExportAssignment */:
+            case 137 /* ExportAssignment */:
                 return visitor.visitExportAssignment(element);
-            case 136 /* MemberFunctionDeclaration */:
+            case 138 /* MemberFunctionDeclaration */:
                 return visitor.visitMemberFunctionDeclaration(element);
-            case 137 /* MemberVariableDeclaration */:
+            case 139 /* MemberVariableDeclaration */:
                 return visitor.visitMemberVariableDeclaration(element);
-            case 138 /* ConstructorDeclaration */:
+            case 140 /* ConstructorDeclaration */:
                 return visitor.visitConstructorDeclaration(element);
-            case 139 /* IndexMemberDeclaration */:
+            case 141 /* IndexMemberDeclaration */:
                 return visitor.visitIndexMemberDeclaration(element);
-            case 140 /* GetAccessor */:
+            case 142 /* GetAccessor */:
                 return visitor.visitGetAccessor(element);
-            case 141 /* SetAccessor */:
+            case 143 /* SetAccessor */:
                 return visitor.visitSetAccessor(element);
-            case 142 /* PropertySignature */:
+            case 144 /* PropertySignature */:
                 return visitor.visitPropertySignature(element);
-            case 143 /* CallSignature */:
+            case 145 /* CallSignature */:
                 return visitor.visitCallSignature(element);
-            case 144 /* ConstructSignature */:
+            case 146 /* ConstructSignature */:
                 return visitor.visitConstructSignature(element);
-            case 145 /* IndexSignature */:
+            case 147 /* IndexSignature */:
                 return visitor.visitIndexSignature(element);
-            case 146 /* MethodSignature */:
+            case 148 /* MethodSignature */:
                 return visitor.visitMethodSignature(element);
-            case 147 /* Block */:
+            case 149 /* Block */:
                 return visitor.visitBlock(element);
-            case 148 /* IfStatement */:
+            case 150 /* IfStatement */:
                 return visitor.visitIfStatement(element);
-            case 149 /* VariableStatement */:
+            case 151 /* VariableStatement */:
                 return visitor.visitVariableStatement(element);
-            case 150 /* ExpressionStatement */:
+            case 152 /* ExpressionStatement */:
                 return visitor.visitExpressionStatement(element);
-            case 151 /* ReturnStatement */:
+            case 153 /* ReturnStatement */:
                 return visitor.visitReturnStatement(element);
-            case 152 /* SwitchStatement */:
+            case 154 /* SwitchStatement */:
                 return visitor.visitSwitchStatement(element);
-            case 153 /* BreakStatement */:
+            case 155 /* BreakStatement */:
                 return visitor.visitBreakStatement(element);
-            case 154 /* ContinueStatement */:
+            case 156 /* ContinueStatement */:
                 return visitor.visitContinueStatement(element);
-            case 155 /* ForStatement */:
+            case 157 /* ForStatement */:
                 return visitor.visitForStatement(element);
-            case 156 /* ForInStatement */:
+            case 158 /* ForInStatement */:
                 return visitor.visitForInStatement(element);
-            case 157 /* EmptyStatement */:
+            case 159 /* EmptyStatement */:
                 return visitor.visitEmptyStatement(element);
-            case 158 /* ThrowStatement */:
+            case 160 /* ThrowStatement */:
                 return visitor.visitThrowStatement(element);
-            case 159 /* WhileStatement */:
+            case 161 /* WhileStatement */:
                 return visitor.visitWhileStatement(element);
-            case 160 /* TryStatement */:
+            case 162 /* TryStatement */:
                 return visitor.visitTryStatement(element);
-            case 161 /* LabeledStatement */:
+            case 163 /* LabeledStatement */:
                 return visitor.visitLabeledStatement(element);
-            case 162 /* DoStatement */:
+            case 164 /* DoStatement */:
                 return visitor.visitDoStatement(element);
-            case 163 /* DebuggerStatement */:
+            case 165 /* DebuggerStatement */:
                 return visitor.visitDebuggerStatement(element);
-            case 164 /* WithStatement */:
+            case 166 /* WithStatement */:
                 return visitor.visitWithStatement(element);
-            case 169 /* PreIncrementExpression */:
-            case 170 /* PreDecrementExpression */:
-            case 165 /* PlusExpression */:
-            case 166 /* NegateExpression */:
-            case 167 /* BitwiseNotExpression */:
-            case 168 /* LogicalNotExpression */:
+            case 171 /* PreIncrementExpression */:
+            case 172 /* PreDecrementExpression */:
+            case 167 /* PlusExpression */:
+            case 168 /* NegateExpression */:
+            case 169 /* BitwiseNotExpression */:
+            case 170 /* LogicalNotExpression */:
                 return visitor.visitPrefixUnaryExpression(element);
-            case 171 /* DeleteExpression */:
+            case 173 /* DeleteExpression */:
                 return visitor.visitDeleteExpression(element);
-            case 172 /* TypeOfExpression */:
+            case 174 /* TypeOfExpression */:
                 return visitor.visitTypeOfExpression(element);
-            case 173 /* VoidExpression */:
+            case 175 /* VoidExpression */:
                 return visitor.visitVoidExpression(element);
-            case 187 /* ConditionalExpression */:
+            case 189 /* ConditionalExpression */:
                 return visitor.visitConditionalExpression(element);
-            case 206 /* MultiplyExpression */:
-            case 207 /* DivideExpression */:
-            case 208 /* ModuloExpression */:
-            case 209 /* AddExpression */:
-            case 210 /* SubtractExpression */:
-            case 203 /* LeftShiftExpression */:
-            case 204 /* SignedRightShiftExpression */:
-            case 205 /* UnsignedRightShiftExpression */:
-            case 197 /* LessThanExpression */:
-            case 198 /* GreaterThanExpression */:
-            case 199 /* LessThanOrEqualExpression */:
-            case 200 /* GreaterThanOrEqualExpression */:
-            case 201 /* InstanceOfExpression */:
-            case 202 /* InExpression */:
-            case 193 /* EqualsWithTypeConversionExpression */:
-            case 194 /* NotEqualsWithTypeConversionExpression */:
-            case 195 /* EqualsExpression */:
-            case 196 /* NotEqualsExpression */:
-            case 192 /* BitwiseAndExpression */:
-            case 191 /* BitwiseExclusiveOrExpression */:
-            case 190 /* BitwiseOrExpression */:
-            case 189 /* LogicalAndExpression */:
-            case 188 /* LogicalOrExpression */:
-            case 183 /* OrAssignmentExpression */:
-            case 181 /* AndAssignmentExpression */:
-            case 182 /* ExclusiveOrAssignmentExpression */:
-            case 184 /* LeftShiftAssignmentExpression */:
-            case 185 /* SignedRightShiftAssignmentExpression */:
-            case 186 /* UnsignedRightShiftAssignmentExpression */:
-            case 176 /* AddAssignmentExpression */:
-            case 177 /* SubtractAssignmentExpression */:
-            case 178 /* MultiplyAssignmentExpression */:
-            case 179 /* DivideAssignmentExpression */:
-            case 180 /* ModuloAssignmentExpression */:
-            case 175 /* AssignmentExpression */:
-            case 174 /* CommaExpression */:
+            case 208 /* MultiplyExpression */:
+            case 209 /* DivideExpression */:
+            case 210 /* ModuloExpression */:
+            case 211 /* AddExpression */:
+            case 212 /* SubtractExpression */:
+            case 205 /* LeftShiftExpression */:
+            case 206 /* SignedRightShiftExpression */:
+            case 207 /* UnsignedRightShiftExpression */:
+            case 199 /* LessThanExpression */:
+            case 200 /* GreaterThanExpression */:
+            case 201 /* LessThanOrEqualExpression */:
+            case 202 /* GreaterThanOrEqualExpression */:
+            case 203 /* InstanceOfExpression */:
+            case 204 /* InExpression */:
+            case 195 /* EqualsWithTypeConversionExpression */:
+            case 196 /* NotEqualsWithTypeConversionExpression */:
+            case 197 /* EqualsExpression */:
+            case 198 /* NotEqualsExpression */:
+            case 194 /* BitwiseAndExpression */:
+            case 193 /* BitwiseExclusiveOrExpression */:
+            case 192 /* BitwiseOrExpression */:
+            case 191 /* LogicalAndExpression */:
+            case 190 /* LogicalOrExpression */:
+            case 185 /* OrAssignmentExpression */:
+            case 183 /* AndAssignmentExpression */:
+            case 184 /* ExclusiveOrAssignmentExpression */:
+            case 186 /* LeftShiftAssignmentExpression */:
+            case 187 /* SignedRightShiftAssignmentExpression */:
+            case 188 /* UnsignedRightShiftAssignmentExpression */:
+            case 178 /* AddAssignmentExpression */:
+            case 179 /* SubtractAssignmentExpression */:
+            case 180 /* MultiplyAssignmentExpression */:
+            case 181 /* DivideAssignmentExpression */:
+            case 182 /* ModuloAssignmentExpression */:
+            case 177 /* AssignmentExpression */:
+            case 176 /* CommaExpression */:
                 return visitor.visitBinaryExpression(element);
-            case 211 /* PostIncrementExpression */:
-            case 212 /* PostDecrementExpression */:
+            case 213 /* PostIncrementExpression */:
+            case 214 /* PostDecrementExpression */:
                 return visitor.visitPostfixUnaryExpression(element);
-            case 213 /* MemberAccessExpression */:
+            case 215 /* MemberAccessExpression */:
                 return visitor.visitMemberAccessExpression(element);
-            case 214 /* InvocationExpression */:
+            case 216 /* InvocationExpression */:
                 return visitor.visitInvocationExpression(element);
-            case 215 /* ArrayLiteralExpression */:
+            case 217 /* ArrayLiteralExpression */:
                 return visitor.visitArrayLiteralExpression(element);
-            case 216 /* ObjectLiteralExpression */:
+            case 218 /* ObjectLiteralExpression */:
                 return visitor.visitObjectLiteralExpression(element);
-            case 217 /* ObjectCreationExpression */:
+            case 219 /* ObjectCreationExpression */:
                 return visitor.visitObjectCreationExpression(element);
-            case 218 /* ParenthesizedExpression */:
+            case 220 /* ParenthesizedExpression */:
                 return visitor.visitParenthesizedExpression(element);
-            case 219 /* ParenthesizedArrowFunctionExpression */:
+            case 221 /* ParenthesizedArrowFunctionExpression */:
                 return visitor.visitParenthesizedArrowFunctionExpression(element);
-            case 220 /* SimpleArrowFunctionExpression */:
+            case 222 /* SimpleArrowFunctionExpression */:
                 return visitor.visitSimpleArrowFunctionExpression(element);
-            case 221 /* CastExpression */:
+            case 223 /* CastExpression */:
                 return visitor.visitCastExpression(element);
-            case 222 /* ElementAccessExpression */:
+            case 224 /* ElementAccessExpression */:
                 return visitor.visitElementAccessExpression(element);
-            case 223 /* FunctionExpression */:
+            case 225 /* FunctionExpression */:
                 return visitor.visitFunctionExpression(element);
-            case 224 /* OmittedExpression */:
+            case 226 /* OmittedExpression */:
                 return visitor.visitOmittedExpression(element);
-            case 225 /* VariableDeclaration */:
+            case 227 /* VariableDeclaration */:
                 return visitor.visitVariableDeclaration(element);
-            case 226 /* VariableDeclarator */:
+            case 228 /* VariableDeclarator */:
                 return visitor.visitVariableDeclarator(element);
-            case 227 /* ArgumentList */:
+            case 229 /* ArgumentList */:
                 return visitor.visitArgumentList(element);
-            case 228 /* ParameterList */:
+            case 230 /* ParameterList */:
                 return visitor.visitParameterList(element);
-            case 229 /* TypeArgumentList */:
+            case 231 /* TypeArgumentList */:
                 return visitor.visitTypeArgumentList(element);
-            case 230 /* TypeParameterList */:
+            case 232 /* TypeParameterList */:
                 return visitor.visitTypeParameterList(element);
-            case 231 /* ExtendsHeritageClause */:
-            case 232 /* ImplementsHeritageClause */:
+            case 233 /* ExtendsHeritageClause */:
+            case 234 /* ImplementsHeritageClause */:
                 return visitor.visitHeritageClause(element);
-            case 233 /* EqualsValueClause */:
+            case 235 /* EqualsValueClause */:
                 return visitor.visitEqualsValueClause(element);
-            case 234 /* CaseSwitchClause */:
+            case 236 /* CaseSwitchClause */:
                 return visitor.visitCaseSwitchClause(element);
-            case 235 /* DefaultSwitchClause */:
+            case 237 /* DefaultSwitchClause */:
                 return visitor.visitDefaultSwitchClause(element);
-            case 236 /* ElseClause */:
+            case 238 /* ElseClause */:
                 return visitor.visitElseClause(element);
-            case 237 /* CatchClause */:
+            case 239 /* CatchClause */:
                 return visitor.visitCatchClause(element);
-            case 238 /* FinallyClause */:
+            case 240 /* FinallyClause */:
                 return visitor.visitFinallyClause(element);
-            case 239 /* TypeParameter */:
+            case 241 /* TypeParameter */:
                 return visitor.visitTypeParameter(element);
-            case 240 /* Constraint */:
+            case 242 /* Constraint */:
                 return visitor.visitConstraint(element);
-            case 241 /* SimplePropertyAssignment */:
+            case 243 /* SimplePropertyAssignment */:
                 return visitor.visitSimplePropertyAssignment(element);
-            case 242 /* FunctionPropertyAssignment */:
+            case 244 /* FunctionPropertyAssignment */:
                 return visitor.visitFunctionPropertyAssignment(element);
-            case 243 /* Parameter */:
+            case 245 /* Parameter */:
                 return visitor.visitParameter(element);
-            case 244 /* EnumElement */:
+            case 246 /* EnumElement */:
                 return visitor.visitEnumElement(element);
-            case 245 /* TypeAnnotation */:
+            case 247 /* TypeAnnotation */:
                 return visitor.visitTypeAnnotation(element);
-            case 246 /* ExternalModuleReference */:
+            case 248 /* ExternalModuleReference */:
                 return visitor.visitExternalModuleReference(element);
-            case 247 /* ModuleNameModuleReference */:
+            case 249 /* ModuleNameModuleReference */:
                 return visitor.visitModuleNameModuleReference(element);
         }
         throw TypeScript.Errors.invalidOperation();
@@ -22672,6 +22678,16 @@ var TypeScript;
             this.visitToken(node.openBracketToken);
             this.visitSeparatedList(node.types);
             this.visitToken(node.closeBracketToken);
+        };
+        SyntaxWalker.prototype.visitUnionType = function (node) {
+            this.visitNodeOrToken(node.left);
+            this.visitToken(node.barToken);
+            this.visitNodeOrToken(node.right);
+        };
+        SyntaxWalker.prototype.visitParenthesizedType = function (node) {
+            this.visitToken(node.openParenToken);
+            this.visitNodeOrToken(node.type);
+            this.visitToken(node.closeParenToken);
         };
         SyntaxWalker.prototype.visitInterfaceDeclaration = function (node) {
             this.visitList(node.modifiers);
@@ -23709,7 +23725,7 @@ var TypeScript;
             }
             function isEnumElement(inErrorRecovery) {
                 var node = currentNode();
-                if (node && node.kind() === 244 /* EnumElement */) {
+                if (node && node.kind() === 246 /* EnumElement */) {
                     return true;
                 }
                 return isPropertyName(currentToken(), inErrorRecovery);
@@ -23719,7 +23735,7 @@ var TypeScript;
             }
             function tryParseEnumElement(inErrorRecovery) {
                 var node = currentNode();
-                if (node && node.kind() === 244 /* EnumElement */) {
+                if (node && node.kind() === 246 /* EnumElement */) {
                     consumeNode(node);
                     return node;
                 }
@@ -24526,13 +24542,13 @@ var TypeScript;
             }
             function isVariableDeclarator() {
                 var node = currentNode();
-                if (node && node.kind() === 226 /* VariableDeclarator */) {
+                if (node && node.kind() === 228 /* VariableDeclarator */) {
                     return true;
                 }
                 return isIdentifier(currentToken());
             }
             function canReuseVariableDeclaratorNode(node) {
-                if (!node || node.kind() !== 226 /* VariableDeclarator */) {
+                if (!node || node.kind() !== 228 /* VariableDeclarator */) {
                     return false;
                 }
                 var variableDeclarator = node;
@@ -25200,6 +25216,30 @@ var TypeScript;
                 return tryParseType() || eatIdentifierToken(TypeScript.DiagnosticCode.Type_expected);
             }
             function tryParseType() {
+                if (isFunctionType()) {
+                    return parseFunctionType();
+                }
+                if (currentToken().kind() === 31 /* NewKeyword */) {
+                    return parseConstructorType();
+                }
+                return tryParseUnionTypeOrHigher();
+            }
+            function tryParseUnionTypeOrHigher() {
+                var type = tryParsePrimaryType();
+                if (type) {
+                    var barToken;
+                    while ((barToken = currentToken()).kind() === 99 /* BarToken */) {
+                        consumeToken(barToken);
+                        var right = parsePrimaryType();
+                        type = new Parser.syntaxFactory.UnionTypeSyntax(parseNodeData, type, barToken, right);
+                    }
+                }
+                return type;
+            }
+            function parsePrimaryType() {
+                return tryParsePrimaryType() || eatIdentifierToken(TypeScript.DiagnosticCode.Type_expected);
+            }
+            function tryParsePrimaryType() {
                 var type = tryParseNonArrayType();
                 while (type) {
                     var _currentToken = currentToken();
@@ -25224,21 +25264,21 @@ var TypeScript;
                             break;
                         }
                         return consumeToken(_currentToken);
-                    case 72 /* OpenParenToken */:
-                    case 80 /* LessThanToken */:
-                        return tryParseFunctionType();
                     case 41 /* VoidKeyword */:
                         return consumeToken(_currentToken);
+                    case 72 /* OpenParenToken */:
+                        return parseParenthesizedType(_currentToken);
                     case 70 /* OpenBraceToken */:
                         return parseObjectType();
-                    case 31 /* NewKeyword */:
-                        return parseConstructorType();
                     case 39 /* TypeOfKeyword */:
                         return parseTypeQuery(_currentToken);
                     case 74 /* OpenBracketToken */:
                         return parseTupleType(_currentToken);
                 }
                 return tryParseNameOrGenericType();
+            }
+            function parseParenthesizedType(openParenToken) {
+                return new Parser.syntaxFactory.ParenthesizedTypeSyntax(parseNodeData, consumeToken(openParenToken), parseType(), eatToken(73 /* CloseParenToken */));
             }
             function tryParseNameOrGenericType() {
                 var name = tryParseName(false);
@@ -25251,25 +25291,41 @@ var TypeScript;
                 var typeArgumentList = tryParseTypeArgumentList(false);
                 return !typeArgumentList ? name : new Parser.syntaxFactory.GenericTypeSyntax(parseNodeData, name, typeArgumentList);
             }
-            function tryParseFunctionType() {
-                var typeParameterList = tryParseTypeParameterList(false);
-                var parameterList = undefined;
-                if (typeParameterList === undefined) {
-                    parameterList = tryParseParameterList();
-                    if (parameterList === undefined) {
-                        return undefined;
+            function isFunctionType() {
+                var token0 = currentToken();
+                var token0Kind = token0.kind();
+                if (token0Kind === 80 /* LessThanToken */) {
+                    return true;
+                }
+                if (token0Kind === 72 /* OpenParenToken */) {
+                    var token1 = peekToken(1);
+                    var token1Kind = token1.kind();
+                    if (token1Kind === 73 /* CloseParenToken */ || token1Kind === 77 /* DotDotDotToken */) {
+                        return true;
+                    }
+                    if (isModifierKind(token1Kind) || isIdentifier(token1)) {
+                        var token2 = peekToken(2);
+                        var token2Kind = token2.kind();
+                        if (token2Kind === 106 /* ColonToken */ || token2Kind === 79 /* CommaToken */ || token2Kind === 105 /* QuestionToken */ || token2Kind === 107 /* EqualsToken */ || isIdentifier(token2) || isModifierKind(token2Kind)) {
+                            return true;
+                        }
+                        if (token2Kind === 73 /* CloseParenToken */) {
+                            return peekToken(3).kind() === 85 /* EqualsGreaterThanToken */;
+                        }
                     }
                 }
-                else {
-                    parameterList = parseParameterList();
-                }
+                return false;
+            }
+            function parseFunctionType() {
+                var typeParameterList = tryParseTypeParameterList(false);
+                var parameterList = parseParameterList();
                 return new Parser.syntaxFactory.FunctionTypeSyntax(parseNodeData, typeParameterList, parameterList, eatToken(85 /* EqualsGreaterThanToken */), parseType());
             }
             function parseConstructorType() {
                 return new Parser.syntaxFactory.ConstructorTypeSyntax(parseNodeData, eatToken(31 /* NewKeyword */), tryParseTypeParameterList(false), parseParameterList(), eatToken(85 /* EqualsGreaterThanToken */), parseType());
             }
             function isParameter() {
-                if (currentNode() && currentNode().kind() === 243 /* Parameter */) {
+                if (currentNode() && currentNode().kind() === 245 /* Parameter */) {
                     return true;
                 }
                 return isParameterHelper(currentToken());
@@ -25283,7 +25339,7 @@ var TypeScript;
             }
             function tryParseParameter() {
                 var node = currentNode();
-                if (node && node.kind() === 243 /* Parameter */) {
+                if (node && node.kind() === 245 /* Parameter */) {
                     consumeNode(node);
                     return node;
                 }
@@ -25913,6 +25969,24 @@ var TypeScript;
                 return TupleTypeSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.TupleTypeSyntax = TupleTypeSyntax;
+            var UnionTypeSyntax = (function (_super) {
+                __extends(UnionTypeSyntax, _super);
+                function UnionTypeSyntax(data, left, barToken, right) {
+                    _super.call(this, data);
+                    this.left = left, this.barToken = barToken, this.right = right, left.parent = this, barToken.parent = this, right.parent = this;
+                }
+                return UnionTypeSyntax;
+            })(TypeScript.SyntaxNode);
+            Concrete.UnionTypeSyntax = UnionTypeSyntax;
+            var ParenthesizedTypeSyntax = (function (_super) {
+                __extends(ParenthesizedTypeSyntax, _super);
+                function ParenthesizedTypeSyntax(data, openParenToken, type, closeParenToken) {
+                    _super.call(this, data);
+                    this.openParenToken = openParenToken, this.type = type, this.closeParenToken = closeParenToken, openParenToken.parent = this, type.parent = this, closeParenToken.parent = this;
+                }
+                return ParenthesizedTypeSyntax;
+            })(TypeScript.SyntaxNode);
+            Concrete.ParenthesizedTypeSyntax = ParenthesizedTypeSyntax;
             var InterfaceDeclarationSyntax = (function (_super) {
                 __extends(InterfaceDeclarationSyntax, _super);
                 function InterfaceDeclarationSyntax(data, modifiers, interfaceKeyword, identifier, typeParameterList, heritageClauses, body) {
@@ -26477,7 +26551,7 @@ var TypeScript;
                     this.extendsOrImplementsKeyword = extendsOrImplementsKeyword, this.typeNames = typeNames, extendsOrImplementsKeyword.parent = this, !TypeScript.isShared(typeNames) && (typeNames.parent = this);
                 }
                 HeritageClauseSyntax.prototype.kind = function () {
-                    return this.extendsOrImplementsKeyword.kind() === 48 /* ExtendsKeyword */ ? 231 /* ExtendsHeritageClause */ : 232 /* ImplementsHeritageClause */;
+                    return this.extendsOrImplementsKeyword.kind() === 48 /* ExtendsKeyword */ ? 233 /* ExtendsHeritageClause */ : 234 /* ImplementsHeritageClause */;
                 };
                 return HeritageClauseSyntax;
             })(TypeScript.SyntaxNode);
@@ -26617,7 +26691,7 @@ var TypeScript;
                 return ModuleNameModuleReferenceSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ModuleNameModuleReferenceSyntax = ModuleNameModuleReferenceSyntax;
-            SourceUnitSyntax.prototype.__kind = 120 /* SourceUnit */, QualifiedNameSyntax.prototype.__kind = 121 /* QualifiedName */, ObjectTypeSyntax.prototype.__kind = 122 /* ObjectType */, FunctionTypeSyntax.prototype.__kind = 123 /* FunctionType */, ArrayTypeSyntax.prototype.__kind = 124 /* ArrayType */, ConstructorTypeSyntax.prototype.__kind = 125 /* ConstructorType */, GenericTypeSyntax.prototype.__kind = 126 /* GenericType */, TypeQuerySyntax.prototype.__kind = 127 /* TypeQuery */, TupleTypeSyntax.prototype.__kind = 128 /* TupleType */, InterfaceDeclarationSyntax.prototype.__kind = 129 /* InterfaceDeclaration */, FunctionDeclarationSyntax.prototype.__kind = 130 /* FunctionDeclaration */, ModuleDeclarationSyntax.prototype.__kind = 131 /* ModuleDeclaration */, ClassDeclarationSyntax.prototype.__kind = 132 /* ClassDeclaration */, EnumDeclarationSyntax.prototype.__kind = 133 /* EnumDeclaration */, ImportDeclarationSyntax.prototype.__kind = 134 /* ImportDeclaration */, ExportAssignmentSyntax.prototype.__kind = 135 /* ExportAssignment */, MemberFunctionDeclarationSyntax.prototype.__kind = 136 /* MemberFunctionDeclaration */, MemberVariableDeclarationSyntax.prototype.__kind = 137 /* MemberVariableDeclaration */, ConstructorDeclarationSyntax.prototype.__kind = 138 /* ConstructorDeclaration */, IndexMemberDeclarationSyntax.prototype.__kind = 139 /* IndexMemberDeclaration */, GetAccessorSyntax.prototype.__kind = 140 /* GetAccessor */, SetAccessorSyntax.prototype.__kind = 141 /* SetAccessor */, PropertySignatureSyntax.prototype.__kind = 142 /* PropertySignature */, CallSignatureSyntax.prototype.__kind = 143 /* CallSignature */, ConstructSignatureSyntax.prototype.__kind = 144 /* ConstructSignature */, IndexSignatureSyntax.prototype.__kind = 145 /* IndexSignature */, MethodSignatureSyntax.prototype.__kind = 146 /* MethodSignature */, BlockSyntax.prototype.__kind = 147 /* Block */, IfStatementSyntax.prototype.__kind = 148 /* IfStatement */, VariableStatementSyntax.prototype.__kind = 149 /* VariableStatement */, ExpressionStatementSyntax.prototype.__kind = 150 /* ExpressionStatement */, ReturnStatementSyntax.prototype.__kind = 151 /* ReturnStatement */, SwitchStatementSyntax.prototype.__kind = 152 /* SwitchStatement */, BreakStatementSyntax.prototype.__kind = 153 /* BreakStatement */, ContinueStatementSyntax.prototype.__kind = 154 /* ContinueStatement */, ForStatementSyntax.prototype.__kind = 155 /* ForStatement */, ForInStatementSyntax.prototype.__kind = 156 /* ForInStatement */, EmptyStatementSyntax.prototype.__kind = 157 /* EmptyStatement */, ThrowStatementSyntax.prototype.__kind = 158 /* ThrowStatement */, WhileStatementSyntax.prototype.__kind = 159 /* WhileStatement */, TryStatementSyntax.prototype.__kind = 160 /* TryStatement */, LabeledStatementSyntax.prototype.__kind = 161 /* LabeledStatement */, DoStatementSyntax.prototype.__kind = 162 /* DoStatement */, DebuggerStatementSyntax.prototype.__kind = 163 /* DebuggerStatement */, WithStatementSyntax.prototype.__kind = 164 /* WithStatement */, DeleteExpressionSyntax.prototype.__kind = 171 /* DeleteExpression */, TypeOfExpressionSyntax.prototype.__kind = 172 /* TypeOfExpression */, VoidExpressionSyntax.prototype.__kind = 173 /* VoidExpression */, ConditionalExpressionSyntax.prototype.__kind = 187 /* ConditionalExpression */, MemberAccessExpressionSyntax.prototype.__kind = 213 /* MemberAccessExpression */, InvocationExpressionSyntax.prototype.__kind = 214 /* InvocationExpression */, ArrayLiteralExpressionSyntax.prototype.__kind = 215 /* ArrayLiteralExpression */, ObjectLiteralExpressionSyntax.prototype.__kind = 216 /* ObjectLiteralExpression */, ObjectCreationExpressionSyntax.prototype.__kind = 217 /* ObjectCreationExpression */, ParenthesizedExpressionSyntax.prototype.__kind = 218 /* ParenthesizedExpression */, ParenthesizedArrowFunctionExpressionSyntax.prototype.__kind = 219 /* ParenthesizedArrowFunctionExpression */, SimpleArrowFunctionExpressionSyntax.prototype.__kind = 220 /* SimpleArrowFunctionExpression */, CastExpressionSyntax.prototype.__kind = 221 /* CastExpression */, ElementAccessExpressionSyntax.prototype.__kind = 222 /* ElementAccessExpression */, FunctionExpressionSyntax.prototype.__kind = 223 /* FunctionExpression */, OmittedExpressionSyntax.prototype.__kind = 224 /* OmittedExpression */, VariableDeclarationSyntax.prototype.__kind = 225 /* VariableDeclaration */, VariableDeclaratorSyntax.prototype.__kind = 226 /* VariableDeclarator */, ArgumentListSyntax.prototype.__kind = 227 /* ArgumentList */, ParameterListSyntax.prototype.__kind = 228 /* ParameterList */, TypeArgumentListSyntax.prototype.__kind = 229 /* TypeArgumentList */, TypeParameterListSyntax.prototype.__kind = 230 /* TypeParameterList */, EqualsValueClauseSyntax.prototype.__kind = 233 /* EqualsValueClause */, CaseSwitchClauseSyntax.prototype.__kind = 234 /* CaseSwitchClause */, DefaultSwitchClauseSyntax.prototype.__kind = 235 /* DefaultSwitchClause */, ElseClauseSyntax.prototype.__kind = 236 /* ElseClause */, CatchClauseSyntax.prototype.__kind = 237 /* CatchClause */, FinallyClauseSyntax.prototype.__kind = 238 /* FinallyClause */, TypeParameterSyntax.prototype.__kind = 239 /* TypeParameter */, ConstraintSyntax.prototype.__kind = 240 /* Constraint */, SimplePropertyAssignmentSyntax.prototype.__kind = 241 /* SimplePropertyAssignment */, FunctionPropertyAssignmentSyntax.prototype.__kind = 242 /* FunctionPropertyAssignment */, ParameterSyntax.prototype.__kind = 243 /* Parameter */, EnumElementSyntax.prototype.__kind = 244 /* EnumElement */, TypeAnnotationSyntax.prototype.__kind = 245 /* TypeAnnotation */, ExternalModuleReferenceSyntax.prototype.__kind = 246 /* ExternalModuleReference */, ModuleNameModuleReferenceSyntax.prototype.__kind = 247 /* ModuleNameModuleReference */;
+            SourceUnitSyntax.prototype.__kind = 120 /* SourceUnit */, QualifiedNameSyntax.prototype.__kind = 121 /* QualifiedName */, ObjectTypeSyntax.prototype.__kind = 122 /* ObjectType */, FunctionTypeSyntax.prototype.__kind = 123 /* FunctionType */, ArrayTypeSyntax.prototype.__kind = 124 /* ArrayType */, ConstructorTypeSyntax.prototype.__kind = 125 /* ConstructorType */, GenericTypeSyntax.prototype.__kind = 126 /* GenericType */, TypeQuerySyntax.prototype.__kind = 127 /* TypeQuery */, TupleTypeSyntax.prototype.__kind = 128 /* TupleType */, UnionTypeSyntax.prototype.__kind = 129 /* UnionType */, ParenthesizedTypeSyntax.prototype.__kind = 130 /* ParenthesizedType */, InterfaceDeclarationSyntax.prototype.__kind = 131 /* InterfaceDeclaration */, FunctionDeclarationSyntax.prototype.__kind = 132 /* FunctionDeclaration */, ModuleDeclarationSyntax.prototype.__kind = 133 /* ModuleDeclaration */, ClassDeclarationSyntax.prototype.__kind = 134 /* ClassDeclaration */, EnumDeclarationSyntax.prototype.__kind = 135 /* EnumDeclaration */, ImportDeclarationSyntax.prototype.__kind = 136 /* ImportDeclaration */, ExportAssignmentSyntax.prototype.__kind = 137 /* ExportAssignment */, MemberFunctionDeclarationSyntax.prototype.__kind = 138 /* MemberFunctionDeclaration */, MemberVariableDeclarationSyntax.prototype.__kind = 139 /* MemberVariableDeclaration */, ConstructorDeclarationSyntax.prototype.__kind = 140 /* ConstructorDeclaration */, IndexMemberDeclarationSyntax.prototype.__kind = 141 /* IndexMemberDeclaration */, GetAccessorSyntax.prototype.__kind = 142 /* GetAccessor */, SetAccessorSyntax.prototype.__kind = 143 /* SetAccessor */, PropertySignatureSyntax.prototype.__kind = 144 /* PropertySignature */, CallSignatureSyntax.prototype.__kind = 145 /* CallSignature */, ConstructSignatureSyntax.prototype.__kind = 146 /* ConstructSignature */, IndexSignatureSyntax.prototype.__kind = 147 /* IndexSignature */, MethodSignatureSyntax.prototype.__kind = 148 /* MethodSignature */, BlockSyntax.prototype.__kind = 149 /* Block */, IfStatementSyntax.prototype.__kind = 150 /* IfStatement */, VariableStatementSyntax.prototype.__kind = 151 /* VariableStatement */, ExpressionStatementSyntax.prototype.__kind = 152 /* ExpressionStatement */, ReturnStatementSyntax.prototype.__kind = 153 /* ReturnStatement */, SwitchStatementSyntax.prototype.__kind = 154 /* SwitchStatement */, BreakStatementSyntax.prototype.__kind = 155 /* BreakStatement */, ContinueStatementSyntax.prototype.__kind = 156 /* ContinueStatement */, ForStatementSyntax.prototype.__kind = 157 /* ForStatement */, ForInStatementSyntax.prototype.__kind = 158 /* ForInStatement */, EmptyStatementSyntax.prototype.__kind = 159 /* EmptyStatement */, ThrowStatementSyntax.prototype.__kind = 160 /* ThrowStatement */, WhileStatementSyntax.prototype.__kind = 161 /* WhileStatement */, TryStatementSyntax.prototype.__kind = 162 /* TryStatement */, LabeledStatementSyntax.prototype.__kind = 163 /* LabeledStatement */, DoStatementSyntax.prototype.__kind = 164 /* DoStatement */, DebuggerStatementSyntax.prototype.__kind = 165 /* DebuggerStatement */, WithStatementSyntax.prototype.__kind = 166 /* WithStatement */, DeleteExpressionSyntax.prototype.__kind = 173 /* DeleteExpression */, TypeOfExpressionSyntax.prototype.__kind = 174 /* TypeOfExpression */, VoidExpressionSyntax.prototype.__kind = 175 /* VoidExpression */, ConditionalExpressionSyntax.prototype.__kind = 189 /* ConditionalExpression */, MemberAccessExpressionSyntax.prototype.__kind = 215 /* MemberAccessExpression */, InvocationExpressionSyntax.prototype.__kind = 216 /* InvocationExpression */, ArrayLiteralExpressionSyntax.prototype.__kind = 217 /* ArrayLiteralExpression */, ObjectLiteralExpressionSyntax.prototype.__kind = 218 /* ObjectLiteralExpression */, ObjectCreationExpressionSyntax.prototype.__kind = 219 /* ObjectCreationExpression */, ParenthesizedExpressionSyntax.prototype.__kind = 220 /* ParenthesizedExpression */, ParenthesizedArrowFunctionExpressionSyntax.prototype.__kind = 221 /* ParenthesizedArrowFunctionExpression */, SimpleArrowFunctionExpressionSyntax.prototype.__kind = 222 /* SimpleArrowFunctionExpression */, CastExpressionSyntax.prototype.__kind = 223 /* CastExpression */, ElementAccessExpressionSyntax.prototype.__kind = 224 /* ElementAccessExpression */, FunctionExpressionSyntax.prototype.__kind = 225 /* FunctionExpression */, OmittedExpressionSyntax.prototype.__kind = 226 /* OmittedExpression */, VariableDeclarationSyntax.prototype.__kind = 227 /* VariableDeclaration */, VariableDeclaratorSyntax.prototype.__kind = 228 /* VariableDeclarator */, ArgumentListSyntax.prototype.__kind = 229 /* ArgumentList */, ParameterListSyntax.prototype.__kind = 230 /* ParameterList */, TypeArgumentListSyntax.prototype.__kind = 231 /* TypeArgumentList */, TypeParameterListSyntax.prototype.__kind = 232 /* TypeParameterList */, EqualsValueClauseSyntax.prototype.__kind = 235 /* EqualsValueClause */, CaseSwitchClauseSyntax.prototype.__kind = 236 /* CaseSwitchClause */, DefaultSwitchClauseSyntax.prototype.__kind = 237 /* DefaultSwitchClause */, ElseClauseSyntax.prototype.__kind = 238 /* ElseClause */, CatchClauseSyntax.prototype.__kind = 239 /* CatchClause */, FinallyClauseSyntax.prototype.__kind = 240 /* FinallyClause */, TypeParameterSyntax.prototype.__kind = 241 /* TypeParameter */, ConstraintSyntax.prototype.__kind = 242 /* Constraint */, SimplePropertyAssignmentSyntax.prototype.__kind = 243 /* SimplePropertyAssignment */, FunctionPropertyAssignmentSyntax.prototype.__kind = 244 /* FunctionPropertyAssignment */, ParameterSyntax.prototype.__kind = 245 /* Parameter */, EnumElementSyntax.prototype.__kind = 246 /* EnumElement */, TypeAnnotationSyntax.prototype.__kind = 247 /* TypeAnnotation */, ExternalModuleReferenceSyntax.prototype.__kind = 248 /* ExternalModuleReference */, ModuleNameModuleReferenceSyntax.prototype.__kind = 249 /* ModuleNameModuleReference */;
         })(Concrete = Syntax.Concrete || (Syntax.Concrete = {}));
     })(Syntax = TypeScript.Syntax || (TypeScript.Syntax = {}));
 })(TypeScript || (TypeScript = {}));
@@ -27206,9 +27280,9 @@ var TypeScript;
             if (!node.stringLiteral) {
                 for (var i = 0, n = node.moduleElements.length; i < n; i++) {
                     var child = node.moduleElements[i];
-                    if (child.kind() === 134 /* ImportDeclaration */) {
+                    if (child.kind() === 136 /* ImportDeclaration */) {
                         var importDeclaration = child;
-                        if (importDeclaration.moduleReference.kind() === 246 /* ExternalModuleReference */) {
+                        if (importDeclaration.moduleReference.kind() === 248 /* ExternalModuleReference */) {
                             this.pushDiagnostic(importDeclaration, TypeScript.DiagnosticCode.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
                         }
                     }
@@ -27250,7 +27324,7 @@ var TypeScript;
         GrammarCheckerWalker.prototype.checkForDisallowedExportAssignment = function (node) {
             for (var i = 0, n = node.moduleElements.length; i < n; i++) {
                 var child = node.moduleElements[i];
-                if (child.kind() === 135 /* ExportAssignment */) {
+                if (child.kind() === 137 /* ExportAssignment */) {
                     this.pushDiagnostic(child, TypeScript.DiagnosticCode.Export_assignment_cannot_be_used_in_internal_modules);
                     return true;
                 }
@@ -27324,7 +27398,7 @@ var TypeScript;
         };
         GrammarCheckerWalker.prototype.inSwitchStatement = function (ast) {
             while (ast) {
-                if (ast.kind() === 152 /* SwitchStatement */) {
+                if (ast.kind() === 154 /* SwitchStatement */) {
                     return true;
                 }
                 if (TypeScript.SyntaxUtilities.isAnyFunctionExpressionOrDeclaration(ast)) {
@@ -27336,10 +27410,10 @@ var TypeScript;
         };
         GrammarCheckerWalker.prototype.isIterationStatement = function (ast) {
             switch (ast.kind()) {
-                case 155 /* ForStatement */:
-                case 156 /* ForInStatement */:
-                case 159 /* WhileStatement */:
-                case 162 /* DoStatement */:
+                case 157 /* ForStatement */:
+                case 158 /* ForInStatement */:
+                case 161 /* WhileStatement */:
+                case 164 /* DoStatement */:
                     return true;
             }
             return false;
@@ -27360,7 +27434,7 @@ var TypeScript;
             var result = [];
             element = element.parent;
             while (element) {
-                if (element.kind() === 161 /* LabeledStatement */) {
+                if (element.kind() === 163 /* LabeledStatement */) {
                     var labeledStatement = element;
                     if (breakable) {
                         result.push(labeledStatement);
@@ -27380,12 +27454,12 @@ var TypeScript;
         };
         GrammarCheckerWalker.prototype.labelIsOnContinuableConstruct = function (statement) {
             switch (statement.kind()) {
-                case 161 /* LabeledStatement */:
+                case 163 /* LabeledStatement */:
                     return this.labelIsOnContinuableConstruct(statement.statement);
-                case 159 /* WhileStatement */:
-                case 155 /* ForStatement */:
-                case 156 /* ForInStatement */:
-                case 162 /* DoStatement */:
+                case 161 /* WhileStatement */:
+                case 157 /* ForStatement */:
+                case 158 /* ForInStatement */:
+                case 164 /* DoStatement */:
                     return true;
                 default:
                     return false;
@@ -27616,7 +27690,7 @@ var TypeScript;
             _super.prototype.visitVariableDeclarator.call(this, node);
         };
         GrammarCheckerWalker.prototype.checkVariableDeclaratorIdentifier = function (node) {
-            if (node.parent.kind() !== 137 /* MemberVariableDeclaration */) {
+            if (node.parent.kind() !== 139 /* MemberVariableDeclaration */) {
                 if (this.checkForDisallowedEvalOrArguments(node, node.propertyName)) {
                     return true;
                 }
@@ -27695,8 +27769,8 @@ var TypeScript;
         };
         GrammarCheckerWalker.prototype.isPreIncrementOrDecrementExpression = function (node) {
             switch (node.kind()) {
-                case 170 /* PreDecrementExpression */:
-                case 169 /* PreIncrementExpression */:
+                case 172 /* PreDecrementExpression */:
+                case 171 /* PreIncrementExpression */:
                     return true;
             }
             return false;
@@ -27784,9 +27858,9 @@ var TypeScript;
             if (_firstToken && _firstToken.kind() === 47 /* ExportKeyword */) {
                 return new TypeScript.TextSpan(TypeScript.start(_firstToken), TypeScript.width(_firstToken));
             }
-            if (moduleElement.kind() === 134 /* ImportDeclaration */) {
+            if (moduleElement.kind() === 136 /* ImportDeclaration */) {
                 var importDecl = moduleElement;
-                if (importDecl.moduleReference.kind() === 246 /* ExternalModuleReference */) {
+                if (importDecl.moduleReference.kind() === 248 /* ExternalModuleReference */) {
                     var literal = importDecl.moduleReference.stringLiteral;
                     return new TypeScript.TextSpan(TypeScript.start(literal), TypeScript.width(literal));
                 }
@@ -28208,6 +28282,18 @@ var TypeScript;
                 this.appendSeparatorSpaceList(node.types);
                 this.appendToken(node.closeBracketToken);
             };
+            PrettyPrinterImpl.prototype.visitParenthesizedType = function (node) {
+                this.appendToken(node.openParenToken);
+                this.appendElement(node.type);
+                this.appendToken(node.closeParenToken);
+            };
+            PrettyPrinterImpl.prototype.visitUnionType = function (node) {
+                this.appendElement(node.left);
+                this.ensureSpace();
+                this.appendToken(node.barToken);
+                this.ensureSpace();
+                this.appendElement(node.right);
+            };
             PrettyPrinterImpl.prototype.visitConstructorType = function (node) {
                 this.appendToken(node.newKeyword);
                 this.ensureSpace();
@@ -28299,7 +28385,7 @@ var TypeScript;
             };
             PrettyPrinterImpl.prototype.visitBinaryExpression = function (node) {
                 TypeScript.visitNodeOrToken(this, node.left);
-                if (node.kind() !== 174 /* CommaExpression */) {
+                if (node.kind() !== 176 /* CommaExpression */) {
                     this.ensureSpace();
                 }
                 this.appendToken(node.operatorToken);
@@ -28363,7 +28449,7 @@ var TypeScript;
                 TypeScript.visitNodeOrToken(this, node.typeOrExpression);
             };
             PrettyPrinterImpl.prototype.appendBlockOrStatement = function (node) {
-                if (node.kind() === 147 /* Block */) {
+                if (node.kind() === 149 /* Block */) {
                     this.ensureSpace();
                     TypeScript.visitNodeOrToken(this, node);
                 }
@@ -28386,7 +28472,7 @@ var TypeScript;
             PrettyPrinterImpl.prototype.visitElseClause = function (node) {
                 this.ensureNewLine();
                 this.appendToken(node.elseKeyword);
-                if (node.statement.kind() === 148 /* IfStatement */) {
+                if (node.statement.kind() === 150 /* IfStatement */) {
                     this.ensureSpace();
                     TypeScript.visitNodeOrToken(this, node.statement);
                 }
@@ -28485,7 +28571,7 @@ var TypeScript;
                 this.appendToken(node.closeBraceToken);
             };
             PrettyPrinterImpl.prototype.appendSwitchClauseStatements = function (node) {
-                if (TypeScript.childCount(node.statements) === 1 && TypeScript.childAt(node.statements, 0).kind() === 147 /* Block */) {
+                if (TypeScript.childCount(node.statements) === 1 && TypeScript.childAt(node.statements, 0).kind() === 149 /* Block */) {
                     this.ensureSpace();
                     TypeScript.visitNodeOrToken(this, TypeScript.childAt(node.statements, 0));
                 }

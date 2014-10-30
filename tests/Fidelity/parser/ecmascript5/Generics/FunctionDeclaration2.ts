@@ -1,1 +1,1 @@
-function foo10<T extends (1)> (test: T) { }
+function foo10<T extends (a)> (test: T) { }

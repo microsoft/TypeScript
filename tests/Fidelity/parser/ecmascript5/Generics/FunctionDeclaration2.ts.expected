@@ -147,7 +147,7 @@
                                         ]
                                     },
                                     "typeOrExpression": {
-                                        "kind": "ParenthesizedExpression",
+                                        "kind": "ParenthesizedType",
                                         "fullStart": 25,
                                         "fullEnd": 28,
                                         "start": 25,
@@ -166,17 +166,17 @@
                                             "value": "(",
                                             "valueText": "("
                                         },
-                                        "expression": {
-                                            "kind": "NumericLiteral",
+                                        "type": {
+                                            "kind": "IdentifierName",
                                             "fullStart": 26,
                                             "fullEnd": 27,
                                             "start": 26,
                                             "end": 27,
                                             "fullWidth": 1,
                                             "width": 1,
-                                            "text": "1",
-                                            "value": 1,
-                                            "valueText": "1"
+                                            "text": "a",
+                                            "value": "a",
+                                            "valueText": "a"
                                         },
                                         "closeParenToken": {
                                             "kind": "CloseParenToken",
