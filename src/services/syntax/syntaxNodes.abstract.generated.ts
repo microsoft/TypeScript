@@ -6,12 +6,12 @@ module TypeScript.Syntax.Abstract {
     export var isConcrete: boolean = false;
 
     export class SourceUnitSyntax extends SyntaxNode {
-        public syntaxTree: SyntaxTree = null;
+        public syntaxTree: SyntaxTree = undefined;
         public moduleElements: IModuleElementSyntax[];
         public endOfFileToken: ISyntaxToken;
         constructor(data: number, moduleElements: IModuleElementSyntax[], endOfFileToken: ISyntaxToken) {
             super(data);
-            this.parent = null,
+            this.parent = undefined,
             this.moduleElements = moduleElements,
             this.endOfFileToken = endOfFileToken,
             !isShared(moduleElements) && (moduleElements.parent = this),

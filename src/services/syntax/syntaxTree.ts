@@ -8,7 +8,7 @@ module TypeScript {
         private _sourceUnit: SourceUnitSyntax;
         private _isDeclaration: boolean;
         private _parserDiagnostics: Diagnostic[];
-        private _allDiagnostics: Diagnostic[] = null;
+        private _allDiagnostics: Diagnostic[] = undefined;
         private _fileName: string;
         private _lineMap: LineMap;
         private _languageVersion: ts.ScriptTarget;
@@ -60,7 +60,7 @@ module TypeScript {
         }
 
         public diagnostics(): Diagnostic[] {
-            if (this._allDiagnostics === null) {
+            if (!this._allDiagnostics) {
                 var start = new Date().getTime();
                 this._allDiagnostics = this.computeDiagnostics();
                 syntaxDiagnosticsTime += new Date().getTime() - start;
@@ -87,7 +87,7 @@ module TypeScript {
             var firstToken = firstSyntaxTreeToken(this);
             var leadingTrivia = firstToken.leadingTrivia(this.text);
 
-            this._isExternalModule = externalModuleIndicatorSpanWorker(this, firstToken) !== null;
+            this._isExternalModule = !!externalModuleIndicatorSpanWorker(this, firstToken);
 
             var amdDependencies: string[] = [];
             for (var i = 0, n = leadingTrivia.count(); i < n; i++) {
@@ -106,7 +106,7 @@ module TypeScript {
         private getAmdDependency(comment: string): string {
             var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s+path=('|")(.+?)\1/gim;
             var match = amdDependencyRegEx.exec(comment);
-            return match ? match[2] : null;
+            return match ? match[2] : undefined;
         }
 
         public isExternalModule(): boolean {
@@ -144,7 +144,7 @@ module TypeScript {
             this.text = syntaxTree.text;
         }
 
-        private pushDiagnostic(element: ISyntaxElement, diagnosticKey: string, args: any[] = null): void {
+        private pushDiagnostic(element: ISyntaxElement, diagnosticKey: string, args?: any[]): void {
             this.diagnostics.push(new Diagnostic(
                 this.syntaxTree.fileName(), this.syntaxTree.lineMap(), start(element, this.text), width(element), diagnosticKey, args));
         }
@@ -303,7 +303,7 @@ module TypeScript {
         }
 
         public visitVariableDeclaration(node: VariableDeclarationSyntax): void {
-            if (this.checkForAtLeastOneElement(node, node.variableDeclarators, node.varKeyword, getLocalizedText(DiagnosticCode.variable_declaration, null)) ||
+            if (this.checkForAtLeastOneElement(node, node.variableDeclarators, node.varKeyword, getLocalizedText(DiagnosticCode.variable_declaration, undefined)) ||
                 this.checkForTrailingComma(node.variableDeclarators)) {
                 return;
             }
@@ -313,7 +313,7 @@ module TypeScript {
 
         public visitTypeArgumentList(node: TypeArgumentListSyntax): void {
             if (this.checkForTrailingComma(node.typeArguments) ||
-                this.checkForAtLeastOneElement(node, node.typeArguments, node.lessThanToken, getLocalizedText(DiagnosticCode.type_argument, null))) {
+                this.checkForAtLeastOneElement(node, node.typeArguments, node.lessThanToken, getLocalizedText(DiagnosticCode.type_argument, undefined))) {
                 return;
             }
 
@@ -322,7 +322,7 @@ module TypeScript {
 
         public visitTupleType(node: TupleTypeSyntax): void {
             if (this.checkForTrailingComma(node.types) ||
-                this.checkForAtLeastOneElement(node, node.types, node.openBracketToken, getLocalizedText(DiagnosticCode.type, null))) {
+                this.checkForAtLeastOneElement(node, node.types, node.openBracketToken, getLocalizedText(DiagnosticCode.type, undefined))) {
                 return
             }
 
@@ -331,7 +331,7 @@ module TypeScript {
 
         public visitTypeParameterList(node: TypeParameterListSyntax): void {
             if (this.checkForTrailingComma(node.typeParameters) ||
-                this.checkForAtLeastOneElement(node, node.typeParameters, node.lessThanToken, getLocalizedText(DiagnosticCode.type_parameter, null))) {
+                this.checkForAtLeastOneElement(node, node.typeParameters, node.lessThanToken, getLocalizedText(DiagnosticCode.type_parameter, undefined))) {
                 return;
             }
 
@@ -635,7 +635,7 @@ module TypeScript {
         }
 
         private checkForDisallowedAccessorTypeParameters(callSignature: CallSignatureSyntax): boolean {
-            if (callSignature.typeParameterList !== null) {
+            if (callSignature.typeParameterList) {
                 this.pushDiagnostic(callSignature.typeParameterList, DiagnosticCode.Type_parameters_cannot_appear_on_an_accessor);
                 return true;
             }
@@ -745,7 +745,7 @@ module TypeScript {
 
         public visitInvocationExpression(node: InvocationExpressionSyntax): void {
             if (node.expression.kind() === SyntaxKind.SuperKeyword &&
-                node.argumentList.typeArgumentList !== null) {
+                node.argumentList.typeArgumentList) {
                 this.pushDiagnostic(node, DiagnosticCode.super_invocation_cannot_have_type_arguments);
             }
 
@@ -1529,11 +1529,11 @@ module TypeScript {
                 }
             }
 
-            return null;
+            return undefined;
         }
 
         private isEvalOrArguments(expr: IExpressionSyntax): boolean {
-            return this.getEvalOrArguments(expr) !== null;
+            return !!this.getEvalOrArguments(expr);
         }
 
         public visitConstraint(node: ConstraintSyntax): void {
@@ -1583,7 +1583,7 @@ module TypeScript {
             }
         }
 
-        return null;
+        return undefined;
     }
 
     function implicitImportSpanWorker(trivia: ISyntaxTrivia): TextSpan {
@@ -1594,7 +1594,7 @@ module TypeScript {
             return new TextSpan(trivia.fullStart(), trivia.fullWidth());
         }
 
-        return null;
+        return undefined;
     }
 
     function topLevelImportOrExportSpan(node: SourceUnitSyntax): TextSpan {
@@ -1602,7 +1602,7 @@ module TypeScript {
             var moduleElement = node.moduleElements[i];
 
             var _firstToken = firstToken(moduleElement);
-            if (_firstToken !== null && _firstToken.kind() === SyntaxKind.ExportKeyword) {
+            if (_firstToken && _firstToken.kind() === SyntaxKind.ExportKeyword) {
                 return new TextSpan(start(_firstToken), width(_firstToken));
             }
 
@@ -1615,6 +1615,6 @@ module TypeScript {
             }
         }
 
-        return null;
+        return undefined;
     }
 }

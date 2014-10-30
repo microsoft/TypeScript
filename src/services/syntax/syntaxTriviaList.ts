@@ -233,7 +233,7 @@ module TypeScript.Syntax {
     }
 
     export function triviaList(trivia: ISyntaxTrivia[]): ISyntaxTriviaList {
-        if (trivia === undefined || trivia === null || trivia.length === 0) {
+        if (!trivia || trivia.length === 0) {
             return Syntax.emptyTriviaList;
         }
 
