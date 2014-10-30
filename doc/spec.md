@@ -45,40 +45,42 @@ TypeScript is a trademark of Microsoft Corporation.
     * [3.3.1 Named Type References](#3.3.1)
     * [3.3.2 Array Types](#3.3.2)
     * [3.3.3 Tuple Types](#3.3.3)
-    * [3.3.4 Union Types](#3.3.4)
-    * [3.3.5 Function Types](#3.3.5)
-    * [3.3.6 Constructor Types](#3.3.6)
-    * [3.3.7 Members](#3.3.7)
-  * [3.4 Type Parameters](#3.4)
-    * [3.4.1 Type Parameter Lists](#3.4.1)
-    * [3.4.2 Type Argument Lists](#3.4.2)
-  * [3.5 Named Types](#3.5)
-    * [3.5.1 Instance Types](#3.5.1)
-  * [3.6 Specifying Types](#3.6)
-    * [3.6.1 Predefined Types](#3.6.1)
-    * [3.6.2 Type References](#3.6.2)
-    * [3.6.3 Object Type Literals](#3.6.3)
-    * [3.6.4 Array Type Literals](#3.6.4)
-    * [3.6.5 Tuple Type Literals](#3.6.5)
-    * [3.6.6 Union Type Literals](#3.6.6)
-    * [3.6.7 Function Type Literals](#3.6.7)
-    * [3.6.8 Constructor Type Literals](#3.6.8)
-    * [3.6.9 Type Queries](#3.6.9)
-  * [3.7 Specifying Members](#3.7)
-    * [3.7.1 Property Signatures](#3.7.1)
-    * [3.7.2 Call Signatures](#3.7.2)
-    * [3.7.3 Construct Signatures](#3.7.3)
-    * [3.7.4 Index Signatures](#3.7.4)
-    * [3.7.5 Method Signatures](#3.7.5)
-  * [3.8 Type Relationships](#3.8)
-    * [3.8.1 Apparent Type](#3.8.1)
-    * [3.8.2 Type and Member Identity](#3.8.2)
-    * [3.8.3 Subtypes and Supertypes](#3.8.3)
-    * [3.8.4 Assignment Compatibility](#3.8.4)
-    * [3.8.5 Contextual Signature Instantiation](#3.8.5)
-    * [3.8.6 Type Inference](#3.8.6)
-    * [3.8.7 Recursive Types](#3.8.7)
-  * [3.9 Widened Types](#3.9)
+    * [3.3.4 Function Types](#3.3.4)
+    * [3.3.5 Constructor Types](#3.3.5)
+    * [3.3.6 Members](#3.3.6)
+  * [3.4 Union Types](#3.4)
+    * [3.4.1 Contextual Union Types](#3.4.1)
+  * [3.5 Type Parameters](#3.5)
+    * [3.5.1 Type Parameter Lists](#3.5.1)
+    * [3.5.2 Type Argument Lists](#3.5.2)
+  * [3.6 Named Types](#3.6)
+    * [3.6.1 Instance Types](#3.6.1)
+  * [3.7 Specifying Types](#3.7)
+    * [3.7.1 Predefined Types](#3.7.1)
+    * [3.7.2 Type References](#3.7.2)
+    * [3.7.3 Object Type Literals](#3.7.3)
+    * [3.7.4 Array Type Literals](#3.7.4)
+    * [3.7.5 Tuple Type Literals](#3.7.5)
+    * [3.7.6 Union Type Literals](#3.7.6)
+    * [3.7.7 Function Type Literals](#3.7.7)
+    * [3.7.8 Constructor Type Literals](#3.7.8)
+    * [3.7.9 Type Queries](#3.7.9)
+  * [3.8 Specifying Members](#3.8)
+    * [3.8.1 Property Signatures](#3.8.1)
+    * [3.8.2 Call Signatures](#3.8.2)
+    * [3.8.3 Construct Signatures](#3.8.3)
+    * [3.8.4 Index Signatures](#3.8.4)
+    * [3.8.5 Method Signatures](#3.8.5)
+  * [3.9 Type Aliases](#3.9)
+  * [3.10 Type Relationships](#3.10)
+    * [3.10.1 Apparent Members](#3.10.1)
+    * [3.10.2 Type and Member Identity](#3.10.2)
+    * [3.10.3 Subtypes and Supertypes](#3.10.3)
+    * [3.10.4 Assignment Compatibility](#3.10.4)
+    * [3.10.5 Contextual Signature Instantiation](#3.10.5)
+    * [3.10.6 Type Inference](#3.10.6)
+    * [3.10.7 Recursive Types](#3.10.7)
+  * [3.11 Widened Types](#3.11)
 * [4 Expressions](#4)
   * [4.1 Values and References](#4.1)
   * [4.2 The this Keyword](#4.2)
@@ -306,7 +308,7 @@ In this example, the second parameter to 'vote' has the function type
 
 which means the second parameter is a function returning type 'any' that has a single parameter of type 'string' named 'result'.
 
-Section [3.7.2](#3.7.2) provides additional information about function types.
+Section [3.8.2](#3.8.2) provides additional information about function types.
 
 ## <a name="1.3"/>1.3 Object Types
 
@@ -418,7 +420,7 @@ getX({ x: 0, y: 0, color: "red" });  // Extra fields Ok
 getX({ x: 0 });  // Error: supplied parameter does not match
 ```
 
-See section [3.8](#3.8) for more information about type comparisons.
+See section [0](#0) for more information about type comparisons.
 
 ## <a name="1.5"/>1.5 Contextual Typing
 
@@ -614,7 +616,7 @@ In the following screen shot, a programming tool combines information from overl
 
 /
 
-Section [3.7.2.4](#3.7.2.4) provides details on how to use string literals in function signatures.
+Section [3.8.2.4](#3.8.2.4) provides details on how to use string literals in function signatures.
 
 ## <a name="1.9"/>1.9 Generic Types and Functions
 
@@ -678,7 +680,7 @@ class List<T extends NamedItem> {
 }
 ```
 
-Section [3.5](#3.5) provides further information about generic types.
+Section [3.6](#3.6) provides further information about generic types.
 
 ## <a name="1.10"/>1.10 Modules
 
@@ -870,9 +872,9 @@ The ***scope*** of a name is the region of program text within which it is possi
 
 Scopes may overlap, for example through nesting of modules and functions. When the scopes of two entities with the same name overlap, the entity with the innermost declaration takes precedence and access to the outer entity is either not possible or only possible by qualifying its name.
 
-When an identifier is resolved as a *TypeName* (section [3.6.2](#3.6.2)), only classes, interfaces, enums, and type parameters are considered and other entities in scope are ignored.
+When an identifier is resolved as a *TypeName* (section [3.7.2](#3.7.2)), only classes, interfaces, enums, and type parameters are considered and other entities in scope are ignored.
 
-When an identifier is resolved as a *ModuleName* (section [3.6.2](#3.6.2)), only modules are considered and other entities in scope are ignored.
+When an identifier is resolved as a *ModuleName* (section [3.7.2](#3.7.2)), only modules are considered and other entities in scope are ignored.
 
 When an identifier is resolved as a *PrimaryExpression* (section [4.3](#4.3)), only instantiated modules (section [10.1](#10.1)), classes, enums, functions, variables, and parameters are considered and other entities in scope are ignored.
 
@@ -901,11 +903,13 @@ module M {
 
 TypeScript adds optional static types to JavaScript. Types are used to place static constraints on program entities such as functions, variables, and properties so that compilers and development tools can offer better verification and assistance during software development. TypeScript's *static* compile-time type system closely models the *dynamic* run-time type system of JavaScript, allowing programmers to accurately express the type relationships that are expected to exist when their programs run and have those assumptions pre-validated by the TypeScript compiler. TypeScript's type analysis occurs entirely at compile-time and adds no run-time overhead to program execution.
 
-All types in TypeScript are subtypes of a single top type called the Any type. The `any` keyword references this type. The Any type is the one type that can represent *any* JavaScript value with no constraints. All other types are categorized as ***primitive types***, ***object types***, or ***type parameters***. These types introduce various static constraints on their values.
+All types in TypeScript are subtypes of a single top type called the Any type. The `any` keyword references this type. The Any type is the one type that can represent *any* JavaScript value with no constraints. All other types are categorized as ***primitive types***, ***object types***, ***union types***, or ***type parameters***. These types introduce various static constraints on their values.
 
 The primitive types are the Number, Boolean, String, Void, Null, and Undefined types along with user defined enum types. The `number`, `boolean`, `string`, and `void` keywords reference the Number, Boolean, String, and Void primitive types respectively. The Void type exists purely to indicate the absence of a value, such as in a function with no return value. It is not possible to explicitly reference the Null and Undefined types—only *values* of those types can be referenced, using the `null` and `undefined` literals.
 
-The object types are all class, interface, array, and literal types. Class and interface types are introduced through class and interface declarations and are referenced by the name given to them in their declarations. Class and interface types may be ***generic types*** which have one or more type parameters. Literal types are written as object, array, function, or constructor type literals and are used to compose new types from other types.
+The object types are all class, interface, array, tuple, function, and constructor types. Class and interface types are introduced through class and interface declarations and are referenced by the name given to them in their declarations. Class and interface types may be ***generic types*** which have one or more type parameters.
+
+Union types represent values that can have one of multiple types.
 
 Declarations of modules, classes, properties, functions, variables and other language entities associate types with those entities. The mechanism by which a type is formed and associated with a language entity depends on the particular kind of entity. For example, a module declaration associates the module with an anonymous type containing a set of properties corresponding to the exported variables and functions in the module, and a function declaration associates the function with an anonymous type containing a call signature corresponding to the parameters and return type of the function. Types can be associated with variables through explicit ***type annotations***, such as
 
@@ -951,7 +955,7 @@ The Number primitive type corresponds to the similarly named JavaScript primitiv
 
 The `number` keyword references the Number primitive type and numeric literals may be used to write values of the Number primitive type.
 
-For purposes of determining type relationships (section [3.8](#3.8)) and accessing properties (section [4.10](#4.10)), the Number primitive type behaves as an object type with the same properties as the global interface type 'Number'.
+For purposes of determining type relationships (section [0](#0)) and accessing properties (section [4.10](#4.10)), the Number primitive type behaves as an object type with the same properties as the global interface type 'Number'.
 
 Some examples:
 
@@ -968,7 +972,7 @@ The Boolean primitive type corresponds to the similarly named JavaScript primiti
 
 The `boolean` keyword references the Boolean primitive type and the `true` and `false` literals reference the two Boolean truth values.
 
-For purposes of determining type relationships (section [3.8](#3.8)) and accessing properties (section [4.10](#4.10)), the Boolean primitive type behaves as an object type with the same properties as the global interface type 'Boolean'.
+For purposes of determining type relationships (section [0](#0)) and accessing properties (section [4.10](#4.10)), the Boolean primitive type behaves as an object type with the same properties as the global interface type 'Boolean'.
 
 Some examples:
 
@@ -984,7 +988,7 @@ The String primitive type corresponds to the similarly named JavaScript primitiv
 
 The `string` keyword references the String primitive type and string literals may be used to write values of the String primitive type.
 
-For purposes of determining type relationships (section [3.8](#3.8)) and accessing properties (section [4.10](#4.10)), the String primitive type behaves as an object type with the same properties as the global interface type 'String'.
+For purposes of determining type relationships (section [0](#0)) and accessing properties (section [4.10](#4.10)), the String primitive type behaves as an object type with the same properties as the global interface type 'String'.
 
 Some examples:
 
@@ -1009,7 +1013,7 @@ The Null type corresponds to the similarly named JavaScript primitive type and i
 
 The `null` literal references the one and only value of the Null type. It is not possible to directly reference the Null type itself.
 
-The Null type is a subtype of all types, except the Undefined type. This means that `null` is considered a valid value for all primitive types, object types, and type parameters, including even the Number and Boolean primitive types.
+The Null type is a subtype of all types, except the Undefined type. This means that `null` is considered a valid value for all primitive types, object types, union types, and type parameters, including even the Number and Boolean primitive types.
 
 Some examples:
 
@@ -1025,7 +1029,7 @@ The Undefined type corresponds to the similarly named JavaScript primitive type 
 
 The `undefined` literal denotes the value given to all uninitialized variables and is the one and only value of the Undefined type. It is not possible to directly reference the Undefined type itself.
 
-The undefined type is a subtype of all types. This means that `undefined` is considered a valid value for all primitive types, object types, and type parameters.
+The undefined type is a subtype of all types. This means that `undefined` is considered a valid value for all primitive types, object types, union types, and type parameters.
 
 Some examples:
 
@@ -1037,13 +1041,13 @@ var e: Undefined;       // Error, can't reference Undefined type
 
 ### <a name="3.2.7"/>3.2.7 Enum Types
 
-Enum types are distinct user defined subtypes of the Number primitive type. Enum types are declared using enum declarations (section [9.1](#9.1)) and referenced using type references (section [3.6.2](#3.6.2)).
+Enum types are distinct user defined subtypes of the Number primitive type. Enum types are declared using enum declarations (section [9.1](#9.1)) and referenced using type references (section [3.7.2](#3.7.2)).
 
 Enum types are assignable to the Number primitive type, and vice versa, but different enum types are not assignable to each other.
 
 ### <a name="3.2.8"/>3.2.8 String Literal Types
 
-Specialized signatures (section [3.7.2.4](#3.7.2.4)) permit string literals to be used as types in parameter type annotations. String literal types are permitted only in that context and nowhere else.
+Specialized signatures (section [3.8.2.4](#3.8.2.4)) permit string literals to be used as types in parameter type annotations. String literal types are permitted only in that context and nowhere else.
 
 All string literal types are subtypes of the String primitive type.
 
@@ -1053,12 +1057,11 @@ Object types are composed from properties, call signatures, construct signatures
 
 Class and interface type references, array types, tuple types, union types, function types, and constructor types are all classified as object types. Multiple constructs in the TypeScript language create object types, including:
 
-* Object type literals (section [3.6.3](#3.6.3)).
-* Array type literals (section [3.6.4](#3.6.4)).
-* Tuple type literals (section [3.6.5](#3.6.5)).
-* Union type literals (section [3.6.6](#3.6.6)).
-* Function type literals (section [3.6.7](#3.6.7)).
-* Constructor type literals (section [3.6.8](#3.6.8)).
+* Object type literals (section [3.7.3](#3.7.3)).
+* Array type literals (section [3.7.4](#3.7.4)).
+* Tuple type literals (section [3.7.5](#3.7.5)).
+* Function type literals (section [3.7.7](#3.7.7)).
+* Constructor type literals (section [3.7.8](#3.7.8)).
 * Object literals (section [4.5](#4.5)).
 * Array literals (section [4.6](#4.6)).
 * Function expressions (section [4.9](#4.9)) and function declarations ([6.1](#6.1)).
@@ -1067,11 +1070,11 @@ Class and interface type references, array types, tuple types, union types, func
 
 ### <a name="3.3.1"/>3.3.1 Named Type References
 
-Type references (section [3.6.2](#3.6.2)) to class and interface types are classified as object types. Type references to generic class and interface types include type arguments that are substituted for the type parameters of the class or interface to produce an actual object type.
+Type references (section [3.7.2](#3.7.2)) to class and interface types are classified as object types. Type references to generic class and interface types include type arguments that are substituted for the type parameters of the class or interface to produce an actual object type.
 
 ### <a name="3.3.2"/>3.3.2 Array Types
 
-***Array types*** represent JavaScript arrays with a common element type. Array types are named type references created from the generic interface type 'Array' in the global module with the array element type as a type argument. Array type literals (section [3.6.4](#3.6.4)) provide a shorthand notation for creating such references.
+***Array types*** represent JavaScript arrays with a common element type. Array types are named type references created from the generic interface type 'Array' in the global module with the array element type as a type argument. Array type literals (section [3.7.4](#3.7.4)) provide a shorthand notation for creating such references.
 
 The declaration of the 'Array' interface includes a property 'length' and a numeric index signature for the element type, along with other members:
 
@@ -1091,7 +1094,7 @@ var a: string[] = ["hello", "world"];
 
 ### <a name="3.3.3"/>3.3.3 Tuple Types
 
-***Tuple types*** represent JavaScript arrays with individually tracked element types. Tuple types are written using tuple type literals (section [3.6.5](#3.6.5)). A tuple type combines a set of numerically named properties with the members of an array type. Specifically, a tuple type
+***Tuple types*** represent JavaScript arrays with individually tracked element types. Tuple types are written using tuple type literals (section [3.7.5](#3.7.5)). A tuple type combines a set of numerically named properties with the members of an array type. Specifically, a tuple type
 
 ```TypeScript
 [ T0, T1, ..., Tn ]
@@ -1108,11 +1111,9 @@ combines the set of properties
 }
 ```
 
-with the members of an array type whose element type is the union type (section [3.3.4](#3.3.4)) of the tuple element types.
+with the members of an array type whose element type is the union type (section [3.4](#3.4)) of the tuple element types.
 
-Array literals (section [4.6](#4.6)) may be used to create values of tuple types.
-
-An example:
+Array literals (section [4.6](#4.6)) may be used to create values of tuple types. For example:
 
 ```TypeScript
 var t: [number, string] = [3, "three"];  
@@ -1122,9 +1123,41 @@ var i: number;
 var x = t[i];  // Type of x is number | string
 ```
 
-### <a name="3.3.4"/>3.3.4 Union Types
+Named tuple types can be created by declaring interfaces that derive from Array&lt;T> and introduce numerically named properties. For example:
 
-***Union types*** represent values that may have one of several disjoint representations. A value of a union type *A* | *B* is a value that is *either* of type *A* or type *B*. Union types are written using union type literals (section [3.6.6](#3.6.6)).
+```TypeScript
+interface KeyValuePair<K, V> extends Array<K | V> { 0: K; 1: V; }
+
+var x: KeyValuePair<number, string> = [10, "ten"];
+```
+
+### <a name="3.3.4"/>3.3.4 Function Types
+
+An object type containing one or more call signatures is said to be a ***function type***. Function types may be written using function type literals (section [3.7.7](#3.7.7)) or by including call signatures in object type literals.
+
+### <a name="3.3.5"/>3.3.5 Constructor Types
+
+An object type containing one or more construct signatures is said to be a ***constructor type***. Constructor types may be written using constructor type literals (section [3.7.8](#3.7.8)) or by including construct signatures in object type literals.
+
+### <a name="3.3.6"/>3.3.6 Members
+
+Every object type is composed from zero or more of the following kinds of members:
+
+* ***Properties***, which define the names and types of the properties of objects of the given type. Property names are unique within their type.
+* ***Call signatures***, which define the possible parameter lists and return types associated with applying call operations to objects of the given type.
+* ***Construct signatures***, which define the possible parameter lists and return types associated with applying the `new` operator to objects of the given type.
+* ***Index signatures***, which define type constraints for properties in the given type. An object type can have at most one string index signature and one numeric index signature.
+
+Properties are either ***public***, ***private***, or ***protected*** and are either ***required*** or ***optional***:
+
+* Properties in a class declaration may be designated public, private, or protected, while properties declared in other contexts are always considered public. Private members are only accessible within their declaring class, as described in section [8.2.2](#8.2.2), and private properties match only themselves in subtype and assignment compatibility checks, as described in section [0](#0). Protected members are only accessible within their declaring class and classes derived from it, as described in section [8.2.2](#8.2.2), and protected properties match only themselves and overrides in subtype and assignment compatibility checks, as described in section [0](#0).
+* Properties in an object type literal or interface declaration may be designated required or optional, while properties declared in other contexts are always considered required. Properties that are optional in the target type of an assignment may be omitted from source objects, as described in section [3.10.4](#3.10.4).
+
+Call and construct signatures may be ***specialized*** (section [3.8.2.4](#3.8.2.4)) by including parameters with string literal types. Specialized signatures are used to express patterns where specific string values for some parameters cause the types of other parameters or the function result to become further specialized.
+
+## <a name="3.4"/>3.4 Union Types
+
+***Union types*** represent values that may have one of several disjoint representations. A value of a union type *A* | *B* is a value that is *either* of type *A* or type *B*. Union types are written using union type literals (section [3.7.6](#3.7.6)).
 
 A union type encompasses an unordered set of unrelated types (that is, types that aren't subtypes of each other). The following rules govern union types:
 
@@ -1143,22 +1176,6 @@ Similarly, union types have the following assignability relationships:
 
 * A union type *U* is assignable to a type *T* if each type in *U* is assignable to *T*.
 * A type *T* is assignable to a union type *U* if *T* is assignable to any type in *U*.
-
-For purposes of property access (section [4.10](#4.10)) and function calls ([4.12](#4.12)), a union type *U* has those members that are present in every one of its constituent types, with types that are unions of the respective members in the constituent types. Specifically:
-
-* If each type in *U* has a property *P*, *U* has a property *P* of a union type of the types of *P* from each type in *U*.
-* If each type in *U* has call signatures and the sets of call signatures are identical ignoring return types, *U* has the same set of call signatures, but with return types that are unions of the return types of the respective call signatures from each type in *U*.
-* If each type in *U* has construct signatures and the sets of construct signatures are identical ignoring return types, *U* has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in *U*.
-* If each type in *U* has a string index signature, *U* has a string index signature of a union type of the types of the string index signatures from each type in *U*.
-* If each type in *U* has a numeric index signature, *U* has a numeric index signature of a union type of the types of the numeric index signatures from each type in *U*.
-
-When used as a contextual type (section [4.19](#4.19)), a union type *U* has those members that are present in any of its constituent types, with types that are unions of the respective members in the constituent types. Specifically:
-
-* Let *S* be the set of types in *U* that has a property *P*. If *S* is not empty, *U* has a property *P* of a union type of the types of *P* from each type in *S*.
-* Let *S* be the set of types in *U* that have call signatures. If *S* is not empty and the sets of call signatures of the types in *S* are identical ignoring return types, *U* has the same set of call signatures, but with return types that are unions of the return types of the respective call signatures from each type in *S*.
-* Let *S* be the set of types in *U* that have construct signatures. If *S* is not empty and the sets of construct signatures of the types in *S* are identical ignoring return types, *U* has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in *S*.
-* Let *S* be the set of types in *U* that has a string index signature. If *S* is not empty, *U* has a string index signature of a union type of the types of the string index signatures from each type in *S*.
-* Let *S* be the set of types in *U* that has a numeric index signature. If *S* is not empty, *U* has a numeric index signature of a union type of the types of the numeric index signatures from each type in *S*.
 
 The || and conditional operators (section [4.15.7](#4.15.7) and [4.16](#4.16)) may produce values of union types, and array literals (section [4.6](#4.6)) may produce array values that have union types as their element types.
 
@@ -1182,7 +1199,7 @@ it is possible to assign 'x' a value of type string, number, or the union type s
 var n = typeof x === "string" ? x.length : x;  // Type of n is number
 ```
 
-The following example illustrates the merging of member types that occurs when union types are created from object types.
+For purposes of property access and function calls, the apparent members (section [3.10.1](#3.10.1)) of a union type *U* are those that are present in every one of its constituent types, with types that are unions of the respective apparent members in the constituent types. The following example illustrates the merging of member types that occurs when union types are created from object types.
 
 ```TypeScript
 interface A {  
@@ -1204,37 +1221,23 @@ var c = x.c;  // Error, no property c in union type
 
 Note that 'x.a' has a union type because the type of 'a' is different in 'A' and 'B', whereas 'x.b' simply has type number because that is the type of 'b' in both 'A' and 'B'. Also note that there is no property 'x.c' because only 'A' has a property 'c'.
 
-### <a name="3.3.5"/>3.3.5 Function Types
+### <a name="3.4.1"/>3.4.1 Contextual Union Types
 
-An object type containing one or more call signatures is said to be a ***function type***. Function types may be written using function type literals (section [3.6.7](#3.6.7)) or by including call signatures in object type literals.
+When used as a contextual type (section [4.19](#4.19)), a union type *U* has those members that are present in any of its constituent types, with types that are unions of the respective members in the constituent types. Specifically:
 
-### <a name="3.3.6"/>3.3.6 Constructor Types
+* Let *S* be the set of types in *U* that has a property *P*. If *S* is not empty, *U* has a property *P* of a union type of the types of *P* from each type in *S*.
+* Let *S* be the set of types in *U* that have call signatures. If *S* is not empty and the sets of call signatures of the types in *S* are identical ignoring return types, *U* has the same set of call signatures, but with return types that are unions of the return types of the respective call signatures from each type in *S*.
+* Let *S* be the set of types in *U* that have construct signatures. If *S* is not empty and the sets of construct signatures of the types in *S* are identical ignoring return types, *U* has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in *S*.
+* Let *S* be the set of types in *U* that has a string index signature. If *S* is not empty, *U* has a string index signature of a union type of the types of the string index signatures from each type in *S*.
+* Let *S* be the set of types in *U* that has a numeric index signature. If *S* is not empty, *U* has a numeric index signature of a union type of the types of the numeric index signatures from each type in *S*.
 
-An object type containing one or more construct signatures is said to be a ***constructor type***. Constructor types may be written using constructor type literals (section [3.6.8](#3.6.8)) or by including construct signatures in object type literals.
-
-### <a name="3.3.7"/>3.3.7 Members
-
-Every object type is composed from zero or more of the following kinds of members:
-
-* ***Properties***, which define the names and types of the properties of objects of the given type. Property names are unique within their type.
-* ***Call signatures***, which define the possible parameter lists and return types associated with applying call operations to objects of the given type.
-* ***Construct signatures***, which define the possible parameter lists and return types associated with applying the `new` operator to objects of the given type.
-* ***Index signatures***, which define type constraints for properties in the given type. An object type can have at most one string index signature and one numeric index signature.
-
-Properties are either ***public***, ***private***, or ***protected*** and are either ***required*** or ***optional***:
-
-* Properties in a class declaration may be designated public, private, or protected, while properties declared in other contexts are always considered public. Private members are only accessible within their declaring class, as described in section [8.2.2](#8.2.2), and private properties match only themselves in subtype and assignment compatibility checks, as described in section [3.8](#3.8). Protected members are only accessible within their declaring class and classes derived from it, as described in section [8.2.2](#8.2.2), and protected properties match only themselves and overrides in subtype and assignment compatibility checks, as described in section [3.8](#3.8).
-* Properties in an object type literal or interface declaration may be designated required or optional, while properties declared in other contexts are always considered required. Properties that are optional in the target type of an assignment may be omitted from source objects, as described in section [3.8.4](#3.8.4).
-
-Call and construct signatures may be ***specialized*** (section [3.7.2.4](#3.7.2.4)) by including parameters with string literal types. Specialized signatures are used to express patterns where specific string values for some parameters cause the types of other parameters or the function result to become further specialized.
-
-## <a name="3.4"/>3.4 Type Parameters
+## <a name="3.5"/>3.5 Type Parameters
 
 A type parameter represents an actual type that the parameter is bound to in a generic type reference or a generic function call. Type parameters have constraints that establish upper bounds for their actual type arguments.
 
 Since a type parameter represents a multitude of different type arguments, type parameters have certain restrictions compared to other types. In particular, a type parameter cannot be used as a base class or interface.
 
-### <a name="3.4.1"/>3.4.1 Type Parameter Lists
+### <a name="3.5.1"/>3.5.1 Type Parameter Lists
 
 Class, interface, and function declarations may optionally include lists of type parameters enclosed in &lt; and > brackets. Type parameters are also permitted in call signatures of object, function, and constructor type literals.
 
@@ -1273,11 +1276,11 @@ interface G<T, U extends Function> {
 
 the base constraint of 'T' is the empty object type, and the base constraint of 'U' and 'V' is 'Function'.
 
-For purposes of determining type relationships (section [3.8](#3.8)), type parameters appear to be subtypes of their base constraint. Likewise, in property accesses (section [4.10](#4.10)), `new` operations (section [4.11](#4.11)), and function calls (section [4.12](#4.12)), type parameters appear to have the members of their base constraint, but no other members.
+For purposes of determining type relationships (section [0](#0)), type parameters appear to be subtypes of their base constraint. Likewise, in property accesses (section [4.10](#4.10)), `new` operations (section [4.11](#4.11)), and function calls (section [4.12](#4.12)), type parameters appear to have the members of their base constraint, but no other members.
 
-### <a name="3.4.2"/>3.4.2 Type Argument Lists
+### <a name="3.5.2"/>3.5.2 Type Argument Lists
 
-A type reference (section [3.6.2](#3.6.2)) to a generic type must include a list of type arguments enclosed in angle brackets and separated by commas. Similarly, a call (section [4.12](#4.12)) to a generic function may explicitly include a type argument list instead of relying on type inference.
+A type reference (section [3.7.2](#3.7.2)) to a generic type must include a list of type arguments enclosed in angle brackets and separated by commas. Similarly, a call (section [4.12](#4.12)) to a generic function may explicitly include a type argument list instead of relying on type inference.
 
 &emsp;&emsp;*TypeArguments:*  
 &emsp;&emsp;&emsp;`<`&emsp;*TypeArgumentList*&emsp;`>`
@@ -1289,7 +1292,7 @@ A type reference (section [3.6.2](#3.6.2)) to a generic type must include a list
 &emsp;&emsp;*TypeArgument:*  
 &emsp;&emsp;&emsp;*Type*
 
-Type arguments correspond one-to-one with type parameters of the generic type or function being referenced. A type argument list is required to specify exactly one type argument for each corresponding type parameter, and each type argument is required to ***satisfy*** the constraint of its corresponding type parameter. A type argument satisfies a type parameter constraint if the type argument is assignable to (section [3.8.4](#3.8.4)) the constraint type once type arguments are substituted for type parameters.
+Type arguments correspond one-to-one with type parameters of the generic type or function being referenced. A type argument list is required to specify exactly one type argument for each corresponding type parameter, and each type argument is required to ***satisfy*** the constraint of its corresponding type parameter. A type argument satisfies a type parameter constraint if the type argument is assignable to (section [3.10.4](#3.10.4)) the constraint type once type arguments are substituted for type parameters.
 
 Given the declaration
 
@@ -1301,13 +1304,13 @@ a type reference of the form 'G&lt;A, B>' places no requirements on 'A' but requ
 
 The process of substituting type arguments for type parameters in a generic type or generic signature is known as ***instantiating*** the generic type or signature. Instantiation of a generic type or signature can fail if the supplied type arguments do not satisfy the constraints of their corresponding type parameters.
 
-## <a name="3.5"/>3.5 Named Types
+## <a name="3.6"/>3.6 Named Types
 
-Class, interface, and enum types are ***named types*** that are introduced through class declarations (section [8.1](#8.1)), interface declarations (section [7.1](#7.1)), and enum declarations ([9.1](#9.1)). Class and interface types may have type parameters and are then called ***generic types***. Conversely, named types without type parameters are called ***non-generic types***.
+Classes, interfaces, enums, and type aliases are ***named types*** that are introduced through class declarations (section [8.1](#8.1)), interface declarations (section [7.1](#7.1)), enum declarations ([9.1](#9.1)), and type alias declarations (section [3.9](#3.9)). Class and interface types may have type parameters and are then called ***generic types***. Conversely, named types without type parameters are called ***non-generic types***.
 
 Interface declarations only introduce named types, whereas class declarations introduce named types *and* constructor functions that create instances of implementations of those named types. The named types introduced by class and interface declarations have only minor differences (classes can't declare optional members and interfaces can't declare private or protected members) and are in most contexts interchangeable. In particular, class declarations with only public members introduce named types that function exactly like those created by interface declarations.
 
-Named types are referenced through ***type references*** (section [3.6.2](#3.6.2)) that specify a type name and, if applicable, the type arguments to be substituted for the type parameters of the named type.
+Named types are referenced through ***type references*** (section [3.7.2](#3.7.2)) that specify a type name and, if applicable, the type arguments to be substituted for the type parameters of the named type.
 
 Named types are technically not types—only *references* to named types are. This distinction is particularly evident with generic types: Generic types are "templates" from which multiple *actual* types can be created by writing type references that supply type arguments to substitute in place of the generic type's type parameters. This substitution process is known as ***instantiating*** a generic type. Only once a generic type is instantiated does it denote an actual type.
 
@@ -1329,9 +1332,9 @@ is indistinguishable from the type
 { first: string; second: Entity; }
 ```
 
-### <a name="3.5.1"/>3.5.1 Instance Types
+### <a name="3.6.1"/>3.6.1 Instance Types
 
-Each named type has an associated actual type known as the ***instance type***. For a non-generic type, the instance type is simply a type reference to the non-generic type. For a generic type, the instance type is an instantiation of the generic type where each of the type arguments is the corresponding type parameter. Since the instance type uses the type parameters it can be used only where the type parameters are in scope—that is, inside the declaration of the generic type. Within the constructor and instance member functions of a class, the type of `this` is the instance type of the class.
+Each class and interface has an associated actual type known as the ***instance type***. For a non-generic class or interface, the instance type is simply a type reference to the class or interface. For a generic class or interface, the instance type is an instantiation of the generic type where each of the type arguments is the corresponding type parameter. Since the instance type uses the type parameters it can be used only where the type parameters are in scope—that is, inside the declaration of the class or interface. Within the constructor and instance member functions of a class, the type of `this` is the instance type of the class.
 
 The following example illustrates the concept of an instance type:
 
@@ -1344,7 +1347,7 @@ class G<T> {               // Introduce type parameter T
 }
 ```
 
-## <a name="3.6"/>3.6 Specifying Types
+## <a name="3.7"/>3.7 Specifying Types
 
 Types are specified either by referencing their keyword or name, or by writing object type literals, array type literals, tuple type literals, function type literals, constructor type literals, or type queries.
 
@@ -1378,7 +1381,7 @@ Parentheses are required around union, function, or constructor types when they 
 
 The different forms of type notations are described in the following sections.
 
-### <a name="3.6.1"/>3.6.1 Predefined Types
+### <a name="3.7.1"/>3.7.1 Predefined Types
 
 The `any`, `number`, `boolean`, `string`, and `void` keywords reference the Any type and the Number, Boolean, String, and Void primitive types respectively.
 
@@ -1391,7 +1394,7 @@ The `any`, `number`, `boolean`, `string`, and `void` keywords reference the Any 
 
 The predefined type keywords are reserved and cannot be used as names of user defined types.
 
-### <a name="3.6.2"/>3.6.2 Type References
+### <a name="3.7.2"/>3.7.2 Type References
 
 A type reference references a named type or type parameter through its name and, in the case of a generic type, supplies a type argument list.
 
@@ -1406,7 +1409,7 @@ A type reference references a named type or type parameter through its name and,
 &emsp;&emsp;&emsp;*Identifier*  
 &emsp;&emsp;&emsp;*ModuleName*&emsp;`.`&emsp;*Identifier*
 
-A *TypeReference* consists of a *TypeName* that a references a named type or type parameter. A reference to a generic type must be followed by a list of *TypeArguments* (section [3.4.2](#3.4.2)).
+A *TypeReference* consists of a *TypeName* that a references a named type or type parameter. A reference to a generic type must be followed by a list of *TypeArguments* (section [3.5.2](#3.5.2)).
 
 Resolution of a *TypeName* consisting of a single identifier is described in section [2.4](#2.4).
 
@@ -1416,7 +1419,7 @@ Resolution of a *ModuleName* consisting of a single identifier is described in s
 
 Resolution of a *ModuleName* of the form *M.N*, where *M* is a *ModuleName* and *N* is an *Identifier*, proceeds by first resolving the module name *M*. If the resolution of *M* is successful and the resulting module contains an exported module member *N*, then *M.N* refers to that member. Otherwise, *M.N* is undefined.
 
-A type reference to a generic type is required to specify exactly one type argument for each type parameter of the referenced generic type, and each type argument must be assignable to (section [3.8.4](#3.8.4)) the constraint of the corresponding type parameter or otherwise an error occurs. An example:
+A type reference to a generic type is required to specify exactly one type argument for each type parameter of the referenced generic type, and each type argument must be assignable to (section [3.10.4](#3.10.4)) the constraint of the corresponding type parameter or otherwise an error occurs. An example:
 
 ```TypeScript
 interface A { a: string; }
@@ -1441,7 +1444,7 @@ var v7: G;                     // Error, no arguments
 
 A type argument is simply a *Type* and may itself be a type reference to a generic type, as demonstrated by 'v4' in the example above.
 
-As described in section [3.5](#3.5), a type reference to a generic type *G* designates a type wherein all occurrences of *G*'s type parameters have been replaced with the actual type arguments supplied in the type reference. For example, the declaration of 'v1' above is equivalent to:
+As described in section [3.6](#3.6), a type reference to a generic type *G* designates a type wherein all occurrences of *G*'s type parameters have been replaced with the actual type arguments supplied in the type reference. For example, the declaration of 'v1' above is equivalent to:
 
 ```TypeScript
 var v1: {  
@@ -1450,7 +1453,7 @@ var v1: {
 };
 ```
 
-### <a name="3.6.3"/>3.6.3 Object Type Literals
+### <a name="3.7.3"/>3.7.3 Object Type Literals
 
 An object type literal defines an object type by specifying the set of members that are statically considered to be present in instances of the type. Object type literals can be given names using interface declarations but are otherwise anonymous.
 
@@ -1471,9 +1474,9 @@ An object type literal defines an object type by specifying the set of members t
 &emsp;&emsp;&emsp;*IndexSignature*  
 &emsp;&emsp;&emsp;*MethodSignature*
 
-The members of an object type literal are specified as a combination of property, call, construct, index, and method signatures. Object type members are described in section [3.7](#3.7).
+The members of an object type literal are specified as a combination of property, call, construct, index, and method signatures. Object type members are described in section [3.8](#3.8).
 
-### <a name="3.6.4"/>3.6.4 Array Type Literals
+### <a name="3.7.4"/>3.7.4 Array Type Literals
 
 An array type literal is written as an element type followed by an open and close square bracket.
 
@@ -1496,7 +1499,7 @@ Array<string | number>
 Array<() => string>
 ```
 
-### <a name="3.6.5"/>3.6.5 Tuple Type Literals
+### <a name="3.7.5"/>3.7.5 Tuple Type Literals
 
 A tuple type literal is written as a sequence of element types, separated by commas and enclosed in square brackets.
 
@@ -1512,14 +1515,14 @@ A tuple type literal is written as a sequence of element types, separated by com
 
 A tuple type literal references a tuple type (section [3.3.3](#3.3.3)).
 
-### <a name="3.6.6"/>3.6.6 Union Type Literals
+### <a name="3.7.6"/>3.7.6 Union Type Literals
 
 A union type literal is written as a sequence of types separated by vertical bars.
 
 &emsp;&emsp;*UnionType:*  
 &emsp;&emsp;&emsp;*PrimaryOrUnionType*&emsp;`|`&emsp;*PrimaryType*
 
-A union typle literal references a union type (section [3.3.4](#3.3.4)).
+A union typle literal references a union type (section [3.4](#3.4)).
 
 When function or constructor types are included in union types they must be enclosed in parentheses. For example:
 
@@ -1533,7 +1536,7 @@ Alternatively, function or constructor types in union types can be written using
 { (x: string): string } | { (x: number): number }
 ```
 
-### <a name="3.6.7"/>3.6.7 Function Type Literals
+### <a name="3.7.7"/>3.7.7 Function Type Literals
 
 A function type literal specifies the type parameters, regular parameters, and return type of a call signature.
 
@@ -1554,7 +1557,7 @@ is exactly equivalent to the object type literal
 
 Note that function types with multiple call or construct signatures cannot be written as function type literals but must instead be written as object type literals.
 
-### <a name="3.6.8"/>3.6.8 Constructor Type Literals
+### <a name="3.7.8"/>3.7.8 Constructor Type Literals
 
 A constructor type literal specifies the type parameters, regular parameters, and return type of a construct signature.
 
@@ -1575,7 +1578,7 @@ is exactly equivalent to the object type literal
 
 Note that constructor types with multiple construct signatures cannot be written as constructor type literals but must instead be written as object type literals.
 
-### <a name="3.6.9"/>3.6.9 Type Queries
+### <a name="3.7.9"/>3.7.9 Type Queries
 
 A type query obtains the type of an expression.
 
@@ -1586,7 +1589,7 @@ A type query obtains the type of an expression.
 &emsp;&emsp;&emsp;*Identifier*  
 &emsp;&emsp;&emsp;*TypeQueryExpression*&emsp;`.`&emsp;*IdentifierName*
 
-A type query consists of the keyword `typeof` followed by an expression. The expression is restricted to a single identifier or a sequence of identifiers separated by periods. The expression is processed as an identifier expression (section [4.3](#4.3)) or property access expression (section [4.10](#4.10)), the widened type (section [3.9](#3.9)) of which becomes the result. Similar to other static typing constructs, type queries are erased from the generated JavaScript code and add no run-time overhead.
+A type query consists of the keyword `typeof` followed by an expression. The expression is restricted to a single identifier or a sequence of identifiers separated by periods. The expression is processed as an identifier expression (section [4.3](#4.3)) or property access expression (section [4.10](#4.10)), the widened type (section [3.11](#3.11)) of which becomes the result. Similar to other static typing constructs, type queries are erased from the generated JavaScript code and add no run-time overhead.
 
 Type queries are useful for capturing anonymous types that are generated by various constructs such as object literals, function declarations, and module declarations. For example:
 
@@ -1615,11 +1618,11 @@ var h: () => typeof h;
 
 Here, 'g' and 'g.x' have the same recursive type, and likewise 'h' and 'h()' have the same recursive type.
 
-## <a name="3.7"/>3.7 Specifying Members
+## <a name="3.8"/>3.8 Specifying Members
 
-The members of an object type literal (section [3.6.3](#3.6.3)) are specified as a combination of property, call, construct, index, and method signatures.
+The members of an object type literal (section [3.7.3](#3.7.3)) are specified as a combination of property, call, construct, index, and method signatures.
 
-### <a name="3.7.1"/>3.7.1 Property Signatures
+### <a name="3.8.1"/>3.8.1 Property Signatures
 
 A property signature declares the name and type of a property member.
 
@@ -1637,26 +1640,26 @@ The *PropertyName* of a property signature must be unique within its containing 
 
 If a property signature omits a *TypeAnnotation*, the Any type is assumed.
 
-### <a name="3.7.2"/>3.7.2 Call Signatures
+### <a name="3.8.2"/>3.8.2 Call Signatures
 
 A call signature defines the type parameters, parameter list, and return type associated with applying a call operation (section [4.12](#4.12)) to an instance of the containing type. A type may ***overload*** call operations by defining multiple different call signatures.
 
 &emsp;&emsp;*CallSignature:*  
 &emsp;&emsp;&emsp;*TypeParameters<sub>opt</sub>*&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;*TypeAnnotation<sub>opt</sub>*
 
-A call signature that includes *TypeParameters* (section [3.4.1](#3.4.1)) is called a ***generic call signature***. Conversely, a call signature with no *TypeParameters* is called a non-generic call signature.
+A call signature that includes *TypeParameters* (section [3.5.1](#3.5.1)) is called a ***generic call signature***. Conversely, a call signature with no *TypeParameters* is called a non-generic call signature.
 
-As well as being members of object type literals, call signatures occur in method signatures (section [3.7.5](#3.7.5)), function expressions (section [4.9](#4.9)), and function declarations (section [6.1](#6.1)).
+As well as being members of object type literals, call signatures occur in method signatures (section [3.8.5](#3.8.5)), function expressions (section [4.9](#4.9)), and function declarations (section [6.1](#6.1)).
 
 An object type containing call signatures is said to be a ***function type***.
 
-#### <a name="3.7.2.1"/>3.7.2.1 Type Parameters
+#### <a name="3.8.2.1"/>3.8.2.1 Type Parameters
 
-Type parameters (section [3.4.1](#3.4.1)) in call signatures provide a mechanism for expressing the relationships of parameter and return types in call operations. For example, a signature might introduce a type parameter and use it as both a parameter type and a return type, in effect describing a function that returns a value of the same type as its argument.
+Type parameters (section [3.5.1](#3.5.1)) in call signatures provide a mechanism for expressing the relationships of parameter and return types in call operations. For example, a signature might introduce a type parameter and use it as both a parameter type and a return type, in effect describing a function that returns a value of the same type as its argument.
 
 Type parameters may be referenced in parameter types and return type annotations, but not in type parameter constraints, of the call signature in which they are introduced.
 
-Type arguments (section [3.4.2](#3.4.2)) for call signature type parameters may be explicitly specified in a call operation or may, when possible, be inferred (section [4.12.2](#4.12.2)) from the types of the regular arguments in the call. An ***instantiation*** of a generic call signature for a particular set of type arguments is the call signature formed by replacing each type parameter with its corresponding type argument.
+Type arguments (section [3.5.2](#3.5.2)) for call signature type parameters may be explicitly specified in a call operation or may, when possible, be inferred (section [4.12.2](#4.12.2)) from the types of the regular arguments in the call. An ***instantiation*** of a generic call signature for a particular set of type arguments is the call signature formed by replacing each type parameter with its corresponding type argument.
 
 Some examples of call signatures with type parameters follow below.
 
@@ -1684,7 +1687,7 @@ A function taking an array of one type and a function argument, returning an arr
 <T, U>(a: T[], f: (x: T) => U): U[]
 ```
 
-#### <a name="3.7.2.2"/>3.7.2.2 Parameter List
+#### <a name="3.8.2.2"/>3.8.2.2 Parameter List
 
 A signature's parameter list consists of zero or more required parameters, followed by zero or more optional parameters, finally followed by an optional rest parameter.
 
@@ -1730,11 +1733,11 @@ A parameter with a type annotation is considered to be of that type. A type anno
 
 A parameter with no type annotation or initializer is considered to be of type `any`, unless it is a rest parameter, in which case it is considered to be of type `any[]`.
 
-When a parameter type annotation specifies a string literal type, the containing signature is a specialized signature (section [3.7.2.4](#3.7.2.4)). Specialized signatures are not permitted in conjunction with a function body, i.e. the *FunctionExpression*, *FunctionImplementation*, *MemberFunctionImplementation*, and *ConstructorImplementation* grammar productions do not permit parameters with string literal types.
+When a parameter type annotation specifies a string literal type, the containing signature is a specialized signature (section [3.8.2.4](#3.8.2.4)). Specialized signatures are not permitted in conjunction with a function body, i.e. the *FunctionExpression*, *FunctionImplementation*, *MemberFunctionImplementation*, and *ConstructorImplementation* grammar productions do not permit parameters with string literal types.
 
 A parameter can be marked optional by following its name with a question mark (`?`) or by including an initializer. The form that includes an initializer is permitted only in conjunction with a function body, i.e. only in a *FunctionExpression*, *FunctionImplementation*, *MemberFunctionImplementation*, or *ConstructorImplementation* grammar production.
 
-#### <a name="3.7.2.3"/>3.7.2.3 Return Type
+#### <a name="3.8.2.3"/>3.8.2.3 Return Type
 
 If present, a call signature's return type annotation specifies the type of the value computed and returned by a call operation. A `void` return type annotation is used to indicate that a function has no return value.
 
@@ -1742,7 +1745,7 @@ When a call signature with no return type annotation occurs in a context without
 
 When a call signature with no return type annotation occurs in a context that has a function body (specifically, a function implementation, a member function implementation, or a member accessor declaration), the return type is inferred from the function body as described in section [6.3](#6.3).
 
-#### <a name="3.7.2.4"/>3.7.2.4 Specialized Signatures
+#### <a name="3.8.2.4"/>3.8.2.4 Specialized Signatures
 
 When a parameter type annotation specifies a string literal type (section [3.2.8](#3.2.8)), the containing signature is considered a specialized signature. Specialized signatures are used to express patterns where specific string values for some parameters cause the types of other parameters or the function result to become further specialized. For example, the declaration
 
@@ -1761,7 +1764,7 @@ When writing overloaded declarations such as the one above it is important to li
 
 Every specialized call or construct signature in an object type must be assignable to at least one non-specialized call or construct signature in the same object type (where a call signature *A* is considered assignable to another call signature *B* if an object type containing only *A* would be assignable to an object type containing only *B*). For example, the 'createElement' property in the example above is of a type that contains three specialized signatures, all of which are assignable to the non-specialized signature in the type.
 
-### <a name="3.7.3"/>3.7.3 Construct Signatures
+### <a name="3.8.3"/>3.8.3 Construct Signatures
 
 A construct signature defines the parameter list and return type associated with applying the `new` operator (section [4.11](#4.11)) to an instance of the containing type. A type may overload `new` operations by defining multiple construct signatures with different parameter lists.
 
@@ -1772,7 +1775,7 @@ The type parameters, parameter list, and return type of a construct signature ar
 
 A type containing construct signatures is said to be a ***constructor type***.
 
-### <a name="3.7.4"/>3.7.4 Index Signatures
+### <a name="3.8.4"/>3.8.4 Index Signatures
 
 An index signature defines a type constraint for properties in the containing type.
 
@@ -1791,7 +1794,7 @@ An object type can contain at most one string index signature and one numeric in
 
 Index signatures affect the determination of the type that results from applying a bracket notation property access to an instance of the containing type, as described in section [4.10](#4.10).
 
-### <a name="3.7.5"/>3.7.5 Method Signatures
+### <a name="3.8.5"/>3.8.5 Method Signatures
 
 A method signature is shorthand for declaring a property of a function type.
 
@@ -1855,27 +1858,85 @@ the properties 'func1', 'func2', and 'func3' are all of the same type, namely an
 
 the properties 'func4' and 'func5' are of the same type, namely an object type with two call signatures taking and returning number and string respectively.
 
-## <a name="3.8"/>3.8 Type Relationships
+## <a name="3.9"/>3.9 Type Aliases
+
+A type alias declaration introduces a ***type alias*** in the containing module.
+
+&emsp;&emsp;*TypeAliasDeclaration:*  
+&emsp;&emsp;&emsp;`type`&emsp;*Identifier*&emsp;`=`&emsp;*Type*&emsp;`;`
+
+A type alias serves as an alias for the type specified in the type alias declaration. Unlike an interface declaration, which always introduces a named object type, a type alias declaration can introduce a name for any kind of type, including primitive types and union types.
+
+Type aliases are referenced using type references ([3.7.2](#3.7.2)). Writing a reference to a type alias has exactly the same effect as writing the aliased type itself.
+
+The *Identifier* of a type alias declaration may not be one of the predefined type names (section [3.7.1](#3.7.1)). Furthermore, the *Type* of a type alias may not be an object type literal (section [3.7.3](#3.7.3)) or a parenthesized form of an object type literal, but any other kind of type composed from an object type literal is permitted.
+
+It is an error for the type specified in a type alias to depend on that type alias. Types have the following dependencies:
+
+* A type alias *directly depends on* the type it aliases.
+* A type reference *directly depends on* the referenced type and each of the type arguments, if any.
+* A union type *directly depends on* each of the constituent types.
+* An array type *directly depends on* its element type.
+* A tuple type *directly depends on* each of its element types.
+* A type query *directly depends on* the type of the referenced entity.
+
+Given this definition, the complete set of types upon which a type depends is the transitive closure of the *directly depends on* relationship. Note that object type literals, function type literals, and constructor type literals do not depend on types referenced within them and are therefore permitted to circularly reference themselves through type aliases.
+
+Some examples of type alias declarations:
+
+```TypeScript
+type StringOrNumber = string | number;  
+type Text = string | { text: string };  
+type Coordinates = [number, number];  
+type NameLookup = Dictionary<string, Person>;  
+type Callback = (data: string) => void;  
+type RecFunc = () => RecFunc;  
+type ObjectStatics = typeof Object;
+```
+
+To ensure that named object types are not inadvertently introduced as aliases for anonymous object type literals, a type alias is not permitted to alias an object type literal. For example, the following is an error:
+
+```TypeScript
+type Point = {  // Error  
+    x: number;  
+    y: number;  
+};
+```
+
+Such types must instead be written as interface declarations:
+
+```TypeScript
+interface Point {  
+    x: number;  
+    y: number;  
+}
+```
+
+## <a name="3.10"/>3.10 Type Relationships
 
 Types in TypeScript have identity, subtype, supertype, and assignment compatibility relationships as defined in the following sections.
 
-For purposes of determining type relationships, all object types appear to have the members of the 'Object' interface unless those members are hidden by members with the same name in the object types, and object types with one or more call or construct signatures appear to have the members of the 'Function' interface unless those members are hidden by members with the same name in the object types. Apparent types (section [3.8.1](#3.8.1)) that are object types appear to have these extra members as well.
+### <a name="3.10.1"/>3.10.1 Apparent Members
 
-### <a name="3.8.1"/>3.8.1 Apparent Type
+The ***apparent members*** of a type are the members observed in subtype, supertype, and assignment compatibility relationships, as well as in the type checking of property accesses (section [4.10](#4.10)), `new` operations (section [4.11](#4.11)), and function calls (section [4.12](#4.12)). The apparent members of a type are determined as follows:
 
-In certain contexts a type appears to have the characteristics of a related type called the type's ***apparent type***. Specifically, a type's apparent type is used when determining subtype, supertype, and assignment compatibility relationships, as well as in the type checking of property accesses (section [4.10](#4.10)), `new` operations (section [4.11](#4.11)), and function calls (section [4.12](#4.12)).
+* The apparent members of the primitive types Number, Boolean, and String are the apparent members of the global interface types 'Number', 'Boolean', and 'String' respectively.
+* The apparent members of an enum type are the apparent members of the global interface type 'Number'.
+* The apparent members of a type parameter are the apparent members of the base constraint (section [3.5.1](#3.5.1)) of that type parameter.
+* The apparent members of an object type *T* are the combination of the following:
+  * The declared and/or inherited members of *T*.
+  * The properties of the global interface type 'Object' that aren't hidden by properties with the same name in *T*.
+  * If *T* has one or more call or construct signatures, the properties of the global interface type 'Function' that aren't hidden by properties with the same name in *T*.
+* The apparent members of a union type *U* are determined as follows:
+  * If each type in *U* has an apparent property *P*, *U* has an apparent property *P* of a union type of the types of *P* from each type in *U*.
+  * If each type in *U* has apparent call signatures and the sets of apparent call signatures are identical ignoring return types, *U* has the same set of call signatures, but with return types that are unions of the return types of the respective apparent call signatures from each type in *U*.
+  * If each type in *U* has apparent construct signatures and the sets of apparent construct signatures are identical ignoring return types, *U* has the same set of construct signatures, but with return types that are unions of the return types of the respective apparent construct signatures from each type in *U*.
+  * If each type in *U* has an apparent string index signature, *U* has a string index signature of a union type of the types of the apparent string index signatures from each type in *U*.
+  * If each type in *U* has an apparent numeric index signature, *U* has a numeric index signature of a union type of the types of the apparent numeric index signatures from each type in *U*.
 
-The apparent type of a type *T* is defined as follows:
+If a type is not one of the above, it is considered to have no apparent members.
 
-* If *T* is the primitive type Number, Boolean, or String, the apparent type of *T* is the augmented form (as defined below) of the global interface type 'Number', 'Boolean', or 'String'.
-* if *T* is an enum type, the apparent type of *T* is the augmented form of the global interface type 'Number'.
-* If *T* is an object type, the apparent type of *T* is the augmented form of *T*.
-* If *T* is a type parameter, the apparent type of *T* is the apparent type of *T*'s base constraint (section [3.4.1](#3.4.1)).
-* Otherwise, the apparent type of *T* is *T* itself.
-
-The augmented form of an object type *T* adds to *T* those properties of the global interface type 'Object' that aren't hidden by properties in *T*. Furthermore, if *T* has one or more call or construct signatures, the augmented form of *T* adds to *T* the properties of the global interface type 'Function' that aren't hidden by properties in *T*. Properties in *T* hide 'Object' or 'Function' interface properties with the same name.
-
-In effect, a type's apparent type is a subtype of the 'Object' or 'Function' interface unless the type defines members that are incompatible with those of the 'Object' or 'Function' interface—which, for example, occurs if the type defines a property with the same name as a property in the 'Object' or 'Function' interface but with a type that isn't a subtype of that in the 'Object' or 'Function' interface.
+In effect, a type's apparent members make it a subtype of the 'Object' or 'Function' interface unless the type defines members that are incompatible with those of the 'Object' or 'Function' interface—which, for example, occurs if the type defines a property with the same name as a property in the 'Object' or 'Function' interface but with a type that isn't a subtype of that in the 'Object' or 'Function' interface.
 
 Some examples:
 
@@ -1885,9 +1946,9 @@ var f: Function = (x: number) => x * x;   // Ok
 var err: Object = { toString: 0 };        // Error
 ```
 
-The last assignment is an error because the apparent type of the object literal has a 'toString' method that isn't compatible with that of 'Object'.
+The last assignment is an error because the object literal has a 'toString' method that isn't compatible with that of 'Object'.
 
-### <a name="3.8.2"/>3.8.2 Type and Member Identity
+### <a name="3.10.2"/>3.10.2 Type and Member Identity
 
 Two types are considered ***identical*** when
 
@@ -1895,7 +1956,7 @@ Two types are considered ***identical*** when
 * they are the same primitive type,
 * they are the same type parameter,
 * they are union types with identical sets of constituent types, or
-* they are non-union object types with identical sets of members.
+* they are object types with identical sets of members.
 
 Two members are considered identical when
 
@@ -1924,9 +1985,9 @@ var b: C<Y>;
 
 the variables 'a' and 'b' are of identical types because the two type references to 'C' create types with a private member 'x' that originates in the same declaration, and because the two private 'x' members have types with identical sets of members once the type arguments 'X' and 'Y' are substituted.
 
-### <a name="3.8.3"/>3.8.3 Subtypes and Supertypes
+### <a name="3.10.3"/>3.10.3 Subtypes and Supertypes
 
-*S* is a ***subtype*** of a type *T*, and *T* is a ***supertype*** of *S*, if one of the following is true, where *S*' denotes the apparent type (section [3.8.1](#3.8.1)) of *S*:
+*S* is a ***subtype*** of a type *T*, and *T* is a ***supertype*** of *S*, if one of the following is true:
 
 * *S* and *T* are identical types.
 * *T* is the Any type.
@@ -1937,32 +1998,31 @@ the variables 'a' and 'b' are of identical types because the two type references
 * *S* and *T* are type parameters, and *S* is directly or indirectly constrained to *T*.
 * *S* is a union type and each constituent type of *S* is a subtype of *T*.
 * *T* is a union type and *S* is a subtype of at least one constituent type of *T*.
-* *S'* and *T* are object types and, for each member *M* in *T*, one of the following is true:
-  * *M* is a property and *S'* contains a property *N* where
+* *S* is an object type, a type parameter, or the Number, Boolean, or String primitive type, *T* is an object type, and for each member *M* in *T*, one of the following is true:
+  * *M* is a property and *S* has an apparent property *N* where
     * *M* and *N* have the same name,
     * the type of *N* is a subtype of that of *M*,
     * if *M* is a required property, *N* is also a required property, and
     * *M* and *N* are both public, *M* and *N* are both private and originate in the same declaration, *M* and *N* are both protected and originate in the same declaration, or *M* is protected and *N* is declared in a class derived from the class in which *M* is declared.
-  * *M* is an optional property and *S'* contains no property of the same name as *M*.
-  * *M* is a non-specialized call or construct signature and *S*' contains a call or construct signature *N* where, when *M* and *N* are instantiated using type Any as the type argument for all type parameters declared by *M* and *N* (if any),
+  * *M* is a non-specialized call or construct signature and *S* has an apparent call or construct signature *N* where, when *M* and *N* are instantiated using type Any as the type argument for all type parameters declared by *M* and *N* (if any),
     * the signatures are of the same kind (call or construct),
     * *M* has a rest parameter or the number of non-optional parameters in *N* is less than or equal to the total number of parameters in *M*,
     * for parameter positions that are present in both signatures, each parameter type in *N* is a subtype or supertype of the corresponding parameter type in *M*, and
     * the result type of *M* is Void, or the result type of *N* is a subtype of that of *M*.
-  * *M* is a string index signature of type *U* and *S'* contains a string index signature of a type that is a subtype of *U*.
-  * *M* is a numeric index signature of type *U* and *S'* contains a string or numeric index signature of a type that is a subtype of *U*.
+  * *M* is a string index signature of type *U* and *S* has an apparent string index signature of a type that is a subtype of *U*.
+  * *M* is a numeric index signature of type *U* and *S* has an apparent string or numeric index signature of a type that is a subtype of *U*.
 
 When comparing call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
 
-Note that specialized call and construct signatures (section [3.7.2.4](#3.7.2.4)) are not significant when determining subtype and supertype relationships.
+Note that specialized call and construct signatures (section [3.8.2.4](#3.8.2.4)) are not significant when determining subtype and supertype relationships.
 
 Also note that type parameters are not considered object types. Thus, the only subtypes of a type parameter *T* are *T* itself and other type parameters that are directly or indirectly constrained to *T*.
 
-### <a name="3.8.4"/>3.8.4 Assignment Compatibility
+### <a name="3.10.4"/>3.10.4 Assignment Compatibility
 
 Types are required to be assignment compatible in certain circumstances, such as expression and variable types in assignment statements and argument and parameter types in function calls.
 
-*S* is ***assignable to*** a type *T*, and *T* is ***assignable from*** *S*, if one of the following is true, where *S*' denotes the apparent type (section [3.8.1](#3.8.1)) of *S*:
+*S* is ***assignable to*** a type *T*, and *T* is ***assignable from*** *S*, if one of the following is true:
 
 * *S* and *T* are identical types.
 * *S* or *T* is the Any type.
@@ -1973,29 +2033,30 @@ Types are required to be assignment compatible in certain circumstances, such as
 * *S* and *T* are type parameters, and *S* is directly or indirectly constrained to *T*.
 * *S* is a union type and each constituent type of *S* is assignable to *T*.
 * *T* is a union type and *S* is assignable to at least one constituent type of *T*.
-* *S'* and *T* are object types and, for each member *M* in *T*, one of the following is true:
-  * *M* is a property and *S'* contains a property *N* where
+* *S* is an object type, a type parameter, or the Number, Boolean, or String primitive type, *T* is an object type, and for each member *M* in *T*, one of the following is true:
+  * *M* is a property and *S* has an apparent property *N* where
     * *M* and *N* have the same name,
     * the type of *N* is assignable to that of *M*,
     * if *M* is a required property, *N* is also a required property, and
     * *M* and *N* are both public, *M* and *N* are both private and originate in the same declaration, *M* and *N* are both protected and originate in the same declaration, or *M* is protected and *N* is declared in a class derived from the class in which *M* is declared.
-  * *M* is an optional property and *S'* contains no property of the same name as *M*.
-  * *M* is a non-specialized call or construct signature and *S*' contains a call or construct signature *N* where, when *M* and *N* are instantiated using type Any as the type argument for all type parameters declared by *M* and *N* (if any),
+  * *M* is an optional property and *S* has no apparent property of the same name as *M*.
+  * *M* is a non-specialized call or construct signature and *S* has an apparent call or construct signature *N* where, when *M* and *N* are instantiated using type Any as the type argument for all type parameters declared by *M* and *N* (if any),
     * the signatures are of the same kind (call or construct),
     * *M* has a rest parameter or the number of non-optional parameters in *N* is less than or equal to the total number of parameters in *M*,
     * for parameter positions that are present in both signatures, each parameter type in *N* is assignable to or from the corresponding parameter type in *M*, and
     * the result type of *M* is Void, or the result type of *N* is assignable to that of *M*.
-  * *M* is a string index signature of type *U* and *S'* contains a string index signature of a type that is assignable to *U*.
-  * *M* is a numeric index signature of type *U* and *S'* contains a string or numeric index signature of a type that is assignable to *U*.
+  * *M* is a string index signature of type *U* and *S* has an apparent string index signature of a type that is assignable to *U*.
+  * *M* is a numeric index signature of type *U* and *S* has an apparent string or numeric index signature of a type that is assignable to *U*.
 
 When comparing call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
 
-Note that specialized call and construct signatures (section [3.7.2.4](#3.7.2.4)) are not significant when determining assignment compatibility.
+Note that specialized call and construct signatures (section [3.8.2.4](#3.8.2.4)) are not significant when determining assignment compatibility.
 
 The assignment compatibility and subtyping rules differ only in that
 
-* the Any type is assignable to, but not a subtype of, all types, and
-* the primitive type Number is assignable to, but not a subtype of, all enum types.
+* the Any type is assignable to, but not a subtype of, all types,
+* the primitive type Number is assignable to, but not a subtype of, all enum types, and
+* an object type without a particular property is assignable to an object type in which that property is optional.
 
 The assignment compatibility rules imply that, when assigning values or passing parameters, optional properties must either be present and of a compatible type, or not be present at all. For example:
 
@@ -2008,14 +2069,14 @@ foo({ id: 1234, name: false });    // Error, name of wrong type
 foo({ name: "hello" });            // Error, id required but missing
 ```
 
-### <a name="3.8.5"/>3.8.5 Contextual Signature Instantiation
+### <a name="3.10.5"/>3.10.5 Contextual Signature Instantiation
 
 During type argument inference in a function call (section [4.12.2](#4.12.2)) it is in certain circumstances necessary to instantiate a generic call signature of an argument expression in the context of a non-generic call signature of a parameter such that further inferences can be made. A generic call signature *A* is ***instantiated in the context of*** non-generic call signature *B* as follows:
 
-* Using the process described in [3.8.6](#3.8.6), inferences for *A*'s type parameters are made from each parameter type in *B* to the corresponding parameter type in *A* for those parameter positions that are present in both signatures, where rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
+* Using the process described in [3.10.6](#3.10.6), inferences for *A*'s type parameters are made from each parameter type in *B* to the corresponding parameter type in *A* for those parameter positions that are present in both signatures, where rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
 * The inferred type argument for each type parameter is the union type of the set of inferences made for that type parameter. However, if the union type does not satisfy the constraint of the type parameter, the inferred type argument is instead the constraint.
 
-### <a name="3.8.6"/>3.8.6 Type Inference
+### <a name="3.10.6"/>3.10.6 Type Inference
 
 In certain contexts, inferences for a given set of type parameters are made *from* a type *S*, in which those type parameters do not occur, *to* another type *T*, in which those type parameters do occur. Inferences consist of a set of candidate type arguments collected for each of the type parameters. The inference process recursively relates *S* and *T* to gather as many inferences as possible:
 
@@ -2035,7 +2096,7 @@ In certain contexts, inferences for a given set of type parameters are made *fro
 
 When comparing call or construct signatures, signatures in *S* correspond to signatures of the same kind in *T* pairwise in declaration order. If *S* and *T* have different numbers of a given kind of signature, the excess *first* signatures in declaration order of the longer list are ignored.
 
-### <a name="3.8.7"/>3.8.7 Recursive Types
+### <a name="3.10.7"/>3.10.7 Recursive Types
 
 Classes and interfaces can reference themselves in their internal structure, in effect creating recursive types with infinite nesting. For example, the type
 
@@ -2069,7 +2130,7 @@ interface List<T> {
 
 'List&lt;T>' has a member 'owner' of type 'List&lt;List&lt;T>>', which has a member 'owner' of type 'List&lt;List&lt;List&lt;T>>>', which has a member 'owner' of type 'List&lt;List&lt;List&lt;List&lt;T>>>>' and so on, ad infinitum. Since type relationships are determined structurally, possibly exploring the constituent types to their full depth, in order to determine type relationships involving infinitely expanding generic types it may be necessary for the compiler to terminate the recursion at some point with the assumption that no further exploration will change the outcome.
 
-## <a name="3.9"/>3.9 Widened Types
+## <a name="3.11"/>3.11 Widened Types
 
 In several situations TypeScript infers types from context, alleviating the need for the programmer to explicitly specify types that appear obvious. For example
 
@@ -2193,7 +2254,7 @@ A get accessor declaration is processed in the same manner as an ordinary functi
 
 If a get accessor is declared for a property, the return type of the get accessor becomes the type of the property. If only a set accessor is declared for a property, the parameter type (which may be type Any if no type annotation is present) of the set accessor becomes the type of the property.
 
-When an object literal is contextually typed by a type that includes a string index signature, the resulting type of the object literal includes a string index signature with the union type of the types of the properties declared in the object literal, or the Undefined type if the object literal is empty. Likewise, when an object literal is contextually typed by a type that includes a numeric index signature, the resulting type of the object literal includes a numeric index signature with the union type of the types of the numerically named properties (section [3.7.4](#3.7.4)) declared in the object literal, or the Undefined type if the object literal declares no numerically named properties.
+When an object literal is contextually typed by a type that includes a string index signature, the resulting type of the object literal includes a string index signature with the union type of the types of the properties declared in the object literal, or the Undefined type if the object literal is empty. Likewise, when an object literal is contextually typed by a type that includes a numeric index signature, the resulting type of the object literal includes a numeric index signature with the union type of the types of the numerically named properties (section [3.8.4](#3.8.4)) declared in the object literal, or the Undefined type if the object literal declares no numerically named properties.
 
 ## <a name="4.6"/>4.6 Array Literals
 
@@ -2394,8 +2455,6 @@ Furthermore, when a function expression has no return type annotation and is con
 
 A property access uses either dot notation or bracket notation. A property access expression is always classified as a reference.
 
-A property access uses an object's apparent type (section [3.8.1](#3.8.1)) to determine its properties. Furthermore, in a property access, an object's apparent type includes the properties that originate in the 'Object' or 'Function' global interface types, as described in section [3.3](#3.3).
-
 A dot notation property access of the form
 
 ```TypeScript
@@ -2405,7 +2464,7 @@ object . name
 where *object* is an expression and *name* is an identifier (including, possibly, a reserved word), is used to access the property with the given name on the given object. A dot notation property access is processed as follows at compile-time:
 
 * If *object* is of type Any, any *name* is permitted and the property access is of type Any.
-* Otherwise, if *name* denotes an accessible property member in the apparent type of *object*, the property access is of the type of that property. Public members are always accessible, but private and protected members of a class have restricted accessibility, as described in [8.2.2](#8.2.2).
+* Otherwise, if *name* denotes an accessible apparent property (section [3.10.1](#3.10.1)) in the type of *object*, the property access is of the type of that property. Public members are always accessible, but private and protected members of a class have restricted accessibility, as described in [8.2.2](#8.2.2).
 * Otherwise, the property access is invalid and a compile-time error occurs.
 
 A bracket notation property access of the form
@@ -2416,9 +2475,9 @@ object [ index ]
 
 where *object* and *index* are expressions, is used to access the property with the name computed by the index expression on the given object. A bracket notation property access is processed as follows at compile-time:
 
-* If *index* is a string literal or a numeric literal and *object*'s apparent type has a property with the name given by that literal (converted to its string representation in the case of a numeric literal), the property access is of the type of that property.
-* Otherwise, if *object*'s apparent type has a numeric index signature and *index* is of type Any, the Number primitive type, or an enum type, the property access is of the type of that index signature.
-* Otherwise, if *object*'s apparent type has a string index signature and *index* is of type Any, the String or Number primitive type, or an enum type, the property access is of the type of that index signature.
+* If *index* is a string literal or a numeric literal and *object* has an apparent property (section [3.10.1](#3.10.1)) with the name given by that literal (converted to its string representation in the case of a numeric literal), the property access is of the type of that property.
+* Otherwise, if *object* has an apparent numeric index signature and *index* is of type Any, the Number primitive type, or an enum type, the property access is of the type of that index signature.
+* Otherwise, if *object* has an apparent string index signature and *index* is of type Any, the String or Number primitive type, or an enum type, the property access is of the type of that index signature.
 * Otherwise, if *index* is of type Any, the String or Number primitive type, or an enum type, the property access is of type Any.
 * Otherwise, the property access is invalid and a compile-time error occurs.
 
@@ -2455,8 +2514,8 @@ new C < ... > ( ... )
 where *C* is an expression. The first form is equivalent to supplying an empty argument list. *C* must be of type Any or of an object type with one or more construct or call signatures. The operation is processed as follows at compile-time:
 
 * If *C* is of type Any, any argument list is permitted and the result of the operation is of type Any.
-* If *C*'s apparent type (section [3.8.1](#3.8.1)) is an object type with one or more construct signatures, the expression is processed in the same manner as a function call, but using the construct signatures as the initial set of candidate signatures for overload resolution. The result type of the function call becomes the result type of the operation.
-* If *C*'s apparent type is an object type with no construct signatures but one or more call signatures, the expression is processed as a function call. A compile-time error occurs if the result of the function call is not Void. The type of the result of the operation is Any.
+* If *C* has one or more apparent construct signatures (section [3.10.1](#3.10.1)), the expression is processed in the same manner as a function call, but using the construct signatures as the initial set of candidate signatures for overload resolution. The result type of the function call becomes the result type of the operation.
+* If *C* has no apparent construct signatures but one or more apparent call signatures, the expression is processed as a function call. A compile-time error occurs if the result of the function call is not Void. The type of the result of the operation is Any.
 
 ## <a name="4.12"/>4.12 Function Calls
 
@@ -2472,11 +2531,11 @@ func ( ... )
 func < ... > ( ... )
 ```
 
-where *func* is an expression of a function type or of type Any. The function expression is followed by an optional type argument list (section [3.4.2](#3.4.2)) and an argument list.
+where *func* is an expression of a function type or of type Any. The function expression is followed by an optional type argument list (section [3.5.2](#3.5.2)) and an argument list.
 
 If *func* is of type Any, or of an object type that has no call or construct signatures but is a subtype of the Function interface, the call is an ***untyped function call***. In an untyped function call no type arguments are permitted, argument expressions can be of any type and number, no contextual types are provided for the argument expressions, and the result is always of type Any.
 
-If *func*'s apparent type (section [3.8.1](#3.8.1)) is a function type, the call is a ***typed function call***. TypeScript employs ***overload resolution*** in typed function calls in order to support functions with multiple call signatures. Furthermore, TypeScript may perform ***type argument inference*** to automatically determine type arguments in generic function calls.
+If *func* has apparent call signatures (section [3.10.1](#3.10.1)) the call is a ***typed function call***. TypeScript employs ***overload resolution*** in typed function calls in order to support functions with multiple call signatures. Furthermore, TypeScript may perform ***type argument inference*** to automatically determine type arguments in generic function calls.
 
 ### <a name="4.12.1"/>4.12.1 Overload Resolution
 
@@ -2503,7 +2562,7 @@ A signature is said to be an ***applicable signature*** with respect to an argum
 
 * the number of arguments is not less than the number of required parameters,
 * the number of arguments is not greater than the number of parameters, and
-* for each argument expression *e* and its corresponding parameter *P,* when *e* is contextually typed (section [4.19](#4.19)) by the type of *P*, no errors ensue and the type of *e* is assignable to (section [3.8.4](#3.8.4)) the type of *P*.
+* for each argument expression *e* and its corresponding parameter *P,* when *e* is contextually typed (section [4.19](#4.19)) by the type of *P*, no errors ensue and the type of *e* is assignable to (section [3.10.4](#3.10.4)) the type of *P*.
 
 ### <a name="4.12.2"/>4.12.2 Type Argument Inference
 
@@ -2518,13 +2577,13 @@ Type argument inference produces a set of candidate types for each type paramete
 In order to compute candidate types, the argument list is processed as follows:
 
 * Initially all inferred type arguments are considered ***unfixed*** with an empty set of candidate types.
-* Proceeding from left to right, each argument expression *e* is ***inferentially typed*** by its corresponding parameter type *P*, possibly causing some inferred type arguments to become ***fixed***, and candidate type inferences (section [3.8.6](#3.8.6)) are made for unfixed inferred type arguments from the type computed for *e* to *P*.
+* Proceeding from left to right, each argument expression *e* is ***inferentially typed*** by its corresponding parameter type *P*, possibly causing some inferred type arguments to become ***fixed***, and candidate type inferences (section [3.10.6](#3.10.6)) are made for unfixed inferred type arguments from the type computed for *e* to *P*.
 
 The process of inferentially typing an expression *e* by a type *T* is the same as that of contextually typing *e* by *T*, with the following exceptions:
 
 * Where expressions contained within *e* would be contextually typed, they are instead inferentially typed.
 * When a function expression is inferentially typed (section [4.9.3](#4.9.3)) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, the corresponding inferred type arguments to become ***fixed*** and no further candidate inferences are made for them.
-* If *e* is an expression of a function type that contains exactly one generic call signature and no other members, and *T* is a function type with exactly one non-generic call signature and no other members, then any inferences made for type parameters referenced by the parameters of *T*'s call signature are ***fixed***, and *e*'s type is changed to a function type with *e*'s call signature instantiated in the context of *T*'s call signature (section [3.8.5](#3.8.5)).
+* If *e* is an expression of a function type that contains exactly one generic call signature and no other members, and *T* is a function type with exactly one non-generic call signature and no other members, then any inferences made for type parameters referenced by the parameters of *T*'s call signature are ***fixed***, and *e*'s type is changed to a function type with *e*'s call signature instantiated in the context of *T*'s call signature (section [3.10.5](#3.10.5)).
 
 An example:
 
@@ -2696,7 +2755,7 @@ The 'void' operator takes an operand of any type and produces the value 'undefin
 
 ### <a name="4.14.6"/>4.14.6 The typeof Operator
 
-The 'typeof' operator takes an operand of any type and produces a value of the String primitive type. In positions where a type is expected, 'typeof' can also be used in a type query (section [3.6.9](#3.6.9)) to produce the type of an expression.
+The 'typeof' operator takes an operand of any type and produces a value of the String primitive type. In positions where a type is expected, 'typeof' can also be used in a type query (section [3.7.9](#3.7.9)) to produce the type of an expression.
 
 ```TypeScript
 var x = 5;  
@@ -2708,31 +2767,31 @@ In the example above, 'x' is of type 'number', 'y' is of type 'string' because w
 
 ## <a name="4.15"/>4.15 Binary Operators
 
-The subsections that follow specify the compile-time processing rules of the binary operators. In general, if the operands of a binary operator do not meet the stated requirements, a compile-time error occurs and the result of the operation defaults to type any in further processing. Tables that summarize the compile-time processing rules for operands of the Any type, the Boolean, Number, and String primitive types, and all object types and type parameters (the Object column in the tables) are provided.
+The subsections that follow specify the compile-time processing rules of the binary operators. In general, if the operands of a binary operator do not meet the stated requirements, a compile-time error occurs and the result of the operation defaults to type any in further processing. Tables that summarize the compile-time processing rules for operands of the Any type, the Boolean, Number, and String primitive types, and all other types (the Other column in the tables) are provided.
 
 ### <a name="4.15.1"/>4.15.1 The *, /, %, –, &lt;&lt;, >>, >>>, &, ^, and | operators
 
 These operators require their operands to be of type Any, the Number primitive type, or an enum type. Operands of an enum type are treated as having the primitive type Number. If one operand is the `null` or `undefined` value, it is treated as having the type of the other operand. The result is always of the Number primitive type.
 
-||Any|Boolean|Number|String|Object|
+||Any|Boolean|Number|String|Other|
 |:---:|:---:|:---:|:---:|:---:|:---:|
 |Any|Number||Number|||
 |Boolean||||||
 |Number|Number||Number|||
 |String||||||
-|Object||||||
+|Other||||||
 
 ### <a name="4.15.2"/>4.15.2 The + operator
 
-The binary + operator requires both operands to be of the Number primitive type or an enum type, or at least one of the operands to be of type Any or the String primitive type. Operands of an enum type are treated as having the primitive type Number. If one operand is the `null` or `undefined` value, it is treated as having the type of the other operand. If both operands are of the Number primitive type, the result is of the Number primitive type. If one or both operands are of the String primitive type, the result is of the String primitive type. Otherwise, the result is of type Any.
+The binary + operator requires both operands to be of the Number primitive type or an enum type, or at least one of the operands to be of type Any or the String primitive type. Operands of an enum type are treated as having the primitive type Number. If one operand is the `null` or `undefine``d` value, it is treated as having the type of the other operand. If both operands are of the Number primitive type, the result is of the Number primitive type. If one or both operands are of the String primitive type, the result is of the String primitive type. Otherwise, the result is of type Any.
 
-||Any|Boolean|Number|String|Object|
+||Any|Boolean|Number|String|Other|
 |:---:|:---:|:---:|:---:|:---:|:---:|
 |Any|Any|Any|Any|String|Any|
 |Boolean|Any|||String||
 |Number|Any||Number|String||
 |String|String|String|String|String|String|
-|Object|Any|||String||
+|Other|Any|||String||
 
 A value of any type can converted to the String primitive type by adding an empty string:
 
@@ -2746,15 +2805,15 @@ The example above converts the result of 'getValue()' to a string if it isn't a 
 
 ### <a name="4.15.3"/>4.15.3 The &lt;, >, &lt;=, >=, ==, !=, ===, and !== operators
 
-These operators require one operand type to be identical to or a subtype of the other operand type. The result is always of the Boolean primitive type.
+These operators require one or both of the operand types to be assignable to the other. The result is always of the Boolean primitive type.
 
-||Any|Boolean|Number|String|Object|
+||Any|Boolean|Number|String|Other|
 |:---:|:---:|:---:|:---:|:---:|:---:|
 |Any|Boolean|Boolean|Boolean|Boolean|Boolean|
 |Boolean|Boolean|Boolean||||
 |Number|Boolean||Boolean|||
 |String|Boolean|||Boolean||
-|Object|Boolean||||Boolean|
+|Other|Boolean||||Boolean|
 
 ### <a name="4.15.4"/>4.15.4 The instanceof operator
 
@@ -2770,13 +2829,13 @@ The `in` operator requires the left operand to be of type Any, the String primit
 
 The && operator permits the operands to be of any type and produces a result of the same type as the second operand.
 
-||Any|Boolean|Number|String|Object|
+||Any|Boolean|Number|String|Other|
 |:---:|:---:|:---:|:---:|:---:|:---:|
-|Any|Any|Boolean|Number|String|Object|
-|Boolean|Any|Boolean|Number|String|Object|
-|Number|Any|Boolean|Number|String|Object|
-|String|Any|Boolean|Number|String|Object|
-|Object|Any|Boolean|Number|String|Object|
+|Any|Any|Boolean|Number|String|Other|
+|Boolean|Any|Boolean|Number|String|Other|
+|Number|Any|Boolean|Number|String|Other|
+|String|Any|Boolean|Number|String|Other|
+|Other|Any|Boolean|Number|String|Other|
 
 ### <a name="4.15.7"/>4.15.7 The || operator
 
@@ -2786,13 +2845,13 @@ If the || expression is contextually typed (section [4.19](#4.19)), the operands
 
 The type of the result is the union type of the two operand types.
 
-||Any|Boolean|Number|String|Object|
+||Any|Boolean|Number|String|Other|
 |:---:|:---:|:---:|:---:|:---:|:---:|
 |Any|Any|Any|Any|Any|Any|
-|Boolean|Any|Boolean|{ }|{ }|{ }|
-|Number|Any|{ }|Number|{ }|{ }|
-|String|Any|{ }|{ }|String|{ }|
-|Object|Any|{ }|{ }|{ }|Object|
+|Boolean|Any|Boolean|N | B|S | B|B | O|
+|Number|Any|N | B|Number|S | N|N | O|
+|String|Any|S | B|S | N|String|S | O|
+|Other|Any|B | O|N | O|S | O|Other|
 
 ## <a name="4.16"/>4.16 The Conditional Operator
 
@@ -2816,7 +2875,7 @@ An assignment of the form
 v = expr
 ```
 
-requires *v* to be classified as a reference (section [4.1](#4.1)). The *expr* expression is contextually typed (section [4.19](#4.19)) by the type of *v*, and the type of *expr* must be assignable to (section [3.8.4](#3.8.4)) the type of *v*, or otherwise a compile-time error occurs. The result is a value with the type of *expr*.
+requires *v* to be classified as a reference (section [4.1](#4.1)). The *expr* expression is contextually typed (section [4.19](#4.19)) by the type of *v*, and the type of *expr* must be assignable to (section [3.10.4](#3.10.4)) the type of *v*, or otherwise a compile-time error occurs. The result is a value with the type of *expr*.
 
 A compound assignment of the form
 
@@ -3038,7 +3097,7 @@ Variable statements are extended to include optional type annotations.
 A variable declaration introduces a variable with the given name in the containing declaration space. The type associated with a variable is determined as follows:
 
 * If the declaration includes a type annotation, the stated type becomes the type of the variable. If an initializer is present, the initializer expression is contextually typed (section [4.19](#4.19)) by the stated type and must be assignable to the stated type, or otherwise a compile-time error occurs.
-* If the declaration includes an initializer but no type annotation, and if the initializer doesn't directly or indirectly reference the variable, the widened type (section [3.9](#3.9)) of the initializer expression becomes the type of the variable. If the initializer directly or indirectly references the variable, the type of the variable becomes the Any type.
+* If the declaration includes an initializer but no type annotation, and if the initializer doesn't directly or indirectly reference the variable, the widened type (section [3.11](#3.11)) of the initializer expression becomes the type of the variable. If the initializer directly or indirectly references the variable, the type of the variable becomes the Any type.
 * If the declaration includes neither a type annotation nor an initializer, the type of the variable becomes the Any type.
 
 Multiple declarations for the same variable name in the same declaration space are permitted, provided that each declaration associates the same type with the variable.
@@ -3135,7 +3194,7 @@ Use of the 'with' statement in TypeScript is an error, as is the case in ECMAScr
 
 ## <a name="5.9"/>5.9 Switch Statements
 
-In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from (section [3.8.4](#3.8.4)) the type of the 'switch' expression.
+In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from (section [3.10.4](#3.10.4)) the type of the 'switch' expression.
 
 ## <a name="5.10"/>5.10 Throw Statements
 
@@ -3212,8 +3271,8 @@ A function implementation without a return type annotation is said to be an ***i
 
 * If there are no return statements with expressions in *f*'s function body, the inferred return type is Void.
 * Otherwise, if *f*'s function body directly references *f* or references any implicitly typed functions that through this same analysis reference *f*, the inferred return type is Any.
-* Otherwise, if *f* is a contextually typed function expression (section [4.9.3](#4.9.3)), the inferred return type is the union type (section [3.3.4](#3.3.4)) of the types of the return statement expressions in the function body, ignoring return statements with no expressions.
-* Otherwise, the inferred return type is the first of the types of the return statement expressions in the function body that is a supertype (section [3.8.3](#3.8.3)) of each of the others, ignoring return statements with no expressions. A compile-time error occurs if no return statement expression has a type that is a supertype of each of the others.
+* Otherwise, if *f* is a contextually typed function expression (section [4.9.3](#4.9.3)), the inferred return type is the union type (section [3.4](#3.4)) of the types of the return statement expressions in the function body, ignoring return statements with no expressions.
+* Otherwise, the inferred return type is the first of the types of the return statement expressions in the function body that is a supertype (section [3.10.3](#3.10.3)) of each of the others, ignoring return statements with no expressions. A compile-time error occurs if no return statement expression has a type that is a supertype of each of the others.
 
 In the example
 
@@ -3234,7 +3293,7 @@ An explicitly typed function whose return type isn't the Void or the Any type mu
 
 The type of 'this' in a function implementation is the Any type.
 
-In the signature of a function implementation, a parameter can be marked optional by following it with an initializer. When a parameter declaration includes both a type annotation and an initializer, the initializer expression is contextually typed (section [4.19](#4.19)) by the stated type and must be assignable to the stated type, or otherwise a compile-time error occurs. When a parameter declaration has no type annotation but includes an initializer, the type of the parameter is the widened form (section [3.9](#3.9)) of the type of the initializer expression.
+In the signature of a function implementation, a parameter can be marked optional by following it with an initializer. When a parameter declaration includes both a type annotation and an initializer, the initializer expression is contextually typed (section [4.19](#4.19)) by the stated type and must be assignable to the stated type, or otherwise a compile-time error occurs. When a parameter declaration has no type annotation but includes an initializer, the type of the parameter is the widened form (section [3.11](#3.11)) of the type of the initializer expression.
 
 Initializer expressions are evaluated in the scope of the function body but are not permitted to reference local variables and are only permitted to access parameters that are declared to the left of the parameter they initialize, unless the parameter reference occurs in a nested function expression.
 
@@ -3269,7 +3328,7 @@ the local variable 'x' is in scope in the parameter initializer (thus hiding the
 
 ## <a name="6.4"/>6.4 Generic Functions
 
-A function implementation may include type parameters in its signature (section [3.7.2.1](#3.7.2.1)) and is then called a ***generic function***. Type parameters provide a mechanism for expressing relationships between parameter and return types in call operations. Type parameters have no run-time representation—they are purely a compile-time construct.
+A function implementation may include type parameters in its signature (section [3.8.2.1](#3.8.2.1)) and is then called a ***generic function***. Type parameters provide a mechanism for expressing relationships between parameter and return types in call operations. Type parameters have no run-time representation—they are purely a compile-time construct.
 
 Type parameters declared in the signature of a function implementation are in scope in the signature and body of that function implementation.
 
@@ -3287,7 +3346,7 @@ function compare<T extends Comparable>(x: T, y: T): number {
 }
 ```
 
-Note that the 'x' and 'y' parameters are known to be subtypes of the constraint 'Comparable' and therefore have a 'compareTo' member. This is described further in section [3.4.1](#3.4.1).
+Note that the 'x' and 'y' parameters are known to be subtypes of the constraint 'Comparable' and therefore have a 'compareTo' member. This is described further in section [3.5.1](#3.5.1).
 
 The type arguments of a call to a generic function may be explicitly specified in a call operation or may, when possible, be inferred (section [4.12.2](#4.12.2)) from the types of the regular arguments in the call. In the example
 
@@ -3335,13 +3394,13 @@ Interfaces provide the ability to name and parameterize object types and to comp
 
 Interfaces have no run-time representation—they are purely a compile-time construct. Interfaces are particularly useful for documenting and validating the required shape of properties, objects passed as parameters, and objects returned from functions.
 
-Because TypeScript has a structural type system, an interface type with a particular set of members is considered identical to, and can be substituted for, another interface type or object type literal with an identical set of members (see section [3.8.2](#3.8.2)).
+Because TypeScript has a structural type system, an interface type with a particular set of members is considered identical to, and can be substituted for, another interface type or object type literal with an identical set of members (see section [3.10.2](#3.10.2)).
 
 Class declarations may reference interfaces in their implements clause to validate that they provide an implementation of the interfaces.
 
 ## <a name="7.1"/>7.1 Interface Declarations
 
-An interface declaration declares a new named type (section [3.5](#3.5)) by introducing a type name in the containing module.
+An interface declaration declares a new named type (section [3.6](#3.6)) by introducing a type name in the containing module.
 
 &emsp;&emsp;*InterfaceDeclaration:*  
 &emsp;&emsp;&emsp;`interface`&emsp;*Identifier*&emsp;*TypeParameters<sub>opt</sub>*&emsp;*InterfaceExtendsClause<sub>opt</sub>*&emsp;*ObjectType*
@@ -3356,9 +3415,9 @@ An interface declaration declares a new named type (section [3.5](#3.5)) by intr
 &emsp;&emsp;*ClassOrInterfaceType:*  
 &emsp;&emsp;&emsp;*TypeReference*
 
-The *Identifier* of an interface declaration may not be one of the predefined type names (section [3.6.1](#3.6.1)).
+The *Identifier* of an interface declaration may not be one of the predefined type names (section [3.7.1](#3.7.1)).
 
-An interface may optionally have type parameters (section [3.4.1](#3.4.1)) that serve as placeholders for actual types to be provided when the interface is referenced in type references. An interface with type parameters is called a ***generic interface***. The type parameters of a generic interface declaration are in scope in the entire declaration and may be referenced in the *InterfaceExtendsClause* and *ObjectType* body.
+An interface may optionally have type parameters (section [3.5.1](#3.5.1)) that serve as placeholders for actual types to be provided when the interface is referenced in type references. An interface with type parameters is called a ***generic interface***. The type parameters of a generic interface declaration are in scope in the entire declaration and may be referenced in the *InterfaceExtendsClause* and *ObjectType* body.
 
 An interface can inherit from zero or more ***base types*** which are specified in the *InterfaceExtendsClause*. The base types must be type references to class or interface types.
 
@@ -3372,9 +3431,9 @@ The following constraints must be satisfied by an interface declaration or other
 
 * An interface declaration may not, directly or indirectly, specify a base type that originates in the same declaration. In other words an interface cannot, directly or indirectly, be a base type of itself, regardless of type arguments.
 * An interface cannot declare a property with the same name as an inherited private or protected property.
-* Inherited properties with the same name must be identical (section [3.8.2](#3.8.2)).
-* All properties of the interface must satisfy the constraints implied by the index signatures of the interface as specified in section [3.7.4](#3.7.4).
-* The instance type (section [3.5.1](#3.5.1)) of the declared interface must be assignable (section [3.8.4](#3.8.4)) to each of the base type references.
+* Inherited properties with the same name must be identical (section [3.10.2](#3.10.2)).
+* All properties of the interface must satisfy the constraints implied by the index signatures of the interface as specified in section [3.8.4](#3.8.4).
+* The instance type (section [3.6.1](#3.6.1)) of the declared interface must be assignable (section [3.10.4](#3.10.4)) to each of the base type references.
 
 An interface is permitted to inherit identical members from multiple base types and will in that case only contain one occurrence of each particular member.
 
@@ -3477,7 +3536,7 @@ class Location {
 }
 ```
 
-In the above example, 'SelectableControl' contains all of the members of 'Control', including the private 'state' property. Since 'state' is a private member it is only possible for descendants of 'Control' to implement 'SelectableControl'. This is because only descendants of 'Control' will have a 'state' private member that originates in the same declaration, which is a requirement for private members to be compatible (section [3.8](#3.8)).
+In the above example, 'SelectableControl' contains all of the members of 'Control', including the private 'state' property. Since 'state' is a private member it is only possible for descendants of 'Control' to implement 'SelectableControl'. This is because only descendants of 'Control' will have a 'state' private member that originates in the same declaration, which is a requirement for private members to be compatible (section [0](#0)).
 
 Within the 'Control' class it is possible to access the 'state' private member through an instance of 'SelectableControl'. Effectively, a 'SelectableControl' acts like a 'Control' that is known to have a 'select' method. The 'Button' and 'TextBox' classes are subtypes of 'SelectableControl' (because they both inherit from 'Control' and have a 'select' method), but the 'Image' and 'Location' classes are not.
 
@@ -3518,9 +3577,9 @@ Class declarations introduce named types and provide implementations of those ty
 
 A *ClassDeclaration* declares a ***class type*** and a ***constructor function***, both with the name given by *Identifier*, in the containing module. The class type is created from the instance members declared in the class body and the instance members inherited from the base class. The constructor function is created from the constructor declaration, the static member declarations in the class body, and the static members inherited from the base class. The constructor function initializes and returns an instance of the class type.
 
-The *Identifier* of a class declaration may not be one of the predefined type names (section [3.6.1](#3.6.1)).
+The *Identifier* of a class declaration may not be one of the predefined type names (section [3.7.1](#3.7.1)).
 
-A class may optionally have type parameters (section [3.4.1](#3.4.1)) that serve as placeholders for actual types to be provided when the class is referenced in type references. A class with type parameters is called a ***generic class***. The type parameters of a generic class declaration are in scope in the entire declaration and may be referenced in the *ClassHeritage* and *ClassBody*.
+A class may optionally have type parameters (section [3.5.1](#3.5.1)) that serve as placeholders for actual types to be provided when the class is referenced in type references. A class with type parameters is called a ***generic class***. The type parameters of a generic class declaration are in scope in the entire declaration and may be referenced in the *ClassHeritage* and *ClassBody*.
 
 The following example introduces both a named type called 'Point' (the class type) and a member called 'Point' (the constructor function) in the containing module.
 
@@ -3581,7 +3640,7 @@ The following constraints must be satisfied by the class heritage specification 
 
 * If present, the type reference specified in the `extends` clause must denote a class type. Furthermore, the *TypeName* part of the type reference is required to be a reference to the class constructor function when evaluated as an expression.
 * A class declaration may not, directly or indirectly, specify a base class that originates in the same declaration. In other words a class cannot, directly or indirectly, be a base class of itself, regardless of type arguments.
-* The instance type (section [3.5.1](#3.5.1)) of the declared class must be assignable (section [3.8.4](#3.8.4)) to the base type reference and each of the type references listed in the `implements` clause.
+* The instance type (section [3.6.1](#3.6.1)) of the declared class must be assignable (section [3.10.4](#3.10.4)) to the base type reference and each of the type references listed in the `implements` clause.
 * The constructor function type created by the class declaration must be assignable to the base class constructor function type, ignoring construct signatures.
 
 The following example illustrates a situation in which the first rule above would be violated:
@@ -3629,7 +3688,7 @@ The members of a class consist of the members introduced through member declarat
 
 Members are either ***instance members*** or ***static members***.
 
-Instance members are members of the class type (section [8.2.4](#8.2.4)) and its associated instance type. Within constructors, instance member functions, and instance member accessors, the type of `this` is the instance type (section [3.5.1](#3.5.1)) of the class.
+Instance members are members of the class type (section [8.2.4](#8.2.4)) and its associated instance type. Within constructors, instance member functions, and instance member accessors, the type of `this` is the instance type (section [3.6.1](#3.6.1)) of the class.
 
 Static members are declared using the `static` modifier and are members of the constructor function type (section [8.2.5](#8.2.5)). Within static member functions and static member accessors, the type of `this` is the constructor function type.
 
@@ -3677,7 +3736,7 @@ In class 'A', the accesses to 'x' are permitted because 'x' is declared in 'A', 
 
 A derived class ***inherits*** all members from its base class it doesn't ***override***. Inheritance means that a derived class implicitly contains all non-overridden members of the base class. Only public and protected property members can be overridden.
 
-A property member in a derived class is said to override a property member in a base class when the derived class property member has the same name and kind (instance or static) as the base class property member. The type of an overriding property member must be assignable (section [3.8.4](#3.8.4)) to the type of the overridden property member, or otherwise a compile-time error occurs.
+A property member in a derived class is said to override a property member in a base class when the derived class property member has the same name and kind (instance or static) as the base class property member. The type of an overriding property member must be assignable (section [3.10.4](#3.10.4)) to the type of the overridden property member, or otherwise a compile-time error occurs.
 
 Base class instance member functions can be overridden by derived class instance member functions, but not by other kinds of members.
 
@@ -3685,11 +3744,11 @@ Base class instance member variables and accessors can be overridden by derived 
 
 Base class static property members can be overridden by derived class static property members of any kind as long as the types are compatible, as described above.
 
-An index member in a derived class is said to override an index member in a base class when the derived class index member is of the same index kind (string or numeric) as the base class index member. The type of an overriding index member must be assignable (section [3.8.4](#3.8.4)) to the type of the overridden index member, or otherwise a compile-time error occurs.
+An index member in a derived class is said to override an index member in a base class when the derived class index member is of the same index kind (string or numeric) as the base class index member. The type of an overriding index member must be assignable (section [3.10.4](#3.10.4)) to the type of the overridden index member, or otherwise a compile-time error occurs.
 
 ### <a name="8.2.4"/>8.2.4 Class Types
 
-A class declaration declares a new named type (section [3.5](#3.5)) called a class type. Within the constructor and member functions of a class, the type of `this` is the instance type (section [3.5.1](#3.5.1)) of this class type. The class type has the following members:
+A class declaration declares a new named type (section [3.6](#3.6)) called a class type. Within the constructor and member functions of a class, the type of `this` is the instance type (section [3.6.1](#3.6.1)) of this class type. The class type has the following members:
 
 * A property for each instance member variable declaration in the class body.
 * A property of a function type for each instance member function declaration in the class body.
@@ -3698,7 +3757,7 @@ A class declaration declares a new named type (section [3.5](#3.5)) called a cla
 * An index signature for each instance index member declaration in the class body.
 * All base class instance type property or index members that are not overridden in the class.
 
-All instance property members (including those that are private or protected) of a class must satisfy the constraints implied by the index members of the class as specified in section [3.7.4](#3.7.4).
+All instance property members (including those that are private or protected) of a class must satisfy the constraints implied by the index members of the class as specified in section [3.8.4](#3.8.4).
 
 In the example
 
@@ -4078,14 +4137,14 @@ Get and set accessors are emitted as calls to 'Object.defineProperty' in the gen
 
 ## <a name="8.5"/>8.5 Index Member Declarations
 
-An index member declaration introduces an index signature (section [3.7.4](#3.7.4)) in the class instance type.
+An index member declaration introduces an index signature (section [3.8.4](#3.8.4)) in the class instance type.
 
 &emsp;&emsp;*IndexMemberDeclaration:*  
 &emsp;&emsp;&emsp;*IndexSignature*&emsp;`;`
 
 Index member declarations have no body and cannot specify an accessibility modifier.
 
-A class declaration can have at most one string index member declaration and one numeric index member declaration. All instance property members of a class must satisfy the constraints implied by the index members of the class as specified in section [3.7.4](#3.7.4).
+A class declaration can have at most one string index member declaration and one numeric index member declaration. All instance property members of a class must satisfy the constraints implied by the index members of the class as specified in section [3.8.4](#3.8.4).
 
 It is not possible to declare index members for the static side of a class.
 
@@ -4289,7 +4348,7 @@ An enum declaration declares an ***enum type*** and an ***enum object*** in the 
 
 The enum type and enum object declared by an *EnumDeclaration* both have the name given by the *Identifier* of the declaration. The enum type is a distinct subtype of the Number primitive type. The enum object is a variable of an anonymous object type containing a set of properties, all of the enum type, corresponding to the values declared for the enum type in the body of the declaration. The enum object's type furthermore includes a numeric index signature with the signature '[x: number]: string'.
 
-The *Identifier* of an enum declaration may not be one of the predefined type names (section [3.6.1](#3.6.1)).
+The *Identifier* of an enum declaration may not be one of the predefined type names (section [3.7.1](#3.7.1)).
 
 The example
 
@@ -4443,7 +4502,7 @@ An internal module declaration declares a namespace name and, in the case of an 
 
 Internal modules are either ***instantiated*** or ***non-instantiated***. A non-instantiated module is an internal module containing only interface types and other non-instantiated modules. An instantiated module is an internal module that doesn't meet this definition. In intuitive terms, an instantiated module is one for which a module object instance is created, whereas a non-instantiated module is one for which no code is generated.
 
-When a module identifier is referenced as a *ModuleName* (section [3.6.2](#3.6.2)) it denotes a container of module and type names, and when a module identifier is referenced as a *PrimaryExpression* (section [4.3](#4.3)) it denotes the singleton module instance. For example:
+When a module identifier is referenced as a *ModuleName* (section [3.7.2](#3.7.2)) it denotes a container of module and type names, and when a module identifier is referenced as a *PrimaryExpression* (section [4.3](#4.3)) it denotes the singleton module instance. For example:
 
 ```TypeScript
 module M {  
@@ -4499,6 +4558,7 @@ The body of an internal module corresponds to a function that is executed once t
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*FunctionDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*ClassDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*InterfaceDeclaration*  
+&emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*TypeAliasDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*EnumDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*ModuleDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*ImportDeclaration*  
@@ -4560,7 +4620,7 @@ When an import statement includes an export modifier, all meanings of the local 
 
 An export declaration declares an externally accessible module member. An export declaration is simply a regular declaration prefixed with the keyword `export`.
 
-Exported class, interface, and enum types can be accessed as a *TypeName* (section [3.6.2](#3.6.2)) of the form *M.T*, where *M* is a reference to the containing module and *T* is the exported type name. Likewise, as part of a *TypeName*, exported modules can be accessed as a *ModuleName* of the form *M.N*, where *M* is a reference to the containing module and *N* is the exported module.
+Exported class, interface, and enum types can be accessed as a *TypeName* (section [3.7.2](#3.7.2)) of the form *M.T*, where *M* is a reference to the containing module and *T* is the exported type name. Likewise, as part of a *TypeName*, exported modules can be accessed as a *ModuleName* of the form *M.N*, where *M* is a reference to the containing module and *N* is the exported module.
 
 Exported variable, function, class, enum, module, and import alias declarations become properties on the module instance and together establish the module's ***instance type***. This unnamed type has the following members:
 
@@ -4571,7 +4631,7 @@ Exported variable, function, class, enum, module, and import alias declarations 
 * A property of an object type for each exported instantiated module declaration.
 * A property for each exported import alias that references a variable, function, class, enum, or instantiated module.
 
-An exported member depends on a (possibly empty) set of named types (section [3.5](#3.5)). Those named types must be at least as accessible as the exported member, or otherwise an error occurs.
+An exported member depends on a (possibly empty) set of named types (section [3.6](#3.6)). Those named types must be at least as accessible as the exported member, or otherwise an error occurs.
 
 The named types upon which a member depends are the named types occurring in the transitive closure of the ***directly depends on*** relationship defined as follows:
 
@@ -4756,13 +4816,14 @@ A TypeScript ***program*** consists of one or more source files that are either 
 &emsp;&emsp;&emsp;*ExportAssignment*  
 &emsp;&emsp;&emsp;*AmbientExternalModuleDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*InterfaceDeclaration*  
+&emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*TypeAliasDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*ImportDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*AmbientDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*ExternalImportDeclaration*
 
 When a TypeScript program is compiled, all of the program's source files are processed together. Statements and declarations in different source files can depend on each other, possibly in a circular fashion. By default, a JavaScript output file is generated for each implementation source file in a compilation, but no output is generated from declaration source files.
 
-The source elements permitted in a TypeScript implementation source file are a superset of those supported by JavaScript. Specifically, TypeScript extends the JavaScript grammar's existing *VariableDeclaration* (section [5.1](#5.1)) and *FunctionDeclaration* (section [6.1](#6.1)) productions, and adds *InterfaceDeclaration* (section [7.1](#7.1)), *ClassDeclaration* (section [8.1](#8.1)), *EnumDeclaration* (section [9.1](#9.1)), *ModuleDeclaration* (section [10.1](#10.1)), *ImportDeclaration* (section [10.3](#10.3)), *ExternalImportDeclaration* (section [11.2.2](#11.2.2)), *ExportAssignment* (section [11.2.4](#11.2.4)), *AmbientDeclaration* (section [12.1](#12.1)), and *AmbientExternalModuleDeclaration* (section [12.2](#12.2)) productions.
+The source elements permitted in a TypeScript implementation source file are a superset of those supported by JavaScript. Specifically, TypeScript extends the JavaScript grammar's existing *VariableDeclaration* (section [5.1](#5.1)) and *FunctionDeclaration* (section [6.1](#6.1)) productions, and adds *TypeAliasDeclaration* (section [3.9](#3.9)), *InterfaceDeclaration* (section [7.1](#7.1)), *ClassDeclaration* (section [8.1](#8.1)), *EnumDeclaration* (section [9.1](#9.1)), *ModuleDeclaration* (section [10.1](#10.1)), *ImportDeclaration* (section [10.3](#10.3)), *ExternalImportDeclaration* (section [11.2.2](#11.2.2)), *ExportAssignment* (section [11.2.4](#11.2.4)), *AmbientDeclaration* (section [12.1](#12.1)), and *AmbientExternalModuleDeclaration* (section [12.2](#12.2)) productions.
 
 Declaration source files are restricted to contain declarations only. Declaration source files can be used to declare the static type information associated with existing JavaScript code in an adjunct manner. They are entirely optional but enable the TypeScript compiler and tools to provide better verification and assistance when integrating existing JavaScript code and libraries in a TypeScript application.
 
@@ -4794,6 +4855,7 @@ External modules are written as separate source files that contain at least one 
 * top-level exported *FunctionDeclaration*,
 * top-level exported *ClassDeclaration*,
 * top-level exported *InterfaceDeclaration*,
+* top-level exported *TypeAliasDeclaration*,
 * top-level exported *EnumDeclaration*,
 * top-level exported *ModuleDeclaration*,
 * top-level exported *ImportDeclaration*, or
@@ -5018,7 +5080,7 @@ An ambient function declaration introduces a function in the containing declarat
 &emsp;&emsp;*AmbientFunctionDeclaration:*  
 &emsp;&emsp;&emsp;`function`&emsp;*Identifier*&emsp;*CallSignature*&emsp;`;`
 
-Ambient functions may be overloaded by specifying multiple ambient function declarations with the same name, but it is an error to declare multiple overloads that are considered identical (section [3.8.2](#3.8.2)) or differ only in their return types.
+Ambient functions may be overloaded by specifying multiple ambient function declarations with the same name, but it is an error to declare multiple overloads that are considered identical (section [3.10.2](#3.10.2)) or differ only in their return types.
 
 Ambient function declarations cannot specify a function bodies and do not permit default parameter values.
 
@@ -5308,6 +5370,9 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;*MethodSignature:*  
 &emsp;&emsp;&emsp;*PropertyName*&emsp;`?`*<sub>opt</sub>*&emsp;*CallSignature*
 
+&emsp;&emsp;*TypeAliasDeclaration:*  
+&emsp;&emsp;&emsp;`type`&emsp;*Identifier*&emsp;`=`&emsp;*Type*&emsp;`;`
+
 ## <a name="A.2"/>A.2 Expressions
 
 &emsp;&emsp;*PropertyAssignment:*  *( Modified )*  
@@ -5515,6 +5580,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*FunctionDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*ClassDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*InterfaceDeclaration*  
+&emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*TypeAliasDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*EnumDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*ModuleDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*ImportDeclaration*  
@@ -5557,6 +5623,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*ExportAssignment*  
 &emsp;&emsp;&emsp;*AmbientExternalModuleDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*InterfaceDeclaration*  
+&emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*TypeAliasDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*ImportDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*AmbientDeclaration*  
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*ExternalImportDeclaration*
