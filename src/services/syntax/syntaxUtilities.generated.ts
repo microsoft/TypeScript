@@ -34,6 +34,8 @@ module TypeScript {
             case SyntaxKind.GenericType:
             case SyntaxKind.TypeQuery:
             case SyntaxKind.TupleType:
+            case SyntaxKind.UnionType:
+            case SyntaxKind.ParenthesizedType:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.ClassDeclaration:

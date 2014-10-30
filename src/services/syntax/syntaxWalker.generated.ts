@@ -109,6 +109,18 @@ module TypeScript {
             this.visitToken(node.closeBracketToken);
         }
 
+        public visitUnionType(node: UnionTypeSyntax): void {
+            this.visitNodeOrToken(node.left);
+            this.visitToken(node.barToken);
+            this.visitNodeOrToken(node.right);
+        }
+
+        public visitParenthesizedType(node: ParenthesizedTypeSyntax): void {
+            this.visitToken(node.openParenToken);
+            this.visitNodeOrToken(node.type);
+            this.visitToken(node.closeParenToken);
+        }
+
         public visitInterfaceDeclaration(node: InterfaceDeclarationSyntax): void {
             this.visitList(node.modifiers);
             this.visitToken(node.interfaceKeyword);

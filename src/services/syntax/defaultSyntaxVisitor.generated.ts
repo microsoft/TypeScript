@@ -46,6 +46,14 @@ module TypeScript {
             return this.defaultVisit(node);
         }
 
+        public visitUnionType(node: UnionTypeSyntax): any {
+            return this.defaultVisit(node);
+        }
+
+        public visitParenthesizedType(node: ParenthesizedTypeSyntax): any {
+            return this.defaultVisit(node);
+        }
+
         public visitInterfaceDeclaration(node: InterfaceDeclarationSyntax): any {
             return this.defaultVisit(node);
         }

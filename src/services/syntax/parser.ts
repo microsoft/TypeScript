@@ -3533,6 +3533,38 @@ module TypeScript.Parser {
         }
 
         function tryParseType(): ITypeSyntax {
+            if (isFunctionType()) {
+                return parseFunctionType();
+            }
+
+            if (currentToken().kind() === SyntaxKind.NewKeyword) {
+                return parseConstructorType();
+            }
+
+            return tryParseUnionTypeOrHigher();
+        }
+
+        function tryParseUnionTypeOrHigher(): ITypeSyntax {
+            var type = tryParsePrimaryType();
+
+            if (type) {
+                var barToken: ISyntaxToken;
+                while ((barToken = currentToken()).kind() === SyntaxKind.BarToken) {
+                    consumeToken(barToken);
+                    var right = parsePrimaryType();
+
+                    type = new syntaxFactory.UnionTypeSyntax(parseNodeData, type, barToken, right);
+                } 
+            }
+
+            return type;
+        }
+
+        function parsePrimaryType(): ITypeSyntax {
+            return tryParsePrimaryType() || eatIdentifierToken(DiagnosticCode.Type_expected);
+        }
+        
+        function tryParsePrimaryType(): ITypeSyntax {
             // First consume any underlying element type.
             var type = tryParseNonArrayType();
 
@@ -3573,16 +3605,18 @@ module TypeScript.Parser {
                     }
 
                     return consumeToken(_currentToken);
-                case SyntaxKind.OpenParenToken:
-                case SyntaxKind.LessThanToken:    return tryParseFunctionType();
                 case SyntaxKind.VoidKeyword:      return consumeToken(_currentToken);
+                case SyntaxKind.OpenParenToken:   return parseParenthesizedType(_currentToken);
                 case SyntaxKind.OpenBraceToken:   return parseObjectType();
-                case SyntaxKind.NewKeyword:       return parseConstructorType();
                 case SyntaxKind.TypeOfKeyword:    return parseTypeQuery(_currentToken);
                 case SyntaxKind.OpenBracketToken: return parseTupleType(_currentToken);
             }
 
             return tryParseNameOrGenericType();
+        }
+
+        function parseParenthesizedType(openParenToken: ISyntaxToken): ParenthesizedTypeSyntax {
+            return new syntaxFactory.ParenthesizedTypeSyntax(parseNodeData, consumeToken(openParenToken), parseType(), eatToken(SyntaxKind.CloseParenToken));
         }
 
         function tryParseNameOrGenericType(): ITypeSyntax {
@@ -3605,18 +3639,71 @@ module TypeScript.Parser {
                 : new syntaxFactory.GenericTypeSyntax(parseNodeData, name, typeArgumentList);
         }
 
-        function tryParseFunctionType(): FunctionTypeSyntax {
-            var typeParameterList = tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false);
-            var parameterList: ParameterListSyntax = undefined;
-            if (typeParameterList === undefined) {
-                parameterList = tryParseParameterList();
-                if (parameterList === undefined) {
-                    return undefined;
+        function isFunctionType(): boolean {
+            var token0 = currentToken();
+            var token0Kind = token0.kind();
+
+            // If we see a  <  then we consider ourselves to be definitely in a (generic) function type.
+            if (token0Kind === SyntaxKind.LessThanToken) {
+                return true;
+            }
+
+            // If we don't see a  <  then we have to see an open paren for this to be a function 
+            // type.  However, an open paren may also start a parenthesized type.  So we need to
+            // do some lookahead to see what we've actually got.  If we don't see enough to be
+            // sure that it's a function type, then we go ahead with the assumption that it's a 
+            // parenthesized type.
+            if (token0Kind === SyntaxKind.OpenParenToken) {
+                var token1 = peekToken(1);
+                var token1Kind = token1.kind();
+
+                if (token1Kind === SyntaxKind.CloseParenToken || token1Kind === SyntaxKind.DotDotDotToken) {
+                    // () 
+                    // (...
+                    //
+                    // Both are definitely function types, and could not be paren types.
+                    return true;
+                }
+
+                if (isModifierKind(token1Kind) || isIdentifier(token1)) {
+                    // (id
+                    // could be a function type or a parenthesized type.
+
+                    var token2 = peekToken(2);
+                    var token2Kind = token2.kind();
+
+                    if (token2Kind === SyntaxKind.ColonToken ||
+                        token2Kind === SyntaxKind.CommaToken ||
+                        token2Kind === SyntaxKind.QuestionToken ||
+                        token2Kind === SyntaxKind.EqualsToken ||
+                        isIdentifier(token2) ||
+                        isModifierKind(token2Kind)) {
+                        // ( id :
+                        // ( id ,
+                        // ( id ?
+                        // ( id =
+                        // ( modifier id
+                        //
+                        // All of these are definitely a function type and not a parenthesized type.
+                        return true;
+                    }
+
+                    if (token2Kind === SyntaxKind.CloseParenToken) {
+                        // ( id )
+                        //
+                        // Only a function type if we see an arrow following it.
+                        return peekToken(3).kind() === SyntaxKind.EqualsGreaterThanToken;
+                    }
                 }
             }
-            else {
-                parameterList = parseParameterList();
-            }
+
+            // Anything else is a parenthesized type.
+            return false;
+        }
+
+        function parseFunctionType(): FunctionTypeSyntax {
+            var typeParameterList = tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false);
+            var parameterList = parseParameterList();
 
             return new syntaxFactory.FunctionTypeSyntax(parseNodeData,
                 typeParameterList, parameterList, eatToken(SyntaxKind.EqualsGreaterThanToken), parseType());

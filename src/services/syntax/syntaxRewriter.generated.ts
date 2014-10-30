@@ -123,6 +123,20 @@ module TypeScript {
                 this.visitToken(node.closeBracketToken));
         }
 
+        public visitUnionType(node: UnionTypeSyntax): any {
+            return node.update(
+                <ITypeSyntax>this.visitNodeOrToken(node.left),
+                this.visitToken(node.barToken),
+                <ITypeSyntax>this.visitNodeOrToken(node.right));
+        }
+
+        public visitParenthesizedType(node: ParenthesizedTypeSyntax): any {
+            return node.update(
+                this.visitToken(node.openParenToken),
+                <ITypeSyntax>this.visitNodeOrToken(node.type),
+                this.visitToken(node.closeParenToken));
+        }
+
         public visitInterfaceDeclaration(node: InterfaceDeclarationSyntax): any {
             return node.update(
                 this.visitList(node.modifiers),

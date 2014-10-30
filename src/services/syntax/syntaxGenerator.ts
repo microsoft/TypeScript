@@ -3,6 +3,7 @@
 ///<reference path='..\..\services\core\stringUtilities.ts' />
 ///<reference path='syntaxFacts.ts' />
 ///<reference path='syntaxKind.ts' />
+///<reference path='..\..\..\tests\fidelity\es5compat.ts' />
 
 // Adds argument checking to the generated nodes.  Argument checking appears to slow things down
 // parsing about 7%.  If we want to get that perf back, we can always remove this.
@@ -363,6 +364,28 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'openBracketToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'types', isSeparatedList: true, elementType: 'ITypeSyntax' },
             <any>{ name: 'closeBracketToken', isToken: true, excludeFromAST: true }
+        ],
+        isTypeScriptSpecific: true
+    },
+    <any> {
+        name: 'UnionTypeSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['ITypeSyntax'],
+        children: [
+            <any>{ name: 'left', type: 'ITypeSyntax' },
+            <any>{ name: 'barToken', isToken: true, excludeFromAST: true },
+            <any>{ name: 'right', type: 'ITypeSyntax' }
+        ],
+        isTypeScriptSpecific: true
+    },
+    <any> {
+        name: 'ParenthesizedTypeSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['ITypeSyntax'],
+        children: [
+            <any>{ name: 'openParenToken', isToken: true, excludeFromAST: true },
+            <any>{ name: 'type', type: 'ITypeSyntax' },
+            <any>{ name: 'closeParenToken', isToken: true, excludeFromAST: true }
         ],
         isTypeScriptSpecific: true
     },
