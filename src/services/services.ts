@@ -4549,7 +4549,7 @@ module ts {
                     if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
                         return SemanticMeaning.Namespace | SemanticMeaning.Value;
                     }
-                    else if (isInstantiated(node, /*checkConstEnums*/ true)) {
+                    else if (isInstantiated(node, /*treatConstEnumsAsValues*/ false)) {
                         return SemanticMeaning.Namespace | SemanticMeaning.Value;
                     }
                     else {
@@ -4826,7 +4826,7 @@ module ts {
                  */
                 function hasValueSideModule(symbol: Symbol): boolean {
                     return forEach(symbol.declarations, declaration => {
-                        return declaration.kind === SyntaxKind.ModuleDeclaration && isInstantiated(declaration, /*checkConstEnums*/ true);
+                        return declaration.kind === SyntaxKind.ModuleDeclaration && isInstantiated(declaration, /*treatConstEnumsAsValues*/ false);
                     });
                 }
             }

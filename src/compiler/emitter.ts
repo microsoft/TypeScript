@@ -1838,7 +1838,7 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (!isInstantiated(node, /*checkConstEnums*/ true)) {
+                if (!isInstantiated(node, /*treatConstEnumsAsValues*/ false)) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
                 emitLeadingComments(node);
@@ -1890,7 +1890,7 @@ module ts {
                     // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
                     // - current file is not external module
                     // - import declaration is top level and target is value imported by entity name
-                    emitImportDeclaration = !isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportedViaEntityName(node);
+                    emitImportDeclaration = !isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportWithEntityName(node);
                 }
 
                 if (emitImportDeclaration) {

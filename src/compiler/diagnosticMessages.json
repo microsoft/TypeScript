@@ -1409,7 +1409,7 @@
         "category": "Error",
         "code": 4083
     },
-    "'const' enums can only be used in property access expressions.": {
+    "'const' enums can only be used in property access/index access expressions and as right hand side in import declarations/export assignments.": {
         "category": "Error",
         "code": 4084
     },

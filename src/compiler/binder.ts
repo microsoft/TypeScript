@@ -5,14 +5,14 @@
 
 module ts {
 
-    export function isInstantiated(node: Node, checkConstEnums: boolean): boolean {
+    export function isInstantiated(node: Node, treatConstEnumsAsValues: boolean): boolean {
         // A module is uninstantiated if it contains only 
         // 1. interface declarations
         if (node.kind === SyntaxKind.InterfaceDeclaration) {
             return false;
         }
         // 2. const enum declarations don't make module instantiated
-        else if (checkConstEnums && node.kind === SyntaxKind.EnumDeclaration && isConstEnumDeclaration(<EnumDeclaration>node)) {
+        else if (!treatConstEnumsAsValues && node.kind === SyntaxKind.EnumDeclaration && isConstEnumDeclaration(<EnumDeclaration>node)) {
             return false;
         }
         // 3. non - exported import declarations
@@ -20,10 +20,10 @@ module ts {
             return false;
         }
         // 4. other uninstantiated module declarations.
-        else if (node.kind === SyntaxKind.ModuleBlock && !forEachChild(node, n => isInstantiated(n, checkConstEnums))) {
+        else if (node.kind === SyntaxKind.ModuleBlock && !forEachChild(node, n => isInstantiated(n, treatConstEnumsAsValues))) {
             return false;
         }
-        else if (node.kind === SyntaxKind.ModuleDeclaration && !isInstantiated((<ModuleDeclaration>node).body, checkConstEnums)) {
+        else if (node.kind === SyntaxKind.ModuleDeclaration && !isInstantiated((<ModuleDeclaration>node).body, treatConstEnumsAsValues)) {
             return false;
         }
         else {
@@ -252,7 +252,7 @@ module ts {
             if (node.name.kind === SyntaxKind.StringLiteral) {
                 bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
             }
-            else if (isInstantiated(node, /*checkConstEnums*/ false)) {
+            else if (isInstantiated(node, /*treatConstEnumsAsValues*/ true)) {
                 bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
             }
             else {
@@ -368,10 +368,12 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.EnumDeclaration:
-                    var enumIsConst = isConstEnumDeclaration(<EnumDeclaration>node);
-                    var flags = enumIsConst ? SymbolFlags.Enum | SymbolFlags.ConstEnum : SymbolFlags.Enum;
-                    var excludes = enumIsConst ? SymbolFlags.ConstEnumExcludes : SymbolFlags.EnumExcludes;
-                    bindDeclaration(<Declaration>node, flags, excludes, /*isBlockScopeContainer*/ false);
+                    if (isConstEnumDeclaration(<EnumDeclaration>node)) {
+                        bindDeclaration(<Declaration>node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes, /*isBlockScopeContainer*/ false);
+                    }
+                    else {
+                        bindDeclaration(<Declaration>node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes, /*isBlockScopeContainer*/ false);
+                    }
                     break;
                 case SyntaxKind.ModuleDeclaration:
                     bindModuleDeclaration(<ModuleDeclaration>node);
