@@ -427,6 +427,20 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.closeBracketToken);
         }
 
+        public visitParenthesizedType(node: ParenthesizedTypeSyntax): void {
+            this.appendToken(node.openParenToken);
+            this.appendElement(node.type);
+            this.appendToken(node.closeParenToken);
+        }
+
+        public visitUnionType(node: UnionTypeSyntax): void {
+            this.appendElement(node.left);
+            this.ensureSpace();
+            this.appendToken(node.barToken);
+            this.ensureSpace();
+            this.appendElement(node.right);
+        }
+
         public visitConstructorType(node: ConstructorTypeSyntax): void {
             this.appendToken(node.newKeyword);
             this.ensureSpace();

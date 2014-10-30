@@ -159,6 +159,8 @@ module TypeScript {
         GenericType,
         TypeQuery,
         TupleType,
+        UnionType,
+        ParenthesizedType,
 
         // Module elements.
         InterfaceDeclaration,
