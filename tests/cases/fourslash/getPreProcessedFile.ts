@@ -25,7 +25,7 @@ verify.errorExistsBetweenMarkers("1", "2");
 verify.errorExistsBetweenMarkers("3", "4");
 verify.errorExistsBetweenMarkers("5", "6");
 verify.errorExistsBetweenMarkers("7", "8");
-verify.errorExistsBetweenMarkers("9", "10");
+verify.errorExistsBetweenMarkers("9", "10");  // At this position,  there are two diagnostic messages: ';' expected, Cannot find name 'requi' 
 verify.errorExistsBetweenMarkers("11", "12");
 
 

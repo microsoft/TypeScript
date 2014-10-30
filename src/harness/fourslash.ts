@@ -284,6 +284,16 @@ module FourSlash {
         private scenarioActions: string[] = [];
         private taoInvalidReason: string = null;
 
+        private inputFiles: ts.Map<string> = {};  // Map between inputFile's filename and its content for easily looking up when resolving references
+        
+        // Add input file which has matched file name with the given reference-file path.
+        // This is necessary when resolveReference flag is specified
+        private addMatchedInputFile(referenceFilePath: string) {
+            var inputFile = this.inputFiles[referenceFilePath];
+            if (inputFile && !Harness.isLibraryFile(referenceFilePath)) {
+                this.languageServiceShimHost.addScript(referenceFilePath, inputFile);
+            }
+        }
 
         constructor(public testData: FourSlashData) {
             // Initialize the language service with all the scripts
@@ -293,10 +303,11 @@ module FourSlash {
             var compilationSettings = convertGlobalOptionsToCompilationSettings(this.testData.globalOptions);
             this.languageServiceShimHost.setCompilationSettings(compilationSettings);
 
-            var inputFiles: { unitName: string; content: string }[] = [];
             var startResolveFileRef: FourSlashFile = undefined;
 
-            testData.files.forEach(file => {
+            ts.forEach(testData.files, file => {
+                // Create map between fileName and its content for easily looking up when resolveReference flag is specified
+                this.inputFiles[file.fileName] = file.content;
                 if (!startResolveFileRef && file.fileOptions[testOptMetadataNames.resolveReference]) {
                     startResolveFileRef = file;
                 } else if (startResolveFileRef) {
@@ -304,21 +315,6 @@ module FourSlash {
                     throw new Error("There exists a Fourslash file which has resolveReference flag specified; remove duplicated resolveReference flag");
                 }
             });
-
-            // NEWTODO: disable resolution for now.
-            // If the last unit contains require( or /// reference then consider it the only input file
-            // and the rest will be added via resolution. If not, then assume we have multiple files
-            // with 0 references in any of them. We could be smarter here to allow scenarios like
-            // 2 files without references and 1 file with a reference but we have 0 tests like that
-            // at the moment and an exhaustive search of the test files for that content could be quite slow.
-            var lastFile = testData.files[testData.files.length - 1];
-            //if (/require\(/.test(lastFile.content) || /reference\spath/.test(lastFile.content)) {
-            //    inputFiles.push({ unitName: lastFile.fileName, content: lastFile.content });
-            //} else {
-            inputFiles = testData.files.map(file => {
-                return { unitName: file.fileName, content: file.content };
-            });
-            //}
 
             if (startResolveFileRef) {
                 // Add the entry-point file itself into the languageServiceShimHost
@@ -329,36 +325,35 @@ module FourSlash {
                 var resolvedResult = jsonResolvedResult.result;
                 var referencedFiles: ts.IFileReference[] = resolvedResult.referencedFiles;
                 var importedFiles: ts.IFileReference[] = resolvedResult.importedFiles;
-                referencedFiles.forEach(refFile => {
-                    inputFiles.forEach(inputFile => {
-                        // Fourslash insert tests/cases/fourslash into inputFile.unitName so we will properly append the same base directory to refFile path
-                        var appendRefFilePath = "tests/cases/fourslash/" + refFile.path;
-                        if (appendRefFilePath === inputFile.unitName && !Harness.isLibraryFile(inputFile.unitName)) {
-                            this.languageServiceShimHost.addScript(inputFile.unitName, inputFile.content);
-                        }
-                    });
+
+                // Add triple reference files into language-service host
+                ts.forEach(referencedFiles, referenceFile => {
+                    // Fourslash insert tests/cases/fourslash into inputFile.unitName so we will properly append the same base directory to refFile path
+                    var referenceFilePath = "tests/cases/fourslash/" + referenceFile.path;
+                    this.addMatchedInputFile(referenceFilePath);
                 });
-                importedFiles.forEach(importedFile => {
-                    inputFiles.forEach(inputFile => {
-                        // Fourslash insert tests/cases/fourslash into inputFile.unitName and import statement doesn't require ".ts"
-                        // so convert them before making appropriate comparison
-                        var appendRefFilePath = "tests/cases/fourslash/" + importedFile.path + ".ts";
-                        if (appendRefFilePath === inputFile.unitName && !Harness.isLibraryFile(inputFile.unitName)) {
-                            this.languageServiceShimHost.addScript(inputFile.unitName, inputFile.content);
-                        }
-                    });
+
+                // Add import files into language-service host
+                ts.forEach(importedFiles, importedFile => {
+                    // Fourslash insert tests/cases/fourslash into inputFile.unitName and import statement doesn't require ".ts"
+                    // so convert them before making appropriate comparison
+                    var importedFilePath = "tests/cases/fourslash/" + importedFile.path + ".ts";
+                    this.addMatchedInputFile(importedFilePath);
                 });
+
+                // Check if no-default-lib flag is false and if so add default library
+                if (!resolvedResult.isLibFile) {
+                    this.languageServiceShimHost.addDefaultLibrary();
+                }
             } else {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
-                inputFiles.forEach(file => {
-                    if (!Harness.isLibraryFile(file.unitName)) {
-                        this.languageServiceShimHost.addScript(file.unitName, file.content);
+                ts.forEachKey(this.inputFiles, fileName => {
+                    if (!Harness.isLibraryFile(fileName)) {
+                        this.languageServiceShimHost.addScript(fileName, this.inputFiles[fileName]);
                     }
                 });
+                this.languageServiceShimHost.addDefaultLibrary();
             }
-
-            this.languageServiceShimHost.addDefaultLibrary();
-
 
             // Sneak into the language service and get its compiler so we can examine the syntax trees
             this.languageService = this.languageServiceShimHost.getLanguageService().languageService;

@@ -1960,7 +1960,6 @@ module ts {
             processImport();
         }
         processTripleSlashDirectives();
-        // TODO (yuisu) : remove diagnostics array
         return { referencedFiles: referencedFiles, importedFiles: importedFiles, isLibFile: isNoDefaultLib };
     }
 

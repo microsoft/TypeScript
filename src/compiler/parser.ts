@@ -642,9 +642,9 @@ module ts {
     }
 
     interface ReferencePathMatchResult {
-        fileReference: FileReference
-        diagnostic: DiagnosticMessage
-        isNoDefaultLib: boolean
+        fileReference?: FileReference
+        diagnostic?: DiagnosticMessage
+        isNoDefaultLib?: boolean
     }
 
     export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
@@ -653,8 +653,6 @@ module ts {
         if (simpleReferenceRegEx.exec(comment)) {
             if (isNoDefaultLibRegEx.exec(comment)) {
                 return {
-                    fileReference: undefined,
-                    diagnostic: undefined,
                     isNoDefaultLib: true
                 }
             }
@@ -670,13 +668,11 @@ module ts {
                     };
                     return {
                         fileReference: fileRef,
-                        diagnostic: undefined,
                         isNoDefaultLib: false
                     };
                 }
                 else {
                     return {
-                        fileReference: undefined,
                         diagnostic: Diagnostics.Invalid_reference_directive_syntax,
                         isNoDefaultLib: false
                     };
