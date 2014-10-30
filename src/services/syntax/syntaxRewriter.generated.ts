@@ -15,13 +15,13 @@ module TypeScript {
         }
 
         public visitList<T extends ISyntaxNodeOrToken>(list: T[]): T[] {
-            var newItems: T[] = undefined;
+            var newItems: T[] = null;
 
             for (var i = 0, n = list.length; i < n; i++) {
                 var item = list[i];
                 var newItem = <T>this.visitNodeOrToken(item);
 
-                if (item !== newItem && !newItems) {
+                if (item !== newItem && newItems === null) {
                     newItems = [];
                     for (var j = 0; j < i; j++) {
                         newItems.push(list[j]);
@@ -34,17 +34,17 @@ module TypeScript {
             }
 
             // Debug.assert(newItems === null || newItems.length === childCount(list));
-            return !newItems ? list : Syntax.list<T>(newItems);
+            return newItems === null ? list : Syntax.list<T>(newItems);
         }
 
         public visitSeparatedList<T extends ISyntaxNodeOrToken>(list: T[]): T[] {
-            var newItems: ISyntaxNodeOrToken[] = undefined;
+            var newItems: ISyntaxNodeOrToken[] = null;
 
             for (var i = 0, n = childCount(list); i < n; i++) {
                 var item = childAt(list, i);
                 var newItem = isToken(item) ? <ISyntaxNodeOrToken>this.visitToken(<ISyntaxToken>item) : this.visitNode(<ISyntaxNode>item);
 
-                if (item !== newItem && !newItems) {
+                if (item !== newItem && newItems === null) {
                     newItems = [];
                     for (var j = 0; j < i; j++) {
                         newItems.push(childAt(list, j));
@@ -57,7 +57,7 @@ module TypeScript {
             }
 
             // Debug.assert(newItems === null || newItems.length === childCount(list));
-            return !newItems ? list : Syntax.separatedList<T>(newItems);
+            return newItems === null ? list : Syntax.separatedList<T>(newItems);
         }
 
         public visitSourceUnit(node: SourceUnitSyntax): any {
@@ -82,7 +82,7 @@ module TypeScript {
 
         public visitFunctionType(node: FunctionTypeSyntax): any {
             return node.update(
-                !node.typeParameterList ? undefined : <TypeParameterListSyntax>this.visitNode(node.typeParameterList),
+                node.typeParameterList === null ? null : <TypeParameterListSyntax>this.visitNode(node.typeParameterList),
                 <ParameterListSyntax>this.visitNode(node.parameterList),
                 this.visitToken(node.equalsGreaterThanToken),
                 <ITypeSyntax>this.visitNodeOrToken(node.type));
@@ -98,7 +98,7 @@ module TypeScript {
         public visitConstructorType(node: ConstructorTypeSyntax): any {
             return node.update(
                 this.visitToken(node.newKeyword),
-                !node.typeParameterList ? undefined : <TypeParameterListSyntax>this.visitNode(node.typeParameterList),
+                node.typeParameterList === null ? null : <TypeParameterListSyntax>this.visitNode(node.typeParameterList),
                 <ParameterListSyntax>this.visitNode(node.parameterList),
                 this.visitToken(node.equalsGreaterThanToken),
                 <ITypeSyntax>this.visitNodeOrToken(node.type));
@@ -128,7 +128,7 @@ module TypeScript {
                 this.visitList(node.modifiers),
                 this.visitToken(node.interfaceKeyword),
                 this.visitToken(node.identifier),
-                !node.typeParameterList ? undefined : <TypeParameterListSyntax>this.visitNode(node.typeParameterList),
+                node.typeParameterList === null ? null : <TypeParameterListSyntax>this.visitNode(node.typeParameterList),
                 this.visitList(node.heritageClauses),
                 <ObjectTypeSyntax>this.visitNode(node.body));
         }
@@ -139,16 +139,16 @@ module TypeScript {
                 this.visitToken(node.functionKeyword),
                 this.visitToken(node.identifier),
                 <CallSignatureSyntax>this.visitNode(node.callSignature),
-                !node.block ? undefined : <BlockSyntax>this.visitNode(node.block),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.block === null ? null : <BlockSyntax>this.visitNode(node.block),
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitModuleDeclaration(node: ModuleDeclarationSyntax): any {
             return node.update(
                 this.visitList(node.modifiers),
                 this.visitToken(node.moduleKeyword),
-                !node.name ? undefined : <INameSyntax>this.visitNodeOrToken(node.name),
-                !node.stringLiteral ? undefined : this.visitToken(node.stringLiteral),
+                node.name === null ? null : <INameSyntax>this.visitNodeOrToken(node.name),
+                node.stringLiteral === null ? null : this.visitToken(node.stringLiteral),
                 this.visitToken(node.openBraceToken),
                 this.visitList(node.moduleElements),
                 this.visitToken(node.closeBraceToken));
@@ -159,7 +159,7 @@ module TypeScript {
                 this.visitList(node.modifiers),
                 this.visitToken(node.classKeyword),
                 this.visitToken(node.identifier),
-                !node.typeParameterList ? undefined : <TypeParameterListSyntax>this.visitNode(node.typeParameterList),
+                node.typeParameterList === null ? null : <TypeParameterListSyntax>this.visitNode(node.typeParameterList),
                 this.visitList(node.heritageClauses),
                 this.visitToken(node.openBraceToken),
                 this.visitList(node.classElements),
@@ -183,7 +183,7 @@ module TypeScript {
                 this.visitToken(node.identifier),
                 this.visitToken(node.equalsToken),
                 <IModuleReferenceSyntax>this.visitNodeOrToken(node.moduleReference),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitExportAssignment(node: ExportAssignmentSyntax): any {
@@ -191,7 +191,7 @@ module TypeScript {
                 this.visitToken(node.exportKeyword),
                 this.visitToken(node.equalsToken),
                 this.visitToken(node.identifier),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): any {
@@ -199,15 +199,15 @@ module TypeScript {
                 this.visitList(node.modifiers),
                 this.visitToken(node.propertyName),
                 <CallSignatureSyntax>this.visitNode(node.callSignature),
-                !node.block ? undefined : <BlockSyntax>this.visitNode(node.block),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.block === null ? null : <BlockSyntax>this.visitNode(node.block),
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): any {
             return node.update(
                 this.visitList(node.modifiers),
                 <VariableDeclaratorSyntax>this.visitNode(node.variableDeclarator),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitConstructorDeclaration(node: ConstructorDeclarationSyntax): any {
@@ -215,15 +215,15 @@ module TypeScript {
                 this.visitList(node.modifiers),
                 this.visitToken(node.constructorKeyword),
                 <CallSignatureSyntax>this.visitNode(node.callSignature),
-                !node.block ? undefined : <BlockSyntax>this.visitNode(node.block),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.block === null ? null : <BlockSyntax>this.visitNode(node.block),
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): any {
             return node.update(
                 this.visitList(node.modifiers),
                 <IndexSignatureSyntax>this.visitNode(node.indexSignature),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitGetAccessor(node: GetAccessorSyntax): any {
@@ -247,15 +247,15 @@ module TypeScript {
         public visitPropertySignature(node: PropertySignatureSyntax): any {
             return node.update(
                 this.visitToken(node.propertyName),
-                !node.questionToken ? undefined : this.visitToken(node.questionToken),
-                !node.typeAnnotation ? undefined : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation));
+                node.questionToken === null ? null : this.visitToken(node.questionToken),
+                node.typeAnnotation === null ? null : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation));
         }
 
         public visitCallSignature(node: CallSignatureSyntax): any {
             return node.update(
-                !node.typeParameterList ? undefined : <TypeParameterListSyntax>this.visitNode(node.typeParameterList),
+                node.typeParameterList === null ? null : <TypeParameterListSyntax>this.visitNode(node.typeParameterList),
                 <ParameterListSyntax>this.visitNode(node.parameterList),
-                !node.typeAnnotation ? undefined : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation));
+                node.typeAnnotation === null ? null : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation));
         }
 
         public visitConstructSignature(node: ConstructSignatureSyntax): any {
@@ -269,13 +269,13 @@ module TypeScript {
                 this.visitToken(node.openBracketToken),
                 this.visitSeparatedList(node.parameters),
                 this.visitToken(node.closeBracketToken),
-                !node.typeAnnotation ? undefined : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation));
+                node.typeAnnotation === null ? null : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation));
         }
 
         public visitMethodSignature(node: MethodSignatureSyntax): any {
             return node.update(
                 this.visitToken(node.propertyName),
-                !node.questionToken ? undefined : this.visitToken(node.questionToken),
+                node.questionToken === null ? null : this.visitToken(node.questionToken),
                 <CallSignatureSyntax>this.visitNode(node.callSignature));
         }
 
@@ -293,27 +293,27 @@ module TypeScript {
                 <IExpressionSyntax>this.visitNodeOrToken(node.condition),
                 this.visitToken(node.closeParenToken),
                 <IStatementSyntax>this.visitNodeOrToken(node.statement),
-                !node.elseClause ? undefined : <ElseClauseSyntax>this.visitNode(node.elseClause));
+                node.elseClause === null ? null : <ElseClauseSyntax>this.visitNode(node.elseClause));
         }
 
         public visitVariableStatement(node: VariableStatementSyntax): any {
             return node.update(
                 this.visitList(node.modifiers),
                 <VariableDeclarationSyntax>this.visitNode(node.variableDeclaration),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitExpressionStatement(node: ExpressionStatementSyntax): any {
             return node.update(
                 <IExpressionSyntax>this.visitNodeOrToken(node.expression),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitReturnStatement(node: ReturnStatementSyntax): any {
             return node.update(
                 this.visitToken(node.returnKeyword),
-                !node.expression ? undefined : <IExpressionSyntax>this.visitNodeOrToken(node.expression),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.expression === null ? null : <IExpressionSyntax>this.visitNodeOrToken(node.expression),
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitSwitchStatement(node: SwitchStatementSyntax): any {
@@ -330,27 +330,27 @@ module TypeScript {
         public visitBreakStatement(node: BreakStatementSyntax): any {
             return node.update(
                 this.visitToken(node.breakKeyword),
-                !node.identifier ? undefined : this.visitToken(node.identifier),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.identifier === null ? null : this.visitToken(node.identifier),
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitContinueStatement(node: ContinueStatementSyntax): any {
             return node.update(
                 this.visitToken(node.continueKeyword),
-                !node.identifier ? undefined : this.visitToken(node.identifier),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.identifier === null ? null : this.visitToken(node.identifier),
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitForStatement(node: ForStatementSyntax): any {
             return node.update(
                 this.visitToken(node.forKeyword),
                 this.visitToken(node.openParenToken),
-                !node.variableDeclaration ? undefined : <VariableDeclarationSyntax>this.visitNode(node.variableDeclaration),
-                !node.initializer ? undefined : <IExpressionSyntax>this.visitNodeOrToken(node.initializer),
+                node.variableDeclaration === null ? null : <VariableDeclarationSyntax>this.visitNode(node.variableDeclaration),
+                node.initializer === null ? null : <IExpressionSyntax>this.visitNodeOrToken(node.initializer),
                 this.visitToken(node.firstSemicolonToken),
-                !node.condition ? undefined : <IExpressionSyntax>this.visitNodeOrToken(node.condition),
+                node.condition === null ? null : <IExpressionSyntax>this.visitNodeOrToken(node.condition),
                 this.visitToken(node.secondSemicolonToken),
-                !node.incrementor ? undefined : <IExpressionSyntax>this.visitNodeOrToken(node.incrementor),
+                node.incrementor === null ? null : <IExpressionSyntax>this.visitNodeOrToken(node.incrementor),
                 this.visitToken(node.closeParenToken),
                 <IStatementSyntax>this.visitNodeOrToken(node.statement));
         }
@@ -359,8 +359,8 @@ module TypeScript {
             return node.update(
                 this.visitToken(node.forKeyword),
                 this.visitToken(node.openParenToken),
-                !node.variableDeclaration ? undefined : <VariableDeclarationSyntax>this.visitNode(node.variableDeclaration),
-                !node.left ? undefined : <IExpressionSyntax>this.visitNodeOrToken(node.left),
+                node.variableDeclaration === null ? null : <VariableDeclarationSyntax>this.visitNode(node.variableDeclaration),
+                node.left === null ? null : <IExpressionSyntax>this.visitNodeOrToken(node.left),
                 this.visitToken(node.inKeyword),
                 <IExpressionSyntax>this.visitNodeOrToken(node.expression),
                 this.visitToken(node.closeParenToken),
@@ -376,7 +376,7 @@ module TypeScript {
             return node.update(
                 this.visitToken(node.throwKeyword),
                 <IExpressionSyntax>this.visitNodeOrToken(node.expression),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitWhileStatement(node: WhileStatementSyntax): any {
@@ -392,8 +392,8 @@ module TypeScript {
             return node.update(
                 this.visitToken(node.tryKeyword),
                 <BlockSyntax>this.visitNode(node.block),
-                !node.catchClause ? undefined : <CatchClauseSyntax>this.visitNode(node.catchClause),
-                !node.finallyClause ? undefined : <FinallyClauseSyntax>this.visitNode(node.finallyClause));
+                node.catchClause === null ? null : <CatchClauseSyntax>this.visitNode(node.catchClause),
+                node.finallyClause === null ? null : <FinallyClauseSyntax>this.visitNode(node.finallyClause));
         }
 
         public visitLabeledStatement(node: LabeledStatementSyntax): any {
@@ -411,13 +411,13 @@ module TypeScript {
                 this.visitToken(node.openParenToken),
                 <IExpressionSyntax>this.visitNodeOrToken(node.condition),
                 this.visitToken(node.closeParenToken),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitDebuggerStatement(node: DebuggerStatementSyntax): any {
             return node.update(
                 this.visitToken(node.debuggerKeyword),
-                !node.semicolonToken ? undefined : this.visitToken(node.semicolonToken));
+                node.semicolonToken === null ? null : this.visitToken(node.semicolonToken));
         }
 
         public visitWithStatement(node: WithStatementSyntax): any {
@@ -506,7 +506,7 @@ module TypeScript {
             return node.update(
                 this.visitToken(node.newKeyword),
                 <IMemberExpressionSyntax>this.visitNodeOrToken(node.expression),
-                !node.argumentList ? undefined : <ArgumentListSyntax>this.visitNode(node.argumentList));
+                node.argumentList === null ? null : <ArgumentListSyntax>this.visitNode(node.argumentList));
         }
 
         public visitParenthesizedExpression(node: ParenthesizedExpressionSyntax): any {
@@ -520,16 +520,16 @@ module TypeScript {
             return node.update(
                 <CallSignatureSyntax>this.visitNode(node.callSignature),
                 this.visitToken(node.equalsGreaterThanToken),
-                !node.block ? undefined : <BlockSyntax>this.visitNode(node.block),
-                !node.expression ? undefined : <IExpressionSyntax>this.visitNodeOrToken(node.expression));
+                node.block === null ? null : <BlockSyntax>this.visitNode(node.block),
+                node.expression === null ? null : <IExpressionSyntax>this.visitNodeOrToken(node.expression));
         }
 
         public visitSimpleArrowFunctionExpression(node: SimpleArrowFunctionExpressionSyntax): any {
             return node.update(
                 <ParameterSyntax>this.visitNode(node.parameter),
                 this.visitToken(node.equalsGreaterThanToken),
-                !node.block ? undefined : <BlockSyntax>this.visitNode(node.block),
-                !node.expression ? undefined : <IExpressionSyntax>this.visitNodeOrToken(node.expression));
+                node.block === null ? null : <BlockSyntax>this.visitNode(node.block),
+                node.expression === null ? null : <IExpressionSyntax>this.visitNodeOrToken(node.expression));
         }
 
         public visitCastExpression(node: CastExpressionSyntax): any {
@@ -551,7 +551,7 @@ module TypeScript {
         public visitFunctionExpression(node: FunctionExpressionSyntax): any {
             return node.update(
                 this.visitToken(node.functionKeyword),
-                !node.identifier ? undefined : this.visitToken(node.identifier),
+                node.identifier === null ? null : this.visitToken(node.identifier),
                 <CallSignatureSyntax>this.visitNode(node.callSignature),
                 <BlockSyntax>this.visitNode(node.block));
         }
@@ -569,13 +569,13 @@ module TypeScript {
         public visitVariableDeclarator(node: VariableDeclaratorSyntax): any {
             return node.update(
                 this.visitToken(node.propertyName),
-                !node.typeAnnotation ? undefined : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation),
-                !node.equalsValueClause ? undefined : <EqualsValueClauseSyntax>this.visitNode(node.equalsValueClause));
+                node.typeAnnotation === null ? null : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation),
+                node.equalsValueClause === null ? null : <EqualsValueClauseSyntax>this.visitNode(node.equalsValueClause));
         }
 
         public visitArgumentList(node: ArgumentListSyntax): any {
             return node.update(
-                !node.typeArgumentList ? undefined : <TypeArgumentListSyntax>this.visitNode(node.typeArgumentList),
+                node.typeArgumentList === null ? null : <TypeArgumentListSyntax>this.visitNode(node.typeArgumentList),
                 this.visitToken(node.openParenToken),
                 this.visitSeparatedList(node.arguments),
                 this.visitToken(node.closeParenToken));
@@ -640,7 +640,7 @@ module TypeScript {
                 this.visitToken(node.catchKeyword),
                 this.visitToken(node.openParenToken),
                 this.visitToken(node.identifier),
-                !node.typeAnnotation ? undefined : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation),
+                node.typeAnnotation === null ? null : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation),
                 this.visitToken(node.closeParenToken),
                 <BlockSyntax>this.visitNode(node.block));
         }
@@ -654,7 +654,7 @@ module TypeScript {
         public visitTypeParameter(node: TypeParameterSyntax): any {
             return node.update(
                 this.visitToken(node.identifier),
-                !node.constraint ? undefined : <ConstraintSyntax>this.visitNode(node.constraint));
+                node.constraint === null ? null : <ConstraintSyntax>this.visitNode(node.constraint));
         }
 
         public visitConstraint(node: ConstraintSyntax): any {
@@ -679,18 +679,18 @@ module TypeScript {
 
         public visitParameter(node: ParameterSyntax): any {
             return node.update(
-                !node.dotDotDotToken ? undefined : this.visitToken(node.dotDotDotToken),
+                node.dotDotDotToken === null ? null : this.visitToken(node.dotDotDotToken),
                 this.visitList(node.modifiers),
                 this.visitToken(node.identifier),
-                !node.questionToken ? undefined : this.visitToken(node.questionToken),
-                !node.typeAnnotation ? undefined : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation),
-                !node.equalsValueClause ? undefined : <EqualsValueClauseSyntax>this.visitNode(node.equalsValueClause));
+                node.questionToken === null ? null : this.visitToken(node.questionToken),
+                node.typeAnnotation === null ? null : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation),
+                node.equalsValueClause === null ? null : <EqualsValueClauseSyntax>this.visitNode(node.equalsValueClause));
         }
 
         public visitEnumElement(node: EnumElementSyntax): any {
             return node.update(
                 this.visitToken(node.propertyName),
-                !node.equalsValueClause ? undefined : <EqualsValueClauseSyntax>this.visitNode(node.equalsValueClause));
+                node.equalsValueClause === null ? null : <EqualsValueClauseSyntax>this.visitNode(node.equalsValueClause));
         }
 
         public visitTypeAnnotation(node: TypeAnnotationSyntax): any {

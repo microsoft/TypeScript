@@ -1,6 +1,7 @@
 /// <reference path='es5compat.ts' />
 /// <reference path='environment.ts' />
 
+///<reference path='..\..\src\compiler\checker.ts' />
 ///<reference path='..\..\src\services\syntax\references.ts' />
 ///<reference path='..\..\src\services\syntax\syntaxNodes.concrete.generated.ts' />
 ///<reference path='..\..\src\services\syntax\prettyPrinter.ts' />
@@ -220,7 +221,16 @@ function syntaxTreeToJSON(tree: TypeScript.SyntaxTree): any {
     var result: any = {};
 
     result.isDeclaration = tree.isDeclaration();
-    result.languageVersion = ts.ScriptTarget[tree.languageVersion()];
+    switch (tree.languageVersion()) {
+        case ts.ScriptTarget.ES3:
+            result.languageVersion = "EcmaScript3";
+            break;
+        case ts.ScriptTarget.ES5:
+            result.languageVersion = "EcmaScript5";
+            break;
+        default:
+            throw new Error();
+    }
 
     if (tree.diagnostics().length > 0) {
         result.diagnostics = tree.diagnostics();
@@ -318,7 +328,7 @@ class Program {
             fileName => this.runPrettyPrinter(fileName, ts.ScriptTarget.ES5, verify, /*generateBaselines:*/ generate));
 
         if (specificFile === undefined) {
-            this.testIncrementalSpeed(TypeScript.Environment.currentDirectory() + "\\src\\compiler\\syntax\\syntaxNodes.concrete.generated.ts");
+            this.testIncrementalSpeed(TypeScript.Environment.currentDirectory() + "\\src\\services\\syntax\\syntaxNodes.concrete.generated.ts");
         }
 
         TypeScript.Environment.standardOut.Write("Testing against 262:");

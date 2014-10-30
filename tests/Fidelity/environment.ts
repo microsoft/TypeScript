@@ -1,6 +1,7 @@
-///<reference path='references.ts' />
-///<reference path='..\enumerator.ts' />
-///<reference path='..\process.ts' />
+// ///<reference path='references.ts' />
+///<reference path='enumerator.ts' />
+///<reference path='process.ts' />
+///<reference path='require.ts' />
 
 declare var Buffer: {
     new (str: string, encoding?: string): any;

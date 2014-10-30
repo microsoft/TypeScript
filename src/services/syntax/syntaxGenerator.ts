@@ -1,5 +1,6 @@
-///<reference path='..\core\references.ts' />
-///<reference path='..\core\environment.ts' />
+///<reference path='..\..\compiler\sys.ts' />
+///<reference path='..\..\services\core\arrayUtilities.ts' />
+///<reference path='..\..\services\core\stringUtilities.ts' />
 ///<reference path='syntaxFacts.ts' />
 ///<reference path='syntaxKind.ts' />
 
@@ -31,7 +32,7 @@ interface IMemberDefinition {
     excludeFromAST?: boolean;
 }
 
-var interfaces: TypeScript.IIndexable<any> = {
+var interfaces: any = {
     IMemberDeclarationSyntax: 'IClassElementSyntax',
     IStatementSyntax: 'IModuleElementSyntax',
     INameSyntax: 'ITypeSyntax',
@@ -2397,7 +2398,7 @@ function firstEnumName(e: any, value: number) {
 }
 
 function groupBy<T>(array: T[], func: (v: T) => string): any {
-    var result: TypeScript.IIndexable<T[]> = {};
+    var result: any = {};
 
     for (var i = 0, n = array.length; i < n; i++) {
         var v: any = array[i];
@@ -2883,12 +2884,12 @@ var visitor = generateVisitor();
 var defaultVisitor = generateDefaultVisitor();
 var servicesUtilities = generateServicesUtilities();
 
-TypeScript.Environment.writeFile(TypeScript.Environment.currentDirectory() + "\\src\\compiler\\syntax\\syntaxNodes.concrete.generated.ts", syntaxNodesConcrete, false);
-TypeScript.Environment.writeFile(TypeScript.Environment.currentDirectory() + "\\src\\compiler\\syntax\\syntaxNodes.abstract.generated.ts", syntaxNodesAbstract, false);
-TypeScript.Environment.writeFile(TypeScript.Environment.currentDirectory() + "\\src\\compiler\\syntax\\syntaxNodes.interfaces.generated.ts", syntaxInterfaces, false);
-TypeScript.Environment.writeFile(TypeScript.Environment.currentDirectory() + "\\src\\services\\syntaxRewriter.generated.ts", rewriter, false);
-TypeScript.Environment.writeFile(TypeScript.Environment.currentDirectory() + "\\src\\compiler\\syntax\\syntaxWalker.generated.ts", walker, false);
-TypeScript.Environment.writeFile(TypeScript.Environment.currentDirectory() + "\\src\\compiler\\syntax\\scannerUtilities.generated.ts", scannerUtilities, false);
-TypeScript.Environment.writeFile(TypeScript.Environment.currentDirectory() + "\\src\\compiler\\syntax\\syntaxVisitor.generated.ts", visitor, false);
-TypeScript.Environment.writeFile(TypeScript.Environment.currentDirectory() + "\\src\\compiler\\syntax\\defaultSyntaxVisitor.generated.ts", defaultVisitor, false);
-TypeScript.Environment.writeFile(TypeScript.Environment.currentDirectory() + "\\src\\services\\syntaxUtilities.generated.ts", servicesUtilities, false);
+sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.concrete.generated.ts", syntaxNodesConcrete, false);
+sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.abstract.generated.ts", syntaxNodesAbstract, false);
+sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.interfaces.generated.ts", syntaxInterfaces, false);
+sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxRewriter.generated.ts", rewriter, false);
+sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxWalker.generated.ts", walker, false);
+sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\scannerUtilities.generated.ts", scannerUtilities, false);
+sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxVisitor.generated.ts", visitor, false);
+sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\defaultSyntaxVisitor.generated.ts", defaultVisitor, false);
+sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxUtilities.generated.ts", servicesUtilities, false);

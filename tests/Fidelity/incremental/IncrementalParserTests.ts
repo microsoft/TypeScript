@@ -1,7 +1,7 @@
-///<reference path='..\..\..\src\compiler\syntax\references.ts' />
-///<reference path='..\..\..\src\compiler\core\environment.ts' />
-///<reference path='..\..\..\src\compiler\references.ts' />
-///<reference path='..\..\..\src\services\references.ts' />
+// ///<reference path='..\..\..\src\compiler\syntax\references.ts' />
+// ///<reference path='..\..\..\src\compiler\core\environment.ts' />
+// ///<reference path='..\..\..\src\compiler\references.ts' />
+// ///<reference path='..\..\..\src\services\references.ts' />
 ///<reference path='..\Program.ts' />
 
 module TypeScript {
@@ -56,10 +56,10 @@ module TypeScript {
     // be a good thing.  If it decreases, that's not great (less reusability), but that may be 
     // unavoidable.  If it does decrease an investigation 
     function compareTrees(oldText: ISimpleText, newText: ISimpleText, textChangeRange: TextChangeRange, reusedElements: number = -1): void {
-        var oldTree = Parser.parse("", oldText, LanguageVersion.EcmaScript5, false);
+        var oldTree = Parser.parse("", oldText, ts.ScriptTarget.ES5, false);
         TypeScript.visitNodeOrToken(new PositionValidatingWalker(), oldTree.sourceUnit());
 
-        var newTree = Parser.parse("", newText, LanguageVersion.EcmaScript5, false);
+        var newTree = Parser.parse("", newText, ts.ScriptTarget.ES5, false);
         TypeScript.visitNodeOrToken(new PositionValidatingWalker(), newTree.sourceUnit());
 
         var incrementalNewTree = IncrementalParser.parse(oldTree, textChangeRange, newText);
@@ -81,7 +81,7 @@ module TypeScript {
         public static runAllTests() {
             for (var name in IncrementalParserTests) {
                 if (IncrementalParserTests.hasOwnProperty(name) && StringUtilities.startsWith(name, "test")) {
-                    var o: TypeScript.IIndexable<any> = <any>IncrementalParserTests;
+                    var o: ts.Map<any> = <any>IncrementalParserTests;
                     o[name]();
                 }
             }
@@ -745,7 +745,7 @@ module m3 { }\
                 "        }";
 
             var text1 = SimpleText.fromString(source);
-            var tree1 = Parser.parse("", text1, LanguageVersion.EcmaScript5, false);
+            var tree1 = Parser.parse("", text1, ts.ScriptTarget.ES5, false);
 
             var index = source.indexOf("enum ") + "enum ".length;
             var textAndChange1 = withInsert(text1, index, "F");

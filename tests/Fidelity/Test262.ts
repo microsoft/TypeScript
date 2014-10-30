@@ -1,4 +1,4 @@
-var negative262ExpectedResults: TypeScript.IIndexable<boolean> = {
+var negative262ExpectedResults: ts.Map<boolean> = {
     'Sbp_12.5_A9_T3.js': false,
     'Sbp_12.6.1_A13_T3.js': false,
     'Sbp_12.6.2_A13_T3.js': false,
