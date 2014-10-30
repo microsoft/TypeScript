@@ -5,34 +5,24 @@
 ///<reference path='..\Program.ts' />
 
 module TypeScript {
-    export class SyntaxElementsCollector extends SyntaxWalker {
-        private elements: ISyntaxElement[] = [];
-        
-        public visitNode(node: ISyntaxNode) {
-            this.elements.push(node);
-            super.visitNode(node);
-        }
-
-        public visitToken(token: ISyntaxToken) {
-            this.elements.push(token);
-        }
-
-        public visitSyntaxList(list: ISyntaxNodeOrToken[]) {
-            if (!isShared(list)) {
-                this.elements.push(list);
-            }
-        }
-
-        public visitSeparatedSyntaxList(list: ISyntaxNodeOrToken[]) {
-            if (!isShared(list)) {
-                this.elements.push(list);
-            }
-        }
-
+    export class SyntaxElementsCollector {
         public static collectElements(node: SourceUnitSyntax): ISyntaxElement[] {
-            var collector = new SyntaxElementsCollector();
-            TypeScript.visitNodeOrToken(collector, node);
-            return collector.elements;
+            var result: ISyntaxElement[] = [];
+
+            this.collect(node, result);
+
+            return result;
+        }
+
+        private static collect(element: ISyntaxElement, result: ISyntaxElement[]) {
+            if (element && !isShared(element)) {
+                var kind = element.kind();
+                result.push(element);
+
+                for (var i = 0, n = childCount(element); i < n; i++) {
+                    this.collect(childAt(element, i), result);
+                }
+            }
         }
     }
 
@@ -109,7 +99,7 @@ module TypeScript {
             var oldText = SimpleText.fromString(source);
             var newTextAndChange = withInsert(oldText, semicolonIndex, " + 1");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 31);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 33);
         }
 
         public static testIncremental2() {
@@ -126,7 +116,7 @@ module TypeScript {
             var oldText = SimpleText.fromString(source);
             var newTextAndChange = withDelete(oldText, index, 3);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 31);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 33);
         }
 
         public static testIncrementalRegex1() {
@@ -137,7 +127,7 @@ module TypeScript {
             var oldText = SimpleText.fromString(source);
             var newTextAndChange = withInsert(oldText, semicolonIndex, "/");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 21);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 22);
         }
 
         public static testIncrementalRegex2() {
@@ -148,7 +138,7 @@ module TypeScript {
             var oldText = SimpleText.fromString(source);
             var newTextAndChange = withInsert(oldText, semicolonIndex, "/");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 19);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 20);
         }
 
         public static testIncrementalComment1() {
@@ -187,7 +177,7 @@ module TypeScript {
             var oldText = SimpleText.fromString(source);
             var newTextAndChange = withInsert(oldText, index, "*");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 22);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 23);
         }
 
         public static testParameter1() {
@@ -215,7 +205,7 @@ module TypeScript {
             var oldText = SimpleText.fromString(source);
             var newTextAndChange = withInsert(oldText, index, "?");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 43);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 45);
         }
 
         public static testEnumElement1() {
@@ -586,7 +576,7 @@ else {\
             var index = source.lastIndexOf(";");
             var newTextAndChange = withDelete(oldText, index, 1);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 33);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 36);
         }
 
         public static testGenericError1() {
