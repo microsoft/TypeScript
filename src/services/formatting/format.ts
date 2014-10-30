@@ -281,7 +281,13 @@ module ts.formatting {
                             var tokenInfo = formattingScanner.readTokenInfo(node);
                             if (tokenInfo.token.kind === listStartToken) {
                                 // make sure that this token does not belong to the child
-                                doConsumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
+                                var startTokenIndentation = nodeIndentation;
+                                var tokenStartLine = sourceFile.getLineAndCharacterFromPosition(tokenInfo.token.pos).line;
+                                if (node.parent.kind !== SyntaxKind.SourceFile && tokenStartLine !== nodeStartLine) {
+                                    var indentation = nodeIndentation.getIndentation() + options.IndentSize;
+                                    startTokenIndentation = getDynamicIndentation(node, indentation, indentation, nodeIndentation);
+                                }
+                                doConsumeTokenAndAdvanceScanner(tokenInfo, node, startTokenIndentation);
                             }
                         }
                     }
@@ -301,6 +307,7 @@ module ts.formatting {
                             }
                         }
                     }
+
                 }
             );
 
