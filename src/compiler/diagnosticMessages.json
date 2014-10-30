@@ -1417,6 +1417,14 @@
         "category": "Error",
         "code": 4085
     },
+    "'const' enum member initializer was evaluated to a non-finite number.": {
+        "category": "Error",
+        "code": 4086
+    },
+    "'const' enum member initializer was evaluated to NaN.": {
+        "category": "Error",
+        "code": 4087
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001

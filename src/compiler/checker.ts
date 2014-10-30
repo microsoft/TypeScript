@@ -7686,6 +7686,15 @@ module ts {
                             checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
                             }
                         }
+                        else if (enumIsConst) {
+                            if (isNaN(autoValue)) {
+                                error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_NaN);
+                            }
+                            else if (!isFinite(autoValue)) {
+                                error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_number);
+                            }
+                        }
+
                     }
                     else if (ambient && !enumIsConst) {
                         autoValue = undefined;
@@ -7735,6 +7744,11 @@ module ts {
                                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken: return left >>> right;
                                 case SyntaxKind.LessThanLessThanToken: return left << right;
                                 case SyntaxKind.CaretToken: return left ^ right;
+                                case SyntaxKind.AsteriskToken: return left * right;
+                                case SyntaxKind.SlashToken: return left / right;
+                                case SyntaxKind.PlusToken: return left + right;
+                                case SyntaxKind.MinusToken: return left - right;
+                                case SyntaxKind.PercentToken: return left % right;
                             }
                             return undefined;
                         case SyntaxKind.NumericLiteral:
