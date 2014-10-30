@@ -41345,7 +41345,7 @@ function prepareTestRunner(text, writeOutput) {
     var insertIndex = text.indexOf("/**  */") + "/** ".length;
     return run;
     function run() {
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 100; i++) {
             var textChangeRange = new TypeScript.TextChangeRange(new TypeScript.TextSpan(insertIndex, 0), 1);
             var newText = text.substring(0, insertIndex) + " " + text.substring(insertIndex);
             var simpleText = TypeScript.SimpleText.fromString(newText);
