@@ -2312,19 +2312,6 @@ function generateWalker(): string {
 "        public visitToken(token: ISyntaxToken): void {\r\n" +
 "        }\r\n" +
 "\r\n" +
-"        public visitNode(node: ISyntaxNode): void {\r\n" +
-"            visitNodeOrToken(this, node);\r\n" +
-"        }\r\n" +
-"\r\n" +
-"        public visitNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {\r\n" +
-"            if (isToken(nodeOrToken)) { \r\n" +
-"                this.visitToken(<ISyntaxToken>nodeOrToken);\r\n" +
-"            }\r\n" +
-"            else {\r\n" +
-"                this.visitNode(<ISyntaxNode>nodeOrToken);\r\n" +
-"            }\r\n" +
-"        }\r\n" +
-"\r\n" +
 "        private visitOptionalToken(token: ISyntaxToken): void {\r\n" +
 "            if (token === undefined) {\r\n" +
 "                return;\r\n" +
@@ -2333,32 +2320,16 @@ function generateWalker(): string {
 "            this.visitToken(token);\r\n" +
 "        }\r\n" +
 "\r\n" +
-"        public visitOptionalNode(node: ISyntaxNode): void {\r\n" +
-"            if (node === undefined) {\r\n" +
-"                return;\r\n" +
-"            }\r\n" +
-"\r\n" +
-"            this.visitNode(node);\r\n" +
-"        }\r\n" +
-"\r\n" +
-"        public visitOptionalNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {\r\n" +
-"            if (nodeOrToken === undefined) {\r\n" +
-"                return;\r\n" +
-"            }\r\n" +
-"\r\n" +
-"            this.visitNodeOrToken(nodeOrToken);\r\n" +
-"        }\r\n" +
-"\r\n" +
 "        public visitList(list: ISyntaxNodeOrToken[]): void {\r\n" +
 "            for (var i = 0, n = list.length; i < n; i++) {\r\n" +
-"               this.visitNodeOrToken(list[i]);\r\n" +
+"               visitNodeOrToken(this, list[i]);\r\n" +
 "            }\r\n" +
 "        }\r\n" +
 "\r\n" +
 "        public visitSeparatedList(list: ISyntaxNodeOrToken[]): void {\r\n" +
 "            for (var i = 0, n = childCount(list); i < n; i++) {\r\n" +
 "                var item = childAt(list, i);\r\n" +
-"                this.visitNodeOrToken(item);\r\n" + 
+"                visitNodeOrToken(this, item);\r\n" + 
 "            }\r\n" +
 "        }\r\n";
 
@@ -2386,20 +2357,10 @@ function generateWalker(): string {
                 result += "            this.visitSeparatedList(node." + child.name + ");\r\n";
             }
             else if (isNodeOrToken(child)) {
-                if (child.isOptional) {
-                    result += "            this.visitOptionalNodeOrToken(node." + child.name + ");\r\n";
-                }
-                else {
-                    result += "            this.visitNodeOrToken(node." + child.name + ");\r\n";
-                }
+                result += "            visitNodeOrToken(this, node." + child.name + ");\r\n";
             }
             else if (child.type !== "SyntaxKind") {
-                if (child.isOptional) {
-                    result += "            this.visitOptionalNode(node." + child.name + ");\r\n";
-                }
-                else {
-                    result += "            this.visitNode(node." + child.name + ");\r\n";
-                }
+                result += "            visitNodeOrToken(this, node." + child.name + ");\r\n";
             }
         }
 
