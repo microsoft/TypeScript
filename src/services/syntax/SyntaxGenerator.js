@@ -229,7 +229,7 @@ var TypeScript;
             if (array1 === array2) {
                 return true;
             }
-            if (array1 === null || array2 === null) {
+            if (!array1 || !array2) {
                 return false;
             }
             if (array1.length !== array2.length) {
@@ -278,7 +278,7 @@ var TypeScript;
                     return v;
                 }
             }
-            return null;
+            return undefined;
         };
         ArrayUtilities.firstOrDefault = function (array, func) {
             for (var i = 0, n = array.length; i < n; i++) {
@@ -287,7 +287,7 @@ var TypeScript;
                     return value;
                 }
             }
-            return null;
+            return undefined;
         };
         ArrayUtilities.first = function (array, func) {
             for (var i = 0, n = array.length; i < n; i++) {
@@ -807,7 +807,7 @@ var TypeScript;
         SyntaxFacts.getTokenKind = getTokenKind;
         function getText(kind) {
             var result = kindToText[kind];
-            return result !== undefined ? result : null;
+            return result;
         }
         SyntaxFacts.getText = getText;
         function isAnyKeyword(kind) {
@@ -2058,7 +2058,7 @@ function getPropertyAccess(child, instance) {
 function generateProperties(definition) {
     var result = "";
     if (definition.name === "SourceUnitSyntax") {
-        result += "        public syntaxTree: SyntaxTree = null;\r\n";
+        result += "        public syntaxTree: SyntaxTree = undefined;\r\n";
     }
     var newLine = false;
     for (var i = 0; i < definition.children.length; i++) {
@@ -2082,7 +2082,7 @@ function generateNullChecks(definition) {
     for (var i = 0; i < definition.children.length; i++) {
         var child = definition.children[i];
         if (!child.isOptional && !child.isToken) {
-            result += "        if (" + child.name + " === null) { throw Errors.argumentNull('" + child.name + "'); }\r\n";
+            result += "        if (!" + child.name + ") { throw Errors.argumentNull('" + child.name + "'); }\r\n";
         }
     }
     return result;
@@ -2166,7 +2166,7 @@ function generateKindCheck(child) {
     var result = "";
     if (child.isOptional) {
         indent = "    ";
-        result += "        if (" + child.name + " !== null) {\r\n";
+        result += "        if (" + child.name + ") {\r\n";
     }
     var kinds = tokenKinds(child);
     if (kinds.length <= 2) {
@@ -2208,7 +2208,7 @@ function generateConstructor(definition) {
     var result = "";
     result += "        constructor(";
     var children = definition.children;
-    var kindChild = null;
+    var kindChild = undefined;
     for (i = 0; i < children.length; i++) {
         child = children[i];
         if (getType(child) === "SyntaxKind") {
@@ -2296,7 +2296,7 @@ function generateFactory1Method(definition) {
             result += "Syntax.emptySeparatedList<" + child.elementType + ">()";
         }
         else {
-            result += "null";
+            result += "undefined";
         }
         result += ", ";
     }
@@ -2314,7 +2314,7 @@ function isKeywordOrPunctuation(kind) {
     return false;
 }
 function isDefaultConstructable(definition) {
-    if (definition === null) {
+    if (!definition) {
         return false;
     }
     for (var i = 0; i < definition.children.length; i++) {
@@ -2368,7 +2368,7 @@ function generateFactory2Method(definition) {
             result += "Syntax.emptySeparatedList<" + child.elementType + ">()";
         }
         else if (isOptional(child)) {
-            result += "null";
+            result += "undefined";
         }
         else if (child.isToken) {
             result += "Syntax.token(SyntaxKind." + tokenKinds(child)[0] + ")";
@@ -2458,7 +2458,7 @@ function generateFirstTokenMethod(definition) {
     var result = "";
     result += "\r\n";
     result += "    public firstToken(): ISyntaxToken {\r\n";
-    result += "        var token = null;\r\n";
+    result += "        var token: ISyntaxToken = undefined;\r\n";
     for (var i = 0; i < definition.children.length; i++) {
         var child = definition.children[i];
         if (getType(child) === "SyntaxKind") {
@@ -2469,14 +2469,14 @@ function generateFirstTokenMethod(definition) {
         }
         result += "        if (";
         if (child.isOptional) {
-            result += getPropertyAccess(child) + " !== null && ";
+            result += getPropertyAccess(child) + " && ";
         }
         if (child.isToken) {
             result += getPropertyAccess(child) + ".width() > 0";
             result += ") { return " + getPropertyAccess(child) + "; }\r\n";
         }
         else {
-            result += "(token = " + getPropertyAccess(child) + ".firstToken()) !== null";
+            result += "(token = " + getPropertyAccess(child) + ".firstToken())";
             result += ") { return token; }\r\n";
         }
     }
@@ -2484,7 +2484,7 @@ function generateFirstTokenMethod(definition) {
         result += "        return this._endOfFileToken;\r\n";
     }
     else {
-        result += "        return null;\r\n";
+        result += "        return undefined;\r\n";
     }
     result += "    }\r\n";
     result += "    }\r\n";
@@ -2498,7 +2498,7 @@ function generateLastTokenMethod(definition) {
         result += "        return this._endOfFileToken;\r\n";
     }
     else {
-        result += "        var token = null;\r\n";
+        result += "        var token: ISyntaxToken = undefined;\r\n";
         for (var i = definition.children.length - 1; i >= 0; i--) {
             var child = definition.children[i];
             if (getType(child) === "SyntaxKind") {
@@ -2509,18 +2509,18 @@ function generateLastTokenMethod(definition) {
             }
             result += "        if (";
             if (child.isOptional) {
-                result += getPropertyAccess(child) + " !== null && ";
+                result += getPropertyAccess(child) + " && ";
             }
             if (child.isToken) {
                 result += getPropertyAccess(child) + ".width() > 0";
                 result += ") { return " + getPropertyAccess(child) + "; }\r\n";
             }
             else {
-                result += "(token = " + getPropertyAccess(child) + ".lastToken()) !== null";
+                result += "(token = " + getPropertyAccess(child) + ".lastToken())";
                 result += ") { return token; }\r\n";
             }
         }
-        result += "        return null;\r\n";
+        result += "        return undefined;\r\n";
     }
     result += "    }\r\n";
     return result;
@@ -2533,7 +2533,7 @@ function memberDefinitionType(child) {
 }
 function derivesFrom(def1, def2) {
     var current = def1;
-    while (current !== null) {
+    while (current) {
         var base = baseType(current);
         if (base === def2) {
             return true;
@@ -2657,7 +2657,7 @@ function generateNode(definition, abstract) {
     }
     result += " {\r\n";
     if (definition.name === "SourceUnitSyntax") {
-        result += "        public syntaxTree: SyntaxTree = null;\r\n";
+        result += "        public syntaxTree: SyntaxTree = undefined;\r\n";
     }
     for (var i = 0; i < definition.children.length; i++) {
         var child = definition.children[i];
@@ -2672,7 +2672,7 @@ function generateNode(definition, abstract) {
     result += ") {\r\n";
     result += "            super(data);\r\n";
     if (definition.name === "SourceUnitSyntax") {
-        result += "            this.parent = null,\r\n";
+        result += "            this.parent = undefined,\r\n";
     }
     if (definition.children) {
         for (var i = 0; i < definition.children.length; i++) {
@@ -2841,7 +2841,7 @@ function isNodeOrToken(child) {
 }
 function generateRewriter() {
     var result = "///<reference path='references.ts' />\r\n\r\n";
-    result += "module TypeScript {\r\n" + "    export class SyntaxRewriter implements ISyntaxVisitor {\r\n" + "        public visitToken(token: ISyntaxToken): ISyntaxToken {\r\n" + "            return token;\r\n" + "        }\r\n" + "\r\n" + "        public visitNode(node: ISyntaxNode): ISyntaxNode {\r\n" + "            return visitNodeOrToken(this, node);\r\n" + "        }\r\n" + "\r\n" + "        public visitNodeOrToken(node: ISyntaxNodeOrToken): ISyntaxNodeOrToken {\r\n" + "            return isToken(node) ? <ISyntaxNodeOrToken>this.visitToken(<ISyntaxToken>node) : this.visitNode(<ISyntaxNode>node);\r\n" + "        }\r\n" + "\r\n" + "        public visitList<T extends ISyntaxNodeOrToken>(list: T[]): T[] {\r\n" + "            var newItems: T[] = null;\r\n" + "\r\n" + "            for (var i = 0, n = list.length; i < n; i++) {\r\n" + "                var item = list[i];\r\n" + "                var newItem = <T>this.visitNodeOrToken(item);\r\n" + "\r\n" + "                if (item !== newItem && newItems === null) {\r\n" + "                    newItems = [];\r\n" + "                    for (var j = 0; j < i; j++) {\r\n" + "                        newItems.push(list[j]);\r\n" + "                    }\r\n" + "                }\r\n" + "\r\n" + "                if (newItems) {\r\n" + "                    newItems.push(newItem);\r\n" + "                }\r\n" + "            }\r\n" + "\r\n" + "            // Debug.assert(newItems === null || newItems.length === childCount(list));\r\n" + "            return newItems === null ? list : Syntax.list<T>(newItems);\r\n" + "        }\r\n" + "\r\n" + "        public visitSeparatedList<T extends ISyntaxNodeOrToken>(list: T[]): T[] {\r\n" + "            var newItems: ISyntaxNodeOrToken[] = null;\r\n" + "\r\n" + "            for (var i = 0, n = childCount(list); i < n; i++) {\r\n" + "                var item = childAt(list, i);\r\n" + "                var newItem = isToken(item) ? <ISyntaxNodeOrToken>this.visitToken(<ISyntaxToken>item) : this.visitNode(<ISyntaxNode>item);\r\n" + "\r\n" + "                if (item !== newItem && newItems === null) {\r\n" + "                    newItems = [];\r\n" + "                    for (var j = 0; j < i; j++) {\r\n" + "                        newItems.push(childAt(list, j));\r\n" + "                    }\r\n" + "                }\r\n" + "\r\n" + "                if (newItems) {\r\n" + "                    newItems.push(newItem);\r\n" + "                }\r\n" + "            }\r\n" + "\r\n" + "            // Debug.assert(newItems === null || newItems.length === childCount(list));\r\n" + "            return newItems === null ? list : Syntax.separatedList<T>(newItems);\r\n" + "        }\r\n";
+    result += "module TypeScript {\r\n" + "    export class SyntaxRewriter implements ISyntaxVisitor {\r\n" + "        public visitToken(token: ISyntaxToken): ISyntaxToken {\r\n" + "            return token;\r\n" + "        }\r\n" + "\r\n" + "        public visitNode(node: ISyntaxNode): ISyntaxNode {\r\n" + "            return visitNodeOrToken(this, node);\r\n" + "        }\r\n" + "\r\n" + "        public visitNodeOrToken(node: ISyntaxNodeOrToken): ISyntaxNodeOrToken {\r\n" + "            return isToken(node) ? <ISyntaxNodeOrToken>this.visitToken(<ISyntaxToken>node) : this.visitNode(<ISyntaxNode>node);\r\n" + "        }\r\n" + "\r\n" + "        public visitList<T extends ISyntaxNodeOrToken>(list: T[]): T[] {\r\n" + "            var newItems: T[] = undefined;\r\n" + "\r\n" + "            for (var i = 0, n = list.length; i < n; i++) {\r\n" + "                var item = list[i];\r\n" + "                var newItem = <T>this.visitNodeOrToken(item);\r\n" + "\r\n" + "                if (item !== newItem && !newItems) {\r\n" + "                    newItems = [];\r\n" + "                    for (var j = 0; j < i; j++) {\r\n" + "                        newItems.push(list[j]);\r\n" + "                    }\r\n" + "                }\r\n" + "\r\n" + "                if (newItems) {\r\n" + "                    newItems.push(newItem);\r\n" + "                }\r\n" + "            }\r\n" + "\r\n" + "            // Debug.assert(!newItems || newItems.length === childCount(list));\r\n" + "            return !newItems ? list : Syntax.list<T>(newItems);\r\n" + "        }\r\n" + "\r\n" + "        public visitSeparatedList<T extends ISyntaxNodeOrToken>(list: T[]): T[] {\r\n" + "            var newItems: ISyntaxNodeOrToken[] = undefined;\r\n" + "\r\n" + "            for (var i = 0, n = childCount(list); i < n; i++) {\r\n" + "                var item = childAt(list, i);\r\n" + "                var newItem = isToken(item) ? <ISyntaxNodeOrToken>this.visitToken(<ISyntaxToken>item) : this.visitNode(<ISyntaxNode>item);\r\n" + "\r\n" + "                if (item !== newItem && !newItems) {\r\n" + "                    newItems = [];\r\n" + "                    for (var j = 0; j < i; j++) {\r\n" + "                        newItems.push(childAt(list, j));\r\n" + "                    }\r\n" + "                }\r\n" + "\r\n" + "                if (newItems) {\r\n" + "                    newItems.push(newItem);\r\n" + "                }\r\n" + "            }\r\n" + "\r\n" + "            // Debug.assert(newItems === undefined || newItems.length === childCount(list));\r\n" + "            return !newItems ? list : Syntax.separatedList<T>(newItems);\r\n" + "        }\r\n";
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
         result += "\r\n";
@@ -2856,7 +2856,7 @@ function generateRewriter() {
             var child = definition.children[j];
             result += "                ";
             if (child.isOptional) {
-                result += "node." + child.name + " === null ? null : ";
+                result += "!node." + child.name + " ? undefined : ";
             }
             if (child.isToken) {
                 result += "this.visitToken(node." + child.name + ")";
@@ -2889,7 +2889,7 @@ function generateRewriter() {
 }
 function generateWalker() {
     var result = "";
-    result += "///<reference path='references.ts' />\r\n" + "\r\n" + "module TypeScript {\r\n" + "    export class SyntaxWalker implements ISyntaxVisitor {\r\n" + "        public visitToken(token: ISyntaxToken): void {\r\n" + "        }\r\n" + "\r\n" + "        public visitNode(node: ISyntaxNode): void {\r\n" + "            visitNodeOrToken(this, node);\r\n" + "        }\r\n" + "\r\n" + "        public visitNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {\r\n" + "            if (isToken(nodeOrToken)) { \r\n" + "                this.visitToken(<ISyntaxToken>nodeOrToken);\r\n" + "            }\r\n" + "            else {\r\n" + "                this.visitNode(<ISyntaxNode>nodeOrToken);\r\n" + "            }\r\n" + "        }\r\n" + "\r\n" + "        private visitOptionalToken(token: ISyntaxToken): void {\r\n" + "            if (token === null) {\r\n" + "                return;\r\n" + "            }\r\n" + "\r\n" + "            this.visitToken(token);\r\n" + "        }\r\n" + "\r\n" + "        public visitOptionalNode(node: ISyntaxNode): void {\r\n" + "            if (node === null) {\r\n" + "                return;\r\n" + "            }\r\n" + "\r\n" + "            this.visitNode(node);\r\n" + "        }\r\n" + "\r\n" + "        public visitOptionalNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {\r\n" + "            if (nodeOrToken === null) {\r\n" + "                return;\r\n" + "            }\r\n" + "\r\n" + "            this.visitNodeOrToken(nodeOrToken);\r\n" + "        }\r\n" + "\r\n" + "        public visitList(list: ISyntaxNodeOrToken[]): void {\r\n" + "            for (var i = 0, n = list.length; i < n; i++) {\r\n" + "               this.visitNodeOrToken(list[i]);\r\n" + "            }\r\n" + "        }\r\n" + "\r\n" + "        public visitSeparatedList(list: ISyntaxNodeOrToken[]): void {\r\n" + "            for (var i = 0, n = childCount(list); i < n; i++) {\r\n" + "                var item = childAt(list, i);\r\n" + "                this.visitNodeOrToken(item);\r\n" + "            }\r\n" + "        }\r\n";
+    result += "///<reference path='references.ts' />\r\n" + "\r\n" + "module TypeScript {\r\n" + "    export class SyntaxWalker implements ISyntaxVisitor {\r\n" + "        public visitToken(token: ISyntaxToken): void {\r\n" + "        }\r\n" + "\r\n" + "        public visitNode(node: ISyntaxNode): void {\r\n" + "            visitNodeOrToken(this, node);\r\n" + "        }\r\n" + "\r\n" + "        public visitNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {\r\n" + "            if (isToken(nodeOrToken)) { \r\n" + "                this.visitToken(<ISyntaxToken>nodeOrToken);\r\n" + "            }\r\n" + "            else {\r\n" + "                this.visitNode(<ISyntaxNode>nodeOrToken);\r\n" + "            }\r\n" + "        }\r\n" + "\r\n" + "        private visitOptionalToken(token: ISyntaxToken): void {\r\n" + "            if (token === undefined) {\r\n" + "                return;\r\n" + "            }\r\n" + "\r\n" + "            this.visitToken(token);\r\n" + "        }\r\n" + "\r\n" + "        public visitOptionalNode(node: ISyntaxNode): void {\r\n" + "            if (node === undefined) {\r\n" + "                return;\r\n" + "            }\r\n" + "\r\n" + "            this.visitNode(node);\r\n" + "        }\r\n" + "\r\n" + "        public visitOptionalNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {\r\n" + "            if (nodeOrToken === undefined) {\r\n" + "                return;\r\n" + "            }\r\n" + "\r\n" + "            this.visitNodeOrToken(nodeOrToken);\r\n" + "        }\r\n" + "\r\n" + "        public visitList(list: ISyntaxNodeOrToken[]): void {\r\n" + "            for (var i = 0, n = list.length; i < n; i++) {\r\n" + "               this.visitNodeOrToken(list[i]);\r\n" + "            }\r\n" + "        }\r\n" + "\r\n" + "        public visitSeparatedList(list: ISyntaxNodeOrToken[]): void {\r\n" + "            for (var i = 0, n = childCount(list); i < n; i++) {\r\n" + "                var item = childAt(list, i);\r\n" + "                this.visitNodeOrToken(item);\r\n" + "            }\r\n" + "        }\r\n";
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
         result += "\r\n";
@@ -3038,7 +3038,7 @@ function generateVisitor() {
     result += "///<reference path='references.ts' />\r\n\r\n";
     result += "module TypeScript {\r\n";
     result += "    export function visitNodeOrToken(visitor: ISyntaxVisitor, element: ISyntaxNodeOrToken): any {\r\n";
-    result += "        if (element === null) { return null; }\r\n";
+    result += "        if (element === undefined) { return undefined; }\r\n";
     result += "        if (isToken(element)) { return visitor.visitToken(<ISyntaxToken>element); }\r\n";
     result += "        switch (element.kind()) {\r\n";
     for (var i = 0; i < definitions.length; i++) {
@@ -3075,7 +3075,7 @@ function generateDefaultVisitor() {
     if (!forPrettyPrinter) {
         result += "    export class SyntaxVisitor implements ISyntaxVisitor {\r\n";
         result += "        public defaultVisit(node: ISyntaxNodeOrToken): any {\r\n";
-        result += "            return null;\r\n";
+        result += "            return undefined;\r\n";
         result += "        }\r\n";
         result += "\r\n";
         result += "        public visitToken(token: ISyntaxToken): any {\r\n";
@@ -3187,7 +3187,7 @@ function generateIsTypeScriptSpecific() {
     result += "        return false;\r\n";
     result += "    }\r\n\r\n";
     result += "    export function isTypeScriptSpecific(element: ISyntaxElement): boolean {\r\n";
-    result += "        if (element === null) { return false; }\r\n";
+    result += "        if (!element) { return false; }\r\n";
     result += "        if (isToken(element)) { return false; }\r\n";
     result += "        if (isList(element)) { return isListTypeScriptSpecific(<ISyntaxNodeOrToken[]>element); }\r\n";
     result += "        if (isSeparatedList(element)) { return isSeparatedListTypeScriptSpecific(<ISyntaxNodeOrToken[]>element); }\r\n\r\n";
@@ -3282,7 +3282,7 @@ function generateIsTypeScriptSpecificMethod(definition) {
                 result += getPropertyAccess(child, "node") + ".childCount() > 0";
             }
             else {
-                result += getPropertyAccess(child, "node") + " !== null";
+                result += "!!" + getPropertyAccess(child, "node");
             }
         }
         else {

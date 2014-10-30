@@ -3,7 +3,7 @@
 module TypeScript {
     export class SyntaxVisitor implements ISyntaxVisitor {
         public defaultVisit(node: ISyntaxNodeOrToken): any {
-            return null;
+            return undefined;
         }
 
         public visitToken(token: ISyntaxToken): any {

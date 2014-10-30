@@ -134,7 +134,7 @@ module TypeScript.SyntaxFacts {
 
     export function getText(kind: SyntaxKind): string {
         var result = kindToText[kind];
-        return result !== undefined ? result : null;
+        return result;//  !== undefined ? result : undefined;
     }
 
     export function isAnyKeyword(kind: SyntaxKind): boolean {

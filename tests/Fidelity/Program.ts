@@ -32,8 +32,8 @@ class PositionValidatingWalker extends TypeScript.SyntaxWalker {
 }
 
 function tokenToJSON(token: TypeScript.ISyntaxToken, text: TypeScript.ISimpleText): any {
-    if (token === null) {
-        return null;
+    if (!token) {
+        return undefined;
     }
 
     var result: any = {};
@@ -57,7 +57,7 @@ function tokenToJSON(token: TypeScript.ISyntaxToken, text: TypeScript.ISimpleTex
     result.text = token.text();
 
     var value = TypeScript.tokenValue(token);
-    if (value !== null) {
+    if (value !== undefined) {
         result.value = value;
         result.valueText = TypeScript.tokenValueText(token);
     }
@@ -66,7 +66,7 @@ function tokenToJSON(token: TypeScript.ISyntaxToken, text: TypeScript.ISimpleTex
         result.isKeywordConvertedToIdentifier = true;
     }
 
-    var leadingTrivia: TypeScript.ISyntaxTriviaList = null;
+    var leadingTrivia: TypeScript.ISyntaxTriviaList = undefined;
     if (token.hasLeadingTrivia()) {
         result.hasLeadingTrivia = true;
         leadingTrivia = token.leadingTrivia(text);
@@ -89,7 +89,7 @@ function tokenToJSON(token: TypeScript.ISyntaxToken, text: TypeScript.ISimpleTex
         }
     }
 
-    var trailingTrivia: TypeScript.ISyntaxTriviaList = null;
+    var trailingTrivia: TypeScript.ISyntaxTriviaList = undefined;
     if (token.hasTrailingTrivia()) {
         result.hasTrailingTrivia = true;
         trailingTrivia = token.trailingTrivia(text);
@@ -250,7 +250,7 @@ class Program {
     runAllTests(verify: boolean): void {
         TypeScript.Environment.standardOut.WriteLine("");
 
-        //var libdts = TypeScript.Environment.readFile("built\\local\\lib.d.ts", null);
+        //var libdts = TypeScript.Environment.readFile("built\\local\\lib.d.ts", undefined);
 
         //TypeScript.Environment.standardOut.WriteLine("size: " + libdts.contents.length);
         //var libsource = ts.createSourceFile("lib.d.ts", libdts.contents);
@@ -371,7 +371,7 @@ class Program {
             return;
         }
 
-        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ null).contents;
+        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ undefined).contents;
         // TypeScript.Environment.standardOut.WriteLine(fileName);
 
         var text = TypeScript.SimpleText.fromString(contents);
@@ -415,7 +415,7 @@ class Program {
             return;
         }
 
-        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ null).contents;
+        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ undefined).contents;
         // TypeScript.Environment.standardOut.WriteLine(fileName);
 
         var text = TypeScript.SimpleText.fromString(contents);
@@ -488,7 +488,7 @@ class Program {
         path: string,
         action: (fileName: string) => void) {
 
-        var testFiles = TypeScript.Environment.listFiles(path, null, { recursive: true });
+        var testFiles = TypeScript.Environment.listFiles(path, undefined, { recursive: true });
         var indexNum = 0;
 
         testFiles.forEach(fileName => {
@@ -521,7 +521,7 @@ class Program {
         var actualFile = fileName + ".actual";
 
         if (generateBaseline) {
-            actualResult = justText ? result : JSON.stringify(convert(result), null, 4);
+            actualResult = justText ? result : JSON.stringify(convert(result), undefined, 4);
             expectedFile = fileName + ".expected";
 
             // TypeScript.Environment.standardOut.WriteLine("Generating baseline for: " + fileName);
@@ -532,14 +532,14 @@ class Program {
             }
         }
         else if (verify) {
-            actualResult = justText ? result : JSON.stringify(convert(result), null, 4);
+            actualResult = justText ? result : JSON.stringify(convert(result), undefined, 4);
 
-            var expectedResult: string = null;
+            var expectedResult: string = undefined;
             if (!TypeScript.Environment.fileExists(expectedFile)) {
                 TypeScript.Environment.writeFile(expectedFile, "", false);
             }
             else {
-                expectedResult = TypeScript.Environment.readFile(expectedFile, /*codepage*/ null).contents;
+                expectedResult = TypeScript.Environment.readFile(expectedFile, /*codepage*/ undefined).contents;
             }
 
             if (expectedResult !== actualResult) {
@@ -571,7 +571,7 @@ class Program {
             return;
         }
 
-        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ null).contents;
+        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ undefined).contents;
         // TypeScript.Environment.standardOut.WriteLine(fileName);
 
         totalSize += contents.length;
@@ -599,7 +599,7 @@ class Program {
             return;
         }
 
-        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ null).contents;
+        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ undefined).contents;
         // TypeScript.Environment.standardOut.WriteLine(fileName);
 
         totalSize += contents.length;
@@ -609,7 +609,7 @@ class Program {
         var tree = TypeScript.Parser.parse(fileName, text, languageVersion, isDTSFile(fileName));
         var result = TypeScript.PrettyPrinter.prettyPrint(tree.sourceUnit());
 
-        this.checkResult(fileName, result, null, verify, generateBaseline, true);
+        this.checkResult(fileName, result, undefined, verify, generateBaseline, true);
     }
 
     runParser(fileName: string,
@@ -625,7 +625,7 @@ class Program {
             return;
         }
 
-        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ null).contents;
+        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ undefined).contents;
         // TypeScript.Environment.standardOut.WriteLine(fileName);
 
         totalSize += contents.length;
@@ -670,7 +670,7 @@ class Program {
             return;
         }
 
-        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ null).contents;
+        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ undefined).contents;
         // TypeScript.Environment.standardOut.WriteLine(fileName);
 
         var text = TypeScript.SimpleText.fromString(contents);
@@ -693,7 +693,7 @@ class Program {
             return;
         }
 
-        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ null).contents;
+        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ undefined).contents;
         // TypeScript.Environment.standardOut.WriteLine(fileName);
 
         var text = TypeScript.SimpleText.fromString(contents);
@@ -711,7 +711,7 @@ class Program {
             var token = TypeScript.findToken(sourceUnit, i);
 
             var left = TypeScript.Syntax.findTokenOnLeft(sourceUnit, i);
-            var tokenOnLeft = left === null ? null : left;
+            var tokenOnLeft = left || null;
 
             TypeScript.Debug.assert(TypeScript.isToken(token));
             if (i === contents.length) {
@@ -723,17 +723,17 @@ class Program {
             }
 
             tokens[i] = tokenToJSON(token, text);
-            tokensOnLeft[i] = tokenToJSON(tokenOnLeft, text);
+            tokensOnLeft[i] = tokenToJSON(tokenOnLeft, text) || null;
         }
 
         var positionedToken = TypeScript.findToken(sourceUnit, 0);
-        while (positionedToken !== null) {
+        while (positionedToken) {
             leftToRight.push(tokenToJSON(positionedToken, text));
             positionedToken = TypeScript.nextToken(positionedToken);
         }
 
         positionedToken = TypeScript.findToken(sourceUnit, contents.length);
-        while (positionedToken !== null) {
+        while (positionedToken) {
             rightToLeft.push(tokenToJSON(positionedToken, text));
             positionedToken = TypeScript.previousToken(positionedToken);
         }
@@ -753,7 +753,7 @@ class Program {
             return;
         }
 
-        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ null).contents;
+        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ undefined).contents;
         var text = TypeScript.SimpleText.fromString(contents);
         var scanner = TypeScript.Scanner.createScanner(languageVersion, text, () => { });
 
@@ -778,7 +778,7 @@ class Program {
             return;
         }
 
-        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ null).contents;
+        var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ undefined).contents;
 
         var diagnostics: TypeScript.Diagnostic[] = [];
         var reportDiagnostic = (position: number, fullWidth: number, diagnosticKey: string, args: any[]) => {
@@ -832,7 +832,7 @@ class Program {
 
     run262(): void {
         var path = "C:\\temp\\test262\\suite";
-        var testFiles = TypeScript.Environment.listFiles(path, null, { recursive: true });
+        var testFiles = TypeScript.Environment.listFiles(path, undefined, { recursive: true });
 
         var testCount = 0;
         var failCount = 0;
@@ -847,7 +847,7 @@ class Program {
 
             // All 262 files are utf8.  But they dont' have a BOM.  Force them to be read in
             // as UTF8.
-            var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ null).contents;
+            var contents = TypeScript.Environment.readFile(fileName, /*codepage*/ undefined).contents;
 
             var isNegative = contents.indexOf("@negative") >= 0
 
@@ -870,7 +870,7 @@ class Program {
                     }
                     else {
                         // We expected to fail on this.  Report an error if we don't.
-                        if (tree.diagnostics() === null || tree.diagnostics().length === 0) {
+                        if (!tree.diagnostics() || tree.diagnostics().length === 0) {
                             TypeScript.Environment.standardOut.WriteLine("Negative test. Unexpected success: " + fileName);
                             failCount++;
                         }

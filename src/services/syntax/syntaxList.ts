@@ -51,7 +51,7 @@ module TypeScript.Syntax {
     }
 
     export function list<T extends ISyntaxNodeOrToken>(nodes: T[]): T[] {
-        if (nodes === undefined || nodes === null || nodes.length === 0) {
+        if (!nodes || nodes.length === 0) {
             return emptyList<T>();
         }
 
@@ -63,7 +63,7 @@ module TypeScript.Syntax {
     }
 
     export function separatedList<T extends ISyntaxNodeOrToken>(nodes: T[], separators: ISyntaxToken[]): T[] {
-        if (nodes === undefined || nodes === null || nodes.length === 0) {
+        if (!nodes || nodes.length === 0) {
             return emptySeparatedList<T>();
         }
 

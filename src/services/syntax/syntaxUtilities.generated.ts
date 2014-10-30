@@ -20,7 +20,7 @@ module TypeScript {
     }
 
     export function isTypeScriptSpecific(element: ISyntaxElement): boolean {
-        if (element === null) { return false; }
+        if (!element) { return false; }
         if (isToken(element)) { return false; }
         if (isList(element)) { return isListTypeScriptSpecific(<ISyntaxNodeOrToken[]>element); }
         if (isSeparatedList(element)) { return isSeparatedListTypeScriptSpecific(<ISyntaxNodeOrToken[]>element); }
@@ -183,9 +183,9 @@ module TypeScript {
     }
 
     function isCallSignatureTypeScriptSpecific(node: CallSignatureSyntax): boolean {
-        return node.typeParameterList !== null ||
+        return !!node.typeParameterList ||
                isTypeScriptSpecific(node.parameterList) ||
-               node.typeAnnotation !== null;
+               !!node.typeAnnotation;
     }
 
     function isMethodSignatureTypeScriptSpecific(node: MethodSignatureSyntax): boolean {
@@ -336,7 +336,7 @@ module TypeScript {
     }
 
     function isVariableDeclaratorTypeScriptSpecific(node: VariableDeclaratorSyntax): boolean {
-        return node.typeAnnotation !== null ||
+        return !!node.typeAnnotation ||
                isTypeScriptSpecific(node.equalsValueClause);
     }
 
@@ -386,8 +386,8 @@ module TypeScript {
 
     function isParameterTypeScriptSpecific(node: ParameterSyntax): boolean {
         return isTypeScriptSpecific(node.modifiers) ||
-               node.typeAnnotation !== null ||
-               node.equalsValueClause !== null;
+               !!node.typeAnnotation ||
+               !!node.equalsValueClause;
     }
 
     function isEnumElementTypeScriptSpecific(node: EnumElementSyntax): boolean {

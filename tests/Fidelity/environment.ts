@@ -67,7 +67,7 @@ module TypeScript {
             try {
                 var fso = new ActiveXObject("Scripting.FileSystemObject");
             } catch (e) {
-                return null;
+                return undefined;
             }
 
             var streamObjectPool: any[] = [];
@@ -104,7 +104,7 @@ module TypeScript {
                     try {
                         // If a codepage is requested, defer to our host to do the reading.  If it
                         // fails, fall back to our normal BOM/utf8 logic.
-                        if (codepage !== null && this.supportsCodePage()) {
+                        if (codepage && this.supportsCodePage()) {
                             try {
                                 var contents = (<any>WScript).ReadFile(path, codepage);
                                 return new FileInformation(contents, ByteOrderMark.None);
@@ -159,7 +159,7 @@ module TypeScript {
                         // "the parameter is incorrect".
                         var message: string;
                         if (err.number === -2147024809) {
-                            message = TypeScript.getDiagnosticMessage(TypeScript.DiagnosticCode.Unsupported_file_encoding, null);
+                            message = TypeScript.getDiagnosticMessage(TypeScript.DiagnosticCode.Unsupported_file_encoding, undefined);
                         }
                         else {
                             message = TypeScript.getDiagnosticMessage(TypeScript.DiagnosticCode.Cannot_read_file_0_1, [path, err.message]);
@@ -268,7 +268,7 @@ module TypeScript {
                     }
                 },
 
-                watchFile: null,
+                watchFile: undefined,
             };
         };
 
@@ -289,8 +289,8 @@ module TypeScript {
                 absolutePath: path => _path.resolve(path),
 
                 readFile: (file, codepage) => {
-                    if (codepage !== null) {
-                        throw new Error(TypeScript.getDiagnosticMessage(TypeScript.DiagnosticCode.codepage_option_not_supported_on_current_platform, null));
+                    if (codepage) {
+                        throw new Error(TypeScript.getDiagnosticMessage(TypeScript.DiagnosticCode.codepage_option_not_supported_on_current_platform, undefined));
                     }
 
                     var buffer = _fs.readFileSync(file);
@@ -383,9 +383,9 @@ module TypeScript {
                 directoryName: path => {
                     var dirPath = _path.dirname(path);
                 
-                    // Node will just continue to repeat the root path, rather than return null
+                    // Node will just continue to repeat the root path, rather than return undefined
                     if (dirPath === path) {
-                        dirPath = null;
+                        dirPath = undefined;
                     }
                 
                     return dirPath;
@@ -500,7 +500,7 @@ module TypeScript {
             return getNodeEnvironment();
         }
         else {
-            return null; // Unsupported host
+            return undefined; // Unsupported host
         }
     })();
 }
