@@ -1494,9 +1494,9 @@ module TypeScript {
         }
 
         private isPreIncrementOrDecrementExpression(node: PrefixUnaryExpressionSyntax) {
-            switch (node.kind()) {
-                case SyntaxKind.PreDecrementExpression:
-                case SyntaxKind.PreIncrementExpression:
+            switch (node.operatorToken.kind()) {
+                case SyntaxKind.MinusMinusToken:
+                case SyntaxKind.PlusPlusToken:
                     return true;
             }
 

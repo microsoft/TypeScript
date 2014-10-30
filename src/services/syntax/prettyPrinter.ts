@@ -552,7 +552,7 @@ module TypeScript.PrettyPrinter {
         public visitBinaryExpression(node: BinaryExpressionSyntax): void {
             visitNodeOrToken(this, node.left);
 
-            if (node.kind() !== SyntaxKind.CommaExpression) {
+            if (node.operatorToken.kind() !== SyntaxKind.CommaToken) {
                 this.ensureSpace();
             }
 

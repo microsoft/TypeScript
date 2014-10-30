@@ -136,10 +136,9 @@ var definitions:ITypeDefinition[] = [
         name: 'HeritageClauseSyntax',
         baseType: 'ISyntaxNode',
         children: [
-            <any>{ name: 'extendsOrImplementsKeyword', isToken: true, tokenKinds: ['ExtendsKeyword', 'ImplementsKeyword'] },
+            <any>{ name: 'extendsOrImplementsKeyword', isToken: true },
             <any>{ name: 'typeNames', isSeparatedList: true, requiresAtLeastOneItem: true, elementType: 'INameSyntax' }
         ],
-        syntaxKinds: ["ExtendsHeritageClause", "ImplementsHeritageClause"],
         isTypeScriptSpecific: true
     },
     <any>{
@@ -210,10 +209,9 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['IUnaryExpressionSyntax'],
         children: [
-            <any>{ name: 'operatorToken', isToken: true, tokenKinds: ['PlusPlusToken', 'MinusMinusToken', 'PlusToken', 'MinusToken', 'TildeToken', 'ExclamationToken'] },
+            <any>{ name: 'operatorToken', isToken: true },
             <any>{ name: 'operand', type: 'IUnaryExpressionSyntax' }
         ],
-        syntaxKinds: ["PreIncrementExpression", "PreDecrementExpression", "PlusExpression", "NegateExpression", "BitwiseNotExpression", "LogicalNotExpression"],
     },
     <any>{
         name: 'ArrayLiteralExpressionSyntax',
@@ -435,9 +433,8 @@ var definitions:ITypeDefinition[] = [
         interfaces: ['IPostfixExpressionSyntax'],
         children: [
             <any>{ name: 'operand', type: 'ILeftHandSideExpressionSyntax' },
-            <any>{ name: 'operatorToken', isToken: true, tokenKinds:['PlusPlusToken', 'MinusMinusToken'] }
+            <any>{ name: 'operatorToken', isToken: true }
         ],
-        syntaxKinds: ["PostIncrementExpression", "PostDecrementExpression"],
     },
     <any>{
         name: 'ElementAccessExpressionSyntax',
@@ -475,27 +472,9 @@ var definitions:ITypeDefinition[] = [
         interfaces: ['IExpressionSyntax'],
         children: [
             <any>{ name: 'left', type: 'IExpressionSyntax' },
-            <any>{ name: 'operatorToken', isToken: true,
-                   tokenKinds:['AsteriskToken',  'SlashToken',  'PercentToken', 'PlusToken', 'MinusToken', 'LessThanLessThanToken',
-                               'GreaterThanGreaterThanToken', 'GreaterThanGreaterThanGreaterThanToken', 'LessThanToken',
-                               'GreaterThanToken', 'LessThanEqualsToken', 'GreaterThanEqualsToken', 'InstanceOfKeyword',
-                               'InKeyword', 'EqualsEqualsToken', 'ExclamationEqualsToken', 'EqualsEqualsEqualsToken',
-                               'ExclamationEqualsEqualsToken', 'AmpersandToken', 'CaretToken', 'BarToken', 'AmpersandAmpersandToken',
-                               'BarBarToken', 'BarEqualsToken', 'AmpersandEqualsToken', 'CaretEqualsToken', 'LessThanLessThanEqualsToken',
-                               'GreaterThanGreaterThanEqualsToken', 'GreaterThanGreaterThanGreaterThanEqualsToken', 'PlusEqualsToken',
-                               'MinusEqualsToken', 'AsteriskEqualsToken', 'SlashEqualsToken', 'PercentEqualsToken', 'EqualsToken',
-                               'CommaToken'] },
+            <any>{ name: 'operatorToken', isToken: true },
             <any>{ name: 'right', type: 'IExpressionSyntax' }
         ],
-        syntaxKinds: ["MultiplyExpression", "DivideExpression", "ModuloExpression", "AddExpression", "SubtractExpression", "LeftShiftExpression",
-            "SignedRightShiftExpression", "UnsignedRightShiftExpression", "LessThanExpression",
-            "GreaterThanExpression", "LessThanOrEqualExpression", "GreaterThanOrEqualExpression", "InstanceOfExpression",
-            "InExpression", "EqualsWithTypeConversionExpression", "NotEqualsWithTypeConversionExpression", "EqualsExpression",
-            "NotEqualsExpression", "BitwiseAndExpression", "BitwiseExclusiveOrExpression", "BitwiseOrExpression", "LogicalAndExpression",
-            "LogicalOrExpression", "OrAssignmentExpression", "AndAssignmentExpression", "ExclusiveOrAssignmentExpression", "LeftShiftAssignmentExpression",
-            "SignedRightShiftAssignmentExpression", "UnsignedRightShiftAssignmentExpression", "AddAssignmentExpression",
-            "SubtractAssignmentExpression", "MultiplyAssignmentExpression", "DivideAssignmentExpression", "ModuloAssignmentExpression", "AssignmentExpression",
-            "CommaExpression"]
     },
     <any>{
         name: 'ConditionalExpressionSyntax',
@@ -1994,20 +1973,6 @@ function generateNode(definition: ITypeDefinition, abstract: boolean): string {
     }
 
     result += "        }\r\n";
-
-    if (definition.name === "BinaryExpressionSyntax") {
-        result += "        public kind(): SyntaxKind { return SyntaxFacts.getBinaryExpressionFromOperatorToken(this.operatorToken.kind()); }\r\n";
-    }
-    else if (definition.name === "PrefixUnaryExpressionSyntax") {
-        result += "        public kind(): SyntaxKind { return SyntaxFacts.getPrefixUnaryExpressionFromOperatorToken(this.operatorToken.kind()); }\r\n";
-    }
-    else if (definition.name === "PostfixUnaryExpressionSyntax") {
-        result += "        public kind(): SyntaxKind { return SyntaxFacts.getPostfixUnaryExpressionFromOperatorToken(this.operatorToken.kind()); }\r\n";
-    }
-    else if (definition.name === "HeritageClauseSyntax") {
-        result += "        public kind(): SyntaxKind { return this.extendsOrImplementsKeyword.kind() === SyntaxKind.ExtendsKeyword ? SyntaxKind.ExtendsHeritageClause : SyntaxKind.ImplementsHeritageClause; }\r\n";
-    }
-
     result += "    }";
     return result;
 }
@@ -2312,19 +2277,6 @@ function generateWalker(): string {
 "        public visitToken(token: ISyntaxToken): void {\r\n" +
 "        }\r\n" +
 "\r\n" +
-"        public visitNode(node: ISyntaxNode): void {\r\n" +
-"            visitNodeOrToken(this, node);\r\n" +
-"        }\r\n" +
-"\r\n" +
-"        public visitNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {\r\n" +
-"            if (isToken(nodeOrToken)) { \r\n" +
-"                this.visitToken(<ISyntaxToken>nodeOrToken);\r\n" +
-"            }\r\n" +
-"            else {\r\n" +
-"                this.visitNode(<ISyntaxNode>nodeOrToken);\r\n" +
-"            }\r\n" +
-"        }\r\n" +
-"\r\n" +
 "        private visitOptionalToken(token: ISyntaxToken): void {\r\n" +
 "            if (token === undefined) {\r\n" +
 "                return;\r\n" +
@@ -2333,32 +2285,16 @@ function generateWalker(): string {
 "            this.visitToken(token);\r\n" +
 "        }\r\n" +
 "\r\n" +
-"        public visitOptionalNode(node: ISyntaxNode): void {\r\n" +
-"            if (node === undefined) {\r\n" +
-"                return;\r\n" +
-"            }\r\n" +
-"\r\n" +
-"            this.visitNode(node);\r\n" +
-"        }\r\n" +
-"\r\n" +
-"        public visitOptionalNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {\r\n" +
-"            if (nodeOrToken === undefined) {\r\n" +
-"                return;\r\n" +
-"            }\r\n" +
-"\r\n" +
-"            this.visitNodeOrToken(nodeOrToken);\r\n" +
-"        }\r\n" +
-"\r\n" +
 "        public visitList(list: ISyntaxNodeOrToken[]): void {\r\n" +
 "            for (var i = 0, n = list.length; i < n; i++) {\r\n" +
-"               this.visitNodeOrToken(list[i]);\r\n" +
+"               visitNodeOrToken(this, list[i]);\r\n" +
 "            }\r\n" +
 "        }\r\n" +
 "\r\n" +
 "        public visitSeparatedList(list: ISyntaxNodeOrToken[]): void {\r\n" +
 "            for (var i = 0, n = childCount(list); i < n; i++) {\r\n" +
 "                var item = childAt(list, i);\r\n" +
-"                this.visitNodeOrToken(item);\r\n" + 
+"                visitNodeOrToken(this, item);\r\n" + 
 "            }\r\n" +
 "        }\r\n";
 
@@ -2386,20 +2322,10 @@ function generateWalker(): string {
                 result += "            this.visitSeparatedList(node." + child.name + ");\r\n";
             }
             else if (isNodeOrToken(child)) {
-                if (child.isOptional) {
-                    result += "            this.visitOptionalNodeOrToken(node." + child.name + ");\r\n";
-                }
-                else {
-                    result += "            this.visitNodeOrToken(node." + child.name + ");\r\n";
-                }
+                result += "            visitNodeOrToken(this, node." + child.name + ");\r\n";
             }
             else if (child.type !== "SyntaxKind") {
-                if (child.isOptional) {
-                    result += "            this.visitOptionalNode(node." + child.name + ");\r\n";
-                }
-                else {
-                    result += "            this.visitNode(node." + child.name + ");\r\n";
-                }
+                result += "            visitNodeOrToken(this, node." + child.name + ");\r\n";
             }
         }
 
