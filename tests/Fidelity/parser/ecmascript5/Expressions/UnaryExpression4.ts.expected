@@ -1,0 +1,107 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 5,
+        "start": 0,
+        "end": 5,
+        "fullWidth": 5,
+        "width": 5,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 5,
+                "start": 0,
+                "end": 5,
+                "fullWidth": 5,
+                "width": 5,
+                "expression": {
+                    "kind": "PreIncrementExpression",
+                    "fullStart": 0,
+                    "fullEnd": 4,
+                    "start": 0,
+                    "end": 4,
+                    "fullWidth": 4,
+                    "width": 4,
+                    "operatorToken": {
+                        "kind": "PlusPlusToken",
+                        "fullStart": 0,
+                        "fullEnd": 2,
+                        "start": 0,
+                        "end": 2,
+                        "fullWidth": 2,
+                        "width": 2,
+                        "text": "++",
+                        "value": "++",
+                        "valueText": "++"
+                    },
+                    "operand": {
+                        "kind": "ObjectLiteralExpression",
+                        "fullStart": 2,
+                        "fullEnd": 4,
+                        "start": 2,
+                        "end": 4,
+                        "fullWidth": 2,
+                        "width": 2,
+                        "openBraceToken": {
+                            "kind": "OpenBraceToken",
+                            "fullStart": 2,
+                            "fullEnd": 3,
+                            "start": 2,
+                            "end": 3,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": "{",
+                            "value": "{",
+                            "valueText": "{"
+                        },
+                        "propertyAssignments": [],
+                        "closeBraceToken": {
+                            "kind": "CloseBraceToken",
+                            "fullStart": 3,
+                            "fullEnd": 4,
+                            "start": 3,
+                            "end": 4,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": "}",
+                            "value": "}",
+                            "valueText": "}"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 4,
+                    "fullEnd": 5,
+                    "start": 4,
+                    "end": 5,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 5,
+            "fullEnd": 5,
+            "start": 5,
+            "end": 5,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 5
+    }
+}

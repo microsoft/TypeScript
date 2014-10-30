@@ -1,0 +1,177 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 22,
+        "start": 0,
+        "end": 22,
+        "fullWidth": 22,
+        "width": 22,
+        "moduleElements": [
+            {
+                "kind": "DoStatement",
+                "fullStart": 0,
+                "fullEnd": 17,
+                "start": 0,
+                "end": 17,
+                "fullWidth": 17,
+                "width": 17,
+                "doKeyword": {
+                    "kind": "DoKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 2,
+                    "start": 0,
+                    "end": 2,
+                    "fullWidth": 2,
+                    "width": 2,
+                    "text": "do",
+                    "value": "do",
+                    "valueText": "do"
+                },
+                "statement": {
+                    "kind": "Block",
+                    "fullStart": 2,
+                    "fullEnd": 5,
+                    "start": 2,
+                    "end": 5,
+                    "fullWidth": 3,
+                    "width": 3,
+                    "openBraceToken": {
+                        "kind": "OpenBraceToken",
+                        "fullStart": 2,
+                        "fullEnd": 3,
+                        "start": 2,
+                        "end": 3,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "{",
+                        "value": "{",
+                        "valueText": "{"
+                    },
+                    "statements": [
+                        {
+                            "kind": "EmptyStatement",
+                            "fullStart": 3,
+                            "fullEnd": 4,
+                            "start": 3,
+                            "end": 4,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "semicolonToken": {
+                                "kind": "SemicolonToken",
+                                "fullStart": 3,
+                                "fullEnd": 4,
+                                "start": 3,
+                                "end": 4,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": ";",
+                                "value": ";",
+                                "valueText": ";"
+                            }
+                        }
+                    ],
+                    "closeBraceToken": {
+                        "kind": "CloseBraceToken",
+                        "fullStart": 4,
+                        "fullEnd": 5,
+                        "start": 4,
+                        "end": 5,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "}",
+                        "value": "}",
+                        "valueText": "}"
+                    }
+                },
+                "whileKeyword": {
+                    "kind": "WhileKeyword",
+                    "fullStart": 5,
+                    "fullEnd": 10,
+                    "start": 5,
+                    "end": 10,
+                    "fullWidth": 5,
+                    "width": 5,
+                    "text": "while",
+                    "value": "while",
+                    "valueText": "while"
+                },
+                "openParenToken": {
+                    "kind": "OpenParenToken",
+                    "fullStart": 10,
+                    "fullEnd": 11,
+                    "start": 10,
+                    "end": 11,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": "(",
+                    "value": "(",
+                    "valueText": "("
+                },
+                "condition": {
+                    "kind": "FalseKeyword",
+                    "fullStart": 11,
+                    "fullEnd": 16,
+                    "start": 11,
+                    "end": 16,
+                    "fullWidth": 5,
+                    "width": 5,
+                    "text": "false",
+                    "value": false,
+                    "valueText": "false"
+                },
+                "closeParenToken": {
+                    "kind": "CloseParenToken",
+                    "fullStart": 16,
+                    "fullEnd": 17,
+                    "start": 16,
+                    "end": 17,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ")",
+                    "value": ")",
+                    "valueText": ")"
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 17,
+                "fullEnd": 22,
+                "start": 17,
+                "end": 22,
+                "fullWidth": 5,
+                "width": 5,
+                "expression": {
+                    "kind": "FalseKeyword",
+                    "fullStart": 17,
+                    "fullEnd": 22,
+                    "start": 17,
+                    "end": 22,
+                    "fullWidth": 5,
+                    "width": 5,
+                    "text": "false",
+                    "value": false,
+                    "valueText": "false"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 22,
+            "fullEnd": 22,
+            "start": 22,
+            "end": 22,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 22
+    }
+}

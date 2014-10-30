@@ -1,0 +1,171 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 297,
+        "start": 281,
+        "end": 297,
+        "fullWidth": 297,
+        "width": 16,
+        "moduleElements": [
+            {
+                "kind": "ThrowStatement",
+                "fullStart": 0,
+                "fullEnd": 296,
+                "start": 281,
+                "end": 295,
+                "fullWidth": 296,
+                "width": 14,
+                "throwKeyword": {
+                    "kind": "ThrowKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 287,
+                    "start": 281,
+                    "end": 286,
+                    "fullWidth": 287,
+                    "width": 5,
+                    "text": "throw",
+                    "value": "throw",
+                    "valueText": "throw",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingComment": true,
+                    "hasLeadingNewLine": true,
+                    "hasTrailingTrivia": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "SingleLineCommentTrivia",
+                            "fullStart": 0,
+                            "fullEnd": 60,
+                            "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 60,
+                            "fullEnd": 61,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "SingleLineCommentTrivia",
+                            "fullStart": 61,
+                            "fullEnd": 131,
+                            "text": "// This code is governed by the BSD license found in the LICENSE file."
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 131,
+                            "fullEnd": 132,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 132,
+                            "fullEnd": 133,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "MultiLineCommentTrivia",
+                            "fullStart": 133,
+                            "fullEnd": 279,
+                            "text": "/**\n * Sanity test for throw statement\n *\n * @path ch12/12.13/S12.13_A1.js\n * @description Trying to throw exception with \"throw\"\n * @negative\n */"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 279,
+                            "fullEnd": 280,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 280,
+                            "fullEnd": 281,
+                            "text": "\n"
+                        }
+                    ],
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 286,
+                            "fullEnd": 287,
+                            "text": " "
+                        }
+                    ]
+                },
+                "expression": {
+                    "kind": "StringLiteral",
+                    "fullStart": 287,
+                    "fullEnd": 294,
+                    "start": 287,
+                    "end": 294,
+                    "fullWidth": 7,
+                    "width": 7,
+                    "text": "\"error\"",
+                    "value": "error",
+                    "valueText": "error"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 294,
+                    "fullEnd": 296,
+                    "start": 294,
+                    "end": 295,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 295,
+                            "fullEnd": 296,
+                            "text": "\n"
+                        }
+                    ]
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 296,
+            "fullEnd": 297,
+            "start": 297,
+            "end": 297,
+            "fullWidth": 1,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 296,
+                    "fullEnd": 297,
+                    "text": "\n"
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            61,
+            132,
+            133,
+            137,
+            172,
+            175,
+            208,
+            263,
+            276,
+            280,
+            281,
+            296,
+            297
+        ],
+        "length": 297
+    }
+}

@@ -1,0 +1,48 @@
+{
+    "fullText": [
+        "100000000000000000000.123"
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 25,
+        "start": 0,
+        "end": 25,
+        "fullWidth": 25,
+        "width": 25,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 25,
+                "start": 0,
+                "end": 25,
+                "fullWidth": 25,
+                "width": 25,
+                "expression": {
+                    "kind": "NumericLiteral",
+                    "fullStart": 0,
+                    "fullEnd": 25,
+                    "start": 0,
+                    "end": 25,
+                    "fullWidth": 25,
+                    "width": 25,
+                    "text": "100000000000000000000.123",
+                    "value": 100000000000000000000,
+                    "valueText": "100000000000000000000"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 25,
+            "fullEnd": 25,
+            "start": 25,
+            "end": 25,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    }
+}

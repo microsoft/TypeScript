@@ -1,0 +1,120 @@
+{
+    "tokens": {
+        "0": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 1,
+            "start": 1,
+            "end": 1,
+            "fullWidth": 1,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 0,
+                        "fullEnd": 1,
+                        "start": 0,
+                        "end": 1,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        },
+        "1": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 1,
+            "start": 1,
+            "end": 1,
+            "fullWidth": 1,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 0,
+                        "fullEnd": 1,
+                        "start": 0,
+                        "end": 1,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        }
+    },
+    "tokensOnLeft": {
+        "0": null,
+        "1": null
+    },
+    "leftToRight": [
+        {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 1,
+            "start": 1,
+            "end": 1,
+            "fullWidth": 1,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 0,
+                        "fullEnd": 1,
+                        "start": 0,
+                        "end": 1,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        }
+    ],
+    "rightToLeft": [
+        {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 1,
+            "start": 1,
+            "end": 1,
+            "fullWidth": 1,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 0,
+                        "fullEnd": 1,
+                        "start": 0,
+                        "end": 1,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,170 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 50,
+        "start": 0,
+        "end": 50,
+        "fullWidth": 50,
+        "width": 50,
+        "moduleElements": [
+            {
+                "kind": "ImportDeclaration",
+                "fullStart": 0,
+                "fullEnd": 50,
+                "start": 0,
+                "end": 50,
+                "fullWidth": 50,
+                "width": 50,
+                "modifiers": [],
+                "importKeyword": {
+                    "kind": "ImportKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 7,
+                    "start": 0,
+                    "end": 6,
+                    "fullWidth": 7,
+                    "width": 6,
+                    "text": "import",
+                    "value": "import",
+                    "valueText": "import",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 6,
+                            "fullEnd": 7,
+                            "text": " "
+                        }
+                    ]
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "fullStart": 7,
+                    "fullEnd": 18,
+                    "start": 7,
+                    "end": 17,
+                    "fullWidth": 11,
+                    "width": 10,
+                    "text": "TypeScript",
+                    "value": "TypeScript",
+                    "valueText": "TypeScript",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 17,
+                            "fullEnd": 18,
+                            "text": " "
+                        }
+                    ]
+                },
+                "equalsToken": {
+                    "kind": "EqualsToken",
+                    "fullStart": 18,
+                    "fullEnd": 20,
+                    "start": 18,
+                    "end": 19,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "text": "=",
+                    "value": "=",
+                    "valueText": "=",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 19,
+                            "fullEnd": 20,
+                            "text": " "
+                        }
+                    ]
+                },
+                "moduleReference": {
+                    "kind": "ModuleNameModuleReference",
+                    "fullStart": 20,
+                    "fullEnd": 49,
+                    "start": 20,
+                    "end": 49,
+                    "fullWidth": 29,
+                    "width": 29,
+                    "moduleName": {
+                        "kind": "QualifiedName",
+                        "fullStart": 20,
+                        "fullEnd": 49,
+                        "start": 20,
+                        "end": 49,
+                        "fullWidth": 29,
+                        "width": 29,
+                        "left": {
+                            "kind": "IdentifierName",
+                            "fullStart": 20,
+                            "fullEnd": 38,
+                            "start": 20,
+                            "end": 38,
+                            "fullWidth": 18,
+                            "width": 18,
+                            "text": "TypeScriptServices",
+                            "value": "TypeScriptServices",
+                            "valueText": "TypeScriptServices"
+                        },
+                        "dotToken": {
+                            "kind": "DotToken",
+                            "fullStart": 38,
+                            "fullEnd": 39,
+                            "start": 38,
+                            "end": 39,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": ".",
+                            "value": ".",
+                            "valueText": "."
+                        },
+                        "right": {
+                            "kind": "IdentifierName",
+                            "fullStart": 39,
+                            "fullEnd": 49,
+                            "start": 39,
+                            "end": 49,
+                            "fullWidth": 10,
+                            "width": 10,
+                            "text": "TypeScript",
+                            "value": "TypeScript",
+                            "valueText": "TypeScript"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 49,
+                    "fullEnd": 50,
+                    "start": 49,
+                    "end": 50,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 50,
+            "fullEnd": 50,
+            "start": 50,
+            "end": 50,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 50
+    }
+}
