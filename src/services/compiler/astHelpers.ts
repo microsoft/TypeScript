@@ -16,45 +16,7 @@
 ///<reference path='references.ts' />
 
 module TypeScript.ASTHelpers {
-
-
     var sentinelEmptyArray: any[] = [];
-
-    //export function scriptIsElided(sourceUnit: SourceUnitSyntax): boolean {
-    //    return isDTSFile(sourceUnit.syntaxTree.fileName()) || moduleMembersAreElided(sourceUnit.moduleElements);
-    //}
-
-    //export function moduleIsElided(declaration: ModuleDeclarationSyntax): boolean {
-    //    return hasModifier(declaration.modifiers, PullElementFlags.Ambient) || moduleMembersAreElided(declaration.moduleElements);
-    //}
-
-    //function moduleMembersAreElided(members: IModuleElementSyntax[]): boolean {
-    //    for (var i = 0, n = members.length; i < n; i++) {
-    //        var member = members[i];
-
-    //        // We should emit *this* module if it contains any non-interface types. 
-    //        // Caveat: if we have contain a module, then we should be emitted *if we want to
-    //        // emit that inner module as well.
-    //        if (member.kind() === SyntaxKind.ModuleDeclaration) {
-    //            if (!moduleIsElided(<ModuleDeclarationSyntax>member)) {
-    //                return false;
-    //            }
-    //        }
-    //        else if (member.kind() !== SyntaxKind.InterfaceDeclaration) {
-    //            return false;
-    //        }
-    //    }
-
-    //    return true;
-    //}
-
-    //export function enumIsElided(declaration: EnumDeclarationSyntax): boolean {
-    //    if (hasModifier(declaration.modifiers, PullElementFlags.Ambient)) {
-    //        return true;
-    //    }
-
-    //    return false;
-    //}
 
      export function isValidAstNode(ast: ISyntaxElement): boolean {
          return ast && !isShared(ast) && start(ast) !== -1 && end(ast) !== -1;
@@ -68,28 +30,6 @@ module TypeScript.ASTHelpers {
             return false;
 
         return true;
-    }
-
-    export function getExtendsHeritageClause(clauses: HeritageClauseSyntax[]): HeritageClauseSyntax {
-        return getHeritageClause(clauses, SyntaxKind.ExtendsHeritageClause);
-    }
-
-    export function getImplementsHeritageClause(clauses: HeritageClauseSyntax[]): HeritageClauseSyntax {
-        return getHeritageClause(clauses, SyntaxKind.ImplementsHeritageClause);
-    }
-
-    function getHeritageClause(clauses: HeritageClauseSyntax[], kind: SyntaxKind): HeritageClauseSyntax {
-        if (clauses) {
-            for (var i = 0, n = clauses.length; i < n; i++) {
-                var child = clauses[i];
-
-                if (child.typeNames.length > 0 && child.kind() === kind) {
-                    return child;
-                }
-            }
-        }
-
-        return null;
     }
 
     export function isCallExpression(ast: ISyntaxElement): boolean {
@@ -576,28 +516,6 @@ module TypeScript.ASTHelpers {
     export function getVariableDeclaratorModifiers(variableDeclarator: VariableDeclaratorSyntax): ISyntaxToken[] {
         var variableStatement = getVariableStatement(variableDeclarator);
         return variableStatement ? variableStatement.modifiers : Syntax.emptyList<ISyntaxToken>();
-    }
-
-    export function isIntegerLiteralAST(expression: ISyntaxElement): boolean {
-        if (expression) {
-            switch (expression.kind()) {
-                case SyntaxKind.PlusExpression:
-                case SyntaxKind.NegateExpression:
-                    // Note: if there is a + or - sign, we can only allow a normal integer following
-                    // (and not a hex integer).  i.e. -0xA is a legal expression, but it is not a 
-                    // *literal*.
-                    expression = (<PrefixUnaryExpressionSyntax>expression).operand;
-                    return expression.kind() === SyntaxKind.NumericLiteral && IntegerUtilities.isInteger((<ISyntaxToken>expression).text());
-
-                case SyntaxKind.NumericLiteral:
-                    // If it doesn't have a + or -, then either an integer literal or a hex literal
-                    // is acceptable.
-                    var text = (<ISyntaxToken>expression).text();
-                    return IntegerUtilities.isInteger(text) || IntegerUtilities.isHexInteger(text);
-            }
-        }
-
-        return false;
     }
 
     export function getEnclosingModuleDeclaration(ast: ISyntaxElement): ModuleDeclarationSyntax {
