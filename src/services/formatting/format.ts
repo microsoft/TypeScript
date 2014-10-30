@@ -19,6 +19,7 @@ module ts.formatting {
     interface DynamicIndentation {
         getIndentation(): number;
         getCommentIndentation(): number;
+        increaseCommentIndentation(delta: number): void;
         recomputeIndentation(lineAddedByFormatting: boolean): void;
     }
 
@@ -200,6 +201,26 @@ module ts.formatting {
             return 0;
         }
 
+        function getDynamicIndentation(node: Node, indentation: number, commentIndentation: number, parentIndentation: DynamicIndentation): DynamicIndentation {
+            return {
+                getCommentIndentation: () => commentIndentation,
+                getIndentation: () => indentation,
+                recomputeIndentation: (lineAdded) => {
+                    if (parentIndentation) {
+                        parentIndentation.recomputeIndentation(lineAdded);
+                    }
+                    var delta = getIndentationDelta(node, lineAdded);
+                    if (delta) {
+                        indentation += delta;
+                        commentIndentation += delta;
+                    }
+                },
+                increaseCommentIndentation: (delta) => {
+                    commentIndentation += delta;
+                }
+            }
+        }
+
         function getListItemIndentation(nodes: Node[], index: number, parentStartLine: number, options: EditorOptions): number {
             Debug.assert(index >= 0 && index < nodes.length);
             var node = nodes[index];
@@ -215,19 +236,7 @@ module ts.formatting {
             if (!rangeOverlapsWithStartEnd(originalRange, node.getStart(sourceFile), node.getEnd())) {
                 return;
             }
-            var commentIndentation = indentation;
-
-            var nodeIndentation: DynamicIndentation = {
-                getCommentIndentation: () => commentIndentation,
-                getIndentation: () => indentation,
-                recomputeIndentation: (lineAdded) => {
-                    var delta = getIndentationDelta(node, lineAdded);
-                    if (delta) {
-                        indentation += delta;
-                        commentIndentation += delta;
-                    }
-                }
-            };
+            var nodeIndentation = getDynamicIndentation(node, indentation, indentation, undefined);
 
             var childContextNode = contextNode;
             forEachChild(
@@ -240,6 +249,24 @@ module ts.formatting {
                     for (var i = 0, len = nodes.length; i < len; ++i) {
                         inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, /*containingList*/ nodes, /*listElementIndex*/ i)
                     }
+                    switch (node.kind) {
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.Method:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.CallExpression:
+                        case SyntaxKind.NewExpression:
+                            //if (formattingScanner.isOnToken()) {
+                            //    var tokenInfo = formattingScanner.readTokenInfo(node);
+                            //    Debug.assert(rangeContainsRange(node, tokenInfo.token));
+                            //    // TODO: check if token is a list terminator
+                            //    if (node.parent.kind !== SyntaxKind.SourceFile && formattingScanner.lastTrailingTriviaWasNewLine()) {
+                            //        var listTerminatorIndentation = nodeIndentation.getIndentation() + options.IndentSize;
+                            //        doConsumeTokenAndAdvanceScanner(tokenInfo, node, getDynamicIndentation(node, listTerminatorIndentation, listTerminatorIndentation, nodeIndentation));
+                            //    }
+                            //}
+                            break;
+                    }
                 }
             );
 
@@ -250,11 +277,9 @@ module ts.formatting {
                     break;
                 }
 
-                commentIndentation =
-                    SmartIndenter.nodeContentIsAlwaysIndented(node) && node.end === tokenInfo.token.end
-                    ? indentation + options.IndentSize
-                    : indentation;
-
+                if (SmartIndenter.nodeContentIsAlwaysIndented(node) && node.end === tokenInfo.token.end) {
+                    nodeIndentation.increaseCommentIndentation(options.IndentSize);
+                }
                 doConsumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
             }
 
@@ -297,7 +322,10 @@ module ts.formatting {
                                 node.pos !== child.pos &&
                                 formattingScanner.lastTrailingTriviaWasNewLine();
 
-                            var childIndentationValue = increaseIndentation ? indentation + options.IndentSize : indentation;
+                            var childIndentationValue =
+                                increaseIndentation
+                                ? nodeIndentation.getIndentation() + options.IndentSize
+                                : nodeIndentation.getIndentation();
                         }
                     }
                     else {
@@ -308,7 +336,7 @@ module ts.formatting {
                         if (actualIndentation !== -1) {
                             inheritedIndentation = actualIndentation;
                         }
-                        var childIndentationValue = inheritedIndentation || indentation;
+                        var childIndentationValue = inheritedIndentation || nodeIndentation.getIndentation();
                     }
                 }
                 else {
@@ -317,20 +345,14 @@ module ts.formatting {
                         !shareLine &&
                         !SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStart.line, sourceFile) &&
                         SmartIndenter.shouldIndentChildNode(node, child);
-                    var childIndentationValue = increaseIndentation ? indentation + options.IndentSize : indentation;
+                    var childIndentationValue =
+                        increaseIndentation
+                            ? nodeIndentation.getIndentation() + options.IndentSize
+                            : nodeIndentation.getIndentation();
                 }
 
-                var childIndentation: DynamicIndentation = {
-                    getIndentation: () => childIndentationValue,
-                    getCommentIndentation: () => childIndentationValue,
-                    recomputeIndentation: lineAdded => {
-                        nodeIndentation.recomputeIndentation(lineAdded);
-                        var delta = getIndentationDelta(node, lineAdded);
-                        if (delta) {
-                            childIndentationValue += delta;
-                        }
-                    },
-                };
+
+                var childIndentation = getDynamicIndentation(node, childIndentationValue, childIndentationValue, nodeIndentation);
 
                 // ensure that current token is inside child node
                 if (isToken(child)) {
