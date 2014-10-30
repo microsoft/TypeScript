@@ -608,7 +608,7 @@
                                                 ]
                                             },
                                             "expression": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 653,
                                                 "fullEnd": 677,
                                                 "start": 653,

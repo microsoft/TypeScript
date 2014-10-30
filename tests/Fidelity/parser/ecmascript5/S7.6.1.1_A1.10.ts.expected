@@ -123,7 +123,7 @@
                     "text": ""
                 },
                 "initializer": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 316,
                     "fullEnd": 319,
                     "start": 316,

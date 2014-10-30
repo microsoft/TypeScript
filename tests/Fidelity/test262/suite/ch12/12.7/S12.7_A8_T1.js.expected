@@ -443,7 +443,7 @@
                                             "fullWidth": 7,
                                             "width": 4,
                                             "expression": {
-                                                "kind": "PostIncrementExpression",
+                                                "kind": "PostfixUnaryExpression",
                                                 "fullStart": 387,
                                                 "fullEnd": 392,
                                                 "start": 389,
@@ -589,7 +589,7 @@
                                             "fullWidth": 7,
                                             "width": 4,
                                             "expression": {
-                                                "kind": "PostIncrementExpression",
+                                                "kind": "PostfixUnaryExpression",
                                                 "fullStart": 420,
                                                 "fullEnd": 425,
                                                 "start": 422,
@@ -1176,7 +1176,7 @@
                                                 "fullWidth": 7,
                                                 "width": 4,
                                                 "expression": {
-                                                    "kind": "PostIncrementExpression",
+                                                    "kind": "PostfixUnaryExpression",
                                                     "fullStart": 551,
                                                     "fullEnd": 556,
                                                     "start": 553,
@@ -1249,7 +1249,7 @@
                                                 "fullWidth": 7,
                                                 "width": 4,
                                                 "expression": {
-                                                    "kind": "PostIncrementExpression",
+                                                    "kind": "PostfixUnaryExpression",
                                                     "fullStart": 558,
                                                     "fullEnd": 563,
                                                     "start": 560,

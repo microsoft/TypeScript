@@ -1512,7 +1512,7 @@
                                                         "valueText": "("
                                                     },
                                                     "condition": {
-                                                        "kind": "EqualsExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 978,
                                                         "fullEnd": 990,
                                                         "start": 978,
@@ -1635,7 +1635,7 @@
                                                                 "fullWidth": 46,
                                                                 "width": 24,
                                                                 "expression": {
-                                                                    "kind": "AssignmentExpression",
+                                                                    "kind": "BinaryExpression",
                                                                     "fullStart": 995,
                                                                     "fullEnd": 1038,
                                                                     "start": 1015,
@@ -1843,7 +1843,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1096,
                                             "fullEnd": 1147,
                                             "start": 1096,
@@ -1851,7 +1851,7 @@
                                             "fullWidth": 51,
                                             "width": 51,
                                             "left": {
-                                                "kind": "LogicalNotExpression",
+                                                "kind": "PrefixUnaryExpression",
                                                 "fullStart": 1096,
                                                 "fullEnd": 1128,
                                                 "start": 1096,

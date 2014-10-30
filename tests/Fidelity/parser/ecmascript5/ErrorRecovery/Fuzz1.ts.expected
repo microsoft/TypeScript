@@ -47,7 +47,7 @@
                 "width": 7,
                 "isIncrementallyUnusable": true,
                 "expression": {
-                    "kind": "LessThanExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 8,
                     "start": 0,

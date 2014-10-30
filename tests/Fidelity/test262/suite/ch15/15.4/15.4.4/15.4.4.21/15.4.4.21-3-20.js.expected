@@ -576,7 +576,7 @@
                                                 "valueText": "("
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 657,
                                                 "fullEnd": 683,
                                                 "start": 657,
@@ -584,7 +584,7 @@
                                                 "fullWidth": 26,
                                                 "width": 26,
                                                 "left": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 657,
                                                     "fullEnd": 671,
                                                     "start": 657,
@@ -677,7 +677,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 674,
                                                     "fullEnd": 683,
                                                     "start": 674,
@@ -1605,7 +1605,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 917,
                                 "fullEnd": 973,
                                 "start": 917,

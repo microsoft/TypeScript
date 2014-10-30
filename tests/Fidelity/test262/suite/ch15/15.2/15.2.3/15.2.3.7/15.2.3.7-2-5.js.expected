@@ -685,7 +685,7 @@
                                                             ]
                                                         },
                                                         {
-                                                            "kind": "NegateExpression",
+                                                            "kind": "PrefixUnaryExpression",
                                                             "fullStart": 645,
                                                             "fullEnd": 648,
                                                             "start": 645,
@@ -798,7 +798,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 667,
                                 "fullEnd": 679,
                                 "start": 667,

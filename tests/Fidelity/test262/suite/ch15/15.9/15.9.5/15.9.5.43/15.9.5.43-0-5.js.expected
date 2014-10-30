@@ -581,7 +581,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 627,
                                 "fullEnd": 662,
                                 "start": 627,
@@ -621,7 +621,7 @@
                                         "valueText": "["
                                     },
                                     "argumentExpression": {
-                                        "kind": "SubtractExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 635,
                                         "fullEnd": 653,
                                         "start": 635,

@@ -19,7 +19,7 @@
                 "fullWidth": 309,
                 "width": 3,
                 "expression": {
-                    "kind": "SubtractExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 309,
                     "start": 305,

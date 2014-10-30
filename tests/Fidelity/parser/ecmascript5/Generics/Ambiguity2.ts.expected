@@ -60,7 +60,7 @@
                         },
                         "arguments": [
                             {
-                                "kind": "LessThanExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 2,
                                 "fullEnd": 5,
                                 "start": 2,
@@ -126,7 +126,7 @@
                                 ]
                             },
                             {
-                                "kind": "GreaterThanExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 7,
                                 "fullEnd": 10,
                                 "start": 7,

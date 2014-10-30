@@ -780,7 +780,7 @@
                                         "fullWidth": 30,
                                         "width": 16,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 715,
                                             "fullEnd": 742,
                                             "start": 727,
@@ -925,7 +925,7 @@
                                             "valueText": "("
                                         },
                                         "condition": {
-                                            "kind": "EqualsExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 761,
                                             "fullEnd": 770,
                                             "start": 761,
@@ -1048,7 +1048,7 @@
                                                     "fullWidth": 37,
                                                     "width": 19,
                                                     "expression": {
-                                                        "kind": "AssignmentExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 775,
                                                         "fullEnd": 809,
                                                         "start": 791,
@@ -3094,7 +3094,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 1312,
                                 "fullEnd": 1334,
                                 "start": 1312,

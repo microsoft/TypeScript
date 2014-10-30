@@ -483,7 +483,7 @@
                                         "fullWidth": 36,
                                         "width": 22,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 672,
                                             "fullEnd": 705,
                                             "start": 684,
@@ -915,7 +915,7 @@
                                         "fullWidth": 44,
                                         "width": 28,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 803,
                                             "fullEnd": 844,
                                             "start": 817,
@@ -1095,7 +1095,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 868,
                                             "fullEnd": 939,
                                             "start": 868,
@@ -1234,7 +1234,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 902,
                                                 "fullEnd": 939,
                                                 "start": 902,

@@ -287,7 +287,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 316,
                                             "fullEnd": 367,
                                             "start": 316,
@@ -647,7 +647,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 391,
                                     "fullEnd": 424,
                                     "start": 391,
@@ -675,7 +675,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 392,
                                             "fullEnd": 414,
                                             "start": 392,
@@ -904,7 +904,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 439,
                                                             "fullEnd": 485,
                                                             "start": 439,
@@ -1483,7 +1483,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 546,
                                             "fullEnd": 605,
                                             "start": 546,
@@ -1845,7 +1845,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 629,
                                     "fullEnd": 662,
                                     "start": 629,
@@ -1873,7 +1873,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 630,
                                             "fullEnd": 652,
                                             "start": 630,
@@ -2102,7 +2102,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 677,
                                                             "fullEnd": 734,
                                                             "start": 677,

@@ -117,7 +117,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 302,
                     "fullEnd": 317,
                     "start": 302,
@@ -125,7 +125,7 @@
                     "fullWidth": 15,
                     "width": 15,
                     "left": {
-                        "kind": "LogicalNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 302,
                         "fullEnd": 309,
                         "start": 302,
@@ -450,7 +450,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 371,
                     "fullEnd": 399,
                     "start": 371,
@@ -458,7 +458,7 @@
                     "fullWidth": 28,
                     "width": 28,
                     "left": {
-                        "kind": "LogicalNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 371,
                         "fullEnd": 390,
                         "start": 371,
@@ -860,7 +860,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 466,
                     "fullEnd": 495,
                     "start": 466,
@@ -868,7 +868,7 @@
                     "fullWidth": 29,
                     "width": 29,
                     "left": {
-                        "kind": "LogicalNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 466,
                         "fullEnd": 486,
                         "start": 466,

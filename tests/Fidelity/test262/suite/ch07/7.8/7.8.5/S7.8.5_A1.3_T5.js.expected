@@ -335,7 +335,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 344,
                                             "fullEnd": 447,
                                             "start": 344,
@@ -743,7 +743,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 471,
                                     "fullEnd": 506,
                                     "start": 471,
@@ -771,7 +771,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 472,
                                             "fullEnd": 496,
                                             "start": 472,
@@ -1000,7 +1000,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 522,
                                                             "fullEnd": 603,
                                                             "start": 522,

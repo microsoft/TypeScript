@@ -335,7 +335,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 340,
                                             "fullEnd": 439,
                                             "start": 340,
@@ -743,7 +743,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 463,
                                     "fullEnd": 498,
                                     "start": 463,
@@ -771,7 +771,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 464,
                                             "fullEnd": 488,
                                             "start": 464,
@@ -1000,7 +1000,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 514,
                                                             "fullEnd": 590,
                                                             "start": 514,

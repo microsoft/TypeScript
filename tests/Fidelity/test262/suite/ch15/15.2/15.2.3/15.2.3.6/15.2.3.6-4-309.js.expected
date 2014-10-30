@@ -2018,7 +2018,7 @@
                                                                         ]
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "LogicalAndExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 1347,
                                                                         "fullEnd": 1471,
                                                                         "start": 1347,
@@ -2026,7 +2026,7 @@
                                                                         "fullWidth": 124,
                                                                         "width": 124,
                                                                         "left": {
-                                                                            "kind": "InstanceOfExpression",
+                                                                            "kind": "BinaryExpression",
                                                                             "fullStart": 1347,
                                                                             "fullEnd": 1370,
                                                                             "start": 1347,

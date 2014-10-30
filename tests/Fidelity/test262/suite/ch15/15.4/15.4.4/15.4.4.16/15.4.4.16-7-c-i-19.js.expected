@@ -635,7 +635,7 @@
                                         "fullWidth": 30,
                                         "width": 16,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 740,
                                             "fullEnd": 767,
                                             "start": 752,
@@ -768,7 +768,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "EqualsExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 789,
                                             "fullEnd": 815,
                                             "start": 789,
@@ -1763,7 +1763,7 @@
                                         "fullWidth": 39,
                                         "width": 25,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1003,
                                             "fullEnd": 1039,
                                             "start": 1015,
@@ -1974,7 +1974,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1061,
                                             "fullEnd": 1116,
                                             "start": 1061,

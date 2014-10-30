@@ -861,7 +861,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 804,
                                 "fullEnd": 817,
                                 "start": 804,

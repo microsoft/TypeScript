@@ -1359,7 +1359,7 @@
                                                                         ]
                                                                     },
                                                                     "value": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 1116,
                                                                         "fullEnd": 1124,
                                                                         "start": 1116,
@@ -1493,7 +1493,7 @@
                                                         ]
                                                     },
                                                     "expression": {
-                                                        "kind": "LogicalAndExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 1150,
                                                         "fullEnd": 1237,
                                                         "start": 1150,

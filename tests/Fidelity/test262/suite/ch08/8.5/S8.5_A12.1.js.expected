@@ -143,7 +143,7 @@
                                     "valueText": "="
                                 },
                                 "value": {
-                                    "kind": "PlusExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 331,
                                     "fullEnd": 340,
                                     "start": 331,
@@ -385,7 +385,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 377,
                     "fullEnd": 409,
                     "start": 377,
@@ -703,7 +703,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 498,
                     "fullEnd": 528,
                     "start": 498,

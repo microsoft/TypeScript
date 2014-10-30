@@ -664,7 +664,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 678,
                                             "fullEnd": 694,
                                             "start": 678,
@@ -1008,7 +1008,7 @@
                             "fullWidth": 36,
                             "width": 26,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 741,
                                 "fullEnd": 774,
                                 "start": 749,
@@ -1341,7 +1341,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 792,
                                 "fullEnd": 859,
                                 "start": 792,
@@ -1349,7 +1349,7 @@
                                 "fullWidth": 67,
                                 "width": 67,
                                 "left": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 792,
                                     "fullEnd": 832,
                                     "start": 792,
@@ -1564,7 +1564,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "LogicalNotExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 835,
                                     "fullEnd": 859,
                                     "start": 835,

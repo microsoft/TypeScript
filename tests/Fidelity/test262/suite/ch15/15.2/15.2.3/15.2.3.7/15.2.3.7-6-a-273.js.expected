@@ -1456,7 +1456,7 @@
                                                 ]
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1063,
                                                 "fullEnd": 1166,
                                                 "start": 1063,
@@ -1484,7 +1484,7 @@
                                                         "valueText": "("
                                                     },
                                                     "expression": {
-                                                        "kind": "InstanceOfExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 1064,
                                                         "fullEnd": 1087,
                                                         "start": 1064,

@@ -340,7 +340,7 @@
                 "width": 49,
                 "isIncrementallyUnusable": true,
                 "expression": {
-                    "kind": "CommaExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 57,
                     "fullEnd": 107,
                     "start": 57,
@@ -349,7 +349,7 @@
                     "width": 49,
                     "isIncrementallyUnusable": true,
                     "left": {
-                        "kind": "CommaExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 57,
                         "fullEnd": 86,
                         "start": 57,

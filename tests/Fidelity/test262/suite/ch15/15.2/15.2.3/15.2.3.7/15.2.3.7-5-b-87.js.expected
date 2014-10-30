@@ -1211,7 +1211,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 854,
                                 "fullEnd": 903,
                                 "start": 854,
@@ -1219,7 +1219,7 @@
                                 "fullWidth": 49,
                                 "width": 49,
                                 "left": {
-                                    "kind": "LogicalNotExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 854,
                                     "fullEnd": 886,
                                     "start": 854,

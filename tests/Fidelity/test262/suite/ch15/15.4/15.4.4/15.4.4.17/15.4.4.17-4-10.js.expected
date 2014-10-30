@@ -1787,7 +1787,7 @@
                                                 ]
                                             },
                                             "expression": {
-                                                "kind": "LogicalNotExpression",
+                                                "kind": "PrefixUnaryExpression",
                                                 "fullStart": 941,
                                                 "fullEnd": 967,
                                                 "start": 941,
@@ -1827,7 +1827,7 @@
                                                         "valueText": "("
                                                     },
                                                     "expression": {
-                                                        "kind": "InstanceOfExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 943,
                                                         "fullEnd": 966,
                                                         "start": 943,

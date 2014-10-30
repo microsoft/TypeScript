@@ -382,7 +382,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 443,
                                             "fullEnd": 554,
                                             "start": 443,
@@ -824,7 +824,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 577,
                                     "fullEnd": 610,
                                     "start": 577,
@@ -852,7 +852,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 578,
                                             "fullEnd": 600,
                                             "start": 578,
@@ -1081,7 +1081,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 625,
                                                             "fullEnd": 701,
                                                             "start": 625,

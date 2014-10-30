@@ -923,7 +923,7 @@
                             "fullWidth": 29,
                             "width": 25,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 676,
                                 "fullEnd": 702,
                                 "start": 678,
@@ -1521,7 +1521,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 754,
                                 "fullEnd": 786,
                                 "start": 754,

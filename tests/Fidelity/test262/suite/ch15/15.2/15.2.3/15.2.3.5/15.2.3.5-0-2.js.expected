@@ -275,7 +275,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 551,
                                 "fullEnd": 577,
                                 "start": 551,

@@ -194,7 +194,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 578,
                                             "fullEnd": 671,
                                             "start": 578,
@@ -663,7 +663,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 693,
                                     "fullEnd": 728,
                                     "start": 693,
@@ -691,7 +691,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 694,
                                             "fullEnd": 718,
                                             "start": 694,
@@ -911,7 +911,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 742,
                                                             "fullEnd": 804,
                                                             "start": 742,

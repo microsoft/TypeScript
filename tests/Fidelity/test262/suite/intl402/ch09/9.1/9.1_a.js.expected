@@ -994,7 +994,7 @@
                                                 "valueText": "("
                                             },
                                             "condition": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 455,
                                                 "fullEnd": 501,
                                                 "start": 455,
@@ -1133,7 +1133,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "NegateExpression",
+                                                    "kind": "PrefixUnaryExpression",
                                                     "fullStart": 499,
                                                     "fullEnd": 501,
                                                     "start": 499,

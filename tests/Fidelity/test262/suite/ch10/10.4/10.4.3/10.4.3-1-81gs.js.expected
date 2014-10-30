@@ -247,7 +247,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "NotEqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 605,
                                 "fullEnd": 621,
                                 "start": 605,
@@ -683,7 +683,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 675,
                     "fullEnd": 682,
                     "start": 675,

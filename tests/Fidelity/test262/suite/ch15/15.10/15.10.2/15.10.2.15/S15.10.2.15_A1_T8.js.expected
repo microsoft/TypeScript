@@ -194,7 +194,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 577,
                                             "fullEnd": 670,
                                             "start": 577,
@@ -663,7 +663,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 692,
                                     "fullEnd": 727,
                                     "start": 692,
@@ -691,7 +691,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 693,
                                             "fullEnd": 717,
                                             "start": 693,
@@ -911,7 +911,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 741,
                                                             "fullEnd": 803,
                                                             "start": 741,

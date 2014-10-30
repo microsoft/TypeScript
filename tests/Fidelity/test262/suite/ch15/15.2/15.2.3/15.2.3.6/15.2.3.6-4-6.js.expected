@@ -483,7 +483,7 @@
                                                 "valueText": "("
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 890,
                                                 "fullEnd": 1004,
                                                 "start": 890,
@@ -491,7 +491,7 @@
                                                 "fullWidth": 114,
                                                 "width": 114,
                                                 "left": {
-                                                    "kind": "LogicalAndExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 890,
                                                     "fullEnd": 954,
                                                     "start": 890,
@@ -499,7 +499,7 @@
                                                     "fullWidth": 64,
                                                     "width": 63,
                                                     "left": {
-                                                        "kind": "EqualsWithTypeConversionExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 890,
                                                         "fullEnd": 907,
                                                         "start": 890,
@@ -661,7 +661,7 @@
                                                         ]
                                                     },
                                                     "right": {
-                                                        "kind": "EqualsWithTypeConversionExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 911,
                                                         "fullEnd": 954,
                                                         "start": 923,
@@ -831,7 +831,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "EqualsWithTypeConversionExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 958,
                                                     "fullEnd": 1004,
                                                     "start": 970,
@@ -2912,7 +2912,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 1747,
                                 "fullEnd": 1792,
                                 "start": 1747,

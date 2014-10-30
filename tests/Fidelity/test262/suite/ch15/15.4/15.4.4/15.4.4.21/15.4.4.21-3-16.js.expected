@@ -576,7 +576,7 @@
                                                 "valueText": "("
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 639,
                                                 "fullEnd": 665,
                                                 "start": 639,
@@ -584,7 +584,7 @@
                                                 "fullWidth": 26,
                                                 "width": 26,
                                                 "left": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 639,
                                                     "fullEnd": 653,
                                                     "start": 639,
@@ -677,7 +677,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 656,
                                                     "fullEnd": 665,
                                                     "start": 656,
@@ -1253,7 +1253,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 753,
                                 "fullEnd": 809,
                                 "start": 753,

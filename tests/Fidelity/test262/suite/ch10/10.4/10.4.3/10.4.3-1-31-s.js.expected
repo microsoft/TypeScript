@@ -894,7 +894,7 @@
                                                                 ]
                                                             },
                                                             "expression": {
-                                                                "kind": "LogicalAndExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 715,
                                                                 "fullEnd": 767,
                                                                 "start": 715,
@@ -924,7 +924,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 716,
                                                                         "fullEnd": 733,
                                                                         "start": 716,
@@ -1079,7 +1079,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 739,
                                                                         "fullEnd": 766,
                                                                         "start": 739,

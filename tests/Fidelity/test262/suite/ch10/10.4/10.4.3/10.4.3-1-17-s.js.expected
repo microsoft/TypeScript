@@ -298,7 +298,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 579,
                                 "fullEnd": 655,
                                 "start": 579,
@@ -328,7 +328,7 @@
                                         "valueText": "("
                                     },
                                     "expression": {
-                                        "kind": "EqualsExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 580,
                                         "fullEnd": 615,
                                         "start": 580,
@@ -514,7 +514,7 @@
                                         "valueText": "("
                                     },
                                     "expression": {
-                                        "kind": "NotEqualsExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 621,
                                         "fullEnd": 654,
                                         "start": 621,

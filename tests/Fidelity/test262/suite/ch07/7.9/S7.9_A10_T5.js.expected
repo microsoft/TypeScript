@@ -19,7 +19,7 @@
                 "fullWidth": 316,
                 "width": 14,
                 "expression": {
-                    "kind": "MultiplyExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 316,
                     "start": 301,

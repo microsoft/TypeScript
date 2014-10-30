@@ -129,7 +129,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 362,
                     "fullEnd": 389,
                     "start": 362,
@@ -332,7 +332,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 401,
                                             "fullEnd": 473,
                                             "start": 401,
@@ -1010,7 +1010,7 @@
                                                                             ]
                                                                         },
                                                                         "expression": {
-                                                                            "kind": "DivideExpression",
+                                                                            "kind": "BinaryExpression",
                                                                             "fullStart": 640,
                                                                             "fullEnd": 663,
                                                                             "start": 640,
@@ -1038,7 +1038,7 @@
                                                                                     "valueText": "("
                                                                                 },
                                                                                 "expression": {
-                                                                                    "kind": "SubtractExpression",
+                                                                                    "kind": "BinaryExpression",
                                                                                     "fullStart": 641,
                                                                                     "fullEnd": 657,
                                                                                     "start": 641,
@@ -1087,7 +1087,7 @@
                                                                                             },
                                                                                             "arguments": [
                                                                                                 {
-                                                                                                    "kind": "AddExpression",
+                                                                                                    "kind": "BinaryExpression",
                                                                                                     "fullStart": 643,
                                                                                                     "fullEnd": 649,
                                                                                                     "start": 643,
@@ -1902,7 +1902,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 819,
                     "fullEnd": 846,
                     "start": 819,
@@ -2105,7 +2105,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 858,
                                             "fullEnd": 930,
                                             "start": 858,

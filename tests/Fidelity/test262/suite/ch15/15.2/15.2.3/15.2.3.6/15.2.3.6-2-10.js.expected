@@ -516,7 +516,7 @@
                                             ]
                                         },
                                         {
-                                            "kind": "NegateExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 649,
                                             "fullEnd": 652,
                                             "start": 649,

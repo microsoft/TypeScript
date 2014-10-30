@@ -247,7 +247,7 @@
                     ]
                 },
                 "condition": {
-                    "kind": "LessThanExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 626,
                     "fullEnd": 634,
                     "start": 626,
@@ -313,7 +313,7 @@
                     ]
                 },
                 "incrementor": {
-                    "kind": "PostIncrementExpression",
+                    "kind": "PostfixUnaryExpression",
                     "fullStart": 636,
                     "fullEnd": 643,
                     "start": 636,
@@ -396,7 +396,7 @@
                 "width": 7,
                 "isIncrementallyUnusable": true,
                 "expression": {
-                    "kind": "PostDecrementExpression",
+                    "kind": "PostfixUnaryExpression",
                     "fullStart": 645,
                     "fullEnd": 653,
                     "start": 645,

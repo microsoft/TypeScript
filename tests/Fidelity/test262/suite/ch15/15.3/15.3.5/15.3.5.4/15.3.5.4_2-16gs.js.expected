@@ -707,7 +707,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalOrExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 775,
                                 "fullEnd": 828,
                                 "start": 775,

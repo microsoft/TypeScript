@@ -381,7 +381,7 @@
                 "fullWidth": 8,
                 "width": 7,
                 "expression": {
-                    "kind": "PreIncrementExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 540,
                     "fullEnd": 548,
                     "start": 540,
@@ -411,7 +411,7 @@
                         ]
                     },
                     "operand": {
-                        "kind": "PreIncrementExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 543,
                         "fullEnd": 548,
                         "start": 543,

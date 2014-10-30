@@ -382,7 +382,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 429,
                                             "fullEnd": 526,
                                             "start": 429,
@@ -824,7 +824,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 549,
                                     "fullEnd": 582,
                                     "start": 549,
@@ -852,7 +852,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 550,
                                             "fullEnd": 572,
                                             "start": 550,
@@ -1081,7 +1081,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 597,
                                                             "fullEnd": 666,
                                                             "start": 597,

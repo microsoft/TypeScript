@@ -107,7 +107,7 @@
                 },
                 "heritageClauses": [
                     {
-                        "kind": "ImplementsHeritageClause",
+                        "kind": "HeritageClause",
                         "fullStart": 35,
                         "fullEnd": 54,
                         "start": 35,
@@ -407,7 +407,7 @@
                                     "fullWidth": 60,
                                     "width": 46,
                                     "expression": {
-                                        "kind": "AssignmentExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 106,
                                         "fullEnd": 163,
                                         "start": 118,

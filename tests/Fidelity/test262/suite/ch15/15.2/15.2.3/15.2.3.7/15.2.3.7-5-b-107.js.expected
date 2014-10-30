@@ -1929,7 +1929,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 988,
                                 "fullEnd": 1031,
                                 "start": 988,
@@ -1979,7 +1979,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "LogicalNotExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 1000,
                                     "fullEnd": 1031,
                                     "start": 1000,

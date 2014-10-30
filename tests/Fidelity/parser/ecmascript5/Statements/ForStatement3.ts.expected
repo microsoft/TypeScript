@@ -85,7 +85,7 @@
                     ]
                 },
                 "expression": {
-                    "kind": "CommaExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 9,
                     "fullEnd": 30,
                     "start": 9,
@@ -93,7 +93,7 @@
                     "fullWidth": 21,
                     "width": 21,
                     "left": {
-                        "kind": "AssignmentExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 9,
                         "fullEnd": 28,
                         "start": 9,
@@ -203,7 +203,7 @@
                             "valueText": "="
                         },
                         "right": {
-                            "kind": "LogicalOrExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 17,
                             "fullEnd": 28,
                             "start": 17,

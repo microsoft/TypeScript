@@ -19,7 +19,7 @@
                 "fullWidth": 348,
                 "width": 12,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 346,
                     "start": 335,
@@ -222,7 +222,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 363,
                     "fullEnd": 404,
                     "start": 363,
@@ -567,7 +567,7 @@
                 "fullWidth": 25,
                 "width": 23,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 484,
                     "fullEnd": 507,
                     "start": 485,
@@ -704,7 +704,7 @@
                 "fullWidth": 29,
                 "width": 27,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 509,
                     "fullEnd": 536,
                     "start": 510,
@@ -897,7 +897,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 553,
                     "fullEnd": 577,
                     "start": 553,
@@ -1103,7 +1103,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 590,
                                             "fullEnd": 715,
                                             "start": 590,

@@ -524,7 +524,7 @@
                                                                 ]
                                                             },
                                                             "expression": {
-                                                                "kind": "LogicalAndExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 662,
                                                                 "fullEnd": 764,
                                                                 "start": 662,
@@ -554,7 +554,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 663,
                                                                         "fullEnd": 730,
                                                                         "start": 663,
@@ -976,7 +976,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 736,
                                                                         "fullEnd": 763,
                                                                         "start": 736,

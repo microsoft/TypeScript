@@ -335,7 +335,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 369,
                                             "fullEnd": 498,
                                             "start": 369,
@@ -743,7 +743,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 522,
                                     "fullEnd": 557,
                                     "start": 522,
@@ -771,7 +771,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 523,
                                             "fullEnd": 547,
                                             "start": 523,
@@ -1000,7 +1000,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 573,
                                                             "fullEnd": 677,
                                                             "start": 573,

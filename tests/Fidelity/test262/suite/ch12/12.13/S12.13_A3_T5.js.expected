@@ -449,7 +449,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 305,
                                             "fullEnd": 312,
                                             "start": 305,
@@ -501,7 +501,7 @@
                                                     "valueText": "("
                                                 },
                                                 "expression": {
-                                                    "kind": "LogicalNotExpression",
+                                                    "kind": "PrefixUnaryExpression",
                                                     "fullStart": 309,
                                                     "fullEnd": 311,
                                                     "start": 309,
@@ -807,7 +807,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 352,
                                     "fullEnd": 367,
                                     "start": 352,
@@ -922,7 +922,7 @@
                                             },
                                             "arguments": [
                                                 {
-                                                    "kind": "AddExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 376,
                                                     "fullEnd": 449,
                                                     "start": 376,

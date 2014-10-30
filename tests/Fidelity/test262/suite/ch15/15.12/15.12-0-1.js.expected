@@ -420,7 +420,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 700,
                                 "fullEnd": 722,
                                 "start": 700,

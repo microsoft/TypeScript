@@ -73,7 +73,7 @@
                 "width": 7,
                 "parsedInStrictMode": true,
                 "expression": {
-                    "kind": "PreIncrementExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 15,
                     "fullEnd": 21,
                     "start": 15,

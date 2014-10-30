@@ -117,7 +117,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 365,
                     "fullEnd": 381,
                     "start": 365,
@@ -157,7 +157,7 @@
                             "valueText": "("
                         },
                         "expression": {
-                            "kind": "EqualsExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 367,
                             "fullEnd": 380,
                             "start": 367,
@@ -483,7 +483,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 433,
                     "fullEnd": 451,
                     "start": 433,
@@ -523,7 +523,7 @@
                             "valueText": "("
                         },
                         "expression": {
-                            "kind": "EqualsExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 435,
                             "fullEnd": 450,
                             "start": 435,
@@ -849,7 +849,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "EqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 505,
                     "fullEnd": 519,
                     "start": 505,
@@ -1161,7 +1161,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "EqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 572,
                     "fullEnd": 586,
                     "start": 572,

@@ -387,7 +387,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 431,
                                             "fullEnd": 528,
                                             "start": 431,
@@ -755,7 +755,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 551,
                                     "fullEnd": 586,
                                     "start": 551,
@@ -783,7 +783,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 552,
                                             "fullEnd": 576,
                                             "start": 552,
@@ -1012,7 +1012,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 601,
                                                             "fullEnd": 675,
                                                             "start": 601,

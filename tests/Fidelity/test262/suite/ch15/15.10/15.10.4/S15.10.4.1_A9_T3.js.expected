@@ -194,7 +194,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 339,
                                             "fullEnd": 420,
                                             "start": 339,
@@ -583,7 +583,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 442,
                                     "fullEnd": 477,
                                     "start": 442,
@@ -611,7 +611,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 443,
                                             "fullEnd": 467,
                                             "start": 443,
@@ -840,7 +840,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 490,
                                                             "fullEnd": 552,
                                                             "start": 490,

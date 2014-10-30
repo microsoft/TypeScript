@@ -895,7 +895,7 @@
                                                                 ]
                                                             },
                                                             "expression": {
-                                                                "kind": "LogicalAndExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 733,
                                                                 "fullEnd": 785,
                                                                 "start": 733,
@@ -925,7 +925,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 734,
                                                                         "fullEnd": 751,
                                                                         "start": 734,
@@ -1080,7 +1080,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 757,
                                                                         "fullEnd": 784,
                                                                         "start": 757,

@@ -347,7 +347,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 372,
                                             "fullEnd": 495,
                                             "start": 372,
@@ -755,7 +755,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 519,
                                     "fullEnd": 554,
                                     "start": 519,
@@ -783,7 +783,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 520,
                                             "fullEnd": 544,
                                             "start": 520,
@@ -1012,7 +1012,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 570,
                                                             "fullEnd": 669,
                                                             "start": 570,

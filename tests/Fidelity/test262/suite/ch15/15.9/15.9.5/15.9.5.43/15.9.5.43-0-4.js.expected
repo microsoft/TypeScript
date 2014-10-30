@@ -813,7 +813,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "SubtractExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 690,
                                                             "fullEnd": 739,
                                                             "start": 690,
@@ -939,7 +939,7 @@
                                                                 ]
                                                             },
                                                             "right": {
-                                                                "kind": "MultiplyExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 707,
                                                                 "fullEnd": 739,
                                                                 "start": 707,
@@ -1166,7 +1166,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 760,
                                 "fullEnd": 814,
                                 "start": 760,

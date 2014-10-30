@@ -488,7 +488,7 @@
                         },
                         "heritageClauses": [
                             {
-                                "kind": "ImplementsHeritageClause",
+                                "kind": "HeritageClause",
                                 "fullStart": 130,
                                 "fullEnd": 148,
                                 "start": 130,
@@ -1331,7 +1331,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 336,
                                                             "fullEnd": 369,
                                                             "start": 336,
@@ -1339,7 +1339,7 @@
                                                             "fullWidth": 33,
                                                             "width": 33,
                                                             "left": {
-                                                                "kind": "MultiplyExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 336,
                                                                 "fullEnd": 352,
                                                                 "start": 336,
@@ -1498,7 +1498,7 @@
                                                                 ]
                                                             },
                                                             "right": {
-                                                                "kind": "MultiplyExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 354,
                                                                 "fullEnd": 369,
                                                                 "start": 354,

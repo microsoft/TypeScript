@@ -680,7 +680,7 @@
                                                     "valueText": "("
                                                 },
                                                 "expression": {
-                                                    "kind": "InstanceOfExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 858,
                                                     "fullEnd": 882,
                                                     "start": 858,

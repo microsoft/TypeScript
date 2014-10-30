@@ -468,7 +468,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 300,
                     "fullEnd": 314,
                     "start": 300,
@@ -476,7 +476,7 @@
                     "fullWidth": 14,
                     "width": 14,
                     "left": {
-                        "kind": "BitwiseNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 300,
                         "fullEnd": 308,
                         "start": 300,
@@ -539,7 +539,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "BitwiseNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 312,
                         "fullEnd": 314,
                         "start": 312,
@@ -1386,7 +1386,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 494,
                     "fullEnd": 508,
                     "start": 494,
@@ -1394,7 +1394,7 @@
                     "fullWidth": 14,
                     "width": 14,
                     "left": {
-                        "kind": "BitwiseNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 494,
                         "fullEnd": 502,
                         "start": 494,
@@ -1457,7 +1457,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "BitwiseNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 506,
                         "fullEnd": 508,
                         "start": 506,
@@ -2332,7 +2332,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 723,
                     "fullEnd": 737,
                     "start": 723,
@@ -2340,7 +2340,7 @@
                     "fullWidth": 14,
                     "width": 14,
                     "left": {
-                        "kind": "BitwiseNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 723,
                         "fullEnd": 731,
                         "start": 723,
@@ -2403,7 +2403,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "BitwiseNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 735,
                         "fullEnd": 737,
                         "start": 735,
@@ -3328,7 +3328,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "NotEqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 966,
                                 "fullEnd": 980,
                                 "start": 966,
@@ -3336,7 +3336,7 @@
                                 "fullWidth": 14,
                                 "width": 14,
                                 "left": {
-                                    "kind": "BitwiseNotExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 966,
                                     "fullEnd": 974,
                                     "start": 966,
@@ -3399,7 +3399,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "BitwiseNotExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 978,
                                     "fullEnd": 980,
                                     "start": 978,
@@ -3806,7 +3806,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 1129,
                                     "fullEnd": 1143,
                                     "start": 1129,
@@ -3856,7 +3856,7 @@
                                         ]
                                     },
                                     "right": {
-                                        "kind": "BitwiseNotExpression",
+                                        "kind": "PrefixUnaryExpression",
                                         "fullStart": 1135,
                                         "fullEnd": 1143,
                                         "start": 1135,
@@ -4200,7 +4200,7 @@
                                                         },
                                                         "arguments": [
                                                             {
-                                                                "kind": "AddExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 1301,
                                                                 "fullEnd": 1433,
                                                                 "start": 1301,
@@ -4810,7 +4810,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1505,
                     "fullEnd": 1519,
                     "start": 1505,
@@ -4818,7 +4818,7 @@
                     "fullWidth": 14,
                     "width": 14,
                     "left": {
-                        "kind": "BitwiseNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1505,
                         "fullEnd": 1513,
                         "start": 1505,
@@ -4881,7 +4881,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "BitwiseNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1517,
                         "fullEnd": 1519,
                         "start": 1517,
@@ -5738,7 +5738,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1700,
                     "fullEnd": 1714,
                     "start": 1700,
@@ -5746,7 +5746,7 @@
                     "fullWidth": 14,
                     "width": 14,
                     "left": {
-                        "kind": "BitwiseNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1700,
                         "fullEnd": 1708,
                         "start": 1700,
@@ -5809,7 +5809,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "BitwiseNotExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1712,
                         "fullEnd": 1714,
                         "start": 1712,
@@ -6692,7 +6692,7 @@
                             "fullWidth": 11,
                             "width": 8,
                             "expression": {
-                                "kind": "BitwiseNotExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 1937,
                                 "fullEnd": 1946,
                                 "start": 1939,
@@ -6815,7 +6815,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1957,
                                             "fullEnd": 2093,
                                             "start": 1957,
@@ -6885,7 +6885,7 @@
                                                     "valueText": "("
                                                 },
                                                 "expression": {
-                                                    "kind": "BitwiseNotExpression",
+                                                    "kind": "PrefixUnaryExpression",
                                                     "fullStart": 2085,
                                                     "fullEnd": 2092,
                                                     "start": 2085,
@@ -7155,7 +7155,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 2118,
                                     "fullEnd": 2131,
                                     "start": 2118,
@@ -7328,7 +7328,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 2146,
                                                             "fullEnd": 2276,
                                                             "start": 2146,
@@ -8236,7 +8236,7 @@
                             "fullWidth": 11,
                             "width": 8,
                             "expression": {
-                                "kind": "BitwiseNotExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 2387,
                                 "fullEnd": 2396,
                                 "start": 2389,
@@ -8359,7 +8359,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 2407,
                                             "fullEnd": 2542,
                                             "start": 2407,
@@ -8429,7 +8429,7 @@
                                                     "valueText": "("
                                                 },
                                                 "expression": {
-                                                    "kind": "BitwiseNotExpression",
+                                                    "kind": "PrefixUnaryExpression",
                                                     "fullStart": 2534,
                                                     "fullEnd": 2541,
                                                     "start": 2534,
@@ -8699,7 +8699,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 2567,
                                     "fullEnd": 2600,
                                     "start": 2567,
@@ -8727,7 +8727,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 2568,
                                             "fullEnd": 2590,
                                             "start": 2568,
@@ -8956,7 +8956,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 2615,
                                                             "fullEnd": 2744,
                                                             "start": 2615,

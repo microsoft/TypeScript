@@ -576,7 +576,7 @@
                                                 "valueText": "("
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 654,
                                                 "fullEnd": 680,
                                                 "start": 654,
@@ -584,7 +584,7 @@
                                                 "fullWidth": 26,
                                                 "width": 26,
                                                 "left": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 654,
                                                     "fullEnd": 668,
                                                     "start": 654,
@@ -677,7 +677,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 671,
                                                     "fullEnd": 680,
                                                     "start": 671,
@@ -1253,7 +1253,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 769,
                                 "fullEnd": 825,
                                 "start": 769,

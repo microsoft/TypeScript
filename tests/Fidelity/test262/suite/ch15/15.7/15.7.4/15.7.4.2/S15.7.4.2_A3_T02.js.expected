@@ -2191,7 +2191,7 @@
                                                                 },
                                                                 "arguments": [
                                                                     {
-                                                                        "kind": "NegateExpression",
+                                                                        "kind": "PrefixUnaryExpression",
                                                                         "fullStart": 732,
                                                                         "fullEnd": 734,
                                                                         "start": 732,

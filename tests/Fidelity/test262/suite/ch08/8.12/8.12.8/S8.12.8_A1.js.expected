@@ -721,7 +721,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 507,
                                             "fullEnd": 631,
                                             "start": 507,
@@ -1082,7 +1082,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 652,
                                     "fullEnd": 685,
                                     "start": 652,
@@ -1110,7 +1110,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 653,
                                             "fullEnd": 675,
                                             "start": 653,
@@ -1339,7 +1339,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 699,
                                                             "fullEnd": 811,
                                                             "start": 699,

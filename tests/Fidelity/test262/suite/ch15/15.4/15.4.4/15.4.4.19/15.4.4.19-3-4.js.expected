@@ -506,7 +506,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "GreaterThanExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 619,
                                             "fullEnd": 627,
                                             "start": 619,
@@ -885,7 +885,7 @@
                                                             ]
                                                         },
                                                         "expression": {
-                                                            "kind": "PlusExpression",
+                                                            "kind": "PrefixUnaryExpression",
                                                             "fullStart": 678,
                                                             "fullEnd": 681,
                                                             "start": 678,
@@ -1354,7 +1354,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 769,
                                 "fullEnd": 788,
                                 "start": 769,

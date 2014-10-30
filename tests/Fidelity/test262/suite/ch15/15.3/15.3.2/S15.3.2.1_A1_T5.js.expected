@@ -747,7 +747,7 @@
                                         },
                                         "arguments": [
                                             {
-                                                "kind": "AddExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 986,
                                                 "fullEnd": 1017,
                                                 "start": 986,
@@ -920,7 +920,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1037,
                     "fullEnd": 1063,
                     "start": 1037,
@@ -1266,7 +1266,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1241,
                     "fullEnd": 1255,
                     "start": 1241,

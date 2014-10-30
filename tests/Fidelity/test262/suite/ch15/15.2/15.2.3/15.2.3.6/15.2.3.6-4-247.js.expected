@@ -637,7 +637,7 @@
                                                         ]
                                                     },
                                                     "expression": {
-                                                        "kind": "PlusExpression",
+                                                        "kind": "PrefixUnaryExpression",
                                                         "fullStart": 971,
                                                         "fullEnd": 975,
                                                         "start": 971,
@@ -1063,7 +1063,7 @@
                                                                     ]
                                                                 },
                                                                 "expression": {
-                                                                    "kind": "NegateExpression",
+                                                                    "kind": "PrefixUnaryExpression",
                                                                     "fullStart": 1080,
                                                                     "fullEnd": 1084,
                                                                     "start": 1080,
@@ -1416,7 +1416,7 @@
                                                 ]
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1170,
                                                 "fullEnd": 1266,
                                                 "start": 1170,
@@ -1424,7 +1424,7 @@
                                                 "fullWidth": 96,
                                                 "width": 96,
                                                 "left": {
-                                                    "kind": "InstanceOfExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 1170,
                                                     "fullEnd": 1193,
                                                     "start": 1170,
@@ -1624,7 +1624,7 @@
                                                                 ]
                                                             },
                                                             {
-                                                                "kind": "PlusExpression",
+                                                                "kind": "PrefixUnaryExpression",
                                                                 "fullStart": 1242,
                                                                 "fullEnd": 1244,
                                                                 "start": 1242,

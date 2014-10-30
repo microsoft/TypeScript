@@ -285,7 +285,7 @@
                         },
                         "arguments": [
                             {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 555,
                                 "fullEnd": 558,
                                 "start": 555,

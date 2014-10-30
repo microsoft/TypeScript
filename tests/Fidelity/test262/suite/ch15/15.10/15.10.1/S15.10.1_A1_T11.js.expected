@@ -194,7 +194,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 318,
                                             "fullEnd": 391,
                                             "start": 318,
@@ -583,7 +583,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 413,
                                     "fullEnd": 448,
                                     "start": 413,
@@ -611,7 +611,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 414,
                                             "fullEnd": 438,
                                             "start": 414,
@@ -840,7 +840,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 461,
                                                             "fullEnd": 519,
                                                             "start": 461,

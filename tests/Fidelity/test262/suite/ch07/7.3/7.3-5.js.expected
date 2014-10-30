@@ -408,7 +408,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 591,
                                 "fullEnd": 658,
                                 "start": 591,
@@ -416,7 +416,7 @@
                                 "fullWidth": 67,
                                 "width": 67,
                                 "left": {
-                                    "kind": "LogicalAndExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 591,
                                     "fullEnd": 638,
                                     "start": 591,
@@ -424,7 +424,7 @@
                                     "fullWidth": 47,
                                     "width": 46,
                                     "left": {
-                                        "kind": "EqualsExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 591,
                                         "fullEnd": 614,
                                         "start": 591,
@@ -517,7 +517,7 @@
                                         ]
                                     },
                                     "right": {
-                                        "kind": "EqualsExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 617,
                                         "fullEnd": 638,
                                         "start": 617,
@@ -656,7 +656,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 641,
                                     "fullEnd": 658,
                                     "start": 641,

@@ -335,7 +335,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 341,
                                             "fullEnd": 440,
                                             "start": 341,
@@ -743,7 +743,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 464,
                                     "fullEnd": 499,
                                     "start": 464,
@@ -771,7 +771,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 465,
                                             "fullEnd": 489,
                                             "start": 465,
@@ -1000,7 +1000,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 515,
                                                             "fullEnd": 591,
                                                             "start": 515,

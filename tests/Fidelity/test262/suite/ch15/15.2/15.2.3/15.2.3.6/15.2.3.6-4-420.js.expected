@@ -1433,7 +1433,7 @@
                                         "fullWidth": 30,
                                         "width": 16,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 968,
                                             "fullEnd": 995,
                                             "start": 980,
@@ -1606,7 +1606,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1019,
                                             "fullEnd": 1067,
                                             "start": 1019,
@@ -1614,7 +1614,7 @@
                                             "fullWidth": 48,
                                             "width": 48,
                                             "left": {
-                                                "kind": "LogicalNotExpression",
+                                                "kind": "PrefixUnaryExpression",
                                                 "fullStart": 1019,
                                                 "fullEnd": 1047,
                                                 "start": 1019,
@@ -1766,7 +1766,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1050,
                                                 "fullEnd": 1067,
                                                 "start": 1050,

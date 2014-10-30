@@ -116,7 +116,7 @@
                 "width": 29,
                 "parsedInStrictMode": true,
                 "expression": {
-                    "kind": "InExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 263,
                     "fullEnd": 291,
                     "start": 263,

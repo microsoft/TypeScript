@@ -28,7 +28,7 @@
                 "width": 27,
                 "isIncrementallyUnusable": true,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 29,
                     "start": 0,
@@ -79,7 +79,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "SignedRightShiftExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 11,
                         "fullEnd": 29,
                         "start": 11,

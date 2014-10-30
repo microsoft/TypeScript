@@ -140,7 +140,7 @@
                                         "valueText": "("
                                     },
                                     "expression": {
-                                        "kind": "CommaExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 10,
                                         "fullEnd": 19,
                                         "start": 10,
@@ -201,7 +201,7 @@
                                                 "valueText": "("
                                             },
                                             "expression": {
-                                                "kind": "CommaExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 14,
                                                 "fullEnd": 18,
                                                 "start": 14,
@@ -366,7 +366,7 @@
                         ]
                     },
                     "expression": {
-                        "kind": "AddExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 24,
                         "fullEnd": 29,
                         "start": 24,
@@ -374,7 +374,7 @@
                         "fullWidth": 5,
                         "width": 5,
                         "left": {
-                            "kind": "AddExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 24,
                             "fullEnd": 27,
                             "start": 24,

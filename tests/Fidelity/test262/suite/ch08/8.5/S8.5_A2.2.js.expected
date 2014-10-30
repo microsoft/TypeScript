@@ -310,7 +310,7 @@
                                     ]
                                 },
                                 "value": {
-                                    "kind": "SubtractExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 369,
                                     "fullEnd": 384,
                                     "start": 369,
@@ -360,7 +360,7 @@
                                         ]
                                     },
                                     "right": {
-                                        "kind": "DivideExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 375,
                                         "fullEnd": 384,
                                         "start": 375,
@@ -530,7 +530,7 @@
                                     ]
                                 },
                                 "value": {
-                                    "kind": "AddExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 394,
                                     "fullEnd": 399,
                                     "start": 394,
@@ -717,7 +717,7 @@
                                     ]
                                 },
                                 "value": {
-                                    "kind": "SubtractExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 409,
                                     "fullEnd": 414,
                                     "start": 409,
@@ -858,7 +858,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "EqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 421,
                     "fullEnd": 428,
                     "start": 421,

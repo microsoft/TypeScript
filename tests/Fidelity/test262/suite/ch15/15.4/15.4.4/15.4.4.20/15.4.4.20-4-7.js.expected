@@ -913,7 +913,7 @@
                                                 "valueText": "("
                                             },
                                             "condition": {
-                                                "kind": "InstanceOfExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 685,
                                                 "fullEnd": 707,
                                                 "start": 685,

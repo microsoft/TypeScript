@@ -178,7 +178,7 @@
                             "fullWidth": 46,
                             "width": 46,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 313,
                                 "fullEnd": 358,
                                 "start": 313,
@@ -491,7 +491,7 @@
                 "fullWidth": 55,
                 "width": 53,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 362,
                     "fullEnd": 415,
                     "start": 363,
@@ -727,7 +727,7 @@
                 "fullWidth": 29,
                 "width": 27,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 417,
                     "fullEnd": 444,
                     "start": 418,
@@ -1025,7 +1025,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "NotEqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 560,
                                 "fullEnd": 608,
                                 "start": 560,
@@ -1426,7 +1426,7 @@
                                                 },
                                                 "arguments": [
                                                     {
-                                                        "kind": "AddExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 623,
                                                         "fullEnd": 729,
                                                         "start": 623,

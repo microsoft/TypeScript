@@ -486,7 +486,7 @@
                                                 "valueText": "("
                                             },
                                             "expression": {
-                                                "kind": "NotEqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 610,
                                                 "fullEnd": 628,
                                                 "start": 610,

@@ -476,7 +476,7 @@
                                         "fullWidth": 51,
                                         "width": 37,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 675,
                                             "fullEnd": 723,
                                             "start": 687,
@@ -1500,7 +1500,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 977,
                                             "fullEnd": 1025,
                                             "start": 977,
@@ -1508,7 +1508,7 @@
                                             "fullWidth": 48,
                                             "width": 48,
                                             "left": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 977,
                                                 "fullEnd": 1000,
                                                 "start": 977,
@@ -1601,7 +1601,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1003,
                                                 "fullEnd": 1025,
                                                 "start": 1003,

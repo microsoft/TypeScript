@@ -912,7 +912,7 @@
                                         "fullWidth": 31,
                                         "width": 17,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 873,
                                             "fullEnd": 901,
                                             "start": 885,
@@ -1085,7 +1085,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 925,
                                             "fullEnd": 975,
                                             "start": 925,
@@ -1093,7 +1093,7 @@
                                             "fullWidth": 50,
                                             "width": 50,
                                             "left": {
-                                                "kind": "LogicalNotExpression",
+                                                "kind": "PrefixUnaryExpression",
                                                 "fullStart": 925,
                                                 "fullEnd": 954,
                                                 "start": 925,
@@ -1245,7 +1245,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 957,
                                                 "fullEnd": 975,
                                                 "start": 957,

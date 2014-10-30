@@ -407,7 +407,7 @@
                             "fullWidth": 56,
                             "width": 46,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 652,
                                 "fullEnd": 705,
                                 "start": 660,
@@ -713,7 +713,7 @@
                             "fullWidth": 58,
                             "width": 48,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 708,
                                 "fullEnd": 763,
                                 "start": 716,
@@ -2482,7 +2482,7 @@
                                             "valueText": "("
                                         },
                                         "condition": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1058,
                                             "fullEnd": 1110,
                                             "start": 1058,
@@ -2490,7 +2490,7 @@
                                             "fullWidth": 52,
                                             "width": 52,
                                             "left": {
-                                                "kind": "NotEqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1058,
                                                 "fullEnd": 1083,
                                                 "start": 1058,
@@ -2530,7 +2530,7 @@
                                                         "valueText": "["
                                                     },
                                                     "argumentExpression": {
-                                                        "kind": "PostIncrementExpression",
+                                                        "kind": "PostfixUnaryExpression",
                                                         "fullStart": 1068,
                                                         "fullEnd": 1075,
                                                         "start": 1068,

@@ -194,7 +194,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 442,
                                             "fullEnd": 525,
                                             "start": 442,
@@ -607,7 +607,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 547,
                                     "fullEnd": 582,
                                     "start": 547,
@@ -635,7 +635,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 548,
                                             "fullEnd": 572,
                                             "start": 548,
@@ -864,7 +864,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 595,
                                                             "fullEnd": 658,
                                                             "start": 595,

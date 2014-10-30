@@ -1027,7 +1027,7 @@
                                                 "valueText": "("
                                             },
                                             "condition": {
-                                                "kind": "GreaterThanExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 504,
                                                 "fullEnd": 528,
                                                 "start": 504,

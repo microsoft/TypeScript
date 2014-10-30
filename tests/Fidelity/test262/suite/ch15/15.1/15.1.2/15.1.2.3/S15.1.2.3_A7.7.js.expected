@@ -316,7 +316,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 410,
                                             "fullEnd": 481,
                                             "start": 410,
@@ -692,7 +692,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 504,
                                     "fullEnd": 537,
                                     "start": 504,
@@ -720,7 +720,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 505,
                                             "fullEnd": 527,
                                             "start": 505,
@@ -949,7 +949,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 552,
                                                             "fullEnd": 608,
                                                             "start": 552,

@@ -194,7 +194,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 443,
                                             "fullEnd": 536,
                                             "start": 443,
@@ -607,7 +607,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 558,
                                     "fullEnd": 593,
                                     "start": 558,
@@ -635,7 +635,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 559,
                                             "fullEnd": 583,
                                             "start": 559,
@@ -864,7 +864,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 606,
                                                             "fullEnd": 674,
                                                             "start": 606,

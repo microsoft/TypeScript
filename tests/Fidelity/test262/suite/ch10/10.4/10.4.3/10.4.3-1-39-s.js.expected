@@ -802,7 +802,7 @@
                                                                 ]
                                                             },
                                                             "expression": {
-                                                                "kind": "LogicalAndExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 727,
                                                                 "fullEnd": 779,
                                                                 "start": 727,
@@ -832,7 +832,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 728,
                                                                         "fullEnd": 745,
                                                                         "start": 728,
@@ -987,7 +987,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 751,
                                                                         "fullEnd": 778,
                                                                         "start": 751,

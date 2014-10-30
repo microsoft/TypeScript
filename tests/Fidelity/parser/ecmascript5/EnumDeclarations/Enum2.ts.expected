@@ -402,7 +402,7 @@
                                 ]
                             },
                             "value": {
-                                "kind": "LeftShiftExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 107,
                                 "fullEnd": 113,
                                 "start": 107,
@@ -556,7 +556,7 @@
                                 ]
                             },
                             "value": {
-                                "kind": "LeftShiftExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 142,
                                 "fullEnd": 150,
                                 "start": 142,

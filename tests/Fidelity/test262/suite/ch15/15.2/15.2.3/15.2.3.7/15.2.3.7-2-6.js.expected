@@ -567,7 +567,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "NegateExpression",
+                                                            "kind": "PrefixUnaryExpression",
                                                             "fullStart": 657,
                                                             "fullEnd": 660,
                                                             "start": 657,
@@ -1159,7 +1159,7 @@
                                                                     "fullWidth": 50,
                                                                     "width": 32,
                                                                     "expression": {
-                                                                        "kind": "AssignmentExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 779,
                                                                         "fullEnd": 826,
                                                                         "start": 795,
@@ -1218,7 +1218,7 @@
                                                                             ]
                                                                         },
                                                                         "right": {
-                                                                            "kind": "InstanceOfExpression",
+                                                                            "kind": "BinaryExpression",
                                                                             "fullStart": 804,
                                                                             "fullEnd": 826,
                                                                             "start": 804,

@@ -812,7 +812,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 651,
                                 "fullEnd": 688,
                                 "start": 651,
@@ -862,7 +862,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "LogicalNotExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 663,
                                     "fullEnd": 688,
                                     "start": 663,

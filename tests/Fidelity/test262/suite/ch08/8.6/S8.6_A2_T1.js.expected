@@ -258,7 +258,7 @@
                 "fullWidth": 104,
                 "width": 12,
                 "expression": {
-                    "kind": "PostIncrementExpression",
+                    "kind": "PostfixUnaryExpression",
                     "fullStart": 318,
                     "fullEnd": 420,
                     "start": 409,
@@ -429,7 +429,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 426,
                     "fullEnd": 443,
                     "start": 426,
@@ -661,7 +661,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 456,
                                             "fullEnd": 548,
                                             "start": 456,

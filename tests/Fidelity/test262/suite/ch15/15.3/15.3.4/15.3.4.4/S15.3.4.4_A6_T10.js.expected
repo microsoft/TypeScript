@@ -881,7 +881,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 629,
                     "fullEnd": 652,
                     "start": 629,
@@ -1238,7 +1238,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 847,
                     "fullEnd": 885,
                     "start": 847,

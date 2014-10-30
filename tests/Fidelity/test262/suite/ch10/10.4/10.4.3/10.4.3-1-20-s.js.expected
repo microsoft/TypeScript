@@ -390,7 +390,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 605,
                                 "fullEnd": 658,
                                 "start": 605,

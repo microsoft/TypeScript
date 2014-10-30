@@ -1331,7 +1331,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "NotEqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 845,
                                 "fullEnd": 917,
                                 "start": 845,

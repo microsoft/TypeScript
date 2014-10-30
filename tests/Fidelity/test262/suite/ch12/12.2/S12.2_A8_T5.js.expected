@@ -159,7 +159,7 @@
                 "fullWidth": 5,
                 "width": 4,
                 "expression": {
-                    "kind": "PreDecrementExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 412,
                     "fullEnd": 415,
                     "start": 412,

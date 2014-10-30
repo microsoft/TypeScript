@@ -437,7 +437,7 @@
                                                                 ]
                                                             },
                                                             "expression": {
-                                                                "kind": "AddExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 523,
                                                                 "fullEnd": 532,
                                                                 "start": 523,
@@ -489,7 +489,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "PreIncrementExpression",
+                                                                        "kind": "PrefixUnaryExpression",
                                                                         "fullStart": 528,
                                                                         "fullEnd": 531,
                                                                         "start": 528,
@@ -1521,7 +1521,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 687,
                     "fullEnd": 710,
                     "start": 687,
@@ -1878,7 +1878,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 905,
                     "fullEnd": 943,
                     "start": 905,

@@ -472,7 +472,7 @@
                                                                 ]
                                                             },
                                                             "expression": {
-                                                                "kind": "LogicalAndExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 659,
                                                                 "fullEnd": 780,
                                                                 "start": 659,
@@ -500,7 +500,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 660,
                                                                         "fullEnd": 750,
                                                                         "start": 660,
@@ -965,7 +965,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 756,
                                                                         "fullEnd": 779,
                                                                         "start": 756,

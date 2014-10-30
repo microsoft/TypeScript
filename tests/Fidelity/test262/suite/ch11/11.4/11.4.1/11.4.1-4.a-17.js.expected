@@ -704,7 +704,7 @@
                                                 "valueText": "("
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 789,
                                                 "fullEnd": 829,
                                                 "start": 789,
@@ -712,7 +712,7 @@
                                                 "fullWidth": 40,
                                                 "width": 40,
                                                 "left": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 789,
                                                     "fullEnd": 800,
                                                     "start": 789,
@@ -805,7 +805,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 803,
                                                     "fullEnd": 829,
                                                     "start": 803,
@@ -1038,7 +1038,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 847,
                                 "fullEnd": 864,
                                 "start": 847,

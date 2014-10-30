@@ -789,7 +789,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 920,
                     "fullEnd": 949,
                     "start": 920,
@@ -996,7 +996,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 962,
                                             "fullEnd": 1121,
                                             "start": 962,
@@ -1247,7 +1247,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1302,
                     "fullEnd": 1338,
                     "start": 1302,
@@ -1486,7 +1486,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1351,
                                             "fullEnd": 1512,
                                             "start": 1351,
@@ -1736,7 +1736,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1693,
                     "fullEnd": 1721,
                     "start": 1693,
@@ -1999,7 +1999,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1734,
                                             "fullEnd": 1891,
                                             "start": 1734,
@@ -2007,7 +2007,7 @@
                                             "fullWidth": 157,
                                             "width": 156,
                                             "left": {
-                                                "kind": "AddExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1734,
                                                 "fullEnd": 1875,
                                                 "start": 1734,
@@ -2015,7 +2015,7 @@
                                                 "fullWidth": 141,
                                                 "width": 141,
                                                 "left": {
-                                                    "kind": "AddExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 1734,
                                                     "fullEnd": 1862,
                                                     "start": 1734,

@@ -400,7 +400,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "GreaterThanExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 386,
                     "fullEnd": 389,
                     "start": 386,
@@ -524,7 +524,7 @@
                         "fullWidth": 4,
                         "width": 3,
                         "expression": {
-                            "kind": "AssignmentExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 396,
                             "fullEnd": 400,
                             "start": 396,

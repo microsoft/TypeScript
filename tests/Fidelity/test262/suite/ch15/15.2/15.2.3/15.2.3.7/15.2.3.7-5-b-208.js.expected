@@ -567,7 +567,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "NegateExpression",
+                                                            "kind": "PrefixUnaryExpression",
                                                             "fullStart": 683,
                                                             "fullEnd": 685,
                                                             "start": 683,
@@ -650,7 +650,7 @@
                             "fullWidth": 81,
                             "width": 69,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 689,
                                 "fullEnd": 767,
                                 "start": 699,
@@ -1324,7 +1324,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 873,
                                 "fullEnd": 898,
                                 "start": 873,

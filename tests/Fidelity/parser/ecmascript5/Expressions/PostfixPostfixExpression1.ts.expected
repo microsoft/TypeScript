@@ -36,7 +36,7 @@
                 "width": 3,
                 "isIncrementallyUnusable": true,
                 "expression": {
-                    "kind": "PostIncrementExpression",
+                    "kind": "PostfixUnaryExpression",
                     "fullStart": 0,
                     "fullEnd": 4,
                     "start": 0,
@@ -98,7 +98,7 @@
                 "width": 3,
                 "isIncrementallyUnusable": true,
                 "expression": {
-                    "kind": "PreIncrementExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 4,
                     "fullEnd": 6,
                     "start": 4,

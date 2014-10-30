@@ -481,7 +481,7 @@
                                                 ]
                                             },
                                             "expression": {
-                                                "kind": "DivideExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 536,
                                                 "fullEnd": 559,
                                                 "start": 536,
@@ -509,7 +509,7 @@
                                                         "valueText": "("
                                                     },
                                                     "expression": {
-                                                        "kind": "SubtractExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 537,
                                                         "fullEnd": 553,
                                                         "start": 537,
@@ -558,7 +558,7 @@
                                                                 },
                                                                 "arguments": [
                                                                     {
-                                                                        "kind": "AddExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 539,
                                                                         "fullEnd": 545,
                                                                         "start": 539,
@@ -962,7 +962,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "GreaterThanOrEqualExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 664,
                     "fullEnd": 760,
                     "start": 664,
@@ -1044,7 +1044,7 @@
                             },
                             "arguments": [
                                 {
-                                    "kind": "SubtractExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 673,
                                     "fullEnd": 746,
                                     "start": 673,
@@ -1435,7 +1435,7 @@
                                             },
                                             "arguments": [
                                                 {
-                                                    "kind": "MultiplyExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 736,
                                                     "fullEnd": 745,
                                                     "start": 736,
@@ -1574,7 +1574,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "DivideExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 751,
                         "fullEnd": 760,
                         "start": 751,

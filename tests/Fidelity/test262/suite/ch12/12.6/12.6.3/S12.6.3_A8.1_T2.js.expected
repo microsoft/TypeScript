@@ -498,7 +498,7 @@
                                 "text": ""
                             },
                             "expression": {
-                                "kind": "PreIncrementExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 507,
                                 "fullEnd": 510,
                                 "start": 507,
@@ -803,7 +803,7 @@
                     ]
                 },
                 "incrementor": {
-                    "kind": "MultiplyExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 523,
                     "fullEnd": 530,
                     "start": 523,
@@ -1018,7 +1018,7 @@
                                 },
                                 "arguments": [
                                     {
-                                        "kind": "AddExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 543,
                                         "fullEnd": 551,
                                         "start": 543,

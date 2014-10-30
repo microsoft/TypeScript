@@ -1284,7 +1284,7 @@
                             "fullWidth": 32,
                             "width": 22,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 841,
                                 "fullEnd": 870,
                                 "start": 849,
@@ -2335,7 +2335,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalNotExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 1093,
                                 "fullEnd": 1116,
                                 "start": 1093,

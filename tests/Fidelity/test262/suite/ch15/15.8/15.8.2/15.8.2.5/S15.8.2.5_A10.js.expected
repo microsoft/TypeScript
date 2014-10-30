@@ -276,7 +276,7 @@
                 "fullWidth": 48,
                 "width": 7,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 426,
                     "fullEnd": 472,
                     "start": 466,
@@ -367,7 +367,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 470,
                         "fullEnd": 472,
                         "start": 470,
@@ -432,7 +432,7 @@
                 "fullWidth": 8,
                 "width": 7,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 474,
                     "fullEnd": 480,
                     "start": 474,
@@ -482,7 +482,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 478,
                         "fullEnd": 480,
                         "start": 478,
@@ -580,7 +580,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 486,
                     "fullEnd": 521,
                     "start": 486,
@@ -787,7 +787,7 @@
                                     ]
                                 },
                                 {
-                                    "kind": "NegateExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 512,
                                     "fullEnd": 520,
                                     "start": 512,

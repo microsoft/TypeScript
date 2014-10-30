@@ -449,7 +449,7 @@
                             "fullWidth": 90,
                             "width": 80,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 656,
                                 "fullEnd": 743,
                                 "start": 664,

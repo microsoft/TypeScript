@@ -270,7 +270,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalNotExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 542,
                                 "fullEnd": 572,
                                 "start": 542,
@@ -426,7 +426,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "NegateExpression",
+                                                            "kind": "PrefixUnaryExpression",
                                                             "fullStart": 568,
                                                             "fullEnd": 570,
                                                             "start": 568,

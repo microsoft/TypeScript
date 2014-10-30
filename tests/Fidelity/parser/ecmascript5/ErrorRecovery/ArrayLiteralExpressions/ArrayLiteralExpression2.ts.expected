@@ -145,7 +145,7 @@
                                     },
                                     "expressions": [
                                         {
-                                            "kind": "NegateExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 14,
                                             "fullEnd": 33,
                                             "start": 14,
@@ -265,7 +265,7 @@
                                             ]
                                         },
                                         {
-                                            "kind": "NegateExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 75,
                                             "fullEnd": 79,
                                             "start": 75,
@@ -439,7 +439,7 @@
                                             ]
                                         },
                                         {
-                                            "kind": "NegateExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 142,
                                             "fullEnd": 161,
                                             "start": 142,

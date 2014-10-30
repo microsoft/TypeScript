@@ -286,7 +286,7 @@
                             "width": 17,
                             "parsedInStrictMode": true,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 635,
                                 "fullEnd": 659,
                                 "start": 643,
@@ -437,7 +437,7 @@
                             "width": 15,
                             "parsedInStrictMode": true,
                             "expression": {
-                                "kind": "PostDecrementExpression",
+                                "kind": "PostfixUnaryExpression",
                                 "fullStart": 662,
                                 "fullEnd": 684,
                                 "start": 670,
@@ -588,7 +588,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 702,
                                 "fullEnd": 718,
                                 "start": 702,

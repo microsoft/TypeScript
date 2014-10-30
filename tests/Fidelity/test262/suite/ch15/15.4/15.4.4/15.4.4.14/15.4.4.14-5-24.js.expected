@@ -829,7 +829,7 @@
                                                                         "fullWidth": 42,
                                                                         "width": 24,
                                                                         "expression": {
-                                                                            "kind": "AssignmentExpression",
+                                                                            "kind": "BinaryExpression",
                                                                             "fullStart": 791,
                                                                             "fullEnd": 830,
                                                                             "start": 807,
@@ -1243,7 +1243,7 @@
                                                                         "fullWidth": 41,
                                                                         "width": 23,
                                                                         "expression": {
-                                                                            "kind": "AssignmentExpression",
+                                                                            "kind": "BinaryExpression",
                                                                             "fullStart": 915,
                                                                             "fullEnd": 953,
                                                                             "start": 931,
@@ -2084,7 +2084,7 @@
                                                 ]
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1146,
                                                 "fullEnd": 1181,
                                                 "start": 1146,

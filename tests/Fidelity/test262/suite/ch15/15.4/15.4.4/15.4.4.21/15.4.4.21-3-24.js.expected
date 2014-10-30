@@ -569,7 +569,7 @@
                                                 "valueText": "("
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 686,
                                                 "fullEnd": 712,
                                                 "start": 686,
@@ -577,7 +577,7 @@
                                                 "fullWidth": 26,
                                                 "width": 26,
                                                 "left": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 686,
                                                     "fullEnd": 700,
                                                     "start": 686,
@@ -670,7 +670,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 703,
                                                     "fullEnd": 712,
                                                     "start": 703,
@@ -1286,7 +1286,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 845,
                                 "fullEnd": 901,
                                 "start": 845,

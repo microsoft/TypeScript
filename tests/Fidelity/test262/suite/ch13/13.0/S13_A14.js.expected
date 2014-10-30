@@ -239,7 +239,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 431,
                     "fullEnd": 460,
                     "start": 431,

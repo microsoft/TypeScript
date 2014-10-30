@@ -1211,7 +1211,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 864,
                                 "fullEnd": 912,
                                 "start": 864,

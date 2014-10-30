@@ -461,7 +461,7 @@
                                             "fullWidth": 13,
                                             "width": 4,
                                             "expression": {
-                                                "kind": "PostIncrementExpression",
+                                                "kind": "PostfixUnaryExpression",
                                                 "fullStart": 455,
                                                 "fullEnd": 466,
                                                 "start": 463,
@@ -642,7 +642,7 @@
                                             "fullWidth": 13,
                                             "width": 4,
                                             "expression": {
-                                                "kind": "PostIncrementExpression",
+                                                "kind": "PostfixUnaryExpression",
                                                 "fullStart": 501,
                                                 "fullEnd": 512,
                                                 "start": 509,
@@ -1070,7 +1070,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "LogicalNotExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 622,
                                     "fullEnd": 649,
                                     "start": 622,
@@ -1110,7 +1110,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 624,
                                             "fullEnd": 648,
                                             "start": 624,

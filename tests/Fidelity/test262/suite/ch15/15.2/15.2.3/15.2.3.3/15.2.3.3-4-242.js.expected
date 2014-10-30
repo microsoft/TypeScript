@@ -1529,7 +1529,7 @@
                                                 ]
                                             },
                                             "value": {
-                                                "kind": "InExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 948,
                                                 "fullEnd": 961,
                                                 "start": 948,
@@ -1917,7 +1917,7 @@
                                                             ]
                                                         },
                                                         "value": {
-                                                            "kind": "InExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 1041,
                                                             "fullEnd": 1054,
                                                             "start": 1041,
@@ -2052,7 +2052,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1078,
                                             "fullEnd": 1105,
                                             "start": 1078,
@@ -2102,7 +2102,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "LogicalNotExpression",
+                                                "kind": "PrefixUnaryExpression",
                                                 "fullStart": 1093,
                                                 "fullEnd": 1105,
                                                 "start": 1093,

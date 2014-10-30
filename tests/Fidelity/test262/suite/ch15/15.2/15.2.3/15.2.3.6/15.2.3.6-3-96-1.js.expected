@@ -476,7 +476,7 @@
                                         "fullWidth": 51,
                                         "width": 37,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 685,
                                             "fullEnd": 733,
                                             "start": 697,
@@ -1898,7 +1898,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1054,
                                             "fullEnd": 1102,
                                             "start": 1054,
@@ -1906,7 +1906,7 @@
                                             "fullWidth": 48,
                                             "width": 48,
                                             "left": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1054,
                                                 "fullEnd": 1077,
                                                 "start": 1054,
@@ -1999,7 +1999,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1080,
                                                 "fullEnd": 1102,
                                                 "start": 1080,

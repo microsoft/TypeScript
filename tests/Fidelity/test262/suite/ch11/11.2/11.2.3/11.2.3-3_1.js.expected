@@ -502,7 +502,7 @@
                                         "fullWidth": 18,
                                         "width": 17,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 641,
                                             "fullEnd": 657,
                                             "start": 641,
@@ -1400,7 +1400,7 @@
                                                 ]
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 812,
                                                 "fullEnd": 858,
                                                 "start": 812,
@@ -1428,7 +1428,7 @@
                                                         "valueText": "("
                                                     },
                                                     "expression": {
-                                                        "kind": "InstanceOfExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 813,
                                                         "fullEnd": 835,
                                                         "start": 813,
@@ -1554,7 +1554,7 @@
                                                         "valueText": "("
                                                     },
                                                     "expression": {
-                                                        "kind": "EqualsExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 841,
                                                         "fullEnd": 857,
                                                         "start": 841,

@@ -526,7 +526,7 @@
                                                 "valueText": "("
                                             },
                                             "expression": {
-                                                "kind": "NotEqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 609,
                                                 "fullEnd": 669,
                                                 "start": 609,
@@ -1342,7 +1342,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalNotExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 794,
                                 "fullEnd": 838,
                                 "start": 794,

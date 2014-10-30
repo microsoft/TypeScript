@@ -476,7 +476,7 @@
                                         "fullWidth": 39,
                                         "width": 25,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 673,
                                             "fullEnd": 709,
                                             "start": 685,
@@ -1467,7 +1467,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 963,
                                             "fullEnd": 1011,
                                             "start": 963,
@@ -1475,7 +1475,7 @@
                                             "fullWidth": 48,
                                             "width": 48,
                                             "left": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 963,
                                                 "fullEnd": 986,
                                                 "start": 963,
@@ -1568,7 +1568,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 989,
                                                 "fullEnd": 1011,
                                                 "start": 989,

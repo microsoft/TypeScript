@@ -1062,7 +1062,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 1040,
                                 "fullEnd": 1048,
                                 "start": 1040,
@@ -1112,7 +1112,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "NegateExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 1046,
                                     "fullEnd": 1048,
                                     "start": 1046,

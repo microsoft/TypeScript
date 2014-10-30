@@ -194,7 +194,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 318,
                                             "fullEnd": 393,
                                             "start": 318,
@@ -603,7 +603,7 @@
                                         "valueText": "("
                                     },
                                     "expression": {
-                                        "kind": "NotEqualsExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 416,
                                         "fullEnd": 449,
                                         "start": 416,
@@ -611,7 +611,7 @@
                                         "fullWidth": 33,
                                         "width": 33,
                                         "left": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 416,
                                             "fullEnd": 441,
                                             "start": 416,
@@ -840,7 +840,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 463,
                                                             "fullEnd": 522,
                                                             "start": 463,

@@ -1123,7 +1123,7 @@
                                                 "valueText": "("
                                             },
                                             "condition": {
-                                                "kind": "GreaterThanExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 542,
                                                 "fullEnd": 566,
                                                 "start": 542,

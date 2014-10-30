@@ -484,7 +484,7 @@
                                                     "fullWidth": 33,
                                                     "width": 19,
                                                     "expression": {
-                                                        "kind": "AssignmentExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 621,
                                                         "fullEnd": 651,
                                                         "start": 633,
@@ -1057,7 +1057,7 @@
                             "fullWidth": 27,
                             "width": 15,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 765,
                                 "fullEnd": 789,
                                 "start": 775,
@@ -1242,7 +1242,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 807,
                                 "fullEnd": 846,
                                 "start": 807,
@@ -1292,7 +1292,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "LogicalNotExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 819,
                                     "fullEnd": 846,
                                     "start": 819,

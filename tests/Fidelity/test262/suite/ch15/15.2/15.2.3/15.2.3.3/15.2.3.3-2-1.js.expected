@@ -709,7 +709,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 652,
                                 "fullEnd": 670,
                                 "start": 652,

@@ -538,7 +538,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "PlusExpression",
+                                                            "kind": "PrefixUnaryExpression",
                                                             "fullStart": 839,
                                                             "fullEnd": 841,
                                                             "start": 839,
@@ -872,7 +872,7 @@
                                         "fullWidth": 30,
                                         "width": 16,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 881,
                                             "fullEnd": 908,
                                             "start": 893,

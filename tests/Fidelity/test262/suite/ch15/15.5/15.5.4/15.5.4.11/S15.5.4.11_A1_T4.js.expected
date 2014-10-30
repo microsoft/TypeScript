@@ -129,7 +129,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 493,
                     "fullEnd": 584,
                     "start": 493,
@@ -609,7 +609,7 @@
                                                     ]
                                                 },
                                                 "expression": {
-                                                    "kind": "AddExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 564,
                                                     "fullEnd": 569,
                                                     "start": 564,
@@ -850,7 +850,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 597,
                                             "fullEnd": 785,
                                             "start": 597,
@@ -1354,7 +1354,7 @@
                                                                             ]
                                                                         },
                                                                         "expression": {
-                                                                            "kind": "AddExpression",
+                                                                            "kind": "BinaryExpression",
                                                                             "fullStart": 776,
                                                                             "fullEnd": 781,
                                                                             "start": 776,

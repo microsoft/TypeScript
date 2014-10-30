@@ -1121,7 +1121,7 @@
                                         "fullWidth": 33,
                                         "width": 19,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 930,
                                             "fullEnd": 960,
                                             "start": 942,
@@ -1294,7 +1294,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 984,
                                             "fullEnd": 1038,
                                             "start": 984,
@@ -1302,7 +1302,7 @@
                                             "fullWidth": 54,
                                             "width": 54,
                                             "left": {
-                                                "kind": "LogicalNotExpression",
+                                                "kind": "PrefixUnaryExpression",
                                                 "fullStart": 984,
                                                 "fullEnd": 1015,
                                                 "start": 984,
@@ -1454,7 +1454,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1018,
                                                 "fullEnd": 1038,
                                                 "start": 1018,

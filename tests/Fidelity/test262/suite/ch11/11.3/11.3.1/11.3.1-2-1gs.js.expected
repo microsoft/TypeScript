@@ -227,7 +227,7 @@
                 "width": 12,
                 "parsedInStrictMode": true,
                 "expression": {
-                    "kind": "PostIncrementExpression",
+                    "kind": "PostfixUnaryExpression",
                     "fullStart": 651,
                     "fullEnd": 662,
                     "start": 651,

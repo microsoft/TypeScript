@@ -927,7 +927,7 @@
                             "fullWidth": 30,
                             "width": 18,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 737,
                                 "fullEnd": 764,
                                 "start": 747,
@@ -1367,7 +1367,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 852,
                                 "fullEnd": 940,
                                 "start": 852,
@@ -1375,7 +1375,7 @@
                                 "fullWidth": 88,
                                 "width": 88,
                                 "left": {
-                                    "kind": "LogicalAndExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 852,
                                     "fullEnd": 906,
                                     "start": 852,
@@ -1514,7 +1514,7 @@
                                         ]
                                     },
                                     "right": {
-                                        "kind": "EqualsExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 886,
                                         "fullEnd": 906,
                                         "start": 886,
@@ -1641,7 +1641,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 909,
                                     "fullEnd": 940,
                                     "start": 909,

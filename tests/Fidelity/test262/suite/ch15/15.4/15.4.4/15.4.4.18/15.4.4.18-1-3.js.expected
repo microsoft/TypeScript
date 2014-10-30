@@ -628,7 +628,7 @@
                                         "fullWidth": 46,
                                         "width": 32,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 618,
                                             "fullEnd": 661,
                                             "start": 630,
@@ -687,7 +687,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "InstanceOfExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 639,
                                                 "fullEnd": 661,
                                                 "start": 639,
@@ -892,7 +892,7 @@
                                         "fullWidth": 42,
                                         "width": 28,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 692,
                                             "fullEnd": 731,
                                             "start": 704,
@@ -1073,7 +1073,7 @@
                                         "fullWidth": 43,
                                         "width": 29,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 734,
                                             "fullEnd": 774,
                                             "start": 746,

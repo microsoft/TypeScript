@@ -382,7 +382,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 421,
                                             "fullEnd": 510,
                                             "start": 421,
@@ -824,7 +824,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 533,
                                     "fullEnd": 566,
                                     "start": 533,
@@ -852,7 +852,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 534,
                                             "fullEnd": 556,
                                             "start": 534,
@@ -1081,7 +1081,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 581,
                                                             "fullEnd": 646,
                                                             "start": 581,

@@ -629,7 +629,7 @@
                                                                                     ]
                                                                                 },
                                                                                 "expression": {
-                                                                                    "kind": "NegateExpression",
+                                                                                    "kind": "PrefixUnaryExpression",
                                                                                     "fullStart": 694,
                                                                                     "fullEnd": 700,
                                                                                     "start": 694,
@@ -1421,7 +1421,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 899,
                                 "fullEnd": 947,
                                 "start": 899,
@@ -1429,7 +1429,7 @@
                                 "fullWidth": 48,
                                 "width": 48,
                                 "left": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 899,
                                     "fullEnd": 922,
                                     "start": 899,
@@ -1522,7 +1522,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 925,
                                     "fullEnd": 947,
                                     "start": 925,

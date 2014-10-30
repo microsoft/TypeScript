@@ -28,7 +28,7 @@
                 "width": 5,
                 "isIncrementallyUnusable": true,
                 "expression": {
-                    "kind": "UnsignedRightShiftExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 9,
                     "start": 0,

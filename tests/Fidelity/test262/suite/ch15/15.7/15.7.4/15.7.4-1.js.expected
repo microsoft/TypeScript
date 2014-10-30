@@ -903,7 +903,7 @@
                                     "valueText": "("
                                 },
                                 "expression": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 650,
                                     "fullEnd": 673,
                                     "start": 650,

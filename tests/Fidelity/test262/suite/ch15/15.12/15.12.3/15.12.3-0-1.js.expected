@@ -460,7 +460,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 1181,
                                 "fullEnd": 1205,
                                 "start": 1181,

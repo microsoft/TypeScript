@@ -764,7 +764,7 @@
                                                     ]
                                                 },
                                                 "expression": {
-                                                    "kind": "LogicalAndExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 720,
                                                     "fullEnd": 772,
                                                     "start": 720,
@@ -794,7 +794,7 @@
                                                             "valueText": "("
                                                         },
                                                         "expression": {
-                                                            "kind": "EqualsExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 721,
                                                             "fullEnd": 738,
                                                             "start": 721,
@@ -949,7 +949,7 @@
                                                             "valueText": "("
                                                         },
                                                         "expression": {
-                                                            "kind": "EqualsExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 744,
                                                             "fullEnd": 771,
                                                             "start": 744,
@@ -1168,7 +1168,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 782,
                     "fullEnd": 788,
                     "start": 782,

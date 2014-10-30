@@ -270,7 +270,7 @@
                 "fullWidth": 23,
                 "width": 10,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 549,
                     "fullEnd": 570,
                     "start": 561,
@@ -587,7 +587,7 @@
                 "fullWidth": 331,
                 "width": 15,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 593,
                     "fullEnd": 922,
                     "start": 908,
@@ -735,7 +735,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 915,
                         "fullEnd": 922,
                         "start": 915,
@@ -800,7 +800,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 924,
                     "fullEnd": 954,
                     "start": 924,
@@ -895,7 +895,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 931,
                         "fullEnd": 954,
                         "start": 931,
@@ -960,7 +960,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 956,
                     "fullEnd": 986,
                     "start": 956,
@@ -1055,7 +1055,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 963,
                         "fullEnd": 986,
                         "start": 963,
@@ -1120,7 +1120,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 988,
                     "fullEnd": 1018,
                     "start": 988,
@@ -1215,7 +1215,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 995,
                         "fullEnd": 1018,
                         "start": 995,
@@ -1280,7 +1280,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1020,
                     "fullEnd": 1050,
                     "start": 1020,
@@ -1375,7 +1375,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1027,
                         "fullEnd": 1050,
                         "start": 1027,
@@ -1440,7 +1440,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1052,
                     "fullEnd": 1082,
                     "start": 1052,
@@ -1535,7 +1535,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1059,
                         "fullEnd": 1082,
                         "start": 1059,
@@ -1600,7 +1600,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1084,
                     "fullEnd": 1114,
                     "start": 1084,
@@ -1695,7 +1695,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1091,
                         "fullEnd": 1114,
                         "start": 1091,
@@ -1760,7 +1760,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1116,
                     "fullEnd": 1146,
                     "start": 1116,
@@ -1855,7 +1855,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1123,
                         "fullEnd": 1146,
                         "start": 1123,
@@ -1920,7 +1920,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1148,
                     "fullEnd": 1178,
                     "start": 1148,
@@ -2015,7 +2015,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1155,
                         "fullEnd": 1178,
                         "start": 1155,
@@ -2080,7 +2080,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1180,
                     "fullEnd": 1210,
                     "start": 1180,
@@ -2175,7 +2175,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1187,
                         "fullEnd": 1210,
                         "start": 1187,
@@ -2240,7 +2240,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1212,
                     "fullEnd": 1243,
                     "start": 1212,
@@ -2335,7 +2335,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1220,
                         "fullEnd": 1243,
                         "start": 1220,
@@ -2400,7 +2400,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1245,
                     "fullEnd": 1276,
                     "start": 1245,
@@ -2495,7 +2495,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1253,
                         "fullEnd": 1276,
                         "start": 1253,
@@ -2560,7 +2560,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1278,
                     "fullEnd": 1309,
                     "start": 1278,
@@ -2655,7 +2655,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1286,
                         "fullEnd": 1309,
                         "start": 1286,
@@ -2720,7 +2720,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1311,
                     "fullEnd": 1342,
                     "start": 1311,
@@ -2815,7 +2815,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1319,
                         "fullEnd": 1342,
                         "start": 1319,
@@ -2880,7 +2880,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1344,
                     "fullEnd": 1375,
                     "start": 1344,
@@ -2975,7 +2975,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1352,
                         "fullEnd": 1375,
                         "start": 1352,
@@ -3040,7 +3040,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1377,
                     "fullEnd": 1408,
                     "start": 1377,
@@ -3135,7 +3135,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1385,
                         "fullEnd": 1408,
                         "start": 1385,
@@ -3200,7 +3200,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1410,
                     "fullEnd": 1441,
                     "start": 1410,
@@ -3295,7 +3295,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1418,
                         "fullEnd": 1441,
                         "start": 1418,
@@ -3360,7 +3360,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1443,
                     "fullEnd": 1474,
                     "start": 1443,
@@ -3455,7 +3455,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1451,
                         "fullEnd": 1474,
                         "start": 1451,
@@ -3520,7 +3520,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1476,
                     "fullEnd": 1507,
                     "start": 1476,
@@ -3615,7 +3615,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1484,
                         "fullEnd": 1507,
                         "start": 1484,
@@ -3680,7 +3680,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1509,
                     "fullEnd": 1540,
                     "start": 1509,
@@ -3775,7 +3775,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1517,
                         "fullEnd": 1540,
                         "start": 1517,
@@ -3840,7 +3840,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1542,
                     "fullEnd": 1573,
                     "start": 1542,
@@ -3935,7 +3935,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1550,
                         "fullEnd": 1573,
                         "start": 1550,
@@ -4000,7 +4000,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1575,
                     "fullEnd": 1606,
                     "start": 1575,
@@ -4095,7 +4095,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1583,
                         "fullEnd": 1606,
                         "start": 1583,
@@ -4160,7 +4160,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1608,
                     "fullEnd": 1639,
                     "start": 1608,
@@ -4255,7 +4255,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1616,
                         "fullEnd": 1639,
                         "start": 1616,
@@ -4320,7 +4320,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1641,
                     "fullEnd": 1672,
                     "start": 1641,
@@ -4415,7 +4415,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1649,
                         "fullEnd": 1672,
                         "start": 1649,
@@ -4480,7 +4480,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1674,
                     "fullEnd": 1705,
                     "start": 1674,
@@ -4575,7 +4575,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1682,
                         "fullEnd": 1705,
                         "start": 1682,
@@ -4640,7 +4640,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1707,
                     "fullEnd": 1738,
                     "start": 1707,
@@ -4735,7 +4735,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1715,
                         "fullEnd": 1738,
                         "start": 1715,
@@ -4800,7 +4800,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1740,
                     "fullEnd": 1771,
                     "start": 1740,
@@ -4895,7 +4895,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1748,
                         "fullEnd": 1771,
                         "start": 1748,
@@ -4960,7 +4960,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1773,
                     "fullEnd": 1804,
                     "start": 1773,
@@ -5055,7 +5055,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1781,
                         "fullEnd": 1804,
                         "start": 1781,
@@ -5120,7 +5120,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1806,
                     "fullEnd": 1837,
                     "start": 1806,
@@ -5215,7 +5215,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1814,
                         "fullEnd": 1837,
                         "start": 1814,
@@ -5280,7 +5280,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1839,
                     "fullEnd": 1870,
                     "start": 1839,
@@ -5375,7 +5375,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1847,
                         "fullEnd": 1870,
                         "start": 1847,
@@ -5440,7 +5440,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1872,
                     "fullEnd": 1903,
                     "start": 1872,
@@ -5535,7 +5535,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1880,
                         "fullEnd": 1903,
                         "start": 1880,
@@ -5600,7 +5600,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1905,
                     "fullEnd": 1936,
                     "start": 1905,
@@ -5695,7 +5695,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 1913,
                         "fullEnd": 1936,
                         "start": 1913,
@@ -5760,7 +5760,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1938,
                     "fullEnd": 1968,
                     "start": 1938,
@@ -5899,7 +5899,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1970,
                     "fullEnd": 2000,
                     "start": 1970,
@@ -6038,7 +6038,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2002,
                     "fullEnd": 2032,
                     "start": 2002,
@@ -6177,7 +6177,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2034,
                     "fullEnd": 2064,
                     "start": 2034,
@@ -6316,7 +6316,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2066,
                     "fullEnd": 2096,
                     "start": 2066,
@@ -6455,7 +6455,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2098,
                     "fullEnd": 2128,
                     "start": 2098,
@@ -6594,7 +6594,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2130,
                     "fullEnd": 2160,
                     "start": 2130,
@@ -6733,7 +6733,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2162,
                     "fullEnd": 2192,
                     "start": 2162,
@@ -6872,7 +6872,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2194,
                     "fullEnd": 2224,
                     "start": 2194,
@@ -7011,7 +7011,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2226,
                     "fullEnd": 2256,
                     "start": 2226,
@@ -7150,7 +7150,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2258,
                     "fullEnd": 2288,
                     "start": 2258,
@@ -7289,7 +7289,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2290,
                     "fullEnd": 2320,
                     "start": 2290,
@@ -7428,7 +7428,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2322,
                     "fullEnd": 2352,
                     "start": 2322,
@@ -7567,7 +7567,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2354,
                     "fullEnd": 2384,
                     "start": 2354,
@@ -7706,7 +7706,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2386,
                     "fullEnd": 2416,
                     "start": 2386,
@@ -7845,7 +7845,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2418,
                     "fullEnd": 2448,
                     "start": 2418,
@@ -7984,7 +7984,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2450,
                     "fullEnd": 2480,
                     "start": 2450,
@@ -8123,7 +8123,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2482,
                     "fullEnd": 2512,
                     "start": 2482,
@@ -8262,7 +8262,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2514,
                     "fullEnd": 2544,
                     "start": 2514,
@@ -8401,7 +8401,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2546,
                     "fullEnd": 2576,
                     "start": 2546,
@@ -8540,7 +8540,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2578,
                     "fullEnd": 2608,
                     "start": 2578,
@@ -8679,7 +8679,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2610,
                     "fullEnd": 2640,
                     "start": 2610,
@@ -8818,7 +8818,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2642,
                     "fullEnd": 2672,
                     "start": 2642,
@@ -8957,7 +8957,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2674,
                     "fullEnd": 2704,
                     "start": 2674,
@@ -9096,7 +9096,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2706,
                     "fullEnd": 2736,
                     "start": 2706,
@@ -9235,7 +9235,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2738,
                     "fullEnd": 2768,
                     "start": 2738,
@@ -9374,7 +9374,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2770,
                     "fullEnd": 2800,
                     "start": 2770,
@@ -9513,7 +9513,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2802,
                     "fullEnd": 2832,
                     "start": 2802,
@@ -9652,7 +9652,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2834,
                     "fullEnd": 2864,
                     "start": 2834,
@@ -9791,7 +9791,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2866,
                     "fullEnd": 2896,
                     "start": 2866,
@@ -9930,7 +9930,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2898,
                     "fullEnd": 2928,
                     "start": 2898,
@@ -10069,7 +10069,7 @@
                 "fullWidth": 16,
                 "width": 15,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2930,
                     "fullEnd": 2944,
                     "start": 2930,
@@ -10430,7 +10430,7 @@
                 "fullWidth": 27,
                 "width": 26,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2970,
                     "fullEnd": 2995,
                     "start": 2970,
@@ -10525,7 +10525,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 2977,
                         "fullEnd": 2995,
                         "start": 2977,
@@ -10590,7 +10590,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2997,
                     "fullEnd": 3028,
                     "start": 2997,
@@ -10685,7 +10685,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3004,
                         "fullEnd": 3028,
                         "start": 3004,
@@ -10750,7 +10750,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3030,
                     "fullEnd": 3060,
                     "start": 3030,
@@ -10845,7 +10845,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3037,
                         "fullEnd": 3060,
                         "start": 3037,
@@ -10910,7 +10910,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3062,
                     "fullEnd": 3092,
                     "start": 3062,
@@ -11005,7 +11005,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3069,
                         "fullEnd": 3092,
                         "start": 3069,
@@ -11070,7 +11070,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3094,
                     "fullEnd": 3124,
                     "start": 3094,
@@ -11165,7 +11165,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3101,
                         "fullEnd": 3124,
                         "start": 3101,
@@ -11230,7 +11230,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3126,
                     "fullEnd": 3156,
                     "start": 3126,
@@ -11325,7 +11325,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3133,
                         "fullEnd": 3156,
                         "start": 3133,
@@ -11390,7 +11390,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3158,
                     "fullEnd": 3188,
                     "start": 3158,
@@ -11485,7 +11485,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3165,
                         "fullEnd": 3188,
                         "start": 3165,
@@ -11550,7 +11550,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3190,
                     "fullEnd": 3220,
                     "start": 3190,
@@ -11645,7 +11645,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3197,
                         "fullEnd": 3220,
                         "start": 3197,
@@ -11710,7 +11710,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3222,
                     "fullEnd": 3252,
                     "start": 3222,
@@ -11805,7 +11805,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3229,
                         "fullEnd": 3252,
                         "start": 3229,
@@ -11870,7 +11870,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3254,
                     "fullEnd": 3284,
                     "start": 3254,
@@ -11965,7 +11965,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3261,
                         "fullEnd": 3284,
                         "start": 3261,
@@ -12030,7 +12030,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3286,
                     "fullEnd": 3317,
                     "start": 3286,
@@ -12125,7 +12125,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3294,
                         "fullEnd": 3317,
                         "start": 3294,
@@ -12190,7 +12190,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3319,
                     "fullEnd": 3350,
                     "start": 3319,
@@ -12285,7 +12285,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3327,
                         "fullEnd": 3350,
                         "start": 3327,
@@ -12350,7 +12350,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3352,
                     "fullEnd": 3383,
                     "start": 3352,
@@ -12445,7 +12445,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3360,
                         "fullEnd": 3383,
                         "start": 3360,
@@ -12510,7 +12510,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3385,
                     "fullEnd": 3416,
                     "start": 3385,
@@ -12605,7 +12605,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3393,
                         "fullEnd": 3416,
                         "start": 3393,
@@ -12670,7 +12670,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3418,
                     "fullEnd": 3449,
                     "start": 3418,
@@ -12765,7 +12765,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3426,
                         "fullEnd": 3449,
                         "start": 3426,
@@ -12830,7 +12830,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3451,
                     "fullEnd": 3482,
                     "start": 3451,
@@ -12925,7 +12925,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3459,
                         "fullEnd": 3482,
                         "start": 3459,
@@ -12990,7 +12990,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3484,
                     "fullEnd": 3515,
                     "start": 3484,
@@ -13085,7 +13085,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3492,
                         "fullEnd": 3515,
                         "start": 3492,
@@ -13150,7 +13150,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3517,
                     "fullEnd": 3548,
                     "start": 3517,
@@ -13245,7 +13245,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3525,
                         "fullEnd": 3548,
                         "start": 3525,
@@ -13310,7 +13310,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3550,
                     "fullEnd": 3581,
                     "start": 3550,
@@ -13405,7 +13405,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3558,
                         "fullEnd": 3581,
                         "start": 3558,
@@ -13470,7 +13470,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3583,
                     "fullEnd": 3614,
                     "start": 3583,
@@ -13565,7 +13565,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3591,
                         "fullEnd": 3614,
                         "start": 3591,
@@ -13630,7 +13630,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3616,
                     "fullEnd": 3647,
                     "start": 3616,
@@ -13725,7 +13725,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3624,
                         "fullEnd": 3647,
                         "start": 3624,
@@ -13790,7 +13790,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3649,
                     "fullEnd": 3680,
                     "start": 3649,
@@ -13885,7 +13885,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3657,
                         "fullEnd": 3680,
                         "start": 3657,
@@ -13950,7 +13950,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3682,
                     "fullEnd": 3713,
                     "start": 3682,
@@ -14045,7 +14045,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3690,
                         "fullEnd": 3713,
                         "start": 3690,
@@ -14110,7 +14110,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3715,
                     "fullEnd": 3746,
                     "start": 3715,
@@ -14205,7 +14205,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3723,
                         "fullEnd": 3746,
                         "start": 3723,
@@ -14270,7 +14270,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3748,
                     "fullEnd": 3779,
                     "start": 3748,
@@ -14365,7 +14365,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3756,
                         "fullEnd": 3779,
                         "start": 3756,
@@ -14430,7 +14430,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3781,
                     "fullEnd": 3812,
                     "start": 3781,
@@ -14525,7 +14525,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3789,
                         "fullEnd": 3812,
                         "start": 3789,
@@ -14590,7 +14590,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3814,
                     "fullEnd": 3845,
                     "start": 3814,
@@ -14685,7 +14685,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3822,
                         "fullEnd": 3845,
                         "start": 3822,
@@ -14750,7 +14750,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3847,
                     "fullEnd": 3878,
                     "start": 3847,
@@ -14845,7 +14845,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3855,
                         "fullEnd": 3878,
                         "start": 3855,
@@ -14910,7 +14910,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3880,
                     "fullEnd": 3911,
                     "start": 3880,
@@ -15005,7 +15005,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3888,
                         "fullEnd": 3911,
                         "start": 3888,
@@ -15070,7 +15070,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3913,
                     "fullEnd": 3944,
                     "start": 3913,
@@ -15165,7 +15165,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3921,
                         "fullEnd": 3944,
                         "start": 3921,
@@ -15230,7 +15230,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3946,
                     "fullEnd": 3977,
                     "start": 3946,
@@ -15325,7 +15325,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3954,
                         "fullEnd": 3977,
                         "start": 3954,
@@ -15390,7 +15390,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3979,
                     "fullEnd": 4010,
                     "start": 3979,
@@ -15485,7 +15485,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "NegateExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 3987,
                         "fullEnd": 4010,
                         "start": 3987,
@@ -15550,7 +15550,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4012,
                     "fullEnd": 4042,
                     "start": 4012,
@@ -15689,7 +15689,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4044,
                     "fullEnd": 4074,
                     "start": 4044,
@@ -15828,7 +15828,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4076,
                     "fullEnd": 4106,
                     "start": 4076,
@@ -15967,7 +15967,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4108,
                     "fullEnd": 4138,
                     "start": 4108,
@@ -16106,7 +16106,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4140,
                     "fullEnd": 4170,
                     "start": 4140,
@@ -16245,7 +16245,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4172,
                     "fullEnd": 4202,
                     "start": 4172,
@@ -16384,7 +16384,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4204,
                     "fullEnd": 4234,
                     "start": 4204,
@@ -16523,7 +16523,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4236,
                     "fullEnd": 4266,
                     "start": 4236,
@@ -16662,7 +16662,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4268,
                     "fullEnd": 4298,
                     "start": 4268,
@@ -16801,7 +16801,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4300,
                     "fullEnd": 4330,
                     "start": 4300,
@@ -16940,7 +16940,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4332,
                     "fullEnd": 4362,
                     "start": 4332,
@@ -17079,7 +17079,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4364,
                     "fullEnd": 4394,
                     "start": 4364,
@@ -17218,7 +17218,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4396,
                     "fullEnd": 4426,
                     "start": 4396,
@@ -17357,7 +17357,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4428,
                     "fullEnd": 4458,
                     "start": 4428,
@@ -17496,7 +17496,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4460,
                     "fullEnd": 4490,
                     "start": 4460,
@@ -17635,7 +17635,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4492,
                     "fullEnd": 4522,
                     "start": 4492,
@@ -17774,7 +17774,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4524,
                     "fullEnd": 4554,
                     "start": 4524,
@@ -17913,7 +17913,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4556,
                     "fullEnd": 4586,
                     "start": 4556,
@@ -18052,7 +18052,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4588,
                     "fullEnd": 4618,
                     "start": 4588,
@@ -18191,7 +18191,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4620,
                     "fullEnd": 4650,
                     "start": 4620,
@@ -18330,7 +18330,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4652,
                     "fullEnd": 4682,
                     "start": 4652,
@@ -18469,7 +18469,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4684,
                     "fullEnd": 4714,
                     "start": 4684,
@@ -18608,7 +18608,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4716,
                     "fullEnd": 4746,
                     "start": 4716,
@@ -18747,7 +18747,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4748,
                     "fullEnd": 4778,
                     "start": 4748,
@@ -18886,7 +18886,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4780,
                     "fullEnd": 4810,
                     "start": 4780,
@@ -19025,7 +19025,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4812,
                     "fullEnd": 4842,
                     "start": 4812,
@@ -19164,7 +19164,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4844,
                     "fullEnd": 4874,
                     "start": 4844,
@@ -19303,7 +19303,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4876,
                     "fullEnd": 4906,
                     "start": 4876,
@@ -19442,7 +19442,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4908,
                     "fullEnd": 4938,
                     "start": 4908,
@@ -19581,7 +19581,7 @@
                 "fullWidth": 32,
                 "width": 31,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4940,
                     "fullEnd": 4970,
                     "start": 4940,
@@ -19720,7 +19720,7 @@
                 "fullWidth": 33,
                 "width": 32,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 4972,
                     "fullEnd": 5003,
                     "start": 4972,
@@ -19859,7 +19859,7 @@
                 "fullWidth": 27,
                 "width": 26,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 5005,
                     "fullEnd": 5030,
                     "start": 5005,
@@ -20132,7 +20132,7 @@
                     "valueText": "("
                 },
                 "initializer": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 5048,
                     "fullEnd": 5053,
                     "start": 5048,
@@ -20216,7 +20216,7 @@
                     ]
                 },
                 "condition": {
-                    "kind": "LessThanExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 5055,
                     "fullEnd": 5063,
                     "start": 5055,
@@ -20300,7 +20300,7 @@
                     ]
                 },
                 "incrementor": {
-                    "kind": "PostIncrementExpression",
+                    "kind": "PostfixUnaryExpression",
                     "fullStart": 5065,
                     "fullEnd": 5068,
                     "start": 5065,
@@ -20394,7 +20394,7 @@
                             "fullWidth": 23,
                             "width": 21,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 5072,
                                 "fullEnd": 5093,
                                 "start": 5073,
@@ -20673,7 +20673,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "LogicalNotExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 5100,
                                 "fullEnd": 5119,
                                 "start": 5100,
@@ -20960,7 +20960,7 @@
                                                 },
                                                 "arguments": [
                                                     {
-                                                        "kind": "AddExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 5133,
                                                         "fullEnd": 5275,
                                                         "start": 5133,
@@ -20968,7 +20968,7 @@
                                                         "fullWidth": 142,
                                                         "width": 142,
                                                         "left": {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 5133,
                                                             "fullEnd": 5267,
                                                             "start": 5133,
@@ -20976,7 +20976,7 @@
                                                             "fullWidth": 134,
                                                             "width": 133,
                                                             "left": {
-                                                                "kind": "AddExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 5133,
                                                                 "fullEnd": 5260,
                                                                 "start": 5133,
@@ -20984,7 +20984,7 @@
                                                                 "fullWidth": 127,
                                                                 "width": 126,
                                                                 "left": {
-                                                                    "kind": "AddExpression",
+                                                                    "kind": "BinaryExpression",
                                                                     "fullStart": 5133,
                                                                     "fullEnd": 5215,
                                                                     "start": 5133,
@@ -20992,7 +20992,7 @@
                                                                     "fullWidth": 82,
                                                                     "width": 81,
                                                                     "left": {
-                                                                        "kind": "AddExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 5133,
                                                                         "fullEnd": 5198,
                                                                         "start": 5133,
@@ -21000,7 +21000,7 @@
                                                                         "fullWidth": 65,
                                                                         "width": 64,
                                                                         "left": {
-                                                                            "kind": "AddExpression",
+                                                                            "kind": "BinaryExpression",
                                                                             "fullStart": 5133,
                                                                             "fullEnd": 5177,
                                                                             "start": 5133,
@@ -21008,7 +21008,7 @@
                                                                             "fullWidth": 44,
                                                                             "width": 43,
                                                                             "left": {
-                                                                                "kind": "AddExpression",
+                                                                                "kind": "BinaryExpression",
                                                                                 "fullStart": 5133,
                                                                                 "fullEnd": 5170,
                                                                                 "start": 5133,
@@ -21016,7 +21016,7 @@
                                                                                 "fullWidth": 37,
                                                                                 "width": 36,
                                                                                 "left": {
-                                                                                    "kind": "AddExpression",
+                                                                                    "kind": "BinaryExpression",
                                                                                     "fullStart": 5133,
                                                                                     "fullEnd": 5149,
                                                                                     "start": 5133,

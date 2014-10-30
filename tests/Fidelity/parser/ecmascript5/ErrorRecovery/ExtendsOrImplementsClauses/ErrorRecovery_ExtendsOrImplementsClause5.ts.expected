@@ -75,7 +75,7 @@
                 },
                 "heritageClauses": [
                     {
-                        "kind": "ExtendsHeritageClause",
+                        "kind": "HeritageClause",
                         "fullStart": 8,
                         "fullEnd": 19,
                         "start": 8,
@@ -140,7 +140,7 @@
                         ]
                     },
                     {
-                        "kind": "ImplementsHeritageClause",
+                        "kind": "HeritageClause",
                         "fullStart": 19,
                         "fullEnd": 33,
                         "start": 19,

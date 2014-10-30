@@ -723,7 +723,7 @@
                                 ]
                             },
                             "condition": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 740,
                                 "fullEnd": 789,
                                 "start": 740,
@@ -751,7 +751,7 @@
                                         "valueText": "("
                                     },
                                     "expression": {
-                                        "kind": "LogicalOrExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 741,
                                         "fullEnd": 762,
                                         "start": 741,
@@ -759,7 +759,7 @@
                                         "fullWidth": 21,
                                         "width": 21,
                                         "left": {
-                                            "kind": "LogicalNotExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 741,
                                             "fullEnd": 751,
                                             "start": 741,

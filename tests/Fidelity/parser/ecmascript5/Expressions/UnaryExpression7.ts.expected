@@ -19,7 +19,7 @@
                 "fullWidth": 13,
                 "width": 13,
                 "expression": {
-                    "kind": "PreIncrementExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 0,
                     "fullEnd": 12,
                     "start": 0,

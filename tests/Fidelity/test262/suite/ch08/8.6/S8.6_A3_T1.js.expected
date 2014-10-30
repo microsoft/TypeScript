@@ -258,7 +258,7 @@
                 "fullWidth": 104,
                 "width": 12,
                 "expression": {
-                    "kind": "PreIncrementExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 320,
                     "fullEnd": 422,
                     "start": 411,
@@ -429,7 +429,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 428,
                     "fullEnd": 445,
                     "start": 428,
@@ -661,7 +661,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 458,
                                             "fullEnd": 551,
                                             "start": 458,

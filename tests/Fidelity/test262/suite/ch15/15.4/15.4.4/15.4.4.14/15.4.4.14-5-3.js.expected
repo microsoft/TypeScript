@@ -503,7 +503,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 564,
                                 "fullEnd": 652,
                                 "start": 564,
@@ -511,7 +511,7 @@
                                 "fullWidth": 88,
                                 "width": 87,
                                 "left": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 564,
                                     "fullEnd": 589,
                                     "start": 564,
@@ -674,7 +674,7 @@
                                         ]
                                     },
                                     "right": {
-                                        "kind": "NegateExpression",
+                                        "kind": "PrefixUnaryExpression",
                                         "fullStart": 586,
                                         "fullEnd": 589,
                                         "start": 586,
@@ -752,7 +752,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 622,
                                     "fullEnd": 652,
                                     "start": 627,

@@ -1428,7 +1428,7 @@
                                                 ]
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 852,
                                                 "fullEnd": 970,
                                                 "start": 852,
@@ -1436,7 +1436,7 @@
                                                 "fullWidth": 118,
                                                 "width": 118,
                                                 "left": {
-                                                    "kind": "LogicalAndExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 852,
                                                     "fullEnd": 935,
                                                     "start": 852,
@@ -1444,7 +1444,7 @@
                                                     "fullWidth": 83,
                                                     "width": 82,
                                                     "left": {
-                                                        "kind": "LogicalAndExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 852,
                                                         "fullEnd": 887,
                                                         "start": 852,
@@ -1452,7 +1452,7 @@
                                                         "fullWidth": 35,
                                                         "width": 34,
                                                         "left": {
-                                                            "kind": "InstanceOfExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 852,
                                                             "fullEnd": 875,
                                                             "start": 852,
@@ -1589,7 +1589,7 @@
                                                         ]
                                                     },
                                                     "right": {
-                                                        "kind": "LogicalNotExpression",
+                                                        "kind": "PrefixUnaryExpression",
                                                         "fullStart": 891,
                                                         "fullEnd": 935,
                                                         "start": 907,
@@ -1751,7 +1751,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 938,
                                                     "fullEnd": 970,
                                                     "start": 938,

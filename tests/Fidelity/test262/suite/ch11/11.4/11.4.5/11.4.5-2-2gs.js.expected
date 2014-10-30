@@ -227,7 +227,7 @@
                 "width": 12,
                 "parsedInStrictMode": true,
                 "expression": {
-                    "kind": "PreDecrementExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 661,
                     "fullEnd": 672,
                     "start": 661,

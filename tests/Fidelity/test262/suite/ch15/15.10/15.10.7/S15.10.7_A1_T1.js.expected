@@ -194,7 +194,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 318,
                                             "fullEnd": 375,
                                             "start": 318,
@@ -549,7 +549,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 397,
                                     "fullEnd": 430,
                                     "start": 397,
@@ -577,7 +577,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 398,
                                             "fullEnd": 420,
                                             "start": 398,
@@ -806,7 +806,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 443,
                                                             "fullEnd": 492,
                                                             "start": 443,

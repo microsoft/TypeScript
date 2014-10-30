@@ -19,7 +19,7 @@
                 "fullWidth": 23,
                 "width": 23,
                 "expression": {
-                    "kind": "DivideExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 22,
                     "start": 0,
@@ -27,7 +27,7 @@
                     "fullWidth": 22,
                     "width": 22,
                     "left": {
-                        "kind": "DivideExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 0,
                         "fullEnd": 14,
                         "start": 0,

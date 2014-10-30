@@ -93,7 +93,7 @@
                         },
                         "arguments": [
                             {
-                                "kind": "InExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 12,
                                 "fullEnd": 32,
                                 "start": 12,

@@ -1137,7 +1137,7 @@
                                                                                 "fullWidth": 35,
                                                                                 "width": 13,
                                                                                 "expression": {
-                                                                                    "kind": "AssignmentExpression",
+                                                                                    "kind": "BinaryExpression",
                                                                                     "fullStart": 794,
                                                                                     "fullEnd": 826,
                                                                                     "start": 814,
@@ -1673,7 +1673,7 @@
                                         "fullWidth": 44,
                                         "width": 30,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 967,
                                             "fullEnd": 1008,
                                             "start": 979,
@@ -1846,7 +1846,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1032,
                                             "fullEnd": 1125,
                                             "start": 1032,
@@ -1854,7 +1854,7 @@
                                             "fullWidth": 93,
                                             "width": 93,
                                             "left": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1032,
                                                 "fullEnd": 1098,
                                                 "start": 1032,
@@ -1862,7 +1862,7 @@
                                                 "fullWidth": 66,
                                                 "width": 65,
                                                 "left": {
-                                                    "kind": "LogicalNotExpression",
+                                                    "kind": "PrefixUnaryExpression",
                                                     "fullStart": 1032,
                                                     "fullEnd": 1063,
                                                     "start": 1032,
@@ -2014,7 +2014,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 1066,
                                                     "fullEnd": 1098,
                                                     "start": 1066,
@@ -2141,7 +2141,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1101,
                                                 "fullEnd": 1125,
                                                 "start": 1101,

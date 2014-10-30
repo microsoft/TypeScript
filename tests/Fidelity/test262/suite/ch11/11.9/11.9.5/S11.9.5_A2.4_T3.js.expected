@@ -144,7 +144,7 @@
                             "fullWidth": 17,
                             "width": 14,
                             "expression": {
-                                "kind": "NotEqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 321,
                                 "fullEnd": 336,
                                 "start": 323,
@@ -223,7 +223,7 @@
                                         "valueText": "("
                                     },
                                     "expression": {
-                                        "kind": "AssignmentExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 330,
                                         "fullEnd": 335,
                                         "start": 330,
@@ -381,7 +381,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 347,
                                             "fullEnd": 417,
                                             "start": 347,
@@ -451,7 +451,7 @@
                                                     "valueText": "("
                                                 },
                                                 "expression": {
-                                                    "kind": "NotEqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 403,
                                                     "fullEnd": 416,
                                                     "start": 403,
@@ -521,7 +521,7 @@
                                                             "valueText": "("
                                                         },
                                                         "expression": {
-                                                            "kind": "AssignmentExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 410,
                                                             "fullEnd": 415,
                                                             "start": 410,
@@ -835,7 +835,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 442,
                                     "fullEnd": 480,
                                     "start": 442,
@@ -863,7 +863,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 443,
                                             "fullEnd": 470,
                                             "start": 443,
@@ -1092,7 +1092,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 495,
                                                             "fullEnd": 553,
                                                             "start": 495,
@@ -1356,7 +1356,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 579,
                     "fullEnd": 592,
                     "start": 579,
@@ -1384,7 +1384,7 @@
                             "valueText": "("
                         },
                         "expression": {
-                            "kind": "AssignmentExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 580,
                             "fullEnd": 585,
                             "start": 580,

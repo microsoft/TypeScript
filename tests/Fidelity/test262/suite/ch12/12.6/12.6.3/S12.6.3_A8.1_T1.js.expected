@@ -429,7 +429,7 @@
                     ]
                 },
                 "condition": {
-                    "kind": "LessThanExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 501,
                     "fullEnd": 510,
                     "start": 501,
@@ -548,7 +548,7 @@
                                 "text": ""
                             },
                             "expression": {
-                                "kind": "PreIncrementExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 518,
                                 "fullEnd": 522,
                                 "start": 518,
@@ -647,7 +647,7 @@
                                 "text": ""
                             },
                             "expression": {
-                                "kind": "MultiplyExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 527,
                                 "fullEnd": 530,
                                 "start": 527,
@@ -868,7 +868,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 543,
                                             "fullEnd": 551,
                                             "start": 543,

@@ -472,7 +472,7 @@
                                                             "fullWidth": 3,
                                                             "width": 3,
                                                             "expression": {
-                                                                "kind": "PostIncrementExpression",
+                                                                "kind": "PostfixUnaryExpression",
                                                                 "fullStart": 368,
                                                                 "fullEnd": 371,
                                                                 "start": 368,
@@ -571,7 +571,7 @@
                 "fullWidth": 26,
                 "width": 25,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 375,
                     "fullEnd": 399,
                     "start": 375,
@@ -914,7 +914,7 @@
                 "fullWidth": 14,
                 "width": 13,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 416,
                     "fullEnd": 428,
                     "start": 416,
@@ -1193,7 +1193,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 454,
                     "fullEnd": 461,
                     "start": 454,
@@ -1372,7 +1372,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 476,
                                             "fullEnd": 633,
                                             "start": 476,

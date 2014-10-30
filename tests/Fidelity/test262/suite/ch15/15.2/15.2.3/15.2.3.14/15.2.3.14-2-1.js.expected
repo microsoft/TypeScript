@@ -822,7 +822,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 597,
                                 "fullEnd": 622,
                                 "start": 597,

@@ -1843,7 +1843,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "EqualsExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1108,
                                             "fullEnd": 1153,
                                             "start": 1108,

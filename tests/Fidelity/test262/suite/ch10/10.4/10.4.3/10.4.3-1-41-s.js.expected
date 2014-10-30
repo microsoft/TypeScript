@@ -525,7 +525,7 @@
                                                                 ]
                                                             },
                                                             "expression": {
-                                                                "kind": "LogicalAndExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 680,
                                                                 "fullEnd": 782,
                                                                 "start": 680,
@@ -555,7 +555,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 681,
                                                                         "fullEnd": 748,
                                                                         "start": 681,
@@ -977,7 +977,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 754,
                                                                         "fullEnd": 781,
                                                                         "start": 754,

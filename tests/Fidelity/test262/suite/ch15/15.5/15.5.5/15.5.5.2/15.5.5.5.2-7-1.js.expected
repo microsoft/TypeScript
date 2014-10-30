@@ -504,7 +504,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 747,
                                 "fullEnd": 766,
                                 "start": 747,
@@ -544,7 +544,7 @@
                                         "valueText": "["
                                     },
                                     "argumentExpression": {
-                                        "kind": "NegateExpression",
+                                        "kind": "PrefixUnaryExpression",
                                         "fullStart": 749,
                                         "fullEnd": 751,
                                         "start": 749,

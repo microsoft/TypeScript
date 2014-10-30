@@ -522,7 +522,7 @@
                                         "fullWidth": 215,
                                         "width": 23,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 850,
                                             "fullEnd": 884,
                                             "start": 862,
@@ -1068,7 +1068,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1182,
                                             "fullEnd": 1232,
                                             "start": 1182,
@@ -1076,7 +1076,7 @@
                                             "fullWidth": 50,
                                             "width": 50,
                                             "left": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1182,
                                                 "fullEnd": 1202,
                                                 "start": 1182,
@@ -1202,7 +1202,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "LogicalNotExpression",
+                                                "kind": "PrefixUnaryExpression",
                                                 "fullStart": 1205,
                                                 "fullEnd": 1232,
                                                 "start": 1205,

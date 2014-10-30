@@ -559,7 +559,7 @@
                                                             ]
                                                         },
                                                         "expression": {
-                                                            "kind": "NegateExpression",
+                                                            "kind": "PrefixUnaryExpression",
                                                             "fullStart": 662,
                                                             "fullEnd": 676,
                                                             "start": 662,
@@ -688,7 +688,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 697,
                                 "fullEnd": 814,
                                 "start": 697,
@@ -696,7 +696,7 @@
                                 "fullWidth": 117,
                                 "width": 117,
                                 "left": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 697,
                                     "fullEnd": 747,
                                     "start": 697,
@@ -978,7 +978,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 751,
                                     "fullEnd": 814,
                                     "start": 763,
@@ -1225,7 +1225,7 @@
                                         ]
                                     },
                                     "right": {
-                                        "kind": "NegateExpression",
+                                        "kind": "PrefixUnaryExpression",
                                         "fullStart": 812,
                                         "fullEnd": 814,
                                         "start": 812,

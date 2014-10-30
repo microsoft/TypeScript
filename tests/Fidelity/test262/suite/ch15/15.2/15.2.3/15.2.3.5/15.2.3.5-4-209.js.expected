@@ -629,7 +629,7 @@
                                                                                     ]
                                                                                 },
                                                                                 "expression": {
-                                                                                    "kind": "PlusExpression",
+                                                                                    "kind": "PrefixUnaryExpression",
                                                                                     "fullStart": 671,
                                                                                     "fullEnd": 675,
                                                                                     "start": 671,
@@ -878,7 +878,7 @@
                                                 ]
                                             },
                                             "value": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 729,
                                                 "fullEnd": 796,
                                                 "start": 729,
@@ -1017,7 +1017,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 762,
                                                     "fullEnd": 796,
                                                     "start": 762,
@@ -1179,7 +1179,7 @@
                             "fullWidth": 30,
                             "width": 18,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 799,
                                 "fullEnd": 826,
                                 "start": 809,
@@ -1359,7 +1359,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 846,
                                 "fullEnd": 895,
                                 "start": 846,
@@ -1409,7 +1409,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 861,
                                     "fullEnd": 895,
                                     "start": 861,

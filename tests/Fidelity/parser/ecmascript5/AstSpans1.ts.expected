@@ -1839,7 +1839,7 @@
                 },
                 "heritageClauses": [
                     {
-                        "kind": "ImplementsHeritageClause",
+                        "kind": "HeritageClause",
                         "fullStart": 374,
                         "fullEnd": 388,
                         "start": 374,
@@ -6271,7 +6271,7 @@
                 "fullWidth": 38,
                 "width": 12,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1130,
                     "fullEnd": 1165,
                     "start": 1154,
@@ -9964,7 +9964,7 @@
                                     "fullWidth": 25,
                                     "width": 15,
                                     "expression": {
-                                        "kind": "AssignmentExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 1917,
                                         "fullEnd": 1939,
                                         "start": 1925,
@@ -10202,7 +10202,7 @@
                 },
                 "heritageClauses": [
                     {
-                        "kind": "ExtendsHeritageClause",
+                        "kind": "HeritageClause",
                         "fullStart": 1961,
                         "fullEnd": 1972,
                         "start": 1961,
@@ -10508,7 +10508,7 @@
                                     "fullWidth": 32,
                                     "width": 22,
                                     "expression": {
-                                        "kind": "AssignmentExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 2016,
                                         "fullEnd": 2045,
                                         "start": 2024,
@@ -13274,7 +13274,7 @@
                 "fullWidth": 25,
                 "width": 12,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 2490,
                     "fullEnd": 2512,
                     "start": 2501,
@@ -13905,7 +13905,7 @@
                 },
                 "heritageClauses": [
                     {
-                        "kind": "ExtendsHeritageClause",
+                        "kind": "HeritageClause",
                         "fullStart": 2584,
                         "fullEnd": 2595,
                         "start": 2584,
@@ -16098,7 +16098,7 @@
                 },
                 "heritageClauses": [
                     {
-                        "kind": "ExtendsHeritageClause",
+                        "kind": "HeritageClause",
                         "fullStart": 3017,
                         "fullEnd": 3028,
                         "start": 3017,
@@ -19230,7 +19230,7 @@
                 "fullWidth": 38,
                 "width": 12,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 3474,
                     "fullEnd": 3509,
                     "start": 3498,
@@ -20584,7 +20584,7 @@
                 },
                 "heritageClauses": [
                     {
-                        "kind": "ExtendsHeritageClause",
+                        "kind": "HeritageClause",
                         "fullStart": 3696,
                         "fullEnd": 3707,
                         "start": 3696,
@@ -20961,7 +20961,7 @@
                                     "fullWidth": 27,
                                     "width": 17,
                                     "expression": {
-                                        "kind": "AssignmentExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 3764,
                                         "fullEnd": 3788,
                                         "start": 3772,

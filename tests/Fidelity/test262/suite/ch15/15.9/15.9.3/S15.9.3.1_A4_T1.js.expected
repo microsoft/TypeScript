@@ -286,7 +286,7 @@
                                                 "fullWidth": 20,
                                                 "width": 17,
                                                 "expression": {
-                                                    "kind": "AssignmentExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 636,
                                                     "fullEnd": 654,
                                                     "start": 638,
@@ -422,7 +422,7 @@
                                                 "fullWidth": 59,
                                                 "width": 56,
                                                 "expression": {
-                                                    "kind": "AssignmentExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 656,
                                                     "fullEnd": 713,
                                                     "start": 658,
@@ -627,7 +627,7 @@
                                                                         ]
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "AddExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 690,
                                                                         "fullEnd": 711,
                                                                         "start": 690,
@@ -765,7 +765,7 @@
                                                 "fullWidth": 61,
                                                 "width": 58,
                                                 "expression": {
-                                                    "kind": "AssignmentExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 715,
                                                     "fullEnd": 774,
                                                     "start": 717,
@@ -970,7 +970,7 @@
                                                                         ]
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "AddExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 750,
                                                                         "fullEnd": 772,
                                                                         "start": 750,
@@ -1885,7 +1885,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 917,
                                     "fullEnd": 934,
                                     "start": 917,
@@ -2825,7 +2825,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 1129,
                                     "fullEnd": 1146,
                                     "start": 1129,

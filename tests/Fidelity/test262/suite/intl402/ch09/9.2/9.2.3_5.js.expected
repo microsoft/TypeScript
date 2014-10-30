@@ -1058,7 +1058,7 @@
                                                 "valueText": "("
                                             },
                                             "condition": {
-                                                "kind": "LogicalNotExpression",
+                                                "kind": "PrefixUnaryExpression",
                                                 "fullStart": 532,
                                                 "fullEnd": 584,
                                                 "start": 532,
@@ -1257,7 +1257,7 @@
                                                                 },
                                                                 "arguments": [
                                                                     {
-                                                                        "kind": "AddExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 603,
                                                                         "fullEnd": 655,
                                                                         "start": 603,
@@ -1265,7 +1265,7 @@
                                                                         "fullWidth": 52,
                                                                         "width": 52,
                                                                         "left": {
-                                                                            "kind": "AddExpression",
+                                                                            "kind": "BinaryExpression",
                                                                             "fullStart": 603,
                                                                             "fullEnd": 650,
                                                                             "start": 603,

@@ -120,7 +120,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 429,
                     "fullEnd": 445,
                     "start": 429,
@@ -485,7 +485,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 679,
                     "fullEnd": 699,
                     "start": 679,
@@ -850,7 +850,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 936,
                     "fullEnd": 954,
                     "start": 936,
@@ -1215,7 +1215,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 1190,
                     "fullEnd": 1208,
                     "start": 1190,
@@ -1580,7 +1580,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 1444,
                     "fullEnd": 1465,
                     "start": 1444,
@@ -1945,7 +1945,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 1707,
                     "fullEnd": 1725,
                     "start": 1707,
@@ -2310,7 +2310,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 1965,
                     "fullEnd": 1984,
                     "start": 1965,
@@ -2673,7 +2673,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 2223,
                     "fullEnd": 2247,
                     "start": 2223,
@@ -3038,7 +3038,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 2491,
                     "fullEnd": 2508,
                     "start": 2491,

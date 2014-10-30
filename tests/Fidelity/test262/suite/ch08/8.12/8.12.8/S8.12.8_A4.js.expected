@@ -949,7 +949,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 581,
                                             "fullEnd": 744,
                                             "start": 581,
@@ -1310,7 +1310,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 766,
                                     "fullEnd": 799,
                                     "start": 766,
@@ -1338,7 +1338,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 767,
                                             "fullEnd": 789,
                                             "start": 767,
@@ -1567,7 +1567,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 814,
                                                             "fullEnd": 965,
                                                             "start": 814,

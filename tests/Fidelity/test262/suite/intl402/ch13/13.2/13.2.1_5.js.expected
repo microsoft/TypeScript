@@ -324,7 +324,7 @@
                                             ]
                                         },
                                         {
-                                            "kind": "NegateExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 322,
                                             "fullEnd": 324,
                                             "start": 322,
@@ -411,7 +411,7 @@
                                             ]
                                         },
                                         {
-                                            "kind": "NegateExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 329,
                                             "fullEnd": 331,
                                             "start": 329,
@@ -531,7 +531,7 @@
                                             ]
                                         },
                                         {
-                                            "kind": "NegateExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 343,
                                             "fullEnd": 347,
                                             "start": 343,
@@ -585,7 +585,7 @@
                                             ]
                                         },
                                         {
-                                            "kind": "NegateExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 349,
                                             "fullEnd": 356,
                                             "start": 349,
@@ -706,7 +706,7 @@
                                             ]
                                         },
                                         {
-                                            "kind": "NegateExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 379,
                                             "fullEnd": 397,
                                             "start": 383,
@@ -944,7 +944,7 @@
                                             ]
                                         },
                                         {
-                                            "kind": "NegateExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 512,
                                             "fullEnd": 548,
                                             "start": 512,
@@ -1041,7 +1041,7 @@
                                             ]
                                         },
                                         {
-                                            "kind": "NegateExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 564,
                                             "fullEnd": 573,
                                             "start": 564,
@@ -5336,7 +5336,7 @@
                                                                                         "fullWidth": 144,
                                                                                         "width": 131,
                                                                                         "expression": {
-                                                                                            "kind": "AddAssignmentExpression",
+                                                                                            "kind": "BinaryExpression",
                                                                                             "fullStart": 1554,
                                                                                             "fullEnd": 1696,
                                                                                             "start": 1566,
@@ -5428,7 +5428,7 @@
                                                                                                 ]
                                                                                             },
                                                                                             "right": {
-                                                                                                "kind": "AddExpression",
+                                                                                                "kind": "BinaryExpression",
                                                                                                 "fullStart": 1579,
                                                                                                 "fullEnd": 1696,
                                                                                                 "start": 1579,
@@ -5436,7 +5436,7 @@
                                                                                                 "fullWidth": 117,
                                                                                                 "width": 117,
                                                                                                 "left": {
-                                                                                                    "kind": "AddExpression",
+                                                                                                    "kind": "BinaryExpression",
                                                                                                     "fullStart": 1579,
                                                                                                     "fullEnd": 1690,
                                                                                                     "start": 1579,
@@ -5444,7 +5444,7 @@
                                                                                                     "fullWidth": 111,
                                                                                                     "width": 110,
                                                                                                     "left": {
-                                                                                                        "kind": "AddExpression",
+                                                                                                        "kind": "BinaryExpression",
                                                                                                         "fullStart": 1579,
                                                                                                         "fullEnd": 1630,
                                                                                                         "start": 1579,
@@ -5452,7 +5452,7 @@
                                                                                                         "fullWidth": 51,
                                                                                                         "width": 50,
                                                                                                         "left": {
-                                                                                                            "kind": "AddExpression",
+                                                                                                            "kind": "BinaryExpression",
                                                                                                             "fullStart": 1579,
                                                                                                             "fullEnd": 1615,
                                                                                                             "start": 1579,

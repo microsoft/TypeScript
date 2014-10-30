@@ -38,7 +38,7 @@
                 "width": 3,
                 "isIncrementallyUnusable": true,
                 "expression": {
-                    "kind": "DivideExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 321,
                     "start": 317,
@@ -47,7 +47,7 @@
                     "width": 3,
                     "isIncrementallyUnusable": true,
                     "left": {
-                        "kind": "DivideExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 0,
                         "fullEnd": 319,
                         "start": 317,

@@ -205,7 +205,7 @@
                                 "width": 3,
                                 "isIncrementallyUnusable": true,
                                 "expression": {
-                                    "kind": "AddExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 27,
                                     "fullEnd": 40,
                                     "start": 34,
@@ -369,7 +369,7 @@
                                 "width": 3,
                                 "isIncrementallyUnusable": true,
                                 "expression": {
-                                    "kind": "AddExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 53,
                                     "fullEnd": 66,
                                     "start": 60,

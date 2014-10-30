@@ -19,7 +19,7 @@
                 "fullWidth": 7,
                 "width": 7,
                 "expression": {
-                    "kind": "SignedRightShiftExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 6,
                     "start": 0,

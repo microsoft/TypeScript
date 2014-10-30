@@ -316,7 +316,7 @@
                                                 ]
                                             },
                                             "value": {
-                                                "kind": "AssignmentExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 587,
                                                 "fullEnd": 601,
                                                 "start": 587,
@@ -464,7 +464,7 @@
                                     "valueText": "("
                                 },
                                 "expression": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 614,
                                     "fullEnd": 632,
                                     "start": 614,

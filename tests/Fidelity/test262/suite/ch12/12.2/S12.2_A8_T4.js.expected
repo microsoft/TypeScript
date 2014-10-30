@@ -185,7 +185,7 @@
                                     "text": ""
                                 },
                                 "value": {
-                                    "kind": "PreIncrementExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 413,
                                     "fullEnd": 415,
                                     "start": 413,

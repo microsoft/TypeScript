@@ -1724,7 +1724,7 @@
                                             "valueText": "("
                                         },
                                         "condition": {
-                                            "kind": "EqualsExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 990,
                                             "fullEnd": 1002,
                                             "start": 990,
@@ -2018,7 +2018,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 1079,
                                 "fullEnd": 1129,
                                 "start": 1079,
@@ -2068,7 +2068,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 1104,
                                     "fullEnd": 1129,
                                     "start": 1104,

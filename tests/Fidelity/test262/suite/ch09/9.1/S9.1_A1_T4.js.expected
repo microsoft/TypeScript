@@ -357,7 +357,7 @@
                                                                 ]
                                                             },
                                                             "expression": {
-                                                                "kind": "NegateExpression",
+                                                                "kind": "PrefixUnaryExpression",
                                                                 "fullStart": 421,
                                                                 "fullEnd": 423,
                                                                 "start": 421,
@@ -702,7 +702,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LessThanExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 467,
                     "fullEnd": 480,
                     "start": 467,
@@ -1467,7 +1467,7 @@
                                                                 ]
                                                             },
                                                             "expression": {
-                                                                "kind": "NegateExpression",
+                                                                "kind": "PrefixUnaryExpression",
                                                                 "fullStart": 691,
                                                                 "fullEnd": 693,
                                                                 "start": 691,
@@ -1599,7 +1599,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LessThanExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 701,
                     "fullEnd": 714,
                     "start": 701,

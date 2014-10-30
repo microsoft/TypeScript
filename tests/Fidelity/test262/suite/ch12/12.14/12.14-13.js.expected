@@ -1023,7 +1023,7 @@
                                                     "fullWidth": 47,
                                                     "width": 29,
                                                     "expression": {
-                                                        "kind": "AssignmentExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 682,
                                                         "fullEnd": 726,
                                                         "start": 698,
@@ -1489,7 +1489,7 @@
                                                         "fullWidth": 50,
                                                         "width": 32,
                                                         "expression": {
-                                                            "kind": "AssignmentExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 833,
                                                             "fullEnd": 880,
                                                             "start": 849,
@@ -1568,7 +1568,7 @@
                                                                     "valueText": "("
                                                                 },
                                                                 "expression": {
-                                                                    "kind": "EqualsExpression",
+                                                                    "kind": "BinaryExpression",
                                                                     "fullStart": 857,
                                                                     "fullEnd": 879,
                                                                     "start": 857,
@@ -1771,7 +1771,7 @@
                                                         "fullWidth": 50,
                                                         "width": 32,
                                                         "expression": {
-                                                            "kind": "AssignmentExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 905,
                                                             "fullEnd": 952,
                                                             "start": 921,
@@ -1850,7 +1850,7 @@
                                                                     "valueText": "("
                                                                 },
                                                                 "expression": {
-                                                                    "kind": "EqualsExpression",
+                                                                    "kind": "BinaryExpression",
                                                                     "fullStart": 929,
                                                                     "fullEnd": 951,
                                                                     "start": 929,
@@ -1993,7 +1993,7 @@
                                         "fullWidth": 46,
                                         "width": 32,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 970,
                                             "fullEnd": 1013,
                                             "start": 982,
@@ -2072,7 +2072,7 @@
                                                     "valueText": "("
                                                 },
                                                 "expression": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 990,
                                                     "fullEnd": 1012,
                                                     "start": 990,
@@ -2229,7 +2229,7 @@
                                             "valueText": "("
                                         },
                                         "condition": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1034,
                                             "fullEnd": 1115,
                                             "start": 1034,
@@ -2237,7 +2237,7 @@
                                             "fullWidth": 81,
                                             "width": 81,
                                             "left": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1034,
                                                 "fullEnd": 1082,
                                                 "start": 1034,
@@ -2245,7 +2245,7 @@
                                                 "fullWidth": 48,
                                                 "width": 47,
                                                 "left": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 1034,
                                                     "fullEnd": 1048,
                                                     "start": 1034,
@@ -2339,7 +2339,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 1052,
                                                     "fullEnd": 1082,
                                                     "start": 1068,
@@ -2443,7 +2443,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1086,
                                                 "fullEnd": 1115,
                                                 "start": 1102,

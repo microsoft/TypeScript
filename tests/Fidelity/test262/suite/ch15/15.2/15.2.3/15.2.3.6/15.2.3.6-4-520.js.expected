@@ -2235,7 +2235,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 1179,
                                 "fullEnd": 1239,
                                 "start": 1179,

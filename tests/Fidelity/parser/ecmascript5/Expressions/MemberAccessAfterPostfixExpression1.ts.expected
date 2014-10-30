@@ -31,7 +31,7 @@
                 "width": 3,
                 "isIncrementallyUnusable": true,
                 "expression": {
-                    "kind": "PostDecrementExpression",
+                    "kind": "PostfixUnaryExpression",
                     "fullStart": 0,
                     "fullEnd": 4,
                     "start": 0,

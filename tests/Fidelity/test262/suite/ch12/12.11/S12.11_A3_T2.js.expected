@@ -683,7 +683,7 @@
                                             "text": ""
                                         },
                                         "expression": {
-                                            "kind": "AddAssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 382,
                                             "fullEnd": 401,
                                             "start": 382,
@@ -864,7 +864,7 @@
                                             "text": ""
                                         },
                                         "expression": {
-                                            "kind": "AddAssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 414,
                                             "fullEnd": 421,
                                             "start": 414,

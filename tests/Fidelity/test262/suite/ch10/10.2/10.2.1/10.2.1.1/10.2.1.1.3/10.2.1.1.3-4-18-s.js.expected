@@ -357,7 +357,7 @@
                                         "width": 15,
                                         "parsedInStrictMode": true,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 685,
                                             "fullEnd": 711,
                                             "start": 697,
@@ -705,7 +705,7 @@
                                                 ]
                                             },
                                             "expression": {
-                                                "kind": "InstanceOfExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 783,
                                                 "fullEnd": 805,
                                                 "start": 783,

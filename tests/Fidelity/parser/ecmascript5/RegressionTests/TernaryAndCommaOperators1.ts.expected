@@ -19,7 +19,7 @@
                 "fullWidth": 24,
                 "width": 22,
                 "expression": {
-                    "kind": "CommaExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 21,
                     "start": 0,
@@ -186,7 +186,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "LogicalAndExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 15,
                         "fullEnd": 21,
                         "start": 15,

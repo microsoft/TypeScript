@@ -2234,7 +2234,7 @@
                     ]
                 },
                 "condition": {
-                    "kind": "LessThanOrEqualExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 730,
                     "fullEnd": 741,
                     "start": 730,
@@ -2318,7 +2318,7 @@
                     ]
                 },
                 "incrementor": {
-                    "kind": "PostIncrementExpression",
+                    "kind": "PostfixUnaryExpression",
                     "fullStart": 743,
                     "fullEnd": 750,
                     "start": 743,
@@ -2453,7 +2453,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "NotEqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 760,
                                 "fullEnd": 791,
                                 "start": 760,
@@ -2716,7 +2716,7 @@
                                                 },
                                                 "arguments": [
                                                     {
-                                                        "kind": "AddExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 806,
                                                         "fullEnd": 834,
                                                         "start": 806,
@@ -2724,7 +2724,7 @@
                                                         "fullWidth": 28,
                                                         "width": 28,
                                                         "left": {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 806,
                                                             "fullEnd": 829,
                                                             "start": 806,

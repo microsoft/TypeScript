@@ -100,7 +100,7 @@
                             ]
                         },
                         "expression": {
-                            "kind": "CommaExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 376,
                             "fullEnd": 402,
                             "start": 376,

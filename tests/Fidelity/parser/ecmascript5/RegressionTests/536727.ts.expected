@@ -736,7 +736,7 @@
                                         ]
                                     },
                                     "expression": {
-                                        "kind": "AddExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 87,
                                         "fullEnd": 97,
                                         "start": 87,

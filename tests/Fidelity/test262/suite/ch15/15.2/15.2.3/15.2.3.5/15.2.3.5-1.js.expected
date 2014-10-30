@@ -632,7 +632,7 @@
                                                 "valueText": "("
                                             },
                                             "condition": {
-                                                "kind": "InstanceOfExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 622,
                                                 "fullEnd": 644,
                                                 "start": 622,

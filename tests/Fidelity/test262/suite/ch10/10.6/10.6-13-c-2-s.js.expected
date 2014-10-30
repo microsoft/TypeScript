@@ -600,7 +600,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "NotEqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 630,
                                 "fullEnd": 648,
                                 "start": 630,

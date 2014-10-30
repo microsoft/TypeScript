@@ -825,7 +825,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "LogicalNotExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 777,
                                 "fullEnd": 805,
                                 "start": 777,
@@ -865,7 +865,7 @@
                                         "valueText": "("
                                     },
                                     "expression": {
-                                        "kind": "EqualsExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 779,
                                         "fullEnd": 804,
                                         "start": 779,

@@ -117,7 +117,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsWithTypeConversionExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 302,
                     "fullEnd": 323,
                     "start": 302,
@@ -466,7 +466,7 @@
                             ]
                         },
                         "condition": {
-                            "kind": "NotEqualsWithTypeConversionExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 378,
                             "fullEnd": 424,
                             "start": 378,
@@ -474,7 +474,7 @@
                             "fullWidth": 46,
                             "width": 46,
                             "left": {
-                                "kind": "DivideExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 378,
                                 "fullEnd": 397,
                                 "start": 378,

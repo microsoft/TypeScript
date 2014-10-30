@@ -391,7 +391,7 @@
                                                 },
                                                 "arguments": [
                                                     {
-                                                        "kind": "AddExpression",
+                                                        "kind": "BinaryExpression",
                                                         "fullStart": 406,
                                                         "fullEnd": 471,
                                                         "start": 406,

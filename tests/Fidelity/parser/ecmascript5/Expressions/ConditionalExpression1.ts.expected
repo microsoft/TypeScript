@@ -47,7 +47,7 @@
                             "valueText": "("
                         },
                         "expression": {
-                            "kind": "AssignmentExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 1,
                             "fullEnd": 12,
                             "start": 1,
@@ -195,7 +195,7 @@
                         "valueText": "?"
                     },
                     "whenTrue": {
-                        "kind": "LogicalOrExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 14,
                         "fullEnd": 43,
                         "start": 14,
@@ -280,7 +280,7 @@
                                 "valueText": "("
                             },
                             "expression": {
-                                "kind": "CommaExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 21,
                                 "fullEnd": 42,
                                 "start": 21,
@@ -425,7 +425,7 @@
                                     "valueText": ","
                                 },
                                 "right": {
-                                    "kind": "AssignmentExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 34,
                                     "fullEnd": 42,
                                     "start": 34,

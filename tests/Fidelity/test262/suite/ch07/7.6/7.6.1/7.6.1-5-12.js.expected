@@ -1152,7 +1152,7 @@
                                 ]
                             },
                             "condition": {
-                                "kind": "LessThanExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 819,
                                 "fullEnd": 833,
                                 "start": 819,
@@ -1269,7 +1269,7 @@
                                 ]
                             },
                             "incrementor": {
-                                "kind": "PostIncrementExpression",
+                                "kind": "PostfixUnaryExpression",
                                 "fullStart": 835,
                                 "fullEnd": 838,
                                 "start": 835,
@@ -1404,7 +1404,7 @@
                                             "valueText": "("
                                         },
                                         "condition": {
-                                            "kind": "NotEqualsExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 859,
                                             "fullEnd": 883,
                                             "start": 859,

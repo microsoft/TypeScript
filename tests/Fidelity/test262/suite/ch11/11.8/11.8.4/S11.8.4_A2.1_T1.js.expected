@@ -117,7 +117,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 305,
                     "fullEnd": 320,
                     "start": 305,
@@ -125,7 +125,7 @@
                     "fullWidth": 15,
                     "width": 15,
                     "left": {
-                        "kind": "GreaterThanOrEqualExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 305,
                         "fullEnd": 312,
                         "start": 305,
@@ -616,7 +616,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 385,
                     "fullEnd": 400,
                     "start": 385,
@@ -624,7 +624,7 @@
                     "fullWidth": 15,
                     "width": 15,
                     "left": {
-                        "kind": "GreaterThanOrEqualExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 385,
                         "fullEnd": 392,
                         "start": 385,
@@ -1115,7 +1115,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 476,
                     "fullEnd": 491,
                     "start": 476,
@@ -1123,7 +1123,7 @@
                     "fullWidth": 15,
                     "width": 15,
                     "left": {
-                        "kind": "GreaterThanOrEqualExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 476,
                         "fullEnd": 483,
                         "start": 476,
@@ -1750,7 +1750,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 578,
                     "fullEnd": 593,
                     "start": 578,
@@ -1758,7 +1758,7 @@
                     "fullWidth": 15,
                     "width": 15,
                     "left": {
-                        "kind": "GreaterThanOrEqualExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 578,
                         "fullEnd": 585,
                         "start": 578,
@@ -2480,7 +2480,7 @@
                 "fullWidth": 18,
                 "width": 17,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 721,
                     "fullEnd": 737,
                     "start": 721,
@@ -2607,7 +2607,7 @@
                 "fullWidth": 18,
                 "width": 17,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 739,
                     "fullEnd": 755,
                     "start": 739,
@@ -2767,7 +2767,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 761,
                     "fullEnd": 798,
                     "start": 761,
@@ -2775,7 +2775,7 @@
                     "fullWidth": 37,
                     "width": 37,
                     "left": {
-                        "kind": "GreaterThanOrEqualExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 761,
                         "fullEnd": 790,
                         "start": 761,

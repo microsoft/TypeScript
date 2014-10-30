@@ -516,7 +516,7 @@
                                             ]
                                         },
                                         {
-                                            "kind": "PlusExpression",
+                                            "kind": "PrefixUnaryExpression",
                                             "fullStart": 641,
                                             "fullEnd": 650,
                                             "start": 641,

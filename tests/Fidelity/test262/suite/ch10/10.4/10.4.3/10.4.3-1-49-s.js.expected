@@ -886,7 +886,7 @@
                                                                 ]
                                                             },
                                                             "expression": {
-                                                                "kind": "LogicalAndExpression",
+                                                                "kind": "BinaryExpression",
                                                                 "fullStart": 735,
                                                                 "fullEnd": 783,
                                                                 "start": 735,
@@ -914,7 +914,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 736,
                                                                         "fullEnd": 753,
                                                                         "start": 736,
@@ -1065,7 +1065,7 @@
                                                                         "valueText": "("
                                                                     },
                                                                     "expression": {
-                                                                        "kind": "EqualsExpression",
+                                                                        "kind": "BinaryExpression",
                                                                         "fullStart": 759,
                                                                         "fullEnd": 782,
                                                                         "start": 759,

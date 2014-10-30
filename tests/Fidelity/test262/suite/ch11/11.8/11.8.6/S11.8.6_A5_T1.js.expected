@@ -306,7 +306,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 414,
                     "fullEnd": 439,
                     "start": 414,
@@ -346,7 +346,7 @@
                             "valueText": "("
                         },
                         "expression": {
-                            "kind": "InstanceOfExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 416,
                             "fullEnd": 438,
                             "start": 416,
@@ -708,7 +708,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "InstanceOfExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 706,
                     "fullEnd": 732,
                     "start": 706,
@@ -1259,7 +1259,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 1029,
                     "fullEnd": 1054,
                     "start": 1029,
@@ -1299,7 +1299,7 @@
                             "valueText": "("
                         },
                         "expression": {
-                            "kind": "InstanceOfExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 1031,
                             "fullEnd": 1053,
                             "start": 1031,
@@ -1661,7 +1661,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "InstanceOfExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 1321,
                     "fullEnd": 1347,
                     "start": 1321,

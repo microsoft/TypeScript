@@ -19,7 +19,7 @@
                 "fullWidth": 31,
                 "width": 31,
                 "expression": {
-                    "kind": "SignedRightShiftAssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 30,
                     "start": 0,

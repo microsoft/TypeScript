@@ -1444,7 +1444,7 @@
                                                                                     "fullWidth": 46,
                                                                                     "width": 24,
                                                                                     "expression": {
-                                                                                        "kind": "AssignmentExpression",
+                                                                                        "kind": "BinaryExpression",
                                                                                         "fullStart": 923,
                                                                                         "fullEnd": 966,
                                                                                         "start": 943,
@@ -1851,7 +1851,7 @@
                                                                                     "fullWidth": 47,
                                                                                     "width": 25,
                                                                                     "expression": {
-                                                                                        "kind": "AssignmentExpression",
+                                                                                        "kind": "BinaryExpression",
                                                                                         "fullStart": 1062,
                                                                                         "fullEnd": 1106,
                                                                                         "start": 1082,
@@ -2523,7 +2523,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 1275,
                                 "fullEnd": 1355,
                                 "start": 1275,
@@ -2531,7 +2531,7 @@
                                 "fullWidth": 80,
                                 "width": 80,
                                 "left": {
-                                    "kind": "LogicalAndExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 1275,
                                     "fullEnd": 1335,
                                     "start": 1275,
@@ -2539,7 +2539,7 @@
                                     "fullWidth": 60,
                                     "width": 59,
                                     "left": {
-                                        "kind": "LogicalAndExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 1275,
                                         "fullEnd": 1315,
                                         "start": 1275,
@@ -2547,7 +2547,7 @@
                                         "fullWidth": 40,
                                         "width": 39,
                                         "left": {
-                                            "kind": "EqualsExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1275,
                                             "fullEnd": 1295,
                                             "start": 1275,
@@ -2673,7 +2673,7 @@
                                             ]
                                         },
                                         "right": {
-                                            "kind": "EqualsExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1298,
                                             "fullEnd": 1315,
                                             "start": 1298,

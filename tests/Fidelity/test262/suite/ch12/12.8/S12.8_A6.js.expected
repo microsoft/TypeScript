@@ -383,7 +383,7 @@
                                 "fullWidth": 9,
                                 "width": 4,
                                 "expression": {
-                                    "kind": "PostIncrementExpression",
+                                    "kind": "PostfixUnaryExpression",
                                     "fullStart": 420,
                                     "fullEnd": 427,
                                     "start": 424,
@@ -725,7 +725,7 @@
                                 "fullWidth": 9,
                                 "width": 4,
                                 "expression": {
-                                    "kind": "PostIncrementExpression",
+                                    "kind": "PostfixUnaryExpression",
                                     "fullStart": 464,
                                     "fullEnd": 471,
                                     "start": 468,

@@ -1753,7 +1753,7 @@
                                         "fullWidth": 38,
                                         "width": 24,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 974,
                                             "fullEnd": 1009,
                                             "start": 986,
@@ -2304,7 +2304,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1105,
                                             "fullEnd": 1143,
                                             "start": 1105,
@@ -2312,7 +2312,7 @@
                                             "fullWidth": 38,
                                             "width": 38,
                                             "left": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1105,
                                                 "fullEnd": 1125,
                                                 "start": 1105,
@@ -2438,7 +2438,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "NotEqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1128,
                                                 "fullEnd": 1143,
                                                 "start": 1128,

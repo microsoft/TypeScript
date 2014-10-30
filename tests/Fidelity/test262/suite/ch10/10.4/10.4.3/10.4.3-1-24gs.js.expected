@@ -500,7 +500,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalOrExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 655,
                     "fullEnd": 725,
                     "start": 655,
@@ -528,7 +528,7 @@
                             "valueText": "("
                         },
                         "expression": {
-                            "kind": "EqualsExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 656,
                             "fullEnd": 686,
                             "start": 656,
@@ -794,7 +794,7 @@
                             "valueText": "("
                         },
                         "expression": {
-                            "kind": "EqualsExpression",
+                            "kind": "BinaryExpression",
                             "fullStart": 692,
                             "fullEnd": 724,
                             "start": 692,

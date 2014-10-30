@@ -52,7 +52,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "LogicalNotExpression",
+                    "kind": "PrefixUnaryExpression",
                     "fullStart": 4,
                     "fullEnd": 19,
                     "start": 4,
@@ -148,7 +148,7 @@
                     "fullWidth": 20,
                     "width": 20,
                     "expression": {
-                        "kind": "AssignmentExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 21,
                         "fullEnd": 40,
                         "start": 21,

@@ -71,7 +71,7 @@
                         },
                         "arguments": [
                             {
-                                "kind": "DivideExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 4,
                                 "fullEnd": 14,
                                 "start": 4,

@@ -1245,7 +1245,7 @@
                                                                                                     ]
                                                                                                 },
                                                                                                 {
-                                                                                                    "kind": "PostIncrementExpression",
+                                                                                                    "kind": "PostfixUnaryExpression",
                                                                                                     "fullStart": 202,
                                                                                                     "fullEnd": 209,
                                                                                                     "start": 202,

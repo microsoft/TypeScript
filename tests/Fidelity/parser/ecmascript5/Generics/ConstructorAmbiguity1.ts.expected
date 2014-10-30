@@ -19,7 +19,7 @@
                 "fullWidth": 11,
                 "width": 11,
                 "expression": {
-                    "kind": "LessThanExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 10,
                     "start": 0,

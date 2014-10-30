@@ -629,7 +629,7 @@
                                         "fullWidth": 22,
                                         "width": 8,
                                         "expression": {
-                                            "kind": "PostIncrementExpression",
+                                            "kind": "PostfixUnaryExpression",
                                             "fullStart": 828,
                                             "fullEnd": 847,
                                             "start": 840,
@@ -766,7 +766,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 876,
                                 "fullEnd": 887,
                                 "start": 876,

@@ -1076,7 +1076,7 @@
                                                                                     "fullWidth": 35,
                                                                                     "width": 13,
                                                                                     "expression": {
-                                                                                        "kind": "AssignmentExpression",
+                                                                                        "kind": "BinaryExpression",
                                                                                         "fullStart": 775,
                                                                                         "fullEnd": 807,
                                                                                         "start": 795,
@@ -1980,7 +1980,7 @@
                             "fullWidth": 41,
                             "width": 29,
                             "expression": {
-                                "kind": "AssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 1003,
                                 "fullEnd": 1041,
                                 "start": 1013,
@@ -2160,7 +2160,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalAndExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 1061,
                                 "fullEnd": 1099,
                                 "start": 1061,
@@ -2210,7 +2210,7 @@
                                     ]
                                 },
                                 "right": {
-                                    "kind": "EqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 1076,
                                     "fullEnd": 1099,
                                     "start": 1076,

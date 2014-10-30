@@ -459,7 +459,7 @@
                 "width": 2,
                 "isIncrementallyUnusable": true,
                 "expression": {
-                    "kind": "AddExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 46,
                     "fullEnd": 49,
                     "start": 46,

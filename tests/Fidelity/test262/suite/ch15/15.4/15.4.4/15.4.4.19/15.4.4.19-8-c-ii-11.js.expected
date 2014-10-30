@@ -483,7 +483,7 @@
                                                 "valueText": "("
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 623,
                                                 "fullEnd": 660,
                                                 "start": 623,
@@ -491,7 +491,7 @@
                                                 "fullWidth": 37,
                                                 "width": 37,
                                                 "left": {
-                                                    "kind": "GreaterThanExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 623,
                                                     "fullEnd": 632,
                                                     "start": 623,
@@ -584,7 +584,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 635,
                                                     "fullEnd": 660,
                                                     "start": 635,
@@ -1129,7 +1129,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 742,
                                 "fullEnd": 764,
                                 "start": 742,

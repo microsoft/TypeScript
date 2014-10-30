@@ -28,7 +28,7 @@
                 "width": 8,
                 "isIncrementallyUnusable": true,
                 "expression": {
-                    "kind": "GreaterThanExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 7,
                     "start": 0,
@@ -37,7 +37,7 @@
                     "width": 7,
                     "isIncrementallyUnusable": true,
                     "left": {
-                        "kind": "GreaterThanExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 0,
                         "fullEnd": 4,
                         "start": 0,

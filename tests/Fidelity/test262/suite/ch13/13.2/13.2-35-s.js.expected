@@ -269,7 +269,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "LogicalNotExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 580,
                                 "fullEnd": 722,
                                 "start": 580,

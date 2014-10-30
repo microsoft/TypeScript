@@ -59,7 +59,7 @@
                     "valueText": "("
                 },
                 "left": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 5,
                     "fullEnd": 11,
                     "start": 5,

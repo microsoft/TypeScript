@@ -545,7 +545,7 @@
                                 ]
                             },
                             "condition": {
-                                "kind": "PlusExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 818,
                                 "fullEnd": 820,
                                 "start": 818,
@@ -650,7 +650,7 @@
                                         "fullWidth": 22,
                                         "width": 8,
                                         "expression": {
-                                            "kind": "PostIncrementExpression",
+                                            "kind": "PostfixUnaryExpression",
                                             "fullStart": 826,
                                             "fullEnd": 845,
                                             "start": 838,
@@ -787,7 +787,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 874,
                                 "fullEnd": 885,
                                 "start": 874,

@@ -1940,7 +1940,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "CommaExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 149,
                                             "fullEnd": 153,
                                             "start": 149,
@@ -2196,7 +2196,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "CommaExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 169,
                                             "fullEnd": 181,
                                             "start": 169,
@@ -2204,7 +2204,7 @@
                                             "fullWidth": 12,
                                             "width": 12,
                                             "left": {
-                                                "kind": "AssignmentExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 169,
                                                 "fullEnd": 174,
                                                 "start": 169,
@@ -2288,7 +2288,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "AssignmentExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 176,
                                                 "fullEnd": 181,
                                                 "start": 176,

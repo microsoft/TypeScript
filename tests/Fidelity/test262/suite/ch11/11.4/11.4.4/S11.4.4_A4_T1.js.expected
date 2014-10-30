@@ -259,7 +259,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 321,
                     "fullEnd": 334,
                     "start": 321,
@@ -267,7 +267,7 @@
                     "fullWidth": 13,
                     "width": 13,
                     "left": {
-                        "kind": "PreIncrementExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 321,
                         "fullEnd": 325,
                         "start": 321,
@@ -330,7 +330,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "AddExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 329,
                         "fullEnd": 334,
                         "start": 329,
@@ -504,7 +504,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 347,
                                             "fullEnd": 399,
                                             "start": 347,
@@ -574,7 +574,7 @@
                                                     "valueText": "("
                                                 },
                                                 "expression": {
-                                                    "kind": "PreIncrementExpression",
+                                                    "kind": "PrefixUnaryExpression",
                                                     "fullStart": 395,
                                                     "fullEnd": 398,
                                                     "start": 395,
@@ -961,7 +961,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 446,
                     "fullEnd": 459,
                     "start": 446,
@@ -969,7 +969,7 @@
                     "fullWidth": 13,
                     "width": 13,
                     "left": {
-                        "kind": "PreIncrementExpression",
+                        "kind": "PrefixUnaryExpression",
                         "fullStart": 446,
                         "fullEnd": 450,
                         "start": 446,
@@ -1032,7 +1032,7 @@
                         ]
                     },
                     "right": {
-                        "kind": "AddExpression",
+                        "kind": "BinaryExpression",
                         "fullStart": 454,
                         "fullEnd": 459,
                         "start": 454,
@@ -1206,7 +1206,7 @@
                                     },
                                     "arguments": [
                                         {
-                                            "kind": "AddExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 472,
                                             "fullEnd": 536,
                                             "start": 472,
@@ -1276,7 +1276,7 @@
                                                     "valueText": "("
                                                 },
                                                 "expression": {
-                                                    "kind": "PreIncrementExpression",
+                                                    "kind": "PrefixUnaryExpression",
                                                     "fullStart": 532,
                                                     "fullEnd": 535,
                                                     "start": 532,

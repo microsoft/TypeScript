@@ -533,7 +533,7 @@
                                                 "valueText": "("
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 630,
                                                 "fullEnd": 658,
                                                 "start": 630,
@@ -541,7 +541,7 @@
                                                 "fullWidth": 28,
                                                 "width": 28,
                                                 "left": {
-                                                    "kind": "GreaterThanExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 630,
                                                     "fullEnd": 639,
                                                     "start": 630,
@@ -634,7 +634,7 @@
                                                     ]
                                                 },
                                                 "right": {
-                                                    "kind": "EqualsExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 642,
                                                     "fullEnd": 658,
                                                     "start": 642,
@@ -1134,7 +1134,7 @@
                                 ]
                             },
                             "expression": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 740,
                                 "fullEnd": 762,
                                 "start": 740,

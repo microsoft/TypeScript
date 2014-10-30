@@ -754,7 +754,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 568,
                                     "fullEnd": 587,
                                     "start": 568,
@@ -927,7 +927,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 600,
                                                             "fullEnd": 660,
                                                             "start": 600,
@@ -2051,7 +2051,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 969,
                                     "fullEnd": 987,
                                     "start": 969,
@@ -2224,7 +2224,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 1000,
                                                             "fullEnd": 1059,
                                                             "start": 1000,

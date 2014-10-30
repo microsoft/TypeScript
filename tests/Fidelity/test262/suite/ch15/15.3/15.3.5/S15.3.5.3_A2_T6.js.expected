@@ -19,7 +19,7 @@
                 "fullWidth": 617,
                 "width": 23,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 0,
                     "fullEnd": 615,
                     "start": 593,
@@ -196,7 +196,7 @@
                 "fullWidth": 30,
                 "width": 28,
                 "expression": {
-                    "kind": "AssignmentExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 617,
                     "fullEnd": 645,
                     "start": 618,
@@ -416,7 +416,7 @@
                             "fullWidth": 42,
                             "width": 39,
                             "expression": {
-                                "kind": "InstanceOfExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 665,
                                 "fullEnd": 705,
                                 "start": 667,
@@ -953,7 +953,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "LogicalNotExpression",
+                                    "kind": "PrefixUnaryExpression",
                                     "fullStart": 791,
                                     "fullEnd": 816,
                                     "start": 791,
@@ -993,7 +993,7 @@
                                             "valueText": "("
                                         },
                                         "expression": {
-                                            "kind": "InstanceOfExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 793,
                                             "fullEnd": 815,
                                             "start": 793,

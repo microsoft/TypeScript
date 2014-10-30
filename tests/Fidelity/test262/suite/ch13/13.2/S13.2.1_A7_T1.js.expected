@@ -845,7 +845,7 @@
                                         },
                                         "arguments": [
                                             {
-                                                "kind": "AddExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 644,
                                                 "fullEnd": 725,
                                                 "start": 644,

@@ -142,7 +142,7 @@
                         },
                         "arguments": [
                             {
-                                "kind": "NegateExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 16,
                                 "fullEnd": 22,
                                 "start": 16,
@@ -182,7 +182,7 @@
                                         "valueText": "("
                                     },
                                     "expression": {
-                                        "kind": "DivideExpression",
+                                        "kind": "BinaryExpression",
                                         "fullStart": 18,
                                         "fullEnd": 21,
                                         "start": 18,

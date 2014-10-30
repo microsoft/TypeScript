@@ -646,7 +646,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 517,
                                     "fullEnd": 524,
                                     "start": 517,
@@ -819,7 +819,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 537,
                                                             "fullEnd": 585,
                                                             "start": 537,
@@ -1672,7 +1672,7 @@
                                     "valueText": "("
                                 },
                                 "condition": {
-                                    "kind": "NotEqualsExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 850,
                                     "fullEnd": 857,
                                     "start": 850,
@@ -1845,7 +1845,7 @@
                                                     },
                                                     "arguments": [
                                                         {
-                                                            "kind": "AddExpression",
+                                                            "kind": "BinaryExpression",
                                                             "fullStart": 870,
                                                             "fullEnd": 918,
                                                             "start": 870,

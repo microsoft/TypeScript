@@ -206,7 +206,7 @@
                     "valueText": ";"
                 },
                 "condition": {
-                    "kind": "LessThanExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 402,
                     "fullEnd": 406,
                     "start": 402,
@@ -263,7 +263,7 @@
                     "valueText": ";"
                 },
                 "incrementor": {
-                    "kind": "PostIncrementExpression",
+                    "kind": "PostfixUnaryExpression",
                     "fullStart": 407,
                     "fullEnd": 410,
                     "start": 407,
@@ -347,7 +347,7 @@
                             "fullWidth": 7,
                             "width": 5,
                             "expression": {
-                                "kind": "MultiplyAssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 413,
                                 "fullEnd": 418,
                                 "start": 414,
@@ -548,7 +548,7 @@
                     "valueText": "("
                 },
                 "condition": {
-                    "kind": "NotEqualsExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 436,
                     "fullEnd": 441,
                     "start": 436,
@@ -663,7 +663,7 @@
                             },
                             "arguments": [
                                 {
-                                    "kind": "AddExpression",
+                                    "kind": "BinaryExpression",
                                     "fullStart": 451,
                                     "fullEnd": 485,
                                     "start": 451,
@@ -918,7 +918,7 @@
                     "valueText": ";"
                 },
                 "condition": {
-                    "kind": "LessThanExpression",
+                    "kind": "BinaryExpression",
                     "fullStart": 511,
                     "fullEnd": 515,
                     "start": 511,
@@ -975,7 +975,7 @@
                     "valueText": ";"
                 },
                 "incrementor": {
-                    "kind": "PostIncrementExpression",
+                    "kind": "PostfixUnaryExpression",
                     "fullStart": 516,
                     "fullEnd": 519,
                     "start": 516,
@@ -1059,7 +1059,7 @@
                             "fullWidth": 8,
                             "width": 5,
                             "expression": {
-                                "kind": "MultiplyAssignmentExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 522,
                                 "fullEnd": 528,
                                 "start": 524,
@@ -1186,7 +1186,7 @@
                                 "valueText": "("
                             },
                             "condition": {
-                                "kind": "EqualsExpression",
+                                "kind": "BinaryExpression",
                                 "fullStart": 536,
                                 "fullEnd": 541,
                                 "start": 536,

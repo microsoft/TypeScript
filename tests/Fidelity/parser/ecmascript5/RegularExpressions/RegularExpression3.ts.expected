@@ -60,7 +60,7 @@
                         },
                         "arguments": [
                             {
-                                "kind": "LogicalNotExpression",
+                                "kind": "PrefixUnaryExpression",
                                 "fullStart": 4,
                                 "fullEnd": 20,
                                 "start": 4,

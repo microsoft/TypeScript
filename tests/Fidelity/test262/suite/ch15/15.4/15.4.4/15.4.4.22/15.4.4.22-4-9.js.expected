@@ -1296,7 +1296,7 @@
                                                                                                 "fullWidth": 42,
                                                                                                 "width": 16,
                                                                                                 "expression": {
-                                                                                                    "kind": "AssignmentExpression",
+                                                                                                    "kind": "BinaryExpression",
                                                                                                     "fullStart": 812,
                                                                                                     "fullEnd": 851,
                                                                                                     "start": 836,
@@ -2288,7 +2288,7 @@
                                                 ]
                                             },
                                             "expression": {
-                                                "kind": "LogicalAndExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1140,
                                                 "fullEnd": 1175,
                                                 "start": 1140,
@@ -2296,7 +2296,7 @@
                                                 "fullWidth": 35,
                                                 "width": 35,
                                                 "left": {
-                                                    "kind": "InstanceOfExpression",
+                                                    "kind": "BinaryExpression",
                                                     "fullStart": 1140,
                                                     "fullEnd": 1164,
                                                     "start": 1140,

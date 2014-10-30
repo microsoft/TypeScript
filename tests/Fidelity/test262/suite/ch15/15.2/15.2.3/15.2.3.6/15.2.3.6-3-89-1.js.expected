@@ -469,7 +469,7 @@
                                         "fullWidth": 52,
                                         "width": 38,
                                         "expression": {
-                                            "kind": "AssignmentExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 674,
                                             "fullEnd": 723,
                                             "start": 686,
@@ -1715,7 +1715,7 @@
                                             ]
                                         },
                                         "expression": {
-                                            "kind": "LogicalAndExpression",
+                                            "kind": "BinaryExpression",
                                             "fullStart": 1026,
                                             "fullEnd": 1074,
                                             "start": 1026,
@@ -1723,7 +1723,7 @@
                                             "fullWidth": 48,
                                             "width": 48,
                                             "left": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1026,
                                                 "fullEnd": 1049,
                                                 "start": 1026,
@@ -1816,7 +1816,7 @@
                                                 ]
                                             },
                                             "right": {
-                                                "kind": "EqualsExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 1052,
                                                 "fullEnd": 1074,
                                                 "start": 1052,

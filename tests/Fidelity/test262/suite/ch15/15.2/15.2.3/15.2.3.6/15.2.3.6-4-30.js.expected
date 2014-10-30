@@ -1559,7 +1559,7 @@
                                                 ]
                                             },
                                             "expression": {
-                                                "kind": "InstanceOfExpression",
+                                                "kind": "BinaryExpression",
                                                 "fullStart": 919,
                                                 "fullEnd": 941,
                                                 "start": 919,
