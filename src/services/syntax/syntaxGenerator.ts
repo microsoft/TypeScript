@@ -2,6 +2,7 @@
 ///<reference path='..\core\environment.ts' />
 ///<reference path='syntaxFacts.ts' />
 ///<reference path='syntaxKind.ts' />
+///<reference path='..\..\..\tests\fidelity\es5compat.ts' />
 
 // Adds argument checking to the generated nodes.  Argument checking appears to slow things down
 // parsing about 7%.  If we want to get that perf back, we can always remove this.
@@ -362,6 +363,28 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'openBracketToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'types', isSeparatedList: true, elementType: 'ITypeSyntax' },
             <any>{ name: 'closeBracketToken', isToken: true, excludeFromAST: true }
+        ],
+        isTypeScriptSpecific: true
+    },
+    <any> {
+        name: 'UnionTypeSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['ITypeSyntax'],
+        children: [
+            <any>{ name: 'left', type: 'ITypeSyntax' },
+            <any>{ name: 'barToken', isToken: true, excludeFromAST: true },
+            <any>{ name: 'right', type: 'ITypeSyntax' }
+        ],
+        isTypeScriptSpecific: true
+    },
+    <any> {
+        name: 'ParenthesizedTypeSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['ITypeSyntax'],
+        children: [
+            <any>{ name: 'openParenToken', isToken: true, excludeFromAST: true },
+            <any>{ name: 'type', type: 'ITypeSyntax' },
+            <any>{ name: 'closeParenToken', isToken: true, excludeFromAST: true }
         ],
         isTypeScriptSpecific: true
     },
@@ -1065,7 +1088,7 @@ function generateProperties(definition: ITypeDefinition): string {
     var result = "";
 
     if (definition.name === "SourceUnitSyntax") {
-        result += "        public syntaxTree: SyntaxTree = null;\r\n";
+        result += "        public syntaxTree: SyntaxTree = undefined;\r\n";
     }
 
     var newLine = false;
@@ -1097,7 +1120,7 @@ function generateNullChecks(definition: ITypeDefinition): string {
         var child = definition.children[i];
 
         if (!child.isOptional && !child.isToken) {
-            result += "        if (" + child.name + " === null) { throw Errors.argumentNull('" + child.name + "'); }\r\n";
+            result += "        if (!" + child.name + ") { throw Errors.argumentNull('" + child.name + "'); }\r\n";
         }
     }
 
@@ -1211,7 +1234,7 @@ function generateKindCheck(child: IMemberDefinition): string {
     if (child.isOptional) {
         indent = "    ";
 
-        result += "        if (" + child.name + " !== null) {\r\n";
+        result += "        if (" + child.name + ") {\r\n";
     }
 
     var kinds = tokenKinds(child);
@@ -1268,7 +1291,7 @@ function generateConstructor(definition: ITypeDefinition): string {
     result += "        constructor("
 
     var children = definition.children;
-    var kindChild: IMemberDefinition = null;
+    var kindChild: IMemberDefinition = undefined;
     for (i = 0; i < children.length; i++) {
         child = children[i];
 
@@ -1385,7 +1408,7 @@ function generateFactory1Method(definition: ITypeDefinition): string {
             result += "Syntax.emptySeparatedList<" + child.elementType + ">()";
         }
         else {
-            result += "null";
+            result += "undefined";
         }
 
         result += ", ";
@@ -1412,7 +1435,7 @@ function isKeywordOrPunctuation(kind: string): boolean {
 }
 
 function isDefaultConstructable(definition: ITypeDefinition): boolean {
-    if (definition === null) {
+    if (!definition) {
         return false;
     }
 
@@ -1489,7 +1512,7 @@ function generateFactory2Method(definition: ITypeDefinition): string {
             result += "Syntax.emptySeparatedList<" + child.elementType + ">()";
         }
         else if (isOptional(child)) {
-            result += "null";
+            result += "undefined";
         }
         else if (child.isToken) {
             result += "Syntax.token(SyntaxKind." + tokenKinds(child)[0] + ")";
@@ -1615,7 +1638,7 @@ function generateFirstTokenMethod(definition: ITypeDefinition): string {
 
     result += "\r\n";
     result += "    public firstToken(): ISyntaxToken {\r\n";
-    result += "        var token = null;\r\n";
+    result += "        var token: ISyntaxToken = undefined;\r\n";
 
     for (var i = 0; i < definition.children.length; i++) {
         var child = definition.children[i];
@@ -1631,7 +1654,7 @@ function generateFirstTokenMethod(definition: ITypeDefinition): string {
         result += "        if (";
 
         if (child.isOptional) {
-            result += getPropertyAccess(child) + " !== null && ";
+            result += getPropertyAccess(child) + " && ";
         }
 
         if (child.isToken) {
@@ -1639,7 +1662,7 @@ function generateFirstTokenMethod(definition: ITypeDefinition): string {
             result += ") { return " + getPropertyAccess(child) + "; }\r\n";
         }
         else {
-            result += "(token = " + getPropertyAccess(child) + ".firstToken()) !== null";
+            result += "(token = " + getPropertyAccess(child) + ".firstToken())";
             result += ") { return token; }\r\n";
         }
     }
@@ -1648,7 +1671,7 @@ function generateFirstTokenMethod(definition: ITypeDefinition): string {
         result += "        return this._endOfFileToken;\r\n";
     }
     else {
-        result += "        return null;\r\n";
+        result += "        return undefined;\r\n";
     }
 
     result += "    }\r\n";
@@ -1668,7 +1691,7 @@ function generateLastTokenMethod(definition: ITypeDefinition): string {
         result += "        return this._endOfFileToken;\r\n";
     }
     else {
-        result += "        var token = null;\r\n";
+        result += "        var token: ISyntaxToken = undefined;\r\n";
 
         for (var i = definition.children.length - 1; i >= 0; i--) {
             var child = definition.children[i];
@@ -1684,7 +1707,7 @@ function generateLastTokenMethod(definition: ITypeDefinition): string {
             result += "        if (";
 
             if (child.isOptional) {
-                result += getPropertyAccess(child) + " !== null && ";
+                result += getPropertyAccess(child) + " && ";
             }
 
             if (child.isToken) {
@@ -1692,12 +1715,12 @@ function generateLastTokenMethod(definition: ITypeDefinition): string {
                 result += ") { return " + getPropertyAccess(child) + "; }\r\n";
             }
             else {
-                result += "(token = " + getPropertyAccess(child) + ".lastToken()) !== null";
+                result += "(token = " + getPropertyAccess(child) + ".lastToken())";
                 result += ") { return token; }\r\n";
             }
         }
 
-        result += "        return null;\r\n";
+        result += "        return undefined;\r\n";
     }
 
     result += "    }\r\n";
@@ -1716,7 +1739,7 @@ function memberDefinitionType(child: IMemberDefinition): ITypeDefinition {
 
 function derivesFrom(def1: ITypeDefinition, def2: ITypeDefinition): boolean {
     var current = def1;
-    while (current !== null) {
+    while (current) {
         var base = baseType(current);
         if (base === def2) {
             return true;
@@ -1909,7 +1932,7 @@ function generateNode(definition: ITypeDefinition, abstract: boolean): string {
     result += " {\r\n";
 
     if (definition.name === "SourceUnitSyntax") {
-        result += "        public syntaxTree: SyntaxTree = null;\r\n";
+        result += "        public syntaxTree: SyntaxTree = undefined;\r\n";
     }
 
     for (var i = 0; i < definition.children.length; i++) {
@@ -1930,7 +1953,7 @@ function generateNode(definition: ITypeDefinition, abstract: boolean): string {
     result += "            super(data);\r\n";
 
     if (definition.name === "SourceUnitSyntax") {
-        result += "            this.parent = null,\r\n";
+        result += "            this.parent = undefined,\r\n";
     }
 
     if (definition.children) {
@@ -2173,13 +2196,13 @@ function generateRewriter(): string {
 "        }\r\n" +
 "\r\n" +
 "        public visitList<T extends ISyntaxNodeOrToken>(list: T[]): T[] {\r\n" +
-"            var newItems: T[] = null;\r\n" +
+"            var newItems: T[] = undefined;\r\n" +
 "\r\n" +
 "            for (var i = 0, n = list.length; i < n; i++) {\r\n" +
 "                var item = list[i];\r\n" +
 "                var newItem = <T>this.visitNodeOrToken(item);\r\n" +
 "\r\n" +
-"                if (item !== newItem && newItems === null) {\r\n" +
+"                if (item !== newItem && !newItems) {\r\n" +
 "                    newItems = [];\r\n" +
 "                    for (var j = 0; j < i; j++) {\r\n" +
 "                        newItems.push(list[j]);\r\n" +
@@ -2191,18 +2214,18 @@ function generateRewriter(): string {
 "                }\r\n" +
 "            }\r\n" +
 "\r\n" +
-"            // Debug.assert(newItems === null || newItems.length === childCount(list));\r\n" +
-"            return newItems === null ? list : Syntax.list<T>(newItems);\r\n" +
+"            // Debug.assert(!newItems || newItems.length === childCount(list));\r\n" +
+"            return !newItems ? list : Syntax.list<T>(newItems);\r\n" +
 "        }\r\n" +
 "\r\n" +
 "        public visitSeparatedList<T extends ISyntaxNodeOrToken>(list: T[]): T[] {\r\n" +
-"            var newItems: ISyntaxNodeOrToken[] = null;\r\n" +
+"            var newItems: ISyntaxNodeOrToken[] = undefined;\r\n" +
 "\r\n" +
 "            for (var i = 0, n = childCount(list); i < n; i++) {\r\n" +
 "                var item = childAt(list, i);\r\n" +
 "                var newItem = isToken(item) ? <ISyntaxNodeOrToken>this.visitToken(<ISyntaxToken>item) : this.visitNode(<ISyntaxNode>item);\r\n" +
 "\r\n" +
-"                if (item !== newItem && newItems === null) {\r\n" +
+"                if (item !== newItem && !newItems) {\r\n" +
 "                    newItems = [];\r\n" +
 "                    for (var j = 0; j < i; j++) {\r\n" +
 "                        newItems.push(childAt(list, j));\r\n" +
@@ -2214,8 +2237,8 @@ function generateRewriter(): string {
 "                }\r\n" +
 "            }\r\n" +
 "\r\n" +
-"            // Debug.assert(newItems === null || newItems.length === childCount(list));\r\n" +
-"            return newItems === null ? list : Syntax.separatedList<T>(newItems);\r\n" +
+"            // Debug.assert(newItems === undefined || newItems.length === childCount(list));\r\n" +
+"            return !newItems ? list : Syntax.separatedList<T>(newItems);\r\n" +
 "        }\r\n";
 
     for (var i = 0; i < definitions.length; i++) {
@@ -2242,7 +2265,7 @@ function generateRewriter(): string {
 
             result += "                ";
             if (child.isOptional) {
-                result += "node." + child.name + " === null ? null : ";
+                result += "!node." + child.name + " ? undefined : ";
             }
 
             if (child.isToken) {
@@ -2289,53 +2312,24 @@ function generateWalker(): string {
 "        public visitToken(token: ISyntaxToken): void {\r\n" +
 "        }\r\n" +
 "\r\n" +
-"        public visitNode(node: ISyntaxNode): void {\r\n" +
-"            visitNodeOrToken(this, node);\r\n" +
-"        }\r\n" +
-"\r\n" +
-"        public visitNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {\r\n" +
-"            if (isToken(nodeOrToken)) { \r\n" +
-"                this.visitToken(<ISyntaxToken>nodeOrToken);\r\n" +
-"            }\r\n" +
-"            else {\r\n" +
-"                this.visitNode(<ISyntaxNode>nodeOrToken);\r\n" +
-"            }\r\n" +
-"        }\r\n" +
-"\r\n" +
 "        private visitOptionalToken(token: ISyntaxToken): void {\r\n" +
-"            if (token === null) {\r\n" +
+"            if (token === undefined) {\r\n" +
 "                return;\r\n" +
 "            }\r\n" +
 "\r\n" +
 "            this.visitToken(token);\r\n" +
 "        }\r\n" +
 "\r\n" +
-"        public visitOptionalNode(node: ISyntaxNode): void {\r\n" +
-"            if (node === null) {\r\n" +
-"                return;\r\n" +
-"            }\r\n" +
-"\r\n" +
-"            this.visitNode(node);\r\n" +
-"        }\r\n" +
-"\r\n" +
-"        public visitOptionalNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {\r\n" +
-"            if (nodeOrToken === null) {\r\n" +
-"                return;\r\n" +
-"            }\r\n" +
-"\r\n" +
-"            this.visitNodeOrToken(nodeOrToken);\r\n" +
-"        }\r\n" +
-"\r\n" +
 "        public visitList(list: ISyntaxNodeOrToken[]): void {\r\n" +
 "            for (var i = 0, n = list.length; i < n; i++) {\r\n" +
-"               this.visitNodeOrToken(list[i]);\r\n" +
+"               visitNodeOrToken(this, list[i]);\r\n" +
 "            }\r\n" +
 "        }\r\n" +
 "\r\n" +
 "        public visitSeparatedList(list: ISyntaxNodeOrToken[]): void {\r\n" +
 "            for (var i = 0, n = childCount(list); i < n; i++) {\r\n" +
 "                var item = childAt(list, i);\r\n" +
-"                this.visitNodeOrToken(item);\r\n" + 
+"                visitNodeOrToken(this, item);\r\n" + 
 "            }\r\n" +
 "        }\r\n";
 
@@ -2363,20 +2357,10 @@ function generateWalker(): string {
                 result += "            this.visitSeparatedList(node." + child.name + ");\r\n";
             }
             else if (isNodeOrToken(child)) {
-                if (child.isOptional) {
-                    result += "            this.visitOptionalNodeOrToken(node." + child.name + ");\r\n";
-                }
-                else {
-                    result += "            this.visitNodeOrToken(node." + child.name + ");\r\n";
-                }
+                result += "            visitNodeOrToken(this, node." + child.name + ");\r\n";
             }
             else if (child.type !== "SyntaxKind") {
-                if (child.isOptional) {
-                    result += "            this.visitOptionalNode(node." + child.name + ");\r\n";
-                }
-                else {
-                    result += "            this.visitNode(node." + child.name + ");\r\n";
-                }
+                result += "            visitNodeOrToken(this, node." + child.name + ");\r\n";
             }
         }
 
@@ -2535,7 +2519,7 @@ function generateVisitor(): string {
 
     result += "module TypeScript {\r\n";
     result += "    export function visitNodeOrToken(visitor: ISyntaxVisitor, element: ISyntaxNodeOrToken): any {\r\n";
-    result += "        if (element === null) { return null; }\r\n";
+    result += "        if (element === undefined) { return undefined; }\r\n";
     result += "        if (isToken(element)) { return visitor.visitToken(<ISyntaxToken>element); }\r\n";
     result += "        switch (element.kind()) {\r\n";
 
@@ -2584,7 +2568,7 @@ function generateDefaultVisitor(): string {
     if (!forPrettyPrinter) {
         result += "    export class SyntaxVisitor implements ISyntaxVisitor {\r\n";
         result += "        public defaultVisit(node: ISyntaxNodeOrToken): any {\r\n";
-        result += "            return null;\r\n";
+        result += "            return undefined;\r\n";
         result += "        }\r\n";
         result += "\r\n";
         result += "        public visitToken(token: ISyntaxToken): any {\r\n";
@@ -2738,7 +2722,7 @@ function generateIsTypeScriptSpecific(): string {
     result += "    }\r\n\r\n";
 
     result += "    export function isTypeScriptSpecific(element: ISyntaxElement): boolean {\r\n"
-    result += "        if (element === null) { return false; }\r\n";
+    result += "        if (!element) { return false; }\r\n";
     result += "        if (isToken(element)) { return false; }\r\n";
     result += "        if (isList(element)) { return isListTypeScriptSpecific(<ISyntaxNodeOrToken[]>element); }\r\n";
     result += "        if (isSeparatedList(element)) { return isSeparatedListTypeScriptSpecific(<ISyntaxNodeOrToken[]>element); }\r\n\r\n";
@@ -2855,7 +2839,7 @@ function generateIsTypeScriptSpecificMethod(definition: ITypeDefinition): string
                 result += getPropertyAccess(child, "node") + ".childCount() > 0";
             }
             else {
-                result += getPropertyAccess(child, "node") + " !== null";
+                result += "!!" + getPropertyAccess(child, "node");
             }
         }
         else {

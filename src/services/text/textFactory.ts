@@ -2,7 +2,7 @@
 
 module TypeScript.SimpleText {
     class SimpleStringText implements ISimpleText {
-        private _lineMap: LineMap = null;
+        private _lineMap: LineMap = undefined;
 
         constructor(private value: string) {
         }
@@ -30,7 +30,7 @@ module TypeScript.SimpleText {
 
     // Class which wraps a host IScriptSnapshot and exposes an ISimpleText for newer compiler code. 
     class SimpleScriptSnapshotText implements ISimpleText {
-        private _lineMap: LineMap = null;
+        private _lineMap: LineMap = undefined;
 
         constructor(public scriptSnapshot: IScriptSnapshot) {
         }
@@ -48,7 +48,7 @@ module TypeScript.SimpleText {
         }
 
         public lineMap(): LineMap {
-            if (this._lineMap === null) {
+            if (!this._lineMap) {
                 this._lineMap = new LineMap(() => this.scriptSnapshot.getLineStartPositions(), this.length());
             }
 

@@ -2,7 +2,7 @@
 
 module TypeScript {
     export function visitNodeOrToken(visitor: ISyntaxVisitor, element: ISyntaxNodeOrToken): any {
-        if (element === null) { return null; }
+        if (element === undefined) { return undefined; }
         if (isToken(element)) { return visitor.visitToken(<ISyntaxToken>element); }
         switch (element.kind()) {
             case SyntaxKind.SourceUnit: return visitor.visitSourceUnit(<SourceUnitSyntax>element);
@@ -14,6 +14,8 @@ module TypeScript {
             case SyntaxKind.GenericType: return visitor.visitGenericType(<GenericTypeSyntax>element);
             case SyntaxKind.TypeQuery: return visitor.visitTypeQuery(<TypeQuerySyntax>element);
             case SyntaxKind.TupleType: return visitor.visitTupleType(<TupleTypeSyntax>element);
+            case SyntaxKind.UnionType: return visitor.visitUnionType(<UnionTypeSyntax>element);
+            case SyntaxKind.ParenthesizedType: return visitor.visitParenthesizedType(<ParenthesizedTypeSyntax>element);
             case SyntaxKind.InterfaceDeclaration: return visitor.visitInterfaceDeclaration(<InterfaceDeclarationSyntax>element);
             case SyntaxKind.FunctionDeclaration: return visitor.visitFunctionDeclaration(<FunctionDeclarationSyntax>element);
             case SyntaxKind.ModuleDeclaration: return visitor.visitModuleDeclaration(<ModuleDeclarationSyntax>element);
@@ -111,6 +113,8 @@ module TypeScript {
         visitGenericType(node: GenericTypeSyntax): any;
         visitTypeQuery(node: TypeQuerySyntax): any;
         visitTupleType(node: TupleTypeSyntax): any;
+        visitUnionType(node: UnionTypeSyntax): any;
+        visitParenthesizedType(node: ParenthesizedTypeSyntax): any;
         visitInterfaceDeclaration(node: InterfaceDeclarationSyntax): any;
         visitFunctionDeclaration(node: FunctionDeclarationSyntax): any;
         visitModuleDeclaration(node: ModuleDeclarationSyntax): any;

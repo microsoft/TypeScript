@@ -16,7 +16,7 @@
 ///<reference path='formatting.ts' />
 
 module TypeScript.Services.Formatting {
-    export class IndentationTrackingWalker extends SyntaxWalker {
+    export class IndentationTrackingWalker {
         private _position: number = 0;
         private _parent: IndentationNodeContext = null;
         private _textSpan: TextSpan;
@@ -26,8 +26,6 @@ module TypeScript.Services.Formatting {
         private _text: ISimpleText;
 
         constructor(textSpan: TextSpan, sourceUnit: SourceUnitSyntax, snapshot: ITextSnapshot, indentFirstToken: boolean, public options: FormattingOptions) {
-            super();
-
             // Create a pool object to manage context nodes while walking the tree
             this._indentationNodeContextPool = new IndentationNodeContextPool();
 
@@ -100,7 +98,23 @@ module TypeScript.Services.Formatting {
             this._position += token.fullWidth();
         }
 
-        public visitNode(node: ISyntaxNode): void {
+        public walk(element: ISyntaxElement) {
+            if (element && !isShared(element)) {
+                if (isToken(element)) {
+                    this.visitToken(<ISyntaxToken>element);
+                }
+                else if (element.kind() === SyntaxKind.List || element.kind() === SyntaxKind.SeparatedList) {
+                    for (var i = 0, n = childCount(element); i < n; i++) {
+                        this.walk(childAt(element, i));
+                    }
+                }
+                else {
+                    this.visitNode(<ISyntaxNode>element);
+                }
+            }
+        }
+
+        private visitNode(node: ISyntaxNode): void {
             var nodeSpan = new TextSpan(this._position, fullWidth(node));
 
             if (nodeSpan.intersectsWithTextSpan(this._textSpan)) {
@@ -112,7 +126,9 @@ module TypeScript.Services.Formatting {
                 this._parent = this._indentationNodeContextPool.getNode(currentParent, node, this._position, indentation.indentationAmount, indentation.indentationAmountDelta);
 
                 // Visit node
-                visitNodeOrToken(this, node);
+                for (var i = 0, n = childCount(node); i < n; i++) {
+                    this.walk(childAt(node, i));
+                }
 
                 // Reset state
                 this._indentationNodeContextPool.releaseNode(this._parent);

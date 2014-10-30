@@ -700,7 +700,7 @@ module TypeScript.Scanner {
 
             while (true) {
                 if (index === end) {
-                    reportDiagnostic(end, 0, DiagnosticCode.AsteriskSlash_expected, null);
+                    reportDiagnostic(end, 0, DiagnosticCode.AsteriskSlash_expected, undefined);
                     return;
                 }
 
@@ -916,7 +916,7 @@ module TypeScript.Scanner {
 
             if (languageVersion >= ts.ScriptTarget.ES5) {
                 reportDiagnostic(
-                    start, index - start, DiagnosticCode.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher, null);
+                    start, index - start, DiagnosticCode.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher, undefined);
             }
         }
 
@@ -1223,7 +1223,7 @@ module TypeScript.Scanner {
                 switch (ch) {
                     case CharacterCodes.backslash:
                         // We're now in an escape.  Consume the next character we see (unless it's
-                        // a newline or null.
+                        // a newline or undefined.
                         inEscape = true;
                         continue;
 
@@ -1364,7 +1364,7 @@ module TypeScript.Scanner {
                     break;
                 }
                 else if (isNaN(ch) || isNewLineCharacter(ch)) {
-                    reportDiagnostic(Math.min(index, end), 1, DiagnosticCode.Missing_close_quote_character, null);
+                    reportDiagnostic(Math.min(index, end), 1, DiagnosticCode.Missing_close_quote_character, undefined);
                     break;
                 }
                 else {
@@ -1431,7 +1431,7 @@ module TypeScript.Scanner {
                 var ch2 = str.charCodeAt(index);
                 if (!CharacterInfo.isHexDigit(ch2)) {
                     if (report) {
-                        reportDiagnostic(start, index - start, DiagnosticCode.Unrecognized_escape_sequence, null)
+                        reportDiagnostic(start, index - start, DiagnosticCode.Unrecognized_escape_sequence, undefined)
                     }
 
                     break;
@@ -1511,30 +1511,30 @@ module TypeScript.Scanner {
         var rewindPointPool: IScannerRewindPoint[] = [];
         var rewindPointPoolCount = 0;
 
-        var lastDiagnostic: Diagnostic = null;
+        var lastDiagnostic: Diagnostic = undefined;
         var reportDiagnostic = (position: number, fullWidth: number, diagnosticKey: string, args: any[]) => {
             lastDiagnostic = new Diagnostic(fileName, text.lineMap(), position, fullWidth, diagnosticKey, args);
         };
 
         // The sliding window that we store tokens in.
-        var slidingWindow = new SlidingWindow(fetchNextItem, ArrayUtilities.createArray(/*defaultWindowSize:*/ 1024, null), null);
+        var slidingWindow = new SlidingWindow(fetchNextItem, ArrayUtilities.createArray(/*defaultWindowSize:*/ 1024, undefined), undefined);
 
         // The scanner we're pulling tokens from.
         var scanner = createScanner(languageVersion, text, reportDiagnostic);
 
         function release() {
-            slidingWindow = null;
-            scanner = null;
+            slidingWindow = undefined;
+            scanner = undefined;
             _tokenDiagnostics = [];
             rewindPointPool = [];
-            lastDiagnostic = null;
-            reportDiagnostic = null;
+            lastDiagnostic = undefined;
+            reportDiagnostic = undefined;
         }
 
         function currentNode(): ISyntaxNode {
             // The normal parser source never returns nodes.  They're only returned by the 
             // incremental parser source.
-            return null;
+            return undefined;
         }
 
         function consumeNode(node: ISyntaxNode): void {
@@ -1557,7 +1557,7 @@ module TypeScript.Scanner {
 
             rewindPointPoolCount--;
             var result = rewindPointPool[rewindPointPoolCount];
-            rewindPointPool[rewindPointPoolCount] = null;
+            rewindPointPool[rewindPointPoolCount] = undefined;
             return result;
         }
 
@@ -1593,7 +1593,7 @@ module TypeScript.Scanner {
             // Debug.assert(spaceAvailable > 0);
             var token = scanner.scan(allowContextualToken);
 
-            if (lastDiagnostic === null) {
+            if (lastDiagnostic === undefined) {
                 return token;
             }
 
@@ -1601,7 +1601,7 @@ module TypeScript.Scanner {
             // it won't be reused in incremental scenarios.
 
             _tokenDiagnostics.push(lastDiagnostic);
-            lastDiagnostic = null;
+            lastDiagnostic = undefined;
             return Syntax.realizeToken(token, text);
         }
 
@@ -1628,13 +1628,12 @@ module TypeScript.Scanner {
                 var diagnostic = _tokenDiagnostics[tokenDiagnosticsLength - 1];
                 if (diagnostic.start() >= position) {
                     tokenDiagnosticsLength--;
+                    _tokenDiagnostics.pop();
                 }
                 else {
                     break;
                 }
             }
-
-            _tokenDiagnostics.length = tokenDiagnosticsLength;
         }
 
         function resetToPosition(absolutePosition: number): void {

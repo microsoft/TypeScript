@@ -5468,31 +5468,29 @@ module ts {
                 Debug.assert(!result.length);
                 for (var i = 0; i < signatures.length; i++) {
                     var signature = signatures[i];
-                    if (true) {
-                        var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
-                        var parent = signature.declaration && signature.declaration.parent;
-                        if (!lastSymbol || symbol === lastSymbol) {
-                            if (lastParent && parent === lastParent) {
-                                pos++;
-                            }
-                            else {
-                                lastParent = parent;
-                                pos = cutoffPos;
-                            }
+                    var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
+                    var parent = signature.declaration && signature.declaration.parent;
+                    if (!lastSymbol || symbol === lastSymbol) {
+                        if (lastParent && parent === lastParent) {
+                            pos++;
                         }
                         else {
-                            // current declaration belongs to a different symbol
-                            // set cutoffPos so re-orderings in the future won't change result set from 0 to cutoffPos
-                            pos = cutoffPos = result.length;
                             lastParent = parent;
+                            pos = cutoffPos;
                         }
-                        lastSymbol = symbol;
-
-                        for (var j = result.length; j > pos; j--) {
-                            result[j] = result[j - 1];
-                        }
-                        result[pos] = signature;
                     }
+                    else {
+                        // current declaration belongs to a different symbol
+                        // set cutoffPos so re-orderings in the future won't change result set from 0 to cutoffPos
+                        pos = cutoffPos = result.length;
+                        lastParent = parent;
+                    }
+                    lastSymbol = symbol;
+
+                    for (var j = result.length; j > pos; j--) {
+                        result[j] = result[j - 1];
+                    }
+                    result[pos] = signature;
                 }
             }
         }
