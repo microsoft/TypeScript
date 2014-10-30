@@ -19,7 +19,7 @@ module TypeScript {
         }
 
         private visitOptionalToken(token: ISyntaxToken): void {
-            if (token === null) {
+            if (token === undefined) {
                 return;
             }
 
@@ -27,7 +27,7 @@ module TypeScript {
         }
 
         public visitOptionalNode(node: ISyntaxNode): void {
-            if (node === null) {
+            if (node === undefined) {
                 return;
             }
 
@@ -35,7 +35,7 @@ module TypeScript {
         }
 
         public visitOptionalNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {
-            if (nodeOrToken === null) {
+            if (nodeOrToken === undefined) {
                 return;
             }
 
