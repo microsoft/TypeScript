@@ -167,7 +167,7 @@ module TypeScript {
             // Assert disabled because it is actually expensive enugh to affect perf.
             // Debug.assert(n >= 0);
             while (this.currentRelativeItemIndex + n >= this.windowCount) {
-                if (!this.addMoreItemsToWindow(/*argument:*/ null)) {
+                if (!this.addMoreItemsToWindow(/*argument:*/ undefined)) {
                     return this.defaultValue;
                 }
             }

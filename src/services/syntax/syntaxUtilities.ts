@@ -21,7 +21,7 @@ module TypeScript {
 
         public static isLastTokenOnLine(token: ISyntaxToken, text: ISimpleText): boolean {
             var _nextToken = nextToken(token, text);
-            if (_nextToken === null) {
+            if (_nextToken === undefined) {
                 return true;
             }
 
@@ -252,7 +252,7 @@ module TypeScript {
         public static isAngleBracket(positionedElement: ISyntaxElement): boolean {
             var element = positionedElement;
             var parent = positionedElement.parent;
-            if (parent !== null && (element.kind() === SyntaxKind.LessThanToken || element.kind() === SyntaxKind.GreaterThanToken)) {
+            if (parent && (element.kind() === SyntaxKind.LessThanToken || element.kind() === SyntaxKind.GreaterThanToken)) {
                 switch (parent.kind()) {
                     case SyntaxKind.TypeArgumentList:
                     case SyntaxKind.TypeParameterList:
@@ -272,15 +272,15 @@ module TypeScript {
                 }
             }
 
-            return null;
+            return undefined;
         }
 
         public static containsToken(list: ISyntaxToken[], kind: SyntaxKind): boolean {
-            return SyntaxUtilities.getToken(list, kind) !== null;
+            return !!SyntaxUtilities.getToken(list, kind);
         }
 
         public static hasExportKeyword(moduleElement: IModuleElementSyntax): boolean {
-            return SyntaxUtilities.getExportKeyword(moduleElement) !== null;
+            return !!SyntaxUtilities.getExportKeyword(moduleElement);
         }
 
         public static getExportKeyword(moduleElement: IModuleElementSyntax): ISyntaxToken {
@@ -294,7 +294,7 @@ module TypeScript {
                 case SyntaxKind.ImportDeclaration:
                     return SyntaxUtilities.getToken((<any>moduleElement).modifiers, SyntaxKind.ExportKeyword);
                 default: 
-                    return null;
+                    return undefined;
             }
         }
 

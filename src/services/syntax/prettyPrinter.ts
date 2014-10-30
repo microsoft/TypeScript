@@ -16,7 +16,7 @@ module TypeScript.PrettyPrinter {
         }
 
         private newLineCountBetweenModuleElements(element1: IModuleElementSyntax, element2: IModuleElementSyntax): number {
-            if (element1 === null || element2 === null) {
+            if (!element1 || !element2) {
                 return 0;
             }
 
@@ -28,7 +28,7 @@ module TypeScript.PrettyPrinter {
         }
 
         private newLineCountBetweenClassElements(element1: IClassElementSyntax, element2: IClassElementSyntax): number {
-            if (element1 === null || element2 === null) {
+            if (!element1 || !element2) {
                 return 0;
             }
 
@@ -36,7 +36,7 @@ module TypeScript.PrettyPrinter {
         }
 
         private newLineCountBetweenStatements(element1: IClassElementSyntax, element2: IClassElementSyntax): number {
-            if (element1 === null || element2 === null) {
+            if (!element1 || !element2) {
                 return 0;
             }
 
@@ -48,7 +48,7 @@ module TypeScript.PrettyPrinter {
         }
 
         private newLineCountBetweenSwitchClauses(element1: ISwitchClauseSyntax, element2: ISwitchClauseSyntax): number {
-            if (element1 === null || element2 === null) {
+            if (!element1 || !element2) {
                 return 0;
             }
 
@@ -120,7 +120,7 @@ module TypeScript.PrettyPrinter {
         }
 
         private appendToken(token: ISyntaxToken): void {
-            if (token !== null && token.fullWidth() > 0) {
+            if (token && token.fullWidth() > 0) {
                 this.appendIndentationIfAfterNewLine();
                 this.appendText(token.text());
             }
@@ -174,7 +174,7 @@ module TypeScript.PrettyPrinter {
         }
 
         private appendModuleElements(list: IModuleElementSyntax[]): void {
-            var lastModuleElement: IModuleElementSyntax = null;
+            var lastModuleElement: IModuleElementSyntax = undefined;
             for (var i = 0, n = list.length; i < n; i++) {
                 var moduleElement = list[i];
                 var newLineCount = this.newLineCountBetweenModuleElements(lastModuleElement, moduleElement);
@@ -236,7 +236,7 @@ module TypeScript.PrettyPrinter {
 
             this.indentation++;
 
-            var lastClassElement: IClassElementSyntax = null;
+            var lastClassElement: IClassElementSyntax = undefined;
             for (var i = 0, n = node.classElements.length; i < n; i++) {
                 var classElement = node.classElements[i];
                 var newLineCount = this.newLineCountBetweenClassElements(lastClassElement, classElement);
@@ -472,7 +472,7 @@ module TypeScript.PrettyPrinter {
         }
 
         private appendStatements(statements: IStatementSyntax[]): void {
-            var lastStatement: IStatementSyntax = null;
+            var lastStatement: IStatementSyntax = undefined;
             for (var i = 0, n = statements.length; i < n; i++) {
                 var statement = statements[i];
 
@@ -743,7 +743,7 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.openBraceToken);
             this.ensureNewLine();
 
-            var lastSwitchClause: ISwitchClauseSyntax = null;
+            var lastSwitchClause: ISwitchClauseSyntax = undefined;
             for (var i = 0, n = node.switchClauses.length; i < n; i++) {
                 var switchClause = node.switchClauses[i];
 

@@ -7,7 +7,7 @@ module TypeScript {
 
     export function nodeStructuralEquals(node1: TypeScript.ISyntaxNode, node2: TypeScript.ISyntaxNode, checkParents: boolean, text1: ISimpleText, text2: ISimpleText): boolean {
         if (node1 === node2) { return true; }
-        if (node1 === null || node2 === null) { return false; }
+        if (!node1 || !node2) { return false; }
 
         Debug.assert(node1.kind() === TypeScript.SyntaxKind.SourceUnit || node1.parent);
         Debug.assert(node2.kind() === TypeScript.SyntaxKind.SourceUnit || node2.parent);
@@ -37,7 +37,7 @@ module TypeScript {
             return true;
         }
 
-        if (node1 === null || node2 === null) {
+        if (!node1 || !node2) {
             return false;
         }
 
@@ -56,7 +56,7 @@ module TypeScript {
             return true;
         }
 
-        if (token1 === null || token2 === null) {
+        if (!token1 || !token2) {
             return false;
         }
 
@@ -156,7 +156,7 @@ module TypeScript {
             return true;
         }
 
-        if (element1 === null || element2 === null) {
+        if (!element1 || !element2) {
             return false;
         }
 
