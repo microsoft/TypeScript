@@ -1,10 +1,10 @@
 /// <reference path="..\src\compiler\types.ts" />
 /// <reference path="..\src\compiler\parser.ts" />
 /// <reference path="..\src\compiler\checker.ts" />
-// <reference path="..\src\compiler\sys.ts" />
 /// <reference path="..\src\services\services.ts" />
 /// <reference path="..\src\services\compiler\precompile.ts" />
 /// <reference path="..\src\services\syntax\incrementalParser.ts" />
+/// <reference path="..\src\compiler\sys.ts" />
 
 function prepareTestRunner(text: string, writeOutput: (s: string) => void): () => void {
     var start = new Date().getTime();
@@ -37,8 +37,8 @@ function prepareTestRunner(text: string, writeOutput: (s: string) => void): () =
     }
 }
 
-//if (sys && sys.args.length) {
-//    var file = sys.readFile(sys.args[0]);
-//    var json = JSON.stringify({ text: file });
-//    sys.writeFile(ts.combinePaths(sys.getCurrentDirectory(), "file.ts.js"), "var text = " + json);
-//}
+if (sys && sys.args.length) {
+    var file = sys.readFile(sys.args[0]);
+    var json = JSON.stringify({ text: file });
+    sys.writeFile(ts.combinePaths(sys.getCurrentDirectory(), "file.ts.js"), "var text = " + json);
+}
