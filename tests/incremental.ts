@@ -16,7 +16,7 @@ function prepareTestRunner(text: string, writeOutput: (s: string) => void): () =
     return run;
 
     function run(): void {
-        var start = new Date().getTime();
+        var total = 0;
         for (var i = 0; i < 100; i++) {
             var textChangeRange = new TypeScript.TextChangeRange(new TypeScript.TextSpan(insertIndex, 0), 1);
             var newText = text.substring(0, insertIndex) + " " + text.substring(insertIndex);
@@ -24,7 +24,9 @@ function prepareTestRunner(text: string, writeOutput: (s: string) => void): () =
             var simpleText = TypeScript.SimpleText.fromString(newText);
             simpleText.lineMap().lineStarts();
 
+            var start = new Date().getTime();
             var newSyntaxTree = TypeScript.IncrementalParser.parse(oldSyntaxTree, textChangeRange, simpleText);
+            total += (new Date().getTime() - start);
 
             //var start = new Date().getTime();
             //ts.createSourceFile("checker.ts", newText, ts.ScriptTarget.ES5, "0", true);
@@ -33,7 +35,7 @@ function prepareTestRunner(text: string, writeOutput: (s: string) => void): () =
             text = newText;
             oldSyntaxTree = newSyntaxTree;
         }
-        writeOutput("incremental: " + (new Date().getTime() - start) + "\r\n");
+        writeOutput("incremental: " + total + "\r\n");
     }
 }
 

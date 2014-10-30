@@ -41345,6 +41345,7 @@ function prepareTestRunner(text, writeOutput) {
     var insertIndex = text.indexOf("/**  */") + "/** ".length;
     return run;
     function run() {
+        var total = 0;
         for (var i = 0; i < 100; i++) {
             var textChangeRange = new TypeScript.TextChangeRange(new TypeScript.TextSpan(insertIndex, 0), 1);
             var newText = text.substring(0, insertIndex) + " " + text.substring(insertIndex);
@@ -41352,13 +41353,14 @@ function prepareTestRunner(text, writeOutput) {
             simpleText.lineMap().lineStarts();
             var start = new Date().getTime();
             var newSyntaxTree = TypeScript.IncrementalParser.parse(oldSyntaxTree, textChangeRange, simpleText);
-            writeOutput("incremental: " + (new Date().getTime() - start) + "\r\n");
+            total += (new Date().getTime() - start);
             //var start = new Date().getTime();
             //ts.createSourceFile("checker.ts", newText, ts.ScriptTarget.ES5, "0", true);
             //writeOutput("full: " + (new Date().getTime() - start) + "\r\n");
             text = newText;
             oldSyntaxTree = newSyntaxTree;
         }
+        writeOutput("incremental: " + total + "\r\n");
     }
 }
 if (sys && sys.args.length) {
