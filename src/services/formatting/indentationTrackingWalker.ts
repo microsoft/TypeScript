@@ -16,7 +16,7 @@
 ///<reference path='formatting.ts' />
 
 module TypeScript.Services.Formatting {
-    export class IndentationTrackingWalker /*extends SyntaxWalker*/ {
+    export class IndentationTrackingWalker {
         private _position: number = 0;
         private _parent: IndentationNodeContext = null;
         private _textSpan: TextSpan;
@@ -26,8 +26,6 @@ module TypeScript.Services.Formatting {
         private _text: ISimpleText;
 
         constructor(textSpan: TextSpan, sourceUnit: SourceUnitSyntax, snapshot: ITextSnapshot, indentFirstToken: boolean, public options: FormattingOptions) {
-            // super();
-
             // Create a pool object to manage context nodes while walking the tree
             this._indentationNodeContextPool = new IndentationNodeContextPool();
 
