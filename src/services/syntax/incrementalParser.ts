@@ -66,7 +66,7 @@ module TypeScript.IncrementalParser {
 
         // Start the cursor pointing at the first element in the source unit (if it exists).
         if (oldSourceUnit.moduleElements.length > 0) {
-            _oldSourceUnitCursor.pushElement(childAt(oldSourceUnit.moduleElements, 0), /*indexInParent:*/ 0);
+            _oldSourceUnitCursor.pushElement(oldSourceUnit.moduleElements.childAt(0), /*indexInParent:*/ 0);
         }
 
         // In general supporting multiple individual edits is just not that important.  So we 
@@ -719,8 +719,8 @@ module TypeScript.IncrementalParser {
             // Either the node has some existent child, then move to it.  if it doesn't, then it's
             // an empty node.  Conceptually the first child of an empty node is really just the 
             // next sibling of the empty node.
-            for (var i = 0, n = childCount(nodeOrToken); i < n; i++) {
-                var child = childAt(nodeOrToken, i);
+            for (var i = 0, n = nodeOrToken.childCount(); i < n; i++) {
+                var child = nodeOrToken.childAt(i);
                 if (child && !isShared(child)) {
                     // Great, we found a real child.  Push that.
                     pushElement(child, /*indexInParent:*/ i);
@@ -746,8 +746,8 @@ module TypeScript.IncrementalParser {
                 var parent = currentPiece.element.parent;
 
                 // We start searching at the index one past our own index in the parent.
-                for (var i = currentPiece.indexInParent + 1, n = childCount(parent); i < n; i++) {
-                    var sibling = childAt(parent, i);
+                for (var i = currentPiece.indexInParent + 1, n = parent.childCount(); i < n; i++) {
+                    var sibling = parent.childAt(i);
 
                     if (sibling && !isShared(sibling)) {
                         // We found a good sibling that we can move to.  Just reuse our existing piece
@@ -782,7 +782,7 @@ module TypeScript.IncrementalParser {
                 // we make sure to filter that out before pushing any children.
                 // Debug.assert(childCount(element) > 0);
 
-                pushElement(childAt(element, 0), /*indexInParent:*/ 0);
+                pushElement(element.childAt(0), /*indexInParent:*/ 0);
             }
         }
 

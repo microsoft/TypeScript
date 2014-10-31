@@ -1561,22 +1561,34 @@ function generateBrands(definition: ITypeDefinition, accessibility: boolean): st
     return properties;
 }
 
+function generateAcceptMethod(definition: ITypeDefinition): string {
+    var result = "";
+
+    if (!hasKind) {
+        result += "\r\n";
+        result += "        public accept(visitor: ISyntaxVisitor): SyntaxKind {\r\n";
+        result += "            return visitor.visit" + getNameWithoutSuffix(definition) + "(this);\r\n";
+        result += "        }\r\n";
+    }
+
+    return result;
+}
+
 function generateKindMethod(definition: ITypeDefinition): string {
     var result = "";
 
-    //if (!hasKind) {
-    //    result += "\r\n";
-    //    result += "        public get kind(): SyntaxKind {\r\n";
-    //    result += "            return SyntaxKind." + getNameWithoutSuffix(definition) + ";\r\n";
-    //    result += "        }\r\n";
-    //}
+    if (!hasKind) {
+        result += "\r\n";
+        result += "        public kind(): SyntaxKind {\r\n";
+        result += "            return SyntaxKind." + getNameWithoutSuffix(definition) + ";\r\n";
+        result += "        }\r\n";
+    }
 
     return result;
 }
 
 function generateSlotMethods(definition: ITypeDefinition): string {
     var result = "";
-    return result;
 
     result += "\r\n";
     result += "        public childCount(): number {\r\n";
@@ -1974,6 +1986,11 @@ function generateNode(definition: ITypeDefinition, abstract: boolean): string {
     }
 
     result += "        }\r\n";
+
+    result += generateKindMethod(definition);
+    result += generateSlotMethods(definition);
+    result += generateAcceptMethod(definition);
+
     result += "    }";
     return result;
 }
@@ -2021,6 +2038,7 @@ function generateSyntaxInterfaces(): string {
 
     result += "\r\n\r\n";
 
+    /*
     result += "    export var nodeMetadata: string[][] = [";
     for (var i = 0; i <= TypeScript.SyntaxKind.LastNode; i++) {
         if (i < TypeScript.SyntaxKind.FirstNode) {
@@ -2040,6 +2058,7 @@ function generateSyntaxInterfaces(): string {
         result += metadata;
     }
     result += "];\r\n\r\n";
+    */
 
     result += "    export module Syntax {\r\n"
 
@@ -2112,7 +2131,7 @@ function generateNodes(abstract: boolean): string {
 
         result += generateNode(definition, abstract);
     }
-
+    /*
     result += "\r\n\r\n    ";
 
     for (var i = 0; i < definitions.length; i++) {
@@ -2129,9 +2148,9 @@ function generateNodes(abstract: boolean): string {
         result += "(<any>" + definition.name + ").prototype.__kind = SyntaxKind." + getNameWithoutSuffix(definition)
     }
 
-    result += ";\r\n";
+    result += ";\r\n";*/
 
-    result += "}";
+    result += "\r\n}";
     return result;
 }
 
@@ -2286,16 +2305,28 @@ function generateWalker(): string {
 "            this.visitToken(token);\r\n" +
 "        }\r\n" +
 "\r\n" +
+"        private visitOptionalNode(node: ISyntaxNode): void {\r\n" +
+"            if (node === undefined) {\r\n" +
+"                return;\r\n" +
+"            }\r\n" +
+"\r\n" +
+"            node.accept(this);\r\n" +
+"        }\r\n" +
+"\r\n" +
 "        public visitList(list: ISyntaxNodeOrToken[]): void {\r\n" +
 "            for (var i = 0, n = list.length; i < n; i++) {\r\n" +
-"               visitNodeOrToken(this, list[i]);\r\n" +
+"                list[i].accept(this);\r\n" +
 "            }\r\n" +
 "        }\r\n" +
 "\r\n" +
 "        public visitSeparatedList(list: ISyntaxNodeOrToken[]): void {\r\n" +
-"            for (var i = 0, n = childCount(list); i < n; i++) {\r\n" +
-"                var item = childAt(list, i);\r\n" +
-"                visitNodeOrToken(this, item);\r\n" + 
+"            for (var i = 0, n = separatedListChildCount(list); i < n; i++) {\r\n" +
+"                if (i % 2 === 0) {\r\n" +
+"                    list[i >> 1].accept(this);\r\n" + 
+"                }\r\n" +
+"                else {\r\n" +
+"                    this.visitToken(list.separators[i >> 1]);\r\n" +
+"                }\r\n" +
 "            }\r\n" +
 "        }\r\n";
 
@@ -2323,10 +2354,28 @@ function generateWalker(): string {
                 result += "            this.visitSeparatedList(node." + child.name + ");\r\n";
             }
             else if (isNodeOrToken(child)) {
-                result += "            visitNodeOrToken(this, node." + child.name + ");\r\n";
+                if (child.isOptional) {
+                    result += "            visitNodeOrToken(this, node." + child.name + ");\r\n";
+                }
+                else {
+                    result += "            node." + child.name + ".accept(this);\r\n";
+                }
+            }
+            else if (child.type === "ISyntaxToken") {
+                if (child.isOptional) {
+                    result += "            this.visitOptionalToken(node." + child.name + ");\r\n";
+                }
+                else {
+                    result += "            this.visitToken(node." + child.name + ");\r\n";
+                }
             }
             else if (child.type !== "SyntaxKind") {
-                result += "            visitNodeOrToken(this, node." + child.name + ");\r\n";
+                if (child.isOptional) {
+                    result += "            this.visitOptionalNode(node." + child.name + ");\r\n";
+                }
+                else {
+                    result += "            node." + child.name + ".accept(this);\r\n";
+                }
             }
         }
 
@@ -2486,6 +2535,8 @@ function generateVisitor(): string {
     result += "module TypeScript {\r\n";
     result += "    export function visitNodeOrToken(visitor: ISyntaxVisitor, element: ISyntaxNodeOrToken): any {\r\n";
     result += "        if (element === undefined) { return undefined; }\r\n";
+    result += "        return element.accept(visitor);\r\n";
+    /*
     result += "        if (isToken(element)) { return visitor.visitToken(<ISyntaxToken>element); }\r\n";
     result += "        switch (element.kind()) {\r\n";
 
@@ -2508,13 +2559,14 @@ function generateVisitor(): string {
 
     result += "        }\r\n\r\n";
     result += "        throw Errors.invalidOperation();\r\n";
+    */
     result += "    }\r\n\r\n";
 
     result += "    export interface ISyntaxVisitor {\r\n";
     result += "        visitToken(token: ISyntaxToken): any;\r\n";
 
-    for (i = 0; i < definitions.length; i++) {
-        definition = definitions[i];
+    for (var i = 0; i < definitions.length; i++) {
+        var definition = definitions[i];
         result += "        visit" + getNameWithoutSuffix(definition) + "(node: " + definition.name + "): any;\r\n";
     }
 
@@ -2670,8 +2722,8 @@ function generateIsTypeScriptSpecific(): string {
     result += "module TypeScript {\r\n";
 
     result += "    function isSeparatedListTypeScriptSpecific(list: ISyntaxNodeOrToken[]): boolean {\r\n"
-    result += "        for (var i = 0, n = childCount(list); i < n; i++) {\r\n";
-    result += "            if (isTypeScriptSpecific(childAt(list, i))) {\r\n";
+    result += "        for (var i = 0, n = list.childCount(); i < n; i++) {\r\n";
+    result += "            if (isTypeScriptSpecific(list.childAt(i))) {\r\n";
     result += "                return true;\r\n";
     result += "            }\r\n";
     result += "        }\r\n\r\n";
@@ -2824,7 +2876,6 @@ function generateIsTypeScriptSpecificMethod(definition: ITypeDefinition): string
 }
 
 var syntaxNodesConcrete = generateNodes(/*abstract:*/ false);
-var syntaxNodesAbstract = generateNodes(/*abstract:*/ true);
 var syntaxInterfaces = generateSyntaxInterfaces();
 var rewriter = generateRewriter();
 var walker = generateWalker();
@@ -2834,7 +2885,6 @@ var defaultVisitor = generateDefaultVisitor();
 var servicesUtilities = generateServicesUtilities();
 
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.concrete.generated.ts", syntaxNodesConcrete, false);
-sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.abstract.generated.ts", syntaxNodesAbstract, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.interfaces.generated.ts", syntaxInterfaces, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxRewriter.generated.ts", rewriter, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxWalker.generated.ts", walker, false);
