@@ -19016,6 +19016,15 @@ var TypeScript;
             FixedWidthTokenWithNoTrivia.prototype.setFullStart = function (fullStart) {
                 this._packedData = fixedWidthTokenPackData(fullStart, this.kind());
             };
+            FixedWidthTokenWithNoTrivia.prototype.childCount = function () {
+                return 0;
+            };
+            FixedWidthTokenWithNoTrivia.prototype.childAt = function (index) {
+                throw TypeScript.Errors.invalidOperation();
+            };
+            FixedWidthTokenWithNoTrivia.prototype.accept = function (visitor) {
+                return visitor.visitToken(this);
+            };
             FixedWidthTokenWithNoTrivia.prototype.isIncrementallyUnusable = function () {
                 return false;
             };
@@ -19079,6 +19088,15 @@ var TypeScript;
             }
             LargeScannerToken.prototype.setFullStart = function (fullStart) {
                 this._packedFullStartAndInfo = largeTokenPackFullStartAndInfo(fullStart, largeTokenUnpackTriviaInfo(this._packedFullStartAndInfo));
+            };
+            LargeScannerToken.prototype.childCount = function () {
+                return 0;
+            };
+            LargeScannerToken.prototype.childAt = function (index) {
+                throw TypeScript.Errors.invalidOperation();
+            };
+            LargeScannerToken.prototype.accept = function (visitor) {
+                return visitor.visitToken(this);
             };
             LargeScannerToken.prototype.syntaxTreeText = function (text) {
                 var result = text || TypeScript.syntaxTree(this).text;
@@ -20426,8 +20444,8 @@ var TypeScript;
     (function (Syntax) {
         Syntax._nextSyntaxID = 1;
         function childIndex(parent, child) {
-            for (var i = 0, n = TypeScript.childCount(parent); i < n; i++) {
-                var current = TypeScript.childAt(parent, i);
+            for (var i = 0, n = parent.childCount(); i < n; i++) {
+                var current = parent.childAt(i);
                 if (current === child) {
                     return i;
                 }
@@ -20436,8 +20454,8 @@ var TypeScript;
         }
         Syntax.childIndex = childIndex;
         function nodeHasSkippedOrMissingTokens(node) {
-            for (var i = 0; i < TypeScript.childCount(node); i++) {
-                var child = TypeScript.childAt(node, i);
+            for (var i = 0; i < node.childCount(); i++) {
+                var child = node.childAt(i);
                 if (TypeScript.isToken(child)) {
                     var token = child;
                     if (token.hasSkippedToken() || (TypeScript.width(token) === 0 && token.kind() !== 10 /* EndOfFileToken */)) {
@@ -20658,35 +20676,6 @@ var TypeScript;
         return (kind === 1 /* List */ || kind === 2 /* SeparatedList */) && element.length === 0;
     }
     TypeScript.isShared = isShared;
-    function childCount(element) {
-        var kind = element.kind();
-        if (kind === 1 /* List */) {
-            return element.length;
-        }
-        else if (kind === 2 /* SeparatedList */) {
-            return element.length + element.separators.length;
-        }
-        else if (kind >= TypeScript.SyntaxKind.FirstToken && kind <= TypeScript.SyntaxKind.LastToken) {
-            return 0;
-        }
-        else {
-            return TypeScript.nodeMetadata[kind].length;
-        }
-    }
-    TypeScript.childCount = childCount;
-    function childAt(element, index) {
-        var kind = element.kind();
-        if (kind === 1 /* List */) {
-            return element[index];
-        }
-        else if (kind === 2 /* SeparatedList */) {
-            return (index % 2 === 0) ? element[index / 2] : element.separators[(index - 1) / 2];
-        }
-        else {
-            return element[TypeScript.nodeMetadata[element.kind()][index]];
-        }
-    }
-    TypeScript.childAt = childAt;
     function syntaxTree(element) {
         if (element) {
             TypeScript.Debug.assert(!isShared(element));
@@ -20790,8 +20779,8 @@ var TypeScript;
         if (isShared(element)) {
             throw TypeScript.Errors.invalidOperation();
         }
-        for (var i = 0, n = childCount(element); i < n; i++) {
-            var child = childAt(element, i);
+        for (var i = 0, n = element.childCount(); i < n; i++) {
+            var child = element.childAt(i);
             if (child) {
                 var childFullWidth = fullWidth(child);
                 if (childFullWidth > 0) {
@@ -20876,8 +20865,8 @@ var TypeScript;
                 elements.push(element.fullText(text));
             }
             else {
-                for (var i = 0, n = childCount(element); i < n; i++) {
-                    collectTextElements(childAt(element, i), elements, text);
+                for (var i = 0, n = element.childCount(); i < n; i++) {
+                    collectTextElements(element.childAt(i), elements, text);
                 }
             }
         }
@@ -20907,36 +20896,10 @@ var TypeScript;
             if (isTokenKind(kind)) {
                 return fullWidth(element) > 0 || element.kind() === 10 /* EndOfFileToken */ ? element : undefined;
             }
-            if (kind === 1 /* List */) {
-                var array = element;
-                for (var i = 0, n = array.length; i < n; i++) {
-                    var token = firstToken(array[i]);
-                    if (token) {
-                        return token;
-                    }
-                }
-            }
-            else if (kind === 2 /* SeparatedList */) {
-                var array = element;
-                var separators = array.separators;
-                for (var i = 0, n = array.length + separators.length; i < n; i++) {
-                    var token = firstToken(i % 2 === 0 ? array[i / 2] : separators[(i - 1) / 2]);
-                    if (token) {
-                        return token;
-                    }
-                }
-            }
-            else {
-                var metadata = TypeScript.nodeMetadata[kind];
-                for (var i = 0, n = metadata.length; i < n; i++) {
-                    var child = element[metadata[i]];
-                    var token = firstToken(child);
-                    if (token) {
-                        return token;
-                    }
-                }
-                if (element.kind() === 120 /* SourceUnit */) {
-                    return element.endOfFileToken;
+            for (var i = 0, n = element.childCount(); i < n; i++) {
+                var token = firstToken(element.childAt(i));
+                if (token) {
+                    return token;
                 }
             }
         }
@@ -20950,8 +20913,8 @@ var TypeScript;
         if (element.kind() === 120 /* SourceUnit */) {
             return element.endOfFileToken;
         }
-        for (var i = childCount(element) - 1; i >= 0; i--) {
-            var child = childAt(element, i);
+        for (var i = element.childCount() - 1; i >= 0; i--) {
+            var child = element.childAt(i);
             if (child) {
                 var token = lastToken(child);
                 if (token) {
@@ -21003,11 +20966,11 @@ var TypeScript;
         return info;
     }
     function computeData(element) {
-        var slotCount = childCount(element);
+        var slotCount = element.childCount();
         var fullWidth = 0;
         var isIncrementallyUnusable = slotCount === 0;
         for (var i = 0, n = slotCount; i < n; i++) {
-            var child = childAt(element, i);
+            var child = element.childAt(i);
             if (child) {
                 fullWidth += TypeScript.fullWidth(child);
                 isIncrementallyUnusable = isIncrementallyUnusable || TypeScript.isIncrementallyUnusable(child);
@@ -21089,6 +21052,17 @@ var TypeScript;
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
 (function (TypeScript) {
+    function separatedListChildCount(list) {
+        return list.length + list.separators.length;
+    }
+    TypeScript.separatedListChildCount = separatedListChildCount;
+    function separatedListChildAt(list, index) {
+        return index % 2 === 0 ? list[index >> 1] : list.separators[index >> 1];
+    }
+    TypeScript.separatedListChildAt = separatedListChildAt;
+})(TypeScript || (TypeScript = {}));
+var TypeScript;
+(function (TypeScript) {
     var Syntax;
     (function (Syntax) {
         var _emptyList = [];
@@ -21099,6 +21073,17 @@ var TypeScript;
         }
         Array.prototype.kind = function () {
             return this.separators === undefined ? 1 /* List */ : 2 /* SeparatedList */;
+        };
+        Array.prototype.childCount = function () {
+            return this.separators ? TypeScript.separatedListChildCount(this) : this.length;
+        };
+        Array.prototype.childAt = function (index) {
+            if (this.separators) {
+                return index % 2 === 0 ? this[index >> 1] : this.separators[index >> 1];
+            }
+            else {
+                return this[index];
+            }
         };
         Array.prototype.separatorCount = function () {
             assertEmptyLists();
@@ -21160,15 +21145,20 @@ var TypeScript;
             }
         }
         SyntaxNode.prototype.kind = function () {
-            return this.__kind;
+            throw TypeScript.Errors.abstract();
+        };
+        SyntaxNode.prototype.childCount = function () {
+            throw TypeScript.Errors.abstract();
+        };
+        SyntaxNode.prototype.childAt = function (index) {
+            throw TypeScript.Errors.abstract();
+        };
+        SyntaxNode.prototype.accept = function (visitor) {
+            throw TypeScript.Errors.abstract();
         };
         return SyntaxNode;
     })();
     TypeScript.SyntaxNode = SyntaxNode;
-})(TypeScript || (TypeScript = {}));
-var TypeScript;
-(function (TypeScript) {
-    TypeScript.nodeMetadata = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], ["moduleElements", "endOfFileToken"], ["left", "dotToken", "right"], ["openBraceToken", "typeMembers", "closeBraceToken"], ["typeParameterList", "parameterList", "equalsGreaterThanToken", "type"], ["type", "openBracketToken", "closeBracketToken"], ["newKeyword", "typeParameterList", "parameterList", "equalsGreaterThanToken", "type"], ["name", "typeArgumentList"], ["typeOfKeyword", "name"], ["openBracketToken", "types", "closeBracketToken"], ["left", "barToken", "right"], ["openParenToken", "type", "closeParenToken"], ["modifiers", "interfaceKeyword", "identifier", "typeParameterList", "heritageClauses", "body"], ["modifiers", "functionKeyword", "identifier", "callSignature", "block", "semicolonToken"], ["modifiers", "moduleKeyword", "name", "stringLiteral", "openBraceToken", "moduleElements", "closeBraceToken"], ["modifiers", "classKeyword", "identifier", "typeParameterList", "heritageClauses", "openBraceToken", "classElements", "closeBraceToken"], ["modifiers", "enumKeyword", "identifier", "openBraceToken", "enumElements", "closeBraceToken"], ["modifiers", "importKeyword", "identifier", "equalsToken", "moduleReference", "semicolonToken"], ["exportKeyword", "equalsToken", "identifier", "semicolonToken"], ["modifiers", "propertyName", "callSignature", "block", "semicolonToken"], ["modifiers", "variableDeclarator", "semicolonToken"], ["modifiers", "constructorKeyword", "callSignature", "block", "semicolonToken"], ["modifiers", "indexSignature", "semicolonToken"], ["modifiers", "getKeyword", "propertyName", "callSignature", "block"], ["modifiers", "setKeyword", "propertyName", "callSignature", "block"], ["propertyName", "questionToken", "typeAnnotation"], ["typeParameterList", "parameterList", "typeAnnotation"], ["newKeyword", "callSignature"], ["openBracketToken", "parameters", "closeBracketToken", "typeAnnotation"], ["propertyName", "questionToken", "callSignature"], ["openBraceToken", "statements", "closeBraceToken"], ["ifKeyword", "openParenToken", "condition", "closeParenToken", "statement", "elseClause"], ["modifiers", "variableDeclaration", "semicolonToken"], ["expression", "semicolonToken"], ["returnKeyword", "expression", "semicolonToken"], ["switchKeyword", "openParenToken", "expression", "closeParenToken", "openBraceToken", "switchClauses", "closeBraceToken"], ["breakKeyword", "identifier", "semicolonToken"], ["continueKeyword", "identifier", "semicolonToken"], ["forKeyword", "openParenToken", "variableDeclaration", "initializer", "firstSemicolonToken", "condition", "secondSemicolonToken", "incrementor", "closeParenToken", "statement"], ["forKeyword", "openParenToken", "variableDeclaration", "left", "inKeyword", "expression", "closeParenToken", "statement"], ["semicolonToken"], ["throwKeyword", "expression", "semicolonToken"], ["whileKeyword", "openParenToken", "condition", "closeParenToken", "statement"], ["tryKeyword", "block", "catchClause", "finallyClause"], ["identifier", "colonToken", "statement"], ["doKeyword", "statement", "whileKeyword", "openParenToken", "condition", "closeParenToken", "semicolonToken"], ["debuggerKeyword", "semicolonToken"], ["withKeyword", "openParenToken", "condition", "closeParenToken", "statement"], ["operatorToken", "operand"], ["deleteKeyword", "expression"], ["typeOfKeyword", "expression"], ["voidKeyword", "expression"], ["condition", "questionToken", "whenTrue", "colonToken", "whenFalse"], ["left", "operatorToken", "right"], ["operand", "operatorToken"], ["expression", "dotToken", "name"], ["expression", "argumentList"], ["openBracketToken", "expressions", "closeBracketToken"], ["openBraceToken", "propertyAssignments", "closeBraceToken"], ["newKeyword", "expression", "argumentList"], ["openParenToken", "expression", "closeParenToken"], ["callSignature", "equalsGreaterThanToken", "block", "expression"], ["parameter", "equalsGreaterThanToken", "block", "expression"], ["lessThanToken", "type", "greaterThanToken", "expression"], ["expression", "openBracketToken", "argumentExpression", "closeBracketToken"], ["functionKeyword", "identifier", "callSignature", "block"], [], ["varKeyword", "variableDeclarators"], ["propertyName", "typeAnnotation", "equalsValueClause"], ["typeArgumentList", "openParenToken", "arguments", "closeParenToken"], ["openParenToken", "parameters", "closeParenToken"], ["lessThanToken", "typeArguments", "greaterThanToken"], ["lessThanToken", "typeParameters", "greaterThanToken"], ["extendsOrImplementsKeyword", "typeNames"], ["equalsToken", "value"], ["caseKeyword", "expression", "colonToken", "statements"], ["defaultKeyword", "colonToken", "statements"], ["elseKeyword", "statement"], ["catchKeyword", "openParenToken", "identifier", "typeAnnotation", "closeParenToken", "block"], ["finallyKeyword", "block"], ["identifier", "constraint"], ["extendsKeyword", "typeOrExpression"], ["propertyName", "colonToken", "expression"], ["propertyName", "callSignature", "block"], ["dotDotDotToken", "modifiers", "identifier", "questionToken", "typeAnnotation", "equalsValueClause"], ["propertyName", "equalsValueClause"], ["colonToken", "type"], ["requireKeyword", "openParenToken", "stringLiteral", "closeParenToken"], ["moduleName"],];
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
 (function (TypeScript) {
@@ -21350,6 +21340,15 @@ var TypeScript;
             EmptyToken.prototype.kind = function () {
                 return this._kind;
             };
+            EmptyToken.prototype.childCount = function () {
+                return 0;
+            };
+            EmptyToken.prototype.childAt = function (index) {
+                throw TypeScript.Errors.invalidOperation();
+            };
+            EmptyToken.prototype.accept = function (visitor) {
+                return visitor.visitToken(this);
+            };
             EmptyToken.prototype.clone = function () {
                 return new EmptyToken(this.kind());
             };
@@ -21374,14 +21373,14 @@ var TypeScript;
                         TypeScript.Debug.assert(current.kind() === 120 /* SourceUnit */, "We had a node without a parent that was not the root node!");
                         return undefined;
                     }
-                    for (var i = 0, n = TypeScript.childCount(parent); i < n; i++) {
-                        if (TypeScript.childAt(parent, i) === current) {
+                    for (var i = 0, n = parent.childCount(); i < n; i++) {
+                        if (parent.childAt(i) === current) {
                             break;
                         }
                     }
                     TypeScript.Debug.assert(i !== n, "Could not find current element in parent's child list!");
                     for (var j = i - 1; j >= 0; j--) {
-                        var sibling = TypeScript.childAt(parent, j);
+                        var sibling = parent.childAt(j);
                         if (sibling && TypeScript.fullWidth(sibling) > 0) {
                             return sibling;
                         }
@@ -21448,6 +21447,15 @@ var TypeScript;
             RealizedToken.prototype.kind = function () {
                 return this._kind;
             };
+            RealizedToken.prototype.childCount = function () {
+                return 0;
+            };
+            RealizedToken.prototype.childAt = function (index) {
+                throw TypeScript.Errors.invalidOperation();
+            };
+            RealizedToken.prototype.accept = function (visitor) {
+                return visitor.visitToken(this);
+            };
             RealizedToken.prototype.clone = function () {
                 return new RealizedToken(this._fullStart, this.kind(), this._isKeywordConvertedToIdentifier, this._leadingTrivia, this._text, this._trailingTrivia);
             };
@@ -21507,6 +21515,15 @@ var TypeScript;
             };
             ConvertedKeywordToken.prototype.setFullStart = function (fullStart) {
                 this.underlyingToken.setFullStart(fullStart);
+            };
+            ConvertedKeywordToken.prototype.childCount = function () {
+                return 0;
+            };
+            ConvertedKeywordToken.prototype.childAt = function (index) {
+                throw TypeScript.Errors.invalidOperation();
+            };
+            ConvertedKeywordToken.prototype.accept = function (visitor) {
+                return visitor.visitToken(this);
             };
             ConvertedKeywordToken.prototype.fullStart = function () {
                 return this.underlyingToken.fullStart();
@@ -22142,188 +22159,7 @@ var TypeScript;
         if (element === undefined) {
             return undefined;
         }
-        if (TypeScript.isToken(element)) {
-            return visitor.visitToken(element);
-        }
-        switch (element.kind()) {
-            case 120 /* SourceUnit */:
-                return visitor.visitSourceUnit(element);
-            case 121 /* QualifiedName */:
-                return visitor.visitQualifiedName(element);
-            case 122 /* ObjectType */:
-                return visitor.visitObjectType(element);
-            case 123 /* FunctionType */:
-                return visitor.visitFunctionType(element);
-            case 124 /* ArrayType */:
-                return visitor.visitArrayType(element);
-            case 125 /* ConstructorType */:
-                return visitor.visitConstructorType(element);
-            case 126 /* GenericType */:
-                return visitor.visitGenericType(element);
-            case 127 /* TypeQuery */:
-                return visitor.visitTypeQuery(element);
-            case 128 /* TupleType */:
-                return visitor.visitTupleType(element);
-            case 129 /* UnionType */:
-                return visitor.visitUnionType(element);
-            case 130 /* ParenthesizedType */:
-                return visitor.visitParenthesizedType(element);
-            case 131 /* InterfaceDeclaration */:
-                return visitor.visitInterfaceDeclaration(element);
-            case 132 /* FunctionDeclaration */:
-                return visitor.visitFunctionDeclaration(element);
-            case 133 /* ModuleDeclaration */:
-                return visitor.visitModuleDeclaration(element);
-            case 134 /* ClassDeclaration */:
-                return visitor.visitClassDeclaration(element);
-            case 135 /* EnumDeclaration */:
-                return visitor.visitEnumDeclaration(element);
-            case 136 /* ImportDeclaration */:
-                return visitor.visitImportDeclaration(element);
-            case 137 /* ExportAssignment */:
-                return visitor.visitExportAssignment(element);
-            case 138 /* MemberFunctionDeclaration */:
-                return visitor.visitMemberFunctionDeclaration(element);
-            case 139 /* MemberVariableDeclaration */:
-                return visitor.visitMemberVariableDeclaration(element);
-            case 140 /* ConstructorDeclaration */:
-                return visitor.visitConstructorDeclaration(element);
-            case 141 /* IndexMemberDeclaration */:
-                return visitor.visitIndexMemberDeclaration(element);
-            case 142 /* GetAccessor */:
-                return visitor.visitGetAccessor(element);
-            case 143 /* SetAccessor */:
-                return visitor.visitSetAccessor(element);
-            case 144 /* PropertySignature */:
-                return visitor.visitPropertySignature(element);
-            case 145 /* CallSignature */:
-                return visitor.visitCallSignature(element);
-            case 146 /* ConstructSignature */:
-                return visitor.visitConstructSignature(element);
-            case 147 /* IndexSignature */:
-                return visitor.visitIndexSignature(element);
-            case 148 /* MethodSignature */:
-                return visitor.visitMethodSignature(element);
-            case 149 /* Block */:
-                return visitor.visitBlock(element);
-            case 150 /* IfStatement */:
-                return visitor.visitIfStatement(element);
-            case 151 /* VariableStatement */:
-                return visitor.visitVariableStatement(element);
-            case 152 /* ExpressionStatement */:
-                return visitor.visitExpressionStatement(element);
-            case 153 /* ReturnStatement */:
-                return visitor.visitReturnStatement(element);
-            case 154 /* SwitchStatement */:
-                return visitor.visitSwitchStatement(element);
-            case 155 /* BreakStatement */:
-                return visitor.visitBreakStatement(element);
-            case 156 /* ContinueStatement */:
-                return visitor.visitContinueStatement(element);
-            case 157 /* ForStatement */:
-                return visitor.visitForStatement(element);
-            case 158 /* ForInStatement */:
-                return visitor.visitForInStatement(element);
-            case 159 /* EmptyStatement */:
-                return visitor.visitEmptyStatement(element);
-            case 160 /* ThrowStatement */:
-                return visitor.visitThrowStatement(element);
-            case 161 /* WhileStatement */:
-                return visitor.visitWhileStatement(element);
-            case 162 /* TryStatement */:
-                return visitor.visitTryStatement(element);
-            case 163 /* LabeledStatement */:
-                return visitor.visitLabeledStatement(element);
-            case 164 /* DoStatement */:
-                return visitor.visitDoStatement(element);
-            case 165 /* DebuggerStatement */:
-                return visitor.visitDebuggerStatement(element);
-            case 166 /* WithStatement */:
-                return visitor.visitWithStatement(element);
-            case 167 /* PrefixUnaryExpression */:
-                return visitor.visitPrefixUnaryExpression(element);
-            case 168 /* DeleteExpression */:
-                return visitor.visitDeleteExpression(element);
-            case 169 /* TypeOfExpression */:
-                return visitor.visitTypeOfExpression(element);
-            case 170 /* VoidExpression */:
-                return visitor.visitVoidExpression(element);
-            case 171 /* ConditionalExpression */:
-                return visitor.visitConditionalExpression(element);
-            case 172 /* BinaryExpression */:
-                return visitor.visitBinaryExpression(element);
-            case 173 /* PostfixUnaryExpression */:
-                return visitor.visitPostfixUnaryExpression(element);
-            case 174 /* MemberAccessExpression */:
-                return visitor.visitMemberAccessExpression(element);
-            case 175 /* InvocationExpression */:
-                return visitor.visitInvocationExpression(element);
-            case 176 /* ArrayLiteralExpression */:
-                return visitor.visitArrayLiteralExpression(element);
-            case 177 /* ObjectLiteralExpression */:
-                return visitor.visitObjectLiteralExpression(element);
-            case 178 /* ObjectCreationExpression */:
-                return visitor.visitObjectCreationExpression(element);
-            case 179 /* ParenthesizedExpression */:
-                return visitor.visitParenthesizedExpression(element);
-            case 180 /* ParenthesizedArrowFunctionExpression */:
-                return visitor.visitParenthesizedArrowFunctionExpression(element);
-            case 181 /* SimpleArrowFunctionExpression */:
-                return visitor.visitSimpleArrowFunctionExpression(element);
-            case 182 /* CastExpression */:
-                return visitor.visitCastExpression(element);
-            case 183 /* ElementAccessExpression */:
-                return visitor.visitElementAccessExpression(element);
-            case 184 /* FunctionExpression */:
-                return visitor.visitFunctionExpression(element);
-            case 185 /* OmittedExpression */:
-                return visitor.visitOmittedExpression(element);
-            case 186 /* VariableDeclaration */:
-                return visitor.visitVariableDeclaration(element);
-            case 187 /* VariableDeclarator */:
-                return visitor.visitVariableDeclarator(element);
-            case 188 /* ArgumentList */:
-                return visitor.visitArgumentList(element);
-            case 189 /* ParameterList */:
-                return visitor.visitParameterList(element);
-            case 190 /* TypeArgumentList */:
-                return visitor.visitTypeArgumentList(element);
-            case 191 /* TypeParameterList */:
-                return visitor.visitTypeParameterList(element);
-            case 192 /* HeritageClause */:
-                return visitor.visitHeritageClause(element);
-            case 193 /* EqualsValueClause */:
-                return visitor.visitEqualsValueClause(element);
-            case 194 /* CaseSwitchClause */:
-                return visitor.visitCaseSwitchClause(element);
-            case 195 /* DefaultSwitchClause */:
-                return visitor.visitDefaultSwitchClause(element);
-            case 196 /* ElseClause */:
-                return visitor.visitElseClause(element);
-            case 197 /* CatchClause */:
-                return visitor.visitCatchClause(element);
-            case 198 /* FinallyClause */:
-                return visitor.visitFinallyClause(element);
-            case 199 /* TypeParameter */:
-                return visitor.visitTypeParameter(element);
-            case 200 /* Constraint */:
-                return visitor.visitConstraint(element);
-            case 201 /* SimplePropertyAssignment */:
-                return visitor.visitSimplePropertyAssignment(element);
-            case 202 /* FunctionPropertyAssignment */:
-                return visitor.visitFunctionPropertyAssignment(element);
-            case 203 /* Parameter */:
-                return visitor.visitParameter(element);
-            case 204 /* EnumElement */:
-                return visitor.visitEnumElement(element);
-            case 205 /* TypeAnnotation */:
-                return visitor.visitTypeAnnotation(element);
-            case 206 /* ExternalModuleReference */:
-                return visitor.visitExternalModuleReference(element);
-            case 207 /* ModuleNameModuleReference */:
-                return visitor.visitModuleNameModuleReference(element);
-        }
-        throw TypeScript.Errors.invalidOperation();
+        return element.accept(visitor);
     }
     TypeScript.visitNodeOrToken = visitNodeOrToken;
 })(TypeScript || (TypeScript = {}));
@@ -22340,15 +22176,25 @@ var TypeScript;
             }
             this.visitToken(token);
         };
+        SyntaxWalker.prototype.visitOptionalNode = function (node) {
+            if (node === undefined) {
+                return;
+            }
+            node.accept(this);
+        };
         SyntaxWalker.prototype.visitList = function (list) {
             for (var i = 0, n = list.length; i < n; i++) {
-                TypeScript.visitNodeOrToken(this, list[i]);
+                list[i].accept(this);
             }
         };
         SyntaxWalker.prototype.visitSeparatedList = function (list) {
-            for (var i = 0, n = TypeScript.childCount(list); i < n; i++) {
-                var item = TypeScript.childAt(list, i);
-                TypeScript.visitNodeOrToken(this, item);
+            for (var i = 0, n = TypeScript.separatedListChildCount(list); i < n; i++) {
+                if (i % 2 === 0) {
+                    list[i >> 1].accept(this);
+                }
+                else {
+                    this.visitToken(list.separators[i >> 1]);
+                }
             }
         };
         SyntaxWalker.prototype.visitSourceUnit = function (node) {
@@ -22356,7 +22202,7 @@ var TypeScript;
             this.visitToken(node.endOfFileToken);
         };
         SyntaxWalker.prototype.visitQualifiedName = function (node) {
-            TypeScript.visitNodeOrToken(this, node.left);
+            node.left.accept(this);
             this.visitToken(node.dotToken);
             this.visitToken(node.right);
         };
@@ -22366,30 +22212,30 @@ var TypeScript;
             this.visitToken(node.closeBraceToken);
         };
         SyntaxWalker.prototype.visitFunctionType = function (node) {
-            TypeScript.visitNodeOrToken(this, node.typeParameterList);
-            TypeScript.visitNodeOrToken(this, node.parameterList);
+            this.visitOptionalNode(node.typeParameterList);
+            node.parameterList.accept(this);
             this.visitToken(node.equalsGreaterThanToken);
-            TypeScript.visitNodeOrToken(this, node.type);
+            node.type.accept(this);
         };
         SyntaxWalker.prototype.visitArrayType = function (node) {
-            TypeScript.visitNodeOrToken(this, node.type);
+            node.type.accept(this);
             this.visitToken(node.openBracketToken);
             this.visitToken(node.closeBracketToken);
         };
         SyntaxWalker.prototype.visitConstructorType = function (node) {
             this.visitToken(node.newKeyword);
-            TypeScript.visitNodeOrToken(this, node.typeParameterList);
-            TypeScript.visitNodeOrToken(this, node.parameterList);
+            this.visitOptionalNode(node.typeParameterList);
+            node.parameterList.accept(this);
             this.visitToken(node.equalsGreaterThanToken);
-            TypeScript.visitNodeOrToken(this, node.type);
+            node.type.accept(this);
         };
         SyntaxWalker.prototype.visitGenericType = function (node) {
-            TypeScript.visitNodeOrToken(this, node.name);
-            TypeScript.visitNodeOrToken(this, node.typeArgumentList);
+            node.name.accept(this);
+            node.typeArgumentList.accept(this);
         };
         SyntaxWalker.prototype.visitTypeQuery = function (node) {
             this.visitToken(node.typeOfKeyword);
-            TypeScript.visitNodeOrToken(this, node.name);
+            node.name.accept(this);
         };
         SyntaxWalker.prototype.visitTupleType = function (node) {
             this.visitToken(node.openBracketToken);
@@ -22397,29 +22243,29 @@ var TypeScript;
             this.visitToken(node.closeBracketToken);
         };
         SyntaxWalker.prototype.visitUnionType = function (node) {
-            TypeScript.visitNodeOrToken(this, node.left);
+            node.left.accept(this);
             this.visitToken(node.barToken);
-            TypeScript.visitNodeOrToken(this, node.right);
+            node.right.accept(this);
         };
         SyntaxWalker.prototype.visitParenthesizedType = function (node) {
             this.visitToken(node.openParenToken);
-            TypeScript.visitNodeOrToken(this, node.type);
+            node.type.accept(this);
             this.visitToken(node.closeParenToken);
         };
         SyntaxWalker.prototype.visitInterfaceDeclaration = function (node) {
             this.visitList(node.modifiers);
             this.visitToken(node.interfaceKeyword);
             this.visitToken(node.identifier);
-            TypeScript.visitNodeOrToken(this, node.typeParameterList);
+            this.visitOptionalNode(node.typeParameterList);
             this.visitList(node.heritageClauses);
-            TypeScript.visitNodeOrToken(this, node.body);
+            node.body.accept(this);
         };
         SyntaxWalker.prototype.visitFunctionDeclaration = function (node) {
             this.visitList(node.modifiers);
             this.visitToken(node.functionKeyword);
             this.visitToken(node.identifier);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-            TypeScript.visitNodeOrToken(this, node.block);
+            node.callSignature.accept(this);
+            this.visitOptionalNode(node.block);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitModuleDeclaration = function (node) {
@@ -22435,7 +22281,7 @@ var TypeScript;
             this.visitList(node.modifiers);
             this.visitToken(node.classKeyword);
             this.visitToken(node.identifier);
-            TypeScript.visitNodeOrToken(this, node.typeParameterList);
+            this.visitOptionalNode(node.typeParameterList);
             this.visitList(node.heritageClauses);
             this.visitToken(node.openBraceToken);
             this.visitList(node.classElements);
@@ -22454,7 +22300,7 @@ var TypeScript;
             this.visitToken(node.importKeyword);
             this.visitToken(node.identifier);
             this.visitToken(node.equalsToken);
-            TypeScript.visitNodeOrToken(this, node.moduleReference);
+            node.moduleReference.accept(this);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitExportAssignment = function (node) {
@@ -22466,65 +22312,65 @@ var TypeScript;
         SyntaxWalker.prototype.visitMemberFunctionDeclaration = function (node) {
             this.visitList(node.modifiers);
             this.visitToken(node.propertyName);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-            TypeScript.visitNodeOrToken(this, node.block);
+            node.callSignature.accept(this);
+            this.visitOptionalNode(node.block);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitMemberVariableDeclaration = function (node) {
             this.visitList(node.modifiers);
-            TypeScript.visitNodeOrToken(this, node.variableDeclarator);
+            node.variableDeclarator.accept(this);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitConstructorDeclaration = function (node) {
             this.visitList(node.modifiers);
             this.visitToken(node.constructorKeyword);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-            TypeScript.visitNodeOrToken(this, node.block);
+            node.callSignature.accept(this);
+            this.visitOptionalNode(node.block);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitIndexMemberDeclaration = function (node) {
             this.visitList(node.modifiers);
-            TypeScript.visitNodeOrToken(this, node.indexSignature);
+            node.indexSignature.accept(this);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitGetAccessor = function (node) {
             this.visitList(node.modifiers);
             this.visitToken(node.getKeyword);
             this.visitToken(node.propertyName);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-            TypeScript.visitNodeOrToken(this, node.block);
+            node.callSignature.accept(this);
+            node.block.accept(this);
         };
         SyntaxWalker.prototype.visitSetAccessor = function (node) {
             this.visitList(node.modifiers);
             this.visitToken(node.setKeyword);
             this.visitToken(node.propertyName);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-            TypeScript.visitNodeOrToken(this, node.block);
+            node.callSignature.accept(this);
+            node.block.accept(this);
         };
         SyntaxWalker.prototype.visitPropertySignature = function (node) {
             this.visitToken(node.propertyName);
             this.visitOptionalToken(node.questionToken);
-            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+            this.visitOptionalNode(node.typeAnnotation);
         };
         SyntaxWalker.prototype.visitCallSignature = function (node) {
-            TypeScript.visitNodeOrToken(this, node.typeParameterList);
-            TypeScript.visitNodeOrToken(this, node.parameterList);
-            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+            this.visitOptionalNode(node.typeParameterList);
+            node.parameterList.accept(this);
+            this.visitOptionalNode(node.typeAnnotation);
         };
         SyntaxWalker.prototype.visitConstructSignature = function (node) {
             this.visitToken(node.newKeyword);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
+            node.callSignature.accept(this);
         };
         SyntaxWalker.prototype.visitIndexSignature = function (node) {
             this.visitToken(node.openBracketToken);
             this.visitSeparatedList(node.parameters);
             this.visitToken(node.closeBracketToken);
-            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+            this.visitOptionalNode(node.typeAnnotation);
         };
         SyntaxWalker.prototype.visitMethodSignature = function (node) {
             this.visitToken(node.propertyName);
             this.visitOptionalToken(node.questionToken);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
+            node.callSignature.accept(this);
         };
         SyntaxWalker.prototype.visitBlock = function (node) {
             this.visitToken(node.openBraceToken);
@@ -22534,18 +22380,18 @@ var TypeScript;
         SyntaxWalker.prototype.visitIfStatement = function (node) {
             this.visitToken(node.ifKeyword);
             this.visitToken(node.openParenToken);
-            TypeScript.visitNodeOrToken(this, node.condition);
+            node.condition.accept(this);
             this.visitToken(node.closeParenToken);
-            TypeScript.visitNodeOrToken(this, node.statement);
-            TypeScript.visitNodeOrToken(this, node.elseClause);
+            node.statement.accept(this);
+            this.visitOptionalNode(node.elseClause);
         };
         SyntaxWalker.prototype.visitVariableStatement = function (node) {
             this.visitList(node.modifiers);
-            TypeScript.visitNodeOrToken(this, node.variableDeclaration);
+            node.variableDeclaration.accept(this);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitExpressionStatement = function (node) {
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitReturnStatement = function (node) {
@@ -22556,7 +22402,7 @@ var TypeScript;
         SyntaxWalker.prototype.visitSwitchStatement = function (node) {
             this.visitToken(node.switchKeyword);
             this.visitToken(node.openParenToken);
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
             this.visitToken(node.closeParenToken);
             this.visitToken(node.openBraceToken);
             this.visitList(node.switchClauses);
@@ -22575,57 +22421,57 @@ var TypeScript;
         SyntaxWalker.prototype.visitForStatement = function (node) {
             this.visitToken(node.forKeyword);
             this.visitToken(node.openParenToken);
-            TypeScript.visitNodeOrToken(this, node.variableDeclaration);
+            this.visitOptionalNode(node.variableDeclaration);
             TypeScript.visitNodeOrToken(this, node.initializer);
             this.visitToken(node.firstSemicolonToken);
             TypeScript.visitNodeOrToken(this, node.condition);
             this.visitToken(node.secondSemicolonToken);
             TypeScript.visitNodeOrToken(this, node.incrementor);
             this.visitToken(node.closeParenToken);
-            TypeScript.visitNodeOrToken(this, node.statement);
+            node.statement.accept(this);
         };
         SyntaxWalker.prototype.visitForInStatement = function (node) {
             this.visitToken(node.forKeyword);
             this.visitToken(node.openParenToken);
-            TypeScript.visitNodeOrToken(this, node.variableDeclaration);
+            this.visitOptionalNode(node.variableDeclaration);
             TypeScript.visitNodeOrToken(this, node.left);
             this.visitToken(node.inKeyword);
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
             this.visitToken(node.closeParenToken);
-            TypeScript.visitNodeOrToken(this, node.statement);
+            node.statement.accept(this);
         };
         SyntaxWalker.prototype.visitEmptyStatement = function (node) {
             this.visitToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitThrowStatement = function (node) {
             this.visitToken(node.throwKeyword);
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitWhileStatement = function (node) {
             this.visitToken(node.whileKeyword);
             this.visitToken(node.openParenToken);
-            TypeScript.visitNodeOrToken(this, node.condition);
+            node.condition.accept(this);
             this.visitToken(node.closeParenToken);
-            TypeScript.visitNodeOrToken(this, node.statement);
+            node.statement.accept(this);
         };
         SyntaxWalker.prototype.visitTryStatement = function (node) {
             this.visitToken(node.tryKeyword);
-            TypeScript.visitNodeOrToken(this, node.block);
-            TypeScript.visitNodeOrToken(this, node.catchClause);
-            TypeScript.visitNodeOrToken(this, node.finallyClause);
+            node.block.accept(this);
+            this.visitOptionalNode(node.catchClause);
+            this.visitOptionalNode(node.finallyClause);
         };
         SyntaxWalker.prototype.visitLabeledStatement = function (node) {
             this.visitToken(node.identifier);
             this.visitToken(node.colonToken);
-            TypeScript.visitNodeOrToken(this, node.statement);
+            node.statement.accept(this);
         };
         SyntaxWalker.prototype.visitDoStatement = function (node) {
             this.visitToken(node.doKeyword);
-            TypeScript.visitNodeOrToken(this, node.statement);
+            node.statement.accept(this);
             this.visitToken(node.whileKeyword);
             this.visitToken(node.openParenToken);
-            TypeScript.visitNodeOrToken(this, node.condition);
+            node.condition.accept(this);
             this.visitToken(node.closeParenToken);
             this.visitOptionalToken(node.semicolonToken);
         };
@@ -22636,50 +22482,50 @@ var TypeScript;
         SyntaxWalker.prototype.visitWithStatement = function (node) {
             this.visitToken(node.withKeyword);
             this.visitToken(node.openParenToken);
-            TypeScript.visitNodeOrToken(this, node.condition);
+            node.condition.accept(this);
             this.visitToken(node.closeParenToken);
-            TypeScript.visitNodeOrToken(this, node.statement);
+            node.statement.accept(this);
         };
         SyntaxWalker.prototype.visitPrefixUnaryExpression = function (node) {
             this.visitToken(node.operatorToken);
-            TypeScript.visitNodeOrToken(this, node.operand);
+            node.operand.accept(this);
         };
         SyntaxWalker.prototype.visitDeleteExpression = function (node) {
             this.visitToken(node.deleteKeyword);
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
         };
         SyntaxWalker.prototype.visitTypeOfExpression = function (node) {
             this.visitToken(node.typeOfKeyword);
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
         };
         SyntaxWalker.prototype.visitVoidExpression = function (node) {
             this.visitToken(node.voidKeyword);
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
         };
         SyntaxWalker.prototype.visitConditionalExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.condition);
+            node.condition.accept(this);
             this.visitToken(node.questionToken);
-            TypeScript.visitNodeOrToken(this, node.whenTrue);
+            node.whenTrue.accept(this);
             this.visitToken(node.colonToken);
-            TypeScript.visitNodeOrToken(this, node.whenFalse);
+            node.whenFalse.accept(this);
         };
         SyntaxWalker.prototype.visitBinaryExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.left);
+            node.left.accept(this);
             this.visitToken(node.operatorToken);
-            TypeScript.visitNodeOrToken(this, node.right);
+            node.right.accept(this);
         };
         SyntaxWalker.prototype.visitPostfixUnaryExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.operand);
+            node.operand.accept(this);
             this.visitToken(node.operatorToken);
         };
         SyntaxWalker.prototype.visitMemberAccessExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
             this.visitToken(node.dotToken);
             this.visitToken(node.name);
         };
         SyntaxWalker.prototype.visitInvocationExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.expression);
-            TypeScript.visitNodeOrToken(this, node.argumentList);
+            node.expression.accept(this);
+            node.argumentList.accept(this);
         };
         SyntaxWalker.prototype.visitArrayLiteralExpression = function (node) {
             this.visitToken(node.openBracketToken);
@@ -22693,43 +22539,43 @@ var TypeScript;
         };
         SyntaxWalker.prototype.visitObjectCreationExpression = function (node) {
             this.visitToken(node.newKeyword);
-            TypeScript.visitNodeOrToken(this, node.expression);
-            TypeScript.visitNodeOrToken(this, node.argumentList);
+            node.expression.accept(this);
+            this.visitOptionalNode(node.argumentList);
         };
         SyntaxWalker.prototype.visitParenthesizedExpression = function (node) {
             this.visitToken(node.openParenToken);
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
             this.visitToken(node.closeParenToken);
         };
         SyntaxWalker.prototype.visitParenthesizedArrowFunctionExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.callSignature);
+            node.callSignature.accept(this);
             this.visitToken(node.equalsGreaterThanToken);
-            TypeScript.visitNodeOrToken(this, node.block);
+            this.visitOptionalNode(node.block);
             TypeScript.visitNodeOrToken(this, node.expression);
         };
         SyntaxWalker.prototype.visitSimpleArrowFunctionExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.parameter);
+            node.parameter.accept(this);
             this.visitToken(node.equalsGreaterThanToken);
-            TypeScript.visitNodeOrToken(this, node.block);
+            this.visitOptionalNode(node.block);
             TypeScript.visitNodeOrToken(this, node.expression);
         };
         SyntaxWalker.prototype.visitCastExpression = function (node) {
             this.visitToken(node.lessThanToken);
-            TypeScript.visitNodeOrToken(this, node.type);
+            node.type.accept(this);
             this.visitToken(node.greaterThanToken);
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
         };
         SyntaxWalker.prototype.visitElementAccessExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
             this.visitToken(node.openBracketToken);
-            TypeScript.visitNodeOrToken(this, node.argumentExpression);
+            node.argumentExpression.accept(this);
             this.visitToken(node.closeBracketToken);
         };
         SyntaxWalker.prototype.visitFunctionExpression = function (node) {
             this.visitToken(node.functionKeyword);
             this.visitOptionalToken(node.identifier);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-            TypeScript.visitNodeOrToken(this, node.block);
+            node.callSignature.accept(this);
+            node.block.accept(this);
         };
         SyntaxWalker.prototype.visitOmittedExpression = function (node) {
         };
@@ -22739,11 +22585,11 @@ var TypeScript;
         };
         SyntaxWalker.prototype.visitVariableDeclarator = function (node) {
             this.visitToken(node.propertyName);
-            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
-            TypeScript.visitNodeOrToken(this, node.equalsValueClause);
+            this.visitOptionalNode(node.typeAnnotation);
+            this.visitOptionalNode(node.equalsValueClause);
         };
         SyntaxWalker.prototype.visitArgumentList = function (node) {
-            TypeScript.visitNodeOrToken(this, node.typeArgumentList);
+            this.visitOptionalNode(node.typeArgumentList);
             this.visitToken(node.openParenToken);
             this.visitSeparatedList(node.arguments);
             this.visitToken(node.closeParenToken);
@@ -22769,11 +22615,11 @@ var TypeScript;
         };
         SyntaxWalker.prototype.visitEqualsValueClause = function (node) {
             this.visitToken(node.equalsToken);
-            TypeScript.visitNodeOrToken(this, node.value);
+            node.value.accept(this);
         };
         SyntaxWalker.prototype.visitCaseSwitchClause = function (node) {
             this.visitToken(node.caseKeyword);
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
             this.visitToken(node.colonToken);
             this.visitList(node.statements);
         };
@@ -22784,53 +22630,53 @@ var TypeScript;
         };
         SyntaxWalker.prototype.visitElseClause = function (node) {
             this.visitToken(node.elseKeyword);
-            TypeScript.visitNodeOrToken(this, node.statement);
+            node.statement.accept(this);
         };
         SyntaxWalker.prototype.visitCatchClause = function (node) {
             this.visitToken(node.catchKeyword);
             this.visitToken(node.openParenToken);
             this.visitToken(node.identifier);
-            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+            this.visitOptionalNode(node.typeAnnotation);
             this.visitToken(node.closeParenToken);
-            TypeScript.visitNodeOrToken(this, node.block);
+            node.block.accept(this);
         };
         SyntaxWalker.prototype.visitFinallyClause = function (node) {
             this.visitToken(node.finallyKeyword);
-            TypeScript.visitNodeOrToken(this, node.block);
+            node.block.accept(this);
         };
         SyntaxWalker.prototype.visitTypeParameter = function (node) {
             this.visitToken(node.identifier);
-            TypeScript.visitNodeOrToken(this, node.constraint);
+            this.visitOptionalNode(node.constraint);
         };
         SyntaxWalker.prototype.visitConstraint = function (node) {
             this.visitToken(node.extendsKeyword);
-            TypeScript.visitNodeOrToken(this, node.typeOrExpression);
+            node.typeOrExpression.accept(this);
         };
         SyntaxWalker.prototype.visitSimplePropertyAssignment = function (node) {
             this.visitToken(node.propertyName);
             this.visitToken(node.colonToken);
-            TypeScript.visitNodeOrToken(this, node.expression);
+            node.expression.accept(this);
         };
         SyntaxWalker.prototype.visitFunctionPropertyAssignment = function (node) {
             this.visitToken(node.propertyName);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-            TypeScript.visitNodeOrToken(this, node.block);
+            node.callSignature.accept(this);
+            node.block.accept(this);
         };
         SyntaxWalker.prototype.visitParameter = function (node) {
             this.visitOptionalToken(node.dotDotDotToken);
             this.visitList(node.modifiers);
             this.visitToken(node.identifier);
             this.visitOptionalToken(node.questionToken);
-            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
-            TypeScript.visitNodeOrToken(this, node.equalsValueClause);
+            this.visitOptionalNode(node.typeAnnotation);
+            this.visitOptionalNode(node.equalsValueClause);
         };
         SyntaxWalker.prototype.visitEnumElement = function (node) {
             this.visitToken(node.propertyName);
-            TypeScript.visitNodeOrToken(this, node.equalsValueClause);
+            this.visitOptionalNode(node.equalsValueClause);
         };
         SyntaxWalker.prototype.visitTypeAnnotation = function (node) {
             this.visitToken(node.colonToken);
-            TypeScript.visitNodeOrToken(this, node.type);
+            node.type.accept(this);
         };
         SyntaxWalker.prototype.visitExternalModuleReference = function (node) {
             this.visitToken(node.requireKeyword);
@@ -22839,7 +22685,7 @@ var TypeScript;
             this.visitToken(node.closeParenToken);
         };
         SyntaxWalker.prototype.visitModuleNameModuleReference = function (node) {
-            TypeScript.visitNodeOrToken(this, node.moduleName);
+            node.moduleName.accept(this);
         };
         return SyntaxWalker;
     })();
@@ -23142,8 +22988,8 @@ var TypeScript;
                 }
                 else if (TypeScript.isSeparatedList(parent)) {
                     var list2 = parent;
-                    for (var i = 0, n = TypeScript.childCount(list2); i < n; i++) {
-                        if (TypeScript.childAt(list2, i) === oldToken) {
+                    for (var i = 0, n = list2.childCount(); i < n; i++) {
+                        if (list2.childAt(i) === oldToken) {
                             if (i % 2 === 0) {
                                 list2[i / 2] = newToken;
                             }
@@ -25590,6 +25436,25 @@ var TypeScript;
                     this.syntaxTree = undefined;
                     this.parent = undefined, this.moduleElements = moduleElements, this.endOfFileToken = endOfFileToken, !TypeScript.isShared(moduleElements) && (moduleElements.parent = this), endOfFileToken.parent = this;
                 }
+                SourceUnitSyntax.prototype.kind = function () {
+                    return 120 /* SourceUnit */;
+                };
+                SourceUnitSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                SourceUnitSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.moduleElements;
+                        case 1:
+                            return this.endOfFileToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                SourceUnitSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitSourceUnit(this);
+                };
                 return SourceUnitSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.SourceUnitSyntax = SourceUnitSyntax;
@@ -25599,6 +25464,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.left = left, this.dotToken = dotToken, this.right = right, left.parent = this, dotToken.parent = this, right.parent = this;
                 }
+                QualifiedNameSyntax.prototype.kind = function () {
+                    return 121 /* QualifiedName */;
+                };
+                QualifiedNameSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                QualifiedNameSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.left;
+                        case 1:
+                            return this.dotToken;
+                        case 2:
+                            return this.right;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                QualifiedNameSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitQualifiedName(this);
+                };
                 return QualifiedNameSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.QualifiedNameSyntax = QualifiedNameSyntax;
@@ -25608,6 +25494,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.openBraceToken = openBraceToken, this.typeMembers = typeMembers, this.closeBraceToken = closeBraceToken, openBraceToken.parent = this, !TypeScript.isShared(typeMembers) && (typeMembers.parent = this), closeBraceToken.parent = this;
                 }
+                ObjectTypeSyntax.prototype.kind = function () {
+                    return 122 /* ObjectType */;
+                };
+                ObjectTypeSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                ObjectTypeSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.openBraceToken;
+                        case 1:
+                            return this.typeMembers;
+                        case 2:
+                            return this.closeBraceToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ObjectTypeSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitObjectType(this);
+                };
                 return ObjectTypeSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ObjectTypeSyntax = ObjectTypeSyntax;
@@ -25617,6 +25524,29 @@ var TypeScript;
                     _super.call(this, data);
                     this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
                 }
+                FunctionTypeSyntax.prototype.kind = function () {
+                    return 123 /* FunctionType */;
+                };
+                FunctionTypeSyntax.prototype.childCount = function () {
+                    return 4;
+                };
+                FunctionTypeSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.typeParameterList;
+                        case 1:
+                            return this.parameterList;
+                        case 2:
+                            return this.equalsGreaterThanToken;
+                        case 3:
+                            return this.type;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                FunctionTypeSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitFunctionType(this);
+                };
                 return FunctionTypeSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.FunctionTypeSyntax = FunctionTypeSyntax;
@@ -25626,6 +25556,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.type = type, this.openBracketToken = openBracketToken, this.closeBracketToken = closeBracketToken, type.parent = this, openBracketToken.parent = this, closeBracketToken.parent = this;
                 }
+                ArrayTypeSyntax.prototype.kind = function () {
+                    return 124 /* ArrayType */;
+                };
+                ArrayTypeSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                ArrayTypeSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.type;
+                        case 1:
+                            return this.openBracketToken;
+                        case 2:
+                            return this.closeBracketToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ArrayTypeSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitArrayType(this);
+                };
                 return ArrayTypeSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ArrayTypeSyntax = ArrayTypeSyntax;
@@ -25635,6 +25586,31 @@ var TypeScript;
                     _super.call(this, data);
                     this.newKeyword = newKeyword, this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type, newKeyword.parent = this, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
                 }
+                ConstructorTypeSyntax.prototype.kind = function () {
+                    return 125 /* ConstructorType */;
+                };
+                ConstructorTypeSyntax.prototype.childCount = function () {
+                    return 5;
+                };
+                ConstructorTypeSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.newKeyword;
+                        case 1:
+                            return this.typeParameterList;
+                        case 2:
+                            return this.parameterList;
+                        case 3:
+                            return this.equalsGreaterThanToken;
+                        case 4:
+                            return this.type;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ConstructorTypeSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitConstructorType(this);
+                };
                 return ConstructorTypeSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ConstructorTypeSyntax = ConstructorTypeSyntax;
@@ -25644,6 +25620,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.name = name, this.typeArgumentList = typeArgumentList, name.parent = this, typeArgumentList.parent = this;
                 }
+                GenericTypeSyntax.prototype.kind = function () {
+                    return 126 /* GenericType */;
+                };
+                GenericTypeSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                GenericTypeSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.name;
+                        case 1:
+                            return this.typeArgumentList;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                GenericTypeSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitGenericType(this);
+                };
                 return GenericTypeSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.GenericTypeSyntax = GenericTypeSyntax;
@@ -25653,6 +25648,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.typeOfKeyword = typeOfKeyword, this.name = name, typeOfKeyword.parent = this, name.parent = this;
                 }
+                TypeQuerySyntax.prototype.kind = function () {
+                    return 127 /* TypeQuery */;
+                };
+                TypeQuerySyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                TypeQuerySyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.typeOfKeyword;
+                        case 1:
+                            return this.name;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                TypeQuerySyntax.prototype.accept = function (visitor) {
+                    return visitor.visitTypeQuery(this);
+                };
                 return TypeQuerySyntax;
             })(TypeScript.SyntaxNode);
             Concrete.TypeQuerySyntax = TypeQuerySyntax;
@@ -25662,6 +25676,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.openBracketToken = openBracketToken, this.types = types, this.closeBracketToken = closeBracketToken, openBracketToken.parent = this, !TypeScript.isShared(types) && (types.parent = this), closeBracketToken.parent = this;
                 }
+                TupleTypeSyntax.prototype.kind = function () {
+                    return 128 /* TupleType */;
+                };
+                TupleTypeSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                TupleTypeSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.openBracketToken;
+                        case 1:
+                            return this.types;
+                        case 2:
+                            return this.closeBracketToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                TupleTypeSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitTupleType(this);
+                };
                 return TupleTypeSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.TupleTypeSyntax = TupleTypeSyntax;
@@ -25671,6 +25706,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.left = left, this.barToken = barToken, this.right = right, left.parent = this, barToken.parent = this, right.parent = this;
                 }
+                UnionTypeSyntax.prototype.kind = function () {
+                    return 129 /* UnionType */;
+                };
+                UnionTypeSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                UnionTypeSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.left;
+                        case 1:
+                            return this.barToken;
+                        case 2:
+                            return this.right;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                UnionTypeSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitUnionType(this);
+                };
                 return UnionTypeSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.UnionTypeSyntax = UnionTypeSyntax;
@@ -25680,6 +25736,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.openParenToken = openParenToken, this.type = type, this.closeParenToken = closeParenToken, openParenToken.parent = this, type.parent = this, closeParenToken.parent = this;
                 }
+                ParenthesizedTypeSyntax.prototype.kind = function () {
+                    return 130 /* ParenthesizedType */;
+                };
+                ParenthesizedTypeSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                ParenthesizedTypeSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.openParenToken;
+                        case 1:
+                            return this.type;
+                        case 2:
+                            return this.closeParenToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ParenthesizedTypeSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitParenthesizedType(this);
+                };
                 return ParenthesizedTypeSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ParenthesizedTypeSyntax = ParenthesizedTypeSyntax;
@@ -25689,6 +25766,33 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.interfaceKeyword = interfaceKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.body = body, !TypeScript.isShared(modifiers) && (modifiers.parent = this), interfaceKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), !TypeScript.isShared(heritageClauses) && (heritageClauses.parent = this), body.parent = this;
                 }
+                InterfaceDeclarationSyntax.prototype.kind = function () {
+                    return 131 /* InterfaceDeclaration */;
+                };
+                InterfaceDeclarationSyntax.prototype.childCount = function () {
+                    return 6;
+                };
+                InterfaceDeclarationSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.interfaceKeyword;
+                        case 2:
+                            return this.identifier;
+                        case 3:
+                            return this.typeParameterList;
+                        case 4:
+                            return this.heritageClauses;
+                        case 5:
+                            return this.body;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                InterfaceDeclarationSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitInterfaceDeclaration(this);
+                };
                 return InterfaceDeclarationSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.InterfaceDeclarationSyntax = InterfaceDeclarationSyntax;
@@ -25698,6 +25802,33 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken, !TypeScript.isShared(modifiers) && (modifiers.parent = this), functionKeyword.parent = this, identifier.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
                 }
+                FunctionDeclarationSyntax.prototype.kind = function () {
+                    return 132 /* FunctionDeclaration */;
+                };
+                FunctionDeclarationSyntax.prototype.childCount = function () {
+                    return 6;
+                };
+                FunctionDeclarationSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.functionKeyword;
+                        case 2:
+                            return this.identifier;
+                        case 3:
+                            return this.callSignature;
+                        case 4:
+                            return this.block;
+                        case 5:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                FunctionDeclarationSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitFunctionDeclaration(this);
+                };
                 return FunctionDeclarationSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.FunctionDeclarationSyntax = FunctionDeclarationSyntax;
@@ -25707,6 +25838,35 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.moduleKeyword = moduleKeyword, this.name = name, this.stringLiteral = stringLiteral, this.openBraceToken = openBraceToken, this.moduleElements = moduleElements, this.closeBraceToken = closeBraceToken, !TypeScript.isShared(modifiers) && (modifiers.parent = this), moduleKeyword.parent = this, name && (name.parent = this), stringLiteral && (stringLiteral.parent = this), openBraceToken.parent = this, !TypeScript.isShared(moduleElements) && (moduleElements.parent = this), closeBraceToken.parent = this;
                 }
+                ModuleDeclarationSyntax.prototype.kind = function () {
+                    return 133 /* ModuleDeclaration */;
+                };
+                ModuleDeclarationSyntax.prototype.childCount = function () {
+                    return 7;
+                };
+                ModuleDeclarationSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.moduleKeyword;
+                        case 2:
+                            return this.name;
+                        case 3:
+                            return this.stringLiteral;
+                        case 4:
+                            return this.openBraceToken;
+                        case 5:
+                            return this.moduleElements;
+                        case 6:
+                            return this.closeBraceToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ModuleDeclarationSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitModuleDeclaration(this);
+                };
                 return ModuleDeclarationSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ModuleDeclarationSyntax = ModuleDeclarationSyntax;
@@ -25716,6 +25876,37 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.classKeyword = classKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.openBraceToken = openBraceToken, this.classElements = classElements, this.closeBraceToken = closeBraceToken, !TypeScript.isShared(modifiers) && (modifiers.parent = this), classKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), !TypeScript.isShared(heritageClauses) && (heritageClauses.parent = this), openBraceToken.parent = this, !TypeScript.isShared(classElements) && (classElements.parent = this), closeBraceToken.parent = this;
                 }
+                ClassDeclarationSyntax.prototype.kind = function () {
+                    return 134 /* ClassDeclaration */;
+                };
+                ClassDeclarationSyntax.prototype.childCount = function () {
+                    return 8;
+                };
+                ClassDeclarationSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.classKeyword;
+                        case 2:
+                            return this.identifier;
+                        case 3:
+                            return this.typeParameterList;
+                        case 4:
+                            return this.heritageClauses;
+                        case 5:
+                            return this.openBraceToken;
+                        case 6:
+                            return this.classElements;
+                        case 7:
+                            return this.closeBraceToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ClassDeclarationSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitClassDeclaration(this);
+                };
                 return ClassDeclarationSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ClassDeclarationSyntax = ClassDeclarationSyntax;
@@ -25725,6 +25916,33 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.enumKeyword = enumKeyword, this.identifier = identifier, this.openBraceToken = openBraceToken, this.enumElements = enumElements, this.closeBraceToken = closeBraceToken, !TypeScript.isShared(modifiers) && (modifiers.parent = this), enumKeyword.parent = this, identifier.parent = this, openBraceToken.parent = this, !TypeScript.isShared(enumElements) && (enumElements.parent = this), closeBraceToken.parent = this;
                 }
+                EnumDeclarationSyntax.prototype.kind = function () {
+                    return 135 /* EnumDeclaration */;
+                };
+                EnumDeclarationSyntax.prototype.childCount = function () {
+                    return 6;
+                };
+                EnumDeclarationSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.enumKeyword;
+                        case 2:
+                            return this.identifier;
+                        case 3:
+                            return this.openBraceToken;
+                        case 4:
+                            return this.enumElements;
+                        case 5:
+                            return this.closeBraceToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                EnumDeclarationSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitEnumDeclaration(this);
+                };
                 return EnumDeclarationSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.EnumDeclarationSyntax = EnumDeclarationSyntax;
@@ -25734,6 +25952,33 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.importKeyword = importKeyword, this.identifier = identifier, this.equalsToken = equalsToken, this.moduleReference = moduleReference, this.semicolonToken = semicolonToken, !TypeScript.isShared(modifiers) && (modifiers.parent = this), importKeyword.parent = this, identifier.parent = this, equalsToken.parent = this, moduleReference.parent = this, semicolonToken && (semicolonToken.parent = this);
                 }
+                ImportDeclarationSyntax.prototype.kind = function () {
+                    return 136 /* ImportDeclaration */;
+                };
+                ImportDeclarationSyntax.prototype.childCount = function () {
+                    return 6;
+                };
+                ImportDeclarationSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.importKeyword;
+                        case 2:
+                            return this.identifier;
+                        case 3:
+                            return this.equalsToken;
+                        case 4:
+                            return this.moduleReference;
+                        case 5:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ImportDeclarationSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitImportDeclaration(this);
+                };
                 return ImportDeclarationSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ImportDeclarationSyntax = ImportDeclarationSyntax;
@@ -25743,6 +25988,29 @@ var TypeScript;
                     _super.call(this, data);
                     this.exportKeyword = exportKeyword, this.equalsToken = equalsToken, this.identifier = identifier, this.semicolonToken = semicolonToken, exportKeyword.parent = this, equalsToken.parent = this, identifier.parent = this, semicolonToken && (semicolonToken.parent = this);
                 }
+                ExportAssignmentSyntax.prototype.kind = function () {
+                    return 137 /* ExportAssignment */;
+                };
+                ExportAssignmentSyntax.prototype.childCount = function () {
+                    return 4;
+                };
+                ExportAssignmentSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.exportKeyword;
+                        case 1:
+                            return this.equalsToken;
+                        case 2:
+                            return this.identifier;
+                        case 3:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ExportAssignmentSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitExportAssignment(this);
+                };
                 return ExportAssignmentSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ExportAssignmentSyntax = ExportAssignmentSyntax;
@@ -25752,6 +26020,31 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken, !TypeScript.isShared(modifiers) && (modifiers.parent = this), propertyName.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
                 }
+                MemberFunctionDeclarationSyntax.prototype.kind = function () {
+                    return 138 /* MemberFunctionDeclaration */;
+                };
+                MemberFunctionDeclarationSyntax.prototype.childCount = function () {
+                    return 5;
+                };
+                MemberFunctionDeclarationSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.propertyName;
+                        case 2:
+                            return this.callSignature;
+                        case 3:
+                            return this.block;
+                        case 4:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                MemberFunctionDeclarationSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitMemberFunctionDeclaration(this);
+                };
                 return MemberFunctionDeclarationSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.MemberFunctionDeclarationSyntax = MemberFunctionDeclarationSyntax;
@@ -25761,6 +26054,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.variableDeclarator = variableDeclarator, this.semicolonToken = semicolonToken, !TypeScript.isShared(modifiers) && (modifiers.parent = this), variableDeclarator.parent = this, semicolonToken && (semicolonToken.parent = this);
                 }
+                MemberVariableDeclarationSyntax.prototype.kind = function () {
+                    return 139 /* MemberVariableDeclaration */;
+                };
+                MemberVariableDeclarationSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                MemberVariableDeclarationSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.variableDeclarator;
+                        case 2:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                MemberVariableDeclarationSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitMemberVariableDeclaration(this);
+                };
                 return MemberVariableDeclarationSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.MemberVariableDeclarationSyntax = MemberVariableDeclarationSyntax;
@@ -25770,6 +26084,31 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.constructorKeyword = constructorKeyword, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken, !TypeScript.isShared(modifiers) && (modifiers.parent = this), constructorKeyword.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
                 }
+                ConstructorDeclarationSyntax.prototype.kind = function () {
+                    return 140 /* ConstructorDeclaration */;
+                };
+                ConstructorDeclarationSyntax.prototype.childCount = function () {
+                    return 5;
+                };
+                ConstructorDeclarationSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.constructorKeyword;
+                        case 2:
+                            return this.callSignature;
+                        case 3:
+                            return this.block;
+                        case 4:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ConstructorDeclarationSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitConstructorDeclaration(this);
+                };
                 return ConstructorDeclarationSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ConstructorDeclarationSyntax = ConstructorDeclarationSyntax;
@@ -25779,6 +26118,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.indexSignature = indexSignature, this.semicolonToken = semicolonToken, !TypeScript.isShared(modifiers) && (modifiers.parent = this), indexSignature.parent = this, semicolonToken && (semicolonToken.parent = this);
                 }
+                IndexMemberDeclarationSyntax.prototype.kind = function () {
+                    return 141 /* IndexMemberDeclaration */;
+                };
+                IndexMemberDeclarationSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                IndexMemberDeclarationSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.indexSignature;
+                        case 2:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                IndexMemberDeclarationSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitIndexMemberDeclaration(this);
+                };
                 return IndexMemberDeclarationSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.IndexMemberDeclarationSyntax = IndexMemberDeclarationSyntax;
@@ -25788,6 +26148,31 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.getKeyword = getKeyword, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, !TypeScript.isShared(modifiers) && (modifiers.parent = this), getKeyword.parent = this, propertyName.parent = this, callSignature.parent = this, block.parent = this;
                 }
+                GetAccessorSyntax.prototype.kind = function () {
+                    return 142 /* GetAccessor */;
+                };
+                GetAccessorSyntax.prototype.childCount = function () {
+                    return 5;
+                };
+                GetAccessorSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.getKeyword;
+                        case 2:
+                            return this.propertyName;
+                        case 3:
+                            return this.callSignature;
+                        case 4:
+                            return this.block;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                GetAccessorSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitGetAccessor(this);
+                };
                 return GetAccessorSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.GetAccessorSyntax = GetAccessorSyntax;
@@ -25797,6 +26182,31 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.setKeyword = setKeyword, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, !TypeScript.isShared(modifiers) && (modifiers.parent = this), setKeyword.parent = this, propertyName.parent = this, callSignature.parent = this, block.parent = this;
                 }
+                SetAccessorSyntax.prototype.kind = function () {
+                    return 143 /* SetAccessor */;
+                };
+                SetAccessorSyntax.prototype.childCount = function () {
+                    return 5;
+                };
+                SetAccessorSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.setKeyword;
+                        case 2:
+                            return this.propertyName;
+                        case 3:
+                            return this.callSignature;
+                        case 4:
+                            return this.block;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                SetAccessorSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitSetAccessor(this);
+                };
                 return SetAccessorSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.SetAccessorSyntax = SetAccessorSyntax;
@@ -25806,6 +26216,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.propertyName = propertyName, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation, propertyName.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this);
                 }
+                PropertySignatureSyntax.prototype.kind = function () {
+                    return 144 /* PropertySignature */;
+                };
+                PropertySignatureSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                PropertySignatureSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.propertyName;
+                        case 1:
+                            return this.questionToken;
+                        case 2:
+                            return this.typeAnnotation;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                PropertySignatureSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitPropertySignature(this);
+                };
                 return PropertySignatureSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.PropertySignatureSyntax = PropertySignatureSyntax;
@@ -25815,6 +26246,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.typeAnnotation = typeAnnotation, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, typeAnnotation && (typeAnnotation.parent = this);
                 }
+                CallSignatureSyntax.prototype.kind = function () {
+                    return 145 /* CallSignature */;
+                };
+                CallSignatureSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                CallSignatureSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.typeParameterList;
+                        case 1:
+                            return this.parameterList;
+                        case 2:
+                            return this.typeAnnotation;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                CallSignatureSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitCallSignature(this);
+                };
                 return CallSignatureSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.CallSignatureSyntax = CallSignatureSyntax;
@@ -25824,6 +26276,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.newKeyword = newKeyword, this.callSignature = callSignature, newKeyword.parent = this, callSignature.parent = this;
                 }
+                ConstructSignatureSyntax.prototype.kind = function () {
+                    return 146 /* ConstructSignature */;
+                };
+                ConstructSignatureSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                ConstructSignatureSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.newKeyword;
+                        case 1:
+                            return this.callSignature;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ConstructSignatureSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitConstructSignature(this);
+                };
                 return ConstructSignatureSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ConstructSignatureSyntax = ConstructSignatureSyntax;
@@ -25833,6 +26304,29 @@ var TypeScript;
                     _super.call(this, data);
                     this.openBracketToken = openBracketToken, this.parameters = parameters, this.closeBracketToken = closeBracketToken, this.typeAnnotation = typeAnnotation, openBracketToken.parent = this, !TypeScript.isShared(parameters) && (parameters.parent = this), closeBracketToken.parent = this, typeAnnotation && (typeAnnotation.parent = this);
                 }
+                IndexSignatureSyntax.prototype.kind = function () {
+                    return 147 /* IndexSignature */;
+                };
+                IndexSignatureSyntax.prototype.childCount = function () {
+                    return 4;
+                };
+                IndexSignatureSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.openBracketToken;
+                        case 1:
+                            return this.parameters;
+                        case 2:
+                            return this.closeBracketToken;
+                        case 3:
+                            return this.typeAnnotation;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                IndexSignatureSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitIndexSignature(this);
+                };
                 return IndexSignatureSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.IndexSignatureSyntax = IndexSignatureSyntax;
@@ -25842,6 +26336,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.propertyName = propertyName, this.questionToken = questionToken, this.callSignature = callSignature, propertyName.parent = this, questionToken && (questionToken.parent = this), callSignature.parent = this;
                 }
+                MethodSignatureSyntax.prototype.kind = function () {
+                    return 148 /* MethodSignature */;
+                };
+                MethodSignatureSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                MethodSignatureSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.propertyName;
+                        case 1:
+                            return this.questionToken;
+                        case 2:
+                            return this.callSignature;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                MethodSignatureSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitMethodSignature(this);
+                };
                 return MethodSignatureSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.MethodSignatureSyntax = MethodSignatureSyntax;
@@ -25851,6 +26366,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.openBraceToken = openBraceToken, this.statements = statements, this.closeBraceToken = closeBraceToken, openBraceToken.parent = this, !TypeScript.isShared(statements) && (statements.parent = this), closeBraceToken.parent = this;
                 }
+                BlockSyntax.prototype.kind = function () {
+                    return 149 /* Block */;
+                };
+                BlockSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                BlockSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.openBraceToken;
+                        case 1:
+                            return this.statements;
+                        case 2:
+                            return this.closeBraceToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                BlockSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitBlock(this);
+                };
                 return BlockSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.BlockSyntax = BlockSyntax;
@@ -25860,6 +26396,33 @@ var TypeScript;
                     _super.call(this, data);
                     this.ifKeyword = ifKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, this.elseClause = elseClause, ifKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this, elseClause && (elseClause.parent = this);
                 }
+                IfStatementSyntax.prototype.kind = function () {
+                    return 150 /* IfStatement */;
+                };
+                IfStatementSyntax.prototype.childCount = function () {
+                    return 6;
+                };
+                IfStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.ifKeyword;
+                        case 1:
+                            return this.openParenToken;
+                        case 2:
+                            return this.condition;
+                        case 3:
+                            return this.closeParenToken;
+                        case 4:
+                            return this.statement;
+                        case 5:
+                            return this.elseClause;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                IfStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitIfStatement(this);
+                };
                 return IfStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.IfStatementSyntax = IfStatementSyntax;
@@ -25869,6 +26432,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.modifiers = modifiers, this.variableDeclaration = variableDeclaration, this.semicolonToken = semicolonToken, !TypeScript.isShared(modifiers) && (modifiers.parent = this), variableDeclaration.parent = this, semicolonToken && (semicolonToken.parent = this);
                 }
+                VariableStatementSyntax.prototype.kind = function () {
+                    return 151 /* VariableStatement */;
+                };
+                VariableStatementSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                VariableStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.modifiers;
+                        case 1:
+                            return this.variableDeclaration;
+                        case 2:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                VariableStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitVariableStatement(this);
+                };
                 return VariableStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.VariableStatementSyntax = VariableStatementSyntax;
@@ -25878,6 +26462,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.expression = expression, this.semicolonToken = semicolonToken, expression.parent = this, semicolonToken && (semicolonToken.parent = this);
                 }
+                ExpressionStatementSyntax.prototype.kind = function () {
+                    return 152 /* ExpressionStatement */;
+                };
+                ExpressionStatementSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                ExpressionStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.expression;
+                        case 1:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ExpressionStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitExpressionStatement(this);
+                };
                 return ExpressionStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ExpressionStatementSyntax = ExpressionStatementSyntax;
@@ -25887,6 +26490,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.returnKeyword = returnKeyword, this.expression = expression, this.semicolonToken = semicolonToken, returnKeyword.parent = this, expression && (expression.parent = this), semicolonToken && (semicolonToken.parent = this);
                 }
+                ReturnStatementSyntax.prototype.kind = function () {
+                    return 153 /* ReturnStatement */;
+                };
+                ReturnStatementSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                ReturnStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.returnKeyword;
+                        case 1:
+                            return this.expression;
+                        case 2:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ReturnStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitReturnStatement(this);
+                };
                 return ReturnStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ReturnStatementSyntax = ReturnStatementSyntax;
@@ -25896,6 +26520,35 @@ var TypeScript;
                     _super.call(this, data);
                     this.switchKeyword = switchKeyword, this.openParenToken = openParenToken, this.expression = expression, this.closeParenToken = closeParenToken, this.openBraceToken = openBraceToken, this.switchClauses = switchClauses, this.closeBraceToken = closeBraceToken, switchKeyword.parent = this, openParenToken.parent = this, expression.parent = this, closeParenToken.parent = this, openBraceToken.parent = this, !TypeScript.isShared(switchClauses) && (switchClauses.parent = this), closeBraceToken.parent = this;
                 }
+                SwitchStatementSyntax.prototype.kind = function () {
+                    return 154 /* SwitchStatement */;
+                };
+                SwitchStatementSyntax.prototype.childCount = function () {
+                    return 7;
+                };
+                SwitchStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.switchKeyword;
+                        case 1:
+                            return this.openParenToken;
+                        case 2:
+                            return this.expression;
+                        case 3:
+                            return this.closeParenToken;
+                        case 4:
+                            return this.openBraceToken;
+                        case 5:
+                            return this.switchClauses;
+                        case 6:
+                            return this.closeBraceToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                SwitchStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitSwitchStatement(this);
+                };
                 return SwitchStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.SwitchStatementSyntax = SwitchStatementSyntax;
@@ -25905,6 +26558,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.breakKeyword = breakKeyword, this.identifier = identifier, this.semicolonToken = semicolonToken, breakKeyword.parent = this, identifier && (identifier.parent = this), semicolonToken && (semicolonToken.parent = this);
                 }
+                BreakStatementSyntax.prototype.kind = function () {
+                    return 155 /* BreakStatement */;
+                };
+                BreakStatementSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                BreakStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.breakKeyword;
+                        case 1:
+                            return this.identifier;
+                        case 2:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                BreakStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitBreakStatement(this);
+                };
                 return BreakStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.BreakStatementSyntax = BreakStatementSyntax;
@@ -25914,6 +26588,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.continueKeyword = continueKeyword, this.identifier = identifier, this.semicolonToken = semicolonToken, continueKeyword.parent = this, identifier && (identifier.parent = this), semicolonToken && (semicolonToken.parent = this);
                 }
+                ContinueStatementSyntax.prototype.kind = function () {
+                    return 156 /* ContinueStatement */;
+                };
+                ContinueStatementSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                ContinueStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.continueKeyword;
+                        case 1:
+                            return this.identifier;
+                        case 2:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ContinueStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitContinueStatement(this);
+                };
                 return ContinueStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ContinueStatementSyntax = ContinueStatementSyntax;
@@ -25923,6 +26618,41 @@ var TypeScript;
                     _super.call(this, data);
                     this.forKeyword = forKeyword, this.openParenToken = openParenToken, this.variableDeclaration = variableDeclaration, this.initializer = initializer, this.firstSemicolonToken = firstSemicolonToken, this.condition = condition, this.secondSemicolonToken = secondSemicolonToken, this.incrementor = incrementor, this.closeParenToken = closeParenToken, this.statement = statement, forKeyword.parent = this, openParenToken.parent = this, variableDeclaration && (variableDeclaration.parent = this), initializer && (initializer.parent = this), firstSemicolonToken.parent = this, condition && (condition.parent = this), secondSemicolonToken.parent = this, incrementor && (incrementor.parent = this), closeParenToken.parent = this, statement.parent = this;
                 }
+                ForStatementSyntax.prototype.kind = function () {
+                    return 157 /* ForStatement */;
+                };
+                ForStatementSyntax.prototype.childCount = function () {
+                    return 10;
+                };
+                ForStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.forKeyword;
+                        case 1:
+                            return this.openParenToken;
+                        case 2:
+                            return this.variableDeclaration;
+                        case 3:
+                            return this.initializer;
+                        case 4:
+                            return this.firstSemicolonToken;
+                        case 5:
+                            return this.condition;
+                        case 6:
+                            return this.secondSemicolonToken;
+                        case 7:
+                            return this.incrementor;
+                        case 8:
+                            return this.closeParenToken;
+                        case 9:
+                            return this.statement;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ForStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitForStatement(this);
+                };
                 return ForStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ForStatementSyntax = ForStatementSyntax;
@@ -25932,6 +26662,37 @@ var TypeScript;
                     _super.call(this, data);
                     this.forKeyword = forKeyword, this.openParenToken = openParenToken, this.variableDeclaration = variableDeclaration, this.left = left, this.inKeyword = inKeyword, this.expression = expression, this.closeParenToken = closeParenToken, this.statement = statement, forKeyword.parent = this, openParenToken.parent = this, variableDeclaration && (variableDeclaration.parent = this), left && (left.parent = this), inKeyword.parent = this, expression.parent = this, closeParenToken.parent = this, statement.parent = this;
                 }
+                ForInStatementSyntax.prototype.kind = function () {
+                    return 158 /* ForInStatement */;
+                };
+                ForInStatementSyntax.prototype.childCount = function () {
+                    return 8;
+                };
+                ForInStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.forKeyword;
+                        case 1:
+                            return this.openParenToken;
+                        case 2:
+                            return this.variableDeclaration;
+                        case 3:
+                            return this.left;
+                        case 4:
+                            return this.inKeyword;
+                        case 5:
+                            return this.expression;
+                        case 6:
+                            return this.closeParenToken;
+                        case 7:
+                            return this.statement;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ForInStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitForInStatement(this);
+                };
                 return ForInStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ForInStatementSyntax = ForInStatementSyntax;
@@ -25941,6 +26702,23 @@ var TypeScript;
                     _super.call(this, data);
                     this.semicolonToken = semicolonToken, semicolonToken.parent = this;
                 }
+                EmptyStatementSyntax.prototype.kind = function () {
+                    return 159 /* EmptyStatement */;
+                };
+                EmptyStatementSyntax.prototype.childCount = function () {
+                    return 1;
+                };
+                EmptyStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                EmptyStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitEmptyStatement(this);
+                };
                 return EmptyStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.EmptyStatementSyntax = EmptyStatementSyntax;
@@ -25950,6 +26728,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.throwKeyword = throwKeyword, this.expression = expression, this.semicolonToken = semicolonToken, throwKeyword.parent = this, expression.parent = this, semicolonToken && (semicolonToken.parent = this);
                 }
+                ThrowStatementSyntax.prototype.kind = function () {
+                    return 160 /* ThrowStatement */;
+                };
+                ThrowStatementSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                ThrowStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.throwKeyword;
+                        case 1:
+                            return this.expression;
+                        case 2:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ThrowStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitThrowStatement(this);
+                };
                 return ThrowStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ThrowStatementSyntax = ThrowStatementSyntax;
@@ -25959,6 +26758,31 @@ var TypeScript;
                     _super.call(this, data);
                     this.whileKeyword = whileKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, whileKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
                 }
+                WhileStatementSyntax.prototype.kind = function () {
+                    return 161 /* WhileStatement */;
+                };
+                WhileStatementSyntax.prototype.childCount = function () {
+                    return 5;
+                };
+                WhileStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.whileKeyword;
+                        case 1:
+                            return this.openParenToken;
+                        case 2:
+                            return this.condition;
+                        case 3:
+                            return this.closeParenToken;
+                        case 4:
+                            return this.statement;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                WhileStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitWhileStatement(this);
+                };
                 return WhileStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.WhileStatementSyntax = WhileStatementSyntax;
@@ -25968,6 +26792,29 @@ var TypeScript;
                     _super.call(this, data);
                     this.tryKeyword = tryKeyword, this.block = block, this.catchClause = catchClause, this.finallyClause = finallyClause, tryKeyword.parent = this, block.parent = this, catchClause && (catchClause.parent = this), finallyClause && (finallyClause.parent = this);
                 }
+                TryStatementSyntax.prototype.kind = function () {
+                    return 162 /* TryStatement */;
+                };
+                TryStatementSyntax.prototype.childCount = function () {
+                    return 4;
+                };
+                TryStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.tryKeyword;
+                        case 1:
+                            return this.block;
+                        case 2:
+                            return this.catchClause;
+                        case 3:
+                            return this.finallyClause;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                TryStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitTryStatement(this);
+                };
                 return TryStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.TryStatementSyntax = TryStatementSyntax;
@@ -25977,6 +26824,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.identifier = identifier, this.colonToken = colonToken, this.statement = statement, identifier.parent = this, colonToken.parent = this, statement.parent = this;
                 }
+                LabeledStatementSyntax.prototype.kind = function () {
+                    return 163 /* LabeledStatement */;
+                };
+                LabeledStatementSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                LabeledStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.identifier;
+                        case 1:
+                            return this.colonToken;
+                        case 2:
+                            return this.statement;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                LabeledStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitLabeledStatement(this);
+                };
                 return LabeledStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.LabeledStatementSyntax = LabeledStatementSyntax;
@@ -25986,6 +26854,35 @@ var TypeScript;
                     _super.call(this, data);
                     this.doKeyword = doKeyword, this.statement = statement, this.whileKeyword = whileKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.semicolonToken = semicolonToken, doKeyword.parent = this, statement.parent = this, whileKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, semicolonToken && (semicolonToken.parent = this);
                 }
+                DoStatementSyntax.prototype.kind = function () {
+                    return 164 /* DoStatement */;
+                };
+                DoStatementSyntax.prototype.childCount = function () {
+                    return 7;
+                };
+                DoStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.doKeyword;
+                        case 1:
+                            return this.statement;
+                        case 2:
+                            return this.whileKeyword;
+                        case 3:
+                            return this.openParenToken;
+                        case 4:
+                            return this.condition;
+                        case 5:
+                            return this.closeParenToken;
+                        case 6:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                DoStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitDoStatement(this);
+                };
                 return DoStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.DoStatementSyntax = DoStatementSyntax;
@@ -25995,6 +26892,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.debuggerKeyword = debuggerKeyword, this.semicolonToken = semicolonToken, debuggerKeyword.parent = this, semicolonToken && (semicolonToken.parent = this);
                 }
+                DebuggerStatementSyntax.prototype.kind = function () {
+                    return 165 /* DebuggerStatement */;
+                };
+                DebuggerStatementSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                DebuggerStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.debuggerKeyword;
+                        case 1:
+                            return this.semicolonToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                DebuggerStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitDebuggerStatement(this);
+                };
                 return DebuggerStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.DebuggerStatementSyntax = DebuggerStatementSyntax;
@@ -26004,6 +26920,31 @@ var TypeScript;
                     _super.call(this, data);
                     this.withKeyword = withKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, withKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
                 }
+                WithStatementSyntax.prototype.kind = function () {
+                    return 166 /* WithStatement */;
+                };
+                WithStatementSyntax.prototype.childCount = function () {
+                    return 5;
+                };
+                WithStatementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.withKeyword;
+                        case 1:
+                            return this.openParenToken;
+                        case 2:
+                            return this.condition;
+                        case 3:
+                            return this.closeParenToken;
+                        case 4:
+                            return this.statement;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                WithStatementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitWithStatement(this);
+                };
                 return WithStatementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.WithStatementSyntax = WithStatementSyntax;
@@ -26013,6 +26954,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.operatorToken = operatorToken, this.operand = operand, operatorToken.parent = this, operand.parent = this;
                 }
+                PrefixUnaryExpressionSyntax.prototype.kind = function () {
+                    return 167 /* PrefixUnaryExpression */;
+                };
+                PrefixUnaryExpressionSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                PrefixUnaryExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.operatorToken;
+                        case 1:
+                            return this.operand;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                PrefixUnaryExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitPrefixUnaryExpression(this);
+                };
                 return PrefixUnaryExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.PrefixUnaryExpressionSyntax = PrefixUnaryExpressionSyntax;
@@ -26022,6 +26982,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.deleteKeyword = deleteKeyword, this.expression = expression, deleteKeyword.parent = this, expression.parent = this;
                 }
+                DeleteExpressionSyntax.prototype.kind = function () {
+                    return 168 /* DeleteExpression */;
+                };
+                DeleteExpressionSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                DeleteExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.deleteKeyword;
+                        case 1:
+                            return this.expression;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                DeleteExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitDeleteExpression(this);
+                };
                 return DeleteExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.DeleteExpressionSyntax = DeleteExpressionSyntax;
@@ -26031,6 +27010,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.typeOfKeyword = typeOfKeyword, this.expression = expression, typeOfKeyword.parent = this, expression.parent = this;
                 }
+                TypeOfExpressionSyntax.prototype.kind = function () {
+                    return 169 /* TypeOfExpression */;
+                };
+                TypeOfExpressionSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                TypeOfExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.typeOfKeyword;
+                        case 1:
+                            return this.expression;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                TypeOfExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitTypeOfExpression(this);
+                };
                 return TypeOfExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.TypeOfExpressionSyntax = TypeOfExpressionSyntax;
@@ -26040,6 +27038,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.voidKeyword = voidKeyword, this.expression = expression, voidKeyword.parent = this, expression.parent = this;
                 }
+                VoidExpressionSyntax.prototype.kind = function () {
+                    return 170 /* VoidExpression */;
+                };
+                VoidExpressionSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                VoidExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.voidKeyword;
+                        case 1:
+                            return this.expression;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                VoidExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitVoidExpression(this);
+                };
                 return VoidExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.VoidExpressionSyntax = VoidExpressionSyntax;
@@ -26049,6 +27066,31 @@ var TypeScript;
                     _super.call(this, data);
                     this.condition = condition, this.questionToken = questionToken, this.whenTrue = whenTrue, this.colonToken = colonToken, this.whenFalse = whenFalse, condition.parent = this, questionToken.parent = this, whenTrue.parent = this, colonToken.parent = this, whenFalse.parent = this;
                 }
+                ConditionalExpressionSyntax.prototype.kind = function () {
+                    return 171 /* ConditionalExpression */;
+                };
+                ConditionalExpressionSyntax.prototype.childCount = function () {
+                    return 5;
+                };
+                ConditionalExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.condition;
+                        case 1:
+                            return this.questionToken;
+                        case 2:
+                            return this.whenTrue;
+                        case 3:
+                            return this.colonToken;
+                        case 4:
+                            return this.whenFalse;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ConditionalExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitConditionalExpression(this);
+                };
                 return ConditionalExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ConditionalExpressionSyntax = ConditionalExpressionSyntax;
@@ -26058,6 +27100,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.left = left, this.operatorToken = operatorToken, this.right = right, left.parent = this, operatorToken.parent = this, right.parent = this;
                 }
+                BinaryExpressionSyntax.prototype.kind = function () {
+                    return 172 /* BinaryExpression */;
+                };
+                BinaryExpressionSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                BinaryExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.left;
+                        case 1:
+                            return this.operatorToken;
+                        case 2:
+                            return this.right;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                BinaryExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitBinaryExpression(this);
+                };
                 return BinaryExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.BinaryExpressionSyntax = BinaryExpressionSyntax;
@@ -26067,6 +27130,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.operand = operand, this.operatorToken = operatorToken, operand.parent = this, operatorToken.parent = this;
                 }
+                PostfixUnaryExpressionSyntax.prototype.kind = function () {
+                    return 173 /* PostfixUnaryExpression */;
+                };
+                PostfixUnaryExpressionSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                PostfixUnaryExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.operand;
+                        case 1:
+                            return this.operatorToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                PostfixUnaryExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitPostfixUnaryExpression(this);
+                };
                 return PostfixUnaryExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.PostfixUnaryExpressionSyntax = PostfixUnaryExpressionSyntax;
@@ -26076,6 +27158,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.expression = expression, this.dotToken = dotToken, this.name = name, expression.parent = this, dotToken.parent = this, name.parent = this;
                 }
+                MemberAccessExpressionSyntax.prototype.kind = function () {
+                    return 174 /* MemberAccessExpression */;
+                };
+                MemberAccessExpressionSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                MemberAccessExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.expression;
+                        case 1:
+                            return this.dotToken;
+                        case 2:
+                            return this.name;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                MemberAccessExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitMemberAccessExpression(this);
+                };
                 return MemberAccessExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.MemberAccessExpressionSyntax = MemberAccessExpressionSyntax;
@@ -26085,6 +27188,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.expression = expression, this.argumentList = argumentList, expression.parent = this, argumentList.parent = this;
                 }
+                InvocationExpressionSyntax.prototype.kind = function () {
+                    return 175 /* InvocationExpression */;
+                };
+                InvocationExpressionSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                InvocationExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.expression;
+                        case 1:
+                            return this.argumentList;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                InvocationExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitInvocationExpression(this);
+                };
                 return InvocationExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.InvocationExpressionSyntax = InvocationExpressionSyntax;
@@ -26094,6 +27216,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.openBracketToken = openBracketToken, this.expressions = expressions, this.closeBracketToken = closeBracketToken, openBracketToken.parent = this, !TypeScript.isShared(expressions) && (expressions.parent = this), closeBracketToken.parent = this;
                 }
+                ArrayLiteralExpressionSyntax.prototype.kind = function () {
+                    return 176 /* ArrayLiteralExpression */;
+                };
+                ArrayLiteralExpressionSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                ArrayLiteralExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.openBracketToken;
+                        case 1:
+                            return this.expressions;
+                        case 2:
+                            return this.closeBracketToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ArrayLiteralExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitArrayLiteralExpression(this);
+                };
                 return ArrayLiteralExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ArrayLiteralExpressionSyntax = ArrayLiteralExpressionSyntax;
@@ -26103,6 +27246,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.openBraceToken = openBraceToken, this.propertyAssignments = propertyAssignments, this.closeBraceToken = closeBraceToken, openBraceToken.parent = this, !TypeScript.isShared(propertyAssignments) && (propertyAssignments.parent = this), closeBraceToken.parent = this;
                 }
+                ObjectLiteralExpressionSyntax.prototype.kind = function () {
+                    return 177 /* ObjectLiteralExpression */;
+                };
+                ObjectLiteralExpressionSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                ObjectLiteralExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.openBraceToken;
+                        case 1:
+                            return this.propertyAssignments;
+                        case 2:
+                            return this.closeBraceToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ObjectLiteralExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitObjectLiteralExpression(this);
+                };
                 return ObjectLiteralExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ObjectLiteralExpressionSyntax = ObjectLiteralExpressionSyntax;
@@ -26112,6 +27276,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.newKeyword = newKeyword, this.expression = expression, this.argumentList = argumentList, newKeyword.parent = this, expression.parent = this, argumentList && (argumentList.parent = this);
                 }
+                ObjectCreationExpressionSyntax.prototype.kind = function () {
+                    return 178 /* ObjectCreationExpression */;
+                };
+                ObjectCreationExpressionSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                ObjectCreationExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.newKeyword;
+                        case 1:
+                            return this.expression;
+                        case 2:
+                            return this.argumentList;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ObjectCreationExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitObjectCreationExpression(this);
+                };
                 return ObjectCreationExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ObjectCreationExpressionSyntax = ObjectCreationExpressionSyntax;
@@ -26121,6 +27306,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.openParenToken = openParenToken, this.expression = expression, this.closeParenToken = closeParenToken, openParenToken.parent = this, expression.parent = this, closeParenToken.parent = this;
                 }
+                ParenthesizedExpressionSyntax.prototype.kind = function () {
+                    return 179 /* ParenthesizedExpression */;
+                };
+                ParenthesizedExpressionSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                ParenthesizedExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.openParenToken;
+                        case 1:
+                            return this.expression;
+                        case 2:
+                            return this.closeParenToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ParenthesizedExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitParenthesizedExpression(this);
+                };
                 return ParenthesizedExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ParenthesizedExpressionSyntax = ParenthesizedExpressionSyntax;
@@ -26130,6 +27336,29 @@ var TypeScript;
                     _super.call(this, data);
                     this.callSignature = callSignature, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression, callSignature.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
                 }
+                ParenthesizedArrowFunctionExpressionSyntax.prototype.kind = function () {
+                    return 180 /* ParenthesizedArrowFunctionExpression */;
+                };
+                ParenthesizedArrowFunctionExpressionSyntax.prototype.childCount = function () {
+                    return 4;
+                };
+                ParenthesizedArrowFunctionExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.callSignature;
+                        case 1:
+                            return this.equalsGreaterThanToken;
+                        case 2:
+                            return this.block;
+                        case 3:
+                            return this.expression;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ParenthesizedArrowFunctionExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitParenthesizedArrowFunctionExpression(this);
+                };
                 return ParenthesizedArrowFunctionExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ParenthesizedArrowFunctionExpressionSyntax = ParenthesizedArrowFunctionExpressionSyntax;
@@ -26139,6 +27368,29 @@ var TypeScript;
                     _super.call(this, data);
                     this.parameter = parameter, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression, parameter.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
                 }
+                SimpleArrowFunctionExpressionSyntax.prototype.kind = function () {
+                    return 181 /* SimpleArrowFunctionExpression */;
+                };
+                SimpleArrowFunctionExpressionSyntax.prototype.childCount = function () {
+                    return 4;
+                };
+                SimpleArrowFunctionExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.parameter;
+                        case 1:
+                            return this.equalsGreaterThanToken;
+                        case 2:
+                            return this.block;
+                        case 3:
+                            return this.expression;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                SimpleArrowFunctionExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitSimpleArrowFunctionExpression(this);
+                };
                 return SimpleArrowFunctionExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.SimpleArrowFunctionExpressionSyntax = SimpleArrowFunctionExpressionSyntax;
@@ -26148,6 +27400,29 @@ var TypeScript;
                     _super.call(this, data);
                     this.lessThanToken = lessThanToken, this.type = type, this.greaterThanToken = greaterThanToken, this.expression = expression, lessThanToken.parent = this, type.parent = this, greaterThanToken.parent = this, expression.parent = this;
                 }
+                CastExpressionSyntax.prototype.kind = function () {
+                    return 182 /* CastExpression */;
+                };
+                CastExpressionSyntax.prototype.childCount = function () {
+                    return 4;
+                };
+                CastExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.lessThanToken;
+                        case 1:
+                            return this.type;
+                        case 2:
+                            return this.greaterThanToken;
+                        case 3:
+                            return this.expression;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                CastExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitCastExpression(this);
+                };
                 return CastExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.CastExpressionSyntax = CastExpressionSyntax;
@@ -26157,6 +27432,29 @@ var TypeScript;
                     _super.call(this, data);
                     this.expression = expression, this.openBracketToken = openBracketToken, this.argumentExpression = argumentExpression, this.closeBracketToken = closeBracketToken, expression.parent = this, openBracketToken.parent = this, argumentExpression.parent = this, closeBracketToken.parent = this;
                 }
+                ElementAccessExpressionSyntax.prototype.kind = function () {
+                    return 183 /* ElementAccessExpression */;
+                };
+                ElementAccessExpressionSyntax.prototype.childCount = function () {
+                    return 4;
+                };
+                ElementAccessExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.expression;
+                        case 1:
+                            return this.openBracketToken;
+                        case 2:
+                            return this.argumentExpression;
+                        case 3:
+                            return this.closeBracketToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ElementAccessExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitElementAccessExpression(this);
+                };
                 return ElementAccessExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ElementAccessExpressionSyntax = ElementAccessExpressionSyntax;
@@ -26166,6 +27464,29 @@ var TypeScript;
                     _super.call(this, data);
                     this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block, functionKeyword.parent = this, identifier && (identifier.parent = this), callSignature.parent = this, block.parent = this;
                 }
+                FunctionExpressionSyntax.prototype.kind = function () {
+                    return 184 /* FunctionExpression */;
+                };
+                FunctionExpressionSyntax.prototype.childCount = function () {
+                    return 4;
+                };
+                FunctionExpressionSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.functionKeyword;
+                        case 1:
+                            return this.identifier;
+                        case 2:
+                            return this.callSignature;
+                        case 3:
+                            return this.block;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                FunctionExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitFunctionExpression(this);
+                };
                 return FunctionExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.FunctionExpressionSyntax = FunctionExpressionSyntax;
@@ -26174,6 +27495,18 @@ var TypeScript;
                 function OmittedExpressionSyntax(data) {
                     _super.call(this, data);
                 }
+                OmittedExpressionSyntax.prototype.kind = function () {
+                    return 185 /* OmittedExpression */;
+                };
+                OmittedExpressionSyntax.prototype.childCount = function () {
+                    return 0;
+                };
+                OmittedExpressionSyntax.prototype.childAt = function (slot) {
+                    throw TypeScript.Errors.invalidOperation();
+                };
+                OmittedExpressionSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitOmittedExpression(this);
+                };
                 return OmittedExpressionSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.OmittedExpressionSyntax = OmittedExpressionSyntax;
@@ -26183,6 +27516,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.varKeyword = varKeyword, this.variableDeclarators = variableDeclarators, varKeyword.parent = this, !TypeScript.isShared(variableDeclarators) && (variableDeclarators.parent = this);
                 }
+                VariableDeclarationSyntax.prototype.kind = function () {
+                    return 186 /* VariableDeclaration */;
+                };
+                VariableDeclarationSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                VariableDeclarationSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.varKeyword;
+                        case 1:
+                            return this.variableDeclarators;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                VariableDeclarationSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitVariableDeclaration(this);
+                };
                 return VariableDeclarationSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.VariableDeclarationSyntax = VariableDeclarationSyntax;
@@ -26192,6 +27544,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.propertyName = propertyName, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause, propertyName.parent = this, typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
                 }
+                VariableDeclaratorSyntax.prototype.kind = function () {
+                    return 187 /* VariableDeclarator */;
+                };
+                VariableDeclaratorSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                VariableDeclaratorSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.propertyName;
+                        case 1:
+                            return this.typeAnnotation;
+                        case 2:
+                            return this.equalsValueClause;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                VariableDeclaratorSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitVariableDeclarator(this);
+                };
                 return VariableDeclaratorSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.VariableDeclaratorSyntax = VariableDeclaratorSyntax;
@@ -26201,6 +27574,29 @@ var TypeScript;
                     _super.call(this, data);
                     this.typeArgumentList = typeArgumentList, this.openParenToken = openParenToken, this.arguments = _arguments, this.closeParenToken = closeParenToken, typeArgumentList && (typeArgumentList.parent = this), openParenToken.parent = this, !TypeScript.isShared(_arguments) && (_arguments.parent = this), closeParenToken.parent = this;
                 }
+                ArgumentListSyntax.prototype.kind = function () {
+                    return 188 /* ArgumentList */;
+                };
+                ArgumentListSyntax.prototype.childCount = function () {
+                    return 4;
+                };
+                ArgumentListSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.typeArgumentList;
+                        case 1:
+                            return this.openParenToken;
+                        case 2:
+                            return this.arguments;
+                        case 3:
+                            return this.closeParenToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ArgumentListSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitArgumentList(this);
+                };
                 return ArgumentListSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ArgumentListSyntax = ArgumentListSyntax;
@@ -26210,6 +27606,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.openParenToken = openParenToken, this.parameters = parameters, this.closeParenToken = closeParenToken, openParenToken.parent = this, !TypeScript.isShared(parameters) && (parameters.parent = this), closeParenToken.parent = this;
                 }
+                ParameterListSyntax.prototype.kind = function () {
+                    return 189 /* ParameterList */;
+                };
+                ParameterListSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                ParameterListSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.openParenToken;
+                        case 1:
+                            return this.parameters;
+                        case 2:
+                            return this.closeParenToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ParameterListSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitParameterList(this);
+                };
                 return ParameterListSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ParameterListSyntax = ParameterListSyntax;
@@ -26219,6 +27636,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.lessThanToken = lessThanToken, this.typeArguments = typeArguments, this.greaterThanToken = greaterThanToken, lessThanToken.parent = this, !TypeScript.isShared(typeArguments) && (typeArguments.parent = this), greaterThanToken.parent = this;
                 }
+                TypeArgumentListSyntax.prototype.kind = function () {
+                    return 190 /* TypeArgumentList */;
+                };
+                TypeArgumentListSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                TypeArgumentListSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.lessThanToken;
+                        case 1:
+                            return this.typeArguments;
+                        case 2:
+                            return this.greaterThanToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                TypeArgumentListSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitTypeArgumentList(this);
+                };
                 return TypeArgumentListSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.TypeArgumentListSyntax = TypeArgumentListSyntax;
@@ -26228,6 +27666,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.lessThanToken = lessThanToken, this.typeParameters = typeParameters, this.greaterThanToken = greaterThanToken, lessThanToken.parent = this, !TypeScript.isShared(typeParameters) && (typeParameters.parent = this), greaterThanToken.parent = this;
                 }
+                TypeParameterListSyntax.prototype.kind = function () {
+                    return 191 /* TypeParameterList */;
+                };
+                TypeParameterListSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                TypeParameterListSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.lessThanToken;
+                        case 1:
+                            return this.typeParameters;
+                        case 2:
+                            return this.greaterThanToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                TypeParameterListSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitTypeParameterList(this);
+                };
                 return TypeParameterListSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.TypeParameterListSyntax = TypeParameterListSyntax;
@@ -26237,6 +27696,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.extendsOrImplementsKeyword = extendsOrImplementsKeyword, this.typeNames = typeNames, extendsOrImplementsKeyword.parent = this, !TypeScript.isShared(typeNames) && (typeNames.parent = this);
                 }
+                HeritageClauseSyntax.prototype.kind = function () {
+                    return 192 /* HeritageClause */;
+                };
+                HeritageClauseSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                HeritageClauseSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.extendsOrImplementsKeyword;
+                        case 1:
+                            return this.typeNames;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                HeritageClauseSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitHeritageClause(this);
+                };
                 return HeritageClauseSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.HeritageClauseSyntax = HeritageClauseSyntax;
@@ -26246,6 +27724,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.equalsToken = equalsToken, this.value = value, equalsToken.parent = this, value.parent = this;
                 }
+                EqualsValueClauseSyntax.prototype.kind = function () {
+                    return 193 /* EqualsValueClause */;
+                };
+                EqualsValueClauseSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                EqualsValueClauseSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.equalsToken;
+                        case 1:
+                            return this.value;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                EqualsValueClauseSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitEqualsValueClause(this);
+                };
                 return EqualsValueClauseSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.EqualsValueClauseSyntax = EqualsValueClauseSyntax;
@@ -26255,6 +27752,29 @@ var TypeScript;
                     _super.call(this, data);
                     this.caseKeyword = caseKeyword, this.expression = expression, this.colonToken = colonToken, this.statements = statements, caseKeyword.parent = this, expression.parent = this, colonToken.parent = this, !TypeScript.isShared(statements) && (statements.parent = this);
                 }
+                CaseSwitchClauseSyntax.prototype.kind = function () {
+                    return 194 /* CaseSwitchClause */;
+                };
+                CaseSwitchClauseSyntax.prototype.childCount = function () {
+                    return 4;
+                };
+                CaseSwitchClauseSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.caseKeyword;
+                        case 1:
+                            return this.expression;
+                        case 2:
+                            return this.colonToken;
+                        case 3:
+                            return this.statements;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                CaseSwitchClauseSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitCaseSwitchClause(this);
+                };
                 return CaseSwitchClauseSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.CaseSwitchClauseSyntax = CaseSwitchClauseSyntax;
@@ -26264,6 +27784,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.defaultKeyword = defaultKeyword, this.colonToken = colonToken, this.statements = statements, defaultKeyword.parent = this, colonToken.parent = this, !TypeScript.isShared(statements) && (statements.parent = this);
                 }
+                DefaultSwitchClauseSyntax.prototype.kind = function () {
+                    return 195 /* DefaultSwitchClause */;
+                };
+                DefaultSwitchClauseSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                DefaultSwitchClauseSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.defaultKeyword;
+                        case 1:
+                            return this.colonToken;
+                        case 2:
+                            return this.statements;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                DefaultSwitchClauseSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitDefaultSwitchClause(this);
+                };
                 return DefaultSwitchClauseSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.DefaultSwitchClauseSyntax = DefaultSwitchClauseSyntax;
@@ -26273,6 +27814,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.elseKeyword = elseKeyword, this.statement = statement, elseKeyword.parent = this, statement.parent = this;
                 }
+                ElseClauseSyntax.prototype.kind = function () {
+                    return 196 /* ElseClause */;
+                };
+                ElseClauseSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                ElseClauseSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.elseKeyword;
+                        case 1:
+                            return this.statement;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ElseClauseSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitElseClause(this);
+                };
                 return ElseClauseSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ElseClauseSyntax = ElseClauseSyntax;
@@ -26282,6 +27842,33 @@ var TypeScript;
                     _super.call(this, data);
                     this.catchKeyword = catchKeyword, this.openParenToken = openParenToken, this.identifier = identifier, this.typeAnnotation = typeAnnotation, this.closeParenToken = closeParenToken, this.block = block, catchKeyword.parent = this, openParenToken.parent = this, identifier.parent = this, typeAnnotation && (typeAnnotation.parent = this), closeParenToken.parent = this, block.parent = this;
                 }
+                CatchClauseSyntax.prototype.kind = function () {
+                    return 197 /* CatchClause */;
+                };
+                CatchClauseSyntax.prototype.childCount = function () {
+                    return 6;
+                };
+                CatchClauseSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.catchKeyword;
+                        case 1:
+                            return this.openParenToken;
+                        case 2:
+                            return this.identifier;
+                        case 3:
+                            return this.typeAnnotation;
+                        case 4:
+                            return this.closeParenToken;
+                        case 5:
+                            return this.block;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                CatchClauseSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitCatchClause(this);
+                };
                 return CatchClauseSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.CatchClauseSyntax = CatchClauseSyntax;
@@ -26291,6 +27878,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.finallyKeyword = finallyKeyword, this.block = block, finallyKeyword.parent = this, block.parent = this;
                 }
+                FinallyClauseSyntax.prototype.kind = function () {
+                    return 198 /* FinallyClause */;
+                };
+                FinallyClauseSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                FinallyClauseSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.finallyKeyword;
+                        case 1:
+                            return this.block;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                FinallyClauseSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitFinallyClause(this);
+                };
                 return FinallyClauseSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.FinallyClauseSyntax = FinallyClauseSyntax;
@@ -26300,6 +27906,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.identifier = identifier, this.constraint = constraint, identifier.parent = this, constraint && (constraint.parent = this);
                 }
+                TypeParameterSyntax.prototype.kind = function () {
+                    return 199 /* TypeParameter */;
+                };
+                TypeParameterSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                TypeParameterSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.identifier;
+                        case 1:
+                            return this.constraint;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                TypeParameterSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitTypeParameter(this);
+                };
                 return TypeParameterSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.TypeParameterSyntax = TypeParameterSyntax;
@@ -26309,6 +27934,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.extendsKeyword = extendsKeyword, this.typeOrExpression = typeOrExpression, extendsKeyword.parent = this, typeOrExpression.parent = this;
                 }
+                ConstraintSyntax.prototype.kind = function () {
+                    return 200 /* Constraint */;
+                };
+                ConstraintSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                ConstraintSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.extendsKeyword;
+                        case 1:
+                            return this.typeOrExpression;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ConstraintSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitConstraint(this);
+                };
                 return ConstraintSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ConstraintSyntax = ConstraintSyntax;
@@ -26318,6 +27962,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.propertyName = propertyName, this.colonToken = colonToken, this.expression = expression, propertyName.parent = this, colonToken.parent = this, expression.parent = this;
                 }
+                SimplePropertyAssignmentSyntax.prototype.kind = function () {
+                    return 201 /* SimplePropertyAssignment */;
+                };
+                SimplePropertyAssignmentSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                SimplePropertyAssignmentSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.propertyName;
+                        case 1:
+                            return this.colonToken;
+                        case 2:
+                            return this.expression;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                SimplePropertyAssignmentSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitSimplePropertyAssignment(this);
+                };
                 return SimplePropertyAssignmentSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.SimplePropertyAssignmentSyntax = SimplePropertyAssignmentSyntax;
@@ -26327,6 +27992,27 @@ var TypeScript;
                     _super.call(this, data);
                     this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, propertyName.parent = this, callSignature.parent = this, block.parent = this;
                 }
+                FunctionPropertyAssignmentSyntax.prototype.kind = function () {
+                    return 202 /* FunctionPropertyAssignment */;
+                };
+                FunctionPropertyAssignmentSyntax.prototype.childCount = function () {
+                    return 3;
+                };
+                FunctionPropertyAssignmentSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.propertyName;
+                        case 1:
+                            return this.callSignature;
+                        case 2:
+                            return this.block;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                FunctionPropertyAssignmentSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitFunctionPropertyAssignment(this);
+                };
                 return FunctionPropertyAssignmentSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.FunctionPropertyAssignmentSyntax = FunctionPropertyAssignmentSyntax;
@@ -26336,6 +28022,33 @@ var TypeScript;
                     _super.call(this, data);
                     this.dotDotDotToken = dotDotDotToken, this.modifiers = modifiers, this.identifier = identifier, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause, dotDotDotToken && (dotDotDotToken.parent = this), !TypeScript.isShared(modifiers) && (modifiers.parent = this), identifier.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
                 }
+                ParameterSyntax.prototype.kind = function () {
+                    return 203 /* Parameter */;
+                };
+                ParameterSyntax.prototype.childCount = function () {
+                    return 6;
+                };
+                ParameterSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.dotDotDotToken;
+                        case 1:
+                            return this.modifiers;
+                        case 2:
+                            return this.identifier;
+                        case 3:
+                            return this.questionToken;
+                        case 4:
+                            return this.typeAnnotation;
+                        case 5:
+                            return this.equalsValueClause;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ParameterSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitParameter(this);
+                };
                 return ParameterSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ParameterSyntax = ParameterSyntax;
@@ -26345,6 +28058,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.propertyName = propertyName, this.equalsValueClause = equalsValueClause, propertyName.parent = this, equalsValueClause && (equalsValueClause.parent = this);
                 }
+                EnumElementSyntax.prototype.kind = function () {
+                    return 204 /* EnumElement */;
+                };
+                EnumElementSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                EnumElementSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.propertyName;
+                        case 1:
+                            return this.equalsValueClause;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                EnumElementSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitEnumElement(this);
+                };
                 return EnumElementSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.EnumElementSyntax = EnumElementSyntax;
@@ -26354,6 +28086,25 @@ var TypeScript;
                     _super.call(this, data);
                     this.colonToken = colonToken, this.type = type, colonToken.parent = this, type.parent = this;
                 }
+                TypeAnnotationSyntax.prototype.kind = function () {
+                    return 205 /* TypeAnnotation */;
+                };
+                TypeAnnotationSyntax.prototype.childCount = function () {
+                    return 2;
+                };
+                TypeAnnotationSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.colonToken;
+                        case 1:
+                            return this.type;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                TypeAnnotationSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitTypeAnnotation(this);
+                };
                 return TypeAnnotationSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.TypeAnnotationSyntax = TypeAnnotationSyntax;
@@ -26363,6 +28114,29 @@ var TypeScript;
                     _super.call(this, data);
                     this.requireKeyword = requireKeyword, this.openParenToken = openParenToken, this.stringLiteral = stringLiteral, this.closeParenToken = closeParenToken, requireKeyword.parent = this, openParenToken.parent = this, stringLiteral.parent = this, closeParenToken.parent = this;
                 }
+                ExternalModuleReferenceSyntax.prototype.kind = function () {
+                    return 206 /* ExternalModuleReference */;
+                };
+                ExternalModuleReferenceSyntax.prototype.childCount = function () {
+                    return 4;
+                };
+                ExternalModuleReferenceSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.requireKeyword;
+                        case 1:
+                            return this.openParenToken;
+                        case 2:
+                            return this.stringLiteral;
+                        case 3:
+                            return this.closeParenToken;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ExternalModuleReferenceSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitExternalModuleReference(this);
+                };
                 return ExternalModuleReferenceSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ExternalModuleReferenceSyntax = ExternalModuleReferenceSyntax;
@@ -26372,10 +28146,26 @@ var TypeScript;
                     _super.call(this, data);
                     this.moduleName = moduleName, moduleName.parent = this;
                 }
+                ModuleNameModuleReferenceSyntax.prototype.kind = function () {
+                    return 207 /* ModuleNameModuleReference */;
+                };
+                ModuleNameModuleReferenceSyntax.prototype.childCount = function () {
+                    return 1;
+                };
+                ModuleNameModuleReferenceSyntax.prototype.childAt = function (slot) {
+                    switch (slot) {
+                        case 0:
+                            return this.moduleName;
+                        default:
+                            throw TypeScript.Errors.invalidOperation();
+                    }
+                };
+                ModuleNameModuleReferenceSyntax.prototype.accept = function (visitor) {
+                    return visitor.visitModuleNameModuleReference(this);
+                };
                 return ModuleNameModuleReferenceSyntax;
             })(TypeScript.SyntaxNode);
             Concrete.ModuleNameModuleReferenceSyntax = ModuleNameModuleReferenceSyntax;
-            SourceUnitSyntax.prototype.__kind = 120 /* SourceUnit */, QualifiedNameSyntax.prototype.__kind = 121 /* QualifiedName */, ObjectTypeSyntax.prototype.__kind = 122 /* ObjectType */, FunctionTypeSyntax.prototype.__kind = 123 /* FunctionType */, ArrayTypeSyntax.prototype.__kind = 124 /* ArrayType */, ConstructorTypeSyntax.prototype.__kind = 125 /* ConstructorType */, GenericTypeSyntax.prototype.__kind = 126 /* GenericType */, TypeQuerySyntax.prototype.__kind = 127 /* TypeQuery */, TupleTypeSyntax.prototype.__kind = 128 /* TupleType */, UnionTypeSyntax.prototype.__kind = 129 /* UnionType */, ParenthesizedTypeSyntax.prototype.__kind = 130 /* ParenthesizedType */, InterfaceDeclarationSyntax.prototype.__kind = 131 /* InterfaceDeclaration */, FunctionDeclarationSyntax.prototype.__kind = 132 /* FunctionDeclaration */, ModuleDeclarationSyntax.prototype.__kind = 133 /* ModuleDeclaration */, ClassDeclarationSyntax.prototype.__kind = 134 /* ClassDeclaration */, EnumDeclarationSyntax.prototype.__kind = 135 /* EnumDeclaration */, ImportDeclarationSyntax.prototype.__kind = 136 /* ImportDeclaration */, ExportAssignmentSyntax.prototype.__kind = 137 /* ExportAssignment */, MemberFunctionDeclarationSyntax.prototype.__kind = 138 /* MemberFunctionDeclaration */, MemberVariableDeclarationSyntax.prototype.__kind = 139 /* MemberVariableDeclaration */, ConstructorDeclarationSyntax.prototype.__kind = 140 /* ConstructorDeclaration */, IndexMemberDeclarationSyntax.prototype.__kind = 141 /* IndexMemberDeclaration */, GetAccessorSyntax.prototype.__kind = 142 /* GetAccessor */, SetAccessorSyntax.prototype.__kind = 143 /* SetAccessor */, PropertySignatureSyntax.prototype.__kind = 144 /* PropertySignature */, CallSignatureSyntax.prototype.__kind = 145 /* CallSignature */, ConstructSignatureSyntax.prototype.__kind = 146 /* ConstructSignature */, IndexSignatureSyntax.prototype.__kind = 147 /* IndexSignature */, MethodSignatureSyntax.prototype.__kind = 148 /* MethodSignature */, BlockSyntax.prototype.__kind = 149 /* Block */, IfStatementSyntax.prototype.__kind = 150 /* IfStatement */, VariableStatementSyntax.prototype.__kind = 151 /* VariableStatement */, ExpressionStatementSyntax.prototype.__kind = 152 /* ExpressionStatement */, ReturnStatementSyntax.prototype.__kind = 153 /* ReturnStatement */, SwitchStatementSyntax.prototype.__kind = 154 /* SwitchStatement */, BreakStatementSyntax.prototype.__kind = 155 /* BreakStatement */, ContinueStatementSyntax.prototype.__kind = 156 /* ContinueStatement */, ForStatementSyntax.prototype.__kind = 157 /* ForStatement */, ForInStatementSyntax.prototype.__kind = 158 /* ForInStatement */, EmptyStatementSyntax.prototype.__kind = 159 /* EmptyStatement */, ThrowStatementSyntax.prototype.__kind = 160 /* ThrowStatement */, WhileStatementSyntax.prototype.__kind = 161 /* WhileStatement */, TryStatementSyntax.prototype.__kind = 162 /* TryStatement */, LabeledStatementSyntax.prototype.__kind = 163 /* LabeledStatement */, DoStatementSyntax.prototype.__kind = 164 /* DoStatement */, DebuggerStatementSyntax.prototype.__kind = 165 /* DebuggerStatement */, WithStatementSyntax.prototype.__kind = 166 /* WithStatement */, PrefixUnaryExpressionSyntax.prototype.__kind = 167 /* PrefixUnaryExpression */, DeleteExpressionSyntax.prototype.__kind = 168 /* DeleteExpression */, TypeOfExpressionSyntax.prototype.__kind = 169 /* TypeOfExpression */, VoidExpressionSyntax.prototype.__kind = 170 /* VoidExpression */, ConditionalExpressionSyntax.prototype.__kind = 171 /* ConditionalExpression */, BinaryExpressionSyntax.prototype.__kind = 172 /* BinaryExpression */, PostfixUnaryExpressionSyntax.prototype.__kind = 173 /* PostfixUnaryExpression */, MemberAccessExpressionSyntax.prototype.__kind = 174 /* MemberAccessExpression */, InvocationExpressionSyntax.prototype.__kind = 175 /* InvocationExpression */, ArrayLiteralExpressionSyntax.prototype.__kind = 176 /* ArrayLiteralExpression */, ObjectLiteralExpressionSyntax.prototype.__kind = 177 /* ObjectLiteralExpression */, ObjectCreationExpressionSyntax.prototype.__kind = 178 /* ObjectCreationExpression */, ParenthesizedExpressionSyntax.prototype.__kind = 179 /* ParenthesizedExpression */, ParenthesizedArrowFunctionExpressionSyntax.prototype.__kind = 180 /* ParenthesizedArrowFunctionExpression */, SimpleArrowFunctionExpressionSyntax.prototype.__kind = 181 /* SimpleArrowFunctionExpression */, CastExpressionSyntax.prototype.__kind = 182 /* CastExpression */, ElementAccessExpressionSyntax.prototype.__kind = 183 /* ElementAccessExpression */, FunctionExpressionSyntax.prototype.__kind = 184 /* FunctionExpression */, OmittedExpressionSyntax.prototype.__kind = 185 /* OmittedExpression */, VariableDeclarationSyntax.prototype.__kind = 186 /* VariableDeclaration */, VariableDeclaratorSyntax.prototype.__kind = 187 /* VariableDeclarator */, ArgumentListSyntax.prototype.__kind = 188 /* ArgumentList */, ParameterListSyntax.prototype.__kind = 189 /* ParameterList */, TypeArgumentListSyntax.prototype.__kind = 190 /* TypeArgumentList */, TypeParameterListSyntax.prototype.__kind = 191 /* TypeParameterList */, HeritageClauseSyntax.prototype.__kind = 192 /* HeritageClause */, EqualsValueClauseSyntax.prototype.__kind = 193 /* EqualsValueClause */, CaseSwitchClauseSyntax.prototype.__kind = 194 /* CaseSwitchClause */, DefaultSwitchClauseSyntax.prototype.__kind = 195 /* DefaultSwitchClause */, ElseClauseSyntax.prototype.__kind = 196 /* ElseClause */, CatchClauseSyntax.prototype.__kind = 197 /* CatchClause */, FinallyClauseSyntax.prototype.__kind = 198 /* FinallyClause */, TypeParameterSyntax.prototype.__kind = 199 /* TypeParameter */, ConstraintSyntax.prototype.__kind = 200 /* Constraint */, SimplePropertyAssignmentSyntax.prototype.__kind = 201 /* SimplePropertyAssignment */, FunctionPropertyAssignmentSyntax.prototype.__kind = 202 /* FunctionPropertyAssignment */, ParameterSyntax.prototype.__kind = 203 /* Parameter */, EnumElementSyntax.prototype.__kind = 204 /* EnumElement */, TypeAnnotationSyntax.prototype.__kind = 205 /* TypeAnnotation */, ExternalModuleReferenceSyntax.prototype.__kind = 206 /* ExternalModuleReference */, ModuleNameModuleReferenceSyntax.prototype.__kind = 207 /* ModuleNameModuleReference */;
         })(Concrete = Syntax.Concrete || (Syntax.Concrete = {}));
     })(Syntax = TypeScript.Syntax || (TypeScript.Syntax = {}));
 })(TypeScript || (TypeScript = {}));
@@ -26564,15 +28354,15 @@ var TypeScript;
             return false;
         };
         GrammarCheckerWalker.prototype.checkForTrailingComma = function (list) {
-            if (TypeScript.childCount(list) === 0 || TypeScript.childCount(list) % 2 === 1) {
+            if (list.childCount() === 0 || list.childCount() % 2 === 1) {
                 return false;
             }
-            var child = TypeScript.childAt(list, TypeScript.childCount(list) - 1);
+            var child = list.childAt(list.childCount() - 1);
             this.pushDiagnostic(child, TypeScript.DiagnosticCode.Trailing_comma_not_allowed);
             return true;
         };
         GrammarCheckerWalker.prototype.checkForAtLeastOneElement = function (parent, list, reportToken, listKind) {
-            if (TypeScript.childCount(list) > 0) {
+            if (list.childCount() > 0) {
                 return false;
             }
             this.pushDiagnostic(reportToken, TypeScript.DiagnosticCode._0_list_cannot_be_empty, [listKind]);
@@ -26815,7 +28605,7 @@ var TypeScript;
         };
         GrammarCheckerWalker.prototype.checkIndexMemberModifiers = function (node) {
             if (node.modifiers.length > 0) {
-                this.pushDiagnostic(TypeScript.childAt(node.modifiers, 0), TypeScript.DiagnosticCode.Modifiers_cannot_appear_here);
+                this.pushDiagnostic(node.modifiers.childAt(0), TypeScript.DiagnosticCode.Modifiers_cannot_appear_here);
                 return true;
             }
             return false;
@@ -26862,7 +28652,7 @@ var TypeScript;
         };
         GrammarCheckerWalker.prototype.checkSetAccessorParameter = function (node) {
             var parameters = node.callSignature.parameterList.parameters;
-            if (TypeScript.childCount(parameters) !== 1) {
+            if (parameters.childCount() !== 1) {
                 this.pushDiagnostic(node.propertyName, TypeScript.DiagnosticCode.set_accessor_must_have_exactly_one_parameter);
                 return true;
             }
@@ -26898,8 +28688,8 @@ var TypeScript;
         };
         GrammarCheckerWalker.prototype.checkEnumElements = function (node) {
             var previousValueWasComputed = false;
-            for (var i = 0, n = TypeScript.childCount(node.enumElements); i < n; i++) {
-                var child = TypeScript.childAt(node.enumElements, i);
+            for (var i = 0, n = node.enumElements.childCount(); i < n; i++) {
+                var child = node.enumElements.childAt(i);
                 if (i % 2 === 0) {
                     var enumElement = child;
                     if (!enumElement.equalsValueClause && previousValueWasComputed) {
@@ -27301,7 +29091,7 @@ var TypeScript;
         GrammarCheckerWalker.prototype.checkForDisallowedModifiers = function (parent, modifiers) {
             if (this.inBlock || this.inObjectLiteralExpression) {
                 if (modifiers.length > 0) {
-                    this.pushDiagnostic(TypeScript.childAt(modifiers, 0), TypeScript.DiagnosticCode.Modifiers_cannot_appear_here);
+                    this.pushDiagnostic(modifiers.childAt(0), TypeScript.DiagnosticCode.Modifiers_cannot_appear_here);
                     return true;
                 }
             }
@@ -27332,8 +29122,8 @@ var TypeScript;
             this.inAmbientDeclaration = savedInAmbientDeclaration;
         };
         GrammarCheckerWalker.prototype.checkListSeparators = function (parent, list, kind) {
-            for (var i = 0, n = TypeScript.childCount(list); i < n; i++) {
-                var child = TypeScript.childAt(list, i);
+            for (var i = 0, n = list.childCount(); i < n; i++) {
+                var child = list.childAt(i);
                 if (i % 2 === 1 && child.kind() !== kind) {
                     this.pushDiagnostic(child, TypeScript.DiagnosticCode._0_expected, [TypeScript.SyntaxFacts.getText(kind)]);
                 }
@@ -27656,7 +29446,7 @@ var TypeScript;
                 if (!element1 || !element2) {
                     return 0;
                 }
-                if (TypeScript.childCount(element1.statements) === 0) {
+                if (element1.statements.childCount() === 0) {
                     return 1;
                 }
                 return 2;
@@ -27720,39 +29510,39 @@ var TypeScript;
                 this.appendToken(token);
             };
             PrettyPrinterImpl.prototype.appendSpaceList = function (list) {
-                for (var i = 0, n = TypeScript.childCount(list); i < n; i++) {
-                    if (TypeScript.isNode(TypeScript.childAt(list, i))) {
-                        this.appendNode(TypeScript.childAt(list, i));
+                for (var i = 0, n = list.childCount(); i < n; i++) {
+                    if (TypeScript.isNode(list.childAt(i))) {
+                        this.appendNode(list.childAt(i));
                     }
                     else {
-                        this.appendToken(TypeScript.childAt(list, i));
+                        this.appendToken(list.childAt(i));
                     }
                     this.ensureSpace();
                 }
             };
             PrettyPrinterImpl.prototype.appendSeparatorSpaceList = function (list) {
-                for (var i = 0, n = TypeScript.childCount(list); i < n; i++) {
+                for (var i = 0, n = list.childCount(); i < n; i++) {
                     if (i % 2 === 0) {
                         if (i > 0) {
                             this.ensureSpace();
                         }
-                        TypeScript.visitNodeOrToken(this, TypeScript.childAt(list, i));
+                        TypeScript.visitNodeOrToken(this, list.childAt(i));
                     }
                     else {
-                        this.appendToken(TypeScript.childAt(list, i));
+                        this.appendToken(list.childAt(i));
                     }
                 }
             };
             PrettyPrinterImpl.prototype.appendSeparatorNewLineList = function (list) {
-                for (var i = 0, n = TypeScript.childCount(list); i < n; i++) {
+                for (var i = 0, n = list.childCount(); i < n; i++) {
                     if (i % 2 === 0) {
                         if (i > 0) {
                             this.ensureNewLine();
                         }
-                        TypeScript.visitNodeOrToken(this, TypeScript.childAt(list, i));
+                        TypeScript.visitNodeOrToken(this, list.childAt(i));
                     }
                     else {
-                        this.appendToken(TypeScript.childAt(list, i));
+                        this.appendToken(list.childAt(i));
                     }
                 }
             };
@@ -27842,8 +29632,8 @@ var TypeScript;
                 else {
                     this.ensureSpace();
                 }
-                for (var i = 0, n = TypeScript.childCount(node.typeMembers); i < n; i++) {
-                    TypeScript.visitNodeOrToken(this, TypeScript.childAt(node.typeMembers, i));
+                for (var i = 0, n = node.typeMembers.childCount(); i < n; i++) {
+                    TypeScript.visitNodeOrToken(this, node.typeMembers.childAt(i));
                     if (appendNewLines) {
                         this.ensureNewLine();
                     }
@@ -28255,11 +30045,11 @@ var TypeScript;
                 this.appendToken(node.closeBraceToken);
             };
             PrettyPrinterImpl.prototype.appendSwitchClauseStatements = function (node) {
-                if (TypeScript.childCount(node.statements) === 1 && TypeScript.childAt(node.statements, 0).kind() === 149 /* Block */) {
+                if (node.statements.childCount() === 1 && node.statements.childAt(0).kind() === 149 /* Block */) {
                     this.ensureSpace();
-                    TypeScript.visitNodeOrToken(this, TypeScript.childAt(node.statements, 0));
+                    TypeScript.visitNodeOrToken(this, node.statements.childAt(0));
                 }
-                else if (TypeScript.childCount(node.statements) > 0) {
+                else if (node.statements.childCount() > 0) {
                     this.ensureNewLine();
                     this.indentation++;
                     this.appendStatements(node.statements);
@@ -28369,12 +30159,12 @@ var TypeScript;
             };
             PrettyPrinterImpl.prototype.visitObjectLiteralExpression = function (node) {
                 this.appendToken(node.openBraceToken);
-                if (TypeScript.childCount(node.propertyAssignments) === 1) {
+                if (node.propertyAssignments.childCount() === 1) {
                     this.ensureSpace();
-                    TypeScript.visitNodeOrToken(this, TypeScript.childAt(node.propertyAssignments, 0));
+                    TypeScript.visitNodeOrToken(this, node.propertyAssignments.childAt(0));
                     this.ensureSpace();
                 }
-                else if (TypeScript.childCount(node.propertyAssignments) > 0) {
+                else if (node.propertyAssignments.childCount() > 0) {
                     this.indentation++;
                     this.ensureNewLine();
                     this.appendSeparatorNewLineList(node.propertyAssignments);
@@ -28956,8 +30746,8 @@ var TypeScript;
             if (element && !TypeScript.isShared(element)) {
                 var kind = element.kind();
                 result.push(element);
-                for (var i = 0, n = TypeScript.childCount(element); i < n; i++) {
-                    this.collect(TypeScript.childAt(element, i), result);
+                for (var i = 0, n = element.childCount(); i < n; i++) {
+                    this.collect(element.childAt(i), result);
                 }
             }
         };
@@ -29427,7 +31217,7 @@ var TypeScript;
             var oldSourceUnit = oldSyntaxTree.sourceUnit();
             var _outstandingRewindPointCount = 0;
             if (oldSourceUnit.moduleElements.length > 0) {
-                _oldSourceUnitCursor.pushElement(TypeScript.childAt(oldSourceUnit.moduleElements, 0), 0);
+                _oldSourceUnitCursor.pushElement(oldSourceUnit.moduleElements.childAt(0), 0);
             }
             _changeRange = extendToAffectedRange(textChangeRange, oldSourceUnit);
             _changeRangeNewSpan = _changeRange.newSpan();
@@ -29719,8 +31509,8 @@ var TypeScript;
                 if (TypeScript.isToken(nodeOrToken)) {
                     return;
                 }
-                for (var i = 0, n = TypeScript.childCount(nodeOrToken); i < n; i++) {
-                    var child = TypeScript.childAt(nodeOrToken, i);
+                for (var i = 0, n = nodeOrToken.childCount(); i < n; i++) {
+                    var child = nodeOrToken.childAt(i);
                     if (child && !TypeScript.isShared(child)) {
                         pushElement(child, i);
                         moveToFirstChildIfList();
@@ -29733,8 +31523,8 @@ var TypeScript;
                 while (!isFinished()) {
                     var currentPiece = pieces[currentPieceIndex];
                     var parent = currentPiece.element.parent;
-                    for (var i = currentPiece.indexInParent + 1, n = TypeScript.childCount(parent); i < n; i++) {
-                        var sibling = TypeScript.childAt(parent, i);
+                    for (var i = currentPiece.indexInParent + 1, n = parent.childCount(); i < n; i++) {
+                        var sibling = parent.childAt(i);
                         if (sibling && !TypeScript.isShared(sibling)) {
                             currentPiece.element = sibling;
                             currentPiece.indexInParent = i;
@@ -29750,7 +31540,7 @@ var TypeScript;
             function moveToFirstChildIfList() {
                 var element = pieces[currentPieceIndex].element;
                 if (TypeScript.isList(element) || TypeScript.isSeparatedList(element)) {
-                    pushElement(TypeScript.childAt(element, 0), 0);
+                    pushElement(element.childAt(0), 0);
                 }
             }
             function pushElement(element, indexInParent) {
@@ -29835,12 +31625,12 @@ var TypeScript;
         if (node1.kind() !== node2.kind()) {
             return false;
         }
-        if (TypeScript.childCount(node1) !== TypeScript.childCount(node2)) {
+        if (node1.childCount() !== node2.childCount()) {
             return false;
         }
-        for (var i = 0, n = TypeScript.childCount(node1); i < n; i++) {
-            var element1 = TypeScript.childAt(node1, i);
-            var element2 = TypeScript.childAt(node2, i);
+        for (var i = 0, n = node1.childCount(); i < n; i++) {
+            var element1 = node1.childAt(i);
+            var element2 = node2.childAt(i);
             if (checkParents) {
                 assertParent(node1, element1);
                 assertParent(node2, element2);
@@ -29902,12 +31692,12 @@ var TypeScript;
     function listStructuralEquals(list1, list2, checkParents, text1, text2) {
         TypeScript.Debug.assert(TypeScript.isShared(list1) || list1.parent);
         TypeScript.Debug.assert(TypeScript.isShared(list2) || list2.parent);
-        if (TypeScript.childCount(list1) !== TypeScript.childCount(list2)) {
+        if (list1.childCount() !== list2.childCount()) {
             return false;
         }
-        for (var i = 0, n = TypeScript.childCount(list1); i < n; i++) {
-            var child1 = TypeScript.childAt(list1, i);
-            var child2 = TypeScript.childAt(list2, i);
+        for (var i = 0, n = list1.childCount(); i < n; i++) {
+            var child1 = list1.childAt(i);
+            var child2 = list2.childAt(i);
             if (checkParents) {
                 assertParent(list1, child1);
                 assertParent(list2, child2);
@@ -29921,12 +31711,12 @@ var TypeScript;
     function separatedListStructuralEquals(list1, list2, checkParents, text1, text2) {
         TypeScript.Debug.assert(TypeScript.isShared(list1) || list1.parent);
         TypeScript.Debug.assert(TypeScript.isShared(list2) || list2.parent);
-        if (TypeScript.childCount(list1) !== TypeScript.childCount(list2)) {
+        if (list1.childCount() !== list2.childCount()) {
             return false;
         }
-        for (var i = 0, n = TypeScript.childCount(list1); i < n; i++) {
-            var element1 = TypeScript.childAt(list1, i);
-            var element2 = TypeScript.childAt(list2, i);
+        for (var i = 0, n = list1.childCount(); i < n; i++) {
+            var element1 = list1.childAt(i);
+            var element2 = list2.childAt(i);
             if (checkParents) {
                 assertParent(list1, element1);
                 assertParent(list2, element2);
@@ -29985,7 +31775,7 @@ var TypeScript;
     TypeScript.treeStructuralEquals = treeStructuralEquals;
 })(TypeScript || (TypeScript = {}));
 var specificFile = undefined;
-var generate = true;
+var generate = false;
 function isDTSFile(s) {
     return ts.fileExtensionIs(s, ".d.ts");
 }
@@ -30117,8 +31907,8 @@ function nodeToJSON(node, text) {
         result.parsedInStrictMode = true;
     }
     var thisAsIndexable = node;
-    for (var i = 0, n = TypeScript.childCount(node); i < n; i++) {
-        var value = TypeScript.childAt(node, i);
+    for (var i = 0, n = node.childCount(); i < n; i++) {
+        var value = node.childAt(i);
         if (value) {
             for (var name in node) {
                 if (value === thisAsIndexable[name]) {
@@ -30136,8 +31926,8 @@ function elementToJSON(element, text) {
     }
     else if (TypeScript.isList(element) || TypeScript.isSeparatedList(element)) {
         var result = [];
-        for (var i = 0, n = TypeScript.childCount(element); i < n; i++) {
-            result.push(elementToJSON(TypeScript.childAt(element, i), text));
+        for (var i = 0, n = element.childCount(); i < n; i++) {
+            result.push(elementToJSON(element.childAt(i), text));
         }
         return result;
     }

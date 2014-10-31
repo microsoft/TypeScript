@@ -19,8 +19,8 @@ module TypeScript {
                 var kind = element.kind();
                 result.push(element);
 
-                for (var i = 0, n = childCount(element); i < n; i++) {
-                    this.collect(childAt(element, i), result);
+                for (var i = 0, n = element.childCount(); i < n; i++) {
+                    this.collect(element.childAt(i), result);
                 }
             }
         }
