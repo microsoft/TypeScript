@@ -1407,7 +1407,8 @@
     },
     "In 'const' enum declarations member initializer must be constant expression.": {
         "category": "Error",
-        "code": 4083
+        "code": 4083,
+        "isEarly": true
     },
     "'const' enums can only be used in property access/index access expressions and as right hand side in import declarations/export assignments.": {
         "category": "Error",
