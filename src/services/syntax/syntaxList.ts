@@ -9,6 +9,19 @@ interface Array<T> {
 
     separatorCount(): number;
     separatorAt(index: number): TypeScript.ISyntaxToken;
+
+    childCount(): number;
+    childAt(index: number): TypeScript.ISyntaxNodeOrToken;
+}
+
+module TypeScript {
+    export function separatedListChildCount(list: ISyntaxNodeOrToken[]) {
+        return list.length + list.separators.length;
+    }
+
+    export function separatedListChildAt(list: ISyntaxNodeOrToken[], index: number) {
+        return index % 2 === 0 ? list[index >> 1] : list.separators[index >> 1];
+    }
 }
 
 module TypeScript.Syntax {
@@ -27,6 +40,19 @@ module TypeScript.Syntax {
 
     Array.prototype.kind = function () {
         return this.separators === undefined ? SyntaxKind.List : SyntaxKind.SeparatedList;
+    }
+
+    Array.prototype.childCount = function (): number {
+        return this.separators ? separatedListChildCount(this) : this.length;
+    }
+
+    Array.prototype.childAt = function (index: number): ISyntaxNodeOrToken {
+        if (this.separators) {
+            return index % 2 === 0 ? this[index >> 1] : this.separators[index >> 1];
+        }
+        else {
+            return this[index];
+        }
     }
 
     Array.prototype.separatorCount = function (): number {
