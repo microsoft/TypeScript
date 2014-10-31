@@ -5247,7 +5247,7 @@ module ts {
             getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
             getEmitOutput: getEmitOutput,
             getSignatureAtPosition: getSignatureAtPosition,
-            getSourceFile: getSourceFile
+            getSourceFile: getCurrentSourceFile
         };
     }
 
