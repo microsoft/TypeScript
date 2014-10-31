@@ -8,4 +8,4 @@ format.document();
 goTo.marker("1");
 verify.currentLineContentIs("}, {");
 goTo.marker("2");
-verify.currentLineContentIs("    });");
+verify.currentLineContentIs("});");
