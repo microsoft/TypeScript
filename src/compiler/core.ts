@@ -1,6 +1,17 @@
 /// <reference path="types.ts"/>
 
 module ts {
+
+    // Ternary values are defined such that
+    // x & y is False if either x or y is False.
+    // x & y is Maybe if either x or y is Maybe, but neither x or y is False.
+    // x & y is True if x and y are both True.
+    export enum Ternary {
+        False = 0,
+        Maybe = 1,
+        True  = -1
+    }
+
     export interface Map<T> {
         [index: string]: T;
     }
