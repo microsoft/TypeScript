@@ -8,10 +8,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(53,9): error TS2323: Type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U'.
   Types of parameters 'y' and 'y' are incompatible.
     Type '(arg2: Base) => Derived' is not assignable to type '(arg2: { foo: number; }) => any'.
-      Types of parameters 'arg2' and 'arg2' are incompatible.
-        Type 'Base' is not assignable to type '{ foo: number; }'.
-          Types of property 'foo' are incompatible.
-            Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(77,9): error TS2323: Type 'new <T>(x: (a: T) => T) => T[]' is not assignable to type '{ new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '(a: any) => any' is not assignable to type '{ new (a: number): number; new (a?: number): number; }'.
@@ -92,10 +88,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2323: Type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U'.
 !!! error TS2323:   Types of parameters 'y' and 'y' are incompatible.
 !!! error TS2323:     Type '(arg2: Base) => Derived' is not assignable to type '(arg2: { foo: number; }) => any'.
-!!! error TS2323:       Types of parameters 'arg2' and 'arg2' are incompatible.
-!!! error TS2323:         Type 'Base' is not assignable to type '{ foo: number; }'.
-!!! error TS2323:           Types of property 'foo' are incompatible.
-!!! error TS2323:             Type 'string' is not assignable to type 'number'.
     
             
             var b10: new <T extends Derived>(...x: T[]) => T; 
