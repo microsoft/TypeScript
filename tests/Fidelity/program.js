@@ -539,6 +539,12 @@ var TypeScript;
 })(TypeScript || (TypeScript = {}));
 var ts;
 (function (ts) {
+    (function (Ternary) {
+        Ternary[Ternary["False"] = 0] = "False";
+        Ternary[Ternary["Maybe"] = 1] = "Maybe";
+        Ternary[Ternary["True"] = -1] = "True";
+    })(ts.Ternary || (ts.Ternary = {}));
+    var Ternary = ts.Ternary;
     function forEach(array, callback) {
         var result;
         if (array) {
@@ -11356,7 +11362,7 @@ var ts;
                 return false;
             }
             for (var i = 0; i < s.length; i++) {
-                if (!compareSignatures(s[i], t[i], false, isTypeIdenticalTo)) {
+                if (!compareSignatures(s[i], t[i], false, compareTypes)) {
                     return false;
                 }
             }
@@ -12261,77 +12267,25 @@ var ts;
         function isTypeIdenticalTo(source, target) {
             return checkTypeRelatedTo(source, target, identityRelation, undefined);
         }
+        function compareTypes(source, target) {
+            return checkTypeRelatedTo(source, target, identityRelation, undefined) ? -1 /* True */ : 0 /* False */;
+        }
         function isTypeSubtypeOf(source, target) {
             return checkTypeSubtypeOf(source, target, undefined);
-        }
-        function checkTypeSubtypeOf(source, target, errorNode, headMessage, containingMessageChain) {
-            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
         }
         function isTypeAssignableTo(source, target) {
             return checkTypeAssignableTo(source, target, undefined);
         }
+        function checkTypeSubtypeOf(source, target, errorNode, headMessage, containingMessageChain) {
+            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
+        }
         function checkTypeAssignableTo(source, target, errorNode, headMessage) {
             return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage);
-        }
-        function isTypeRelatedTo(source, target, relation) {
-            return checkTypeRelatedTo(source, target, relation, undefined);
         }
         function isSignatureAssignableTo(source, target) {
             var sourceType = getOrCreateTypeFromSignature(source);
             var targetType = getOrCreateTypeFromSignature(target);
             return checkTypeRelatedTo(sourceType, targetType, assignableRelation, undefined);
-        }
-        function isPropertyIdenticalTo(sourceProp, targetProp) {
-            return isPropertyIdenticalToRecursive(sourceProp, targetProp, false, function (s, t, _reportErrors) { return isTypeIdenticalTo(s, t); });
-        }
-        function checkInheritedPropertiesAreIdentical(type, typeNode) {
-            if (!type.baseTypes.length || type.baseTypes.length === 1) {
-                return true;
-            }
-            var seen = {};
-            ts.forEach(type.declaredProperties, function (p) {
-                seen[p.name] = { prop: p, containingType: type };
-            });
-            var ok = true;
-            for (var i = 0, len = type.baseTypes.length; i < len; ++i) {
-                var base = type.baseTypes[i];
-                var properties = getPropertiesOfObjectType(base);
-                for (var j = 0, proplen = properties.length; j < proplen; ++j) {
-                    var prop = properties[j];
-                    if (!ts.hasProperty(seen, prop.name)) {
-                        seen[prop.name] = { prop: prop, containingType: base };
-                    }
-                    else {
-                        var existing = seen[prop.name];
-                        var isInheritedProperty = existing.containingType !== type;
-                        if (isInheritedProperty && !isPropertyIdenticalTo(existing.prop, prop)) {
-                            ok = false;
-                            var typeName1 = typeToString(existing.containingType);
-                            var typeName2 = typeToString(base);
-                            var errorInfo = ts.chainDiagnosticMessages(undefined, ts.Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
-                            errorInfo = ts.chainDiagnosticMessages(errorInfo, ts.Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
-                            addDiagnostic(ts.createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, program.getCompilerHost().getNewLine()));
-                        }
-                    }
-                }
-            }
-            return ok;
-        }
-        function isPropertyIdenticalToRecursive(sourceProp, targetProp, reportErrors, relate) {
-            if (sourceProp === targetProp) {
-                return true;
-            }
-            var sourcePropAccessibility = getDeclarationFlagsFromSymbol(sourceProp) & (32 /* Private */ | 64 /* Protected */);
-            var targetPropAccessibility = getDeclarationFlagsFromSymbol(targetProp) & (32 /* Private */ | 64 /* Protected */);
-            if (sourcePropAccessibility !== targetPropAccessibility) {
-                return false;
-            }
-            if (sourcePropAccessibility) {
-                return getTargetSymbol(sourceProp) === getTargetSymbol(targetProp) && relate(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
-            }
-            else {
-                return isOptionalProperty(sourceProp) === isOptionalProperty(targetProp) && relate(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
-            }
         }
         function checkTypeRelatedTo(source, target, relation, errorNode, headMessage, containingMessageChain) {
             var errorInfo;
@@ -12341,7 +12295,7 @@ var ts;
             var depth = 0;
             var overflow = false;
             ts.Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
-            var result = isRelatedToWithCustomErrors(source, target, errorNode !== undefined, headMessage);
+            var result = isRelatedTo(source, target, errorNode !== undefined, headMessage);
             if (overflow) {
                 error(errorNode, ts.Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
@@ -12351,65 +12305,63 @@ var ts;
                 }
                 addDiagnostic(ts.createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, program.getCompilerHost().getNewLine()));
             }
-            return result;
+            return result !== 0 /* False */;
             function reportError(message, arg0, arg1, arg2) {
                 errorInfo = ts.chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
             }
-            function isRelatedTo(source, target, reportErrors) {
-                return isRelatedToWithCustomErrors(source, target, reportErrors, undefined);
-            }
-            function isRelatedToWithCustomErrors(source, target, reportErrors, headMessage) {
+            function isRelatedTo(source, target, reportErrors, headMessage) {
+                var result;
                 if (relation === identityRelation) {
                     if (source === target)
-                        return true;
+                        return -1 /* True */;
                 }
                 else {
                     if (source === target)
-                        return true;
+                        return -1 /* True */;
                     if (target.flags & 1 /* Any */)
-                        return true;
+                        return -1 /* True */;
                     if (source === undefinedType)
-                        return true;
+                        return -1 /* True */;
                     if (source === nullType && target !== undefinedType)
-                        return true;
+                        return -1 /* True */;
                     if (source.flags & 128 /* Enum */ && target === numberType)
-                        return true;
+                        return -1 /* True */;
                     if (source.flags & 256 /* StringLiteral */ && target === stringType)
-                        return true;
+                        return -1 /* True */;
                     if (relation === assignableRelation) {
                         if (source.flags & 1 /* Any */)
-                            return true;
+                            return -1 /* True */;
                         if (source === numberType && target.flags & 128 /* Enum */)
-                            return true;
+                            return -1 /* True */;
                     }
                 }
                 if (source.flags & 16384 /* Union */) {
-                    if (unionTypeRelatedToType(source, target, reportErrors)) {
-                        return true;
+                    if (result = unionTypeRelatedToType(source, target, reportErrors)) {
+                        return result;
                     }
                 }
                 else if (target.flags & 16384 /* Union */) {
-                    if (typeRelatedToUnionType(source, target, reportErrors)) {
-                        return true;
+                    if (result = typeRelatedToUnionType(source, target, reportErrors)) {
+                        return result;
                     }
                 }
                 else if (source.flags & 512 /* TypeParameter */ && target.flags & 512 /* TypeParameter */) {
-                    if (typeParameterRelatedTo(source, target, reportErrors)) {
-                        return true;
+                    if (result = typeParameterRelatedTo(source, target, reportErrors)) {
+                        return result;
                     }
                 }
                 else {
                     var saveErrorInfo = errorInfo;
                     if (source.flags & 4096 /* Reference */ && target.flags & 4096 /* Reference */ && source.target === target.target) {
-                        if (typesRelatedTo(source.typeArguments, target.typeArguments, reportErrors)) {
-                            return true;
+                        if (result = typesRelatedTo(source.typeArguments, target.typeArguments, reportErrors)) {
+                            return result;
                         }
                     }
                     var reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
                     var sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
-                    if (sourceOrApparentType.flags & ts.TypeFlags.ObjectType && target.flags & ts.TypeFlags.ObjectType && objectTypeRelatedTo(sourceOrApparentType, target, reportStructuralErrors)) {
+                    if (sourceOrApparentType.flags & ts.TypeFlags.ObjectType && target.flags & ts.TypeFlags.ObjectType && (result = objectTypeRelatedTo(sourceOrApparentType, target, reportStructuralErrors))) {
                         errorInfo = saveErrorInfo;
-                        return true;
+                        return result;
                     }
                 }
                 if (reportErrors) {
@@ -12417,43 +12369,51 @@ var ts;
                     ts.Debug.assert(headMessage);
                     reportError(headMessage, typeToString(source), typeToString(target));
                 }
-                return false;
+                return 0 /* False */;
             }
             function typeRelatedToUnionType(source, target, reportErrors) {
                 var targetTypes = target.types;
                 for (var i = 0, len = targetTypes.length; i < len; i++) {
-                    if (isRelatedTo(source, targetTypes[i], reportErrors && i === len - 1)) {
-                        return true;
+                    var related = isRelatedTo(source, targetTypes[i], reportErrors && i === len - 1);
+                    if (related) {
+                        return related;
                     }
                 }
-                return false;
+                return 0 /* False */;
             }
             function unionTypeRelatedToType(source, target, reportErrors) {
+                var result = -1 /* True */;
                 var sourceTypes = source.types;
                 for (var i = 0, len = sourceTypes.length; i < len; i++) {
-                    if (!isRelatedTo(sourceTypes[i], target, reportErrors)) {
-                        return false;
+                    var related = isRelatedTo(sourceTypes[i], target, reportErrors);
+                    if (!related) {
+                        return 0 /* False */;
                     }
+                    result &= related;
                 }
-                return true;
+                return result;
             }
             function typesRelatedTo(sources, targets, reportErrors) {
+                var result = -1 /* True */;
                 for (var i = 0, len = sources.length; i < len; i++) {
-                    if (!isRelatedTo(sources[i], targets[i], reportErrors))
-                        return false;
+                    var related = isRelatedTo(sources[i], targets[i], reportErrors);
+                    if (!related) {
+                        return 0 /* False */;
+                    }
+                    result &= related;
                 }
-                return true;
+                return result;
             }
             function typeParameterRelatedTo(source, target, reportErrors) {
                 if (relation === identityRelation) {
                     if (source.symbol.name !== target.symbol.name) {
-                        return false;
+                        return 0 /* False */;
                     }
                     if (source.constraint === target.constraint) {
-                        return true;
+                        return -1 /* True */;
                     }
                     if (source.constraint === noConstraintType || target.constraint === noConstraintType) {
-                        return false;
+                        return 0 /* False */;
                     }
                     return isRelatedTo(source.constraint, target.constraint, reportErrors);
                 }
@@ -12461,29 +12421,32 @@ var ts;
                     while (true) {
                         var constraint = getConstraintOfTypeParameter(source);
                         if (constraint === target)
-                            return true;
+                            return -1 /* True */;
                         if (!(constraint && constraint.flags & 512 /* TypeParameter */))
                             break;
                         source = constraint;
                     }
-                    return false;
+                    return 0 /* False */;
                 }
             }
             function objectTypeRelatedTo(source, target, reportErrors) {
-                if (overflow)
-                    return false;
-                var result;
+                if (overflow) {
+                    return 0 /* False */;
+                }
                 var id = source.id + "," + target.id;
-                if ((result = relation[id]) !== undefined)
-                    return result;
+                var related = relation[id];
+                if (related !== undefined) {
+                    return related;
+                }
                 if (depth > 0) {
                     for (var i = 0; i < depth; i++) {
-                        if (source === sourceStack[i] && target === targetStack[i])
-                            return true;
+                        if (source === sourceStack[i] && target === targetStack[i]) {
+                            return 1 /* Maybe */;
+                        }
                     }
                     if (depth === 100) {
                         overflow = true;
-                        return false;
+                        return 0 /* False */;
                     }
                 }
                 else {
@@ -12499,10 +12462,27 @@ var ts;
                     expandingFlags |= 1;
                 if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack))
                     expandingFlags |= 2;
-                result = expandingFlags === 3 || propertiesRelatedTo(source, target, reportErrors) && signaturesRelatedTo(source, target, 0 /* Call */, reportErrors) && signaturesRelatedTo(source, target, 1 /* Construct */, reportErrors) && stringIndexTypesRelatedTo(source, target, reportErrors) && numberIndexTypesRelatedTo(source, target, reportErrors);
+                if (expandingFlags === 3) {
+                    var result = -1 /* True */;
+                }
+                else {
+                    var result = propertiesRelatedTo(source, target, reportErrors);
+                    if (result) {
+                        result &= signaturesRelatedTo(source, target, 0 /* Call */, reportErrors);
+                        if (result) {
+                            result &= signaturesRelatedTo(source, target, 1 /* Construct */, reportErrors);
+                            if (result) {
+                                result &= stringIndexTypesRelatedTo(source, target, reportErrors);
+                                if (result) {
+                                    result &= numberIndexTypesRelatedTo(source, target, reportErrors);
+                                }
+                            }
+                        }
+                    }
+                }
                 expandingFlags = saveExpandingFlags;
                 depth--;
-                if (depth === 0) {
+                if (result !== 1 /* Maybe */) {
                     relation[id] = result;
                 }
                 return result;
@@ -12524,8 +12504,9 @@ var ts;
             }
             function propertiesRelatedTo(source, target, reportErrors) {
                 if (relation === identityRelation) {
-                    return propertiesIdenticalTo(source, target, reportErrors);
+                    return propertiesIdenticalTo(source, target);
                 }
+                var result = -1 /* True */;
                 var properties = getPropertiesOfObjectType(target);
                 for (var i = 0; i < properties.length; i++) {
                     var targetProp = properties[i];
@@ -12536,7 +12517,7 @@ var ts;
                                 if (reportErrors) {
                                     reportError(ts.Diagnostics.Property_0_is_missing_in_type_1, symbolToString(targetProp), typeToString(source));
                                 }
-                                return false;
+                                return 0 /* False */;
                             }
                         }
                         else if (!(targetProp.flags & 268435456 /* Prototype */)) {
@@ -12552,7 +12533,7 @@ var ts;
                                             reportError(ts.Diagnostics.Property_0_is_private_in_type_1_but_not_in_type_2, symbolToString(targetProp), typeToString(sourceFlags & 32 /* Private */ ? source : target), typeToString(sourceFlags & 32 /* Private */ ? target : source));
                                         }
                                     }
-                                    return false;
+                                    return 0 /* False */;
                                 }
                             }
                             else if (targetFlags & 64 /* Protected */) {
@@ -12563,55 +12544,65 @@ var ts;
                                     if (reportErrors) {
                                         reportError(ts.Diagnostics.Property_0_is_protected_but_type_1_is_not_a_class_derived_from_2, symbolToString(targetProp), typeToString(sourceClass || source), typeToString(targetClass));
                                     }
-                                    return false;
+                                    return 0 /* False */;
                                 }
                             }
                             else if (sourceFlags & 64 /* Protected */) {
                                 if (reportErrors) {
                                     reportError(ts.Diagnostics.Property_0_is_protected_in_type_1_but_public_in_type_2, symbolToString(targetProp), typeToString(source), typeToString(target));
                                 }
-                                return false;
+                                return 0 /* False */;
                             }
-                            if (!isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors)) {
+                            var related = isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
+                            if (!related) {
                                 if (reportErrors) {
                                     reportError(ts.Diagnostics.Types_of_property_0_are_incompatible, symbolToString(targetProp));
                                 }
-                                return false;
+                                return 0 /* False */;
                             }
+                            result &= related;
                             if (isOptionalProperty(sourceProp) && !isOptionalProperty(targetProp)) {
                                 if (reportErrors) {
                                     reportError(ts.Diagnostics.Property_0_is_optional_in_type_1_but_required_in_type_2, symbolToString(targetProp), typeToString(source), typeToString(target));
                                 }
-                                return false;
+                                return 0 /* False */;
                             }
                         }
                     }
                 }
-                return true;
+                return result;
             }
-            function propertiesIdenticalTo(source, target, reportErrors) {
+            function propertiesIdenticalTo(source, target) {
                 var sourceProperties = getPropertiesOfObjectType(source);
                 var targetProperties = getPropertiesOfObjectType(target);
                 if (sourceProperties.length !== targetProperties.length) {
-                    return false;
+                    return 0 /* False */;
                 }
+                var result = -1 /* True */;
                 for (var i = 0, len = sourceProperties.length; i < len; ++i) {
                     var sourceProp = sourceProperties[i];
                     var targetProp = getPropertyOfObjectType(target, sourceProp.name);
-                    if (!targetProp || !isPropertyIdenticalToRecursive(sourceProp, targetProp, reportErrors, isRelatedTo)) {
-                        return false;
+                    if (!targetProp) {
+                        return 0 /* False */;
                     }
+                    var related = compareProperties(sourceProp, targetProp, isRelatedTo);
+                    if (!related) {
+                        return 0 /* False */;
+                    }
+                    result &= related;
                 }
-                return true;
+                return result;
             }
             function signaturesRelatedTo(source, target, kind, reportErrors) {
                 if (relation === identityRelation) {
-                    return signaturesIdenticalTo(source, target, kind, reportErrors);
+                    return signaturesIdenticalTo(source, target, kind);
                 }
-                if (target === anyFunctionType || source === anyFunctionType)
-                    return true;
+                if (target === anyFunctionType || source === anyFunctionType) {
+                    return -1 /* True */;
+                }
                 var sourceSignatures = getSignaturesOfType(source, kind);
                 var targetSignatures = getSignaturesOfType(target, kind);
+                var result = -1 /* True */;
                 var saveErrorInfo = errorInfo;
                 outer: for (var i = 0; i < targetSignatures.length; i++) {
                     var t = targetSignatures[i];
@@ -12620,24 +12611,26 @@ var ts;
                         for (var j = 0; j < sourceSignatures.length; j++) {
                             var s = sourceSignatures[j];
                             if (!s.hasStringLiterals || source.flags & 65536 /* FromSignature */) {
-                                if (signatureRelatedTo(s, t, localErrors)) {
+                                var related = signatureRelatedTo(s, t, localErrors);
+                                if (related) {
+                                    result &= related;
                                     errorInfo = saveErrorInfo;
                                     continue outer;
                                 }
                                 localErrors = false;
                             }
                         }
-                        return false;
+                        return 0 /* False */;
                     }
                 }
-                return true;
+                return result;
             }
             function signatureRelatedTo(source, target, reportErrors) {
                 if (source === target) {
-                    return true;
+                    return -1 /* True */;
                 }
                 if (!target.hasRestParameter && source.minArgumentCount > target.parameters.length) {
-                    return false;
+                    return 0 /* False */;
                 }
                 var sourceMax = source.parameters.length;
                 var targetMax = target.parameters.length;
@@ -12660,42 +12653,49 @@ var ts;
                 }
                 source = getErasedSignature(source);
                 target = getErasedSignature(target);
+                var result = -1 /* True */;
                 for (var i = 0; i < checkCount; i++) {
                     var s = i < sourceMax ? getTypeOfSymbol(source.parameters[i]) : getRestTypeOfSignature(source);
                     var t = i < targetMax ? getTypeOfSymbol(target.parameters[i]) : getRestTypeOfSignature(target);
                     var saveErrorInfo = errorInfo;
-                    if (!isRelatedTo(s, t, reportErrors)) {
-                        if (!isRelatedTo(t, s, false)) {
+                    var related = isRelatedTo(s, t, reportErrors);
+                    if (!related) {
+                        related = isRelatedTo(t, s, false);
+                        if (!related) {
                             if (reportErrors) {
                                 reportError(ts.Diagnostics.Types_of_parameters_0_and_1_are_incompatible, source.parameters[i < sourceMax ? i : sourceMax].name, target.parameters[i < targetMax ? i : targetMax].name);
                             }
-                            return false;
+                            return 0 /* False */;
                         }
                         errorInfo = saveErrorInfo;
                     }
+                    result &= related;
                 }
                 var t = getReturnTypeOfSignature(target);
                 if (t === voidType)
-                    return true;
+                    return result;
                 var s = getReturnTypeOfSignature(source);
-                return isRelatedTo(s, t, reportErrors);
+                return result & isRelatedTo(s, t, reportErrors);
             }
-            function signaturesIdenticalTo(source, target, kind, reportErrors) {
+            function signaturesIdenticalTo(source, target, kind) {
                 var sourceSignatures = getSignaturesOfType(source, kind);
                 var targetSignatures = getSignaturesOfType(target, kind);
                 if (sourceSignatures.length !== targetSignatures.length) {
-                    return false;
+                    return 0 /* False */;
                 }
+                var result = -1 /* True */;
                 for (var i = 0, len = sourceSignatures.length; i < len; ++i) {
-                    if (!compareSignatures(sourceSignatures[i], targetSignatures[i], true, isRelatedTo)) {
-                        return false;
+                    var related = compareSignatures(sourceSignatures[i], targetSignatures[i], true, isRelatedTo);
+                    if (!related) {
+                        return 0 /* False */;
                     }
+                    result &= related;
                 }
-                return true;
+                return result;
             }
             function stringIndexTypesRelatedTo(source, target, reportErrors) {
                 if (relation === identityRelation) {
-                    return indexTypesIdenticalTo(0 /* String */, source, target, reportErrors);
+                    return indexTypesIdenticalTo(0 /* String */, source, target);
                 }
                 var targetType = getIndexTypeOfType(target, 0 /* String */);
                 if (targetType) {
@@ -12704,20 +12704,22 @@ var ts;
                         if (reportErrors) {
                             reportError(ts.Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
                         }
-                        return false;
+                        return 0 /* False */;
                     }
-                    if (!isRelatedTo(sourceType, targetType, reportErrors)) {
+                    var related = isRelatedTo(sourceType, targetType, reportErrors);
+                    if (!related) {
                         if (reportErrors) {
                             reportError(ts.Diagnostics.Index_signatures_are_incompatible);
                         }
-                        return false;
+                        return 0 /* False */;
                     }
+                    return related;
                 }
-                return true;
+                return -1 /* True */;
             }
             function numberIndexTypesRelatedTo(source, target, reportErrors) {
                 if (relation === identityRelation) {
-                    return indexTypesIdenticalTo(1 /* Number */, source, target, reportErrors);
+                    return indexTypesIdenticalTo(1 /* Number */, source, target);
                 }
                 var targetType = getIndexTypeOfType(target, 1 /* Number */);
                 if (targetType) {
@@ -12727,59 +12729,98 @@ var ts;
                         if (reportErrors) {
                             reportError(ts.Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
                         }
-                        return false;
+                        return 0 /* False */;
                     }
                     if (sourceStringType && sourceNumberType) {
-                        var compatible = isRelatedTo(sourceStringType, targetType, false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
+                        var related = isRelatedTo(sourceStringType, targetType, false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
                     }
                     else {
-                        var compatible = isRelatedTo(sourceStringType || sourceNumberType, targetType, reportErrors);
+                        var related = isRelatedTo(sourceStringType || sourceNumberType, targetType, reportErrors);
                     }
-                    if (!compatible) {
+                    if (!related) {
                         if (reportErrors) {
                             reportError(ts.Diagnostics.Index_signatures_are_incompatible);
                         }
-                        return false;
+                        return 0 /* False */;
                     }
+                    return related;
                 }
-                return true;
+                return -1 /* True */;
             }
-            function indexTypesIdenticalTo(indexKind, source, target, reportErrors) {
+            function indexTypesIdenticalTo(indexKind, source, target) {
                 var targetType = getIndexTypeOfType(target, indexKind);
                 var sourceType = getIndexTypeOfType(source, indexKind);
-                return (!sourceType && !targetType) || (sourceType && targetType && isRelatedTo(sourceType, targetType, reportErrors));
+                if (!sourceType && !targetType) {
+                    return -1 /* True */;
+                }
+                if (sourceType && targetType) {
+                    return isRelatedTo(sourceType, targetType);
+                }
+                return 0 /* False */;
             }
+        }
+        function isPropertyIdenticalTo(sourceProp, targetProp) {
+            return compareProperties(sourceProp, targetProp, compareTypes) !== 0 /* False */;
+        }
+        function compareProperties(sourceProp, targetProp, compareTypes) {
+            if (sourceProp === targetProp) {
+                return -1 /* True */;
+            }
+            var sourcePropAccessibility = getDeclarationFlagsFromSymbol(sourceProp) & (32 /* Private */ | 64 /* Protected */);
+            var targetPropAccessibility = getDeclarationFlagsFromSymbol(targetProp) & (32 /* Private */ | 64 /* Protected */);
+            if (sourcePropAccessibility !== targetPropAccessibility) {
+                return 0 /* False */;
+            }
+            if (sourcePropAccessibility) {
+                if (getTargetSymbol(sourceProp) !== getTargetSymbol(targetProp)) {
+                    return 0 /* False */;
+                }
+            }
+            else {
+                if (isOptionalProperty(sourceProp) !== isOptionalProperty(targetProp)) {
+                    return 0 /* False */;
+                }
+            }
+            return compareTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
         }
         function compareSignatures(source, target, compareReturnTypes, compareTypes) {
             if (source === target) {
-                return true;
+                return -1 /* True */;
             }
             if (source.parameters.length !== target.parameters.length || source.minArgumentCount !== target.minArgumentCount || source.hasRestParameter !== target.hasRestParameter) {
-                return false;
+                return 0 /* False */;
             }
+            var result = -1 /* True */;
             if (source.typeParameters && target.typeParameters) {
                 if (source.typeParameters.length !== target.typeParameters.length) {
-                    return false;
+                    return 0 /* False */;
                 }
                 for (var i = 0, len = source.typeParameters.length; i < len; ++i) {
-                    if (!compareTypes(source.typeParameters[i], target.typeParameters[i])) {
-                        return false;
+                    var related = compareTypes(source.typeParameters[i], target.typeParameters[i]);
+                    if (!related) {
+                        return 0 /* False */;
                     }
+                    result &= related;
                 }
             }
             else if (source.typeParameters || source.typeParameters) {
-                return false;
+                return 0 /* False */;
             }
             source = getErasedSignature(source);
             target = getErasedSignature(target);
             for (var i = 0, len = source.parameters.length; i < len; i++) {
                 var s = source.hasRestParameter && i === len - 1 ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
                 var t = target.hasRestParameter && i === len - 1 ? getRestTypeOfSignature(target) : getTypeOfSymbol(target.parameters[i]);
-                if (!compareTypes(s, t)) {
-                    return false;
+                var related = compareTypes(s, t);
+                if (!related) {
+                    return 0 /* False */;
                 }
+                result &= related;
             }
-            return !compareReturnTypes || compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+            if (compareReturnTypes) {
+                result &= compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+            }
+            return result;
         }
         function isSupertypeOfEach(candidate, types) {
             for (var i = 0, len = types.length; i < len; i++) {
@@ -13639,7 +13680,7 @@ var ts;
                     if (!result) {
                         result = signature;
                     }
-                    else if (!compareSignatures(result, signature, true, isTypeIdenticalTo)) {
+                    else if (!compareSignatures(result, signature, true, compareTypes)) {
                         return undefined;
                     }
                 }
@@ -15585,6 +15626,39 @@ var ts;
                 }
             }
             return true;
+        }
+        function checkInheritedPropertiesAreIdentical(type, typeNode) {
+            if (!type.baseTypes.length || type.baseTypes.length === 1) {
+                return true;
+            }
+            var seen = {};
+            ts.forEach(type.declaredProperties, function (p) {
+                seen[p.name] = { prop: p, containingType: type };
+            });
+            var ok = true;
+            for (var i = 0, len = type.baseTypes.length; i < len; ++i) {
+                var base = type.baseTypes[i];
+                var properties = getPropertiesOfObjectType(base);
+                for (var j = 0, proplen = properties.length; j < proplen; ++j) {
+                    var prop = properties[j];
+                    if (!ts.hasProperty(seen, prop.name)) {
+                        seen[prop.name] = { prop: prop, containingType: base };
+                    }
+                    else {
+                        var existing = seen[prop.name];
+                        var isInheritedProperty = existing.containingType !== type;
+                        if (isInheritedProperty && !isPropertyIdenticalTo(existing.prop, prop)) {
+                            ok = false;
+                            var typeName1 = typeToString(existing.containingType);
+                            var typeName2 = typeToString(base);
+                            var errorInfo = ts.chainDiagnosticMessages(undefined, ts.Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
+                            errorInfo = ts.chainDiagnosticMessages(errorInfo, ts.Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
+                            addDiagnostic(ts.createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, program.getCompilerHost().getNewLine()));
+                        }
+                    }
+                }
+            }
+            return ok;
         }
         function checkInterfaceDeclaration(node) {
             checkTypeParameters(node.typeParameters);
