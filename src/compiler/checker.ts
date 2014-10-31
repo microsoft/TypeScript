@@ -3217,8 +3217,8 @@ module ts {
             return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined);
         }
 
-        function compareTypes(source: Type, target: Type): number {
-            return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined) ? -1 : 0;
+        function compareTypes(source: Type, target: Type): Ternary {
+            return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined) ? Ternary.True : Ternary.False;
         }
 
         function isTypeSubtypeOf(source: Type, target: Type): boolean {
@@ -3270,7 +3270,7 @@ module ts {
                 }
                 addDiagnostic(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, program.getCompilerHost().getNewLine()));
             }
-            return result !== 0;
+            return result !== Ternary.False;
 
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
                 errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
@@ -3418,11 +3418,13 @@ module ts {
                 if (depth > 0) {
                     for (var i = 0; i < depth; i++) {
                         // If source and target are already being compared, consider them related with assumptions
-                        if (source === sourceStack[i] && target === targetStack[i]) return Ternary.Maybe;
+                        if (source === sourceStack[i] && target === targetStack[i]) {
+                            return Ternary.Maybe;
+                        }
                     }
                     if (depth === 100) {
                         overflow = true;
-                        return 0;
+                        return Ternary.False;
                     }
                 }
                 else {
@@ -3766,7 +3768,7 @@ module ts {
         }
 
         function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
-            return compareProperties(sourceProp, targetProp, compareTypes) !== 0;
+            return compareProperties(sourceProp, targetProp, compareTypes) !== Ternary.False;
         }
 
         function compareProperties(sourceProp: Symbol, targetProp: Symbol, compareTypes: (source: Type, target: Type) => Ternary): Ternary {
@@ -3785,14 +3787,13 @@ module ts {
                 if (getTargetSymbol(sourceProp) !== getTargetSymbol(targetProp)) {
                     return Ternary.False;
                 }
-                return compareTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
             }
             else {
                 if (isOptionalProperty(sourceProp) !== isOptionalProperty(targetProp)) {
                     return Ternary.False;
                 }
-                return compareTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
             }
+            return compareTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
         }
 
         function compareSignatures(source: Signature, target: Signature, compareReturnTypes: boolean, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
