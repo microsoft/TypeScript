@@ -52,16 +52,13 @@ module TypeScript {
             case SyntaxKind.DoStatement: return visitor.visitDoStatement(<DoStatementSyntax>element);
             case SyntaxKind.DebuggerStatement: return visitor.visitDebuggerStatement(<DebuggerStatementSyntax>element);
             case SyntaxKind.WithStatement: return visitor.visitWithStatement(<WithStatementSyntax>element);
-            case SyntaxKind.PreIncrementExpression: case SyntaxKind.PreDecrementExpression: case SyntaxKind.PlusExpression: case SyntaxKind.NegateExpression: case SyntaxKind.BitwiseNotExpression: case SyntaxKind.LogicalNotExpression:
-                return visitor.visitPrefixUnaryExpression(<PrefixUnaryExpressionSyntax>element);
+            case SyntaxKind.PrefixUnaryExpression: return visitor.visitPrefixUnaryExpression(<PrefixUnaryExpressionSyntax>element);
             case SyntaxKind.DeleteExpression: return visitor.visitDeleteExpression(<DeleteExpressionSyntax>element);
             case SyntaxKind.TypeOfExpression: return visitor.visitTypeOfExpression(<TypeOfExpressionSyntax>element);
             case SyntaxKind.VoidExpression: return visitor.visitVoidExpression(<VoidExpressionSyntax>element);
             case SyntaxKind.ConditionalExpression: return visitor.visitConditionalExpression(<ConditionalExpressionSyntax>element);
-            case SyntaxKind.MultiplyExpression: case SyntaxKind.DivideExpression: case SyntaxKind.ModuloExpression: case SyntaxKind.AddExpression: case SyntaxKind.SubtractExpression: case SyntaxKind.LeftShiftExpression: case SyntaxKind.SignedRightShiftExpression: case SyntaxKind.UnsignedRightShiftExpression: case SyntaxKind.LessThanExpression: case SyntaxKind.GreaterThanExpression: case SyntaxKind.LessThanOrEqualExpression: case SyntaxKind.GreaterThanOrEqualExpression: case SyntaxKind.InstanceOfExpression: case SyntaxKind.InExpression: case SyntaxKind.EqualsWithTypeConversionExpression: case SyntaxKind.NotEqualsWithTypeConversionExpression: case SyntaxKind.EqualsExpression: case SyntaxKind.NotEqualsExpression: case SyntaxKind.BitwiseAndExpression: case SyntaxKind.BitwiseExclusiveOrExpression: case SyntaxKind.BitwiseOrExpression: case SyntaxKind.LogicalAndExpression: case SyntaxKind.LogicalOrExpression: case SyntaxKind.OrAssignmentExpression: case SyntaxKind.AndAssignmentExpression: case SyntaxKind.ExclusiveOrAssignmentExpression: case SyntaxKind.LeftShiftAssignmentExpression: case SyntaxKind.SignedRightShiftAssignmentExpression: case SyntaxKind.UnsignedRightShiftAssignmentExpression: case SyntaxKind.AddAssignmentExpression: case SyntaxKind.SubtractAssignmentExpression: case SyntaxKind.MultiplyAssignmentExpression: case SyntaxKind.DivideAssignmentExpression: case SyntaxKind.ModuloAssignmentExpression: case SyntaxKind.AssignmentExpression: case SyntaxKind.CommaExpression:
-                return visitor.visitBinaryExpression(<BinaryExpressionSyntax>element);
-            case SyntaxKind.PostIncrementExpression: case SyntaxKind.PostDecrementExpression:
-                return visitor.visitPostfixUnaryExpression(<PostfixUnaryExpressionSyntax>element);
+            case SyntaxKind.BinaryExpression: return visitor.visitBinaryExpression(<BinaryExpressionSyntax>element);
+            case SyntaxKind.PostfixUnaryExpression: return visitor.visitPostfixUnaryExpression(<PostfixUnaryExpressionSyntax>element);
             case SyntaxKind.MemberAccessExpression: return visitor.visitMemberAccessExpression(<MemberAccessExpressionSyntax>element);
             case SyntaxKind.InvocationExpression: return visitor.visitInvocationExpression(<InvocationExpressionSyntax>element);
             case SyntaxKind.ArrayLiteralExpression: return visitor.visitArrayLiteralExpression(<ArrayLiteralExpressionSyntax>element);
@@ -80,8 +77,7 @@ module TypeScript {
             case SyntaxKind.ParameterList: return visitor.visitParameterList(<ParameterListSyntax>element);
             case SyntaxKind.TypeArgumentList: return visitor.visitTypeArgumentList(<TypeArgumentListSyntax>element);
             case SyntaxKind.TypeParameterList: return visitor.visitTypeParameterList(<TypeParameterListSyntax>element);
-            case SyntaxKind.ExtendsHeritageClause: case SyntaxKind.ImplementsHeritageClause:
-                return visitor.visitHeritageClause(<HeritageClauseSyntax>element);
+            case SyntaxKind.HeritageClause: return visitor.visitHeritageClause(<HeritageClauseSyntax>element);
             case SyntaxKind.EqualsValueClause: return visitor.visitEqualsValueClause(<EqualsValueClauseSyntax>element);
             case SyntaxKind.CaseSwitchClause: return visitor.visitCaseSwitchClause(<CaseSwitchClauseSyntax>element);
             case SyntaxKind.DefaultSwitchClause: return visitor.visitDefaultSwitchClause(<DefaultSwitchClauseSyntax>element);

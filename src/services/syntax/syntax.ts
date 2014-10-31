@@ -185,13 +185,17 @@ module TypeScript.Syntax {
     export function isIntegerLiteral(expression: IExpressionSyntax): boolean {
         if (expression) {
             switch (expression.kind()) {
-                case SyntaxKind.PlusExpression:
-                case SyntaxKind.NegateExpression:
-                    // Note: if there is a + or - sign, we can only allow a normal integer following
-                    // (and not a hex integer).  i.e. -0xA is a legal expression, but it is not a 
-                    // *literal*.
-                    expression = (<PrefixUnaryExpressionSyntax>expression).operand;
-                    return isToken(expression) && IntegerUtilities.isInteger((<ISyntaxToken>expression).text());
+                case SyntaxKind.PrefixUnaryExpression:
+                    var prefixExpr = <PrefixUnaryExpressionSyntax>expression;
+                    if (prefixExpr.operatorToken.kind() == SyntaxKind.PlusToken || prefixExpr.operatorToken.kind() === SyntaxKind.MinusToken) {
+                        // Note: if there is a + or - sign, we can only allow a normal integer following
+                        // (and not a hex integer).  i.e. -0xA is a legal expression, but it is not a 
+                        // *literal*.
+                        expression = prefixExpr.operand;
+                        return isToken(expression) && IntegerUtilities.isInteger((<ISyntaxToken>expression).text());
+                    }
+
+                    return false;
 
                 case SyntaxKind.NumericLiteral:
                     // If it doesn't have a + or -, then either an integer literal or a hex literal
