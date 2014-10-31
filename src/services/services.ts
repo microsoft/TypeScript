@@ -2471,12 +2471,12 @@ module ts {
             }
 
             function isCompletionListBlocker(previousToken: Node): boolean {
-                return isInStringOrRegularExpressionLiteral(previousToken) ||
+                return isInStringOrRegularExpressionOrTemplateLiteral(previousToken) ||
                     isIdentifierDefinitionLocation(previousToken) ||
                     isRightOfIllegalDot(previousToken);
             }
 
-            function isInStringOrRegularExpressionLiteral(previousToken: Node): boolean {
+            function isInStringOrRegularExpressionOrTemplateLiteral(previousToken: Node): boolean {
                 if (previousToken.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(previousToken.kind)) {
                     // The position has to be either: 1. entirely within the token text, or 
                     // 2. at the end position, and the string literal is not terminated

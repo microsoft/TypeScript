@@ -403,6 +403,8 @@ module ts {
         templateSpans: NodeArray<TemplateSpan>;
     }
 
+    // Each of these corresponds to a substitution expression and a template literal, in that order.
+    // The template literal must have kind TemplateMiddleLiteral or TemplateTailLiteral.
     export interface TemplateSpan extends Node {
         expression: Expression;
         literal: LiteralExpression;
@@ -440,8 +442,7 @@ module ts {
 
     export interface TaggedTemplateExpression extends Expression {
         tag: Expression;
-        // Either a LiteralExpression of kind NoSubstitutionTemplateLiteral, or a TemplateExpression
-        template: Expression;
+        template: LiteralExpression | TemplateExpression;
     }
 
     export interface TypeAssertion extends Expression {
