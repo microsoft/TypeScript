@@ -427,7 +427,7 @@ module ts {
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
                     // Block-scoped variables cannot be used before their definition
                     var declaration = forEach(result.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
-                    Debug.assert(declaration, "Block-scoped variable declaration is undefined");
+                    Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
                     var declarationSourceFile = getSourceFileOfNode(declaration);
                     var referenceSourceFile = getSourceFileOfNode(errorLocation);
                     if (declarationSourceFile === referenceSourceFile) {
@@ -472,7 +472,7 @@ module ts {
         function getSymbolOfPartOfRightHandSideOfImport(entityName: EntityName, importDeclaration?: ImportDeclaration): Symbol {
             if (!importDeclaration) {
                 importDeclaration = getAncestor(entityName, SyntaxKind.ImportDeclaration);
-                Debug.assert(importDeclaration);
+                Debug.assert(importDeclaration !== undefined);
             }
             // There are three things we might try to look for. In the following examples,
             // the search term is enclosed in |...|:
@@ -3334,7 +3334,6 @@ module ts {
                 }
                 if (reportErrors) {
                     headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
-                    Debug.assert(headMessage);
                     reportError(headMessage, typeToString(source), typeToString(target));
                 }
                 return Ternary.False;
@@ -4912,7 +4911,7 @@ module ts {
             }
             return createArrayType(getUnionType(elementTypes));
         }
-
+        
         function isNumericName(name: string) {
             // The intent of numeric names is that
             //     - they are names with text in a numeric form, and that
@@ -4937,7 +4936,7 @@ module ts {
             // with the strings '"Infinity"', '"-Infinity"', and '"NaN"' respectively.
             return (+name).toString() === name;
         }
-
+        
         function checkObjectLiteral(node: ObjectLiteral, contextualMapper?: TypeMapper): Type {
             var members = node.symbol.members;
             var properties: SymbolTable = {};
@@ -5660,6 +5659,13 @@ module ts {
             return getReturnTypeOfSignature(signature);
         }
 
+        function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
+            // TODO (drosen): Make sure substitutions are assignable to the tag's arguments.
+            checkExpression(node.tag);
+            checkExpression(node.template);
+            return anyType;
+        }
+
         function checkTypeAssertion(node: TypeAssertion): Type {
             var exprType = checkExpression(node.operand);
             var targetType = getTypeFromTypeNode(node.type);
@@ -6170,6 +6176,19 @@ module ts {
             return getUnionType([type1, type2]);
         }
 
+        function checkTemplateExpression(node: TemplateExpression): Type {
+            // We just want to check each expressions, but we are unconcerned with
+            // the type of each expression, as any value may be coerced into a string.
+            // It is worth asking whether this is what we really want though.
+            // A place where we actually *are* concerned with the expressions' types are
+            // in tagged templates.
+            forEach((<TemplateExpression>node).templateSpans, templateSpan => {
+                checkExpression(templateSpan.expression);
+            });
+
+            return stringType;
+        }
+
         function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper?: TypeMapper): Type {
             var saveContextualType = node.contextualType;
             node.contextualType = contextualType;
@@ -6223,7 +6242,10 @@ module ts {
                     return booleanType;
                 case SyntaxKind.NumericLiteral:
                     return numberType;
+                case SyntaxKind.TemplateExpression:
+                    return checkTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return stringType;
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
@@ -6240,6 +6262,8 @@ module ts {
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.TypeAssertion:
                     return checkTypeAssertion(<TypeAssertion>node);
                 case SyntaxKind.ParenExpression:
@@ -7549,17 +7573,17 @@ module ts {
                             errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
                         }
                         else {
-                            Debug.assert(derived.flags & SymbolFlags.Property);
+                            Debug.assert((derived.flags & SymbolFlags.Property) !== 0);
                             errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_property;
                         }
                     }
                     else if (base.flags & SymbolFlags.Property) {
-                        Debug.assert(derived.flags & SymbolFlags.Method);
+                        Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
                         errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_function;
                     }
                     else {
-                        Debug.assert(base.flags & SymbolFlags.Accessor);
-                        Debug.assert(derived.flags & SymbolFlags.Method);
+                        Debug.assert((base.flags & SymbolFlags.Accessor) !== 0);
+                        Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
                         errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function;
                     }
 
@@ -8016,6 +8040,7 @@ module ts {
                 case SyntaxKind.IndexedAccess:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.TypeAssertion:
                 case SyntaxKind.ParenExpression:
                 case SyntaxKind.PrefixOperator:
@@ -8293,6 +8318,9 @@ module ts {
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
                             return (<CallExpression>parent).typeArguments && (<CallExpression>parent).typeArguments.indexOf(node) >= 0;
+                        case SyntaxKind.TaggedTemplateExpression:
+                            // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
+                            return false;
                     }
             }
 

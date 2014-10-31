@@ -1639,7 +1639,7 @@ module ts {
             }
 
             if (syntaxTree !== null) {
-                Debug.assert(sourceFile);
+                Debug.assert(sourceFile !== undefined);
                 // All done, ensure state is up to date
                 this.currentFileVersion = version;
                 this.currentFilename = filename;
@@ -1847,9 +1847,9 @@ module ts {
             ): SourceFile {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
-            Debug.assert(bucket);
+            Debug.assert(bucket !== undefined);
             var entry = lookUp(bucket, filename);
-            Debug.assert(entry);
+            Debug.assert(entry !== undefined);
 
             if (entry.sourceFile.isOpen === isOpen && entry.sourceFile.version === version) {
                 return entry.sourceFile;
@@ -1861,7 +1861,7 @@ module ts {
 
         function releaseDocument(filename: string, compilationSettings: CompilerOptions): void {
             var bucket = getBucketForCompilationSettings(compilationSettings, false);
-            Debug.assert(bucket);
+            Debug.assert(bucket !== undefined);
 
             var entry = lookUp(bucket, filename);
             entry.refCount--;
@@ -2471,31 +2471,54 @@ module ts {
             }
 
             function isCompletionListBlocker(previousToken: Node): boolean {
-                return isInStringOrRegularExpressionLiteral(previousToken) ||
+                return isInStringOrRegularExpressionOrTemplateLiteral(previousToken) ||
                     isIdentifierDefinitionLocation(previousToken) ||
                     isRightOfIllegalDot(previousToken);
             }
 
-            function isInStringOrRegularExpressionLiteral(previousToken: Node): boolean {
-                if (previousToken.kind === SyntaxKind.StringLiteral) {
+            function isInStringOrRegularExpressionOrTemplateLiteral(previousToken: Node): boolean {
+                if (previousToken.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(previousToken.kind)) {
                     // The position has to be either: 1. entirely within the token text, or 
                     // 2. at the end position, and the string literal is not terminated
+                    
                     var start = previousToken.getStart();
                     var end = previousToken.getEnd();
+
                     if (start < position && position < end) {
                         return true;
                     }
                     else if (position === end) {
                         var width = end - start;
                         var text = previousToken.getSourceFile().text;
-                        return width <= 1 ||
-                            text.charCodeAt(start) !== text.charCodeAt(end - 1) ||
-                            text.charCodeAt(end - 2) === CharacterCodes.backslash;
+
+                        // If the token is a single character, or its second-to-last charcter indicates an escape code,
+                        // then we can immediately say that we are in the middle of an unclosed string.
+                        if (width <= 1 || text.charCodeAt(end - 2) === CharacterCodes.backslash) {
+                            return true;
+                        }
+
+                        // Now check if the last character is a closing character for the token.
+                        switch (previousToken.kind) {
+                            case SyntaxKind.StringLiteral:
+                            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                                return text.charCodeAt(start) !== text.charCodeAt(end - 1);
+
+                            case SyntaxKind.TemplateHead:
+                            case SyntaxKind.TemplateMiddle:
+                                return text.charCodeAt(end - 1) !== CharacterCodes.openBrace
+                                    || text.charCodeAt(end - 2) !== CharacterCodes.$;
+
+                            case SyntaxKind.TemplateTail:
+                                return text.charCodeAt(end - 1) !== CharacterCodes.backtick;
+                        }
+
+                        return false;
                     }
                 }
                 else if (previousToken.kind === SyntaxKind.RegularExpressionLiteral) {
                     return previousToken.getStart() < position && position < previousToken.getEnd();
                 }
+
                 return false;
             }
 
@@ -2647,7 +2670,7 @@ module ts {
             var symbol = lookUp(activeCompletionSession.symbols, entryName);
             if (symbol) {
                 var type = session.typeChecker.getTypeOfSymbol(symbol);
-                Debug.assert(type, "Could not find type for symbol");
+                Debug.assert(type !== undefined, "Could not find type for symbol");
                 var completionEntry = createCompletionEntry(symbol, session.typeChecker);
                 // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
                 //               which is permissible given that it is backwards compatible; but really we should consider
@@ -2748,7 +2771,7 @@ module ts {
                         }
                         if (rootSymbolFlags & SymbolFlags.GetAccessor) return ScriptElementKind.memberVariableElement;
                         if (rootSymbolFlags & SymbolFlags.SetAccessor) return ScriptElementKind.memberVariableElement;
-                        Debug.assert(rootSymbolFlags & SymbolFlags.Method);
+                        Debug.assert((rootSymbolFlags & SymbolFlags.Method) !== undefined);
                     }) || ScriptElementKind.memberFunctionElement;
                 }
                 return ScriptElementKind.memberVariableElement;
@@ -4927,6 +4950,10 @@ module ts {
                     // TODO: we should get another classification type for these literals.
                     return ClassificationTypeNames.stringLiteral;
                 }
+                else if (isTemplateLiteralKind(tokenKind)) {
+                    // TODO (drosen): we should *also* get another classification type for these literals.
+                    return ClassificationTypeNames.stringLiteral;
+                }
                 else if (tokenKind === SyntaxKind.Identifier) {
                     switch (token.parent.kind) {
                         case SyntaxKind.ClassDeclaration:
@@ -5163,7 +5190,7 @@ module ts {
                             descriptor = descriptors[i];
                         }
                     }
-                    Debug.assert(descriptor);
+                    Debug.assert(descriptor !== undefined);
 
                     // We don't want to match something like 'TODOBY', so we make sure a non 
                     // letter/digit follows the match.
