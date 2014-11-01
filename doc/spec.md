@@ -1867,7 +1867,7 @@ A type alias declaration introduces a ***type alias*** in the containing module.
 
 A type alias serves as an alias for the type specified in the type alias declaration. Unlike an interface declaration, which always introduces a named object type, a type alias declaration can introduce a name for any kind of type, including primitive types and union types.
 
-Type aliases are referenced using type references ([3.7.2](#3.7.2)). Writing a reference to a type alias has exactly the same effect as writing the aliased type itself.
+Type aliases are referenced using type references ([3.7.2](#3.7.2)). Writing a reference to a type alias has ***exactly*** the same effect as writing the aliased type itself.
 
 The *Identifier* of a type alias declaration may not be one of the predefined type names (section [3.7.1](#3.7.1)). Furthermore, the *Type* of a type alias may not be an object type literal (section [3.7.3](#3.7.3)) or a parenthesized form of an object type literal, but any other kind of type composed from an object type literal is permitted.
 
@@ -1894,16 +1894,7 @@ type RecFunc = () => RecFunc;
 type ObjectStatics = typeof Object;
 ```
 
-To ensure that named object types are not inadvertently introduced as aliases for anonymous object type literals, a type alias is not permitted to alias an object type literal. For example, the following is an error:
-
-```TypeScript
-type Point = {  // Error  
-    x: number;  
-    y: number;  
-};
-```
-
-Such types must instead be written as interface declarations:
+Interface types have many similarities to type aliases for object type literals, but since interface types offer more capabilities they are generally preferred to type aliases. For example, the interface type
 
 ```TypeScript
 interface Point {  
@@ -1911,6 +1902,21 @@ interface Point {
     y: number;  
 }
 ```
+
+could be written as the type alias
+
+```TypeScript
+type Point = {  
+    x: number;  
+    y: number;  
+};
+```
+
+However, doing so means the following capabilities are lost:
+
+* An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.
+* An interface can have multiple merged declarations, but a type alias for an object type literal cannot.
+* An interface is referenced by its name in error messages and tooling, but a type alias is always expanded to its structural representation.
 
 ## <a name="3.10"/>3.10 Type Relationships
 
