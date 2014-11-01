@@ -21,7 +21,7 @@ module TypeScript {
 
         public static isLastTokenOnLine(token: ISyntaxToken, text: ISimpleText): boolean {
             var _nextToken = nextToken(token, text);
-            if (_nextToken === null) {
+            if (_nextToken === undefined) {
                 return true;
             }
 
@@ -72,54 +72,13 @@ module TypeScript {
                     case SyntaxKind.TrueKeyword:
                     case SyntaxKind.SuperKeyword:
 
-                    case SyntaxKind.PlusExpression:
-                    case SyntaxKind.NegateExpression:
-                    case SyntaxKind.BitwiseNotExpression:
-                    case SyntaxKind.LogicalNotExpression:
-                    case SyntaxKind.PreIncrementExpression:
-                    case SyntaxKind.PreDecrementExpression:
+                    case SyntaxKind.PrefixUnaryExpression:
+                    case SyntaxKind.PostfixUnaryExpression:
+                    case SyntaxKind.BinaryExpression:
                     case SyntaxKind.DeleteExpression:
                     case SyntaxKind.TypeOfExpression:
                     case SyntaxKind.VoidExpression:
-                    case SyntaxKind.CommaExpression:
-                    case SyntaxKind.AssignmentExpression:
-                    case SyntaxKind.AddAssignmentExpression:
-                    case SyntaxKind.SubtractAssignmentExpression:
-                    case SyntaxKind.MultiplyAssignmentExpression:
-                    case SyntaxKind.DivideAssignmentExpression:
-                    case SyntaxKind.ModuloAssignmentExpression:
-                    case SyntaxKind.AndAssignmentExpression:
-                    case SyntaxKind.ExclusiveOrAssignmentExpression:
-                    case SyntaxKind.OrAssignmentExpression:
-                    case SyntaxKind.LeftShiftAssignmentExpression:
-                    case SyntaxKind.SignedRightShiftAssignmentExpression:
-                    case SyntaxKind.UnsignedRightShiftAssignmentExpression:
                     case SyntaxKind.ConditionalExpression:
-                    case SyntaxKind.LogicalOrExpression:
-                    case SyntaxKind.LogicalAndExpression:
-                    case SyntaxKind.BitwiseOrExpression:
-                    case SyntaxKind.BitwiseExclusiveOrExpression:
-                    case SyntaxKind.BitwiseAndExpression:
-                    case SyntaxKind.EqualsWithTypeConversionExpression:
-                    case SyntaxKind.NotEqualsWithTypeConversionExpression:
-                    case SyntaxKind.EqualsExpression:
-                    case SyntaxKind.NotEqualsExpression:
-                    case SyntaxKind.LessThanExpression:
-                    case SyntaxKind.GreaterThanExpression:
-                    case SyntaxKind.LessThanOrEqualExpression:
-                    case SyntaxKind.GreaterThanOrEqualExpression:
-                    case SyntaxKind.InstanceOfExpression:
-                    case SyntaxKind.InExpression:
-                    case SyntaxKind.LeftShiftExpression:
-                    case SyntaxKind.SignedRightShiftExpression:
-                    case SyntaxKind.UnsignedRightShiftExpression:
-                    case SyntaxKind.MultiplyExpression:
-                    case SyntaxKind.DivideExpression:
-                    case SyntaxKind.ModuloExpression:
-                    case SyntaxKind.AddExpression:
-                    case SyntaxKind.SubtractExpression:
-                    case SyntaxKind.PostIncrementExpression:
-                    case SyntaxKind.PostDecrementExpression:
                     case SyntaxKind.MemberAccessExpression:
                     case SyntaxKind.InvocationExpression:
                     case SyntaxKind.ArrayLiteralExpression:
@@ -252,7 +211,7 @@ module TypeScript {
         public static isAngleBracket(positionedElement: ISyntaxElement): boolean {
             var element = positionedElement;
             var parent = positionedElement.parent;
-            if (parent !== null && (element.kind() === SyntaxKind.LessThanToken || element.kind() === SyntaxKind.GreaterThanToken)) {
+            if (parent && (element.kind() === SyntaxKind.LessThanToken || element.kind() === SyntaxKind.GreaterThanToken)) {
                 switch (parent.kind()) {
                     case SyntaxKind.TypeArgumentList:
                     case SyntaxKind.TypeParameterList:
@@ -272,15 +231,15 @@ module TypeScript {
                 }
             }
 
-            return null;
+            return undefined;
         }
 
         public static containsToken(list: ISyntaxToken[], kind: SyntaxKind): boolean {
-            return SyntaxUtilities.getToken(list, kind) !== null;
+            return !!SyntaxUtilities.getToken(list, kind);
         }
 
         public static hasExportKeyword(moduleElement: IModuleElementSyntax): boolean {
-            return SyntaxUtilities.getExportKeyword(moduleElement) !== null;
+            return !!SyntaxUtilities.getExportKeyword(moduleElement);
         }
 
         public static getExportKeyword(moduleElement: IModuleElementSyntax): ISyntaxToken {
@@ -294,7 +253,7 @@ module TypeScript {
                 case SyntaxKind.ImportDeclaration:
                     return SyntaxUtilities.getToken((<any>moduleElement).modifiers, SyntaxKind.ExportKeyword);
                 default: 
-                    return null;
+                    return undefined;
             }
         }
 

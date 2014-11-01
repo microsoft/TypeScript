@@ -449,7 +449,7 @@ module ts {
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
                     // Block-scoped variables cannot be used before their definition
                     var declaration = forEach(result.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
-                    Debug.assert(declaration, "Block-scoped variable declaration is undefined");
+                    Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
                     if (!isDefinedBefore(declaration, errorLocation)) {
                         error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
                     }
@@ -484,7 +484,7 @@ module ts {
         function getSymbolOfPartOfRightHandSideOfImport(entityName: EntityName, importDeclaration?: ImportDeclaration): Symbol {
             if (!importDeclaration) {
                 importDeclaration = getAncestor(entityName, SyntaxKind.ImportDeclaration);
-                Debug.assert(importDeclaration);
+                Debug.assert(importDeclaration !== undefined);
             }
             // There are three things we might try to look for. In the following examples,
             // the search term is enclosed in |...|:
@@ -2175,7 +2175,7 @@ module ts {
                 return false;
             }
             for (var i = 0; i < s.length; i++) {
-                if (!compareSignatures(s[i], t[i], /*compareReturnTypes*/ false, isTypeIdenticalTo)) {
+                if (!compareSignatures(s[i], t[i], /*compareReturnTypes*/ false, compareTypes)) {
                     return false;
                 }
             }
@@ -3221,38 +3221,32 @@ module ts {
 
         // TYPE CHECKING
 
-        var subtypeRelation: Map<boolean> = {};
-        var assignableRelation: Map<boolean> = {};
-        var identityRelation: Map<boolean> = {};
+        var subtypeRelation: Map<Ternary> = {};
+        var assignableRelation: Map<Ternary> = {};
+        var identityRelation: Map<Ternary> = {};
 
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
             return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined);
+        }
+
+        function compareTypes(source: Type, target: Type): Ternary {
+            return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined) ? Ternary.True : Ternary.False;
         }
 
         function isTypeSubtypeOf(source: Type, target: Type): boolean {
             return checkTypeSubtypeOf(source, target, /*errorNode*/ undefined);
         }
 
-        function checkTypeSubtypeOf(
-            source: Type,
-            target: Type,
-            errorNode: Node,
-            headMessage?: DiagnosticMessage,
-            containingMessageChain?: DiagnosticMessageChain): boolean {
-
-            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
-        }
-
         function isTypeAssignableTo(source: Type, target: Type): boolean {
             return checkTypeAssignableTo(source, target, /*errorNode*/ undefined);
         }
 
-        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage): boolean {
-            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage);
+        function checkTypeSubtypeOf(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
+            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
         }
 
-        function isTypeRelatedTo(source: Type, target: Type, relation: Map<boolean>): boolean {
-            return checkTypeRelatedTo(source, target, relation, /*errorNode*/ undefined);
+        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage): boolean {
+            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage);
         }
 
         function isSignatureAssignableTo(source: Signature, target: Signature): boolean {
@@ -3261,71 +3255,10 @@ module ts {
             return checkTypeRelatedTo(sourceType, targetType, assignableRelation, /*errorNode*/ undefined);
         }
 
-        function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
-            return isPropertyIdenticalToRecursive(sourceProp, targetProp, /*reportErrors*/ false, (s, t, _reportErrors) => isTypeIdenticalTo(s, t));
-        }
-
-        function checkInheritedPropertiesAreIdentical(type: InterfaceType, typeNode: Node): boolean {
-            if (!type.baseTypes.length || type.baseTypes.length === 1) {
-                return true;
-            }
-
-            var seen: Map<{ prop: Symbol; containingType: Type }> = {};
-            forEach(type.declaredProperties, p => { seen[p.name] = { prop: p, containingType: type }; });
-            var ok = true;
-
-            for (var i = 0, len = type.baseTypes.length; i < len; ++i) {
-                var base = type.baseTypes[i];
-                var properties = getPropertiesOfObjectType(base);
-                for (var j = 0, proplen = properties.length; j < proplen; ++j) {
-                    var prop = properties[j];
-                    if (!hasProperty(seen, prop.name)) {
-                        seen[prop.name] = { prop: prop, containingType: base };
-                    }
-                    else {
-                        var existing = seen[prop.name];
-                        var isInheritedProperty = existing.containingType !== type;
-                        if (isInheritedProperty && !isPropertyIdenticalTo(existing.prop, prop)) {
-                            ok = false;
-
-                            var typeName1 = typeToString(existing.containingType);
-                            var typeName2 = typeToString(base);
-
-                            var errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
-                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
-                            addDiagnostic(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, program.getCompilerHost().getNewLine()));
-                        }
-                    }
-                }
-            }
-
-            return ok;
-        }
-
-        function isPropertyIdenticalToRecursive(sourceProp: Symbol, targetProp: Symbol, reportErrors: boolean, relate: (source: Type, target: Type, reportErrors: boolean) => boolean): boolean {
-            // Two members are considered identical when
-            // - they are public properties with identical names, optionality, and types,
-            // - they are private or protected properties originating in the same declaration and having identical types
-            if (sourceProp === targetProp) {
-                return true;
-            }
-            var sourcePropAccessibility = getDeclarationFlagsFromSymbol(sourceProp) & (NodeFlags.Private | NodeFlags.Protected);
-            var targetPropAccessibility = getDeclarationFlagsFromSymbol(targetProp) & (NodeFlags.Private | NodeFlags.Protected);
-            if (sourcePropAccessibility !== targetPropAccessibility) {
-                return false;
-            }
-            if (sourcePropAccessibility) {
-                return getTargetSymbol(sourceProp) === getTargetSymbol(targetProp) && relate(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
-            }
-            else {
-                return isOptionalProperty(sourceProp) === isOptionalProperty(targetProp) && relate(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
-            }
-        }
-
         function checkTypeRelatedTo(
             source: Type,
             target: Type,
-            relation: Map<boolean>,
+            relation: Map<Ternary>,
             errorNode: Node,
             headMessage?: DiagnosticMessage,
             containingMessageChain?: DiagnosticMessageChain): boolean {
@@ -3339,7 +3272,7 @@ module ts {
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
-            var result = isRelatedToWithCustomErrors(source, target, errorNode !== undefined, headMessage);
+            var result = isRelatedTo(source, target, errorNode !== undefined, headMessage);
             if (overflow) {
                 error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
@@ -3349,54 +3282,55 @@ module ts {
                 }
                 addDiagnostic(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, program.getCompilerHost().getNewLine()));
             }
-            return result;
+            return result !== Ternary.False;
 
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
                 errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
             }
 
-            function isRelatedTo(source: Type, target: Type, reportErrors?: boolean): boolean {
-                return isRelatedToWithCustomErrors(source, target, reportErrors, /*headMessage*/ undefined);
-            }
-
-            function isRelatedToWithCustomErrors(source: Type, target: Type, reportErrors: boolean, headMessage: DiagnosticMessage): boolean {
+            // Compare two types and return
+            // Ternary.True if they are related with no assumptions,
+            // Ternary.Maybe if they are related with assumptions of other relationships, or
+            // Ternary.False if they are not related.
+            function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
+                var result: Ternary;
                 if (relation === identityRelation) {
                     // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
-                    if (source === target) return true;
+                    if (source === target) return Ternary.True;
                 }
                 else {
-                    if (source === target) return true;
-                    if (target.flags & TypeFlags.Any) return true;
-                    if (source === undefinedType) return true;
-                    if (source === nullType && target !== undefinedType) return true;
-                    if (source.flags & TypeFlags.Enum && target === numberType) return true;
-                    if (source.flags & TypeFlags.StringLiteral && target === stringType) return true;
+                    if (source === target) return Ternary.True;
+                    if (target.flags & TypeFlags.Any) return Ternary.True;
+                    if (source === undefinedType) return Ternary.True;
+                    if (source === nullType && target !== undefinedType) return Ternary.True;
+                    if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
+                    if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
                     if (relation === assignableRelation) {
-                        if (source.flags & TypeFlags.Any) return true;
-                        if (source === numberType && target.flags & TypeFlags.Enum) return true;
+                        if (source.flags & TypeFlags.Any) return Ternary.True;
+                        if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
                     }
                 }
                 if (source.flags & TypeFlags.Union) {
-                    if (unionTypeRelatedToType(<UnionType>source, target, reportErrors)) {
-                        return true;
+                    if (result = unionTypeRelatedToType(<UnionType>source, target, reportErrors)) {
+                        return result;
                     }
                 }
                 else if (target.flags & TypeFlags.Union) {
-                    if (typeRelatedToUnionType(source, <UnionType>target, reportErrors)) {
-                        return true;
+                    if (result = typeRelatedToUnionType(source, <UnionType>target, reportErrors)) {
+                        return result;
                     }
                 }
                 else if (source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.TypeParameter) {
-                    if (typeParameterRelatedTo(<TypeParameter>source, <TypeParameter>target, reportErrors)) {
-                        return true;
+                    if (result = typeParameterRelatedTo(<TypeParameter>source, <TypeParameter>target, reportErrors)) {
+                        return result;
                     }
                 }
                 else {
                     var saveErrorInfo = errorInfo;
                     if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                         // We have type references to same target type, see if relationship holds for all type arguments
-                        if (typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, reportErrors)) {
-                            return true;
+                        if (result = typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, reportErrors)) {
+                            return result;
                         }
                     }
                     // Even if relationship doesn't hold for type arguments, it may hold in a structural comparison
@@ -3405,71 +3339,76 @@ module ts {
                     // identity relation does not use apparent type
                     var sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
                     if (sourceOrApparentType.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType &&
-                        objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors)) {
+                        (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors))) {
                         errorInfo = saveErrorInfo;
-                        return true;
+                        return result;
                     }
                 }
                 if (reportErrors) {
                     headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
-                    Debug.assert(headMessage);
                     reportError(headMessage, typeToString(source), typeToString(target));
                 }
-                return false;
+                return Ternary.False;
             }
 
-            function typeRelatedToUnionType(source: Type, target: UnionType, reportErrors: boolean): boolean {
+            function typeRelatedToUnionType(source: Type, target: UnionType, reportErrors: boolean): Ternary {
                 var targetTypes = target.types;
                 for (var i = 0, len = targetTypes.length; i < len; i++) {
-                    if (isRelatedTo(source, targetTypes[i], reportErrors && i === len - 1)) {
-                        return true;
+                    var related = isRelatedTo(source, targetTypes[i], reportErrors && i === len - 1);
+                    if (related) {
+                        return related;
                     }
                 }
-                return false;
+                return Ternary.False;
             }
 
-            function unionTypeRelatedToType(source: UnionType, target: Type, reportErrors: boolean): boolean {
+            function unionTypeRelatedToType(source: UnionType, target: Type, reportErrors: boolean): Ternary {
+                var result = Ternary.True;
                 var sourceTypes = source.types;
                 for (var i = 0, len = sourceTypes.length; i < len; i++) {
-                    if (!isRelatedTo(sourceTypes[i], target, reportErrors)) {
-                        return false;
+                    var related = isRelatedTo(sourceTypes[i], target, reportErrors);
+                    if (!related) {
+                        return Ternary.False;
                     }
+                    result &= related;
                 }
-                return true;
+                return result;
             }
 
-            function typesRelatedTo(sources: Type[], targets: Type[], reportErrors: boolean): boolean {
+            function typesRelatedTo(sources: Type[], targets: Type[], reportErrors: boolean): Ternary {
+                var result = Ternary.True;
                 for (var i = 0, len = sources.length; i < len; i++) {
-                    if (!isRelatedTo(sources[i], targets[i], reportErrors)) return false;
+                    var related = isRelatedTo(sources[i], targets[i], reportErrors);
+                    if (!related) {
+                        return Ternary.False;
+                    }
+                    result &= related;
                 }
-                return true;
+                return result;
             }
 
-            function typeParameterRelatedTo(source: TypeParameter, target: TypeParameter, reportErrors: boolean): boolean {
+            function typeParameterRelatedTo(source: TypeParameter, target: TypeParameter, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
                     if (source.symbol.name !== target.symbol.name) {
-                        return false;
+                        return Ternary.False;
                     }
-
                     // covers case when both type parameters does not have constraint (both equal to noConstraintType)
                     if (source.constraint === target.constraint) {
-                        return true;
+                        return Ternary.True;
                     }
-
                     if (source.constraint === noConstraintType || target.constraint === noConstraintType) {
-                        return false;
+                        return Ternary.False;
                     }
-
                     return isRelatedTo(source.constraint, target.constraint, reportErrors);
                 }
                 else {
                     while (true) {
                         var constraint = getConstraintOfTypeParameter(source);
-                        if (constraint === target) return true;
+                        if (constraint === target) return Ternary.True;
                         if (!(constraint && constraint.flags & TypeFlags.TypeParameter)) break;
                         source = <TypeParameter>constraint;
                     }
-                    return false;
+                    return Ternary.False;
                 }
             }
 
@@ -3478,18 +3417,25 @@ module ts {
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
-            function objectTypeRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): boolean {
-                if (overflow) return false;
-                var result: boolean;
+            function objectTypeRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
+                if (overflow) {
+                    return Ternary.False;
+                }
                 var id = source.id + "," + target.id;
-                if ((result = relation[id]) !== undefined) return result;
+                var related = relation[id];
+                if (related !== undefined) {
+                    return related;
+                }
                 if (depth > 0) {
                     for (var i = 0; i < depth; i++) {
-                        if (source === sourceStack[i] && target === targetStack[i]) return true;
+                        // If source and target are already being compared, consider them related with assumptions
+                        if (source === sourceStack[i] && target === targetStack[i]) {
+                            return Ternary.Maybe;
+                        }
                     }
                     if (depth === 100) {
                         overflow = true;
-                        return false;
+                        return Ternary.False;
                     }
                 }
                 else {
@@ -3503,15 +3449,28 @@ module ts {
                 var saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack)) expandingFlags |= 1;
                 if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack)) expandingFlags |= 2;
-                result = expandingFlags === 3 ||
-                    propertiesRelatedTo(source, target, reportErrors) &&
-                    signaturesRelatedTo(source, target, SignatureKind.Call, reportErrors) &&
-                    signaturesRelatedTo(source, target, SignatureKind.Construct, reportErrors) &&
-                    stringIndexTypesRelatedTo(source, target, reportErrors) &&
-                    numberIndexTypesRelatedTo(source, target, reportErrors);
+                if (expandingFlags === 3) {
+                    var result = Ternary.True;
+                }
+                else {
+                    var result = propertiesRelatedTo(source, target, reportErrors);
+                    if (result) {
+                        result &= signaturesRelatedTo(source, target, SignatureKind.Call, reportErrors);
+                        if (result) {
+                            result &= signaturesRelatedTo(source, target, SignatureKind.Construct, reportErrors);
+                            if (result) {
+                                result &= stringIndexTypesRelatedTo(source, target, reportErrors);
+                                if (result) {
+                                    result &= numberIndexTypesRelatedTo(source, target, reportErrors);
+                                }
+                            }
+                        }
+                    }
+                }
                 expandingFlags = saveExpandingFlags;
                 depth--;
-                if (depth === 0) {
+                // Only cache results that are free of assumptions
+                if (result !== Ternary.Maybe) {
                     relation[id] = result;
                 }
                 return result;
@@ -3537,10 +3496,11 @@ module ts {
                 return false;
             }
 
-            function propertiesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): boolean {
+            function propertiesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
-                    return propertiesIdenticalTo(source, target, reportErrors);
+                    return propertiesIdenticalTo(source, target);
                 }
+                var result = Ternary.True;
                 var properties = getPropertiesOfObjectType(target);
                 for (var i = 0; i < properties.length; i++) {
                     var targetProp = properties[i];
@@ -3551,7 +3511,7 @@ module ts {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(targetProp), typeToString(source));
                                 }
-                                return false;
+                                return Ternary.False;
                             }
                         }
                         else if (!(targetProp.flags & SymbolFlags.Prototype)) {
@@ -3569,7 +3529,7 @@ module ts {
                                                 typeToString(sourceFlags & NodeFlags.Private ? target : source));
                                         }
                                     }
-                                    return false;
+                                    return Ternary.False;
                                 }
                             }
                             else if (targetFlags & NodeFlags.Protected) {
@@ -3581,7 +3541,7 @@ module ts {
                                         reportError(Diagnostics.Property_0_is_protected_but_type_1_is_not_a_class_derived_from_2,
                                             symbolToString(targetProp), typeToString(sourceClass || source), typeToString(targetClass));
                                     }
-                                    return false;
+                                    return Ternary.False;
                                 }
                             }
                             else if (sourceFlags & NodeFlags.Protected) {
@@ -3589,14 +3549,16 @@ module ts {
                                     reportError(Diagnostics.Property_0_is_protected_in_type_1_but_public_in_type_2,
                                         symbolToString(targetProp), typeToString(source), typeToString(target));
                                 }
-                                return false;
+                                return Ternary.False;
                             }
-                            if (!isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors)) {
+                            var related = isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
+                            if (!related) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Types_of_property_0_are_incompatible, symbolToString(targetProp));
                                 }
-                                return false;
+                                return Ternary.False;
                             }
+                            result &= related;
                             if (isOptionalProperty(sourceProp) && !isOptionalProperty(targetProp)) {
                                 // TypeScript 1.0 spec (April 2014): 3.8.3
                                 // S is a subtype of a type T, and T is a supertype of S if ...
@@ -3609,37 +3571,46 @@ module ts {
                                     reportError(Diagnostics.Property_0_is_optional_in_type_1_but_required_in_type_2,
                                         symbolToString(targetProp), typeToString(source), typeToString(target));
                                 }
-                                return false;
+                                return Ternary.False;
                             }
                         }
                     }
                 }
-                return true;
+                return result;
             }
 
-            function propertiesIdenticalTo(source: ObjectType, target: ObjectType, reportErrors: boolean): boolean {
+            function propertiesIdenticalTo(source: ObjectType, target: ObjectType): Ternary {
                 var sourceProperties = getPropertiesOfObjectType(source);
                 var targetProperties = getPropertiesOfObjectType(target);
                 if (sourceProperties.length !== targetProperties.length) {
-                    return false;
+                    return Ternary.False;
                 }
+                var result = Ternary.True;
                 for (var i = 0, len = sourceProperties.length; i < len; ++i) {
                     var sourceProp = sourceProperties[i];
                     var targetProp = getPropertyOfObjectType(target, sourceProp.name);
-                    if (!targetProp || !isPropertyIdenticalToRecursive(sourceProp, targetProp, reportErrors, isRelatedTo)) {
-                        return false;
+                    if (!targetProp) {
+                        return Ternary.False;
                     }
+                    var related = compareProperties(sourceProp, targetProp, isRelatedTo);
+                    if (!related) {
+                        return Ternary.False;
+                    }
+                    result &= related;
                 }
-                return true;
+                return result;
             }
 
-            function signaturesRelatedTo(source: ObjectType, target: ObjectType, kind: SignatureKind, reportErrors: boolean): boolean {
+            function signaturesRelatedTo(source: ObjectType, target: ObjectType, kind: SignatureKind, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
-                    return signaturesIdenticalTo(source, target, kind, reportErrors);
+                    return signaturesIdenticalTo(source, target, kind);
                 }
-                if (target === anyFunctionType || source === anyFunctionType) return true;
+                if (target === anyFunctionType || source === anyFunctionType) {
+                    return Ternary.True;
+                }
                 var sourceSignatures = getSignaturesOfType(source, kind);
                 var targetSignatures = getSignaturesOfType(target, kind);
+                var result = Ternary.True;
                 var saveErrorInfo = errorInfo;
                 outer: for (var i = 0; i < targetSignatures.length; i++) {
                     var t = targetSignatures[i];
@@ -3648,7 +3619,9 @@ module ts {
                         for (var j = 0; j < sourceSignatures.length; j++) {
                             var s = sourceSignatures[j];
                             if (!s.hasStringLiterals || source.flags & TypeFlags.FromSignature) {
-                                if (signatureRelatedTo(s, t, localErrors)) {
+                                var related = signatureRelatedTo(s, t, localErrors);
+                                if (related) {
+                                    result &= related;
                                     errorInfo = saveErrorInfo;
                                     continue outer;
                                 }
@@ -3656,18 +3629,18 @@ module ts {
                                 localErrors = false;
                             }
                         }
-                        return false;
+                        return Ternary.False;
                     }
                 }
-                return true;
+                return result;
             }
 
-            function signatureRelatedTo(source: Signature, target: Signature, reportErrors: boolean): boolean {
+            function signatureRelatedTo(source: Signature, target: Signature, reportErrors: boolean): Ternary {
                 if (source === target) {
-                    return true;
+                    return Ternary.True;
                 }
                 if (!target.hasRestParameter && source.minArgumentCount > target.parameters.length) {
-                    return false;
+                    return Ternary.False;
                 }
                 var sourceMax = source.parameters.length;
                 var targetMax = target.parameters.length;
@@ -3692,45 +3665,52 @@ module ts {
                 // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
                 source = getErasedSignature(source);
                 target = getErasedSignature(target);
+                var result = Ternary.True;
                 for (var i = 0; i < checkCount; i++) {
                     var s = i < sourceMax ? getTypeOfSymbol(source.parameters[i]) : getRestTypeOfSignature(source);
                     var t = i < targetMax ? getTypeOfSymbol(target.parameters[i]) : getRestTypeOfSignature(target);
                     var saveErrorInfo = errorInfo;
-                    if (!isRelatedTo(s, t, reportErrors)) {
-                        if (!isRelatedTo(t, s, false)) {
+                    var related = isRelatedTo(s, t, reportErrors);
+                    if (!related) {
+                        related = isRelatedTo(t, s, false);
+                        if (!related) {
                             if (reportErrors) {
                                 reportError(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
                                     source.parameters[i < sourceMax ? i : sourceMax].name,
                                     target.parameters[i < targetMax ? i : targetMax].name);
                             }
-                            return false;
+                            return Ternary.False;
                         }
                         errorInfo = saveErrorInfo;
                     }
+                    result &= related;
                 }
                 var t = getReturnTypeOfSignature(target);
-                if (t === voidType) return true;
+                if (t === voidType) return result;
                 var s = getReturnTypeOfSignature(source);
-                return isRelatedTo(s, t, reportErrors);
+                return result & isRelatedTo(s, t, reportErrors);
             }
 
-            function signaturesIdenticalTo(source: ObjectType, target: ObjectType, kind: SignatureKind, reportErrors: boolean): boolean {
+            function signaturesIdenticalTo(source: ObjectType, target: ObjectType, kind: SignatureKind): Ternary {
                 var sourceSignatures = getSignaturesOfType(source, kind);
                 var targetSignatures = getSignaturesOfType(target, kind);
                 if (sourceSignatures.length !== targetSignatures.length) {
-                    return false;
+                    return Ternary.False;
                 }
+                var result = Ternary.True;
                 for (var i = 0, len = sourceSignatures.length; i < len; ++i) {
-                    if (!compareSignatures(sourceSignatures[i], targetSignatures[i], /*compareReturnTypes*/ true, isRelatedTo)) {
-                        return false;
+                    var related = compareSignatures(sourceSignatures[i], targetSignatures[i], /*compareReturnTypes*/ true, isRelatedTo);
+                    if (!related) {
+                        return Ternary.False;
                     }
+                    result &= related;
                 }
-                return true;
+                return result;
             }
 
-            function stringIndexTypesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): boolean {
+            function stringIndexTypesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
-                    return indexTypesIdenticalTo(IndexKind.String, source, target, reportErrors);
+                    return indexTypesIdenticalTo(IndexKind.String, source, target);
                 }
                 var targetType = getIndexTypeOfType(target, IndexKind.String);
                 if (targetType) {
@@ -3739,21 +3719,23 @@ module ts {
                         if (reportErrors) {
                             reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
                         }
-                        return false;
+                        return Ternary.False;
                     }
-                    if (!isRelatedTo(sourceType, targetType, reportErrors)) {
+                    var related = isRelatedTo(sourceType, targetType, reportErrors);
+                    if (!related) {
                         if (reportErrors) {
                             reportError(Diagnostics.Index_signatures_are_incompatible);
                         }
-                        return false;
+                        return Ternary.False;
                     }
+                    return related;
                 }
-                return true;
+                return Ternary.True;
             } 
 
-            function numberIndexTypesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): boolean {
+            function numberIndexTypesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
-                    return indexTypesIdenticalTo(IndexKind.Number, source, target, reportErrors);
+                    return indexTypesIdenticalTo(IndexKind.Number, source, target);
                 }
                 var targetType = getIndexTypeOfType(target, IndexKind.Number);
                 if (targetType) {
@@ -3763,53 +3745,92 @@ module ts {
                         if (reportErrors) {
                             reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
                         }
-                        return false;
+                        return Ternary.False;
                     }
                     if (sourceStringType && sourceNumberType) {
                         // If we know for sure we're testing both string and numeric index types then only report errors from the second one
-                        var compatible = isRelatedTo(sourceStringType, targetType, false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
+                        var related = isRelatedTo(sourceStringType, targetType, false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
                     }
                     else {
-                        var compatible = isRelatedTo(sourceStringType || sourceNumberType, targetType, reportErrors);
+                        var related = isRelatedTo(sourceStringType || sourceNumberType, targetType, reportErrors);
                     }
-                    if (!compatible) {
+                    if (!related) {
                         if (reportErrors) {
                             reportError(Diagnostics.Index_signatures_are_incompatible);
                         }
-                        return false;
+                        return Ternary.False;
                     }
+                    return related;
                 }
-                return true;
+                return Ternary.True;
             }
 
-            function indexTypesIdenticalTo(indexKind: IndexKind, source: ObjectType, target: ObjectType, reportErrors: boolean): boolean {
+            function indexTypesIdenticalTo(indexKind: IndexKind, source: ObjectType, target: ObjectType): Ternary {
                 var targetType = getIndexTypeOfType(target, indexKind);
                 var sourceType = getIndexTypeOfType(source, indexKind);
-                return (!sourceType && !targetType) || (sourceType && targetType && isRelatedTo(sourceType, targetType, reportErrors));
+                if (!sourceType && !targetType) {
+                    return Ternary.True;
+                }
+                if (sourceType && targetType) {
+                    return isRelatedTo(sourceType, targetType);
+                }
+                return Ternary.False;
             }
         }
 
-        function compareSignatures(source: Signature, target: Signature, compareReturnTypes: boolean, compareTypes: (s: Type, t: Type) => boolean): boolean {
+        function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
+            return compareProperties(sourceProp, targetProp, compareTypes) !== Ternary.False;
+        }
+
+        function compareProperties(sourceProp: Symbol, targetProp: Symbol, compareTypes: (source: Type, target: Type) => Ternary): Ternary {
+            // Two members are considered identical when
+            // - they are public properties with identical names, optionality, and types,
+            // - they are private or protected properties originating in the same declaration and having identical types
+            if (sourceProp === targetProp) {
+                return Ternary.True;
+            }
+            var sourcePropAccessibility = getDeclarationFlagsFromSymbol(sourceProp) & (NodeFlags.Private | NodeFlags.Protected);
+            var targetPropAccessibility = getDeclarationFlagsFromSymbol(targetProp) & (NodeFlags.Private | NodeFlags.Protected);
+            if (sourcePropAccessibility !== targetPropAccessibility) {
+                return Ternary.False;
+            }
+            if (sourcePropAccessibility) {
+                if (getTargetSymbol(sourceProp) !== getTargetSymbol(targetProp)) {
+                    return Ternary.False;
+                }
+            }
+            else {
+                if (isOptionalProperty(sourceProp) !== isOptionalProperty(targetProp)) {
+                    return Ternary.False;
+                }
+            }
+            return compareTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
+        }
+
+        function compareSignatures(source: Signature, target: Signature, compareReturnTypes: boolean, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
             if (source === target) {
-                return true;
+                return Ternary.True;
             }
             if (source.parameters.length !== target.parameters.length ||
                 source.minArgumentCount !== target.minArgumentCount ||
                 source.hasRestParameter !== target.hasRestParameter) {
-                return false;
+                return Ternary.False;
             }
+            var result = Ternary.True;
             if (source.typeParameters && target.typeParameters) {
                 if (source.typeParameters.length !== target.typeParameters.length) {
-                    return false;
+                    return Ternary.False;
                 }
                 for (var i = 0, len = source.typeParameters.length; i < len; ++i) {
-                    if (!compareTypes(source.typeParameters[i], target.typeParameters[i])) {
-                        return false;
+                    var related = compareTypes(source.typeParameters[i], target.typeParameters[i]);
+                    if (!related) {
+                        return Ternary.False;
                     }
+                    result &= related;
                 }
             }
             else if (source.typeParameters || source.typeParameters) {
-                return false;
+                return Ternary.False;
             }
             // Spec 1.0 Section 3.8.3 & 3.8.4:
             // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
@@ -3818,11 +3839,16 @@ module ts {
             for (var i = 0, len = source.parameters.length; i < len; i++) {
                 var s = source.hasRestParameter && i === len - 1 ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
                 var t = target.hasRestParameter && i === len - 1 ? getRestTypeOfSignature(target) : getTypeOfSymbol(target.parameters[i]);
-                if (!compareTypes(s, t)) {
-                    return false;
+                var related = compareTypes(s, t);
+                if (!related) {
+                    return Ternary.False;
                 }
+                result &= related;
             }
-            return !compareReturnTypes || compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+            if (compareReturnTypes) {
+                result &= compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+            }
+            return result;
         }
 
         function isSupertypeOfEach(candidate: Type, types: Type[]): boolean {
@@ -4871,7 +4897,7 @@ module ts {
                     if (!result) {
                         result = signature;
                     }
-                    else if (!compareSignatures(result, signature, /*compareReturnTypes*/ true, isTypeIdenticalTo)) {
+                    else if (!compareSignatures(result, signature, /*compareReturnTypes*/ true, compareTypes)) {
                         return undefined;
                     }
                 }
@@ -4897,7 +4923,7 @@ module ts {
             }
             return createArrayType(getUnionType(elementTypes));
         }
-
+        
         function isNumericName(name: string) {
             // The intent of numeric names is that
             //     - they are names with text in a numeric form, and that
@@ -4922,7 +4948,7 @@ module ts {
             // with the strings '"Infinity"', '"-Infinity"', and '"NaN"' respectively.
             return (+name).toString() === name;
         }
-
+        
         function checkObjectLiteral(node: ObjectLiteral, contextualMapper?: TypeMapper): Type {
             var members = node.symbol.members;
             var properties: SymbolTable = {};
@@ -5267,7 +5293,7 @@ module ts {
             return typeArgumentsAreAssignable;
         }
 
-        function checkApplicableSignature(node: CallExpression, signature: Signature, relation: Map<boolean>, excludeArgument: boolean[], reportErrors: boolean) {
+        function checkApplicableSignature(node: CallExpression, signature: Signature, relation: Map<Ternary>, excludeArgument: boolean[], reportErrors: boolean) {
             if (node.arguments) {
                 for (var i = 0; i < node.arguments.length; i++) {
                     var arg = node.arguments[i];
@@ -5405,7 +5431,7 @@ module ts {
 
             return resolveErrorCall(node);
 
-            function chooseOverload(candidates: Signature[], relation: Map<boolean>, excludeArgument: boolean[]) {
+            function chooseOverload(candidates: Signature[], relation: Map<Ternary>, excludeArgument: boolean[]) {
                 for (var i = 0; i < candidates.length; i++) {
                     if (!signatureHasCorrectArity(node, candidates[i])) {
                         continue;
@@ -5485,31 +5511,29 @@ module ts {
                 Debug.assert(!result.length);
                 for (var i = 0; i < signatures.length; i++) {
                     var signature = signatures[i];
-                    if (true) {
-                        var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
-                        var parent = signature.declaration && signature.declaration.parent;
-                        if (!lastSymbol || symbol === lastSymbol) {
-                            if (lastParent && parent === lastParent) {
-                                pos++;
-                            }
-                            else {
-                                lastParent = parent;
-                                pos = cutoffPos;
-                            }
+                    var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
+                    var parent = signature.declaration && signature.declaration.parent;
+                    if (!lastSymbol || symbol === lastSymbol) {
+                        if (lastParent && parent === lastParent) {
+                            pos++;
                         }
                         else {
-                            // current declaration belongs to a different symbol
-                            // set cutoffPos so re-orderings in the future won't change result set from 0 to cutoffPos
-                            pos = cutoffPos = result.length;
                             lastParent = parent;
+                            pos = cutoffPos;
                         }
-                        lastSymbol = symbol;
-
-                        for (var j = result.length; j > pos; j--) {
-                            result[j] = result[j - 1];
-                        }
-                        result[pos] = signature;
                     }
+                    else {
+                        // current declaration belongs to a different symbol
+                        // set cutoffPos so re-orderings in the future won't change result set from 0 to cutoffPos
+                        pos = cutoffPos = result.length;
+                        lastParent = parent;
+                    }
+                    lastSymbol = symbol;
+
+                    for (var j = result.length; j > pos; j--) {
+                        result[j] = result[j - 1];
+                    }
+                    result[pos] = signature;
                 }
             }
         }
@@ -5649,6 +5673,13 @@ module ts {
                 }
             }
             return getReturnTypeOfSignature(signature);
+        }
+
+        function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
+            // TODO (drosen): Make sure substitutions are assignable to the tag's arguments.
+            checkExpression(node.tag);
+            checkExpression(node.template);
+            return anyType;
         }
 
         function checkTypeAssertion(node: TypeAssertion): Type {
@@ -6169,6 +6200,19 @@ module ts {
             return getUnionType([type1, type2]);
         }
 
+        function checkTemplateExpression(node: TemplateExpression): Type {
+            // We just want to check each expressions, but we are unconcerned with
+            // the type of each expression, as any value may be coerced into a string.
+            // It is worth asking whether this is what we really want though.
+            // A place where we actually *are* concerned with the expressions' types are
+            // in tagged templates.
+            forEach((<TemplateExpression>node).templateSpans, templateSpan => {
+                checkExpression(templateSpan.expression);
+            });
+
+            return stringType;
+        }
+
         function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper?: TypeMapper): Type {
             var saveContextualType = node.contextualType;
             node.contextualType = contextualType;
@@ -6237,7 +6281,10 @@ module ts {
                     return booleanType;
                 case SyntaxKind.NumericLiteral:
                     return numberType;
+                case SyntaxKind.TemplateExpression:
+                    return checkTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return stringType;
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
@@ -6254,6 +6301,8 @@ module ts {
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.TypeAssertion:
                     return checkTypeAssertion(<TypeAssertion>node);
                 case SyntaxKind.ParenExpression:
@@ -7563,17 +7612,17 @@ module ts {
                             errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
                         }
                         else {
-                            Debug.assert(derived.flags & SymbolFlags.Property);
+                            Debug.assert((derived.flags & SymbolFlags.Property) !== 0);
                             errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_property;
                         }
                     }
                     else if (base.flags & SymbolFlags.Property) {
-                        Debug.assert(derived.flags & SymbolFlags.Method);
+                        Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
                         errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_function;
                     }
                     else {
-                        Debug.assert(base.flags & SymbolFlags.Accessor);
-                        Debug.assert(derived.flags & SymbolFlags.Method);
+                        Debug.assert((base.flags & SymbolFlags.Accessor) !== 0);
+                        Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
                         errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function;
                     }
 
@@ -7613,6 +7662,43 @@ module ts {
                 }
             }
             return true;
+        }
+
+        function checkInheritedPropertiesAreIdentical(type: InterfaceType, typeNode: Node): boolean {
+            if (!type.baseTypes.length || type.baseTypes.length === 1) {
+                return true;
+            }
+
+            var seen: Map<{ prop: Symbol; containingType: Type }> = {};
+            forEach(type.declaredProperties, p => { seen[p.name] = { prop: p, containingType: type }; });
+            var ok = true;
+
+            for (var i = 0, len = type.baseTypes.length; i < len; ++i) {
+                var base = type.baseTypes[i];
+                var properties = getPropertiesOfObjectType(base);
+                for (var j = 0, proplen = properties.length; j < proplen; ++j) {
+                    var prop = properties[j];
+                    if (!hasProperty(seen, prop.name)) {
+                        seen[prop.name] = { prop: prop, containingType: base };
+                    }
+                    else {
+                        var existing = seen[prop.name];
+                        var isInheritedProperty = existing.containingType !== type;
+                        if (isInheritedProperty && !isPropertyIdenticalTo(existing.prop, prop)) {
+                            ok = false;
+
+                            var typeName1 = typeToString(existing.containingType);
+                            var typeName2 = typeToString(base);
+
+                            var errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
+                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
+                            addDiagnostic(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, program.getCompilerHost().getNewLine()));
+                        }
+                    }
+                }
+            }
+
+            return ok;
         }
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
@@ -8105,6 +8191,7 @@ module ts {
                 case SyntaxKind.IndexedAccess:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.TypeAssertion:
                 case SyntaxKind.ParenExpression:
                 case SyntaxKind.PrefixOperator:
@@ -8382,6 +8469,9 @@ module ts {
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
                             return (<CallExpression>parent).typeArguments && (<CallExpression>parent).typeArguments.indexOf(node) >= 0;
+                        case SyntaxKind.TaggedTemplateExpression:
+                            // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
+                            return false;
                     }
             }
 

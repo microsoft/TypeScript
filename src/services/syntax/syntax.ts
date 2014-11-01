@@ -4,8 +4,8 @@ module TypeScript.Syntax {
     export var _nextSyntaxID: number = 1;
 
     export function childIndex(parent: ISyntaxElement, child: ISyntaxElement) {
-        for (var i = 0, n = childCount(parent); i < n; i++) {
-            var current = childAt(parent, i);
+        for (var i = 0, n = parent.childCount(); i < n; i++) {
+            var current = parent.childAt(i);
             if (current === child) {
                 return i;
             }
@@ -15,8 +15,8 @@ module TypeScript.Syntax {
     }
 
     export function nodeHasSkippedOrMissingTokens(node: ISyntaxNode): boolean {
-        for (var i = 0; i < childCount(node); i++) {
-            var child = childAt(node, i);
+        for (var i = 0; i < node.childCount(); i++) {
+            var child = node.childAt(i);
             if (isToken(child)) {
                 var token = <ISyntaxToken>child;
                 // If a token is skipped, return true. Or if it is a missing token. The only empty token that is not missing is EOF
@@ -63,8 +63,8 @@ module TypeScript.Syntax {
     export function isEntirelyInsideComment(sourceUnit: SourceUnitSyntax, position: number): boolean {
         var positionedToken = findToken(sourceUnit, position);
         var fullStart = positionedToken.fullStart();
-        var triviaList: ISyntaxTriviaList = null;
-        var lastTriviaBeforeToken: ISyntaxTrivia = null;
+        var triviaList: ISyntaxTriviaList = undefined;
+        var lastTriviaBeforeToken: ISyntaxTrivia = undefined;
 
         if (positionedToken.kind() === SyntaxKind.EndOfFileToken) {
             // Check if the trivia is leading on the EndOfFile token
@@ -133,7 +133,7 @@ module TypeScript.Syntax {
     }
 
     function findSkippedTokenOnLeftInTriviaList(positionedToken: ISyntaxToken, position: number, lookInLeadingTriviaList: boolean): ISyntaxToken {
-        var triviaList: TypeScript.ISyntaxTriviaList = null;
+        var triviaList: TypeScript.ISyntaxTriviaList = undefined;
         var fullEnd: number;
 
         if (lookInLeadingTriviaList) {
@@ -158,7 +158,7 @@ module TypeScript.Syntax {
             }
         }
 
-        return null;
+        return undefined;
     }
 
     export function findSkippedTokenOnLeft(positionedToken: ISyntaxToken, position: number): ISyntaxToken {
@@ -175,23 +175,27 @@ module TypeScript.Syntax {
             positionedToken = positionedToken.parent;
         }
 
-        return null;
+        return undefined;
     }
 
     export function hasAncestorOfKind(positionedToken: ISyntaxElement, kind: SyntaxKind): boolean {
-        return getAncestorOfKind(positionedToken, kind) !== null;
+        return !!getAncestorOfKind(positionedToken, kind);
     }
 
     export function isIntegerLiteral(expression: IExpressionSyntax): boolean {
         if (expression) {
             switch (expression.kind()) {
-                case SyntaxKind.PlusExpression:
-                case SyntaxKind.NegateExpression:
-                    // Note: if there is a + or - sign, we can only allow a normal integer following
-                    // (and not a hex integer).  i.e. -0xA is a legal expression, but it is not a 
-                    // *literal*.
-                    expression = (<PrefixUnaryExpressionSyntax>expression).operand;
-                    return isToken(expression) && IntegerUtilities.isInteger((<ISyntaxToken>expression).text());
+                case SyntaxKind.PrefixUnaryExpression:
+                    var prefixExpr = <PrefixUnaryExpressionSyntax>expression;
+                    if (prefixExpr.operatorToken.kind() == SyntaxKind.PlusToken || prefixExpr.operatorToken.kind() === SyntaxKind.MinusToken) {
+                        // Note: if there is a + or - sign, we can only allow a normal integer following
+                        // (and not a hex integer).  i.e. -0xA is a legal expression, but it is not a 
+                        // *literal*.
+                        expression = prefixExpr.operand;
+                        return isToken(expression) && IntegerUtilities.isInteger((<ISyntaxToken>expression).text());
+                    }
+
+                    return false;
 
                 case SyntaxKind.NumericLiteral:
                     // If it doesn't have a + or -, then either an integer literal or a hex literal
@@ -207,7 +211,7 @@ module TypeScript.Syntax {
     export function containingNode(element: ISyntaxElement): ISyntaxNode {
         var current = element.parent;
 
-        while (current !== null && !isNode(current)) {
+        while (current && !isNode(current)) {
             current = current.parent;
         }
 
@@ -234,7 +238,7 @@ module TypeScript.Syntax {
         // we're in the trivia before the start of the token.  Need to return the previous token.
         if (positionedToken.fullStart() === 0) {
             // Already on the first token.  Nothing before us.
-            return null;
+            return undefined;
         }
 
         return previousToken(positionedToken, includeSkippedTokens);
@@ -274,7 +278,7 @@ module TypeScript.Syntax {
 
     function isFirstTokenInLine(token: ISyntaxToken, lineMap: LineMap): boolean {
         var _previousToken = previousToken(token);
-        if (_previousToken === null) {
+        if (_previousToken === undefined) {
             return true;
         }
         

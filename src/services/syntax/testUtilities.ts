@@ -7,17 +7,17 @@ module TypeScript {
 
     export function nodeStructuralEquals(node1: TypeScript.ISyntaxNode, node2: TypeScript.ISyntaxNode, checkParents: boolean, text1: ISimpleText, text2: ISimpleText): boolean {
         if (node1 === node2) { return true; }
-        if (node1 === null || node2 === null) { return false; }
+        if (!node1 || !node2) { return false; }
 
         Debug.assert(node1.kind() === TypeScript.SyntaxKind.SourceUnit || node1.parent);
         Debug.assert(node2.kind() === TypeScript.SyntaxKind.SourceUnit || node2.parent);
 
         if (node1.kind() !== node2.kind()) { return false; }
-        if (childCount(node1) !== childCount(node2)) { return false; }
+        if (node1.childCount() !== node2.childCount()) { return false; }
 
-        for (var i = 0, n = childCount(node1); i < n; i++) {
-            var element1 = childAt(node1, i);
-            var element2 = childAt(node2, i);
+        for (var i = 0, n = node1.childCount(); i < n; i++) {
+            var element1 = node1.childAt(i);
+            var element2 = node2.childAt(i);
 
             if (checkParents) {
                 assertParent(node1, element1);
@@ -37,7 +37,7 @@ module TypeScript {
             return true;
         }
 
-        if (node1 === null || node2 === null) {
+        if (!node1 || !node2) {
             return false;
         }
 
@@ -56,7 +56,7 @@ module TypeScript {
             return true;
         }
 
-        if (token1 === null || token2 === null) {
+        if (!token1 || !token2) {
             return false;
         }
 
@@ -105,13 +105,13 @@ module TypeScript {
         Debug.assert(TypeScript.isShared(list1) || list1.parent);
         Debug.assert(TypeScript.isShared(list2) || list2.parent);
 
-        if (childCount(list1) !== childCount(list2)) {
+        if (list1.childCount() !== list2.childCount()) {
             return false;
         }
 
-        for (var i = 0, n = childCount(list1); i < n; i++) {
-            var child1 = childAt(list1, i);
-            var child2 = childAt(list2, i);
+        for (var i = 0, n = list1.childCount(); i < n; i++) {
+            var child1 = list1.childAt(i);
+            var child2 = list2.childAt(i);
 
             if (checkParents) {
                 assertParent(list1, child1);
@@ -130,13 +130,13 @@ module TypeScript {
         Debug.assert(TypeScript.isShared(list1) || list1.parent);
         Debug.assert(TypeScript.isShared(list2) || list2.parent);
 
-        if (childCount(list1) !== childCount(list2)) {
+        if (list1.childCount() !== list2.childCount()) {
             return false;
         }
 
-        for (var i = 0, n = childCount(list1); i < n; i++) {
-            var element1 = childAt(list1, i);
-            var element2 = childAt(list2, i);
+        for (var i = 0, n = list1.childCount(); i < n; i++) {
+            var element1 = list1.childAt(i);
+            var element2 = list2.childAt(i);
 
             if (checkParents) {
                 assertParent(list1, element1);
@@ -156,7 +156,7 @@ module TypeScript {
             return true;
         }
 
-        if (element1 === null || element2 === null) {
+        if (!element1 || !element2) {
             return false;
         }
 

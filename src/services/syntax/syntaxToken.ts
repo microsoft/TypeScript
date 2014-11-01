@@ -71,7 +71,7 @@ module TypeScript {
 module TypeScript {
     export function tokenValue(token: ISyntaxToken): any {
         if (token.fullWidth() === 0) {
-            return null;
+            return undefined;
         }
 
         var kind = token.kind();
@@ -87,7 +87,7 @@ module TypeScript {
             case SyntaxKind.FalseKeyword:
                 return false;
             case SyntaxKind.NullKeyword:
-                return null;
+                return undefined;
         }
 
         if (SyntaxFacts.isAnyKeyword(kind) || SyntaxFacts.isAnyPunctuation(kind)) {
@@ -112,7 +112,7 @@ module TypeScript {
             return regularExpressionValue(text);
         }
         else if (kind === SyntaxKind.EndOfFileToken || kind === SyntaxKind.ErrorToken) {
-            return null;
+            return undefined;
         }
         else {
             throw Errors.invalidOperation();
@@ -121,7 +121,7 @@ module TypeScript {
 
     export function tokenValueText(token: ISyntaxToken): string {
         var value = tokenValue(token);
-        return value === null ? "" : massageDisallowedIdentifiers(value.toString());
+        return value === undefined ? "" : massageDisallowedIdentifiers(value.toString());
     }
 
     export function massageEscapes(text: string): string {
@@ -136,7 +136,7 @@ module TypeScript {
             return new RegExp(body, flags);
         }
         catch (e) {
-            return null;
+            return undefined;
         }
     }
 
@@ -235,13 +235,13 @@ module TypeScript {
             characterArray.push(ch);
 
             if (i && !(i % 1024)) {
-                result = result.concat(String.fromCharCode.apply(null, characterArray));
+                result = result.concat(String.fromCharCode.apply(undefined, characterArray));
                 characterArray.length = 0;
             }
         }
 
         if (characterArray.length) {
-            result = result.concat(String.fromCharCode.apply(null, characterArray));
+            result = result.concat(String.fromCharCode.apply(undefined, characterArray));
         }
 
         return result;
@@ -297,6 +297,10 @@ module TypeScript.Syntax {
             return this._kind;
         }
 
+        public childCount() { return 0 }
+        public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
+        public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
+
         public clone(): ISyntaxToken {
             return new EmptyToken(this.kind());
         }
@@ -330,14 +334,14 @@ module TypeScript.Syntax {
             // the full-start of this token to be at the full-end of that element.
 
             var previousElement = this.previousNonZeroWidthElement();
-            return previousElement === null ? 0 : fullStart(previousElement) + fullWidth(previousElement);
+            return !previousElement ? 0 : fullStart(previousElement) + fullWidth(previousElement);
         }
 
         private previousNonZeroWidthElement(): ISyntaxElement {
             var current: ISyntaxElement = this;
             while (true) {
                 var parent = current.parent;
-                if (parent === null) {
+                if (parent === undefined) {
                     Debug.assert(current.kind() === SyntaxKind.SourceUnit, "We had a node without a parent that was not the root node!");
 
                     // We walked all the way to the top, and never found a previous element.  This 
@@ -346,14 +350,14 @@ module TypeScript.Syntax {
                     //      / b;
                     //
                     // We will have an empty identifier token as the first token in the tree.  In
-                    // this case, return null so that the position of the empty token will be 
+                    // this case, return undefined so that the position of the empty token will be 
                     // considered to be 0.
-                    return null;
+                    return undefined;
                 }
 
                 // Ok.  We have a parent.  First, find out which slot we're at in the parent.
-                for (var i = 0, n = childCount(parent); i < n; i++) {
-                    if (childAt(parent, i) === current) {
+                for (var i = 0, n = parent.childCount(); i < n; i++) {
+                    if (parent.childAt(i) === current) {
                         break;
                     }
                 }
@@ -362,7 +366,7 @@ module TypeScript.Syntax {
 
                 // Walk backward from this element, looking for a non-zero-width sibling.
                 for (var j = i - 1; j >= 0; j--) {
-                    var sibling = childAt(parent, j);
+                    var sibling = parent.childAt(j);
                     if (sibling && fullWidth(sibling) > 0) {
                         return sibling;
                     }
@@ -435,6 +439,10 @@ module TypeScript.Syntax {
         public kind(): SyntaxKind {
             return this._kind;
         }
+        
+        public childCount() { return 0 }
+        public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
+        public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
         public clone(): ISyntaxToken {
             return new RealizedToken(this._fullStart, this.kind(), this._isKeywordConvertedToIdentifier, this._leadingTrivia, this._text, this._trailingTrivia);
@@ -480,6 +488,10 @@ module TypeScript.Syntax {
         public setFullStart(fullStart: number): void {
             this.underlyingToken.setFullStart(fullStart);
         }
+
+        public childCount() { return 0 }
+        public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
+        public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
         public fullStart(): number {
             return this.underlyingToken.fullStart();

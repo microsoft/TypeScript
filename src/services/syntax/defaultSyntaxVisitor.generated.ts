@@ -3,7 +3,7 @@
 module TypeScript {
     export class SyntaxVisitor implements ISyntaxVisitor {
         public defaultVisit(node: ISyntaxNodeOrToken): any {
-            return null;
+            return undefined;
         }
 
         public visitToken(token: ISyntaxToken): any {
@@ -43,6 +43,14 @@ module TypeScript {
         }
 
         public visitTupleType(node: TupleTypeSyntax): any {
+            return this.defaultVisit(node);
+        }
+
+        public visitUnionType(node: UnionTypeSyntax): any {
+            return this.defaultVisit(node);
+        }
+
+        public visitParenthesizedType(node: ParenthesizedTypeSyntax): any {
             return this.defaultVisit(node);
         }
 
