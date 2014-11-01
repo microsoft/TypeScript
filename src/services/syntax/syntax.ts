@@ -4,8 +4,8 @@ module TypeScript.Syntax {
     export var _nextSyntaxID: number = 1;
 
     export function childIndex(parent: ISyntaxElement, child: ISyntaxElement) {
-        for (var i = 0, n = childCount(parent); i < n; i++) {
-            var current = childAt(parent, i);
+        for (var i = 0, n = parent.childCount(); i < n; i++) {
+            var current = parent.childAt(i);
             if (current === child) {
                 return i;
             }
@@ -15,8 +15,8 @@ module TypeScript.Syntax {
     }
 
     export function nodeHasSkippedOrMissingTokens(node: ISyntaxNode): boolean {
-        for (var i = 0; i < childCount(node); i++) {
-            var child = childAt(node, i);
+        for (var i = 0; i < node.childCount(); i++) {
+            var child = node.childAt(i);
             if (isToken(child)) {
                 var token = <ISyntaxToken>child;
                 // If a token is skipped, return true. Or if it is a missing token. The only empty token that is not missing is EOF

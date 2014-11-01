@@ -120,6 +120,8 @@ module ts {
         const_declarations_must_be_initialized: { code: 1155, category: DiagnosticCategory.Error, key: "'const' declarations must be initialized" },
         const_declarations_can_only_be_declared_inside_a_block: { code: 1156, category: DiagnosticCategory.Error, key: "'const' declarations can only be declared inside a block." },
         let_declarations_can_only_be_declared_inside_a_block: { code: 1157, category: DiagnosticCategory.Error, key: "'let' declarations can only be declared inside a block." },
+        Invalid_template_literal_expected: { code: 1158, category: DiagnosticCategory.Error, key: "Invalid template literal; expected '}'" },
+        Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1159, category: DiagnosticCategory.Error, key: "Tagged templates are only available when targeting ECMAScript 6 and higher." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

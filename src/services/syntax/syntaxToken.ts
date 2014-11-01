@@ -297,6 +297,10 @@ module TypeScript.Syntax {
             return this._kind;
         }
 
+        public childCount() { return 0 }
+        public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
+        public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
+
         public clone(): ISyntaxToken {
             return new EmptyToken(this.kind());
         }
@@ -352,8 +356,8 @@ module TypeScript.Syntax {
                 }
 
                 // Ok.  We have a parent.  First, find out which slot we're at in the parent.
-                for (var i = 0, n = childCount(parent); i < n; i++) {
-                    if (childAt(parent, i) === current) {
+                for (var i = 0, n = parent.childCount(); i < n; i++) {
+                    if (parent.childAt(i) === current) {
                         break;
                     }
                 }
@@ -362,7 +366,7 @@ module TypeScript.Syntax {
 
                 // Walk backward from this element, looking for a non-zero-width sibling.
                 for (var j = i - 1; j >= 0; j--) {
-                    var sibling = childAt(parent, j);
+                    var sibling = parent.childAt(j);
                     if (sibling && fullWidth(sibling) > 0) {
                         return sibling;
                     }
@@ -435,6 +439,10 @@ module TypeScript.Syntax {
         public kind(): SyntaxKind {
             return this._kind;
         }
+        
+        public childCount() { return 0 }
+        public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
+        public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
         public clone(): ISyntaxToken {
             return new RealizedToken(this._fullStart, this.kind(), this._isKeywordConvertedToIdentifier, this._leadingTrivia, this._text, this._trailingTrivia);
@@ -480,6 +488,10 @@ module TypeScript.Syntax {
         public setFullStart(fullStart: number): void {
             this.underlyingToken.setFullStart(fullStart);
         }
+
+        public childCount() { return 0 }
+        public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
+        public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
         public fullStart(): number {
             return this.underlyingToken.fullStart();

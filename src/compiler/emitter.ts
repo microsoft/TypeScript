@@ -786,14 +786,123 @@ module ts {
                 }
             }
 
-            function emitLiteral(node: LiteralExpression) {
-                var text = getSourceTextOfLocalNode(node);
-                if (node.kind === SyntaxKind.StringLiteral && compilerOptions.sourceMap) {
+            function emitLiteral(node: LiteralExpression): void {
+                var text = getLiteralText();
+
+                if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
                 else {
                     write(text);
                 }
+
+                function getLiteralText() {
+                    if (compilerOptions.target < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind)) {
+                        return getTemplateLiteralAsStringLiteral(node)
+                    }
+
+                    return getSourceTextOfLocalNode(node);
+                }
+            }
+
+            function getTemplateLiteralAsStringLiteral(node: LiteralExpression): string {
+                return '"' + escapeString(node.text) + '"';
+            }
+            
+            function emitTemplateExpression(node: TemplateExpression): void {
+                // In ES6 mode and above, we can simply emit each portion of a template in order, but in
+                // ES3 & ES5 we must convert the template expression into a series of string concatenations.
+                if (compilerOptions.target >= ScriptTarget.ES6) {
+                    forEachChild(node, emit);
+                    return;
+                }
+
+                Debug.assert(node.parent.kind !== SyntaxKind.TaggedTemplateExpression);
+
+                var templateNeedsParens = isExpression(node.parent)
+                    && node.parent.kind !== SyntaxKind.ParenExpression
+                    && comparePrecedenceToBinaryPlus(node.parent) !== Comparison.LessThan;
+
+                if (templateNeedsParens) {
+                    write("(");
+                }
+
+                emitLiteral(node.head);
+
+                forEach(node.templateSpans, templateSpan => {
+                    // Check if the expression has operands and binds its operands less closely than binary '+'.
+                    // If it does, we need to wrap the expression in parentheses. Otherwise, something like
+                    //    `abc${ 1 << 2}`
+                    // becomes
+                    //    "abc" + 1 << 2 + ""
+                    // which is really
+                    //    ("abc" + 1) << (2 + "")
+                    // rather than
+                    //    "abc" + (1 << 2) + ""
+                    var needsParens = templateSpan.expression.kind !== SyntaxKind.ParenExpression
+                        && comparePrecedenceToBinaryPlus(templateSpan.expression) !== Comparison.GreaterThan;
+
+                    write(" + ");
+
+                    if (needsParens) {
+                        write("(");
+                    }
+                    emit(templateSpan.expression);
+                    if (needsParens) {
+                        write(")");
+                    }
+
+                    // Only emit if the literal is non-empty.
+                    // The binary '+' operator is left-associative, so the first string concatenation will force
+                    // the result up to this point to be a string. Emitting a '+ ""' has no semantic effect.
+                    if (templateSpan.literal.text.length !== 0) {
+                        write(" + ")
+                        emitLiteral(templateSpan.literal);
+                    }
+                });
+                
+                if (templateNeedsParens) {
+                    write(")");
+                }
+
+                /**
+                 * Returns whether the expression has lesser, greater,
+                 * or equal precedence to the binary '+' operator
+                 */
+                function comparePrecedenceToBinaryPlus(expression: Expression): Comparison {
+                    // All binary expressions have lower precedence than '+' apart from '*', '/', and '%'.
+                    // All unary operators have a higher precedence apart from yield.
+                    // Arrow functions and conditionals have a lower precedence, 
+                    // although we convert the former into regular function expressions in ES5 mode,
+                    // and in ES6 mode this function won't get called anyway.
+                    // 
+                    // TODO (drosen): Note that we need to account for the upcoming 'yield' and
+                    //                spread ('...') unary operators that are anticipated for ES6.
+                    Debug.assert(compilerOptions.target <= ScriptTarget.ES5);
+                    switch (expression.kind) {
+                        case SyntaxKind.BinaryExpression:
+                            switch ((<BinaryExpression>expression).operator) {
+                                case SyntaxKind.AsteriskToken:
+                                case SyntaxKind.SlashToken:
+                                case SyntaxKind.PercentToken:
+                                    return Comparison.GreaterThan;
+                                case SyntaxKind.PlusToken:
+                                    return Comparison.EqualTo;
+                                default:
+                                    return Comparison.LessThan;
+                            }
+                        case SyntaxKind.ConditionalExpression:
+                            return Comparison.LessThan;
+                        default:
+                            return Comparison.GreaterThan;
+                    }
+                }
+
+            }
+
+            function emitTemplateSpan(span: TemplateSpan) {
+                emit(span.expression);
+                emit(span.literal);
             }
 
             // This function specifically handles numeric/string literals for enum and accessor 'identifiers'.
@@ -975,6 +1084,13 @@ module ts {
                     emitCommaList(node.arguments, /*includeTrailingComma*/ false);
                     write(")");
                 }
+            }
+
+            function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
+                Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Trying to emit a tagged template in pre-ES6 mode.");
+                emit(node.tag);
+                write(" ");
+                emit(node.template);
             }
 
             function emitParenExpression(node: ParenExpression) {
@@ -2085,7 +2201,15 @@ module ts {
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.RegularExpressionLiteral:
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    case SyntaxKind.TemplateHead:
+                    case SyntaxKind.TemplateMiddle:
+                    case SyntaxKind.TemplateTail:
                         return emitLiteral(<LiteralExpression>node);
+                    case SyntaxKind.TemplateExpression:
+                        return emitTemplateExpression(<TemplateExpression>node);
+                    case SyntaxKind.TemplateSpan:
+                        return emitTemplateSpan(<TemplateSpan>node);
                     case SyntaxKind.QualifiedName:
                         return emitPropertyAccess(<QualifiedName>node);
                     case SyntaxKind.ArrayLiteral:
@@ -2102,6 +2226,8 @@ module ts {
                         return emitCallExpression(<CallExpression>node);
                     case SyntaxKind.NewExpression:
                         return emitNewExpression(<NewExpression>node);
+                    case SyntaxKind.TaggedTemplateExpression:
+                        return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                     case SyntaxKind.TypeAssertion:
                         return emit((<TypeAssertion>node).operand);
                     case SyntaxKind.ParenExpression:

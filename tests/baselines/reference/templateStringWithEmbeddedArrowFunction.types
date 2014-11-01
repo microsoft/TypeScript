@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedArrowFunction.ts ===
+var x = `abc${ x => x }def`;
+>x : string
+>x => x : (x: any) => any
+>x : any
+>x : any
+

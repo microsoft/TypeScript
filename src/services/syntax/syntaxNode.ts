@@ -2,7 +2,7 @@
 
 module TypeScript {
     export class SyntaxNode implements ISyntaxNodeOrToken {
-        private __kind: SyntaxKind;
+        // private __kind: SyntaxKind;
         public data: number;
         public parent: ISyntaxElement;
 
@@ -13,7 +13,19 @@ module TypeScript {
         }
 
         public kind(): SyntaxKind {
-            return this.__kind;
+            throw Errors.abstract();
+        }
+
+        public childCount(): number {
+            throw Errors.abstract();
+        }
+
+        public childAt(index: number): ISyntaxElement {
+            throw Errors.abstract();
+        }
+
+        public accept(visitor: ISyntaxVisitor): any {
+            throw Errors.abstract();
         }
     }
 }

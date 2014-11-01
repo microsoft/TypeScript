@@ -1,0 +1,37 @@
+=== tests/cases/conformance/es6/templates/templateStringWithEmptyLiteralPortions.ts ===
+var a = ``;
+>a : string
+
+var b = `${ 0 }`;
+>b : string
+
+var c = `1${ 0 }`;
+>c : string
+
+var d = `${ 0 }2`;
+>d : string
+
+var e = `1${ 0 }2`;
+>e : string
+
+var f = `${ 0 }${ 0 }`;
+>f : string
+
+var g = `1${ 0 }${ 0 }`;
+>g : string
+
+var h = `${ 0 }2${ 0 }`;
+>h : string
+
+var i = `1${ 0 }2${ 0 }`;
+>i : string
+
+var j = `${ 0 }${ 0 }3`;
+>j : string
+
+var k = `1${ 0 }${ 0 }3`;
+>k : string
+
+var l = `1${ 0 }2${ 0 }3`;
+>l : string
+
