@@ -4756,6 +4756,7 @@
                                 }
                             ]
                         },
+                        "heritageClauses": [],
                         "openBraceToken": {
                             "kind": "OpenBraceToken",
                             "fullStart": 1232,
@@ -24195,6 +24196,7 @@
                                 }
                             ]
                         },
+                        "heritageClauses": [],
                         "body": {
                             "kind": "ObjectType",
                             "fullStart": 5997,
@@ -26431,6 +26433,7 @@
                         }
                     ]
                 },
+                "heritageClauses": [],
                 "openBraceToken": {
                     "kind": "OpenBraceToken",
                     "fullStart": 6474,
@@ -27751,6 +27754,7 @@
                         }
                     ]
                 },
+                "heritageClauses": [],
                 "openBraceToken": {
                     "kind": "OpenBraceToken",
                     "fullStart": 6774,
@@ -29675,6 +29679,7 @@
                         }
                     ]
                 },
+                "heritageClauses": [],
                 "body": {
                     "kind": "ObjectType",
                     "fullStart": 7198,

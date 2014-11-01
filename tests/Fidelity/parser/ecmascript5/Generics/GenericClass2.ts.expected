@@ -150,6 +150,7 @@
                         ]
                     }
                 },
+                "heritageClauses": [],
                 "openBraceToken": {
                     "kind": "OpenBraceToken",
                     "fullStart": 13,
@@ -172,6 +173,7 @@
                         }
                     ]
                 },
+                "classElements": [],
                 "closeBraceToken": {
                     "kind": "CloseBraceToken",
                     "fullStart": 16,

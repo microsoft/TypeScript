@@ -167,6 +167,7 @@
                                 }
                             ]
                         },
+                        "heritageClauses": [],
                         "body": {
                             "kind": "ObjectType",
                             "fullStart": 41,

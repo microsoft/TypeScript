@@ -114,6 +114,7 @@
                     "width": 0,
                     "text": ""
                 },
+                "moduleElements": [],
                 "closeBraceToken": {
                     "kind": "CloseBraceToken",
                     "fullStart": 9,

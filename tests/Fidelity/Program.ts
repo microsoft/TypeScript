@@ -182,14 +182,16 @@ function nodeToJSON(node: TypeScript.ISyntaxNode, text: TypeScript.ISimpleText):
         result.parsedInStrictMode = true;
     }
 
+    var usedNames: any = {};
     var thisAsIndexable: ts.Map<any> = <any>node;
     for (var i = 0, n = node.childCount(); i < n; i++) {
         var value = node.childAt(i);
 
         if (value) {
             for (var name in node) {
-                if (value === thisAsIndexable[name]) {
+                if (usedNames[name] === undefined && value === thisAsIndexable[name]) {
                     result[name] = elementToJSON(value, text);
+                    usedNames[name] = true;
                     break;
                 }
             }

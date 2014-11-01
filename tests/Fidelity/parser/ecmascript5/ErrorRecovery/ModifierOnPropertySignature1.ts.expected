@@ -64,6 +64,7 @@
                     "value": "Foo",
                     "valueText": "Foo"
                 },
+                "heritageClauses": [],
                 "body": {
                     "kind": "ObjectType",
                     "fullStart": 13,

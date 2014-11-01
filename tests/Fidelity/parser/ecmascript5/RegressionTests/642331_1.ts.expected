@@ -124,6 +124,7 @@
                         }
                     ]
                 },
+                "heritageClauses": [],
                 "openBraceToken": {
                     "kind": "OpenBraceToken",
                     "fullStart": 28,

@@ -245,6 +245,7 @@
                         }
                     ]
                 },
+                "moduleElements": [],
                 "closeBraceToken": {
                     "kind": "CloseBraceToken",
                     "fullStart": 43,

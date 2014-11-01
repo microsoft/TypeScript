@@ -61,6 +61,7 @@
                         }
                     ]
                 },
+                "heritageClauses": [],
                 "openBraceToken": {
                     "kind": "OpenBraceToken",
                     "fullStart": 8,
@@ -578,6 +579,7 @@
                                 }
                             ]
                         },
+                        "heritageClauses": [],
                         "openBraceToken": {
                             "kind": "OpenBraceToken",
                             "fullStart": 95,
