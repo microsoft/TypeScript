@@ -3,12 +3,22 @@
 interface Array<T> {
     data: number;
     separators?: TypeScript.ISyntaxToken[];
+    separatedListLength?: number;
 
     kind(): TypeScript.SyntaxKind;
     parent: TypeScript.ISyntaxElement;
 
     separatorCount(): number;
     separatorAt(index: number): TypeScript.ISyntaxToken;
+
+    childCount(): number;
+    childAt(index: number): TypeScript.ISyntaxNodeOrToken;
+}
+
+module TypeScript {
+    export function separatedListChildAt(list: ISyntaxNodeOrToken[], index: number) {
+        return index % 2 === 0 ? list[index >> 1] : list.separators[index >> 1];
+    }
 }
 
 module TypeScript.Syntax {
@@ -18,6 +28,7 @@ module TypeScript.Syntax {
     var _emptySeparators: ISyntaxToken[] = [];
 
     _emptySeparatedList.separators = _emptySeparators;
+    _emptySeparatedList.separatedListLength = 0;
 
     function assertEmptyLists() {
         // Debug.assert(_emptyList.length === 0);
@@ -99,8 +110,8 @@ module TypeScript.Syntax {
             separators[i].parent = nodes;
         }
 
-
         nodes.separators = separators.length === 0 ? _emptySeparators : separators;
+        nodes.separatedListLength = nodes.length + separators.length;
 
         return nodes;
     }

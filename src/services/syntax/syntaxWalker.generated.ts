@@ -20,9 +20,13 @@ module TypeScript {
         }
 
         public visitSeparatedList(list: ISyntaxNodeOrToken[]): void {
-            for (var i = 0, n = childCount(list); i < n; i++) {
-                var item = childAt(list, i);
-                visitNodeOrToken(this, item);
+            for (var i = 0, n = list.separatedListLength; i < n; i++) {
+                if (i % 2 === 0) {
+                    visitNodeOrToken(this, list[i >> 1]);
+                }
+                else {
+                    this.visitToken(list.separators[i >> 1]);
+                }
             }
         }
 
