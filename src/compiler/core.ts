@@ -19,6 +19,12 @@ module ts {
         [index: string]: T;
     }
 
+    export enum Comparison {
+        LessThan    = -1,
+        EqualTo     = 0,
+        GreaterThan = 1
+    }
+
     export interface StringSet extends Map<any> { }
 
     export function forEach<T, U>(array: T[], callback: (element: T) => U): U {
@@ -93,6 +99,7 @@ module ts {
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
+
         return array1.concat(array2);
     }
 
@@ -326,11 +333,11 @@ module ts {
         };
     }
 
-    export function compareValues<T>(a: T, b: T): number {
-        if (a === b) return 0;
-        if (a === undefined) return -1;
-        if (b === undefined) return 1;
-        return a < b ? -1 : 1;
+    export function compareValues<T>(a: T, b: T): Comparison {
+        if (a === b) return Comparison.EqualTo;
+        if (a === undefined) return Comparison.LessThan;
+        if (b === undefined) return Comparison.GreaterThan;
+        return a < b ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
     function getDiagnosticFilename(diagnostic: Diagnostic): string {
@@ -355,7 +362,7 @@ module ts {
         var previousDiagnostic = diagnostics[0];
         for (var i = 1; i < diagnostics.length; i++) {
             var currentDiagnostic = diagnostics[i];
-            var isDupe = compareDiagnostics(currentDiagnostic, previousDiagnostic) === 0;
+            var isDupe = compareDiagnostics(currentDiagnostic, previousDiagnostic) === Comparison.EqualTo;
             if (!isDupe) {
                 newDiagnostics.push(currentDiagnostic);
                 previousDiagnostic = currentDiagnostic;
@@ -644,7 +651,7 @@ module ts {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: any, message?: string, verboseDebugInfo?: () => string): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string): void {
             if (!expression) {
                 var verboseDebugString = "";
                 if (verboseDebugInfo) {

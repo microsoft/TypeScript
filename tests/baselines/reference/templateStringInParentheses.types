@@ -1,0 +1,5 @@
+=== tests/cases/conformance/es6/templates/templateStringInParentheses.ts ===
+var x = (`abc${0}abc`);
+>x : string
+>(`abc${0}abc`) : string
+

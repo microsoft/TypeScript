@@ -92,7 +92,7 @@ class TypeWriterWalker {
 
     private getTypeOfNode(node: ts.Node): ts.Type {
         var type = this.checker.getTypeOfNode(node);
-        ts.Debug.assert(type, "type doesn't exist");
+        ts.Debug.assert(type !== undefined, "type doesn't exist");
         return type;
     }
 }

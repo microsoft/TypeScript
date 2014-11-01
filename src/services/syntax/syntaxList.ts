@@ -16,10 +16,6 @@ interface Array<T> {
 }
 
 module TypeScript {
-    //export function separatedListChildCount(list: ISyntaxNodeOrToken[]) {
-    //    return list.length + list.separators.length;
-    //}
-
     export function separatedListChildAt(list: ISyntaxNodeOrToken[], index: number) {
         return index % 2 === 0 ? list[index >> 1] : list.separators[index >> 1];
     }

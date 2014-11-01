@@ -3,7 +3,7 @@
 ///<reference path='..\..\services\core\stringUtilities.ts' />
 ///<reference path='syntaxFacts.ts' />
 ///<reference path='syntaxKind.ts' />
-///<reference path='..\..\..\tests\fidelity\es5compat.ts' />
+// ///<reference path='..\..\..\tests\fidelity\es5compat.ts' />
 
 // Adds argument checking to the generated nodes.  Argument checking appears to slow things down
 // parsing about 7%.  If we want to get that perf back, we can always remove this.
