@@ -2036,49 +2036,7 @@ function generateSyntaxInterfaces(): string {
         result += generateSyntaxInterface(definition);
     }
 
-    result += "\r\n\r\n";
-
-    /*
-    result += "    export var nodeMetadata: string[][] = [";
-    for (var i = 0; i <= TypeScript.SyntaxKind.LastNode; i++) {
-        if (i < TypeScript.SyntaxKind.FirstNode) {
-            result += "[],";
-            continue;
-        }
-
-        var kindName = syntaxKindName(i);
-
-        var definition = getDefinitionForKind(i);
-
-        var metadata = "[";
-        var children = definition.children.filter(m => m.type !== "SyntaxKind").map(m => '"' + m.name + '"');
-        metadata += children.join(",");
-        metadata += "],";
-
-        result += metadata;
-    }
-    result += "];\r\n\r\n";
-    */
-
-    result += "    export module Syntax {\r\n"
-
-    result += "        export interface ISyntaxFactory {\r\n";
-    result += "            isConcrete: boolean;\r\n";
-
-    for (var i = 0; i < definitions.length; i++) {
-        var definition = definitions[i];
-        result += "            " + definition.name + ": { new(data: number";
-
-        for (var j = 0; j < definition.children.length; j++) {
-            var child = definition.children[j];
-            result += ", " + child.name + ": " + getType(child);
-        }
-
-        result += "): " + definition.name + " };\r\n";
-    }
-
-    result += "        }\r\n";
-    result += "    }\r\n";
+    result += "\r\n";
 
     result += "}";
     return result;
@@ -2112,16 +2070,9 @@ function generateSyntaxInterface(definition: ITypeDefinition): string {
 function generateNodes(abstract: boolean): string {
     var result = "///<reference path='references.ts' />\r\n\r\n";
 
-    result += "module TypeScript.Syntax.";
-
-    var moduleName = abstract ? "Abstract" : "Concrete";
-    result += moduleName;
+    result += "module TypeScript";
 
     result += " {\r\n";
-    result += "    // Inject this module as the factory for producing syntax nodes in the parser.\r\n";
-    result += "    Parser.syntaxFactory = " + moduleName + ";\r\n";
-    result += "    export var isConcrete: boolean = " + !abstract + ";\r\n\r\n";
-
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
 
@@ -2131,24 +2082,6 @@ function generateNodes(abstract: boolean): string {
 
         result += generateNode(definition, abstract);
     }
-    /*
-    result += "\r\n\r\n    ";
-
-    for (var i = 0; i < definitions.length; i++) {
-        var definition = definitions[i];
-
-        if (definition.syntaxKinds) {
-            continue;
-        }
-
-        if (i) {
-            result += ", "
-        }
-
-        result += "(<any>" + definition.name + ").prototype.__kind = SyntaxKind." + getNameWithoutSuffix(definition)
-    }
-
-    result += ";\r\n";*/
 
     result += "\r\n}";
     return result;
@@ -2834,7 +2767,6 @@ var defaultVisitor = generateDefaultVisitor();
 var servicesUtilities = generateServicesUtilities();
 
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.concrete.generated.ts", syntaxNodesConcrete, false);
-sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.interfaces.generated.ts", syntaxInterfaces, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxRewriter.generated.ts", rewriter, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxWalker.generated.ts", walker, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\scannerUtilities.generated.ts", scannerUtilities, false);
