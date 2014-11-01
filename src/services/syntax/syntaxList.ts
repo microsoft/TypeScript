@@ -25,22 +25,44 @@ module TypeScript.Syntax {
         // Debug.assert(!separators || separators.length === 0);
     }
 
-    Array.prototype.kind = function () {
-        return this.separators === undefined ? SyntaxKind.List : SyntaxKind.SeparatedList;
+    function addArrayFunction(name: string, func: Function) {
+        if (Object.defineProperty) {
+            Object.defineProperty(Array.prototype, name, { value: func, writable: true });
+        }
+        else {
+            (<any>Array.prototype)[name] = func;
+        }
     }
 
-    Array.prototype.separatorCount = function (): number {
+    addArrayFunction("kind", function () {
+        return this.separators === undefined ? SyntaxKind.List : SyntaxKind.SeparatedList;
+    });
+
+    addArrayFunction("childCount", function (): number {
+        return this.separators ? this.separatedListLength : this.length;
+    });
+
+    addArrayFunction("childAt", function (index: number): ISyntaxNodeOrToken {
+        if (this.separators) {
+            return index % 2 === 0 ? this[index >> 1] : this.separators[index >> 1];
+        }
+        else {
+            return this[index];
+        }
+    });
+
+    addArrayFunction("separatorCount", function (): number {
         assertEmptyLists();
         // Debug.assert(this.kind === SyntaxKind.SeparatedList);
         return this.separators.length;
-    }
+    });
 
-    Array.prototype.separatorAt = function (index: number): ISyntaxToken {
+    addArrayFunction("separatorAt", function (index: number): ISyntaxToken {
         assertEmptyLists();
         // Debug.assert(this.kind === SyntaxKind.SeparatedList);
         // Debug.assert(index >= 0 && index < this.separators.length);
         return this.separators[index];
-    }
+    });
 
     export function emptyList<T extends ISyntaxNodeOrToken>(): T[] {
         return <T[]><any>_emptyList;
