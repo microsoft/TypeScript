@@ -1838,7 +1838,7 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (!isInstantiated(node, /*treatConstEnumsAsValues*/ false)) {
+                if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
                 emitLeadingComments(node);

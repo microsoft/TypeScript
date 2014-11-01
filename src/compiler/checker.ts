@@ -208,6 +208,7 @@ module ts {
             result.declarations = symbol.declarations.slice(0);
             result.parent = symbol.parent;
             if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
+            if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
             if (symbol.members) result.members = cloneSymbolTable(symbol.members);
             if (symbol.exports) result.exports = cloneSymbolTable(symbol.exports);
             recordMergedSymbol(result, symbol);
@@ -216,6 +217,10 @@ module ts {
 
         function extendSymbol(target: Symbol, source: Symbol) {
             if (!(target.flags & getExcludedSymbolFlags(source.flags))) {
+                if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
+                    // reset flag when merging instantiated module into value module that has only const enums
+                    target.constEnumOnlyModule = false;
+                }
                 target.flags |= source.flags;
                 if (!target.valueDeclaration && source.valueDeclaration) target.valueDeclaration = source.valueDeclaration;
                 forEach(source.declarations, node => {
@@ -4432,8 +4437,8 @@ module ts {
 
             if (symbol.flags & SymbolFlags.Import) {
                 // Mark the import as referenced so that we emit it in the final .js file.
-                // exception: identifiers that appear in type queries, const enums
-                getSymbolLinks(symbol).referenced = !isInTypeQuery(node) && !isConstEnumSymbol(resolveImport(symbol));
+                // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
+                getSymbolLinks(symbol).referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
             }
 
             checkCollisionWithCapturedSuperVariable(node, node);
@@ -6883,7 +6888,7 @@ module ts {
                     case SyntaxKind.InterfaceDeclaration:
                         return SymbolFlags.ExportType;
                     case SyntaxKind.ModuleDeclaration:
-                        return (<ModuleDeclaration>d).name.kind === SyntaxKind.StringLiteral || isInstantiated(d, /*treatConstEnumsAsValues*/ true)
+                        return (<ModuleDeclaration>d).name.kind === SyntaxKind.StringLiteral || getModuleInstanceState(d) !== ModuleInstanceState.NonInstantiated
                             ? SymbolFlags.ExportNamespace | SymbolFlags.ExportValue
                             : SymbolFlags.ExportNamespace;
                     case SyntaxKind.ClassDeclaration:
@@ -7120,7 +7125,7 @@ module ts {
             }
 
             // Uninstantiated modules shouldnt do this check
-            if (node.kind === SyntaxKind.ModuleDeclaration && !isInstantiated(node, /*treatConstEnumsAsValues*/ false)) {
+            if (node.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                 return;
             }
 
@@ -8673,8 +8678,7 @@ module ts {
                 return false;
             }
             var symbol = getSymbolOfNode(node);
-            var target = resolveImport(symbol);
-            return target !== unknownSymbol && ((target.flags & SymbolFlags.Value) !== 0) && !isConstEnumSymbol(target);
+            return isImportResolvedToValue(getSymbolOfNode(node));
         }
 
         function hasSemanticErrors() {
@@ -8686,6 +8690,16 @@ module ts {
             return forEach(getDiagnostics(sourceFile), d => d.isEarly);
         }
 
+        function isImportResolvedToValue(symbol: Symbol): boolean {
+            var target = resolveImport(symbol);
+            // const enums and modules that contain only const enums are not considered values from the emit perespective
+            return target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target);
+        }
+
+        function isConstEnumOrConstEnumOnlyModule(s: Symbol): boolean {
+            return isConstEnumSymbol(s) || s.constEnumOnlyModule;
+        }
+
         function isReferencedImportDeclaration(node: ImportDeclaration): boolean {
             var symbol = getSymbolOfNode(node);
             if (getSymbolLinks(symbol).referenced) {
@@ -8694,11 +8708,7 @@ module ts {
             // logic below will answer 'true' for exported import declaration in a nested module that itself is not exported.
             // As a consequence this might cause emitting extra.
             if (node.flags & NodeFlags.Export) {
-                var target = resolveImport(symbol);
-                // importing const enum does not cause import to be referenced
-                if (target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumSymbol(target)) {
-                    return true;
-                }
+                return isImportResolvedToValue(symbol);
             }
             return false;
         }

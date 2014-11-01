@@ -57,7 +57,35 @@ module A {
     }
 }
 
+module A1 {
+    export module B {
+        export module C {
+            export const enum E {
+                V1 = 10,
+                V2 = 110,
+            }
+        }
+    }
+}
+
+module A2 {
+    export module B {
+        export module C {
+            export const enum E {
+                V1 = 10,
+                V2 = 110,
+            }
+        }
+        // module C will be classified as value
+        export module C {
+            var x = 1
+        }
+    }
+}
+
 import I = A.B.C.E;
+import I1 = A1.B;
+import I2 = A2.B;
 
 function foo0(e: I): void {
     if (e === I.V1) {
@@ -65,6 +93,21 @@ function foo0(e: I): void {
     else if (e === I.V2) {
     }
 }
+
+function foo1(e: I1.C.E): void {
+    if (e === I1.C.E.V1) {
+    }
+    else if (e === I1.C.E.V2) {
+    }
+}
+
+function foo2(e: I2.C.E): void {
+    if (e === I2.C.E.V1) {
+    }
+    else if (e === I2.C.E.V2) {
+    }
+}
+
 
 function foo(x: Enum1) {
     switch (x) {

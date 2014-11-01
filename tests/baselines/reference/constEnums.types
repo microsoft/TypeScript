@@ -211,12 +211,73 @@ module A {
     }
 }
 
+module A1 {
+>A1 : typeof A1
+
+    export module B {
+>B : typeof B
+
+        export module C {
+>C : typeof C
+
+            export const enum E {
+>E : E
+
+                V1 = 10,
+>V1 : E
+
+                V2 = 110,
+>V2 : E
+            }
+        }
+    }
+}
+
+module A2 {
+>A2 : typeof A2
+
+    export module B {
+>B : typeof B
+
+        export module C {
+>C : typeof C
+
+            export const enum E {
+>E : E
+
+                V1 = 10,
+>V1 : E
+
+                V2 = 110,
+>V2 : E
+            }
+        }
+        // module C will be classified as value
+        export module C {
+>C : typeof C
+
+            var x = 1
+>x : number
+        }
+    }
+}
+
 import I = A.B.C.E;
 >I : typeof I
 >A : typeof A
 >B : typeof A.B
 >C : typeof A.B.C
 >E : I
+
+import I1 = A1.B;
+>I1 : typeof I1
+>A1 : typeof A1
+>B : typeof I1
+
+import I2 = A2.B;
+>I2 : typeof I2
+>A2 : typeof A2
+>B : typeof I2
 
 function foo0(e: I): void {
 >foo0 : (e: I) => void
@@ -238,6 +299,69 @@ function foo0(e: I): void {
 >V2 : I
     }
 }
+
+function foo1(e: I1.C.E): void {
+>foo1 : (e: I1.C.E) => void
+>e : I1.C.E
+>I1 : unknown
+>C : unknown
+>E : I1.C.E
+
+    if (e === I1.C.E.V1) {
+>e === I1.C.E.V1 : boolean
+>e : I1.C.E
+>I1.C.E.V1 : I1.C.E
+>I1.C.E : typeof I1.C.E
+>I1.C : typeof I1.C
+>I1 : typeof I1
+>C : typeof I1.C
+>E : typeof I1.C.E
+>V1 : I1.C.E
+    }
+    else if (e === I1.C.E.V2) {
+>e === I1.C.E.V2 : boolean
+>e : I1.C.E
+>I1.C.E.V2 : I1.C.E
+>I1.C.E : typeof I1.C.E
+>I1.C : typeof I1.C
+>I1 : typeof I1
+>C : typeof I1.C
+>E : typeof I1.C.E
+>V2 : I1.C.E
+    }
+}
+
+function foo2(e: I2.C.E): void {
+>foo2 : (e: I2.C.E) => void
+>e : I2.C.E
+>I2 : unknown
+>C : unknown
+>E : I2.C.E
+
+    if (e === I2.C.E.V1) {
+>e === I2.C.E.V1 : boolean
+>e : I2.C.E
+>I2.C.E.V1 : I2.C.E
+>I2.C.E : typeof I2.C.E
+>I2.C : typeof I2.C
+>I2 : typeof I2
+>C : typeof I2.C
+>E : typeof I2.C.E
+>V1 : I2.C.E
+    }
+    else if (e === I2.C.E.V2) {
+>e === I2.C.E.V2 : boolean
+>e : I2.C.E
+>I2.C.E.V2 : I2.C.E
+>I2.C.E : typeof I2.C.E
+>I2.C : typeof I2.C
+>I2 : typeof I2
+>C : typeof I2.C
+>E : typeof I2.C.E
+>V2 : I2.C.E
+    }
+}
+
 
 function foo(x: Enum1) {
 >foo : (x: Enum1) => void

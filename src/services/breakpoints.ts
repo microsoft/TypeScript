@@ -178,7 +178,7 @@ module ts.BreakpointResolver {
 
                     case SyntaxKind.ModuleDeclaration:
                         // span on complete module if it is instantiated
-                        if (!isInstantiated(node, /*treatConstEnumsAsValues*/ false)) {
+                        if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
 
@@ -350,7 +350,7 @@ module ts.BreakpointResolver {
             function spanInBlock(block: Block): TypeScript.TextSpan {
                 switch (block.parent.kind) {
                     case SyntaxKind.ModuleDeclaration:
-                        if (!isInstantiated(block.parent, /*treatConstEnumsAsValues*/ false)) {
+                        if (getModuleInstanceState(block.parent) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
 
@@ -407,7 +407,7 @@ module ts.BreakpointResolver {
                 switch (node.parent.kind) {
                     case SyntaxKind.ModuleBlock:
                         // If this is not instantiated module block no bp span
-                        if (!isInstantiated(node.parent.parent, /*treatConstEnumsAsValues*/ false)) {
+                        if (getModuleInstanceState(node.parent.parent) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
 

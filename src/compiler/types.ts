@@ -842,7 +842,8 @@ module ts {
         members?: SymbolTable;         // Class, interface or literal instance members
         exports?: SymbolTable;         // Module exports
         exportSymbol?: Symbol;         // Exported symbol associated with this symbol
-        valueDeclaration?: Declaration // First value declaration of the symbol
+        valueDeclaration?: Declaration // First value declaration of the symbol,
+        constEnumOnlyModule?: boolean // For modules - if true - module contains only const enums or other modules with only const enums.
     }
 
     export interface SymbolLinks {

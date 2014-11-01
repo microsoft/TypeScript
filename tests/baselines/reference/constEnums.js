@@ -58,7 +58,35 @@ module A {
     }
 }
 
+module A1 {
+    export module B {
+        export module C {
+            export const enum E {
+                V1 = 10,
+                V2 = 110,
+            }
+        }
+    }
+}
+
+module A2 {
+    export module B {
+        export module C {
+            export const enum E {
+                V1 = 10,
+                V2 = 110,
+            }
+        }
+        // module C will be classified as value
+        export module C {
+            var x = 1
+        }
+    }
+}
+
 import I = A.B.C.E;
+import I1 = A1.B;
+import I2 = A2.B;
 
 function foo0(e: I): void {
     if (e === I.V1) {
@@ -66,6 +94,21 @@ function foo0(e: I): void {
     else if (e === I.V2) {
     }
 }
+
+function foo1(e: I1.C.E): void {
+    if (e === I1.C.E.V1) {
+    }
+    else if (e === I1.C.E.V2) {
+    }
+}
+
+function foo2(e: I2.C.E): void {
+    if (e === I2.C.E.V1) {
+    }
+    else if (e === I2.C.E.V2) {
+    }
+}
+
 
 function foo(x: Enum1) {
     switch (x) {
@@ -109,10 +152,34 @@ function bar(e: A.B.C.E): number {
 }
 
 //// [constEnums.js]
+var A2;
+(function (A2) {
+    var B;
+    (function (B) {
+        // module C will be classified as value
+        var C;
+        (function (C) {
+            var x = 1;
+        })(C = B.C || (B.C = {}));
+    })(B = A2.B || (A2.B = {}));
+})(A2 || (A2 = {}));
+var I2 = A2.B;
 function foo0(e) {
     if (e === 1 /* V1 */) {
     }
     else if (e === 101 /* V2 */) {
+    }
+}
+function foo1(e) {
+    if (e === 10 /* V1 */) {
+    }
+    else if (e === 110 /* V2 */) {
+    }
+}
+function foo2(e) {
+    if (e === 10 /* V1 */) {
+    }
+    else if (e === 110 /* V2 */) {
     }
 }
 function foo(x) {
