@@ -255,18 +255,18 @@ module TypeScript {
         private checkForTrailingComma(list: ISyntaxNodeOrToken[]): boolean {
             // If we have at least one child, and we have an even number of children, then that 
             // means we have an illegal trailing separator.
-            if (childCount(list) === 0 || childCount(list) % 2 === 1) {
+            if (list.childCount() === 0 || list.childCount() % 2 === 1) {
                 return false;
             }
 
-            var child = childAt(list, childCount(list) - 1);
+            var child = list.childAt(list.childCount() - 1);
             this.pushDiagnostic(child, DiagnosticCode.Trailing_comma_not_allowed);
 
             return true;
         }
 
         private checkForAtLeastOneElement(parent: ISyntaxElement, list: ISyntaxNodeOrToken[], reportToken: ISyntaxToken, listKind: string): boolean {
-            if (childCount(list) > 0) {
+            if (list.childCount() > 0) {
                 return false;
             }
 
@@ -589,7 +589,7 @@ module TypeScript {
 
         private checkIndexMemberModifiers(node: IndexMemberDeclarationSyntax): boolean {
             if (node.modifiers.length > 0) {
-                this.pushDiagnostic(childAt(node.modifiers, 0), DiagnosticCode.Modifiers_cannot_appear_here);
+                this.pushDiagnostic(node.modifiers.childAt(0), DiagnosticCode.Modifiers_cannot_appear_here);
                 return true;
             }
 
@@ -654,7 +654,7 @@ module TypeScript {
 
         private checkSetAccessorParameter(node: SetAccessorSyntax): boolean {
             var parameters = node.callSignature.parameterList.parameters;
-            if (childCount(parameters) !== 1) {
+            if (parameters.childCount() !== 1) {
                 this.pushDiagnostic(node.propertyName, DiagnosticCode.set_accessor_must_have_exactly_one_parameter);
                 return true;
             }
@@ -710,8 +710,8 @@ module TypeScript {
 
         private checkEnumElements(node: EnumDeclarationSyntax): boolean {
             var previousValueWasComputed = false;
-            for (var i = 0, n = childCount(node.enumElements); i < n; i++) {
-                var child = childAt(node.enumElements, i);
+            for (var i = 0, n = node.enumElements.childCount(); i < n; i++) {
+                var child = node.enumElements.childAt(i);
 
                 if (i % 2 === 0) {
                     var enumElement = <EnumElementSyntax>child;
@@ -1286,7 +1286,7 @@ module TypeScript {
         private checkForDisallowedModifiers(parent: ISyntaxElement, modifiers: ISyntaxToken[]): boolean {
             if (this.inBlock || this.inObjectLiteralExpression) {
                 if (modifiers.length > 0) {
-                    this.pushDiagnostic(childAt(modifiers, 0), DiagnosticCode.Modifiers_cannot_appear_here);
+                    this.pushDiagnostic(modifiers.childAt(0), DiagnosticCode.Modifiers_cannot_appear_here);
                     return true;
                 }
             }
@@ -1334,8 +1334,8 @@ module TypeScript {
         }
 
         private checkListSeparators<T extends ISyntaxNodeOrToken>(parent: ISyntaxElement, list: T[], kind: SyntaxKind): boolean {
-            for (var i = 0, n = childCount(list); i < n; i++) {
-                var child = childAt(list, i);
+            for (var i = 0, n = list.childCount(); i < n; i++) {
+                var child = list.childAt(i);
                 if (i % 2 === 1 && child.kind() !== kind) {
                     this.pushDiagnostic(child, DiagnosticCode._0_expected, [SyntaxFacts.getText(kind)]);
                 }

@@ -219,7 +219,7 @@ module ts.SignatureHelp {
                 // Find the list that starts right *after* the < or ( token.
                 // If the user has just opened a list, consider this item 0.
                 var list = getChildListThatStartsWithOpenerToken(parent, node, sourceFile);
-                Debug.assert(list);
+                Debug.assert(list !== undefined);
                 return {
                     list: list,
                     listItemIndex: 0

@@ -594,8 +594,8 @@ module TypeScript.Parser {
             }
             else if (isSeparatedList(parent)) {
                 var list2 = <ISyntaxNodeOrToken[]>parent;
-                for (var i = 0, n = childCount(list2); i < n; i++) {
-                    if (childAt(list2, i) === oldToken) {
+                for (var i = 0, n = list2.childCount(); i < n; i++) {
+                    if (list2.childAt(i) === oldToken) {
                         if (i % 2 === 0) {
                             list2[i / 2] = newToken;
                         }

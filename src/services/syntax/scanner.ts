@@ -255,6 +255,10 @@ module TypeScript.Scanner {
             this._packedData = fixedWidthTokenPackData(fullStart, this.kind());
         }
 
+        public childCount() { return 0 }
+        public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
+        public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
+
         public isIncrementallyUnusable(): boolean { return false; }
         public isKeywordConvertedToIdentifier(): boolean { return false; }
         public hasSkippedToken(): boolean { return false; }
@@ -289,6 +293,10 @@ module TypeScript.Scanner {
             this._packedFullStartAndInfo = largeTokenPackFullStartAndInfo(fullStart,
                 largeTokenUnpackTriviaInfo(this._packedFullStartAndInfo));
         }
+
+        public childCount() { return 0 }
+        public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
+        public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
         private syntaxTreeText(text: ISimpleText) {
             var result = text || syntaxTree(this).text;
