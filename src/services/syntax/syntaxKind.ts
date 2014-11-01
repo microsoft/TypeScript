@@ -5,8 +5,6 @@ module TypeScript {
         // Variable width tokens, trivia and lists.
         None,
         List,
-        SeparatedList,
-        TriviaList,
 
         // Trivia
         WhitespaceTrivia,

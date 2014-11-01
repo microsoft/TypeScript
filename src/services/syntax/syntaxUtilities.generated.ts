@@ -1,14 +1,4 @@
 module TypeScript {
-    function isSeparatedListTypeScriptSpecific(list: ISyntaxNodeOrToken[]): boolean {
-        for (var i = 0, n = list.childCount(); i < n; i++) {
-            if (isTypeScriptSpecific(list.childAt(i))) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     function isListTypeScriptSpecific(list: ISyntaxNodeOrToken[]): boolean {
         for (var i = 0, n = list.length; i < n; i++) {
             if (isTypeScriptSpecific(list[i])) {
@@ -23,8 +13,6 @@ module TypeScript {
         if (!element) { return false; }
         if (isToken(element)) { return false; }
         if (isList(element)) { return isListTypeScriptSpecific(<ISyntaxNodeOrToken[]>element); }
-        if (isSeparatedList(element)) { return isSeparatedListTypeScriptSpecific(<ISyntaxNodeOrToken[]>element); }
-
         switch (element.kind()) {
             case SyntaxKind.QualifiedName:
             case SyntaxKind.ObjectType:

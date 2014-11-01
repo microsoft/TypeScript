@@ -777,7 +777,7 @@ module TypeScript.IncrementalParser {
         function moveToFirstChildIfList(): void {
             var element = pieces[currentPieceIndex].element;
 
-            if (isList(element) || isSeparatedList(element)) {
+            if (isList(element)) {
                 // We cannot ever get an empty list in our piece path.  Empty lists are 'shared' and
                 // we make sure to filter that out before pushing any children.
                 // Debug.assert(childCount(element) > 0);

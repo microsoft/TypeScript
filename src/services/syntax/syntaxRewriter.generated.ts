@@ -14,12 +14,12 @@ module TypeScript {
             return isToken(node) ? <ISyntaxNodeOrToken>this.visitToken(<ISyntaxToken>node) : this.visitNode(<ISyntaxNode>node);
         }
 
-        public visitList<T extends ISyntaxNodeOrToken>(list: T[]): T[] {
-            var newItems: T[] = undefined;
+        public visitList<T extends ISyntaxNodeOrToken[]>(list: T): T {
+            var newItems: T = undefined;
 
             for (var i = 0, n = list.length; i < n; i++) {
                 var item = list[i];
-                var newItem = <T>this.visitNodeOrToken(item);
+                var newItem = this.visitNodeOrToken(item);
 
                 if (item !== newItem && !newItems) {
                     newItems = [];
@@ -34,31 +34,9 @@ module TypeScript {
             }
 
             // Debug.assert(!newItems || newItems.length === childCount(list));
-            return !newItems ? list : Syntax.list<T>(newItems);
+            return !newItems ? list : <T>Syntax.list(newItems);
         }
 
-        public visitSeparatedList<T extends ISyntaxNodeOrToken>(list: T[]): T[] {
-            var newItems: ISyntaxNodeOrToken[] = undefined;
-
-            for (var i = 0, n = childCount(list); i < n; i++) {
-                var item = childAt(list, i);
-                var newItem = isToken(item) ? <ISyntaxNodeOrToken>this.visitToken(<ISyntaxToken>item) : this.visitNode(<ISyntaxNode>item);
-
-                if (item !== newItem && !newItems) {
-                    newItems = [];
-                    for (var j = 0; j < i; j++) {
-                        newItems.push(childAt(list, j));
-                    }
-                }
-
-                if (newItems) {
-                    newItems.push(newItem);
-                }
-            }
-
-            // Debug.assert(newItems === undefined || newItems.length === childCount(list));
-            return !newItems ? list : Syntax.separatedList<T>(newItems);
-        }
 
         public visitSourceUnit(node: SourceUnitSyntax): any {
             return node.update(
@@ -76,7 +54,7 @@ module TypeScript {
         public visitObjectType(node: ObjectTypeSyntax): any {
             return node.update(
                 this.visitToken(node.openBraceToken),
-                this.visitSeparatedList(node.typeMembers),
+                this.visitList(node.typeMembers),
                 this.visitToken(node.closeBraceToken));
         }
 
@@ -119,7 +97,7 @@ module TypeScript {
         public visitTupleType(node: TupleTypeSyntax): any {
             return node.update(
                 this.visitToken(node.openBracketToken),
-                this.visitSeparatedList(node.types),
+                this.visitList(node.types),
                 this.visitToken(node.closeBracketToken));
         }
 
@@ -186,7 +164,7 @@ module TypeScript {
                 this.visitToken(node.enumKeyword),
                 this.visitToken(node.identifier),
                 this.visitToken(node.openBraceToken),
-                this.visitSeparatedList(node.enumElements),
+                this.visitList(node.enumElements),
                 this.visitToken(node.closeBraceToken));
         }
 
@@ -281,7 +259,7 @@ module TypeScript {
         public visitIndexSignature(node: IndexSignatureSyntax): any {
             return node.update(
                 this.visitToken(node.openBracketToken),
-                this.visitSeparatedList(node.parameters),
+                this.visitList(node.parameters),
                 this.visitToken(node.closeBracketToken),
                 !node.typeAnnotation ? undefined : <TypeAnnotationSyntax>this.visitNode(node.typeAnnotation));
         }
@@ -505,14 +483,14 @@ module TypeScript {
         public visitArrayLiteralExpression(node: ArrayLiteralExpressionSyntax): any {
             return node.update(
                 this.visitToken(node.openBracketToken),
-                this.visitSeparatedList(node.expressions),
+                this.visitList(node.expressions),
                 this.visitToken(node.closeBracketToken));
         }
 
         public visitObjectLiteralExpression(node: ObjectLiteralExpressionSyntax): any {
             return node.update(
                 this.visitToken(node.openBraceToken),
-                this.visitSeparatedList(node.propertyAssignments),
+                this.visitList(node.propertyAssignments),
                 this.visitToken(node.closeBraceToken));
         }
 
@@ -577,7 +555,7 @@ module TypeScript {
         public visitVariableDeclaration(node: VariableDeclarationSyntax): any {
             return node.update(
                 this.visitToken(node.varKeyword),
-                this.visitSeparatedList(node.variableDeclarators));
+                this.visitList(node.variableDeclarators));
         }
 
         public visitVariableDeclarator(node: VariableDeclaratorSyntax): any {
@@ -591,35 +569,35 @@ module TypeScript {
             return node.update(
                 !node.typeArgumentList ? undefined : <TypeArgumentListSyntax>this.visitNode(node.typeArgumentList),
                 this.visitToken(node.openParenToken),
-                this.visitSeparatedList(node.arguments),
+                this.visitList(node.arguments),
                 this.visitToken(node.closeParenToken));
         }
 
         public visitParameterList(node: ParameterListSyntax): any {
             return node.update(
                 this.visitToken(node.openParenToken),
-                this.visitSeparatedList(node.parameters),
+                this.visitList(node.parameters),
                 this.visitToken(node.closeParenToken));
         }
 
         public visitTypeArgumentList(node: TypeArgumentListSyntax): any {
             return node.update(
                 this.visitToken(node.lessThanToken),
-                this.visitSeparatedList(node.typeArguments),
+                this.visitList(node.typeArguments),
                 this.visitToken(node.greaterThanToken));
         }
 
         public visitTypeParameterList(node: TypeParameterListSyntax): any {
             return node.update(
                 this.visitToken(node.lessThanToken),
-                this.visitSeparatedList(node.typeParameters),
+                this.visitList(node.typeParameters),
                 this.visitToken(node.greaterThanToken));
         }
 
         public visitHeritageClause(node: HeritageClauseSyntax): any {
             return node.update(
                 this.visitToken(node.extendsOrImplementsKeyword),
-                this.visitSeparatedList(node.typeNames));
+                this.visitList(node.typeNames));
         }
 
         public visitEqualsValueClause(node: EqualsValueClauseSyntax): any {

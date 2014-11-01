@@ -8,7 +8,7 @@ module TypeScript {
     // nodes don't have positions or parents.
     export function isShared(element: ISyntaxElement): boolean {
         var kind = element.kind();
-        return (kind === SyntaxKind.List || kind === SyntaxKind.SeparatedList) && (<ISyntaxNodeOrToken[]>element).length === 0;
+        return kind === SyntaxKind.List && (<ISyntaxNodeOrToken[]>element).length === 0;
     }
 
     export function syntaxTree(element: ISyntaxElement): SyntaxTree {
@@ -225,10 +225,6 @@ module TypeScript {
         return element && element.kind() === SyntaxKind.List;
     }
 
-    export function isSeparatedList(element: ISyntaxElement): boolean {
-        return element && element.kind() === SyntaxKind.SeparatedList;
-    }
-
     export function syntaxID(element: ISyntaxElement): number {
         if (isShared(element)) {
             throw Errors.invalidOperation("Should not use shared syntax element as a key.");
@@ -350,7 +346,7 @@ module TypeScript {
     }
 
     function data(element: ISyntaxElement): number {
-        Debug.assert(isNode(element) || isList(element) || isSeparatedList(element));
+        Debug.assert(isNode(element) || isList(element));
 
         // Lists and nodes all have a 'data' element.
         var dataElement = <{ data: number }><any>element;

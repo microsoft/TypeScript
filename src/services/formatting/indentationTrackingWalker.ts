@@ -103,7 +103,7 @@ module TypeScript.Services.Formatting {
                 if (isToken(element)) {
                     this.visitToken(<ISyntaxToken>element);
                 }
-                else if (element.kind() === SyntaxKind.List || element.kind() === SyntaxKind.SeparatedList) {
+                else if (element.kind() === SyntaxKind.List) {
                     for (var i = 0, n = element.childCount(); i < n; i++) {
                         this.walk(element.childAt(i));
                     }

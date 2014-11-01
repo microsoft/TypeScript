@@ -2,33 +2,26 @@
 
 interface Array<T> {
     data: number;
-    separators?: TypeScript.ISyntaxToken[];
-    separatedListLength?: number;
 
     kind(): TypeScript.SyntaxKind;
     parent: TypeScript.ISyntaxElement;
-
-    separatorCount(): number;
-    separatorAt(index: number): TypeScript.ISyntaxToken;
 
     childCount(): number;
     childAt(index: number): TypeScript.ISyntaxNodeOrToken;
 }
 
 module TypeScript {
-    export function separatedListChildAt(list: ISyntaxNodeOrToken[], index: number) {
-        return index % 2 === 0 ? list[index >> 1] : list.separators[index >> 1];
+    export interface ISeparatedSyntaxList<T extends ISyntaxNodeOrToken> extends Array<ISyntaxNodeOrToken> {
+        separatorCount(): number;
+        separatorAt(index: number): TypeScript.ISyntaxToken;
+
+        nonSeparatorCount(): number;
+        nonSeparatorAt(index: number): T;
     }
 }
 
 module TypeScript.Syntax {
     var _emptyList: ISyntaxNodeOrToken[] = [];
-
-    var _emptySeparatedList: ISyntaxNodeOrToken[] = [];
-    var _emptySeparators: ISyntaxToken[] = [];
-
-    _emptySeparatedList.separators = _emptySeparators;
-    _emptySeparatedList.separatedListLength = 0;
 
     function assertEmptyLists() {
         // Debug.assert(_emptyList.length === 0);
@@ -46,41 +39,49 @@ module TypeScript.Syntax {
     }
 
     addArrayFunction("kind", function () {
-        return this.separators === undefined ? SyntaxKind.List : SyntaxKind.SeparatedList;
+        return SyntaxKind.List;
     });
 
     addArrayFunction("childCount", function (): number {
-        return this.separators ? this.separatedListLength : this.length;
+        return this.length;
     });
 
     addArrayFunction("childAt", function (index: number): ISyntaxNodeOrToken {
-        if (this.separators) {
-            return index % 2 === 0 ? this[index >> 1] : this.separators[index >> 1];
-        }
-        else {
-            return this[index];
-        }
+        return this[index];
     });
 
     addArrayFunction("separatorCount", function (): number {
         assertEmptyLists();
         // Debug.assert(this.kind === SyntaxKind.SeparatedList);
-        return this.separators.length;
+        return this.length >> 1;
+    });
+
+    addArrayFunction("nonSeparatorCount", function (): number {
+        assertEmptyLists();
+        // Debug.assert(this.kind === SyntaxKind.SeparatedList);
+        return (this.length + 1) >> 1;
     });
 
     addArrayFunction("separatorAt", function (index: number): ISyntaxToken {
         assertEmptyLists();
         // Debug.assert(this.kind === SyntaxKind.SeparatedList);
         // Debug.assert(index >= 0 && index < this.separators.length);
-        return this.separators[index];
+        return this[(index << 1) + 1];
+    });
+
+    addArrayFunction("nonSeparatorAt", function (index: number): ISyntaxToken {
+        assertEmptyLists();
+        // Debug.assert(this.kind === SyntaxKind.SeparatedList);
+        // Debug.assert(index >= 0 && index < this.separators.length);
+        return this[index << 1];
     });
 
     export function emptyList<T extends ISyntaxNodeOrToken>(): T[] {
-        return <T[]><any>_emptyList;
+        return <T[]>_emptyList;
     }
 
-    export function emptySeparatedList<T extends ISyntaxNodeOrToken>(): T[] {
-        return <T[]><any>_emptySeparatedList;
+    export function emptySeparatedList<T extends ISyntaxNodeOrToken>(): ISeparatedSyntaxList<T> {
+        return <ISeparatedSyntaxList<T>>_emptyList;
     }
 
     export function list<T extends ISyntaxNodeOrToken>(nodes: T[]): T[] {
@@ -95,25 +96,18 @@ module TypeScript.Syntax {
         return nodes;
     }
 
-    export function separatedList<T extends ISyntaxNodeOrToken>(nodes: T[], separators: ISyntaxToken[]): T[] {
-        if (!nodes || nodes.length === 0) {
-            return emptySeparatedList<T>();
+    export function separatedList<T extends ISyntaxNodeOrToken>(nodesAndTokens: ISyntaxNodeOrToken[]): ISeparatedSyntaxList<T> {
+        if (!nodesAndTokens || nodesAndTokens.length === 0) {
+            return <ISeparatedSyntaxList<T>>emptyList<ISyntaxNodeOrToken>();
         }
 
         // Debug.assert(separators.length === nodes.length || separators.length == (nodes.length - 1));
 
-        for (var i = 0, n = nodes.length; i < n; i++) {
-            nodes[i].parent = nodes;
+        for (var i = 0, n = nodesAndTokens.length; i < n; i++) {
+            nodesAndTokens[i].parent = nodesAndTokens;
         }
 
-        for (var i = 0, n = separators.length; i < n; i++) {
-            separators[i].parent = nodes;
-        }
-
-        nodes.separators = separators.length === 0 ? _emptySeparators : separators;
-        nodes.separatedListLength = nodes.length + separators.length;
-
-        return nodes;
+        return <ISeparatedSyntaxList<T>>nodesAndTokens;
     }
 
     export function nonSeparatorIndexOf<T extends ISyntaxNodeOrToken>(list: T[], ast: ISyntaxNodeOrToken): number {
