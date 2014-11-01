@@ -680,7 +680,7 @@ class Program {
 
         var tree1 = TypeScript.Parser.parse(fileName, text, languageVersion, isDTSFile(fileName));
         var tree2 = TypeScript.IncrementalParser.parse(
-            new TypeScript.SyntaxTree(/*isConcrete:*/ true, emptySourceUnit(), isDTSFile(fileName), [], fileName, text, tree1.languageVersion()),
+            new TypeScript.SyntaxTree(emptySourceUnit(), isDTSFile(fileName), [], fileName, text, tree1.languageVersion()),
             new TypeScript.TextChangeRange(new TypeScript.TextSpan(0, 0), text.length()),
             text);
 
