@@ -557,7 +557,7 @@ module TypeScript.Parser {
             // when next requested.
             while (true) {
                 // Parent must be a list or a node.  All of those have a 'data' element.
-                Debug.assert(isNode(parent) || isList(parent) || isSeparatedList(parent));
+                Debug.assert(isNode(parent) || isList(parent));
                 var dataElement = <{ data: number }><any>parent;
                 if (dataElement.data) {
                     dataElement.data &= SyntaxConstants.NodeParsedInStrictModeMask
@@ -588,20 +588,6 @@ module TypeScript.Parser {
                 for (var i = 0, n = list1.length; i < n; i++) {
                     if (list1[i] === oldToken) {
                         list1[i] = newToken;
-                        return;
-                    }
-                }
-            }
-            else if (isSeparatedList(parent)) {
-                var list2 = <ISyntaxNodeOrToken[]>parent;
-                for (var i = 0, n = list2.childCount(); i < n; i++) {
-                    if (list2.childAt(i) === oldToken) {
-                        if (i % 2 === 0) {
-                            list2[i / 2] = newToken;
-                        }
-                        else {
-                            list2.separators[(i - 1) / 2] = newToken;
-                        }
                         return;
                     }
                 }
@@ -3786,7 +3772,7 @@ module TypeScript.Parser {
             return result;
         }
 
-        function parseSeparatedSyntaxList<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState, skippedTokens: ISyntaxToken[]): T[] {
+        function parseSeparatedSyntaxList<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState, skippedTokens: ISyntaxToken[]): ISeparatedSyntaxList<T> {
             var savedListParsingState = listParsingState;
             listParsingState |= (1 << currentListType);
 
@@ -3799,7 +3785,7 @@ module TypeScript.Parser {
 
         // Returns true if we should abort parsing.
         function abortParsingListOrMoveToNextToken<T extends ISyntaxNodeOrToken>(
-                currentListType: ListParsingState, nodes: T[], separators: ISyntaxToken[], skippedTokens: ISyntaxToken[]): boolean {
+                currentListType: ListParsingState, nodeAndSeparators: ISyntaxNodeOrToken[], skippedTokens: ISyntaxToken[]): boolean {
             // Ok.  We're at a token that is not a terminator for the list and wasn't the start of 
             // an item in the list. Definitely report an error for this token.
             reportUnexpectedTokenDiagnostic(currentListType);
@@ -3819,30 +3805,27 @@ module TypeScript.Parser {
 
             // Otherwise, if none of the lists we're in can capture this token, then we need to 
             // unilaterally skip it.  Note: we've already reported an error above.
-            addSkippedTokenToList(nodes, separators, skippedTokens, consumeToken(currentToken()));
+            addSkippedTokenToList(nodeAndSeparators, skippedTokens, consumeToken(currentToken()));
 
             // Continue parsing this list.  Attach this token to whatever we've seen already.
             return false;
         }
         
-        function addSkippedTokenToList<T extends ISyntaxNodeOrToken>(
-                nodes: T[], separators: ISyntaxToken[], skippedTokens: ISyntaxToken[], skippedToken: ISyntaxToken): void {
+        function addSkippedTokenToList(
+                nodesAndSeparators: ISyntaxNodeOrToken[], skippedTokens: ISyntaxToken[], skippedToken: ISyntaxToken): void {
             // Now, add this skipped token to the last item we successfully parsed in the list.  Or
             // add it to the list of skipped tokens if we haven't parsed anything.  Our caller will
             // have to deal with them.
             //
             // Note: we only bother doing this if we're creating a concrete syntax tree.
             if (syntaxFactory.isConcrete) {
-                var length = nodes.length + (separators ? separators.length : 0);
+                var length = nodesAndSeparators.length;
 
                 for (var i = length - 1; i >= 0; i--) {
-                    var array: ISyntaxNodeOrToken[] = separators && (i % 2 === 1) ? separators : nodes;
-                    var arrayIndex = separators ? IntegerUtilities.integerDivide(i, 2) : i;
-
-                    var item = array[arrayIndex];
+                    var item = nodesAndSeparators[i];
                     var _lastToken = lastToken(item);
                     if (_lastToken && _lastToken.fullWidth() > 0) {
-                        array[arrayIndex] = <T>addSkippedTokenAfterNodeOrToken(item, skippedToken);
+                        nodesAndSeparators[i] = addSkippedTokenAfterNodeOrToken(item, skippedToken);
                         return;
                     }
                 }
@@ -3895,7 +3878,7 @@ module TypeScript.Parser {
 
                     // List wasn't complete and we didn't get an item.  Figure out if we should bail out
                     // or skip a token and continue.
-                    var abort = abortParsingListOrMoveToNextToken(currentListType, items, /*separators:*/ undefined, skippedTokens);
+                    var abort = abortParsingListOrMoveToNextToken(currentListType, items, skippedTokens);
                     if (abort) {
                         break;
                     }
@@ -3914,9 +3897,8 @@ module TypeScript.Parser {
             return result;
         }
 
-        function parseSeparatedSyntaxListWorker<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState, skippedTokens: ISyntaxToken[]): T[] {
-            var nodes: T[] = getArray();
-            var separators: ISyntaxToken[] = getArray();
+        function parseSeparatedSyntaxListWorker<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState, skippedTokens: ISyntaxToken[]): ISeparatedSyntaxList<T> {
+            var nodesAndSeparators: ISyntaxNodeOrToken[] = getArray();
 
             // Debug.assert(nodes.length === 0);
             // Debug.assert(separators.length === 0);
@@ -3934,7 +3916,7 @@ module TypeScript.Parser {
                 // continue parsing.
 
                 // Debug.assert(oldItemsCount % 2 === 0);
-                var succeeded = tryParseExpectedListItem(currentListType, inErrorRecovery, nodes, /*processItems:*/ undefined);
+                var succeeded = tryParseExpectedListItem(currentListType, inErrorRecovery, nodesAndSeparators, /*processItems:*/ undefined);
 
                 if (!succeeded) {
                     // We weren't able to parse out a list element.
@@ -3948,7 +3930,7 @@ module TypeScript.Parser {
 
                     // List wasn't complete and we didn't get an item.  Figure out if we should bail out
                     // or skip a token and continue.
-                    var abort = abortParsingListOrMoveToNextToken(currentListType, nodes, separators, skippedTokens);
+                    var abort = abortParsingListOrMoveToNextToken(currentListType, nodesAndSeparators, skippedTokens);
                     if (abort) {
                         break;
                     }
@@ -3973,7 +3955,7 @@ module TypeScript.Parser {
                 var tokenKind = _currentToken.kind();
                 if (tokenKind === _separatorKind || tokenKind === SyntaxKind.CommaToken) {
                     // Consume the last separator and continue parsing list elements.
-                    separators.push(consumeToken(_currentToken));
+                    nodesAndSeparators.push(consumeToken(_currentToken));
                     continue;
                 }
 
@@ -4001,7 +3983,7 @@ module TypeScript.Parser {
 
                 if (allowAutomaticSemicolonInsertion && canEatAutomaticSemicolon(/*allowWithoutNewline:*/ false)) {
                     var semicolonToken = eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) || Syntax.emptyToken(SyntaxKind.SemicolonToken);
-                    separators.push(semicolonToken);
+                    nodesAndSeparators.push(semicolonToken);
                     // Debug.assert(items.length % 2 === 0);
                     continue;
                 }
@@ -4011,7 +3993,7 @@ module TypeScript.Parser {
                 // This time mark that we're in error recovery mode though.
                 //
                 // Note: trying to eat this token will emit the appropriate diagnostic.
-                separators.push(eatToken(_separatorKind));
+                nodesAndSeparators.push(eatToken(_separatorKind));
 
                 // Now that we're in 'error recovery' mode we cantweak some parsing rules as 
                 // appropriate.  For example, if we have:
@@ -4027,12 +4009,11 @@ module TypeScript.Parser {
                 inErrorRecovery = true;
             }
 
-            var result = Syntax.separatedList<T>(nodes, separators);
+            var result = Syntax.separatedList<T>(nodesAndSeparators);
 
             // Can't return if it has more then 0 elements.  In that case, the list will have been
             // copied into the SyntaxList.
-            returnZeroLengthArray(nodes);
-            returnZeroLengthArray(separators);
+            returnZeroLengthArray(nodesAndSeparators);
 
             return result;
         }

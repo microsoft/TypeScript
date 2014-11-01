@@ -169,10 +169,10 @@ module TypeScript {
 
         private checkParameterListOrder(node: ParameterListSyntax): boolean {
             var seenOptionalParameter = false;
-            var parameterCount = node.parameters.length;
+            var parameterCount = node.parameters.nonSeparatorCount();
 
             for (var i = 0; i < parameterCount; i++) {
-                var parameter = node.parameters[i];
+                var parameter = node.parameters.nonSeparatorAt(i);
 
                 if (parameter.dotDotDotToken) {
                     if (i !== (parameterCount - 1)) {
@@ -210,8 +210,8 @@ module TypeScript {
         }
 
         private checkParameterListAcessibilityModifiers(node: ParameterListSyntax): boolean {
-            for (var i = 0, n = node.parameters.length; i < n; i++) {
-                var parameter = node.parameters[i];
+            for (var i = 0, n = node.parameters.nonSeparatorCount(); i < n; i++) {
+                var parameter = node.parameters.nonSeparatorAt(i);
 
                 if (this.checkParameterAccessibilityModifiers(node, parameter)) {
                     return true;
@@ -344,7 +344,7 @@ module TypeScript {
                 return true;
             }
 
-            var parameter = node.parameters[0];
+            var parameter = node.parameters.nonSeparatorAt(0);
 
             if (parameter.dotDotDotToken) {
                 this.pushDiagnostic(parameter, DiagnosticCode.Index_signatures_cannot_have_rest_parameters);
@@ -407,7 +407,7 @@ module TypeScript {
                         return true;
                     }
 
-                    if (heritageClause.typeNames.length > 1) {
+                    if (heritageClause.typeNames.nonSeparatorCount() > 1) {
                         this.pushDiagnostic(heritageClause, DiagnosticCode.Classes_can_only_extend_a_single_class);
                         return true;
                     }
@@ -654,12 +654,12 @@ module TypeScript {
 
         private checkSetAccessorParameter(node: SetAccessorSyntax): boolean {
             var parameters = node.callSignature.parameterList.parameters;
-            if (parameters.childCount() !== 1) {
+            if (parameters.nonSeparatorCount() !== 1) {
                 this.pushDiagnostic(node.propertyName, DiagnosticCode.set_accessor_must_have_exactly_one_parameter);
                 return true;
             }
 
-            var parameter = parameters[0];
+            var parameter = parameters.nonSeparatorAt(0);
 
             if (parameter.questionToken) {
                 this.pushDiagnostic(parameter, DiagnosticCode.set_accessor_parameter_cannot_be_optional);

@@ -126,31 +126,6 @@ module TypeScript {
         return true;
     }
 
-    function separatedListStructuralEquals<T extends TypeScript.ISyntaxNodeOrToken>(list1: T[], list2: T[], checkParents: boolean, text1: ISimpleText, text2: ISimpleText): boolean {
-        Debug.assert(TypeScript.isShared(list1) || list1.parent);
-        Debug.assert(TypeScript.isShared(list2) || list2.parent);
-
-        if (list1.childCount() !== list2.childCount()) {
-            return false;
-        }
-
-        for (var i = 0, n = list1.childCount(); i < n; i++) {
-            var element1 = list1.childAt(i);
-            var element2 = list2.childAt(i);
-
-            if (checkParents) {
-                assertParent(list1, element1);
-                assertParent(list2, element2);
-            }
-
-            if (!nodeOrTokenStructuralEquals(element1, element2, checkParents, text1, text2)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     export function elementStructuralEquals(element1: TypeScript.ISyntaxElement, element2: TypeScript.ISyntaxElement, checkParents: boolean, text1: ISimpleText, text2: ISimpleText) {
         if (element1 === element2) {
             return true;
@@ -191,9 +166,6 @@ module TypeScript {
         }
         else if (TypeScript.isList(element1)) {
             return listStructuralEquals(<TypeScript.ISyntaxNodeOrToken[]>element1, <TypeScript.ISyntaxNodeOrToken[]>element2, checkParents, text1, text2);
-        }
-        else if (TypeScript.isSeparatedList(element1)) {
-            return separatedListStructuralEquals(<TypeScript.ISyntaxNodeOrToken[]>element1, <TypeScript.ISyntaxNodeOrToken[]>element2, checkParents, text1, text2);
         }
 
         throw TypeScript.Errors.invalidOperation();

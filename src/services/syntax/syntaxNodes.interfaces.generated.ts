@@ -13,7 +13,7 @@ module TypeScript {
     }
     export interface ObjectTypeSyntax extends ISyntaxNode, ITypeSyntax {
         openBraceToken: ISyntaxToken;
-        typeMembers: ITypeMemberSyntax[];
+        typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>;
         closeBraceToken: ISyntaxToken;
     }
     export interface FunctionTypeSyntax extends ISyntaxNode, ITypeSyntax {
@@ -44,7 +44,7 @@ module TypeScript {
     }
     export interface TupleTypeSyntax extends ISyntaxNode, ITypeSyntax {
         openBracketToken: ISyntaxToken;
-        types: ITypeSyntax[];
+        types: ISeparatedSyntaxList<ITypeSyntax>;
         closeBracketToken: ISyntaxToken;
     }
     export interface UnionTypeSyntax extends ISyntaxNode, ITypeSyntax {
@@ -97,7 +97,7 @@ module TypeScript {
         enumKeyword: ISyntaxToken;
         identifier: ISyntaxToken;
         openBraceToken: ISyntaxToken;
-        enumElements: EnumElementSyntax[];
+        enumElements: ISeparatedSyntaxList<EnumElementSyntax>;
         closeBraceToken: ISyntaxToken;
     }
     export interface ImportDeclarationSyntax extends ISyntaxNode, IModuleElementSyntax {
@@ -168,7 +168,7 @@ module TypeScript {
     }
     export interface IndexSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
         openBracketToken: ISyntaxToken;
-        parameters: ParameterSyntax[];
+        parameters: ISeparatedSyntaxList<ParameterSyntax>;
         closeBracketToken: ISyntaxToken;
         typeAnnotation: TypeAnnotationSyntax;
     }
@@ -334,12 +334,12 @@ module TypeScript {
     }
     export interface ArrayLiteralExpressionSyntax extends ISyntaxNode, IPrimaryExpressionSyntax {
         openBracketToken: ISyntaxToken;
-        expressions: IExpressionSyntax[];
+        expressions: ISeparatedSyntaxList<IExpressionSyntax>;
         closeBracketToken: ISyntaxToken;
     }
     export interface ObjectLiteralExpressionSyntax extends ISyntaxNode, IPrimaryExpressionSyntax {
         openBraceToken: ISyntaxToken;
-        propertyAssignments: IPropertyAssignmentSyntax[];
+        propertyAssignments: ISeparatedSyntaxList<IPropertyAssignmentSyntax>;
         closeBraceToken: ISyntaxToken;
     }
     export interface ObjectCreationExpressionSyntax extends ISyntaxNode, IPrimaryExpressionSyntax {
@@ -386,7 +386,7 @@ module TypeScript {
     }
     export interface VariableDeclarationSyntax extends ISyntaxNode {
         varKeyword: ISyntaxToken;
-        variableDeclarators: VariableDeclaratorSyntax[];
+        variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>;
     }
     export interface VariableDeclaratorSyntax extends ISyntaxNode {
         propertyName: ISyntaxToken;
@@ -396,27 +396,27 @@ module TypeScript {
     export interface ArgumentListSyntax extends ISyntaxNode {
         typeArgumentList: TypeArgumentListSyntax;
         openParenToken: ISyntaxToken;
-        arguments: IExpressionSyntax[];
+        arguments: ISeparatedSyntaxList<IExpressionSyntax>;
         closeParenToken: ISyntaxToken;
     }
     export interface ParameterListSyntax extends ISyntaxNode {
         openParenToken: ISyntaxToken;
-        parameters: ParameterSyntax[];
+        parameters: ISeparatedSyntaxList<ParameterSyntax>;
         closeParenToken: ISyntaxToken;
     }
     export interface TypeArgumentListSyntax extends ISyntaxNode {
         lessThanToken: ISyntaxToken;
-        typeArguments: ITypeSyntax[];
+        typeArguments: ISeparatedSyntaxList<ITypeSyntax>;
         greaterThanToken: ISyntaxToken;
     }
     export interface TypeParameterListSyntax extends ISyntaxNode {
         lessThanToken: ISyntaxToken;
-        typeParameters: TypeParameterSyntax[];
+        typeParameters: ISeparatedSyntaxList<TypeParameterSyntax>;
         greaterThanToken: ISyntaxToken;
     }
     export interface HeritageClauseSyntax extends ISyntaxNode {
         extendsOrImplementsKeyword: ISyntaxToken;
-        typeNames: INameSyntax[];
+        typeNames: ISeparatedSyntaxList<INameSyntax>;
     }
     export interface EqualsValueClauseSyntax extends ISyntaxNode {
         equalsToken: ISyntaxToken;
@@ -498,20 +498,20 @@ module TypeScript {
             isConcrete: boolean;
             SourceUnitSyntax: { new(data: number, moduleElements: IModuleElementSyntax[], endOfFileToken: ISyntaxToken): SourceUnitSyntax };
             QualifiedNameSyntax: { new(data: number, left: INameSyntax, dotToken: ISyntaxToken, right: ISyntaxToken): QualifiedNameSyntax };
-            ObjectTypeSyntax: { new(data: number, openBraceToken: ISyntaxToken, typeMembers: ITypeMemberSyntax[], closeBraceToken: ISyntaxToken): ObjectTypeSyntax };
+            ObjectTypeSyntax: { new(data: number, openBraceToken: ISyntaxToken, typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>, closeBraceToken: ISyntaxToken): ObjectTypeSyntax };
             FunctionTypeSyntax: { new(data: number, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, equalsGreaterThanToken: ISyntaxToken, type: ITypeSyntax): FunctionTypeSyntax };
             ArrayTypeSyntax: { new(data: number, type: ITypeSyntax, openBracketToken: ISyntaxToken, closeBracketToken: ISyntaxToken): ArrayTypeSyntax };
             ConstructorTypeSyntax: { new(data: number, newKeyword: ISyntaxToken, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, equalsGreaterThanToken: ISyntaxToken, type: ITypeSyntax): ConstructorTypeSyntax };
             GenericTypeSyntax: { new(data: number, name: INameSyntax, typeArgumentList: TypeArgumentListSyntax): GenericTypeSyntax };
             TypeQuerySyntax: { new(data: number, typeOfKeyword: ISyntaxToken, name: INameSyntax): TypeQuerySyntax };
-            TupleTypeSyntax: { new(data: number, openBracketToken: ISyntaxToken, types: ITypeSyntax[], closeBracketToken: ISyntaxToken): TupleTypeSyntax };
+            TupleTypeSyntax: { new(data: number, openBracketToken: ISyntaxToken, types: ISeparatedSyntaxList<ITypeSyntax>, closeBracketToken: ISyntaxToken): TupleTypeSyntax };
             UnionTypeSyntax: { new(data: number, left: ITypeSyntax, barToken: ISyntaxToken, right: ITypeSyntax): UnionTypeSyntax };
             ParenthesizedTypeSyntax: { new(data: number, openParenToken: ISyntaxToken, type: ITypeSyntax, closeParenToken: ISyntaxToken): ParenthesizedTypeSyntax };
             InterfaceDeclarationSyntax: { new(data: number, modifiers: ISyntaxToken[], interfaceKeyword: ISyntaxToken, identifier: ISyntaxToken, typeParameterList: TypeParameterListSyntax, heritageClauses: HeritageClauseSyntax[], body: ObjectTypeSyntax): InterfaceDeclarationSyntax };
             FunctionDeclarationSyntax: { new(data: number, modifiers: ISyntaxToken[], functionKeyword: ISyntaxToken, identifier: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax, semicolonToken: ISyntaxToken): FunctionDeclarationSyntax };
             ModuleDeclarationSyntax: { new(data: number, modifiers: ISyntaxToken[], moduleKeyword: ISyntaxToken, name: INameSyntax, stringLiteral: ISyntaxToken, openBraceToken: ISyntaxToken, moduleElements: IModuleElementSyntax[], closeBraceToken: ISyntaxToken): ModuleDeclarationSyntax };
             ClassDeclarationSyntax: { new(data: number, modifiers: ISyntaxToken[], classKeyword: ISyntaxToken, identifier: ISyntaxToken, typeParameterList: TypeParameterListSyntax, heritageClauses: HeritageClauseSyntax[], openBraceToken: ISyntaxToken, classElements: IClassElementSyntax[], closeBraceToken: ISyntaxToken): ClassDeclarationSyntax };
-            EnumDeclarationSyntax: { new(data: number, modifiers: ISyntaxToken[], enumKeyword: ISyntaxToken, identifier: ISyntaxToken, openBraceToken: ISyntaxToken, enumElements: EnumElementSyntax[], closeBraceToken: ISyntaxToken): EnumDeclarationSyntax };
+            EnumDeclarationSyntax: { new(data: number, modifiers: ISyntaxToken[], enumKeyword: ISyntaxToken, identifier: ISyntaxToken, openBraceToken: ISyntaxToken, enumElements: ISeparatedSyntaxList<EnumElementSyntax>, closeBraceToken: ISyntaxToken): EnumDeclarationSyntax };
             ImportDeclarationSyntax: { new(data: number, modifiers: ISyntaxToken[], importKeyword: ISyntaxToken, identifier: ISyntaxToken, equalsToken: ISyntaxToken, moduleReference: IModuleReferenceSyntax, semicolonToken: ISyntaxToken): ImportDeclarationSyntax };
             ExportAssignmentSyntax: { new(data: number, exportKeyword: ISyntaxToken, equalsToken: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken): ExportAssignmentSyntax };
             MemberFunctionDeclarationSyntax: { new(data: number, modifiers: ISyntaxToken[], propertyName: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax, semicolonToken: ISyntaxToken): MemberFunctionDeclarationSyntax };
@@ -523,7 +523,7 @@ module TypeScript {
             PropertySignatureSyntax: { new(data: number, propertyName: ISyntaxToken, questionToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax): PropertySignatureSyntax };
             CallSignatureSyntax: { new(data: number, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, typeAnnotation: TypeAnnotationSyntax): CallSignatureSyntax };
             ConstructSignatureSyntax: { new(data: number, newKeyword: ISyntaxToken, callSignature: CallSignatureSyntax): ConstructSignatureSyntax };
-            IndexSignatureSyntax: { new(data: number, openBracketToken: ISyntaxToken, parameters: ParameterSyntax[], closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax): IndexSignatureSyntax };
+            IndexSignatureSyntax: { new(data: number, openBracketToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax): IndexSignatureSyntax };
             MethodSignatureSyntax: { new(data: number, propertyName: ISyntaxToken, questionToken: ISyntaxToken, callSignature: CallSignatureSyntax): MethodSignatureSyntax };
             BlockSyntax: { new(data: number, openBraceToken: ISyntaxToken, statements: IStatementSyntax[], closeBraceToken: ISyntaxToken): BlockSyntax };
             IfStatementSyntax: { new(data: number, ifKeyword: ISyntaxToken, openParenToken: ISyntaxToken, condition: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax, elseClause: ElseClauseSyntax): IfStatementSyntax };
@@ -552,8 +552,8 @@ module TypeScript {
             PostfixUnaryExpressionSyntax: { new(data: number, operand: ILeftHandSideExpressionSyntax, operatorToken: ISyntaxToken): PostfixUnaryExpressionSyntax };
             MemberAccessExpressionSyntax: { new(data: number, expression: ILeftHandSideExpressionSyntax, dotToken: ISyntaxToken, name: ISyntaxToken): MemberAccessExpressionSyntax };
             InvocationExpressionSyntax: { new(data: number, expression: ILeftHandSideExpressionSyntax, argumentList: ArgumentListSyntax): InvocationExpressionSyntax };
-            ArrayLiteralExpressionSyntax: { new(data: number, openBracketToken: ISyntaxToken, expressions: IExpressionSyntax[], closeBracketToken: ISyntaxToken): ArrayLiteralExpressionSyntax };
-            ObjectLiteralExpressionSyntax: { new(data: number, openBraceToken: ISyntaxToken, propertyAssignments: IPropertyAssignmentSyntax[], closeBraceToken: ISyntaxToken): ObjectLiteralExpressionSyntax };
+            ArrayLiteralExpressionSyntax: { new(data: number, openBracketToken: ISyntaxToken, expressions: ISeparatedSyntaxList<IExpressionSyntax>, closeBracketToken: ISyntaxToken): ArrayLiteralExpressionSyntax };
+            ObjectLiteralExpressionSyntax: { new(data: number, openBraceToken: ISyntaxToken, propertyAssignments: ISeparatedSyntaxList<IPropertyAssignmentSyntax>, closeBraceToken: ISyntaxToken): ObjectLiteralExpressionSyntax };
             ObjectCreationExpressionSyntax: { new(data: number, newKeyword: ISyntaxToken, expression: IMemberExpressionSyntax, argumentList: ArgumentListSyntax): ObjectCreationExpressionSyntax };
             ParenthesizedExpressionSyntax: { new(data: number, openParenToken: ISyntaxToken, expression: IExpressionSyntax, closeParenToken: ISyntaxToken): ParenthesizedExpressionSyntax };
             ParenthesizedArrowFunctionExpressionSyntax: { new(data: number, callSignature: CallSignatureSyntax, equalsGreaterThanToken: ISyntaxToken, block: BlockSyntax, expression: IExpressionSyntax): ParenthesizedArrowFunctionExpressionSyntax };
@@ -562,13 +562,13 @@ module TypeScript {
             ElementAccessExpressionSyntax: { new(data: number, expression: ILeftHandSideExpressionSyntax, openBracketToken: ISyntaxToken, argumentExpression: IExpressionSyntax, closeBracketToken: ISyntaxToken): ElementAccessExpressionSyntax };
             FunctionExpressionSyntax: { new(data: number, functionKeyword: ISyntaxToken, identifier: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax): FunctionExpressionSyntax };
             OmittedExpressionSyntax: { new(data: number): OmittedExpressionSyntax };
-            VariableDeclarationSyntax: { new(data: number, varKeyword: ISyntaxToken, variableDeclarators: VariableDeclaratorSyntax[]): VariableDeclarationSyntax };
+            VariableDeclarationSyntax: { new(data: number, varKeyword: ISyntaxToken, variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>): VariableDeclarationSyntax };
             VariableDeclaratorSyntax: { new(data: number, propertyName: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, equalsValueClause: EqualsValueClauseSyntax): VariableDeclaratorSyntax };
-            ArgumentListSyntax: { new(data: number, typeArgumentList: TypeArgumentListSyntax, openParenToken: ISyntaxToken, arguments: IExpressionSyntax[], closeParenToken: ISyntaxToken): ArgumentListSyntax };
-            ParameterListSyntax: { new(data: number, openParenToken: ISyntaxToken, parameters: ParameterSyntax[], closeParenToken: ISyntaxToken): ParameterListSyntax };
-            TypeArgumentListSyntax: { new(data: number, lessThanToken: ISyntaxToken, typeArguments: ITypeSyntax[], greaterThanToken: ISyntaxToken): TypeArgumentListSyntax };
-            TypeParameterListSyntax: { new(data: number, lessThanToken: ISyntaxToken, typeParameters: TypeParameterSyntax[], greaterThanToken: ISyntaxToken): TypeParameterListSyntax };
-            HeritageClauseSyntax: { new(data: number, extendsOrImplementsKeyword: ISyntaxToken, typeNames: INameSyntax[]): HeritageClauseSyntax };
+            ArgumentListSyntax: { new(data: number, typeArgumentList: TypeArgumentListSyntax, openParenToken: ISyntaxToken, arguments: ISeparatedSyntaxList<IExpressionSyntax>, closeParenToken: ISyntaxToken): ArgumentListSyntax };
+            ParameterListSyntax: { new(data: number, openParenToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeParenToken: ISyntaxToken): ParameterListSyntax };
+            TypeArgumentListSyntax: { new(data: number, lessThanToken: ISyntaxToken, typeArguments: ISeparatedSyntaxList<ITypeSyntax>, greaterThanToken: ISyntaxToken): TypeArgumentListSyntax };
+            TypeParameterListSyntax: { new(data: number, lessThanToken: ISyntaxToken, typeParameters: ISeparatedSyntaxList<TypeParameterSyntax>, greaterThanToken: ISyntaxToken): TypeParameterListSyntax };
+            HeritageClauseSyntax: { new(data: number, extendsOrImplementsKeyword: ISyntaxToken, typeNames: ISeparatedSyntaxList<INameSyntax>): HeritageClauseSyntax };
             EqualsValueClauseSyntax: { new(data: number, equalsToken: ISyntaxToken, value: IExpressionSyntax): EqualsValueClauseSyntax };
             CaseSwitchClauseSyntax: { new(data: number, caseKeyword: ISyntaxToken, expression: IExpressionSyntax, colonToken: ISyntaxToken, statements: IStatementSyntax[]): CaseSwitchClauseSyntax };
             DefaultSwitchClauseSyntax: { new(data: number, defaultKeyword: ISyntaxToken, colonToken: ISyntaxToken, statements: IStatementSyntax[]): DefaultSwitchClauseSyntax };
