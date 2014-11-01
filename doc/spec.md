@@ -1869,7 +1869,7 @@ A type alias serves as an alias for the type specified in the type alias declara
 
 Type aliases are referenced using type references ([3.7.2](#3.7.2)). Writing a reference to a type alias has ***exactly*** the same effect as writing the aliased type itself.
 
-The *Identifier* of a type alias declaration may not be one of the predefined type names (section [3.7.1](#3.7.1)). Furthermore, the *Type* of a type alias may not be an object type literal (section [3.7.3](#3.7.3)) or a parenthesized form of an object type literal, but any other kind of type composed from an object type literal is permitted.
+The *Identifier* of a type alias declaration may not be one of the predefined type names (section [3.7.1](#3.7.1)).
 
 It is an error for the type specified in a type alias to depend on that type alias. Types have the following dependencies:
 
@@ -1916,7 +1916,8 @@ However, doing so means the following capabilities are lost:
 
 * An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.
 * An interface can have multiple merged declarations, but a type alias for an object type literal cannot.
-* An interface is referenced by its name in error messages and tooling, but a type alias is always expanded to its structural representation.
+* An interface can have type parameters, but a type alias for an object type literal cannot.
+* An interface is referenced by its name in error messages and tooling, but a type alias is always expanded to its structural representation. 
 
 ## <a name="3.10"/>3.10 Type Relationships
 
@@ -2789,7 +2790,7 @@ These operators require their operands to be of type Any, the Number primitive t
 
 ### <a name="4.15.2"/>4.15.2 The + operator
 
-The binary + operator requires both operands to be of the Number primitive type or an enum type, or at least one of the operands to be of type Any or the String primitive type. Operands of an enum type are treated as having the primitive type Number. If one operand is the `null` or `undefine``d` value, it is treated as having the type of the other operand. If both operands are of the Number primitive type, the result is of the Number primitive type. If one or both operands are of the String primitive type, the result is of the String primitive type. Otherwise, the result is of type Any.
+The binary + operator requires both operands to be of the Number primitive type or an enum type, or at least one of the operands to be of type Any or the String primitive type. Operands of an enum type are treated as having the primitive type Number. If one operand is the `null` or `undefined` value, it is treated as having the type of the other operand. If both operands are of the Number primitive type, the result is of the Number primitive type. If one or both operands are of the String primitive type, the result is of the String primitive type. Otherwise, the result is of type Any.
 
 ||Any|Boolean|Number|String|Other|
 |:---:|:---:|:---:|:---:|:---:|:---:|
