@@ -1,6 +1,19 @@
 /// <reference path="types.ts"/>
 var ts;
 (function (ts) {
+    // Ternary values are defined such that
+    // x & y is False if either x or y is False.
+    // x & y is Maybe if either x or y is Maybe, but neither x or y is False.
+    // x & y is True if both x and y are True.
+    // x | y is False if both x and y are False.
+    // x | y is Maybe if either x or y is Maybe, but neither x or y is True.
+    // x | y is True if either x or y is True.
+    (function (Ternary) {
+        Ternary[Ternary["False"] = 0] = "False";
+        Ternary[Ternary["Maybe"] = 1] = "Maybe";
+        Ternary[Ternary["True"] = -1] = "True";
+    })(ts.Ternary || (ts.Ternary = {}));
+    var Ternary = ts.Ternary;
     function forEach(array, callback) {
         var result;
         if (array) {
@@ -11742,7 +11755,7 @@ var ts;
                 return false;
             }
             for (var i = 0; i < s.length; i++) {
-                if (!compareSignatures(s[i], t[i], false, isTypeIdenticalTo)) {
+                if (!compareSignatures(s[i], t[i], false, compareTypes)) {
                     return false;
                 }
             }
@@ -12707,80 +12720,25 @@ var ts;
         function isTypeIdenticalTo(source, target) {
             return checkTypeRelatedTo(source, target, identityRelation, undefined);
         }
+        function compareTypes(source, target) {
+            return checkTypeRelatedTo(source, target, identityRelation, undefined) ? -1 /* True */ : 0 /* False */;
+        }
         function isTypeSubtypeOf(source, target) {
             return checkTypeSubtypeOf(source, target, undefined);
-        }
-        function checkTypeSubtypeOf(source, target, errorNode, headMessage, containingMessageChain) {
-            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
         }
         function isTypeAssignableTo(source, target) {
             return checkTypeAssignableTo(source, target, undefined);
         }
+        function checkTypeSubtypeOf(source, target, errorNode, headMessage, containingMessageChain) {
+            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
+        }
         function checkTypeAssignableTo(source, target, errorNode, headMessage) {
             return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage);
-        }
-        function isTypeRelatedTo(source, target, relation) {
-            return checkTypeRelatedTo(source, target, relation, undefined);
         }
         function isSignatureAssignableTo(source, target) {
             var sourceType = getOrCreateTypeFromSignature(source);
             var targetType = getOrCreateTypeFromSignature(target);
             return checkTypeRelatedTo(sourceType, targetType, assignableRelation, undefined);
-        }
-        function isPropertyIdenticalTo(sourceProp, targetProp) {
-            return isPropertyIdenticalToRecursive(sourceProp, targetProp, false, function (s, t, _reportErrors) { return isTypeIdenticalTo(s, t); });
-        }
-        function checkInheritedPropertiesAreIdentical(type, typeNode) {
-            if (!type.baseTypes.length || type.baseTypes.length === 1) {
-                return true;
-            }
-            var seen = {};
-            ts.forEach(type.declaredProperties, function (p) {
-                seen[p.name] = { prop: p, containingType: type };
-            });
-            var ok = true;
-            for (var i = 0, len = type.baseTypes.length; i < len; ++i) {
-                var base = type.baseTypes[i];
-                var properties = getPropertiesOfObjectType(base);
-                for (var j = 0, proplen = properties.length; j < proplen; ++j) {
-                    var prop = properties[j];
-                    if (!ts.hasProperty(seen, prop.name)) {
-                        seen[prop.name] = { prop: prop, containingType: base };
-                    }
-                    else {
-                        var existing = seen[prop.name];
-                        var isInheritedProperty = existing.containingType !== type;
-                        if (isInheritedProperty && !isPropertyIdenticalTo(existing.prop, prop)) {
-                            ok = false;
-                            var typeName1 = typeToString(existing.containingType);
-                            var typeName2 = typeToString(base);
-                            var errorInfo = ts.chainDiagnosticMessages(undefined, ts.Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
-                            errorInfo = ts.chainDiagnosticMessages(errorInfo, ts.Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
-                            addDiagnostic(ts.createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, program.getCompilerHost().getNewLine()));
-                        }
-                    }
-                }
-            }
-            return ok;
-        }
-        function isPropertyIdenticalToRecursive(sourceProp, targetProp, reportErrors, relate) {
-            // Two members are considered identical when
-            // - they are public properties with identical names, optionality, and types,
-            // - they are private or protected properties originating in the same declaration and having identical types
-            if (sourceProp === targetProp) {
-                return true;
-            }
-            var sourcePropAccessibility = getDeclarationFlagsFromSymbol(sourceProp) & (32 /* Private */ | 64 /* Protected */);
-            var targetPropAccessibility = getDeclarationFlagsFromSymbol(targetProp) & (32 /* Private */ | 64 /* Protected */);
-            if (sourcePropAccessibility !== targetPropAccessibility) {
-                return false;
-            }
-            if (sourcePropAccessibility) {
-                return getTargetSymbol(sourceProp) === getTargetSymbol(targetProp) && relate(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
-            }
-            else {
-                return isOptionalProperty(sourceProp) === isOptionalProperty(targetProp) && relate(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
-            }
         }
         function checkTypeRelatedTo(source, target, relation, errorNode, headMessage, containingMessageChain) {
             var errorInfo;
@@ -12790,7 +12748,7 @@ var ts;
             var depth = 0;
             var overflow = false;
             ts.Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
-            var result = isRelatedToWithCustomErrors(source, target, errorNode !== undefined, headMessage);
+            var result = isRelatedTo(source, target, errorNode !== undefined, headMessage);
             if (overflow) {
                 error(errorNode, ts.Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
@@ -12800,60 +12758,62 @@ var ts;
                 }
                 addDiagnostic(ts.createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, program.getCompilerHost().getNewLine()));
             }
-            return result;
+            return result !== 0 /* False */;
             function reportError(message, arg0, arg1, arg2) {
                 errorInfo = ts.chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
             }
-            function isRelatedTo(source, target, reportErrors) {
-                return isRelatedToWithCustomErrors(source, target, reportErrors, undefined);
-            }
-            function isRelatedToWithCustomErrors(source, target, reportErrors, headMessage) {
+            // Compare two types and return
+            // Ternary.True if they are related with no assumptions,
+            // Ternary.Maybe if they are related with assumptions of other relationships, or
+            // Ternary.False if they are not related.
+            function isRelatedTo(source, target, reportErrors, headMessage) {
+                var result;
                 if (relation === identityRelation) {
                     // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                     if (source === target)
-                        return true;
+                        return -1 /* True */;
                 }
                 else {
                     if (source === target)
-                        return true;
+                        return -1 /* True */;
                     if (target.flags & 1 /* Any */)
-                        return true;
+                        return -1 /* True */;
                     if (source === undefinedType)
-                        return true;
+                        return -1 /* True */;
                     if (source === nullType && target !== undefinedType)
-                        return true;
+                        return -1 /* True */;
                     if (source.flags & 128 /* Enum */ && target === numberType)
-                        return true;
+                        return -1 /* True */;
                     if (source.flags & 256 /* StringLiteral */ && target === stringType)
-                        return true;
+                        return -1 /* True */;
                     if (relation === assignableRelation) {
                         if (source.flags & 1 /* Any */)
-                            return true;
+                            return -1 /* True */;
                         if (source === numberType && target.flags & 128 /* Enum */)
-                            return true;
+                            return -1 /* True */;
                     }
                 }
                 if (source.flags & 16384 /* Union */) {
-                    if (unionTypeRelatedToType(source, target, reportErrors)) {
-                        return true;
+                    if (result = unionTypeRelatedToType(source, target, reportErrors)) {
+                        return result;
                     }
                 }
                 else if (target.flags & 16384 /* Union */) {
-                    if (typeRelatedToUnionType(source, target, reportErrors)) {
-                        return true;
+                    if (result = typeRelatedToUnionType(source, target, reportErrors)) {
+                        return result;
                     }
                 }
                 else if (source.flags & 512 /* TypeParameter */ && target.flags & 512 /* TypeParameter */) {
-                    if (typeParameterRelatedTo(source, target, reportErrors)) {
-                        return true;
+                    if (result = typeParameterRelatedTo(source, target, reportErrors)) {
+                        return result;
                     }
                 }
                 else {
                     var saveErrorInfo = errorInfo;
                     if (source.flags & 4096 /* Reference */ && target.flags & 4096 /* Reference */ && source.target === target.target) {
                         // We have type references to same target type, see if relationship holds for all type arguments
-                        if (typesRelatedTo(source.typeArguments, target.typeArguments, reportErrors)) {
-                            return true;
+                        if (result = typesRelatedTo(source.typeArguments, target.typeArguments, reportErrors)) {
+                            return result;
                         }
                     }
                     // Even if relationship doesn't hold for type arguments, it may hold in a structural comparison
@@ -12861,9 +12821,9 @@ var ts;
                     var reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
                     // identity relation does not use apparent type
                     var sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
-                    if (sourceOrApparentType.flags & ts.TypeFlags.ObjectType && target.flags & ts.TypeFlags.ObjectType && objectTypeRelatedTo(sourceOrApparentType, target, reportStructuralErrors)) {
+                    if (sourceOrApparentType.flags & ts.TypeFlags.ObjectType && target.flags & ts.TypeFlags.ObjectType && (result = objectTypeRelatedTo(sourceOrApparentType, target, reportStructuralErrors))) {
                         errorInfo = saveErrorInfo;
-                        return true;
+                        return result;
                     }
                 }
                 if (reportErrors) {
@@ -12871,44 +12831,52 @@ var ts;
                     ts.Debug.assert(headMessage);
                     reportError(headMessage, typeToString(source), typeToString(target));
                 }
-                return false;
+                return 0 /* False */;
             }
             function typeRelatedToUnionType(source, target, reportErrors) {
                 var targetTypes = target.types;
                 for (var i = 0, len = targetTypes.length; i < len; i++) {
-                    if (isRelatedTo(source, targetTypes[i], reportErrors && i === len - 1)) {
-                        return true;
+                    var related = isRelatedTo(source, targetTypes[i], reportErrors && i === len - 1);
+                    if (related) {
+                        return related;
                     }
                 }
-                return false;
+                return 0 /* False */;
             }
             function unionTypeRelatedToType(source, target, reportErrors) {
+                var result = -1 /* True */;
                 var sourceTypes = source.types;
                 for (var i = 0, len = sourceTypes.length; i < len; i++) {
-                    if (!isRelatedTo(sourceTypes[i], target, reportErrors)) {
-                        return false;
+                    var related = isRelatedTo(sourceTypes[i], target, reportErrors);
+                    if (!related) {
+                        return 0 /* False */;
                     }
+                    result &= related;
                 }
-                return true;
+                return result;
             }
             function typesRelatedTo(sources, targets, reportErrors) {
+                var result = -1 /* True */;
                 for (var i = 0, len = sources.length; i < len; i++) {
-                    if (!isRelatedTo(sources[i], targets[i], reportErrors))
-                        return false;
+                    var related = isRelatedTo(sources[i], targets[i], reportErrors);
+                    if (!related) {
+                        return 0 /* False */;
+                    }
+                    result &= related;
                 }
-                return true;
+                return result;
             }
             function typeParameterRelatedTo(source, target, reportErrors) {
                 if (relation === identityRelation) {
                     if (source.symbol.name !== target.symbol.name) {
-                        return false;
+                        return 0 /* False */;
                     }
                     // covers case when both type parameters does not have constraint (both equal to noConstraintType)
                     if (source.constraint === target.constraint) {
-                        return true;
+                        return -1 /* True */;
                     }
                     if (source.constraint === noConstraintType || target.constraint === noConstraintType) {
-                        return false;
+                        return 0 /* False */;
                     }
                     return isRelatedTo(source.constraint, target.constraint, reportErrors);
                 }
@@ -12916,12 +12884,12 @@ var ts;
                     while (true) {
                         var constraint = getConstraintOfTypeParameter(source);
                         if (constraint === target)
-                            return true;
+                            return -1 /* True */;
                         if (!(constraint && constraint.flags & 512 /* TypeParameter */))
                             break;
                         source = constraint;
                     }
-                    return false;
+                    return 0 /* False */;
                 }
             }
             // Determine if two object types are related by structure. First, check if the result is already available in the global cache.
@@ -12930,20 +12898,24 @@ var ts;
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
             function objectTypeRelatedTo(source, target, reportErrors) {
-                if (overflow)
-                    return false;
-                var result;
+                if (overflow) {
+                    return 0 /* False */;
+                }
                 var id = source.id + "," + target.id;
-                if ((result = relation[id]) !== undefined)
-                    return result;
+                var related = relation[id];
+                if (related !== undefined) {
+                    return related;
+                }
                 if (depth > 0) {
                     for (var i = 0; i < depth; i++) {
-                        if (source === sourceStack[i] && target === targetStack[i])
-                            return true;
+                        // If source and target are already being compared, consider them related with assumptions
+                        if (source === sourceStack[i] && target === targetStack[i]) {
+                            return 1 /* Maybe */;
+                        }
                     }
                     if (depth === 100) {
                         overflow = true;
-                        return false;
+                        return 0 /* False */;
                     }
                 }
                 else {
@@ -12959,10 +12931,28 @@ var ts;
                     expandingFlags |= 1;
                 if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack))
                     expandingFlags |= 2;
-                result = expandingFlags === 3 || propertiesRelatedTo(source, target, reportErrors) && signaturesRelatedTo(source, target, 0 /* Call */, reportErrors) && signaturesRelatedTo(source, target, 1 /* Construct */, reportErrors) && stringIndexTypesRelatedTo(source, target, reportErrors) && numberIndexTypesRelatedTo(source, target, reportErrors);
+                if (expandingFlags === 3) {
+                    var result = -1 /* True */;
+                }
+                else {
+                    var result = propertiesRelatedTo(source, target, reportErrors);
+                    if (result) {
+                        result &= signaturesRelatedTo(source, target, 0 /* Call */, reportErrors);
+                        if (result) {
+                            result &= signaturesRelatedTo(source, target, 1 /* Construct */, reportErrors);
+                            if (result) {
+                                result &= stringIndexTypesRelatedTo(source, target, reportErrors);
+                                if (result) {
+                                    result &= numberIndexTypesRelatedTo(source, target, reportErrors);
+                                }
+                            }
+                        }
+                    }
+                }
                 expandingFlags = saveExpandingFlags;
                 depth--;
-                if (depth === 0) {
+                // Only cache results that are free of assumptions
+                if (result !== 1 /* Maybe */) {
                     relation[id] = result;
                 }
                 return result;
@@ -12989,8 +12979,9 @@ var ts;
             }
             function propertiesRelatedTo(source, target, reportErrors) {
                 if (relation === identityRelation) {
-                    return propertiesIdenticalTo(source, target, reportErrors);
+                    return propertiesIdenticalTo(source, target);
                 }
+                var result = -1 /* True */;
                 var properties = getPropertiesOfObjectType(target);
                 for (var i = 0; i < properties.length; i++) {
                     var targetProp = properties[i];
@@ -13001,7 +12992,7 @@ var ts;
                                 if (reportErrors) {
                                     reportError(ts.Diagnostics.Property_0_is_missing_in_type_1, symbolToString(targetProp), typeToString(source));
                                 }
-                                return false;
+                                return 0 /* False */;
                             }
                         }
                         else if (!(targetProp.flags & 268435456 /* Prototype */)) {
@@ -13017,7 +13008,7 @@ var ts;
                                             reportError(ts.Diagnostics.Property_0_is_private_in_type_1_but_not_in_type_2, symbolToString(targetProp), typeToString(sourceFlags & 32 /* Private */ ? source : target), typeToString(sourceFlags & 32 /* Private */ ? target : source));
                                         }
                                     }
-                                    return false;
+                                    return 0 /* False */;
                                 }
                             }
                             else if (targetFlags & 64 /* Protected */) {
@@ -13028,21 +13019,23 @@ var ts;
                                     if (reportErrors) {
                                         reportError(ts.Diagnostics.Property_0_is_protected_but_type_1_is_not_a_class_derived_from_2, symbolToString(targetProp), typeToString(sourceClass || source), typeToString(targetClass));
                                     }
-                                    return false;
+                                    return 0 /* False */;
                                 }
                             }
                             else if (sourceFlags & 64 /* Protected */) {
                                 if (reportErrors) {
                                     reportError(ts.Diagnostics.Property_0_is_protected_in_type_1_but_public_in_type_2, symbolToString(targetProp), typeToString(source), typeToString(target));
                                 }
-                                return false;
+                                return 0 /* False */;
                             }
-                            if (!isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors)) {
+                            var related = isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
+                            if (!related) {
                                 if (reportErrors) {
                                     reportError(ts.Diagnostics.Types_of_property_0_are_incompatible, symbolToString(targetProp));
                                 }
-                                return false;
+                                return 0 /* False */;
                             }
+                            result &= related;
                             if (isOptionalProperty(sourceProp) && !isOptionalProperty(targetProp)) {
                                 // TypeScript 1.0 spec (April 2014): 3.8.3
                                 // S is a subtype of a type T, and T is a supertype of S if ...
@@ -13054,36 +13047,44 @@ var ts;
                                 if (reportErrors) {
                                     reportError(ts.Diagnostics.Property_0_is_optional_in_type_1_but_required_in_type_2, symbolToString(targetProp), typeToString(source), typeToString(target));
                                 }
-                                return false;
+                                return 0 /* False */;
                             }
                         }
                     }
                 }
-                return true;
+                return result;
             }
-            function propertiesIdenticalTo(source, target, reportErrors) {
+            function propertiesIdenticalTo(source, target) {
                 var sourceProperties = getPropertiesOfObjectType(source);
                 var targetProperties = getPropertiesOfObjectType(target);
                 if (sourceProperties.length !== targetProperties.length) {
-                    return false;
+                    return 0 /* False */;
                 }
+                var result = -1 /* True */;
                 for (var i = 0, len = sourceProperties.length; i < len; ++i) {
                     var sourceProp = sourceProperties[i];
                     var targetProp = getPropertyOfObjectType(target, sourceProp.name);
-                    if (!targetProp || !isPropertyIdenticalToRecursive(sourceProp, targetProp, reportErrors, isRelatedTo)) {
-                        return false;
+                    if (!targetProp) {
+                        return 0 /* False */;
                     }
+                    var related = compareProperties(sourceProp, targetProp, isRelatedTo);
+                    if (!related) {
+                        return 0 /* False */;
+                    }
+                    result &= related;
                 }
-                return true;
+                return result;
             }
             function signaturesRelatedTo(source, target, kind, reportErrors) {
                 if (relation === identityRelation) {
-                    return signaturesIdenticalTo(source, target, kind, reportErrors);
+                    return signaturesIdenticalTo(source, target, kind);
                 }
-                if (target === anyFunctionType || source === anyFunctionType)
-                    return true;
+                if (target === anyFunctionType || source === anyFunctionType) {
+                    return -1 /* True */;
+                }
                 var sourceSignatures = getSignaturesOfType(source, kind);
                 var targetSignatures = getSignaturesOfType(target, kind);
+                var result = -1 /* True */;
                 var saveErrorInfo = errorInfo;
                 outer: for (var i = 0; i < targetSignatures.length; i++) {
                     var t = targetSignatures[i];
@@ -13092,7 +13093,9 @@ var ts;
                         for (var j = 0; j < sourceSignatures.length; j++) {
                             var s = sourceSignatures[j];
                             if (!s.hasStringLiterals || source.flags & 65536 /* FromSignature */) {
-                                if (signatureRelatedTo(s, t, localErrors)) {
+                                var related = signatureRelatedTo(s, t, localErrors);
+                                if (related) {
+                                    result &= related;
                                     errorInfo = saveErrorInfo;
                                     continue outer;
                                 }
@@ -13100,17 +13103,17 @@ var ts;
                                 localErrors = false;
                             }
                         }
-                        return false;
+                        return 0 /* False */;
                     }
                 }
-                return true;
+                return result;
             }
             function signatureRelatedTo(source, target, reportErrors) {
                 if (source === target) {
-                    return true;
+                    return -1 /* True */;
                 }
                 if (!target.hasRestParameter && source.minArgumentCount > target.parameters.length) {
-                    return false;
+                    return 0 /* False */;
                 }
                 var sourceMax = source.parameters.length;
                 var targetMax = target.parameters.length;
@@ -13135,42 +13138,49 @@ var ts;
                 // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
                 source = getErasedSignature(source);
                 target = getErasedSignature(target);
+                var result = -1 /* True */;
                 for (var i = 0; i < checkCount; i++) {
                     var s = i < sourceMax ? getTypeOfSymbol(source.parameters[i]) : getRestTypeOfSignature(source);
                     var t = i < targetMax ? getTypeOfSymbol(target.parameters[i]) : getRestTypeOfSignature(target);
                     var saveErrorInfo = errorInfo;
-                    if (!isRelatedTo(s, t, reportErrors)) {
-                        if (!isRelatedTo(t, s, false)) {
+                    var related = isRelatedTo(s, t, reportErrors);
+                    if (!related) {
+                        related = isRelatedTo(t, s, false);
+                        if (!related) {
                             if (reportErrors) {
                                 reportError(ts.Diagnostics.Types_of_parameters_0_and_1_are_incompatible, source.parameters[i < sourceMax ? i : sourceMax].name, target.parameters[i < targetMax ? i : targetMax].name);
                             }
-                            return false;
+                            return 0 /* False */;
                         }
                         errorInfo = saveErrorInfo;
                     }
+                    result &= related;
                 }
                 var t = getReturnTypeOfSignature(target);
                 if (t === voidType)
-                    return true;
+                    return result;
                 var s = getReturnTypeOfSignature(source);
-                return isRelatedTo(s, t, reportErrors);
+                return result & isRelatedTo(s, t, reportErrors);
             }
-            function signaturesIdenticalTo(source, target, kind, reportErrors) {
+            function signaturesIdenticalTo(source, target, kind) {
                 var sourceSignatures = getSignaturesOfType(source, kind);
                 var targetSignatures = getSignaturesOfType(target, kind);
                 if (sourceSignatures.length !== targetSignatures.length) {
-                    return false;
+                    return 0 /* False */;
                 }
+                var result = -1 /* True */;
                 for (var i = 0, len = sourceSignatures.length; i < len; ++i) {
-                    if (!compareSignatures(sourceSignatures[i], targetSignatures[i], true, isRelatedTo)) {
-                        return false;
+                    var related = compareSignatures(sourceSignatures[i], targetSignatures[i], true, isRelatedTo);
+                    if (!related) {
+                        return 0 /* False */;
                     }
+                    result &= related;
                 }
-                return true;
+                return result;
             }
             function stringIndexTypesRelatedTo(source, target, reportErrors) {
                 if (relation === identityRelation) {
-                    return indexTypesIdenticalTo(0 /* String */, source, target, reportErrors);
+                    return indexTypesIdenticalTo(0 /* String */, source, target);
                 }
                 var targetType = getIndexTypeOfType(target, 0 /* String */);
                 if (targetType) {
@@ -13179,20 +13189,22 @@ var ts;
                         if (reportErrors) {
                             reportError(ts.Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
                         }
-                        return false;
+                        return 0 /* False */;
                     }
-                    if (!isRelatedTo(sourceType, targetType, reportErrors)) {
+                    var related = isRelatedTo(sourceType, targetType, reportErrors);
+                    if (!related) {
                         if (reportErrors) {
                             reportError(ts.Diagnostics.Index_signatures_are_incompatible);
                         }
-                        return false;
+                        return 0 /* False */;
                     }
+                    return related;
                 }
-                return true;
+                return -1 /* True */;
             }
             function numberIndexTypesRelatedTo(source, target, reportErrors) {
                 if (relation === identityRelation) {
-                    return indexTypesIdenticalTo(1 /* Number */, source, target, reportErrors);
+                    return indexTypesIdenticalTo(1 /* Number */, source, target);
                 }
                 var targetType = getIndexTypeOfType(target, 1 /* Number */);
                 if (targetType) {
@@ -13202,49 +13214,86 @@ var ts;
                         if (reportErrors) {
                             reportError(ts.Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
                         }
-                        return false;
+                        return 0 /* False */;
                     }
                     if (sourceStringType && sourceNumberType) {
                         // If we know for sure we're testing both string and numeric index types then only report errors from the second one
-                        var compatible = isRelatedTo(sourceStringType, targetType, false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
+                        var related = isRelatedTo(sourceStringType, targetType, false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
                     }
                     else {
-                        var compatible = isRelatedTo(sourceStringType || sourceNumberType, targetType, reportErrors);
+                        var related = isRelatedTo(sourceStringType || sourceNumberType, targetType, reportErrors);
                     }
-                    if (!compatible) {
+                    if (!related) {
                         if (reportErrors) {
                             reportError(ts.Diagnostics.Index_signatures_are_incompatible);
                         }
-                        return false;
+                        return 0 /* False */;
                     }
+                    return related;
                 }
-                return true;
+                return -1 /* True */;
             }
-            function indexTypesIdenticalTo(indexKind, source, target, reportErrors) {
+            function indexTypesIdenticalTo(indexKind, source, target) {
                 var targetType = getIndexTypeOfType(target, indexKind);
                 var sourceType = getIndexTypeOfType(source, indexKind);
-                return (!sourceType && !targetType) || (sourceType && targetType && isRelatedTo(sourceType, targetType, reportErrors));
+                if (!sourceType && !targetType) {
+                    return -1 /* True */;
+                }
+                if (sourceType && targetType) {
+                    return isRelatedTo(sourceType, targetType);
+                }
+                return 0 /* False */;
             }
+        }
+        function isPropertyIdenticalTo(sourceProp, targetProp) {
+            return compareProperties(sourceProp, targetProp, compareTypes) !== 0 /* False */;
+        }
+        function compareProperties(sourceProp, targetProp, compareTypes) {
+            // Two members are considered identical when
+            // - they are public properties with identical names, optionality, and types,
+            // - they are private or protected properties originating in the same declaration and having identical types
+            if (sourceProp === targetProp) {
+                return -1 /* True */;
+            }
+            var sourcePropAccessibility = getDeclarationFlagsFromSymbol(sourceProp) & (32 /* Private */ | 64 /* Protected */);
+            var targetPropAccessibility = getDeclarationFlagsFromSymbol(targetProp) & (32 /* Private */ | 64 /* Protected */);
+            if (sourcePropAccessibility !== targetPropAccessibility) {
+                return 0 /* False */;
+            }
+            if (sourcePropAccessibility) {
+                if (getTargetSymbol(sourceProp) !== getTargetSymbol(targetProp)) {
+                    return 0 /* False */;
+                }
+            }
+            else {
+                if (isOptionalProperty(sourceProp) !== isOptionalProperty(targetProp)) {
+                    return 0 /* False */;
+                }
+            }
+            return compareTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
         }
         function compareSignatures(source, target, compareReturnTypes, compareTypes) {
             if (source === target) {
-                return true;
+                return -1 /* True */;
             }
             if (source.parameters.length !== target.parameters.length || source.minArgumentCount !== target.minArgumentCount || source.hasRestParameter !== target.hasRestParameter) {
-                return false;
+                return 0 /* False */;
             }
+            var result = -1 /* True */;
             if (source.typeParameters && target.typeParameters) {
                 if (source.typeParameters.length !== target.typeParameters.length) {
-                    return false;
+                    return 0 /* False */;
                 }
                 for (var i = 0, len = source.typeParameters.length; i < len; ++i) {
-                    if (!compareTypes(source.typeParameters[i], target.typeParameters[i])) {
-                        return false;
+                    var related = compareTypes(source.typeParameters[i], target.typeParameters[i]);
+                    if (!related) {
+                        return 0 /* False */;
                     }
+                    result &= related;
                 }
             }
             else if (source.typeParameters || source.typeParameters) {
-                return false;
+                return 0 /* False */;
             }
             // Spec 1.0 Section 3.8.3 & 3.8.4:
             // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
@@ -13253,11 +13302,16 @@ var ts;
             for (var i = 0, len = source.parameters.length; i < len; i++) {
                 var s = source.hasRestParameter && i === len - 1 ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
                 var t = target.hasRestParameter && i === len - 1 ? getRestTypeOfSignature(target) : getTypeOfSymbol(target.parameters[i]);
-                if (!compareTypes(s, t)) {
-                    return false;
+                var related = compareTypes(s, t);
+                if (!related) {
+                    return 0 /* False */;
                 }
+                result &= related;
             }
-            return !compareReturnTypes || compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+            if (compareReturnTypes) {
+                result &= compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+            }
+            return result;
         }
         function isSupertypeOfEach(candidate, types) {
             for (var i = 0, len = types.length; i < len; i++) {
@@ -14205,7 +14259,7 @@ var ts;
                     if (!result) {
                         result = signature;
                     }
-                    else if (!compareSignatures(result, signature, true, isTypeIdenticalTo)) {
+                    else if (!compareSignatures(result, signature, true, compareTypes)) {
                         return undefined;
                     }
                 }
@@ -16597,6 +16651,39 @@ var ts;
                 }
             }
             return true;
+        }
+        function checkInheritedPropertiesAreIdentical(type, typeNode) {
+            if (!type.baseTypes.length || type.baseTypes.length === 1) {
+                return true;
+            }
+            var seen = {};
+            ts.forEach(type.declaredProperties, function (p) {
+                seen[p.name] = { prop: p, containingType: type };
+            });
+            var ok = true;
+            for (var i = 0, len = type.baseTypes.length; i < len; ++i) {
+                var base = type.baseTypes[i];
+                var properties = getPropertiesOfObjectType(base);
+                for (var j = 0, proplen = properties.length; j < proplen; ++j) {
+                    var prop = properties[j];
+                    if (!ts.hasProperty(seen, prop.name)) {
+                        seen[prop.name] = { prop: prop, containingType: base };
+                    }
+                    else {
+                        var existing = seen[prop.name];
+                        var isInheritedProperty = existing.containingType !== type;
+                        if (isInheritedProperty && !isPropertyIdenticalTo(existing.prop, prop)) {
+                            ok = false;
+                            var typeName1 = typeToString(existing.containingType);
+                            var typeName2 = typeToString(base);
+                            var errorInfo = ts.chainDiagnosticMessages(undefined, ts.Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
+                            errorInfo = ts.chainDiagnosticMessages(errorInfo, ts.Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
+                            addDiagnostic(ts.createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, program.getCompilerHost().getNewLine()));
+                        }
+                    }
+                }
+            }
+            return ok;
         }
         function checkInterfaceDeclaration(node) {
             checkTypeParameters(node.typeParameters);
@@ -22701,10 +22788,9 @@ var TypeScript;
 ///<reference path='references.ts' />
 var TypeScript;
 (function (TypeScript) {
-    function separatedListChildCount(list) {
-        return list.length + list.separators.length;
-    }
-    TypeScript.separatedListChildCount = separatedListChildCount;
+    //export function separatedListChildCount(list: ISyntaxNodeOrToken[]) {
+    //    return list.length + list.separators.length;
+    //}
     function separatedListChildAt(list, index) {
         return index % 2 === 0 ? list[index >> 1] : list.separators[index >> 1];
     }
@@ -22718,6 +22804,7 @@ var TypeScript;
         var _emptySeparatedList = [];
         var _emptySeparators = [];
         _emptySeparatedList.separators = _emptySeparators;
+        _emptySeparatedList.separatedListLength = 0;
         function assertEmptyLists() {
             // Debug.assert(_emptyList.length === 0);
             // var separators = _emptySeparatedList.separators;
@@ -22727,7 +22814,7 @@ var TypeScript;
             return this.separators === undefined ? 1 /* List */ : 2 /* SeparatedList */;
         };
         Array.prototype.childCount = function () {
-            return this.separators ? TypeScript.separatedListChildCount(this) : this.length;
+            return this.separators ? this.separatedListLength : this.length;
         };
         Array.prototype.childAt = function (index) {
             if (this.separators) {
@@ -22777,6 +22864,7 @@ var TypeScript;
                 separators[i].parent = nodes;
             }
             nodes.separators = separators.length === 0 ? _emptySeparators : separators;
+            nodes.separatedListLength = nodes.length + separators.length;
             return nodes;
         }
         Syntax.separatedList = separatedList;
@@ -23905,7 +23993,7 @@ var TypeScript;
             }
         };
         SyntaxWalker.prototype.visitSeparatedList = function (list) {
-            for (var i = 0, n = TypeScript.separatedListChildCount(list); i < n; i++) {
+            for (var i = 0, n = list.separatedListLength; i < n; i++) {
                 if (i % 2 === 0) {
                     list[i >> 1].accept(this);
                 }
@@ -37148,589 +37236,6 @@ var TypeScript;
 ///<reference path='references.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var Comment = (function () {
-        function Comment(_trivia, endsLine, _start, _end) {
-            this._trivia = _trivia;
-            this.endsLine = endsLine;
-            this._start = _start;
-            this._end = _end;
-        }
-        Comment.prototype.start = function () {
-            return this._start;
-        };
-        Comment.prototype.end = function () {
-            return this._end;
-        };
-        Comment.prototype.fullText = function () {
-            return this._trivia.fullText();
-        };
-        Comment.prototype.kind = function () {
-            return this._trivia.kind();
-        };
-        Comment.prototype.structuralEquals = function (ast, includingPosition) {
-            if (includingPosition) {
-                if (this.start() !== ast.start() || this.end() !== ast.end()) {
-                    return false;
-                }
-            }
-            return this._trivia.fullText() === ast._trivia.fullText() && this.endsLine === ast.endsLine;
-        };
-        return Comment;
-    })();
-    TypeScript.Comment = Comment;
-})(TypeScript || (TypeScript = {}));
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-///<reference path='references.ts' />
-var TypeScript;
-(function (TypeScript) {
-    var ASTHelpers;
-    (function (ASTHelpers) {
-        var sentinelEmptyArray = [];
-        function isValidAstNode(ast) {
-            return ast && !TypeScript.isShared(ast) && TypeScript.start(ast) !== -1 && TypeScript.end(ast) !== -1;
-        }
-        ASTHelpers.isValidAstNode = isValidAstNode;
-        function isValidSpan(ast) {
-            if (!ast)
-                return false;
-            if (ast.start() === -1 || ast.end() === -1)
-                return false;
-            return true;
-        }
-        ASTHelpers.isValidSpan = isValidSpan;
-        function isCallExpression(ast) {
-            return (ast && ast.kind() === 175 /* InvocationExpression */) || (ast && ast.kind() === 178 /* ObjectCreationExpression */);
-        }
-        ASTHelpers.isCallExpression = isCallExpression;
-        function isCallExpressionTarget(ast) {
-            return !!getCallExpressionTarget(ast);
-        }
-        ASTHelpers.isCallExpressionTarget = isCallExpressionTarget;
-        function getCallExpressionTarget(ast) {
-            if (!ast) {
-                return null;
-            }
-            var current = ast;
-            while (current && current.parent) {
-                if (current.parent.kind() === 174 /* MemberAccessExpression */ && current.parent.name === current) {
-                    current = current.parent;
-                    continue;
-                }
-                break;
-            }
-            if (current && current.parent) {
-                if (current.parent.kind() === 175 /* InvocationExpression */ || current.parent.kind() === 178 /* ObjectCreationExpression */) {
-                    return current === current.parent.expression ? current : null;
-                }
-            }
-            return null;
-        }
-        ASTHelpers.getCallExpressionTarget = getCallExpressionTarget;
-        function isNameOfSomeDeclaration(ast) {
-            if (ast === null || ast.parent === null) {
-                return false;
-            }
-            if (ast.kind() !== 11 /* IdentifierName */) {
-                return false;
-            }
-            switch (ast.parent.kind()) {
-                case 134 /* ClassDeclaration */:
-                    return ast.parent.identifier === ast;
-                case 131 /* InterfaceDeclaration */:
-                    return ast.parent.identifier === ast;
-                case 135 /* EnumDeclaration */:
-                    return ast.parent.identifier === ast;
-                case 133 /* ModuleDeclaration */:
-                    return ast.parent.name === ast || ast.parent.stringLiteral === ast;
-                case 187 /* VariableDeclarator */:
-                    return ast.parent.propertyName === ast;
-                case 132 /* FunctionDeclaration */:
-                    return ast.parent.identifier === ast;
-                case 138 /* MemberFunctionDeclaration */:
-                    return ast.parent.propertyName === ast;
-                case 203 /* Parameter */:
-                    return ast.parent.identifier === ast;
-                case 199 /* TypeParameter */:
-                    return ast.parent.identifier === ast;
-                case 201 /* SimplePropertyAssignment */:
-                    return ast.parent.propertyName === ast;
-                case 202 /* FunctionPropertyAssignment */:
-                    return ast.parent.propertyName === ast;
-                case 204 /* EnumElement */:
-                    return ast.parent.propertyName === ast;
-                case 136 /* ImportDeclaration */:
-                    return ast.parent.identifier === ast;
-                case 148 /* MethodSignature */:
-                    return ast.parent.propertyName === ast;
-                case 144 /* PropertySignature */:
-                    return ast.parent.propertyName === ast;
-            }
-            return false;
-        }
-        function isDeclarationASTOrDeclarationNameAST(ast) {
-            return isNameOfSomeDeclaration(ast) || ASTHelpers.isDeclarationAST(ast);
-        }
-        ASTHelpers.isDeclarationASTOrDeclarationNameAST = isDeclarationASTOrDeclarationNameAST;
-        function getEnclosingParameterForInitializer(ast) {
-            var current = ast;
-            while (current) {
-                switch (current.kind()) {
-                    case 193 /* EqualsValueClause */:
-                        if (current.parent && current.parent.kind() === 203 /* Parameter */) {
-                            return current.parent;
-                        }
-                        break;
-                    case 134 /* ClassDeclaration */:
-                    case 131 /* InterfaceDeclaration */:
-                    case 133 /* ModuleDeclaration */:
-                        // exit early
-                        return null;
-                }
-                current = current.parent;
-            }
-            return null;
-        }
-        ASTHelpers.getEnclosingParameterForInitializer = getEnclosingParameterForInitializer;
-        function getEnclosingMemberDeclaration(ast) {
-            var current = ast;
-            while (current) {
-                switch (current.kind()) {
-                    case 139 /* MemberVariableDeclaration */:
-                    case 148 /* MethodSignature */:
-                    case 138 /* MemberFunctionDeclaration */:
-                    case 142 /* GetAccessor */:
-                    case 143 /* SetAccessor */:
-                        return current;
-                    case 134 /* ClassDeclaration */:
-                    case 131 /* InterfaceDeclaration */:
-                    case 133 /* ModuleDeclaration */:
-                        // exit early
-                        return null;
-                }
-                current = current.parent;
-            }
-            return null;
-        }
-        ASTHelpers.getEnclosingMemberDeclaration = getEnclosingMemberDeclaration;
-        function isNameOfFunction(ast) {
-            return ast && ast.parent && ast.kind() === 11 /* IdentifierName */ && ast.parent.kind() === 132 /* FunctionDeclaration */ && ast.parent.identifier === ast;
-        }
-        ASTHelpers.isNameOfFunction = isNameOfFunction;
-        function isNameOfMemberFunction(ast) {
-            return ast && ast.parent && ast.kind() === 11 /* IdentifierName */ && ast.parent.kind() === 138 /* MemberFunctionDeclaration */ && ast.parent.propertyName === ast;
-        }
-        ASTHelpers.isNameOfMemberFunction = isNameOfMemberFunction;
-        function isNameOfMemberAccessExpression(ast) {
-            if (ast && ast.parent && ast.parent.kind() === 174 /* MemberAccessExpression */ && ast.parent.name === ast) {
-                return true;
-            }
-            return false;
-        }
-        ASTHelpers.isNameOfMemberAccessExpression = isNameOfMemberAccessExpression;
-        function isRightSideOfQualifiedName(ast) {
-            if (ast && ast.parent && ast.parent.kind() === 121 /* QualifiedName */ && ast.parent.right === ast) {
-                return true;
-            }
-            return false;
-        }
-        ASTHelpers.isRightSideOfQualifiedName = isRightSideOfQualifiedName;
-        function parentIsModuleDeclaration(ast) {
-            return ast.parent && ast.parent.kind() === 133 /* ModuleDeclaration */;
-        }
-        ASTHelpers.parentIsModuleDeclaration = parentIsModuleDeclaration;
-        function isDeclarationAST(ast) {
-            switch (ast.kind()) {
-                case 187 /* VariableDeclarator */:
-                    return getVariableStatement(ast) !== null;
-                case 136 /* ImportDeclaration */:
-                case 134 /* ClassDeclaration */:
-                case 131 /* InterfaceDeclaration */:
-                case 203 /* Parameter */:
-                case 181 /* SimpleArrowFunctionExpression */:
-                case 180 /* ParenthesizedArrowFunctionExpression */:
-                case 147 /* IndexSignature */:
-                case 132 /* FunctionDeclaration */:
-                case 133 /* ModuleDeclaration */:
-                case 124 /* ArrayType */:
-                case 122 /* ObjectType */:
-                case 199 /* TypeParameter */:
-                case 140 /* ConstructorDeclaration */:
-                case 138 /* MemberFunctionDeclaration */:
-                case 142 /* GetAccessor */:
-                case 143 /* SetAccessor */:
-                case 139 /* MemberVariableDeclaration */:
-                case 141 /* IndexMemberDeclaration */:
-                case 135 /* EnumDeclaration */:
-                case 204 /* EnumElement */:
-                case 201 /* SimplePropertyAssignment */:
-                case 202 /* FunctionPropertyAssignment */:
-                case 184 /* FunctionExpression */:
-                case 145 /* CallSignature */:
-                case 146 /* ConstructSignature */:
-                case 148 /* MethodSignature */:
-                case 144 /* PropertySignature */:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-        ASTHelpers.isDeclarationAST = isDeclarationAST;
-        function preComments(element, text) {
-            if (element) {
-                switch (element.kind()) {
-                    case 151 /* VariableStatement */:
-                    case 152 /* ExpressionStatement */:
-                    case 134 /* ClassDeclaration */:
-                    case 136 /* ImportDeclaration */:
-                    case 132 /* FunctionDeclaration */:
-                    case 133 /* ModuleDeclaration */:
-                    case 135 /* EnumDeclaration */:
-                    case 150 /* IfStatement */:
-                    case 201 /* SimplePropertyAssignment */:
-                    case 138 /* MemberFunctionDeclaration */:
-                    case 131 /* InterfaceDeclaration */:
-                    case 142 /* GetAccessor */:
-                    case 143 /* SetAccessor */:
-                    case 153 /* ReturnStatement */:
-                    case 140 /* ConstructorDeclaration */:
-                    case 139 /* MemberVariableDeclaration */:
-                    case 204 /* EnumElement */:
-                    case 145 /* CallSignature */:
-                    case 146 /* ConstructSignature */:
-                    case 147 /* IndexSignature */:
-                    case 144 /* PropertySignature */:
-                    case 148 /* MethodSignature */:
-                    case 202 /* FunctionPropertyAssignment */:
-                    case 203 /* Parameter */:
-                        return convertNodeLeadingComments(element, text);
-                }
-            }
-            return null;
-        }
-        ASTHelpers.preComments = preComments;
-        function postComments(element, text) {
-            if (element) {
-                switch (element.kind()) {
-                    case 152 /* ExpressionStatement */:
-                        return convertNodeTrailingComments(element, text, true);
-                    case 151 /* VariableStatement */:
-                    case 134 /* ClassDeclaration */:
-                    case 136 /* ImportDeclaration */:
-                    case 132 /* FunctionDeclaration */:
-                    case 133 /* ModuleDeclaration */:
-                    case 135 /* EnumDeclaration */:
-                    case 150 /* IfStatement */:
-                    case 201 /* SimplePropertyAssignment */:
-                    case 138 /* MemberFunctionDeclaration */:
-                    case 131 /* InterfaceDeclaration */:
-                    case 142 /* GetAccessor */:
-                    case 143 /* SetAccessor */:
-                    case 153 /* ReturnStatement */:
-                    case 140 /* ConstructorDeclaration */:
-                    case 139 /* MemberVariableDeclaration */:
-                    case 204 /* EnumElement */:
-                    case 145 /* CallSignature */:
-                    case 146 /* ConstructSignature */:
-                    case 147 /* IndexSignature */:
-                    case 144 /* PropertySignature */:
-                    case 148 /* MethodSignature */:
-                    case 202 /* FunctionPropertyAssignment */:
-                    case 203 /* Parameter */:
-                        return convertNodeTrailingComments(element, text);
-                }
-            }
-            return null;
-        }
-        ASTHelpers.postComments = postComments;
-        function convertNodeTrailingComments(node, text, allowWithNewLine) {
-            if (allowWithNewLine === void 0) { allowWithNewLine = false; }
-            // Bail out quickly before doing any expensive math computation.
-            var _lastToken = TypeScript.lastToken(node);
-            if (_lastToken === null || !_lastToken.hasTrailingTrivia()) {
-                return null;
-            }
-            if (!allowWithNewLine && TypeScript.SyntaxUtilities.isLastTokenOnLine(_lastToken, text)) {
-                return null;
-            }
-            return convertComments(_lastToken.trailingTrivia(text), TypeScript.fullStart(node) + TypeScript.fullWidth(node) - _lastToken.trailingTriviaWidth(text));
-        }
-        function convertNodeLeadingComments(element, text) {
-            if (element) {
-                return convertTokenLeadingComments(TypeScript.firstToken(element), text);
-            }
-            return null;
-        }
-        function convertTokenLeadingComments(token, text) {
-            if (token === null) {
-                return null;
-            }
-            return token.hasLeadingTrivia() ? convertComments(token.leadingTrivia(text), token.fullStart()) : null;
-        }
-        ASTHelpers.convertTokenLeadingComments = convertTokenLeadingComments;
-        function convertTokenTrailingComments(token, text) {
-            if (token === null) {
-                return null;
-            }
-            return token.hasTrailingTrivia() ? convertComments(token.trailingTrivia(text), TypeScript.fullEnd(token) - token.trailingTriviaWidth(text)) : null;
-        }
-        ASTHelpers.convertTokenTrailingComments = convertTokenTrailingComments;
-        function convertComments(triviaList, commentStartPosition) {
-            var result = null;
-            for (var i = 0, n = triviaList.count(); i < n; i++) {
-                var trivia = triviaList.syntaxTriviaAt(i);
-                if (trivia.isComment()) {
-                    var hasTrailingNewLine = ((i + 1) < n) && triviaList.syntaxTriviaAt(i + 1).isNewLine();
-                    result = result || [];
-                    result.push(convertComment(trivia, commentStartPosition, hasTrailingNewLine));
-                }
-                commentStartPosition += trivia.fullWidth();
-            }
-            return result;
-        }
-        function convertComment(trivia, commentStartPosition, hasTrailingNewLine) {
-            var comment = new TypeScript.Comment(trivia, hasTrailingNewLine, commentStartPosition, commentStartPosition + trivia.fullWidth());
-            return comment;
-        }
-        function docComments(ast, text) {
-            if (isDeclarationAST(ast)) {
-                var comments = null;
-                if (ast.kind() === 187 /* VariableDeclarator */) {
-                    // Get the doc comments for a variable off of the variable statement.  That's what
-                    // they'll be attached to in the tree.
-                    comments = TypeScript.ASTHelpers.preComments(getVariableStatement(ast), text);
-                }
-                else if (ast.kind() === 203 /* Parameter */) {
-                    // First check if the parameter was written like so:
-                    //      (
-                    //          /** blah */ a,
-                    //          /** blah */ b);
-                    comments = TypeScript.ASTHelpers.preComments(ast, text);
-                    if (!comments) {
-                        // Now check if it was written like so:
-                        //      (/** blah */ a, /** blah */ b);
-                        // In this case, the comment will belong to the preceding token.
-                        var previousToken = TypeScript.findToken(TypeScript.syntaxTree(ast).sourceUnit(), TypeScript.firstToken(ast).fullStart() - 1);
-                        if (previousToken && (previousToken.kind() === 72 /* OpenParenToken */ || previousToken.kind() === 79 /* CommaToken */)) {
-                            comments = convertTokenTrailingComments(previousToken, text);
-                        }
-                    }
-                }
-                else {
-                    comments = TypeScript.ASTHelpers.preComments(ast, text);
-                }
-                if (comments && comments.length > 0) {
-                    return comments.filter(function (c) { return isDocComment(c); });
-                }
-            }
-            return sentinelEmptyArray;
-        }
-        ASTHelpers.docComments = docComments;
-        function isDocComment(comment) {
-            if (comment.kind() === 6 /* MultiLineCommentTrivia */) {
-                var fullText = comment.fullText();
-                return fullText.charAt(2) === "*" && fullText.charAt(3) !== "/";
-            }
-            return false;
-        }
-        ASTHelpers.isDocComment = isDocComment;
-        function getParameterList(ast) {
-            if (ast) {
-                switch (ast.kind()) {
-                    case 140 /* ConstructorDeclaration */:
-                        return getParameterList(ast.callSignature);
-                    case 132 /* FunctionDeclaration */:
-                        return getParameterList(ast.callSignature);
-                    case 180 /* ParenthesizedArrowFunctionExpression */:
-                        return getParameterList(ast.callSignature);
-                    case 146 /* ConstructSignature */:
-                        return getParameterList(ast.callSignature);
-                    case 138 /* MemberFunctionDeclaration */:
-                        return getParameterList(ast.callSignature);
-                    case 202 /* FunctionPropertyAssignment */:
-                        return getParameterList(ast.callSignature);
-                    case 184 /* FunctionExpression */:
-                        return getParameterList(ast.callSignature);
-                    case 148 /* MethodSignature */:
-                        return getParameterList(ast.callSignature);
-                    case 125 /* ConstructorType */:
-                        return ast.parameterList;
-                    case 123 /* FunctionType */:
-                        return ast.parameterList;
-                    case 145 /* CallSignature */:
-                        return ast.parameterList;
-                    case 142 /* GetAccessor */:
-                        return getParameterList(ast.callSignature);
-                    case 143 /* SetAccessor */:
-                        return getParameterList(ast.callSignature);
-                }
-            }
-            return null;
-        }
-        ASTHelpers.getParameterList = getParameterList;
-        function getType(ast) {
-            if (ast) {
-                switch (ast.kind()) {
-                    case 132 /* FunctionDeclaration */:
-                        return getType(ast.callSignature);
-                    case 180 /* ParenthesizedArrowFunctionExpression */:
-                        return getType(ast.callSignature);
-                    case 146 /* ConstructSignature */:
-                        return getType(ast.callSignature);
-                    case 138 /* MemberFunctionDeclaration */:
-                        return getType(ast.callSignature);
-                    case 202 /* FunctionPropertyAssignment */:
-                        return getType(ast.callSignature);
-                    case 184 /* FunctionExpression */:
-                        return getType(ast.callSignature);
-                    case 148 /* MethodSignature */:
-                        return getType(ast.callSignature);
-                    case 145 /* CallSignature */:
-                        return getType(ast.typeAnnotation);
-                    case 147 /* IndexSignature */:
-                        return getType(ast.typeAnnotation);
-                    case 144 /* PropertySignature */:
-                        return getType(ast.typeAnnotation);
-                    case 142 /* GetAccessor */:
-                        return getType(ast.callSignature);
-                    case 203 /* Parameter */:
-                        return getType(ast.typeAnnotation);
-                    case 139 /* MemberVariableDeclaration */:
-                        return getType(ast.variableDeclarator);
-                    case 187 /* VariableDeclarator */:
-                        return getType(ast.typeAnnotation);
-                    case 197 /* CatchClause */:
-                        return getType(ast.typeAnnotation);
-                    case 125 /* ConstructorType */:
-                        return ast.type;
-                    case 123 /* FunctionType */:
-                        return ast.type;
-                    case 205 /* TypeAnnotation */:
-                        return ast.type;
-                }
-            }
-            return null;
-        }
-        ASTHelpers.getType = getType;
-        function getVariableStatement(variableDeclarator) {
-            if (variableDeclarator && variableDeclarator.parent && variableDeclarator.parent.parent && variableDeclarator.parent.parent.parent && variableDeclarator.parent.kind() === 2 /* SeparatedList */ && variableDeclarator.parent.parent.kind() === 186 /* VariableDeclaration */ && variableDeclarator.parent.parent.parent.kind() === 151 /* VariableStatement */) {
-                return variableDeclarator.parent.parent.parent;
-            }
-            return null;
-        }
-        function getVariableDeclaratorModifiers(variableDeclarator) {
-            var variableStatement = getVariableStatement(variableDeclarator);
-            return variableStatement ? variableStatement.modifiers : TypeScript.Syntax.emptyList();
-        }
-        ASTHelpers.getVariableDeclaratorModifiers = getVariableDeclaratorModifiers;
-        function getEnclosingModuleDeclaration(ast) {
-            while (ast) {
-                if (ast.kind() === 133 /* ModuleDeclaration */) {
-                    return ast;
-                }
-                ast = ast.parent;
-            }
-            return null;
-        }
-        ASTHelpers.getEnclosingModuleDeclaration = getEnclosingModuleDeclaration;
-        function isEntireNameOfModuleDeclaration(nameAST) {
-            return parentIsModuleDeclaration(nameAST) && nameAST.parent.name === nameAST;
-        }
-        function getModuleDeclarationFromNameAST(ast) {
-            if (ast) {
-                switch (ast.kind()) {
-                    case 14 /* StringLiteral */:
-                        if (parentIsModuleDeclaration(ast) && ast.parent.stringLiteral === ast) {
-                            return ast.parent;
-                        }
-                        return null;
-                    case 11 /* IdentifierName */:
-                    case 121 /* QualifiedName */:
-                        if (isEntireNameOfModuleDeclaration(ast)) {
-                            return ast.parent;
-                        }
-                        break;
-                    default:
-                        return null;
-                }
-                for (ast = ast.parent; ast && ast.kind() === 121 /* QualifiedName */; ast = ast.parent) {
-                    if (isEntireNameOfModuleDeclaration(ast)) {
-                        return ast.parent;
-                    }
-                }
-            }
-            return null;
-        }
-        ASTHelpers.getModuleDeclarationFromNameAST = getModuleDeclarationFromNameAST;
-        function isLastNameOfModule(ast, astName) {
-            if (ast) {
-                if (ast.stringLiteral) {
-                    return astName === ast.stringLiteral;
-                }
-                else if (ast.name.kind() === 121 /* QualifiedName */) {
-                    return astName === ast.name.right;
-                }
-                else {
-                    return astName === ast.name;
-                }
-            }
-            return false;
-        }
-        ASTHelpers.isLastNameOfModule = isLastNameOfModule;
-        function getNameOfIdentifierOrQualifiedName(name) {
-            if (name.kind() === 11 /* IdentifierName */) {
-                return name.text();
-            }
-            else {
-                TypeScript.Debug.assert(name.kind() == 121 /* QualifiedName */);
-                var dotExpr = name;
-                return getNameOfIdentifierOrQualifiedName(dotExpr.left) + "." + getNameOfIdentifierOrQualifiedName(dotExpr.right);
-            }
-        }
-        ASTHelpers.getNameOfIdentifierOrQualifiedName = getNameOfIdentifierOrQualifiedName;
-        function getModuleNames(name, result) {
-            result = result || [];
-            if (name.kind() === 121 /* QualifiedName */) {
-                getModuleNames(name.left, result);
-                result.push(name.right);
-            }
-            else {
-                result.push(name);
-            }
-            return result;
-        }
-        ASTHelpers.getModuleNames = getModuleNames;
-    })(ASTHelpers = TypeScript.ASTHelpers || (TypeScript.ASTHelpers = {}));
-})(TypeScript || (TypeScript = {}));
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-///<reference path='references.ts' />
-var TypeScript;
-(function (TypeScript) {
     function stripStartAndEndQuotes(str) {
         var firstCharCode = str && str.charCodeAt(0);
         if (str && str.length >= 2 && firstCharCode === str.charCodeAt(str.length - 1) && (firstCharCode === 39 /* singleQuote */ || firstCharCode === 34 /* doubleQuote */)) {
@@ -37739,148 +37244,32 @@ var TypeScript;
         return str;
     }
     TypeScript.stripStartAndEndQuotes = stripStartAndEndQuotes;
-    function isSingleQuoted(str) {
-        return str && str.length >= 2 && str.charCodeAt(0) === str.charCodeAt(str.length - 1) && str.charCodeAt(0) === 39 /* singleQuote */;
-    }
-    TypeScript.isSingleQuoted = isSingleQuoted;
-    function isDoubleQuoted(str) {
-        return str && str.length >= 2 && str.charCodeAt(0) === str.charCodeAt(str.length - 1) && str.charCodeAt(0) === 34 /* doubleQuote */;
-    }
-    TypeScript.isDoubleQuoted = isDoubleQuoted;
-    function isQuoted(str) {
-        return isDoubleQuoted(str) || isSingleQuoted(str);
-    }
-    TypeScript.isQuoted = isQuoted;
-    function quoteStr(str) {
-        return "\"" + str + "\"";
-    }
-    TypeScript.quoteStr = quoteStr;
     var switchToForwardSlashesRegEx = /\\/g;
     function switchToForwardSlashes(path) {
         return path.replace(switchToForwardSlashesRegEx, "/");
     }
     TypeScript.switchToForwardSlashes = switchToForwardSlashes;
-    function trimModName(modName) {
-        // in case's it's a declare file...
-        if (modName.length > 5 && modName.substring(modName.length - 5, modName.length) === ".d.ts") {
-            return modName.substring(0, modName.length - 5);
-        }
-        if (modName.length > 3 && modName.substring(modName.length - 3, modName.length) === ".ts") {
-            return modName.substring(0, modName.length - 3);
-        }
-        // in case's it's a .js file
-        if (modName.length > 3 && modName.substring(modName.length - 3, modName.length) === ".js") {
-            return modName.substring(0, modName.length - 3);
-        }
-        return modName;
-    }
-    TypeScript.trimModName = trimModName;
-    function getDeclareFilePath(fname) {
-        return isTSFile(fname) ? changePathToDTS(fname) : changePathToDTS(fname);
-    }
-    TypeScript.getDeclareFilePath = getDeclareFilePath;
     function isFileOfExtension(fname, ext) {
         var invariantFname = fname.toLocaleUpperCase();
         var invariantExt = ext.toLocaleUpperCase();
         var extLength = invariantExt.length;
         return invariantFname.length > extLength && invariantFname.substring(invariantFname.length - extLength, invariantFname.length) === invariantExt;
     }
-    function isTSFile(fname) {
-        return isFileOfExtension(fname, ".ts");
-    }
-    TypeScript.isTSFile = isTSFile;
     function isDTSFile(fname) {
         return isFileOfExtension(fname, ".d.ts");
     }
     TypeScript.isDTSFile = isDTSFile;
-    function getPrettyName(modPath, quote, treatAsFileName) {
-        if (quote === void 0) { quote = true; }
-        if (treatAsFileName === void 0) { treatAsFileName = false; }
-        var modName = treatAsFileName ? switchToForwardSlashes(modPath) : trimModName(stripStartAndEndQuotes(modPath));
-        var components = this.getPathComponents(modName);
-        return components.length ? (quote ? quoteStr(components[components.length - 1]) : components[components.length - 1]) : modPath;
-    }
-    TypeScript.getPrettyName = getPrettyName;
     function getPathComponents(path) {
         return path.split("/");
     }
     TypeScript.getPathComponents = getPathComponents;
-    function getRelativePathToFixedPath(fixedModFilePath, absoluteModPath, isAbsoultePathURL) {
-        if (isAbsoultePathURL === void 0) { isAbsoultePathURL = true; }
-        absoluteModPath = switchToForwardSlashes(absoluteModPath);
-        var modComponents = this.getPathComponents(absoluteModPath);
-        var fixedModComponents = this.getPathComponents(fixedModFilePath);
-        // Find the component that differs
-        var joinStartIndex = 0;
-        for (; joinStartIndex < modComponents.length && joinStartIndex < fixedModComponents.length; joinStartIndex++) {
-            if (fixedModComponents[joinStartIndex] !== modComponents[joinStartIndex]) {
-                break;
-            }
-        }
-        // Get the relative path
-        if (joinStartIndex !== 0) {
-            var relativePath = "";
-            var relativePathComponents = modComponents.slice(joinStartIndex, modComponents.length);
-            for (; joinStartIndex < fixedModComponents.length; joinStartIndex++) {
-                if (fixedModComponents[joinStartIndex] !== "") {
-                    relativePath = relativePath + "../";
-                }
-            }
-            return relativePath + relativePathComponents.join("/");
-        }
-        if (isAbsoultePathURL && absoluteModPath.indexOf("://") === -1) {
-            absoluteModPath = "file:///" + absoluteModPath;
-        }
-        return absoluteModPath;
-    }
-    TypeScript.getRelativePathToFixedPath = getRelativePathToFixedPath;
-    function changePathToDTS(modPath) {
-        return trimModName(stripStartAndEndQuotes(modPath)) + ".d.ts";
-    }
-    TypeScript.changePathToDTS = changePathToDTS;
-    function isRelative(path) {
-        return path.length > 0 && path.charAt(0) === ".";
-    }
-    TypeScript.isRelative = isRelative;
-    function isRooted(path) {
-        return path.length > 0 && (path.charAt(0) === "\\" || path.charAt(0) === "/" || (path.indexOf(":\\") !== -1) || (path.indexOf(":/") !== -1));
-    }
-    TypeScript.isRooted = isRooted;
-    function getRootFilePath(outFname) {
-        if (outFname === "") {
-            return outFname;
-        }
-        else {
-            var isPath = outFname.indexOf("/") !== -1;
-            return isPath ? filePath(outFname) : "";
-        }
-    }
-    TypeScript.getRootFilePath = getRootFilePath;
-    function filePathComponents(fullPath) {
-        fullPath = switchToForwardSlashes(fullPath);
-        var components = getPathComponents(fullPath);
-        return components.slice(0, components.length - 1);
-    }
-    TypeScript.filePathComponents = filePathComponents;
-    function filePath(fullPath) {
-        var path = filePathComponents(fullPath);
-        return path.join("/") + "/";
-    }
-    TypeScript.filePath = filePath;
-    function convertToDirectoryPath(dirPath) {
-        if (dirPath && dirPath.charAt(dirPath.length - 1) !== "/") {
-            dirPath += "/";
-        }
-        return dirPath;
-    }
-    TypeScript.convertToDirectoryPath = convertToDirectoryPath;
     var normalizePathRegEx = /^\\\\[^\\]/;
     function normalizePath(path) {
         // If it's a UNC style path (i.e. \\server\share), convert to a URI style (i.e. file://server/share)
         if (normalizePathRegEx.test(path)) {
             path = "file:" + path;
         }
-        var parts = this.getPathComponents(switchToForwardSlashes(path));
+        var parts = getPathComponents(switchToForwardSlashes(path));
         var normalizedParts = [];
         for (var i = 0; i < parts.length; i++) {
             var part = parts[i];

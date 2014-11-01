@@ -21126,10 +21126,6 @@ var TypeScript;
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
 (function (TypeScript) {
-    function separatedListChildCount(list) {
-        return list.length + list.separators.length;
-    }
-    TypeScript.separatedListChildCount = separatedListChildCount;
     function separatedListChildAt(list, index) {
         return index % 2 === 0 ? list[index >> 1] : list.separators[index >> 1];
     }
@@ -21143,13 +21139,14 @@ var TypeScript;
         var _emptySeparatedList = [];
         var _emptySeparators = [];
         _emptySeparatedList.separators = _emptySeparators;
+        _emptySeparatedList.separatedListLength = 0;
         function assertEmptyLists() {
         }
         Array.prototype.kind = function () {
             return this.separators === undefined ? 1 /* List */ : 2 /* SeparatedList */;
         };
         Array.prototype.childCount = function () {
-            return this.separators ? TypeScript.separatedListChildCount(this) : this.length;
+            return this.separators ? this.separatedListLength : this.length;
         };
         Array.prototype.childAt = function (index) {
             if (this.separators) {
@@ -21196,6 +21193,7 @@ var TypeScript;
                 separators[i].parent = nodes;
             }
             nodes.separators = separators.length === 0 ? _emptySeparators : separators;
+            nodes.separatedListLength = nodes.length + separators.length;
             return nodes;
         }
         Syntax.separatedList = separatedList;
@@ -22262,7 +22260,7 @@ var TypeScript;
             }
         };
         SyntaxWalker.prototype.visitSeparatedList = function (list) {
-            for (var i = 0, n = TypeScript.separatedListChildCount(list); i < n; i++) {
+            for (var i = 0, n = list.separatedListLength; i < n; i++) {
                 if (i % 2 === 0) {
                     list[i >> 1].accept(this);
                 }
