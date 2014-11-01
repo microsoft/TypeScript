@@ -22810,31 +22810,39 @@ var TypeScript;
             // var separators = _emptySeparatedList.separators;
             // Debug.assert(!separators || separators.length === 0);
         }
-        Array.prototype.kind = function () {
+        function addArrayFunction(name, func) {
+            if (Object.defineProperty) {
+                Object.defineProperty(Array.prototype, name, { value: func, writable: true });
+            }
+            else {
+                Array.prototype[name] = func;
+            }
+        }
+        addArrayFunction("kind", function () {
             return this.separators === undefined ? 1 /* List */ : 2 /* SeparatedList */;
-        };
-        Array.prototype.childCount = function () {
+        });
+        addArrayFunction("childCount", function () {
             return this.separators ? this.separatedListLength : this.length;
-        };
-        Array.prototype.childAt = function (index) {
+        });
+        addArrayFunction("childAt", function (index) {
             if (this.separators) {
                 return index % 2 === 0 ? this[index >> 1] : this.separators[index >> 1];
             }
             else {
                 return this[index];
             }
-        };
-        Array.prototype.separatorCount = function () {
+        });
+        addArrayFunction("separatorCount", function () {
             assertEmptyLists();
             // Debug.assert(this.kind === SyntaxKind.SeparatedList);
             return this.separators.length;
-        };
-        Array.prototype.separatorAt = function (index) {
+        });
+        addArrayFunction("separatorAt", function (index) {
             assertEmptyLists();
             // Debug.assert(this.kind === SyntaxKind.SeparatedList);
             // Debug.assert(index >= 0 && index < this.separators.length);
             return this.separators[index];
-        };
+        });
         function emptyList() {
             return _emptyList;
         }

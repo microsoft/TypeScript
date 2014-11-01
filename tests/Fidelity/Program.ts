@@ -1,4 +1,5 @@
 /// <reference path='es5compat.ts' />
+/// <reference path='json2.ts' />
 /// <reference path='environment.ts' />
 
 ///<reference path='..\..\src\compiler\checker.ts' />
@@ -205,7 +206,7 @@ function elementToJSON(element: TypeScript.ISyntaxElement, text: TypeScript.ISim
     if (TypeScript.isToken(element)) {
         return tokenToJSON(<TypeScript.ISyntaxToken>element, text);
     }
-    else if (TypeScript.isList(element) || TypeScript.isSeparatedList(element)) {
+    else if (TypeScript.isList(element)) {
         var result: any[] = [];
 
         for (var i = 0, n = element.childCount(); i < n; i++) {
