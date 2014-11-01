@@ -3,6 +3,7 @@
 interface Array<T> {
     data: number;
     separators?: TypeScript.ISyntaxToken[];
+    separatedListLength?: number;
 
     kind(): TypeScript.SyntaxKind;
     parent: TypeScript.ISyntaxElement;
@@ -15,9 +16,9 @@ interface Array<T> {
 }
 
 module TypeScript {
-    export function separatedListChildCount(list: ISyntaxNodeOrToken[]) {
-        return list.length + list.separators.length;
-    }
+    //export function separatedListChildCount(list: ISyntaxNodeOrToken[]) {
+    //    return list.length + list.separators.length;
+    //}
 
     export function separatedListChildAt(list: ISyntaxNodeOrToken[], index: number) {
         return index % 2 === 0 ? list[index >> 1] : list.separators[index >> 1];
@@ -31,6 +32,7 @@ module TypeScript.Syntax {
     var _emptySeparators: ISyntaxToken[] = [];
 
     _emptySeparatedList.separators = _emptySeparators;
+    _emptySeparatedList.separatedListLength = 0;
 
     function assertEmptyLists() {
         // Debug.assert(_emptyList.length === 0);
@@ -43,7 +45,7 @@ module TypeScript.Syntax {
     }
 
     Array.prototype.childCount = function (): number {
-        return this.separators ? separatedListChildCount(this) : this.length;
+        return this.separators ? this.separatedListLength : this.length;
     }
 
     Array.prototype.childAt = function (index: number): ISyntaxNodeOrToken {
@@ -103,8 +105,8 @@ module TypeScript.Syntax {
             separators[i].parent = nodes;
         }
 
-
         nodes.separators = separators.length === 0 ? _emptySeparators : separators;
+        nodes.separatedListLength = nodes.length + separators.length;
 
         return nodes;
     }

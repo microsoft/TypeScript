@@ -28,7 +28,7 @@ module TypeScript {
         }
 
         public visitSeparatedList(list: ISyntaxNodeOrToken[]): void {
-            for (var i = 0, n = separatedListChildCount(list); i < n; i++) {
+            for (var i = 0, n = list.separatedListLength; i < n; i++) {
                 if (i % 2 === 0) {
                     list[i >> 1].accept(this);
                 }

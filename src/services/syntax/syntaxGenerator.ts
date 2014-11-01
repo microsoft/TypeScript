@@ -2320,7 +2320,7 @@ function generateWalker(): string {
 "        }\r\n" +
 "\r\n" +
 "        public visitSeparatedList(list: ISyntaxNodeOrToken[]): void {\r\n" +
-"            for (var i = 0, n = separatedListChildCount(list); i < n; i++) {\r\n" +
+"            for (var i = 0, n = list.separatedListLength; i < n; i++) {\r\n" +
 "                if (i % 2 === 0) {\r\n" +
 "                    list[i >> 1].accept(this);\r\n" + 
 "                }\r\n" +
