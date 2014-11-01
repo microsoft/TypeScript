@@ -19,7 +19,6 @@
 ///<reference path='syntaxList.ts' />
 ///<reference path='syntaxNode.ts' />
 ///<reference path='syntaxNodeOrToken.ts' />
-///<reference path='syntaxNodes.interfaces.generated.ts' />
 
 // SyntaxDedenter depends on SyntaxRewriter
 // ///<reference path='syntaxDedenter.ts' />
