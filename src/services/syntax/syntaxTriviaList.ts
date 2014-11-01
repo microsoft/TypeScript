@@ -28,10 +28,6 @@ module TypeScript {
 
 module TypeScript.Syntax {
     class EmptyTriviaList implements ISyntaxTriviaList {
-        public kind() {
-            return SyntaxKind.TriviaList;
-        }
-
         public isShared(): boolean {
             return true;
         }
@@ -89,10 +85,6 @@ module TypeScript.Syntax {
         constructor(item: ISyntaxTrivia) {
             this.item = item.clone();
             this.item.parent = this;
-        }
-
-        public kind() {
-            return SyntaxKind.TriviaList;
         }
 
         public isShared(): boolean {
@@ -153,10 +145,6 @@ module TypeScript.Syntax {
                 cloned.parent = this;
                 return cloned;
             });
-        }
-
-        public kind() {
-            return SyntaxKind.TriviaList;
         }
 
         public isShared(): boolean {

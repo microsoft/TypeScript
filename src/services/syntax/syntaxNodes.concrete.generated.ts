@@ -76,10 +76,10 @@ module TypeScript.Syntax.Concrete {
     }
     export class ObjectTypeSyntax extends SyntaxNode implements ITypeSyntax {
         public openBraceToken: ISyntaxToken;
-        public typeMembers: ITypeMemberSyntax[];
+        public typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>;
         public closeBraceToken: ISyntaxToken;
         public _typeBrand: any;
-        constructor(data: number, openBraceToken: ISyntaxToken, typeMembers: ITypeMemberSyntax[], closeBraceToken: ISyntaxToken) {
+        constructor(data: number, openBraceToken: ISyntaxToken, typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>, closeBraceToken: ISyntaxToken) {
             super(data);
             this.openBraceToken = openBraceToken,
             this.typeMembers = typeMembers,
@@ -296,10 +296,10 @@ module TypeScript.Syntax.Concrete {
     }
     export class TupleTypeSyntax extends SyntaxNode implements ITypeSyntax {
         public openBracketToken: ISyntaxToken;
-        public types: ITypeSyntax[];
+        public types: ISeparatedSyntaxList<ITypeSyntax>;
         public closeBracketToken: ISyntaxToken;
         public _typeBrand: any;
-        constructor(data: number, openBracketToken: ISyntaxToken, types: ITypeSyntax[], closeBracketToken: ISyntaxToken) {
+        constructor(data: number, openBracketToken: ISyntaxToken, types: ISeparatedSyntaxList<ITypeSyntax>, closeBracketToken: ISyntaxToken) {
             super(data);
             this.openBracketToken = openBracketToken,
             this.types = types,
@@ -611,10 +611,10 @@ module TypeScript.Syntax.Concrete {
         public enumKeyword: ISyntaxToken;
         public identifier: ISyntaxToken;
         public openBraceToken: ISyntaxToken;
-        public enumElements: EnumElementSyntax[];
+        public enumElements: ISeparatedSyntaxList<EnumElementSyntax>;
         public closeBraceToken: ISyntaxToken;
         public _moduleElementBrand: any;
-        constructor(data: number, modifiers: ISyntaxToken[], enumKeyword: ISyntaxToken, identifier: ISyntaxToken, openBraceToken: ISyntaxToken, enumElements: EnumElementSyntax[], closeBraceToken: ISyntaxToken) {
+        constructor(data: number, modifiers: ISyntaxToken[], enumKeyword: ISyntaxToken, identifier: ISyntaxToken, openBraceToken: ISyntaxToken, enumElements: ISeparatedSyntaxList<EnumElementSyntax>, closeBraceToken: ISyntaxToken) {
             super(data);
             this.modifiers = modifiers,
             this.enumKeyword = enumKeyword,
@@ -1096,11 +1096,11 @@ module TypeScript.Syntax.Concrete {
     }
     export class IndexSignatureSyntax extends SyntaxNode implements ITypeMemberSyntax {
         public openBracketToken: ISyntaxToken;
-        public parameters: ParameterSyntax[];
+        public parameters: ISeparatedSyntaxList<ParameterSyntax>;
         public closeBracketToken: ISyntaxToken;
         public typeAnnotation: TypeAnnotationSyntax;
         public _typeMemberBrand: any;
-        constructor(data: number, openBracketToken: ISyntaxToken, parameters: ParameterSyntax[], closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax) {
+        constructor(data: number, openBracketToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax) {
             super(data);
             this.openBracketToken = openBracketToken,
             this.parameters = parameters,
@@ -2224,10 +2224,10 @@ module TypeScript.Syntax.Concrete {
     }
     export class ArrayLiteralExpressionSyntax extends SyntaxNode implements IPrimaryExpressionSyntax {
         public openBracketToken: ISyntaxToken;
-        public expressions: IExpressionSyntax[];
+        public expressions: ISeparatedSyntaxList<IExpressionSyntax>;
         public closeBracketToken: ISyntaxToken;
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
-        constructor(data: number, openBracketToken: ISyntaxToken, expressions: IExpressionSyntax[], closeBracketToken: ISyntaxToken) {
+        constructor(data: number, openBracketToken: ISyntaxToken, expressions: ISeparatedSyntaxList<IExpressionSyntax>, closeBracketToken: ISyntaxToken) {
             super(data);
             this.openBracketToken = openBracketToken,
             this.expressions = expressions,
@@ -2260,10 +2260,10 @@ module TypeScript.Syntax.Concrete {
     }
     export class ObjectLiteralExpressionSyntax extends SyntaxNode implements IPrimaryExpressionSyntax {
         public openBraceToken: ISyntaxToken;
-        public propertyAssignments: IPropertyAssignmentSyntax[];
+        public propertyAssignments: ISeparatedSyntaxList<IPropertyAssignmentSyntax>;
         public closeBraceToken: ISyntaxToken;
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
-        constructor(data: number, openBraceToken: ISyntaxToken, propertyAssignments: IPropertyAssignmentSyntax[], closeBraceToken: ISyntaxToken) {
+        constructor(data: number, openBraceToken: ISyntaxToken, propertyAssignments: ISeparatedSyntaxList<IPropertyAssignmentSyntax>, closeBraceToken: ISyntaxToken) {
             super(data);
             this.openBraceToken = openBraceToken,
             this.propertyAssignments = propertyAssignments,
@@ -2590,8 +2590,8 @@ module TypeScript.Syntax.Concrete {
     }
     export class VariableDeclarationSyntax extends SyntaxNode {
         public varKeyword: ISyntaxToken;
-        public variableDeclarators: VariableDeclaratorSyntax[];
-        constructor(data: number, varKeyword: ISyntaxToken, variableDeclarators: VariableDeclaratorSyntax[]) {
+        public variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>;
+        constructor(data: number, varKeyword: ISyntaxToken, variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>) {
             super(data);
             this.varKeyword = varKeyword,
             this.variableDeclarators = variableDeclarators,
@@ -2657,9 +2657,9 @@ module TypeScript.Syntax.Concrete {
     export class ArgumentListSyntax extends SyntaxNode {
         public typeArgumentList: TypeArgumentListSyntax;
         public openParenToken: ISyntaxToken;
-        public arguments: IExpressionSyntax[];
+        public arguments: ISeparatedSyntaxList<IExpressionSyntax>;
         public closeParenToken: ISyntaxToken;
-        constructor(data: number, typeArgumentList: TypeArgumentListSyntax, openParenToken: ISyntaxToken, _arguments: IExpressionSyntax[], closeParenToken: ISyntaxToken) {
+        constructor(data: number, typeArgumentList: TypeArgumentListSyntax, openParenToken: ISyntaxToken, _arguments: ISeparatedSyntaxList<IExpressionSyntax>, closeParenToken: ISyntaxToken) {
             super(data);
             this.typeArgumentList = typeArgumentList,
             this.openParenToken = openParenToken,
@@ -2695,9 +2695,9 @@ module TypeScript.Syntax.Concrete {
     }
     export class ParameterListSyntax extends SyntaxNode {
         public openParenToken: ISyntaxToken;
-        public parameters: ParameterSyntax[];
+        public parameters: ISeparatedSyntaxList<ParameterSyntax>;
         public closeParenToken: ISyntaxToken;
-        constructor(data: number, openParenToken: ISyntaxToken, parameters: ParameterSyntax[], closeParenToken: ISyntaxToken) {
+        constructor(data: number, openParenToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeParenToken: ISyntaxToken) {
             super(data);
             this.openParenToken = openParenToken,
             this.parameters = parameters,
@@ -2730,9 +2730,9 @@ module TypeScript.Syntax.Concrete {
     }
     export class TypeArgumentListSyntax extends SyntaxNode {
         public lessThanToken: ISyntaxToken;
-        public typeArguments: ITypeSyntax[];
+        public typeArguments: ISeparatedSyntaxList<ITypeSyntax>;
         public greaterThanToken: ISyntaxToken;
-        constructor(data: number, lessThanToken: ISyntaxToken, typeArguments: ITypeSyntax[], greaterThanToken: ISyntaxToken) {
+        constructor(data: number, lessThanToken: ISyntaxToken, typeArguments: ISeparatedSyntaxList<ITypeSyntax>, greaterThanToken: ISyntaxToken) {
             super(data);
             this.lessThanToken = lessThanToken,
             this.typeArguments = typeArguments,
@@ -2765,9 +2765,9 @@ module TypeScript.Syntax.Concrete {
     }
     export class TypeParameterListSyntax extends SyntaxNode {
         public lessThanToken: ISyntaxToken;
-        public typeParameters: TypeParameterSyntax[];
+        public typeParameters: ISeparatedSyntaxList<TypeParameterSyntax>;
         public greaterThanToken: ISyntaxToken;
-        constructor(data: number, lessThanToken: ISyntaxToken, typeParameters: TypeParameterSyntax[], greaterThanToken: ISyntaxToken) {
+        constructor(data: number, lessThanToken: ISyntaxToken, typeParameters: ISeparatedSyntaxList<TypeParameterSyntax>, greaterThanToken: ISyntaxToken) {
             super(data);
             this.lessThanToken = lessThanToken,
             this.typeParameters = typeParameters,
@@ -2800,8 +2800,8 @@ module TypeScript.Syntax.Concrete {
     }
     export class HeritageClauseSyntax extends SyntaxNode {
         public extendsOrImplementsKeyword: ISyntaxToken;
-        public typeNames: INameSyntax[];
-        constructor(data: number, extendsOrImplementsKeyword: ISyntaxToken, typeNames: INameSyntax[]) {
+        public typeNames: ISeparatedSyntaxList<INameSyntax>;
+        constructor(data: number, extendsOrImplementsKeyword: ISyntaxToken, typeNames: ISeparatedSyntaxList<INameSyntax>) {
             super(data);
             this.extendsOrImplementsKeyword = extendsOrImplementsKeyword,
             this.typeNames = typeNames,
