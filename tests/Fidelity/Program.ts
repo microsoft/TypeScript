@@ -231,6 +231,9 @@ function syntaxTreeToJSON(tree: TypeScript.SyntaxTree): any {
         case ts.ScriptTarget.ES5:
             result.languageVersion = "EcmaScript5";
             break;
+        case ts.ScriptTarget.ES6:
+            result.languageVersion = "EcmaScript6";
+            break;
         default:
             throw new Error();
     }
@@ -305,6 +308,10 @@ class Program {
         TypeScript.Environment.standardOut.Write("Testing trivia:");
         this.runTests(TypeScript.Environment.currentDirectory() + "\\tests\\Fidelity\\trivia\\ecmascript5",
             fileName => this.runTrivia(fileName, ts.ScriptTarget.ES5, verify, /*generateBaselines:*/ generate));
+
+        TypeScript.Environment.standardOut.Write("Testing parser ES6:");
+        this.runTests(TypeScript.Environment.currentDirectory() + "\\tests\\Fidelity\\parser\\ecmascript6",
+            fileName => this.runParser(fileName, ts.ScriptTarget.ES6, verify, /*generateBaselines:*/ generate));
 
         TypeScript.Environment.standardOut.Write("Testing parser ES5:");
         this.runTests(TypeScript.Environment.currentDirectory() + "\\tests\\Fidelity\\parser\\ecmascript5",

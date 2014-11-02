@@ -19424,6 +19424,9 @@ var TypeScript;
                 case 115 /* GreaterThanGreaterThanEqualsToken */:
                 case 116 /* GreaterThanGreaterThanGreaterThanEqualsToken */:
                     return true;
+                case 15 /* TemplateMiddleToken */:
+                case 16 /* TemplateEndToken */:
+                    return true;
                 default:
                     return token.isKeywordConvertedToIdentifier();
             }
@@ -21661,12 +21664,13 @@ var TypeScript;
             return TypeScript.IntegerUtilities.isHexInteger(text) ? parseInt(text, 16) : parseFloat(text);
         }
         else if (kind === 12 /* StringLiteral */) {
-            if (text.length > 1 && text.charCodeAt(text.length - 1) === text.charCodeAt(0)) {
-                return massageEscapes(text.substr(1, text.length - 2));
-            }
-            else {
-                return massageEscapes(text.substr(1));
-            }
+            return (text.length > 1 && text.charCodeAt(text.length - 1) === text.charCodeAt(0)) ? massageEscapes(text.substr(1, text.length - "''".length)) : massageEscapes(text.substr(1));
+        }
+        else if (kind === 13 /* NoSubstitutionTemplateToken */ || kind === 16 /* TemplateEndToken */) {
+            return (text.length > 1 && text.charCodeAt(text.length - 1) === 96 /* backtick */) ? massageTemplate(text.substr(1, text.length - "``".length)) : massageTemplate(text.substr(1));
+        }
+        else if (kind === 14 /* TemplateStartToken */ || kind === 15 /* TemplateMiddleToken */) {
+            return massageTemplate(text.substr(1, text.length - "`${".length));
         }
         else if (kind === 10 /* RegularExpressionLiteral */) {
             return regularExpressionValue(text);
@@ -21684,6 +21688,10 @@ var TypeScript;
         return value === undefined ? "" : massageDisallowedIdentifiers(value.toString());
     }
     TypeScript.tokenValueText = tokenValueText;
+    function massageTemplate(text) {
+        text = text.replace("\r\n", "\n").replace("\r", "\n");
+        return massageEscapes(text);
+    }
     function massageEscapes(text) {
         return text.indexOf("\\") >= 0 ? convertEscapes(text) : text;
     }
@@ -22390,6 +22398,7 @@ var TypeScript;
                 switch (element.kind()) {
                     case 176 /* MemberAccessExpression */:
                     case 185 /* ElementAccessExpression */:
+                    case 189 /* TemplateAccessExpression */:
                     case 180 /* ObjectCreationExpression */:
                     case 177 /* InvocationExpression */:
                     case 178 /* ArrayLiteralExpression */:
@@ -22405,42 +22414,6 @@ var TypeScript;
                     case 37 /* ThisKeyword */:
                     case 39 /* TrueKeyword */:
                     case 52 /* SuperKeyword */:
-                        return true;
-                }
-            }
-            return false;
-        };
-        SyntaxUtilities.isExpression = function (element) {
-            if (element) {
-                switch (element.kind()) {
-                    case 9 /* IdentifierName */:
-                    case 10 /* RegularExpressionLiteral */:
-                    case 11 /* NumericLiteral */:
-                    case 12 /* StringLiteral */:
-                    case 26 /* FalseKeyword */:
-                    case 34 /* NullKeyword */:
-                    case 37 /* ThisKeyword */:
-                    case 39 /* TrueKeyword */:
-                    case 52 /* SuperKeyword */:
-                    case 169 /* PrefixUnaryExpression */:
-                    case 175 /* PostfixUnaryExpression */:
-                    case 174 /* BinaryExpression */:
-                    case 170 /* DeleteExpression */:
-                    case 171 /* TypeOfExpression */:
-                    case 172 /* VoidExpression */:
-                    case 173 /* ConditionalExpression */:
-                    case 176 /* MemberAccessExpression */:
-                    case 177 /* InvocationExpression */:
-                    case 178 /* ArrayLiteralExpression */:
-                    case 179 /* ObjectLiteralExpression */:
-                    case 180 /* ObjectCreationExpression */:
-                    case 181 /* ParenthesizedExpression */:
-                    case 182 /* ParenthesizedArrowFunctionExpression */:
-                    case 183 /* SimpleArrowFunctionExpression */:
-                    case 184 /* CastExpression */:
-                    case 185 /* ElementAccessExpression */:
-                    case 186 /* FunctionExpression */:
-                    case 187 /* OmittedExpression */:
                         return true;
                 }
             }
@@ -24480,6 +24453,8 @@ var TypeScript;
                     case 11 /* NumericLiteral */:
                     case 12 /* StringLiteral */:
                     case 10 /* RegularExpressionLiteral */:
+                    case 13 /* NoSubstitutionTemplateToken */:
+                    case 14 /* TemplateStartToken */:
                     case 76 /* OpenBracketToken */:
                     case 74 /* OpenParenToken */:
                     case 82 /* LessThanToken */:
@@ -24918,12 +24893,13 @@ var TypeScript;
             function parseTemplateClause() {
                 var expression = parseExpression(true);
                 var token = currentToken();
-                if (token.kind() === 72 /* OpenBraceToken */) {
+                if (token.kind() === 73 /* CloseBraceToken */) {
                     token = currentContextualToken();
                     TypeScript.Debug.assert(token.kind() === 15 /* TemplateMiddleToken */ || token.kind() === 16 /* TemplateEndToken */);
+                    consumeToken(token);
                 }
                 else {
-                    var diagnostic = getExpectedTokenDiagnostic(72 /* OpenBraceToken */);
+                    var diagnostic = getExpectedTokenDiagnostic(73 /* CloseBraceToken */);
                     addDiagnostic(diagnostic);
                     token = TypeScript.Syntax.emptyToken(16 /* TemplateEndToken */);
                 }
@@ -29165,7 +29141,7 @@ var TypeScript;
             }
             return false;
         };
-        GrammarCheckerWalker.prototype.checkEcmaScriptVersionIsAtLeast = function (parent, reportToken, languageVersion, diagnosticKey) {
+        GrammarCheckerWalker.prototype.checkEcmaScriptVersionIsAtLeast = function (reportToken, languageVersion, diagnosticKey) {
             if (this.syntaxTree.languageVersion() < languageVersion) {
                 this.pushDiagnostic(reportToken, diagnosticKey);
                 return true;
@@ -29179,7 +29155,7 @@ var TypeScript;
             this.inObjectLiteralExpression = savedInObjectLiteralExpression;
         };
         GrammarCheckerWalker.prototype.visitGetAccessor = function (node) {
-            if (this.checkForAccessorDeclarationInAmbientContext(node) || this.checkEcmaScriptVersionIsAtLeast(node, node.propertyName, 1 /* ES5 */, TypeScript.DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) || this.checkForDisallowedModifiers(node, node.modifiers) || this.checkClassElementModifiers(node.modifiers) || this.checkForDisallowedAccessorTypeParameters(node.callSignature) || this.checkGetAccessorParameter(node)) {
+            if (this.checkForAccessorDeclarationInAmbientContext(node) || this.checkEcmaScriptVersionIsAtLeast(node.propertyName, 1 /* ES5 */, TypeScript.DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) || this.checkForDisallowedModifiers(node, node.modifiers) || this.checkClassElementModifiers(node.modifiers) || this.checkForDisallowedAccessorTypeParameters(node.callSignature) || this.checkGetAccessorParameter(node)) {
                 return;
             }
             _super.prototype.visitGetAccessor.call(this, node);
@@ -29227,7 +29203,7 @@ var TypeScript;
             return false;
         };
         GrammarCheckerWalker.prototype.visitSetAccessor = function (node) {
-            if (this.checkForAccessorDeclarationInAmbientContext(node) || this.checkEcmaScriptVersionIsAtLeast(node, node.propertyName, 1 /* ES5 */, TypeScript.DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) || this.checkForDisallowedModifiers(node, node.modifiers) || this.checkClassElementModifiers(node.modifiers) || this.checkForDisallowedAccessorTypeParameters(node.callSignature) || this.checkForDisallowedSetAccessorTypeAnnotation(node) || this.checkSetAccessorParameter(node)) {
+            if (this.checkForAccessorDeclarationInAmbientContext(node) || this.checkEcmaScriptVersionIsAtLeast(node.propertyName, 1 /* ES5 */, TypeScript.DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) || this.checkForDisallowedModifiers(node, node.modifiers) || this.checkClassElementModifiers(node.modifiers) || this.checkForDisallowedAccessorTypeParameters(node.callSignature) || this.checkForDisallowedSetAccessorTypeAnnotation(node) || this.checkSetAccessorParameter(node)) {
                 return;
             }
             _super.prototype.visitSetAccessor.call(this, node);
@@ -32494,6 +32470,9 @@ function syntaxTreeToJSON(tree) {
         case 1 /* ES5 */:
             result.languageVersion = "EcmaScript5";
             break;
+        case 2 /* ES6 */:
+            result.languageVersion = "EcmaScript6";
+            break;
         default:
             throw new Error();
     }
@@ -32531,6 +32510,8 @@ var Program = (function () {
         this.runTests(TypeScript.Environment.currentDirectory() + "\\tests\\Fidelity\\findToken\\ecmascript5", function (fileName) { return _this.runFindToken(fileName, 1 /* ES5 */, verify, generate); });
         TypeScript.Environment.standardOut.Write("Testing trivia:");
         this.runTests(TypeScript.Environment.currentDirectory() + "\\tests\\Fidelity\\trivia\\ecmascript5", function (fileName) { return _this.runTrivia(fileName, 1 /* ES5 */, verify, generate); });
+        TypeScript.Environment.standardOut.Write("Testing parser ES6:");
+        this.runTests(TypeScript.Environment.currentDirectory() + "\\tests\\Fidelity\\parser\\ecmascript6", function (fileName) { return _this.runParser(fileName, 2 /* ES6 */, verify, generate); });
         TypeScript.Environment.standardOut.Write("Testing parser ES5:");
         this.runTests(TypeScript.Environment.currentDirectory() + "\\tests\\Fidelity\\parser\\ecmascript5", function (fileName) { return _this.runParser(fileName, 1 /* ES5 */, verify, generate); });
         TypeScript.Environment.standardOut.Write("Testing parser ES3:");
