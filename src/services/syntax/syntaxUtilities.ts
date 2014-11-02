@@ -37,6 +37,7 @@ module TypeScript {
                 switch (element.kind()) {
                     case SyntaxKind.MemberAccessExpression:
                     case SyntaxKind.ElementAccessExpression:
+                    case SyntaxKind.TemplateAccessExpression:
                     case SyntaxKind.ObjectCreationExpression:
                     case SyntaxKind.InvocationExpression:
                     case SyntaxKind.ArrayLiteralExpression:
@@ -52,45 +53,6 @@ module TypeScript {
                     case SyntaxKind.ThisKeyword:
                     case SyntaxKind.TrueKeyword:
                     case SyntaxKind.SuperKeyword:
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
-        public static isExpression(element: ISyntaxElement) {
-            if (element) {
-                switch (element.kind()) {
-                    case SyntaxKind.IdentifierName:
-                    case SyntaxKind.RegularExpressionLiteral:
-                    case SyntaxKind.NumericLiteral:
-                    case SyntaxKind.StringLiteral:
-                    case SyntaxKind.FalseKeyword:
-                    case SyntaxKind.NullKeyword:
-                    case SyntaxKind.ThisKeyword:
-                    case SyntaxKind.TrueKeyword:
-                    case SyntaxKind.SuperKeyword:
-
-                    case SyntaxKind.PrefixUnaryExpression:
-                    case SyntaxKind.PostfixUnaryExpression:
-                    case SyntaxKind.BinaryExpression:
-                    case SyntaxKind.DeleteExpression:
-                    case SyntaxKind.TypeOfExpression:
-                    case SyntaxKind.VoidExpression:
-                    case SyntaxKind.ConditionalExpression:
-                    case SyntaxKind.MemberAccessExpression:
-                    case SyntaxKind.InvocationExpression:
-                    case SyntaxKind.ArrayLiteralExpression:
-                    case SyntaxKind.ObjectLiteralExpression:
-                    case SyntaxKind.ObjectCreationExpression:
-                    case SyntaxKind.ParenthesizedExpression:
-                    case SyntaxKind.ParenthesizedArrowFunctionExpression:
-                    case SyntaxKind.SimpleArrowFunctionExpression:
-                    case SyntaxKind.CastExpression:
-                    case SyntaxKind.ElementAccessExpression:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.OmittedExpression:
                         return true;
                 }
             }

@@ -178,6 +178,11 @@ module TypeScript.Scanner {
             case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
                 return true;
 
+            // Created by the parser when it sees } while parsing a template expression.
+            case SyntaxKind.TemplateMiddleToken:
+            case SyntaxKind.TemplateEndToken:
+                return true;
+
             default:
                 return token.isKeywordConvertedToIdentifier();
         }
