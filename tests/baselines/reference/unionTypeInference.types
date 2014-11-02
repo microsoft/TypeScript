@@ -1,0 +1,72 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts ===
+// Verify that inferences made *to* a type parameter in a union type are secondary
+// to inferences made directly to that type parameter
+
+function f<T>(x: T, y: string|T): T {
+>f : <T>(x: T, y: string | T) => T
+>T : T
+>x : T
+>T : T
+>y : string | T
+>T : T
+>T : T
+
+    return x;
+>x : T
+}
+function g<T>(value: [string, T]): T {
+>g : <T>(value: [string, T]) => T
+>T : T
+>value : [string, T]
+>T : T
+>T : T
+
+    return value[1];
+>value[1] : T
+>value : [string, T]
+}
+
+var a: number;
+>a : number
+
+var a = f(1, 2);
+>a : number
+>f(1, 2) : number
+>f : <T>(x: T, y: string | T) => T
+
+var b: number;
+>b : number
+
+var b = f(1, "hello");
+>b : number
+>f(1, "hello") : number
+>f : <T>(x: T, y: string | T) => T
+
+var c: number;
+>c : number
+
+var c = f(1, a || "hello");
+>c : number
+>f(1, a || "hello") : number
+>f : <T>(x: T, y: string | T) => T
+>a || "hello" : string | number
+>a : number
+
+var d: any;
+>d : any
+
+var d = f(undefined, "abc");
+>d : any
+>f(undefined, "abc") : any
+>f : <T>(x: T, y: string | T) => T
+>undefined : undefined
+
+var e: boolean;
+>e : boolean
+
+var e = g(["string", true]);
+>e : boolean
+>g(["string", true]) : boolean
+>g : <T>(value: [string, T]) => T
+>["string", true] : [string, boolean]
+
