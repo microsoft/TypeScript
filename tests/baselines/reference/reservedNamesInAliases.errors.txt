@@ -1,0 +1,18 @@
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,6): error TS1003: Identifier expected.
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,11): error TS1005: ';' expected.
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,13): error TS2304: Cannot find name 'I'.
+
+
+==== tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts (3 errors) ====
+    interface I {}
+    type any = I;
+    type number = I;
+    type boolean = I;
+    type string = I;
+    type void = I;
+         ~~~~
+!!! error TS1003: Identifier expected.
+              ~
+!!! error TS1005: ';' expected.
+                ~
+!!! error TS2304: Cannot find name 'I'.

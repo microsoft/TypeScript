@@ -1,0 +1,57 @@
+=== tests/cases/conformance/types/typeAliases/typeAliases.ts ===
+// Writing a reference to a type alias has exactly the same effect as writing the aliased type itself.
+
+type Meters = number
+>Meters : number
+
+enum E { x = 10 }
+>E : E
+>x : E
+
+declare function f(a: string): boolean;
+>f : { (a: string): boolean; (a: number): string; }
+>a : string
+
+declare function f(a: Meters): string;
+>f : { (a: string): boolean; (a: number): string; }
+>a : number
+>Meters : number
+
+f(E.x).toLowerCase();
+>f(E.x).toLowerCase() : string
+>f(E.x).toLowerCase : () => string
+>f(E.x) : string
+>f : { (a: string): boolean; (a: number): string; }
+>E.x : E
+>E : typeof E
+>x : E
+>toLowerCase : () => string
+
+type StringAndBoolean = [string, boolean]
+>StringAndBoolean : [string, boolean]
+
+declare function f1(s: StringAndBoolean): string;
+>f1 : (s: [string, boolean]) => string
+>s : [string, boolean]
+>StringAndBoolean : [string, boolean]
+
+var x: [string, boolean];
+>x : [string, boolean]
+
+f1(x);
+>f1(x) : string
+>f1 : (s: [string, boolean]) => string
+>x : [string, boolean]
+
+var y: StringAndBoolean = ["1", false];
+>y : [string, boolean]
+>StringAndBoolean : [string, boolean]
+>["1", false] : [string, boolean]
+
+y[0].toLowerCase();
+>y[0].toLowerCase() : string
+>y[0].toLowerCase : () => string
+>y[0] : string
+>y : [string, boolean]
+>toLowerCase : () => string
+
