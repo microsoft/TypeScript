@@ -371,6 +371,10 @@
         "category": "Error",
         "code": 1110
     },
+    "Template literal cannot be used as an element name.": {
+        "category": "Error",
+        "code": 1111
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2000

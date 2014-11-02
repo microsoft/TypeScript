@@ -191,7 +191,7 @@ var definitions:ITypeDefinition[] = [
         name: 'VariableDeclaratorSyntax',
         baseType: 'ISyntaxNode',
         children: [
-            <any>{ name: 'propertyName', isToken: true, tokenKinds: ['IdentifierName', 'StringLiteral', 'NumericLiteral'] },
+            <any>{ name: 'propertyName', isToken: true },
             <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true, isTypeScriptSpecific: true },
             <any>{ name: 'equalsValueClause', type: 'EqualsValueClauseSyntax', isOptional: true }
         ]

@@ -3390,8 +3390,10 @@ module TypeScript.Parser {
                 }
             }
 
+            // We allow a template literal while parser for error tolerance.  We'll report errors
+            // on this later in the grammar checker walker.
             var kind = token.kind();
-            return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral;
+            return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral || kind === SyntaxKind.NoSubstitutionTemplateToken;
         }
 
         function parseArrayLiteralExpression(openBracketToken: ISyntaxToken): ArrayLiteralExpressionSyntax {
