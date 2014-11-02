@@ -1,0 +1,215 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript6",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 45,
+        "start": 17,
+        "end": 45,
+        "fullWidth": 45,
+        "width": 28,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 45,
+                "start": 17,
+                "end": 45,
+                "fullWidth": 45,
+                "width": 28,
+                "expression": {
+                    "kind": "InvocationExpression",
+                    "fullStart": 0,
+                    "fullEnd": 44,
+                    "start": 17,
+                    "end": 44,
+                    "fullWidth": 44,
+                    "width": 27,
+                    "expression": {
+                        "kind": "MemberAccessExpression",
+                        "fullStart": 0,
+                        "fullEnd": 37,
+                        "start": 17,
+                        "end": 37,
+                        "fullWidth": 37,
+                        "width": 20,
+                        "expression": {
+                            "kind": "TemplateExpression",
+                            "fullStart": 0,
+                            "fullEnd": 29,
+                            "start": 17,
+                            "end": 29,
+                            "fullWidth": 29,
+                            "width": 12,
+                            "templateStartToken": {
+                                "kind": "TemplateStartToken",
+                                "fullStart": 0,
+                                "fullEnd": 23,
+                                "start": 17,
+                                "end": 23,
+                                "fullWidth": 23,
+                                "width": 6,
+                                "text": "`abc${",
+                                "value": "abc",
+                                "valueText": "abc",
+                                "hasLeadingTrivia": true,
+                                "hasLeadingComment": true,
+                                "hasLeadingNewLine": true,
+                                "leadingTrivia": [
+                                    {
+                                        "kind": "SingleLineCommentTrivia",
+                                        "fullStart": 0,
+                                        "fullEnd": 15,
+                                        "text": "// @target: ES6"
+                                    },
+                                    {
+                                        "kind": "NewLineTrivia",
+                                        "fullStart": 15,
+                                        "fullEnd": 17,
+                                        "text": "\r\n"
+                                    }
+                                ]
+                            },
+                            "templateClauses": [
+                                {
+                                    "kind": "TemplateClause",
+                                    "fullStart": 23,
+                                    "fullEnd": 29,
+                                    "start": 23,
+                                    "end": 29,
+                                    "fullWidth": 6,
+                                    "width": 6,
+                                    "expression": {
+                                        "kind": "NumericLiteral",
+                                        "fullStart": 23,
+                                        "fullEnd": 24,
+                                        "start": 23,
+                                        "end": 24,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": "0",
+                                        "value": 0,
+                                        "valueText": "0"
+                                    },
+                                    "templateMiddleOrEndToken": {
+                                        "kind": "TemplateEndToken",
+                                        "fullStart": 24,
+                                        "fullEnd": 29,
+                                        "start": 24,
+                                        "end": 29,
+                                        "fullWidth": 5,
+                                        "width": 5,
+                                        "text": "}abc`",
+                                        "value": "abc",
+                                        "valueText": "abc"
+                                    }
+                                }
+                            ]
+                        },
+                        "dotToken": {
+                            "kind": "DotToken",
+                            "fullStart": 29,
+                            "fullEnd": 30,
+                            "start": 29,
+                            "end": 30,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": ".",
+                            "value": ".",
+                            "valueText": "."
+                        },
+                        "name": {
+                            "kind": "IdentifierName",
+                            "fullStart": 30,
+                            "fullEnd": 37,
+                            "start": 30,
+                            "end": 37,
+                            "fullWidth": 7,
+                            "width": 7,
+                            "text": "indexOf",
+                            "value": "indexOf",
+                            "valueText": "indexOf"
+                        }
+                    },
+                    "argumentList": {
+                        "kind": "ArgumentList",
+                        "fullStart": 37,
+                        "fullEnd": 44,
+                        "start": 37,
+                        "end": 44,
+                        "fullWidth": 7,
+                        "width": 7,
+                        "openParenToken": {
+                            "kind": "OpenParenToken",
+                            "fullStart": 37,
+                            "fullEnd": 38,
+                            "start": 37,
+                            "end": 38,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": "(",
+                            "value": "(",
+                            "valueText": "("
+                        },
+                        "arguments": [
+                            {
+                                "kind": "NoSubstitutionTemplateToken",
+                                "fullStart": 38,
+                                "fullEnd": 43,
+                                "start": 38,
+                                "end": 43,
+                                "fullWidth": 5,
+                                "width": 5,
+                                "text": "`abc`",
+                                "value": "abc",
+                                "valueText": "abc"
+                            }
+                        ],
+                        "closeParenToken": {
+                            "kind": "CloseParenToken",
+                            "fullStart": 43,
+                            "fullEnd": 44,
+                            "start": 43,
+                            "end": 44,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": ")",
+                            "value": ")",
+                            "valueText": ")"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 44,
+                    "fullEnd": 45,
+                    "start": 44,
+                    "end": 45,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 45,
+            "fullEnd": 45,
+            "start": 45,
+            "end": 45,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            17
+        ],
+        "length": 45
+    }
+}

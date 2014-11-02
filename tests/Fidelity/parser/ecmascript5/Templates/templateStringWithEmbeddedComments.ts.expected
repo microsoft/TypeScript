@@ -1,0 +1,251 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 121,
+        "start": 0,
+        "end": 121,
+        "fullWidth": 121,
+        "width": 121,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 121,
+                "start": 0,
+                "end": 121,
+                "fullWidth": 121,
+                "width": 121,
+                "expression": {
+                    "kind": "TemplateExpression",
+                    "fullStart": 0,
+                    "fullEnd": 120,
+                    "start": 0,
+                    "end": 120,
+                    "fullWidth": 120,
+                    "width": 120,
+                    "templateStartToken": {
+                        "kind": "TemplateStartToken",
+                        "fullStart": 0,
+                        "fullEnd": 32,
+                        "start": 0,
+                        "end": 7,
+                        "fullWidth": 32,
+                        "width": 7,
+                        "text": "`head${",
+                        "value": "head",
+                        "valueText": "head",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingComment": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 7,
+                                "fullEnd": 8,
+                                "text": " "
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 8,
+                                "fullEnd": 30,
+                                "text": "// single line comment"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 30,
+                                "fullEnd": 32,
+                                "text": "\r\n"
+                            }
+                        ]
+                    },
+                    "templateClauses": [
+                        {
+                            "kind": "TemplateClause",
+                            "fullStart": 32,
+                            "fullEnd": 49,
+                            "start": 32,
+                            "end": 47,
+                            "fullWidth": 17,
+                            "width": 15,
+                            "expression": {
+                                "kind": "NumericLiteral",
+                                "fullStart": 32,
+                                "fullEnd": 36,
+                                "start": 32,
+                                "end": 34,
+                                "fullWidth": 4,
+                                "width": 2,
+                                "text": "10",
+                                "value": 10,
+                                "valueText": "10",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingNewLine": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "NewLineTrivia",
+                                        "fullStart": 34,
+                                        "fullEnd": 36,
+                                        "text": "\r\n"
+                                    }
+                                ]
+                            },
+                            "templateMiddleOrEndToken": {
+                                "kind": "TemplateMiddleToken",
+                                "fullStart": 36,
+                                "fullEnd": 49,
+                                "start": 36,
+                                "end": 47,
+                                "fullWidth": 13,
+                                "width": 11,
+                                "text": "}\r\nmiddle${",
+                                "value": "\nmiddle",
+                                "valueText": "\nmiddle",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingNewLine": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "NewLineTrivia",
+                                        "fullStart": 47,
+                                        "fullEnd": 49,
+                                        "text": "\r\n"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "kind": "TemplateClause",
+                            "fullStart": 49,
+                            "fullEnd": 120,
+                            "start": 87,
+                            "end": 120,
+                            "fullWidth": 71,
+                            "width": 33,
+                            "expression": {
+                                "kind": "NumericLiteral",
+                                "fullStart": 49,
+                                "fullEnd": 91,
+                                "start": 87,
+                                "end": 89,
+                                "fullWidth": 42,
+                                "width": 2,
+                                "text": "20",
+                                "value": 20,
+                                "valueText": "20",
+                                "hasLeadingTrivia": true,
+                                "hasLeadingComment": true,
+                                "hasLeadingNewLine": true,
+                                "hasTrailingTrivia": true,
+                                "hasTrailingNewLine": true,
+                                "leadingTrivia": [
+                                    {
+                                        "kind": "MultiLineCommentTrivia",
+                                        "fullStart": 49,
+                                        "fullEnd": 84,
+                                        "text": "/* Multi-\r\n * line\r\n * comment\r\n */"
+                                    },
+                                    {
+                                        "kind": "NewLineTrivia",
+                                        "fullStart": 84,
+                                        "fullEnd": 86,
+                                        "text": "\r\n"
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "fullStart": 86,
+                                        "fullEnd": 87,
+                                        "text": " "
+                                    }
+                                ],
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "NewLineTrivia",
+                                        "fullStart": 89,
+                                        "fullEnd": 91,
+                                        "text": "\r\n"
+                                    }
+                                ]
+                            },
+                            "templateMiddleOrEndToken": {
+                                "kind": "TemplateEndToken",
+                                "fullStart": 91,
+                                "fullEnd": 120,
+                                "start": 112,
+                                "end": 120,
+                                "fullWidth": 29,
+                                "width": 8,
+                                "text": "}\r\ntail`",
+                                "value": "\ntail",
+                                "valueText": "\ntail",
+                                "hasLeadingTrivia": true,
+                                "hasLeadingComment": true,
+                                "hasLeadingNewLine": true,
+                                "leadingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "fullStart": 91,
+                                        "fullEnd": 92,
+                                        "text": " "
+                                    },
+                                    {
+                                        "kind": "SingleLineCommentTrivia",
+                                        "fullStart": 92,
+                                        "fullEnd": 110,
+                                        "text": "// closing comment"
+                                    },
+                                    {
+                                        "kind": "NewLineTrivia",
+                                        "fullStart": 110,
+                                        "fullEnd": 112,
+                                        "text": "\r\n"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 120,
+                    "fullEnd": 121,
+                    "start": 120,
+                    "end": 121,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 121,
+            "fullEnd": 121,
+            "start": 121,
+            "end": 121,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            32,
+            36,
+            39,
+            49,
+            60,
+            69,
+            81,
+            86,
+            91,
+            112,
+            115
+        ],
+        "length": 121
+    }
+}
