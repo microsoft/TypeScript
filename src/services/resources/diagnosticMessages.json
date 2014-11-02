@@ -47,10 +47,6 @@
         "category": "Error",
         "code": 1009
     },
-    "'*/' expected.": {
-        "category": "Error",
-        "code": 1010
-    },
     "'public' or 'private' modifier must precede 'static'.": {
         "category": "Error",
         "code": 1011
@@ -374,6 +370,10 @@
     "Type expected.": {
         "category": "Error",
         "code": 1110
+    },
+    "Template literal cannot be used as an element name.": {
+        "category": "Error",
+        "code": 1111
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",

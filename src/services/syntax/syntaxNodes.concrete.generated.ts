@@ -2584,6 +2584,70 @@ module TypeScript {
             return visitor.visitOmittedExpression(this);
         }
     }
+    export class TemplateExpressionSyntax extends SyntaxNode implements IPrimaryExpressionSyntax {
+        public templateStartToken: ISyntaxToken;
+        public templateClauses: TemplateClauseSyntax[];
+        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
+        constructor(data: number, templateStartToken: ISyntaxToken, templateClauses: TemplateClauseSyntax[]) {
+            super(data);
+            this.templateStartToken = templateStartToken,
+            this.templateClauses = templateClauses,
+            templateStartToken.parent = this,
+            !isShared(templateClauses) && (templateClauses.parent = this);
+        }
+
+        public kind(): SyntaxKind {
+            return SyntaxKind.TemplateExpression;
+        }
+
+        public childCount(): number {
+            return 2;
+        }
+
+        public childAt(slot: number): ISyntaxElement {
+            switch (slot) {
+                case 0: return this.templateStartToken;
+                case 1: return this.templateClauses;
+                default: throw Errors.invalidOperation();
+            }
+        }
+
+        public accept(visitor: ISyntaxVisitor): SyntaxKind {
+            return visitor.visitTemplateExpression(this);
+        }
+    }
+    export class TemplateAccessExpressionSyntax extends SyntaxNode implements IMemberExpressionSyntax, ICallExpressionSyntax {
+        public expression: ILeftHandSideExpressionSyntax;
+        public templateExpression: IPrimaryExpressionSyntax;
+        public _memberExpressionBrand: any; public _callExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
+        constructor(data: number, expression: ILeftHandSideExpressionSyntax, templateExpression: IPrimaryExpressionSyntax) {
+            super(data);
+            this.expression = expression,
+            this.templateExpression = templateExpression,
+            expression.parent = this,
+            templateExpression.parent = this;
+        }
+
+        public kind(): SyntaxKind {
+            return SyntaxKind.TemplateAccessExpression;
+        }
+
+        public childCount(): number {
+            return 2;
+        }
+
+        public childAt(slot: number): ISyntaxElement {
+            switch (slot) {
+                case 0: return this.expression;
+                case 1: return this.templateExpression;
+                default: throw Errors.invalidOperation();
+            }
+        }
+
+        public accept(visitor: ISyntaxVisitor): SyntaxKind {
+            return visitor.visitTemplateAccessExpression(this);
+        }
+    }
     export class VariableDeclarationSyntax extends SyntaxNode {
         public varKeyword: ISyntaxToken;
         public variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>;
@@ -3039,6 +3103,37 @@ module TypeScript {
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitFinallyClause(this);
+        }
+    }
+    export class TemplateClauseSyntax extends SyntaxNode {
+        public expression: IExpressionSyntax;
+        public templateMiddleOrEndToken: ISyntaxToken;
+        constructor(data: number, expression: IExpressionSyntax, templateMiddleOrEndToken: ISyntaxToken) {
+            super(data);
+            this.expression = expression,
+            this.templateMiddleOrEndToken = templateMiddleOrEndToken,
+            expression.parent = this,
+            templateMiddleOrEndToken.parent = this;
+        }
+
+        public kind(): SyntaxKind {
+            return SyntaxKind.TemplateClause;
+        }
+
+        public childCount(): number {
+            return 2;
+        }
+
+        public childAt(slot: number): ISyntaxElement {
+            switch (slot) {
+                case 0: return this.expression;
+                case 1: return this.templateMiddleOrEndToken;
+                default: throw Errors.invalidOperation();
+            }
+        }
+
+        public accept(visitor: ISyntaxVisitor): SyntaxKind {
+            return visitor.visitTemplateClause(this);
         }
     }
     export class TypeParameterSyntax extends SyntaxNode {

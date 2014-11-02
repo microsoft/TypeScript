@@ -98,15 +98,23 @@ module TypeScript {
             return IntegerUtilities.isHexInteger(text) ? parseInt(text, /*radix:*/ 16) : parseFloat(text);
         }
         else if (kind === SyntaxKind.StringLiteral) {
-            if (text.length > 1 && text.charCodeAt(text.length - 1) === text.charCodeAt(0)) {
-                // Properly terminated.  Remove the quotes, and massage any escape characters we see.
-                return massageEscapes(text.substr(1, text.length - 2));
-            }
-            else {
-                // Not property terminated.  Remove the first quote and massage any escape characters we see.
-                return massageEscapes(text.substr(1));
-
-            }
+            return (text.length > 1 && text.charCodeAt(text.length - 1) === text.charCodeAt(0)) 
+                ? massageEscapes(text.substr(1, text.length - "''".length))
+                : massageEscapes(text.substr(1));
+        }
+        else if (kind === SyntaxKind.NoSubstitutionTemplateToken || kind === SyntaxKind.TemplateEndToken) {
+            // Both of these template types may be missing their closing backtick (if they were at 
+            // the end of the file).  Check to make sure it is there before grabbing the portion
+            // we're examining.
+            return (text.length > 1 && text.charCodeAt(text.length - 1) === CharacterCodes.backtick) 
+                ? massageTemplate(text.substr(1, text.length - "``".length))
+                : massageTemplate(text.substr(1));
+        }
+        else if (kind === SyntaxKind.TemplateStartToken || kind === SyntaxKind.TemplateMiddleToken) {
+            // Both these tokens must have been properly ended.  i.e. if it didn't end with a ${
+            // then we would not have parsed a start or middle token out at all.  So we don't
+            // need to check for an incomplete token.
+            return massageTemplate(text.substr(1, text.length - "`${".length));
         }
         else if (kind === SyntaxKind.RegularExpressionLiteral) {
             return regularExpressionValue(text);
@@ -122,6 +130,18 @@ module TypeScript {
     export function tokenValueText(token: ISyntaxToken): string {
         var value = tokenValue(token);
         return value === undefined ? "" : massageDisallowedIdentifiers(value.toString());
+    }
+
+    function massageTemplate(text: string): string {
+        // First, convert all carriage-return newlines into line-feed newlines.  This is due to:
+        //
+        // The TRV of LineTerminatorSequence :: <CR> is the code unit value 0x000A.
+        // ...
+        // The TRV of LineTerminatorSequence :: <CR><LF> is the sequence consisting of the code unit value 0x000A.
+        text = text.replace("\r\n", "\n").replace("\r", "\n");
+
+        // Now remove any escape characters that may be in the string.
+        return massageEscapes(text);
     }
 
     export function massageEscapes(text: string): string {
