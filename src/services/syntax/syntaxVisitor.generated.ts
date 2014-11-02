@@ -74,6 +74,8 @@ module TypeScript {
         visitElementAccessExpression(node: ElementAccessExpressionSyntax): any;
         visitFunctionExpression(node: FunctionExpressionSyntax): any;
         visitOmittedExpression(node: OmittedExpressionSyntax): any;
+        visitTemplateExpression(node: TemplateExpressionSyntax): any;
+        visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): any;
         visitVariableDeclaration(node: VariableDeclarationSyntax): any;
         visitVariableDeclarator(node: VariableDeclaratorSyntax): any;
         visitArgumentList(node: ArgumentListSyntax): any;
@@ -87,6 +89,7 @@ module TypeScript {
         visitElseClause(node: ElseClauseSyntax): any;
         visitCatchClause(node: CatchClauseSyntax): any;
         visitFinallyClause(node: FinallyClauseSyntax): any;
+        visitTemplateClause(node: TemplateClauseSyntax): any;
         visitTypeParameter(node: TypeParameterSyntax): any;
         visitConstraint(node: ConstraintSyntax): any;
         visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): any;
