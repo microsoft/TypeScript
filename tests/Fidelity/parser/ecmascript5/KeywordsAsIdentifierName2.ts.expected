@@ -5,7 +5,10 @@
         {
             "start": 79,
             "length": 0,
-            "diagnosticCode": "'*/' expected."
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                "*/"
+            ]
         }
     ],
     "sourceUnit": {
