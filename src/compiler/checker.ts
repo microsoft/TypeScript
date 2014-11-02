@@ -3995,8 +3995,10 @@ module ts {
         }
 
         function createInferenceContext(typeParameters: TypeParameter[], inferUnionTypes: boolean): InferenceContext {
-            var inferences: Type[][] = [];
-            for (var i = 0; i < typeParameters.length; i++) inferences.push([]);
+            var inferences: TypeInferences[] = [];
+            for (var i = 0; i < typeParameters.length; i++) {
+                inferences.push({ primary: undefined, secondary: undefined });
+            }
             return {
                 typeParameters: typeParameters,
                 inferUnionTypes: inferUnionTypes,
@@ -4010,6 +4012,7 @@ module ts {
             var sourceStack: Type[];
             var targetStack: Type[];
             var depth = 0;
+            var inferiority = 0;
             inferFromTypes(source, target);
 
             function isInProcess(source: Type, target: Type) {
@@ -4038,9 +4041,11 @@ module ts {
                     var typeParameters = context.typeParameters;
                     for (var i = 0; i < typeParameters.length; i++) {
                         if (target === typeParameters[i]) {
-                            context.inferenceCount++;
                             var inferences = context.inferences[i];
-                            if (!contains(inferences, source)) inferences.push(source);
+                            var candidates = inferiority ?
+                                inferences.secondary || (inferences.secondary = []) :
+                                inferences.primary || (inferences.primary = []);
+                            if (!contains(candidates, source)) candidates.push(source);
                             break;
                         }
                     }
@@ -4055,7 +4060,6 @@ module ts {
                 }
                 else if (target.flags & TypeFlags.Union) {
                     var targetTypes = (<UnionType>target).types;
-                    var startCount = context.inferenceCount;
                     var typeParameterCount = 0;
                     var typeParameter: TypeParameter;
                     // First infer to each type in union that isn't a type parameter
@@ -4069,9 +4073,12 @@ module ts {
                             inferFromTypes(source, t);
                         }
                     }
-                    // If no inferences were produced above and union contains a single naked type parameter, infer to that type parameter
-                    if (context.inferenceCount === startCount && typeParameterCount === 1) {
+                    // If no inferences were produced above and union contains a single naked type parameter,
+                    // make a secondary inference to that type parameter
+                    if (typeParameterCount === 1) {
+                        inferiority++;
                         inferFromTypes(source, typeParameter);
+                        inferiority--;
                     }
                 }
                 else if (source.flags & TypeFlags.Union) {
@@ -4141,10 +4148,15 @@ module ts {
             }
         }
 
+        function getInferenceCandidates(context: InferenceContext, index: number): Type[]{
+            var inferences = context.inferences[index];
+            return inferences.primary || inferences.secondary || emptyArray;
+        }
+
         function getInferredType(context: InferenceContext, index: number): Type {
             var inferredType = context.inferredTypes[index];
             if (!inferredType) {
-                var inferences = context.inferences[index];
+                var inferences = getInferenceCandidates(context, index);
                 if (inferences.length) {
                     // Infer widened union or supertype, or the undefined type for no common supertype
                     var unionOrSuperType = context.inferUnionTypes ? getUnionType(inferences) : getCommonSupertype(inferences);
@@ -4154,7 +4166,6 @@ module ts {
                     // Infer the empty object type when no inferences were made
                     inferredType = emptyObjectType;
                 }
-
                 if (inferredType !== inferenceFailureType) {
                     var constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
                     inferredType = constraint && !isTypeAssignableTo(inferredType, constraint) ? constraint : inferredType;
@@ -5387,7 +5398,7 @@ module ts {
                 else {
                     Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
                     var failedTypeParameter = candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failedTypeParameterIndex];
-                    var inferenceCandidates = resultOfFailedInference.inferences[resultOfFailedInference.failedTypeParameterIndex];
+                    var inferenceCandidates = getInferenceCandidates(resultOfFailedInference, resultOfFailedInference.failedTypeParameterIndex);
 
                     var diagnosticChainHead = chainDiagnosticMessages(/*details*/ undefined, // details will be provided by call to reportNoCommonSupertypeError
                         Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
