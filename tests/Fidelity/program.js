@@ -17037,6 +17037,7 @@ var TypeScript;
         return_statement_must_be_contained_within_a_function_body: "'return' statement must be contained within a function body.",
         Expression_expected: "Expression expected.",
         Type_expected: "Type expected.",
+        Template_literal_cannot_be_used_as_an_element_name: "Template literal cannot be used as an element name.",
         Duplicate_identifier_0: "Duplicate identifier '{0}'.",
         The_name_0_does_not_exist_in_the_current_scope: "The name '{0}' does not exist in the current scope.",
         The_name_0_does_not_refer_to_a_value: "The name '{0}' does not refer to a value.",
@@ -17492,6 +17493,7 @@ var TypeScript;
         "'return' statement must be contained within a function body.": { "code": 1108, "category": 1 /* Error */ },
         "Expression expected.": { "code": 1109, "category": 1 /* Error */ },
         "Type expected.": { "code": 1110, "category": 1 /* Error */ },
+        "Template literal cannot be used as an element name.": { "code": 1111, "category": 1 /* Error */ },
         "Duplicate identifier '{0}'.": { "code": 2000, "category": 1 /* Error */ },
         "The name '{0}' does not exist in the current scope.": { "code": 2001, "category": 1 /* Error */ },
         "The name '{0}' does not refer to a value.": { "code": 2002, "category": 1 /* Error */ },
@@ -25095,7 +25097,7 @@ var TypeScript;
                     }
                 }
                 var kind = token.kind();
-                return kind === 12 /* StringLiteral */ || kind === 11 /* NumericLiteral */;
+                return kind === 12 /* StringLiteral */ || kind === 11 /* NumericLiteral */ || kind === 13 /* NoSubstitutionTemplateToken */;
             }
             function parseArrayLiteralExpression(openBracketToken) {
                 consumeToken(openBracketToken);
@@ -29115,8 +29117,20 @@ var TypeScript;
             }
             _super.prototype.visitMemberVariableDeclaration.call(this, node);
         };
+        GrammarCheckerWalker.prototype.visitMethodSignature = function (node) {
+            if (this.checkForTemplatePropertyName(node.propertyName)) {
+                return;
+            }
+            _super.prototype.visitMethodSignature.call(this, node);
+        };
+        GrammarCheckerWalker.prototype.visitPropertySignature = function (node) {
+            if (this.checkForTemplatePropertyName(node.propertyName)) {
+                return;
+            }
+            _super.prototype.visitPropertySignature.call(this, node);
+        };
         GrammarCheckerWalker.prototype.visitMemberFunctionDeclaration = function (node) {
-            if (this.checkClassElementModifiers(node.modifiers)) {
+            if (this.checkClassElementModifiers(node.modifiers) || this.checkForTemplatePropertyName(node.propertyName)) {
                 return;
             }
             _super.prototype.visitMemberFunctionDeclaration.call(this, node);
@@ -29155,7 +29169,7 @@ var TypeScript;
             this.inObjectLiteralExpression = savedInObjectLiteralExpression;
         };
         GrammarCheckerWalker.prototype.visitGetAccessor = function (node) {
-            if (this.checkForAccessorDeclarationInAmbientContext(node) || this.checkEcmaScriptVersionIsAtLeast(node.propertyName, 1 /* ES5 */, TypeScript.DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) || this.checkForDisallowedModifiers(node, node.modifiers) || this.checkClassElementModifiers(node.modifiers) || this.checkForDisallowedAccessorTypeParameters(node.callSignature) || this.checkGetAccessorParameter(node)) {
+            if (this.checkForAccessorDeclarationInAmbientContext(node) || this.checkEcmaScriptVersionIsAtLeast(node.propertyName, 1 /* ES5 */, TypeScript.DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) || this.checkForDisallowedModifiers(node, node.modifiers) || this.checkClassElementModifiers(node.modifiers) || this.checkForDisallowedAccessorTypeParameters(node.callSignature) || this.checkGetAccessorParameter(node) || this.checkForTemplatePropertyName(node.propertyName)) {
                 return;
             }
             _super.prototype.visitGetAccessor.call(this, node);
@@ -29202,8 +29216,14 @@ var TypeScript;
             }
             return false;
         };
+        GrammarCheckerWalker.prototype.visitSimplePropertyAssignment = function (node) {
+            if (this.checkForTemplatePropertyName(node.propertyName)) {
+                return;
+            }
+            _super.prototype.visitSimplePropertyAssignment.call(this, node);
+        };
         GrammarCheckerWalker.prototype.visitSetAccessor = function (node) {
-            if (this.checkForAccessorDeclarationInAmbientContext(node) || this.checkEcmaScriptVersionIsAtLeast(node.propertyName, 1 /* ES5 */, TypeScript.DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) || this.checkForDisallowedModifiers(node, node.modifiers) || this.checkClassElementModifiers(node.modifiers) || this.checkForDisallowedAccessorTypeParameters(node.callSignature) || this.checkForDisallowedSetAccessorTypeAnnotation(node) || this.checkSetAccessorParameter(node)) {
+            if (this.checkForAccessorDeclarationInAmbientContext(node) || this.checkEcmaScriptVersionIsAtLeast(node.propertyName, 1 /* ES5 */, TypeScript.DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) || this.checkForDisallowedModifiers(node, node.modifiers) || this.checkClassElementModifiers(node.modifiers) || this.checkForDisallowedAccessorTypeParameters(node.callSignature) || this.checkForDisallowedSetAccessorTypeAnnotation(node) || this.checkSetAccessorParameter(node) || this.checkForTemplatePropertyName(node.propertyName)) {
                 return;
             }
             _super.prototype.visitSetAccessor.call(this, node);
@@ -29236,6 +29256,9 @@ var TypeScript;
             return false;
         };
         GrammarCheckerWalker.prototype.visitEnumElement = function (node) {
+            if (this.checkForTemplatePropertyName(node.propertyName)) {
+                return;
+            }
             if (this.inAmbientDeclaration && node.equalsValueClause) {
                 var expression = node.equalsValueClause.value;
                 if (!TypeScript.Syntax.isIntegerLiteral(expression)) {
@@ -29643,6 +29666,12 @@ var TypeScript;
             }
             _super.prototype.visitFunctionExpression.call(this, node);
         };
+        GrammarCheckerWalker.prototype.visitFunctionPropertyAssignment = function (node) {
+            if (this.checkForTemplatePropertyName(node.propertyName)) {
+                return;
+            }
+            _super.prototype.visitFunctionPropertyAssignment.call(this, node);
+        };
         GrammarCheckerWalker.prototype.visitVariableStatement = function (node) {
             if (this.checkForDisallowedDeclareModifier(node.modifiers) || this.checkForDisallowedModifiers(node, node.modifiers) || this.checkForRequiredDeclareModifier(node, node.variableDeclaration.varKeyword, node.modifiers) || this.checkModuleElementModifiers(node.modifiers)) {
                 return;
@@ -29689,10 +29718,17 @@ var TypeScript;
             this.inAmbientDeclaration = savedInAmbientDeclaration;
         };
         GrammarCheckerWalker.prototype.visitVariableDeclarator = function (node) {
-            if (this.checkVariableDeclaratorInitializer(node) || this.checkVariableDeclaratorIdentifier(node)) {
+            if (this.checkVariableDeclaratorInitializer(node) || this.checkVariableDeclaratorIdentifier(node) || this.checkForTemplatePropertyName(node.propertyName)) {
                 return;
             }
             _super.prototype.visitVariableDeclarator.call(this, node);
+        };
+        GrammarCheckerWalker.prototype.checkForTemplatePropertyName = function (token) {
+            if (token.kind() === 13 /* NoSubstitutionTemplateToken */) {
+                this.pushDiagnostic(token, TypeScript.DiagnosticCode.Template_literal_cannot_be_used_as_an_element_name);
+                return true;
+            }
+            return false;
         };
         GrammarCheckerWalker.prototype.checkVariableDeclaratorIdentifier = function (node) {
             if (node.parent.kind() !== 141 /* MemberVariableDeclaration */) {
