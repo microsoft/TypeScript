@@ -1031,19 +1031,29 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitPropertyAccess(node: PropertyAccess) {
+            function tryEmitConstantValue(node: PropertyAccess | IndexedAccess): boolean {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
-                    write(constantValue.toString() + " /* " + identifierToString(node.right) + " */");
+                    var propertyName = node.kind === SyntaxKind.PropertyAccess ? identifierToString((<PropertyAccess>node).right) : getTextOfNode((<IndexedAccess>node).index);
+                    write(constantValue.toString() + " /* " + propertyName + " */");
+                    return true;
                 }
-                else {
-                    emit(node.left);
-                    write(".");
-                    emit(node.right);
+                return false;
+            }
+
+            function emitPropertyAccess(node: PropertyAccess) {
+                if (tryEmitConstantValue(node)) {
+                    return;
                 }
+                emit(node.left);
+                write(".");
+                emit(node.right);
             }
 
             function emitIndexedAccess(node: IndexedAccess) {
+                if (tryEmitConstantValue(node)) {
+                    return;
+                }
                 emit(node.object);
                 write("[");
                 emit(node.index);

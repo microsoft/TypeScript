@@ -466,10 +466,9 @@ function foo(x: Enum1) {
 >Enum1 : typeof Enum1
 >S : Enum1
 
-        case Enum1.T:
->Enum1.T : Enum1
+        case Enum1["T"]:
+>Enum1["T"] : Enum1
 >Enum1 : typeof Enum1
->T : Enum1
 
         case Enum1.U:
 >Enum1.U : Enum1

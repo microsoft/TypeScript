@@ -130,7 +130,7 @@ function foo(x: Enum1) {
         case Enum1.Q:
         case Enum1.R:
         case Enum1.S:
-        case Enum1.T:
+        case Enum1["T"]:
         case Enum1.U:
         case Enum1.V:
         case Enum1.W:

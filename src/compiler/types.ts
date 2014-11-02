@@ -774,7 +774,7 @@ module ts {
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
-        getConstantValue(node: PropertyAccess): number;
+        getConstantValue(node: PropertyAccess | IndexedAccess): number;
         hasEarlyErrors(sourceFile?: SourceFile): boolean;
     }
 

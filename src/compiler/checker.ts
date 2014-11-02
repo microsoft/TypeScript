@@ -5136,6 +5136,7 @@ module ts {
                 var name = (<LiteralExpression>node.index).text;
                 var prop = getPropertyOfType(objectType, name);
                 if (prop) {
+                    getNodeLinks(node).resolvedSymbol = prop;
                     return getTypeOfSymbol(prop);
                 }
             }
@@ -8833,7 +8834,7 @@ module ts {
             return getNodeLinks(node).enumMemberValue;
         }
 
-        function getConstantValue(node: PropertyAccess): number {
+        function getConstantValue(node: PropertyAccess | IndexedAccess): number {
             var symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 var declaration = symbol.valueDeclaration;
