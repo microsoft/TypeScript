@@ -555,8 +555,25 @@ module TypeScript {
             super.visitMemberVariableDeclaration(node);
         }
 
+        public visitMethodSignature(node: MethodSignatureSyntax): void {
+            if (this.checkForTemplatePropertyName(node.propertyName)) {
+                return;
+            }
+
+            super.visitMethodSignature(node);
+        }
+
+        public visitPropertySignature(node: PropertySignatureSyntax): void {
+            if (this.checkForTemplatePropertyName(node.propertyName)) {
+                return;
+            }
+
+            super.visitPropertySignature(node);
+        }
+
         public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {
-            if (this.checkClassElementModifiers(node.modifiers)) {
+            if (this.checkClassElementModifiers(node.modifiers) ||
+                this.checkForTemplatePropertyName(node.propertyName)) {
                 return;
             }
 
@@ -589,7 +606,7 @@ module TypeScript {
             return false;
         }
 
-        private checkEcmaScriptVersionIsAtLeast(parent: ISyntaxElement, reportToken: ISyntaxToken, languageVersion: ts.ScriptTarget, diagnosticKey: string): boolean {
+        private checkEcmaScriptVersionIsAtLeast(reportToken: ISyntaxToken, languageVersion: ts.ScriptTarget, diagnosticKey: string): boolean {
             if (this.syntaxTree.languageVersion() < languageVersion) {
                 this.pushDiagnostic(reportToken, diagnosticKey);
                 return true;
@@ -607,11 +624,12 @@ module TypeScript {
 
         public visitGetAccessor(node: GetAccessorSyntax): void {
             if (this.checkForAccessorDeclarationInAmbientContext(node) ||
-                this.checkEcmaScriptVersionIsAtLeast(node, node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
+                this.checkEcmaScriptVersionIsAtLeast(node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
                 this.checkForDisallowedModifiers(node, node.modifiers) ||
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
-                this.checkGetAccessorParameter(node)) {
+                this.checkGetAccessorParameter(node) ||
+                this.checkForTemplatePropertyName(node.propertyName)) {
                 return;
             }
 
@@ -672,14 +690,23 @@ module TypeScript {
             return false;
         }
 
+        public visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): void {
+            if (this.checkForTemplatePropertyName(node.propertyName)) {
+                return;
+            }
+
+            super.visitSimplePropertyAssignment(node);
+        }
+
         public visitSetAccessor(node: SetAccessorSyntax): void {
             if (this.checkForAccessorDeclarationInAmbientContext(node) ||
-                this.checkEcmaScriptVersionIsAtLeast(node, node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
+                this.checkEcmaScriptVersionIsAtLeast(node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
                 this.checkForDisallowedModifiers(node, node.modifiers) ||
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
                 this.checkForDisallowedSetAccessorTypeAnnotation(node) ||
-                this.checkSetAccessorParameter(node)) {
+                this.checkSetAccessorParameter(node) ||
+                this.checkForTemplatePropertyName(node.propertyName)) {
                 return;
             }
 
@@ -725,6 +752,10 @@ module TypeScript {
         }
 
         public visitEnumElement(node: EnumElementSyntax): void {
+            if (this.checkForTemplatePropertyName(node.propertyName)) {
+                return;
+            }
+
             if (this.inAmbientDeclaration && node.equalsValueClause) {
                 var expression = node.equalsValueClause.value;
                 if (!Syntax.isIntegerLiteral(expression)) {
@@ -1311,6 +1342,14 @@ module TypeScript {
             super.visitFunctionExpression(node);
         }
 
+        public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
+            if (this.checkForTemplatePropertyName(node.propertyName)) {
+                return;
+            }
+
+            super.visitFunctionPropertyAssignment(node);
+        }
+
         public visitVariableStatement(node: VariableStatementSyntax): void {
             if (this.checkForDisallowedDeclareModifier(node.modifiers) ||
                 this.checkForDisallowedModifiers(node, node.modifiers) ||
@@ -1375,11 +1414,21 @@ module TypeScript {
 
         public visitVariableDeclarator(node: VariableDeclaratorSyntax): void {
             if (this.checkVariableDeclaratorInitializer(node) ||
-                this.checkVariableDeclaratorIdentifier(node)) {
+                this.checkVariableDeclaratorIdentifier(node) ||
+                this.checkForTemplatePropertyName(node.propertyName)) {
                 return;
             }
 
             super.visitVariableDeclarator(node);
+        }
+
+        private checkForTemplatePropertyName(token: ISyntaxToken): boolean {
+            if (token.kind() === SyntaxKind.NoSubstitutionTemplateToken) {
+                this.pushDiagnostic(token, DiagnosticCode.Template_literal_cannot_be_used_as_an_element_name);
+                return true;
+            }
+
+            return false;
         }
 
         private checkVariableDeclaratorIdentifier(node: VariableDeclaratorSyntax): boolean {

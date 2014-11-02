@@ -476,6 +476,16 @@ module TypeScript {
         public visitOmittedExpression(node: OmittedExpressionSyntax): void {
         }
 
+        public visitTemplateExpression(node: TemplateExpressionSyntax): void {
+            this.visitToken(node.templateStartToken);
+            this.visitList(node.templateClauses);
+        }
+
+        public visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): void {
+            node.expression.accept(this);
+            node.templateExpression.accept(this);
+        }
+
         public visitVariableDeclaration(node: VariableDeclarationSyntax): void {
             this.visitToken(node.varKeyword);
             this.visitList(node.variableDeclarators);
@@ -552,6 +562,11 @@ module TypeScript {
         public visitFinallyClause(node: FinallyClauseSyntax): void {
             this.visitToken(node.finallyKeyword);
             node.block.accept(this);
+        }
+
+        public visitTemplateClause(node: TemplateClauseSyntax): void {
+            node.expression.accept(this);
+            this.visitToken(node.templateMiddleOrEndToken);
         }
 
         public visitTypeParameter(node: TypeParameterSyntax): void {
