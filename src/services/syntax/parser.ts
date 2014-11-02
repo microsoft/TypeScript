@@ -2133,6 +2133,10 @@ module TypeScript.Parser {
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.RegularExpressionLiteral:
 
+                // Templates
+                case SyntaxKind.NoSubstitutionTemplateToken:
+                case SyntaxKind.TemplateStartToken:
+
                  // For array literals.
                 case SyntaxKind.OpenBracketToken:
 
@@ -3001,12 +3005,13 @@ module TypeScript.Parser {
             var expression = parseExpression(/*allowIn:*/ true);
             var token = currentToken();
 
-            if (token.kind() === SyntaxKind.OpenBraceToken) {
+            if (token.kind() === SyntaxKind.CloseBraceToken) {
                 token = currentContextualToken();
                 Debug.assert(token.kind() === SyntaxKind.TemplateMiddleToken || token.kind() === SyntaxKind.TemplateEndToken);
+                consumeToken(token);
             }
             else {
-                var diagnostic = getExpectedTokenDiagnostic(SyntaxKind.OpenBraceToken);
+                var diagnostic = getExpectedTokenDiagnostic(SyntaxKind.CloseBraceToken);
                 addDiagnostic(diagnostic);
                 token = Syntax.emptyToken(SyntaxKind.TemplateEndToken);
             }

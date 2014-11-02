@@ -589,7 +589,7 @@ module TypeScript {
             return false;
         }
 
-        private checkEcmaScriptVersionIsAtLeast(parent: ISyntaxElement, reportToken: ISyntaxToken, languageVersion: ts.ScriptTarget, diagnosticKey: string): boolean {
+        private checkEcmaScriptVersionIsAtLeast(reportToken: ISyntaxToken, languageVersion: ts.ScriptTarget, diagnosticKey: string): boolean {
             if (this.syntaxTree.languageVersion() < languageVersion) {
                 this.pushDiagnostic(reportToken, diagnosticKey);
                 return true;
@@ -607,7 +607,7 @@ module TypeScript {
 
         public visitGetAccessor(node: GetAccessorSyntax): void {
             if (this.checkForAccessorDeclarationInAmbientContext(node) ||
-                this.checkEcmaScriptVersionIsAtLeast(node, node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
+                this.checkEcmaScriptVersionIsAtLeast(node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
                 this.checkForDisallowedModifiers(node, node.modifiers) ||
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
@@ -674,7 +674,7 @@ module TypeScript {
 
         public visitSetAccessor(node: SetAccessorSyntax): void {
             if (this.checkForAccessorDeclarationInAmbientContext(node) ||
-                this.checkEcmaScriptVersionIsAtLeast(node, node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
+                this.checkEcmaScriptVersionIsAtLeast(node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
                 this.checkForDisallowedModifiers(node, node.modifiers) ||
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
