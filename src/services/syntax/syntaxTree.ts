@@ -4,7 +4,6 @@ module TypeScript {
     export var syntaxDiagnosticsTime: number = 0;
 
     export class SyntaxTree {
-        private _isConcrete: boolean;
         private _sourceUnit: SourceUnitSyntax;
         private _isDeclaration: boolean;
         private _parserDiagnostics: Diagnostic[];
@@ -17,14 +16,12 @@ module TypeScript {
         private _amdDependencies: string[];
         private _isExternalModule: boolean;
 
-        constructor(isConcrete: boolean,
-                    sourceUnit: SourceUnitSyntax,
+        constructor(sourceUnit: SourceUnitSyntax,
                     isDeclaration: boolean,
                     diagnostics: Diagnostic[],
                     fileName: string,
                     public text: ISimpleText,
                     languageVersion: ts.ScriptTarget) {
-            this._isConcrete = isConcrete;
             this._sourceUnit = sourceUnit;
             this._isDeclaration = isDeclaration;
             this._parserDiagnostics = diagnostics;
@@ -33,10 +30,6 @@ module TypeScript {
             this._languageVersion = languageVersion;
 
             sourceUnit.syntaxTree = this;
-        }
-
-        public isConcrete(): boolean {
-            return this._isConcrete;
         }
 
         public sourceUnit(): SourceUnitSyntax {

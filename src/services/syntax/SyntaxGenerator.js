@@ -2596,21 +2596,7 @@ function generateSyntaxInterfaces() {
         }
         result += generateSyntaxInterface(definition);
     }
-    result += "\r\n\r\n";
-    result += "    export module Syntax {\r\n";
-    result += "        export interface ISyntaxFactory {\r\n";
-    result += "            isConcrete: boolean;\r\n";
-    for (var i = 0; i < definitions.length; i++) {
-        var definition = definitions[i];
-        result += "            " + definition.name + ": { new(data: number";
-        for (var j = 0; j < definition.children.length; j++) {
-            var child = definition.children[j];
-            result += ", " + child.name + ": " + getType(child);
-        }
-        result += "): " + definition.name + " };\r\n";
-    }
-    result += "        }\r\n";
-    result += "    }\r\n";
+    result += "\r\n";
     result += "}";
     return result;
 }
@@ -2633,13 +2619,8 @@ function generateSyntaxInterface(definition) {
 }
 function generateNodes(abstract) {
     var result = "///<reference path='references.ts' />\r\n\r\n";
-    result += "module TypeScript.Syntax.";
-    var moduleName = abstract ? "Abstract" : "Concrete";
-    result += moduleName;
+    result += "module TypeScript";
     result += " {\r\n";
-    result += "    // Inject this module as the factory for producing syntax nodes in the parser.\r\n";
-    result += "    Parser.syntaxFactory = " + moduleName + ";\r\n";
-    result += "    export var isConcrete: boolean = " + !abstract + ";\r\n\r\n";
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
         if (i > 0) {

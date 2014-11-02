@@ -1,10 +1,6 @@
 ///<reference path='references.ts' />
 
-module TypeScript.Syntax.Concrete {
-    // Inject this module as the factory for producing syntax nodes in the parser.
-    Parser.syntaxFactory = Concrete;
-    export var isConcrete: boolean = true;
-
+module TypeScript {
     export class SourceUnitSyntax extends SyntaxNode {
         public syntaxTree: SyntaxTree = undefined;
         public moduleElements: IModuleElementSyntax[];
