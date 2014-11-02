@@ -1,14 +1,26 @@
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,6): error TS1003: Identifier expected.
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,11): error TS1005: ';' expected.
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(2,6): error TS2457: Type alias name cannot be 'any'
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(3,6): error TS2457: Type alias name cannot be 'number'
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(4,6): error TS2457: Type alias name cannot be 'boolean'
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(5,6): error TS2457: Type alias name cannot be 'string'
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,13): error TS2304: Cannot find name 'I'.
 
 
-==== tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts (3 errors) ====
+==== tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts (7 errors) ====
     interface I {}
     type any = I;
+         ~~~
+!!! error TS2457: Type alias name cannot be 'any'
     type number = I;
+         ~~~~~~
+!!! error TS2457: Type alias name cannot be 'number'
     type boolean = I;
+         ~~~~~~~
+!!! error TS2457: Type alias name cannot be 'boolean'
     type string = I;
+         ~~~~~~
+!!! error TS2457: Type alias name cannot be 'string'
     type void = I;
          ~~~~
 !!! error TS1003: Identifier expected.
