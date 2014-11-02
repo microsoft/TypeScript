@@ -1023,5 +1023,23 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.debuggerKeyword);
             this.appendToken(node.semicolonToken);
         }
+
+        public visitTemplateExpression(node: TemplateExpressionSyntax): void {
+            this.appendToken(node.templateStartToken);
+            this.ensureSpace();
+            this.appendSpaceList(node.templateClauses);
+        }
+
+        public visitTemplateClause(node: TemplateClauseSyntax): void {
+            node.expression.accept(this);
+            this.ensureSpace();
+            this.appendToken(node.templateMiddleOrEndToken);
+        }
+
+        public visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): void {
+            node.expression.accept(this);
+            this.ensureSpace();
+            node.templateExpression.accept(this);
+        }
     }
 }

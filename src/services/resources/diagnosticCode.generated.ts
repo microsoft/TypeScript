@@ -13,7 +13,6 @@ module TypeScript {
         Automatic_semicolon_insertion_not_allowed: "Automatic semicolon insertion not allowed.",
         Unexpected_token_0_expected: "Unexpected token; '{0}' expected.",
         Trailing_comma_not_allowed: "Trailing comma not allowed.",
-        AsteriskSlash_expected: "'*/' expected.",
         public_or_private_modifier_must_precede_static: "'public' or 'private' modifier must precede 'static'.",
         Unexpected_token: "Unexpected token.",
         Catch_clause_parameter_cannot_have_a_type_annotation: "Catch clause parameter cannot have a type annotation.",

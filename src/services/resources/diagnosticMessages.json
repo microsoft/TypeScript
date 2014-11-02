@@ -47,10 +47,6 @@
         "category": "Error",
         "code": 1009
     },
-    "'*/' expected.": {
-        "category": "Error",
-        "code": 1010
-    },
     "'public' or 'private' modifier must precede 'static'.": {
         "category": "Error",
         "code": 1011

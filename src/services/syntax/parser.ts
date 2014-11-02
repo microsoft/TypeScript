@@ -465,7 +465,7 @@ module TypeScript.Parser {
             return Syntax.emptyToken(expectedKind);
         }
 
-        function getExpectedTokenDiagnostic(expectedKind: SyntaxKind, actual: ISyntaxToken, diagnosticCode: string): Diagnostic {
+        function getExpectedTokenDiagnostic(expectedKind: SyntaxKind, actual?: ISyntaxToken, diagnosticCode?: string): Diagnostic {
             var token = currentToken();
 
             var args: any[] = undefined;
@@ -2638,6 +2638,11 @@ module TypeScript.Parser {
                     case SyntaxKind.DotToken:
                         expression = new MemberAccessExpressionSyntax(parseNodeData, expression, consumeToken(_currentToken), eatIdentifierNameToken());
                         continue;
+
+                    case SyntaxKind.NoSubstitutionTemplateToken:
+                    case SyntaxKind.TemplateStartToken:
+                        expression = new TemplateAccessExpressionSyntax(parseNodeData, expression, parseTemplateExpression(_currentToken));
+                        continue;
                 }
 
                 return expression;
@@ -2656,6 +2661,11 @@ module TypeScript.Parser {
 
                     case SyntaxKind.DotToken:
                         expression = new MemberAccessExpressionSyntax(parseNodeData, expression, consumeToken(_currentToken), eatIdentifierNameToken());
+                        continue;
+
+                    case SyntaxKind.NoSubstitutionTemplateToken:
+                    case SyntaxKind.TemplateStartToken:
+                        expression = new TemplateAccessExpressionSyntax(parseNodeData, expression, parseTemplateExpression(_currentToken));
                         continue;
                 }
 
@@ -2870,11 +2880,15 @@ module TypeScript.Parser {
                 case SyntaxKind.StringLiteral:
                     return consumeToken(_currentToken);
 
-                case SyntaxKind.FunctionKeyword:  return parseFunctionExpression(_currentToken);
-                case SyntaxKind.OpenBracketToken: return parseArrayLiteralExpression(_currentToken);
-                case SyntaxKind.OpenBraceToken:   return parseObjectLiteralExpression(_currentToken);
-                case SyntaxKind.OpenParenToken:   return parseParenthesizedExpression(_currentToken);
-                case SyntaxKind.NewKeyword:       return parseObjectCreationExpression(_currentToken);
+                case SyntaxKind.FunctionKeyword:    return parseFunctionExpression(_currentToken);
+                case SyntaxKind.OpenBracketToken:   return parseArrayLiteralExpression(_currentToken);
+                case SyntaxKind.OpenBraceToken:     return parseObjectLiteralExpression(_currentToken);
+                case SyntaxKind.OpenParenToken:     return parseParenthesizedExpression(_currentToken);
+                case SyntaxKind.NewKeyword:         return parseObjectCreationExpression(_currentToken);
+
+                case SyntaxKind.NoSubstitutionTemplateToken:
+                case SyntaxKind.TemplateStartToken:
+                    return parseTemplateExpression(_currentToken);
 
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
@@ -2959,6 +2973,45 @@ module TypeScript.Parser {
 
             return new ObjectCreationExpressionSyntax(parseNodeData,
                 consumeToken(newKeyword), tryParseMemberExpressionOrHigher(currentToken(), /*force:*/ true, /*inObjectCreation:*/ true), tryParseArgumentList());
+        }
+
+        function parseTemplateExpression(startToken: ISyntaxToken): IPrimaryExpressionSyntax {
+            consumeToken(startToken);
+
+            if (startToken.kind() === SyntaxKind.NoSubstitutionTemplateToken) {
+                return startToken;
+            }
+            
+            var templateClausesArray: TemplateClauseSyntax[] = getArray();
+
+            do {
+                // Keep consuming template spans as long as the last one we keep getting template
+                // middle pieces.
+                templateClausesArray.push(parseTemplateClause());
+            }
+            while (templateClausesArray[templateClausesArray.length - 1].templateMiddleOrEndToken.kind() === SyntaxKind.TemplateMiddleToken);
+
+            var templateClauses = Syntax.list(templateClausesArray);
+            returnZeroLengthArray(templateClausesArray);
+
+            return new TemplateExpressionSyntax(parseNodeData, startToken, templateClauses);
+        }
+
+        function parseTemplateClause(): TemplateClauseSyntax {
+            var expression = parseExpression(/*allowIn:*/ true);
+            var token = currentToken();
+
+            if (token.kind() === SyntaxKind.OpenBraceToken) {
+                token = currentContextualToken();
+                Debug.assert(token.kind() === SyntaxKind.TemplateMiddleToken || token.kind() === SyntaxKind.TemplateEndToken);
+            }
+            else {
+                var diagnostic = getExpectedTokenDiagnostic(SyntaxKind.OpenBraceToken);
+                addDiagnostic(diagnostic);
+                token = Syntax.emptyToken(SyntaxKind.TemplateEndToken);
+            }
+
+            return new TemplateClauseSyntax(parseNodeData, expression, token);
         }
 
         function parseCastExpression(lessThanToken: ISyntaxToken): CastExpressionSyntax {

@@ -274,6 +274,14 @@ module TypeScript {
             return this.defaultVisit(node);
         }
 
+        public visitTemplateExpression(node: TemplateExpressionSyntax): any {
+            return this.defaultVisit(node);
+        }
+
+        public visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): any {
+            return this.defaultVisit(node);
+        }
+
         public visitVariableDeclaration(node: VariableDeclarationSyntax): any {
             return this.defaultVisit(node);
         }
@@ -323,6 +331,10 @@ module TypeScript {
         }
 
         public visitFinallyClause(node: FinallyClauseSyntax): any {
+            return this.defaultVisit(node);
+        }
+
+        public visitTemplateClause(node: TemplateClauseSyntax): any {
             return this.defaultVisit(node);
         }
 

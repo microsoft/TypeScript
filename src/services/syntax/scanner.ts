@@ -708,7 +708,7 @@ module TypeScript.Scanner {
 
             while (true) {
                 if (index === end) {
-                    reportDiagnostic(end, 0, DiagnosticCode.AsteriskSlash_expected, undefined);
+                    reportDiagnostic(end, 0, DiagnosticCode._0_expected, ["*/"]);
                     return;
                 }
 
@@ -750,10 +750,10 @@ module TypeScript.Scanner {
             index++;
 
             switch (character) {
-                case CharacterCodes.exclamation /*33*/: return scanExclamationToken();
+                case CharacterCodes.exclamation/*33*/: return scanExclamationToken();
                 case CharacterCodes.doubleQuote/*34*/: return scanStringLiteral(character);
-                case CharacterCodes.percent /*37*/: return scanPercentToken();
-                case CharacterCodes.ampersand /*38*/: return scanAmpersandToken();
+                case CharacterCodes.percent/*37*/: return scanPercentToken();
+                case CharacterCodes.ampersand/*38*/: return scanAmpersandToken();
                 case CharacterCodes.singleQuote/*39*/: return scanStringLiteral(character);
                 case CharacterCodes.openParen/*40*/: return SyntaxKind.OpenParenToken;
                 case CharacterCodes.closeParen/*41*/: return SyntaxKind.CloseParenToken;
@@ -779,10 +779,11 @@ module TypeScript.Scanner {
                 case CharacterCodes.openBracket/*91*/: return SyntaxKind.OpenBracketToken;
                 case CharacterCodes.closeBracket/*93*/: return SyntaxKind.CloseBracketToken;
                 case CharacterCodes.caret/*94*/: return scanCaretToken();
+                case CharacterCodes.backtick/*96*/: return scanTemplateToken(character);
 
                 case CharacterCodes.openBrace/*123*/: return SyntaxKind.OpenBraceToken;
                 case CharacterCodes.bar/*124*/: return scanBarToken();
-                case CharacterCodes.closeBrace/*125*/: return SyntaxKind.CloseBraceToken;
+                case CharacterCodes.closeBrace/*125*/: return scanCloseBraceToken(allowContextualToken, character);
                 case CharacterCodes.tilde/*126*/: return SyntaxKind.TildeToken;
             }
 
@@ -1079,6 +1080,39 @@ module TypeScript.Scanner {
             else {
                 return SyntaxKind.CaretToken;
             }
+        }
+
+        function scanCloseBraceToken(allowContextualToken: boolean, startChar: number): SyntaxKind {
+            return allowContextualToken ? scanTemplateToken(startChar) : SyntaxKind.CloseBraceToken;
+        }
+
+        function scanTemplateToken(startChar: number): SyntaxKind {
+            var startedWithBacktick = startChar === CharacterCodes.backtick;
+
+            while (true) {
+                if (index === end) {
+                    // Hit the end of the file.  
+                    reportDiagnostic(end, 0, DiagnosticCode._0_expected, ["`"]);
+                    break;
+                }
+
+                var ch = str.charCodeAt(index);
+                index++;
+
+                if (ch === CharacterCodes.backtick) {
+                    break;
+                }
+
+                if (ch === CharacterCodes.$ &&
+                    index < end &&
+                    str.charCodeAt(index) === CharacterCodes.openBrace) {
+
+                    index++;
+                    return startedWithBacktick ? SyntaxKind.TemplateStartToken : SyntaxKind.TemplateMiddleToken;
+                }
+            }
+
+            return startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateToken : SyntaxKind.TemplateEndToken;
         }
 
         function scanAmpersandToken(): SyntaxKind {

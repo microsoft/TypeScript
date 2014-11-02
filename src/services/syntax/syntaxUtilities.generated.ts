@@ -124,6 +124,10 @@ module TypeScript {
                 return isElementAccessExpressionTypeScriptSpecific(<ElementAccessExpressionSyntax>element);
             case SyntaxKind.FunctionExpression:
                 return isFunctionExpressionTypeScriptSpecific(<FunctionExpressionSyntax>element);
+            case SyntaxKind.TemplateExpression:
+                return isTemplateExpressionTypeScriptSpecific(<TemplateExpressionSyntax>element);
+            case SyntaxKind.TemplateAccessExpression:
+                return isTemplateAccessExpressionTypeScriptSpecific(<TemplateAccessExpressionSyntax>element);
             case SyntaxKind.VariableDeclaration:
                 return isVariableDeclarationTypeScriptSpecific(<VariableDeclarationSyntax>element);
             case SyntaxKind.VariableDeclarator:
@@ -144,6 +148,8 @@ module TypeScript {
                 return isCatchClauseTypeScriptSpecific(<CatchClauseSyntax>element);
             case SyntaxKind.FinallyClause:
                 return isFinallyClauseTypeScriptSpecific(<FinallyClauseSyntax>element);
+            case SyntaxKind.TemplateClause:
+                return isTemplateClauseTypeScriptSpecific(<TemplateClauseSyntax>element);
             case SyntaxKind.SimplePropertyAssignment:
                 return isSimplePropertyAssignmentTypeScriptSpecific(<SimplePropertyAssignmentSyntax>element);
             case SyntaxKind.FunctionPropertyAssignment:
@@ -320,6 +326,15 @@ module TypeScript {
                isTypeScriptSpecific(node.block);
     }
 
+    function isTemplateExpressionTypeScriptSpecific(node: TemplateExpressionSyntax): boolean {
+        return isTypeScriptSpecific(node.templateClauses);
+    }
+
+    function isTemplateAccessExpressionTypeScriptSpecific(node: TemplateAccessExpressionSyntax): boolean {
+        return isTypeScriptSpecific(node.expression) ||
+               isTypeScriptSpecific(node.templateExpression);
+    }
+
     function isVariableDeclarationTypeScriptSpecific(node: VariableDeclarationSyntax): boolean {
         return isTypeScriptSpecific(node.variableDeclarators);
     }
@@ -362,6 +377,10 @@ module TypeScript {
 
     function isFinallyClauseTypeScriptSpecific(node: FinallyClauseSyntax): boolean {
         return isTypeScriptSpecific(node.block);
+    }
+
+    function isTemplateClauseTypeScriptSpecific(node: TemplateClauseSyntax): boolean {
+        return isTypeScriptSpecific(node.expression);
     }
 
     function isSimplePropertyAssignmentTypeScriptSpecific(node: SimplePropertyAssignmentSyntax): boolean {

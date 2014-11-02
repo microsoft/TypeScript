@@ -26,6 +26,12 @@ module TypeScript {
         NumericLiteral,
         StringLiteral,
 
+        // Template tokens
+        NoSubstitutionTemplateToken,
+        TemplateStartToken,
+        TemplateMiddleToken,
+        TemplateEndToken,
+
         // All fixed width tokens follow.
 
         // Keywords
@@ -226,6 +232,8 @@ module TypeScript {
         ElementAccessExpression,
         FunctionExpression,
         OmittedExpression,
+        TemplateExpression,
+        TemplateAccessExpression,
 
         // Variable declarations
         VariableDeclaration,
@@ -245,6 +253,7 @@ module TypeScript {
         ElseClause,
         CatchClause,
         FinallyClause,
+        TemplateClause,
 
         // Generics
         TypeParameter,

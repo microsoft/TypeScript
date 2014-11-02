@@ -15,7 +15,6 @@ interface ITypeDefinition {
     baseType: string;
     interfaces?: string[];
     children: IMemberDefinition[];
-    syntaxKinds?: string[];
     isTypeScriptSpecific: boolean;
 }
 
@@ -446,6 +445,32 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'openBracketToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'argumentExpression', type: 'IExpressionSyntax' },
             <any>{ name: 'closeBracketToken', isToken: true, excludeFromAST: true }
+        ]
+    },
+    <any>{
+        name: 'TemplateAccessExpressionSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['IMemberExpressionSyntax', 'ICallExpressionSyntax'],
+        children: [
+            <any>{ name: 'expression', type: 'ILeftHandSideExpressionSyntax' },
+            <any>{ name: 'templateExpression', type: 'IPrimaryExpressionSyntax' },
+        ]
+    },
+    <any>{
+        name: 'TemplateExpressionSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['IPrimaryExpressionSyntax'],
+        children: [
+            <any>{ name: 'templateStartToken', isToken: true, excludeFromAST: true },
+            <any>{ name: 'templateClauses', isList: true, elementType: 'TemplateClauseSyntax' },
+        ]
+    },
+    <any>{
+        name: 'TemplateClauseSyntax',
+        baseType: 'ISyntaxNode',
+        children: [
+            <any>{ name: 'expression', type: 'IExpressionSyntax' },
+            <any>{ name: 'templateMiddleOrEndToken', isToken: true, elementType: 'TemplateSpanSyntax' },
         ]
     },
     <any>{
@@ -989,7 +1014,7 @@ var definitions:ITypeDefinition[] = [
     }];
 
 function firstKind(definition: ITypeDefinition): TypeScript.SyntaxKind {
-    var kindName = definition.syntaxKinds ? definition.syntaxKinds[0] : getNameWithoutSuffix(definition);
+    var kindName = getNameWithoutSuffix(definition);
     //TypeScript.Environment.standardOut.WriteLine(kindName);
     var kind = (<any>TypeScript.SyntaxKind)[kindName];
     //TypeScript.Environment.standardOut.WriteLine(kind);
@@ -2013,10 +2038,6 @@ function getDefinitionForKind(kind: TypeScript.SyntaxKind): ITypeDefinition {
             return true;
         }
 
-        if (d.syntaxKinds) {
-            return TypeScript.ArrayUtilities.contains(d.syntaxKinds, kindName);
-        }
-
         return false;
     });
 }
@@ -2637,14 +2658,7 @@ function generateIsTypeScriptSpecific(): string {
             continue;
         }
 
-        if (definition.syntaxKinds) {
-            for (var j = 0; j < definition.syntaxKinds.length; j++) {
-                result += "            case SyntaxKind." + definition.syntaxKinds[j] + ":\r\n";
-            }
-        }
-        else {
-            result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ":\r\n";
-        }
+        result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ":\r\n";
     }
 
     result += "                return true;\r\n";
@@ -2656,14 +2670,7 @@ function generateIsTypeScriptSpecific(): string {
             continue;
         }
 
-        if (definition.syntaxKinds) {
-            for (var j = 0; j < definition.syntaxKinds.length; j++) {
-                result += "            case SyntaxKind." + definition.syntaxKinds[j] + ":\r\n";
-            }
-        }
-        else {
-            result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ":\r\n";
-        }
+        result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ":\r\n";
     }
 
     result += "                return false;\r\n";
@@ -2678,15 +2685,7 @@ function generateIsTypeScriptSpecific(): string {
             continue;
         }
 
-        if (definition.syntaxKinds) {
-            result += "           ";
-            for (var j = 0; j < definition.syntaxKinds.length; j++) {
-                result += " case SyntaxKind." + definition.syntaxKinds[j] + ":";
-            }
-        }
-        else {
-            result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ":";
-        }
+        result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ":";
         result += "\r\n";
         result += "                return is" + getNameWithoutSuffix(definition) + "TypeScriptSpecific(<" + definition.name + ">element);\r\n";
     }
