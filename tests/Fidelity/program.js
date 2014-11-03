@@ -1371,9 +1371,8 @@ var ts;
         const_declarations_must_be_initialized: { code: 1155, category: 1 /* Error */, key: "'const' declarations must be initialized" },
         const_declarations_can_only_be_declared_inside_a_block: { code: 1156, category: 1 /* Error */, key: "'const' declarations can only be declared inside a block." },
         let_declarations_can_only_be_declared_inside_a_block: { code: 1157, category: 1 /* Error */, key: "'let' declarations can only be declared inside a block." },
-        Aliased_type_cannot_be_an_object_type_literal_Use_an_interface_declaration_instead: { code: 1158, category: 1 /* Error */, key: "Aliased type cannot be an object type literal. Use an interface declaration instead." },
-        Invalid_template_literal_expected: { code: 1159, category: 1 /* Error */, key: "Invalid template literal; expected '}'" },
-        Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1160, category: 1 /* Error */, key: "Tagged templates are only available when targeting ECMAScript 6 and higher." },
+        Invalid_template_literal_expected: { code: 1158, category: 1 /* Error */, key: "Invalid template literal; expected '}'" },
+        Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1159, category: 1 /* Error */, key: "Tagged templates are only available when targeting ECMAScript 6 and higher." },
         Duplicate_identifier_0: { code: 2300, category: 1 /* Error */, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: 1 /* Error */, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: 1 /* Error */, key: "Static members cannot reference class type parameters." },
@@ -1521,6 +1520,7 @@ var ts;
         The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly: { code: 2453, category: 1 /* Error */, key: "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly." },
         Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0: { code: 2455, category: 1 /* Error */, key: "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'." },
         Type_alias_0_circularly_references_itself: { code: 2456, category: 1 /* Error */, key: "Type alias '{0}' circularly references itself." },
+        Type_alias_name_cannot_be_0: { code: 2457, category: 1 /* Error */, key: "Type alias name cannot be '{0}'" },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: 1 /* Error */, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_name_1_from_private_module_2: { code: 4001, category: 1 /* Error */, key: "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: 1 /* Error */, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
@@ -6269,13 +6269,6 @@ var ts;
             parseExpected(51 /* EqualsToken */);
             node.type = parseType();
             parseSemicolon();
-            var n = node.type;
-            while (n.kind === 138 /* ParenType */) {
-                n = n.type;
-            }
-            if (n.kind === 134 /* TypeLiteral */ && (n.pos !== n.members.pos || n.end !== n.members.end)) {
-                grammarErrorOnNode(node.type, ts.Diagnostics.Aliased_type_cannot_be_an_object_type_literal_Use_an_interface_declaration_instead);
-            }
             return finishNode(node);
         }
         function parseAndCheckEnumDeclaration(pos, flags) {
@@ -16069,6 +16062,7 @@ var ts;
             }
         }
         function checkTypeAliasDeclaration(node) {
+            checkTypeNameIsReserved(node.name, ts.Diagnostics.Type_alias_name_cannot_be_0);
             checkSourceElement(node.type);
         }
         function getConstantValueForExpression(node) {
