@@ -432,6 +432,11 @@ class Program {
         var tree = TypeScript.Parser.parse(fileName, text, ts.ScriptTarget.ES5, isDTSFile(fileName));
         var originalTree = tree;
 
+        var allElements = TypeScript.SyntaxElementsCollector.collectElements(tree.sourceUnit());
+        var nonSharedElements = TypeScript.ArrayUtilities.where(allElements, e => !(TypeScript.isList(e) && (<any>e).length === 0));
+        TypeScript.Environment.standardOut.WriteLine("All elements   : " + allElements.length);
+        TypeScript.Environment.standardOut.WriteLine("Non empty lists: " + nonSharedElements.length);
+
         var totalIncrementalTime = 0;
         var totalIncrementalASTTime = 0;
 
