@@ -1498,38 +1498,6 @@ function generateVisitor(): string {
     return result;
 }
 
-function generateDefaultVisitor(): string {
-    var result = "";
-
-    result += "///<reference path='references.ts' />\r\n\r\n";
-
-    result += "module TypeScript {\r\n";
-    if (!forPrettyPrinter) {
-        result += "    export class SyntaxVisitor implements ISyntaxVisitor {\r\n";
-        result += "        public defaultVisit(node: ISyntaxNodeOrToken): any {\r\n";
-        result += "            return undefined;\r\n";
-        result += "        }\r\n";
-        result += "\r\n";
-        result += "        public visitToken(token: ISyntaxToken): any {\r\n";
-        result += "            return this.defaultVisit(token);\r\n";
-        result += "        }\r\n";
-
-        for (var i = 0; i < definitions.length; i++) {
-            var definition = definitions[i];
-
-            result += "\r\n        public visit" + getNameWithoutSuffix(definition) + "(node: " + definition.name + "): any {\r\n";
-            result += "            return this.defaultVisit(node);\r\n";
-            result += "        }\r\n";
-        }
-
-        result += "    }";
-    }
-
-    result += "\r\n}";
-
-    return result;
-}
-
 function generateServicesUtilities(): string {
     var result = "";
     result += "module TypeScript {\r\n";
@@ -1590,7 +1558,6 @@ var syntaxInterfaces = generateSyntaxInterfaces();
 var walker = generateWalker();
 var scannerUtilities = generateScannerUtilities();
 var visitor = generateVisitor();
-var defaultVisitor = generateDefaultVisitor();
 var servicesUtilities = generateServicesUtilities();
 
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.concrete.generated.ts", syntaxNodesConcrete, false);
@@ -1598,5 +1565,4 @@ sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxInterf
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxWalker.generated.ts", walker, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\scannerUtilities.generated.ts", scannerUtilities, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxVisitor.generated.ts", visitor, false);
-sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\defaultSyntaxVisitor.generated.ts", defaultVisitor, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxUtilities.generated.ts", servicesUtilities, false);
