@@ -726,6 +726,10 @@ module TypeScript.IncrementalParser {
             return isNode(element) ? <ISyntaxNode>element : undefined;
         }
 
+        function isEmptyList(element: ISyntaxElement) {
+            return isList(element) && (<ISyntaxNodeOrToken[]>element).length === 0;
+        }
+
         function moveToFirstChild() {
             var nodeOrToken = currentNodeOrToken();
             if (nodeOrToken === undefined) {
@@ -745,7 +749,7 @@ module TypeScript.IncrementalParser {
             // next sibling of the empty node.
             for (var i = 0, n = nodeOrToken.childCount(); i < n; i++) {
                 var child = nodeOrToken.childAt(i);
-                if (child && !isShared(child)) {
+                if (child && !isEmptyList(child)) {
                     // Great, we found a real child.  Push that.
                     pushElement(child, /*indexInParent:*/ i);
 
@@ -773,14 +777,13 @@ module TypeScript.IncrementalParser {
                 for (var i = currentPiece.indexInParent + 1, n = parent.childCount(); i < n; i++) {
                     var sibling = parent.childAt(i);
 
-                    if (sibling && !isShared(sibling)) {
+                    if (sibling && !isEmptyList(sibling)) {
                         // We found a good sibling that we can move to.  Just reuse our existing piece
                         // so we don't have to push/pop.
                         currentPiece.element = sibling;
                         currentPiece.indexInParent = i;
 
-                        // The sibling might have been a list.  Move to it's first child.  it must have
-                        // one since this was a non-shared element.
+                        // The sibling might have been a list.  Move to it's first child.
                         moveToFirstChildIfList();
                         return;
                     }

@@ -99,7 +99,7 @@ module TypeScript.Services.Formatting {
         }
 
         public walk(element: ISyntaxElement) {
-            if (element && !isShared(element)) {
+            if (element) {
                 if (isToken(element)) {
                     this.visitToken(<ISyntaxToken>element);
                 }

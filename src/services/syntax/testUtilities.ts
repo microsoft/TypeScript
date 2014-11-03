@@ -1,6 +1,6 @@
 module TypeScript {
     function assertParent(parent: ISyntaxElement, child: ISyntaxElement) {
-        if (child && !TypeScript.isShared(child)) {
+        if (child) {
             return Debug.assert(parent === child.parent);
         }
     }
@@ -102,8 +102,8 @@ module TypeScript {
     }
 
     function listStructuralEquals<T extends TypeScript.ISyntaxNodeOrToken>(list1: T[], list2: T[], checkParents: boolean, text1: ISimpleText, text2: ISimpleText): boolean {
-        Debug.assert(TypeScript.isShared(list1) || list1.parent);
-        Debug.assert(TypeScript.isShared(list2) || list2.parent);
+        Debug.assert(list1.parent);
+        Debug.assert(list2.parent);
 
         if (list1.childCount() !== list2.childCount()) {
             return false;

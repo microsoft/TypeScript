@@ -11,7 +11,7 @@ module TypeScript {
             this.parent = undefined,
             this.moduleElements = moduleElements,
             this.endOfFileToken = endOfFileToken,
-            !isShared(moduleElements) && (moduleElements.parent = this),
+            moduleElements.parent = this,
             endOfFileToken.parent = this;
         }
 
@@ -84,7 +84,7 @@ module TypeScript {
             this.typeMembers = typeMembers,
             this.closeBraceToken = closeBraceToken,
             openBraceToken.parent = this,
-            !isShared(typeMembers) && (typeMembers.parent = this),
+            typeMembers.parent = this,
             closeBraceToken.parent = this;
         }
 
@@ -310,7 +310,7 @@ module TypeScript {
             this.types = types,
             this.closeBracketToken = closeBracketToken,
             openBracketToken.parent = this,
-            !isShared(types) && (types.parent = this),
+            types.parent = this,
             closeBracketToken.parent = this;
         }
 
@@ -426,11 +426,11 @@ module TypeScript {
             this.typeParameterList = typeParameterList,
             this.heritageClauses = heritageClauses,
             this.body = body,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             interfaceKeyword.parent = this,
             identifier.parent = this,
             typeParameterList && (typeParameterList.parent = this),
-            !isShared(heritageClauses) && (heritageClauses.parent = this),
+            heritageClauses.parent = this,
             body.parent = this;
         }
 
@@ -475,7 +475,7 @@ module TypeScript {
             this.callSignature = callSignature,
             this.block = block,
             this.semicolonToken = semicolonToken,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             functionKeyword.parent = this,
             identifier.parent = this,
             callSignature.parent = this,
@@ -526,12 +526,12 @@ module TypeScript {
             this.openBraceToken = openBraceToken,
             this.moduleElements = moduleElements,
             this.closeBraceToken = closeBraceToken,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             moduleKeyword.parent = this,
             name && (name.parent = this),
             stringLiteral && (stringLiteral.parent = this),
             openBraceToken.parent = this,
-            !isShared(moduleElements) && (moduleElements.parent = this),
+            moduleElements.parent = this,
             closeBraceToken.parent = this;
         }
 
@@ -581,13 +581,13 @@ module TypeScript {
             this.openBraceToken = openBraceToken,
             this.classElements = classElements,
             this.closeBraceToken = closeBraceToken,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             classKeyword.parent = this,
             identifier.parent = this,
             typeParameterList && (typeParameterList.parent = this),
-            !isShared(heritageClauses) && (heritageClauses.parent = this),
+            heritageClauses.parent = this,
             openBraceToken.parent = this,
-            !isShared(classElements) && (classElements.parent = this),
+            classElements.parent = this,
             closeBraceToken.parent = this;
         }
 
@@ -634,11 +634,11 @@ module TypeScript {
             this.openBraceToken = openBraceToken,
             this.enumElements = enumElements,
             this.closeBraceToken = closeBraceToken,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             enumKeyword.parent = this,
             identifier.parent = this,
             openBraceToken.parent = this,
-            !isShared(enumElements) && (enumElements.parent = this),
+            enumElements.parent = this,
             closeBraceToken.parent = this;
         }
 
@@ -683,7 +683,7 @@ module TypeScript {
             this.equalsToken = equalsToken,
             this.moduleReference = moduleReference,
             this.semicolonToken = semicolonToken,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             importKeyword.parent = this,
             identifier.parent = this,
             equalsToken.parent = this,
@@ -771,7 +771,7 @@ module TypeScript {
             this.callSignature = callSignature,
             this.block = block,
             this.semicolonToken = semicolonToken,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             propertyName.parent = this,
             callSignature.parent = this,
             block && (block.parent = this),
@@ -812,7 +812,7 @@ module TypeScript {
             this.modifiers = modifiers,
             this.variableDeclarator = variableDeclarator,
             this.semicolonToken = semicolonToken,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             variableDeclarator.parent = this,
             semicolonToken && (semicolonToken.parent = this);
         }
@@ -853,7 +853,7 @@ module TypeScript {
             this.callSignature = callSignature,
             this.block = block,
             this.semicolonToken = semicolonToken,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             constructorKeyword.parent = this,
             callSignature.parent = this,
             block && (block.parent = this),
@@ -894,7 +894,7 @@ module TypeScript {
             this.modifiers = modifiers,
             this.indexSignature = indexSignature,
             this.semicolonToken = semicolonToken,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             indexSignature.parent = this,
             semicolonToken && (semicolonToken.parent = this);
         }
@@ -935,7 +935,7 @@ module TypeScript {
             this.propertyName = propertyName,
             this.callSignature = callSignature,
             this.block = block,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             getKeyword.parent = this,
             propertyName.parent = this,
             callSignature.parent = this,
@@ -980,7 +980,7 @@ module TypeScript {
             this.propertyName = propertyName,
             this.callSignature = callSignature,
             this.block = block,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             setKeyword.parent = this,
             propertyName.parent = this,
             callSignature.parent = this,
@@ -1131,7 +1131,7 @@ module TypeScript {
             this.closeBracketToken = closeBracketToken,
             this.typeAnnotation = typeAnnotation,
             openBracketToken.parent = this,
-            !isShared(parameters) && (parameters.parent = this),
+            parameters.parent = this,
             closeBracketToken.parent = this,
             typeAnnotation && (typeAnnotation.parent = this);
         }
@@ -1207,7 +1207,7 @@ module TypeScript {
             this.statements = statements,
             this.closeBraceToken = closeBraceToken,
             openBraceToken.parent = this,
-            !isShared(statements) && (statements.parent = this),
+            statements.parent = this,
             closeBraceToken.parent = this;
         }
 
@@ -1292,7 +1292,7 @@ module TypeScript {
             this.modifiers = modifiers,
             this.variableDeclaration = variableDeclaration,
             this.semicolonToken = semicolonToken,
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             variableDeclaration.parent = this,
             semicolonToken && (semicolonToken.parent = this);
         }
@@ -1412,7 +1412,7 @@ module TypeScript {
             expression.parent = this,
             closeParenToken.parent = this,
             openBraceToken.parent = this,
-            !isShared(switchClauses) && (switchClauses.parent = this),
+            switchClauses.parent = this,
             closeBraceToken.parent = this;
         }
 
@@ -2286,7 +2286,7 @@ module TypeScript {
             this.expressions = expressions,
             this.closeBracketToken = closeBracketToken,
             openBracketToken.parent = this,
-            !isShared(expressions) && (expressions.parent = this),
+            expressions.parent = this,
             closeBracketToken.parent = this;
         }
 
@@ -2323,7 +2323,7 @@ module TypeScript {
             this.propertyAssignments = propertyAssignments,
             this.closeBraceToken = closeBraceToken,
             openBraceToken.parent = this,
-            !isShared(propertyAssignments) && (propertyAssignments.parent = this),
+            propertyAssignments.parent = this,
             closeBraceToken.parent = this;
         }
 
@@ -2660,7 +2660,7 @@ module TypeScript {
             this.templateStartToken = templateStartToken,
             this.templateClauses = templateClauses,
             templateStartToken.parent = this,
-            !isShared(templateClauses) && (templateClauses.parent = this);
+            templateClauses.parent = this;
         }
 
         public kind(): SyntaxKind {
@@ -2725,7 +2725,7 @@ module TypeScript {
             this.varKeyword = varKeyword,
             this.variableDeclarators = variableDeclarators,
             varKeyword.parent = this,
-            !isShared(variableDeclarators) && (variableDeclarators.parent = this);
+            variableDeclarators.parent = this;
         }
 
         public kind(): SyntaxKind {
@@ -2798,7 +2798,7 @@ module TypeScript {
             this.closeParenToken = closeParenToken,
             typeArgumentList && (typeArgumentList.parent = this),
             openParenToken.parent = this,
-            !isShared(_arguments) && (_arguments.parent = this),
+            _arguments.parent = this,
             closeParenToken.parent = this;
         }
 
@@ -2835,7 +2835,7 @@ module TypeScript {
             this.parameters = parameters,
             this.closeParenToken = closeParenToken,
             openParenToken.parent = this,
-            !isShared(parameters) && (parameters.parent = this),
+            parameters.parent = this,
             closeParenToken.parent = this;
         }
 
@@ -2871,7 +2871,7 @@ module TypeScript {
             this.typeArguments = typeArguments,
             this.greaterThanToken = greaterThanToken,
             lessThanToken.parent = this,
-            !isShared(typeArguments) && (typeArguments.parent = this),
+            typeArguments.parent = this,
             greaterThanToken.parent = this;
         }
 
@@ -2907,7 +2907,7 @@ module TypeScript {
             this.typeParameters = typeParameters,
             this.greaterThanToken = greaterThanToken,
             lessThanToken.parent = this,
-            !isShared(typeParameters) && (typeParameters.parent = this),
+            typeParameters.parent = this,
             greaterThanToken.parent = this;
         }
 
@@ -2941,7 +2941,7 @@ module TypeScript {
             this.extendsOrImplementsKeyword = extendsOrImplementsKeyword,
             this.typeNames = typeNames,
             extendsOrImplementsKeyword.parent = this,
-            !isShared(typeNames) && (typeNames.parent = this);
+            typeNames.parent = this;
         }
 
         public kind(): SyntaxKind {
@@ -3012,7 +3012,7 @@ module TypeScript {
             caseKeyword.parent = this,
             expression.parent = this,
             colonToken.parent = this,
-            !isShared(statements) && (statements.parent = this);
+            statements.parent = this;
         }
 
         public kind(): SyntaxKind {
@@ -3050,7 +3050,7 @@ module TypeScript {
             this.statements = statements,
             defaultKeyword.parent = this,
             colonToken.parent = this,
-            !isShared(statements) && (statements.parent = this);
+            statements.parent = this;
         }
 
         public kind(): SyntaxKind {
@@ -3373,7 +3373,7 @@ module TypeScript {
             this.typeAnnotation = typeAnnotation,
             this.equalsValueClause = equalsValueClause,
             dotDotDotToken && (dotDotDotToken.parent = this),
-            !isShared(modifiers) && (modifiers.parent = this),
+            modifiers.parent = this,
             identifier.parent = this,
             questionToken && (questionToken.parent = this),
             typeAnnotation && (typeAnnotation.parent = this),
