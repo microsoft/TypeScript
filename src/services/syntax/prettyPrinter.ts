@@ -1031,15 +1031,15 @@ module TypeScript.PrettyPrinter {
         }
 
         public visitTemplateClause(node: TemplateClauseSyntax): void {
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
             this.ensureSpace();
             this.appendToken(node.templateMiddleOrEndToken);
         }
 
         public visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): void {
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
             this.ensureSpace();
-            node.templateExpression.accept(this);
+            visitNodeOrToken(this, node.templateExpression);
         }
     }
 }

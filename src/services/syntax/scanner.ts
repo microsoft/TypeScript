@@ -251,7 +251,7 @@ module TypeScript.Scanner {
     }
 
     class FixedWidthTokenWithNoTrivia implements ISyntaxToken {
-        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any;
+        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
 
         constructor(private _packedData: number) {
         }
@@ -285,7 +285,7 @@ module TypeScript.Scanner {
     }
 
     class LargeScannerToken implements ISyntaxToken {
-        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any;
+        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
 
         private cachedText: string;
         constructor(private _packedFullStartAndInfo: number, private _packedFullWidthAndKind: number, cachedText: string) {

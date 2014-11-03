@@ -13,20 +13,11 @@ module TypeScript {
             this.visitToken(token);
         }
 
-        private visitOptionalNode(node: ISyntaxNode): void {
-            if (node === undefined) {
-                return;
-            }
-
-            node.accept(this);
-        }
-
         public visitList(list: ISyntaxNodeOrToken[]): void {
             for (var i = 0, n = list.length; i < n; i++) {
-                list[i].accept(this);
+                visitNodeOrToken(this, list[i]);
             }
         }
-
 
         public visitSourceUnit(node: SourceUnitSyntax): void {
             this.visitList(node.moduleElements);
@@ -34,7 +25,7 @@ module TypeScript {
         }
 
         public visitQualifiedName(node: QualifiedNameSyntax): void {
-            node.left.accept(this);
+            visitNodeOrToken(this, node.left);
             this.visitToken(node.dotToken);
             this.visitToken(node.right);
         }
@@ -46,34 +37,34 @@ module TypeScript {
         }
 
         public visitFunctionType(node: FunctionTypeSyntax): void {
-            this.visitOptionalNode(node.typeParameterList);
-            node.parameterList.accept(this);
+            visitNodeOrToken(this, node.typeParameterList);
+            visitNodeOrToken(this, node.parameterList);
             this.visitToken(node.equalsGreaterThanToken);
-            node.type.accept(this);
+            visitNodeOrToken(this, node.type);
         }
 
         public visitArrayType(node: ArrayTypeSyntax): void {
-            node.type.accept(this);
+            visitNodeOrToken(this, node.type);
             this.visitToken(node.openBracketToken);
             this.visitToken(node.closeBracketToken);
         }
 
         public visitConstructorType(node: ConstructorTypeSyntax): void {
             this.visitToken(node.newKeyword);
-            this.visitOptionalNode(node.typeParameterList);
-            node.parameterList.accept(this);
+            visitNodeOrToken(this, node.typeParameterList);
+            visitNodeOrToken(this, node.parameterList);
             this.visitToken(node.equalsGreaterThanToken);
-            node.type.accept(this);
+            visitNodeOrToken(this, node.type);
         }
 
         public visitGenericType(node: GenericTypeSyntax): void {
-            node.name.accept(this);
-            node.typeArgumentList.accept(this);
+            visitNodeOrToken(this, node.name);
+            visitNodeOrToken(this, node.typeArgumentList);
         }
 
         public visitTypeQuery(node: TypeQuerySyntax): void {
             this.visitToken(node.typeOfKeyword);
-            node.name.accept(this);
+            visitNodeOrToken(this, node.name);
         }
 
         public visitTupleType(node: TupleTypeSyntax): void {
@@ -83,14 +74,14 @@ module TypeScript {
         }
 
         public visitUnionType(node: UnionTypeSyntax): void {
-            node.left.accept(this);
+            visitNodeOrToken(this, node.left);
             this.visitToken(node.barToken);
-            node.right.accept(this);
+            visitNodeOrToken(this, node.right);
         }
 
         public visitParenthesizedType(node: ParenthesizedTypeSyntax): void {
             this.visitToken(node.openParenToken);
-            node.type.accept(this);
+            visitNodeOrToken(this, node.type);
             this.visitToken(node.closeParenToken);
         }
 
@@ -98,17 +89,17 @@ module TypeScript {
             this.visitList(node.modifiers);
             this.visitToken(node.interfaceKeyword);
             this.visitToken(node.identifier);
-            this.visitOptionalNode(node.typeParameterList);
+            visitNodeOrToken(this, node.typeParameterList);
             this.visitList(node.heritageClauses);
-            node.body.accept(this);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitFunctionDeclaration(node: FunctionDeclarationSyntax): void {
             this.visitList(node.modifiers);
             this.visitToken(node.functionKeyword);
             this.visitToken(node.identifier);
-            node.callSignature.accept(this);
-            this.visitOptionalNode(node.block);
+            visitNodeOrToken(this, node.callSignature);
+            visitNodeOrToken(this, node.block);
             this.visitOptionalToken(node.semicolonToken);
         }
 
@@ -126,7 +117,7 @@ module TypeScript {
             this.visitList(node.modifiers);
             this.visitToken(node.classKeyword);
             this.visitToken(node.identifier);
-            this.visitOptionalNode(node.typeParameterList);
+            visitNodeOrToken(this, node.typeParameterList);
             this.visitList(node.heritageClauses);
             this.visitToken(node.openBraceToken);
             this.visitList(node.classElements);
@@ -147,7 +138,7 @@ module TypeScript {
             this.visitToken(node.importKeyword);
             this.visitToken(node.identifier);
             this.visitToken(node.equalsToken);
-            node.moduleReference.accept(this);
+            visitNodeOrToken(this, node.moduleReference);
             this.visitOptionalToken(node.semicolonToken);
         }
 
@@ -161,28 +152,28 @@ module TypeScript {
         public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {
             this.visitList(node.modifiers);
             this.visitToken(node.propertyName);
-            node.callSignature.accept(this);
-            this.visitOptionalNode(node.block);
+            visitNodeOrToken(this, node.callSignature);
+            visitNodeOrToken(this, node.block);
             this.visitOptionalToken(node.semicolonToken);
         }
 
         public visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): void {
             this.visitList(node.modifiers);
-            node.variableDeclarator.accept(this);
+            visitNodeOrToken(this, node.variableDeclarator);
             this.visitOptionalToken(node.semicolonToken);
         }
 
         public visitConstructorDeclaration(node: ConstructorDeclarationSyntax): void {
             this.visitList(node.modifiers);
             this.visitToken(node.constructorKeyword);
-            node.callSignature.accept(this);
-            this.visitOptionalNode(node.block);
+            visitNodeOrToken(this, node.callSignature);
+            visitNodeOrToken(this, node.block);
             this.visitOptionalToken(node.semicolonToken);
         }
 
         public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): void {
             this.visitList(node.modifiers);
-            node.indexSignature.accept(this);
+            visitNodeOrToken(this, node.indexSignature);
             this.visitOptionalToken(node.semicolonToken);
         }
 
@@ -190,46 +181,46 @@ module TypeScript {
             this.visitList(node.modifiers);
             this.visitToken(node.getKeyword);
             this.visitToken(node.propertyName);
-            node.callSignature.accept(this);
-            node.block.accept(this);
+            visitNodeOrToken(this, node.callSignature);
+            visitNodeOrToken(this, node.block);
         }
 
         public visitSetAccessor(node: SetAccessorSyntax): void {
             this.visitList(node.modifiers);
             this.visitToken(node.setKeyword);
             this.visitToken(node.propertyName);
-            node.callSignature.accept(this);
-            node.block.accept(this);
+            visitNodeOrToken(this, node.callSignature);
+            visitNodeOrToken(this, node.block);
         }
 
         public visitPropertySignature(node: PropertySignatureSyntax): void {
             this.visitToken(node.propertyName);
             this.visitOptionalToken(node.questionToken);
-            this.visitOptionalNode(node.typeAnnotation);
+            visitNodeOrToken(this, node.typeAnnotation);
         }
 
         public visitCallSignature(node: CallSignatureSyntax): void {
-            this.visitOptionalNode(node.typeParameterList);
-            node.parameterList.accept(this);
-            this.visitOptionalNode(node.typeAnnotation);
+            visitNodeOrToken(this, node.typeParameterList);
+            visitNodeOrToken(this, node.parameterList);
+            visitNodeOrToken(this, node.typeAnnotation);
         }
 
         public visitConstructSignature(node: ConstructSignatureSyntax): void {
             this.visitToken(node.newKeyword);
-            node.callSignature.accept(this);
+            visitNodeOrToken(this, node.callSignature);
         }
 
         public visitIndexSignature(node: IndexSignatureSyntax): void {
             this.visitToken(node.openBracketToken);
             this.visitList(node.parameters);
             this.visitToken(node.closeBracketToken);
-            this.visitOptionalNode(node.typeAnnotation);
+            visitNodeOrToken(this, node.typeAnnotation);
         }
 
         public visitMethodSignature(node: MethodSignatureSyntax): void {
             this.visitToken(node.propertyName);
             this.visitOptionalToken(node.questionToken);
-            node.callSignature.accept(this);
+            visitNodeOrToken(this, node.callSignature);
         }
 
         public visitBlock(node: BlockSyntax): void {
@@ -241,20 +232,20 @@ module TypeScript {
         public visitIfStatement(node: IfStatementSyntax): void {
             this.visitToken(node.ifKeyword);
             this.visitToken(node.openParenToken);
-            node.condition.accept(this);
+            visitNodeOrToken(this, node.condition);
             this.visitToken(node.closeParenToken);
-            node.statement.accept(this);
-            this.visitOptionalNode(node.elseClause);
+            visitNodeOrToken(this, node.statement);
+            visitNodeOrToken(this, node.elseClause);
         }
 
         public visitVariableStatement(node: VariableStatementSyntax): void {
             this.visitList(node.modifiers);
-            node.variableDeclaration.accept(this);
+            visitNodeOrToken(this, node.variableDeclaration);
             this.visitOptionalToken(node.semicolonToken);
         }
 
         public visitExpressionStatement(node: ExpressionStatementSyntax): void {
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
             this.visitOptionalToken(node.semicolonToken);
         }
 
@@ -267,7 +258,7 @@ module TypeScript {
         public visitSwitchStatement(node: SwitchStatementSyntax): void {
             this.visitToken(node.switchKeyword);
             this.visitToken(node.openParenToken);
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
             this.visitToken(node.closeParenToken);
             this.visitToken(node.openBraceToken);
             this.visitList(node.switchClauses);
@@ -289,25 +280,25 @@ module TypeScript {
         public visitForStatement(node: ForStatementSyntax): void {
             this.visitToken(node.forKeyword);
             this.visitToken(node.openParenToken);
-            this.visitOptionalNode(node.variableDeclaration);
+            visitNodeOrToken(this, node.variableDeclaration);
             visitNodeOrToken(this, node.initializer);
             this.visitToken(node.firstSemicolonToken);
             visitNodeOrToken(this, node.condition);
             this.visitToken(node.secondSemicolonToken);
             visitNodeOrToken(this, node.incrementor);
             this.visitToken(node.closeParenToken);
-            node.statement.accept(this);
+            visitNodeOrToken(this, node.statement);
         }
 
         public visitForInStatement(node: ForInStatementSyntax): void {
             this.visitToken(node.forKeyword);
             this.visitToken(node.openParenToken);
-            this.visitOptionalNode(node.variableDeclaration);
+            visitNodeOrToken(this, node.variableDeclaration);
             visitNodeOrToken(this, node.left);
             this.visitToken(node.inKeyword);
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
             this.visitToken(node.closeParenToken);
-            node.statement.accept(this);
+            visitNodeOrToken(this, node.statement);
         }
 
         public visitEmptyStatement(node: EmptyStatementSyntax): void {
@@ -316,37 +307,37 @@ module TypeScript {
 
         public visitThrowStatement(node: ThrowStatementSyntax): void {
             this.visitToken(node.throwKeyword);
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
             this.visitOptionalToken(node.semicolonToken);
         }
 
         public visitWhileStatement(node: WhileStatementSyntax): void {
             this.visitToken(node.whileKeyword);
             this.visitToken(node.openParenToken);
-            node.condition.accept(this);
+            visitNodeOrToken(this, node.condition);
             this.visitToken(node.closeParenToken);
-            node.statement.accept(this);
+            visitNodeOrToken(this, node.statement);
         }
 
         public visitTryStatement(node: TryStatementSyntax): void {
             this.visitToken(node.tryKeyword);
-            node.block.accept(this);
-            this.visitOptionalNode(node.catchClause);
-            this.visitOptionalNode(node.finallyClause);
+            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.catchClause);
+            visitNodeOrToken(this, node.finallyClause);
         }
 
         public visitLabeledStatement(node: LabeledStatementSyntax): void {
             this.visitToken(node.identifier);
             this.visitToken(node.colonToken);
-            node.statement.accept(this);
+            visitNodeOrToken(this, node.statement);
         }
 
         public visitDoStatement(node: DoStatementSyntax): void {
             this.visitToken(node.doKeyword);
-            node.statement.accept(this);
+            visitNodeOrToken(this, node.statement);
             this.visitToken(node.whileKeyword);
             this.visitToken(node.openParenToken);
-            node.condition.accept(this);
+            visitNodeOrToken(this, node.condition);
             this.visitToken(node.closeParenToken);
             this.visitOptionalToken(node.semicolonToken);
         }
@@ -359,59 +350,59 @@ module TypeScript {
         public visitWithStatement(node: WithStatementSyntax): void {
             this.visitToken(node.withKeyword);
             this.visitToken(node.openParenToken);
-            node.condition.accept(this);
+            visitNodeOrToken(this, node.condition);
             this.visitToken(node.closeParenToken);
-            node.statement.accept(this);
+            visitNodeOrToken(this, node.statement);
         }
 
         public visitPrefixUnaryExpression(node: PrefixUnaryExpressionSyntax): void {
             this.visitToken(node.operatorToken);
-            node.operand.accept(this);
+            visitNodeOrToken(this, node.operand);
         }
 
         public visitDeleteExpression(node: DeleteExpressionSyntax): void {
             this.visitToken(node.deleteKeyword);
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
         }
 
         public visitTypeOfExpression(node: TypeOfExpressionSyntax): void {
             this.visitToken(node.typeOfKeyword);
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
         }
 
         public visitVoidExpression(node: VoidExpressionSyntax): void {
             this.visitToken(node.voidKeyword);
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
         }
 
         public visitConditionalExpression(node: ConditionalExpressionSyntax): void {
-            node.condition.accept(this);
+            visitNodeOrToken(this, node.condition);
             this.visitToken(node.questionToken);
-            node.whenTrue.accept(this);
+            visitNodeOrToken(this, node.whenTrue);
             this.visitToken(node.colonToken);
-            node.whenFalse.accept(this);
+            visitNodeOrToken(this, node.whenFalse);
         }
 
         public visitBinaryExpression(node: BinaryExpressionSyntax): void {
-            node.left.accept(this);
+            visitNodeOrToken(this, node.left);
             this.visitToken(node.operatorToken);
-            node.right.accept(this);
+            visitNodeOrToken(this, node.right);
         }
 
         public visitPostfixUnaryExpression(node: PostfixUnaryExpressionSyntax): void {
-            node.operand.accept(this);
+            visitNodeOrToken(this, node.operand);
             this.visitToken(node.operatorToken);
         }
 
         public visitMemberAccessExpression(node: MemberAccessExpressionSyntax): void {
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
             this.visitToken(node.dotToken);
             this.visitToken(node.name);
         }
 
         public visitInvocationExpression(node: InvocationExpressionSyntax): void {
-            node.expression.accept(this);
-            node.argumentList.accept(this);
+            visitNodeOrToken(this, node.expression);
+            visitNodeOrToken(this, node.argumentList);
         }
 
         public visitArrayLiteralExpression(node: ArrayLiteralExpressionSyntax): void {
@@ -428,49 +419,49 @@ module TypeScript {
 
         public visitObjectCreationExpression(node: ObjectCreationExpressionSyntax): void {
             this.visitToken(node.newKeyword);
-            node.expression.accept(this);
-            this.visitOptionalNode(node.argumentList);
+            visitNodeOrToken(this, node.expression);
+            visitNodeOrToken(this, node.argumentList);
         }
 
         public visitParenthesizedExpression(node: ParenthesizedExpressionSyntax): void {
             this.visitToken(node.openParenToken);
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
             this.visitToken(node.closeParenToken);
         }
 
         public visitParenthesizedArrowFunctionExpression(node: ParenthesizedArrowFunctionExpressionSyntax): void {
-            node.callSignature.accept(this);
+            visitNodeOrToken(this, node.callSignature);
             this.visitToken(node.equalsGreaterThanToken);
-            this.visitOptionalNode(node.block);
+            visitNodeOrToken(this, node.block);
             visitNodeOrToken(this, node.expression);
         }
 
         public visitSimpleArrowFunctionExpression(node: SimpleArrowFunctionExpressionSyntax): void {
-            node.parameter.accept(this);
+            visitNodeOrToken(this, node.parameter);
             this.visitToken(node.equalsGreaterThanToken);
-            this.visitOptionalNode(node.block);
+            visitNodeOrToken(this, node.block);
             visitNodeOrToken(this, node.expression);
         }
 
         public visitCastExpression(node: CastExpressionSyntax): void {
             this.visitToken(node.lessThanToken);
-            node.type.accept(this);
+            visitNodeOrToken(this, node.type);
             this.visitToken(node.greaterThanToken);
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
         }
 
         public visitElementAccessExpression(node: ElementAccessExpressionSyntax): void {
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
             this.visitToken(node.openBracketToken);
-            node.argumentExpression.accept(this);
+            visitNodeOrToken(this, node.argumentExpression);
             this.visitToken(node.closeBracketToken);
         }
 
         public visitFunctionExpression(node: FunctionExpressionSyntax): void {
             this.visitToken(node.functionKeyword);
             this.visitOptionalToken(node.identifier);
-            node.callSignature.accept(this);
-            node.block.accept(this);
+            visitNodeOrToken(this, node.callSignature);
+            visitNodeOrToken(this, node.block);
         }
 
         public visitOmittedExpression(node: OmittedExpressionSyntax): void {
@@ -482,8 +473,8 @@ module TypeScript {
         }
 
         public visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): void {
-            node.expression.accept(this);
-            node.templateExpression.accept(this);
+            visitNodeOrToken(this, node.expression);
+            visitNodeOrToken(this, node.templateExpression);
         }
 
         public visitVariableDeclaration(node: VariableDeclarationSyntax): void {
@@ -493,12 +484,12 @@ module TypeScript {
 
         public visitVariableDeclarator(node: VariableDeclaratorSyntax): void {
             this.visitToken(node.propertyName);
-            this.visitOptionalNode(node.typeAnnotation);
-            this.visitOptionalNode(node.equalsValueClause);
+            visitNodeOrToken(this, node.typeAnnotation);
+            visitNodeOrToken(this, node.equalsValueClause);
         }
 
         public visitArgumentList(node: ArgumentListSyntax): void {
-            this.visitOptionalNode(node.typeArgumentList);
+            visitNodeOrToken(this, node.typeArgumentList);
             this.visitToken(node.openParenToken);
             this.visitList(node.arguments);
             this.visitToken(node.closeParenToken);
@@ -529,12 +520,12 @@ module TypeScript {
 
         public visitEqualsValueClause(node: EqualsValueClauseSyntax): void {
             this.visitToken(node.equalsToken);
-            node.value.accept(this);
+            visitNodeOrToken(this, node.value);
         }
 
         public visitCaseSwitchClause(node: CaseSwitchClauseSyntax): void {
             this.visitToken(node.caseKeyword);
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
             this.visitToken(node.colonToken);
             this.visitList(node.statements);
         }
@@ -547,48 +538,48 @@ module TypeScript {
 
         public visitElseClause(node: ElseClauseSyntax): void {
             this.visitToken(node.elseKeyword);
-            node.statement.accept(this);
+            visitNodeOrToken(this, node.statement);
         }
 
         public visitCatchClause(node: CatchClauseSyntax): void {
             this.visitToken(node.catchKeyword);
             this.visitToken(node.openParenToken);
             this.visitToken(node.identifier);
-            this.visitOptionalNode(node.typeAnnotation);
+            visitNodeOrToken(this, node.typeAnnotation);
             this.visitToken(node.closeParenToken);
-            node.block.accept(this);
+            visitNodeOrToken(this, node.block);
         }
 
         public visitFinallyClause(node: FinallyClauseSyntax): void {
             this.visitToken(node.finallyKeyword);
-            node.block.accept(this);
+            visitNodeOrToken(this, node.block);
         }
 
         public visitTemplateClause(node: TemplateClauseSyntax): void {
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
             this.visitToken(node.templateMiddleOrEndToken);
         }
 
         public visitTypeParameter(node: TypeParameterSyntax): void {
             this.visitToken(node.identifier);
-            this.visitOptionalNode(node.constraint);
+            visitNodeOrToken(this, node.constraint);
         }
 
         public visitConstraint(node: ConstraintSyntax): void {
             this.visitToken(node.extendsKeyword);
-            node.typeOrExpression.accept(this);
+            visitNodeOrToken(this, node.typeOrExpression);
         }
 
         public visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): void {
             this.visitToken(node.propertyName);
             this.visitToken(node.colonToken);
-            node.expression.accept(this);
+            visitNodeOrToken(this, node.expression);
         }
 
         public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
             this.visitToken(node.propertyName);
-            node.callSignature.accept(this);
-            node.block.accept(this);
+            visitNodeOrToken(this, node.callSignature);
+            visitNodeOrToken(this, node.block);
         }
 
         public visitParameter(node: ParameterSyntax): void {
@@ -596,18 +587,18 @@ module TypeScript {
             this.visitList(node.modifiers);
             this.visitToken(node.identifier);
             this.visitOptionalToken(node.questionToken);
-            this.visitOptionalNode(node.typeAnnotation);
-            this.visitOptionalNode(node.equalsValueClause);
+            visitNodeOrToken(this, node.typeAnnotation);
+            visitNodeOrToken(this, node.equalsValueClause);
         }
 
         public visitEnumElement(node: EnumElementSyntax): void {
             this.visitToken(node.propertyName);
-            this.visitOptionalNode(node.equalsValueClause);
+            visitNodeOrToken(this, node.equalsValueClause);
         }
 
         public visitTypeAnnotation(node: TypeAnnotationSyntax): void {
             this.visitToken(node.colonToken);
-            node.type.accept(this);
+            visitNodeOrToken(this, node.type);
         }
 
         public visitExternalModuleReference(node: ExternalModuleReferenceSyntax): void {
@@ -618,7 +609,7 @@ module TypeScript {
         }
 
         public visitModuleNameModuleReference(node: ModuleNameModuleReferenceSyntax): void {
-            node.moduleName.accept(this);
+            visitNodeOrToken(this, node.moduleName);
         }
     }
 }
