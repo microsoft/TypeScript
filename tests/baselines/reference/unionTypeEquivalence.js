@@ -1,7 +1,7 @@
 //// [unionTypeEquivalence.ts]
 // A | B is equivalent to A if B is a subtype of A
 class C { }
-class D extends C { }
+class D extends C { foo() { } }
 var x: C;
 var x : C | D;
 
@@ -37,6 +37,8 @@ var D = (function (_super) {
     function D() {
         _super.apply(this, arguments);
     }
+    D.prototype.foo = function () {
+    };
     return D;
 })(C);
 var x;

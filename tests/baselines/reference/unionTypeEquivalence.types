@@ -3,9 +3,10 @@
 class C { }
 >C : C
 
-class D extends C { }
+class D extends C { foo() { } }
 >D : D
 >C : C
+>foo : () => void
 
 var x: C;
 >x : C
