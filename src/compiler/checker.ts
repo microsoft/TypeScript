@@ -6261,7 +6261,7 @@ module ts {
                     ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<EntityName>node));
 
                 if (!ok) {
-                    error(node, Diagnostics.const_enums_can_only_be_used_in_property_access_Slashindex_access_expressions_and_as_right_hand_side_in_import_declarations_Slashexport_assignments);
+                    error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment);
                 }
             }
             return type;
@@ -7771,10 +7771,10 @@ module ts {
                         }
                         else if (enumIsConst) {
                             if (isNaN(autoValue)) {
-                                error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_NaN);
+                                error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN);
                             }
                             else if (!isFinite(autoValue)) {
-                                error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_number);
+                                error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
                             }
                         }
 

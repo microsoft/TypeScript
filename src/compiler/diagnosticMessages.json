@@ -1418,7 +1418,7 @@
         "code": 4083,
         "isEarly": true
     },
-    "'const' enums can only be used in property access/index access expressions and as right hand side in import declarations/export assignments.": {
+    "'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.": {
         "category": "Error",
         "code": 4084
     },
@@ -1426,11 +1426,11 @@
         "category": "Error",
         "code": 4085
     },
-    "'const' enum member initializer was evaluated to a non-finite number.": {
+    "'const' enum member initializer was evaluated to a non-finite value.": {
         "category": "Error",
         "code": 4086
     },
-    "'const' enum member initializer was evaluated to NaN.": {
+    "'const' enum member initializer was evaluated to disallowed value 'NaN'.": {
         "category": "Error",
         "code": 4087
     },
@@ -1489,6 +1489,10 @@
     "Redirect output structure to the directory.": {
         "category": "Message",
         "code": 6006
+    },
+    "Do not erase const enum declarations in generated code.": {
+        "category": "Message",
+        "code": 6007
     },
     "Do not emit comments to output.": {
         "category": "Message",

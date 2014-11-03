@@ -121,7 +121,8 @@ module ts {
         },
         {
             name: "preserveConstEnums",
-            type: "boolean"
+            type: "boolean",
+            description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
         }
     ];
 
