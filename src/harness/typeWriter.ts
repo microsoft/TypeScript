@@ -77,6 +77,11 @@ class TypeWriterWalker {
         var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
         var lineAndCharacter = this.currentSourceFile.getLineAndCharacterFromPosition(actualPos);
         var sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
+
+        var typeFormatFlags = ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.WriteOwnNameForAnyLike;
+        if (node.parent.kind === ts.SyntaxKind.TypeAliasDeclaration) {
+            typeFormatFlags = typeFormatFlags | ts.TypeFormatFlags.NoTypeAlias;
+        }
         
         // If we got an unknown type, we temporarily want to fall back to just pretending the name
         // (source text) of the node is the type. This is to align with the old typeWriter to make
@@ -86,7 +91,7 @@ class TypeWriterWalker {
             column: lineAndCharacter.character,
             syntaxKind: ts.SyntaxKind[node.kind],
             sourceText: sourceText,
-            type: this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.WriteOwnNameForAnyLike)
+            type: this.checker.typeToString(type, node.parent, typeFormatFlags)
         });
     }
 

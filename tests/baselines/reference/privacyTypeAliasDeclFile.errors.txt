@@ -1,0 +1,23 @@
+tests/cases/compiler/privacyTypeAliasDeclFile.ts(8,20): error TS4025: Exported variable 'p' has or is using private name 'W'.
+
+
+==== tests/cases/compiler/privacyTypeAliasDeclFile.ts (1 errors) ====
+    interface Window {
+        someMethod();
+    }
+    module M {
+        type W = Window | string;
+        export module N {
+            export class Window { }
+            export var p: W; // Should report error that W is private
+                       ~
+!!! error TS4025: Exported variable 'p' has or is using private name 'W'.
+        }
+    }
+    module M1 {
+        export type W = Window | string;
+        export module N {
+            export class Window { }
+            export var p: W;
+        }
+    }

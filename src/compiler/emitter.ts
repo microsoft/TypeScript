@@ -2700,7 +2700,7 @@ module ts {
                     emitSourceTextOfNode(node.name);
                     write(" = ");
                     getSymbolVisibilityDiagnosticMessage = getTypeAliasDeclarationVisibilityError;
-                    resolver.writeTypeAtLocation(node.type, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                    resolver.writeTypeAtLocation(node.type, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.NoTypeAlias, writer);
                     write(";");
                     writeLine();
                 }

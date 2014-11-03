@@ -1024,19 +1024,6 @@ module ts {
             return result;
         }
 
-        function getTypeAliasForTypeLiteral(type: Type): Symbol {
-            if (type.symbol && type.symbol.flags & SymbolFlags.TypeLiteral) {
-                var node = type.symbol.declarations[0].parent;
-                while (node.kind === SyntaxKind.ParenType) {
-                    node = node.parent;
-                }
-                if (node.kind === SyntaxKind.TypeAliasDeclaration) {
-                    return getSymbolOfNode(node);
-                }
-            }
-            return undefined;
-        }
-
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
         var _displayBuilder: SymbolDisplayBuilder;
         function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
@@ -1138,6 +1125,24 @@ module ts {
                 var globalFlagsToPass = globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike;
                 return writeType(type, globalFlags);
 
+                function getTypeAliasSymbol(type: Type): Symbol {
+                    function getTypeAliasSymbolFromSymbolTable(symbols: SymbolTable): Symbol {
+                        // Check if symbol is any of the type alias
+                        return forEachValue(symbols, symbolFromSymbolTable => {
+                            if (symbolFromSymbolTable.flags & SymbolFlags.TypeAlias) {
+                                var typeOfTypeAliasSymbol = getDeclaredTypeOfSymbol(symbolFromSymbolTable);
+                                if (typeOfTypeAliasSymbol === type) {
+                                    return symbolFromSymbolTable;
+                                }
+                            }
+                        });
+                    }
+
+                    if (type && enclosingDeclaration) {
+                        return forEachSymbolTableInScope(enclosingDeclaration, getTypeAliasSymbolFromSymbolTable);
+                    }
+                }
+
                 function writeType(type: Type, flags: TypeFormatFlags) {
                     // Write undefined/null type as any
                     if (type.flags & TypeFlags.Intrinsic) {
@@ -1151,26 +1156,32 @@ module ts {
                     else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type);
                     }
-                    else if (type.flags & TypeFlags.Tuple) {
-                        writeTupleType(<TupleType>type);
-                    }
-                    else if (type.flags & TypeFlags.Union) {
-                        writeUnionType(<UnionType>type, flags);
-                    }
-                    else if (type.flags & TypeFlags.Anonymous) {
-                        writeAnonymousType(<ObjectType>type, flags);
-                    }
-                    else if (type.flags & TypeFlags.StringLiteral) {
-                        writer.writeStringLiteral((<StringLiteralType>type).text);
-                    }
                     else {
-                        // Should never get here
-                        // { ... }
-                        writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                        writeSpace(writer);
-                        writePunctuation(writer, SyntaxKind.DotDotDotToken);
-                        writeSpace(writer);
-                        writePunctuation(writer, SyntaxKind.CloseBraceToken);
+                        var typeAliasSymbol = flags & TypeFormatFlags.NoTypeAlias ?  undefined : getTypeAliasSymbol(type);
+                        if (typeAliasSymbol) {
+                            buildSymbolDisplay(typeAliasSymbol, writer, enclosingDeclaration, SymbolFlags.Type);
+                        }
+                        else if (type.flags & TypeFlags.Tuple) {
+                            writeTupleType(<TupleType>type);
+                        }
+                        else if (type.flags & TypeFlags.Union) {
+                            writeUnionType(<UnionType>type, flags);
+                        }
+                        else if (type.flags & TypeFlags.Anonymous) {
+                            writeAnonymousType(<ObjectType>type, flags);
+                        }
+                        else if (type.flags & TypeFlags.StringLiteral) {
+                            writer.writeStringLiteral((<StringLiteralType>type).text);
+                        }
+                        else {
+                            // Should never get here
+                            // { ... }
+                            writePunctuation(writer, SyntaxKind.OpenBraceToken);
+                            writeSpace(writer);
+                            writePunctuation(writer, SyntaxKind.DotDotDotToken);
+                            writeSpace(writer);
+                            writePunctuation(writer, SyntaxKind.CloseBraceToken);
+                        }
                     }
                 }
 
@@ -1227,15 +1238,8 @@ module ts {
                         writeTypeofSymbol(type);
                     }
                     else if (typeStack && contains(typeStack, type)) {
-                        // If type is an anonymous type literal in a type alias declaration, use type alias name
-                        var typeAlias = getTypeAliasForTypeLiteral(type);
-                        if (typeAlias) {
-                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type);
-                        }
-                        else {
-                            // Recursive usage, use any
-                            writeKeyword(writer, SyntaxKind.AnyKeyword);
-                        }
+                        // Recursive usage, use any
+                        writeKeyword(writer, SyntaxKind.AnyKeyword);
                     }
                     else {
                         if (!typeStack) {
