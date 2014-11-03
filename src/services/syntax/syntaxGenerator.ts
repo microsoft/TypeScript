@@ -1342,9 +1342,9 @@ function generateConstructor(definition: ITypeDefinition): string {
             if (child.isOptional) {
                 result += "            " + getSafeName(child) + " && (" + getSafeName(child) + ".parent = this);\r\n";
             }
-            else if (child.isList || child.isSeparatedList) {
-                result += "            !isShared(" + getSafeName(child) + ") && (" + getSafeName(child) + ".parent = this);\r\n";
-            }
+            //else if (child.isList || child.isSeparatedList) {
+            //    result += "            !isShared(" + getSafeName(child) + ") && (" + getSafeName(child) + ".parent = this);\r\n";
+            //}
             else {
                 result += "            " + getSafeName(child) + ".parent = this;\r\n";
             }
@@ -1999,10 +1999,10 @@ function generateNode(definition: ITypeDefinition, abstract: boolean): string {
             }
             first = false;
 
-            if (child.isList || child.isSeparatedList) {
-                result += "            !isShared(" + getSafeName(child) + ") && (" + getSafeName(child) + ".parent = this)";
-            }
-            else if (child.isOptional) {
+            //if (child.isList || child.isSeparatedList) {
+            //    result += "            !isShared(" + getSafeName(child) + ") && (" + getSafeName(child) + ".parent = this)";
+            //}
+            if (child.isOptional) {
                 result += "            " + getSafeName(child) + " && (" + getSafeName(child) + ".parent = this)";
             }
             else {
