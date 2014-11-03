@@ -184,8 +184,8 @@ module TypeScript.Syntax {
         return <ISyntaxNode>current;
     }
 
-    export function findTokenOnLeft(element: ISyntaxElement, position: number): ISyntaxToken {
-        var positionedToken = findToken(element, position);
+    export function findTokenOnLeft(sourceUnit: SourceUnitSyntax, position: number): ISyntaxToken {
+        var positionedToken = findToken(sourceUnit, position);
         var _start = start(positionedToken);
 
         // Position better fall within this token.
@@ -206,8 +206,8 @@ module TypeScript.Syntax {
         return previousToken(positionedToken);
     }
 
-    export function findCompleteTokenOnLeft(element: ISyntaxElement, position: number): ISyntaxToken {
-        var positionedToken = findToken(element, position);
+    export function findCompleteTokenOnLeft(sourceUnit: SourceUnitSyntax, position: number): ISyntaxToken {
+        var positionedToken = findToken(sourceUnit, position);
 
         // Position better fall within this token.
         // Debug.assert(position >= positionedToken.fullStart());

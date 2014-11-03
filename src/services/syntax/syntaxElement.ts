@@ -58,18 +58,26 @@ module TypeScript {
      * Note: findToken will always return a non-missing token with width greater than or equal to
      * 1 (except for EOF).  Empty tokens synthesized by the parser are never returned.
      */
-    export function findToken(element: ISyntaxElement, position: number): ISyntaxToken {
-        var endOfFileToken = tryGetEndOfFileAt(element, position);
-        if (endOfFileToken) {
-            return endOfFileToken;
-        }
-
-        if (position < 0 || position >= fullWidth(element)) {
+    export function findToken(sourceUnit: SourceUnitSyntax, position: number): ISyntaxToken {
+        if (position < 0) {
             throw Errors.argumentOutOfRange("position");
         }
 
-        var positionedToken = findTokenWorker(element, 0, position);
-        return positionedToken;
+        var token = findTokenWorker(sourceUnit, 0, position);
+        if (token) {
+            Debug.assert(token.fullWidth() > 0);
+            return token;
+        }
+
+        if (position === fullWidth(sourceUnit)) {
+            return sourceUnit.endOfFileToken;
+        }
+
+        if (position > fullWidth(sourceUnit)) {
+            throw Errors.argumentOutOfRange("position");
+        }
+
+        throw Errors.invalidOperation();
     }
 
     export function findSkippedTokenInPositionedToken(positionedToken: ISyntaxToken, position: number): ISyntaxToken {
@@ -115,16 +123,8 @@ module TypeScript {
     }
 
     function findTokenWorker(element: ISyntaxElement, elementPosition: number, position: number): ISyntaxToken {
-        // Debug.assert(position >= 0 && position < this.fullWidth());
         if (isToken(element)) {
-            Debug.assert(fullWidth(element) > 0);
             return <ISyntaxToken>element;
-        }
-
-        if (isShared(element)) {
-            // This should never have been called on this element.  It has a 0 width, so the client 
-            // should have skipped over this.
-            throw Errors.invalidOperation();
         }
 
         // Consider: we could use a binary search here to find the child more quickly.
@@ -133,19 +133,17 @@ module TypeScript {
 
             if (child) {
                 var childFullWidth = fullWidth(child);
-                if (childFullWidth > 0) {
-                    var elementEndPosition = elementPosition + childFullWidth;
+                var elementEndPosition = elementPosition + childFullWidth;
 
-                    if (position < elementEndPosition) {
-                        return findTokenWorker(child, elementPosition, position);
-                    }
-
-                    elementPosition = elementEndPosition;
+                if (position < elementEndPosition) {
+                    return findTokenWorker(child, elementPosition, position);
                 }
+
+                elementPosition = elementEndPosition;
             }
         }
 
-        throw Errors.invalidOperation();
+        return undefined;
     }
 
     function tryGetEndOfFileAt(element: ISyntaxElement, position: number): ISyntaxToken {
