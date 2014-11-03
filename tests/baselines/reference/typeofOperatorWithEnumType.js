@@ -44,15 +44,15 @@ var ENUM1;
 var ResultIsString1 = typeof ENUM;
 var ResultIsString2 = typeof ENUM1;
 // enum type expressions
-var ResultIsString3 = typeof ENUM1["A"];
-var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
+var ResultIsString3 = typeof 0 /* "A" */;
+var ResultIsString4 = typeof (ENUM[0] + 1 /* "B" */);
 // multiple typeof  operators
 var ResultIsString5 = typeof typeof ENUM;
 var ResultIsString6 = typeof typeof typeof (ENUM[0] + 1 /* B */);
 // miss assignment operators
 typeof ENUM;
 typeof ENUM1;
-typeof ENUM1["B"];
+typeof 1 /* "B" */;
 typeof ENUM, ENUM1;
 // use typeof in type query
 var z;

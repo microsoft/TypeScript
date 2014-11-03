@@ -115,6 +115,10 @@ module ts {
         return (file.flags & NodeFlags.DeclarationFile) !== 0;
     }
 
+    export function isConstEnumDeclaration(node: EnumDeclaration): boolean {
+        return (node.flags & NodeFlags.Const) !== 0;
+    }
+
     export function isPrologueDirective(node: Node): boolean {
         return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
@@ -3246,7 +3250,6 @@ module ts {
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
-                case SyntaxKind.ConstKeyword:
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.IfKeyword:
                 case SyntaxKind.DoKeyword:
@@ -3265,6 +3268,12 @@ module ts {
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
                     return true;
+                case SyntaxKind.ConstKeyword:
+                    // const keyword can precede enum keyword when defining constant enums
+                    // 'const enum' do not start statement.
+                    // In ES 6 'enum' is a future reserved keyword, so it should not be used as identifier
+                    var isConstEnum = lookAhead(() => nextToken() === SyntaxKind.EnumKeyword);
+                    return !isConstEnum;
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.ModuleKeyword:
@@ -3275,6 +3284,7 @@ module ts {
                     if (isDeclarationStart()) {
                         return false;
                     }
+
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
@@ -3296,6 +3306,7 @@ module ts {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
+                    // const here should always be parsed as const declaration because of check in 'isStatement' 
                     return parseVariableStatement(allowLetAndConstDeclarations);
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionDeclaration();
@@ -3860,6 +3871,7 @@ module ts {
         }
 
         function parseAndCheckEnumDeclaration(pos: number, flags: NodeFlags): EnumDeclaration {
+            var enumIsConst = flags & NodeFlags.Const;
             function isIntegerLiteral(expression: Expression): boolean {
                 function isInteger(literalExpression: LiteralExpression): boolean {
                     // Allows for scientific notation since literalExpression.text was formed by
@@ -3894,22 +3906,29 @@ module ts {
                 node.name = parsePropertyName();
                 node.initializer = parseInitializer(/*inParameter*/ false);
 
-                if (inAmbientContext) {
-                    if (node.initializer && !isIntegerLiteral(node.initializer) && errorCountBeforeEnumMember === file.syntacticErrors.length) {
-                        grammarErrorOnNode(node.name, Diagnostics.Ambient_enum_elements_can_only_have_integer_literal_initializers);
+                // skip checks below for const enums  - they allow arbitrary initializers as long as they can be evaluated to constant expressions.
+                // since all values are known in compile time - it is not necessary to check that constant enum section precedes computed enum members.
+                if (!enumIsConst) {
+                    if (inAmbientContext) {
+                        if (node.initializer && !isIntegerLiteral(node.initializer) && errorCountBeforeEnumMember === file.syntacticErrors.length) {
+                            grammarErrorOnNode(node.name, Diagnostics.Ambient_enum_elements_can_only_have_integer_literal_initializers);
+                        }
                     }
-                }
-                else if (node.initializer) {
-                    inConstantEnumMemberSection = isIntegerLiteral(node.initializer);
-                }
-                else if (!inConstantEnumMemberSection && errorCountBeforeEnumMember === file.syntacticErrors.length) {
-                    grammarErrorOnNode(node.name, Diagnostics.Enum_member_must_have_initializer);
+                    else if (node.initializer) {
+                        inConstantEnumMemberSection = isIntegerLiteral(node.initializer);
+                    }
+                    else if (!inConstantEnumMemberSection && errorCountBeforeEnumMember === file.syntacticErrors.length) {
+                        grammarErrorOnNode(node.name, Diagnostics.Enum_member_must_have_initializer);
+                    }
                 }
                 return finishNode(node);
             }
 
             var node = <EnumDeclaration>createNode(SyntaxKind.EnumDeclaration, pos);
             node.flags = flags;
+            if (enumIsConst) {
+                parseExpected(SyntaxKind.ConstKeyword);
+            }
             parseExpected(SyntaxKind.EnumKeyword);
             node.name = parseIdentifier();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
@@ -4066,8 +4085,16 @@ module ts {
             switch (token) {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
-                case SyntaxKind.ConstKeyword:
                     result = parseVariableStatement(/*allowLetAndConstDeclarations*/ true, pos, flags);
+                    break;
+                case SyntaxKind.ConstKeyword:
+                    var isConstEnum = lookAhead(() => nextToken() === SyntaxKind.EnumKeyword);
+                    if (isConstEnum) {
+                        result = parseAndCheckEnumDeclaration(pos, flags | NodeFlags.Const);
+                    }
+                    else {
+                        result = parseVariableStatement(/*allowLetAndConstDeclarations*/ true, pos, flags);
+                    }
                     break;
                 case SyntaxKind.FunctionKeyword:
                     result = parseFunctionDeclaration(pos, flags);

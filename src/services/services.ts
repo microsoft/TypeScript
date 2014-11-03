@@ -4572,7 +4572,7 @@ module ts {
                     if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
                         return SemanticMeaning.Namespace | SemanticMeaning.Value;
                     }
-                    else if (isInstantiated(node)) {
+                    else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {
                         return SemanticMeaning.Namespace | SemanticMeaning.Value;
                     }
                     else {
@@ -4849,7 +4849,7 @@ module ts {
                  */
                 function hasValueSideModule(symbol: Symbol): boolean {
                     return forEach(symbol.declarations, declaration => {
-                        return declaration.kind === SyntaxKind.ModuleDeclaration && isInstantiated(declaration);
+                        return declaration.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(declaration) == ModuleInstanceState.Instantiated;
                     });
                 }
             }

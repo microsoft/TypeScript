@@ -1031,19 +1031,29 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitPropertyAccess(node: PropertyAccess) {
+            function tryEmitConstantValue(node: PropertyAccess | IndexedAccess): boolean {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
-                    write(constantValue.toString() + " /* " + identifierToString(node.right) + " */");
+                    var propertyName = node.kind === SyntaxKind.PropertyAccess ? identifierToString((<PropertyAccess>node).right) : getTextOfNode((<IndexedAccess>node).index);
+                    write(constantValue.toString() + " /* " + propertyName + " */");
+                    return true;
                 }
-                else {
-                    emit(node.left);
-                    write(".");
-                    emit(node.right);
+                return false;
+            }
+
+            function emitPropertyAccess(node: PropertyAccess) {
+                if (tryEmitConstantValue(node)) {
+                    return;
                 }
+                emit(node.left);
+                write(".");
+                emit(node.right);
             }
 
             function emitIndexedAccess(node: IndexedAccess) {
+                if (tryEmitConstantValue(node)) {
+                    return;
+                }
                 emit(node.object);
                 write("[");
                 emit(node.index);
@@ -1876,6 +1886,10 @@ module ts {
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
+                // const enums are completely erased during compilation.
+                if (isConstEnumDeclaration(node) && !compilerOptions.preserveConstEnums) {
+                    return;
+                }
                 emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
@@ -1950,7 +1964,7 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (!isInstantiated(node)) {
+                if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
                 emitLeadingComments(node);
@@ -2002,7 +2016,7 @@ module ts {
                     // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
                     // - current file is not external module
                     // - import declaration is top level and target is value imported by entity name
-                    emitImportDeclaration = !isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportedViaEntityName(node);
+                    emitImportDeclaration = !isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportWithEntityName(node);
                 }
 
                 if (emitImportDeclaration) {
@@ -2722,6 +2736,9 @@ module ts {
                 if (resolver.isDeclarationVisible(node)) {
                     emitJsDocComments(node);
                     emitDeclarationFlags(node);
+                    if (isConstEnumDeclaration(node)) {
+                        write("const ")
+                    }
                     write("enum ");
                     emitSourceTextOfNode(node.name);
                     write(" {");

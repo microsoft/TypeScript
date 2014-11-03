@@ -24,7 +24,7 @@ module ts {
             type: "boolean",
         },
         {
-            name: "emitBOM", 
+            name: "emitBOM",
             type: "boolean"
         },
         {
@@ -102,7 +102,7 @@ module ts {
         {
             name: "target",
             shortName: "t",
-            type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5 , "es6": ScriptTarget.ES6 },
+            type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental,
             paramType: Diagnostics.VERSION,
             error: Diagnostics.Argument_for_target_option_must_be_es3_es5_or_es6
@@ -118,6 +118,11 @@ module ts {
             shortName: "w",
             type: "boolean",
             description: Diagnostics.Watch_input_files,
+        },
+        {
+            name: "preserveConstEnums",
+            type: "boolean",
+            description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
         }
     ];
 
