@@ -554,10 +554,12 @@ module TypeScript.Parser {
             while (true) {
                 // Parent must be a list or a node.  All of those have a 'data' element.
                 Debug.assert(isNode(parent) || isList(parent));
-                var dataElement = <{ data: number }><any>parent;
-                if (dataElement.data) {
-                    dataElement.data &= SyntaxConstants.NodeParsedInStrictModeMask
+                var dataElement = <ISyntaxNode>parent;
+                if (dataElement.__data) {
+                    dataElement.__data &= SyntaxConstants.NodeParsedInStrictModeMask
                 }
+
+                dataElement.__cachedTokens = undefined;
 
                 if (parent === node) {
                     break;

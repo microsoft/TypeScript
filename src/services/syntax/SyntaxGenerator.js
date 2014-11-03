@@ -1041,7 +1041,7 @@ var definitions = [
         name: 'VariableDeclaratorSyntax',
         baseType: 'ISyntaxNode',
         children: [
-            { name: 'propertyName', isToken: true, tokenKinds: ['IdentifierName', 'StringLiteral', 'NumericLiteral'] },
+            { name: 'propertyName', isToken: true },
             { name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true, isTypeScriptSpecific: true },
             { name: 'equalsValueClause', type: 'EqualsValueClauseSyntax', isOptional: true }
         ]
@@ -2838,14 +2838,22 @@ function max(array, func) {
     return max;
 }
 function generateScannerUtilities() {
-    var result = "///<reference path='references.ts' />\r\n" + "\r\n" + "module TypeScript {\r\n" + "    export class ScannerUtilities {\r\n";
+    var result = "///<reference path='references.ts' />\r\n" + "\r\n" + "module TypeScript {\r\n" + "    export module ScannerUtilities {\r\n";
+    result += "        export function fixedWidthTokenLength(kind: SyntaxKind) {\r\n";
+    result += "            switch (kind) {\r\n";
+    for (var k = TypeScript.SyntaxKind.FirstFixedWidth; k <= TypeScript.SyntaxKind.LastFixedWidth; k++) {
+        result += "                case SyntaxKind." + syntaxKindName(k) + ": return " + TypeScript.SyntaxFacts.getText(k).length + ";\r\n";
+    }
+    result += "                default: throw new Error();\r\n";
+    result += "            }\r\n";
+    result += "        }\r\n\r\n";
     var i;
     var keywords = [];
     for (i = TypeScript.SyntaxKind.FirstKeyword; i <= TypeScript.SyntaxKind.LastKeyword; i++) {
         keywords.push({ kind: i, text: TypeScript.SyntaxFacts.getText(i) });
     }
     keywords.sort(function (a, b) { return a.text.localeCompare(b.text); });
-    result += "        public static identifierKind(str: string, start: number, length: number): SyntaxKind {\r\n";
+    result += "        export function identifierKind(str: string, start: number, length: number): SyntaxKind {\r\n";
     var minTokenLength = min(keywords, function (k) { return k.text.length; });
     var maxTokenLength = max(keywords, function (k) { return k.text.length; });
     result += "            switch (length) {\r\n";

@@ -2407,7 +2407,17 @@ function generateScannerUtilities(): string {
     var result = "///<reference path='references.ts' />\r\n" +
         "\r\n" +
         "module TypeScript {\r\n" +
-        "    export class ScannerUtilities {\r\n";
+        "    export module ScannerUtilities {\r\n";
+
+    result += "        export function fixedWidthTokenLength(kind: SyntaxKind) {\r\n";
+    result += "            switch (kind) {\r\n";
+
+    for (var k = TypeScript.SyntaxKind.FirstFixedWidth; k <= TypeScript.SyntaxKind.LastFixedWidth; k++) {
+        result += "                case SyntaxKind." + syntaxKindName(k) + ": return " + TypeScript.SyntaxFacts.getText(k).length + ";\r\n";
+    }
+    result += "                default: throw new Error();\r\n";
+    result += "            }\r\n";
+    result += "        }\r\n\r\n";
 
     var i: number;
     var keywords: { text: string; kind: TypeScript.SyntaxKind; }[] = [];
@@ -2418,7 +2428,7 @@ function generateScannerUtilities(): string {
 
     keywords.sort((a, b) => a.text.localeCompare(b.text));
 
-    result += "        public static identifierKind(str: string, start: number, length: number): SyntaxKind {\r\n";
+    result += "        export function identifierKind(str: string, start: number, length: number): SyntaxKind {\r\n";
 
     var minTokenLength = min(keywords, k => k.text.length);
     var maxTokenLength = max(keywords, k => k.text.length);
