@@ -22887,56 +22887,16 @@ var TypeScript;
         switch (element.kind()) {
             case 122 /* SourceUnit */:
                 return 2;
-            case 211 /* ExternalModuleReference */:
-                return 4;
-            case 212 /* ModuleNameModuleReference */:
-                return 1;
-            case 138 /* ImportDeclaration */:
-                return 6;
-            case 139 /* ExportAssignment */:
-                return 4;
-            case 136 /* ClassDeclaration */:
-                return 8;
-            case 133 /* InterfaceDeclaration */:
-                return 6;
-            case 196 /* HeritageClause */:
-                return 2;
-            case 135 /* ModuleDeclaration */:
-                return 7;
-            case 134 /* FunctionDeclaration */:
-                return 6;
-            case 153 /* VariableStatement */:
-                return 3;
-            case 190 /* VariableDeclaration */:
-                return 2;
-            case 191 /* VariableDeclarator */:
-                return 3;
-            case 197 /* EqualsValueClause */:
-                return 2;
-            case 169 /* PrefixUnaryExpression */:
-                return 2;
-            case 178 /* ArrayLiteralExpression */:
-                return 3;
-            case 187 /* OmittedExpression */:
-                return 0;
-            case 181 /* ParenthesizedExpression */:
-                return 3;
-            case 183 /* SimpleArrowFunctionExpression */:
-                return 4;
-            case 182 /* ParenthesizedArrowFunctionExpression */:
-                return 4;
             case 123 /* QualifiedName */:
                 return 3;
-            case 194 /* TypeArgumentList */:
+            case 124 /* ObjectType */:
+                return 3;
+            case 125 /* FunctionType */:
+                return 4;
+            case 126 /* ArrayType */:
                 return 3;
             case 127 /* ConstructorType */:
                 return 5;
-            case 125 /* FunctionType */:
-                return 4;
-            case 124 /* ObjectType */:
-                return 3;
-            case 126 /* ArrayType */:
-                return 3;
             case 128 /* GenericType */:
                 return 2;
             case 129 /* TypeQuery */:
@@ -22947,80 +22907,54 @@ var TypeScript;
                 return 3;
             case 132 /* ParenthesizedType */:
                 return 3;
-            case 210 /* TypeAnnotation */:
-                return 2;
-            case 151 /* Block */:
-                return 3;
-            case 208 /* Parameter */:
+            case 133 /* InterfaceDeclaration */:
                 return 6;
-            case 176 /* MemberAccessExpression */:
-                return 3;
-            case 175 /* PostfixUnaryExpression */:
-                return 2;
-            case 185 /* ElementAccessExpression */:
-                return 4;
-            case 189 /* TemplateAccessExpression */:
-                return 2;
-            case 188 /* TemplateExpression */:
-                return 2;
-            case 203 /* TemplateClause */:
-                return 2;
-            case 177 /* InvocationExpression */:
-                return 2;
-            case 192 /* ArgumentList */:
-                return 4;
-            case 174 /* BinaryExpression */:
-                return 3;
-            case 173 /* ConditionalExpression */:
-                return 5;
-            case 148 /* ConstructSignature */:
-                return 2;
-            case 150 /* MethodSignature */:
-                return 3;
-            case 149 /* IndexSignature */:
-                return 4;
-            case 146 /* PropertySignature */:
-                return 3;
-            case 147 /* CallSignature */:
-                return 3;
-            case 193 /* ParameterList */:
-                return 3;
-            case 195 /* TypeParameterList */:
-                return 3;
-            case 204 /* TypeParameter */:
-                return 2;
-            case 205 /* Constraint */:
-                return 2;
-            case 200 /* ElseClause */:
-                return 2;
-            case 152 /* IfStatement */:
+            case 134 /* FunctionDeclaration */:
                 return 6;
-            case 154 /* ExpressionStatement */:
-                return 2;
-            case 142 /* ConstructorDeclaration */:
-                return 5;
+            case 135 /* ModuleDeclaration */:
+                return 7;
+            case 136 /* ClassDeclaration */:
+                return 8;
+            case 137 /* EnumDeclaration */:
+                return 6;
+            case 138 /* ImportDeclaration */:
+                return 6;
+            case 139 /* ExportAssignment */:
+                return 4;
             case 140 /* MemberFunctionDeclaration */:
                 return 5;
+            case 141 /* MemberVariableDeclaration */:
+                return 3;
+            case 142 /* ConstructorDeclaration */:
+                return 5;
+            case 143 /* IndexMemberDeclaration */:
+                return 3;
             case 144 /* GetAccessor */:
                 return 5;
             case 145 /* SetAccessor */:
                 return 5;
-            case 141 /* MemberVariableDeclaration */:
+            case 146 /* PropertySignature */:
                 return 3;
-            case 143 /* IndexMemberDeclaration */:
+            case 147 /* CallSignature */:
                 return 3;
-            case 162 /* ThrowStatement */:
+            case 148 /* ConstructSignature */:
+                return 2;
+            case 149 /* IndexSignature */:
+                return 4;
+            case 150 /* MethodSignature */:
                 return 3;
+            case 151 /* Block */:
+                return 3;
+            case 152 /* IfStatement */:
+                return 6;
+            case 153 /* VariableStatement */:
+                return 3;
+            case 154 /* ExpressionStatement */:
+                return 2;
             case 155 /* ReturnStatement */:
-                return 3;
-            case 180 /* ObjectCreationExpression */:
                 return 3;
             case 156 /* SwitchStatement */:
                 return 7;
-            case 198 /* CaseSwitchClause */:
-                return 4;
-            case 199 /* DefaultSwitchClause */:
-                return 3;
             case 157 /* BreakStatement */:
                 return 3;
             case 158 /* ContinueStatement */:
@@ -23029,44 +22963,110 @@ var TypeScript;
                 return 10;
             case 160 /* ForInStatement */:
                 return 8;
-            case 163 /* WhileStatement */:
-                return 5;
-            case 168 /* WithStatement */:
-                return 5;
-            case 137 /* EnumDeclaration */:
-                return 6;
-            case 209 /* EnumElement */:
-                return 2;
-            case 184 /* CastExpression */:
-                return 4;
-            case 179 /* ObjectLiteralExpression */:
-                return 3;
-            case 206 /* SimplePropertyAssignment */:
-                return 3;
-            case 207 /* FunctionPropertyAssignment */:
-                return 3;
-            case 186 /* FunctionExpression */:
-                return 4;
             case 161 /* EmptyStatement */:
                 return 1;
+            case 162 /* ThrowStatement */:
+                return 3;
+            case 163 /* WhileStatement */:
+                return 5;
             case 164 /* TryStatement */:
                 return 4;
-            case 201 /* CatchClause */:
-                return 6;
-            case 202 /* FinallyClause */:
-                return 2;
             case 165 /* LabeledStatement */:
                 return 3;
             case 166 /* DoStatement */:
                 return 7;
-            case 171 /* TypeOfExpression */:
+            case 167 /* DebuggerStatement */:
+                return 2;
+            case 168 /* WithStatement */:
+                return 5;
+            case 169 /* PrefixUnaryExpression */:
                 return 2;
             case 170 /* DeleteExpression */:
                 return 2;
+            case 171 /* TypeOfExpression */:
+                return 2;
             case 172 /* VoidExpression */:
                 return 2;
-            case 167 /* DebuggerStatement */:
+            case 173 /* ConditionalExpression */:
+                return 5;
+            case 174 /* BinaryExpression */:
+                return 3;
+            case 175 /* PostfixUnaryExpression */:
                 return 2;
+            case 176 /* MemberAccessExpression */:
+                return 3;
+            case 177 /* InvocationExpression */:
+                return 2;
+            case 178 /* ArrayLiteralExpression */:
+                return 3;
+            case 179 /* ObjectLiteralExpression */:
+                return 3;
+            case 180 /* ObjectCreationExpression */:
+                return 3;
+            case 181 /* ParenthesizedExpression */:
+                return 3;
+            case 182 /* ParenthesizedArrowFunctionExpression */:
+                return 4;
+            case 183 /* SimpleArrowFunctionExpression */:
+                return 4;
+            case 184 /* CastExpression */:
+                return 4;
+            case 185 /* ElementAccessExpression */:
+                return 4;
+            case 186 /* FunctionExpression */:
+                return 4;
+            case 187 /* OmittedExpression */:
+                return 0;
+            case 188 /* TemplateExpression */:
+                return 2;
+            case 189 /* TemplateAccessExpression */:
+                return 2;
+            case 190 /* VariableDeclaration */:
+                return 2;
+            case 191 /* VariableDeclarator */:
+                return 3;
+            case 192 /* ArgumentList */:
+                return 4;
+            case 193 /* ParameterList */:
+                return 3;
+            case 194 /* TypeArgumentList */:
+                return 3;
+            case 195 /* TypeParameterList */:
+                return 3;
+            case 196 /* HeritageClause */:
+                return 2;
+            case 197 /* EqualsValueClause */:
+                return 2;
+            case 198 /* CaseSwitchClause */:
+                return 4;
+            case 199 /* DefaultSwitchClause */:
+                return 3;
+            case 200 /* ElseClause */:
+                return 2;
+            case 201 /* CatchClause */:
+                return 6;
+            case 202 /* FinallyClause */:
+                return 2;
+            case 203 /* TemplateClause */:
+                return 2;
+            case 204 /* TypeParameter */:
+                return 2;
+            case 205 /* Constraint */:
+                return 2;
+            case 206 /* SimplePropertyAssignment */:
+                return 3;
+            case 207 /* FunctionPropertyAssignment */:
+                return 3;
+            case 208 /* Parameter */:
+                return 6;
+            case 209 /* EnumElement */:
+                return 2;
+            case 210 /* TypeAnnotation */:
+                return 2;
+            case 211 /* ExternalModuleReference */:
+                return 4;
+            case 212 /* ModuleNameModuleReference */:
+                return 1;
             default:
                 return 0;
         }
@@ -23080,221 +23080,6 @@ var TypeScript;
                 return node.endOfFileToken;
         }
     }
-    function externalModuleReferenceChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.requireKeyword;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.stringLiteral;
-            case 3:
-                return node.closeParenToken;
-        }
-    }
-    function moduleNameModuleReferenceChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.moduleName;
-        }
-    }
-    function importDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.importKeyword;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.equalsToken;
-            case 4:
-                return node.moduleReference;
-            case 5:
-                return node.semicolonToken;
-        }
-    }
-    function exportAssignmentChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.exportKeyword;
-            case 1:
-                return node.equalsToken;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.semicolonToken;
-        }
-    }
-    function classDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.classKeyword;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.typeParameterList;
-            case 4:
-                return node.heritageClauses;
-            case 5:
-                return node.openBraceToken;
-            case 6:
-                return node.classElements;
-            case 7:
-                return node.closeBraceToken;
-        }
-    }
-    function interfaceDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.interfaceKeyword;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.typeParameterList;
-            case 4:
-                return node.heritageClauses;
-            case 5:
-                return node.body;
-        }
-    }
-    function heritageClauseChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.extendsOrImplementsKeyword;
-            case 1:
-                return node.typeNames;
-        }
-    }
-    function moduleDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.moduleKeyword;
-            case 2:
-                return node.name;
-            case 3:
-                return node.stringLiteral;
-            case 4:
-                return node.openBraceToken;
-            case 5:
-                return node.moduleElements;
-            case 6:
-                return node.closeBraceToken;
-        }
-    }
-    function functionDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.functionKeyword;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.callSignature;
-            case 4:
-                return node.block;
-            case 5:
-                return node.semicolonToken;
-        }
-    }
-    function variableStatementChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.variableDeclaration;
-            case 2:
-                return node.semicolonToken;
-        }
-    }
-    function variableDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.varKeyword;
-            case 1:
-                return node.variableDeclarators;
-        }
-    }
-    function variableDeclaratorChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.propertyName;
-            case 1:
-                return node.typeAnnotation;
-            case 2:
-                return node.equalsValueClause;
-        }
-    }
-    function equalsValueClauseChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.equalsToken;
-            case 1:
-                return node.value;
-        }
-    }
-    function prefixUnaryExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.operatorToken;
-            case 1:
-                return node.operand;
-        }
-    }
-    function arrayLiteralExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.openBracketToken;
-            case 1:
-                return node.expressions;
-            case 2:
-                return node.closeBracketToken;
-        }
-    }
-    function omittedExpressionChildAt(node, index) {
-        throw TypeScript.Errors.invalidOperation();
-    }
-    function parenthesizedExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.openParenToken;
-            case 1:
-                return node.expression;
-            case 2:
-                return node.closeParenToken;
-        }
-    }
-    function simpleArrowFunctionExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.parameter;
-            case 1:
-                return node.equalsGreaterThanToken;
-            case 2:
-                return node.block;
-            case 3:
-                return node.expression;
-        }
-    }
-    function parenthesizedArrowFunctionExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.callSignature;
-            case 1:
-                return node.equalsGreaterThanToken;
-            case 2:
-                return node.block;
-            case 3:
-                return node.expression;
-        }
-    }
     function qualifiedNameChildAt(node, index) {
         switch (index) {
             case 0:
@@ -23305,28 +23090,14 @@ var TypeScript;
                 return node.right;
         }
     }
-    function typeArgumentListChildAt(node, index) {
+    function objectTypeChildAt(node, index) {
         switch (index) {
             case 0:
-                return node.lessThanToken;
+                return node.openBraceToken;
             case 1:
-                return node.typeArguments;
+                return node.typeMembers;
             case 2:
-                return node.greaterThanToken;
-        }
-    }
-    function constructorTypeChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.newKeyword;
-            case 1:
-                return node.typeParameterList;
-            case 2:
-                return node.parameterList;
-            case 3:
-                return node.equalsGreaterThanToken;
-            case 4:
-                return node.type;
+                return node.closeBraceToken;
         }
     }
     function functionTypeChildAt(node, index) {
@@ -23341,16 +23112,6 @@ var TypeScript;
                 return node.type;
         }
     }
-    function objectTypeChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.openBraceToken;
-            case 1:
-                return node.typeMembers;
-            case 2:
-                return node.closeBraceToken;
-        }
-    }
     function arrayTypeChildAt(node, index) {
         switch (index) {
             case 0:
@@ -23359,6 +23120,20 @@ var TypeScript;
                 return node.openBracketToken;
             case 2:
                 return node.closeBracketToken;
+        }
+    }
+    function constructorTypeChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.newKeyword;
+            case 1:
+                return node.typeParameterList;
+            case 2:
+                return node.parameterList;
+            case 3:
+                return node.equalsGreaterThanToken;
+            case 4:
+                return node.type;
         }
     }
     function genericTypeChildAt(node, index) {
@@ -23407,253 +23182,141 @@ var TypeScript;
                 return node.closeParenToken;
         }
     }
-    function typeAnnotationChildAt(node, index) {
+    function interfaceDeclarationChildAt(node, index) {
         switch (index) {
             case 0:
-                return node.colonToken;
+                return node.modifiers;
             case 1:
-                return node.type;
+                return node.interfaceKeyword;
+            case 2:
+                return node.identifier;
+            case 3:
+                return node.typeParameterList;
+            case 4:
+                return node.heritageClauses;
+            case 5:
+                return node.body;
         }
     }
-    function blockChildAt(node, index) {
+    function functionDeclarationChildAt(node, index) {
         switch (index) {
             case 0:
-                return node.openBraceToken;
+                return node.modifiers;
             case 1:
-                return node.statements;
+                return node.functionKeyword;
             case 2:
+                return node.identifier;
+            case 3:
+                return node.callSignature;
+            case 4:
+                return node.block;
+            case 5:
+                return node.semicolonToken;
+        }
+    }
+    function moduleDeclarationChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.modifiers;
+            case 1:
+                return node.moduleKeyword;
+            case 2:
+                return node.name;
+            case 3:
+                return node.stringLiteral;
+            case 4:
+                return node.openBraceToken;
+            case 5:
+                return node.moduleElements;
+            case 6:
                 return node.closeBraceToken;
         }
     }
-    function parameterChildAt(node, index) {
+    function classDeclarationChildAt(node, index) {
         switch (index) {
             case 0:
-                return node.dotDotDotToken;
-            case 1:
                 return node.modifiers;
+            case 1:
+                return node.classKeyword;
             case 2:
                 return node.identifier;
             case 3:
-                return node.questionToken;
-            case 4:
-                return node.typeAnnotation;
-            case 5:
-                return node.equalsValueClause;
-        }
-    }
-    function memberAccessExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.expression;
-            case 1:
-                return node.dotToken;
-            case 2:
-                return node.name;
-        }
-    }
-    function postfixUnaryExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.operand;
-            case 1:
-                return node.operatorToken;
-        }
-    }
-    function elementAccessExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.expression;
-            case 1:
-                return node.openBracketToken;
-            case 2:
-                return node.argumentExpression;
-            case 3:
-                return node.closeBracketToken;
-        }
-    }
-    function templateAccessExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.expression;
-            case 1:
-                return node.templateExpression;
-        }
-    }
-    function templateExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.templateStartToken;
-            case 1:
-                return node.templateClauses;
-        }
-    }
-    function templateClauseChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.expression;
-            case 1:
-                return node.templateMiddleOrEndToken;
-        }
-    }
-    function invocationExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.expression;
-            case 1:
-                return node.argumentList;
-        }
-    }
-    function argumentListChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.typeArgumentList;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.arguments;
-            case 3:
-                return node.closeParenToken;
-        }
-    }
-    function binaryExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.left;
-            case 1:
-                return node.operatorToken;
-            case 2:
-                return node.right;
-        }
-    }
-    function conditionalExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.condition;
-            case 1:
-                return node.questionToken;
-            case 2:
-                return node.whenTrue;
-            case 3:
-                return node.colonToken;
-            case 4:
-                return node.whenFalse;
-        }
-    }
-    function constructSignatureChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.newKeyword;
-            case 1:
-                return node.callSignature;
-        }
-    }
-    function methodSignatureChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.propertyName;
-            case 1:
-                return node.questionToken;
-            case 2:
-                return node.callSignature;
-        }
-    }
-    function indexSignatureChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.openBracketToken;
-            case 1:
-                return node.parameters;
-            case 2:
-                return node.closeBracketToken;
-            case 3:
-                return node.typeAnnotation;
-        }
-    }
-    function propertySignatureChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.propertyName;
-            case 1:
-                return node.questionToken;
-            case 2:
-                return node.typeAnnotation;
-        }
-    }
-    function callSignatureChildAt(node, index) {
-        switch (index) {
-            case 0:
                 return node.typeParameterList;
-            case 1:
-                return node.parameterList;
-            case 2:
-                return node.typeAnnotation;
-        }
-    }
-    function parameterListChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.openParenToken;
-            case 1:
-                return node.parameters;
-            case 2:
-                return node.closeParenToken;
-        }
-    }
-    function typeParameterListChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.lessThanToken;
-            case 1:
-                return node.typeParameters;
-            case 2:
-                return node.greaterThanToken;
-        }
-    }
-    function typeParameterChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.identifier;
-            case 1:
-                return node.constraint;
-        }
-    }
-    function constraintChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.extendsKeyword;
-            case 1:
-                return node.typeOrExpression;
-        }
-    }
-    function elseClauseChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.elseKeyword;
-            case 1:
-                return node.statement;
-        }
-    }
-    function ifStatementChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.ifKeyword;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.condition;
-            case 3:
-                return node.closeParenToken;
             case 4:
-                return node.statement;
+                return node.heritageClauses;
             case 5:
-                return node.elseClause;
+                return node.openBraceToken;
+            case 6:
+                return node.classElements;
+            case 7:
+                return node.closeBraceToken;
         }
     }
-    function expressionStatementChildAt(node, index) {
+    function enumDeclarationChildAt(node, index) {
         switch (index) {
             case 0:
-                return node.expression;
+                return node.modifiers;
             case 1:
+                return node.enumKeyword;
+            case 2:
+                return node.identifier;
+            case 3:
+                return node.openBraceToken;
+            case 4:
+                return node.enumElements;
+            case 5:
+                return node.closeBraceToken;
+        }
+    }
+    function importDeclarationChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.modifiers;
+            case 1:
+                return node.importKeyword;
+            case 2:
+                return node.identifier;
+            case 3:
+                return node.equalsToken;
+            case 4:
+                return node.moduleReference;
+            case 5:
+                return node.semicolonToken;
+        }
+    }
+    function exportAssignmentChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.exportKeyword;
+            case 1:
+                return node.equalsToken;
+            case 2:
+                return node.identifier;
+            case 3:
+                return node.semicolonToken;
+        }
+    }
+    function memberFunctionDeclarationChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.modifiers;
+            case 1:
+                return node.propertyName;
+            case 2:
+                return node.callSignature;
+            case 3:
+                return node.block;
+            case 4:
+                return node.semicolonToken;
+        }
+    }
+    function memberVariableDeclarationChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.modifiers;
+            case 1:
+                return node.variableDeclarator;
+            case 2:
                 return node.semicolonToken;
         }
     }
@@ -23671,17 +23334,13 @@ var TypeScript;
                 return node.semicolonToken;
         }
     }
-    function memberFunctionDeclarationChildAt(node, index) {
+    function indexMemberDeclarationChildAt(node, index) {
         switch (index) {
             case 0:
                 return node.modifiers;
             case 1:
-                return node.propertyName;
+                return node.indexSignature;
             case 2:
-                return node.callSignature;
-            case 3:
-                return node.block;
-            case 4:
                 return node.semicolonToken;
         }
     }
@@ -23713,33 +23372,97 @@ var TypeScript;
                 return node.block;
         }
     }
-    function memberVariableDeclarationChildAt(node, index) {
+    function propertySignatureChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.propertyName;
+            case 1:
+                return node.questionToken;
+            case 2:
+                return node.typeAnnotation;
+        }
+    }
+    function callSignatureChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.typeParameterList;
+            case 1:
+                return node.parameterList;
+            case 2:
+                return node.typeAnnotation;
+        }
+    }
+    function constructSignatureChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.newKeyword;
+            case 1:
+                return node.callSignature;
+        }
+    }
+    function indexSignatureChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.openBracketToken;
+            case 1:
+                return node.parameters;
+            case 2:
+                return node.closeBracketToken;
+            case 3:
+                return node.typeAnnotation;
+        }
+    }
+    function methodSignatureChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.propertyName;
+            case 1:
+                return node.questionToken;
+            case 2:
+                return node.callSignature;
+        }
+    }
+    function blockChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.openBraceToken;
+            case 1:
+                return node.statements;
+            case 2:
+                return node.closeBraceToken;
+        }
+    }
+    function ifStatementChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.ifKeyword;
+            case 1:
+                return node.openParenToken;
+            case 2:
+                return node.condition;
+            case 3:
+                return node.closeParenToken;
+            case 4:
+                return node.statement;
+            case 5:
+                return node.elseClause;
+        }
+    }
+    function variableStatementChildAt(node, index) {
         switch (index) {
             case 0:
                 return node.modifiers;
             case 1:
-                return node.variableDeclarator;
+                return node.variableDeclaration;
             case 2:
                 return node.semicolonToken;
         }
     }
-    function indexMemberDeclarationChildAt(node, index) {
+    function expressionStatementChildAt(node, index) {
         switch (index) {
             case 0:
-                return node.modifiers;
-            case 1:
-                return node.indexSignature;
-            case 2:
-                return node.semicolonToken;
-        }
-    }
-    function throwStatementChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.throwKeyword;
-            case 1:
                 return node.expression;
-            case 2:
+            case 1:
                 return node.semicolonToken;
         }
     }
@@ -23751,16 +23474,6 @@ var TypeScript;
                 return node.expression;
             case 2:
                 return node.semicolonToken;
-        }
-    }
-    function objectCreationExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.newKeyword;
-            case 1:
-                return node.expression;
-            case 2:
-                return node.argumentList;
         }
     }
     function switchStatementChildAt(node, index) {
@@ -23779,28 +23492,6 @@ var TypeScript;
                 return node.switchClauses;
             case 6:
                 return node.closeBraceToken;
-        }
-    }
-    function caseSwitchClauseChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.caseKeyword;
-            case 1:
-                return node.expression;
-            case 2:
-                return node.colonToken;
-            case 3:
-                return node.statements;
-        }
-    }
-    function defaultSwitchClauseChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.defaultKeyword;
-            case 1:
-                return node.colonToken;
-            case 2:
-                return node.statements;
         }
     }
     function breakStatementChildAt(node, index) {
@@ -23867,6 +23558,22 @@ var TypeScript;
                 return node.statement;
         }
     }
+    function emptyStatementChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.semicolonToken;
+        }
+    }
+    function throwStatementChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.throwKeyword;
+            case 1:
+                return node.expression;
+            case 2:
+                return node.semicolonToken;
+        }
+    }
     function whileStatementChildAt(node, index) {
         switch (index) {
             case 0:
@@ -23881,104 +23588,6 @@ var TypeScript;
                 return node.statement;
         }
     }
-    function withStatementChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.withKeyword;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.condition;
-            case 3:
-                return node.closeParenToken;
-            case 4:
-                return node.statement;
-        }
-    }
-    function enumDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.enumKeyword;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.openBraceToken;
-            case 4:
-                return node.enumElements;
-            case 5:
-                return node.closeBraceToken;
-        }
-    }
-    function enumElementChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.propertyName;
-            case 1:
-                return node.equalsValueClause;
-        }
-    }
-    function castExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.lessThanToken;
-            case 1:
-                return node.type;
-            case 2:
-                return node.greaterThanToken;
-            case 3:
-                return node.expression;
-        }
-    }
-    function objectLiteralExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.openBraceToken;
-            case 1:
-                return node.propertyAssignments;
-            case 2:
-                return node.closeBraceToken;
-        }
-    }
-    function simplePropertyAssignmentChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.propertyName;
-            case 1:
-                return node.colonToken;
-            case 2:
-                return node.expression;
-        }
-    }
-    function functionPropertyAssignmentChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.propertyName;
-            case 1:
-                return node.callSignature;
-            case 2:
-                return node.block;
-        }
-    }
-    function functionExpressionChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.functionKeyword;
-            case 1:
-                return node.identifier;
-            case 2:
-                return node.callSignature;
-            case 3:
-                return node.block;
-        }
-    }
-    function emptyStatementChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.semicolonToken;
-        }
-    }
     function tryStatementChildAt(node, index) {
         switch (index) {
             case 0:
@@ -23989,30 +23598,6 @@ var TypeScript;
                 return node.catchClause;
             case 3:
                 return node.finallyClause;
-        }
-    }
-    function catchClauseChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.catchKeyword;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.typeAnnotation;
-            case 4:
-                return node.closeParenToken;
-            case 5:
-                return node.block;
-        }
-    }
-    function finallyClauseChildAt(node, index) {
-        switch (index) {
-            case 0:
-                return node.finallyKeyword;
-            case 1:
-                return node.block;
         }
     }
     function labeledStatementChildAt(node, index) {
@@ -24043,18 +23628,48 @@ var TypeScript;
                 return node.semicolonToken;
         }
     }
-    function typeOfExpressionChildAt(node, index) {
+    function debuggerStatementChildAt(node, index) {
         switch (index) {
             case 0:
-                return node.typeOfKeyword;
+                return node.debuggerKeyword;
             case 1:
-                return node.expression;
+                return node.semicolonToken;
+        }
+    }
+    function withStatementChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.withKeyword;
+            case 1:
+                return node.openParenToken;
+            case 2:
+                return node.condition;
+            case 3:
+                return node.closeParenToken;
+            case 4:
+                return node.statement;
+        }
+    }
+    function prefixUnaryExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.operatorToken;
+            case 1:
+                return node.operand;
         }
     }
     function deleteExpressionChildAt(node, index) {
         switch (index) {
             case 0:
                 return node.deleteKeyword;
+            case 1:
+                return node.expression;
+        }
+    }
+    function typeOfExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.typeOfKeyword;
             case 1:
                 return node.expression;
         }
@@ -24067,12 +23682,397 @@ var TypeScript;
                 return node.expression;
         }
     }
-    function debuggerStatementChildAt(node, index) {
+    function conditionalExpressionChildAt(node, index) {
         switch (index) {
             case 0:
-                return node.debuggerKeyword;
+                return node.condition;
             case 1:
-                return node.semicolonToken;
+                return node.questionToken;
+            case 2:
+                return node.whenTrue;
+            case 3:
+                return node.colonToken;
+            case 4:
+                return node.whenFalse;
+        }
+    }
+    function binaryExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.left;
+            case 1:
+                return node.operatorToken;
+            case 2:
+                return node.right;
+        }
+    }
+    function postfixUnaryExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.operand;
+            case 1:
+                return node.operatorToken;
+        }
+    }
+    function memberAccessExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.expression;
+            case 1:
+                return node.dotToken;
+            case 2:
+                return node.name;
+        }
+    }
+    function invocationExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.expression;
+            case 1:
+                return node.argumentList;
+        }
+    }
+    function arrayLiteralExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.openBracketToken;
+            case 1:
+                return node.expressions;
+            case 2:
+                return node.closeBracketToken;
+        }
+    }
+    function objectLiteralExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.openBraceToken;
+            case 1:
+                return node.propertyAssignments;
+            case 2:
+                return node.closeBraceToken;
+        }
+    }
+    function objectCreationExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.newKeyword;
+            case 1:
+                return node.expression;
+            case 2:
+                return node.argumentList;
+        }
+    }
+    function parenthesizedExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.openParenToken;
+            case 1:
+                return node.expression;
+            case 2:
+                return node.closeParenToken;
+        }
+    }
+    function parenthesizedArrowFunctionExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.callSignature;
+            case 1:
+                return node.equalsGreaterThanToken;
+            case 2:
+                return node.block;
+            case 3:
+                return node.expression;
+        }
+    }
+    function simpleArrowFunctionExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.parameter;
+            case 1:
+                return node.equalsGreaterThanToken;
+            case 2:
+                return node.block;
+            case 3:
+                return node.expression;
+        }
+    }
+    function castExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.lessThanToken;
+            case 1:
+                return node.type;
+            case 2:
+                return node.greaterThanToken;
+            case 3:
+                return node.expression;
+        }
+    }
+    function elementAccessExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.expression;
+            case 1:
+                return node.openBracketToken;
+            case 2:
+                return node.argumentExpression;
+            case 3:
+                return node.closeBracketToken;
+        }
+    }
+    function functionExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.functionKeyword;
+            case 1:
+                return node.identifier;
+            case 2:
+                return node.callSignature;
+            case 3:
+                return node.block;
+        }
+    }
+    function omittedExpressionChildAt(node, index) {
+        throw TypeScript.Errors.invalidOperation();
+    }
+    function templateExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.templateStartToken;
+            case 1:
+                return node.templateClauses;
+        }
+    }
+    function templateAccessExpressionChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.expression;
+            case 1:
+                return node.templateExpression;
+        }
+    }
+    function variableDeclarationChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.varKeyword;
+            case 1:
+                return node.variableDeclarators;
+        }
+    }
+    function variableDeclaratorChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.propertyName;
+            case 1:
+                return node.typeAnnotation;
+            case 2:
+                return node.equalsValueClause;
+        }
+    }
+    function argumentListChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.typeArgumentList;
+            case 1:
+                return node.openParenToken;
+            case 2:
+                return node.arguments;
+            case 3:
+                return node.closeParenToken;
+        }
+    }
+    function parameterListChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.openParenToken;
+            case 1:
+                return node.parameters;
+            case 2:
+                return node.closeParenToken;
+        }
+    }
+    function typeArgumentListChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.lessThanToken;
+            case 1:
+                return node.typeArguments;
+            case 2:
+                return node.greaterThanToken;
+        }
+    }
+    function typeParameterListChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.lessThanToken;
+            case 1:
+                return node.typeParameters;
+            case 2:
+                return node.greaterThanToken;
+        }
+    }
+    function heritageClauseChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.extendsOrImplementsKeyword;
+            case 1:
+                return node.typeNames;
+        }
+    }
+    function equalsValueClauseChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.equalsToken;
+            case 1:
+                return node.value;
+        }
+    }
+    function caseSwitchClauseChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.caseKeyword;
+            case 1:
+                return node.expression;
+            case 2:
+                return node.colonToken;
+            case 3:
+                return node.statements;
+        }
+    }
+    function defaultSwitchClauseChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.defaultKeyword;
+            case 1:
+                return node.colonToken;
+            case 2:
+                return node.statements;
+        }
+    }
+    function elseClauseChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.elseKeyword;
+            case 1:
+                return node.statement;
+        }
+    }
+    function catchClauseChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.catchKeyword;
+            case 1:
+                return node.openParenToken;
+            case 2:
+                return node.identifier;
+            case 3:
+                return node.typeAnnotation;
+            case 4:
+                return node.closeParenToken;
+            case 5:
+                return node.block;
+        }
+    }
+    function finallyClauseChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.finallyKeyword;
+            case 1:
+                return node.block;
+        }
+    }
+    function templateClauseChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.expression;
+            case 1:
+                return node.templateMiddleOrEndToken;
+        }
+    }
+    function typeParameterChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.identifier;
+            case 1:
+                return node.constraint;
+        }
+    }
+    function constraintChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.extendsKeyword;
+            case 1:
+                return node.typeOrExpression;
+        }
+    }
+    function simplePropertyAssignmentChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.propertyName;
+            case 1:
+                return node.colonToken;
+            case 2:
+                return node.expression;
+        }
+    }
+    function functionPropertyAssignmentChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.propertyName;
+            case 1:
+                return node.callSignature;
+            case 2:
+                return node.block;
+        }
+    }
+    function parameterChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.dotDotDotToken;
+            case 1:
+                return node.modifiers;
+            case 2:
+                return node.identifier;
+            case 3:
+                return node.questionToken;
+            case 4:
+                return node.typeAnnotation;
+            case 5:
+                return node.equalsValueClause;
+        }
+    }
+    function enumElementChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.propertyName;
+            case 1:
+                return node.equalsValueClause;
+        }
+    }
+    function typeAnnotationChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.colonToken;
+            case 1:
+                return node.type;
+        }
+    }
+    function externalModuleReferenceChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.requireKeyword;
+            case 1:
+                return node.openParenToken;
+            case 2:
+                return node.stringLiteral;
+            case 3:
+                return node.closeParenToken;
+        }
+    }
+    function moduleNameModuleReferenceChildAt(node, index) {
+        switch (index) {
+            case 0:
+                return node.moduleName;
         }
     }
     function childAt(element, index) {
@@ -24082,56 +24082,16 @@ var TypeScript;
         switch (element.kind()) {
             case 122 /* SourceUnit */:
                 return sourceUnitChildAt(element, index);
-            case 211 /* ExternalModuleReference */:
-                return externalModuleReferenceChildAt(element, index);
-            case 212 /* ModuleNameModuleReference */:
-                return moduleNameModuleReferenceChildAt(element, index);
-            case 138 /* ImportDeclaration */:
-                return importDeclarationChildAt(element, index);
-            case 139 /* ExportAssignment */:
-                return exportAssignmentChildAt(element, index);
-            case 136 /* ClassDeclaration */:
-                return classDeclarationChildAt(element, index);
-            case 133 /* InterfaceDeclaration */:
-                return interfaceDeclarationChildAt(element, index);
-            case 196 /* HeritageClause */:
-                return heritageClauseChildAt(element, index);
-            case 135 /* ModuleDeclaration */:
-                return moduleDeclarationChildAt(element, index);
-            case 134 /* FunctionDeclaration */:
-                return functionDeclarationChildAt(element, index);
-            case 153 /* VariableStatement */:
-                return variableStatementChildAt(element, index);
-            case 190 /* VariableDeclaration */:
-                return variableDeclarationChildAt(element, index);
-            case 191 /* VariableDeclarator */:
-                return variableDeclaratorChildAt(element, index);
-            case 197 /* EqualsValueClause */:
-                return equalsValueClauseChildAt(element, index);
-            case 169 /* PrefixUnaryExpression */:
-                return prefixUnaryExpressionChildAt(element, index);
-            case 178 /* ArrayLiteralExpression */:
-                return arrayLiteralExpressionChildAt(element, index);
-            case 187 /* OmittedExpression */:
-                return omittedExpressionChildAt(element, index);
-            case 181 /* ParenthesizedExpression */:
-                return parenthesizedExpressionChildAt(element, index);
-            case 183 /* SimpleArrowFunctionExpression */:
-                return simpleArrowFunctionExpressionChildAt(element, index);
-            case 182 /* ParenthesizedArrowFunctionExpression */:
-                return parenthesizedArrowFunctionExpressionChildAt(element, index);
             case 123 /* QualifiedName */:
                 return qualifiedNameChildAt(element, index);
-            case 194 /* TypeArgumentList */:
-                return typeArgumentListChildAt(element, index);
-            case 127 /* ConstructorType */:
-                return constructorTypeChildAt(element, index);
-            case 125 /* FunctionType */:
-                return functionTypeChildAt(element, index);
             case 124 /* ObjectType */:
                 return objectTypeChildAt(element, index);
+            case 125 /* FunctionType */:
+                return functionTypeChildAt(element, index);
             case 126 /* ArrayType */:
                 return arrayTypeChildAt(element, index);
+            case 127 /* ConstructorType */:
+                return constructorTypeChildAt(element, index);
             case 128 /* GenericType */:
                 return genericTypeChildAt(element, index);
             case 129 /* TypeQuery */:
@@ -24142,80 +24102,54 @@ var TypeScript;
                 return unionTypeChildAt(element, index);
             case 132 /* ParenthesizedType */:
                 return parenthesizedTypeChildAt(element, index);
-            case 210 /* TypeAnnotation */:
-                return typeAnnotationChildAt(element, index);
-            case 151 /* Block */:
-                return blockChildAt(element, index);
-            case 208 /* Parameter */:
-                return parameterChildAt(element, index);
-            case 176 /* MemberAccessExpression */:
-                return memberAccessExpressionChildAt(element, index);
-            case 175 /* PostfixUnaryExpression */:
-                return postfixUnaryExpressionChildAt(element, index);
-            case 185 /* ElementAccessExpression */:
-                return elementAccessExpressionChildAt(element, index);
-            case 189 /* TemplateAccessExpression */:
-                return templateAccessExpressionChildAt(element, index);
-            case 188 /* TemplateExpression */:
-                return templateExpressionChildAt(element, index);
-            case 203 /* TemplateClause */:
-                return templateClauseChildAt(element, index);
-            case 177 /* InvocationExpression */:
-                return invocationExpressionChildAt(element, index);
-            case 192 /* ArgumentList */:
-                return argumentListChildAt(element, index);
-            case 174 /* BinaryExpression */:
-                return binaryExpressionChildAt(element, index);
-            case 173 /* ConditionalExpression */:
-                return conditionalExpressionChildAt(element, index);
-            case 148 /* ConstructSignature */:
-                return constructSignatureChildAt(element, index);
-            case 150 /* MethodSignature */:
-                return methodSignatureChildAt(element, index);
-            case 149 /* IndexSignature */:
-                return indexSignatureChildAt(element, index);
-            case 146 /* PropertySignature */:
-                return propertySignatureChildAt(element, index);
-            case 147 /* CallSignature */:
-                return callSignatureChildAt(element, index);
-            case 193 /* ParameterList */:
-                return parameterListChildAt(element, index);
-            case 195 /* TypeParameterList */:
-                return typeParameterListChildAt(element, index);
-            case 204 /* TypeParameter */:
-                return typeParameterChildAt(element, index);
-            case 205 /* Constraint */:
-                return constraintChildAt(element, index);
-            case 200 /* ElseClause */:
-                return elseClauseChildAt(element, index);
-            case 152 /* IfStatement */:
-                return ifStatementChildAt(element, index);
-            case 154 /* ExpressionStatement */:
-                return expressionStatementChildAt(element, index);
-            case 142 /* ConstructorDeclaration */:
-                return constructorDeclarationChildAt(element, index);
+            case 133 /* InterfaceDeclaration */:
+                return interfaceDeclarationChildAt(element, index);
+            case 134 /* FunctionDeclaration */:
+                return functionDeclarationChildAt(element, index);
+            case 135 /* ModuleDeclaration */:
+                return moduleDeclarationChildAt(element, index);
+            case 136 /* ClassDeclaration */:
+                return classDeclarationChildAt(element, index);
+            case 137 /* EnumDeclaration */:
+                return enumDeclarationChildAt(element, index);
+            case 138 /* ImportDeclaration */:
+                return importDeclarationChildAt(element, index);
+            case 139 /* ExportAssignment */:
+                return exportAssignmentChildAt(element, index);
             case 140 /* MemberFunctionDeclaration */:
                 return memberFunctionDeclarationChildAt(element, index);
+            case 141 /* MemberVariableDeclaration */:
+                return memberVariableDeclarationChildAt(element, index);
+            case 142 /* ConstructorDeclaration */:
+                return constructorDeclarationChildAt(element, index);
+            case 143 /* IndexMemberDeclaration */:
+                return indexMemberDeclarationChildAt(element, index);
             case 144 /* GetAccessor */:
                 return getAccessorChildAt(element, index);
             case 145 /* SetAccessor */:
                 return setAccessorChildAt(element, index);
-            case 141 /* MemberVariableDeclaration */:
-                return memberVariableDeclarationChildAt(element, index);
-            case 143 /* IndexMemberDeclaration */:
-                return indexMemberDeclarationChildAt(element, index);
-            case 162 /* ThrowStatement */:
-                return throwStatementChildAt(element, index);
+            case 146 /* PropertySignature */:
+                return propertySignatureChildAt(element, index);
+            case 147 /* CallSignature */:
+                return callSignatureChildAt(element, index);
+            case 148 /* ConstructSignature */:
+                return constructSignatureChildAt(element, index);
+            case 149 /* IndexSignature */:
+                return indexSignatureChildAt(element, index);
+            case 150 /* MethodSignature */:
+                return methodSignatureChildAt(element, index);
+            case 151 /* Block */:
+                return blockChildAt(element, index);
+            case 152 /* IfStatement */:
+                return ifStatementChildAt(element, index);
+            case 153 /* VariableStatement */:
+                return variableStatementChildAt(element, index);
+            case 154 /* ExpressionStatement */:
+                return expressionStatementChildAt(element, index);
             case 155 /* ReturnStatement */:
                 return returnStatementChildAt(element, index);
-            case 180 /* ObjectCreationExpression */:
-                return objectCreationExpressionChildAt(element, index);
             case 156 /* SwitchStatement */:
                 return switchStatementChildAt(element, index);
-            case 198 /* CaseSwitchClause */:
-                return caseSwitchClauseChildAt(element, index);
-            case 199 /* DefaultSwitchClause */:
-                return defaultSwitchClauseChildAt(element, index);
             case 157 /* BreakStatement */:
                 return breakStatementChildAt(element, index);
             case 158 /* ContinueStatement */:
@@ -24224,44 +24158,110 @@ var TypeScript;
                 return forStatementChildAt(element, index);
             case 160 /* ForInStatement */:
                 return forInStatementChildAt(element, index);
-            case 163 /* WhileStatement */:
-                return whileStatementChildAt(element, index);
-            case 168 /* WithStatement */:
-                return withStatementChildAt(element, index);
-            case 137 /* EnumDeclaration */:
-                return enumDeclarationChildAt(element, index);
-            case 209 /* EnumElement */:
-                return enumElementChildAt(element, index);
-            case 184 /* CastExpression */:
-                return castExpressionChildAt(element, index);
-            case 179 /* ObjectLiteralExpression */:
-                return objectLiteralExpressionChildAt(element, index);
-            case 206 /* SimplePropertyAssignment */:
-                return simplePropertyAssignmentChildAt(element, index);
-            case 207 /* FunctionPropertyAssignment */:
-                return functionPropertyAssignmentChildAt(element, index);
-            case 186 /* FunctionExpression */:
-                return functionExpressionChildAt(element, index);
             case 161 /* EmptyStatement */:
                 return emptyStatementChildAt(element, index);
+            case 162 /* ThrowStatement */:
+                return throwStatementChildAt(element, index);
+            case 163 /* WhileStatement */:
+                return whileStatementChildAt(element, index);
             case 164 /* TryStatement */:
                 return tryStatementChildAt(element, index);
-            case 201 /* CatchClause */:
-                return catchClauseChildAt(element, index);
-            case 202 /* FinallyClause */:
-                return finallyClauseChildAt(element, index);
             case 165 /* LabeledStatement */:
                 return labeledStatementChildAt(element, index);
             case 166 /* DoStatement */:
                 return doStatementChildAt(element, index);
-            case 171 /* TypeOfExpression */:
-                return typeOfExpressionChildAt(element, index);
-            case 170 /* DeleteExpression */:
-                return deleteExpressionChildAt(element, index);
-            case 172 /* VoidExpression */:
-                return voidExpressionChildAt(element, index);
             case 167 /* DebuggerStatement */:
                 return debuggerStatementChildAt(element, index);
+            case 168 /* WithStatement */:
+                return withStatementChildAt(element, index);
+            case 169 /* PrefixUnaryExpression */:
+                return prefixUnaryExpressionChildAt(element, index);
+            case 170 /* DeleteExpression */:
+                return deleteExpressionChildAt(element, index);
+            case 171 /* TypeOfExpression */:
+                return typeOfExpressionChildAt(element, index);
+            case 172 /* VoidExpression */:
+                return voidExpressionChildAt(element, index);
+            case 173 /* ConditionalExpression */:
+                return conditionalExpressionChildAt(element, index);
+            case 174 /* BinaryExpression */:
+                return binaryExpressionChildAt(element, index);
+            case 175 /* PostfixUnaryExpression */:
+                return postfixUnaryExpressionChildAt(element, index);
+            case 176 /* MemberAccessExpression */:
+                return memberAccessExpressionChildAt(element, index);
+            case 177 /* InvocationExpression */:
+                return invocationExpressionChildAt(element, index);
+            case 178 /* ArrayLiteralExpression */:
+                return arrayLiteralExpressionChildAt(element, index);
+            case 179 /* ObjectLiteralExpression */:
+                return objectLiteralExpressionChildAt(element, index);
+            case 180 /* ObjectCreationExpression */:
+                return objectCreationExpressionChildAt(element, index);
+            case 181 /* ParenthesizedExpression */:
+                return parenthesizedExpressionChildAt(element, index);
+            case 182 /* ParenthesizedArrowFunctionExpression */:
+                return parenthesizedArrowFunctionExpressionChildAt(element, index);
+            case 183 /* SimpleArrowFunctionExpression */:
+                return simpleArrowFunctionExpressionChildAt(element, index);
+            case 184 /* CastExpression */:
+                return castExpressionChildAt(element, index);
+            case 185 /* ElementAccessExpression */:
+                return elementAccessExpressionChildAt(element, index);
+            case 186 /* FunctionExpression */:
+                return functionExpressionChildAt(element, index);
+            case 187 /* OmittedExpression */:
+                return omittedExpressionChildAt(element, index);
+            case 188 /* TemplateExpression */:
+                return templateExpressionChildAt(element, index);
+            case 189 /* TemplateAccessExpression */:
+                return templateAccessExpressionChildAt(element, index);
+            case 190 /* VariableDeclaration */:
+                return variableDeclarationChildAt(element, index);
+            case 191 /* VariableDeclarator */:
+                return variableDeclaratorChildAt(element, index);
+            case 192 /* ArgumentList */:
+                return argumentListChildAt(element, index);
+            case 193 /* ParameterList */:
+                return parameterListChildAt(element, index);
+            case 194 /* TypeArgumentList */:
+                return typeArgumentListChildAt(element, index);
+            case 195 /* TypeParameterList */:
+                return typeParameterListChildAt(element, index);
+            case 196 /* HeritageClause */:
+                return heritageClauseChildAt(element, index);
+            case 197 /* EqualsValueClause */:
+                return equalsValueClauseChildAt(element, index);
+            case 198 /* CaseSwitchClause */:
+                return caseSwitchClauseChildAt(element, index);
+            case 199 /* DefaultSwitchClause */:
+                return defaultSwitchClauseChildAt(element, index);
+            case 200 /* ElseClause */:
+                return elseClauseChildAt(element, index);
+            case 201 /* CatchClause */:
+                return catchClauseChildAt(element, index);
+            case 202 /* FinallyClause */:
+                return finallyClauseChildAt(element, index);
+            case 203 /* TemplateClause */:
+                return templateClauseChildAt(element, index);
+            case 204 /* TypeParameter */:
+                return typeParameterChildAt(element, index);
+            case 205 /* Constraint */:
+                return constraintChildAt(element, index);
+            case 206 /* SimplePropertyAssignment */:
+                return simplePropertyAssignmentChildAt(element, index);
+            case 207 /* FunctionPropertyAssignment */:
+                return functionPropertyAssignmentChildAt(element, index);
+            case 208 /* Parameter */:
+                return parameterChildAt(element, index);
+            case 209 /* EnumElement */:
+                return enumElementChildAt(element, index);
+            case 210 /* TypeAnnotation */:
+                return typeAnnotationChildAt(element, index);
+            case 211 /* ExternalModuleReference */:
+                return externalModuleReferenceChildAt(element, index);
+            case 212 /* ModuleNameModuleReference */:
+                return moduleNameModuleReferenceChildAt(element, index);
         }
     }
     TypeScript.childAt = childAt;
@@ -24275,56 +24275,16 @@ var TypeScript;
         switch (element.kind()) {
             case 122 /* SourceUnit */:
                 return visitor.visitSourceUnit(element);
-            case 211 /* ExternalModuleReference */:
-                return visitor.visitExternalModuleReference(element);
-            case 212 /* ModuleNameModuleReference */:
-                return visitor.visitModuleNameModuleReference(element);
-            case 138 /* ImportDeclaration */:
-                return visitor.visitImportDeclaration(element);
-            case 139 /* ExportAssignment */:
-                return visitor.visitExportAssignment(element);
-            case 136 /* ClassDeclaration */:
-                return visitor.visitClassDeclaration(element);
-            case 133 /* InterfaceDeclaration */:
-                return visitor.visitInterfaceDeclaration(element);
-            case 196 /* HeritageClause */:
-                return visitor.visitHeritageClause(element);
-            case 135 /* ModuleDeclaration */:
-                return visitor.visitModuleDeclaration(element);
-            case 134 /* FunctionDeclaration */:
-                return visitor.visitFunctionDeclaration(element);
-            case 153 /* VariableStatement */:
-                return visitor.visitVariableStatement(element);
-            case 190 /* VariableDeclaration */:
-                return visitor.visitVariableDeclaration(element);
-            case 191 /* VariableDeclarator */:
-                return visitor.visitVariableDeclarator(element);
-            case 197 /* EqualsValueClause */:
-                return visitor.visitEqualsValueClause(element);
-            case 169 /* PrefixUnaryExpression */:
-                return visitor.visitPrefixUnaryExpression(element);
-            case 178 /* ArrayLiteralExpression */:
-                return visitor.visitArrayLiteralExpression(element);
-            case 187 /* OmittedExpression */:
-                return visitor.visitOmittedExpression(element);
-            case 181 /* ParenthesizedExpression */:
-                return visitor.visitParenthesizedExpression(element);
-            case 183 /* SimpleArrowFunctionExpression */:
-                return visitor.visitSimpleArrowFunctionExpression(element);
-            case 182 /* ParenthesizedArrowFunctionExpression */:
-                return visitor.visitParenthesizedArrowFunctionExpression(element);
             case 123 /* QualifiedName */:
                 return visitor.visitQualifiedName(element);
-            case 194 /* TypeArgumentList */:
-                return visitor.visitTypeArgumentList(element);
-            case 127 /* ConstructorType */:
-                return visitor.visitConstructorType(element);
-            case 125 /* FunctionType */:
-                return visitor.visitFunctionType(element);
             case 124 /* ObjectType */:
                 return visitor.visitObjectType(element);
+            case 125 /* FunctionType */:
+                return visitor.visitFunctionType(element);
             case 126 /* ArrayType */:
                 return visitor.visitArrayType(element);
+            case 127 /* ConstructorType */:
+                return visitor.visitConstructorType(element);
             case 128 /* GenericType */:
                 return visitor.visitGenericType(element);
             case 129 /* TypeQuery */:
@@ -24335,80 +24295,54 @@ var TypeScript;
                 return visitor.visitUnionType(element);
             case 132 /* ParenthesizedType */:
                 return visitor.visitParenthesizedType(element);
-            case 210 /* TypeAnnotation */:
-                return visitor.visitTypeAnnotation(element);
-            case 151 /* Block */:
-                return visitor.visitBlock(element);
-            case 208 /* Parameter */:
-                return visitor.visitParameter(element);
-            case 176 /* MemberAccessExpression */:
-                return visitor.visitMemberAccessExpression(element);
-            case 175 /* PostfixUnaryExpression */:
-                return visitor.visitPostfixUnaryExpression(element);
-            case 185 /* ElementAccessExpression */:
-                return visitor.visitElementAccessExpression(element);
-            case 189 /* TemplateAccessExpression */:
-                return visitor.visitTemplateAccessExpression(element);
-            case 188 /* TemplateExpression */:
-                return visitor.visitTemplateExpression(element);
-            case 203 /* TemplateClause */:
-                return visitor.visitTemplateClause(element);
-            case 177 /* InvocationExpression */:
-                return visitor.visitInvocationExpression(element);
-            case 192 /* ArgumentList */:
-                return visitor.visitArgumentList(element);
-            case 174 /* BinaryExpression */:
-                return visitor.visitBinaryExpression(element);
-            case 173 /* ConditionalExpression */:
-                return visitor.visitConditionalExpression(element);
-            case 148 /* ConstructSignature */:
-                return visitor.visitConstructSignature(element);
-            case 150 /* MethodSignature */:
-                return visitor.visitMethodSignature(element);
-            case 149 /* IndexSignature */:
-                return visitor.visitIndexSignature(element);
-            case 146 /* PropertySignature */:
-                return visitor.visitPropertySignature(element);
-            case 147 /* CallSignature */:
-                return visitor.visitCallSignature(element);
-            case 193 /* ParameterList */:
-                return visitor.visitParameterList(element);
-            case 195 /* TypeParameterList */:
-                return visitor.visitTypeParameterList(element);
-            case 204 /* TypeParameter */:
-                return visitor.visitTypeParameter(element);
-            case 205 /* Constraint */:
-                return visitor.visitConstraint(element);
-            case 200 /* ElseClause */:
-                return visitor.visitElseClause(element);
-            case 152 /* IfStatement */:
-                return visitor.visitIfStatement(element);
-            case 154 /* ExpressionStatement */:
-                return visitor.visitExpressionStatement(element);
-            case 142 /* ConstructorDeclaration */:
-                return visitor.visitConstructorDeclaration(element);
+            case 133 /* InterfaceDeclaration */:
+                return visitor.visitInterfaceDeclaration(element);
+            case 134 /* FunctionDeclaration */:
+                return visitor.visitFunctionDeclaration(element);
+            case 135 /* ModuleDeclaration */:
+                return visitor.visitModuleDeclaration(element);
+            case 136 /* ClassDeclaration */:
+                return visitor.visitClassDeclaration(element);
+            case 137 /* EnumDeclaration */:
+                return visitor.visitEnumDeclaration(element);
+            case 138 /* ImportDeclaration */:
+                return visitor.visitImportDeclaration(element);
+            case 139 /* ExportAssignment */:
+                return visitor.visitExportAssignment(element);
             case 140 /* MemberFunctionDeclaration */:
                 return visitor.visitMemberFunctionDeclaration(element);
+            case 141 /* MemberVariableDeclaration */:
+                return visitor.visitMemberVariableDeclaration(element);
+            case 142 /* ConstructorDeclaration */:
+                return visitor.visitConstructorDeclaration(element);
+            case 143 /* IndexMemberDeclaration */:
+                return visitor.visitIndexMemberDeclaration(element);
             case 144 /* GetAccessor */:
                 return visitor.visitGetAccessor(element);
             case 145 /* SetAccessor */:
                 return visitor.visitSetAccessor(element);
-            case 141 /* MemberVariableDeclaration */:
-                return visitor.visitMemberVariableDeclaration(element);
-            case 143 /* IndexMemberDeclaration */:
-                return visitor.visitIndexMemberDeclaration(element);
-            case 162 /* ThrowStatement */:
-                return visitor.visitThrowStatement(element);
+            case 146 /* PropertySignature */:
+                return visitor.visitPropertySignature(element);
+            case 147 /* CallSignature */:
+                return visitor.visitCallSignature(element);
+            case 148 /* ConstructSignature */:
+                return visitor.visitConstructSignature(element);
+            case 149 /* IndexSignature */:
+                return visitor.visitIndexSignature(element);
+            case 150 /* MethodSignature */:
+                return visitor.visitMethodSignature(element);
+            case 151 /* Block */:
+                return visitor.visitBlock(element);
+            case 152 /* IfStatement */:
+                return visitor.visitIfStatement(element);
+            case 153 /* VariableStatement */:
+                return visitor.visitVariableStatement(element);
+            case 154 /* ExpressionStatement */:
+                return visitor.visitExpressionStatement(element);
             case 155 /* ReturnStatement */:
                 return visitor.visitReturnStatement(element);
-            case 180 /* ObjectCreationExpression */:
-                return visitor.visitObjectCreationExpression(element);
             case 156 /* SwitchStatement */:
                 return visitor.visitSwitchStatement(element);
-            case 198 /* CaseSwitchClause */:
-                return visitor.visitCaseSwitchClause(element);
-            case 199 /* DefaultSwitchClause */:
-                return visitor.visitDefaultSwitchClause(element);
             case 157 /* BreakStatement */:
                 return visitor.visitBreakStatement(element);
             case 158 /* ContinueStatement */:
@@ -24417,44 +24351,110 @@ var TypeScript;
                 return visitor.visitForStatement(element);
             case 160 /* ForInStatement */:
                 return visitor.visitForInStatement(element);
-            case 163 /* WhileStatement */:
-                return visitor.visitWhileStatement(element);
-            case 168 /* WithStatement */:
-                return visitor.visitWithStatement(element);
-            case 137 /* EnumDeclaration */:
-                return visitor.visitEnumDeclaration(element);
-            case 209 /* EnumElement */:
-                return visitor.visitEnumElement(element);
-            case 184 /* CastExpression */:
-                return visitor.visitCastExpression(element);
-            case 179 /* ObjectLiteralExpression */:
-                return visitor.visitObjectLiteralExpression(element);
-            case 206 /* SimplePropertyAssignment */:
-                return visitor.visitSimplePropertyAssignment(element);
-            case 207 /* FunctionPropertyAssignment */:
-                return visitor.visitFunctionPropertyAssignment(element);
-            case 186 /* FunctionExpression */:
-                return visitor.visitFunctionExpression(element);
             case 161 /* EmptyStatement */:
                 return visitor.visitEmptyStatement(element);
+            case 162 /* ThrowStatement */:
+                return visitor.visitThrowStatement(element);
+            case 163 /* WhileStatement */:
+                return visitor.visitWhileStatement(element);
             case 164 /* TryStatement */:
                 return visitor.visitTryStatement(element);
-            case 201 /* CatchClause */:
-                return visitor.visitCatchClause(element);
-            case 202 /* FinallyClause */:
-                return visitor.visitFinallyClause(element);
             case 165 /* LabeledStatement */:
                 return visitor.visitLabeledStatement(element);
             case 166 /* DoStatement */:
                 return visitor.visitDoStatement(element);
-            case 171 /* TypeOfExpression */:
-                return visitor.visitTypeOfExpression(element);
-            case 170 /* DeleteExpression */:
-                return visitor.visitDeleteExpression(element);
-            case 172 /* VoidExpression */:
-                return visitor.visitVoidExpression(element);
             case 167 /* DebuggerStatement */:
                 return visitor.visitDebuggerStatement(element);
+            case 168 /* WithStatement */:
+                return visitor.visitWithStatement(element);
+            case 169 /* PrefixUnaryExpression */:
+                return visitor.visitPrefixUnaryExpression(element);
+            case 170 /* DeleteExpression */:
+                return visitor.visitDeleteExpression(element);
+            case 171 /* TypeOfExpression */:
+                return visitor.visitTypeOfExpression(element);
+            case 172 /* VoidExpression */:
+                return visitor.visitVoidExpression(element);
+            case 173 /* ConditionalExpression */:
+                return visitor.visitConditionalExpression(element);
+            case 174 /* BinaryExpression */:
+                return visitor.visitBinaryExpression(element);
+            case 175 /* PostfixUnaryExpression */:
+                return visitor.visitPostfixUnaryExpression(element);
+            case 176 /* MemberAccessExpression */:
+                return visitor.visitMemberAccessExpression(element);
+            case 177 /* InvocationExpression */:
+                return visitor.visitInvocationExpression(element);
+            case 178 /* ArrayLiteralExpression */:
+                return visitor.visitArrayLiteralExpression(element);
+            case 179 /* ObjectLiteralExpression */:
+                return visitor.visitObjectLiteralExpression(element);
+            case 180 /* ObjectCreationExpression */:
+                return visitor.visitObjectCreationExpression(element);
+            case 181 /* ParenthesizedExpression */:
+                return visitor.visitParenthesizedExpression(element);
+            case 182 /* ParenthesizedArrowFunctionExpression */:
+                return visitor.visitParenthesizedArrowFunctionExpression(element);
+            case 183 /* SimpleArrowFunctionExpression */:
+                return visitor.visitSimpleArrowFunctionExpression(element);
+            case 184 /* CastExpression */:
+                return visitor.visitCastExpression(element);
+            case 185 /* ElementAccessExpression */:
+                return visitor.visitElementAccessExpression(element);
+            case 186 /* FunctionExpression */:
+                return visitor.visitFunctionExpression(element);
+            case 187 /* OmittedExpression */:
+                return visitor.visitOmittedExpression(element);
+            case 188 /* TemplateExpression */:
+                return visitor.visitTemplateExpression(element);
+            case 189 /* TemplateAccessExpression */:
+                return visitor.visitTemplateAccessExpression(element);
+            case 190 /* VariableDeclaration */:
+                return visitor.visitVariableDeclaration(element);
+            case 191 /* VariableDeclarator */:
+                return visitor.visitVariableDeclarator(element);
+            case 192 /* ArgumentList */:
+                return visitor.visitArgumentList(element);
+            case 193 /* ParameterList */:
+                return visitor.visitParameterList(element);
+            case 194 /* TypeArgumentList */:
+                return visitor.visitTypeArgumentList(element);
+            case 195 /* TypeParameterList */:
+                return visitor.visitTypeParameterList(element);
+            case 196 /* HeritageClause */:
+                return visitor.visitHeritageClause(element);
+            case 197 /* EqualsValueClause */:
+                return visitor.visitEqualsValueClause(element);
+            case 198 /* CaseSwitchClause */:
+                return visitor.visitCaseSwitchClause(element);
+            case 199 /* DefaultSwitchClause */:
+                return visitor.visitDefaultSwitchClause(element);
+            case 200 /* ElseClause */:
+                return visitor.visitElseClause(element);
+            case 201 /* CatchClause */:
+                return visitor.visitCatchClause(element);
+            case 202 /* FinallyClause */:
+                return visitor.visitFinallyClause(element);
+            case 203 /* TemplateClause */:
+                return visitor.visitTemplateClause(element);
+            case 204 /* TypeParameter */:
+                return visitor.visitTypeParameter(element);
+            case 205 /* Constraint */:
+                return visitor.visitConstraint(element);
+            case 206 /* SimplePropertyAssignment */:
+                return visitor.visitSimplePropertyAssignment(element);
+            case 207 /* FunctionPropertyAssignment */:
+                return visitor.visitFunctionPropertyAssignment(element);
+            case 208 /* Parameter */:
+                return visitor.visitParameter(element);
+            case 209 /* EnumElement */:
+                return visitor.visitEnumElement(element);
+            case 210 /* TypeAnnotation */:
+                return visitor.visitTypeAnnotation(element);
+            case 211 /* ExternalModuleReference */:
+                return visitor.visitExternalModuleReference(element);
+            case 212 /* ModuleNameModuleReference */:
+                return visitor.visitModuleNameModuleReference(element);
             default:
                 return visitor.visitToken(element);
         }
@@ -24483,130 +24483,15 @@ var TypeScript;
             this.visitList(node.moduleElements);
             this.visitToken(node.endOfFileToken);
         };
-        SyntaxWalker.prototype.visitExternalModuleReference = function (node) {
-            this.visitToken(node.requireKeyword);
-            this.visitToken(node.openParenToken);
-            this.visitToken(node.stringLiteral);
-            this.visitToken(node.closeParenToken);
-        };
-        SyntaxWalker.prototype.visitModuleNameModuleReference = function (node) {
-            TypeScript.visitNodeOrToken(this, node.moduleName);
-        };
-        SyntaxWalker.prototype.visitImportDeclaration = function (node) {
-            this.visitList(node.modifiers);
-            this.visitToken(node.importKeyword);
-            this.visitToken(node.identifier);
-            this.visitToken(node.equalsToken);
-            TypeScript.visitNodeOrToken(this, node.moduleReference);
-            this.visitOptionalToken(node.semicolonToken);
-        };
-        SyntaxWalker.prototype.visitExportAssignment = function (node) {
-            this.visitToken(node.exportKeyword);
-            this.visitToken(node.equalsToken);
-            this.visitToken(node.identifier);
-            this.visitOptionalToken(node.semicolonToken);
-        };
-        SyntaxWalker.prototype.visitClassDeclaration = function (node) {
-            this.visitList(node.modifiers);
-            this.visitToken(node.classKeyword);
-            this.visitToken(node.identifier);
-            TypeScript.visitNodeOrToken(this, node.typeParameterList);
-            this.visitList(node.heritageClauses);
-            this.visitToken(node.openBraceToken);
-            this.visitList(node.classElements);
-            this.visitToken(node.closeBraceToken);
-        };
-        SyntaxWalker.prototype.visitInterfaceDeclaration = function (node) {
-            this.visitList(node.modifiers);
-            this.visitToken(node.interfaceKeyword);
-            this.visitToken(node.identifier);
-            TypeScript.visitNodeOrToken(this, node.typeParameterList);
-            this.visitList(node.heritageClauses);
-            TypeScript.visitNodeOrToken(this, node.body);
-        };
-        SyntaxWalker.prototype.visitHeritageClause = function (node) {
-            this.visitToken(node.extendsOrImplementsKeyword);
-            this.visitList(node.typeNames);
-        };
-        SyntaxWalker.prototype.visitModuleDeclaration = function (node) {
-            this.visitList(node.modifiers);
-            this.visitToken(node.moduleKeyword);
-            TypeScript.visitNodeOrToken(this, node.name);
-            this.visitOptionalToken(node.stringLiteral);
-            this.visitToken(node.openBraceToken);
-            this.visitList(node.moduleElements);
-            this.visitToken(node.closeBraceToken);
-        };
-        SyntaxWalker.prototype.visitFunctionDeclaration = function (node) {
-            this.visitList(node.modifiers);
-            this.visitToken(node.functionKeyword);
-            this.visitToken(node.identifier);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-            TypeScript.visitNodeOrToken(this, node.block);
-            this.visitOptionalToken(node.semicolonToken);
-        };
-        SyntaxWalker.prototype.visitVariableStatement = function (node) {
-            this.visitList(node.modifiers);
-            TypeScript.visitNodeOrToken(this, node.variableDeclaration);
-            this.visitOptionalToken(node.semicolonToken);
-        };
-        SyntaxWalker.prototype.visitVariableDeclaration = function (node) {
-            this.visitToken(node.varKeyword);
-            this.visitList(node.variableDeclarators);
-        };
-        SyntaxWalker.prototype.visitVariableDeclarator = function (node) {
-            this.visitToken(node.propertyName);
-            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
-            TypeScript.visitNodeOrToken(this, node.equalsValueClause);
-        };
-        SyntaxWalker.prototype.visitEqualsValueClause = function (node) {
-            this.visitToken(node.equalsToken);
-            TypeScript.visitNodeOrToken(this, node.value);
-        };
-        SyntaxWalker.prototype.visitPrefixUnaryExpression = function (node) {
-            this.visitToken(node.operatorToken);
-            TypeScript.visitNodeOrToken(this, node.operand);
-        };
-        SyntaxWalker.prototype.visitArrayLiteralExpression = function (node) {
-            this.visitToken(node.openBracketToken);
-            this.visitList(node.expressions);
-            this.visitToken(node.closeBracketToken);
-        };
-        SyntaxWalker.prototype.visitOmittedExpression = function (node) {
-        };
-        SyntaxWalker.prototype.visitParenthesizedExpression = function (node) {
-            this.visitToken(node.openParenToken);
-            TypeScript.visitNodeOrToken(this, node.expression);
-            this.visitToken(node.closeParenToken);
-        };
-        SyntaxWalker.prototype.visitSimpleArrowFunctionExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.parameter);
-            this.visitToken(node.equalsGreaterThanToken);
-            TypeScript.visitNodeOrToken(this, node.block);
-            TypeScript.visitNodeOrToken(this, node.expression);
-        };
-        SyntaxWalker.prototype.visitParenthesizedArrowFunctionExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-            this.visitToken(node.equalsGreaterThanToken);
-            TypeScript.visitNodeOrToken(this, node.block);
-            TypeScript.visitNodeOrToken(this, node.expression);
-        };
         SyntaxWalker.prototype.visitQualifiedName = function (node) {
             TypeScript.visitNodeOrToken(this, node.left);
             this.visitToken(node.dotToken);
             this.visitToken(node.right);
         };
-        SyntaxWalker.prototype.visitTypeArgumentList = function (node) {
-            this.visitToken(node.lessThanToken);
-            this.visitList(node.typeArguments);
-            this.visitToken(node.greaterThanToken);
-        };
-        SyntaxWalker.prototype.visitConstructorType = function (node) {
-            this.visitToken(node.newKeyword);
-            TypeScript.visitNodeOrToken(this, node.typeParameterList);
-            TypeScript.visitNodeOrToken(this, node.parameterList);
-            this.visitToken(node.equalsGreaterThanToken);
-            TypeScript.visitNodeOrToken(this, node.type);
+        SyntaxWalker.prototype.visitObjectType = function (node) {
+            this.visitToken(node.openBraceToken);
+            this.visitList(node.typeMembers);
+            this.visitToken(node.closeBraceToken);
         };
         SyntaxWalker.prototype.visitFunctionType = function (node) {
             TypeScript.visitNodeOrToken(this, node.typeParameterList);
@@ -24614,15 +24499,17 @@ var TypeScript;
             this.visitToken(node.equalsGreaterThanToken);
             TypeScript.visitNodeOrToken(this, node.type);
         };
-        SyntaxWalker.prototype.visitObjectType = function (node) {
-            this.visitToken(node.openBraceToken);
-            this.visitList(node.typeMembers);
-            this.visitToken(node.closeBraceToken);
-        };
         SyntaxWalker.prototype.visitArrayType = function (node) {
             TypeScript.visitNodeOrToken(this, node.type);
             this.visitToken(node.openBracketToken);
             this.visitToken(node.closeBracketToken);
+        };
+        SyntaxWalker.prototype.visitConstructorType = function (node) {
+            this.visitToken(node.newKeyword);
+            TypeScript.visitNodeOrToken(this, node.typeParameterList);
+            TypeScript.visitNodeOrToken(this, node.parameterList);
+            this.visitToken(node.equalsGreaterThanToken);
+            TypeScript.visitNodeOrToken(this, node.type);
         };
         SyntaxWalker.prototype.visitGenericType = function (node) {
             TypeScript.visitNodeOrToken(this, node.name);
@@ -24647,129 +24534,73 @@ var TypeScript;
             TypeScript.visitNodeOrToken(this, node.type);
             this.visitToken(node.closeParenToken);
         };
-        SyntaxWalker.prototype.visitTypeAnnotation = function (node) {
-            this.visitToken(node.colonToken);
-            TypeScript.visitNodeOrToken(this, node.type);
+        SyntaxWalker.prototype.visitInterfaceDeclaration = function (node) {
+            this.visitList(node.modifiers);
+            this.visitToken(node.interfaceKeyword);
+            this.visitToken(node.identifier);
+            TypeScript.visitNodeOrToken(this, node.typeParameterList);
+            this.visitList(node.heritageClauses);
+            TypeScript.visitNodeOrToken(this, node.body);
         };
-        SyntaxWalker.prototype.visitBlock = function (node) {
+        SyntaxWalker.prototype.visitFunctionDeclaration = function (node) {
+            this.visitList(node.modifiers);
+            this.visitToken(node.functionKeyword);
+            this.visitToken(node.identifier);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+            TypeScript.visitNodeOrToken(this, node.block);
+            this.visitOptionalToken(node.semicolonToken);
+        };
+        SyntaxWalker.prototype.visitModuleDeclaration = function (node) {
+            this.visitList(node.modifiers);
+            this.visitToken(node.moduleKeyword);
+            TypeScript.visitNodeOrToken(this, node.name);
+            this.visitOptionalToken(node.stringLiteral);
             this.visitToken(node.openBraceToken);
-            this.visitList(node.statements);
+            this.visitList(node.moduleElements);
             this.visitToken(node.closeBraceToken);
         };
-        SyntaxWalker.prototype.visitParameter = function (node) {
-            this.visitOptionalToken(node.dotDotDotToken);
+        SyntaxWalker.prototype.visitClassDeclaration = function (node) {
             this.visitList(node.modifiers);
+            this.visitToken(node.classKeyword);
             this.visitToken(node.identifier);
-            this.visitOptionalToken(node.questionToken);
-            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
-            TypeScript.visitNodeOrToken(this, node.equalsValueClause);
-        };
-        SyntaxWalker.prototype.visitMemberAccessExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.expression);
-            this.visitToken(node.dotToken);
-            this.visitToken(node.name);
-        };
-        SyntaxWalker.prototype.visitPostfixUnaryExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.operand);
-            this.visitToken(node.operatorToken);
-        };
-        SyntaxWalker.prototype.visitElementAccessExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.expression);
-            this.visitToken(node.openBracketToken);
-            TypeScript.visitNodeOrToken(this, node.argumentExpression);
-            this.visitToken(node.closeBracketToken);
-        };
-        SyntaxWalker.prototype.visitTemplateAccessExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.expression);
-            TypeScript.visitNodeOrToken(this, node.templateExpression);
-        };
-        SyntaxWalker.prototype.visitTemplateExpression = function (node) {
-            this.visitToken(node.templateStartToken);
-            this.visitList(node.templateClauses);
-        };
-        SyntaxWalker.prototype.visitTemplateClause = function (node) {
-            TypeScript.visitNodeOrToken(this, node.expression);
-            this.visitToken(node.templateMiddleOrEndToken);
-        };
-        SyntaxWalker.prototype.visitInvocationExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.expression);
-            TypeScript.visitNodeOrToken(this, node.argumentList);
-        };
-        SyntaxWalker.prototype.visitArgumentList = function (node) {
-            TypeScript.visitNodeOrToken(this, node.typeArgumentList);
-            this.visitToken(node.openParenToken);
-            this.visitList(node.arguments);
-            this.visitToken(node.closeParenToken);
-        };
-        SyntaxWalker.prototype.visitBinaryExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.left);
-            this.visitToken(node.operatorToken);
-            TypeScript.visitNodeOrToken(this, node.right);
-        };
-        SyntaxWalker.prototype.visitConditionalExpression = function (node) {
-            TypeScript.visitNodeOrToken(this, node.condition);
-            this.visitToken(node.questionToken);
-            TypeScript.visitNodeOrToken(this, node.whenTrue);
-            this.visitToken(node.colonToken);
-            TypeScript.visitNodeOrToken(this, node.whenFalse);
-        };
-        SyntaxWalker.prototype.visitConstructSignature = function (node) {
-            this.visitToken(node.newKeyword);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-        };
-        SyntaxWalker.prototype.visitMethodSignature = function (node) {
-            this.visitToken(node.propertyName);
-            this.visitOptionalToken(node.questionToken);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-        };
-        SyntaxWalker.prototype.visitIndexSignature = function (node) {
-            this.visitToken(node.openBracketToken);
-            this.visitList(node.parameters);
-            this.visitToken(node.closeBracketToken);
-            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
-        };
-        SyntaxWalker.prototype.visitPropertySignature = function (node) {
-            this.visitToken(node.propertyName);
-            this.visitOptionalToken(node.questionToken);
-            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
-        };
-        SyntaxWalker.prototype.visitCallSignature = function (node) {
             TypeScript.visitNodeOrToken(this, node.typeParameterList);
-            TypeScript.visitNodeOrToken(this, node.parameterList);
-            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+            this.visitList(node.heritageClauses);
+            this.visitToken(node.openBraceToken);
+            this.visitList(node.classElements);
+            this.visitToken(node.closeBraceToken);
         };
-        SyntaxWalker.prototype.visitParameterList = function (node) {
-            this.visitToken(node.openParenToken);
-            this.visitList(node.parameters);
-            this.visitToken(node.closeParenToken);
-        };
-        SyntaxWalker.prototype.visitTypeParameterList = function (node) {
-            this.visitToken(node.lessThanToken);
-            this.visitList(node.typeParameters);
-            this.visitToken(node.greaterThanToken);
-        };
-        SyntaxWalker.prototype.visitTypeParameter = function (node) {
+        SyntaxWalker.prototype.visitEnumDeclaration = function (node) {
+            this.visitList(node.modifiers);
+            this.visitToken(node.enumKeyword);
             this.visitToken(node.identifier);
-            TypeScript.visitNodeOrToken(this, node.constraint);
+            this.visitToken(node.openBraceToken);
+            this.visitList(node.enumElements);
+            this.visitToken(node.closeBraceToken);
         };
-        SyntaxWalker.prototype.visitConstraint = function (node) {
-            this.visitToken(node.extendsKeyword);
-            TypeScript.visitNodeOrToken(this, node.typeOrExpression);
+        SyntaxWalker.prototype.visitImportDeclaration = function (node) {
+            this.visitList(node.modifiers);
+            this.visitToken(node.importKeyword);
+            this.visitToken(node.identifier);
+            this.visitToken(node.equalsToken);
+            TypeScript.visitNodeOrToken(this, node.moduleReference);
+            this.visitOptionalToken(node.semicolonToken);
         };
-        SyntaxWalker.prototype.visitElseClause = function (node) {
-            this.visitToken(node.elseKeyword);
-            TypeScript.visitNodeOrToken(this, node.statement);
+        SyntaxWalker.prototype.visitExportAssignment = function (node) {
+            this.visitToken(node.exportKeyword);
+            this.visitToken(node.equalsToken);
+            this.visitToken(node.identifier);
+            this.visitOptionalToken(node.semicolonToken);
         };
-        SyntaxWalker.prototype.visitIfStatement = function (node) {
-            this.visitToken(node.ifKeyword);
-            this.visitToken(node.openParenToken);
-            TypeScript.visitNodeOrToken(this, node.condition);
-            this.visitToken(node.closeParenToken);
-            TypeScript.visitNodeOrToken(this, node.statement);
-            TypeScript.visitNodeOrToken(this, node.elseClause);
+        SyntaxWalker.prototype.visitMemberFunctionDeclaration = function (node) {
+            this.visitList(node.modifiers);
+            this.visitToken(node.propertyName);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+            TypeScript.visitNodeOrToken(this, node.block);
+            this.visitOptionalToken(node.semicolonToken);
         };
-        SyntaxWalker.prototype.visitExpressionStatement = function (node) {
-            TypeScript.visitNodeOrToken(this, node.expression);
+        SyntaxWalker.prototype.visitMemberVariableDeclaration = function (node) {
+            this.visitList(node.modifiers);
+            TypeScript.visitNodeOrToken(this, node.variableDeclarator);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitConstructorDeclaration = function (node) {
@@ -24779,11 +24610,9 @@ var TypeScript;
             TypeScript.visitNodeOrToken(this, node.block);
             this.visitOptionalToken(node.semicolonToken);
         };
-        SyntaxWalker.prototype.visitMemberFunctionDeclaration = function (node) {
+        SyntaxWalker.prototype.visitIndexMemberDeclaration = function (node) {
             this.visitList(node.modifiers);
-            this.visitToken(node.propertyName);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-            TypeScript.visitNodeOrToken(this, node.block);
+            TypeScript.visitNodeOrToken(this, node.indexSignature);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitGetAccessor = function (node) {
@@ -24800,18 +24629,50 @@ var TypeScript;
             TypeScript.visitNodeOrToken(this, node.callSignature);
             TypeScript.visitNodeOrToken(this, node.block);
         };
-        SyntaxWalker.prototype.visitMemberVariableDeclaration = function (node) {
+        SyntaxWalker.prototype.visitPropertySignature = function (node) {
+            this.visitToken(node.propertyName);
+            this.visitOptionalToken(node.questionToken);
+            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+        };
+        SyntaxWalker.prototype.visitCallSignature = function (node) {
+            TypeScript.visitNodeOrToken(this, node.typeParameterList);
+            TypeScript.visitNodeOrToken(this, node.parameterList);
+            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+        };
+        SyntaxWalker.prototype.visitConstructSignature = function (node) {
+            this.visitToken(node.newKeyword);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+        };
+        SyntaxWalker.prototype.visitIndexSignature = function (node) {
+            this.visitToken(node.openBracketToken);
+            this.visitList(node.parameters);
+            this.visitToken(node.closeBracketToken);
+            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+        };
+        SyntaxWalker.prototype.visitMethodSignature = function (node) {
+            this.visitToken(node.propertyName);
+            this.visitOptionalToken(node.questionToken);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+        };
+        SyntaxWalker.prototype.visitBlock = function (node) {
+            this.visitToken(node.openBraceToken);
+            this.visitList(node.statements);
+            this.visitToken(node.closeBraceToken);
+        };
+        SyntaxWalker.prototype.visitIfStatement = function (node) {
+            this.visitToken(node.ifKeyword);
+            this.visitToken(node.openParenToken);
+            TypeScript.visitNodeOrToken(this, node.condition);
+            this.visitToken(node.closeParenToken);
+            TypeScript.visitNodeOrToken(this, node.statement);
+            TypeScript.visitNodeOrToken(this, node.elseClause);
+        };
+        SyntaxWalker.prototype.visitVariableStatement = function (node) {
             this.visitList(node.modifiers);
-            TypeScript.visitNodeOrToken(this, node.variableDeclarator);
+            TypeScript.visitNodeOrToken(this, node.variableDeclaration);
             this.visitOptionalToken(node.semicolonToken);
         };
-        SyntaxWalker.prototype.visitIndexMemberDeclaration = function (node) {
-            this.visitList(node.modifiers);
-            TypeScript.visitNodeOrToken(this, node.indexSignature);
-            this.visitOptionalToken(node.semicolonToken);
-        };
-        SyntaxWalker.prototype.visitThrowStatement = function (node) {
-            this.visitToken(node.throwKeyword);
+        SyntaxWalker.prototype.visitExpressionStatement = function (node) {
             TypeScript.visitNodeOrToken(this, node.expression);
             this.visitOptionalToken(node.semicolonToken);
         };
@@ -24819,11 +24680,6 @@ var TypeScript;
             this.visitToken(node.returnKeyword);
             TypeScript.visitNodeOrToken(this, node.expression);
             this.visitOptionalToken(node.semicolonToken);
-        };
-        SyntaxWalker.prototype.visitObjectCreationExpression = function (node) {
-            this.visitToken(node.newKeyword);
-            TypeScript.visitNodeOrToken(this, node.expression);
-            TypeScript.visitNodeOrToken(this, node.argumentList);
         };
         SyntaxWalker.prototype.visitSwitchStatement = function (node) {
             this.visitToken(node.switchKeyword);
@@ -24833,17 +24689,6 @@ var TypeScript;
             this.visitToken(node.openBraceToken);
             this.visitList(node.switchClauses);
             this.visitToken(node.closeBraceToken);
-        };
-        SyntaxWalker.prototype.visitCaseSwitchClause = function (node) {
-            this.visitToken(node.caseKeyword);
-            TypeScript.visitNodeOrToken(this, node.expression);
-            this.visitToken(node.colonToken);
-            this.visitList(node.statements);
-        };
-        SyntaxWalker.prototype.visitDefaultSwitchClause = function (node) {
-            this.visitToken(node.defaultKeyword);
-            this.visitToken(node.colonToken);
-            this.visitList(node.statements);
         };
         SyntaxWalker.prototype.visitBreakStatement = function (node) {
             this.visitToken(node.breakKeyword);
@@ -24877,6 +24722,14 @@ var TypeScript;
             this.visitToken(node.closeParenToken);
             TypeScript.visitNodeOrToken(this, node.statement);
         };
+        SyntaxWalker.prototype.visitEmptyStatement = function (node) {
+            this.visitToken(node.semicolonToken);
+        };
+        SyntaxWalker.prototype.visitThrowStatement = function (node) {
+            this.visitToken(node.throwKeyword);
+            TypeScript.visitNodeOrToken(this, node.expression);
+            this.visitOptionalToken(node.semicolonToken);
+        };
         SyntaxWalker.prototype.visitWhileStatement = function (node) {
             this.visitToken(node.whileKeyword);
             this.visitToken(node.openParenToken);
@@ -24884,72 +24737,11 @@ var TypeScript;
             this.visitToken(node.closeParenToken);
             TypeScript.visitNodeOrToken(this, node.statement);
         };
-        SyntaxWalker.prototype.visitWithStatement = function (node) {
-            this.visitToken(node.withKeyword);
-            this.visitToken(node.openParenToken);
-            TypeScript.visitNodeOrToken(this, node.condition);
-            this.visitToken(node.closeParenToken);
-            TypeScript.visitNodeOrToken(this, node.statement);
-        };
-        SyntaxWalker.prototype.visitEnumDeclaration = function (node) {
-            this.visitList(node.modifiers);
-            this.visitToken(node.enumKeyword);
-            this.visitToken(node.identifier);
-            this.visitToken(node.openBraceToken);
-            this.visitList(node.enumElements);
-            this.visitToken(node.closeBraceToken);
-        };
-        SyntaxWalker.prototype.visitEnumElement = function (node) {
-            this.visitToken(node.propertyName);
-            TypeScript.visitNodeOrToken(this, node.equalsValueClause);
-        };
-        SyntaxWalker.prototype.visitCastExpression = function (node) {
-            this.visitToken(node.lessThanToken);
-            TypeScript.visitNodeOrToken(this, node.type);
-            this.visitToken(node.greaterThanToken);
-            TypeScript.visitNodeOrToken(this, node.expression);
-        };
-        SyntaxWalker.prototype.visitObjectLiteralExpression = function (node) {
-            this.visitToken(node.openBraceToken);
-            this.visitList(node.propertyAssignments);
-            this.visitToken(node.closeBraceToken);
-        };
-        SyntaxWalker.prototype.visitSimplePropertyAssignment = function (node) {
-            this.visitToken(node.propertyName);
-            this.visitToken(node.colonToken);
-            TypeScript.visitNodeOrToken(this, node.expression);
-        };
-        SyntaxWalker.prototype.visitFunctionPropertyAssignment = function (node) {
-            this.visitToken(node.propertyName);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-            TypeScript.visitNodeOrToken(this, node.block);
-        };
-        SyntaxWalker.prototype.visitFunctionExpression = function (node) {
-            this.visitToken(node.functionKeyword);
-            this.visitOptionalToken(node.identifier);
-            TypeScript.visitNodeOrToken(this, node.callSignature);
-            TypeScript.visitNodeOrToken(this, node.block);
-        };
-        SyntaxWalker.prototype.visitEmptyStatement = function (node) {
-            this.visitToken(node.semicolonToken);
-        };
         SyntaxWalker.prototype.visitTryStatement = function (node) {
             this.visitToken(node.tryKeyword);
             TypeScript.visitNodeOrToken(this, node.block);
             TypeScript.visitNodeOrToken(this, node.catchClause);
             TypeScript.visitNodeOrToken(this, node.finallyClause);
-        };
-        SyntaxWalker.prototype.visitCatchClause = function (node) {
-            this.visitToken(node.catchKeyword);
-            this.visitToken(node.openParenToken);
-            this.visitToken(node.identifier);
-            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
-            this.visitToken(node.closeParenToken);
-            TypeScript.visitNodeOrToken(this, node.block);
-        };
-        SyntaxWalker.prototype.visitFinallyClause = function (node) {
-            this.visitToken(node.finallyKeyword);
-            TypeScript.visitNodeOrToken(this, node.block);
         };
         SyntaxWalker.prototype.visitLabeledStatement = function (node) {
             this.visitToken(node.identifier);
@@ -24965,21 +24757,229 @@ var TypeScript;
             this.visitToken(node.closeParenToken);
             this.visitOptionalToken(node.semicolonToken);
         };
-        SyntaxWalker.prototype.visitTypeOfExpression = function (node) {
-            this.visitToken(node.typeOfKeyword);
-            TypeScript.visitNodeOrToken(this, node.expression);
+        SyntaxWalker.prototype.visitDebuggerStatement = function (node) {
+            this.visitToken(node.debuggerKeyword);
+            this.visitOptionalToken(node.semicolonToken);
+        };
+        SyntaxWalker.prototype.visitWithStatement = function (node) {
+            this.visitToken(node.withKeyword);
+            this.visitToken(node.openParenToken);
+            TypeScript.visitNodeOrToken(this, node.condition);
+            this.visitToken(node.closeParenToken);
+            TypeScript.visitNodeOrToken(this, node.statement);
+        };
+        SyntaxWalker.prototype.visitPrefixUnaryExpression = function (node) {
+            this.visitToken(node.operatorToken);
+            TypeScript.visitNodeOrToken(this, node.operand);
         };
         SyntaxWalker.prototype.visitDeleteExpression = function (node) {
             this.visitToken(node.deleteKeyword);
+            TypeScript.visitNodeOrToken(this, node.expression);
+        };
+        SyntaxWalker.prototype.visitTypeOfExpression = function (node) {
+            this.visitToken(node.typeOfKeyword);
             TypeScript.visitNodeOrToken(this, node.expression);
         };
         SyntaxWalker.prototype.visitVoidExpression = function (node) {
             this.visitToken(node.voidKeyword);
             TypeScript.visitNodeOrToken(this, node.expression);
         };
-        SyntaxWalker.prototype.visitDebuggerStatement = function (node) {
-            this.visitToken(node.debuggerKeyword);
-            this.visitOptionalToken(node.semicolonToken);
+        SyntaxWalker.prototype.visitConditionalExpression = function (node) {
+            TypeScript.visitNodeOrToken(this, node.condition);
+            this.visitToken(node.questionToken);
+            TypeScript.visitNodeOrToken(this, node.whenTrue);
+            this.visitToken(node.colonToken);
+            TypeScript.visitNodeOrToken(this, node.whenFalse);
+        };
+        SyntaxWalker.prototype.visitBinaryExpression = function (node) {
+            TypeScript.visitNodeOrToken(this, node.left);
+            this.visitToken(node.operatorToken);
+            TypeScript.visitNodeOrToken(this, node.right);
+        };
+        SyntaxWalker.prototype.visitPostfixUnaryExpression = function (node) {
+            TypeScript.visitNodeOrToken(this, node.operand);
+            this.visitToken(node.operatorToken);
+        };
+        SyntaxWalker.prototype.visitMemberAccessExpression = function (node) {
+            TypeScript.visitNodeOrToken(this, node.expression);
+            this.visitToken(node.dotToken);
+            this.visitToken(node.name);
+        };
+        SyntaxWalker.prototype.visitInvocationExpression = function (node) {
+            TypeScript.visitNodeOrToken(this, node.expression);
+            TypeScript.visitNodeOrToken(this, node.argumentList);
+        };
+        SyntaxWalker.prototype.visitArrayLiteralExpression = function (node) {
+            this.visitToken(node.openBracketToken);
+            this.visitList(node.expressions);
+            this.visitToken(node.closeBracketToken);
+        };
+        SyntaxWalker.prototype.visitObjectLiteralExpression = function (node) {
+            this.visitToken(node.openBraceToken);
+            this.visitList(node.propertyAssignments);
+            this.visitToken(node.closeBraceToken);
+        };
+        SyntaxWalker.prototype.visitObjectCreationExpression = function (node) {
+            this.visitToken(node.newKeyword);
+            TypeScript.visitNodeOrToken(this, node.expression);
+            TypeScript.visitNodeOrToken(this, node.argumentList);
+        };
+        SyntaxWalker.prototype.visitParenthesizedExpression = function (node) {
+            this.visitToken(node.openParenToken);
+            TypeScript.visitNodeOrToken(this, node.expression);
+            this.visitToken(node.closeParenToken);
+        };
+        SyntaxWalker.prototype.visitParenthesizedArrowFunctionExpression = function (node) {
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+            this.visitToken(node.equalsGreaterThanToken);
+            TypeScript.visitNodeOrToken(this, node.block);
+            TypeScript.visitNodeOrToken(this, node.expression);
+        };
+        SyntaxWalker.prototype.visitSimpleArrowFunctionExpression = function (node) {
+            TypeScript.visitNodeOrToken(this, node.parameter);
+            this.visitToken(node.equalsGreaterThanToken);
+            TypeScript.visitNodeOrToken(this, node.block);
+            TypeScript.visitNodeOrToken(this, node.expression);
+        };
+        SyntaxWalker.prototype.visitCastExpression = function (node) {
+            this.visitToken(node.lessThanToken);
+            TypeScript.visitNodeOrToken(this, node.type);
+            this.visitToken(node.greaterThanToken);
+            TypeScript.visitNodeOrToken(this, node.expression);
+        };
+        SyntaxWalker.prototype.visitElementAccessExpression = function (node) {
+            TypeScript.visitNodeOrToken(this, node.expression);
+            this.visitToken(node.openBracketToken);
+            TypeScript.visitNodeOrToken(this, node.argumentExpression);
+            this.visitToken(node.closeBracketToken);
+        };
+        SyntaxWalker.prototype.visitFunctionExpression = function (node) {
+            this.visitToken(node.functionKeyword);
+            this.visitOptionalToken(node.identifier);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+            TypeScript.visitNodeOrToken(this, node.block);
+        };
+        SyntaxWalker.prototype.visitOmittedExpression = function (node) {
+        };
+        SyntaxWalker.prototype.visitTemplateExpression = function (node) {
+            this.visitToken(node.templateStartToken);
+            this.visitList(node.templateClauses);
+        };
+        SyntaxWalker.prototype.visitTemplateAccessExpression = function (node) {
+            TypeScript.visitNodeOrToken(this, node.expression);
+            TypeScript.visitNodeOrToken(this, node.templateExpression);
+        };
+        SyntaxWalker.prototype.visitVariableDeclaration = function (node) {
+            this.visitToken(node.varKeyword);
+            this.visitList(node.variableDeclarators);
+        };
+        SyntaxWalker.prototype.visitVariableDeclarator = function (node) {
+            this.visitToken(node.propertyName);
+            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+            TypeScript.visitNodeOrToken(this, node.equalsValueClause);
+        };
+        SyntaxWalker.prototype.visitArgumentList = function (node) {
+            TypeScript.visitNodeOrToken(this, node.typeArgumentList);
+            this.visitToken(node.openParenToken);
+            this.visitList(node.arguments);
+            this.visitToken(node.closeParenToken);
+        };
+        SyntaxWalker.prototype.visitParameterList = function (node) {
+            this.visitToken(node.openParenToken);
+            this.visitList(node.parameters);
+            this.visitToken(node.closeParenToken);
+        };
+        SyntaxWalker.prototype.visitTypeArgumentList = function (node) {
+            this.visitToken(node.lessThanToken);
+            this.visitList(node.typeArguments);
+            this.visitToken(node.greaterThanToken);
+        };
+        SyntaxWalker.prototype.visitTypeParameterList = function (node) {
+            this.visitToken(node.lessThanToken);
+            this.visitList(node.typeParameters);
+            this.visitToken(node.greaterThanToken);
+        };
+        SyntaxWalker.prototype.visitHeritageClause = function (node) {
+            this.visitToken(node.extendsOrImplementsKeyword);
+            this.visitList(node.typeNames);
+        };
+        SyntaxWalker.prototype.visitEqualsValueClause = function (node) {
+            this.visitToken(node.equalsToken);
+            TypeScript.visitNodeOrToken(this, node.value);
+        };
+        SyntaxWalker.prototype.visitCaseSwitchClause = function (node) {
+            this.visitToken(node.caseKeyword);
+            TypeScript.visitNodeOrToken(this, node.expression);
+            this.visitToken(node.colonToken);
+            this.visitList(node.statements);
+        };
+        SyntaxWalker.prototype.visitDefaultSwitchClause = function (node) {
+            this.visitToken(node.defaultKeyword);
+            this.visitToken(node.colonToken);
+            this.visitList(node.statements);
+        };
+        SyntaxWalker.prototype.visitElseClause = function (node) {
+            this.visitToken(node.elseKeyword);
+            TypeScript.visitNodeOrToken(this, node.statement);
+        };
+        SyntaxWalker.prototype.visitCatchClause = function (node) {
+            this.visitToken(node.catchKeyword);
+            this.visitToken(node.openParenToken);
+            this.visitToken(node.identifier);
+            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+            this.visitToken(node.closeParenToken);
+            TypeScript.visitNodeOrToken(this, node.block);
+        };
+        SyntaxWalker.prototype.visitFinallyClause = function (node) {
+            this.visitToken(node.finallyKeyword);
+            TypeScript.visitNodeOrToken(this, node.block);
+        };
+        SyntaxWalker.prototype.visitTemplateClause = function (node) {
+            TypeScript.visitNodeOrToken(this, node.expression);
+            this.visitToken(node.templateMiddleOrEndToken);
+        };
+        SyntaxWalker.prototype.visitTypeParameter = function (node) {
+            this.visitToken(node.identifier);
+            TypeScript.visitNodeOrToken(this, node.constraint);
+        };
+        SyntaxWalker.prototype.visitConstraint = function (node) {
+            this.visitToken(node.extendsKeyword);
+            TypeScript.visitNodeOrToken(this, node.typeOrExpression);
+        };
+        SyntaxWalker.prototype.visitSimplePropertyAssignment = function (node) {
+            this.visitToken(node.propertyName);
+            this.visitToken(node.colonToken);
+            TypeScript.visitNodeOrToken(this, node.expression);
+        };
+        SyntaxWalker.prototype.visitFunctionPropertyAssignment = function (node) {
+            this.visitToken(node.propertyName);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+            TypeScript.visitNodeOrToken(this, node.block);
+        };
+        SyntaxWalker.prototype.visitParameter = function (node) {
+            this.visitOptionalToken(node.dotDotDotToken);
+            this.visitList(node.modifiers);
+            this.visitToken(node.identifier);
+            this.visitOptionalToken(node.questionToken);
+            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+            TypeScript.visitNodeOrToken(this, node.equalsValueClause);
+        };
+        SyntaxWalker.prototype.visitEnumElement = function (node) {
+            this.visitToken(node.propertyName);
+            TypeScript.visitNodeOrToken(this, node.equalsValueClause);
+        };
+        SyntaxWalker.prototype.visitTypeAnnotation = function (node) {
+            this.visitToken(node.colonToken);
+            TypeScript.visitNodeOrToken(this, node.type);
+        };
+        SyntaxWalker.prototype.visitExternalModuleReference = function (node) {
+            this.visitToken(node.requireKeyword);
+            this.visitToken(node.openParenToken);
+            this.visitToken(node.stringLiteral);
+            this.visitToken(node.closeParenToken);
+        };
+        SyntaxWalker.prototype.visitModuleNameModuleReference = function (node) {
+            TypeScript.visitNodeOrToken(this, node.moduleName);
         };
         return SyntaxWalker;
     })();
@@ -27724,194 +27724,6 @@ var TypeScript;
     TypeScript.SourceUnitSyntax.prototype.kind = function () {
         return 122 /* SourceUnit */;
     };
-    TypeScript.ExternalModuleReferenceSyntax = function (data, requireKeyword, openParenToken, stringLiteral, closeParenToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.requireKeyword = requireKeyword, this.openParenToken = openParenToken, this.stringLiteral = stringLiteral, this.closeParenToken = closeParenToken;
-        requireKeyword.parent = this, openParenToken.parent = this, stringLiteral.parent = this, closeParenToken.parent = this;
-    };
-    TypeScript.ExternalModuleReferenceSyntax.prototype.kind = function () {
-        return 211 /* ExternalModuleReference */;
-    };
-    TypeScript.ModuleNameModuleReferenceSyntax = function (data, moduleName) {
-        if (data) {
-            this.__data = data;
-        }
-        this.moduleName = moduleName;
-        moduleName.parent = this;
-    };
-    TypeScript.ModuleNameModuleReferenceSyntax.prototype.kind = function () {
-        return 212 /* ModuleNameModuleReference */;
-    };
-    TypeScript.ImportDeclarationSyntax = function (data, modifiers, importKeyword, identifier, equalsToken, moduleReference, semicolonToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.modifiers = modifiers, this.importKeyword = importKeyword, this.identifier = identifier, this.equalsToken = equalsToken, this.moduleReference = moduleReference, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, importKeyword.parent = this, identifier.parent = this, equalsToken.parent = this, moduleReference.parent = this, semicolonToken && (semicolonToken.parent = this);
-    };
-    TypeScript.ImportDeclarationSyntax.prototype.kind = function () {
-        return 138 /* ImportDeclaration */;
-    };
-    TypeScript.ExportAssignmentSyntax = function (data, exportKeyword, equalsToken, identifier, semicolonToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.exportKeyword = exportKeyword, this.equalsToken = equalsToken, this.identifier = identifier, this.semicolonToken = semicolonToken;
-        exportKeyword.parent = this, equalsToken.parent = this, identifier.parent = this, semicolonToken && (semicolonToken.parent = this);
-    };
-    TypeScript.ExportAssignmentSyntax.prototype.kind = function () {
-        return 139 /* ExportAssignment */;
-    };
-    TypeScript.ClassDeclarationSyntax = function (data, modifiers, classKeyword, identifier, typeParameterList, heritageClauses, openBraceToken, classElements, closeBraceToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.modifiers = modifiers, this.classKeyword = classKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.openBraceToken = openBraceToken, this.classElements = classElements, this.closeBraceToken = closeBraceToken;
-        modifiers.parent = this, classKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), heritageClauses.parent = this, openBraceToken.parent = this, classElements.parent = this, closeBraceToken.parent = this;
-    };
-    TypeScript.ClassDeclarationSyntax.prototype.kind = function () {
-        return 136 /* ClassDeclaration */;
-    };
-    TypeScript.InterfaceDeclarationSyntax = function (data, modifiers, interfaceKeyword, identifier, typeParameterList, heritageClauses, body) {
-        if (data) {
-            this.__data = data;
-        }
-        this.modifiers = modifiers, this.interfaceKeyword = interfaceKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.body = body;
-        modifiers.parent = this, interfaceKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), heritageClauses.parent = this, body.parent = this;
-    };
-    TypeScript.InterfaceDeclarationSyntax.prototype.kind = function () {
-        return 133 /* InterfaceDeclaration */;
-    };
-    TypeScript.HeritageClauseSyntax = function (data, extendsOrImplementsKeyword, typeNames) {
-        if (data) {
-            this.__data = data;
-        }
-        this.extendsOrImplementsKeyword = extendsOrImplementsKeyword, this.typeNames = typeNames;
-        extendsOrImplementsKeyword.parent = this, typeNames.parent = this;
-    };
-    TypeScript.HeritageClauseSyntax.prototype.kind = function () {
-        return 196 /* HeritageClause */;
-    };
-    TypeScript.ModuleDeclarationSyntax = function (data, modifiers, moduleKeyword, name, stringLiteral, openBraceToken, moduleElements, closeBraceToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.modifiers = modifiers, this.moduleKeyword = moduleKeyword, this.name = name, this.stringLiteral = stringLiteral, this.openBraceToken = openBraceToken, this.moduleElements = moduleElements, this.closeBraceToken = closeBraceToken;
-        modifiers.parent = this, moduleKeyword.parent = this, name && (name.parent = this), stringLiteral && (stringLiteral.parent = this), openBraceToken.parent = this, moduleElements.parent = this, closeBraceToken.parent = this;
-    };
-    TypeScript.ModuleDeclarationSyntax.prototype.kind = function () {
-        return 135 /* ModuleDeclaration */;
-    };
-    TypeScript.FunctionDeclarationSyntax = function (data, modifiers, functionKeyword, identifier, callSignature, block, semicolonToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.modifiers = modifiers, this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, functionKeyword.parent = this, identifier.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
-    };
-    TypeScript.FunctionDeclarationSyntax.prototype.kind = function () {
-        return 134 /* FunctionDeclaration */;
-    };
-    TypeScript.VariableStatementSyntax = function (data, modifiers, variableDeclaration, semicolonToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.modifiers = modifiers, this.variableDeclaration = variableDeclaration, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, variableDeclaration.parent = this, semicolonToken && (semicolonToken.parent = this);
-    };
-    TypeScript.VariableStatementSyntax.prototype.kind = function () {
-        return 153 /* VariableStatement */;
-    };
-    TypeScript.VariableDeclarationSyntax = function (data, varKeyword, variableDeclarators) {
-        if (data) {
-            this.__data = data;
-        }
-        this.varKeyword = varKeyword, this.variableDeclarators = variableDeclarators;
-        varKeyword.parent = this, variableDeclarators.parent = this;
-    };
-    TypeScript.VariableDeclarationSyntax.prototype.kind = function () {
-        return 190 /* VariableDeclaration */;
-    };
-    TypeScript.VariableDeclaratorSyntax = function (data, propertyName, typeAnnotation, equalsValueClause) {
-        if (data) {
-            this.__data = data;
-        }
-        this.propertyName = propertyName, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause;
-        propertyName.parent = this, typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
-    };
-    TypeScript.VariableDeclaratorSyntax.prototype.kind = function () {
-        return 191 /* VariableDeclarator */;
-    };
-    TypeScript.EqualsValueClauseSyntax = function (data, equalsToken, value) {
-        if (data) {
-            this.__data = data;
-        }
-        this.equalsToken = equalsToken, this.value = value;
-        equalsToken.parent = this, value.parent = this;
-    };
-    TypeScript.EqualsValueClauseSyntax.prototype.kind = function () {
-        return 197 /* EqualsValueClause */;
-    };
-    TypeScript.PrefixUnaryExpressionSyntax = function (data, operatorToken, operand) {
-        if (data) {
-            this.__data = data;
-        }
-        this.operatorToken = operatorToken, this.operand = operand;
-        operatorToken.parent = this, operand.parent = this;
-    };
-    TypeScript.PrefixUnaryExpressionSyntax.prototype.kind = function () {
-        return 169 /* PrefixUnaryExpression */;
-    };
-    TypeScript.ArrayLiteralExpressionSyntax = function (data, openBracketToken, expressions, closeBracketToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.openBracketToken = openBracketToken, this.expressions = expressions, this.closeBracketToken = closeBracketToken;
-        openBracketToken.parent = this, expressions.parent = this, closeBracketToken.parent = this;
-    };
-    TypeScript.ArrayLiteralExpressionSyntax.prototype.kind = function () {
-        return 178 /* ArrayLiteralExpression */;
-    };
-    TypeScript.OmittedExpressionSyntax = function (data) {
-        if (data) {
-            this.__data = data;
-        }
-    };
-    TypeScript.OmittedExpressionSyntax.prototype.kind = function () {
-        return 187 /* OmittedExpression */;
-    };
-    TypeScript.ParenthesizedExpressionSyntax = function (data, openParenToken, expression, closeParenToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.openParenToken = openParenToken, this.expression = expression, this.closeParenToken = closeParenToken;
-        openParenToken.parent = this, expression.parent = this, closeParenToken.parent = this;
-    };
-    TypeScript.ParenthesizedExpressionSyntax.prototype.kind = function () {
-        return 181 /* ParenthesizedExpression */;
-    };
-    TypeScript.SimpleArrowFunctionExpressionSyntax = function (data, parameter, equalsGreaterThanToken, block, expression) {
-        if (data) {
-            this.__data = data;
-        }
-        this.parameter = parameter, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression;
-        parameter.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
-    };
-    TypeScript.SimpleArrowFunctionExpressionSyntax.prototype.kind = function () {
-        return 183 /* SimpleArrowFunctionExpression */;
-    };
-    TypeScript.ParenthesizedArrowFunctionExpressionSyntax = function (data, callSignature, equalsGreaterThanToken, block, expression) {
-        if (data) {
-            this.__data = data;
-        }
-        this.callSignature = callSignature, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression;
-        callSignature.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
-    };
-    TypeScript.ParenthesizedArrowFunctionExpressionSyntax.prototype.kind = function () {
-        return 182 /* ParenthesizedArrowFunctionExpression */;
-    };
     TypeScript.QualifiedNameSyntax = function (data, left, dotToken, right) {
         if (data) {
             this.__data = data;
@@ -27921,36 +27733,6 @@ var TypeScript;
     };
     TypeScript.QualifiedNameSyntax.prototype.kind = function () {
         return 123 /* QualifiedName */;
-    };
-    TypeScript.TypeArgumentListSyntax = function (data, lessThanToken, typeArguments, greaterThanToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.lessThanToken = lessThanToken, this.typeArguments = typeArguments, this.greaterThanToken = greaterThanToken;
-        lessThanToken.parent = this, typeArguments.parent = this, greaterThanToken.parent = this;
-    };
-    TypeScript.TypeArgumentListSyntax.prototype.kind = function () {
-        return 194 /* TypeArgumentList */;
-    };
-    TypeScript.ConstructorTypeSyntax = function (data, newKeyword, typeParameterList, parameterList, equalsGreaterThanToken, type) {
-        if (data) {
-            this.__data = data;
-        }
-        this.newKeyword = newKeyword, this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type;
-        newKeyword.parent = this, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
-    };
-    TypeScript.ConstructorTypeSyntax.prototype.kind = function () {
-        return 127 /* ConstructorType */;
-    };
-    TypeScript.FunctionTypeSyntax = function (data, typeParameterList, parameterList, equalsGreaterThanToken, type) {
-        if (data) {
-            this.__data = data;
-        }
-        this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type;
-        typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
-    };
-    TypeScript.FunctionTypeSyntax.prototype.kind = function () {
-        return 125 /* FunctionType */;
     };
     TypeScript.ObjectTypeSyntax = function (data, openBraceToken, typeMembers, closeBraceToken) {
         if (data) {
@@ -27962,6 +27744,16 @@ var TypeScript;
     TypeScript.ObjectTypeSyntax.prototype.kind = function () {
         return 124 /* ObjectType */;
     };
+    TypeScript.FunctionTypeSyntax = function (data, typeParameterList, parameterList, equalsGreaterThanToken, type) {
+        if (data) {
+            this.__data = data;
+        }
+        this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type;
+        typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
+    };
+    TypeScript.FunctionTypeSyntax.prototype.kind = function () {
+        return 125 /* FunctionType */;
+    };
     TypeScript.ArrayTypeSyntax = function (data, type, openBracketToken, closeBracketToken) {
         if (data) {
             this.__data = data;
@@ -27971,6 +27763,16 @@ var TypeScript;
     };
     TypeScript.ArrayTypeSyntax.prototype.kind = function () {
         return 126 /* ArrayType */;
+    };
+    TypeScript.ConstructorTypeSyntax = function (data, newKeyword, typeParameterList, parameterList, equalsGreaterThanToken, type) {
+        if (data) {
+            this.__data = data;
+        }
+        this.newKeyword = newKeyword, this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type;
+        newKeyword.parent = this, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
+    };
+    TypeScript.ConstructorTypeSyntax.prototype.kind = function () {
+        return 127 /* ConstructorType */;
     };
     TypeScript.GenericTypeSyntax = function (data, name, typeArgumentList) {
         if (data) {
@@ -28022,255 +27824,95 @@ var TypeScript;
     TypeScript.ParenthesizedTypeSyntax.prototype.kind = function () {
         return 132 /* ParenthesizedType */;
     };
-    TypeScript.TypeAnnotationSyntax = function (data, colonToken, type) {
+    TypeScript.InterfaceDeclarationSyntax = function (data, modifiers, interfaceKeyword, identifier, typeParameterList, heritageClauses, body) {
         if (data) {
             this.__data = data;
         }
-        this.colonToken = colonToken, this.type = type;
-        colonToken.parent = this, type.parent = this;
+        this.modifiers = modifiers, this.interfaceKeyword = interfaceKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.body = body;
+        modifiers.parent = this, interfaceKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), heritageClauses.parent = this, body.parent = this;
     };
-    TypeScript.TypeAnnotationSyntax.prototype.kind = function () {
-        return 210 /* TypeAnnotation */;
+    TypeScript.InterfaceDeclarationSyntax.prototype.kind = function () {
+        return 133 /* InterfaceDeclaration */;
     };
-    TypeScript.BlockSyntax = function (data, openBraceToken, statements, closeBraceToken) {
+    TypeScript.FunctionDeclarationSyntax = function (data, modifiers, functionKeyword, identifier, callSignature, block, semicolonToken) {
         if (data) {
             this.__data = data;
         }
-        this.openBraceToken = openBraceToken, this.statements = statements, this.closeBraceToken = closeBraceToken;
-        openBraceToken.parent = this, statements.parent = this, closeBraceToken.parent = this;
+        this.modifiers = modifiers, this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, functionKeyword.parent = this, identifier.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
     };
-    TypeScript.BlockSyntax.prototype.kind = function () {
-        return 151 /* Block */;
+    TypeScript.FunctionDeclarationSyntax.prototype.kind = function () {
+        return 134 /* FunctionDeclaration */;
     };
-    TypeScript.ParameterSyntax = function (data, dotDotDotToken, modifiers, identifier, questionToken, typeAnnotation, equalsValueClause) {
+    TypeScript.ModuleDeclarationSyntax = function (data, modifiers, moduleKeyword, name, stringLiteral, openBraceToken, moduleElements, closeBraceToken) {
         if (data) {
             this.__data = data;
         }
-        this.dotDotDotToken = dotDotDotToken, this.modifiers = modifiers, this.identifier = identifier, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause;
-        dotDotDotToken && (dotDotDotToken.parent = this), modifiers.parent = this, identifier.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
+        this.modifiers = modifiers, this.moduleKeyword = moduleKeyword, this.name = name, this.stringLiteral = stringLiteral, this.openBraceToken = openBraceToken, this.moduleElements = moduleElements, this.closeBraceToken = closeBraceToken;
+        modifiers.parent = this, moduleKeyword.parent = this, name && (name.parent = this), stringLiteral && (stringLiteral.parent = this), openBraceToken.parent = this, moduleElements.parent = this, closeBraceToken.parent = this;
     };
-    TypeScript.ParameterSyntax.prototype.kind = function () {
-        return 208 /* Parameter */;
+    TypeScript.ModuleDeclarationSyntax.prototype.kind = function () {
+        return 135 /* ModuleDeclaration */;
     };
-    TypeScript.MemberAccessExpressionSyntax = function (data, expression, dotToken, name) {
+    TypeScript.ClassDeclarationSyntax = function (data, modifiers, classKeyword, identifier, typeParameterList, heritageClauses, openBraceToken, classElements, closeBraceToken) {
         if (data) {
             this.__data = data;
         }
-        this.expression = expression, this.dotToken = dotToken, this.name = name;
-        expression.parent = this, dotToken.parent = this, name.parent = this;
+        this.modifiers = modifiers, this.classKeyword = classKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.openBraceToken = openBraceToken, this.classElements = classElements, this.closeBraceToken = closeBraceToken;
+        modifiers.parent = this, classKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), heritageClauses.parent = this, openBraceToken.parent = this, classElements.parent = this, closeBraceToken.parent = this;
     };
-    TypeScript.MemberAccessExpressionSyntax.prototype.kind = function () {
-        return 176 /* MemberAccessExpression */;
+    TypeScript.ClassDeclarationSyntax.prototype.kind = function () {
+        return 136 /* ClassDeclaration */;
     };
-    TypeScript.PostfixUnaryExpressionSyntax = function (data, operand, operatorToken) {
+    TypeScript.EnumDeclarationSyntax = function (data, modifiers, enumKeyword, identifier, openBraceToken, enumElements, closeBraceToken) {
         if (data) {
             this.__data = data;
         }
-        this.operand = operand, this.operatorToken = operatorToken;
-        operand.parent = this, operatorToken.parent = this;
+        this.modifiers = modifiers, this.enumKeyword = enumKeyword, this.identifier = identifier, this.openBraceToken = openBraceToken, this.enumElements = enumElements, this.closeBraceToken = closeBraceToken;
+        modifiers.parent = this, enumKeyword.parent = this, identifier.parent = this, openBraceToken.parent = this, enumElements.parent = this, closeBraceToken.parent = this;
     };
-    TypeScript.PostfixUnaryExpressionSyntax.prototype.kind = function () {
-        return 175 /* PostfixUnaryExpression */;
+    TypeScript.EnumDeclarationSyntax.prototype.kind = function () {
+        return 137 /* EnumDeclaration */;
     };
-    TypeScript.ElementAccessExpressionSyntax = function (data, expression, openBracketToken, argumentExpression, closeBracketToken) {
+    TypeScript.ImportDeclarationSyntax = function (data, modifiers, importKeyword, identifier, equalsToken, moduleReference, semicolonToken) {
         if (data) {
             this.__data = data;
         }
-        this.expression = expression, this.openBracketToken = openBracketToken, this.argumentExpression = argumentExpression, this.closeBracketToken = closeBracketToken;
-        expression.parent = this, openBracketToken.parent = this, argumentExpression.parent = this, closeBracketToken.parent = this;
+        this.modifiers = modifiers, this.importKeyword = importKeyword, this.identifier = identifier, this.equalsToken = equalsToken, this.moduleReference = moduleReference, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, importKeyword.parent = this, identifier.parent = this, equalsToken.parent = this, moduleReference.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
-    TypeScript.ElementAccessExpressionSyntax.prototype.kind = function () {
-        return 185 /* ElementAccessExpression */;
+    TypeScript.ImportDeclarationSyntax.prototype.kind = function () {
+        return 138 /* ImportDeclaration */;
     };
-    TypeScript.TemplateAccessExpressionSyntax = function (data, expression, templateExpression) {
+    TypeScript.ExportAssignmentSyntax = function (data, exportKeyword, equalsToken, identifier, semicolonToken) {
         if (data) {
             this.__data = data;
         }
-        this.expression = expression, this.templateExpression = templateExpression;
-        expression.parent = this, templateExpression.parent = this;
+        this.exportKeyword = exportKeyword, this.equalsToken = equalsToken, this.identifier = identifier, this.semicolonToken = semicolonToken;
+        exportKeyword.parent = this, equalsToken.parent = this, identifier.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
-    TypeScript.TemplateAccessExpressionSyntax.prototype.kind = function () {
-        return 189 /* TemplateAccessExpression */;
+    TypeScript.ExportAssignmentSyntax.prototype.kind = function () {
+        return 139 /* ExportAssignment */;
     };
-    TypeScript.TemplateExpressionSyntax = function (data, templateStartToken, templateClauses) {
+    TypeScript.MemberFunctionDeclarationSyntax = function (data, modifiers, propertyName, callSignature, block, semicolonToken) {
         if (data) {
             this.__data = data;
         }
-        this.templateStartToken = templateStartToken, this.templateClauses = templateClauses;
-        templateStartToken.parent = this, templateClauses.parent = this;
+        this.modifiers = modifiers, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, propertyName.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
     };
-    TypeScript.TemplateExpressionSyntax.prototype.kind = function () {
-        return 188 /* TemplateExpression */;
+    TypeScript.MemberFunctionDeclarationSyntax.prototype.kind = function () {
+        return 140 /* MemberFunctionDeclaration */;
     };
-    TypeScript.TemplateClauseSyntax = function (data, expression, templateMiddleOrEndToken) {
+    TypeScript.MemberVariableDeclarationSyntax = function (data, modifiers, variableDeclarator, semicolonToken) {
         if (data) {
             this.__data = data;
         }
-        this.expression = expression, this.templateMiddleOrEndToken = templateMiddleOrEndToken;
-        expression.parent = this, templateMiddleOrEndToken.parent = this;
+        this.modifiers = modifiers, this.variableDeclarator = variableDeclarator, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, variableDeclarator.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
-    TypeScript.TemplateClauseSyntax.prototype.kind = function () {
-        return 203 /* TemplateClause */;
-    };
-    TypeScript.InvocationExpressionSyntax = function (data, expression, argumentList) {
-        if (data) {
-            this.__data = data;
-        }
-        this.expression = expression, this.argumentList = argumentList;
-        expression.parent = this, argumentList.parent = this;
-    };
-    TypeScript.InvocationExpressionSyntax.prototype.kind = function () {
-        return 177 /* InvocationExpression */;
-    };
-    TypeScript.ArgumentListSyntax = function (data, typeArgumentList, openParenToken, _arguments, closeParenToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.typeArgumentList = typeArgumentList, this.openParenToken = openParenToken, this.arguments = _arguments, this.closeParenToken = closeParenToken;
-        typeArgumentList && (typeArgumentList.parent = this), openParenToken.parent = this, _arguments.parent = this, closeParenToken.parent = this;
-    };
-    TypeScript.ArgumentListSyntax.prototype.kind = function () {
-        return 192 /* ArgumentList */;
-    };
-    TypeScript.BinaryExpressionSyntax = function (data, left, operatorToken, right) {
-        if (data) {
-            this.__data = data;
-        }
-        this.left = left, this.operatorToken = operatorToken, this.right = right;
-        left.parent = this, operatorToken.parent = this, right.parent = this;
-    };
-    TypeScript.BinaryExpressionSyntax.prototype.kind = function () {
-        return 174 /* BinaryExpression */;
-    };
-    TypeScript.ConditionalExpressionSyntax = function (data, condition, questionToken, whenTrue, colonToken, whenFalse) {
-        if (data) {
-            this.__data = data;
-        }
-        this.condition = condition, this.questionToken = questionToken, this.whenTrue = whenTrue, this.colonToken = colonToken, this.whenFalse = whenFalse;
-        condition.parent = this, questionToken.parent = this, whenTrue.parent = this, colonToken.parent = this, whenFalse.parent = this;
-    };
-    TypeScript.ConditionalExpressionSyntax.prototype.kind = function () {
-        return 173 /* ConditionalExpression */;
-    };
-    TypeScript.ConstructSignatureSyntax = function (data, newKeyword, callSignature) {
-        if (data) {
-            this.__data = data;
-        }
-        this.newKeyword = newKeyword, this.callSignature = callSignature;
-        newKeyword.parent = this, callSignature.parent = this;
-    };
-    TypeScript.ConstructSignatureSyntax.prototype.kind = function () {
-        return 148 /* ConstructSignature */;
-    };
-    TypeScript.MethodSignatureSyntax = function (data, propertyName, questionToken, callSignature) {
-        if (data) {
-            this.__data = data;
-        }
-        this.propertyName = propertyName, this.questionToken = questionToken, this.callSignature = callSignature;
-        propertyName.parent = this, questionToken && (questionToken.parent = this), callSignature.parent = this;
-    };
-    TypeScript.MethodSignatureSyntax.prototype.kind = function () {
-        return 150 /* MethodSignature */;
-    };
-    TypeScript.IndexSignatureSyntax = function (data, openBracketToken, parameters, closeBracketToken, typeAnnotation) {
-        if (data) {
-            this.__data = data;
-        }
-        this.openBracketToken = openBracketToken, this.parameters = parameters, this.closeBracketToken = closeBracketToken, this.typeAnnotation = typeAnnotation;
-        openBracketToken.parent = this, parameters.parent = this, closeBracketToken.parent = this, typeAnnotation && (typeAnnotation.parent = this);
-    };
-    TypeScript.IndexSignatureSyntax.prototype.kind = function () {
-        return 149 /* IndexSignature */;
-    };
-    TypeScript.PropertySignatureSyntax = function (data, propertyName, questionToken, typeAnnotation) {
-        if (data) {
-            this.__data = data;
-        }
-        this.propertyName = propertyName, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation;
-        propertyName.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this);
-    };
-    TypeScript.PropertySignatureSyntax.prototype.kind = function () {
-        return 146 /* PropertySignature */;
-    };
-    TypeScript.CallSignatureSyntax = function (data, typeParameterList, parameterList, typeAnnotation) {
-        if (data) {
-            this.__data = data;
-        }
-        this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.typeAnnotation = typeAnnotation;
-        typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, typeAnnotation && (typeAnnotation.parent = this);
-    };
-    TypeScript.CallSignatureSyntax.prototype.kind = function () {
-        return 147 /* CallSignature */;
-    };
-    TypeScript.ParameterListSyntax = function (data, openParenToken, parameters, closeParenToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.openParenToken = openParenToken, this.parameters = parameters, this.closeParenToken = closeParenToken;
-        openParenToken.parent = this, parameters.parent = this, closeParenToken.parent = this;
-    };
-    TypeScript.ParameterListSyntax.prototype.kind = function () {
-        return 193 /* ParameterList */;
-    };
-    TypeScript.TypeParameterListSyntax = function (data, lessThanToken, typeParameters, greaterThanToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.lessThanToken = lessThanToken, this.typeParameters = typeParameters, this.greaterThanToken = greaterThanToken;
-        lessThanToken.parent = this, typeParameters.parent = this, greaterThanToken.parent = this;
-    };
-    TypeScript.TypeParameterListSyntax.prototype.kind = function () {
-        return 195 /* TypeParameterList */;
-    };
-    TypeScript.TypeParameterSyntax = function (data, identifier, constraint) {
-        if (data) {
-            this.__data = data;
-        }
-        this.identifier = identifier, this.constraint = constraint;
-        identifier.parent = this, constraint && (constraint.parent = this);
-    };
-    TypeScript.TypeParameterSyntax.prototype.kind = function () {
-        return 204 /* TypeParameter */;
-    };
-    TypeScript.ConstraintSyntax = function (data, extendsKeyword, typeOrExpression) {
-        if (data) {
-            this.__data = data;
-        }
-        this.extendsKeyword = extendsKeyword, this.typeOrExpression = typeOrExpression;
-        extendsKeyword.parent = this, typeOrExpression.parent = this;
-    };
-    TypeScript.ConstraintSyntax.prototype.kind = function () {
-        return 205 /* Constraint */;
-    };
-    TypeScript.ElseClauseSyntax = function (data, elseKeyword, statement) {
-        if (data) {
-            this.__data = data;
-        }
-        this.elseKeyword = elseKeyword, this.statement = statement;
-        elseKeyword.parent = this, statement.parent = this;
-    };
-    TypeScript.ElseClauseSyntax.prototype.kind = function () {
-        return 200 /* ElseClause */;
-    };
-    TypeScript.IfStatementSyntax = function (data, ifKeyword, openParenToken, condition, closeParenToken, statement, elseClause) {
-        if (data) {
-            this.__data = data;
-        }
-        this.ifKeyword = ifKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, this.elseClause = elseClause;
-        ifKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this, elseClause && (elseClause.parent = this);
-    };
-    TypeScript.IfStatementSyntax.prototype.kind = function () {
-        return 152 /* IfStatement */;
-    };
-    TypeScript.ExpressionStatementSyntax = function (data, expression, semicolonToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.expression = expression, this.semicolonToken = semicolonToken;
-        expression.parent = this, semicolonToken && (semicolonToken.parent = this);
-    };
-    TypeScript.ExpressionStatementSyntax.prototype.kind = function () {
-        return 154 /* ExpressionStatement */;
+    TypeScript.MemberVariableDeclarationSyntax.prototype.kind = function () {
+        return 141 /* MemberVariableDeclaration */;
     };
     TypeScript.ConstructorDeclarationSyntax = function (data, modifiers, constructorKeyword, callSignature, block, semicolonToken) {
         if (data) {
@@ -28282,15 +27924,15 @@ var TypeScript;
     TypeScript.ConstructorDeclarationSyntax.prototype.kind = function () {
         return 142 /* ConstructorDeclaration */;
     };
-    TypeScript.MemberFunctionDeclarationSyntax = function (data, modifiers, propertyName, callSignature, block, semicolonToken) {
+    TypeScript.IndexMemberDeclarationSyntax = function (data, modifiers, indexSignature, semicolonToken) {
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, propertyName.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
+        this.modifiers = modifiers, this.indexSignature = indexSignature, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, indexSignature.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
-    TypeScript.MemberFunctionDeclarationSyntax.prototype.kind = function () {
-        return 140 /* MemberFunctionDeclaration */;
+    TypeScript.IndexMemberDeclarationSyntax.prototype.kind = function () {
+        return 143 /* IndexMemberDeclaration */;
     };
     TypeScript.GetAccessorSyntax = function (data, modifiers, getKeyword, propertyName, callSignature, block) {
         if (data) {
@@ -28312,35 +27954,95 @@ var TypeScript;
     TypeScript.SetAccessorSyntax.prototype.kind = function () {
         return 145 /* SetAccessor */;
     };
-    TypeScript.MemberVariableDeclarationSyntax = function (data, modifiers, variableDeclarator, semicolonToken) {
+    TypeScript.PropertySignatureSyntax = function (data, propertyName, questionToken, typeAnnotation) {
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.variableDeclarator = variableDeclarator, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, variableDeclarator.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.propertyName = propertyName, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation;
+        propertyName.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this);
     };
-    TypeScript.MemberVariableDeclarationSyntax.prototype.kind = function () {
-        return 141 /* MemberVariableDeclaration */;
+    TypeScript.PropertySignatureSyntax.prototype.kind = function () {
+        return 146 /* PropertySignature */;
     };
-    TypeScript.IndexMemberDeclarationSyntax = function (data, modifiers, indexSignature, semicolonToken) {
+    TypeScript.CallSignatureSyntax = function (data, typeParameterList, parameterList, typeAnnotation) {
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.indexSignature = indexSignature, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, indexSignature.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.typeAnnotation = typeAnnotation;
+        typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, typeAnnotation && (typeAnnotation.parent = this);
     };
-    TypeScript.IndexMemberDeclarationSyntax.prototype.kind = function () {
-        return 143 /* IndexMemberDeclaration */;
+    TypeScript.CallSignatureSyntax.prototype.kind = function () {
+        return 147 /* CallSignature */;
     };
-    TypeScript.ThrowStatementSyntax = function (data, throwKeyword, expression, semicolonToken) {
+    TypeScript.ConstructSignatureSyntax = function (data, newKeyword, callSignature) {
         if (data) {
             this.__data = data;
         }
-        this.throwKeyword = throwKeyword, this.expression = expression, this.semicolonToken = semicolonToken;
-        throwKeyword.parent = this, expression.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.newKeyword = newKeyword, this.callSignature = callSignature;
+        newKeyword.parent = this, callSignature.parent = this;
     };
-    TypeScript.ThrowStatementSyntax.prototype.kind = function () {
-        return 162 /* ThrowStatement */;
+    TypeScript.ConstructSignatureSyntax.prototype.kind = function () {
+        return 148 /* ConstructSignature */;
+    };
+    TypeScript.IndexSignatureSyntax = function (data, openBracketToken, parameters, closeBracketToken, typeAnnotation) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openBracketToken = openBracketToken, this.parameters = parameters, this.closeBracketToken = closeBracketToken, this.typeAnnotation = typeAnnotation;
+        openBracketToken.parent = this, parameters.parent = this, closeBracketToken.parent = this, typeAnnotation && (typeAnnotation.parent = this);
+    };
+    TypeScript.IndexSignatureSyntax.prototype.kind = function () {
+        return 149 /* IndexSignature */;
+    };
+    TypeScript.MethodSignatureSyntax = function (data, propertyName, questionToken, callSignature) {
+        if (data) {
+            this.__data = data;
+        }
+        this.propertyName = propertyName, this.questionToken = questionToken, this.callSignature = callSignature;
+        propertyName.parent = this, questionToken && (questionToken.parent = this), callSignature.parent = this;
+    };
+    TypeScript.MethodSignatureSyntax.prototype.kind = function () {
+        return 150 /* MethodSignature */;
+    };
+    TypeScript.BlockSyntax = function (data, openBraceToken, statements, closeBraceToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openBraceToken = openBraceToken, this.statements = statements, this.closeBraceToken = closeBraceToken;
+        openBraceToken.parent = this, statements.parent = this, closeBraceToken.parent = this;
+    };
+    TypeScript.BlockSyntax.prototype.kind = function () {
+        return 151 /* Block */;
+    };
+    TypeScript.IfStatementSyntax = function (data, ifKeyword, openParenToken, condition, closeParenToken, statement, elseClause) {
+        if (data) {
+            this.__data = data;
+        }
+        this.ifKeyword = ifKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, this.elseClause = elseClause;
+        ifKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this, elseClause && (elseClause.parent = this);
+    };
+    TypeScript.IfStatementSyntax.prototype.kind = function () {
+        return 152 /* IfStatement */;
+    };
+    TypeScript.VariableStatementSyntax = function (data, modifiers, variableDeclaration, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.variableDeclaration = variableDeclaration, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, variableDeclaration.parent = this, semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.VariableStatementSyntax.prototype.kind = function () {
+        return 153 /* VariableStatement */;
+    };
+    TypeScript.ExpressionStatementSyntax = function (data, expression, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.expression = expression, this.semicolonToken = semicolonToken;
+        expression.parent = this, semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.ExpressionStatementSyntax.prototype.kind = function () {
+        return 154 /* ExpressionStatement */;
     };
     TypeScript.ReturnStatementSyntax = function (data, returnKeyword, expression, semicolonToken) {
         if (data) {
@@ -28352,16 +28054,6 @@ var TypeScript;
     TypeScript.ReturnStatementSyntax.prototype.kind = function () {
         return 155 /* ReturnStatement */;
     };
-    TypeScript.ObjectCreationExpressionSyntax = function (data, newKeyword, expression, argumentList) {
-        if (data) {
-            this.__data = data;
-        }
-        this.newKeyword = newKeyword, this.expression = expression, this.argumentList = argumentList;
-        newKeyword.parent = this, expression.parent = this, argumentList && (argumentList.parent = this);
-    };
-    TypeScript.ObjectCreationExpressionSyntax.prototype.kind = function () {
-        return 180 /* ObjectCreationExpression */;
-    };
     TypeScript.SwitchStatementSyntax = function (data, switchKeyword, openParenToken, expression, closeParenToken, openBraceToken, switchClauses, closeBraceToken) {
         if (data) {
             this.__data = data;
@@ -28371,26 +28063,6 @@ var TypeScript;
     };
     TypeScript.SwitchStatementSyntax.prototype.kind = function () {
         return 156 /* SwitchStatement */;
-    };
-    TypeScript.CaseSwitchClauseSyntax = function (data, caseKeyword, expression, colonToken, statements) {
-        if (data) {
-            this.__data = data;
-        }
-        this.caseKeyword = caseKeyword, this.expression = expression, this.colonToken = colonToken, this.statements = statements;
-        caseKeyword.parent = this, expression.parent = this, colonToken.parent = this, statements.parent = this;
-    };
-    TypeScript.CaseSwitchClauseSyntax.prototype.kind = function () {
-        return 198 /* CaseSwitchClause */;
-    };
-    TypeScript.DefaultSwitchClauseSyntax = function (data, defaultKeyword, colonToken, statements) {
-        if (data) {
-            this.__data = data;
-        }
-        this.defaultKeyword = defaultKeyword, this.colonToken = colonToken, this.statements = statements;
-        defaultKeyword.parent = this, colonToken.parent = this, statements.parent = this;
-    };
-    TypeScript.DefaultSwitchClauseSyntax.prototype.kind = function () {
-        return 199 /* DefaultSwitchClause */;
     };
     TypeScript.BreakStatementSyntax = function (data, breakKeyword, identifier, semicolonToken) {
         if (data) {
@@ -28432,96 +28104,6 @@ var TypeScript;
     TypeScript.ForInStatementSyntax.prototype.kind = function () {
         return 160 /* ForInStatement */;
     };
-    TypeScript.WhileStatementSyntax = function (data, whileKeyword, openParenToken, condition, closeParenToken, statement) {
-        if (data) {
-            this.__data = data;
-        }
-        this.whileKeyword = whileKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement;
-        whileKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
-    };
-    TypeScript.WhileStatementSyntax.prototype.kind = function () {
-        return 163 /* WhileStatement */;
-    };
-    TypeScript.WithStatementSyntax = function (data, withKeyword, openParenToken, condition, closeParenToken, statement) {
-        if (data) {
-            this.__data = data;
-        }
-        this.withKeyword = withKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement;
-        withKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
-    };
-    TypeScript.WithStatementSyntax.prototype.kind = function () {
-        return 168 /* WithStatement */;
-    };
-    TypeScript.EnumDeclarationSyntax = function (data, modifiers, enumKeyword, identifier, openBraceToken, enumElements, closeBraceToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.modifiers = modifiers, this.enumKeyword = enumKeyword, this.identifier = identifier, this.openBraceToken = openBraceToken, this.enumElements = enumElements, this.closeBraceToken = closeBraceToken;
-        modifiers.parent = this, enumKeyword.parent = this, identifier.parent = this, openBraceToken.parent = this, enumElements.parent = this, closeBraceToken.parent = this;
-    };
-    TypeScript.EnumDeclarationSyntax.prototype.kind = function () {
-        return 137 /* EnumDeclaration */;
-    };
-    TypeScript.EnumElementSyntax = function (data, propertyName, equalsValueClause) {
-        if (data) {
-            this.__data = data;
-        }
-        this.propertyName = propertyName, this.equalsValueClause = equalsValueClause;
-        propertyName.parent = this, equalsValueClause && (equalsValueClause.parent = this);
-    };
-    TypeScript.EnumElementSyntax.prototype.kind = function () {
-        return 209 /* EnumElement */;
-    };
-    TypeScript.CastExpressionSyntax = function (data, lessThanToken, type, greaterThanToken, expression) {
-        if (data) {
-            this.__data = data;
-        }
-        this.lessThanToken = lessThanToken, this.type = type, this.greaterThanToken = greaterThanToken, this.expression = expression;
-        lessThanToken.parent = this, type.parent = this, greaterThanToken.parent = this, expression.parent = this;
-    };
-    TypeScript.CastExpressionSyntax.prototype.kind = function () {
-        return 184 /* CastExpression */;
-    };
-    TypeScript.ObjectLiteralExpressionSyntax = function (data, openBraceToken, propertyAssignments, closeBraceToken) {
-        if (data) {
-            this.__data = data;
-        }
-        this.openBraceToken = openBraceToken, this.propertyAssignments = propertyAssignments, this.closeBraceToken = closeBraceToken;
-        openBraceToken.parent = this, propertyAssignments.parent = this, closeBraceToken.parent = this;
-    };
-    TypeScript.ObjectLiteralExpressionSyntax.prototype.kind = function () {
-        return 179 /* ObjectLiteralExpression */;
-    };
-    TypeScript.SimplePropertyAssignmentSyntax = function (data, propertyName, colonToken, expression) {
-        if (data) {
-            this.__data = data;
-        }
-        this.propertyName = propertyName, this.colonToken = colonToken, this.expression = expression;
-        propertyName.parent = this, colonToken.parent = this, expression.parent = this;
-    };
-    TypeScript.SimplePropertyAssignmentSyntax.prototype.kind = function () {
-        return 206 /* SimplePropertyAssignment */;
-    };
-    TypeScript.FunctionPropertyAssignmentSyntax = function (data, propertyName, callSignature, block) {
-        if (data) {
-            this.__data = data;
-        }
-        this.propertyName = propertyName, this.callSignature = callSignature, this.block = block;
-        propertyName.parent = this, callSignature.parent = this, block.parent = this;
-    };
-    TypeScript.FunctionPropertyAssignmentSyntax.prototype.kind = function () {
-        return 207 /* FunctionPropertyAssignment */;
-    };
-    TypeScript.FunctionExpressionSyntax = function (data, functionKeyword, identifier, callSignature, block) {
-        if (data) {
-            this.__data = data;
-        }
-        this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block;
-        functionKeyword.parent = this, identifier && (identifier.parent = this), callSignature.parent = this, block.parent = this;
-    };
-    TypeScript.FunctionExpressionSyntax.prototype.kind = function () {
-        return 186 /* FunctionExpression */;
-    };
     TypeScript.EmptyStatementSyntax = function (data, semicolonToken) {
         if (data) {
             this.__data = data;
@@ -28532,6 +28114,26 @@ var TypeScript;
     TypeScript.EmptyStatementSyntax.prototype.kind = function () {
         return 161 /* EmptyStatement */;
     };
+    TypeScript.ThrowStatementSyntax = function (data, throwKeyword, expression, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.throwKeyword = throwKeyword, this.expression = expression, this.semicolonToken = semicolonToken;
+        throwKeyword.parent = this, expression.parent = this, semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.ThrowStatementSyntax.prototype.kind = function () {
+        return 162 /* ThrowStatement */;
+    };
+    TypeScript.WhileStatementSyntax = function (data, whileKeyword, openParenToken, condition, closeParenToken, statement) {
+        if (data) {
+            this.__data = data;
+        }
+        this.whileKeyword = whileKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement;
+        whileKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
+    };
+    TypeScript.WhileStatementSyntax.prototype.kind = function () {
+        return 163 /* WhileStatement */;
+    };
     TypeScript.TryStatementSyntax = function (data, tryKeyword, block, catchClause, finallyClause) {
         if (data) {
             this.__data = data;
@@ -28541,26 +28143,6 @@ var TypeScript;
     };
     TypeScript.TryStatementSyntax.prototype.kind = function () {
         return 164 /* TryStatement */;
-    };
-    TypeScript.CatchClauseSyntax = function (data, catchKeyword, openParenToken, identifier, typeAnnotation, closeParenToken, block) {
-        if (data) {
-            this.__data = data;
-        }
-        this.catchKeyword = catchKeyword, this.openParenToken = openParenToken, this.identifier = identifier, this.typeAnnotation = typeAnnotation, this.closeParenToken = closeParenToken, this.block = block;
-        catchKeyword.parent = this, openParenToken.parent = this, identifier.parent = this, typeAnnotation && (typeAnnotation.parent = this), closeParenToken.parent = this, block.parent = this;
-    };
-    TypeScript.CatchClauseSyntax.prototype.kind = function () {
-        return 201 /* CatchClause */;
-    };
-    TypeScript.FinallyClauseSyntax = function (data, finallyKeyword, block) {
-        if (data) {
-            this.__data = data;
-        }
-        this.finallyKeyword = finallyKeyword, this.block = block;
-        finallyKeyword.parent = this, block.parent = this;
-    };
-    TypeScript.FinallyClauseSyntax.prototype.kind = function () {
-        return 202 /* FinallyClause */;
     };
     TypeScript.LabeledStatementSyntax = function (data, identifier, colonToken, statement) {
         if (data) {
@@ -28582,15 +28164,35 @@ var TypeScript;
     TypeScript.DoStatementSyntax.prototype.kind = function () {
         return 166 /* DoStatement */;
     };
-    TypeScript.TypeOfExpressionSyntax = function (data, typeOfKeyword, expression) {
+    TypeScript.DebuggerStatementSyntax = function (data, debuggerKeyword, semicolonToken) {
         if (data) {
             this.__data = data;
         }
-        this.typeOfKeyword = typeOfKeyword, this.expression = expression;
-        typeOfKeyword.parent = this, expression.parent = this;
+        this.debuggerKeyword = debuggerKeyword, this.semicolonToken = semicolonToken;
+        debuggerKeyword.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
-    TypeScript.TypeOfExpressionSyntax.prototype.kind = function () {
-        return 171 /* TypeOfExpression */;
+    TypeScript.DebuggerStatementSyntax.prototype.kind = function () {
+        return 167 /* DebuggerStatement */;
+    };
+    TypeScript.WithStatementSyntax = function (data, withKeyword, openParenToken, condition, closeParenToken, statement) {
+        if (data) {
+            this.__data = data;
+        }
+        this.withKeyword = withKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement;
+        withKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
+    };
+    TypeScript.WithStatementSyntax.prototype.kind = function () {
+        return 168 /* WithStatement */;
+    };
+    TypeScript.PrefixUnaryExpressionSyntax = function (data, operatorToken, operand) {
+        if (data) {
+            this.__data = data;
+        }
+        this.operatorToken = operatorToken, this.operand = operand;
+        operatorToken.parent = this, operand.parent = this;
+    };
+    TypeScript.PrefixUnaryExpressionSyntax.prototype.kind = function () {
+        return 169 /* PrefixUnaryExpression */;
     };
     TypeScript.DeleteExpressionSyntax = function (data, deleteKeyword, expression) {
         if (data) {
@@ -28602,6 +28204,16 @@ var TypeScript;
     TypeScript.DeleteExpressionSyntax.prototype.kind = function () {
         return 170 /* DeleteExpression */;
     };
+    TypeScript.TypeOfExpressionSyntax = function (data, typeOfKeyword, expression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.typeOfKeyword = typeOfKeyword, this.expression = expression;
+        typeOfKeyword.parent = this, expression.parent = this;
+    };
+    TypeScript.TypeOfExpressionSyntax.prototype.kind = function () {
+        return 171 /* TypeOfExpression */;
+    };
     TypeScript.VoidExpressionSyntax = function (data, voidKeyword, expression) {
         if (data) {
             this.__data = data;
@@ -28612,15 +28224,403 @@ var TypeScript;
     TypeScript.VoidExpressionSyntax.prototype.kind = function () {
         return 172 /* VoidExpression */;
     };
-    TypeScript.DebuggerStatementSyntax = function (data, debuggerKeyword, semicolonToken) {
+    TypeScript.ConditionalExpressionSyntax = function (data, condition, questionToken, whenTrue, colonToken, whenFalse) {
         if (data) {
             this.__data = data;
         }
-        this.debuggerKeyword = debuggerKeyword, this.semicolonToken = semicolonToken;
-        debuggerKeyword.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.condition = condition, this.questionToken = questionToken, this.whenTrue = whenTrue, this.colonToken = colonToken, this.whenFalse = whenFalse;
+        condition.parent = this, questionToken.parent = this, whenTrue.parent = this, colonToken.parent = this, whenFalse.parent = this;
     };
-    TypeScript.DebuggerStatementSyntax.prototype.kind = function () {
-        return 167 /* DebuggerStatement */;
+    TypeScript.ConditionalExpressionSyntax.prototype.kind = function () {
+        return 173 /* ConditionalExpression */;
+    };
+    TypeScript.BinaryExpressionSyntax = function (data, left, operatorToken, right) {
+        if (data) {
+            this.__data = data;
+        }
+        this.left = left, this.operatorToken = operatorToken, this.right = right;
+        left.parent = this, operatorToken.parent = this, right.parent = this;
+    };
+    TypeScript.BinaryExpressionSyntax.prototype.kind = function () {
+        return 174 /* BinaryExpression */;
+    };
+    TypeScript.PostfixUnaryExpressionSyntax = function (data, operand, operatorToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.operand = operand, this.operatorToken = operatorToken;
+        operand.parent = this, operatorToken.parent = this;
+    };
+    TypeScript.PostfixUnaryExpressionSyntax.prototype.kind = function () {
+        return 175 /* PostfixUnaryExpression */;
+    };
+    TypeScript.MemberAccessExpressionSyntax = function (data, expression, dotToken, name) {
+        if (data) {
+            this.__data = data;
+        }
+        this.expression = expression, this.dotToken = dotToken, this.name = name;
+        expression.parent = this, dotToken.parent = this, name.parent = this;
+    };
+    TypeScript.MemberAccessExpressionSyntax.prototype.kind = function () {
+        return 176 /* MemberAccessExpression */;
+    };
+    TypeScript.InvocationExpressionSyntax = function (data, expression, argumentList) {
+        if (data) {
+            this.__data = data;
+        }
+        this.expression = expression, this.argumentList = argumentList;
+        expression.parent = this, argumentList.parent = this;
+    };
+    TypeScript.InvocationExpressionSyntax.prototype.kind = function () {
+        return 177 /* InvocationExpression */;
+    };
+    TypeScript.ArrayLiteralExpressionSyntax = function (data, openBracketToken, expressions, closeBracketToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openBracketToken = openBracketToken, this.expressions = expressions, this.closeBracketToken = closeBracketToken;
+        openBracketToken.parent = this, expressions.parent = this, closeBracketToken.parent = this;
+    };
+    TypeScript.ArrayLiteralExpressionSyntax.prototype.kind = function () {
+        return 178 /* ArrayLiteralExpression */;
+    };
+    TypeScript.ObjectLiteralExpressionSyntax = function (data, openBraceToken, propertyAssignments, closeBraceToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openBraceToken = openBraceToken, this.propertyAssignments = propertyAssignments, this.closeBraceToken = closeBraceToken;
+        openBraceToken.parent = this, propertyAssignments.parent = this, closeBraceToken.parent = this;
+    };
+    TypeScript.ObjectLiteralExpressionSyntax.prototype.kind = function () {
+        return 179 /* ObjectLiteralExpression */;
+    };
+    TypeScript.ObjectCreationExpressionSyntax = function (data, newKeyword, expression, argumentList) {
+        if (data) {
+            this.__data = data;
+        }
+        this.newKeyword = newKeyword, this.expression = expression, this.argumentList = argumentList;
+        newKeyword.parent = this, expression.parent = this, argumentList && (argumentList.parent = this);
+    };
+    TypeScript.ObjectCreationExpressionSyntax.prototype.kind = function () {
+        return 180 /* ObjectCreationExpression */;
+    };
+    TypeScript.ParenthesizedExpressionSyntax = function (data, openParenToken, expression, closeParenToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openParenToken = openParenToken, this.expression = expression, this.closeParenToken = closeParenToken;
+        openParenToken.parent = this, expression.parent = this, closeParenToken.parent = this;
+    };
+    TypeScript.ParenthesizedExpressionSyntax.prototype.kind = function () {
+        return 181 /* ParenthesizedExpression */;
+    };
+    TypeScript.ParenthesizedArrowFunctionExpressionSyntax = function (data, callSignature, equalsGreaterThanToken, block, expression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.callSignature = callSignature, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression;
+        callSignature.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
+    };
+    TypeScript.ParenthesizedArrowFunctionExpressionSyntax.prototype.kind = function () {
+        return 182 /* ParenthesizedArrowFunctionExpression */;
+    };
+    TypeScript.SimpleArrowFunctionExpressionSyntax = function (data, parameter, equalsGreaterThanToken, block, expression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.parameter = parameter, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression;
+        parameter.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
+    };
+    TypeScript.SimpleArrowFunctionExpressionSyntax.prototype.kind = function () {
+        return 183 /* SimpleArrowFunctionExpression */;
+    };
+    TypeScript.CastExpressionSyntax = function (data, lessThanToken, type, greaterThanToken, expression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.lessThanToken = lessThanToken, this.type = type, this.greaterThanToken = greaterThanToken, this.expression = expression;
+        lessThanToken.parent = this, type.parent = this, greaterThanToken.parent = this, expression.parent = this;
+    };
+    TypeScript.CastExpressionSyntax.prototype.kind = function () {
+        return 184 /* CastExpression */;
+    };
+    TypeScript.ElementAccessExpressionSyntax = function (data, expression, openBracketToken, argumentExpression, closeBracketToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.expression = expression, this.openBracketToken = openBracketToken, this.argumentExpression = argumentExpression, this.closeBracketToken = closeBracketToken;
+        expression.parent = this, openBracketToken.parent = this, argumentExpression.parent = this, closeBracketToken.parent = this;
+    };
+    TypeScript.ElementAccessExpressionSyntax.prototype.kind = function () {
+        return 185 /* ElementAccessExpression */;
+    };
+    TypeScript.FunctionExpressionSyntax = function (data, functionKeyword, identifier, callSignature, block) {
+        if (data) {
+            this.__data = data;
+        }
+        this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block;
+        functionKeyword.parent = this, identifier && (identifier.parent = this), callSignature.parent = this, block.parent = this;
+    };
+    TypeScript.FunctionExpressionSyntax.prototype.kind = function () {
+        return 186 /* FunctionExpression */;
+    };
+    TypeScript.OmittedExpressionSyntax = function (data) {
+        if (data) {
+            this.__data = data;
+        }
+    };
+    TypeScript.OmittedExpressionSyntax.prototype.kind = function () {
+        return 187 /* OmittedExpression */;
+    };
+    TypeScript.TemplateExpressionSyntax = function (data, templateStartToken, templateClauses) {
+        if (data) {
+            this.__data = data;
+        }
+        this.templateStartToken = templateStartToken, this.templateClauses = templateClauses;
+        templateStartToken.parent = this, templateClauses.parent = this;
+    };
+    TypeScript.TemplateExpressionSyntax.prototype.kind = function () {
+        return 188 /* TemplateExpression */;
+    };
+    TypeScript.TemplateAccessExpressionSyntax = function (data, expression, templateExpression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.expression = expression, this.templateExpression = templateExpression;
+        expression.parent = this, templateExpression.parent = this;
+    };
+    TypeScript.TemplateAccessExpressionSyntax.prototype.kind = function () {
+        return 189 /* TemplateAccessExpression */;
+    };
+    TypeScript.VariableDeclarationSyntax = function (data, varKeyword, variableDeclarators) {
+        if (data) {
+            this.__data = data;
+        }
+        this.varKeyword = varKeyword, this.variableDeclarators = variableDeclarators;
+        varKeyword.parent = this, variableDeclarators.parent = this;
+    };
+    TypeScript.VariableDeclarationSyntax.prototype.kind = function () {
+        return 190 /* VariableDeclaration */;
+    };
+    TypeScript.VariableDeclaratorSyntax = function (data, propertyName, typeAnnotation, equalsValueClause) {
+        if (data) {
+            this.__data = data;
+        }
+        this.propertyName = propertyName, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause;
+        propertyName.parent = this, typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
+    };
+    TypeScript.VariableDeclaratorSyntax.prototype.kind = function () {
+        return 191 /* VariableDeclarator */;
+    };
+    TypeScript.ArgumentListSyntax = function (data, typeArgumentList, openParenToken, _arguments, closeParenToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.typeArgumentList = typeArgumentList, this.openParenToken = openParenToken, this.arguments = _arguments, this.closeParenToken = closeParenToken;
+        typeArgumentList && (typeArgumentList.parent = this), openParenToken.parent = this, _arguments.parent = this, closeParenToken.parent = this;
+    };
+    TypeScript.ArgumentListSyntax.prototype.kind = function () {
+        return 192 /* ArgumentList */;
+    };
+    TypeScript.ParameterListSyntax = function (data, openParenToken, parameters, closeParenToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openParenToken = openParenToken, this.parameters = parameters, this.closeParenToken = closeParenToken;
+        openParenToken.parent = this, parameters.parent = this, closeParenToken.parent = this;
+    };
+    TypeScript.ParameterListSyntax.prototype.kind = function () {
+        return 193 /* ParameterList */;
+    };
+    TypeScript.TypeArgumentListSyntax = function (data, lessThanToken, typeArguments, greaterThanToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.lessThanToken = lessThanToken, this.typeArguments = typeArguments, this.greaterThanToken = greaterThanToken;
+        lessThanToken.parent = this, typeArguments.parent = this, greaterThanToken.parent = this;
+    };
+    TypeScript.TypeArgumentListSyntax.prototype.kind = function () {
+        return 194 /* TypeArgumentList */;
+    };
+    TypeScript.TypeParameterListSyntax = function (data, lessThanToken, typeParameters, greaterThanToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.lessThanToken = lessThanToken, this.typeParameters = typeParameters, this.greaterThanToken = greaterThanToken;
+        lessThanToken.parent = this, typeParameters.parent = this, greaterThanToken.parent = this;
+    };
+    TypeScript.TypeParameterListSyntax.prototype.kind = function () {
+        return 195 /* TypeParameterList */;
+    };
+    TypeScript.HeritageClauseSyntax = function (data, extendsOrImplementsKeyword, typeNames) {
+        if (data) {
+            this.__data = data;
+        }
+        this.extendsOrImplementsKeyword = extendsOrImplementsKeyword, this.typeNames = typeNames;
+        extendsOrImplementsKeyword.parent = this, typeNames.parent = this;
+    };
+    TypeScript.HeritageClauseSyntax.prototype.kind = function () {
+        return 196 /* HeritageClause */;
+    };
+    TypeScript.EqualsValueClauseSyntax = function (data, equalsToken, value) {
+        if (data) {
+            this.__data = data;
+        }
+        this.equalsToken = equalsToken, this.value = value;
+        equalsToken.parent = this, value.parent = this;
+    };
+    TypeScript.EqualsValueClauseSyntax.prototype.kind = function () {
+        return 197 /* EqualsValueClause */;
+    };
+    TypeScript.CaseSwitchClauseSyntax = function (data, caseKeyword, expression, colonToken, statements) {
+        if (data) {
+            this.__data = data;
+        }
+        this.caseKeyword = caseKeyword, this.expression = expression, this.colonToken = colonToken, this.statements = statements;
+        caseKeyword.parent = this, expression.parent = this, colonToken.parent = this, statements.parent = this;
+    };
+    TypeScript.CaseSwitchClauseSyntax.prototype.kind = function () {
+        return 198 /* CaseSwitchClause */;
+    };
+    TypeScript.DefaultSwitchClauseSyntax = function (data, defaultKeyword, colonToken, statements) {
+        if (data) {
+            this.__data = data;
+        }
+        this.defaultKeyword = defaultKeyword, this.colonToken = colonToken, this.statements = statements;
+        defaultKeyword.parent = this, colonToken.parent = this, statements.parent = this;
+    };
+    TypeScript.DefaultSwitchClauseSyntax.prototype.kind = function () {
+        return 199 /* DefaultSwitchClause */;
+    };
+    TypeScript.ElseClauseSyntax = function (data, elseKeyword, statement) {
+        if (data) {
+            this.__data = data;
+        }
+        this.elseKeyword = elseKeyword, this.statement = statement;
+        elseKeyword.parent = this, statement.parent = this;
+    };
+    TypeScript.ElseClauseSyntax.prototype.kind = function () {
+        return 200 /* ElseClause */;
+    };
+    TypeScript.CatchClauseSyntax = function (data, catchKeyword, openParenToken, identifier, typeAnnotation, closeParenToken, block) {
+        if (data) {
+            this.__data = data;
+        }
+        this.catchKeyword = catchKeyword, this.openParenToken = openParenToken, this.identifier = identifier, this.typeAnnotation = typeAnnotation, this.closeParenToken = closeParenToken, this.block = block;
+        catchKeyword.parent = this, openParenToken.parent = this, identifier.parent = this, typeAnnotation && (typeAnnotation.parent = this), closeParenToken.parent = this, block.parent = this;
+    };
+    TypeScript.CatchClauseSyntax.prototype.kind = function () {
+        return 201 /* CatchClause */;
+    };
+    TypeScript.FinallyClauseSyntax = function (data, finallyKeyword, block) {
+        if (data) {
+            this.__data = data;
+        }
+        this.finallyKeyword = finallyKeyword, this.block = block;
+        finallyKeyword.parent = this, block.parent = this;
+    };
+    TypeScript.FinallyClauseSyntax.prototype.kind = function () {
+        return 202 /* FinallyClause */;
+    };
+    TypeScript.TemplateClauseSyntax = function (data, expression, templateMiddleOrEndToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.expression = expression, this.templateMiddleOrEndToken = templateMiddleOrEndToken;
+        expression.parent = this, templateMiddleOrEndToken.parent = this;
+    };
+    TypeScript.TemplateClauseSyntax.prototype.kind = function () {
+        return 203 /* TemplateClause */;
+    };
+    TypeScript.TypeParameterSyntax = function (data, identifier, constraint) {
+        if (data) {
+            this.__data = data;
+        }
+        this.identifier = identifier, this.constraint = constraint;
+        identifier.parent = this, constraint && (constraint.parent = this);
+    };
+    TypeScript.TypeParameterSyntax.prototype.kind = function () {
+        return 204 /* TypeParameter */;
+    };
+    TypeScript.ConstraintSyntax = function (data, extendsKeyword, typeOrExpression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.extendsKeyword = extendsKeyword, this.typeOrExpression = typeOrExpression;
+        extendsKeyword.parent = this, typeOrExpression.parent = this;
+    };
+    TypeScript.ConstraintSyntax.prototype.kind = function () {
+        return 205 /* Constraint */;
+    };
+    TypeScript.SimplePropertyAssignmentSyntax = function (data, propertyName, colonToken, expression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.propertyName = propertyName, this.colonToken = colonToken, this.expression = expression;
+        propertyName.parent = this, colonToken.parent = this, expression.parent = this;
+    };
+    TypeScript.SimplePropertyAssignmentSyntax.prototype.kind = function () {
+        return 206 /* SimplePropertyAssignment */;
+    };
+    TypeScript.FunctionPropertyAssignmentSyntax = function (data, propertyName, callSignature, block) {
+        if (data) {
+            this.__data = data;
+        }
+        this.propertyName = propertyName, this.callSignature = callSignature, this.block = block;
+        propertyName.parent = this, callSignature.parent = this, block.parent = this;
+    };
+    TypeScript.FunctionPropertyAssignmentSyntax.prototype.kind = function () {
+        return 207 /* FunctionPropertyAssignment */;
+    };
+    TypeScript.ParameterSyntax = function (data, dotDotDotToken, modifiers, identifier, questionToken, typeAnnotation, equalsValueClause) {
+        if (data) {
+            this.__data = data;
+        }
+        this.dotDotDotToken = dotDotDotToken, this.modifiers = modifiers, this.identifier = identifier, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause;
+        dotDotDotToken && (dotDotDotToken.parent = this), modifiers.parent = this, identifier.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
+    };
+    TypeScript.ParameterSyntax.prototype.kind = function () {
+        return 208 /* Parameter */;
+    };
+    TypeScript.EnumElementSyntax = function (data, propertyName, equalsValueClause) {
+        if (data) {
+            this.__data = data;
+        }
+        this.propertyName = propertyName, this.equalsValueClause = equalsValueClause;
+        propertyName.parent = this, equalsValueClause && (equalsValueClause.parent = this);
+    };
+    TypeScript.EnumElementSyntax.prototype.kind = function () {
+        return 209 /* EnumElement */;
+    };
+    TypeScript.TypeAnnotationSyntax = function (data, colonToken, type) {
+        if (data) {
+            this.__data = data;
+        }
+        this.colonToken = colonToken, this.type = type;
+        colonToken.parent = this, type.parent = this;
+    };
+    TypeScript.TypeAnnotationSyntax.prototype.kind = function () {
+        return 210 /* TypeAnnotation */;
+    };
+    TypeScript.ExternalModuleReferenceSyntax = function (data, requireKeyword, openParenToken, stringLiteral, closeParenToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.requireKeyword = requireKeyword, this.openParenToken = openParenToken, this.stringLiteral = stringLiteral, this.closeParenToken = closeParenToken;
+        requireKeyword.parent = this, openParenToken.parent = this, stringLiteral.parent = this, closeParenToken.parent = this;
+    };
+    TypeScript.ExternalModuleReferenceSyntax.prototype.kind = function () {
+        return 211 /* ExternalModuleReference */;
+    };
+    TypeScript.ModuleNameModuleReferenceSyntax = function (data, moduleName) {
+        if (data) {
+            this.__data = data;
+        }
+        this.moduleName = moduleName;
+        moduleName.parent = this;
+    };
+    TypeScript.ModuleNameModuleReferenceSyntax.prototype.kind = function () {
+        return 212 /* ModuleNameModuleReference */;
     };
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
