@@ -41,6 +41,7 @@
 ///<reference path='parser.ts' />
 
 // Concrete nodes depend on the parser.
+///<reference path='syntaxInterfaces.generated.ts' />
 ///<reference path='syntaxNodes.concrete.generated.ts' />
 
 // SyntaxTree depends on PositionTrackingWalker

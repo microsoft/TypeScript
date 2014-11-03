@@ -695,7 +695,7 @@ module TypeScript.Parser {
             var moduleElements = parseSyntaxList<IModuleElementSyntax>(ListParsingState.SourceUnit_ModuleElements, skippedTokens, updateStrictModeState);
 
             setStrictMode(savedIsInStrictMode);
-
+            
             var sourceUnit = new SourceUnitSyntax(parseNodeData, moduleElements, currentToken());
 
             sourceUnit = <SourceUnitSyntax>addSkippedTokensBeforeNode(sourceUnit, skippedTokens);

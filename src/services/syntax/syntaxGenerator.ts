@@ -2015,6 +2015,34 @@ function generateNode(definition: ITypeDefinition, abstract: boolean): string {
     return result;
 }
 
+function generateConstructorFunction(definition: ITypeDefinition) {
+    var result = "    function " + camelCase(definition.name) + "(data: number";
+
+    for (var i = 0; i < definition.children.length; i++) {
+        var child = definition.children[i];
+        result += ", ";
+        result += getSafeName(child);
+        result += ": " + getType(child);
+    }
+
+    result += ") {\r\n";
+
+    for (var i = 0; i < definition.children.length; i++) {
+        var child = definition.children[i];
+        result += "        this." + child.name + " = " + getSafeName(child) + ";\r\n";
+    }
+
+    result += "        finishNode(this, data);\r\n";
+
+    result += "    }\r\n";
+    result += "    " + camelCase(definition.name) + ".prototype.kind = function() { return SyntaxKind." + getNameWithoutSuffix(definition) + "; }\r\n";
+
+    result += "    export var " + definition.name + ": " + getNameWithoutSuffix(definition) + "Constructor";
+    result += " = <any>" + camelCase(definition.name) + ";\r\n";
+
+    return result;
+}
+
 function syntaxKindName(kind: TypeScript.SyntaxKind): string {
     for (var name in TypeScript.SyntaxKind) {
         if (<any>TypeScript.SyntaxKind[name] === kind) {
@@ -2052,8 +2080,6 @@ function generateSyntaxInterfaces(): string {
         result += generateSyntaxInterface(definition);
     }
 
-    result += "\r\n";
-
     result += "}";
     return result;
 }
@@ -2077,7 +2103,19 @@ function generateSyntaxInterface(definition: ITypeDefinition): string {
         result += "        " + child.name + ": " + getType(child) + ";\r\n";
     }
 
-    result += "    }";
+    result += "    }\r\n";
+    result += "    export interface " + getNameWithoutSuffix(definition) + "Constructor {";
+    result += " new (data: number";
+    
+    for (var i = 0; i < definition.children.length; i++) {
+        var child = definition.children[i];
+        result += ", ";
+        result += getSafeName(child);
+        result += ": " + getType(child);
+    }
+
+    result += "): " + definition.name;
+    result += " }\r\n";
 
     return result;
 }
@@ -2089,17 +2127,30 @@ function generateNodes(abstract: boolean): string {
     result += "module TypeScript";
 
     result += " {\r\n";
+    result += "    function finishNode(node: ISyntaxNode, data: number) {\r\n";
+    result += "        for (var i = 0, n = childCount(node); i < n; i++) {\r\n";
+    result += "            childAt(node, i).parent = node;\r\n";
+    result += "        }\r\n";
+    //result += "        for (var name in node) {\r\n";
+    //result += "            if (node.hasOwnProperty(name)) {\r\n";
+    //result += "                (<any>node)[name] = node;\r\n";
+    //result += "            }\r\n";
+    //result += "        }\r\n";
+    result += "\r\n";
+    result += "        if (data) {\r\n";
+    result += "            node.__data = data;\r\n";
+    result += "        }\r\n";
+    result += "    }\r\n";
+
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
 
-        if (i > 0) {
-            result += "\r\n";
-        }
-
-        result += generateNode(definition, abstract);
+        result += "\r\n";
+        result += generateConstructorFunction(definition);
+        // result += generateNode(definition, abstract);
     }
 
-    result += "\r\n}";
+    result += "}";
     return result;
 }
 
@@ -2700,6 +2751,7 @@ var defaultVisitor = generateDefaultVisitor();
 var servicesUtilities = generateServicesUtilities();
 
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.concrete.generated.ts", syntaxNodesConcrete, false);
+sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxInterfaces.generated.ts", syntaxInterfaces, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxRewriter.generated.ts", rewriter, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxWalker.generated.ts", walker, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\scannerUtilities.generated.ts", scannerUtilities, false);
