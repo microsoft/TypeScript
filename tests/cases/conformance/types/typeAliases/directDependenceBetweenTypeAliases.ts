@@ -37,5 +37,5 @@ type T10 = { x: T10 } | { new(v: T10): string }
 type T11 = T12[]
 type T12 = [T13, string]
 type T13 = typeof zz
-var zz: { x: T10 }
+var zz: { x: T11 }
 
