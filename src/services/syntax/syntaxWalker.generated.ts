@@ -24,151 +24,16 @@ module TypeScript {
             this.visitToken(node.endOfFileToken);
         }
 
-        public visitExternalModuleReference(node: ExternalModuleReferenceSyntax): void {
-            this.visitToken(node.requireKeyword);
-            this.visitToken(node.openParenToken);
-            this.visitToken(node.stringLiteral);
-            this.visitToken(node.closeParenToken);
-        }
-
-        public visitModuleNameModuleReference(node: ModuleNameModuleReferenceSyntax): void {
-            visitNodeOrToken(this, node.moduleName);
-        }
-
-        public visitImportDeclaration(node: ImportDeclarationSyntax): void {
-            this.visitList(node.modifiers);
-            this.visitToken(node.importKeyword);
-            this.visitToken(node.identifier);
-            this.visitToken(node.equalsToken);
-            visitNodeOrToken(this, node.moduleReference);
-            this.visitOptionalToken(node.semicolonToken);
-        }
-
-        public visitExportAssignment(node: ExportAssignmentSyntax): void {
-            this.visitToken(node.exportKeyword);
-            this.visitToken(node.equalsToken);
-            this.visitToken(node.identifier);
-            this.visitOptionalToken(node.semicolonToken);
-        }
-
-        public visitClassDeclaration(node: ClassDeclarationSyntax): void {
-            this.visitList(node.modifiers);
-            this.visitToken(node.classKeyword);
-            this.visitToken(node.identifier);
-            visitNodeOrToken(this, node.typeParameterList);
-            this.visitList(node.heritageClauses);
-            this.visitToken(node.openBraceToken);
-            this.visitList(node.classElements);
-            this.visitToken(node.closeBraceToken);
-        }
-
-        public visitInterfaceDeclaration(node: InterfaceDeclarationSyntax): void {
-            this.visitList(node.modifiers);
-            this.visitToken(node.interfaceKeyword);
-            this.visitToken(node.identifier);
-            visitNodeOrToken(this, node.typeParameterList);
-            this.visitList(node.heritageClauses);
-            visitNodeOrToken(this, node.body);
-        }
-
-        public visitHeritageClause(node: HeritageClauseSyntax): void {
-            this.visitToken(node.extendsOrImplementsKeyword);
-            this.visitList(node.typeNames);
-        }
-
-        public visitModuleDeclaration(node: ModuleDeclarationSyntax): void {
-            this.visitList(node.modifiers);
-            this.visitToken(node.moduleKeyword);
-            visitNodeOrToken(this, node.name);
-            this.visitOptionalToken(node.stringLiteral);
-            this.visitToken(node.openBraceToken);
-            this.visitList(node.moduleElements);
-            this.visitToken(node.closeBraceToken);
-        }
-
-        public visitFunctionDeclaration(node: FunctionDeclarationSyntax): void {
-            this.visitList(node.modifiers);
-            this.visitToken(node.functionKeyword);
-            this.visitToken(node.identifier);
-            visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
-            this.visitOptionalToken(node.semicolonToken);
-        }
-
-        public visitVariableStatement(node: VariableStatementSyntax): void {
-            this.visitList(node.modifiers);
-            visitNodeOrToken(this, node.variableDeclaration);
-            this.visitOptionalToken(node.semicolonToken);
-        }
-
-        public visitVariableDeclaration(node: VariableDeclarationSyntax): void {
-            this.visitToken(node.varKeyword);
-            this.visitList(node.variableDeclarators);
-        }
-
-        public visitVariableDeclarator(node: VariableDeclaratorSyntax): void {
-            this.visitToken(node.propertyName);
-            visitNodeOrToken(this, node.typeAnnotation);
-            visitNodeOrToken(this, node.equalsValueClause);
-        }
-
-        public visitEqualsValueClause(node: EqualsValueClauseSyntax): void {
-            this.visitToken(node.equalsToken);
-            visitNodeOrToken(this, node.value);
-        }
-
-        public visitPrefixUnaryExpression(node: PrefixUnaryExpressionSyntax): void {
-            this.visitToken(node.operatorToken);
-            visitNodeOrToken(this, node.operand);
-        }
-
-        public visitArrayLiteralExpression(node: ArrayLiteralExpressionSyntax): void {
-            this.visitToken(node.openBracketToken);
-            this.visitList(node.expressions);
-            this.visitToken(node.closeBracketToken);
-        }
-
-        public visitOmittedExpression(node: OmittedExpressionSyntax): void {
-        }
-
-        public visitParenthesizedExpression(node: ParenthesizedExpressionSyntax): void {
-            this.visitToken(node.openParenToken);
-            visitNodeOrToken(this, node.expression);
-            this.visitToken(node.closeParenToken);
-        }
-
-        public visitSimpleArrowFunctionExpression(node: SimpleArrowFunctionExpressionSyntax): void {
-            visitNodeOrToken(this, node.parameter);
-            this.visitToken(node.equalsGreaterThanToken);
-            visitNodeOrToken(this, node.block);
-            visitNodeOrToken(this, node.expression);
-        }
-
-        public visitParenthesizedArrowFunctionExpression(node: ParenthesizedArrowFunctionExpressionSyntax): void {
-            visitNodeOrToken(this, node.callSignature);
-            this.visitToken(node.equalsGreaterThanToken);
-            visitNodeOrToken(this, node.block);
-            visitNodeOrToken(this, node.expression);
-        }
-
         public visitQualifiedName(node: QualifiedNameSyntax): void {
             visitNodeOrToken(this, node.left);
             this.visitToken(node.dotToken);
             this.visitToken(node.right);
         }
 
-        public visitTypeArgumentList(node: TypeArgumentListSyntax): void {
-            this.visitToken(node.lessThanToken);
-            this.visitList(node.typeArguments);
-            this.visitToken(node.greaterThanToken);
-        }
-
-        public visitConstructorType(node: ConstructorTypeSyntax): void {
-            this.visitToken(node.newKeyword);
-            visitNodeOrToken(this, node.typeParameterList);
-            visitNodeOrToken(this, node.parameterList);
-            this.visitToken(node.equalsGreaterThanToken);
-            visitNodeOrToken(this, node.type);
+        public visitObjectType(node: ObjectTypeSyntax): void {
+            this.visitToken(node.openBraceToken);
+            this.visitList(node.typeMembers);
+            this.visitToken(node.closeBraceToken);
         }
 
         public visitFunctionType(node: FunctionTypeSyntax): void {
@@ -178,16 +43,18 @@ module TypeScript {
             visitNodeOrToken(this, node.type);
         }
 
-        public visitObjectType(node: ObjectTypeSyntax): void {
-            this.visitToken(node.openBraceToken);
-            this.visitList(node.typeMembers);
-            this.visitToken(node.closeBraceToken);
-        }
-
         public visitArrayType(node: ArrayTypeSyntax): void {
             visitNodeOrToken(this, node.type);
             this.visitToken(node.openBracketToken);
             this.visitToken(node.closeBracketToken);
+        }
+
+        public visitConstructorType(node: ConstructorTypeSyntax): void {
+            this.visitToken(node.newKeyword);
+            visitNodeOrToken(this, node.typeParameterList);
+            visitNodeOrToken(this, node.parameterList);
+            this.visitToken(node.equalsGreaterThanToken);
+            visitNodeOrToken(this, node.type);
         }
 
         public visitGenericType(node: GenericTypeSyntax): void {
@@ -218,153 +85,81 @@ module TypeScript {
             this.visitToken(node.closeParenToken);
         }
 
-        public visitTypeAnnotation(node: TypeAnnotationSyntax): void {
-            this.visitToken(node.colonToken);
-            visitNodeOrToken(this, node.type);
+        public visitInterfaceDeclaration(node: InterfaceDeclarationSyntax): void {
+            this.visitList(node.modifiers);
+            this.visitToken(node.interfaceKeyword);
+            this.visitToken(node.identifier);
+            visitNodeOrToken(this, node.typeParameterList);
+            this.visitList(node.heritageClauses);
+            visitNodeOrToken(this, node.body);
         }
 
-        public visitBlock(node: BlockSyntax): void {
+        public visitFunctionDeclaration(node: FunctionDeclarationSyntax): void {
+            this.visitList(node.modifiers);
+            this.visitToken(node.functionKeyword);
+            this.visitToken(node.identifier);
+            visitNodeOrToken(this, node.callSignature);
+            visitNodeOrToken(this, node.block);
+            this.visitOptionalToken(node.semicolonToken);
+        }
+
+        public visitModuleDeclaration(node: ModuleDeclarationSyntax): void {
+            this.visitList(node.modifiers);
+            this.visitToken(node.moduleKeyword);
+            visitNodeOrToken(this, node.name);
+            this.visitOptionalToken(node.stringLiteral);
             this.visitToken(node.openBraceToken);
-            this.visitList(node.statements);
+            this.visitList(node.moduleElements);
             this.visitToken(node.closeBraceToken);
         }
 
-        public visitParameter(node: ParameterSyntax): void {
-            this.visitOptionalToken(node.dotDotDotToken);
+        public visitClassDeclaration(node: ClassDeclarationSyntax): void {
             this.visitList(node.modifiers);
+            this.visitToken(node.classKeyword);
             this.visitToken(node.identifier);
-            this.visitOptionalToken(node.questionToken);
-            visitNodeOrToken(this, node.typeAnnotation);
-            visitNodeOrToken(this, node.equalsValueClause);
-        }
-
-        public visitMemberAccessExpression(node: MemberAccessExpressionSyntax): void {
-            visitNodeOrToken(this, node.expression);
-            this.visitToken(node.dotToken);
-            this.visitToken(node.name);
-        }
-
-        public visitPostfixUnaryExpression(node: PostfixUnaryExpressionSyntax): void {
-            visitNodeOrToken(this, node.operand);
-            this.visitToken(node.operatorToken);
-        }
-
-        public visitElementAccessExpression(node: ElementAccessExpressionSyntax): void {
-            visitNodeOrToken(this, node.expression);
-            this.visitToken(node.openBracketToken);
-            visitNodeOrToken(this, node.argumentExpression);
-            this.visitToken(node.closeBracketToken);
-        }
-
-        public visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): void {
-            visitNodeOrToken(this, node.expression);
-            visitNodeOrToken(this, node.templateExpression);
-        }
-
-        public visitTemplateExpression(node: TemplateExpressionSyntax): void {
-            this.visitToken(node.templateStartToken);
-            this.visitList(node.templateClauses);
-        }
-
-        public visitTemplateClause(node: TemplateClauseSyntax): void {
-            visitNodeOrToken(this, node.expression);
-            this.visitToken(node.templateMiddleOrEndToken);
-        }
-
-        public visitInvocationExpression(node: InvocationExpressionSyntax): void {
-            visitNodeOrToken(this, node.expression);
-            visitNodeOrToken(this, node.argumentList);
-        }
-
-        public visitArgumentList(node: ArgumentListSyntax): void {
-            visitNodeOrToken(this, node.typeArgumentList);
-            this.visitToken(node.openParenToken);
-            this.visitList(node.arguments);
-            this.visitToken(node.closeParenToken);
-        }
-
-        public visitBinaryExpression(node: BinaryExpressionSyntax): void {
-            visitNodeOrToken(this, node.left);
-            this.visitToken(node.operatorToken);
-            visitNodeOrToken(this, node.right);
-        }
-
-        public visitConditionalExpression(node: ConditionalExpressionSyntax): void {
-            visitNodeOrToken(this, node.condition);
-            this.visitToken(node.questionToken);
-            visitNodeOrToken(this, node.whenTrue);
-            this.visitToken(node.colonToken);
-            visitNodeOrToken(this, node.whenFalse);
-        }
-
-        public visitConstructSignature(node: ConstructSignatureSyntax): void {
-            this.visitToken(node.newKeyword);
-            visitNodeOrToken(this, node.callSignature);
-        }
-
-        public visitMethodSignature(node: MethodSignatureSyntax): void {
-            this.visitToken(node.propertyName);
-            this.visitOptionalToken(node.questionToken);
-            visitNodeOrToken(this, node.callSignature);
-        }
-
-        public visitIndexSignature(node: IndexSignatureSyntax): void {
-            this.visitToken(node.openBracketToken);
-            this.visitList(node.parameters);
-            this.visitToken(node.closeBracketToken);
-            visitNodeOrToken(this, node.typeAnnotation);
-        }
-
-        public visitPropertySignature(node: PropertySignatureSyntax): void {
-            this.visitToken(node.propertyName);
-            this.visitOptionalToken(node.questionToken);
-            visitNodeOrToken(this, node.typeAnnotation);
-        }
-
-        public visitCallSignature(node: CallSignatureSyntax): void {
             visitNodeOrToken(this, node.typeParameterList);
-            visitNodeOrToken(this, node.parameterList);
-            visitNodeOrToken(this, node.typeAnnotation);
+            this.visitList(node.heritageClauses);
+            this.visitToken(node.openBraceToken);
+            this.visitList(node.classElements);
+            this.visitToken(node.closeBraceToken);
         }
 
-        public visitParameterList(node: ParameterListSyntax): void {
-            this.visitToken(node.openParenToken);
-            this.visitList(node.parameters);
-            this.visitToken(node.closeParenToken);
-        }
-
-        public visitTypeParameterList(node: TypeParameterListSyntax): void {
-            this.visitToken(node.lessThanToken);
-            this.visitList(node.typeParameters);
-            this.visitToken(node.greaterThanToken);
-        }
-
-        public visitTypeParameter(node: TypeParameterSyntax): void {
+        public visitEnumDeclaration(node: EnumDeclarationSyntax): void {
+            this.visitList(node.modifiers);
+            this.visitToken(node.enumKeyword);
             this.visitToken(node.identifier);
-            visitNodeOrToken(this, node.constraint);
+            this.visitToken(node.openBraceToken);
+            this.visitList(node.enumElements);
+            this.visitToken(node.closeBraceToken);
         }
 
-        public visitConstraint(node: ConstraintSyntax): void {
-            this.visitToken(node.extendsKeyword);
-            visitNodeOrToken(this, node.typeOrExpression);
+        public visitImportDeclaration(node: ImportDeclarationSyntax): void {
+            this.visitList(node.modifiers);
+            this.visitToken(node.importKeyword);
+            this.visitToken(node.identifier);
+            this.visitToken(node.equalsToken);
+            visitNodeOrToken(this, node.moduleReference);
+            this.visitOptionalToken(node.semicolonToken);
         }
 
-        public visitElseClause(node: ElseClauseSyntax): void {
-            this.visitToken(node.elseKeyword);
-            visitNodeOrToken(this, node.statement);
+        public visitExportAssignment(node: ExportAssignmentSyntax): void {
+            this.visitToken(node.exportKeyword);
+            this.visitToken(node.equalsToken);
+            this.visitToken(node.identifier);
+            this.visitOptionalToken(node.semicolonToken);
         }
 
-        public visitIfStatement(node: IfStatementSyntax): void {
-            this.visitToken(node.ifKeyword);
-            this.visitToken(node.openParenToken);
-            visitNodeOrToken(this, node.condition);
-            this.visitToken(node.closeParenToken);
-            visitNodeOrToken(this, node.statement);
-            visitNodeOrToken(this, node.elseClause);
+        public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {
+            this.visitList(node.modifiers);
+            this.visitToken(node.propertyName);
+            visitNodeOrToken(this, node.callSignature);
+            visitNodeOrToken(this, node.block);
+            this.visitOptionalToken(node.semicolonToken);
         }
 
-        public visitExpressionStatement(node: ExpressionStatementSyntax): void {
-            visitNodeOrToken(this, node.expression);
+        public visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): void {
+            this.visitList(node.modifiers);
+            visitNodeOrToken(this, node.variableDeclarator);
             this.visitOptionalToken(node.semicolonToken);
         }
 
@@ -376,11 +171,9 @@ module TypeScript {
             this.visitOptionalToken(node.semicolonToken);
         }
 
-        public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {
+        public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): void {
             this.visitList(node.modifiers);
-            this.visitToken(node.propertyName);
-            visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.indexSignature);
             this.visitOptionalToken(node.semicolonToken);
         }
 
@@ -400,20 +193,58 @@ module TypeScript {
             visitNodeOrToken(this, node.block);
         }
 
-        public visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): void {
+        public visitPropertySignature(node: PropertySignatureSyntax): void {
+            this.visitToken(node.propertyName);
+            this.visitOptionalToken(node.questionToken);
+            visitNodeOrToken(this, node.typeAnnotation);
+        }
+
+        public visitCallSignature(node: CallSignatureSyntax): void {
+            visitNodeOrToken(this, node.typeParameterList);
+            visitNodeOrToken(this, node.parameterList);
+            visitNodeOrToken(this, node.typeAnnotation);
+        }
+
+        public visitConstructSignature(node: ConstructSignatureSyntax): void {
+            this.visitToken(node.newKeyword);
+            visitNodeOrToken(this, node.callSignature);
+        }
+
+        public visitIndexSignature(node: IndexSignatureSyntax): void {
+            this.visitToken(node.openBracketToken);
+            this.visitList(node.parameters);
+            this.visitToken(node.closeBracketToken);
+            visitNodeOrToken(this, node.typeAnnotation);
+        }
+
+        public visitMethodSignature(node: MethodSignatureSyntax): void {
+            this.visitToken(node.propertyName);
+            this.visitOptionalToken(node.questionToken);
+            visitNodeOrToken(this, node.callSignature);
+        }
+
+        public visitBlock(node: BlockSyntax): void {
+            this.visitToken(node.openBraceToken);
+            this.visitList(node.statements);
+            this.visitToken(node.closeBraceToken);
+        }
+
+        public visitIfStatement(node: IfStatementSyntax): void {
+            this.visitToken(node.ifKeyword);
+            this.visitToken(node.openParenToken);
+            visitNodeOrToken(this, node.condition);
+            this.visitToken(node.closeParenToken);
+            visitNodeOrToken(this, node.statement);
+            visitNodeOrToken(this, node.elseClause);
+        }
+
+        public visitVariableStatement(node: VariableStatementSyntax): void {
             this.visitList(node.modifiers);
-            visitNodeOrToken(this, node.variableDeclarator);
+            visitNodeOrToken(this, node.variableDeclaration);
             this.visitOptionalToken(node.semicolonToken);
         }
 
-        public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): void {
-            this.visitList(node.modifiers);
-            visitNodeOrToken(this, node.indexSignature);
-            this.visitOptionalToken(node.semicolonToken);
-        }
-
-        public visitThrowStatement(node: ThrowStatementSyntax): void {
-            this.visitToken(node.throwKeyword);
+        public visitExpressionStatement(node: ExpressionStatementSyntax): void {
             visitNodeOrToken(this, node.expression);
             this.visitOptionalToken(node.semicolonToken);
         }
@@ -424,12 +255,6 @@ module TypeScript {
             this.visitOptionalToken(node.semicolonToken);
         }
 
-        public visitObjectCreationExpression(node: ObjectCreationExpressionSyntax): void {
-            this.visitToken(node.newKeyword);
-            visitNodeOrToken(this, node.expression);
-            visitNodeOrToken(this, node.argumentList);
-        }
-
         public visitSwitchStatement(node: SwitchStatementSyntax): void {
             this.visitToken(node.switchKeyword);
             this.visitToken(node.openParenToken);
@@ -438,19 +263,6 @@ module TypeScript {
             this.visitToken(node.openBraceToken);
             this.visitList(node.switchClauses);
             this.visitToken(node.closeBraceToken);
-        }
-
-        public visitCaseSwitchClause(node: CaseSwitchClauseSyntax): void {
-            this.visitToken(node.caseKeyword);
-            visitNodeOrToken(this, node.expression);
-            this.visitToken(node.colonToken);
-            this.visitList(node.statements);
-        }
-
-        public visitDefaultSwitchClause(node: DefaultSwitchClauseSyntax): void {
-            this.visitToken(node.defaultKeyword);
-            this.visitToken(node.colonToken);
-            this.visitList(node.statements);
         }
 
         public visitBreakStatement(node: BreakStatementSyntax): void {
@@ -489,6 +301,16 @@ module TypeScript {
             visitNodeOrToken(this, node.statement);
         }
 
+        public visitEmptyStatement(node: EmptyStatementSyntax): void {
+            this.visitToken(node.semicolonToken);
+        }
+
+        public visitThrowStatement(node: ThrowStatementSyntax): void {
+            this.visitToken(node.throwKeyword);
+            visitNodeOrToken(this, node.expression);
+            this.visitOptionalToken(node.semicolonToken);
+        }
+
         public visitWhileStatement(node: WhileStatementSyntax): void {
             this.visitToken(node.whileKeyword);
             this.visitToken(node.openParenToken);
@@ -497,83 +319,11 @@ module TypeScript {
             visitNodeOrToken(this, node.statement);
         }
 
-        public visitWithStatement(node: WithStatementSyntax): void {
-            this.visitToken(node.withKeyword);
-            this.visitToken(node.openParenToken);
-            visitNodeOrToken(this, node.condition);
-            this.visitToken(node.closeParenToken);
-            visitNodeOrToken(this, node.statement);
-        }
-
-        public visitEnumDeclaration(node: EnumDeclarationSyntax): void {
-            this.visitList(node.modifiers);
-            this.visitToken(node.enumKeyword);
-            this.visitToken(node.identifier);
-            this.visitToken(node.openBraceToken);
-            this.visitList(node.enumElements);
-            this.visitToken(node.closeBraceToken);
-        }
-
-        public visitEnumElement(node: EnumElementSyntax): void {
-            this.visitToken(node.propertyName);
-            visitNodeOrToken(this, node.equalsValueClause);
-        }
-
-        public visitCastExpression(node: CastExpressionSyntax): void {
-            this.visitToken(node.lessThanToken);
-            visitNodeOrToken(this, node.type);
-            this.visitToken(node.greaterThanToken);
-            visitNodeOrToken(this, node.expression);
-        }
-
-        public visitObjectLiteralExpression(node: ObjectLiteralExpressionSyntax): void {
-            this.visitToken(node.openBraceToken);
-            this.visitList(node.propertyAssignments);
-            this.visitToken(node.closeBraceToken);
-        }
-
-        public visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): void {
-            this.visitToken(node.propertyName);
-            this.visitToken(node.colonToken);
-            visitNodeOrToken(this, node.expression);
-        }
-
-        public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
-            this.visitToken(node.propertyName);
-            visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
-        }
-
-        public visitFunctionExpression(node: FunctionExpressionSyntax): void {
-            this.visitToken(node.functionKeyword);
-            this.visitOptionalToken(node.identifier);
-            visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
-        }
-
-        public visitEmptyStatement(node: EmptyStatementSyntax): void {
-            this.visitToken(node.semicolonToken);
-        }
-
         public visitTryStatement(node: TryStatementSyntax): void {
             this.visitToken(node.tryKeyword);
             visitNodeOrToken(this, node.block);
             visitNodeOrToken(this, node.catchClause);
             visitNodeOrToken(this, node.finallyClause);
-        }
-
-        public visitCatchClause(node: CatchClauseSyntax): void {
-            this.visitToken(node.catchKeyword);
-            this.visitToken(node.openParenToken);
-            this.visitToken(node.identifier);
-            visitNodeOrToken(this, node.typeAnnotation);
-            this.visitToken(node.closeParenToken);
-            visitNodeOrToken(this, node.block);
-        }
-
-        public visitFinallyClause(node: FinallyClauseSyntax): void {
-            this.visitToken(node.finallyKeyword);
-            visitNodeOrToken(this, node.block);
         }
 
         public visitLabeledStatement(node: LabeledStatementSyntax): void {
@@ -592,13 +342,31 @@ module TypeScript {
             this.visitOptionalToken(node.semicolonToken);
         }
 
-        public visitTypeOfExpression(node: TypeOfExpressionSyntax): void {
-            this.visitToken(node.typeOfKeyword);
-            visitNodeOrToken(this, node.expression);
+        public visitDebuggerStatement(node: DebuggerStatementSyntax): void {
+            this.visitToken(node.debuggerKeyword);
+            this.visitOptionalToken(node.semicolonToken);
+        }
+
+        public visitWithStatement(node: WithStatementSyntax): void {
+            this.visitToken(node.withKeyword);
+            this.visitToken(node.openParenToken);
+            visitNodeOrToken(this, node.condition);
+            this.visitToken(node.closeParenToken);
+            visitNodeOrToken(this, node.statement);
+        }
+
+        public visitPrefixUnaryExpression(node: PrefixUnaryExpressionSyntax): void {
+            this.visitToken(node.operatorToken);
+            visitNodeOrToken(this, node.operand);
         }
 
         public visitDeleteExpression(node: DeleteExpressionSyntax): void {
             this.visitToken(node.deleteKeyword);
+            visitNodeOrToken(this, node.expression);
+        }
+
+        public visitTypeOfExpression(node: TypeOfExpressionSyntax): void {
+            this.visitToken(node.typeOfKeyword);
             visitNodeOrToken(this, node.expression);
         }
 
@@ -607,9 +375,241 @@ module TypeScript {
             visitNodeOrToken(this, node.expression);
         }
 
-        public visitDebuggerStatement(node: DebuggerStatementSyntax): void {
-            this.visitToken(node.debuggerKeyword);
-            this.visitOptionalToken(node.semicolonToken);
+        public visitConditionalExpression(node: ConditionalExpressionSyntax): void {
+            visitNodeOrToken(this, node.condition);
+            this.visitToken(node.questionToken);
+            visitNodeOrToken(this, node.whenTrue);
+            this.visitToken(node.colonToken);
+            visitNodeOrToken(this, node.whenFalse);
+        }
+
+        public visitBinaryExpression(node: BinaryExpressionSyntax): void {
+            visitNodeOrToken(this, node.left);
+            this.visitToken(node.operatorToken);
+            visitNodeOrToken(this, node.right);
+        }
+
+        public visitPostfixUnaryExpression(node: PostfixUnaryExpressionSyntax): void {
+            visitNodeOrToken(this, node.operand);
+            this.visitToken(node.operatorToken);
+        }
+
+        public visitMemberAccessExpression(node: MemberAccessExpressionSyntax): void {
+            visitNodeOrToken(this, node.expression);
+            this.visitToken(node.dotToken);
+            this.visitToken(node.name);
+        }
+
+        public visitInvocationExpression(node: InvocationExpressionSyntax): void {
+            visitNodeOrToken(this, node.expression);
+            visitNodeOrToken(this, node.argumentList);
+        }
+
+        public visitArrayLiteralExpression(node: ArrayLiteralExpressionSyntax): void {
+            this.visitToken(node.openBracketToken);
+            this.visitList(node.expressions);
+            this.visitToken(node.closeBracketToken);
+        }
+
+        public visitObjectLiteralExpression(node: ObjectLiteralExpressionSyntax): void {
+            this.visitToken(node.openBraceToken);
+            this.visitList(node.propertyAssignments);
+            this.visitToken(node.closeBraceToken);
+        }
+
+        public visitObjectCreationExpression(node: ObjectCreationExpressionSyntax): void {
+            this.visitToken(node.newKeyword);
+            visitNodeOrToken(this, node.expression);
+            visitNodeOrToken(this, node.argumentList);
+        }
+
+        public visitParenthesizedExpression(node: ParenthesizedExpressionSyntax): void {
+            this.visitToken(node.openParenToken);
+            visitNodeOrToken(this, node.expression);
+            this.visitToken(node.closeParenToken);
+        }
+
+        public visitParenthesizedArrowFunctionExpression(node: ParenthesizedArrowFunctionExpressionSyntax): void {
+            visitNodeOrToken(this, node.callSignature);
+            this.visitToken(node.equalsGreaterThanToken);
+            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.expression);
+        }
+
+        public visitSimpleArrowFunctionExpression(node: SimpleArrowFunctionExpressionSyntax): void {
+            visitNodeOrToken(this, node.parameter);
+            this.visitToken(node.equalsGreaterThanToken);
+            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.expression);
+        }
+
+        public visitCastExpression(node: CastExpressionSyntax): void {
+            this.visitToken(node.lessThanToken);
+            visitNodeOrToken(this, node.type);
+            this.visitToken(node.greaterThanToken);
+            visitNodeOrToken(this, node.expression);
+        }
+
+        public visitElementAccessExpression(node: ElementAccessExpressionSyntax): void {
+            visitNodeOrToken(this, node.expression);
+            this.visitToken(node.openBracketToken);
+            visitNodeOrToken(this, node.argumentExpression);
+            this.visitToken(node.closeBracketToken);
+        }
+
+        public visitFunctionExpression(node: FunctionExpressionSyntax): void {
+            this.visitToken(node.functionKeyword);
+            this.visitOptionalToken(node.identifier);
+            visitNodeOrToken(this, node.callSignature);
+            visitNodeOrToken(this, node.block);
+        }
+
+        public visitOmittedExpression(node: OmittedExpressionSyntax): void {
+        }
+
+        public visitTemplateExpression(node: TemplateExpressionSyntax): void {
+            this.visitToken(node.templateStartToken);
+            this.visitList(node.templateClauses);
+        }
+
+        public visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): void {
+            visitNodeOrToken(this, node.expression);
+            visitNodeOrToken(this, node.templateExpression);
+        }
+
+        public visitVariableDeclaration(node: VariableDeclarationSyntax): void {
+            this.visitToken(node.varKeyword);
+            this.visitList(node.variableDeclarators);
+        }
+
+        public visitVariableDeclarator(node: VariableDeclaratorSyntax): void {
+            this.visitToken(node.propertyName);
+            visitNodeOrToken(this, node.typeAnnotation);
+            visitNodeOrToken(this, node.equalsValueClause);
+        }
+
+        public visitArgumentList(node: ArgumentListSyntax): void {
+            visitNodeOrToken(this, node.typeArgumentList);
+            this.visitToken(node.openParenToken);
+            this.visitList(node.arguments);
+            this.visitToken(node.closeParenToken);
+        }
+
+        public visitParameterList(node: ParameterListSyntax): void {
+            this.visitToken(node.openParenToken);
+            this.visitList(node.parameters);
+            this.visitToken(node.closeParenToken);
+        }
+
+        public visitTypeArgumentList(node: TypeArgumentListSyntax): void {
+            this.visitToken(node.lessThanToken);
+            this.visitList(node.typeArguments);
+            this.visitToken(node.greaterThanToken);
+        }
+
+        public visitTypeParameterList(node: TypeParameterListSyntax): void {
+            this.visitToken(node.lessThanToken);
+            this.visitList(node.typeParameters);
+            this.visitToken(node.greaterThanToken);
+        }
+
+        public visitHeritageClause(node: HeritageClauseSyntax): void {
+            this.visitToken(node.extendsOrImplementsKeyword);
+            this.visitList(node.typeNames);
+        }
+
+        public visitEqualsValueClause(node: EqualsValueClauseSyntax): void {
+            this.visitToken(node.equalsToken);
+            visitNodeOrToken(this, node.value);
+        }
+
+        public visitCaseSwitchClause(node: CaseSwitchClauseSyntax): void {
+            this.visitToken(node.caseKeyword);
+            visitNodeOrToken(this, node.expression);
+            this.visitToken(node.colonToken);
+            this.visitList(node.statements);
+        }
+
+        public visitDefaultSwitchClause(node: DefaultSwitchClauseSyntax): void {
+            this.visitToken(node.defaultKeyword);
+            this.visitToken(node.colonToken);
+            this.visitList(node.statements);
+        }
+
+        public visitElseClause(node: ElseClauseSyntax): void {
+            this.visitToken(node.elseKeyword);
+            visitNodeOrToken(this, node.statement);
+        }
+
+        public visitCatchClause(node: CatchClauseSyntax): void {
+            this.visitToken(node.catchKeyword);
+            this.visitToken(node.openParenToken);
+            this.visitToken(node.identifier);
+            visitNodeOrToken(this, node.typeAnnotation);
+            this.visitToken(node.closeParenToken);
+            visitNodeOrToken(this, node.block);
+        }
+
+        public visitFinallyClause(node: FinallyClauseSyntax): void {
+            this.visitToken(node.finallyKeyword);
+            visitNodeOrToken(this, node.block);
+        }
+
+        public visitTemplateClause(node: TemplateClauseSyntax): void {
+            visitNodeOrToken(this, node.expression);
+            this.visitToken(node.templateMiddleOrEndToken);
+        }
+
+        public visitTypeParameter(node: TypeParameterSyntax): void {
+            this.visitToken(node.identifier);
+            visitNodeOrToken(this, node.constraint);
+        }
+
+        public visitConstraint(node: ConstraintSyntax): void {
+            this.visitToken(node.extendsKeyword);
+            visitNodeOrToken(this, node.typeOrExpression);
+        }
+
+        public visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): void {
+            this.visitToken(node.propertyName);
+            this.visitToken(node.colonToken);
+            visitNodeOrToken(this, node.expression);
+        }
+
+        public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
+            this.visitToken(node.propertyName);
+            visitNodeOrToken(this, node.callSignature);
+            visitNodeOrToken(this, node.block);
+        }
+
+        public visitParameter(node: ParameterSyntax): void {
+            this.visitOptionalToken(node.dotDotDotToken);
+            this.visitList(node.modifiers);
+            this.visitToken(node.identifier);
+            this.visitOptionalToken(node.questionToken);
+            visitNodeOrToken(this, node.typeAnnotation);
+            visitNodeOrToken(this, node.equalsValueClause);
+        }
+
+        public visitEnumElement(node: EnumElementSyntax): void {
+            this.visitToken(node.propertyName);
+            visitNodeOrToken(this, node.equalsValueClause);
+        }
+
+        public visitTypeAnnotation(node: TypeAnnotationSyntax): void {
+            this.visitToken(node.colonToken);
+            visitNodeOrToken(this, node.type);
+        }
+
+        public visitExternalModuleReference(node: ExternalModuleReferenceSyntax): void {
+            this.visitToken(node.requireKeyword);
+            this.visitToken(node.openParenToken);
+            this.visitToken(node.stringLiteral);
+            this.visitToken(node.closeParenToken);
+        }
+
+        public visitModuleNameModuleReference(node: ModuleNameModuleReferenceSyntax): void {
+            visitNodeOrToken(this, node.moduleName);
         }
     }
 }

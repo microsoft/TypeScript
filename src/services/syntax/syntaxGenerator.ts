@@ -1009,6 +1009,13 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }]
     }];
 
+function firstKind(definition: ITypeDefinition): TypeScript.SyntaxKind {
+    var kindName = getNameWithoutSuffix(definition);
+    return (<any>TypeScript.SyntaxKind)[kindName];
+}
+
+definitions.sort((d1, d2) => firstKind(d1) - firstKind(d2));
+
 function getStringWithoutSuffix(definition: string) {
     if (TypeScript.StringUtilities.endsWith(definition, "Syntax")) {
         return definition.substring(0, definition.length - "Syntax".length);

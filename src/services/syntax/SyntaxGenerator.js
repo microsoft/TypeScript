@@ -1870,6 +1870,11 @@ var definitions = [
         ]
     }
 ];
+function firstKind(definition) {
+    var kindName = getNameWithoutSuffix(definition);
+    return TypeScript.SyntaxKind[kindName];
+}
+definitions.sort(function (d1, d2) { return firstKind(d1) - firstKind(d2); });
 function getStringWithoutSuffix(definition) {
     if (TypeScript.StringUtilities.endsWith(definition, "Syntax")) {
         return definition.substring(0, definition.length - "Syntax".length);
