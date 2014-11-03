@@ -14,6 +14,42 @@ function f<T>(x: T, y: string|T): T {
     return x;
 >x : T
 }
+
+var a1: number;
+>a1 : number
+
+var a1 = f(1, 2);
+>a1 : number
+>f(1, 2) : number
+>f : <T>(x: T, y: string | T) => T
+
+var a2: number;
+>a2 : number
+
+var a2 = f(1, "hello");
+>a2 : number
+>f(1, "hello") : number
+>f : <T>(x: T, y: string | T) => T
+
+var a3: number;
+>a3 : number
+
+var a3 = f(1, a1 || "hello");
+>a3 : number
+>f(1, a1 || "hello") : number
+>f : <T>(x: T, y: string | T) => T
+>a1 || "hello" : string | number
+>a1 : number
+
+var a4: any;
+>a4 : any
+
+var a4 = f(undefined, "abc");
+>a4 : any
+>f(undefined, "abc") : any
+>f : <T>(x: T, y: string | T) => T
+>undefined : undefined
+
 function g<T>(value: [string, T]): T {
 >g : <T>(value: [string, T]) => T
 >T : T
@@ -26,47 +62,48 @@ function g<T>(value: [string, T]): T {
 >value : [string, T]
 }
 
-var a: number;
->a : number
+var b1: boolean;
+>b1 : boolean
 
-var a = f(1, 2);
->a : number
->f(1, 2) : number
->f : <T>(x: T, y: string | T) => T
-
-var b: number;
->b : number
-
-var b = f(1, "hello");
->b : number
->f(1, "hello") : number
->f : <T>(x: T, y: string | T) => T
-
-var c: number;
->c : number
-
-var c = f(1, a || "hello");
->c : number
->f(1, a || "hello") : number
->f : <T>(x: T, y: string | T) => T
->a || "hello" : string | number
->a : number
-
-var d: any;
->d : any
-
-var d = f(undefined, "abc");
->d : any
->f(undefined, "abc") : any
->f : <T>(x: T, y: string | T) => T
->undefined : undefined
-
-var e: boolean;
->e : boolean
-
-var e = g(["string", true]);
->e : boolean
+var b1 = g(["string", true]);
+>b1 : boolean
 >g(["string", true]) : boolean
 >g : <T>(value: [string, T]) => T
 >["string", true] : [string, boolean]
+
+function h<T>(x: string|boolean|T): T {
+>h : <T>(x: string | boolean | T) => T
+>T : T
+>x : string | boolean | T
+>T : T
+>T : T
+
+    return typeof x === "string" || typeof x === "boolean" ? undefined : x;
+>typeof x === "string" || typeof x === "boolean" ? undefined : x : T
+>typeof x === "string" || typeof x === "boolean" : boolean
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | boolean | T
+>typeof x === "boolean" : boolean
+>typeof x : string
+>x : boolean | T
+>undefined : undefined
+>x : T
+}
+
+var c1: number;
+>c1 : number
+
+var c1 = h(5);
+>c1 : number
+>h(5) : number
+>h : <T>(x: string | boolean | T) => T
+
+var c2: string;
+>c2 : string
+
+var c2 = h("abc");
+>c2 : string
+>h("abc") : string
+>h : <T>(x: string | boolean | T) => T
 
