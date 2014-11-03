@@ -2764,7 +2764,8 @@ module ts {
 
             if (flags & SymbolFlags.Property) {
                 if (flags & SymbolFlags.UnionProperty) {
-                    return forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
+                    // If any of the property includes the declaration of property - the kind is property
+                    var unionPropetyKind = forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
                         var rootSymbolFlags = rootSymbol.getFlags();
                         if (rootSymbolFlags & SymbolFlags.Property) {
                             return ScriptElementKind.memberVariableElement;
@@ -2772,7 +2773,16 @@ module ts {
                         if (rootSymbolFlags & SymbolFlags.GetAccessor) return ScriptElementKind.memberVariableElement;
                         if (rootSymbolFlags & SymbolFlags.SetAccessor) return ScriptElementKind.memberVariableElement;
                         Debug.assert((rootSymbolFlags & SymbolFlags.Method) !== undefined);
-                    }) || ScriptElementKind.memberFunctionElement;
+                    });
+                    if (!unionPropetyKind) {
+                        // If this was union of all methods, make sure it has call signatures before we call it method
+                        var typeOfUnionProperty = typeInfoResolver.getTypeOfSymbol(symbol);
+                        if (typeOfUnionProperty.getCallSignatures().length) {
+                            return ScriptElementKind.memberFunctionElement;
+                        }
+                        return ScriptElementKind.memberVariableElement;
+                    }
+                    return unionPropetyKind;
                 }
                 return ScriptElementKind.memberVariableElement;
             }
