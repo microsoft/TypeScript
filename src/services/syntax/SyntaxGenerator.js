@@ -1906,7 +1906,6 @@ function getType(child) {
         return child.type;
     }
 }
-var hasKind = false;
 function pascalCase(value) {
     return value.substr(0, 1).toUpperCase() + value.substr(1);
 }
@@ -1941,7 +1940,6 @@ function generateProperties(definition) {
         else if (child.name === "arguments") {
             result += "    public " + child.name + ": " + getType(child) + ";\r\n";
         }
-        hasKind = hasKind || (getType(child) === "SyntaxKind");
     }
     if (newLine) {
         result += "\r\n";
@@ -2291,29 +2289,25 @@ function generateBrands(definition, accessibility) {
 }
 function generateAcceptMethod(definition) {
     var result = "";
-    if (!hasKind) {
-        result += "\r\n";
-        result += "        public accept(visitor: ISyntaxVisitor): SyntaxKind {\r\n";
-        result += "            return visitor.visit" + getNameWithoutSuffix(definition) + "(this);\r\n";
-        result += "        }\r\n";
-    }
+    result += "\r\n";
+    result += "        public accept(visitor: ISyntaxVisitor): SyntaxKind {\r\n";
+    result += "            return visitor.visit" + getNameWithoutSuffix(definition) + "(this);\r\n";
+    result += "        }\r\n";
     return result;
 }
 function generateKindMethod(definition) {
     var result = "";
-    if (!hasKind) {
-        result += "\r\n";
-        result += "        public kind(): SyntaxKind {\r\n";
-        result += "            return SyntaxKind." + getNameWithoutSuffix(definition) + ";\r\n";
-        result += "        }\r\n";
-    }
+    result += "\r\n";
+    result += "        public kind(): SyntaxKind {\r\n";
+    result += "            return SyntaxKind." + getNameWithoutSuffix(definition) + ";\r\n";
+    result += "        }\r\n";
     return result;
 }
 function generateSlotMethods(definition) {
     var result = "";
     result += "\r\n";
+    var slotCount = definition.children.length;
     result += "        public childCount(): number {\r\n";
-    var slotCount = hasKind ? (definition.children.length - 1) : definition.children.length;
     result += "            return " + slotCount + ";\r\n";
     result += "        }\r\n\r\n";
     result += "        public childAt(slot: number): ISyntaxElement {\r\n";
@@ -2589,7 +2583,6 @@ function generateNode(definition, abstract) {
     }
     result += "        }\r\n";
     result += generateKindMethod(definition);
-    result += generateSlotMethods(definition);
     result += generateAcceptMethod(definition);
     result += "    }";
     return result;
@@ -2908,79 +2901,44 @@ function generateDefaultVisitor() {
     result += "\r\n}";
     return result;
 }
-function generateFactory() {
-    var result = "///<reference path='references.ts' />\r\n";
-    result += "\r\nmodule TypeScript.Syntax {\r\n";
-    result += "    export interface IFactory {\r\n";
-    var i;
-    var j;
-    var definition;
-    var child;
-    for (i = 0; i < definitions.length; i++) {
-        definition = definitions[i];
-        result += "        " + camelCase(getNameWithoutSuffix(definition)) + "(";
-        for (j = 0; j < definition.children.length; j++) {
-            if (j > 0) {
-                result += ", ";
-            }
-            child = definition.children[j];
-            result += child.name + ": " + getType(child);
-        }
-        result += "): " + definition.name + ";\r\n";
-    }
-    result += "    }\r\n\r\n";
-    result += "    export class NormalModeFactory implements IFactory {\r\n";
-    for (i = 0; i < definitions.length; i++) {
-        definition = definitions[i];
-        result += "        " + camelCase(getNameWithoutSuffix(definition)) + "(";
-        for (j = 0; j < definition.children.length; j++) {
-            if (j > 0) {
-                result += ", ";
-            }
-            child = definition.children[j];
-            result += getSafeName(child) + ": " + getType(child);
-        }
-        result += "): " + definition.name + " {\r\n";
-        result += "            return new " + definition.name + "(";
-        for (j = 0; j < definition.children.length; j++) {
-            child = definition.children[j];
-            result += getSafeName(child);
-            result += ", ";
-        }
-        result += "/*data:*/ 0);\r\n";
-        result += "        }\r\n";
-    }
-    result += "    }\r\n\r\n";
-    result += "    export class StrictModeFactory implements IFactory {\r\n";
-    for (i = 0; i < definitions.length; i++) {
-        definition = definitions[i];
-        result += "        " + camelCase(getNameWithoutSuffix(definition)) + "(";
-        for (j = 0; j < definition.children.length; j++) {
-            if (j > 0) {
-                result += ", ";
-            }
-            child = definition.children[j];
-            result += getSafeName(child) + ": " + getType(child);
-        }
-        result += "): " + definition.name + " {\r\n";
-        result += "            return new " + definition.name + "(";
-        for (j = 0; j < definition.children.length; j++) {
-            child = definition.children[j];
-            result += getSafeName(child);
-            result += ", ";
-        }
-        result += "/*data:*/ SyntaxConstants.NodeParsedInStrictModeMask);\r\n";
-        result += "        }\r\n";
-    }
-    result += "    }\r\n\r\n";
-    result += "    export var normalModeFactory: IFactory = new NormalModeFactory();\r\n";
-    result += "    export var strictModeFactory: IFactory = new StrictModeFactory();\r\n";
-    result += "}";
-    return result;
-}
 function generateServicesUtilities() {
     var result = "";
-    result += generateIsTypeScriptSpecific();
+    result += "module TypeScript {\r\n";
+    result += "    export function childCount(element: ISyntaxElement): number {\r\n";
+    result += "        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element).length; }\r\n";
+    result += "        switch (element.kind()) {\r\n";
+    for (var i = 0; i < definitions.length; i++) {
+        var definition = definitions[i];
+        result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ": return " + definition.children.length + ";\r\n";
+    }
+    result += "            default: return 0;\r\n";
+    result += "        }\r\n";
+    result += "    }\r\n\r\n";
+    for (var i = 0; i < definitions.length; i++) {
+        var definition = definitions[i];
+        result += "    function " + camelCase(getNameWithoutSuffix(definition)) + "ChildAt(node: " + definition.name + ", index: number): ISyntaxElement {\r\n";
+        if (definition.children.length) {
+            result += "        switch (index) {\r\n";
+            for (var j = 0; j < definition.children.length; j++) {
+                result += "            case " + j + ": return node." + definition.children[j].name + ";\r\n";
+            }
+            result += "        }\r\n";
+        }
+        else {
+            result += "        throw Errors.invalidOperation();\r\n";
+        }
+        result += "    }\r\n";
+    }
+    result += "    export function childAt(element: ISyntaxElement, index: number): ISyntaxElement {\r\n";
+    result += "        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element)[index]; }\r\n";
+    result += "        switch (element.kind()) {\r\n";
+    for (var i = 0; i < definitions.length; i++) {
+        var definition = definitions[i];
+        result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ": return " + camelCase(getNameWithoutSuffix(definition)) + "ChildAt(<" + definition.name + ">element, index);\r\n";
+    }
+    result += "        }\r\n";
+    result += "    }\r\n";
+    result += "}";
     return result;
 }
 function generateIsTypeScriptSpecific() {

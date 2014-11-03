@@ -5,18 +5,33 @@ interface Array<T> {
 
     kind(): TypeScript.SyntaxKind;
     parent: TypeScript.ISyntaxElement;
-
-    childCount(): number;
-    childAt(index: number): TypeScript.ISyntaxNodeOrToken;
 }
 
 module TypeScript {
     export interface ISeparatedSyntaxList<T extends ISyntaxNodeOrToken> extends Array<ISyntaxNodeOrToken> {
-        separatorCount(): number;
-        separatorAt(index: number): TypeScript.ISyntaxToken;
+        //separatorCount(): number;
+        //separatorAt(index: number): TypeScript.ISyntaxToken;
 
-        nonSeparatorCount(): number;
-        nonSeparatorAt(index: number): T;
+        //nonSeparatorCount(): number;
+        //nonSeparatorAt(index: number): T;
+    }
+}
+
+module TypeScript {
+    export function separatorCount(list: ISeparatedSyntaxList<ISyntaxNodeOrToken>) {
+        return list.length >> 1;
+    }
+
+    export function nonSeparatorCount(list: ISeparatedSyntaxList<ISyntaxNodeOrToken>) {
+        return (list.length + 1) >> 1;
+    }
+
+    export function separatorAt(list: ISeparatedSyntaxList<ISyntaxNodeOrToken>, index: number): ISyntaxToken {
+        return <ISyntaxToken>list[(index << 1) + 1];
+    }
+
+    export function nonSeparatorAt<T extends ISyntaxNodeOrToken>(list: ISeparatedSyntaxList<T>, index: number): T {
+        return <T>list[index << 1];
     }
 }
 
@@ -32,30 +47,6 @@ module TypeScript.Syntax {
 
     addArrayFunction("kind", function () {
         return SyntaxKind.List;
-    });
-
-    addArrayFunction("childCount", function (): number {
-        return this.length;
-    });
-
-    addArrayFunction("childAt", function (index: number): ISyntaxNodeOrToken {
-        return this[index];
-    });
-
-    addArrayFunction("separatorCount", function (): number {
-        return this.length >> 1;
-    });
-
-    addArrayFunction("nonSeparatorCount", function (): number {
-        return (this.length + 1) >> 1;
-    });
-
-    addArrayFunction("separatorAt", function (index: number): ISyntaxToken {
-        return this[(index << 1) + 1];
-    });
-
-    addArrayFunction("nonSeparatorAt", function (index: number): ISyntaxToken {
-        return this[index << 1];
     });
 
     export function list<T extends ISyntaxNodeOrToken>(nodes: T[]): T[] {

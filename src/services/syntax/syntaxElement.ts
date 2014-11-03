@@ -118,8 +118,8 @@ module TypeScript {
         }
 
         // Consider: we could use a binary search here to find the child more quickly.
-        for (var i = 0, n = element.childCount(); i < n; i++) {
-            var child = element.childAt(i);
+        for (var i = 0, n = childCount(element); i < n; i++) {
+            var child = childAt(element, i);
 
             if (child) {
                 var childFullWidth = fullWidth(child);
@@ -197,8 +197,8 @@ module TypeScript {
                 elements.push((<ISyntaxToken>element).fullText(text));
             }
             else {
-                for (var i = 0, n = element.childCount(); i < n; i++) {
-                    collectTextElements(element.childAt(i), elements, text);
+                for (var i = 0, n = childCount(element); i < n; i++) {
+                    collectTextElements(childAt(element, i), elements, text);
                 }
             }
         }
@@ -233,8 +233,8 @@ module TypeScript {
                 return (<ISyntaxToken>element).fullWidth() > 0 || kind === SyntaxKind.EndOfFileToken ? <ISyntaxToken>element : undefined;
             }
 
-            for (var i = 0, n = element.childCount(); i < n; i++) {
-                var token = firstToken(element.childAt(i));
+            for (var i = 0, n = childCount(element); i < n; i++) {
+                var token = firstToken(childAt(element, i));
                 if (token) {
                     return token;
                 }
@@ -253,8 +253,8 @@ module TypeScript {
             return (<SourceUnitSyntax>element).endOfFileToken;
         }
 
-        for (var i = element.childCount() - 1; i >= 0; i--) {
-            var child = element.childAt(i);
+        for (var i = childCount(element) - 1; i >= 0; i--) {
+            var child = childAt(element, i);
             if (child) {
                 var token = lastToken(child);
                 if (token) {
@@ -309,7 +309,7 @@ module TypeScript {
     }
 
     function computeData(element: ISyntaxElement): number {
-        var slotCount = element.childCount();
+        var slotCount = childCount(element);
 
         var fullWidth = 0;
 
@@ -317,7 +317,7 @@ module TypeScript {
         var isIncrementallyUnusable = slotCount === 0 && !isList(element);
 
         for (var i = 0, n = slotCount; i < n; i++) {
-            var child = element.childAt(i);
+            var child = childAt(element, i);
 
             if (child) {
                 fullWidth += TypeScript.fullWidth(child);
@@ -368,8 +368,6 @@ module TypeScript {
     export interface ISyntaxElement {
         kind(): SyntaxKind;
         parent?: ISyntaxElement;
-        childCount(): number;
-        childAt(index: number): ISyntaxElement;
     }
 
     export interface ISyntaxNode extends ISyntaxNodeOrToken {
