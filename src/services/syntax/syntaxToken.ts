@@ -376,8 +376,8 @@ module TypeScript.Syntax {
                 }
 
                 // Ok.  We have a parent.  First, find out which slot we're at in the parent.
-                for (var i = 0, n = parent.childCount(); i < n; i++) {
-                    if (parent.childAt(i) === current) {
+                for (var i = 0, n = childCount(parent); i < n; i++) {
+                    if (childAt(parent, i) === current) {
                         break;
                     }
                 }
@@ -386,7 +386,7 @@ module TypeScript.Syntax {
 
                 // Walk backward from this element, looking for a non-zero-width sibling.
                 for (var j = i - 1; j >= 0; j--) {
-                    var sibling = parent.childAt(j);
+                    var sibling = childAt(parent, j);
                     if (sibling && fullWidth(sibling) > 0) {
                         return sibling;
                     }

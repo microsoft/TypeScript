@@ -162,10 +162,10 @@ module TypeScript {
 
         private checkParameterListOrder(node: ParameterListSyntax): boolean {
             var seenOptionalParameter = false;
-            var parameterCount = node.parameters.nonSeparatorCount();
+            var parameterCount = nonSeparatorCount(node.parameters);
 
             for (var i = 0; i < parameterCount; i++) {
-                var parameter = node.parameters.nonSeparatorAt(i);
+                var parameter = nonSeparatorAt(node.parameters, i);
 
                 if (parameter.dotDotDotToken) {
                     if (i !== (parameterCount - 1)) {
@@ -203,8 +203,8 @@ module TypeScript {
         }
 
         private checkParameterListAcessibilityModifiers(node: ParameterListSyntax): boolean {
-            for (var i = 0, n = node.parameters.nonSeparatorCount(); i < n; i++) {
-                var parameter = node.parameters.nonSeparatorAt(i);
+            for (var i = 0, n = nonSeparatorCount(node.parameters); i < n; i++) {
+                var parameter = nonSeparatorAt(node.parameters, i);
 
                 if (this.checkParameterAccessibilityModifiers(node, parameter)) {
                     return true;
@@ -248,18 +248,18 @@ module TypeScript {
         private checkForTrailingComma(list: ISyntaxNodeOrToken[]): boolean {
             // If we have at least one child, and we have an even number of children, then that 
             // means we have an illegal trailing separator.
-            if (list.childCount() === 0 || list.childCount() % 2 === 1) {
+            if (list.length === 0 || list.length % 2 === 1) {
                 return false;
             }
 
-            var child = list.childAt(list.childCount() - 1);
+            var child = list[list.length - 1];
             this.pushDiagnostic(child, DiagnosticCode.Trailing_comma_not_allowed);
 
             return true;
         }
 
-        private checkForAtLeastOneElement(parent: ISyntaxElement, list: ISyntaxNodeOrToken[], reportToken: ISyntaxToken, listKind: string): boolean {
-            if (list.childCount() > 0) {
+        private checkForAtLeastOneElement(list: ISyntaxNodeOrToken[], reportToken: ISyntaxToken, listKind: string): boolean {
+            if (childCount(list) > 0) {
                 return false;
             }
 
@@ -280,7 +280,7 @@ module TypeScript {
 
         public visitHeritageClause(node: HeritageClauseSyntax): void {
             if (this.checkForTrailingComma(node.typeNames) ||
-                this.checkForAtLeastOneElement(node, node.typeNames, node.extendsOrImplementsKeyword, SyntaxFacts.getText(node.extendsOrImplementsKeyword.kind()))) {
+                this.checkForAtLeastOneElement(node.typeNames, node.extendsOrImplementsKeyword, SyntaxFacts.getText(node.extendsOrImplementsKeyword.kind()))) {
                 return;
             }
 
@@ -296,7 +296,7 @@ module TypeScript {
         }
 
         public visitVariableDeclaration(node: VariableDeclarationSyntax): void {
-            if (this.checkForAtLeastOneElement(node, node.variableDeclarators, node.varKeyword, getLocalizedText(DiagnosticCode.variable_declaration, undefined)) ||
+            if (this.checkForAtLeastOneElement(node.variableDeclarators, node.varKeyword, getLocalizedText(DiagnosticCode.variable_declaration, undefined)) ||
                 this.checkForTrailingComma(node.variableDeclarators)) {
                 return;
             }
@@ -306,7 +306,7 @@ module TypeScript {
 
         public visitTypeArgumentList(node: TypeArgumentListSyntax): void {
             if (this.checkForTrailingComma(node.typeArguments) ||
-                this.checkForAtLeastOneElement(node, node.typeArguments, node.lessThanToken, getLocalizedText(DiagnosticCode.type_argument, undefined))) {
+                this.checkForAtLeastOneElement(node.typeArguments, node.lessThanToken, getLocalizedText(DiagnosticCode.type_argument, undefined))) {
                 return;
             }
 
@@ -315,7 +315,7 @@ module TypeScript {
 
         public visitTupleType(node: TupleTypeSyntax): void {
             if (this.checkForTrailingComma(node.types) ||
-                this.checkForAtLeastOneElement(node, node.types, node.openBracketToken, getLocalizedText(DiagnosticCode.type, undefined))) {
+                this.checkForAtLeastOneElement(node.types, node.openBracketToken, getLocalizedText(DiagnosticCode.type, undefined))) {
                 return
             }
 
@@ -324,7 +324,7 @@ module TypeScript {
 
         public visitTypeParameterList(node: TypeParameterListSyntax): void {
             if (this.checkForTrailingComma(node.typeParameters) ||
-                this.checkForAtLeastOneElement(node, node.typeParameters, node.lessThanToken, getLocalizedText(DiagnosticCode.type_parameter, undefined))) {
+                this.checkForAtLeastOneElement(node.typeParameters, node.lessThanToken, getLocalizedText(DiagnosticCode.type_parameter, undefined))) {
                 return;
             }
 
@@ -337,7 +337,7 @@ module TypeScript {
                 return true;
             }
 
-            var parameter = node.parameters.nonSeparatorAt(0);
+            var parameter = nonSeparatorAt(node.parameters, 0);
 
             if (parameter.dotDotDotToken) {
                 this.pushDiagnostic(parameter, DiagnosticCode.Index_signatures_cannot_have_rest_parameters);
@@ -400,7 +400,7 @@ module TypeScript {
                         return true;
                     }
 
-                    if (heritageClause.typeNames.nonSeparatorCount() > 1) {
+                    if (nonSeparatorCount(heritageClause.typeNames) > 1) {
                         this.pushDiagnostic(heritageClause, DiagnosticCode.Classes_can_only_extend_a_single_class);
                         return true;
                     }
@@ -599,7 +599,7 @@ module TypeScript {
 
         private checkIndexMemberModifiers(node: IndexMemberDeclarationSyntax): boolean {
             if (node.modifiers.length > 0) {
-                this.pushDiagnostic(node.modifiers.childAt(0), DiagnosticCode.Modifiers_cannot_appear_here);
+                this.pushDiagnostic(node.modifiers[0], DiagnosticCode.Modifiers_cannot_appear_here);
                 return true;
             }
 
@@ -625,7 +625,7 @@ module TypeScript {
         public visitGetAccessor(node: GetAccessorSyntax): void {
             if (this.checkForAccessorDeclarationInAmbientContext(node) ||
                 this.checkEcmaScriptVersionIsAtLeast(node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
-                this.checkForDisallowedModifiers(node, node.modifiers) ||
+                this.checkForDisallowedModifiers(node.modifiers) ||
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
                 this.checkGetAccessorParameter(node) ||
@@ -665,12 +665,12 @@ module TypeScript {
 
         private checkSetAccessorParameter(node: SetAccessorSyntax): boolean {
             var parameters = node.callSignature.parameterList.parameters;
-            if (parameters.nonSeparatorCount() !== 1) {
+            if (nonSeparatorCount(parameters) !== 1) {
                 this.pushDiagnostic(node.propertyName, DiagnosticCode.set_accessor_must_have_exactly_one_parameter);
                 return true;
             }
 
-            var parameter = parameters.nonSeparatorAt(0);
+            var parameter = nonSeparatorAt(parameters, 0);
 
             if (parameter.questionToken) {
                 this.pushDiagnostic(parameter, DiagnosticCode.set_accessor_parameter_cannot_be_optional);
@@ -701,7 +701,7 @@ module TypeScript {
         public visitSetAccessor(node: SetAccessorSyntax): void {
             if (this.checkForAccessorDeclarationInAmbientContext(node) ||
                 this.checkEcmaScriptVersionIsAtLeast(node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
-                this.checkForDisallowedModifiers(node, node.modifiers) ||
+                this.checkForDisallowedModifiers(node.modifiers) ||
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
                 this.checkForDisallowedSetAccessorTypeAnnotation(node) ||
@@ -730,24 +730,19 @@ module TypeScript {
 
         private checkEnumElements(node: EnumDeclarationSyntax): boolean {
             var previousValueWasComputed = false;
-            for (var i = 0, n = node.enumElements.childCount(); i < n; i++) {
-                var child = node.enumElements.childAt(i);
+            for (var i = 0, n = nonSeparatorCount(node.enumElements); i < n; i++) {
+                var enumElement = nonSeparatorAt(node.enumElements, i);
 
-                if (i % 2 === 0) {
-                    var enumElement = <EnumElementSyntax>child;
+                if (!enumElement.equalsValueClause && previousValueWasComputed) {
+                    this.pushDiagnostic(enumElement, DiagnosticCode.Enum_member_must_have_initializer);
+                    return true;
+                }
 
-                    if (!enumElement.equalsValueClause && previousValueWasComputed) {
-                        this.pushDiagnostic(enumElement, DiagnosticCode.Enum_member_must_have_initializer);
-                        return true;
-                    }
-
-                    if (enumElement.equalsValueClause) {
-                        var value = enumElement.equalsValueClause.value;
-                        previousValueWasComputed = !Syntax.isIntegerLiteral(value);
-                    }
+                if (enumElement.equalsValueClause) {
+                    var value = enumElement.equalsValueClause.value;
+                    previousValueWasComputed = !Syntax.isIntegerLiteral(value);
                 }
             }
-
             return false;
         }
 
@@ -1307,10 +1302,10 @@ module TypeScript {
             return false;
         }
 
-        private checkForDisallowedModifiers(parent: ISyntaxElement, modifiers: ISyntaxToken[]): boolean {
+        private checkForDisallowedModifiers(modifiers: ISyntaxToken[]): boolean {
             if (this.inBlock || this.inObjectLiteralExpression) {
                 if (modifiers.length > 0) {
-                    this.pushDiagnostic(modifiers.childAt(0), DiagnosticCode.Modifiers_cannot_appear_here);
+                    this.pushDiagnostic(modifiers[0], DiagnosticCode.Modifiers_cannot_appear_here);
                     return true;
                 }
             }
@@ -1320,7 +1315,7 @@ module TypeScript {
 
         public visitFunctionDeclaration(node: FunctionDeclarationSyntax): void {
             if (this.checkForDisallowedDeclareModifier(node.modifiers) ||
-                this.checkForDisallowedModifiers(node, node.modifiers) ||
+                this.checkForDisallowedModifiers(node.modifiers) ||
                 this.checkForRequiredDeclareModifier(node, node.identifier, node.modifiers) ||
                 this.checkModuleElementModifiers(node.modifiers) ||
                 this.checkForDisallowedEvalOrArguments(node, node.identifier)) {
@@ -1352,7 +1347,7 @@ module TypeScript {
 
         public visitVariableStatement(node: VariableStatementSyntax): void {
             if (this.checkForDisallowedDeclareModifier(node.modifiers) ||
-                this.checkForDisallowedModifiers(node, node.modifiers) ||
+                this.checkForDisallowedModifiers(node.modifiers) ||
                 this.checkForRequiredDeclareModifier(node, node.variableDeclaration.varKeyword, node.modifiers) ||
                 this.checkModuleElementModifiers(node.modifiers)) {
 
@@ -1365,10 +1360,10 @@ module TypeScript {
             this.inAmbientDeclaration = savedInAmbientDeclaration;
         }
 
-        private checkListSeparators<T extends ISyntaxNodeOrToken>(parent: ISyntaxElement, list: T[], kind: SyntaxKind): boolean {
-            for (var i = 0, n = list.childCount(); i < n; i++) {
-                var child = list.childAt(i);
-                if (i % 2 === 1 && child.kind() !== kind) {
+        private checkListSeparators<T extends ISyntaxNodeOrToken>(list: ISeparatedSyntaxList<T>, kind: SyntaxKind): boolean {
+            for (var i = 0, n = separatorCount(list); i < n; i++) {
+                var child = separatorAt(list, i);
+                if (child.kind() !== kind) {
                     this.pushDiagnostic(child, DiagnosticCode._0_expected, [SyntaxFacts.getText(kind)]);
                 }
             }
@@ -1377,7 +1372,7 @@ module TypeScript {
         }
 
         public visitObjectType(node: ObjectTypeSyntax): void {
-            if (this.checkListSeparators(node, node.typeMembers, SyntaxKind.SemicolonToken)) {
+            if (this.checkListSeparators(node.typeMembers, SyntaxKind.SemicolonToken)) {
                 return;
             }
 

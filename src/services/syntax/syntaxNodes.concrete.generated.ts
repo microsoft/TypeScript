@@ -19,18 +19,6 @@ module TypeScript {
             return SyntaxKind.SourceUnit;
         }
 
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.moduleElements;
-                case 1: return this.endOfFileToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitSourceUnit(this);
         }
@@ -55,19 +43,6 @@ module TypeScript {
             return SyntaxKind.QualifiedName;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.left;
-                case 1: return this.dotToken;
-                case 2: return this.right;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitQualifiedName(this);
         }
@@ -90,19 +65,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ObjectType;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.openBraceToken;
-                case 1: return this.typeMembers;
-                case 2: return this.closeBraceToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -132,20 +94,6 @@ module TypeScript {
             return SyntaxKind.FunctionType;
         }
 
-        public childCount(): number {
-            return 4;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.typeParameterList;
-                case 1: return this.parameterList;
-                case 2: return this.equalsGreaterThanToken;
-                case 3: return this.type;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitFunctionType(this);
         }
@@ -168,19 +116,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ArrayType;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.type;
-                case 1: return this.openBracketToken;
-                case 2: return this.closeBracketToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -213,21 +148,6 @@ module TypeScript {
             return SyntaxKind.ConstructorType;
         }
 
-        public childCount(): number {
-            return 5;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.newKeyword;
-                case 1: return this.typeParameterList;
-                case 2: return this.parameterList;
-                case 3: return this.equalsGreaterThanToken;
-                case 4: return this.type;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitConstructorType(this);
         }
@@ -249,18 +169,6 @@ module TypeScript {
             return SyntaxKind.GenericType;
         }
 
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.name;
-                case 1: return this.typeArgumentList;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitGenericType(this);
         }
@@ -280,18 +188,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.TypeQuery;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.typeOfKeyword;
-                case 1: return this.name;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -318,19 +214,6 @@ module TypeScript {
             return SyntaxKind.TupleType;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.openBracketToken;
-                case 1: return this.types;
-                case 2: return this.closeBracketToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitTupleType(this);
         }
@@ -355,19 +238,6 @@ module TypeScript {
             return SyntaxKind.UnionType;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.left;
-                case 1: return this.barToken;
-                case 2: return this.right;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitUnionType(this);
         }
@@ -390,19 +260,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ParenthesizedType;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.openParenToken;
-                case 1: return this.type;
-                case 2: return this.closeParenToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -438,22 +295,6 @@ module TypeScript {
             return SyntaxKind.InterfaceDeclaration;
         }
 
-        public childCount(): number {
-            return 6;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.interfaceKeyword;
-                case 2: return this.identifier;
-                case 3: return this.typeParameterList;
-                case 4: return this.heritageClauses;
-                case 5: return this.body;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitInterfaceDeclaration(this);
         }
@@ -485,22 +326,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.FunctionDeclaration;
-        }
-
-        public childCount(): number {
-            return 6;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.functionKeyword;
-                case 2: return this.identifier;
-                case 3: return this.callSignature;
-                case 4: return this.block;
-                case 5: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -537,23 +362,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ModuleDeclaration;
-        }
-
-        public childCount(): number {
-            return 7;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.moduleKeyword;
-                case 2: return this.name;
-                case 3: return this.stringLiteral;
-                case 4: return this.openBraceToken;
-                case 5: return this.moduleElements;
-                case 6: return this.closeBraceToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -595,24 +403,6 @@ module TypeScript {
             return SyntaxKind.ClassDeclaration;
         }
 
-        public childCount(): number {
-            return 8;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.classKeyword;
-                case 2: return this.identifier;
-                case 3: return this.typeParameterList;
-                case 4: return this.heritageClauses;
-                case 5: return this.openBraceToken;
-                case 6: return this.classElements;
-                case 7: return this.closeBraceToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitClassDeclaration(this);
         }
@@ -644,22 +434,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.EnumDeclaration;
-        }
-
-        public childCount(): number {
-            return 6;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.enumKeyword;
-                case 2: return this.identifier;
-                case 3: return this.openBraceToken;
-                case 4: return this.enumElements;
-                case 5: return this.closeBraceToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -695,22 +469,6 @@ module TypeScript {
             return SyntaxKind.ImportDeclaration;
         }
 
-        public childCount(): number {
-            return 6;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.importKeyword;
-                case 2: return this.identifier;
-                case 3: return this.equalsToken;
-                case 4: return this.moduleReference;
-                case 5: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitImportDeclaration(this);
         }
@@ -736,20 +494,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ExportAssignment;
-        }
-
-        public childCount(): number {
-            return 4;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.exportKeyword;
-                case 1: return this.equalsToken;
-                case 2: return this.identifier;
-                case 3: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -782,21 +526,6 @@ module TypeScript {
             return SyntaxKind.MemberFunctionDeclaration;
         }
 
-        public childCount(): number {
-            return 5;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.propertyName;
-                case 2: return this.callSignature;
-                case 3: return this.block;
-                case 4: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitMemberFunctionDeclaration(this);
         }
@@ -819,19 +548,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.MemberVariableDeclaration;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.variableDeclarator;
-                case 2: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -864,21 +580,6 @@ module TypeScript {
             return SyntaxKind.ConstructorDeclaration;
         }
 
-        public childCount(): number {
-            return 5;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.constructorKeyword;
-                case 2: return this.callSignature;
-                case 3: return this.block;
-                case 4: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitConstructorDeclaration(this);
         }
@@ -901,19 +602,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.IndexMemberDeclaration;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.indexSignature;
-                case 2: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -946,21 +634,6 @@ module TypeScript {
             return SyntaxKind.GetAccessor;
         }
 
-        public childCount(): number {
-            return 5;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.getKeyword;
-                case 2: return this.propertyName;
-                case 3: return this.callSignature;
-                case 4: return this.block;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitGetAccessor(this);
         }
@@ -991,21 +664,6 @@ module TypeScript {
             return SyntaxKind.SetAccessor;
         }
 
-        public childCount(): number {
-            return 5;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.setKeyword;
-                case 2: return this.propertyName;
-                case 3: return this.callSignature;
-                case 4: return this.block;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitSetAccessor(this);
         }
@@ -1028,19 +686,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.PropertySignature;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.propertyName;
-                case 1: return this.questionToken;
-                case 2: return this.typeAnnotation;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -1067,19 +712,6 @@ module TypeScript {
             return SyntaxKind.CallSignature;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.typeParameterList;
-                case 1: return this.parameterList;
-                case 2: return this.typeAnnotation;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitCallSignature(this);
         }
@@ -1099,18 +731,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ConstructSignature;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.newKeyword;
-                case 1: return this.callSignature;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -1140,20 +760,6 @@ module TypeScript {
             return SyntaxKind.IndexSignature;
         }
 
-        public childCount(): number {
-            return 4;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.openBracketToken;
-                case 1: return this.parameters;
-                case 2: return this.closeBracketToken;
-                case 3: return this.typeAnnotation;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitIndexSignature(this);
         }
@@ -1178,19 +784,6 @@ module TypeScript {
             return SyntaxKind.MethodSignature;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.propertyName;
-                case 1: return this.questionToken;
-                case 2: return this.callSignature;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitMethodSignature(this);
         }
@@ -1213,19 +806,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.Block;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.openBraceToken;
-                case 1: return this.statements;
-                case 2: return this.closeBraceToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -1261,22 +841,6 @@ module TypeScript {
             return SyntaxKind.IfStatement;
         }
 
-        public childCount(): number {
-            return 6;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.ifKeyword;
-                case 1: return this.openParenToken;
-                case 2: return this.condition;
-                case 3: return this.closeParenToken;
-                case 4: return this.statement;
-                case 5: return this.elseClause;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitIfStatement(this);
         }
@@ -1301,19 +865,6 @@ module TypeScript {
             return SyntaxKind.VariableStatement;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.modifiers;
-                case 1: return this.variableDeclaration;
-                case 2: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitVariableStatement(this);
         }
@@ -1333,18 +884,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ExpressionStatement;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.expression;
-                case 1: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -1369,19 +908,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ReturnStatement;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.returnKeyword;
-                case 1: return this.expression;
-                case 2: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -1420,23 +946,6 @@ module TypeScript {
             return SyntaxKind.SwitchStatement;
         }
 
-        public childCount(): number {
-            return 7;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.switchKeyword;
-                case 1: return this.openParenToken;
-                case 2: return this.expression;
-                case 3: return this.closeParenToken;
-                case 4: return this.openBraceToken;
-                case 5: return this.switchClauses;
-                case 6: return this.closeBraceToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitSwitchStatement(this);
         }
@@ -1461,19 +970,6 @@ module TypeScript {
             return SyntaxKind.BreakStatement;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.breakKeyword;
-                case 1: return this.identifier;
-                case 2: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitBreakStatement(this);
         }
@@ -1496,19 +992,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ContinueStatement;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.continueKeyword;
-                case 1: return this.identifier;
-                case 2: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -1556,26 +1039,6 @@ module TypeScript {
             return SyntaxKind.ForStatement;
         }
 
-        public childCount(): number {
-            return 10;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.forKeyword;
-                case 1: return this.openParenToken;
-                case 2: return this.variableDeclaration;
-                case 3: return this.initializer;
-                case 4: return this.firstSemicolonToken;
-                case 5: return this.condition;
-                case 6: return this.secondSemicolonToken;
-                case 7: return this.incrementor;
-                case 8: return this.closeParenToken;
-                case 9: return this.statement;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitForStatement(this);
         }
@@ -1615,24 +1078,6 @@ module TypeScript {
             return SyntaxKind.ForInStatement;
         }
 
-        public childCount(): number {
-            return 8;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.forKeyword;
-                case 1: return this.openParenToken;
-                case 2: return this.variableDeclaration;
-                case 3: return this.left;
-                case 4: return this.inKeyword;
-                case 5: return this.expression;
-                case 6: return this.closeParenToken;
-                case 7: return this.statement;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitForInStatement(this);
         }
@@ -1649,17 +1094,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.EmptyStatement;
-        }
-
-        public childCount(): number {
-            return 1;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -1684,19 +1118,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ThrowStatement;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.throwKeyword;
-                case 1: return this.expression;
-                case 2: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -1729,21 +1150,6 @@ module TypeScript {
             return SyntaxKind.WhileStatement;
         }
 
-        public childCount(): number {
-            return 5;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.whileKeyword;
-                case 1: return this.openParenToken;
-                case 2: return this.condition;
-                case 3: return this.closeParenToken;
-                case 4: return this.statement;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitWhileStatement(this);
         }
@@ -1771,20 +1177,6 @@ module TypeScript {
             return SyntaxKind.TryStatement;
         }
 
-        public childCount(): number {
-            return 4;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.tryKeyword;
-                case 1: return this.block;
-                case 2: return this.catchClause;
-                case 3: return this.finallyClause;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitTryStatement(this);
         }
@@ -1807,19 +1199,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.LabeledStatement;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.identifier;
-                case 1: return this.colonToken;
-                case 2: return this.statement;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -1858,23 +1237,6 @@ module TypeScript {
             return SyntaxKind.DoStatement;
         }
 
-        public childCount(): number {
-            return 7;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.doKeyword;
-                case 1: return this.statement;
-                case 2: return this.whileKeyword;
-                case 3: return this.openParenToken;
-                case 4: return this.condition;
-                case 5: return this.closeParenToken;
-                case 6: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitDoStatement(this);
         }
@@ -1894,18 +1256,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.DebuggerStatement;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.debuggerKeyword;
-                case 1: return this.semicolonToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -1938,21 +1288,6 @@ module TypeScript {
             return SyntaxKind.WithStatement;
         }
 
-        public childCount(): number {
-            return 5;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.withKeyword;
-                case 1: return this.openParenToken;
-                case 2: return this.condition;
-                case 3: return this.closeParenToken;
-                case 4: return this.statement;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitWithStatement(this);
         }
@@ -1972,18 +1307,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.PrefixUnaryExpression;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.operatorToken;
-                case 1: return this.operand;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -2007,18 +1330,6 @@ module TypeScript {
             return SyntaxKind.DeleteExpression;
         }
 
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.deleteKeyword;
-                case 1: return this.expression;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitDeleteExpression(this);
         }
@@ -2040,18 +1351,6 @@ module TypeScript {
             return SyntaxKind.TypeOfExpression;
         }
 
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.typeOfKeyword;
-                case 1: return this.expression;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitTypeOfExpression(this);
         }
@@ -2071,18 +1370,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.VoidExpression;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.voidKeyword;
-                case 1: return this.expression;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -2115,21 +1402,6 @@ module TypeScript {
             return SyntaxKind.ConditionalExpression;
         }
 
-        public childCount(): number {
-            return 5;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.condition;
-                case 1: return this.questionToken;
-                case 2: return this.whenTrue;
-                case 3: return this.colonToken;
-                case 4: return this.whenFalse;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitConditionalExpression(this);
         }
@@ -2154,19 +1426,6 @@ module TypeScript {
             return SyntaxKind.BinaryExpression;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.left;
-                case 1: return this.operatorToken;
-                case 2: return this.right;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitBinaryExpression(this);
         }
@@ -2186,18 +1445,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.PostfixUnaryExpression;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.operand;
-                case 1: return this.operatorToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -2224,19 +1471,6 @@ module TypeScript {
             return SyntaxKind.MemberAccessExpression;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.expression;
-                case 1: return this.dotToken;
-                case 2: return this.name;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitMemberAccessExpression(this);
         }
@@ -2256,18 +1490,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.InvocationExpression;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.expression;
-                case 1: return this.argumentList;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -2294,19 +1516,6 @@ module TypeScript {
             return SyntaxKind.ArrayLiteralExpression;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.openBracketToken;
-                case 1: return this.expressions;
-                case 2: return this.closeBracketToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitArrayLiteralExpression(this);
         }
@@ -2329,19 +1538,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ObjectLiteralExpression;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.openBraceToken;
-                case 1: return this.propertyAssignments;
-                case 2: return this.closeBraceToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -2368,19 +1564,6 @@ module TypeScript {
             return SyntaxKind.ObjectCreationExpression;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.newKeyword;
-                case 1: return this.expression;
-                case 2: return this.argumentList;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitObjectCreationExpression(this);
         }
@@ -2403,19 +1586,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ParenthesizedExpression;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.openParenToken;
-                case 1: return this.expression;
-                case 2: return this.closeParenToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -2445,20 +1615,6 @@ module TypeScript {
             return SyntaxKind.ParenthesizedArrowFunctionExpression;
         }
 
-        public childCount(): number {
-            return 4;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.callSignature;
-                case 1: return this.equalsGreaterThanToken;
-                case 2: return this.block;
-                case 3: return this.expression;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitParenthesizedArrowFunctionExpression(this);
         }
@@ -2484,20 +1640,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.SimpleArrowFunctionExpression;
-        }
-
-        public childCount(): number {
-            return 4;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.parameter;
-                case 1: return this.equalsGreaterThanToken;
-                case 2: return this.block;
-                case 3: return this.expression;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -2527,20 +1669,6 @@ module TypeScript {
             return SyntaxKind.CastExpression;
         }
 
-        public childCount(): number {
-            return 4;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.lessThanToken;
-                case 1: return this.type;
-                case 2: return this.greaterThanToken;
-                case 3: return this.expression;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitCastExpression(this);
         }
@@ -2566,20 +1694,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ElementAccessExpression;
-        }
-
-        public childCount(): number {
-            return 4;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.expression;
-                case 1: return this.openBracketToken;
-                case 2: return this.argumentExpression;
-                case 3: return this.closeBracketToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -2609,20 +1723,6 @@ module TypeScript {
             return SyntaxKind.FunctionExpression;
         }
 
-        public childCount(): number {
-            return 4;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.functionKeyword;
-                case 1: return this.identifier;
-                case 2: return this.callSignature;
-                case 3: return this.block;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitFunctionExpression(this);
         }
@@ -2636,14 +1736,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.OmittedExpression;
-        }
-
-        public childCount(): number {
-            return 0;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            throw Errors.invalidOperation();
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -2667,18 +1759,6 @@ module TypeScript {
             return SyntaxKind.TemplateExpression;
         }
 
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.templateStartToken;
-                case 1: return this.templateClauses;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitTemplateExpression(this);
         }
@@ -2700,18 +1780,6 @@ module TypeScript {
             return SyntaxKind.TemplateAccessExpression;
         }
 
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.expression;
-                case 1: return this.templateExpression;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitTemplateAccessExpression(this);
         }
@@ -2730,18 +1798,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.VariableDeclaration;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.varKeyword;
-                case 1: return this.variableDeclarators;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -2765,19 +1821,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.VariableDeclarator;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.propertyName;
-                case 1: return this.typeAnnotation;
-                case 2: return this.equalsValueClause;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -2806,20 +1849,6 @@ module TypeScript {
             return SyntaxKind.ArgumentList;
         }
 
-        public childCount(): number {
-            return 4;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.typeArgumentList;
-                case 1: return this.openParenToken;
-                case 2: return this.arguments;
-                case 3: return this.closeParenToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitArgumentList(this);
         }
@@ -2841,19 +1870,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ParameterList;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.openParenToken;
-                case 1: return this.parameters;
-                case 2: return this.closeParenToken;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -2879,19 +1895,6 @@ module TypeScript {
             return SyntaxKind.TypeArgumentList;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.lessThanToken;
-                case 1: return this.typeArguments;
-                case 2: return this.greaterThanToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitTypeArgumentList(this);
         }
@@ -2915,19 +1918,6 @@ module TypeScript {
             return SyntaxKind.TypeParameterList;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.lessThanToken;
-                case 1: return this.typeParameters;
-                case 2: return this.greaterThanToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitTypeParameterList(this);
         }
@@ -2948,18 +1938,6 @@ module TypeScript {
             return SyntaxKind.HeritageClause;
         }
 
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.extendsOrImplementsKeyword;
-                case 1: return this.typeNames;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitHeritageClause(this);
         }
@@ -2978,18 +1956,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.EqualsValueClause;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.equalsToken;
-                case 1: return this.value;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -3019,20 +1985,6 @@ module TypeScript {
             return SyntaxKind.CaseSwitchClause;
         }
 
-        public childCount(): number {
-            return 4;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.caseKeyword;
-                case 1: return this.expression;
-                case 2: return this.colonToken;
-                case 3: return this.statements;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitCaseSwitchClause(this);
         }
@@ -3057,19 +2009,6 @@ module TypeScript {
             return SyntaxKind.DefaultSwitchClause;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.defaultKeyword;
-                case 1: return this.colonToken;
-                case 2: return this.statements;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitDefaultSwitchClause(this);
         }
@@ -3088,18 +2027,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ElseClause;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.elseKeyword;
-                case 1: return this.statement;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -3134,22 +2061,6 @@ module TypeScript {
             return SyntaxKind.CatchClause;
         }
 
-        public childCount(): number {
-            return 6;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.catchKeyword;
-                case 1: return this.openParenToken;
-                case 2: return this.identifier;
-                case 3: return this.typeAnnotation;
-                case 4: return this.closeParenToken;
-                case 5: return this.block;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitCatchClause(this);
         }
@@ -3168,18 +2079,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.FinallyClause;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.finallyKeyword;
-                case 1: return this.block;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -3202,18 +2101,6 @@ module TypeScript {
             return SyntaxKind.TemplateClause;
         }
 
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.expression;
-                case 1: return this.templateMiddleOrEndToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitTemplateClause(this);
         }
@@ -3234,18 +2121,6 @@ module TypeScript {
             return SyntaxKind.TypeParameter;
         }
 
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.identifier;
-                case 1: return this.constraint;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitTypeParameter(this);
         }
@@ -3264,18 +2139,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.Constraint;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.extendsKeyword;
-                case 1: return this.typeOrExpression;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -3302,19 +2165,6 @@ module TypeScript {
             return SyntaxKind.SimplePropertyAssignment;
         }
 
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.propertyName;
-                case 1: return this.colonToken;
-                case 2: return this.expression;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitSimplePropertyAssignment(this);
         }
@@ -3337,19 +2187,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.FunctionPropertyAssignment;
-        }
-
-        public childCount(): number {
-            return 3;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.propertyName;
-                case 1: return this.callSignature;
-                case 2: return this.block;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -3384,22 +2221,6 @@ module TypeScript {
             return SyntaxKind.Parameter;
         }
 
-        public childCount(): number {
-            return 6;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.dotDotDotToken;
-                case 1: return this.modifiers;
-                case 2: return this.identifier;
-                case 3: return this.questionToken;
-                case 4: return this.typeAnnotation;
-                case 5: return this.equalsValueClause;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitParameter(this);
         }
@@ -3420,18 +2241,6 @@ module TypeScript {
             return SyntaxKind.EnumElement;
         }
 
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.propertyName;
-                case 1: return this.equalsValueClause;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitEnumElement(this);
         }
@@ -3450,18 +2259,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.TypeAnnotation;
-        }
-
-        public childCount(): number {
-            return 2;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.colonToken;
-                case 1: return this.type;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
@@ -3491,20 +2288,6 @@ module TypeScript {
             return SyntaxKind.ExternalModuleReference;
         }
 
-        public childCount(): number {
-            return 4;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.requireKeyword;
-                case 1: return this.openParenToken;
-                case 2: return this.stringLiteral;
-                case 3: return this.closeParenToken;
-                default: throw Errors.invalidOperation();
-            }
-        }
-
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
             return visitor.visitExternalModuleReference(this);
         }
@@ -3521,17 +2304,6 @@ module TypeScript {
 
         public kind(): SyntaxKind {
             return SyntaxKind.ModuleNameModuleReference;
-        }
-
-        public childCount(): number {
-            return 1;
-        }
-
-        public childAt(slot: number): ISyntaxElement {
-            switch (slot) {
-                case 0: return this.moduleName;
-                default: throw Errors.invalidOperation();
-            }
         }
 
         public accept(visitor: ISyntaxVisitor): SyntaxKind {
