@@ -471,17 +471,13 @@
         "category": "Error",
         "code": 1157
     },
-    "Aliased type cannot be an object type literal. Use an interface declaration instead.": {
+    "Invalid template literal; expected '}'": {
         "category": "Error",
         "code": 1158
     },
-    "Invalid template literal; expected '}'": {
-        "category": "Error",
-        "code": 1159
-    },
     "Tagged templates are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
-        "code": 1160
+        "code": 1159
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1079,6 +1075,10 @@
     "Type alias '{0}' circularly references itself.": {
         "category": "Error",
         "code": 2456
+    },
+    "Type alias name cannot be '{0}'": {
+        "category": "Error",
+        "code": 2457
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

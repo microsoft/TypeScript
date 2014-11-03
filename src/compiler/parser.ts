@@ -3856,13 +3856,6 @@ module ts {
             parseExpected(SyntaxKind.EqualsToken);
             node.type = parseType();
             parseSemicolon();
-            var n = node.type;
-            while (n.kind === SyntaxKind.ParenType) {
-                n = (<ParenTypeNode>n).type;
-            }
-            if (n.kind === SyntaxKind.TypeLiteral && (n.pos !== (<TypeLiteralNode>n).members.pos || n.end !== (<TypeLiteralNode>n).members.end)) {
-                grammarErrorOnNode(node.type, Diagnostics.Aliased_type_cannot_be_an_object_type_literal_Use_an_interface_declaration_instead);
-            }
             return finishNode(node);
         }
 

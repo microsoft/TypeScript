@@ -1,13 +1,13 @@
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(12,1): error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(14,1): error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(16,1): error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(18,1): error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(20,1): error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(22,1): error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(24,1): error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(24,1): error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(26,1): error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(26,1): error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(12,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(14,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(16,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(18,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(20,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(22,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(24,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(24,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(26,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(26,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 
 
 ==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts (10 errors) ====
@@ -24,39 +24,39 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTyped
     
     f `abc`
     ~~~~~~~
-!!! error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc${1}def${2}ghi`;
     ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc`.member
     ~~~~~~~
-!!! error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc${1}def${2}ghi`.member;
     ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc`["member"];
     ~~~~~~~
-!!! error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc${1}def${2}ghi`["member"];
     ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc`[0].member `abc${1}def${2}ghi`;
     ~~~~~~~
-!!! error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
     ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f.thisIsNotATag(`abc`);
     
