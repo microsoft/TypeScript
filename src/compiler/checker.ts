@@ -4073,8 +4073,7 @@ module ts {
                             inferFromTypes(source, t);
                         }
                     }
-                    // If no inferences were produced above and union contains a single naked type parameter,
-                    // make a secondary inference to that type parameter
+                    // If union contains a single naked type parameter, make a secondary inference to that type parameter
                     if (typeParameterCount === 1) {
                         inferiority++;
                         inferFromTypes(source, typeParameter);
