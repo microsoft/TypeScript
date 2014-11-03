@@ -17,7 +17,6 @@
 ///<reference path='syntaxElement.ts' />
 ///<reference path='syntaxFacts2.ts' />
 ///<reference path='syntaxList.ts' />
-///<reference path='syntaxNode.ts' />
 ///<reference path='syntaxNodeOrToken.ts' />
 
 // SyntaxDedenter depends on SyntaxRewriter
@@ -29,6 +28,7 @@
 ///<reference path='syntaxTrivia.ts' />
 ///<reference path='syntaxTriviaList.ts' />
 ///<reference path='syntaxUtilities.ts' />
+///<reference path='syntaxUtilities.generated.ts' />
 ///<reference path='syntaxVisitor.generated.ts' />
 ///<reference path='syntaxWalker.generated.ts' />
 
@@ -40,6 +40,7 @@
 ///<reference path='parser.ts' />
 
 // Concrete nodes depend on the parser.
+///<reference path='syntaxInterfaces.generated.ts' />
 ///<reference path='syntaxNodes.concrete.generated.ts' />
 
 // SyntaxTree depends on PositionTrackingWalker

@@ -66,7 +66,7 @@ module TypeScript.IncrementalParser {
 
         // Start the cursor pointing at the first element in the source unit (if it exists).
         if (oldSourceUnit.moduleElements.length > 0) {
-            _oldSourceUnitCursor.pushElement(oldSourceUnit.moduleElements.childAt(0), /*indexInParent:*/ 0);
+            _oldSourceUnitCursor.pushElement(childAt(oldSourceUnit.moduleElements, 0), /*indexInParent:*/ 0);
         }
 
         // In general supporting multiple individual edits is just not that important.  So we 
@@ -243,14 +243,38 @@ module TypeScript.IncrementalParser {
             // edited range, as their positions will be correct when the underlying parser source 
             // creates them.
 
-            var position = absolutePosition();
-            var tokenWasMoved = isPastChangeRange() && fullStart(nodeOrToken) !== position;
+            if (isPastChangeRange()) {
+                var position = absolutePosition();
 
-            if (tokenWasMoved) {
-                setTokenFullStartWalker.position = position;
+                if (isToken(nodeOrToken)) {
+                    (<ISyntaxToken>nodeOrToken).setFullStart(position);
+                }
+                else {
+                    var tokens = getTokens(<ISyntaxNode>nodeOrToken);
 
-                visitNodeOrToken(setTokenFullStartWalker, nodeOrToken);
+                    for (var i = 0, n = tokens.length; i < n; i++) {
+                        var token = tokens[i];
+                        token.setFullStart(position);
+
+                        position += token.fullWidth();
+                    }
+                }
             }
+        }
+
+        function getTokens(node: ISyntaxNode): ISyntaxToken[] {
+            var tokens = node.__cachedTokens;
+            if (!tokens) {
+                tokens = [];
+                tokenCollectorWalker.tokens = tokens;
+
+                visitNodeOrToken(tokenCollectorWalker, node);
+
+                node.__cachedTokens = tokens;
+                tokenCollectorWalker.tokens = undefined;
+            }
+
+            return tokens;
         }
 
         function currentNode(): ISyntaxNode {
@@ -702,6 +726,10 @@ module TypeScript.IncrementalParser {
             return isNode(element) ? <ISyntaxNode>element : undefined;
         }
 
+        function isEmptyList(element: ISyntaxElement) {
+            return isList(element) && (<ISyntaxNodeOrToken[]>element).length === 0;
+        }
+
         function moveToFirstChild() {
             var nodeOrToken = currentNodeOrToken();
             if (nodeOrToken === undefined) {
@@ -719,9 +747,9 @@ module TypeScript.IncrementalParser {
             // Either the node has some existent child, then move to it.  if it doesn't, then it's
             // an empty node.  Conceptually the first child of an empty node is really just the 
             // next sibling of the empty node.
-            for (var i = 0, n = nodeOrToken.childCount(); i < n; i++) {
-                var child = nodeOrToken.childAt(i);
-                if (child && !isShared(child)) {
+            for (var i = 0, n = childCount(nodeOrToken); i < n; i++) {
+                var child = childAt(nodeOrToken, i);
+                if (child && !isEmptyList(child)) {
                     // Great, we found a real child.  Push that.
                     pushElement(child, /*indexInParent:*/ i);
 
@@ -746,17 +774,16 @@ module TypeScript.IncrementalParser {
                 var parent = currentPiece.element.parent;
 
                 // We start searching at the index one past our own index in the parent.
-                for (var i = currentPiece.indexInParent + 1, n = parent.childCount(); i < n; i++) {
-                    var sibling = parent.childAt(i);
+                for (var i = currentPiece.indexInParent + 1, n = childCount(parent); i < n; i++) {
+                    var sibling = childAt(parent, i);
 
-                    if (sibling && !isShared(sibling)) {
+                    if (sibling && !isEmptyList(sibling)) {
                         // We found a good sibling that we can move to.  Just reuse our existing piece
                         // so we don't have to push/pop.
                         currentPiece.element = sibling;
                         currentPiece.indexInParent = i;
 
-                        // The sibling might have been a list.  Move to it's first child.  it must have
-                        // one since this was a non-shared element.
+                        // The sibling might have been a list.  Move to it's first child.
                         moveToFirstChildIfList();
                         return;
                     }
@@ -782,7 +809,7 @@ module TypeScript.IncrementalParser {
                 // we make sure to filter that out before pushing any children.
                 // Debug.assert(childCount(element) > 0);
 
-                pushElement(element.childAt(0), /*indexInParent:*/ 0);
+                pushElement(childAt(element, 0), /*indexInParent:*/ 0);
             }
         }
 
@@ -841,18 +868,15 @@ module TypeScript.IncrementalParser {
     // A simple walker we use to hit all the tokens of a node and update their positions when they
     // are reused in a different location because of an incremental parse.
 
-    class SetTokenFullStartWalker extends SyntaxWalker {
-        public position: number;
+    class TokenCollectorWalker extends SyntaxWalker {
+        public tokens: ISyntaxToken[] = [];
 
         public visitToken(token: ISyntaxToken): void {
-            var position = this.position;
-            token.setFullStart(position);
-
-            this.position = position + token.fullWidth();
+            this.tokens.push(token);
         }
     }
 
-    var setTokenFullStartWalker = new SetTokenFullStartWalker();
+    var tokenCollectorWalker = new TokenCollectorWalker();
 
     export function parse(oldSyntaxTree: SyntaxTree, textChangeRange: TextChangeRange, newText: ISimpleText): SyntaxTree {
         if (textChangeRange.isUnchanged()) {

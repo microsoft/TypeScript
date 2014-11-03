@@ -99,13 +99,13 @@ module TypeScript.Services.Formatting {
         }
 
         public walk(element: ISyntaxElement) {
-            if (element && !isShared(element)) {
+            if (element) {
                 if (isToken(element)) {
                     this.visitToken(<ISyntaxToken>element);
                 }
                 else if (element.kind() === SyntaxKind.List) {
-                    for (var i = 0, n = element.childCount(); i < n; i++) {
-                        this.walk(element.childAt(i));
+                    for (var i = 0, n = childCount(element); i < n; i++) {
+                        this.walk(childAt(element, i));
                     }
                 }
                 else {
@@ -126,8 +126,8 @@ module TypeScript.Services.Formatting {
                 this._parent = this._indentationNodeContextPool.getNode(currentParent, node, this._position, indentation.indentationAmount, indentation.indentationAmountDelta);
 
                 // Visit node
-                for (var i = 0, n = node.childCount(); i < n; i++) {
-                    this.walk(node.childAt(i));
+                for (var i = 0, n = childCount(node); i < n; i++) {
+                    this.walk(childAt(node, i));
                 }
 
                 // Reset state

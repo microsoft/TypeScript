@@ -1,6 +1,6 @@
 module TypeScript {
     function assertParent(parent: ISyntaxElement, child: ISyntaxElement) {
-        if (child && !TypeScript.isShared(child)) {
+        if (child) {
             return Debug.assert(parent === child.parent);
         }
     }
@@ -13,11 +13,11 @@ module TypeScript {
         Debug.assert(node2.kind() === TypeScript.SyntaxKind.SourceUnit || node2.parent);
 
         if (node1.kind() !== node2.kind()) { return false; }
-        if (node1.childCount() !== node2.childCount()) { return false; }
+        if (childCount(node1) !== childCount(node2)) { return false; }
 
-        for (var i = 0, n = node1.childCount(); i < n; i++) {
-            var element1 = node1.childAt(i);
-            var element2 = node2.childAt(i);
+        for (var i = 0, n = childCount(node1); i < n; i++) {
+            var element1 = childAt(node1, i);
+            var element2 = childAt(node2, i);
 
             if (checkParents) {
                 assertParent(node1, element1);
@@ -102,23 +102,23 @@ module TypeScript {
     }
 
     function listStructuralEquals<T extends TypeScript.ISyntaxNodeOrToken>(list1: T[], list2: T[], checkParents: boolean, text1: ISimpleText, text2: ISimpleText): boolean {
-        Debug.assert(TypeScript.isShared(list1) || list1.parent);
-        Debug.assert(TypeScript.isShared(list2) || list2.parent);
+        Debug.assert(list1.parent);
+        Debug.assert(list2.parent);
 
-        if (list1.childCount() !== list2.childCount()) {
+        if (childCount(list1) !== childCount(list2)) {
             return false;
         }
 
-        for (var i = 0, n = list1.childCount(); i < n; i++) {
-            var child1 = list1.childAt(i);
-            var child2 = list2.childAt(i);
+        for (var i = 0, n = childCount(list1); i < n; i++) {
+            var child1 = childAt(list1, i);
+            var child2 = childAt(list2, i);
 
             if (checkParents) {
                 assertParent(list1, child1);
                 assertParent(list2, child2);
             }
 
-            if (!nodeOrTokenStructuralEquals(child1, child2, checkParents, text1, text2)) {
+            if (!elementStructuralEquals(child1, child2, checkParents, text1, text2)) {
                 return false;
             }
         }

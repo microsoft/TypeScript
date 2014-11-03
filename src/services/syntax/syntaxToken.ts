@@ -304,7 +304,7 @@ module TypeScript.Syntax {
     }
 
     class EmptyToken implements ISyntaxToken {
-        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any;
+        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
 
         constructor(private _kind: SyntaxKind) {
         }
@@ -376,8 +376,8 @@ module TypeScript.Syntax {
                 }
 
                 // Ok.  We have a parent.  First, find out which slot we're at in the parent.
-                for (var i = 0, n = parent.childCount(); i < n; i++) {
-                    if (parent.childAt(i) === current) {
+                for (var i = 0, n = childCount(parent); i < n; i++) {
+                    if (childAt(parent, i) === current) {
                         break;
                     }
                 }
@@ -386,7 +386,7 @@ module TypeScript.Syntax {
 
                 // Walk backward from this element, looking for a non-zero-width sibling.
                 for (var j = i - 1; j >= 0; j--) {
-                    var sibling = parent.childAt(j);
+                    var sibling = childAt(parent, j);
                     if (sibling && fullWidth(sibling) > 0) {
                         return sibling;
                     }
@@ -427,7 +427,7 @@ module TypeScript.Syntax {
         private _text: string;
         private _trailingTrivia: ISyntaxTriviaList;
 
-        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any;
+        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
 
         constructor(fullStart: number,
             kind: SyntaxKind,
@@ -496,7 +496,7 @@ module TypeScript.Syntax {
     }
 
     class ConvertedKeywordToken implements ISyntaxToken {
-        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any;
+        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
 
         constructor(private underlyingToken: ISyntaxToken) {
         }
