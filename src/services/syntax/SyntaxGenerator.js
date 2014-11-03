@@ -2275,6 +2275,7 @@ function generateBrands(definition, accessibility) {
             types.push(type);
         }
     }
+    types.push("_syntaxNodeOrTokenBrand");
     if (types.length > 0) {
         properties += "       ";
         for (var i = 0; i < types.length; i++) {
@@ -2583,7 +2584,6 @@ function generateNode(definition, abstract) {
     }
     result += "        }\r\n";
     result += generateKindMethod(definition);
-    result += generateAcceptMethod(definition);
     result += "    }";
     return result;
 }
@@ -2702,7 +2702,7 @@ function generateRewriter() {
 }
 function generateWalker() {
     var result = "";
-    result += "///<reference path='references.ts' />\r\n" + "\r\n" + "module TypeScript {\r\n" + "    export class SyntaxWalker implements ISyntaxVisitor {\r\n" + "        public visitToken(token: ISyntaxToken): void {\r\n" + "        }\r\n" + "\r\n" + "        private visitOptionalToken(token: ISyntaxToken): void {\r\n" + "            if (token === undefined) {\r\n" + "                return;\r\n" + "            }\r\n" + "\r\n" + "            this.visitToken(token);\r\n" + "        }\r\n" + "\r\n" + "        private visitOptionalNode(node: ISyntaxNode): void {\r\n" + "            if (node === undefined) {\r\n" + "                return;\r\n" + "            }\r\n" + "\r\n" + "            node.accept(this);\r\n" + "        }\r\n" + "\r\n" + "        public visitList(list: ISyntaxNodeOrToken[]): void {\r\n" + "            for (var i = 0, n = list.length; i < n; i++) {\r\n" + "                list[i].accept(this);\r\n" + "            }\r\n" + "        }\r\n" + "\r\n";
+    result += "///<reference path='references.ts' />\r\n" + "\r\n" + "module TypeScript {\r\n" + "    export class SyntaxWalker implements ISyntaxVisitor {\r\n" + "        public visitToken(token: ISyntaxToken): void {\r\n" + "        }\r\n" + "\r\n" + "        private visitOptionalToken(token: ISyntaxToken): void {\r\n" + "            if (token === undefined) {\r\n" + "                return;\r\n" + "            }\r\n" + "\r\n" + "            this.visitToken(token);\r\n" + "        }\r\n" + "\r\n" + "        public visitList(list: ISyntaxNodeOrToken[]): void {\r\n" + "            for (var i = 0, n = list.length; i < n; i++) {\r\n" + "                visitNodeOrToken(this, list[i]);\r\n" + "            }\r\n" + "        }\r\n";
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
         result += "\r\n";
@@ -2721,12 +2721,7 @@ function generateWalker() {
                 result += "            this.visitList(node." + child.name + ");\r\n";
             }
             else if (isNodeOrToken(child)) {
-                if (child.isOptional) {
-                    result += "            visitNodeOrToken(this, node." + child.name + ");\r\n";
-                }
-                else {
-                    result += "            node." + child.name + ".accept(this);\r\n";
-                }
+                result += "            visitNodeOrToken(this, node." + child.name + ");\r\n";
             }
             else if (child.type === "ISyntaxToken") {
                 if (child.isOptional) {
@@ -2737,12 +2732,7 @@ function generateWalker() {
                 }
             }
             else if (child.type !== "SyntaxKind") {
-                if (child.isOptional) {
-                    result += "            this.visitOptionalNode(node." + child.name + ");\r\n";
-                }
-                else {
-                    result += "            node." + child.name + ".accept(this);\r\n";
-                }
+                result += "            visitNodeOrToken(this, node." + child.name + ");\r\n";
             }
         }
         result += "        }\r\n";
@@ -2865,7 +2855,14 @@ function generateVisitor() {
     result += "module TypeScript {\r\n";
     result += "    export function visitNodeOrToken(visitor: ISyntaxVisitor, element: ISyntaxNodeOrToken): any {\r\n";
     result += "        if (element === undefined) { return undefined; }\r\n";
-    result += "        return element.accept(visitor);\r\n";
+    result += "        switch (element.kind()) {\r\n";
+    for (var i = 0; i < definitions.length; i++) {
+        var definition = definitions[i];
+        result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ": ";
+        result += "return visitor.visit" + getNameWithoutSuffix(definition) + "(<" + definition.name + ">element);\r\n";
+    }
+    result += "            default: return visitor.visitToken(<ISyntaxToken>element);\r\n";
+    result += "        }\r\n";
     result += "    }\r\n\r\n";
     result += "    export interface ISyntaxVisitor {\r\n";
     result += "        visitToken(token: ISyntaxToken): any;\r\n";
