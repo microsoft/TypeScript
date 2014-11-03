@@ -2536,12 +2536,13 @@ function generateUpdateMethod(definition) {
     return result;
 }
 function generateNode(definition, abstract) {
-    var result = "    export class " + definition.name + " extends SyntaxNode";
+    var result = "    export class " + definition.name + " implements ISyntaxNode";
     if (definition.interfaces) {
-        result += " implements ";
+        result += ", ";
         result += definition.interfaces.join(", ");
     }
     result += " {\r\n";
+    result += "        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;\r\n";
     if (definition.name === "SourceUnitSyntax") {
         result += "        public syntaxTree: SyntaxTree = undefined;\r\n";
     }
@@ -2556,7 +2557,7 @@ function generateNode(definition, abstract) {
         result += ", " + getSafeName(child) + ": " + getType(child);
     }
     result += ") {\r\n";
-    result += "            super(data);\r\n";
+    result += "            if (data) { this.__data = data; }\r\n";
     if (definition.name === "SourceUnitSyntax") {
         result += "            this.parent = undefined,\r\n";
     }

@@ -1,12 +1,13 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
-    export class SourceUnitSyntax extends SyntaxNode {
+    export class SourceUnitSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public syntaxTree: SyntaxTree = undefined;
         public moduleElements: IModuleElementSyntax[];
         public endOfFileToken: ISyntaxToken;
         constructor(data: number, moduleElements: IModuleElementSyntax[], endOfFileToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.parent = undefined,
             this.moduleElements = moduleElements,
             this.endOfFileToken = endOfFileToken,
@@ -34,13 +35,14 @@ module TypeScript {
             return visitor.visitSourceUnit(this);
         }
     }
-    export class QualifiedNameSyntax extends SyntaxNode implements INameSyntax {
+    export class QualifiedNameSyntax implements ISyntaxNode, INameSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public left: INameSyntax;
         public dotToken: ISyntaxToken;
         public right: ISyntaxToken;
         public _nameBrand: any; public _typeBrand: any;
         constructor(data: number, left: INameSyntax, dotToken: ISyntaxToken, right: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.left = left,
             this.dotToken = dotToken,
             this.right = right,
@@ -70,13 +72,14 @@ module TypeScript {
             return visitor.visitQualifiedName(this);
         }
     }
-    export class ObjectTypeSyntax extends SyntaxNode implements ITypeSyntax {
+    export class ObjectTypeSyntax implements ISyntaxNode, ITypeSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public openBraceToken: ISyntaxToken;
         public typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>;
         public closeBraceToken: ISyntaxToken;
         public _typeBrand: any;
         constructor(data: number, openBraceToken: ISyntaxToken, typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>, closeBraceToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.openBraceToken = openBraceToken,
             this.typeMembers = typeMembers,
             this.closeBraceToken = closeBraceToken,
@@ -106,14 +109,15 @@ module TypeScript {
             return visitor.visitObjectType(this);
         }
     }
-    export class FunctionTypeSyntax extends SyntaxNode implements ITypeSyntax {
+    export class FunctionTypeSyntax implements ISyntaxNode, ITypeSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public typeParameterList: TypeParameterListSyntax;
         public parameterList: ParameterListSyntax;
         public equalsGreaterThanToken: ISyntaxToken;
         public type: ITypeSyntax;
         public _typeBrand: any;
         constructor(data: number, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, equalsGreaterThanToken: ISyntaxToken, type: ITypeSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.typeParameterList = typeParameterList,
             this.parameterList = parameterList,
             this.equalsGreaterThanToken = equalsGreaterThanToken,
@@ -146,13 +150,14 @@ module TypeScript {
             return visitor.visitFunctionType(this);
         }
     }
-    export class ArrayTypeSyntax extends SyntaxNode implements ITypeSyntax {
+    export class ArrayTypeSyntax implements ISyntaxNode, ITypeSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public type: ITypeSyntax;
         public openBracketToken: ISyntaxToken;
         public closeBracketToken: ISyntaxToken;
         public _typeBrand: any;
         constructor(data: number, type: ITypeSyntax, openBracketToken: ISyntaxToken, closeBracketToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.type = type,
             this.openBracketToken = openBracketToken,
             this.closeBracketToken = closeBracketToken,
@@ -182,7 +187,8 @@ module TypeScript {
             return visitor.visitArrayType(this);
         }
     }
-    export class ConstructorTypeSyntax extends SyntaxNode implements ITypeSyntax {
+    export class ConstructorTypeSyntax implements ISyntaxNode, ITypeSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public newKeyword: ISyntaxToken;
         public typeParameterList: TypeParameterListSyntax;
         public parameterList: ParameterListSyntax;
@@ -190,7 +196,7 @@ module TypeScript {
         public type: ITypeSyntax;
         public _typeBrand: any;
         constructor(data: number, newKeyword: ISyntaxToken, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, equalsGreaterThanToken: ISyntaxToken, type: ITypeSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.newKeyword = newKeyword,
             this.typeParameterList = typeParameterList,
             this.parameterList = parameterList,
@@ -226,12 +232,13 @@ module TypeScript {
             return visitor.visitConstructorType(this);
         }
     }
-    export class GenericTypeSyntax extends SyntaxNode implements ITypeSyntax {
+    export class GenericTypeSyntax implements ISyntaxNode, ITypeSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public name: INameSyntax;
         public typeArgumentList: TypeArgumentListSyntax;
         public _typeBrand: any;
         constructor(data: number, name: INameSyntax, typeArgumentList: TypeArgumentListSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.name = name,
             this.typeArgumentList = typeArgumentList,
             name.parent = this,
@@ -258,12 +265,13 @@ module TypeScript {
             return visitor.visitGenericType(this);
         }
     }
-    export class TypeQuerySyntax extends SyntaxNode implements ITypeSyntax {
+    export class TypeQuerySyntax implements ISyntaxNode, ITypeSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public typeOfKeyword: ISyntaxToken;
         public name: INameSyntax;
         public _typeBrand: any;
         constructor(data: number, typeOfKeyword: ISyntaxToken, name: INameSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.typeOfKeyword = typeOfKeyword,
             this.name = name,
             typeOfKeyword.parent = this,
@@ -290,13 +298,14 @@ module TypeScript {
             return visitor.visitTypeQuery(this);
         }
     }
-    export class TupleTypeSyntax extends SyntaxNode implements ITypeSyntax {
+    export class TupleTypeSyntax implements ISyntaxNode, ITypeSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public openBracketToken: ISyntaxToken;
         public types: ISeparatedSyntaxList<ITypeSyntax>;
         public closeBracketToken: ISyntaxToken;
         public _typeBrand: any;
         constructor(data: number, openBracketToken: ISyntaxToken, types: ISeparatedSyntaxList<ITypeSyntax>, closeBracketToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.openBracketToken = openBracketToken,
             this.types = types,
             this.closeBracketToken = closeBracketToken,
@@ -326,13 +335,14 @@ module TypeScript {
             return visitor.visitTupleType(this);
         }
     }
-    export class UnionTypeSyntax extends SyntaxNode implements ITypeSyntax {
+    export class UnionTypeSyntax implements ISyntaxNode, ITypeSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public left: ITypeSyntax;
         public barToken: ISyntaxToken;
         public right: ITypeSyntax;
         public _typeBrand: any;
         constructor(data: number, left: ITypeSyntax, barToken: ISyntaxToken, right: ITypeSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.left = left,
             this.barToken = barToken,
             this.right = right,
@@ -362,13 +372,14 @@ module TypeScript {
             return visitor.visitUnionType(this);
         }
     }
-    export class ParenthesizedTypeSyntax extends SyntaxNode implements ITypeSyntax {
+    export class ParenthesizedTypeSyntax implements ISyntaxNode, ITypeSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public openParenToken: ISyntaxToken;
         public type: ITypeSyntax;
         public closeParenToken: ISyntaxToken;
         public _typeBrand: any;
         constructor(data: number, openParenToken: ISyntaxToken, type: ITypeSyntax, closeParenToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.openParenToken = openParenToken,
             this.type = type,
             this.closeParenToken = closeParenToken,
@@ -398,7 +409,8 @@ module TypeScript {
             return visitor.visitParenthesizedType(this);
         }
     }
-    export class InterfaceDeclarationSyntax extends SyntaxNode implements IModuleElementSyntax {
+    export class InterfaceDeclarationSyntax implements ISyntaxNode, IModuleElementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public interfaceKeyword: ISyntaxToken;
         public identifier: ISyntaxToken;
@@ -407,7 +419,7 @@ module TypeScript {
         public body: ObjectTypeSyntax;
         public _moduleElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], interfaceKeyword: ISyntaxToken, identifier: ISyntaxToken, typeParameterList: TypeParameterListSyntax, heritageClauses: HeritageClauseSyntax[], body: ObjectTypeSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.interfaceKeyword = interfaceKeyword,
             this.identifier = identifier,
@@ -446,7 +458,8 @@ module TypeScript {
             return visitor.visitInterfaceDeclaration(this);
         }
     }
-    export class FunctionDeclarationSyntax extends SyntaxNode implements IStatementSyntax {
+    export class FunctionDeclarationSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public functionKeyword: ISyntaxToken;
         public identifier: ISyntaxToken;
@@ -455,7 +468,7 @@ module TypeScript {
         public semicolonToken: ISyntaxToken;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], functionKeyword: ISyntaxToken, identifier: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.functionKeyword = functionKeyword,
             this.identifier = identifier,
@@ -494,7 +507,8 @@ module TypeScript {
             return visitor.visitFunctionDeclaration(this);
         }
     }
-    export class ModuleDeclarationSyntax extends SyntaxNode implements IModuleElementSyntax {
+    export class ModuleDeclarationSyntax implements ISyntaxNode, IModuleElementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public moduleKeyword: ISyntaxToken;
         public name: INameSyntax;
@@ -504,7 +518,7 @@ module TypeScript {
         public closeBraceToken: ISyntaxToken;
         public _moduleElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], moduleKeyword: ISyntaxToken, name: INameSyntax, stringLiteral: ISyntaxToken, openBraceToken: ISyntaxToken, moduleElements: IModuleElementSyntax[], closeBraceToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.moduleKeyword = moduleKeyword,
             this.name = name,
@@ -546,7 +560,8 @@ module TypeScript {
             return visitor.visitModuleDeclaration(this);
         }
     }
-    export class ClassDeclarationSyntax extends SyntaxNode implements IModuleElementSyntax {
+    export class ClassDeclarationSyntax implements ISyntaxNode, IModuleElementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public classKeyword: ISyntaxToken;
         public identifier: ISyntaxToken;
@@ -557,7 +572,7 @@ module TypeScript {
         public closeBraceToken: ISyntaxToken;
         public _moduleElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], classKeyword: ISyntaxToken, identifier: ISyntaxToken, typeParameterList: TypeParameterListSyntax, heritageClauses: HeritageClauseSyntax[], openBraceToken: ISyntaxToken, classElements: IClassElementSyntax[], closeBraceToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.classKeyword = classKeyword,
             this.identifier = identifier,
@@ -602,7 +617,8 @@ module TypeScript {
             return visitor.visitClassDeclaration(this);
         }
     }
-    export class EnumDeclarationSyntax extends SyntaxNode implements IModuleElementSyntax {
+    export class EnumDeclarationSyntax implements ISyntaxNode, IModuleElementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public enumKeyword: ISyntaxToken;
         public identifier: ISyntaxToken;
@@ -611,7 +627,7 @@ module TypeScript {
         public closeBraceToken: ISyntaxToken;
         public _moduleElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], enumKeyword: ISyntaxToken, identifier: ISyntaxToken, openBraceToken: ISyntaxToken, enumElements: ISeparatedSyntaxList<EnumElementSyntax>, closeBraceToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.enumKeyword = enumKeyword,
             this.identifier = identifier,
@@ -650,7 +666,8 @@ module TypeScript {
             return visitor.visitEnumDeclaration(this);
         }
     }
-    export class ImportDeclarationSyntax extends SyntaxNode implements IModuleElementSyntax {
+    export class ImportDeclarationSyntax implements ISyntaxNode, IModuleElementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public importKeyword: ISyntaxToken;
         public identifier: ISyntaxToken;
@@ -659,7 +676,7 @@ module TypeScript {
         public semicolonToken: ISyntaxToken;
         public _moduleElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], importKeyword: ISyntaxToken, identifier: ISyntaxToken, equalsToken: ISyntaxToken, moduleReference: IModuleReferenceSyntax, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.importKeyword = importKeyword,
             this.identifier = identifier,
@@ -698,14 +715,15 @@ module TypeScript {
             return visitor.visitImportDeclaration(this);
         }
     }
-    export class ExportAssignmentSyntax extends SyntaxNode implements IModuleElementSyntax {
+    export class ExportAssignmentSyntax implements ISyntaxNode, IModuleElementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public exportKeyword: ISyntaxToken;
         public equalsToken: ISyntaxToken;
         public identifier: ISyntaxToken;
         public semicolonToken: ISyntaxToken;
         public _moduleElementBrand: any;
         constructor(data: number, exportKeyword: ISyntaxToken, equalsToken: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.exportKeyword = exportKeyword,
             this.equalsToken = equalsToken,
             this.identifier = identifier,
@@ -738,7 +756,8 @@ module TypeScript {
             return visitor.visitExportAssignment(this);
         }
     }
-    export class MemberFunctionDeclarationSyntax extends SyntaxNode implements IMemberDeclarationSyntax {
+    export class MemberFunctionDeclarationSyntax implements ISyntaxNode, IMemberDeclarationSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public propertyName: ISyntaxToken;
         public callSignature: CallSignatureSyntax;
@@ -746,7 +765,7 @@ module TypeScript {
         public semicolonToken: ISyntaxToken;
         public _memberDeclarationBrand: any; public _classElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], propertyName: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.propertyName = propertyName,
             this.callSignature = callSignature,
@@ -782,13 +801,14 @@ module TypeScript {
             return visitor.visitMemberFunctionDeclaration(this);
         }
     }
-    export class MemberVariableDeclarationSyntax extends SyntaxNode implements IMemberDeclarationSyntax {
+    export class MemberVariableDeclarationSyntax implements ISyntaxNode, IMemberDeclarationSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public variableDeclarator: VariableDeclaratorSyntax;
         public semicolonToken: ISyntaxToken;
         public _memberDeclarationBrand: any; public _classElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], variableDeclarator: VariableDeclaratorSyntax, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.variableDeclarator = variableDeclarator,
             this.semicolonToken = semicolonToken,
@@ -818,7 +838,8 @@ module TypeScript {
             return visitor.visitMemberVariableDeclaration(this);
         }
     }
-    export class ConstructorDeclarationSyntax extends SyntaxNode implements IClassElementSyntax {
+    export class ConstructorDeclarationSyntax implements ISyntaxNode, IClassElementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public constructorKeyword: ISyntaxToken;
         public callSignature: CallSignatureSyntax;
@@ -826,7 +847,7 @@ module TypeScript {
         public semicolonToken: ISyntaxToken;
         public _classElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], constructorKeyword: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.constructorKeyword = constructorKeyword,
             this.callSignature = callSignature,
@@ -862,13 +883,14 @@ module TypeScript {
             return visitor.visitConstructorDeclaration(this);
         }
     }
-    export class IndexMemberDeclarationSyntax extends SyntaxNode implements IClassElementSyntax {
+    export class IndexMemberDeclarationSyntax implements ISyntaxNode, IClassElementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public indexSignature: IndexSignatureSyntax;
         public semicolonToken: ISyntaxToken;
         public _classElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], indexSignature: IndexSignatureSyntax, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.indexSignature = indexSignature,
             this.semicolonToken = semicolonToken,
@@ -898,7 +920,8 @@ module TypeScript {
             return visitor.visitIndexMemberDeclaration(this);
         }
     }
-    export class GetAccessorSyntax extends SyntaxNode implements IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
+    export class GetAccessorSyntax implements ISyntaxNode, IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public getKeyword: ISyntaxToken;
         public propertyName: ISyntaxToken;
@@ -906,7 +929,7 @@ module TypeScript {
         public block: BlockSyntax;
         public _memberDeclarationBrand: any; public _propertyAssignmentBrand: any; public _classElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], getKeyword: ISyntaxToken, propertyName: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.getKeyword = getKeyword,
             this.propertyName = propertyName,
@@ -942,7 +965,8 @@ module TypeScript {
             return visitor.visitGetAccessor(this);
         }
     }
-    export class SetAccessorSyntax extends SyntaxNode implements IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
+    export class SetAccessorSyntax implements ISyntaxNode, IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public setKeyword: ISyntaxToken;
         public propertyName: ISyntaxToken;
@@ -950,7 +974,7 @@ module TypeScript {
         public block: BlockSyntax;
         public _memberDeclarationBrand: any; public _propertyAssignmentBrand: any; public _classElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], setKeyword: ISyntaxToken, propertyName: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.setKeyword = setKeyword,
             this.propertyName = propertyName,
@@ -986,13 +1010,14 @@ module TypeScript {
             return visitor.visitSetAccessor(this);
         }
     }
-    export class PropertySignatureSyntax extends SyntaxNode implements ITypeMemberSyntax {
+    export class PropertySignatureSyntax implements ISyntaxNode, ITypeMemberSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public propertyName: ISyntaxToken;
         public questionToken: ISyntaxToken;
         public typeAnnotation: TypeAnnotationSyntax;
         public _typeMemberBrand: any;
         constructor(data: number, propertyName: ISyntaxToken, questionToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.propertyName = propertyName,
             this.questionToken = questionToken,
             this.typeAnnotation = typeAnnotation,
@@ -1022,13 +1047,14 @@ module TypeScript {
             return visitor.visitPropertySignature(this);
         }
     }
-    export class CallSignatureSyntax extends SyntaxNode implements ITypeMemberSyntax {
+    export class CallSignatureSyntax implements ISyntaxNode, ITypeMemberSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public typeParameterList: TypeParameterListSyntax;
         public parameterList: ParameterListSyntax;
         public typeAnnotation: TypeAnnotationSyntax;
         public _typeMemberBrand: any;
         constructor(data: number, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, typeAnnotation: TypeAnnotationSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.typeParameterList = typeParameterList,
             this.parameterList = parameterList,
             this.typeAnnotation = typeAnnotation,
@@ -1058,12 +1084,13 @@ module TypeScript {
             return visitor.visitCallSignature(this);
         }
     }
-    export class ConstructSignatureSyntax extends SyntaxNode implements ITypeMemberSyntax {
+    export class ConstructSignatureSyntax implements ISyntaxNode, ITypeMemberSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public newKeyword: ISyntaxToken;
         public callSignature: CallSignatureSyntax;
         public _typeMemberBrand: any;
         constructor(data: number, newKeyword: ISyntaxToken, callSignature: CallSignatureSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.newKeyword = newKeyword,
             this.callSignature = callSignature,
             newKeyword.parent = this,
@@ -1090,14 +1117,15 @@ module TypeScript {
             return visitor.visitConstructSignature(this);
         }
     }
-    export class IndexSignatureSyntax extends SyntaxNode implements ITypeMemberSyntax {
+    export class IndexSignatureSyntax implements ISyntaxNode, ITypeMemberSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public openBracketToken: ISyntaxToken;
         public parameters: ISeparatedSyntaxList<ParameterSyntax>;
         public closeBracketToken: ISyntaxToken;
         public typeAnnotation: TypeAnnotationSyntax;
         public _typeMemberBrand: any;
         constructor(data: number, openBracketToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.openBracketToken = openBracketToken,
             this.parameters = parameters,
             this.closeBracketToken = closeBracketToken,
@@ -1130,13 +1158,14 @@ module TypeScript {
             return visitor.visitIndexSignature(this);
         }
     }
-    export class MethodSignatureSyntax extends SyntaxNode implements ITypeMemberSyntax {
+    export class MethodSignatureSyntax implements ISyntaxNode, ITypeMemberSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public propertyName: ISyntaxToken;
         public questionToken: ISyntaxToken;
         public callSignature: CallSignatureSyntax;
         public _typeMemberBrand: any;
         constructor(data: number, propertyName: ISyntaxToken, questionToken: ISyntaxToken, callSignature: CallSignatureSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.propertyName = propertyName,
             this.questionToken = questionToken,
             this.callSignature = callSignature,
@@ -1166,13 +1195,14 @@ module TypeScript {
             return visitor.visitMethodSignature(this);
         }
     }
-    export class BlockSyntax extends SyntaxNode implements IStatementSyntax {
+    export class BlockSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public openBraceToken: ISyntaxToken;
         public statements: IStatementSyntax[];
         public closeBraceToken: ISyntaxToken;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, openBraceToken: ISyntaxToken, statements: IStatementSyntax[], closeBraceToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.openBraceToken = openBraceToken,
             this.statements = statements,
             this.closeBraceToken = closeBraceToken,
@@ -1202,7 +1232,8 @@ module TypeScript {
             return visitor.visitBlock(this);
         }
     }
-    export class IfStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class IfStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public ifKeyword: ISyntaxToken;
         public openParenToken: ISyntaxToken;
         public condition: IExpressionSyntax;
@@ -1211,7 +1242,7 @@ module TypeScript {
         public elseClause: ElseClauseSyntax;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, ifKeyword: ISyntaxToken, openParenToken: ISyntaxToken, condition: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax, elseClause: ElseClauseSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.ifKeyword = ifKeyword,
             this.openParenToken = openParenToken,
             this.condition = condition,
@@ -1250,13 +1281,14 @@ module TypeScript {
             return visitor.visitIfStatement(this);
         }
     }
-    export class VariableStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class VariableStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public modifiers: ISyntaxToken[];
         public variableDeclaration: VariableDeclarationSyntax;
         public semicolonToken: ISyntaxToken;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, modifiers: ISyntaxToken[], variableDeclaration: VariableDeclarationSyntax, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.modifiers = modifiers,
             this.variableDeclaration = variableDeclaration,
             this.semicolonToken = semicolonToken,
@@ -1286,12 +1318,13 @@ module TypeScript {
             return visitor.visitVariableStatement(this);
         }
     }
-    export class ExpressionStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class ExpressionStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public expression: IExpressionSyntax;
         public semicolonToken: ISyntaxToken;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, expression: IExpressionSyntax, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.expression = expression,
             this.semicolonToken = semicolonToken,
             expression.parent = this,
@@ -1318,13 +1351,14 @@ module TypeScript {
             return visitor.visitExpressionStatement(this);
         }
     }
-    export class ReturnStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class ReturnStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public returnKeyword: ISyntaxToken;
         public expression: IExpressionSyntax;
         public semicolonToken: ISyntaxToken;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, returnKeyword: ISyntaxToken, expression: IExpressionSyntax, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.returnKeyword = returnKeyword,
             this.expression = expression,
             this.semicolonToken = semicolonToken,
@@ -1354,7 +1388,8 @@ module TypeScript {
             return visitor.visitReturnStatement(this);
         }
     }
-    export class SwitchStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class SwitchStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public switchKeyword: ISyntaxToken;
         public openParenToken: ISyntaxToken;
         public expression: IExpressionSyntax;
@@ -1364,7 +1399,7 @@ module TypeScript {
         public closeBraceToken: ISyntaxToken;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, switchKeyword: ISyntaxToken, openParenToken: ISyntaxToken, expression: IExpressionSyntax, closeParenToken: ISyntaxToken, openBraceToken: ISyntaxToken, switchClauses: ISwitchClauseSyntax[], closeBraceToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.switchKeyword = switchKeyword,
             this.openParenToken = openParenToken,
             this.expression = expression,
@@ -1406,13 +1441,14 @@ module TypeScript {
             return visitor.visitSwitchStatement(this);
         }
     }
-    export class BreakStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class BreakStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public breakKeyword: ISyntaxToken;
         public identifier: ISyntaxToken;
         public semicolonToken: ISyntaxToken;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, breakKeyword: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.breakKeyword = breakKeyword,
             this.identifier = identifier,
             this.semicolonToken = semicolonToken,
@@ -1442,13 +1478,14 @@ module TypeScript {
             return visitor.visitBreakStatement(this);
         }
     }
-    export class ContinueStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class ContinueStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public continueKeyword: ISyntaxToken;
         public identifier: ISyntaxToken;
         public semicolonToken: ISyntaxToken;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, continueKeyword: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.continueKeyword = continueKeyword,
             this.identifier = identifier,
             this.semicolonToken = semicolonToken,
@@ -1478,7 +1515,8 @@ module TypeScript {
             return visitor.visitContinueStatement(this);
         }
     }
-    export class ForStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class ForStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public forKeyword: ISyntaxToken;
         public openParenToken: ISyntaxToken;
         public variableDeclaration: VariableDeclarationSyntax;
@@ -1491,7 +1529,7 @@ module TypeScript {
         public statement: IStatementSyntax;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, variableDeclaration: VariableDeclarationSyntax, initializer: IExpressionSyntax, firstSemicolonToken: ISyntaxToken, condition: IExpressionSyntax, secondSemicolonToken: ISyntaxToken, incrementor: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.forKeyword = forKeyword,
             this.openParenToken = openParenToken,
             this.variableDeclaration = variableDeclaration,
@@ -1542,7 +1580,8 @@ module TypeScript {
             return visitor.visitForStatement(this);
         }
     }
-    export class ForInStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class ForInStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public forKeyword: ISyntaxToken;
         public openParenToken: ISyntaxToken;
         public variableDeclaration: VariableDeclarationSyntax;
@@ -1553,7 +1592,7 @@ module TypeScript {
         public statement: IStatementSyntax;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, variableDeclaration: VariableDeclarationSyntax, left: IExpressionSyntax, inKeyword: ISyntaxToken, expression: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.forKeyword = forKeyword,
             this.openParenToken = openParenToken,
             this.variableDeclaration = variableDeclaration,
@@ -1598,11 +1637,12 @@ module TypeScript {
             return visitor.visitForInStatement(this);
         }
     }
-    export class EmptyStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class EmptyStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public semicolonToken: ISyntaxToken;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.semicolonToken = semicolonToken,
             semicolonToken.parent = this;
         }
@@ -1626,13 +1666,14 @@ module TypeScript {
             return visitor.visitEmptyStatement(this);
         }
     }
-    export class ThrowStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class ThrowStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public throwKeyword: ISyntaxToken;
         public expression: IExpressionSyntax;
         public semicolonToken: ISyntaxToken;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, throwKeyword: ISyntaxToken, expression: IExpressionSyntax, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.throwKeyword = throwKeyword,
             this.expression = expression,
             this.semicolonToken = semicolonToken,
@@ -1662,7 +1703,8 @@ module TypeScript {
             return visitor.visitThrowStatement(this);
         }
     }
-    export class WhileStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class WhileStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public whileKeyword: ISyntaxToken;
         public openParenToken: ISyntaxToken;
         public condition: IExpressionSyntax;
@@ -1670,7 +1712,7 @@ module TypeScript {
         public statement: IStatementSyntax;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, whileKeyword: ISyntaxToken, openParenToken: ISyntaxToken, condition: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.whileKeyword = whileKeyword,
             this.openParenToken = openParenToken,
             this.condition = condition,
@@ -1706,14 +1748,15 @@ module TypeScript {
             return visitor.visitWhileStatement(this);
         }
     }
-    export class TryStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class TryStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public tryKeyword: ISyntaxToken;
         public block: BlockSyntax;
         public catchClause: CatchClauseSyntax;
         public finallyClause: FinallyClauseSyntax;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, tryKeyword: ISyntaxToken, block: BlockSyntax, catchClause: CatchClauseSyntax, finallyClause: FinallyClauseSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.tryKeyword = tryKeyword,
             this.block = block,
             this.catchClause = catchClause,
@@ -1746,13 +1789,14 @@ module TypeScript {
             return visitor.visitTryStatement(this);
         }
     }
-    export class LabeledStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class LabeledStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public identifier: ISyntaxToken;
         public colonToken: ISyntaxToken;
         public statement: IStatementSyntax;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, identifier: ISyntaxToken, colonToken: ISyntaxToken, statement: IStatementSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.identifier = identifier,
             this.colonToken = colonToken,
             this.statement = statement,
@@ -1782,7 +1826,8 @@ module TypeScript {
             return visitor.visitLabeledStatement(this);
         }
     }
-    export class DoStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class DoStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public doKeyword: ISyntaxToken;
         public statement: IStatementSyntax;
         public whileKeyword: ISyntaxToken;
@@ -1792,7 +1837,7 @@ module TypeScript {
         public semicolonToken: ISyntaxToken;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, doKeyword: ISyntaxToken, statement: IStatementSyntax, whileKeyword: ISyntaxToken, openParenToken: ISyntaxToken, condition: IExpressionSyntax, closeParenToken: ISyntaxToken, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.doKeyword = doKeyword,
             this.statement = statement,
             this.whileKeyword = whileKeyword,
@@ -1834,12 +1879,13 @@ module TypeScript {
             return visitor.visitDoStatement(this);
         }
     }
-    export class DebuggerStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class DebuggerStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public debuggerKeyword: ISyntaxToken;
         public semicolonToken: ISyntaxToken;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, debuggerKeyword: ISyntaxToken, semicolonToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.debuggerKeyword = debuggerKeyword,
             this.semicolonToken = semicolonToken,
             debuggerKeyword.parent = this,
@@ -1866,7 +1912,8 @@ module TypeScript {
             return visitor.visitDebuggerStatement(this);
         }
     }
-    export class WithStatementSyntax extends SyntaxNode implements IStatementSyntax {
+    export class WithStatementSyntax implements ISyntaxNode, IStatementSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public withKeyword: ISyntaxToken;
         public openParenToken: ISyntaxToken;
         public condition: IExpressionSyntax;
@@ -1874,7 +1921,7 @@ module TypeScript {
         public statement: IStatementSyntax;
         public _statementBrand: any; public _moduleElementBrand: any;
         constructor(data: number, withKeyword: ISyntaxToken, openParenToken: ISyntaxToken, condition: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.withKeyword = withKeyword,
             this.openParenToken = openParenToken,
             this.condition = condition,
@@ -1910,12 +1957,13 @@ module TypeScript {
             return visitor.visitWithStatement(this);
         }
     }
-    export class PrefixUnaryExpressionSyntax extends SyntaxNode implements IUnaryExpressionSyntax {
+    export class PrefixUnaryExpressionSyntax implements ISyntaxNode, IUnaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public operatorToken: ISyntaxToken;
         public operand: IUnaryExpressionSyntax;
         public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, operatorToken: ISyntaxToken, operand: IUnaryExpressionSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.operatorToken = operatorToken,
             this.operand = operand,
             operatorToken.parent = this,
@@ -1942,12 +1990,13 @@ module TypeScript {
             return visitor.visitPrefixUnaryExpression(this);
         }
     }
-    export class DeleteExpressionSyntax extends SyntaxNode implements IUnaryExpressionSyntax {
+    export class DeleteExpressionSyntax implements ISyntaxNode, IUnaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public deleteKeyword: ISyntaxToken;
         public expression: IUnaryExpressionSyntax;
         public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, deleteKeyword: ISyntaxToken, expression: IUnaryExpressionSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.deleteKeyword = deleteKeyword,
             this.expression = expression,
             deleteKeyword.parent = this,
@@ -1974,12 +2023,13 @@ module TypeScript {
             return visitor.visitDeleteExpression(this);
         }
     }
-    export class TypeOfExpressionSyntax extends SyntaxNode implements IUnaryExpressionSyntax {
+    export class TypeOfExpressionSyntax implements ISyntaxNode, IUnaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public typeOfKeyword: ISyntaxToken;
         public expression: IUnaryExpressionSyntax;
         public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, typeOfKeyword: ISyntaxToken, expression: IUnaryExpressionSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.typeOfKeyword = typeOfKeyword,
             this.expression = expression,
             typeOfKeyword.parent = this,
@@ -2006,12 +2056,13 @@ module TypeScript {
             return visitor.visitTypeOfExpression(this);
         }
     }
-    export class VoidExpressionSyntax extends SyntaxNode implements IUnaryExpressionSyntax {
+    export class VoidExpressionSyntax implements ISyntaxNode, IUnaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public voidKeyword: ISyntaxToken;
         public expression: IUnaryExpressionSyntax;
         public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, voidKeyword: ISyntaxToken, expression: IUnaryExpressionSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.voidKeyword = voidKeyword,
             this.expression = expression,
             voidKeyword.parent = this,
@@ -2038,7 +2089,8 @@ module TypeScript {
             return visitor.visitVoidExpression(this);
         }
     }
-    export class ConditionalExpressionSyntax extends SyntaxNode implements IExpressionSyntax {
+    export class ConditionalExpressionSyntax implements ISyntaxNode, IExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public condition: IExpressionSyntax;
         public questionToken: ISyntaxToken;
         public whenTrue: IExpressionSyntax;
@@ -2046,7 +2098,7 @@ module TypeScript {
         public whenFalse: IExpressionSyntax;
         public _expressionBrand: any;
         constructor(data: number, condition: IExpressionSyntax, questionToken: ISyntaxToken, whenTrue: IExpressionSyntax, colonToken: ISyntaxToken, whenFalse: IExpressionSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.condition = condition,
             this.questionToken = questionToken,
             this.whenTrue = whenTrue,
@@ -2082,13 +2134,14 @@ module TypeScript {
             return visitor.visitConditionalExpression(this);
         }
     }
-    export class BinaryExpressionSyntax extends SyntaxNode implements IExpressionSyntax {
+    export class BinaryExpressionSyntax implements ISyntaxNode, IExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public left: IExpressionSyntax;
         public operatorToken: ISyntaxToken;
         public right: IExpressionSyntax;
         public _expressionBrand: any;
         constructor(data: number, left: IExpressionSyntax, operatorToken: ISyntaxToken, right: IExpressionSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.left = left,
             this.operatorToken = operatorToken,
             this.right = right,
@@ -2118,12 +2171,13 @@ module TypeScript {
             return visitor.visitBinaryExpression(this);
         }
     }
-    export class PostfixUnaryExpressionSyntax extends SyntaxNode implements IPostfixExpressionSyntax {
+    export class PostfixUnaryExpressionSyntax implements ISyntaxNode, IPostfixExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public operand: ILeftHandSideExpressionSyntax;
         public operatorToken: ISyntaxToken;
         public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, operand: ILeftHandSideExpressionSyntax, operatorToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.operand = operand,
             this.operatorToken = operatorToken,
             operand.parent = this,
@@ -2150,13 +2204,14 @@ module TypeScript {
             return visitor.visitPostfixUnaryExpression(this);
         }
     }
-    export class MemberAccessExpressionSyntax extends SyntaxNode implements IMemberExpressionSyntax, ICallExpressionSyntax {
+    export class MemberAccessExpressionSyntax implements ISyntaxNode, IMemberExpressionSyntax, ICallExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public expression: ILeftHandSideExpressionSyntax;
         public dotToken: ISyntaxToken;
         public name: ISyntaxToken;
         public _memberExpressionBrand: any; public _callExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, expression: ILeftHandSideExpressionSyntax, dotToken: ISyntaxToken, name: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.expression = expression,
             this.dotToken = dotToken,
             this.name = name,
@@ -2186,12 +2241,13 @@ module TypeScript {
             return visitor.visitMemberAccessExpression(this);
         }
     }
-    export class InvocationExpressionSyntax extends SyntaxNode implements ICallExpressionSyntax {
+    export class InvocationExpressionSyntax implements ISyntaxNode, ICallExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public expression: ILeftHandSideExpressionSyntax;
         public argumentList: ArgumentListSyntax;
         public _callExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, expression: ILeftHandSideExpressionSyntax, argumentList: ArgumentListSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.expression = expression,
             this.argumentList = argumentList,
             expression.parent = this,
@@ -2218,13 +2274,14 @@ module TypeScript {
             return visitor.visitInvocationExpression(this);
         }
     }
-    export class ArrayLiteralExpressionSyntax extends SyntaxNode implements IPrimaryExpressionSyntax {
+    export class ArrayLiteralExpressionSyntax implements ISyntaxNode, IPrimaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public openBracketToken: ISyntaxToken;
         public expressions: ISeparatedSyntaxList<IExpressionSyntax>;
         public closeBracketToken: ISyntaxToken;
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, openBracketToken: ISyntaxToken, expressions: ISeparatedSyntaxList<IExpressionSyntax>, closeBracketToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.openBracketToken = openBracketToken,
             this.expressions = expressions,
             this.closeBracketToken = closeBracketToken,
@@ -2254,13 +2311,14 @@ module TypeScript {
             return visitor.visitArrayLiteralExpression(this);
         }
     }
-    export class ObjectLiteralExpressionSyntax extends SyntaxNode implements IPrimaryExpressionSyntax {
+    export class ObjectLiteralExpressionSyntax implements ISyntaxNode, IPrimaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public openBraceToken: ISyntaxToken;
         public propertyAssignments: ISeparatedSyntaxList<IPropertyAssignmentSyntax>;
         public closeBraceToken: ISyntaxToken;
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, openBraceToken: ISyntaxToken, propertyAssignments: ISeparatedSyntaxList<IPropertyAssignmentSyntax>, closeBraceToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.openBraceToken = openBraceToken,
             this.propertyAssignments = propertyAssignments,
             this.closeBraceToken = closeBraceToken,
@@ -2290,13 +2348,14 @@ module TypeScript {
             return visitor.visitObjectLiteralExpression(this);
         }
     }
-    export class ObjectCreationExpressionSyntax extends SyntaxNode implements IPrimaryExpressionSyntax {
+    export class ObjectCreationExpressionSyntax implements ISyntaxNode, IPrimaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public newKeyword: ISyntaxToken;
         public expression: IMemberExpressionSyntax;
         public argumentList: ArgumentListSyntax;
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, newKeyword: ISyntaxToken, expression: IMemberExpressionSyntax, argumentList: ArgumentListSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.newKeyword = newKeyword,
             this.expression = expression,
             this.argumentList = argumentList,
@@ -2326,13 +2385,14 @@ module TypeScript {
             return visitor.visitObjectCreationExpression(this);
         }
     }
-    export class ParenthesizedExpressionSyntax extends SyntaxNode implements IPrimaryExpressionSyntax {
+    export class ParenthesizedExpressionSyntax implements ISyntaxNode, IPrimaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public openParenToken: ISyntaxToken;
         public expression: IExpressionSyntax;
         public closeParenToken: ISyntaxToken;
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, openParenToken: ISyntaxToken, expression: IExpressionSyntax, closeParenToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.openParenToken = openParenToken,
             this.expression = expression,
             this.closeParenToken = closeParenToken,
@@ -2362,14 +2422,15 @@ module TypeScript {
             return visitor.visitParenthesizedExpression(this);
         }
     }
-    export class ParenthesizedArrowFunctionExpressionSyntax extends SyntaxNode implements IUnaryExpressionSyntax {
+    export class ParenthesizedArrowFunctionExpressionSyntax implements ISyntaxNode, IUnaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public callSignature: CallSignatureSyntax;
         public equalsGreaterThanToken: ISyntaxToken;
         public block: BlockSyntax;
         public expression: IExpressionSyntax;
         public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, callSignature: CallSignatureSyntax, equalsGreaterThanToken: ISyntaxToken, block: BlockSyntax, expression: IExpressionSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.callSignature = callSignature,
             this.equalsGreaterThanToken = equalsGreaterThanToken,
             this.block = block,
@@ -2402,14 +2463,15 @@ module TypeScript {
             return visitor.visitParenthesizedArrowFunctionExpression(this);
         }
     }
-    export class SimpleArrowFunctionExpressionSyntax extends SyntaxNode implements IUnaryExpressionSyntax {
+    export class SimpleArrowFunctionExpressionSyntax implements ISyntaxNode, IUnaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public parameter: ParameterSyntax;
         public equalsGreaterThanToken: ISyntaxToken;
         public block: BlockSyntax;
         public expression: IExpressionSyntax;
         public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, parameter: ParameterSyntax, equalsGreaterThanToken: ISyntaxToken, block: BlockSyntax, expression: IExpressionSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.parameter = parameter,
             this.equalsGreaterThanToken = equalsGreaterThanToken,
             this.block = block,
@@ -2442,14 +2504,15 @@ module TypeScript {
             return visitor.visitSimpleArrowFunctionExpression(this);
         }
     }
-    export class CastExpressionSyntax extends SyntaxNode implements IUnaryExpressionSyntax {
+    export class CastExpressionSyntax implements ISyntaxNode, IUnaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public lessThanToken: ISyntaxToken;
         public type: ITypeSyntax;
         public greaterThanToken: ISyntaxToken;
         public expression: IUnaryExpressionSyntax;
         public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, lessThanToken: ISyntaxToken, type: ITypeSyntax, greaterThanToken: ISyntaxToken, expression: IUnaryExpressionSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.lessThanToken = lessThanToken,
             this.type = type,
             this.greaterThanToken = greaterThanToken,
@@ -2482,14 +2545,15 @@ module TypeScript {
             return visitor.visitCastExpression(this);
         }
     }
-    export class ElementAccessExpressionSyntax extends SyntaxNode implements IMemberExpressionSyntax, ICallExpressionSyntax {
+    export class ElementAccessExpressionSyntax implements ISyntaxNode, IMemberExpressionSyntax, ICallExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public expression: ILeftHandSideExpressionSyntax;
         public openBracketToken: ISyntaxToken;
         public argumentExpression: IExpressionSyntax;
         public closeBracketToken: ISyntaxToken;
         public _memberExpressionBrand: any; public _callExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, expression: ILeftHandSideExpressionSyntax, openBracketToken: ISyntaxToken, argumentExpression: IExpressionSyntax, closeBracketToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.expression = expression,
             this.openBracketToken = openBracketToken,
             this.argumentExpression = argumentExpression,
@@ -2522,14 +2586,15 @@ module TypeScript {
             return visitor.visitElementAccessExpression(this);
         }
     }
-    export class FunctionExpressionSyntax extends SyntaxNode implements IPrimaryExpressionSyntax {
+    export class FunctionExpressionSyntax implements ISyntaxNode, IPrimaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public functionKeyword: ISyntaxToken;
         public identifier: ISyntaxToken;
         public callSignature: CallSignatureSyntax;
         public block: BlockSyntax;
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, functionKeyword: ISyntaxToken, identifier: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.functionKeyword = functionKeyword,
             this.identifier = identifier,
             this.callSignature = callSignature,
@@ -2562,10 +2627,11 @@ module TypeScript {
             return visitor.visitFunctionExpression(this);
         }
     }
-    export class OmittedExpressionSyntax extends SyntaxNode implements IExpressionSyntax {
+    export class OmittedExpressionSyntax implements ISyntaxNode, IExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public _expressionBrand: any;
         constructor(data: number) {
-            super(data);
+            if (data) { this.__data = data; }
         }
 
         public kind(): SyntaxKind {
@@ -2584,12 +2650,13 @@ module TypeScript {
             return visitor.visitOmittedExpression(this);
         }
     }
-    export class TemplateExpressionSyntax extends SyntaxNode implements IPrimaryExpressionSyntax {
+    export class TemplateExpressionSyntax implements ISyntaxNode, IPrimaryExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public templateStartToken: ISyntaxToken;
         public templateClauses: TemplateClauseSyntax[];
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, templateStartToken: ISyntaxToken, templateClauses: TemplateClauseSyntax[]) {
-            super(data);
+            if (data) { this.__data = data; }
             this.templateStartToken = templateStartToken,
             this.templateClauses = templateClauses,
             templateStartToken.parent = this,
@@ -2616,12 +2683,13 @@ module TypeScript {
             return visitor.visitTemplateExpression(this);
         }
     }
-    export class TemplateAccessExpressionSyntax extends SyntaxNode implements IMemberExpressionSyntax, ICallExpressionSyntax {
+    export class TemplateAccessExpressionSyntax implements ISyntaxNode, IMemberExpressionSyntax, ICallExpressionSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public expression: ILeftHandSideExpressionSyntax;
         public templateExpression: IPrimaryExpressionSyntax;
         public _memberExpressionBrand: any; public _callExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any;
         constructor(data: number, expression: ILeftHandSideExpressionSyntax, templateExpression: IPrimaryExpressionSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.expression = expression,
             this.templateExpression = templateExpression,
             expression.parent = this,
@@ -2648,11 +2716,12 @@ module TypeScript {
             return visitor.visitTemplateAccessExpression(this);
         }
     }
-    export class VariableDeclarationSyntax extends SyntaxNode {
+    export class VariableDeclarationSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public varKeyword: ISyntaxToken;
         public variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>;
         constructor(data: number, varKeyword: ISyntaxToken, variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>) {
-            super(data);
+            if (data) { this.__data = data; }
             this.varKeyword = varKeyword,
             this.variableDeclarators = variableDeclarators,
             varKeyword.parent = this,
@@ -2679,12 +2748,13 @@ module TypeScript {
             return visitor.visitVariableDeclaration(this);
         }
     }
-    export class VariableDeclaratorSyntax extends SyntaxNode {
+    export class VariableDeclaratorSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public propertyName: ISyntaxToken;
         public typeAnnotation: TypeAnnotationSyntax;
         public equalsValueClause: EqualsValueClauseSyntax;
         constructor(data: number, propertyName: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, equalsValueClause: EqualsValueClauseSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.propertyName = propertyName,
             this.typeAnnotation = typeAnnotation,
             this.equalsValueClause = equalsValueClause,
@@ -2714,13 +2784,14 @@ module TypeScript {
             return visitor.visitVariableDeclarator(this);
         }
     }
-    export class ArgumentListSyntax extends SyntaxNode {
+    export class ArgumentListSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public typeArgumentList: TypeArgumentListSyntax;
         public openParenToken: ISyntaxToken;
         public arguments: ISeparatedSyntaxList<IExpressionSyntax>;
         public closeParenToken: ISyntaxToken;
         constructor(data: number, typeArgumentList: TypeArgumentListSyntax, openParenToken: ISyntaxToken, _arguments: ISeparatedSyntaxList<IExpressionSyntax>, closeParenToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.typeArgumentList = typeArgumentList,
             this.openParenToken = openParenToken,
             this.arguments = _arguments,
@@ -2753,12 +2824,13 @@ module TypeScript {
             return visitor.visitArgumentList(this);
         }
     }
-    export class ParameterListSyntax extends SyntaxNode {
+    export class ParameterListSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public openParenToken: ISyntaxToken;
         public parameters: ISeparatedSyntaxList<ParameterSyntax>;
         public closeParenToken: ISyntaxToken;
         constructor(data: number, openParenToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeParenToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.openParenToken = openParenToken,
             this.parameters = parameters,
             this.closeParenToken = closeParenToken,
@@ -2788,12 +2860,13 @@ module TypeScript {
             return visitor.visitParameterList(this);
         }
     }
-    export class TypeArgumentListSyntax extends SyntaxNode {
+    export class TypeArgumentListSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public lessThanToken: ISyntaxToken;
         public typeArguments: ISeparatedSyntaxList<ITypeSyntax>;
         public greaterThanToken: ISyntaxToken;
         constructor(data: number, lessThanToken: ISyntaxToken, typeArguments: ISeparatedSyntaxList<ITypeSyntax>, greaterThanToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.lessThanToken = lessThanToken,
             this.typeArguments = typeArguments,
             this.greaterThanToken = greaterThanToken,
@@ -2823,12 +2896,13 @@ module TypeScript {
             return visitor.visitTypeArgumentList(this);
         }
     }
-    export class TypeParameterListSyntax extends SyntaxNode {
+    export class TypeParameterListSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public lessThanToken: ISyntaxToken;
         public typeParameters: ISeparatedSyntaxList<TypeParameterSyntax>;
         public greaterThanToken: ISyntaxToken;
         constructor(data: number, lessThanToken: ISyntaxToken, typeParameters: ISeparatedSyntaxList<TypeParameterSyntax>, greaterThanToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.lessThanToken = lessThanToken,
             this.typeParameters = typeParameters,
             this.greaterThanToken = greaterThanToken,
@@ -2858,11 +2932,12 @@ module TypeScript {
             return visitor.visitTypeParameterList(this);
         }
     }
-    export class HeritageClauseSyntax extends SyntaxNode {
+    export class HeritageClauseSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public extendsOrImplementsKeyword: ISyntaxToken;
         public typeNames: ISeparatedSyntaxList<INameSyntax>;
         constructor(data: number, extendsOrImplementsKeyword: ISyntaxToken, typeNames: ISeparatedSyntaxList<INameSyntax>) {
-            super(data);
+            if (data) { this.__data = data; }
             this.extendsOrImplementsKeyword = extendsOrImplementsKeyword,
             this.typeNames = typeNames,
             extendsOrImplementsKeyword.parent = this,
@@ -2889,11 +2964,12 @@ module TypeScript {
             return visitor.visitHeritageClause(this);
         }
     }
-    export class EqualsValueClauseSyntax extends SyntaxNode {
+    export class EqualsValueClauseSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public equalsToken: ISyntaxToken;
         public value: IExpressionSyntax;
         constructor(data: number, equalsToken: ISyntaxToken, value: IExpressionSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.equalsToken = equalsToken,
             this.value = value,
             equalsToken.parent = this,
@@ -2920,14 +2996,15 @@ module TypeScript {
             return visitor.visitEqualsValueClause(this);
         }
     }
-    export class CaseSwitchClauseSyntax extends SyntaxNode implements ISwitchClauseSyntax {
+    export class CaseSwitchClauseSyntax implements ISyntaxNode, ISwitchClauseSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public caseKeyword: ISyntaxToken;
         public expression: IExpressionSyntax;
         public colonToken: ISyntaxToken;
         public statements: IStatementSyntax[];
         public _switchClauseBrand: any;
         constructor(data: number, caseKeyword: ISyntaxToken, expression: IExpressionSyntax, colonToken: ISyntaxToken, statements: IStatementSyntax[]) {
-            super(data);
+            if (data) { this.__data = data; }
             this.caseKeyword = caseKeyword,
             this.expression = expression,
             this.colonToken = colonToken,
@@ -2960,13 +3037,14 @@ module TypeScript {
             return visitor.visitCaseSwitchClause(this);
         }
     }
-    export class DefaultSwitchClauseSyntax extends SyntaxNode implements ISwitchClauseSyntax {
+    export class DefaultSwitchClauseSyntax implements ISyntaxNode, ISwitchClauseSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public defaultKeyword: ISyntaxToken;
         public colonToken: ISyntaxToken;
         public statements: IStatementSyntax[];
         public _switchClauseBrand: any;
         constructor(data: number, defaultKeyword: ISyntaxToken, colonToken: ISyntaxToken, statements: IStatementSyntax[]) {
-            super(data);
+            if (data) { this.__data = data; }
             this.defaultKeyword = defaultKeyword,
             this.colonToken = colonToken,
             this.statements = statements,
@@ -2996,11 +3074,12 @@ module TypeScript {
             return visitor.visitDefaultSwitchClause(this);
         }
     }
-    export class ElseClauseSyntax extends SyntaxNode {
+    export class ElseClauseSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public elseKeyword: ISyntaxToken;
         public statement: IStatementSyntax;
         constructor(data: number, elseKeyword: ISyntaxToken, statement: IStatementSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.elseKeyword = elseKeyword,
             this.statement = statement,
             elseKeyword.parent = this,
@@ -3027,7 +3106,8 @@ module TypeScript {
             return visitor.visitElseClause(this);
         }
     }
-    export class CatchClauseSyntax extends SyntaxNode {
+    export class CatchClauseSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public catchKeyword: ISyntaxToken;
         public openParenToken: ISyntaxToken;
         public identifier: ISyntaxToken;
@@ -3035,7 +3115,7 @@ module TypeScript {
         public closeParenToken: ISyntaxToken;
         public block: BlockSyntax;
         constructor(data: number, catchKeyword: ISyntaxToken, openParenToken: ISyntaxToken, identifier: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, closeParenToken: ISyntaxToken, block: BlockSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.catchKeyword = catchKeyword,
             this.openParenToken = openParenToken,
             this.identifier = identifier,
@@ -3074,11 +3154,12 @@ module TypeScript {
             return visitor.visitCatchClause(this);
         }
     }
-    export class FinallyClauseSyntax extends SyntaxNode {
+    export class FinallyClauseSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public finallyKeyword: ISyntaxToken;
         public block: BlockSyntax;
         constructor(data: number, finallyKeyword: ISyntaxToken, block: BlockSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.finallyKeyword = finallyKeyword,
             this.block = block,
             finallyKeyword.parent = this,
@@ -3105,11 +3186,12 @@ module TypeScript {
             return visitor.visitFinallyClause(this);
         }
     }
-    export class TemplateClauseSyntax extends SyntaxNode {
+    export class TemplateClauseSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public expression: IExpressionSyntax;
         public templateMiddleOrEndToken: ISyntaxToken;
         constructor(data: number, expression: IExpressionSyntax, templateMiddleOrEndToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.expression = expression,
             this.templateMiddleOrEndToken = templateMiddleOrEndToken,
             expression.parent = this,
@@ -3136,11 +3218,12 @@ module TypeScript {
             return visitor.visitTemplateClause(this);
         }
     }
-    export class TypeParameterSyntax extends SyntaxNode {
+    export class TypeParameterSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public identifier: ISyntaxToken;
         public constraint: ConstraintSyntax;
         constructor(data: number, identifier: ISyntaxToken, constraint: ConstraintSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.identifier = identifier,
             this.constraint = constraint,
             identifier.parent = this,
@@ -3167,11 +3250,12 @@ module TypeScript {
             return visitor.visitTypeParameter(this);
         }
     }
-    export class ConstraintSyntax extends SyntaxNode {
+    export class ConstraintSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public extendsKeyword: ISyntaxToken;
         public typeOrExpression: ISyntaxNodeOrToken;
         constructor(data: number, extendsKeyword: ISyntaxToken, typeOrExpression: ISyntaxNodeOrToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.extendsKeyword = extendsKeyword,
             this.typeOrExpression = typeOrExpression,
             extendsKeyword.parent = this,
@@ -3198,13 +3282,14 @@ module TypeScript {
             return visitor.visitConstraint(this);
         }
     }
-    export class SimplePropertyAssignmentSyntax extends SyntaxNode implements IPropertyAssignmentSyntax {
+    export class SimplePropertyAssignmentSyntax implements ISyntaxNode, IPropertyAssignmentSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public propertyName: ISyntaxToken;
         public colonToken: ISyntaxToken;
         public expression: IExpressionSyntax;
         public _propertyAssignmentBrand: any;
         constructor(data: number, propertyName: ISyntaxToken, colonToken: ISyntaxToken, expression: IExpressionSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.propertyName = propertyName,
             this.colonToken = colonToken,
             this.expression = expression,
@@ -3234,13 +3319,14 @@ module TypeScript {
             return visitor.visitSimplePropertyAssignment(this);
         }
     }
-    export class FunctionPropertyAssignmentSyntax extends SyntaxNode implements IPropertyAssignmentSyntax {
+    export class FunctionPropertyAssignmentSyntax implements ISyntaxNode, IPropertyAssignmentSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public propertyName: ISyntaxToken;
         public callSignature: CallSignatureSyntax;
         public block: BlockSyntax;
         public _propertyAssignmentBrand: any;
         constructor(data: number, propertyName: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.propertyName = propertyName,
             this.callSignature = callSignature,
             this.block = block,
@@ -3270,7 +3356,8 @@ module TypeScript {
             return visitor.visitFunctionPropertyAssignment(this);
         }
     }
-    export class ParameterSyntax extends SyntaxNode {
+    export class ParameterSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public dotDotDotToken: ISyntaxToken;
         public modifiers: ISyntaxToken[];
         public identifier: ISyntaxToken;
@@ -3278,7 +3365,7 @@ module TypeScript {
         public typeAnnotation: TypeAnnotationSyntax;
         public equalsValueClause: EqualsValueClauseSyntax;
         constructor(data: number, dotDotDotToken: ISyntaxToken, modifiers: ISyntaxToken[], identifier: ISyntaxToken, questionToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, equalsValueClause: EqualsValueClauseSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.dotDotDotToken = dotDotDotToken,
             this.modifiers = modifiers,
             this.identifier = identifier,
@@ -3317,11 +3404,12 @@ module TypeScript {
             return visitor.visitParameter(this);
         }
     }
-    export class EnumElementSyntax extends SyntaxNode {
+    export class EnumElementSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public propertyName: ISyntaxToken;
         public equalsValueClause: EqualsValueClauseSyntax;
         constructor(data: number, propertyName: ISyntaxToken, equalsValueClause: EqualsValueClauseSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.propertyName = propertyName,
             this.equalsValueClause = equalsValueClause,
             propertyName.parent = this,
@@ -3348,11 +3436,12 @@ module TypeScript {
             return visitor.visitEnumElement(this);
         }
     }
-    export class TypeAnnotationSyntax extends SyntaxNode {
+    export class TypeAnnotationSyntax implements ISyntaxNode {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public colonToken: ISyntaxToken;
         public type: ITypeSyntax;
         constructor(data: number, colonToken: ISyntaxToken, type: ITypeSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.colonToken = colonToken,
             this.type = type,
             colonToken.parent = this,
@@ -3379,14 +3468,15 @@ module TypeScript {
             return visitor.visitTypeAnnotation(this);
         }
     }
-    export class ExternalModuleReferenceSyntax extends SyntaxNode implements IModuleReferenceSyntax {
+    export class ExternalModuleReferenceSyntax implements ISyntaxNode, IModuleReferenceSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public requireKeyword: ISyntaxToken;
         public openParenToken: ISyntaxToken;
         public stringLiteral: ISyntaxToken;
         public closeParenToken: ISyntaxToken;
         public _moduleReferenceBrand: any;
         constructor(data: number, requireKeyword: ISyntaxToken, openParenToken: ISyntaxToken, stringLiteral: ISyntaxToken, closeParenToken: ISyntaxToken) {
-            super(data);
+            if (data) { this.__data = data; }
             this.requireKeyword = requireKeyword,
             this.openParenToken = openParenToken,
             this.stringLiteral = stringLiteral,
@@ -3419,11 +3509,12 @@ module TypeScript {
             return visitor.visitExternalModuleReference(this);
         }
     }
-    export class ModuleNameModuleReferenceSyntax extends SyntaxNode implements IModuleReferenceSyntax {
+    export class ModuleNameModuleReferenceSyntax implements ISyntaxNode, IModuleReferenceSyntax {
+        public __data: number; public __cachedTokens: ISyntaxToken[]; public parent: ISyntaxElement;
         public moduleName: INameSyntax;
         public _moduleReferenceBrand: any;
         constructor(data: number, moduleName: INameSyntax) {
-            super(data);
+            if (data) { this.__data = data; }
             this.moduleName = moduleName,
             moduleName.parent = this;
         }

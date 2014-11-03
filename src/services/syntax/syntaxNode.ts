@@ -1,6 +1,7 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
+    /*
     export class SyntaxNode implements ISyntaxNode {
         // private __kind: SyntaxKind;
         public __data: number;
@@ -29,4 +30,5 @@ module TypeScript {
             throw Errors.abstract();
         }
     }
+    */
 }
