@@ -247,10 +247,35 @@ module TypeScript.IncrementalParser {
             var tokenWasMoved = isPastChangeRange() && fullStart(nodeOrToken) !== position;
 
             if (tokenWasMoved) {
-                setTokenFullStartWalker.position = position;
+                if (isToken(nodeOrToken)) {
+                    (<ISyntaxToken>nodeOrToken).setFullStart(position);
+                }
+                else {
+                    var tokens = getTokens(<ISyntaxNode>nodeOrToken);
 
-                visitNodeOrToken(setTokenFullStartWalker, nodeOrToken);
+                    for (var i = 0, n = tokens.length; i < n; i++) {
+                        var token = tokens[i];
+                        token.setFullStart(position);
+
+                        position += token.fullWidth();
+                    }
+                }
             }
+        }
+
+        function getTokens(node: ISyntaxNode): ISyntaxToken[] {
+            var tokens = node.__cachedTokens;
+            if (!tokens) {
+                tokens = [];
+                tokenCollectorWalker.tokens = tokens;
+
+                visitNodeOrToken(tokenCollectorWalker, node);
+
+                node.__cachedTokens = tokens;
+                tokenCollectorWalker.tokens = undefined;
+            }
+
+            return tokens;
         }
 
         function currentNode(): ISyntaxNode {
@@ -841,18 +866,15 @@ module TypeScript.IncrementalParser {
     // A simple walker we use to hit all the tokens of a node and update their positions when they
     // are reused in a different location because of an incremental parse.
 
-    class SetTokenFullStartWalker extends SyntaxWalker {
-        public position: number;
+    class TokenCollectorWalker extends SyntaxWalker {
+        public tokens: ISyntaxToken[] = [];
 
         public visitToken(token: ISyntaxToken): void {
-            var position = this.position;
-            token.setFullStart(position);
-
-            this.position = position + token.fullWidth();
+            this.tokens.push(token);
         }
     }
 
-    var setTokenFullStartWalker = new SetTokenFullStartWalker();
+    var tokenCollectorWalker = new TokenCollectorWalker();
 
     export function parse(oldSyntaxTree: SyntaxTree, textChangeRange: TextChangeRange, newText: ISimpleText): SyntaxTree {
         if (textChangeRange.isUnchanged()) {

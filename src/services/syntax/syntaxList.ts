@@ -1,7 +1,7 @@
 ///<reference path='references.ts' />
 
 interface Array<T> {
-    data: number;
+    __data: number;
 
     kind(): TypeScript.SyntaxKind;
     parent: TypeScript.ISyntaxElement;

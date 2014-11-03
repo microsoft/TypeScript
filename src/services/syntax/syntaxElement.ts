@@ -28,7 +28,7 @@ module TypeScript {
     }
 
     export function parsedInStrictMode(node: ISyntaxNode): boolean {
-        var info = node.data;
+        var info = node.__data;
         if (info === undefined) {
             return false;
         }
@@ -73,7 +73,7 @@ module TypeScript {
      * Note: findToken will always return a non-missing token with width greater than or equal to
      * 1 (except for EOF).  Empty tokens synthesized by the parser are never returned.
      */
-    export function findToken(element: ISyntaxElement, position: number, includeSkippedTokens: boolean = false): ISyntaxToken {
+    export function findToken(element: ISyntaxElement, position: number, includeSkippedTokens?: boolean): ISyntaxToken {
         var endOfFileToken = tryGetEndOfFileAt(element, position);
         if (endOfFileToken) {
             return endOfFileToken;
@@ -277,7 +277,7 @@ module TypeScript {
             var kind = element.kind();
 
             if (isTokenKind(kind)) {
-                return fullWidth(element) > 0 || element.kind() === SyntaxKind.EndOfFileToken ? <ISyntaxToken>element : undefined;
+                return (<ISyntaxToken>element).fullWidth() > 0 || kind === SyntaxKind.EndOfFileToken ? <ISyntaxToken>element : undefined;
             }
 
             for (var i = 0, n = element.childCount(); i < n; i++) {
@@ -349,16 +349,16 @@ module TypeScript {
         Debug.assert(isNode(element) || isList(element));
 
         // Lists and nodes all have a 'data' element.
-        var dataElement = <{ data: number }><any>element;
+        var dataElement = <ISyntaxNode>element;
 
-        var info = dataElement.data;
+        var info = dataElement.__data;
         if (info === undefined) {
             info = 0;
         }
 
         if ((info & SyntaxConstants.NodeDataComputed) === 0) {
             info |= computeData(element);
-            dataElement.data = info;
+            dataElement.__data = info;
         }
 
         return info;
@@ -429,7 +429,8 @@ module TypeScript {
     }
 
     export interface ISyntaxNode extends ISyntaxNodeOrToken {
-        data: number;
+        __data: number;
+        __cachedTokens: ISyntaxToken[];
     }
 
     export interface IModuleReferenceSyntax extends ISyntaxNode {
