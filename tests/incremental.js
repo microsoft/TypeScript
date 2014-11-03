@@ -30177,1191 +30177,917 @@ var TypeScript;
     })(Parser = TypeScript.Parser || (TypeScript.Parser = {}));
 })(TypeScript || (TypeScript = {}));
 ///<reference path='references.ts' />
+///<reference path='references.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var SourceUnitSyntax = (function () {
-        function SourceUnitSyntax(data, moduleElements, endOfFileToken) {
-            this.syntaxTree = undefined;
-            if (data) {
-                this.__data = data;
-            }
-            this.parent = undefined, this.moduleElements = moduleElements, this.endOfFileToken = endOfFileToken, moduleElements.parent = this, endOfFileToken.parent = this;
-        }
-        SourceUnitSyntax.prototype.kind = function () {
-            return 122 /* SourceUnit */;
-        };
-        return SourceUnitSyntax;
-    })();
-    TypeScript.SourceUnitSyntax = SourceUnitSyntax;
-    var QualifiedNameSyntax = (function () {
-        function QualifiedNameSyntax(data, left, dotToken, right) {
-            if (data) {
-                this.__data = data;
-            }
-            this.left = left, this.dotToken = dotToken, this.right = right, left.parent = this, dotToken.parent = this, right.parent = this;
-        }
-        QualifiedNameSyntax.prototype.kind = function () {
-            return 123 /* QualifiedName */;
-        };
-        return QualifiedNameSyntax;
-    })();
-    TypeScript.QualifiedNameSyntax = QualifiedNameSyntax;
-    var ObjectTypeSyntax = (function () {
-        function ObjectTypeSyntax(data, openBraceToken, typeMembers, closeBraceToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.openBraceToken = openBraceToken, this.typeMembers = typeMembers, this.closeBraceToken = closeBraceToken, openBraceToken.parent = this, typeMembers.parent = this, closeBraceToken.parent = this;
-        }
-        ObjectTypeSyntax.prototype.kind = function () {
-            return 124 /* ObjectType */;
-        };
-        return ObjectTypeSyntax;
-    })();
-    TypeScript.ObjectTypeSyntax = ObjectTypeSyntax;
-    var FunctionTypeSyntax = (function () {
-        function FunctionTypeSyntax(data, typeParameterList, parameterList, equalsGreaterThanToken, type) {
-            if (data) {
-                this.__data = data;
-            }
-            this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
-        }
-        FunctionTypeSyntax.prototype.kind = function () {
-            return 125 /* FunctionType */;
-        };
-        return FunctionTypeSyntax;
-    })();
-    TypeScript.FunctionTypeSyntax = FunctionTypeSyntax;
-    var ArrayTypeSyntax = (function () {
-        function ArrayTypeSyntax(data, type, openBracketToken, closeBracketToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.type = type, this.openBracketToken = openBracketToken, this.closeBracketToken = closeBracketToken, type.parent = this, openBracketToken.parent = this, closeBracketToken.parent = this;
-        }
-        ArrayTypeSyntax.prototype.kind = function () {
-            return 126 /* ArrayType */;
-        };
-        return ArrayTypeSyntax;
-    })();
-    TypeScript.ArrayTypeSyntax = ArrayTypeSyntax;
-    var ConstructorTypeSyntax = (function () {
-        function ConstructorTypeSyntax(data, newKeyword, typeParameterList, parameterList, equalsGreaterThanToken, type) {
-            if (data) {
-                this.__data = data;
-            }
-            this.newKeyword = newKeyword, this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type, newKeyword.parent = this, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
-        }
-        ConstructorTypeSyntax.prototype.kind = function () {
-            return 127 /* ConstructorType */;
-        };
-        return ConstructorTypeSyntax;
-    })();
-    TypeScript.ConstructorTypeSyntax = ConstructorTypeSyntax;
-    var GenericTypeSyntax = (function () {
-        function GenericTypeSyntax(data, name, typeArgumentList) {
-            if (data) {
-                this.__data = data;
-            }
-            this.name = name, this.typeArgumentList = typeArgumentList, name.parent = this, typeArgumentList.parent = this;
-        }
-        GenericTypeSyntax.prototype.kind = function () {
-            return 128 /* GenericType */;
-        };
-        return GenericTypeSyntax;
-    })();
-    TypeScript.GenericTypeSyntax = GenericTypeSyntax;
-    var TypeQuerySyntax = (function () {
-        function TypeQuerySyntax(data, typeOfKeyword, name) {
-            if (data) {
-                this.__data = data;
-            }
-            this.typeOfKeyword = typeOfKeyword, this.name = name, typeOfKeyword.parent = this, name.parent = this;
-        }
-        TypeQuerySyntax.prototype.kind = function () {
-            return 129 /* TypeQuery */;
-        };
-        return TypeQuerySyntax;
-    })();
-    TypeScript.TypeQuerySyntax = TypeQuerySyntax;
-    var TupleTypeSyntax = (function () {
-        function TupleTypeSyntax(data, openBracketToken, types, closeBracketToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.openBracketToken = openBracketToken, this.types = types, this.closeBracketToken = closeBracketToken, openBracketToken.parent = this, types.parent = this, closeBracketToken.parent = this;
-        }
-        TupleTypeSyntax.prototype.kind = function () {
-            return 130 /* TupleType */;
-        };
-        return TupleTypeSyntax;
-    })();
-    TypeScript.TupleTypeSyntax = TupleTypeSyntax;
-    var UnionTypeSyntax = (function () {
-        function UnionTypeSyntax(data, left, barToken, right) {
-            if (data) {
-                this.__data = data;
-            }
-            this.left = left, this.barToken = barToken, this.right = right, left.parent = this, barToken.parent = this, right.parent = this;
-        }
-        UnionTypeSyntax.prototype.kind = function () {
-            return 131 /* UnionType */;
-        };
-        return UnionTypeSyntax;
-    })();
-    TypeScript.UnionTypeSyntax = UnionTypeSyntax;
-    var ParenthesizedTypeSyntax = (function () {
-        function ParenthesizedTypeSyntax(data, openParenToken, type, closeParenToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.openParenToken = openParenToken, this.type = type, this.closeParenToken = closeParenToken, openParenToken.parent = this, type.parent = this, closeParenToken.parent = this;
-        }
-        ParenthesizedTypeSyntax.prototype.kind = function () {
-            return 132 /* ParenthesizedType */;
-        };
-        return ParenthesizedTypeSyntax;
-    })();
-    TypeScript.ParenthesizedTypeSyntax = ParenthesizedTypeSyntax;
-    var InterfaceDeclarationSyntax = (function () {
-        function InterfaceDeclarationSyntax(data, modifiers, interfaceKeyword, identifier, typeParameterList, heritageClauses, body) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.interfaceKeyword = interfaceKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.body = body, modifiers.parent = this, interfaceKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), heritageClauses.parent = this, body.parent = this;
-        }
-        InterfaceDeclarationSyntax.prototype.kind = function () {
-            return 133 /* InterfaceDeclaration */;
-        };
-        return InterfaceDeclarationSyntax;
-    })();
-    TypeScript.InterfaceDeclarationSyntax = InterfaceDeclarationSyntax;
-    var FunctionDeclarationSyntax = (function () {
-        function FunctionDeclarationSyntax(data, modifiers, functionKeyword, identifier, callSignature, block, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken, modifiers.parent = this, functionKeyword.parent = this, identifier.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
-        }
-        FunctionDeclarationSyntax.prototype.kind = function () {
-            return 134 /* FunctionDeclaration */;
-        };
-        return FunctionDeclarationSyntax;
-    })();
-    TypeScript.FunctionDeclarationSyntax = FunctionDeclarationSyntax;
-    var ModuleDeclarationSyntax = (function () {
-        function ModuleDeclarationSyntax(data, modifiers, moduleKeyword, name, stringLiteral, openBraceToken, moduleElements, closeBraceToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.moduleKeyword = moduleKeyword, this.name = name, this.stringLiteral = stringLiteral, this.openBraceToken = openBraceToken, this.moduleElements = moduleElements, this.closeBraceToken = closeBraceToken, modifiers.parent = this, moduleKeyword.parent = this, name && (name.parent = this), stringLiteral && (stringLiteral.parent = this), openBraceToken.parent = this, moduleElements.parent = this, closeBraceToken.parent = this;
-        }
-        ModuleDeclarationSyntax.prototype.kind = function () {
-            return 135 /* ModuleDeclaration */;
-        };
-        return ModuleDeclarationSyntax;
-    })();
-    TypeScript.ModuleDeclarationSyntax = ModuleDeclarationSyntax;
-    var ClassDeclarationSyntax = (function () {
-        function ClassDeclarationSyntax(data, modifiers, classKeyword, identifier, typeParameterList, heritageClauses, openBraceToken, classElements, closeBraceToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.classKeyword = classKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.openBraceToken = openBraceToken, this.classElements = classElements, this.closeBraceToken = closeBraceToken, modifiers.parent = this, classKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), heritageClauses.parent = this, openBraceToken.parent = this, classElements.parent = this, closeBraceToken.parent = this;
-        }
-        ClassDeclarationSyntax.prototype.kind = function () {
-            return 136 /* ClassDeclaration */;
-        };
-        return ClassDeclarationSyntax;
-    })();
-    TypeScript.ClassDeclarationSyntax = ClassDeclarationSyntax;
-    var EnumDeclarationSyntax = (function () {
-        function EnumDeclarationSyntax(data, modifiers, enumKeyword, identifier, openBraceToken, enumElements, closeBraceToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.enumKeyword = enumKeyword, this.identifier = identifier, this.openBraceToken = openBraceToken, this.enumElements = enumElements, this.closeBraceToken = closeBraceToken, modifiers.parent = this, enumKeyword.parent = this, identifier.parent = this, openBraceToken.parent = this, enumElements.parent = this, closeBraceToken.parent = this;
-        }
-        EnumDeclarationSyntax.prototype.kind = function () {
-            return 137 /* EnumDeclaration */;
-        };
-        return EnumDeclarationSyntax;
-    })();
-    TypeScript.EnumDeclarationSyntax = EnumDeclarationSyntax;
-    var ImportDeclarationSyntax = (function () {
-        function ImportDeclarationSyntax(data, modifiers, importKeyword, identifier, equalsToken, moduleReference, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.importKeyword = importKeyword, this.identifier = identifier, this.equalsToken = equalsToken, this.moduleReference = moduleReference, this.semicolonToken = semicolonToken, modifiers.parent = this, importKeyword.parent = this, identifier.parent = this, equalsToken.parent = this, moduleReference.parent = this, semicolonToken && (semicolonToken.parent = this);
-        }
-        ImportDeclarationSyntax.prototype.kind = function () {
-            return 138 /* ImportDeclaration */;
-        };
-        return ImportDeclarationSyntax;
-    })();
-    TypeScript.ImportDeclarationSyntax = ImportDeclarationSyntax;
-    var ExportAssignmentSyntax = (function () {
-        function ExportAssignmentSyntax(data, exportKeyword, equalsToken, identifier, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.exportKeyword = exportKeyword, this.equalsToken = equalsToken, this.identifier = identifier, this.semicolonToken = semicolonToken, exportKeyword.parent = this, equalsToken.parent = this, identifier.parent = this, semicolonToken && (semicolonToken.parent = this);
-        }
-        ExportAssignmentSyntax.prototype.kind = function () {
-            return 139 /* ExportAssignment */;
-        };
-        return ExportAssignmentSyntax;
-    })();
-    TypeScript.ExportAssignmentSyntax = ExportAssignmentSyntax;
-    var MemberFunctionDeclarationSyntax = (function () {
-        function MemberFunctionDeclarationSyntax(data, modifiers, propertyName, callSignature, block, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken, modifiers.parent = this, propertyName.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
-        }
-        MemberFunctionDeclarationSyntax.prototype.kind = function () {
-            return 140 /* MemberFunctionDeclaration */;
-        };
-        return MemberFunctionDeclarationSyntax;
-    })();
-    TypeScript.MemberFunctionDeclarationSyntax = MemberFunctionDeclarationSyntax;
-    var MemberVariableDeclarationSyntax = (function () {
-        function MemberVariableDeclarationSyntax(data, modifiers, variableDeclarator, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.variableDeclarator = variableDeclarator, this.semicolonToken = semicolonToken, modifiers.parent = this, variableDeclarator.parent = this, semicolonToken && (semicolonToken.parent = this);
-        }
-        MemberVariableDeclarationSyntax.prototype.kind = function () {
-            return 141 /* MemberVariableDeclaration */;
-        };
-        return MemberVariableDeclarationSyntax;
-    })();
-    TypeScript.MemberVariableDeclarationSyntax = MemberVariableDeclarationSyntax;
-    var ConstructorDeclarationSyntax = (function () {
-        function ConstructorDeclarationSyntax(data, modifiers, constructorKeyword, callSignature, block, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.constructorKeyword = constructorKeyword, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken, modifiers.parent = this, constructorKeyword.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
-        }
-        ConstructorDeclarationSyntax.prototype.kind = function () {
-            return 142 /* ConstructorDeclaration */;
-        };
-        return ConstructorDeclarationSyntax;
-    })();
-    TypeScript.ConstructorDeclarationSyntax = ConstructorDeclarationSyntax;
-    var IndexMemberDeclarationSyntax = (function () {
-        function IndexMemberDeclarationSyntax(data, modifiers, indexSignature, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.indexSignature = indexSignature, this.semicolonToken = semicolonToken, modifiers.parent = this, indexSignature.parent = this, semicolonToken && (semicolonToken.parent = this);
-        }
-        IndexMemberDeclarationSyntax.prototype.kind = function () {
-            return 143 /* IndexMemberDeclaration */;
-        };
-        return IndexMemberDeclarationSyntax;
-    })();
-    TypeScript.IndexMemberDeclarationSyntax = IndexMemberDeclarationSyntax;
-    var GetAccessorSyntax = (function () {
-        function GetAccessorSyntax(data, modifiers, getKeyword, propertyName, callSignature, block) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.getKeyword = getKeyword, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, modifiers.parent = this, getKeyword.parent = this, propertyName.parent = this, callSignature.parent = this, block.parent = this;
-        }
-        GetAccessorSyntax.prototype.kind = function () {
-            return 144 /* GetAccessor */;
-        };
-        return GetAccessorSyntax;
-    })();
-    TypeScript.GetAccessorSyntax = GetAccessorSyntax;
-    var SetAccessorSyntax = (function () {
-        function SetAccessorSyntax(data, modifiers, setKeyword, propertyName, callSignature, block) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.setKeyword = setKeyword, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, modifiers.parent = this, setKeyword.parent = this, propertyName.parent = this, callSignature.parent = this, block.parent = this;
-        }
-        SetAccessorSyntax.prototype.kind = function () {
-            return 145 /* SetAccessor */;
-        };
-        return SetAccessorSyntax;
-    })();
-    TypeScript.SetAccessorSyntax = SetAccessorSyntax;
-    var PropertySignatureSyntax = (function () {
-        function PropertySignatureSyntax(data, propertyName, questionToken, typeAnnotation) {
-            if (data) {
-                this.__data = data;
-            }
-            this.propertyName = propertyName, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation, propertyName.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this);
-        }
-        PropertySignatureSyntax.prototype.kind = function () {
-            return 146 /* PropertySignature */;
-        };
-        return PropertySignatureSyntax;
-    })();
-    TypeScript.PropertySignatureSyntax = PropertySignatureSyntax;
-    var CallSignatureSyntax = (function () {
-        function CallSignatureSyntax(data, typeParameterList, parameterList, typeAnnotation) {
-            if (data) {
-                this.__data = data;
-            }
-            this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.typeAnnotation = typeAnnotation, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, typeAnnotation && (typeAnnotation.parent = this);
-        }
-        CallSignatureSyntax.prototype.kind = function () {
-            return 147 /* CallSignature */;
-        };
-        return CallSignatureSyntax;
-    })();
-    TypeScript.CallSignatureSyntax = CallSignatureSyntax;
-    var ConstructSignatureSyntax = (function () {
-        function ConstructSignatureSyntax(data, newKeyword, callSignature) {
-            if (data) {
-                this.__data = data;
-            }
-            this.newKeyword = newKeyword, this.callSignature = callSignature, newKeyword.parent = this, callSignature.parent = this;
-        }
-        ConstructSignatureSyntax.prototype.kind = function () {
-            return 148 /* ConstructSignature */;
-        };
-        return ConstructSignatureSyntax;
-    })();
-    TypeScript.ConstructSignatureSyntax = ConstructSignatureSyntax;
-    var IndexSignatureSyntax = (function () {
-        function IndexSignatureSyntax(data, openBracketToken, parameters, closeBracketToken, typeAnnotation) {
-            if (data) {
-                this.__data = data;
-            }
-            this.openBracketToken = openBracketToken, this.parameters = parameters, this.closeBracketToken = closeBracketToken, this.typeAnnotation = typeAnnotation, openBracketToken.parent = this, parameters.parent = this, closeBracketToken.parent = this, typeAnnotation && (typeAnnotation.parent = this);
-        }
-        IndexSignatureSyntax.prototype.kind = function () {
-            return 149 /* IndexSignature */;
-        };
-        return IndexSignatureSyntax;
-    })();
-    TypeScript.IndexSignatureSyntax = IndexSignatureSyntax;
-    var MethodSignatureSyntax = (function () {
-        function MethodSignatureSyntax(data, propertyName, questionToken, callSignature) {
-            if (data) {
-                this.__data = data;
-            }
-            this.propertyName = propertyName, this.questionToken = questionToken, this.callSignature = callSignature, propertyName.parent = this, questionToken && (questionToken.parent = this), callSignature.parent = this;
-        }
-        MethodSignatureSyntax.prototype.kind = function () {
-            return 150 /* MethodSignature */;
-        };
-        return MethodSignatureSyntax;
-    })();
-    TypeScript.MethodSignatureSyntax = MethodSignatureSyntax;
-    var BlockSyntax = (function () {
-        function BlockSyntax(data, openBraceToken, statements, closeBraceToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.openBraceToken = openBraceToken, this.statements = statements, this.closeBraceToken = closeBraceToken, openBraceToken.parent = this, statements.parent = this, closeBraceToken.parent = this;
-        }
-        BlockSyntax.prototype.kind = function () {
-            return 151 /* Block */;
-        };
-        return BlockSyntax;
-    })();
-    TypeScript.BlockSyntax = BlockSyntax;
-    var IfStatementSyntax = (function () {
-        function IfStatementSyntax(data, ifKeyword, openParenToken, condition, closeParenToken, statement, elseClause) {
-            if (data) {
-                this.__data = data;
-            }
-            this.ifKeyword = ifKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, this.elseClause = elseClause, ifKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this, elseClause && (elseClause.parent = this);
-        }
-        IfStatementSyntax.prototype.kind = function () {
-            return 152 /* IfStatement */;
-        };
-        return IfStatementSyntax;
-    })();
-    TypeScript.IfStatementSyntax = IfStatementSyntax;
-    var VariableStatementSyntax = (function () {
-        function VariableStatementSyntax(data, modifiers, variableDeclaration, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.modifiers = modifiers, this.variableDeclaration = variableDeclaration, this.semicolonToken = semicolonToken, modifiers.parent = this, variableDeclaration.parent = this, semicolonToken && (semicolonToken.parent = this);
-        }
-        VariableStatementSyntax.prototype.kind = function () {
-            return 153 /* VariableStatement */;
-        };
-        return VariableStatementSyntax;
-    })();
-    TypeScript.VariableStatementSyntax = VariableStatementSyntax;
-    var ExpressionStatementSyntax = (function () {
-        function ExpressionStatementSyntax(data, expression, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.expression = expression, this.semicolonToken = semicolonToken, expression.parent = this, semicolonToken && (semicolonToken.parent = this);
-        }
-        ExpressionStatementSyntax.prototype.kind = function () {
-            return 154 /* ExpressionStatement */;
-        };
-        return ExpressionStatementSyntax;
-    })();
-    TypeScript.ExpressionStatementSyntax = ExpressionStatementSyntax;
-    var ReturnStatementSyntax = (function () {
-        function ReturnStatementSyntax(data, returnKeyword, expression, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.returnKeyword = returnKeyword, this.expression = expression, this.semicolonToken = semicolonToken, returnKeyword.parent = this, expression && (expression.parent = this), semicolonToken && (semicolonToken.parent = this);
-        }
-        ReturnStatementSyntax.prototype.kind = function () {
-            return 155 /* ReturnStatement */;
-        };
-        return ReturnStatementSyntax;
-    })();
-    TypeScript.ReturnStatementSyntax = ReturnStatementSyntax;
-    var SwitchStatementSyntax = (function () {
-        function SwitchStatementSyntax(data, switchKeyword, openParenToken, expression, closeParenToken, openBraceToken, switchClauses, closeBraceToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.switchKeyword = switchKeyword, this.openParenToken = openParenToken, this.expression = expression, this.closeParenToken = closeParenToken, this.openBraceToken = openBraceToken, this.switchClauses = switchClauses, this.closeBraceToken = closeBraceToken, switchKeyword.parent = this, openParenToken.parent = this, expression.parent = this, closeParenToken.parent = this, openBraceToken.parent = this, switchClauses.parent = this, closeBraceToken.parent = this;
-        }
-        SwitchStatementSyntax.prototype.kind = function () {
-            return 156 /* SwitchStatement */;
-        };
-        return SwitchStatementSyntax;
-    })();
-    TypeScript.SwitchStatementSyntax = SwitchStatementSyntax;
-    var BreakStatementSyntax = (function () {
-        function BreakStatementSyntax(data, breakKeyword, identifier, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.breakKeyword = breakKeyword, this.identifier = identifier, this.semicolonToken = semicolonToken, breakKeyword.parent = this, identifier && (identifier.parent = this), semicolonToken && (semicolonToken.parent = this);
-        }
-        BreakStatementSyntax.prototype.kind = function () {
-            return 157 /* BreakStatement */;
-        };
-        return BreakStatementSyntax;
-    })();
-    TypeScript.BreakStatementSyntax = BreakStatementSyntax;
-    var ContinueStatementSyntax = (function () {
-        function ContinueStatementSyntax(data, continueKeyword, identifier, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.continueKeyword = continueKeyword, this.identifier = identifier, this.semicolonToken = semicolonToken, continueKeyword.parent = this, identifier && (identifier.parent = this), semicolonToken && (semicolonToken.parent = this);
-        }
-        ContinueStatementSyntax.prototype.kind = function () {
-            return 158 /* ContinueStatement */;
-        };
-        return ContinueStatementSyntax;
-    })();
-    TypeScript.ContinueStatementSyntax = ContinueStatementSyntax;
-    var ForStatementSyntax = (function () {
-        function ForStatementSyntax(data, forKeyword, openParenToken, variableDeclaration, initializer, firstSemicolonToken, condition, secondSemicolonToken, incrementor, closeParenToken, statement) {
-            if (data) {
-                this.__data = data;
-            }
-            this.forKeyword = forKeyword, this.openParenToken = openParenToken, this.variableDeclaration = variableDeclaration, this.initializer = initializer, this.firstSemicolonToken = firstSemicolonToken, this.condition = condition, this.secondSemicolonToken = secondSemicolonToken, this.incrementor = incrementor, this.closeParenToken = closeParenToken, this.statement = statement, forKeyword.parent = this, openParenToken.parent = this, variableDeclaration && (variableDeclaration.parent = this), initializer && (initializer.parent = this), firstSemicolonToken.parent = this, condition && (condition.parent = this), secondSemicolonToken.parent = this, incrementor && (incrementor.parent = this), closeParenToken.parent = this, statement.parent = this;
-        }
-        ForStatementSyntax.prototype.kind = function () {
-            return 159 /* ForStatement */;
-        };
-        return ForStatementSyntax;
-    })();
-    TypeScript.ForStatementSyntax = ForStatementSyntax;
-    var ForInStatementSyntax = (function () {
-        function ForInStatementSyntax(data, forKeyword, openParenToken, variableDeclaration, left, inKeyword, expression, closeParenToken, statement) {
-            if (data) {
-                this.__data = data;
-            }
-            this.forKeyword = forKeyword, this.openParenToken = openParenToken, this.variableDeclaration = variableDeclaration, this.left = left, this.inKeyword = inKeyword, this.expression = expression, this.closeParenToken = closeParenToken, this.statement = statement, forKeyword.parent = this, openParenToken.parent = this, variableDeclaration && (variableDeclaration.parent = this), left && (left.parent = this), inKeyword.parent = this, expression.parent = this, closeParenToken.parent = this, statement.parent = this;
-        }
-        ForInStatementSyntax.prototype.kind = function () {
-            return 160 /* ForInStatement */;
-        };
-        return ForInStatementSyntax;
-    })();
-    TypeScript.ForInStatementSyntax = ForInStatementSyntax;
-    var EmptyStatementSyntax = (function () {
-        function EmptyStatementSyntax(data, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.semicolonToken = semicolonToken, semicolonToken.parent = this;
-        }
-        EmptyStatementSyntax.prototype.kind = function () {
-            return 161 /* EmptyStatement */;
-        };
-        return EmptyStatementSyntax;
-    })();
-    TypeScript.EmptyStatementSyntax = EmptyStatementSyntax;
-    var ThrowStatementSyntax = (function () {
-        function ThrowStatementSyntax(data, throwKeyword, expression, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.throwKeyword = throwKeyword, this.expression = expression, this.semicolonToken = semicolonToken, throwKeyword.parent = this, expression.parent = this, semicolonToken && (semicolonToken.parent = this);
-        }
-        ThrowStatementSyntax.prototype.kind = function () {
-            return 162 /* ThrowStatement */;
-        };
-        return ThrowStatementSyntax;
-    })();
-    TypeScript.ThrowStatementSyntax = ThrowStatementSyntax;
-    var WhileStatementSyntax = (function () {
-        function WhileStatementSyntax(data, whileKeyword, openParenToken, condition, closeParenToken, statement) {
-            if (data) {
-                this.__data = data;
-            }
-            this.whileKeyword = whileKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, whileKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
-        }
-        WhileStatementSyntax.prototype.kind = function () {
-            return 163 /* WhileStatement */;
-        };
-        return WhileStatementSyntax;
-    })();
-    TypeScript.WhileStatementSyntax = WhileStatementSyntax;
-    var TryStatementSyntax = (function () {
-        function TryStatementSyntax(data, tryKeyword, block, catchClause, finallyClause) {
-            if (data) {
-                this.__data = data;
-            }
-            this.tryKeyword = tryKeyword, this.block = block, this.catchClause = catchClause, this.finallyClause = finallyClause, tryKeyword.parent = this, block.parent = this, catchClause && (catchClause.parent = this), finallyClause && (finallyClause.parent = this);
-        }
-        TryStatementSyntax.prototype.kind = function () {
-            return 164 /* TryStatement */;
-        };
-        return TryStatementSyntax;
-    })();
-    TypeScript.TryStatementSyntax = TryStatementSyntax;
-    var LabeledStatementSyntax = (function () {
-        function LabeledStatementSyntax(data, identifier, colonToken, statement) {
-            if (data) {
-                this.__data = data;
-            }
-            this.identifier = identifier, this.colonToken = colonToken, this.statement = statement, identifier.parent = this, colonToken.parent = this, statement.parent = this;
-        }
-        LabeledStatementSyntax.prototype.kind = function () {
-            return 165 /* LabeledStatement */;
-        };
-        return LabeledStatementSyntax;
-    })();
-    TypeScript.LabeledStatementSyntax = LabeledStatementSyntax;
-    var DoStatementSyntax = (function () {
-        function DoStatementSyntax(data, doKeyword, statement, whileKeyword, openParenToken, condition, closeParenToken, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.doKeyword = doKeyword, this.statement = statement, this.whileKeyword = whileKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.semicolonToken = semicolonToken, doKeyword.parent = this, statement.parent = this, whileKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, semicolonToken && (semicolonToken.parent = this);
-        }
-        DoStatementSyntax.prototype.kind = function () {
-            return 166 /* DoStatement */;
-        };
-        return DoStatementSyntax;
-    })();
-    TypeScript.DoStatementSyntax = DoStatementSyntax;
-    var DebuggerStatementSyntax = (function () {
-        function DebuggerStatementSyntax(data, debuggerKeyword, semicolonToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.debuggerKeyword = debuggerKeyword, this.semicolonToken = semicolonToken, debuggerKeyword.parent = this, semicolonToken && (semicolonToken.parent = this);
-        }
-        DebuggerStatementSyntax.prototype.kind = function () {
-            return 167 /* DebuggerStatement */;
-        };
-        return DebuggerStatementSyntax;
-    })();
-    TypeScript.DebuggerStatementSyntax = DebuggerStatementSyntax;
-    var WithStatementSyntax = (function () {
-        function WithStatementSyntax(data, withKeyword, openParenToken, condition, closeParenToken, statement) {
-            if (data) {
-                this.__data = data;
-            }
-            this.withKeyword = withKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, withKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
-        }
-        WithStatementSyntax.prototype.kind = function () {
-            return 168 /* WithStatement */;
-        };
-        return WithStatementSyntax;
-    })();
-    TypeScript.WithStatementSyntax = WithStatementSyntax;
-    var PrefixUnaryExpressionSyntax = (function () {
-        function PrefixUnaryExpressionSyntax(data, operatorToken, operand) {
-            if (data) {
-                this.__data = data;
-            }
-            this.operatorToken = operatorToken, this.operand = operand, operatorToken.parent = this, operand.parent = this;
-        }
-        PrefixUnaryExpressionSyntax.prototype.kind = function () {
-            return 169 /* PrefixUnaryExpression */;
-        };
-        return PrefixUnaryExpressionSyntax;
-    })();
-    TypeScript.PrefixUnaryExpressionSyntax = PrefixUnaryExpressionSyntax;
-    var DeleteExpressionSyntax = (function () {
-        function DeleteExpressionSyntax(data, deleteKeyword, expression) {
-            if (data) {
-                this.__data = data;
-            }
-            this.deleteKeyword = deleteKeyword, this.expression = expression, deleteKeyword.parent = this, expression.parent = this;
-        }
-        DeleteExpressionSyntax.prototype.kind = function () {
-            return 170 /* DeleteExpression */;
-        };
-        return DeleteExpressionSyntax;
-    })();
-    TypeScript.DeleteExpressionSyntax = DeleteExpressionSyntax;
-    var TypeOfExpressionSyntax = (function () {
-        function TypeOfExpressionSyntax(data, typeOfKeyword, expression) {
-            if (data) {
-                this.__data = data;
-            }
-            this.typeOfKeyword = typeOfKeyword, this.expression = expression, typeOfKeyword.parent = this, expression.parent = this;
-        }
-        TypeOfExpressionSyntax.prototype.kind = function () {
-            return 171 /* TypeOfExpression */;
-        };
-        return TypeOfExpressionSyntax;
-    })();
-    TypeScript.TypeOfExpressionSyntax = TypeOfExpressionSyntax;
-    var VoidExpressionSyntax = (function () {
-        function VoidExpressionSyntax(data, voidKeyword, expression) {
-            if (data) {
-                this.__data = data;
-            }
-            this.voidKeyword = voidKeyword, this.expression = expression, voidKeyword.parent = this, expression.parent = this;
-        }
-        VoidExpressionSyntax.prototype.kind = function () {
-            return 172 /* VoidExpression */;
-        };
-        return VoidExpressionSyntax;
-    })();
-    TypeScript.VoidExpressionSyntax = VoidExpressionSyntax;
-    var ConditionalExpressionSyntax = (function () {
-        function ConditionalExpressionSyntax(data, condition, questionToken, whenTrue, colonToken, whenFalse) {
-            if (data) {
-                this.__data = data;
-            }
-            this.condition = condition, this.questionToken = questionToken, this.whenTrue = whenTrue, this.colonToken = colonToken, this.whenFalse = whenFalse, condition.parent = this, questionToken.parent = this, whenTrue.parent = this, colonToken.parent = this, whenFalse.parent = this;
-        }
-        ConditionalExpressionSyntax.prototype.kind = function () {
-            return 173 /* ConditionalExpression */;
-        };
-        return ConditionalExpressionSyntax;
-    })();
-    TypeScript.ConditionalExpressionSyntax = ConditionalExpressionSyntax;
-    var BinaryExpressionSyntax = (function () {
-        function BinaryExpressionSyntax(data, left, operatorToken, right) {
-            if (data) {
-                this.__data = data;
-            }
-            this.left = left, this.operatorToken = operatorToken, this.right = right, left.parent = this, operatorToken.parent = this, right.parent = this;
-        }
-        BinaryExpressionSyntax.prototype.kind = function () {
-            return 174 /* BinaryExpression */;
-        };
-        return BinaryExpressionSyntax;
-    })();
-    TypeScript.BinaryExpressionSyntax = BinaryExpressionSyntax;
-    var PostfixUnaryExpressionSyntax = (function () {
-        function PostfixUnaryExpressionSyntax(data, operand, operatorToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.operand = operand, this.operatorToken = operatorToken, operand.parent = this, operatorToken.parent = this;
-        }
-        PostfixUnaryExpressionSyntax.prototype.kind = function () {
-            return 175 /* PostfixUnaryExpression */;
-        };
-        return PostfixUnaryExpressionSyntax;
-    })();
-    TypeScript.PostfixUnaryExpressionSyntax = PostfixUnaryExpressionSyntax;
-    var MemberAccessExpressionSyntax = (function () {
-        function MemberAccessExpressionSyntax(data, expression, dotToken, name) {
-            if (data) {
-                this.__data = data;
-            }
-            this.expression = expression, this.dotToken = dotToken, this.name = name, expression.parent = this, dotToken.parent = this, name.parent = this;
-        }
-        MemberAccessExpressionSyntax.prototype.kind = function () {
-            return 176 /* MemberAccessExpression */;
-        };
-        return MemberAccessExpressionSyntax;
-    })();
-    TypeScript.MemberAccessExpressionSyntax = MemberAccessExpressionSyntax;
-    var InvocationExpressionSyntax = (function () {
-        function InvocationExpressionSyntax(data, expression, argumentList) {
-            if (data) {
-                this.__data = data;
-            }
-            this.expression = expression, this.argumentList = argumentList, expression.parent = this, argumentList.parent = this;
-        }
-        InvocationExpressionSyntax.prototype.kind = function () {
-            return 177 /* InvocationExpression */;
-        };
-        return InvocationExpressionSyntax;
-    })();
-    TypeScript.InvocationExpressionSyntax = InvocationExpressionSyntax;
-    var ArrayLiteralExpressionSyntax = (function () {
-        function ArrayLiteralExpressionSyntax(data, openBracketToken, expressions, closeBracketToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.openBracketToken = openBracketToken, this.expressions = expressions, this.closeBracketToken = closeBracketToken, openBracketToken.parent = this, expressions.parent = this, closeBracketToken.parent = this;
-        }
-        ArrayLiteralExpressionSyntax.prototype.kind = function () {
-            return 178 /* ArrayLiteralExpression */;
-        };
-        return ArrayLiteralExpressionSyntax;
-    })();
-    TypeScript.ArrayLiteralExpressionSyntax = ArrayLiteralExpressionSyntax;
-    var ObjectLiteralExpressionSyntax = (function () {
-        function ObjectLiteralExpressionSyntax(data, openBraceToken, propertyAssignments, closeBraceToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.openBraceToken = openBraceToken, this.propertyAssignments = propertyAssignments, this.closeBraceToken = closeBraceToken, openBraceToken.parent = this, propertyAssignments.parent = this, closeBraceToken.parent = this;
-        }
-        ObjectLiteralExpressionSyntax.prototype.kind = function () {
-            return 179 /* ObjectLiteralExpression */;
-        };
-        return ObjectLiteralExpressionSyntax;
-    })();
-    TypeScript.ObjectLiteralExpressionSyntax = ObjectLiteralExpressionSyntax;
-    var ObjectCreationExpressionSyntax = (function () {
-        function ObjectCreationExpressionSyntax(data, newKeyword, expression, argumentList) {
-            if (data) {
-                this.__data = data;
-            }
-            this.newKeyword = newKeyword, this.expression = expression, this.argumentList = argumentList, newKeyword.parent = this, expression.parent = this, argumentList && (argumentList.parent = this);
-        }
-        ObjectCreationExpressionSyntax.prototype.kind = function () {
-            return 180 /* ObjectCreationExpression */;
-        };
-        return ObjectCreationExpressionSyntax;
-    })();
-    TypeScript.ObjectCreationExpressionSyntax = ObjectCreationExpressionSyntax;
-    var ParenthesizedExpressionSyntax = (function () {
-        function ParenthesizedExpressionSyntax(data, openParenToken, expression, closeParenToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.openParenToken = openParenToken, this.expression = expression, this.closeParenToken = closeParenToken, openParenToken.parent = this, expression.parent = this, closeParenToken.parent = this;
-        }
-        ParenthesizedExpressionSyntax.prototype.kind = function () {
-            return 181 /* ParenthesizedExpression */;
-        };
-        return ParenthesizedExpressionSyntax;
-    })();
-    TypeScript.ParenthesizedExpressionSyntax = ParenthesizedExpressionSyntax;
-    var ParenthesizedArrowFunctionExpressionSyntax = (function () {
-        function ParenthesizedArrowFunctionExpressionSyntax(data, callSignature, equalsGreaterThanToken, block, expression) {
-            if (data) {
-                this.__data = data;
-            }
-            this.callSignature = callSignature, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression, callSignature.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
-        }
-        ParenthesizedArrowFunctionExpressionSyntax.prototype.kind = function () {
-            return 182 /* ParenthesizedArrowFunctionExpression */;
-        };
-        return ParenthesizedArrowFunctionExpressionSyntax;
-    })();
-    TypeScript.ParenthesizedArrowFunctionExpressionSyntax = ParenthesizedArrowFunctionExpressionSyntax;
-    var SimpleArrowFunctionExpressionSyntax = (function () {
-        function SimpleArrowFunctionExpressionSyntax(data, parameter, equalsGreaterThanToken, block, expression) {
-            if (data) {
-                this.__data = data;
-            }
-            this.parameter = parameter, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression, parameter.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
-        }
-        SimpleArrowFunctionExpressionSyntax.prototype.kind = function () {
-            return 183 /* SimpleArrowFunctionExpression */;
-        };
-        return SimpleArrowFunctionExpressionSyntax;
-    })();
-    TypeScript.SimpleArrowFunctionExpressionSyntax = SimpleArrowFunctionExpressionSyntax;
-    var CastExpressionSyntax = (function () {
-        function CastExpressionSyntax(data, lessThanToken, type, greaterThanToken, expression) {
-            if (data) {
-                this.__data = data;
-            }
-            this.lessThanToken = lessThanToken, this.type = type, this.greaterThanToken = greaterThanToken, this.expression = expression, lessThanToken.parent = this, type.parent = this, greaterThanToken.parent = this, expression.parent = this;
-        }
-        CastExpressionSyntax.prototype.kind = function () {
-            return 184 /* CastExpression */;
-        };
-        return CastExpressionSyntax;
-    })();
-    TypeScript.CastExpressionSyntax = CastExpressionSyntax;
-    var ElementAccessExpressionSyntax = (function () {
-        function ElementAccessExpressionSyntax(data, expression, openBracketToken, argumentExpression, closeBracketToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.expression = expression, this.openBracketToken = openBracketToken, this.argumentExpression = argumentExpression, this.closeBracketToken = closeBracketToken, expression.parent = this, openBracketToken.parent = this, argumentExpression.parent = this, closeBracketToken.parent = this;
-        }
-        ElementAccessExpressionSyntax.prototype.kind = function () {
-            return 185 /* ElementAccessExpression */;
-        };
-        return ElementAccessExpressionSyntax;
-    })();
-    TypeScript.ElementAccessExpressionSyntax = ElementAccessExpressionSyntax;
-    var FunctionExpressionSyntax = (function () {
-        function FunctionExpressionSyntax(data, functionKeyword, identifier, callSignature, block) {
-            if (data) {
-                this.__data = data;
-            }
-            this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block, functionKeyword.parent = this, identifier && (identifier.parent = this), callSignature.parent = this, block.parent = this;
-        }
-        FunctionExpressionSyntax.prototype.kind = function () {
-            return 186 /* FunctionExpression */;
-        };
-        return FunctionExpressionSyntax;
-    })();
-    TypeScript.FunctionExpressionSyntax = FunctionExpressionSyntax;
-    var OmittedExpressionSyntax = (function () {
-        function OmittedExpressionSyntax(data) {
-            if (data) {
-                this.__data = data;
-            }
-        }
-        OmittedExpressionSyntax.prototype.kind = function () {
-            return 187 /* OmittedExpression */;
-        };
-        return OmittedExpressionSyntax;
-    })();
-    TypeScript.OmittedExpressionSyntax = OmittedExpressionSyntax;
-    var TemplateExpressionSyntax = (function () {
-        function TemplateExpressionSyntax(data, templateStartToken, templateClauses) {
-            if (data) {
-                this.__data = data;
-            }
-            this.templateStartToken = templateStartToken, this.templateClauses = templateClauses, templateStartToken.parent = this, templateClauses.parent = this;
-        }
-        TemplateExpressionSyntax.prototype.kind = function () {
-            return 188 /* TemplateExpression */;
-        };
-        return TemplateExpressionSyntax;
-    })();
-    TypeScript.TemplateExpressionSyntax = TemplateExpressionSyntax;
-    var TemplateAccessExpressionSyntax = (function () {
-        function TemplateAccessExpressionSyntax(data, expression, templateExpression) {
-            if (data) {
-                this.__data = data;
-            }
-            this.expression = expression, this.templateExpression = templateExpression, expression.parent = this, templateExpression.parent = this;
-        }
-        TemplateAccessExpressionSyntax.prototype.kind = function () {
-            return 189 /* TemplateAccessExpression */;
-        };
-        return TemplateAccessExpressionSyntax;
-    })();
-    TypeScript.TemplateAccessExpressionSyntax = TemplateAccessExpressionSyntax;
-    var VariableDeclarationSyntax = (function () {
-        function VariableDeclarationSyntax(data, varKeyword, variableDeclarators) {
-            if (data) {
-                this.__data = data;
-            }
-            this.varKeyword = varKeyword, this.variableDeclarators = variableDeclarators, varKeyword.parent = this, variableDeclarators.parent = this;
-        }
-        VariableDeclarationSyntax.prototype.kind = function () {
-            return 190 /* VariableDeclaration */;
-        };
-        return VariableDeclarationSyntax;
-    })();
-    TypeScript.VariableDeclarationSyntax = VariableDeclarationSyntax;
-    var VariableDeclaratorSyntax = (function () {
-        function VariableDeclaratorSyntax(data, propertyName, typeAnnotation, equalsValueClause) {
-            if (data) {
-                this.__data = data;
-            }
-            this.propertyName = propertyName, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause, propertyName.parent = this, typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
-        }
-        VariableDeclaratorSyntax.prototype.kind = function () {
-            return 191 /* VariableDeclarator */;
-        };
-        return VariableDeclaratorSyntax;
-    })();
-    TypeScript.VariableDeclaratorSyntax = VariableDeclaratorSyntax;
-    var ArgumentListSyntax = (function () {
-        function ArgumentListSyntax(data, typeArgumentList, openParenToken, _arguments, closeParenToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.typeArgumentList = typeArgumentList, this.openParenToken = openParenToken, this.arguments = _arguments, this.closeParenToken = closeParenToken, typeArgumentList && (typeArgumentList.parent = this), openParenToken.parent = this, _arguments.parent = this, closeParenToken.parent = this;
-        }
-        ArgumentListSyntax.prototype.kind = function () {
-            return 192 /* ArgumentList */;
-        };
-        return ArgumentListSyntax;
-    })();
-    TypeScript.ArgumentListSyntax = ArgumentListSyntax;
-    var ParameterListSyntax = (function () {
-        function ParameterListSyntax(data, openParenToken, parameters, closeParenToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.openParenToken = openParenToken, this.parameters = parameters, this.closeParenToken = closeParenToken, openParenToken.parent = this, parameters.parent = this, closeParenToken.parent = this;
-        }
-        ParameterListSyntax.prototype.kind = function () {
-            return 193 /* ParameterList */;
-        };
-        return ParameterListSyntax;
-    })();
-    TypeScript.ParameterListSyntax = ParameterListSyntax;
-    var TypeArgumentListSyntax = (function () {
-        function TypeArgumentListSyntax(data, lessThanToken, typeArguments, greaterThanToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.lessThanToken = lessThanToken, this.typeArguments = typeArguments, this.greaterThanToken = greaterThanToken, lessThanToken.parent = this, typeArguments.parent = this, greaterThanToken.parent = this;
-        }
-        TypeArgumentListSyntax.prototype.kind = function () {
-            return 194 /* TypeArgumentList */;
-        };
-        return TypeArgumentListSyntax;
-    })();
-    TypeScript.TypeArgumentListSyntax = TypeArgumentListSyntax;
-    var TypeParameterListSyntax = (function () {
-        function TypeParameterListSyntax(data, lessThanToken, typeParameters, greaterThanToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.lessThanToken = lessThanToken, this.typeParameters = typeParameters, this.greaterThanToken = greaterThanToken, lessThanToken.parent = this, typeParameters.parent = this, greaterThanToken.parent = this;
-        }
-        TypeParameterListSyntax.prototype.kind = function () {
-            return 195 /* TypeParameterList */;
-        };
-        return TypeParameterListSyntax;
-    })();
-    TypeScript.TypeParameterListSyntax = TypeParameterListSyntax;
-    var HeritageClauseSyntax = (function () {
-        function HeritageClauseSyntax(data, extendsOrImplementsKeyword, typeNames) {
-            if (data) {
-                this.__data = data;
-            }
-            this.extendsOrImplementsKeyword = extendsOrImplementsKeyword, this.typeNames = typeNames, extendsOrImplementsKeyword.parent = this, typeNames.parent = this;
-        }
-        HeritageClauseSyntax.prototype.kind = function () {
-            return 196 /* HeritageClause */;
-        };
-        return HeritageClauseSyntax;
-    })();
-    TypeScript.HeritageClauseSyntax = HeritageClauseSyntax;
-    var EqualsValueClauseSyntax = (function () {
-        function EqualsValueClauseSyntax(data, equalsToken, value) {
-            if (data) {
-                this.__data = data;
-            }
-            this.equalsToken = equalsToken, this.value = value, equalsToken.parent = this, value.parent = this;
-        }
-        EqualsValueClauseSyntax.prototype.kind = function () {
-            return 197 /* EqualsValueClause */;
-        };
-        return EqualsValueClauseSyntax;
-    })();
-    TypeScript.EqualsValueClauseSyntax = EqualsValueClauseSyntax;
-    var CaseSwitchClauseSyntax = (function () {
-        function CaseSwitchClauseSyntax(data, caseKeyword, expression, colonToken, statements) {
-            if (data) {
-                this.__data = data;
-            }
-            this.caseKeyword = caseKeyword, this.expression = expression, this.colonToken = colonToken, this.statements = statements, caseKeyword.parent = this, expression.parent = this, colonToken.parent = this, statements.parent = this;
-        }
-        CaseSwitchClauseSyntax.prototype.kind = function () {
-            return 198 /* CaseSwitchClause */;
-        };
-        return CaseSwitchClauseSyntax;
-    })();
-    TypeScript.CaseSwitchClauseSyntax = CaseSwitchClauseSyntax;
-    var DefaultSwitchClauseSyntax = (function () {
-        function DefaultSwitchClauseSyntax(data, defaultKeyword, colonToken, statements) {
-            if (data) {
-                this.__data = data;
-            }
-            this.defaultKeyword = defaultKeyword, this.colonToken = colonToken, this.statements = statements, defaultKeyword.parent = this, colonToken.parent = this, statements.parent = this;
-        }
-        DefaultSwitchClauseSyntax.prototype.kind = function () {
-            return 199 /* DefaultSwitchClause */;
-        };
-        return DefaultSwitchClauseSyntax;
-    })();
-    TypeScript.DefaultSwitchClauseSyntax = DefaultSwitchClauseSyntax;
-    var ElseClauseSyntax = (function () {
-        function ElseClauseSyntax(data, elseKeyword, statement) {
-            if (data) {
-                this.__data = data;
-            }
-            this.elseKeyword = elseKeyword, this.statement = statement, elseKeyword.parent = this, statement.parent = this;
-        }
-        ElseClauseSyntax.prototype.kind = function () {
-            return 200 /* ElseClause */;
-        };
-        return ElseClauseSyntax;
-    })();
-    TypeScript.ElseClauseSyntax = ElseClauseSyntax;
-    var CatchClauseSyntax = (function () {
-        function CatchClauseSyntax(data, catchKeyword, openParenToken, identifier, typeAnnotation, closeParenToken, block) {
-            if (data) {
-                this.__data = data;
-            }
-            this.catchKeyword = catchKeyword, this.openParenToken = openParenToken, this.identifier = identifier, this.typeAnnotation = typeAnnotation, this.closeParenToken = closeParenToken, this.block = block, catchKeyword.parent = this, openParenToken.parent = this, identifier.parent = this, typeAnnotation && (typeAnnotation.parent = this), closeParenToken.parent = this, block.parent = this;
-        }
-        CatchClauseSyntax.prototype.kind = function () {
-            return 201 /* CatchClause */;
-        };
-        return CatchClauseSyntax;
-    })();
-    TypeScript.CatchClauseSyntax = CatchClauseSyntax;
-    var FinallyClauseSyntax = (function () {
-        function FinallyClauseSyntax(data, finallyKeyword, block) {
-            if (data) {
-                this.__data = data;
-            }
-            this.finallyKeyword = finallyKeyword, this.block = block, finallyKeyword.parent = this, block.parent = this;
-        }
-        FinallyClauseSyntax.prototype.kind = function () {
-            return 202 /* FinallyClause */;
-        };
-        return FinallyClauseSyntax;
-    })();
-    TypeScript.FinallyClauseSyntax = FinallyClauseSyntax;
-    var TemplateClauseSyntax = (function () {
-        function TemplateClauseSyntax(data, expression, templateMiddleOrEndToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.expression = expression, this.templateMiddleOrEndToken = templateMiddleOrEndToken, expression.parent = this, templateMiddleOrEndToken.parent = this;
-        }
-        TemplateClauseSyntax.prototype.kind = function () {
-            return 203 /* TemplateClause */;
-        };
-        return TemplateClauseSyntax;
-    })();
-    TypeScript.TemplateClauseSyntax = TemplateClauseSyntax;
-    var TypeParameterSyntax = (function () {
-        function TypeParameterSyntax(data, identifier, constraint) {
-            if (data) {
-                this.__data = data;
-            }
-            this.identifier = identifier, this.constraint = constraint, identifier.parent = this, constraint && (constraint.parent = this);
-        }
-        TypeParameterSyntax.prototype.kind = function () {
-            return 204 /* TypeParameter */;
-        };
-        return TypeParameterSyntax;
-    })();
-    TypeScript.TypeParameterSyntax = TypeParameterSyntax;
-    var ConstraintSyntax = (function () {
-        function ConstraintSyntax(data, extendsKeyword, typeOrExpression) {
-            if (data) {
-                this.__data = data;
-            }
-            this.extendsKeyword = extendsKeyword, this.typeOrExpression = typeOrExpression, extendsKeyword.parent = this, typeOrExpression.parent = this;
-        }
-        ConstraintSyntax.prototype.kind = function () {
-            return 205 /* Constraint */;
-        };
-        return ConstraintSyntax;
-    })();
-    TypeScript.ConstraintSyntax = ConstraintSyntax;
-    var SimplePropertyAssignmentSyntax = (function () {
-        function SimplePropertyAssignmentSyntax(data, propertyName, colonToken, expression) {
-            if (data) {
-                this.__data = data;
-            }
-            this.propertyName = propertyName, this.colonToken = colonToken, this.expression = expression, propertyName.parent = this, colonToken.parent = this, expression.parent = this;
-        }
-        SimplePropertyAssignmentSyntax.prototype.kind = function () {
-            return 206 /* SimplePropertyAssignment */;
-        };
-        return SimplePropertyAssignmentSyntax;
-    })();
-    TypeScript.SimplePropertyAssignmentSyntax = SimplePropertyAssignmentSyntax;
-    var FunctionPropertyAssignmentSyntax = (function () {
-        function FunctionPropertyAssignmentSyntax(data, propertyName, callSignature, block) {
-            if (data) {
-                this.__data = data;
-            }
-            this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, propertyName.parent = this, callSignature.parent = this, block.parent = this;
-        }
-        FunctionPropertyAssignmentSyntax.prototype.kind = function () {
-            return 207 /* FunctionPropertyAssignment */;
-        };
-        return FunctionPropertyAssignmentSyntax;
-    })();
-    TypeScript.FunctionPropertyAssignmentSyntax = FunctionPropertyAssignmentSyntax;
-    var ParameterSyntax = (function () {
-        function ParameterSyntax(data, dotDotDotToken, modifiers, identifier, questionToken, typeAnnotation, equalsValueClause) {
-            if (data) {
-                this.__data = data;
-            }
-            this.dotDotDotToken = dotDotDotToken, this.modifiers = modifiers, this.identifier = identifier, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause, dotDotDotToken && (dotDotDotToken.parent = this), modifiers.parent = this, identifier.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
-        }
-        ParameterSyntax.prototype.kind = function () {
-            return 208 /* Parameter */;
-        };
-        return ParameterSyntax;
-    })();
-    TypeScript.ParameterSyntax = ParameterSyntax;
-    var EnumElementSyntax = (function () {
-        function EnumElementSyntax(data, propertyName, equalsValueClause) {
-            if (data) {
-                this.__data = data;
-            }
-            this.propertyName = propertyName, this.equalsValueClause = equalsValueClause, propertyName.parent = this, equalsValueClause && (equalsValueClause.parent = this);
-        }
-        EnumElementSyntax.prototype.kind = function () {
-            return 209 /* EnumElement */;
-        };
-        return EnumElementSyntax;
-    })();
-    TypeScript.EnumElementSyntax = EnumElementSyntax;
-    var TypeAnnotationSyntax = (function () {
-        function TypeAnnotationSyntax(data, colonToken, type) {
-            if (data) {
-                this.__data = data;
-            }
-            this.colonToken = colonToken, this.type = type, colonToken.parent = this, type.parent = this;
-        }
-        TypeAnnotationSyntax.prototype.kind = function () {
-            return 210 /* TypeAnnotation */;
-        };
-        return TypeAnnotationSyntax;
-    })();
-    TypeScript.TypeAnnotationSyntax = TypeAnnotationSyntax;
-    var ExternalModuleReferenceSyntax = (function () {
-        function ExternalModuleReferenceSyntax(data, requireKeyword, openParenToken, stringLiteral, closeParenToken) {
-            if (data) {
-                this.__data = data;
-            }
-            this.requireKeyword = requireKeyword, this.openParenToken = openParenToken, this.stringLiteral = stringLiteral, this.closeParenToken = closeParenToken, requireKeyword.parent = this, openParenToken.parent = this, stringLiteral.parent = this, closeParenToken.parent = this;
-        }
-        ExternalModuleReferenceSyntax.prototype.kind = function () {
-            return 211 /* ExternalModuleReference */;
-        };
-        return ExternalModuleReferenceSyntax;
-    })();
-    TypeScript.ExternalModuleReferenceSyntax = ExternalModuleReferenceSyntax;
-    var ModuleNameModuleReferenceSyntax = (function () {
-        function ModuleNameModuleReferenceSyntax(data, moduleName) {
-            if (data) {
-                this.__data = data;
-            }
-            this.moduleName = moduleName, moduleName.parent = this;
-        }
-        ModuleNameModuleReferenceSyntax.prototype.kind = function () {
-            return 212 /* ModuleNameModuleReference */;
-        };
-        return ModuleNameModuleReferenceSyntax;
-    })();
-    TypeScript.ModuleNameModuleReferenceSyntax = ModuleNameModuleReferenceSyntax;
+    TypeScript.SourceUnitSyntax = function (data, moduleElements, endOfFileToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.moduleElements = moduleElements, this.endOfFileToken = endOfFileToken;
+        moduleElements.parent = this, endOfFileToken.parent = this;
+    };
+    TypeScript.SourceUnitSyntax.prototype.kind = function () {
+        return 122 /* SourceUnit */;
+    };
+    TypeScript.QualifiedNameSyntax = function (data, left, dotToken, right) {
+        if (data) {
+            this.__data = data;
+        }
+        this.left = left, this.dotToken = dotToken, this.right = right;
+        left.parent = this, dotToken.parent = this, right.parent = this;
+    };
+    TypeScript.QualifiedNameSyntax.prototype.kind = function () {
+        return 123 /* QualifiedName */;
+    };
+    TypeScript.ObjectTypeSyntax = function (data, openBraceToken, typeMembers, closeBraceToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openBraceToken = openBraceToken, this.typeMembers = typeMembers, this.closeBraceToken = closeBraceToken;
+        openBraceToken.parent = this, typeMembers.parent = this, closeBraceToken.parent = this;
+    };
+    TypeScript.ObjectTypeSyntax.prototype.kind = function () {
+        return 124 /* ObjectType */;
+    };
+    TypeScript.FunctionTypeSyntax = function (data, typeParameterList, parameterList, equalsGreaterThanToken, type) {
+        if (data) {
+            this.__data = data;
+        }
+        this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type;
+        typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
+    };
+    TypeScript.FunctionTypeSyntax.prototype.kind = function () {
+        return 125 /* FunctionType */;
+    };
+    TypeScript.ArrayTypeSyntax = function (data, type, openBracketToken, closeBracketToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.type = type, this.openBracketToken = openBracketToken, this.closeBracketToken = closeBracketToken;
+        type.parent = this, openBracketToken.parent = this, closeBracketToken.parent = this;
+    };
+    TypeScript.ArrayTypeSyntax.prototype.kind = function () {
+        return 126 /* ArrayType */;
+    };
+    TypeScript.ConstructorTypeSyntax = function (data, newKeyword, typeParameterList, parameterList, equalsGreaterThanToken, type) {
+        if (data) {
+            this.__data = data;
+        }
+        this.newKeyword = newKeyword, this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type;
+        newKeyword.parent = this, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
+    };
+    TypeScript.ConstructorTypeSyntax.prototype.kind = function () {
+        return 127 /* ConstructorType */;
+    };
+    TypeScript.GenericTypeSyntax = function (data, name, typeArgumentList) {
+        if (data) {
+            this.__data = data;
+        }
+        this.name = name, this.typeArgumentList = typeArgumentList;
+        name.parent = this, typeArgumentList.parent = this;
+    };
+    TypeScript.GenericTypeSyntax.prototype.kind = function () {
+        return 128 /* GenericType */;
+    };
+    TypeScript.TypeQuerySyntax = function (data, typeOfKeyword, name) {
+        if (data) {
+            this.__data = data;
+        }
+        this.typeOfKeyword = typeOfKeyword, this.name = name;
+        typeOfKeyword.parent = this, name.parent = this;
+    };
+    TypeScript.TypeQuerySyntax.prototype.kind = function () {
+        return 129 /* TypeQuery */;
+    };
+    TypeScript.TupleTypeSyntax = function (data, openBracketToken, types, closeBracketToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openBracketToken = openBracketToken, this.types = types, this.closeBracketToken = closeBracketToken;
+        openBracketToken.parent = this, types.parent = this, closeBracketToken.parent = this;
+    };
+    TypeScript.TupleTypeSyntax.prototype.kind = function () {
+        return 130 /* TupleType */;
+    };
+    TypeScript.UnionTypeSyntax = function (data, left, barToken, right) {
+        if (data) {
+            this.__data = data;
+        }
+        this.left = left, this.barToken = barToken, this.right = right;
+        left.parent = this, barToken.parent = this, right.parent = this;
+    };
+    TypeScript.UnionTypeSyntax.prototype.kind = function () {
+        return 131 /* UnionType */;
+    };
+    TypeScript.ParenthesizedTypeSyntax = function (data, openParenToken, type, closeParenToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openParenToken = openParenToken, this.type = type, this.closeParenToken = closeParenToken;
+        openParenToken.parent = this, type.parent = this, closeParenToken.parent = this;
+    };
+    TypeScript.ParenthesizedTypeSyntax.prototype.kind = function () {
+        return 132 /* ParenthesizedType */;
+    };
+    TypeScript.InterfaceDeclarationSyntax = function (data, modifiers, interfaceKeyword, identifier, typeParameterList, heritageClauses, body) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.interfaceKeyword = interfaceKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.body = body;
+        modifiers.parent = this, interfaceKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), heritageClauses.parent = this, body.parent = this;
+    };
+    TypeScript.InterfaceDeclarationSyntax.prototype.kind = function () {
+        return 133 /* InterfaceDeclaration */;
+    };
+    TypeScript.FunctionDeclarationSyntax = function (data, modifiers, functionKeyword, identifier, callSignature, block, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, functionKeyword.parent = this, identifier.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.FunctionDeclarationSyntax.prototype.kind = function () {
+        return 134 /* FunctionDeclaration */;
+    };
+    TypeScript.ModuleDeclarationSyntax = function (data, modifiers, moduleKeyword, name, stringLiteral, openBraceToken, moduleElements, closeBraceToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.moduleKeyword = moduleKeyword, this.name = name, this.stringLiteral = stringLiteral, this.openBraceToken = openBraceToken, this.moduleElements = moduleElements, this.closeBraceToken = closeBraceToken;
+        modifiers.parent = this, moduleKeyword.parent = this, name && (name.parent = this), stringLiteral && (stringLiteral.parent = this), openBraceToken.parent = this, moduleElements.parent = this, closeBraceToken.parent = this;
+    };
+    TypeScript.ModuleDeclarationSyntax.prototype.kind = function () {
+        return 135 /* ModuleDeclaration */;
+    };
+    TypeScript.ClassDeclarationSyntax = function (data, modifiers, classKeyword, identifier, typeParameterList, heritageClauses, openBraceToken, classElements, closeBraceToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.classKeyword = classKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.openBraceToken = openBraceToken, this.classElements = classElements, this.closeBraceToken = closeBraceToken;
+        modifiers.parent = this, classKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), heritageClauses.parent = this, openBraceToken.parent = this, classElements.parent = this, closeBraceToken.parent = this;
+    };
+    TypeScript.ClassDeclarationSyntax.prototype.kind = function () {
+        return 136 /* ClassDeclaration */;
+    };
+    TypeScript.EnumDeclarationSyntax = function (data, modifiers, enumKeyword, identifier, openBraceToken, enumElements, closeBraceToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.enumKeyword = enumKeyword, this.identifier = identifier, this.openBraceToken = openBraceToken, this.enumElements = enumElements, this.closeBraceToken = closeBraceToken;
+        modifiers.parent = this, enumKeyword.parent = this, identifier.parent = this, openBraceToken.parent = this, enumElements.parent = this, closeBraceToken.parent = this;
+    };
+    TypeScript.EnumDeclarationSyntax.prototype.kind = function () {
+        return 137 /* EnumDeclaration */;
+    };
+    TypeScript.ImportDeclarationSyntax = function (data, modifiers, importKeyword, identifier, equalsToken, moduleReference, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.importKeyword = importKeyword, this.identifier = identifier, this.equalsToken = equalsToken, this.moduleReference = moduleReference, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, importKeyword.parent = this, identifier.parent = this, equalsToken.parent = this, moduleReference.parent = this, semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.ImportDeclarationSyntax.prototype.kind = function () {
+        return 138 /* ImportDeclaration */;
+    };
+    TypeScript.ExportAssignmentSyntax = function (data, exportKeyword, equalsToken, identifier, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.exportKeyword = exportKeyword, this.equalsToken = equalsToken, this.identifier = identifier, this.semicolonToken = semicolonToken;
+        exportKeyword.parent = this, equalsToken.parent = this, identifier.parent = this, semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.ExportAssignmentSyntax.prototype.kind = function () {
+        return 139 /* ExportAssignment */;
+    };
+    TypeScript.MemberFunctionDeclarationSyntax = function (data, modifiers, propertyName, callSignature, block, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, propertyName.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.MemberFunctionDeclarationSyntax.prototype.kind = function () {
+        return 140 /* MemberFunctionDeclaration */;
+    };
+    TypeScript.MemberVariableDeclarationSyntax = function (data, modifiers, variableDeclarator, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.variableDeclarator = variableDeclarator, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, variableDeclarator.parent = this, semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.MemberVariableDeclarationSyntax.prototype.kind = function () {
+        return 141 /* MemberVariableDeclaration */;
+    };
+    TypeScript.ConstructorDeclarationSyntax = function (data, modifiers, constructorKeyword, callSignature, block, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.constructorKeyword = constructorKeyword, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, constructorKeyword.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.ConstructorDeclarationSyntax.prototype.kind = function () {
+        return 142 /* ConstructorDeclaration */;
+    };
+    TypeScript.IndexMemberDeclarationSyntax = function (data, modifiers, indexSignature, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.indexSignature = indexSignature, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, indexSignature.parent = this, semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.IndexMemberDeclarationSyntax.prototype.kind = function () {
+        return 143 /* IndexMemberDeclaration */;
+    };
+    TypeScript.GetAccessorSyntax = function (data, modifiers, getKeyword, propertyName, callSignature, block) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.getKeyword = getKeyword, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block;
+        modifiers.parent = this, getKeyword.parent = this, propertyName.parent = this, callSignature.parent = this, block.parent = this;
+    };
+    TypeScript.GetAccessorSyntax.prototype.kind = function () {
+        return 144 /* GetAccessor */;
+    };
+    TypeScript.SetAccessorSyntax = function (data, modifiers, setKeyword, propertyName, callSignature, block) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.setKeyword = setKeyword, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block;
+        modifiers.parent = this, setKeyword.parent = this, propertyName.parent = this, callSignature.parent = this, block.parent = this;
+    };
+    TypeScript.SetAccessorSyntax.prototype.kind = function () {
+        return 145 /* SetAccessor */;
+    };
+    TypeScript.PropertySignatureSyntax = function (data, propertyName, questionToken, typeAnnotation) {
+        if (data) {
+            this.__data = data;
+        }
+        this.propertyName = propertyName, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation;
+        propertyName.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this);
+    };
+    TypeScript.PropertySignatureSyntax.prototype.kind = function () {
+        return 146 /* PropertySignature */;
+    };
+    TypeScript.CallSignatureSyntax = function (data, typeParameterList, parameterList, typeAnnotation) {
+        if (data) {
+            this.__data = data;
+        }
+        this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.typeAnnotation = typeAnnotation;
+        typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, typeAnnotation && (typeAnnotation.parent = this);
+    };
+    TypeScript.CallSignatureSyntax.prototype.kind = function () {
+        return 147 /* CallSignature */;
+    };
+    TypeScript.ConstructSignatureSyntax = function (data, newKeyword, callSignature) {
+        if (data) {
+            this.__data = data;
+        }
+        this.newKeyword = newKeyword, this.callSignature = callSignature;
+        newKeyword.parent = this, callSignature.parent = this;
+    };
+    TypeScript.ConstructSignatureSyntax.prototype.kind = function () {
+        return 148 /* ConstructSignature */;
+    };
+    TypeScript.IndexSignatureSyntax = function (data, openBracketToken, parameters, closeBracketToken, typeAnnotation) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openBracketToken = openBracketToken, this.parameters = parameters, this.closeBracketToken = closeBracketToken, this.typeAnnotation = typeAnnotation;
+        openBracketToken.parent = this, parameters.parent = this, closeBracketToken.parent = this, typeAnnotation && (typeAnnotation.parent = this);
+    };
+    TypeScript.IndexSignatureSyntax.prototype.kind = function () {
+        return 149 /* IndexSignature */;
+    };
+    TypeScript.MethodSignatureSyntax = function (data, propertyName, questionToken, callSignature) {
+        if (data) {
+            this.__data = data;
+        }
+        this.propertyName = propertyName, this.questionToken = questionToken, this.callSignature = callSignature;
+        propertyName.parent = this, questionToken && (questionToken.parent = this), callSignature.parent = this;
+    };
+    TypeScript.MethodSignatureSyntax.prototype.kind = function () {
+        return 150 /* MethodSignature */;
+    };
+    TypeScript.BlockSyntax = function (data, openBraceToken, statements, closeBraceToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openBraceToken = openBraceToken, this.statements = statements, this.closeBraceToken = closeBraceToken;
+        openBraceToken.parent = this, statements.parent = this, closeBraceToken.parent = this;
+    };
+    TypeScript.BlockSyntax.prototype.kind = function () {
+        return 151 /* Block */;
+    };
+    TypeScript.IfStatementSyntax = function (data, ifKeyword, openParenToken, condition, closeParenToken, statement, elseClause) {
+        if (data) {
+            this.__data = data;
+        }
+        this.ifKeyword = ifKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, this.elseClause = elseClause;
+        ifKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this, elseClause && (elseClause.parent = this);
+    };
+    TypeScript.IfStatementSyntax.prototype.kind = function () {
+        return 152 /* IfStatement */;
+    };
+    TypeScript.VariableStatementSyntax = function (data, modifiers, variableDeclaration, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.modifiers = modifiers, this.variableDeclaration = variableDeclaration, this.semicolonToken = semicolonToken;
+        modifiers.parent = this, variableDeclaration.parent = this, semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.VariableStatementSyntax.prototype.kind = function () {
+        return 153 /* VariableStatement */;
+    };
+    TypeScript.ExpressionStatementSyntax = function (data, expression, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.expression = expression, this.semicolonToken = semicolonToken;
+        expression.parent = this, semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.ExpressionStatementSyntax.prototype.kind = function () {
+        return 154 /* ExpressionStatement */;
+    };
+    TypeScript.ReturnStatementSyntax = function (data, returnKeyword, expression, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.returnKeyword = returnKeyword, this.expression = expression, this.semicolonToken = semicolonToken;
+        returnKeyword.parent = this, expression && (expression.parent = this), semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.ReturnStatementSyntax.prototype.kind = function () {
+        return 155 /* ReturnStatement */;
+    };
+    TypeScript.SwitchStatementSyntax = function (data, switchKeyword, openParenToken, expression, closeParenToken, openBraceToken, switchClauses, closeBraceToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.switchKeyword = switchKeyword, this.openParenToken = openParenToken, this.expression = expression, this.closeParenToken = closeParenToken, this.openBraceToken = openBraceToken, this.switchClauses = switchClauses, this.closeBraceToken = closeBraceToken;
+        switchKeyword.parent = this, openParenToken.parent = this, expression.parent = this, closeParenToken.parent = this, openBraceToken.parent = this, switchClauses.parent = this, closeBraceToken.parent = this;
+    };
+    TypeScript.SwitchStatementSyntax.prototype.kind = function () {
+        return 156 /* SwitchStatement */;
+    };
+    TypeScript.BreakStatementSyntax = function (data, breakKeyword, identifier, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.breakKeyword = breakKeyword, this.identifier = identifier, this.semicolonToken = semicolonToken;
+        breakKeyword.parent = this, identifier && (identifier.parent = this), semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.BreakStatementSyntax.prototype.kind = function () {
+        return 157 /* BreakStatement */;
+    };
+    TypeScript.ContinueStatementSyntax = function (data, continueKeyword, identifier, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.continueKeyword = continueKeyword, this.identifier = identifier, this.semicolonToken = semicolonToken;
+        continueKeyword.parent = this, identifier && (identifier.parent = this), semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.ContinueStatementSyntax.prototype.kind = function () {
+        return 158 /* ContinueStatement */;
+    };
+    TypeScript.ForStatementSyntax = function (data, forKeyword, openParenToken, variableDeclaration, initializer, firstSemicolonToken, condition, secondSemicolonToken, incrementor, closeParenToken, statement) {
+        if (data) {
+            this.__data = data;
+        }
+        this.forKeyword = forKeyword, this.openParenToken = openParenToken, this.variableDeclaration = variableDeclaration, this.initializer = initializer, this.firstSemicolonToken = firstSemicolonToken, this.condition = condition, this.secondSemicolonToken = secondSemicolonToken, this.incrementor = incrementor, this.closeParenToken = closeParenToken, this.statement = statement;
+        forKeyword.parent = this, openParenToken.parent = this, variableDeclaration && (variableDeclaration.parent = this), initializer && (initializer.parent = this), firstSemicolonToken.parent = this, condition && (condition.parent = this), secondSemicolonToken.parent = this, incrementor && (incrementor.parent = this), closeParenToken.parent = this, statement.parent = this;
+    };
+    TypeScript.ForStatementSyntax.prototype.kind = function () {
+        return 159 /* ForStatement */;
+    };
+    TypeScript.ForInStatementSyntax = function (data, forKeyword, openParenToken, variableDeclaration, left, inKeyword, expression, closeParenToken, statement) {
+        if (data) {
+            this.__data = data;
+        }
+        this.forKeyword = forKeyword, this.openParenToken = openParenToken, this.variableDeclaration = variableDeclaration, this.left = left, this.inKeyword = inKeyword, this.expression = expression, this.closeParenToken = closeParenToken, this.statement = statement;
+        forKeyword.parent = this, openParenToken.parent = this, variableDeclaration && (variableDeclaration.parent = this), left && (left.parent = this), inKeyword.parent = this, expression.parent = this, closeParenToken.parent = this, statement.parent = this;
+    };
+    TypeScript.ForInStatementSyntax.prototype.kind = function () {
+        return 160 /* ForInStatement */;
+    };
+    TypeScript.EmptyStatementSyntax = function (data, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.semicolonToken = semicolonToken;
+        semicolonToken.parent = this;
+    };
+    TypeScript.EmptyStatementSyntax.prototype.kind = function () {
+        return 161 /* EmptyStatement */;
+    };
+    TypeScript.ThrowStatementSyntax = function (data, throwKeyword, expression, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.throwKeyword = throwKeyword, this.expression = expression, this.semicolonToken = semicolonToken;
+        throwKeyword.parent = this, expression.parent = this, semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.ThrowStatementSyntax.prototype.kind = function () {
+        return 162 /* ThrowStatement */;
+    };
+    TypeScript.WhileStatementSyntax = function (data, whileKeyword, openParenToken, condition, closeParenToken, statement) {
+        if (data) {
+            this.__data = data;
+        }
+        this.whileKeyword = whileKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement;
+        whileKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
+    };
+    TypeScript.WhileStatementSyntax.prototype.kind = function () {
+        return 163 /* WhileStatement */;
+    };
+    TypeScript.TryStatementSyntax = function (data, tryKeyword, block, catchClause, finallyClause) {
+        if (data) {
+            this.__data = data;
+        }
+        this.tryKeyword = tryKeyword, this.block = block, this.catchClause = catchClause, this.finallyClause = finallyClause;
+        tryKeyword.parent = this, block.parent = this, catchClause && (catchClause.parent = this), finallyClause && (finallyClause.parent = this);
+    };
+    TypeScript.TryStatementSyntax.prototype.kind = function () {
+        return 164 /* TryStatement */;
+    };
+    TypeScript.LabeledStatementSyntax = function (data, identifier, colonToken, statement) {
+        if (data) {
+            this.__data = data;
+        }
+        this.identifier = identifier, this.colonToken = colonToken, this.statement = statement;
+        identifier.parent = this, colonToken.parent = this, statement.parent = this;
+    };
+    TypeScript.LabeledStatementSyntax.prototype.kind = function () {
+        return 165 /* LabeledStatement */;
+    };
+    TypeScript.DoStatementSyntax = function (data, doKeyword, statement, whileKeyword, openParenToken, condition, closeParenToken, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.doKeyword = doKeyword, this.statement = statement, this.whileKeyword = whileKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.semicolonToken = semicolonToken;
+        doKeyword.parent = this, statement.parent = this, whileKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.DoStatementSyntax.prototype.kind = function () {
+        return 166 /* DoStatement */;
+    };
+    TypeScript.DebuggerStatementSyntax = function (data, debuggerKeyword, semicolonToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.debuggerKeyword = debuggerKeyword, this.semicolonToken = semicolonToken;
+        debuggerKeyword.parent = this, semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeScript.DebuggerStatementSyntax.prototype.kind = function () {
+        return 167 /* DebuggerStatement */;
+    };
+    TypeScript.WithStatementSyntax = function (data, withKeyword, openParenToken, condition, closeParenToken, statement) {
+        if (data) {
+            this.__data = data;
+        }
+        this.withKeyword = withKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement;
+        withKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
+    };
+    TypeScript.WithStatementSyntax.prototype.kind = function () {
+        return 168 /* WithStatement */;
+    };
+    TypeScript.PrefixUnaryExpressionSyntax = function (data, operatorToken, operand) {
+        if (data) {
+            this.__data = data;
+        }
+        this.operatorToken = operatorToken, this.operand = operand;
+        operatorToken.parent = this, operand.parent = this;
+    };
+    TypeScript.PrefixUnaryExpressionSyntax.prototype.kind = function () {
+        return 169 /* PrefixUnaryExpression */;
+    };
+    TypeScript.DeleteExpressionSyntax = function (data, deleteKeyword, expression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.deleteKeyword = deleteKeyword, this.expression = expression;
+        deleteKeyword.parent = this, expression.parent = this;
+    };
+    TypeScript.DeleteExpressionSyntax.prototype.kind = function () {
+        return 170 /* DeleteExpression */;
+    };
+    TypeScript.TypeOfExpressionSyntax = function (data, typeOfKeyword, expression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.typeOfKeyword = typeOfKeyword, this.expression = expression;
+        typeOfKeyword.parent = this, expression.parent = this;
+    };
+    TypeScript.TypeOfExpressionSyntax.prototype.kind = function () {
+        return 171 /* TypeOfExpression */;
+    };
+    TypeScript.VoidExpressionSyntax = function (data, voidKeyword, expression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.voidKeyword = voidKeyword, this.expression = expression;
+        voidKeyword.parent = this, expression.parent = this;
+    };
+    TypeScript.VoidExpressionSyntax.prototype.kind = function () {
+        return 172 /* VoidExpression */;
+    };
+    TypeScript.ConditionalExpressionSyntax = function (data, condition, questionToken, whenTrue, colonToken, whenFalse) {
+        if (data) {
+            this.__data = data;
+        }
+        this.condition = condition, this.questionToken = questionToken, this.whenTrue = whenTrue, this.colonToken = colonToken, this.whenFalse = whenFalse;
+        condition.parent = this, questionToken.parent = this, whenTrue.parent = this, colonToken.parent = this, whenFalse.parent = this;
+    };
+    TypeScript.ConditionalExpressionSyntax.prototype.kind = function () {
+        return 173 /* ConditionalExpression */;
+    };
+    TypeScript.BinaryExpressionSyntax = function (data, left, operatorToken, right) {
+        if (data) {
+            this.__data = data;
+        }
+        this.left = left, this.operatorToken = operatorToken, this.right = right;
+        left.parent = this, operatorToken.parent = this, right.parent = this;
+    };
+    TypeScript.BinaryExpressionSyntax.prototype.kind = function () {
+        return 174 /* BinaryExpression */;
+    };
+    TypeScript.PostfixUnaryExpressionSyntax = function (data, operand, operatorToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.operand = operand, this.operatorToken = operatorToken;
+        operand.parent = this, operatorToken.parent = this;
+    };
+    TypeScript.PostfixUnaryExpressionSyntax.prototype.kind = function () {
+        return 175 /* PostfixUnaryExpression */;
+    };
+    TypeScript.MemberAccessExpressionSyntax = function (data, expression, dotToken, name) {
+        if (data) {
+            this.__data = data;
+        }
+        this.expression = expression, this.dotToken = dotToken, this.name = name;
+        expression.parent = this, dotToken.parent = this, name.parent = this;
+    };
+    TypeScript.MemberAccessExpressionSyntax.prototype.kind = function () {
+        return 176 /* MemberAccessExpression */;
+    };
+    TypeScript.InvocationExpressionSyntax = function (data, expression, argumentList) {
+        if (data) {
+            this.__data = data;
+        }
+        this.expression = expression, this.argumentList = argumentList;
+        expression.parent = this, argumentList.parent = this;
+    };
+    TypeScript.InvocationExpressionSyntax.prototype.kind = function () {
+        return 177 /* InvocationExpression */;
+    };
+    TypeScript.ArrayLiteralExpressionSyntax = function (data, openBracketToken, expressions, closeBracketToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openBracketToken = openBracketToken, this.expressions = expressions, this.closeBracketToken = closeBracketToken;
+        openBracketToken.parent = this, expressions.parent = this, closeBracketToken.parent = this;
+    };
+    TypeScript.ArrayLiteralExpressionSyntax.prototype.kind = function () {
+        return 178 /* ArrayLiteralExpression */;
+    };
+    TypeScript.ObjectLiteralExpressionSyntax = function (data, openBraceToken, propertyAssignments, closeBraceToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openBraceToken = openBraceToken, this.propertyAssignments = propertyAssignments, this.closeBraceToken = closeBraceToken;
+        openBraceToken.parent = this, propertyAssignments.parent = this, closeBraceToken.parent = this;
+    };
+    TypeScript.ObjectLiteralExpressionSyntax.prototype.kind = function () {
+        return 179 /* ObjectLiteralExpression */;
+    };
+    TypeScript.ObjectCreationExpressionSyntax = function (data, newKeyword, expression, argumentList) {
+        if (data) {
+            this.__data = data;
+        }
+        this.newKeyword = newKeyword, this.expression = expression, this.argumentList = argumentList;
+        newKeyword.parent = this, expression.parent = this, argumentList && (argumentList.parent = this);
+    };
+    TypeScript.ObjectCreationExpressionSyntax.prototype.kind = function () {
+        return 180 /* ObjectCreationExpression */;
+    };
+    TypeScript.ParenthesizedExpressionSyntax = function (data, openParenToken, expression, closeParenToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openParenToken = openParenToken, this.expression = expression, this.closeParenToken = closeParenToken;
+        openParenToken.parent = this, expression.parent = this, closeParenToken.parent = this;
+    };
+    TypeScript.ParenthesizedExpressionSyntax.prototype.kind = function () {
+        return 181 /* ParenthesizedExpression */;
+    };
+    TypeScript.ParenthesizedArrowFunctionExpressionSyntax = function (data, callSignature, equalsGreaterThanToken, block, expression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.callSignature = callSignature, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression;
+        callSignature.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
+    };
+    TypeScript.ParenthesizedArrowFunctionExpressionSyntax.prototype.kind = function () {
+        return 182 /* ParenthesizedArrowFunctionExpression */;
+    };
+    TypeScript.SimpleArrowFunctionExpressionSyntax = function (data, parameter, equalsGreaterThanToken, block, expression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.parameter = parameter, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression;
+        parameter.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
+    };
+    TypeScript.SimpleArrowFunctionExpressionSyntax.prototype.kind = function () {
+        return 183 /* SimpleArrowFunctionExpression */;
+    };
+    TypeScript.CastExpressionSyntax = function (data, lessThanToken, type, greaterThanToken, expression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.lessThanToken = lessThanToken, this.type = type, this.greaterThanToken = greaterThanToken, this.expression = expression;
+        lessThanToken.parent = this, type.parent = this, greaterThanToken.parent = this, expression.parent = this;
+    };
+    TypeScript.CastExpressionSyntax.prototype.kind = function () {
+        return 184 /* CastExpression */;
+    };
+    TypeScript.ElementAccessExpressionSyntax = function (data, expression, openBracketToken, argumentExpression, closeBracketToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.expression = expression, this.openBracketToken = openBracketToken, this.argumentExpression = argumentExpression, this.closeBracketToken = closeBracketToken;
+        expression.parent = this, openBracketToken.parent = this, argumentExpression.parent = this, closeBracketToken.parent = this;
+    };
+    TypeScript.ElementAccessExpressionSyntax.prototype.kind = function () {
+        return 185 /* ElementAccessExpression */;
+    };
+    TypeScript.FunctionExpressionSyntax = function (data, functionKeyword, identifier, callSignature, block) {
+        if (data) {
+            this.__data = data;
+        }
+        this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block;
+        functionKeyword.parent = this, identifier && (identifier.parent = this), callSignature.parent = this, block.parent = this;
+    };
+    TypeScript.FunctionExpressionSyntax.prototype.kind = function () {
+        return 186 /* FunctionExpression */;
+    };
+    TypeScript.OmittedExpressionSyntax = function (data) {
+        if (data) {
+            this.__data = data;
+        }
+    };
+    TypeScript.OmittedExpressionSyntax.prototype.kind = function () {
+        return 187 /* OmittedExpression */;
+    };
+    TypeScript.TemplateExpressionSyntax = function (data, templateStartToken, templateClauses) {
+        if (data) {
+            this.__data = data;
+        }
+        this.templateStartToken = templateStartToken, this.templateClauses = templateClauses;
+        templateStartToken.parent = this, templateClauses.parent = this;
+    };
+    TypeScript.TemplateExpressionSyntax.prototype.kind = function () {
+        return 188 /* TemplateExpression */;
+    };
+    TypeScript.TemplateAccessExpressionSyntax = function (data, expression, templateExpression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.expression = expression, this.templateExpression = templateExpression;
+        expression.parent = this, templateExpression.parent = this;
+    };
+    TypeScript.TemplateAccessExpressionSyntax.prototype.kind = function () {
+        return 189 /* TemplateAccessExpression */;
+    };
+    TypeScript.VariableDeclarationSyntax = function (data, varKeyword, variableDeclarators) {
+        if (data) {
+            this.__data = data;
+        }
+        this.varKeyword = varKeyword, this.variableDeclarators = variableDeclarators;
+        varKeyword.parent = this, variableDeclarators.parent = this;
+    };
+    TypeScript.VariableDeclarationSyntax.prototype.kind = function () {
+        return 190 /* VariableDeclaration */;
+    };
+    TypeScript.VariableDeclaratorSyntax = function (data, propertyName, typeAnnotation, equalsValueClause) {
+        if (data) {
+            this.__data = data;
+        }
+        this.propertyName = propertyName, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause;
+        propertyName.parent = this, typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
+    };
+    TypeScript.VariableDeclaratorSyntax.prototype.kind = function () {
+        return 191 /* VariableDeclarator */;
+    };
+    TypeScript.ArgumentListSyntax = function (data, typeArgumentList, openParenToken, _arguments, closeParenToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.typeArgumentList = typeArgumentList, this.openParenToken = openParenToken, this.arguments = _arguments, this.closeParenToken = closeParenToken;
+        typeArgumentList && (typeArgumentList.parent = this), openParenToken.parent = this, _arguments.parent = this, closeParenToken.parent = this;
+    };
+    TypeScript.ArgumentListSyntax.prototype.kind = function () {
+        return 192 /* ArgumentList */;
+    };
+    TypeScript.ParameterListSyntax = function (data, openParenToken, parameters, closeParenToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.openParenToken = openParenToken, this.parameters = parameters, this.closeParenToken = closeParenToken;
+        openParenToken.parent = this, parameters.parent = this, closeParenToken.parent = this;
+    };
+    TypeScript.ParameterListSyntax.prototype.kind = function () {
+        return 193 /* ParameterList */;
+    };
+    TypeScript.TypeArgumentListSyntax = function (data, lessThanToken, typeArguments, greaterThanToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.lessThanToken = lessThanToken, this.typeArguments = typeArguments, this.greaterThanToken = greaterThanToken;
+        lessThanToken.parent = this, typeArguments.parent = this, greaterThanToken.parent = this;
+    };
+    TypeScript.TypeArgumentListSyntax.prototype.kind = function () {
+        return 194 /* TypeArgumentList */;
+    };
+    TypeScript.TypeParameterListSyntax = function (data, lessThanToken, typeParameters, greaterThanToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.lessThanToken = lessThanToken, this.typeParameters = typeParameters, this.greaterThanToken = greaterThanToken;
+        lessThanToken.parent = this, typeParameters.parent = this, greaterThanToken.parent = this;
+    };
+    TypeScript.TypeParameterListSyntax.prototype.kind = function () {
+        return 195 /* TypeParameterList */;
+    };
+    TypeScript.HeritageClauseSyntax = function (data, extendsOrImplementsKeyword, typeNames) {
+        if (data) {
+            this.__data = data;
+        }
+        this.extendsOrImplementsKeyword = extendsOrImplementsKeyword, this.typeNames = typeNames;
+        extendsOrImplementsKeyword.parent = this, typeNames.parent = this;
+    };
+    TypeScript.HeritageClauseSyntax.prototype.kind = function () {
+        return 196 /* HeritageClause */;
+    };
+    TypeScript.EqualsValueClauseSyntax = function (data, equalsToken, value) {
+        if (data) {
+            this.__data = data;
+        }
+        this.equalsToken = equalsToken, this.value = value;
+        equalsToken.parent = this, value.parent = this;
+    };
+    TypeScript.EqualsValueClauseSyntax.prototype.kind = function () {
+        return 197 /* EqualsValueClause */;
+    };
+    TypeScript.CaseSwitchClauseSyntax = function (data, caseKeyword, expression, colonToken, statements) {
+        if (data) {
+            this.__data = data;
+        }
+        this.caseKeyword = caseKeyword, this.expression = expression, this.colonToken = colonToken, this.statements = statements;
+        caseKeyword.parent = this, expression.parent = this, colonToken.parent = this, statements.parent = this;
+    };
+    TypeScript.CaseSwitchClauseSyntax.prototype.kind = function () {
+        return 198 /* CaseSwitchClause */;
+    };
+    TypeScript.DefaultSwitchClauseSyntax = function (data, defaultKeyword, colonToken, statements) {
+        if (data) {
+            this.__data = data;
+        }
+        this.defaultKeyword = defaultKeyword, this.colonToken = colonToken, this.statements = statements;
+        defaultKeyword.parent = this, colonToken.parent = this, statements.parent = this;
+    };
+    TypeScript.DefaultSwitchClauseSyntax.prototype.kind = function () {
+        return 199 /* DefaultSwitchClause */;
+    };
+    TypeScript.ElseClauseSyntax = function (data, elseKeyword, statement) {
+        if (data) {
+            this.__data = data;
+        }
+        this.elseKeyword = elseKeyword, this.statement = statement;
+        elseKeyword.parent = this, statement.parent = this;
+    };
+    TypeScript.ElseClauseSyntax.prototype.kind = function () {
+        return 200 /* ElseClause */;
+    };
+    TypeScript.CatchClauseSyntax = function (data, catchKeyword, openParenToken, identifier, typeAnnotation, closeParenToken, block) {
+        if (data) {
+            this.__data = data;
+        }
+        this.catchKeyword = catchKeyword, this.openParenToken = openParenToken, this.identifier = identifier, this.typeAnnotation = typeAnnotation, this.closeParenToken = closeParenToken, this.block = block;
+        catchKeyword.parent = this, openParenToken.parent = this, identifier.parent = this, typeAnnotation && (typeAnnotation.parent = this), closeParenToken.parent = this, block.parent = this;
+    };
+    TypeScript.CatchClauseSyntax.prototype.kind = function () {
+        return 201 /* CatchClause */;
+    };
+    TypeScript.FinallyClauseSyntax = function (data, finallyKeyword, block) {
+        if (data) {
+            this.__data = data;
+        }
+        this.finallyKeyword = finallyKeyword, this.block = block;
+        finallyKeyword.parent = this, block.parent = this;
+    };
+    TypeScript.FinallyClauseSyntax.prototype.kind = function () {
+        return 202 /* FinallyClause */;
+    };
+    TypeScript.TemplateClauseSyntax = function (data, expression, templateMiddleOrEndToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.expression = expression, this.templateMiddleOrEndToken = templateMiddleOrEndToken;
+        expression.parent = this, templateMiddleOrEndToken.parent = this;
+    };
+    TypeScript.TemplateClauseSyntax.prototype.kind = function () {
+        return 203 /* TemplateClause */;
+    };
+    TypeScript.TypeParameterSyntax = function (data, identifier, constraint) {
+        if (data) {
+            this.__data = data;
+        }
+        this.identifier = identifier, this.constraint = constraint;
+        identifier.parent = this, constraint && (constraint.parent = this);
+    };
+    TypeScript.TypeParameterSyntax.prototype.kind = function () {
+        return 204 /* TypeParameter */;
+    };
+    TypeScript.ConstraintSyntax = function (data, extendsKeyword, typeOrExpression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.extendsKeyword = extendsKeyword, this.typeOrExpression = typeOrExpression;
+        extendsKeyword.parent = this, typeOrExpression.parent = this;
+    };
+    TypeScript.ConstraintSyntax.prototype.kind = function () {
+        return 205 /* Constraint */;
+    };
+    TypeScript.SimplePropertyAssignmentSyntax = function (data, propertyName, colonToken, expression) {
+        if (data) {
+            this.__data = data;
+        }
+        this.propertyName = propertyName, this.colonToken = colonToken, this.expression = expression;
+        propertyName.parent = this, colonToken.parent = this, expression.parent = this;
+    };
+    TypeScript.SimplePropertyAssignmentSyntax.prototype.kind = function () {
+        return 206 /* SimplePropertyAssignment */;
+    };
+    TypeScript.FunctionPropertyAssignmentSyntax = function (data, propertyName, callSignature, block) {
+        if (data) {
+            this.__data = data;
+        }
+        this.propertyName = propertyName, this.callSignature = callSignature, this.block = block;
+        propertyName.parent = this, callSignature.parent = this, block.parent = this;
+    };
+    TypeScript.FunctionPropertyAssignmentSyntax.prototype.kind = function () {
+        return 207 /* FunctionPropertyAssignment */;
+    };
+    TypeScript.ParameterSyntax = function (data, dotDotDotToken, modifiers, identifier, questionToken, typeAnnotation, equalsValueClause) {
+        if (data) {
+            this.__data = data;
+        }
+        this.dotDotDotToken = dotDotDotToken, this.modifiers = modifiers, this.identifier = identifier, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause;
+        dotDotDotToken && (dotDotDotToken.parent = this), modifiers.parent = this, identifier.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
+    };
+    TypeScript.ParameterSyntax.prototype.kind = function () {
+        return 208 /* Parameter */;
+    };
+    TypeScript.EnumElementSyntax = function (data, propertyName, equalsValueClause) {
+        if (data) {
+            this.__data = data;
+        }
+        this.propertyName = propertyName, this.equalsValueClause = equalsValueClause;
+        propertyName.parent = this, equalsValueClause && (equalsValueClause.parent = this);
+    };
+    TypeScript.EnumElementSyntax.prototype.kind = function () {
+        return 209 /* EnumElement */;
+    };
+    TypeScript.TypeAnnotationSyntax = function (data, colonToken, type) {
+        if (data) {
+            this.__data = data;
+        }
+        this.colonToken = colonToken, this.type = type;
+        colonToken.parent = this, type.parent = this;
+    };
+    TypeScript.TypeAnnotationSyntax.prototype.kind = function () {
+        return 210 /* TypeAnnotation */;
+    };
+    TypeScript.ExternalModuleReferenceSyntax = function (data, requireKeyword, openParenToken, stringLiteral, closeParenToken) {
+        if (data) {
+            this.__data = data;
+        }
+        this.requireKeyword = requireKeyword, this.openParenToken = openParenToken, this.stringLiteral = stringLiteral, this.closeParenToken = closeParenToken;
+        requireKeyword.parent = this, openParenToken.parent = this, stringLiteral.parent = this, closeParenToken.parent = this;
+    };
+    TypeScript.ExternalModuleReferenceSyntax.prototype.kind = function () {
+        return 211 /* ExternalModuleReference */;
+    };
+    TypeScript.ModuleNameModuleReferenceSyntax = function (data, moduleName) {
+        if (data) {
+            this.__data = data;
+        }
+        this.moduleName = moduleName;
+        moduleName.parent = this;
+    };
+    TypeScript.ModuleNameModuleReferenceSyntax.prototype.kind = function () {
+        return 212 /* ModuleNameModuleReference */;
+    };
 })(TypeScript || (TypeScript = {}));
 ///<reference path='references.ts' />
 var TypeScript;
