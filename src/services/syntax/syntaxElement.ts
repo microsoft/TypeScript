@@ -83,7 +83,7 @@ module TypeScript {
             throw Errors.argumentOutOfRange("position");
         }
 
-        var positionedToken = findTokenWorker(element, position);
+        var positionedToken = findTokenWorker(element, 0, position);
 
         if (includeSkippedTokens) {
             return findSkippedTokenInPositionedToken(positionedToken, position) || positionedToken;
@@ -135,7 +135,7 @@ module TypeScript {
         return undefined;
     }
 
-    function findTokenWorker(element: ISyntaxElement, position: number): ISyntaxToken {
+    function findTokenWorker(element: ISyntaxElement, elementPosition: number, position: number): ISyntaxToken {
         // Debug.assert(position >= 0 && position < this.fullWidth());
         if (isToken(element)) {
             Debug.assert(fullWidth(element) > 0);
@@ -155,15 +155,13 @@ module TypeScript {
             if (child) {
                 var childFullWidth = fullWidth(child);
                 if (childFullWidth > 0) {
-                    var childFullStart = fullStart(child);
+                    var elementEndPosition = elementPosition + childFullWidth;
 
-                    if (position >= childFullStart) {
-                        var childFullEnd = childFullStart + childFullWidth;
-
-                        if (position < childFullEnd) {
-                            return findTokenWorker(child, position);
-                        }
+                    if (position < elementEndPosition) {
+                        return findTokenWorker(child, elementPosition, position);
                     }
+
+                    elementPosition = elementEndPosition;
                 }
             }
         }
