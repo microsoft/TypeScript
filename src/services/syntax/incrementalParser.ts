@@ -243,10 +243,9 @@ module TypeScript.IncrementalParser {
             // edited range, as their positions will be correct when the underlying parser source 
             // creates them.
 
-            var position = absolutePosition();
-            var tokenWasMoved = isPastChangeRange() && fullStart(nodeOrToken) !== position;
+            if (isPastChangeRange()) {
+                var position = absolutePosition();
 
-            if (tokenWasMoved) {
                 if (isToken(nodeOrToken)) {
                     (<ISyntaxToken>nodeOrToken).setFullStart(position);
                 }

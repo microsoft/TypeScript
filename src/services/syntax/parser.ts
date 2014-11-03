@@ -1599,9 +1599,7 @@ module TypeScript.Parser {
             return new HeritageClauseSyntax(parseNodeData, extendsOrImplementsKeyword, typeNames);
         }
 
-        function isInterfaceEnumClassModuleImportOrExport(modifierCount: number): boolean {
-            var _currentToken = currentToken();
-
+        function isInterfaceEnumClassModuleImportOrExport(modifierCount: number, _currentToken?: ISyntaxToken): boolean {
             if (modifierCount) {
                 // Any of these keywords following a modifier is definitely a TS construct.
                 switch (peekToken(modifierCount).kind()) {
@@ -1614,6 +1612,8 @@ module TypeScript.Parser {
                 }
             }
 
+            _currentToken = _currentToken || currentToken();
+
             // no modifiers.  While certain of these keywords are javascript keywords as well, it
             // is possible to run into them in some circumstances in error recovery where we don't
             // want to consider them the start of the module element construct.  For example, they
@@ -1623,25 +1623,16 @@ module TypeScript.Parser {
 
             switch (_currentToken.kind()) {
                 case SyntaxKind.ModuleKeyword:
-                    if (isIdentifier(nextToken) || nextToken.kind() === SyntaxKind.StringLiteral) {
-                        return true;
-                    }
-                    break;
+                    return isIdentifier(nextToken) || nextToken.kind() === SyntaxKind.StringLiteral;
 
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.InterfaceKeyword:
-                    if (isIdentifier(nextToken)) {
-                        return true;
-                    }
-                    break;
+                    return isIdentifier(nextToken);
 
                 case SyntaxKind.ExportKeyword:
-                    if (nextToken.kind() === SyntaxKind.EqualsToken) {
-                        return true;
-                    }
-                    break;
+                    return nextToken.kind() === SyntaxKind.EqualsToken;
             }
 
             return false;
@@ -1694,7 +1685,7 @@ module TypeScript.Parser {
             // do not want to consume.  This can happen when the user does not terminate their 
             // existing block properly.  We don't want to accidently consume these as expression 
             // below.
-            if (isInterfaceEnumClassModuleImportOrExport(modifierCount)) {
+            if (isInterfaceEnumClassModuleImportOrExport(modifierCount, _currentToken)) {
                 return false;
             }
 
@@ -1760,7 +1751,7 @@ module TypeScript.Parser {
             // do not want to consume.  This can happen when the user does not terminate their 
             // existing block properly.  We don't want to accidently consume these as expression 
             // below.
-            if (isInterfaceEnumClassModuleImportOrExport(modifierCount)) {
+            if (isInterfaceEnumClassModuleImportOrExport(modifierCount, _currentToken)) {
                 return undefined;
             }
             else if (isVariableStatement(modifierCount)) {

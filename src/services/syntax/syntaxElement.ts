@@ -220,7 +220,7 @@ module TypeScript {
     }
 
     export function isList(element: ISyntaxElement): boolean {
-        return element && element.kind() === SyntaxKind.List;
+        return element instanceof Array;
     }
 
     export function syntaxID(element: ISyntaxElement): number {
@@ -322,10 +322,6 @@ module TypeScript {
             return (<ISyntaxToken>element).fullWidth();
         }
 
-        if (isShared(element)) {
-            return 0;
-        }
-
         var info = data(element);
         return info >>> SyntaxConstants.NodeFullWidthShift;
     }
@@ -335,16 +331,11 @@ module TypeScript {
             return (<ISyntaxToken>element).isIncrementallyUnusable();
         }
 
-        if (isShared(element)) {
-            // All shared lists are reusable.
-            return false;
-        }
-
         return (data(element) & SyntaxConstants.NodeIncrementallyUnusableMask) !== 0;
     }
 
     function data(element: ISyntaxElement): number {
-        Debug.assert(isNode(element) || isList(element));
+        // Debug.assert(isNode(element) || isList(element));
 
         // Lists and nodes all have a 'data' element.
         var dataElement = <ISyntaxNode>element;
@@ -368,7 +359,7 @@ module TypeScript {
         var fullWidth = 0;
 
         // If we have no children (like an OmmittedExpressionSyntax), we're automatically not reusable.
-        var isIncrementallyUnusable = slotCount === 0;
+        var isIncrementallyUnusable = slotCount === 0 && !isList(element);
 
         for (var i = 0, n = slotCount; i < n; i++) {
             var child = element.childAt(i);
