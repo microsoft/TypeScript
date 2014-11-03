@@ -12,7 +12,10 @@ module TypeScript.SimpleText {
         }
 
         public substr(start: number, length: number): string {
-            return this.value.substr(start, length);
+            var val = this.value;
+            return start === 0 && length == val.length
+                ? val
+                : val.substr(start, length);
         }
 
         public charCodeAt(index: number): number {
