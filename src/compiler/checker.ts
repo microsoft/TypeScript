@@ -4933,11 +4933,11 @@ module ts {
                         // TypeScript 1.0 spec (April 2014): 4.10
                         // A property access expression is always classified as a reference.
                         // NOTE (not in spec): assignment to enum members should not be allowed
-                        return !symbol || symbol === unknownSymbol || (symbol.flags & ~SymbolFlags.EnumMember) !== 0;
+                        return !symbol || symbol === unknownSymbol || (symbol.flags & SymbolFlags.EnumMember) === 0;
                     case SyntaxKind.IndexedAccess:
                         var symbol = findSymbol(n);
                         if (symbol) {
-                            return symbol === unknownSymbol || (symbol.flags & ~SymbolFlags.EnumMember) !== 0;
+                            return symbol === unknownSymbol || (symbol.flags & SymbolFlags.EnumMember) === 0;
                         } 
                         
                         var objectSymbol = findSymbol((<IndexedAccess>n).object);
