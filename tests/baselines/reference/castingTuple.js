@@ -16,16 +16,21 @@ var classCDTuple: [C, D] = [new C(), new D()];
 var interfaceIITuple = <[I, I]>classCDTuple;
 var classCDATuple = <[C, D, A]>classCDTuple;
 var eleFromCDA1 = classCDATuple[2]; // A
-var eleFromCDA2 = classCDATuple[5]; // {}
+var eleFromCDA2 = classCDATuple[5]; // C | D | A
 var t10: [E1, E2] = [E1.one, E2.one];
 var t11 = <[number, number]>t10;
 var array1 = <{}[]>emptyObjTuple;
+var unionTuple: [C, string | number] = [new C(), "foo"];
+var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
+var unionTuple3: [number, string| number] = [10, "foo"]; 
+var unionTuple4 = <[number, number]>unionTuple3; 
 
 // error
 var t3 = <[number, number]>numStrTuple;
 var t9 = <[A, I]>classCDTuple;
 var array1 = <number[]>numStrTuple;
 t4[2] = 10;
+
 
 //// [castingTuple.js]
 var __extends = this.__extends || function (d, b) {
@@ -84,10 +89,14 @@ var classCDTuple = [new C(), new D()];
 var interfaceIITuple = classCDTuple;
 var classCDATuple = classCDTuple;
 var eleFromCDA1 = classCDATuple[2]; // A
-var eleFromCDA2 = classCDATuple[5]; // {}
+var eleFromCDA2 = classCDATuple[5]; // C | D | A
 var t10 = [0 /* one */, 0 /* one */];
 var t11 = t10;
 var array1 = emptyObjTuple;
+var unionTuple = [new C(), "foo"];
+var unionTuple2 = [new C(), "foo", new D()];
+var unionTuple3 = [10, "foo"];
+var unionTuple4 = unionTuple3;
 // error
 var t3 = numStrTuple;
 var t9 = classCDTuple;

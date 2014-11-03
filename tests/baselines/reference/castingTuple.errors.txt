@@ -2,19 +2,19 @@ tests/cases/conformance/types/tuple/castingTuple.ts(13,23): error TS2352: Neithe
   Property '2' is missing in type '[number, string]'.
 tests/cases/conformance/types/tuple/castingTuple.ts(16,21): error TS2352: Neither type '[C, D]' nor type '[C, D, A]' is assignable to the other.
   Property '2' is missing in type '[C, D]'.
-tests/cases/conformance/types/tuple/castingTuple.ts(24,10): error TS2352: Neither type '[number, string]' nor type '[number, number]' is assignable to the other.
+tests/cases/conformance/types/tuple/castingTuple.ts(28,10): error TS2352: Neither type '[number, string]' nor type '[number, number]' is assignable to the other.
   Types of property '1' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/castingTuple.ts(25,10): error TS2352: Neither type '[C, D]' nor type '[A, I]' is assignable to the other.
+tests/cases/conformance/types/tuple/castingTuple.ts(29,10): error TS2352: Neither type '[C, D]' nor type '[A, I]' is assignable to the other.
   Types of property '0' are incompatible.
     Type 'C' is not assignable to type 'A'.
-tests/cases/conformance/types/tuple/castingTuple.ts(26,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
-tests/cases/conformance/types/tuple/castingTuple.ts(26,14): error TS2352: Neither type '[number, string]' nor type 'number[]' is assignable to the other.
+tests/cases/conformance/types/tuple/castingTuple.ts(30,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(30,14): error TS2352: Neither type '[number, string]' nor type 'number[]' is assignable to the other.
   Types of property 'pop' are incompatible.
     Type '() => string | number' is not assignable to type '() => number'.
       Type 'string | number' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/castingTuple.ts(27,1): error TS2304: Cannot find name 't4'.
+tests/cases/conformance/types/tuple/castingTuple.ts(31,1): error TS2304: Cannot find name 't4'.
 
 
 ==== tests/cases/conformance/types/tuple/castingTuple.ts (7 errors) ====
@@ -41,10 +41,14 @@ tests/cases/conformance/types/tuple/castingTuple.ts(27,1): error TS2304: Cannot 
 !!! error TS2352: Neither type '[C, D]' nor type '[C, D, A]' is assignable to the other.
 !!! error TS2352:   Property '2' is missing in type '[C, D]'.
     var eleFromCDA1 = classCDATuple[2]; // A
-    var eleFromCDA2 = classCDATuple[5]; // {}
+    var eleFromCDA2 = classCDATuple[5]; // C | D | A
     var t10: [E1, E2] = [E1.one, E2.one];
     var t11 = <[number, number]>t10;
     var array1 = <{}[]>emptyObjTuple;
+    var unionTuple: [C, string | number] = [new C(), "foo"];
+    var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
+    var unionTuple3: [number, string| number] = [10, "foo"]; 
+    var unionTuple4 = <[number, number]>unionTuple3; 
     
     // error
     var t3 = <[number, number]>numStrTuple;
@@ -69,3 +73,4 @@ tests/cases/conformance/types/tuple/castingTuple.ts(27,1): error TS2304: Cannot 
     t4[2] = 10;
     ~~
 !!! error TS2304: Cannot find name 't4'.
+    
