@@ -24272,7 +24272,192 @@ var TypeScript;
         if (element === undefined) {
             return undefined;
         }
-        return element.accept(visitor);
+        switch (element.kind()) {
+            case 122 /* SourceUnit */:
+                return visitor.visitSourceUnit(element);
+            case 123 /* QualifiedName */:
+                return visitor.visitQualifiedName(element);
+            case 124 /* ObjectType */:
+                return visitor.visitObjectType(element);
+            case 125 /* FunctionType */:
+                return visitor.visitFunctionType(element);
+            case 126 /* ArrayType */:
+                return visitor.visitArrayType(element);
+            case 127 /* ConstructorType */:
+                return visitor.visitConstructorType(element);
+            case 128 /* GenericType */:
+                return visitor.visitGenericType(element);
+            case 129 /* TypeQuery */:
+                return visitor.visitTypeQuery(element);
+            case 130 /* TupleType */:
+                return visitor.visitTupleType(element);
+            case 131 /* UnionType */:
+                return visitor.visitUnionType(element);
+            case 132 /* ParenthesizedType */:
+                return visitor.visitParenthesizedType(element);
+            case 133 /* InterfaceDeclaration */:
+                return visitor.visitInterfaceDeclaration(element);
+            case 134 /* FunctionDeclaration */:
+                return visitor.visitFunctionDeclaration(element);
+            case 135 /* ModuleDeclaration */:
+                return visitor.visitModuleDeclaration(element);
+            case 136 /* ClassDeclaration */:
+                return visitor.visitClassDeclaration(element);
+            case 137 /* EnumDeclaration */:
+                return visitor.visitEnumDeclaration(element);
+            case 138 /* ImportDeclaration */:
+                return visitor.visitImportDeclaration(element);
+            case 139 /* ExportAssignment */:
+                return visitor.visitExportAssignment(element);
+            case 140 /* MemberFunctionDeclaration */:
+                return visitor.visitMemberFunctionDeclaration(element);
+            case 141 /* MemberVariableDeclaration */:
+                return visitor.visitMemberVariableDeclaration(element);
+            case 142 /* ConstructorDeclaration */:
+                return visitor.visitConstructorDeclaration(element);
+            case 143 /* IndexMemberDeclaration */:
+                return visitor.visitIndexMemberDeclaration(element);
+            case 144 /* GetAccessor */:
+                return visitor.visitGetAccessor(element);
+            case 145 /* SetAccessor */:
+                return visitor.visitSetAccessor(element);
+            case 146 /* PropertySignature */:
+                return visitor.visitPropertySignature(element);
+            case 147 /* CallSignature */:
+                return visitor.visitCallSignature(element);
+            case 148 /* ConstructSignature */:
+                return visitor.visitConstructSignature(element);
+            case 149 /* IndexSignature */:
+                return visitor.visitIndexSignature(element);
+            case 150 /* MethodSignature */:
+                return visitor.visitMethodSignature(element);
+            case 151 /* Block */:
+                return visitor.visitBlock(element);
+            case 152 /* IfStatement */:
+                return visitor.visitIfStatement(element);
+            case 153 /* VariableStatement */:
+                return visitor.visitVariableStatement(element);
+            case 154 /* ExpressionStatement */:
+                return visitor.visitExpressionStatement(element);
+            case 155 /* ReturnStatement */:
+                return visitor.visitReturnStatement(element);
+            case 156 /* SwitchStatement */:
+                return visitor.visitSwitchStatement(element);
+            case 157 /* BreakStatement */:
+                return visitor.visitBreakStatement(element);
+            case 158 /* ContinueStatement */:
+                return visitor.visitContinueStatement(element);
+            case 159 /* ForStatement */:
+                return visitor.visitForStatement(element);
+            case 160 /* ForInStatement */:
+                return visitor.visitForInStatement(element);
+            case 161 /* EmptyStatement */:
+                return visitor.visitEmptyStatement(element);
+            case 162 /* ThrowStatement */:
+                return visitor.visitThrowStatement(element);
+            case 163 /* WhileStatement */:
+                return visitor.visitWhileStatement(element);
+            case 164 /* TryStatement */:
+                return visitor.visitTryStatement(element);
+            case 165 /* LabeledStatement */:
+                return visitor.visitLabeledStatement(element);
+            case 166 /* DoStatement */:
+                return visitor.visitDoStatement(element);
+            case 167 /* DebuggerStatement */:
+                return visitor.visitDebuggerStatement(element);
+            case 168 /* WithStatement */:
+                return visitor.visitWithStatement(element);
+            case 169 /* PrefixUnaryExpression */:
+                return visitor.visitPrefixUnaryExpression(element);
+            case 170 /* DeleteExpression */:
+                return visitor.visitDeleteExpression(element);
+            case 171 /* TypeOfExpression */:
+                return visitor.visitTypeOfExpression(element);
+            case 172 /* VoidExpression */:
+                return visitor.visitVoidExpression(element);
+            case 173 /* ConditionalExpression */:
+                return visitor.visitConditionalExpression(element);
+            case 174 /* BinaryExpression */:
+                return visitor.visitBinaryExpression(element);
+            case 175 /* PostfixUnaryExpression */:
+                return visitor.visitPostfixUnaryExpression(element);
+            case 176 /* MemberAccessExpression */:
+                return visitor.visitMemberAccessExpression(element);
+            case 177 /* InvocationExpression */:
+                return visitor.visitInvocationExpression(element);
+            case 178 /* ArrayLiteralExpression */:
+                return visitor.visitArrayLiteralExpression(element);
+            case 179 /* ObjectLiteralExpression */:
+                return visitor.visitObjectLiteralExpression(element);
+            case 180 /* ObjectCreationExpression */:
+                return visitor.visitObjectCreationExpression(element);
+            case 181 /* ParenthesizedExpression */:
+                return visitor.visitParenthesizedExpression(element);
+            case 182 /* ParenthesizedArrowFunctionExpression */:
+                return visitor.visitParenthesizedArrowFunctionExpression(element);
+            case 183 /* SimpleArrowFunctionExpression */:
+                return visitor.visitSimpleArrowFunctionExpression(element);
+            case 184 /* CastExpression */:
+                return visitor.visitCastExpression(element);
+            case 185 /* ElementAccessExpression */:
+                return visitor.visitElementAccessExpression(element);
+            case 186 /* FunctionExpression */:
+                return visitor.visitFunctionExpression(element);
+            case 187 /* OmittedExpression */:
+                return visitor.visitOmittedExpression(element);
+            case 188 /* TemplateExpression */:
+                return visitor.visitTemplateExpression(element);
+            case 189 /* TemplateAccessExpression */:
+                return visitor.visitTemplateAccessExpression(element);
+            case 190 /* VariableDeclaration */:
+                return visitor.visitVariableDeclaration(element);
+            case 191 /* VariableDeclarator */:
+                return visitor.visitVariableDeclarator(element);
+            case 192 /* ArgumentList */:
+                return visitor.visitArgumentList(element);
+            case 193 /* ParameterList */:
+                return visitor.visitParameterList(element);
+            case 194 /* TypeArgumentList */:
+                return visitor.visitTypeArgumentList(element);
+            case 195 /* TypeParameterList */:
+                return visitor.visitTypeParameterList(element);
+            case 196 /* HeritageClause */:
+                return visitor.visitHeritageClause(element);
+            case 197 /* EqualsValueClause */:
+                return visitor.visitEqualsValueClause(element);
+            case 198 /* CaseSwitchClause */:
+                return visitor.visitCaseSwitchClause(element);
+            case 199 /* DefaultSwitchClause */:
+                return visitor.visitDefaultSwitchClause(element);
+            case 200 /* ElseClause */:
+                return visitor.visitElseClause(element);
+            case 201 /* CatchClause */:
+                return visitor.visitCatchClause(element);
+            case 202 /* FinallyClause */:
+                return visitor.visitFinallyClause(element);
+            case 203 /* TemplateClause */:
+                return visitor.visitTemplateClause(element);
+            case 204 /* TypeParameter */:
+                return visitor.visitTypeParameter(element);
+            case 205 /* Constraint */:
+                return visitor.visitConstraint(element);
+            case 206 /* SimplePropertyAssignment */:
+                return visitor.visitSimplePropertyAssignment(element);
+            case 207 /* FunctionPropertyAssignment */:
+                return visitor.visitFunctionPropertyAssignment(element);
+            case 208 /* Parameter */:
+                return visitor.visitParameter(element);
+            case 209 /* EnumElement */:
+                return visitor.visitEnumElement(element);
+            case 210 /* TypeAnnotation */:
+                return visitor.visitTypeAnnotation(element);
+            case 211 /* ExternalModuleReference */:
+                return visitor.visitExternalModuleReference(element);
+            case 212 /* ModuleNameModuleReference */:
+                return visitor.visitModuleNameModuleReference(element);
+            default:
+                return visitor.visitToken(element);
+        }
     }
     TypeScript.visitNodeOrToken = visitNodeOrToken;
 })(TypeScript || (TypeScript = {}));
@@ -24289,15 +24474,9 @@ var TypeScript;
             }
             this.visitToken(token);
         };
-        SyntaxWalker.prototype.visitOptionalNode = function (node) {
-            if (node === undefined) {
-                return;
-            }
-            node.accept(this);
-        };
         SyntaxWalker.prototype.visitList = function (list) {
             for (var i = 0, n = list.length; i < n; i++) {
-                list[i].accept(this);
+                TypeScript.visitNodeOrToken(this, list[i]);
             }
         };
         SyntaxWalker.prototype.visitSourceUnit = function (node) {
@@ -24305,7 +24484,7 @@ var TypeScript;
             this.visitToken(node.endOfFileToken);
         };
         SyntaxWalker.prototype.visitQualifiedName = function (node) {
-            node.left.accept(this);
+            TypeScript.visitNodeOrToken(this, node.left);
             this.visitToken(node.dotToken);
             this.visitToken(node.right);
         };
@@ -24315,30 +24494,30 @@ var TypeScript;
             this.visitToken(node.closeBraceToken);
         };
         SyntaxWalker.prototype.visitFunctionType = function (node) {
-            this.visitOptionalNode(node.typeParameterList);
-            node.parameterList.accept(this);
+            TypeScript.visitNodeOrToken(this, node.typeParameterList);
+            TypeScript.visitNodeOrToken(this, node.parameterList);
             this.visitToken(node.equalsGreaterThanToken);
-            node.type.accept(this);
+            TypeScript.visitNodeOrToken(this, node.type);
         };
         SyntaxWalker.prototype.visitArrayType = function (node) {
-            node.type.accept(this);
+            TypeScript.visitNodeOrToken(this, node.type);
             this.visitToken(node.openBracketToken);
             this.visitToken(node.closeBracketToken);
         };
         SyntaxWalker.prototype.visitConstructorType = function (node) {
             this.visitToken(node.newKeyword);
-            this.visitOptionalNode(node.typeParameterList);
-            node.parameterList.accept(this);
+            TypeScript.visitNodeOrToken(this, node.typeParameterList);
+            TypeScript.visitNodeOrToken(this, node.parameterList);
             this.visitToken(node.equalsGreaterThanToken);
-            node.type.accept(this);
+            TypeScript.visitNodeOrToken(this, node.type);
         };
         SyntaxWalker.prototype.visitGenericType = function (node) {
-            node.name.accept(this);
-            node.typeArgumentList.accept(this);
+            TypeScript.visitNodeOrToken(this, node.name);
+            TypeScript.visitNodeOrToken(this, node.typeArgumentList);
         };
         SyntaxWalker.prototype.visitTypeQuery = function (node) {
             this.visitToken(node.typeOfKeyword);
-            node.name.accept(this);
+            TypeScript.visitNodeOrToken(this, node.name);
         };
         SyntaxWalker.prototype.visitTupleType = function (node) {
             this.visitToken(node.openBracketToken);
@@ -24346,29 +24525,29 @@ var TypeScript;
             this.visitToken(node.closeBracketToken);
         };
         SyntaxWalker.prototype.visitUnionType = function (node) {
-            node.left.accept(this);
+            TypeScript.visitNodeOrToken(this, node.left);
             this.visitToken(node.barToken);
-            node.right.accept(this);
+            TypeScript.visitNodeOrToken(this, node.right);
         };
         SyntaxWalker.prototype.visitParenthesizedType = function (node) {
             this.visitToken(node.openParenToken);
-            node.type.accept(this);
+            TypeScript.visitNodeOrToken(this, node.type);
             this.visitToken(node.closeParenToken);
         };
         SyntaxWalker.prototype.visitInterfaceDeclaration = function (node) {
             this.visitList(node.modifiers);
             this.visitToken(node.interfaceKeyword);
             this.visitToken(node.identifier);
-            this.visitOptionalNode(node.typeParameterList);
+            TypeScript.visitNodeOrToken(this, node.typeParameterList);
             this.visitList(node.heritageClauses);
-            node.body.accept(this);
+            TypeScript.visitNodeOrToken(this, node.body);
         };
         SyntaxWalker.prototype.visitFunctionDeclaration = function (node) {
             this.visitList(node.modifiers);
             this.visitToken(node.functionKeyword);
             this.visitToken(node.identifier);
-            node.callSignature.accept(this);
-            this.visitOptionalNode(node.block);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+            TypeScript.visitNodeOrToken(this, node.block);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitModuleDeclaration = function (node) {
@@ -24384,7 +24563,7 @@ var TypeScript;
             this.visitList(node.modifiers);
             this.visitToken(node.classKeyword);
             this.visitToken(node.identifier);
-            this.visitOptionalNode(node.typeParameterList);
+            TypeScript.visitNodeOrToken(this, node.typeParameterList);
             this.visitList(node.heritageClauses);
             this.visitToken(node.openBraceToken);
             this.visitList(node.classElements);
@@ -24403,7 +24582,7 @@ var TypeScript;
             this.visitToken(node.importKeyword);
             this.visitToken(node.identifier);
             this.visitToken(node.equalsToken);
-            node.moduleReference.accept(this);
+            TypeScript.visitNodeOrToken(this, node.moduleReference);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitExportAssignment = function (node) {
@@ -24415,65 +24594,65 @@ var TypeScript;
         SyntaxWalker.prototype.visitMemberFunctionDeclaration = function (node) {
             this.visitList(node.modifiers);
             this.visitToken(node.propertyName);
-            node.callSignature.accept(this);
-            this.visitOptionalNode(node.block);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+            TypeScript.visitNodeOrToken(this, node.block);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitMemberVariableDeclaration = function (node) {
             this.visitList(node.modifiers);
-            node.variableDeclarator.accept(this);
+            TypeScript.visitNodeOrToken(this, node.variableDeclarator);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitConstructorDeclaration = function (node) {
             this.visitList(node.modifiers);
             this.visitToken(node.constructorKeyword);
-            node.callSignature.accept(this);
-            this.visitOptionalNode(node.block);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+            TypeScript.visitNodeOrToken(this, node.block);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitIndexMemberDeclaration = function (node) {
             this.visitList(node.modifiers);
-            node.indexSignature.accept(this);
+            TypeScript.visitNodeOrToken(this, node.indexSignature);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitGetAccessor = function (node) {
             this.visitList(node.modifiers);
             this.visitToken(node.getKeyword);
             this.visitToken(node.propertyName);
-            node.callSignature.accept(this);
-            node.block.accept(this);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+            TypeScript.visitNodeOrToken(this, node.block);
         };
         SyntaxWalker.prototype.visitSetAccessor = function (node) {
             this.visitList(node.modifiers);
             this.visitToken(node.setKeyword);
             this.visitToken(node.propertyName);
-            node.callSignature.accept(this);
-            node.block.accept(this);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+            TypeScript.visitNodeOrToken(this, node.block);
         };
         SyntaxWalker.prototype.visitPropertySignature = function (node) {
             this.visitToken(node.propertyName);
             this.visitOptionalToken(node.questionToken);
-            this.visitOptionalNode(node.typeAnnotation);
+            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
         };
         SyntaxWalker.prototype.visitCallSignature = function (node) {
-            this.visitOptionalNode(node.typeParameterList);
-            node.parameterList.accept(this);
-            this.visitOptionalNode(node.typeAnnotation);
+            TypeScript.visitNodeOrToken(this, node.typeParameterList);
+            TypeScript.visitNodeOrToken(this, node.parameterList);
+            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
         };
         SyntaxWalker.prototype.visitConstructSignature = function (node) {
             this.visitToken(node.newKeyword);
-            node.callSignature.accept(this);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
         };
         SyntaxWalker.prototype.visitIndexSignature = function (node) {
             this.visitToken(node.openBracketToken);
             this.visitList(node.parameters);
             this.visitToken(node.closeBracketToken);
-            this.visitOptionalNode(node.typeAnnotation);
+            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
         };
         SyntaxWalker.prototype.visitMethodSignature = function (node) {
             this.visitToken(node.propertyName);
             this.visitOptionalToken(node.questionToken);
-            node.callSignature.accept(this);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
         };
         SyntaxWalker.prototype.visitBlock = function (node) {
             this.visitToken(node.openBraceToken);
@@ -24483,18 +24662,18 @@ var TypeScript;
         SyntaxWalker.prototype.visitIfStatement = function (node) {
             this.visitToken(node.ifKeyword);
             this.visitToken(node.openParenToken);
-            node.condition.accept(this);
+            TypeScript.visitNodeOrToken(this, node.condition);
             this.visitToken(node.closeParenToken);
-            node.statement.accept(this);
-            this.visitOptionalNode(node.elseClause);
+            TypeScript.visitNodeOrToken(this, node.statement);
+            TypeScript.visitNodeOrToken(this, node.elseClause);
         };
         SyntaxWalker.prototype.visitVariableStatement = function (node) {
             this.visitList(node.modifiers);
-            node.variableDeclaration.accept(this);
+            TypeScript.visitNodeOrToken(this, node.variableDeclaration);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitExpressionStatement = function (node) {
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitReturnStatement = function (node) {
@@ -24505,7 +24684,7 @@ var TypeScript;
         SyntaxWalker.prototype.visitSwitchStatement = function (node) {
             this.visitToken(node.switchKeyword);
             this.visitToken(node.openParenToken);
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
             this.visitToken(node.closeParenToken);
             this.visitToken(node.openBraceToken);
             this.visitList(node.switchClauses);
@@ -24524,57 +24703,57 @@ var TypeScript;
         SyntaxWalker.prototype.visitForStatement = function (node) {
             this.visitToken(node.forKeyword);
             this.visitToken(node.openParenToken);
-            this.visitOptionalNode(node.variableDeclaration);
+            TypeScript.visitNodeOrToken(this, node.variableDeclaration);
             TypeScript.visitNodeOrToken(this, node.initializer);
             this.visitToken(node.firstSemicolonToken);
             TypeScript.visitNodeOrToken(this, node.condition);
             this.visitToken(node.secondSemicolonToken);
             TypeScript.visitNodeOrToken(this, node.incrementor);
             this.visitToken(node.closeParenToken);
-            node.statement.accept(this);
+            TypeScript.visitNodeOrToken(this, node.statement);
         };
         SyntaxWalker.prototype.visitForInStatement = function (node) {
             this.visitToken(node.forKeyword);
             this.visitToken(node.openParenToken);
-            this.visitOptionalNode(node.variableDeclaration);
+            TypeScript.visitNodeOrToken(this, node.variableDeclaration);
             TypeScript.visitNodeOrToken(this, node.left);
             this.visitToken(node.inKeyword);
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
             this.visitToken(node.closeParenToken);
-            node.statement.accept(this);
+            TypeScript.visitNodeOrToken(this, node.statement);
         };
         SyntaxWalker.prototype.visitEmptyStatement = function (node) {
             this.visitToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitThrowStatement = function (node) {
             this.visitToken(node.throwKeyword);
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
             this.visitOptionalToken(node.semicolonToken);
         };
         SyntaxWalker.prototype.visitWhileStatement = function (node) {
             this.visitToken(node.whileKeyword);
             this.visitToken(node.openParenToken);
-            node.condition.accept(this);
+            TypeScript.visitNodeOrToken(this, node.condition);
             this.visitToken(node.closeParenToken);
-            node.statement.accept(this);
+            TypeScript.visitNodeOrToken(this, node.statement);
         };
         SyntaxWalker.prototype.visitTryStatement = function (node) {
             this.visitToken(node.tryKeyword);
-            node.block.accept(this);
-            this.visitOptionalNode(node.catchClause);
-            this.visitOptionalNode(node.finallyClause);
+            TypeScript.visitNodeOrToken(this, node.block);
+            TypeScript.visitNodeOrToken(this, node.catchClause);
+            TypeScript.visitNodeOrToken(this, node.finallyClause);
         };
         SyntaxWalker.prototype.visitLabeledStatement = function (node) {
             this.visitToken(node.identifier);
             this.visitToken(node.colonToken);
-            node.statement.accept(this);
+            TypeScript.visitNodeOrToken(this, node.statement);
         };
         SyntaxWalker.prototype.visitDoStatement = function (node) {
             this.visitToken(node.doKeyword);
-            node.statement.accept(this);
+            TypeScript.visitNodeOrToken(this, node.statement);
             this.visitToken(node.whileKeyword);
             this.visitToken(node.openParenToken);
-            node.condition.accept(this);
+            TypeScript.visitNodeOrToken(this, node.condition);
             this.visitToken(node.closeParenToken);
             this.visitOptionalToken(node.semicolonToken);
         };
@@ -24585,50 +24764,50 @@ var TypeScript;
         SyntaxWalker.prototype.visitWithStatement = function (node) {
             this.visitToken(node.withKeyword);
             this.visitToken(node.openParenToken);
-            node.condition.accept(this);
+            TypeScript.visitNodeOrToken(this, node.condition);
             this.visitToken(node.closeParenToken);
-            node.statement.accept(this);
+            TypeScript.visitNodeOrToken(this, node.statement);
         };
         SyntaxWalker.prototype.visitPrefixUnaryExpression = function (node) {
             this.visitToken(node.operatorToken);
-            node.operand.accept(this);
+            TypeScript.visitNodeOrToken(this, node.operand);
         };
         SyntaxWalker.prototype.visitDeleteExpression = function (node) {
             this.visitToken(node.deleteKeyword);
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
         };
         SyntaxWalker.prototype.visitTypeOfExpression = function (node) {
             this.visitToken(node.typeOfKeyword);
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
         };
         SyntaxWalker.prototype.visitVoidExpression = function (node) {
             this.visitToken(node.voidKeyword);
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
         };
         SyntaxWalker.prototype.visitConditionalExpression = function (node) {
-            node.condition.accept(this);
+            TypeScript.visitNodeOrToken(this, node.condition);
             this.visitToken(node.questionToken);
-            node.whenTrue.accept(this);
+            TypeScript.visitNodeOrToken(this, node.whenTrue);
             this.visitToken(node.colonToken);
-            node.whenFalse.accept(this);
+            TypeScript.visitNodeOrToken(this, node.whenFalse);
         };
         SyntaxWalker.prototype.visitBinaryExpression = function (node) {
-            node.left.accept(this);
+            TypeScript.visitNodeOrToken(this, node.left);
             this.visitToken(node.operatorToken);
-            node.right.accept(this);
+            TypeScript.visitNodeOrToken(this, node.right);
         };
         SyntaxWalker.prototype.visitPostfixUnaryExpression = function (node) {
-            node.operand.accept(this);
+            TypeScript.visitNodeOrToken(this, node.operand);
             this.visitToken(node.operatorToken);
         };
         SyntaxWalker.prototype.visitMemberAccessExpression = function (node) {
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
             this.visitToken(node.dotToken);
             this.visitToken(node.name);
         };
         SyntaxWalker.prototype.visitInvocationExpression = function (node) {
-            node.expression.accept(this);
-            node.argumentList.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
+            TypeScript.visitNodeOrToken(this, node.argumentList);
         };
         SyntaxWalker.prototype.visitArrayLiteralExpression = function (node) {
             this.visitToken(node.openBracketToken);
@@ -24642,43 +24821,43 @@ var TypeScript;
         };
         SyntaxWalker.prototype.visitObjectCreationExpression = function (node) {
             this.visitToken(node.newKeyword);
-            node.expression.accept(this);
-            this.visitOptionalNode(node.argumentList);
+            TypeScript.visitNodeOrToken(this, node.expression);
+            TypeScript.visitNodeOrToken(this, node.argumentList);
         };
         SyntaxWalker.prototype.visitParenthesizedExpression = function (node) {
             this.visitToken(node.openParenToken);
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
             this.visitToken(node.closeParenToken);
         };
         SyntaxWalker.prototype.visitParenthesizedArrowFunctionExpression = function (node) {
-            node.callSignature.accept(this);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
             this.visitToken(node.equalsGreaterThanToken);
-            this.visitOptionalNode(node.block);
+            TypeScript.visitNodeOrToken(this, node.block);
             TypeScript.visitNodeOrToken(this, node.expression);
         };
         SyntaxWalker.prototype.visitSimpleArrowFunctionExpression = function (node) {
-            node.parameter.accept(this);
+            TypeScript.visitNodeOrToken(this, node.parameter);
             this.visitToken(node.equalsGreaterThanToken);
-            this.visitOptionalNode(node.block);
+            TypeScript.visitNodeOrToken(this, node.block);
             TypeScript.visitNodeOrToken(this, node.expression);
         };
         SyntaxWalker.prototype.visitCastExpression = function (node) {
             this.visitToken(node.lessThanToken);
-            node.type.accept(this);
+            TypeScript.visitNodeOrToken(this, node.type);
             this.visitToken(node.greaterThanToken);
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
         };
         SyntaxWalker.prototype.visitElementAccessExpression = function (node) {
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
             this.visitToken(node.openBracketToken);
-            node.argumentExpression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.argumentExpression);
             this.visitToken(node.closeBracketToken);
         };
         SyntaxWalker.prototype.visitFunctionExpression = function (node) {
             this.visitToken(node.functionKeyword);
             this.visitOptionalToken(node.identifier);
-            node.callSignature.accept(this);
-            node.block.accept(this);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+            TypeScript.visitNodeOrToken(this, node.block);
         };
         SyntaxWalker.prototype.visitOmittedExpression = function (node) {
         };
@@ -24687,8 +24866,8 @@ var TypeScript;
             this.visitList(node.templateClauses);
         };
         SyntaxWalker.prototype.visitTemplateAccessExpression = function (node) {
-            node.expression.accept(this);
-            node.templateExpression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
+            TypeScript.visitNodeOrToken(this, node.templateExpression);
         };
         SyntaxWalker.prototype.visitVariableDeclaration = function (node) {
             this.visitToken(node.varKeyword);
@@ -24696,11 +24875,11 @@ var TypeScript;
         };
         SyntaxWalker.prototype.visitVariableDeclarator = function (node) {
             this.visitToken(node.propertyName);
-            this.visitOptionalNode(node.typeAnnotation);
-            this.visitOptionalNode(node.equalsValueClause);
+            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+            TypeScript.visitNodeOrToken(this, node.equalsValueClause);
         };
         SyntaxWalker.prototype.visitArgumentList = function (node) {
-            this.visitOptionalNode(node.typeArgumentList);
+            TypeScript.visitNodeOrToken(this, node.typeArgumentList);
             this.visitToken(node.openParenToken);
             this.visitList(node.arguments);
             this.visitToken(node.closeParenToken);
@@ -24726,11 +24905,11 @@ var TypeScript;
         };
         SyntaxWalker.prototype.visitEqualsValueClause = function (node) {
             this.visitToken(node.equalsToken);
-            node.value.accept(this);
+            TypeScript.visitNodeOrToken(this, node.value);
         };
         SyntaxWalker.prototype.visitCaseSwitchClause = function (node) {
             this.visitToken(node.caseKeyword);
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
             this.visitToken(node.colonToken);
             this.visitList(node.statements);
         };
@@ -24741,57 +24920,57 @@ var TypeScript;
         };
         SyntaxWalker.prototype.visitElseClause = function (node) {
             this.visitToken(node.elseKeyword);
-            node.statement.accept(this);
+            TypeScript.visitNodeOrToken(this, node.statement);
         };
         SyntaxWalker.prototype.visitCatchClause = function (node) {
             this.visitToken(node.catchKeyword);
             this.visitToken(node.openParenToken);
             this.visitToken(node.identifier);
-            this.visitOptionalNode(node.typeAnnotation);
+            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
             this.visitToken(node.closeParenToken);
-            node.block.accept(this);
+            TypeScript.visitNodeOrToken(this, node.block);
         };
         SyntaxWalker.prototype.visitFinallyClause = function (node) {
             this.visitToken(node.finallyKeyword);
-            node.block.accept(this);
+            TypeScript.visitNodeOrToken(this, node.block);
         };
         SyntaxWalker.prototype.visitTemplateClause = function (node) {
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
             this.visitToken(node.templateMiddleOrEndToken);
         };
         SyntaxWalker.prototype.visitTypeParameter = function (node) {
             this.visitToken(node.identifier);
-            this.visitOptionalNode(node.constraint);
+            TypeScript.visitNodeOrToken(this, node.constraint);
         };
         SyntaxWalker.prototype.visitConstraint = function (node) {
             this.visitToken(node.extendsKeyword);
-            node.typeOrExpression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.typeOrExpression);
         };
         SyntaxWalker.prototype.visitSimplePropertyAssignment = function (node) {
             this.visitToken(node.propertyName);
             this.visitToken(node.colonToken);
-            node.expression.accept(this);
+            TypeScript.visitNodeOrToken(this, node.expression);
         };
         SyntaxWalker.prototype.visitFunctionPropertyAssignment = function (node) {
             this.visitToken(node.propertyName);
-            node.callSignature.accept(this);
-            node.block.accept(this);
+            TypeScript.visitNodeOrToken(this, node.callSignature);
+            TypeScript.visitNodeOrToken(this, node.block);
         };
         SyntaxWalker.prototype.visitParameter = function (node) {
             this.visitOptionalToken(node.dotDotDotToken);
             this.visitList(node.modifiers);
             this.visitToken(node.identifier);
             this.visitOptionalToken(node.questionToken);
-            this.visitOptionalNode(node.typeAnnotation);
-            this.visitOptionalNode(node.equalsValueClause);
+            TypeScript.visitNodeOrToken(this, node.typeAnnotation);
+            TypeScript.visitNodeOrToken(this, node.equalsValueClause);
         };
         SyntaxWalker.prototype.visitEnumElement = function (node) {
             this.visitToken(node.propertyName);
-            this.visitOptionalNode(node.equalsValueClause);
+            TypeScript.visitNodeOrToken(this, node.equalsValueClause);
         };
         SyntaxWalker.prototype.visitTypeAnnotation = function (node) {
             this.visitToken(node.colonToken);
-            node.type.accept(this);
+            TypeScript.visitNodeOrToken(this, node.type);
         };
         SyntaxWalker.prototype.visitExternalModuleReference = function (node) {
             this.visitToken(node.requireKeyword);
@@ -24800,7 +24979,7 @@ var TypeScript;
             this.visitToken(node.closeParenToken);
         };
         SyntaxWalker.prototype.visitModuleNameModuleReference = function (node) {
-            node.moduleName.accept(this);
+            TypeScript.visitNodeOrToken(this, node.moduleName);
         };
         return SyntaxWalker;
     })();
@@ -27546,9 +27725,6 @@ var TypeScript;
         SourceUnitSyntax.prototype.kind = function () {
             return 122 /* SourceUnit */;
         };
-        SourceUnitSyntax.prototype.accept = function (visitor) {
-            return visitor.visitSourceUnit(this);
-        };
         return SourceUnitSyntax;
     })();
     TypeScript.SourceUnitSyntax = SourceUnitSyntax;
@@ -27561,9 +27737,6 @@ var TypeScript;
         }
         QualifiedNameSyntax.prototype.kind = function () {
             return 123 /* QualifiedName */;
-        };
-        QualifiedNameSyntax.prototype.accept = function (visitor) {
-            return visitor.visitQualifiedName(this);
         };
         return QualifiedNameSyntax;
     })();
@@ -27578,9 +27751,6 @@ var TypeScript;
         ObjectTypeSyntax.prototype.kind = function () {
             return 124 /* ObjectType */;
         };
-        ObjectTypeSyntax.prototype.accept = function (visitor) {
-            return visitor.visitObjectType(this);
-        };
         return ObjectTypeSyntax;
     })();
     TypeScript.ObjectTypeSyntax = ObjectTypeSyntax;
@@ -27593,9 +27763,6 @@ var TypeScript;
         }
         FunctionTypeSyntax.prototype.kind = function () {
             return 125 /* FunctionType */;
-        };
-        FunctionTypeSyntax.prototype.accept = function (visitor) {
-            return visitor.visitFunctionType(this);
         };
         return FunctionTypeSyntax;
     })();
@@ -27610,9 +27777,6 @@ var TypeScript;
         ArrayTypeSyntax.prototype.kind = function () {
             return 126 /* ArrayType */;
         };
-        ArrayTypeSyntax.prototype.accept = function (visitor) {
-            return visitor.visitArrayType(this);
-        };
         return ArrayTypeSyntax;
     })();
     TypeScript.ArrayTypeSyntax = ArrayTypeSyntax;
@@ -27625,9 +27789,6 @@ var TypeScript;
         }
         ConstructorTypeSyntax.prototype.kind = function () {
             return 127 /* ConstructorType */;
-        };
-        ConstructorTypeSyntax.prototype.accept = function (visitor) {
-            return visitor.visitConstructorType(this);
         };
         return ConstructorTypeSyntax;
     })();
@@ -27642,9 +27803,6 @@ var TypeScript;
         GenericTypeSyntax.prototype.kind = function () {
             return 128 /* GenericType */;
         };
-        GenericTypeSyntax.prototype.accept = function (visitor) {
-            return visitor.visitGenericType(this);
-        };
         return GenericTypeSyntax;
     })();
     TypeScript.GenericTypeSyntax = GenericTypeSyntax;
@@ -27657,9 +27815,6 @@ var TypeScript;
         }
         TypeQuerySyntax.prototype.kind = function () {
             return 129 /* TypeQuery */;
-        };
-        TypeQuerySyntax.prototype.accept = function (visitor) {
-            return visitor.visitTypeQuery(this);
         };
         return TypeQuerySyntax;
     })();
@@ -27674,9 +27829,6 @@ var TypeScript;
         TupleTypeSyntax.prototype.kind = function () {
             return 130 /* TupleType */;
         };
-        TupleTypeSyntax.prototype.accept = function (visitor) {
-            return visitor.visitTupleType(this);
-        };
         return TupleTypeSyntax;
     })();
     TypeScript.TupleTypeSyntax = TupleTypeSyntax;
@@ -27689,9 +27841,6 @@ var TypeScript;
         }
         UnionTypeSyntax.prototype.kind = function () {
             return 131 /* UnionType */;
-        };
-        UnionTypeSyntax.prototype.accept = function (visitor) {
-            return visitor.visitUnionType(this);
         };
         return UnionTypeSyntax;
     })();
@@ -27706,9 +27855,6 @@ var TypeScript;
         ParenthesizedTypeSyntax.prototype.kind = function () {
             return 132 /* ParenthesizedType */;
         };
-        ParenthesizedTypeSyntax.prototype.accept = function (visitor) {
-            return visitor.visitParenthesizedType(this);
-        };
         return ParenthesizedTypeSyntax;
     })();
     TypeScript.ParenthesizedTypeSyntax = ParenthesizedTypeSyntax;
@@ -27721,9 +27867,6 @@ var TypeScript;
         }
         InterfaceDeclarationSyntax.prototype.kind = function () {
             return 133 /* InterfaceDeclaration */;
-        };
-        InterfaceDeclarationSyntax.prototype.accept = function (visitor) {
-            return visitor.visitInterfaceDeclaration(this);
         };
         return InterfaceDeclarationSyntax;
     })();
@@ -27738,9 +27881,6 @@ var TypeScript;
         FunctionDeclarationSyntax.prototype.kind = function () {
             return 134 /* FunctionDeclaration */;
         };
-        FunctionDeclarationSyntax.prototype.accept = function (visitor) {
-            return visitor.visitFunctionDeclaration(this);
-        };
         return FunctionDeclarationSyntax;
     })();
     TypeScript.FunctionDeclarationSyntax = FunctionDeclarationSyntax;
@@ -27753,9 +27893,6 @@ var TypeScript;
         }
         ModuleDeclarationSyntax.prototype.kind = function () {
             return 135 /* ModuleDeclaration */;
-        };
-        ModuleDeclarationSyntax.prototype.accept = function (visitor) {
-            return visitor.visitModuleDeclaration(this);
         };
         return ModuleDeclarationSyntax;
     })();
@@ -27770,9 +27907,6 @@ var TypeScript;
         ClassDeclarationSyntax.prototype.kind = function () {
             return 136 /* ClassDeclaration */;
         };
-        ClassDeclarationSyntax.prototype.accept = function (visitor) {
-            return visitor.visitClassDeclaration(this);
-        };
         return ClassDeclarationSyntax;
     })();
     TypeScript.ClassDeclarationSyntax = ClassDeclarationSyntax;
@@ -27785,9 +27919,6 @@ var TypeScript;
         }
         EnumDeclarationSyntax.prototype.kind = function () {
             return 137 /* EnumDeclaration */;
-        };
-        EnumDeclarationSyntax.prototype.accept = function (visitor) {
-            return visitor.visitEnumDeclaration(this);
         };
         return EnumDeclarationSyntax;
     })();
@@ -27802,9 +27933,6 @@ var TypeScript;
         ImportDeclarationSyntax.prototype.kind = function () {
             return 138 /* ImportDeclaration */;
         };
-        ImportDeclarationSyntax.prototype.accept = function (visitor) {
-            return visitor.visitImportDeclaration(this);
-        };
         return ImportDeclarationSyntax;
     })();
     TypeScript.ImportDeclarationSyntax = ImportDeclarationSyntax;
@@ -27817,9 +27945,6 @@ var TypeScript;
         }
         ExportAssignmentSyntax.prototype.kind = function () {
             return 139 /* ExportAssignment */;
-        };
-        ExportAssignmentSyntax.prototype.accept = function (visitor) {
-            return visitor.visitExportAssignment(this);
         };
         return ExportAssignmentSyntax;
     })();
@@ -27834,9 +27959,6 @@ var TypeScript;
         MemberFunctionDeclarationSyntax.prototype.kind = function () {
             return 140 /* MemberFunctionDeclaration */;
         };
-        MemberFunctionDeclarationSyntax.prototype.accept = function (visitor) {
-            return visitor.visitMemberFunctionDeclaration(this);
-        };
         return MemberFunctionDeclarationSyntax;
     })();
     TypeScript.MemberFunctionDeclarationSyntax = MemberFunctionDeclarationSyntax;
@@ -27849,9 +27971,6 @@ var TypeScript;
         }
         MemberVariableDeclarationSyntax.prototype.kind = function () {
             return 141 /* MemberVariableDeclaration */;
-        };
-        MemberVariableDeclarationSyntax.prototype.accept = function (visitor) {
-            return visitor.visitMemberVariableDeclaration(this);
         };
         return MemberVariableDeclarationSyntax;
     })();
@@ -27866,9 +27985,6 @@ var TypeScript;
         ConstructorDeclarationSyntax.prototype.kind = function () {
             return 142 /* ConstructorDeclaration */;
         };
-        ConstructorDeclarationSyntax.prototype.accept = function (visitor) {
-            return visitor.visitConstructorDeclaration(this);
-        };
         return ConstructorDeclarationSyntax;
     })();
     TypeScript.ConstructorDeclarationSyntax = ConstructorDeclarationSyntax;
@@ -27881,9 +27997,6 @@ var TypeScript;
         }
         IndexMemberDeclarationSyntax.prototype.kind = function () {
             return 143 /* IndexMemberDeclaration */;
-        };
-        IndexMemberDeclarationSyntax.prototype.accept = function (visitor) {
-            return visitor.visitIndexMemberDeclaration(this);
         };
         return IndexMemberDeclarationSyntax;
     })();
@@ -27898,9 +28011,6 @@ var TypeScript;
         GetAccessorSyntax.prototype.kind = function () {
             return 144 /* GetAccessor */;
         };
-        GetAccessorSyntax.prototype.accept = function (visitor) {
-            return visitor.visitGetAccessor(this);
-        };
         return GetAccessorSyntax;
     })();
     TypeScript.GetAccessorSyntax = GetAccessorSyntax;
@@ -27913,9 +28023,6 @@ var TypeScript;
         }
         SetAccessorSyntax.prototype.kind = function () {
             return 145 /* SetAccessor */;
-        };
-        SetAccessorSyntax.prototype.accept = function (visitor) {
-            return visitor.visitSetAccessor(this);
         };
         return SetAccessorSyntax;
     })();
@@ -27930,9 +28037,6 @@ var TypeScript;
         PropertySignatureSyntax.prototype.kind = function () {
             return 146 /* PropertySignature */;
         };
-        PropertySignatureSyntax.prototype.accept = function (visitor) {
-            return visitor.visitPropertySignature(this);
-        };
         return PropertySignatureSyntax;
     })();
     TypeScript.PropertySignatureSyntax = PropertySignatureSyntax;
@@ -27945,9 +28049,6 @@ var TypeScript;
         }
         CallSignatureSyntax.prototype.kind = function () {
             return 147 /* CallSignature */;
-        };
-        CallSignatureSyntax.prototype.accept = function (visitor) {
-            return visitor.visitCallSignature(this);
         };
         return CallSignatureSyntax;
     })();
@@ -27962,9 +28063,6 @@ var TypeScript;
         ConstructSignatureSyntax.prototype.kind = function () {
             return 148 /* ConstructSignature */;
         };
-        ConstructSignatureSyntax.prototype.accept = function (visitor) {
-            return visitor.visitConstructSignature(this);
-        };
         return ConstructSignatureSyntax;
     })();
     TypeScript.ConstructSignatureSyntax = ConstructSignatureSyntax;
@@ -27977,9 +28075,6 @@ var TypeScript;
         }
         IndexSignatureSyntax.prototype.kind = function () {
             return 149 /* IndexSignature */;
-        };
-        IndexSignatureSyntax.prototype.accept = function (visitor) {
-            return visitor.visitIndexSignature(this);
         };
         return IndexSignatureSyntax;
     })();
@@ -27994,9 +28089,6 @@ var TypeScript;
         MethodSignatureSyntax.prototype.kind = function () {
             return 150 /* MethodSignature */;
         };
-        MethodSignatureSyntax.prototype.accept = function (visitor) {
-            return visitor.visitMethodSignature(this);
-        };
         return MethodSignatureSyntax;
     })();
     TypeScript.MethodSignatureSyntax = MethodSignatureSyntax;
@@ -28009,9 +28101,6 @@ var TypeScript;
         }
         BlockSyntax.prototype.kind = function () {
             return 151 /* Block */;
-        };
-        BlockSyntax.prototype.accept = function (visitor) {
-            return visitor.visitBlock(this);
         };
         return BlockSyntax;
     })();
@@ -28026,9 +28115,6 @@ var TypeScript;
         IfStatementSyntax.prototype.kind = function () {
             return 152 /* IfStatement */;
         };
-        IfStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitIfStatement(this);
-        };
         return IfStatementSyntax;
     })();
     TypeScript.IfStatementSyntax = IfStatementSyntax;
@@ -28041,9 +28127,6 @@ var TypeScript;
         }
         VariableStatementSyntax.prototype.kind = function () {
             return 153 /* VariableStatement */;
-        };
-        VariableStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitVariableStatement(this);
         };
         return VariableStatementSyntax;
     })();
@@ -28058,9 +28141,6 @@ var TypeScript;
         ExpressionStatementSyntax.prototype.kind = function () {
             return 154 /* ExpressionStatement */;
         };
-        ExpressionStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitExpressionStatement(this);
-        };
         return ExpressionStatementSyntax;
     })();
     TypeScript.ExpressionStatementSyntax = ExpressionStatementSyntax;
@@ -28073,9 +28153,6 @@ var TypeScript;
         }
         ReturnStatementSyntax.prototype.kind = function () {
             return 155 /* ReturnStatement */;
-        };
-        ReturnStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitReturnStatement(this);
         };
         return ReturnStatementSyntax;
     })();
@@ -28090,9 +28167,6 @@ var TypeScript;
         SwitchStatementSyntax.prototype.kind = function () {
             return 156 /* SwitchStatement */;
         };
-        SwitchStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitSwitchStatement(this);
-        };
         return SwitchStatementSyntax;
     })();
     TypeScript.SwitchStatementSyntax = SwitchStatementSyntax;
@@ -28105,9 +28179,6 @@ var TypeScript;
         }
         BreakStatementSyntax.prototype.kind = function () {
             return 157 /* BreakStatement */;
-        };
-        BreakStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitBreakStatement(this);
         };
         return BreakStatementSyntax;
     })();
@@ -28122,9 +28193,6 @@ var TypeScript;
         ContinueStatementSyntax.prototype.kind = function () {
             return 158 /* ContinueStatement */;
         };
-        ContinueStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitContinueStatement(this);
-        };
         return ContinueStatementSyntax;
     })();
     TypeScript.ContinueStatementSyntax = ContinueStatementSyntax;
@@ -28137,9 +28205,6 @@ var TypeScript;
         }
         ForStatementSyntax.prototype.kind = function () {
             return 159 /* ForStatement */;
-        };
-        ForStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitForStatement(this);
         };
         return ForStatementSyntax;
     })();
@@ -28154,9 +28219,6 @@ var TypeScript;
         ForInStatementSyntax.prototype.kind = function () {
             return 160 /* ForInStatement */;
         };
-        ForInStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitForInStatement(this);
-        };
         return ForInStatementSyntax;
     })();
     TypeScript.ForInStatementSyntax = ForInStatementSyntax;
@@ -28169,9 +28231,6 @@ var TypeScript;
         }
         EmptyStatementSyntax.prototype.kind = function () {
             return 161 /* EmptyStatement */;
-        };
-        EmptyStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitEmptyStatement(this);
         };
         return EmptyStatementSyntax;
     })();
@@ -28186,9 +28245,6 @@ var TypeScript;
         ThrowStatementSyntax.prototype.kind = function () {
             return 162 /* ThrowStatement */;
         };
-        ThrowStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitThrowStatement(this);
-        };
         return ThrowStatementSyntax;
     })();
     TypeScript.ThrowStatementSyntax = ThrowStatementSyntax;
@@ -28201,9 +28257,6 @@ var TypeScript;
         }
         WhileStatementSyntax.prototype.kind = function () {
             return 163 /* WhileStatement */;
-        };
-        WhileStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitWhileStatement(this);
         };
         return WhileStatementSyntax;
     })();
@@ -28218,9 +28271,6 @@ var TypeScript;
         TryStatementSyntax.prototype.kind = function () {
             return 164 /* TryStatement */;
         };
-        TryStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitTryStatement(this);
-        };
         return TryStatementSyntax;
     })();
     TypeScript.TryStatementSyntax = TryStatementSyntax;
@@ -28233,9 +28283,6 @@ var TypeScript;
         }
         LabeledStatementSyntax.prototype.kind = function () {
             return 165 /* LabeledStatement */;
-        };
-        LabeledStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitLabeledStatement(this);
         };
         return LabeledStatementSyntax;
     })();
@@ -28250,9 +28297,6 @@ var TypeScript;
         DoStatementSyntax.prototype.kind = function () {
             return 166 /* DoStatement */;
         };
-        DoStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitDoStatement(this);
-        };
         return DoStatementSyntax;
     })();
     TypeScript.DoStatementSyntax = DoStatementSyntax;
@@ -28265,9 +28309,6 @@ var TypeScript;
         }
         DebuggerStatementSyntax.prototype.kind = function () {
             return 167 /* DebuggerStatement */;
-        };
-        DebuggerStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitDebuggerStatement(this);
         };
         return DebuggerStatementSyntax;
     })();
@@ -28282,9 +28323,6 @@ var TypeScript;
         WithStatementSyntax.prototype.kind = function () {
             return 168 /* WithStatement */;
         };
-        WithStatementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitWithStatement(this);
-        };
         return WithStatementSyntax;
     })();
     TypeScript.WithStatementSyntax = WithStatementSyntax;
@@ -28297,9 +28335,6 @@ var TypeScript;
         }
         PrefixUnaryExpressionSyntax.prototype.kind = function () {
             return 169 /* PrefixUnaryExpression */;
-        };
-        PrefixUnaryExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitPrefixUnaryExpression(this);
         };
         return PrefixUnaryExpressionSyntax;
     })();
@@ -28314,9 +28349,6 @@ var TypeScript;
         DeleteExpressionSyntax.prototype.kind = function () {
             return 170 /* DeleteExpression */;
         };
-        DeleteExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitDeleteExpression(this);
-        };
         return DeleteExpressionSyntax;
     })();
     TypeScript.DeleteExpressionSyntax = DeleteExpressionSyntax;
@@ -28329,9 +28361,6 @@ var TypeScript;
         }
         TypeOfExpressionSyntax.prototype.kind = function () {
             return 171 /* TypeOfExpression */;
-        };
-        TypeOfExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitTypeOfExpression(this);
         };
         return TypeOfExpressionSyntax;
     })();
@@ -28346,9 +28375,6 @@ var TypeScript;
         VoidExpressionSyntax.prototype.kind = function () {
             return 172 /* VoidExpression */;
         };
-        VoidExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitVoidExpression(this);
-        };
         return VoidExpressionSyntax;
     })();
     TypeScript.VoidExpressionSyntax = VoidExpressionSyntax;
@@ -28361,9 +28387,6 @@ var TypeScript;
         }
         ConditionalExpressionSyntax.prototype.kind = function () {
             return 173 /* ConditionalExpression */;
-        };
-        ConditionalExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitConditionalExpression(this);
         };
         return ConditionalExpressionSyntax;
     })();
@@ -28378,9 +28401,6 @@ var TypeScript;
         BinaryExpressionSyntax.prototype.kind = function () {
             return 174 /* BinaryExpression */;
         };
-        BinaryExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitBinaryExpression(this);
-        };
         return BinaryExpressionSyntax;
     })();
     TypeScript.BinaryExpressionSyntax = BinaryExpressionSyntax;
@@ -28393,9 +28413,6 @@ var TypeScript;
         }
         PostfixUnaryExpressionSyntax.prototype.kind = function () {
             return 175 /* PostfixUnaryExpression */;
-        };
-        PostfixUnaryExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitPostfixUnaryExpression(this);
         };
         return PostfixUnaryExpressionSyntax;
     })();
@@ -28410,9 +28427,6 @@ var TypeScript;
         MemberAccessExpressionSyntax.prototype.kind = function () {
             return 176 /* MemberAccessExpression */;
         };
-        MemberAccessExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitMemberAccessExpression(this);
-        };
         return MemberAccessExpressionSyntax;
     })();
     TypeScript.MemberAccessExpressionSyntax = MemberAccessExpressionSyntax;
@@ -28425,9 +28439,6 @@ var TypeScript;
         }
         InvocationExpressionSyntax.prototype.kind = function () {
             return 177 /* InvocationExpression */;
-        };
-        InvocationExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitInvocationExpression(this);
         };
         return InvocationExpressionSyntax;
     })();
@@ -28442,9 +28453,6 @@ var TypeScript;
         ArrayLiteralExpressionSyntax.prototype.kind = function () {
             return 178 /* ArrayLiteralExpression */;
         };
-        ArrayLiteralExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitArrayLiteralExpression(this);
-        };
         return ArrayLiteralExpressionSyntax;
     })();
     TypeScript.ArrayLiteralExpressionSyntax = ArrayLiteralExpressionSyntax;
@@ -28457,9 +28465,6 @@ var TypeScript;
         }
         ObjectLiteralExpressionSyntax.prototype.kind = function () {
             return 179 /* ObjectLiteralExpression */;
-        };
-        ObjectLiteralExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitObjectLiteralExpression(this);
         };
         return ObjectLiteralExpressionSyntax;
     })();
@@ -28474,9 +28479,6 @@ var TypeScript;
         ObjectCreationExpressionSyntax.prototype.kind = function () {
             return 180 /* ObjectCreationExpression */;
         };
-        ObjectCreationExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitObjectCreationExpression(this);
-        };
         return ObjectCreationExpressionSyntax;
     })();
     TypeScript.ObjectCreationExpressionSyntax = ObjectCreationExpressionSyntax;
@@ -28489,9 +28491,6 @@ var TypeScript;
         }
         ParenthesizedExpressionSyntax.prototype.kind = function () {
             return 181 /* ParenthesizedExpression */;
-        };
-        ParenthesizedExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitParenthesizedExpression(this);
         };
         return ParenthesizedExpressionSyntax;
     })();
@@ -28506,9 +28505,6 @@ var TypeScript;
         ParenthesizedArrowFunctionExpressionSyntax.prototype.kind = function () {
             return 182 /* ParenthesizedArrowFunctionExpression */;
         };
-        ParenthesizedArrowFunctionExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitParenthesizedArrowFunctionExpression(this);
-        };
         return ParenthesizedArrowFunctionExpressionSyntax;
     })();
     TypeScript.ParenthesizedArrowFunctionExpressionSyntax = ParenthesizedArrowFunctionExpressionSyntax;
@@ -28521,9 +28517,6 @@ var TypeScript;
         }
         SimpleArrowFunctionExpressionSyntax.prototype.kind = function () {
             return 183 /* SimpleArrowFunctionExpression */;
-        };
-        SimpleArrowFunctionExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitSimpleArrowFunctionExpression(this);
         };
         return SimpleArrowFunctionExpressionSyntax;
     })();
@@ -28538,9 +28531,6 @@ var TypeScript;
         CastExpressionSyntax.prototype.kind = function () {
             return 184 /* CastExpression */;
         };
-        CastExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitCastExpression(this);
-        };
         return CastExpressionSyntax;
     })();
     TypeScript.CastExpressionSyntax = CastExpressionSyntax;
@@ -28553,9 +28543,6 @@ var TypeScript;
         }
         ElementAccessExpressionSyntax.prototype.kind = function () {
             return 185 /* ElementAccessExpression */;
-        };
-        ElementAccessExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitElementAccessExpression(this);
         };
         return ElementAccessExpressionSyntax;
     })();
@@ -28570,9 +28557,6 @@ var TypeScript;
         FunctionExpressionSyntax.prototype.kind = function () {
             return 186 /* FunctionExpression */;
         };
-        FunctionExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitFunctionExpression(this);
-        };
         return FunctionExpressionSyntax;
     })();
     TypeScript.FunctionExpressionSyntax = FunctionExpressionSyntax;
@@ -28584,9 +28568,6 @@ var TypeScript;
         }
         OmittedExpressionSyntax.prototype.kind = function () {
             return 187 /* OmittedExpression */;
-        };
-        OmittedExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitOmittedExpression(this);
         };
         return OmittedExpressionSyntax;
     })();
@@ -28601,9 +28582,6 @@ var TypeScript;
         TemplateExpressionSyntax.prototype.kind = function () {
             return 188 /* TemplateExpression */;
         };
-        TemplateExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitTemplateExpression(this);
-        };
         return TemplateExpressionSyntax;
     })();
     TypeScript.TemplateExpressionSyntax = TemplateExpressionSyntax;
@@ -28616,9 +28594,6 @@ var TypeScript;
         }
         TemplateAccessExpressionSyntax.prototype.kind = function () {
             return 189 /* TemplateAccessExpression */;
-        };
-        TemplateAccessExpressionSyntax.prototype.accept = function (visitor) {
-            return visitor.visitTemplateAccessExpression(this);
         };
         return TemplateAccessExpressionSyntax;
     })();
@@ -28633,9 +28608,6 @@ var TypeScript;
         VariableDeclarationSyntax.prototype.kind = function () {
             return 190 /* VariableDeclaration */;
         };
-        VariableDeclarationSyntax.prototype.accept = function (visitor) {
-            return visitor.visitVariableDeclaration(this);
-        };
         return VariableDeclarationSyntax;
     })();
     TypeScript.VariableDeclarationSyntax = VariableDeclarationSyntax;
@@ -28648,9 +28620,6 @@ var TypeScript;
         }
         VariableDeclaratorSyntax.prototype.kind = function () {
             return 191 /* VariableDeclarator */;
-        };
-        VariableDeclaratorSyntax.prototype.accept = function (visitor) {
-            return visitor.visitVariableDeclarator(this);
         };
         return VariableDeclaratorSyntax;
     })();
@@ -28665,9 +28634,6 @@ var TypeScript;
         ArgumentListSyntax.prototype.kind = function () {
             return 192 /* ArgumentList */;
         };
-        ArgumentListSyntax.prototype.accept = function (visitor) {
-            return visitor.visitArgumentList(this);
-        };
         return ArgumentListSyntax;
     })();
     TypeScript.ArgumentListSyntax = ArgumentListSyntax;
@@ -28680,9 +28646,6 @@ var TypeScript;
         }
         ParameterListSyntax.prototype.kind = function () {
             return 193 /* ParameterList */;
-        };
-        ParameterListSyntax.prototype.accept = function (visitor) {
-            return visitor.visitParameterList(this);
         };
         return ParameterListSyntax;
     })();
@@ -28697,9 +28660,6 @@ var TypeScript;
         TypeArgumentListSyntax.prototype.kind = function () {
             return 194 /* TypeArgumentList */;
         };
-        TypeArgumentListSyntax.prototype.accept = function (visitor) {
-            return visitor.visitTypeArgumentList(this);
-        };
         return TypeArgumentListSyntax;
     })();
     TypeScript.TypeArgumentListSyntax = TypeArgumentListSyntax;
@@ -28712,9 +28672,6 @@ var TypeScript;
         }
         TypeParameterListSyntax.prototype.kind = function () {
             return 195 /* TypeParameterList */;
-        };
-        TypeParameterListSyntax.prototype.accept = function (visitor) {
-            return visitor.visitTypeParameterList(this);
         };
         return TypeParameterListSyntax;
     })();
@@ -28729,9 +28686,6 @@ var TypeScript;
         HeritageClauseSyntax.prototype.kind = function () {
             return 196 /* HeritageClause */;
         };
-        HeritageClauseSyntax.prototype.accept = function (visitor) {
-            return visitor.visitHeritageClause(this);
-        };
         return HeritageClauseSyntax;
     })();
     TypeScript.HeritageClauseSyntax = HeritageClauseSyntax;
@@ -28744,9 +28698,6 @@ var TypeScript;
         }
         EqualsValueClauseSyntax.prototype.kind = function () {
             return 197 /* EqualsValueClause */;
-        };
-        EqualsValueClauseSyntax.prototype.accept = function (visitor) {
-            return visitor.visitEqualsValueClause(this);
         };
         return EqualsValueClauseSyntax;
     })();
@@ -28761,9 +28712,6 @@ var TypeScript;
         CaseSwitchClauseSyntax.prototype.kind = function () {
             return 198 /* CaseSwitchClause */;
         };
-        CaseSwitchClauseSyntax.prototype.accept = function (visitor) {
-            return visitor.visitCaseSwitchClause(this);
-        };
         return CaseSwitchClauseSyntax;
     })();
     TypeScript.CaseSwitchClauseSyntax = CaseSwitchClauseSyntax;
@@ -28776,9 +28724,6 @@ var TypeScript;
         }
         DefaultSwitchClauseSyntax.prototype.kind = function () {
             return 199 /* DefaultSwitchClause */;
-        };
-        DefaultSwitchClauseSyntax.prototype.accept = function (visitor) {
-            return visitor.visitDefaultSwitchClause(this);
         };
         return DefaultSwitchClauseSyntax;
     })();
@@ -28793,9 +28738,6 @@ var TypeScript;
         ElseClauseSyntax.prototype.kind = function () {
             return 200 /* ElseClause */;
         };
-        ElseClauseSyntax.prototype.accept = function (visitor) {
-            return visitor.visitElseClause(this);
-        };
         return ElseClauseSyntax;
     })();
     TypeScript.ElseClauseSyntax = ElseClauseSyntax;
@@ -28808,9 +28750,6 @@ var TypeScript;
         }
         CatchClauseSyntax.prototype.kind = function () {
             return 201 /* CatchClause */;
-        };
-        CatchClauseSyntax.prototype.accept = function (visitor) {
-            return visitor.visitCatchClause(this);
         };
         return CatchClauseSyntax;
     })();
@@ -28825,9 +28764,6 @@ var TypeScript;
         FinallyClauseSyntax.prototype.kind = function () {
             return 202 /* FinallyClause */;
         };
-        FinallyClauseSyntax.prototype.accept = function (visitor) {
-            return visitor.visitFinallyClause(this);
-        };
         return FinallyClauseSyntax;
     })();
     TypeScript.FinallyClauseSyntax = FinallyClauseSyntax;
@@ -28840,9 +28776,6 @@ var TypeScript;
         }
         TemplateClauseSyntax.prototype.kind = function () {
             return 203 /* TemplateClause */;
-        };
-        TemplateClauseSyntax.prototype.accept = function (visitor) {
-            return visitor.visitTemplateClause(this);
         };
         return TemplateClauseSyntax;
     })();
@@ -28857,9 +28790,6 @@ var TypeScript;
         TypeParameterSyntax.prototype.kind = function () {
             return 204 /* TypeParameter */;
         };
-        TypeParameterSyntax.prototype.accept = function (visitor) {
-            return visitor.visitTypeParameter(this);
-        };
         return TypeParameterSyntax;
     })();
     TypeScript.TypeParameterSyntax = TypeParameterSyntax;
@@ -28872,9 +28802,6 @@ var TypeScript;
         }
         ConstraintSyntax.prototype.kind = function () {
             return 205 /* Constraint */;
-        };
-        ConstraintSyntax.prototype.accept = function (visitor) {
-            return visitor.visitConstraint(this);
         };
         return ConstraintSyntax;
     })();
@@ -28889,9 +28816,6 @@ var TypeScript;
         SimplePropertyAssignmentSyntax.prototype.kind = function () {
             return 206 /* SimplePropertyAssignment */;
         };
-        SimplePropertyAssignmentSyntax.prototype.accept = function (visitor) {
-            return visitor.visitSimplePropertyAssignment(this);
-        };
         return SimplePropertyAssignmentSyntax;
     })();
     TypeScript.SimplePropertyAssignmentSyntax = SimplePropertyAssignmentSyntax;
@@ -28904,9 +28828,6 @@ var TypeScript;
         }
         FunctionPropertyAssignmentSyntax.prototype.kind = function () {
             return 207 /* FunctionPropertyAssignment */;
-        };
-        FunctionPropertyAssignmentSyntax.prototype.accept = function (visitor) {
-            return visitor.visitFunctionPropertyAssignment(this);
         };
         return FunctionPropertyAssignmentSyntax;
     })();
@@ -28921,9 +28842,6 @@ var TypeScript;
         ParameterSyntax.prototype.kind = function () {
             return 208 /* Parameter */;
         };
-        ParameterSyntax.prototype.accept = function (visitor) {
-            return visitor.visitParameter(this);
-        };
         return ParameterSyntax;
     })();
     TypeScript.ParameterSyntax = ParameterSyntax;
@@ -28936,9 +28854,6 @@ var TypeScript;
         }
         EnumElementSyntax.prototype.kind = function () {
             return 209 /* EnumElement */;
-        };
-        EnumElementSyntax.prototype.accept = function (visitor) {
-            return visitor.visitEnumElement(this);
         };
         return EnumElementSyntax;
     })();
@@ -28953,9 +28868,6 @@ var TypeScript;
         TypeAnnotationSyntax.prototype.kind = function () {
             return 210 /* TypeAnnotation */;
         };
-        TypeAnnotationSyntax.prototype.accept = function (visitor) {
-            return visitor.visitTypeAnnotation(this);
-        };
         return TypeAnnotationSyntax;
     })();
     TypeScript.TypeAnnotationSyntax = TypeAnnotationSyntax;
@@ -28969,9 +28881,6 @@ var TypeScript;
         ExternalModuleReferenceSyntax.prototype.kind = function () {
             return 211 /* ExternalModuleReference */;
         };
-        ExternalModuleReferenceSyntax.prototype.accept = function (visitor) {
-            return visitor.visitExternalModuleReference(this);
-        };
         return ExternalModuleReferenceSyntax;
     })();
     TypeScript.ExternalModuleReferenceSyntax = ExternalModuleReferenceSyntax;
@@ -28984,9 +28893,6 @@ var TypeScript;
         }
         ModuleNameModuleReferenceSyntax.prototype.kind = function () {
             return 212 /* ModuleNameModuleReference */;
-        };
-        ModuleNameModuleReferenceSyntax.prototype.accept = function (visitor) {
-            return visitor.visitModuleNameModuleReference(this);
         };
         return ModuleNameModuleReferenceSyntax;
     })();
@@ -31112,14 +31018,14 @@ var TypeScript;
                 this.appendSpaceList(node.templateClauses);
             };
             PrettyPrinterImpl.prototype.visitTemplateClause = function (node) {
-                node.expression.accept(this);
+                TypeScript.visitNodeOrToken(this, node.expression);
                 this.ensureSpace();
                 this.appendToken(node.templateMiddleOrEndToken);
             };
             PrettyPrinterImpl.prototype.visitTemplateAccessExpression = function (node) {
-                node.expression.accept(this);
+                TypeScript.visitNodeOrToken(this, node.expression);
                 this.ensureSpace();
-                node.templateExpression.accept(this);
+                TypeScript.visitNodeOrToken(this, node.templateExpression);
             };
             return PrettyPrinterImpl;
         })();
