@@ -1980,17 +1980,12 @@ function generateNode(definition: ITypeDefinition, abstract: boolean): string {
     }
 
     if (definition.children.length > 0) {
-        var first = true;
         for (var i = 0; i < definition.children.length; i++) {
             var child = definition.children[i];
-            if (child.excludeFromAST && abstract) {
-                continue;
-            }
 
-            if (!first) {
+            if (i) {
                 result += ",\r\n";
             }
-            first = false;
 
             //if (child.isList || child.isSeparatedList) {
             //    result += "            !isShared(" + getSafeName(child) + ") && (" + getSafeName(child) + ".parent = this)";
@@ -2016,7 +2011,7 @@ function generateNode(definition: ITypeDefinition, abstract: boolean): string {
 }
 
 function generateConstructorFunction(definition: ITypeDefinition) {
-    var result = "    function " + camelCase(definition.name) + "(data: number";
+    var result = "    export var " + definition.name + ": " + getNameWithoutSuffix(definition) + "Constructor = <any>function(data: number";
 
     for (var i = 0; i < definition.children.length; i++) {
         var child = definition.children[i];
@@ -2027,18 +2022,46 @@ function generateConstructorFunction(definition: ITypeDefinition) {
 
     result += ") {\r\n";
 
-    for (var i = 0; i < definition.children.length; i++) {
-        var child = definition.children[i];
-        result += "        this." + child.name + " = " + getSafeName(child) + ";\r\n";
+    result += "        if (data) { this.__data = data; }\r\n";
+
+    if (definition.children.length) {
+        result += "        ";
+
+        for (var i = 0; i < definition.children.length; i++) {
+            if (i) {
+                result += ", ";
+            }
+
+            var child = definition.children[i];
+            result += "this." + child.name + " = " + getSafeName(child);
+        }
+
+        result += ";\r\n";
     }
 
-    result += "        finishNode(this, data);\r\n";
+    if (definition.children.length > 0) {
+        result += "        ";
 
-    result += "    }\r\n";
-    result += "    " + camelCase(definition.name) + ".prototype.kind = function() { return SyntaxKind." + getNameWithoutSuffix(definition) + "; }\r\n";
+        for (var i = 0; i < definition.children.length; i++) {
+            if (i) {
+                result += ", ";
+            }
 
-    result += "    export var " + definition.name + ": " + getNameWithoutSuffix(definition) + "Constructor";
-    result += " = <any>" + camelCase(definition.name) + ";\r\n";
+            var child = definition.children[i];
+
+            if (child.isOptional) {
+                result += getSafeName(child) + " && (" + getSafeName(child) + ".parent = this)";
+            }
+            else {
+                result += getSafeName(child) + ".parent = this";
+            }
+        }
+        result += ";\r\n";
+    }
+
+    result += "    };\r\n";
+
+    result += "    " + definition.name + ".prototype.kind = function() { return SyntaxKind." + getNameWithoutSuffix(definition) + "; }\r\n";
 
     return result;
 }
@@ -2127,25 +2150,28 @@ function generateNodes(abstract: boolean): string {
     result += "module TypeScript";
 
     result += " {\r\n";
-    result += "    function finishNode(node: ISyntaxNode, data: number) {\r\n";
-    result += "        for (var i = 0, n = childCount(node); i < n; i++) {\r\n";
-    result += "            childAt(node, i).parent = node;\r\n";
-    result += "        }\r\n";
-    //result += "        for (var name in node) {\r\n";
-    //result += "            if (node.hasOwnProperty(name)) {\r\n";
-    //result += "                (<any>node)[name] = node;\r\n";
-    //result += "            }\r\n";
+    //result += "    function finishNode(node: ISyntaxNode, data: number) {\r\n";
+    //result += "        for (var i = 0, n = childCount(node); i < n; i++) {\r\n";
+    //result += "            childAt(node, i).parent = node;\r\n";
     //result += "        }\r\n";
-    result += "\r\n";
-    result += "        if (data) {\r\n";
-    result += "            node.__data = data;\r\n";
-    result += "        }\r\n";
-    result += "    }\r\n";
+    ////result += "        for (var name in node) {\r\n";
+    ////result += "            if (node.hasOwnProperty(name)) {\r\n";
+    ////result += "                (<any>node)[name] = node;\r\n";
+    ////result += "            }\r\n";
+    ////result += "        }\r\n";
+    //result += "\r\n";
+    //result += "        if (data) {\r\n";
+    //result += "            node.__data = data;\r\n";
+    //result += "        }\r\n";
+    //result += "    }\r\n";
 
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
 
-        result += "\r\n";
+        if (i) {
+            result += "\r\n";
+        }
+
         result += generateConstructorFunction(definition);
         // result += generateNode(definition, abstract);
     }
