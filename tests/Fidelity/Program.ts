@@ -185,8 +185,8 @@ function nodeToJSON(node: TypeScript.ISyntaxNode, text: TypeScript.ISimpleText):
 
     var usedNames: any = {};
     var thisAsIndexable: ts.Map<any> = <any>node;
-    for (var i = 0, n = node.childCount(); i < n; i++) {
-        var value = node.childAt(i);
+    for (var i = 0, n = TypeScript.childCount(node); i < n; i++) {
+        var value = TypeScript.childAt(node, i);
 
         if (value) {
             for (var name in node) {
@@ -209,8 +209,8 @@ function elementToJSON(element: TypeScript.ISyntaxElement, text: TypeScript.ISim
     else if (TypeScript.isList(element)) {
         var result: any[] = [];
 
-        for (var i = 0, n = element.childCount(); i < n; i++) {
-            result.push(elementToJSON(element.childAt(i), text));
+        for (var i = 0, n = TypeScript.childCount(element); i < n; i++) {
+            result.push(elementToJSON(TypeScript.childAt(element, i), text));
         }
 
         return result;
