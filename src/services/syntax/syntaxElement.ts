@@ -36,28 +36,13 @@ module TypeScript {
         return (info & SyntaxConstants.NodeParsedInStrictModeMask) !== 0;
     }
 
-    export function previousToken(token: ISyntaxToken, includeSkippedTokens: boolean = false): ISyntaxToken {
-        if (includeSkippedTokens) {
-            var triviaList = token.leadingTrivia();
-            if (triviaList && triviaList.hasSkippedToken()) {
-                var currentTriviaEndPosition = TypeScript.start(token);
-                for (var i = triviaList.count() - 1; i >= 0; i--) {
-                    var trivia = triviaList.syntaxTriviaAt(i);
-                    if (trivia.isSkippedToken()) {
-                        return trivia.skippedToken();
-                    }
-
-                    currentTriviaEndPosition -= trivia.fullWidth();
-                }
-            }
-        }
-
+    export function previousToken(token: ISyntaxToken): ISyntaxToken {
         var start = token.fullStart();
         if (start === 0) {
             return undefined;
         }
 
-        return findToken(syntaxTree(token).sourceUnit(), start - 1, includeSkippedTokens);
+        return findToken(syntaxTree(token).sourceUnit(), start - 1);
     }
 
     /**
@@ -73,7 +58,7 @@ module TypeScript {
      * Note: findToken will always return a non-missing token with width greater than or equal to
      * 1 (except for EOF).  Empty tokens synthesized by the parser are never returned.
      */
-    export function findToken(element: ISyntaxElement, position: number, includeSkippedTokens?: boolean): ISyntaxToken {
+    export function findToken(element: ISyntaxElement, position: number): ISyntaxToken {
         var endOfFileToken = tryGetEndOfFileAt(element, position);
         if (endOfFileToken) {
             return endOfFileToken;
@@ -84,12 +69,6 @@ module TypeScript {
         }
 
         var positionedToken = findTokenWorker(element, 0, position);
-
-        if (includeSkippedTokens) {
-            return findSkippedTokenInPositionedToken(positionedToken, position) || positionedToken;
-        }
-
-        // Could not find a better match
         return positionedToken;
     }
 
@@ -178,24 +157,12 @@ module TypeScript {
         return undefined;
     }
 
-    export function nextToken(token: ISyntaxToken, text?: ISimpleText, includeSkippedTokens: boolean = false): ISyntaxToken {
+    export function nextToken(token: ISyntaxToken, text?: ISimpleText): ISyntaxToken {
         if (token.kind() === SyntaxKind.EndOfFileToken) {
             return undefined;
         }
 
-        if (includeSkippedTokens) {
-            var triviaList = token.trailingTrivia(text);
-            if (triviaList && triviaList.hasSkippedToken()) {
-                for (var i = 0, n = triviaList.count(); i < n; i++) {
-                    var trivia = triviaList.syntaxTriviaAt(i);
-                    if (trivia.isSkippedToken()) {
-                        return trivia.skippedToken();
-                    }
-                }
-            }
-        }
-
-        return findToken(syntaxTree(token).sourceUnit(), fullEnd(token), includeSkippedTokens);
+        return findToken(syntaxTree(token).sourceUnit(), fullEnd(token));
     }
 
     export function isNode(element: ISyntaxElement): boolean {
