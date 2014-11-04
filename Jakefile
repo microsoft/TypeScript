@@ -134,6 +134,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = false;
+var emitReverseMapping = false;
 var generateDeclarations = false;
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
@@ -148,9 +149,13 @@ var compilerFilename = "tsc.js";
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
-        var options = "-removeComments --module commonjs -noImplicitAny "; //" -propagateEnumConstants "
+        var options = "-removeComments --module commonjs -noImplicitAny ";
         if (generateDeclarations) {
             options += "--declaration ";
+        }
+
+        if (emitReverseMapping) {
+            options += "--preserveConstEnums ";
         }
         
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
@@ -259,10 +264,14 @@ task("local", ["generate-diagnostics", "lib", tscFile, servicesFile]);
 
 // Local target to build the compiler and services
 desc("Emit debug mode files with sourcemaps");
-task("debug", function() {
+task("debug", ["emitReverseMapping"], function() {
     useDebugMode = true;
 });
 
+desc("Emit reverse mapping for const enums");
+task("emitReverseMapping", function() {
+    emitReverseMapping = true;
+});
 
 // Set the default task to "local"
 task("default", ["local"]);
