@@ -4879,8 +4879,9 @@ module ts {
 
         // Return the contextual signature for a given expression node. A contextual type provides a
         // contextual signature if it has a single call signature and if that call signature is non-generic.
-        // If the contextual type is a union type and each constituent type that has a contextual signature
-        // provides the same contextual signature, then the union type provides that contextual signature.
+        // If the contextual type is a union type, get the signature from each type possible and if they are 
+        // all identical ignoring their return type, the result is same signature but with return type as 
+        // union type of return types from these signatures
         function getContextualSignature(node: Expression): Signature {
             var type = getContextualType(node);
             if (!type) {
@@ -4889,18 +4890,40 @@ module ts {
             if (!(type.flags & TypeFlags.Union)) {
                 return getNonGenericSignature(type);
             }
-            var result: Signature;
+            var signatureList: Signature[];
             var types = (<UnionType>type).types;
             for (var i = 0; i < types.length; i++) {
+                // The signature set of all constituent type with call signatures should match
+                // So number of signatures allowed is either 0 or 1
+                if (signatureList &&
+                    getSignaturesOfObjectOrUnionType(types[i], SignatureKind.Call).length > 1) {
+                    return undefined;
+                }
+
                 var signature = getNonGenericSignature(types[i]);
                 if (signature) {
-                    if (!result) {
-                        result = signature;
+                    if (!signatureList) {
+                        // This signature will contribute to contextual union signature
+                        signatureList = [signature];
                     }
-                    else if (!compareSignatures(result, signature, /*compareReturnTypes*/ true, compareTypes)) {
+                    else if (!compareSignatures(signatureList[0], signature, /*compareReturnTypes*/ false, compareTypes)) {
+                        // Signatures arent identical, do not use
                         return undefined;
                     }
+                    else {
+                        // Use this signature for contextual union signature
+                        signatureList.push(signature);
+                    }
                 }
+            }
+
+            // Result is union of signatures collected (return type is union of return types of this signature set)
+            var result: Signature;
+            if (signatureList) {
+                result = cloneSignature(signatureList[0]);
+                // Clear resolved return type we possibly got from cloneSignature
+                result.resolvedReturnType = undefined;
+                result.unionSignatures = signatureList;
             }
             return result;
         }

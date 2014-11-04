@@ -23,10 +23,10 @@ tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(
     Types of property 'prop' are incompatible.
       Type 'string | number' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(57,5): error TS2323: Type '{ commonMethodDifferentReturnType: (a: any, b: any) => string | number; }' is not assignable to type 'I11 | I21'.
-  Type '{ commonMethodDifferentReturnType: (a: any, b: any) => string | number; }' is not assignable to type 'I21'.
+tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(57,5): error TS2323: Type '{ commonMethodDifferentReturnType: (a: string, b: number) => string | number; }' is not assignable to type 'I11 | I21'.
+  Type '{ commonMethodDifferentReturnType: (a: string, b: number) => string | number; }' is not assignable to type 'I21'.
     Types of property 'commonMethodDifferentReturnType' are incompatible.
-      Type '(a: any, b: any) => string | number' is not assignable to type '(a: string, b: number) => number'.
+      Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => number'.
         Type 'string | number' is not assignable to type 'number'.
           Type 'string' is not assignable to type 'number'.
 
@@ -120,10 +120,10 @@ tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(
     var strOrNumber: string | number;
     var i11Ori21: I11 | I21 = { // Like i1 and i2 both
         ~~~~~~~~
-!!! error TS2323: Type '{ commonMethodDifferentReturnType: (a: any, b: any) => string | number; }' is not assignable to type 'I11 | I21'.
-!!! error TS2323:   Type '{ commonMethodDifferentReturnType: (a: any, b: any) => string | number; }' is not assignable to type 'I21'.
+!!! error TS2323: Type '{ commonMethodDifferentReturnType: (a: string, b: number) => string | number; }' is not assignable to type 'I11 | I21'.
+!!! error TS2323:   Type '{ commonMethodDifferentReturnType: (a: string, b: number) => string | number; }' is not assignable to type 'I21'.
 !!! error TS2323:     Types of property 'commonMethodDifferentReturnType' are incompatible.
-!!! error TS2323:       Type '(a: any, b: any) => string | number' is not assignable to type '(a: string, b: number) => number'.
+!!! error TS2323:       Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => number'.
 !!! error TS2323:         Type 'string | number' is not assignable to type 'number'.
 !!! error TS2323:           Type 'string' is not assignable to type 'number'.
         commonMethodDifferentReturnType: (a, b) => strOrNumber,

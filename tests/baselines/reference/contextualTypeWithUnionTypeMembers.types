@@ -321,25 +321,25 @@ var i11Ori21: I11 | I21 = {
 >i11Ori21 : I11 | I21
 >I11 : I11
 >I21 : I21
->{     // Like i1    commonMethodDifferentReturnType: (a, b) => {        var z = a.charAt(b);        return z;      },    commonPropertyDifferentType: "hello",  } : { commonMethodDifferentReturnType: (a: any, b: any) => any; commonPropertyDifferentType: string; }
+>{     // Like i1    commonMethodDifferentReturnType: (a, b) => {        var z = a.charAt(b);        return z;      },    commonPropertyDifferentType: "hello",  } : { commonMethodDifferentReturnType: (a: string, b: number) => string; commonPropertyDifferentType: string; }
 
     // Like i1
     commonMethodDifferentReturnType: (a, b) => {
->commonMethodDifferentReturnType : (a: any, b: any) => any
->(a, b) => {        var z = a.charAt(b);        return z;      } : (a: any, b: any) => any
->a : any
->b : any
+>commonMethodDifferentReturnType : (a: string, b: number) => string
+>(a, b) => {        var z = a.charAt(b);        return z;      } : (a: string, b: number) => string
+>a : string
+>b : number
 
         var z = a.charAt(b);
->z : any
->a.charAt(b) : any
->a.charAt : any
->a : any
->charAt : any
->b : any
+>z : string
+>a.charAt(b) : string
+>a.charAt : (pos: number) => string
+>a : string
+>charAt : (pos: number) => string
+>b : number
 
         return z;  
->z : any
+>z : string
 
     },
     commonPropertyDifferentType: "hello",  
@@ -350,25 +350,25 @@ var i11Ori21: I11 | I21 = {
 >i11Ori21 : I11 | I21
 >I11 : I11
 >I21 : I21
->{     // Like i2    commonMethodDifferentReturnType: (a, b) => {        var z = a.charCodeAt(b);        return z;    },    commonPropertyDifferentType: 10,} : { commonMethodDifferentReturnType: (a: any, b: any) => any; commonPropertyDifferentType: number; }
+>{     // Like i2    commonMethodDifferentReturnType: (a, b) => {        var z = a.charCodeAt(b);        return z;    },    commonPropertyDifferentType: 10,} : { commonMethodDifferentReturnType: (a: string, b: number) => number; commonPropertyDifferentType: number; }
 
     // Like i2
     commonMethodDifferentReturnType: (a, b) => {
->commonMethodDifferentReturnType : (a: any, b: any) => any
->(a, b) => {        var z = a.charCodeAt(b);        return z;    } : (a: any, b: any) => any
->a : any
->b : any
+>commonMethodDifferentReturnType : (a: string, b: number) => number
+>(a, b) => {        var z = a.charCodeAt(b);        return z;    } : (a: string, b: number) => number
+>a : string
+>b : number
 
         var z = a.charCodeAt(b);
->z : any
->a.charCodeAt(b) : any
->a.charCodeAt : any
->a : any
->charCodeAt : any
->b : any
+>z : number
+>a.charCodeAt(b) : number
+>a.charCodeAt : (index: number) => number
+>a : string
+>charCodeAt : (index: number) => number
+>b : number
 
         return z;
->z : any
+>z : number
 
     },
     commonPropertyDifferentType: 10,
@@ -380,56 +380,56 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
 >Array : T[]
 >I11 : I11
 >I21 : I21
->[i11, i21, i11 || i21, {         // Like i1        commonMethodDifferentReturnType: (a, b) => {            var z = a.charAt(b);            return z;        },        commonPropertyDifferentType: "hello",    }, {         // Like i2        commonMethodDifferentReturnType: (a, b) => {            var z = a.charCodeAt(b);            return z;        },        commonPropertyDifferentType: 10,    }] : ({ commonMethodDifferentReturnType: (a: any, b: any) => any; commonPropertyDifferentType: string; } | { commonMethodDifferentReturnType: (a: any, b: any) => any; commonPropertyDifferentType: number; })[]
+>[i11, i21, i11 || i21, {         // Like i1        commonMethodDifferentReturnType: (a, b) => {            var z = a.charAt(b);            return z;        },        commonPropertyDifferentType: "hello",    }, {         // Like i2        commonMethodDifferentReturnType: (a, b) => {            var z = a.charCodeAt(b);            return z;        },        commonPropertyDifferentType: 10,    }] : (I11 | I21)[]
 >i11 : I11
 >i21 : I21
 >i11 || i21 : I11 | I21
 >i11 : I11
 >i21 : I21
->{         // Like i1        commonMethodDifferentReturnType: (a, b) => {            var z = a.charAt(b);            return z;        },        commonPropertyDifferentType: "hello",    } : { commonMethodDifferentReturnType: (a: any, b: any) => any; commonPropertyDifferentType: string; }
+>{         // Like i1        commonMethodDifferentReturnType: (a, b) => {            var z = a.charAt(b);            return z;        },        commonPropertyDifferentType: "hello",    } : { commonMethodDifferentReturnType: (a: string, b: number) => string; commonPropertyDifferentType: string; }
 
         // Like i1
         commonMethodDifferentReturnType: (a, b) => {
->commonMethodDifferentReturnType : (a: any, b: any) => any
->(a, b) => {            var z = a.charAt(b);            return z;        } : (a: any, b: any) => any
->a : any
->b : any
+>commonMethodDifferentReturnType : (a: string, b: number) => string
+>(a, b) => {            var z = a.charAt(b);            return z;        } : (a: string, b: number) => string
+>a : string
+>b : number
 
             var z = a.charAt(b);
->z : any
->a.charAt(b) : any
->a.charAt : any
->a : any
->charAt : any
->b : any
+>z : string
+>a.charAt(b) : string
+>a.charAt : (pos: number) => string
+>a : string
+>charAt : (pos: number) => string
+>b : number
 
             return z;
->z : any
+>z : string
 
         },
         commonPropertyDifferentType: "hello",
 >commonPropertyDifferentType : string
 
     }, { 
->{         // Like i2        commonMethodDifferentReturnType: (a, b) => {            var z = a.charCodeAt(b);            return z;        },        commonPropertyDifferentType: 10,    } : { commonMethodDifferentReturnType: (a: any, b: any) => any; commonPropertyDifferentType: number; }
+>{         // Like i2        commonMethodDifferentReturnType: (a, b) => {            var z = a.charCodeAt(b);            return z;        },        commonPropertyDifferentType: 10,    } : { commonMethodDifferentReturnType: (a: string, b: number) => number; commonPropertyDifferentType: number; }
 
         // Like i2
         commonMethodDifferentReturnType: (a, b) => {
->commonMethodDifferentReturnType : (a: any, b: any) => any
->(a, b) => {            var z = a.charCodeAt(b);            return z;        } : (a: any, b: any) => any
->a : any
->b : any
+>commonMethodDifferentReturnType : (a: string, b: number) => number
+>(a, b) => {            var z = a.charCodeAt(b);            return z;        } : (a: string, b: number) => number
+>a : string
+>b : number
 
             var z = a.charCodeAt(b);
->z : any
->a.charCodeAt(b) : any
->a.charCodeAt : any
->a : any
->charCodeAt : any
->b : any
+>z : number
+>a.charCodeAt(b) : number
+>a.charCodeAt : (index: number) => number
+>a : string
+>charCodeAt : (index: number) => number
+>b : number
 
             return z;
->z : any
+>z : number
 
         },
         commonPropertyDifferentType: 10,
