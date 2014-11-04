@@ -1898,7 +1898,8 @@ module ts {
 
             function emitEnumDeclaration(node: EnumDeclaration) {
                 // const enums are completely erased during compilation.
-                if (isConstEnumDeclaration(node) && !compilerOptions.preserveConstEnums) {
+                var isConstEnum = isConstEnumDeclaration(node);
+                if (isConstEnum && !compilerOptions.preserveConstEnums) {
                     return;
                 }
                 emitLeadingComments(node);
@@ -1918,7 +1919,7 @@ module ts {
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
-                emitEnumMemberDeclarations();
+                emitEnumMemberDeclarations(isConstEnum);
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
@@ -1941,7 +1942,7 @@ module ts {
                 }
                 emitTrailingComments(node);
 
-                function emitEnumMemberDeclarations() {
+                function emitEnumMemberDeclarations(isConstEnum: boolean) {
                     forEach(node.members, member => {
                         writeLine();
                         emitLeadingComments(member);
@@ -1952,7 +1953,7 @@ module ts {
                         write("[");
                         emitQuotedIdentifier(member.name);
                         write("] = ");
-                        if (member.initializer) {
+                        if (member.initializer && !isConstEnum) {
                             emit(member.initializer);
                         }
                         else {
