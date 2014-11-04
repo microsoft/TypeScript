@@ -729,9 +729,8 @@ var ts;
         const_declarations_must_be_initialized: { code: 1155, category: 1 /* Error */, key: "'const' declarations must be initialized" },
         const_declarations_can_only_be_declared_inside_a_block: { code: 1156, category: 1 /* Error */, key: "'const' declarations can only be declared inside a block." },
         let_declarations_can_only_be_declared_inside_a_block: { code: 1157, category: 1 /* Error */, key: "'let' declarations can only be declared inside a block." },
-        Aliased_type_cannot_be_an_object_type_literal_Use_an_interface_declaration_instead: { code: 1158, category: 1 /* Error */, key: "Aliased type cannot be an object type literal. Use an interface declaration instead." },
-        Invalid_template_literal_expected: { code: 1159, category: 1 /* Error */, key: "Invalid template literal; expected '}'" },
-        Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1160, category: 1 /* Error */, key: "Tagged templates are only available when targeting ECMAScript 6 and higher." },
+        Invalid_template_literal_expected: { code: 1158, category: 1 /* Error */, key: "Invalid template literal; expected '}'" },
+        Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1159, category: 1 /* Error */, key: "Tagged templates are only available when targeting ECMAScript 6 and higher." },
         Duplicate_identifier_0: { code: 2300, category: 1 /* Error */, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: 1 /* Error */, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: 1 /* Error */, key: "Static members cannot reference class type parameters." },
@@ -879,6 +878,7 @@ var ts;
         The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly: { code: 2453, category: 1 /* Error */, key: "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly." },
         Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0: { code: 2455, category: 1 /* Error */, key: "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'." },
         Type_alias_0_circularly_references_itself: { code: 2456, category: 1 /* Error */, key: "Type alias '{0}' circularly references itself." },
+        Type_alias_name_cannot_be_0: { code: 2457, category: 1 /* Error */, key: "Type alias name cannot be '{0}'" },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: 1 /* Error */, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_name_1_from_private_module_2: { code: 4001, category: 1 /* Error */, key: "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: 1 /* Error */, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
@@ -3269,40 +3269,23 @@ var ts;
     })(Tristate || (Tristate = {}));
     function parsingContextErrors(context) {
         switch (context) {
-            case 0 /* SourceElements */:
-                return ts.Diagnostics.Declaration_or_statement_expected;
-            case 1 /* ModuleElements */:
-                return ts.Diagnostics.Declaration_or_statement_expected;
-            case 2 /* BlockStatements */:
-                return ts.Diagnostics.Statement_expected;
-            case 3 /* SwitchClauses */:
-                return ts.Diagnostics.case_or_default_expected;
-            case 4 /* SwitchClauseStatements */:
-                return ts.Diagnostics.Statement_expected;
-            case 5 /* TypeMembers */:
-                return ts.Diagnostics.Property_or_signature_expected;
-            case 6 /* ClassMembers */:
-                return ts.Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
-            case 7 /* EnumMembers */:
-                return ts.Diagnostics.Enum_member_expected;
-            case 8 /* BaseTypeReferences */:
-                return ts.Diagnostics.Type_reference_expected;
-            case 9 /* VariableDeclarations */:
-                return ts.Diagnostics.Variable_declaration_expected;
-            case 10 /* ArgumentExpressions */:
-                return ts.Diagnostics.Argument_expression_expected;
-            case 11 /* ObjectLiteralMembers */:
-                return ts.Diagnostics.Property_assignment_expected;
-            case 12 /* ArrayLiteralMembers */:
-                return ts.Diagnostics.Expression_or_comma_expected;
-            case 13 /* Parameters */:
-                return ts.Diagnostics.Parameter_declaration_expected;
-            case 14 /* TypeParameters */:
-                return ts.Diagnostics.Type_parameter_declaration_expected;
-            case 15 /* TypeArguments */:
-                return ts.Diagnostics.Type_argument_expected;
-            case 16 /* TupleElementTypes */:
-                return ts.Diagnostics.Type_expected;
+            case 0 /* SourceElements */: return ts.Diagnostics.Declaration_or_statement_expected;
+            case 1 /* ModuleElements */: return ts.Diagnostics.Declaration_or_statement_expected;
+            case 2 /* BlockStatements */: return ts.Diagnostics.Statement_expected;
+            case 3 /* SwitchClauses */: return ts.Diagnostics.case_or_default_expected;
+            case 4 /* SwitchClauseStatements */: return ts.Diagnostics.Statement_expected;
+            case 5 /* TypeMembers */: return ts.Diagnostics.Property_or_signature_expected;
+            case 6 /* ClassMembers */: return ts.Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
+            case 7 /* EnumMembers */: return ts.Diagnostics.Enum_member_expected;
+            case 8 /* BaseTypeReferences */: return ts.Diagnostics.Type_reference_expected;
+            case 9 /* VariableDeclarations */: return ts.Diagnostics.Variable_declaration_expected;
+            case 10 /* ArgumentExpressions */: return ts.Diagnostics.Argument_expression_expected;
+            case 11 /* ObjectLiteralMembers */: return ts.Diagnostics.Property_assignment_expected;
+            case 12 /* ArrayLiteralMembers */: return ts.Diagnostics.Expression_or_comma_expected;
+            case 13 /* Parameters */: return ts.Diagnostics.Parameter_declaration_expected;
+            case 14 /* TypeParameters */: return ts.Diagnostics.Type_parameter_declaration_expected;
+            case 15 /* TypeArguments */: return ts.Diagnostics.Type_argument_expected;
+            case 16 /* TupleElementTypes */: return ts.Diagnostics.Type_expected;
         }
     }
     ;
@@ -6106,13 +6089,6 @@ var ts;
             parseExpected(51 /* EqualsToken */);
             node.type = parseType();
             parseSemicolon();
-            var n = node.type;
-            while (n.kind === 138 /* ParenType */) {
-                n = n.type;
-            }
-            if (n.kind === 134 /* TypeLiteral */ && (n.pos !== n.members.pos || n.end !== n.members.end)) {
-                grammarErrorOnNode(node.type, ts.Diagnostics.Aliased_type_cannot_be_an_object_type_literal_Use_an_interface_declaration_instead);
-            }
             return finishNode(node);
         }
         function parseAndCheckEnumDeclaration(pos, flags) {
@@ -6722,14 +6698,10 @@ var ts;
                 return node.name.text;
             }
             switch (node.kind) {
-                case 126 /* Constructor */:
-                    return "__constructor";
-                case 129 /* CallSignature */:
-                    return "__call";
-                case 130 /* ConstructSignature */:
-                    return "__new";
-                case 131 /* IndexSignature */:
-                    return "__index";
+                case 126 /* Constructor */: return "__constructor";
+                case 129 /* CallSignature */: return "__call";
+                case 130 /* ConstructSignature */: return "__new";
+                case 131 /* IndexSignature */: return "__index";
             }
         }
         function getDisplayName(node) {
@@ -8189,6 +8161,9 @@ var ts;
                 writeLine();
                 emitToken(14 /* CloseBraceToken */, node.clauses.end);
             }
+            function isOnSameLine(node1, node2) {
+                return getLineOfLocalPosition(ts.skipTrivia(currentSourceFile.text, node1.pos)) === getLineOfLocalPosition(ts.skipTrivia(currentSourceFile.text, node2.pos));
+            }
             function emitCaseOrDefaultClause(node) {
                 if (node.kind === 172 /* CaseClause */) {
                     write("case ");
@@ -8198,9 +8173,15 @@ var ts;
                 else {
                     write("default:");
                 }
-                increaseIndent();
-                emitLines(node.statements);
-                decreaseIndent();
+                if (node.statements.length === 1 && isOnSameLine(node, node.statements[0])) {
+                    write(" ");
+                    emit(node.statements[0]);
+                }
+                else {
+                    increaseIndent();
+                    emitLines(node.statements);
+                    decreaseIndent();
+                }
             }
             function emitThrowStatement(node) {
                 write("throw ");
@@ -12814,10 +12795,8 @@ var ts;
         }
         function createTypeMapper(sources, targets) {
             switch (sources.length) {
-                case 1:
-                    return createUnaryTypeMapper(sources[0], targets[0]);
-                case 2:
-                    return createBinaryTypeMapper(sources[0], targets[0], sources[1], targets[1]);
+                case 1: return createUnaryTypeMapper(sources[0], targets[0]);
+                case 2: return createBinaryTypeMapper(sources[0], targets[0], sources[1], targets[1]);
             }
             return function (t) {
                 for (var i = 0; i < sources.length; i++) {
@@ -12835,10 +12814,8 @@ var ts;
         }
         function createTypeEraser(sources) {
             switch (sources.length) {
-                case 1:
-                    return createUnaryTypeEraser(sources[0]);
-                case 2:
-                    return createBinaryTypeEraser(sources[0], sources[1]);
+                case 1: return createUnaryTypeEraser(sources[0]);
+                case 2: return createBinaryTypeEraser(sources[0], sources[1]);
             }
             return function (t) {
                 for (var i = 0; i < sources.length; i++) {
@@ -15936,10 +15913,8 @@ var ts;
                     case 149 /* FunctionExpression */:
                     case 182 /* FunctionDeclaration */:
                     case 150 /* ArrowFunction */:
-                    case 140 /* ObjectLiteral */:
-                        return false;
-                    default:
-                        return ts.forEachChild(n, containsSuperCall);
+                    case 140 /* ObjectLiteral */: return false;
+                    default: return ts.forEachChild(n, containsSuperCall);
                 }
             }
             function markThisReferencesAsErrors(n) {
@@ -16997,6 +16972,7 @@ var ts;
             }
         }
         function checkTypeAliasDeclaration(node) {
+            checkTypeNameIsReserved(node.name, ts.Diagnostics.Type_alias_name_cannot_be_0);
             checkSourceElement(node.type);
         }
         function getConstantValueForExpression(node) {
@@ -21264,32 +21240,19 @@ var TypeScript;
                 var character = str.charCodeAt(index);
                 index++;
                 switch (character) {
-                    case 33 /* exclamation */:
-                        return scanExclamationToken();
-                    case 34 /* doubleQuote */:
-                        return scanStringLiteral(character);
-                    case 37 /* percent */:
-                        return scanPercentToken();
-                    case 38 /* ampersand */:
-                        return scanAmpersandToken();
-                    case 39 /* singleQuote */:
-                        return scanStringLiteral(character);
-                    case 40 /* openParen */:
-                        return 74 /* OpenParenToken */;
-                    case 41 /* closeParen */:
-                        return 75 /* CloseParenToken */;
-                    case 42 /* asterisk */:
-                        return scanAsteriskToken();
-                    case 43 /* plus */:
-                        return scanPlusToken();
-                    case 44 /* comma */:
-                        return 81 /* CommaToken */;
-                    case 45 /* minus */:
-                        return scanMinusToken();
-                    case 46 /* dot */:
-                        return scanDotToken();
-                    case 47 /* slash */:
-                        return scanSlashToken(allowContextualToken);
+                    case 33 /* exclamation */: return scanExclamationToken();
+                    case 34 /* doubleQuote */: return scanStringLiteral(character);
+                    case 37 /* percent */: return scanPercentToken();
+                    case 38 /* ampersand */: return scanAmpersandToken();
+                    case 39 /* singleQuote */: return scanStringLiteral(character);
+                    case 40 /* openParen */: return 74 /* OpenParenToken */;
+                    case 41 /* closeParen */: return 75 /* CloseParenToken */;
+                    case 42 /* asterisk */: return scanAsteriskToken();
+                    case 43 /* plus */: return scanPlusToken();
+                    case 44 /* comma */: return 81 /* CommaToken */;
+                    case 45 /* minus */: return scanMinusToken();
+                    case 46 /* dot */: return scanDotToken();
+                    case 47 /* slash */: return scanSlashToken(allowContextualToken);
                     case 48 /* _0 */:
                     case 49 /* _1 */:
                     case 50 /* _2 */:
@@ -21301,34 +21264,20 @@ var TypeScript;
                     case 56 /* _8 */:
                     case 57 /* _9 */:
                         return scanNumericLiteral(character);
-                    case 58 /* colon */:
-                        return 108 /* ColonToken */;
-                    case 59 /* semicolon */:
-                        return 80 /* SemicolonToken */;
-                    case 60 /* lessThan */:
-                        return scanLessThanToken();
-                    case 61 /* equals */:
-                        return scanEqualsToken();
-                    case 62 /* greaterThan */:
-                        return scanGreaterThanToken(allowContextualToken);
-                    case 63 /* question */:
-                        return 107 /* QuestionToken */;
-                    case 91 /* openBracket */:
-                        return 76 /* OpenBracketToken */;
-                    case 93 /* closeBracket */:
-                        return 77 /* CloseBracketToken */;
-                    case 94 /* caret */:
-                        return scanCaretToken();
-                    case 96 /* backtick */:
-                        return scanTemplateToken(character);
-                    case 123 /* openBrace */:
-                        return 72 /* OpenBraceToken */;
-                    case 124 /* bar */:
-                        return scanBarToken();
-                    case 125 /* closeBrace */:
-                        return scanCloseBraceToken(allowContextualToken, character);
-                    case 126 /* tilde */:
-                        return 104 /* TildeToken */;
+                    case 58 /* colon */: return 108 /* ColonToken */;
+                    case 59 /* semicolon */: return 80 /* SemicolonToken */;
+                    case 60 /* lessThan */: return scanLessThanToken();
+                    case 61 /* equals */: return scanEqualsToken();
+                    case 62 /* greaterThan */: return scanGreaterThanToken(allowContextualToken);
+                    case 63 /* question */: return 107 /* QuestionToken */;
+                    case 91 /* openBracket */: return 76 /* OpenBracketToken */;
+                    case 93 /* closeBracket */: return 77 /* CloseBracketToken */;
+                    case 94 /* caret */: return scanCaretToken();
+                    case 96 /* backtick */: return scanTemplateToken(character);
+                    case 123 /* openBrace */: return 72 /* OpenBraceToken */;
+                    case 124 /* bar */: return scanBarToken();
+                    case 125 /* closeBrace */: return scanCloseBraceToken(allowContextualToken, character);
+                    case 126 /* tilde */: return 104 /* TildeToken */;
                 }
                 // We run into so many identifiers (and keywords) when scanning, that we want the code to
                 // be as fast as possible.  To that end, we have an extremely fast path for scanning that
@@ -22079,218 +22028,112 @@ var TypeScript;
         Scanner.createParserSource = createParserSource;
         function fixedWidthTokenLength(kind) {
             switch (kind) {
-                case 17 /* BreakKeyword */:
-                    return 5;
-                case 18 /* CaseKeyword */:
-                    return 4;
-                case 19 /* CatchKeyword */:
-                    return 5;
-                case 20 /* ContinueKeyword */:
-                    return 8;
-                case 21 /* DebuggerKeyword */:
-                    return 8;
-                case 22 /* DefaultKeyword */:
-                    return 7;
-                case 23 /* DeleteKeyword */:
-                    return 6;
-                case 24 /* DoKeyword */:
-                    return 2;
-                case 25 /* ElseKeyword */:
-                    return 4;
-                case 26 /* FalseKeyword */:
-                    return 5;
-                case 27 /* FinallyKeyword */:
-                    return 7;
-                case 28 /* ForKeyword */:
-                    return 3;
-                case 29 /* FunctionKeyword */:
-                    return 8;
-                case 30 /* IfKeyword */:
-                    return 2;
-                case 31 /* InKeyword */:
-                    return 2;
-                case 32 /* InstanceOfKeyword */:
-                    return 10;
-                case 33 /* NewKeyword */:
-                    return 3;
-                case 34 /* NullKeyword */:
-                    return 4;
-                case 35 /* ReturnKeyword */:
-                    return 6;
-                case 36 /* SwitchKeyword */:
-                    return 6;
-                case 37 /* ThisKeyword */:
-                    return 4;
-                case 38 /* ThrowKeyword */:
-                    return 5;
-                case 39 /* TrueKeyword */:
-                    return 4;
-                case 40 /* TryKeyword */:
-                    return 3;
-                case 41 /* TypeOfKeyword */:
-                    return 6;
-                case 42 /* VarKeyword */:
-                    return 3;
-                case 43 /* VoidKeyword */:
-                    return 4;
-                case 44 /* WhileKeyword */:
-                    return 5;
-                case 45 /* WithKeyword */:
-                    return 4;
-                case 46 /* ClassKeyword */:
-                    return 5;
-                case 47 /* ConstKeyword */:
-                    return 5;
-                case 48 /* EnumKeyword */:
-                    return 4;
-                case 49 /* ExportKeyword */:
-                    return 6;
-                case 50 /* ExtendsKeyword */:
-                    return 7;
-                case 51 /* ImportKeyword */:
-                    return 6;
-                case 52 /* SuperKeyword */:
-                    return 5;
-                case 53 /* ImplementsKeyword */:
-                    return 10;
-                case 54 /* InterfaceKeyword */:
-                    return 9;
-                case 55 /* LetKeyword */:
-                    return 3;
-                case 56 /* PackageKeyword */:
-                    return 7;
-                case 57 /* PrivateKeyword */:
-                    return 7;
-                case 58 /* ProtectedKeyword */:
-                    return 9;
-                case 59 /* PublicKeyword */:
-                    return 6;
-                case 60 /* StaticKeyword */:
-                    return 6;
-                case 61 /* YieldKeyword */:
-                    return 5;
-                case 62 /* AnyKeyword */:
-                    return 3;
-                case 63 /* BooleanKeyword */:
-                    return 7;
-                case 64 /* ConstructorKeyword */:
-                    return 11;
-                case 65 /* DeclareKeyword */:
-                    return 7;
-                case 66 /* GetKeyword */:
-                    return 3;
-                case 67 /* ModuleKeyword */:
-                    return 6;
-                case 68 /* RequireKeyword */:
-                    return 7;
-                case 69 /* NumberKeyword */:
-                    return 6;
-                case 70 /* SetKeyword */:
-                    return 3;
-                case 71 /* StringKeyword */:
-                    return 6;
-                case 72 /* OpenBraceToken */:
-                    return 1;
-                case 73 /* CloseBraceToken */:
-                    return 1;
-                case 74 /* OpenParenToken */:
-                    return 1;
-                case 75 /* CloseParenToken */:
-                    return 1;
-                case 76 /* OpenBracketToken */:
-                    return 1;
-                case 77 /* CloseBracketToken */:
-                    return 1;
-                case 78 /* DotToken */:
-                    return 1;
-                case 79 /* DotDotDotToken */:
-                    return 3;
-                case 80 /* SemicolonToken */:
-                    return 1;
-                case 81 /* CommaToken */:
-                    return 1;
-                case 82 /* LessThanToken */:
-                    return 1;
-                case 83 /* GreaterThanToken */:
-                    return 1;
-                case 84 /* LessThanEqualsToken */:
-                    return 2;
-                case 85 /* GreaterThanEqualsToken */:
-                    return 2;
-                case 86 /* EqualsEqualsToken */:
-                    return 2;
-                case 87 /* EqualsGreaterThanToken */:
-                    return 2;
-                case 88 /* ExclamationEqualsToken */:
-                    return 2;
-                case 89 /* EqualsEqualsEqualsToken */:
-                    return 3;
-                case 90 /* ExclamationEqualsEqualsToken */:
-                    return 3;
-                case 91 /* PlusToken */:
-                    return 1;
-                case 92 /* MinusToken */:
-                    return 1;
-                case 93 /* AsteriskToken */:
-                    return 1;
-                case 94 /* PercentToken */:
-                    return 1;
-                case 95 /* PlusPlusToken */:
-                    return 2;
-                case 96 /* MinusMinusToken */:
-                    return 2;
-                case 97 /* LessThanLessThanToken */:
-                    return 2;
-                case 98 /* GreaterThanGreaterThanToken */:
-                    return 2;
-                case 99 /* GreaterThanGreaterThanGreaterThanToken */:
-                    return 3;
-                case 100 /* AmpersandToken */:
-                    return 1;
-                case 101 /* BarToken */:
-                    return 1;
-                case 102 /* CaretToken */:
-                    return 1;
-                case 103 /* ExclamationToken */:
-                    return 1;
-                case 104 /* TildeToken */:
-                    return 1;
-                case 105 /* AmpersandAmpersandToken */:
-                    return 2;
-                case 106 /* BarBarToken */:
-                    return 2;
-                case 107 /* QuestionToken */:
-                    return 1;
-                case 108 /* ColonToken */:
-                    return 1;
-                case 109 /* EqualsToken */:
-                    return 1;
-                case 110 /* PlusEqualsToken */:
-                    return 2;
-                case 111 /* MinusEqualsToken */:
-                    return 2;
-                case 112 /* AsteriskEqualsToken */:
-                    return 2;
-                case 113 /* PercentEqualsToken */:
-                    return 2;
-                case 114 /* LessThanLessThanEqualsToken */:
-                    return 3;
-                case 115 /* GreaterThanGreaterThanEqualsToken */:
-                    return 3;
-                case 116 /* GreaterThanGreaterThanGreaterThanEqualsToken */:
-                    return 4;
-                case 117 /* AmpersandEqualsToken */:
-                    return 2;
-                case 118 /* BarEqualsToken */:
-                    return 2;
-                case 119 /* CaretEqualsToken */:
-                    return 2;
-                case 120 /* SlashToken */:
-                    return 1;
-                case 121 /* SlashEqualsToken */:
-                    return 2;
-                default:
-                    throw new Error();
+                case 17 /* BreakKeyword */: return 5;
+                case 18 /* CaseKeyword */: return 4;
+                case 19 /* CatchKeyword */: return 5;
+                case 20 /* ContinueKeyword */: return 8;
+                case 21 /* DebuggerKeyword */: return 8;
+                case 22 /* DefaultKeyword */: return 7;
+                case 23 /* DeleteKeyword */: return 6;
+                case 24 /* DoKeyword */: return 2;
+                case 25 /* ElseKeyword */: return 4;
+                case 26 /* FalseKeyword */: return 5;
+                case 27 /* FinallyKeyword */: return 7;
+                case 28 /* ForKeyword */: return 3;
+                case 29 /* FunctionKeyword */: return 8;
+                case 30 /* IfKeyword */: return 2;
+                case 31 /* InKeyword */: return 2;
+                case 32 /* InstanceOfKeyword */: return 10;
+                case 33 /* NewKeyword */: return 3;
+                case 34 /* NullKeyword */: return 4;
+                case 35 /* ReturnKeyword */: return 6;
+                case 36 /* SwitchKeyword */: return 6;
+                case 37 /* ThisKeyword */: return 4;
+                case 38 /* ThrowKeyword */: return 5;
+                case 39 /* TrueKeyword */: return 4;
+                case 40 /* TryKeyword */: return 3;
+                case 41 /* TypeOfKeyword */: return 6;
+                case 42 /* VarKeyword */: return 3;
+                case 43 /* VoidKeyword */: return 4;
+                case 44 /* WhileKeyword */: return 5;
+                case 45 /* WithKeyword */: return 4;
+                case 46 /* ClassKeyword */: return 5;
+                case 47 /* ConstKeyword */: return 5;
+                case 48 /* EnumKeyword */: return 4;
+                case 49 /* ExportKeyword */: return 6;
+                case 50 /* ExtendsKeyword */: return 7;
+                case 51 /* ImportKeyword */: return 6;
+                case 52 /* SuperKeyword */: return 5;
+                case 53 /* ImplementsKeyword */: return 10;
+                case 54 /* InterfaceKeyword */: return 9;
+                case 55 /* LetKeyword */: return 3;
+                case 56 /* PackageKeyword */: return 7;
+                case 57 /* PrivateKeyword */: return 7;
+                case 58 /* ProtectedKeyword */: return 9;
+                case 59 /* PublicKeyword */: return 6;
+                case 60 /* StaticKeyword */: return 6;
+                case 61 /* YieldKeyword */: return 5;
+                case 62 /* AnyKeyword */: return 3;
+                case 63 /* BooleanKeyword */: return 7;
+                case 64 /* ConstructorKeyword */: return 11;
+                case 65 /* DeclareKeyword */: return 7;
+                case 66 /* GetKeyword */: return 3;
+                case 67 /* ModuleKeyword */: return 6;
+                case 68 /* RequireKeyword */: return 7;
+                case 69 /* NumberKeyword */: return 6;
+                case 70 /* SetKeyword */: return 3;
+                case 71 /* StringKeyword */: return 6;
+                case 72 /* OpenBraceToken */: return 1;
+                case 73 /* CloseBraceToken */: return 1;
+                case 74 /* OpenParenToken */: return 1;
+                case 75 /* CloseParenToken */: return 1;
+                case 76 /* OpenBracketToken */: return 1;
+                case 77 /* CloseBracketToken */: return 1;
+                case 78 /* DotToken */: return 1;
+                case 79 /* DotDotDotToken */: return 3;
+                case 80 /* SemicolonToken */: return 1;
+                case 81 /* CommaToken */: return 1;
+                case 82 /* LessThanToken */: return 1;
+                case 83 /* GreaterThanToken */: return 1;
+                case 84 /* LessThanEqualsToken */: return 2;
+                case 85 /* GreaterThanEqualsToken */: return 2;
+                case 86 /* EqualsEqualsToken */: return 2;
+                case 87 /* EqualsGreaterThanToken */: return 2;
+                case 88 /* ExclamationEqualsToken */: return 2;
+                case 89 /* EqualsEqualsEqualsToken */: return 3;
+                case 90 /* ExclamationEqualsEqualsToken */: return 3;
+                case 91 /* PlusToken */: return 1;
+                case 92 /* MinusToken */: return 1;
+                case 93 /* AsteriskToken */: return 1;
+                case 94 /* PercentToken */: return 1;
+                case 95 /* PlusPlusToken */: return 2;
+                case 96 /* MinusMinusToken */: return 2;
+                case 97 /* LessThanLessThanToken */: return 2;
+                case 98 /* GreaterThanGreaterThanToken */: return 2;
+                case 99 /* GreaterThanGreaterThanGreaterThanToken */: return 3;
+                case 100 /* AmpersandToken */: return 1;
+                case 101 /* BarToken */: return 1;
+                case 102 /* CaretToken */: return 1;
+                case 103 /* ExclamationToken */: return 1;
+                case 104 /* TildeToken */: return 1;
+                case 105 /* AmpersandAmpersandToken */: return 2;
+                case 106 /* BarBarToken */: return 2;
+                case 107 /* QuestionToken */: return 1;
+                case 108 /* ColonToken */: return 1;
+                case 109 /* EqualsToken */: return 1;
+                case 110 /* PlusEqualsToken */: return 2;
+                case 111 /* MinusEqualsToken */: return 2;
+                case 112 /* AsteriskEqualsToken */: return 2;
+                case 113 /* PercentEqualsToken */: return 2;
+                case 114 /* LessThanLessThanEqualsToken */: return 3;
+                case 115 /* GreaterThanGreaterThanEqualsToken */: return 3;
+                case 116 /* GreaterThanGreaterThanGreaterThanEqualsToken */: return 4;
+                case 117 /* AmpersandEqualsToken */: return 2;
+                case 118 /* BarEqualsToken */: return 2;
+                case 119 /* CaretEqualsToken */: return 2;
+                case 120 /* SlashToken */: return 1;
+                case 121 /* SlashEqualsToken */: return 2;
+                default: throw new Error();
             }
         }
     })(Scanner = TypeScript.Scanner || (TypeScript.Scanner = {}));
@@ -22302,218 +22145,112 @@ var TypeScript;
     (function (ScannerUtilities) {
         function fixedWidthTokenLength(kind) {
             switch (kind) {
-                case 17 /* BreakKeyword */:
-                    return 5;
-                case 18 /* CaseKeyword */:
-                    return 4;
-                case 19 /* CatchKeyword */:
-                    return 5;
-                case 20 /* ContinueKeyword */:
-                    return 8;
-                case 21 /* DebuggerKeyword */:
-                    return 8;
-                case 22 /* DefaultKeyword */:
-                    return 7;
-                case 23 /* DeleteKeyword */:
-                    return 6;
-                case 24 /* DoKeyword */:
-                    return 2;
-                case 25 /* ElseKeyword */:
-                    return 4;
-                case 26 /* FalseKeyword */:
-                    return 5;
-                case 27 /* FinallyKeyword */:
-                    return 7;
-                case 28 /* ForKeyword */:
-                    return 3;
-                case 29 /* FunctionKeyword */:
-                    return 8;
-                case 30 /* IfKeyword */:
-                    return 2;
-                case 31 /* InKeyword */:
-                    return 2;
-                case 32 /* InstanceOfKeyword */:
-                    return 10;
-                case 33 /* NewKeyword */:
-                    return 3;
-                case 34 /* NullKeyword */:
-                    return 4;
-                case 35 /* ReturnKeyword */:
-                    return 6;
-                case 36 /* SwitchKeyword */:
-                    return 6;
-                case 37 /* ThisKeyword */:
-                    return 4;
-                case 38 /* ThrowKeyword */:
-                    return 5;
-                case 39 /* TrueKeyword */:
-                    return 4;
-                case 40 /* TryKeyword */:
-                    return 3;
-                case 41 /* TypeOfKeyword */:
-                    return 6;
-                case 42 /* VarKeyword */:
-                    return 3;
-                case 43 /* VoidKeyword */:
-                    return 4;
-                case 44 /* WhileKeyword */:
-                    return 5;
-                case 45 /* WithKeyword */:
-                    return 4;
-                case 46 /* ClassKeyword */:
-                    return 5;
-                case 47 /* ConstKeyword */:
-                    return 5;
-                case 48 /* EnumKeyword */:
-                    return 4;
-                case 49 /* ExportKeyword */:
-                    return 6;
-                case 50 /* ExtendsKeyword */:
-                    return 7;
-                case 51 /* ImportKeyword */:
-                    return 6;
-                case 52 /* SuperKeyword */:
-                    return 5;
-                case 53 /* ImplementsKeyword */:
-                    return 10;
-                case 54 /* InterfaceKeyword */:
-                    return 9;
-                case 55 /* LetKeyword */:
-                    return 3;
-                case 56 /* PackageKeyword */:
-                    return 7;
-                case 57 /* PrivateKeyword */:
-                    return 7;
-                case 58 /* ProtectedKeyword */:
-                    return 9;
-                case 59 /* PublicKeyword */:
-                    return 6;
-                case 60 /* StaticKeyword */:
-                    return 6;
-                case 61 /* YieldKeyword */:
-                    return 5;
-                case 62 /* AnyKeyword */:
-                    return 3;
-                case 63 /* BooleanKeyword */:
-                    return 7;
-                case 64 /* ConstructorKeyword */:
-                    return 11;
-                case 65 /* DeclareKeyword */:
-                    return 7;
-                case 66 /* GetKeyword */:
-                    return 3;
-                case 67 /* ModuleKeyword */:
-                    return 6;
-                case 68 /* RequireKeyword */:
-                    return 7;
-                case 69 /* NumberKeyword */:
-                    return 6;
-                case 70 /* SetKeyword */:
-                    return 3;
-                case 71 /* StringKeyword */:
-                    return 6;
-                case 72 /* OpenBraceToken */:
-                    return 1;
-                case 73 /* CloseBraceToken */:
-                    return 1;
-                case 74 /* OpenParenToken */:
-                    return 1;
-                case 75 /* CloseParenToken */:
-                    return 1;
-                case 76 /* OpenBracketToken */:
-                    return 1;
-                case 77 /* CloseBracketToken */:
-                    return 1;
-                case 78 /* DotToken */:
-                    return 1;
-                case 79 /* DotDotDotToken */:
-                    return 3;
-                case 80 /* SemicolonToken */:
-                    return 1;
-                case 81 /* CommaToken */:
-                    return 1;
-                case 82 /* LessThanToken */:
-                    return 1;
-                case 83 /* GreaterThanToken */:
-                    return 1;
-                case 84 /* LessThanEqualsToken */:
-                    return 2;
-                case 85 /* GreaterThanEqualsToken */:
-                    return 2;
-                case 86 /* EqualsEqualsToken */:
-                    return 2;
-                case 87 /* EqualsGreaterThanToken */:
-                    return 2;
-                case 88 /* ExclamationEqualsToken */:
-                    return 2;
-                case 89 /* EqualsEqualsEqualsToken */:
-                    return 3;
-                case 90 /* ExclamationEqualsEqualsToken */:
-                    return 3;
-                case 91 /* PlusToken */:
-                    return 1;
-                case 92 /* MinusToken */:
-                    return 1;
-                case 93 /* AsteriskToken */:
-                    return 1;
-                case 94 /* PercentToken */:
-                    return 1;
-                case 95 /* PlusPlusToken */:
-                    return 2;
-                case 96 /* MinusMinusToken */:
-                    return 2;
-                case 97 /* LessThanLessThanToken */:
-                    return 2;
-                case 98 /* GreaterThanGreaterThanToken */:
-                    return 2;
-                case 99 /* GreaterThanGreaterThanGreaterThanToken */:
-                    return 3;
-                case 100 /* AmpersandToken */:
-                    return 1;
-                case 101 /* BarToken */:
-                    return 1;
-                case 102 /* CaretToken */:
-                    return 1;
-                case 103 /* ExclamationToken */:
-                    return 1;
-                case 104 /* TildeToken */:
-                    return 1;
-                case 105 /* AmpersandAmpersandToken */:
-                    return 2;
-                case 106 /* BarBarToken */:
-                    return 2;
-                case 107 /* QuestionToken */:
-                    return 1;
-                case 108 /* ColonToken */:
-                    return 1;
-                case 109 /* EqualsToken */:
-                    return 1;
-                case 110 /* PlusEqualsToken */:
-                    return 2;
-                case 111 /* MinusEqualsToken */:
-                    return 2;
-                case 112 /* AsteriskEqualsToken */:
-                    return 2;
-                case 113 /* PercentEqualsToken */:
-                    return 2;
-                case 114 /* LessThanLessThanEqualsToken */:
-                    return 3;
-                case 115 /* GreaterThanGreaterThanEqualsToken */:
-                    return 3;
-                case 116 /* GreaterThanGreaterThanGreaterThanEqualsToken */:
-                    return 4;
-                case 117 /* AmpersandEqualsToken */:
-                    return 2;
-                case 118 /* BarEqualsToken */:
-                    return 2;
-                case 119 /* CaretEqualsToken */:
-                    return 2;
-                case 120 /* SlashToken */:
-                    return 1;
-                case 121 /* SlashEqualsToken */:
-                    return 2;
-                default:
-                    throw new Error();
+                case 17 /* BreakKeyword */: return 5;
+                case 18 /* CaseKeyword */: return 4;
+                case 19 /* CatchKeyword */: return 5;
+                case 20 /* ContinueKeyword */: return 8;
+                case 21 /* DebuggerKeyword */: return 8;
+                case 22 /* DefaultKeyword */: return 7;
+                case 23 /* DeleteKeyword */: return 6;
+                case 24 /* DoKeyword */: return 2;
+                case 25 /* ElseKeyword */: return 4;
+                case 26 /* FalseKeyword */: return 5;
+                case 27 /* FinallyKeyword */: return 7;
+                case 28 /* ForKeyword */: return 3;
+                case 29 /* FunctionKeyword */: return 8;
+                case 30 /* IfKeyword */: return 2;
+                case 31 /* InKeyword */: return 2;
+                case 32 /* InstanceOfKeyword */: return 10;
+                case 33 /* NewKeyword */: return 3;
+                case 34 /* NullKeyword */: return 4;
+                case 35 /* ReturnKeyword */: return 6;
+                case 36 /* SwitchKeyword */: return 6;
+                case 37 /* ThisKeyword */: return 4;
+                case 38 /* ThrowKeyword */: return 5;
+                case 39 /* TrueKeyword */: return 4;
+                case 40 /* TryKeyword */: return 3;
+                case 41 /* TypeOfKeyword */: return 6;
+                case 42 /* VarKeyword */: return 3;
+                case 43 /* VoidKeyword */: return 4;
+                case 44 /* WhileKeyword */: return 5;
+                case 45 /* WithKeyword */: return 4;
+                case 46 /* ClassKeyword */: return 5;
+                case 47 /* ConstKeyword */: return 5;
+                case 48 /* EnumKeyword */: return 4;
+                case 49 /* ExportKeyword */: return 6;
+                case 50 /* ExtendsKeyword */: return 7;
+                case 51 /* ImportKeyword */: return 6;
+                case 52 /* SuperKeyword */: return 5;
+                case 53 /* ImplementsKeyword */: return 10;
+                case 54 /* InterfaceKeyword */: return 9;
+                case 55 /* LetKeyword */: return 3;
+                case 56 /* PackageKeyword */: return 7;
+                case 57 /* PrivateKeyword */: return 7;
+                case 58 /* ProtectedKeyword */: return 9;
+                case 59 /* PublicKeyword */: return 6;
+                case 60 /* StaticKeyword */: return 6;
+                case 61 /* YieldKeyword */: return 5;
+                case 62 /* AnyKeyword */: return 3;
+                case 63 /* BooleanKeyword */: return 7;
+                case 64 /* ConstructorKeyword */: return 11;
+                case 65 /* DeclareKeyword */: return 7;
+                case 66 /* GetKeyword */: return 3;
+                case 67 /* ModuleKeyword */: return 6;
+                case 68 /* RequireKeyword */: return 7;
+                case 69 /* NumberKeyword */: return 6;
+                case 70 /* SetKeyword */: return 3;
+                case 71 /* StringKeyword */: return 6;
+                case 72 /* OpenBraceToken */: return 1;
+                case 73 /* CloseBraceToken */: return 1;
+                case 74 /* OpenParenToken */: return 1;
+                case 75 /* CloseParenToken */: return 1;
+                case 76 /* OpenBracketToken */: return 1;
+                case 77 /* CloseBracketToken */: return 1;
+                case 78 /* DotToken */: return 1;
+                case 79 /* DotDotDotToken */: return 3;
+                case 80 /* SemicolonToken */: return 1;
+                case 81 /* CommaToken */: return 1;
+                case 82 /* LessThanToken */: return 1;
+                case 83 /* GreaterThanToken */: return 1;
+                case 84 /* LessThanEqualsToken */: return 2;
+                case 85 /* GreaterThanEqualsToken */: return 2;
+                case 86 /* EqualsEqualsToken */: return 2;
+                case 87 /* EqualsGreaterThanToken */: return 2;
+                case 88 /* ExclamationEqualsToken */: return 2;
+                case 89 /* EqualsEqualsEqualsToken */: return 3;
+                case 90 /* ExclamationEqualsEqualsToken */: return 3;
+                case 91 /* PlusToken */: return 1;
+                case 92 /* MinusToken */: return 1;
+                case 93 /* AsteriskToken */: return 1;
+                case 94 /* PercentToken */: return 1;
+                case 95 /* PlusPlusToken */: return 2;
+                case 96 /* MinusMinusToken */: return 2;
+                case 97 /* LessThanLessThanToken */: return 2;
+                case 98 /* GreaterThanGreaterThanToken */: return 2;
+                case 99 /* GreaterThanGreaterThanGreaterThanToken */: return 3;
+                case 100 /* AmpersandToken */: return 1;
+                case 101 /* BarToken */: return 1;
+                case 102 /* CaretToken */: return 1;
+                case 103 /* ExclamationToken */: return 1;
+                case 104 /* TildeToken */: return 1;
+                case 105 /* AmpersandAmpersandToken */: return 2;
+                case 106 /* BarBarToken */: return 2;
+                case 107 /* QuestionToken */: return 1;
+                case 108 /* ColonToken */: return 1;
+                case 109 /* EqualsToken */: return 1;
+                case 110 /* PlusEqualsToken */: return 2;
+                case 111 /* MinusEqualsToken */: return 2;
+                case 112 /* AsteriskEqualsToken */: return 2;
+                case 113 /* PercentEqualsToken */: return 2;
+                case 114 /* LessThanLessThanEqualsToken */: return 3;
+                case 115 /* GreaterThanGreaterThanEqualsToken */: return 3;
+                case 116 /* GreaterThanGreaterThanGreaterThanEqualsToken */: return 4;
+                case 117 /* AmpersandEqualsToken */: return 2;
+                case 118 /* BarEqualsToken */: return 2;
+                case 119 /* CaretEqualsToken */: return 2;
+                case 120 /* SlashToken */: return 1;
+                case 121 /* SlashEqualsToken */: return 2;
+                default: throw new Error();
             }
         }
         ScannerUtilities.fixedWidthTokenLength = fixedWidthTokenLength;
@@ -22521,211 +22258,136 @@ var TypeScript;
             switch (length) {
                 case 2:
                     switch (str.charCodeAt(start)) {
-                        case 100 /* d */:
-                            return (str.charCodeAt(start + 1) === 111 /* o */) ? 24 /* DoKeyword */ : 9 /* IdentifierName */;
+                        case 100 /* d */: return (str.charCodeAt(start + 1) === 111 /* o */) ? 24 /* DoKeyword */ : 9 /* IdentifierName */;
                         case 105 /* i */:
                             switch (str.charCodeAt(start + 1)) {
-                                case 102 /* f */:
-                                    return 30 /* IfKeyword */;
-                                case 110 /* n */:
-                                    return 31 /* InKeyword */;
-                                default:
-                                    return 9 /* IdentifierName */;
+                                case 102 /* f */: return 30 /* IfKeyword */;
+                                case 110 /* n */: return 31 /* InKeyword */;
+                                default: return 9 /* IdentifierName */;
                             }
-                        default:
-                            return 9 /* IdentifierName */;
+                        default: return 9 /* IdentifierName */;
                     }
                 case 3:
                     switch (str.charCodeAt(start)) {
-                        case 97 /* a */:
-                            return (str.charCodeAt(start + 1) === 110 /* n */ && str.charCodeAt(start + 2) === 121 /* y */) ? 62 /* AnyKeyword */ : 9 /* IdentifierName */;
-                        case 102 /* f */:
-                            return (str.charCodeAt(start + 1) === 111 /* o */ && str.charCodeAt(start + 2) === 114 /* r */) ? 28 /* ForKeyword */ : 9 /* IdentifierName */;
-                        case 103 /* g */:
-                            return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 116 /* t */) ? 66 /* GetKeyword */ : 9 /* IdentifierName */;
-                        case 108 /* l */:
-                            return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 116 /* t */) ? 55 /* LetKeyword */ : 9 /* IdentifierName */;
-                        case 110 /* n */:
-                            return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 119 /* w */) ? 33 /* NewKeyword */ : 9 /* IdentifierName */;
-                        case 115 /* s */:
-                            return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 116 /* t */) ? 70 /* SetKeyword */ : 9 /* IdentifierName */;
-                        case 116 /* t */:
-                            return (str.charCodeAt(start + 1) === 114 /* r */ && str.charCodeAt(start + 2) === 121 /* y */) ? 40 /* TryKeyword */ : 9 /* IdentifierName */;
-                        case 118 /* v */:
-                            return (str.charCodeAt(start + 1) === 97 /* a */ && str.charCodeAt(start + 2) === 114 /* r */) ? 42 /* VarKeyword */ : 9 /* IdentifierName */;
-                        default:
-                            return 9 /* IdentifierName */;
+                        case 97 /* a */: return (str.charCodeAt(start + 1) === 110 /* n */ && str.charCodeAt(start + 2) === 121 /* y */) ? 62 /* AnyKeyword */ : 9 /* IdentifierName */;
+                        case 102 /* f */: return (str.charCodeAt(start + 1) === 111 /* o */ && str.charCodeAt(start + 2) === 114 /* r */) ? 28 /* ForKeyword */ : 9 /* IdentifierName */;
+                        case 103 /* g */: return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 116 /* t */) ? 66 /* GetKeyword */ : 9 /* IdentifierName */;
+                        case 108 /* l */: return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 116 /* t */) ? 55 /* LetKeyword */ : 9 /* IdentifierName */;
+                        case 110 /* n */: return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 119 /* w */) ? 33 /* NewKeyword */ : 9 /* IdentifierName */;
+                        case 115 /* s */: return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 116 /* t */) ? 70 /* SetKeyword */ : 9 /* IdentifierName */;
+                        case 116 /* t */: return (str.charCodeAt(start + 1) === 114 /* r */ && str.charCodeAt(start + 2) === 121 /* y */) ? 40 /* TryKeyword */ : 9 /* IdentifierName */;
+                        case 118 /* v */: return (str.charCodeAt(start + 1) === 97 /* a */ && str.charCodeAt(start + 2) === 114 /* r */) ? 42 /* VarKeyword */ : 9 /* IdentifierName */;
+                        default: return 9 /* IdentifierName */;
                     }
                 case 4:
                     switch (str.charCodeAt(start)) {
-                        case 99 /* c */:
-                            return (str.charCodeAt(start + 1) === 97 /* a */ && str.charCodeAt(start + 2) === 115 /* s */ && str.charCodeAt(start + 3) === 101 /* e */) ? 18 /* CaseKeyword */ : 9 /* IdentifierName */;
+                        case 99 /* c */: return (str.charCodeAt(start + 1) === 97 /* a */ && str.charCodeAt(start + 2) === 115 /* s */ && str.charCodeAt(start + 3) === 101 /* e */) ? 18 /* CaseKeyword */ : 9 /* IdentifierName */;
                         case 101 /* e */:
                             switch (str.charCodeAt(start + 1)) {
-                                case 108 /* l */:
-                                    return (str.charCodeAt(start + 2) === 115 /* s */ && str.charCodeAt(start + 3) === 101 /* e */) ? 25 /* ElseKeyword */ : 9 /* IdentifierName */;
-                                case 110 /* n */:
-                                    return (str.charCodeAt(start + 2) === 117 /* u */ && str.charCodeAt(start + 3) === 109 /* m */) ? 48 /* EnumKeyword */ : 9 /* IdentifierName */;
-                                default:
-                                    return 9 /* IdentifierName */;
+                                case 108 /* l */: return (str.charCodeAt(start + 2) === 115 /* s */ && str.charCodeAt(start + 3) === 101 /* e */) ? 25 /* ElseKeyword */ : 9 /* IdentifierName */;
+                                case 110 /* n */: return (str.charCodeAt(start + 2) === 117 /* u */ && str.charCodeAt(start + 3) === 109 /* m */) ? 48 /* EnumKeyword */ : 9 /* IdentifierName */;
+                                default: return 9 /* IdentifierName */;
                             }
-                        case 110 /* n */:
-                            return (str.charCodeAt(start + 1) === 117 /* u */ && str.charCodeAt(start + 2) === 108 /* l */ && str.charCodeAt(start + 3) === 108 /* l */) ? 34 /* NullKeyword */ : 9 /* IdentifierName */;
+                        case 110 /* n */: return (str.charCodeAt(start + 1) === 117 /* u */ && str.charCodeAt(start + 2) === 108 /* l */ && str.charCodeAt(start + 3) === 108 /* l */) ? 34 /* NullKeyword */ : 9 /* IdentifierName */;
                         case 116 /* t */:
                             switch (str.charCodeAt(start + 1)) {
-                                case 104 /* h */:
-                                    return (str.charCodeAt(start + 2) === 105 /* i */ && str.charCodeAt(start + 3) === 115 /* s */) ? 37 /* ThisKeyword */ : 9 /* IdentifierName */;
-                                case 114 /* r */:
-                                    return (str.charCodeAt(start + 2) === 117 /* u */ && str.charCodeAt(start + 3) === 101 /* e */) ? 39 /* TrueKeyword */ : 9 /* IdentifierName */;
-                                default:
-                                    return 9 /* IdentifierName */;
+                                case 104 /* h */: return (str.charCodeAt(start + 2) === 105 /* i */ && str.charCodeAt(start + 3) === 115 /* s */) ? 37 /* ThisKeyword */ : 9 /* IdentifierName */;
+                                case 114 /* r */: return (str.charCodeAt(start + 2) === 117 /* u */ && str.charCodeAt(start + 3) === 101 /* e */) ? 39 /* TrueKeyword */ : 9 /* IdentifierName */;
+                                default: return 9 /* IdentifierName */;
                             }
-                        case 118 /* v */:
-                            return (str.charCodeAt(start + 1) === 111 /* o */ && str.charCodeAt(start + 2) === 105 /* i */ && str.charCodeAt(start + 3) === 100 /* d */) ? 43 /* VoidKeyword */ : 9 /* IdentifierName */;
-                        case 119 /* w */:
-                            return (str.charCodeAt(start + 1) === 105 /* i */ && str.charCodeAt(start + 2) === 116 /* t */ && str.charCodeAt(start + 3) === 104 /* h */) ? 45 /* WithKeyword */ : 9 /* IdentifierName */;
-                        default:
-                            return 9 /* IdentifierName */;
+                        case 118 /* v */: return (str.charCodeAt(start + 1) === 111 /* o */ && str.charCodeAt(start + 2) === 105 /* i */ && str.charCodeAt(start + 3) === 100 /* d */) ? 43 /* VoidKeyword */ : 9 /* IdentifierName */;
+                        case 119 /* w */: return (str.charCodeAt(start + 1) === 105 /* i */ && str.charCodeAt(start + 2) === 116 /* t */ && str.charCodeAt(start + 3) === 104 /* h */) ? 45 /* WithKeyword */ : 9 /* IdentifierName */;
+                        default: return 9 /* IdentifierName */;
                     }
                 case 5:
                     switch (str.charCodeAt(start)) {
-                        case 98 /* b */:
-                            return (str.charCodeAt(start + 1) === 114 /* r */ && str.charCodeAt(start + 2) === 101 /* e */ && str.charCodeAt(start + 3) === 97 /* a */ && str.charCodeAt(start + 4) === 107 /* k */) ? 17 /* BreakKeyword */ : 9 /* IdentifierName */;
+                        case 98 /* b */: return (str.charCodeAt(start + 1) === 114 /* r */ && str.charCodeAt(start + 2) === 101 /* e */ && str.charCodeAt(start + 3) === 97 /* a */ && str.charCodeAt(start + 4) === 107 /* k */) ? 17 /* BreakKeyword */ : 9 /* IdentifierName */;
                         case 99 /* c */:
                             switch (str.charCodeAt(start + 1)) {
-                                case 97 /* a */:
-                                    return (str.charCodeAt(start + 2) === 116 /* t */ && str.charCodeAt(start + 3) === 99 /* c */ && str.charCodeAt(start + 4) === 104 /* h */) ? 19 /* CatchKeyword */ : 9 /* IdentifierName */;
-                                case 108 /* l */:
-                                    return (str.charCodeAt(start + 2) === 97 /* a */ && str.charCodeAt(start + 3) === 115 /* s */ && str.charCodeAt(start + 4) === 115 /* s */) ? 46 /* ClassKeyword */ : 9 /* IdentifierName */;
-                                case 111 /* o */:
-                                    return (str.charCodeAt(start + 2) === 110 /* n */ && str.charCodeAt(start + 3) === 115 /* s */ && str.charCodeAt(start + 4) === 116 /* t */) ? 47 /* ConstKeyword */ : 9 /* IdentifierName */;
-                                default:
-                                    return 9 /* IdentifierName */;
+                                case 97 /* a */: return (str.charCodeAt(start + 2) === 116 /* t */ && str.charCodeAt(start + 3) === 99 /* c */ && str.charCodeAt(start + 4) === 104 /* h */) ? 19 /* CatchKeyword */ : 9 /* IdentifierName */;
+                                case 108 /* l */: return (str.charCodeAt(start + 2) === 97 /* a */ && str.charCodeAt(start + 3) === 115 /* s */ && str.charCodeAt(start + 4) === 115 /* s */) ? 46 /* ClassKeyword */ : 9 /* IdentifierName */;
+                                case 111 /* o */: return (str.charCodeAt(start + 2) === 110 /* n */ && str.charCodeAt(start + 3) === 115 /* s */ && str.charCodeAt(start + 4) === 116 /* t */) ? 47 /* ConstKeyword */ : 9 /* IdentifierName */;
+                                default: return 9 /* IdentifierName */;
                             }
-                        case 102 /* f */:
-                            return (str.charCodeAt(start + 1) === 97 /* a */ && str.charCodeAt(start + 2) === 108 /* l */ && str.charCodeAt(start + 3) === 115 /* s */ && str.charCodeAt(start + 4) === 101 /* e */) ? 26 /* FalseKeyword */ : 9 /* IdentifierName */;
-                        case 115 /* s */:
-                            return (str.charCodeAt(start + 1) === 117 /* u */ && str.charCodeAt(start + 2) === 112 /* p */ && str.charCodeAt(start + 3) === 101 /* e */ && str.charCodeAt(start + 4) === 114 /* r */) ? 52 /* SuperKeyword */ : 9 /* IdentifierName */;
-                        case 116 /* t */:
-                            return (str.charCodeAt(start + 1) === 104 /* h */ && str.charCodeAt(start + 2) === 114 /* r */ && str.charCodeAt(start + 3) === 111 /* o */ && str.charCodeAt(start + 4) === 119 /* w */) ? 38 /* ThrowKeyword */ : 9 /* IdentifierName */;
-                        case 119 /* w */:
-                            return (str.charCodeAt(start + 1) === 104 /* h */ && str.charCodeAt(start + 2) === 105 /* i */ && str.charCodeAt(start + 3) === 108 /* l */ && str.charCodeAt(start + 4) === 101 /* e */) ? 44 /* WhileKeyword */ : 9 /* IdentifierName */;
-                        case 121 /* y */:
-                            return (str.charCodeAt(start + 1) === 105 /* i */ && str.charCodeAt(start + 2) === 101 /* e */ && str.charCodeAt(start + 3) === 108 /* l */ && str.charCodeAt(start + 4) === 100 /* d */) ? 61 /* YieldKeyword */ : 9 /* IdentifierName */;
-                        default:
-                            return 9 /* IdentifierName */;
+                        case 102 /* f */: return (str.charCodeAt(start + 1) === 97 /* a */ && str.charCodeAt(start + 2) === 108 /* l */ && str.charCodeAt(start + 3) === 115 /* s */ && str.charCodeAt(start + 4) === 101 /* e */) ? 26 /* FalseKeyword */ : 9 /* IdentifierName */;
+                        case 115 /* s */: return (str.charCodeAt(start + 1) === 117 /* u */ && str.charCodeAt(start + 2) === 112 /* p */ && str.charCodeAt(start + 3) === 101 /* e */ && str.charCodeAt(start + 4) === 114 /* r */) ? 52 /* SuperKeyword */ : 9 /* IdentifierName */;
+                        case 116 /* t */: return (str.charCodeAt(start + 1) === 104 /* h */ && str.charCodeAt(start + 2) === 114 /* r */ && str.charCodeAt(start + 3) === 111 /* o */ && str.charCodeAt(start + 4) === 119 /* w */) ? 38 /* ThrowKeyword */ : 9 /* IdentifierName */;
+                        case 119 /* w */: return (str.charCodeAt(start + 1) === 104 /* h */ && str.charCodeAt(start + 2) === 105 /* i */ && str.charCodeAt(start + 3) === 108 /* l */ && str.charCodeAt(start + 4) === 101 /* e */) ? 44 /* WhileKeyword */ : 9 /* IdentifierName */;
+                        case 121 /* y */: return (str.charCodeAt(start + 1) === 105 /* i */ && str.charCodeAt(start + 2) === 101 /* e */ && str.charCodeAt(start + 3) === 108 /* l */ && str.charCodeAt(start + 4) === 100 /* d */) ? 61 /* YieldKeyword */ : 9 /* IdentifierName */;
+                        default: return 9 /* IdentifierName */;
                     }
                 case 6:
                     switch (str.charCodeAt(start)) {
-                        case 100 /* d */:
-                            return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 108 /* l */ && str.charCodeAt(start + 3) === 101 /* e */ && str.charCodeAt(start + 4) === 116 /* t */ && str.charCodeAt(start + 5) === 101 /* e */) ? 23 /* DeleteKeyword */ : 9 /* IdentifierName */;
-                        case 101 /* e */:
-                            return (str.charCodeAt(start + 1) === 120 /* x */ && str.charCodeAt(start + 2) === 112 /* p */ && str.charCodeAt(start + 3) === 111 /* o */ && str.charCodeAt(start + 4) === 114 /* r */ && str.charCodeAt(start + 5) === 116 /* t */) ? 49 /* ExportKeyword */ : 9 /* IdentifierName */;
-                        case 105 /* i */:
-                            return (str.charCodeAt(start + 1) === 109 /* m */ && str.charCodeAt(start + 2) === 112 /* p */ && str.charCodeAt(start + 3) === 111 /* o */ && str.charCodeAt(start + 4) === 114 /* r */ && str.charCodeAt(start + 5) === 116 /* t */) ? 51 /* ImportKeyword */ : 9 /* IdentifierName */;
-                        case 109 /* m */:
-                            return (str.charCodeAt(start + 1) === 111 /* o */ && str.charCodeAt(start + 2) === 100 /* d */ && str.charCodeAt(start + 3) === 117 /* u */ && str.charCodeAt(start + 4) === 108 /* l */ && str.charCodeAt(start + 5) === 101 /* e */) ? 67 /* ModuleKeyword */ : 9 /* IdentifierName */;
-                        case 110 /* n */:
-                            return (str.charCodeAt(start + 1) === 117 /* u */ && str.charCodeAt(start + 2) === 109 /* m */ && str.charCodeAt(start + 3) === 98 /* b */ && str.charCodeAt(start + 4) === 101 /* e */ && str.charCodeAt(start + 5) === 114 /* r */) ? 69 /* NumberKeyword */ : 9 /* IdentifierName */;
-                        case 112 /* p */:
-                            return (str.charCodeAt(start + 1) === 117 /* u */ && str.charCodeAt(start + 2) === 98 /* b */ && str.charCodeAt(start + 3) === 108 /* l */ && str.charCodeAt(start + 4) === 105 /* i */ && str.charCodeAt(start + 5) === 99 /* c */) ? 59 /* PublicKeyword */ : 9 /* IdentifierName */;
-                        case 114 /* r */:
-                            return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 116 /* t */ && str.charCodeAt(start + 3) === 117 /* u */ && str.charCodeAt(start + 4) === 114 /* r */ && str.charCodeAt(start + 5) === 110 /* n */) ? 35 /* ReturnKeyword */ : 9 /* IdentifierName */;
+                        case 100 /* d */: return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 108 /* l */ && str.charCodeAt(start + 3) === 101 /* e */ && str.charCodeAt(start + 4) === 116 /* t */ && str.charCodeAt(start + 5) === 101 /* e */) ? 23 /* DeleteKeyword */ : 9 /* IdentifierName */;
+                        case 101 /* e */: return (str.charCodeAt(start + 1) === 120 /* x */ && str.charCodeAt(start + 2) === 112 /* p */ && str.charCodeAt(start + 3) === 111 /* o */ && str.charCodeAt(start + 4) === 114 /* r */ && str.charCodeAt(start + 5) === 116 /* t */) ? 49 /* ExportKeyword */ : 9 /* IdentifierName */;
+                        case 105 /* i */: return (str.charCodeAt(start + 1) === 109 /* m */ && str.charCodeAt(start + 2) === 112 /* p */ && str.charCodeAt(start + 3) === 111 /* o */ && str.charCodeAt(start + 4) === 114 /* r */ && str.charCodeAt(start + 5) === 116 /* t */) ? 51 /* ImportKeyword */ : 9 /* IdentifierName */;
+                        case 109 /* m */: return (str.charCodeAt(start + 1) === 111 /* o */ && str.charCodeAt(start + 2) === 100 /* d */ && str.charCodeAt(start + 3) === 117 /* u */ && str.charCodeAt(start + 4) === 108 /* l */ && str.charCodeAt(start + 5) === 101 /* e */) ? 67 /* ModuleKeyword */ : 9 /* IdentifierName */;
+                        case 110 /* n */: return (str.charCodeAt(start + 1) === 117 /* u */ && str.charCodeAt(start + 2) === 109 /* m */ && str.charCodeAt(start + 3) === 98 /* b */ && str.charCodeAt(start + 4) === 101 /* e */ && str.charCodeAt(start + 5) === 114 /* r */) ? 69 /* NumberKeyword */ : 9 /* IdentifierName */;
+                        case 112 /* p */: return (str.charCodeAt(start + 1) === 117 /* u */ && str.charCodeAt(start + 2) === 98 /* b */ && str.charCodeAt(start + 3) === 108 /* l */ && str.charCodeAt(start + 4) === 105 /* i */ && str.charCodeAt(start + 5) === 99 /* c */) ? 59 /* PublicKeyword */ : 9 /* IdentifierName */;
+                        case 114 /* r */: return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 116 /* t */ && str.charCodeAt(start + 3) === 117 /* u */ && str.charCodeAt(start + 4) === 114 /* r */ && str.charCodeAt(start + 5) === 110 /* n */) ? 35 /* ReturnKeyword */ : 9 /* IdentifierName */;
                         case 115 /* s */:
                             switch (str.charCodeAt(start + 1)) {
                                 case 116 /* t */:
                                     switch (str.charCodeAt(start + 2)) {
-                                        case 97 /* a */:
-                                            return (str.charCodeAt(start + 3) === 116 /* t */ && str.charCodeAt(start + 4) === 105 /* i */ && str.charCodeAt(start + 5) === 99 /* c */) ? 60 /* StaticKeyword */ : 9 /* IdentifierName */;
-                                        case 114 /* r */:
-                                            return (str.charCodeAt(start + 3) === 105 /* i */ && str.charCodeAt(start + 4) === 110 /* n */ && str.charCodeAt(start + 5) === 103 /* g */) ? 71 /* StringKeyword */ : 9 /* IdentifierName */;
-                                        default:
-                                            return 9 /* IdentifierName */;
+                                        case 97 /* a */: return (str.charCodeAt(start + 3) === 116 /* t */ && str.charCodeAt(start + 4) === 105 /* i */ && str.charCodeAt(start + 5) === 99 /* c */) ? 60 /* StaticKeyword */ : 9 /* IdentifierName */;
+                                        case 114 /* r */: return (str.charCodeAt(start + 3) === 105 /* i */ && str.charCodeAt(start + 4) === 110 /* n */ && str.charCodeAt(start + 5) === 103 /* g */) ? 71 /* StringKeyword */ : 9 /* IdentifierName */;
+                                        default: return 9 /* IdentifierName */;
                                     }
-                                case 119 /* w */:
-                                    return (str.charCodeAt(start + 2) === 105 /* i */ && str.charCodeAt(start + 3) === 116 /* t */ && str.charCodeAt(start + 4) === 99 /* c */ && str.charCodeAt(start + 5) === 104 /* h */) ? 36 /* SwitchKeyword */ : 9 /* IdentifierName */;
-                                default:
-                                    return 9 /* IdentifierName */;
+                                case 119 /* w */: return (str.charCodeAt(start + 2) === 105 /* i */ && str.charCodeAt(start + 3) === 116 /* t */ && str.charCodeAt(start + 4) === 99 /* c */ && str.charCodeAt(start + 5) === 104 /* h */) ? 36 /* SwitchKeyword */ : 9 /* IdentifierName */;
+                                default: return 9 /* IdentifierName */;
                             }
-                        case 116 /* t */:
-                            return (str.charCodeAt(start + 1) === 121 /* y */ && str.charCodeAt(start + 2) === 112 /* p */ && str.charCodeAt(start + 3) === 101 /* e */ && str.charCodeAt(start + 4) === 111 /* o */ && str.charCodeAt(start + 5) === 102 /* f */) ? 41 /* TypeOfKeyword */ : 9 /* IdentifierName */;
-                        default:
-                            return 9 /* IdentifierName */;
+                        case 116 /* t */: return (str.charCodeAt(start + 1) === 121 /* y */ && str.charCodeAt(start + 2) === 112 /* p */ && str.charCodeAt(start + 3) === 101 /* e */ && str.charCodeAt(start + 4) === 111 /* o */ && str.charCodeAt(start + 5) === 102 /* f */) ? 41 /* TypeOfKeyword */ : 9 /* IdentifierName */;
+                        default: return 9 /* IdentifierName */;
                     }
                 case 7:
                     switch (str.charCodeAt(start)) {
-                        case 98 /* b */:
-                            return (str.charCodeAt(start + 1) === 111 /* o */ && str.charCodeAt(start + 2) === 111 /* o */ && str.charCodeAt(start + 3) === 108 /* l */ && str.charCodeAt(start + 4) === 101 /* e */ && str.charCodeAt(start + 5) === 97 /* a */ && str.charCodeAt(start + 6) === 110 /* n */) ? 63 /* BooleanKeyword */ : 9 /* IdentifierName */;
+                        case 98 /* b */: return (str.charCodeAt(start + 1) === 111 /* o */ && str.charCodeAt(start + 2) === 111 /* o */ && str.charCodeAt(start + 3) === 108 /* l */ && str.charCodeAt(start + 4) === 101 /* e */ && str.charCodeAt(start + 5) === 97 /* a */ && str.charCodeAt(start + 6) === 110 /* n */) ? 63 /* BooleanKeyword */ : 9 /* IdentifierName */;
                         case 100 /* d */:
                             switch (str.charCodeAt(start + 1)) {
                                 case 101 /* e */:
                                     switch (str.charCodeAt(start + 2)) {
-                                        case 99 /* c */:
-                                            return (str.charCodeAt(start + 3) === 108 /* l */ && str.charCodeAt(start + 4) === 97 /* a */ && str.charCodeAt(start + 5) === 114 /* r */ && str.charCodeAt(start + 6) === 101 /* e */) ? 65 /* DeclareKeyword */ : 9 /* IdentifierName */;
-                                        case 102 /* f */:
-                                            return (str.charCodeAt(start + 3) === 97 /* a */ && str.charCodeAt(start + 4) === 117 /* u */ && str.charCodeAt(start + 5) === 108 /* l */ && str.charCodeAt(start + 6) === 116 /* t */) ? 22 /* DefaultKeyword */ : 9 /* IdentifierName */;
-                                        default:
-                                            return 9 /* IdentifierName */;
+                                        case 99 /* c */: return (str.charCodeAt(start + 3) === 108 /* l */ && str.charCodeAt(start + 4) === 97 /* a */ && str.charCodeAt(start + 5) === 114 /* r */ && str.charCodeAt(start + 6) === 101 /* e */) ? 65 /* DeclareKeyword */ : 9 /* IdentifierName */;
+                                        case 102 /* f */: return (str.charCodeAt(start + 3) === 97 /* a */ && str.charCodeAt(start + 4) === 117 /* u */ && str.charCodeAt(start + 5) === 108 /* l */ && str.charCodeAt(start + 6) === 116 /* t */) ? 22 /* DefaultKeyword */ : 9 /* IdentifierName */;
+                                        default: return 9 /* IdentifierName */;
                                     }
-                                default:
-                                    return 9 /* IdentifierName */;
+                                default: return 9 /* IdentifierName */;
                             }
-                        case 101 /* e */:
-                            return (str.charCodeAt(start + 1) === 120 /* x */ && str.charCodeAt(start + 2) === 116 /* t */ && str.charCodeAt(start + 3) === 101 /* e */ && str.charCodeAt(start + 4) === 110 /* n */ && str.charCodeAt(start + 5) === 100 /* d */ && str.charCodeAt(start + 6) === 115 /* s */) ? 50 /* ExtendsKeyword */ : 9 /* IdentifierName */;
-                        case 102 /* f */:
-                            return (str.charCodeAt(start + 1) === 105 /* i */ && str.charCodeAt(start + 2) === 110 /* n */ && str.charCodeAt(start + 3) === 97 /* a */ && str.charCodeAt(start + 4) === 108 /* l */ && str.charCodeAt(start + 5) === 108 /* l */ && str.charCodeAt(start + 6) === 121 /* y */) ? 27 /* FinallyKeyword */ : 9 /* IdentifierName */;
+                        case 101 /* e */: return (str.charCodeAt(start + 1) === 120 /* x */ && str.charCodeAt(start + 2) === 116 /* t */ && str.charCodeAt(start + 3) === 101 /* e */ && str.charCodeAt(start + 4) === 110 /* n */ && str.charCodeAt(start + 5) === 100 /* d */ && str.charCodeAt(start + 6) === 115 /* s */) ? 50 /* ExtendsKeyword */ : 9 /* IdentifierName */;
+                        case 102 /* f */: return (str.charCodeAt(start + 1) === 105 /* i */ && str.charCodeAt(start + 2) === 110 /* n */ && str.charCodeAt(start + 3) === 97 /* a */ && str.charCodeAt(start + 4) === 108 /* l */ && str.charCodeAt(start + 5) === 108 /* l */ && str.charCodeAt(start + 6) === 121 /* y */) ? 27 /* FinallyKeyword */ : 9 /* IdentifierName */;
                         case 112 /* p */:
                             switch (str.charCodeAt(start + 1)) {
-                                case 97 /* a */:
-                                    return (str.charCodeAt(start + 2) === 99 /* c */ && str.charCodeAt(start + 3) === 107 /* k */ && str.charCodeAt(start + 4) === 97 /* a */ && str.charCodeAt(start + 5) === 103 /* g */ && str.charCodeAt(start + 6) === 101 /* e */) ? 56 /* PackageKeyword */ : 9 /* IdentifierName */;
-                                case 114 /* r */:
-                                    return (str.charCodeAt(start + 2) === 105 /* i */ && str.charCodeAt(start + 3) === 118 /* v */ && str.charCodeAt(start + 4) === 97 /* a */ && str.charCodeAt(start + 5) === 116 /* t */ && str.charCodeAt(start + 6) === 101 /* e */) ? 57 /* PrivateKeyword */ : 9 /* IdentifierName */;
-                                default:
-                                    return 9 /* IdentifierName */;
+                                case 97 /* a */: return (str.charCodeAt(start + 2) === 99 /* c */ && str.charCodeAt(start + 3) === 107 /* k */ && str.charCodeAt(start + 4) === 97 /* a */ && str.charCodeAt(start + 5) === 103 /* g */ && str.charCodeAt(start + 6) === 101 /* e */) ? 56 /* PackageKeyword */ : 9 /* IdentifierName */;
+                                case 114 /* r */: return (str.charCodeAt(start + 2) === 105 /* i */ && str.charCodeAt(start + 3) === 118 /* v */ && str.charCodeAt(start + 4) === 97 /* a */ && str.charCodeAt(start + 5) === 116 /* t */ && str.charCodeAt(start + 6) === 101 /* e */) ? 57 /* PrivateKeyword */ : 9 /* IdentifierName */;
+                                default: return 9 /* IdentifierName */;
                             }
-                        case 114 /* r */:
-                            return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 113 /* q */ && str.charCodeAt(start + 3) === 117 /* u */ && str.charCodeAt(start + 4) === 105 /* i */ && str.charCodeAt(start + 5) === 114 /* r */ && str.charCodeAt(start + 6) === 101 /* e */) ? 68 /* RequireKeyword */ : 9 /* IdentifierName */;
-                        default:
-                            return 9 /* IdentifierName */;
+                        case 114 /* r */: return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 113 /* q */ && str.charCodeAt(start + 3) === 117 /* u */ && str.charCodeAt(start + 4) === 105 /* i */ && str.charCodeAt(start + 5) === 114 /* r */ && str.charCodeAt(start + 6) === 101 /* e */) ? 68 /* RequireKeyword */ : 9 /* IdentifierName */;
+                        default: return 9 /* IdentifierName */;
                     }
                 case 8:
                     switch (str.charCodeAt(start)) {
-                        case 99 /* c */:
-                            return (str.charCodeAt(start + 1) === 111 /* o */ && str.charCodeAt(start + 2) === 110 /* n */ && str.charCodeAt(start + 3) === 116 /* t */ && str.charCodeAt(start + 4) === 105 /* i */ && str.charCodeAt(start + 5) === 110 /* n */ && str.charCodeAt(start + 6) === 117 /* u */ && str.charCodeAt(start + 7) === 101 /* e */) ? 20 /* ContinueKeyword */ : 9 /* IdentifierName */;
-                        case 100 /* d */:
-                            return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 98 /* b */ && str.charCodeAt(start + 3) === 117 /* u */ && str.charCodeAt(start + 4) === 103 /* g */ && str.charCodeAt(start + 5) === 103 /* g */ && str.charCodeAt(start + 6) === 101 /* e */ && str.charCodeAt(start + 7) === 114 /* r */) ? 21 /* DebuggerKeyword */ : 9 /* IdentifierName */;
-                        case 102 /* f */:
-                            return (str.charCodeAt(start + 1) === 117 /* u */ && str.charCodeAt(start + 2) === 110 /* n */ && str.charCodeAt(start + 3) === 99 /* c */ && str.charCodeAt(start + 4) === 116 /* t */ && str.charCodeAt(start + 5) === 105 /* i */ && str.charCodeAt(start + 6) === 111 /* o */ && str.charCodeAt(start + 7) === 110 /* n */) ? 29 /* FunctionKeyword */ : 9 /* IdentifierName */;
-                        default:
-                            return 9 /* IdentifierName */;
+                        case 99 /* c */: return (str.charCodeAt(start + 1) === 111 /* o */ && str.charCodeAt(start + 2) === 110 /* n */ && str.charCodeAt(start + 3) === 116 /* t */ && str.charCodeAt(start + 4) === 105 /* i */ && str.charCodeAt(start + 5) === 110 /* n */ && str.charCodeAt(start + 6) === 117 /* u */ && str.charCodeAt(start + 7) === 101 /* e */) ? 20 /* ContinueKeyword */ : 9 /* IdentifierName */;
+                        case 100 /* d */: return (str.charCodeAt(start + 1) === 101 /* e */ && str.charCodeAt(start + 2) === 98 /* b */ && str.charCodeAt(start + 3) === 117 /* u */ && str.charCodeAt(start + 4) === 103 /* g */ && str.charCodeAt(start + 5) === 103 /* g */ && str.charCodeAt(start + 6) === 101 /* e */ && str.charCodeAt(start + 7) === 114 /* r */) ? 21 /* DebuggerKeyword */ : 9 /* IdentifierName */;
+                        case 102 /* f */: return (str.charCodeAt(start + 1) === 117 /* u */ && str.charCodeAt(start + 2) === 110 /* n */ && str.charCodeAt(start + 3) === 99 /* c */ && str.charCodeAt(start + 4) === 116 /* t */ && str.charCodeAt(start + 5) === 105 /* i */ && str.charCodeAt(start + 6) === 111 /* o */ && str.charCodeAt(start + 7) === 110 /* n */) ? 29 /* FunctionKeyword */ : 9 /* IdentifierName */;
+                        default: return 9 /* IdentifierName */;
                     }
                 case 9:
                     switch (str.charCodeAt(start)) {
-                        case 105 /* i */:
-                            return (str.charCodeAt(start + 1) === 110 /* n */ && str.charCodeAt(start + 2) === 116 /* t */ && str.charCodeAt(start + 3) === 101 /* e */ && str.charCodeAt(start + 4) === 114 /* r */ && str.charCodeAt(start + 5) === 102 /* f */ && str.charCodeAt(start + 6) === 97 /* a */ && str.charCodeAt(start + 7) === 99 /* c */ && str.charCodeAt(start + 8) === 101 /* e */) ? 54 /* InterfaceKeyword */ : 9 /* IdentifierName */;
-                        case 112 /* p */:
-                            return (str.charCodeAt(start + 1) === 114 /* r */ && str.charCodeAt(start + 2) === 111 /* o */ && str.charCodeAt(start + 3) === 116 /* t */ && str.charCodeAt(start + 4) === 101 /* e */ && str.charCodeAt(start + 5) === 99 /* c */ && str.charCodeAt(start + 6) === 116 /* t */ && str.charCodeAt(start + 7) === 101 /* e */ && str.charCodeAt(start + 8) === 100 /* d */) ? 58 /* ProtectedKeyword */ : 9 /* IdentifierName */;
-                        default:
-                            return 9 /* IdentifierName */;
+                        case 105 /* i */: return (str.charCodeAt(start + 1) === 110 /* n */ && str.charCodeAt(start + 2) === 116 /* t */ && str.charCodeAt(start + 3) === 101 /* e */ && str.charCodeAt(start + 4) === 114 /* r */ && str.charCodeAt(start + 5) === 102 /* f */ && str.charCodeAt(start + 6) === 97 /* a */ && str.charCodeAt(start + 7) === 99 /* c */ && str.charCodeAt(start + 8) === 101 /* e */) ? 54 /* InterfaceKeyword */ : 9 /* IdentifierName */;
+                        case 112 /* p */: return (str.charCodeAt(start + 1) === 114 /* r */ && str.charCodeAt(start + 2) === 111 /* o */ && str.charCodeAt(start + 3) === 116 /* t */ && str.charCodeAt(start + 4) === 101 /* e */ && str.charCodeAt(start + 5) === 99 /* c */ && str.charCodeAt(start + 6) === 116 /* t */ && str.charCodeAt(start + 7) === 101 /* e */ && str.charCodeAt(start + 8) === 100 /* d */) ? 58 /* ProtectedKeyword */ : 9 /* IdentifierName */;
+                        default: return 9 /* IdentifierName */;
                     }
                 case 10:
                     switch (str.charCodeAt(start)) {
                         case 105 /* i */:
                             switch (str.charCodeAt(start + 1)) {
-                                case 109 /* m */:
-                                    return (str.charCodeAt(start + 2) === 112 /* p */ && str.charCodeAt(start + 3) === 108 /* l */ && str.charCodeAt(start + 4) === 101 /* e */ && str.charCodeAt(start + 5) === 109 /* m */ && str.charCodeAt(start + 6) === 101 /* e */ && str.charCodeAt(start + 7) === 110 /* n */ && str.charCodeAt(start + 8) === 116 /* t */ && str.charCodeAt(start + 9) === 115 /* s */) ? 53 /* ImplementsKeyword */ : 9 /* IdentifierName */;
-                                case 110 /* n */:
-                                    return (str.charCodeAt(start + 2) === 115 /* s */ && str.charCodeAt(start + 3) === 116 /* t */ && str.charCodeAt(start + 4) === 97 /* a */ && str.charCodeAt(start + 5) === 110 /* n */ && str.charCodeAt(start + 6) === 99 /* c */ && str.charCodeAt(start + 7) === 101 /* e */ && str.charCodeAt(start + 8) === 111 /* o */ && str.charCodeAt(start + 9) === 102 /* f */) ? 32 /* InstanceOfKeyword */ : 9 /* IdentifierName */;
-                                default:
-                                    return 9 /* IdentifierName */;
+                                case 109 /* m */: return (str.charCodeAt(start + 2) === 112 /* p */ && str.charCodeAt(start + 3) === 108 /* l */ && str.charCodeAt(start + 4) === 101 /* e */ && str.charCodeAt(start + 5) === 109 /* m */ && str.charCodeAt(start + 6) === 101 /* e */ && str.charCodeAt(start + 7) === 110 /* n */ && str.charCodeAt(start + 8) === 116 /* t */ && str.charCodeAt(start + 9) === 115 /* s */) ? 53 /* ImplementsKeyword */ : 9 /* IdentifierName */;
+                                case 110 /* n */: return (str.charCodeAt(start + 2) === 115 /* s */ && str.charCodeAt(start + 3) === 116 /* t */ && str.charCodeAt(start + 4) === 97 /* a */ && str.charCodeAt(start + 5) === 110 /* n */ && str.charCodeAt(start + 6) === 99 /* c */ && str.charCodeAt(start + 7) === 101 /* e */ && str.charCodeAt(start + 8) === 111 /* o */ && str.charCodeAt(start + 9) === 102 /* f */) ? 32 /* InstanceOfKeyword */ : 9 /* IdentifierName */;
+                                default: return 9 /* IdentifierName */;
                             }
-                        default:
-                            return 9 /* IdentifierName */;
+                        default: return 9 /* IdentifierName */;
                     }
-                case 11:
-                    return (str.charCodeAt(start) === 99 /* c */ && str.charCodeAt(start + 1) === 111 /* o */ && str.charCodeAt(start + 2) === 110 /* n */ && str.charCodeAt(start + 3) === 115 /* s */ && str.charCodeAt(start + 4) === 116 /* t */ && str.charCodeAt(start + 5) === 114 /* r */ && str.charCodeAt(start + 6) === 117 /* u */ && str.charCodeAt(start + 7) === 99 /* c */ && str.charCodeAt(start + 8) === 116 /* t */ && str.charCodeAt(start + 9) === 111 /* o */ && str.charCodeAt(start + 10) === 114 /* r */) ? 64 /* ConstructorKeyword */ : 9 /* IdentifierName */;
-                default:
-                    return 9 /* IdentifierName */;
+                case 11: return (str.charCodeAt(start) === 99 /* c */ && str.charCodeAt(start + 1) === 111 /* o */ && str.charCodeAt(start + 2) === 110 /* n */ && str.charCodeAt(start + 3) === 115 /* s */ && str.charCodeAt(start + 4) === 116 /* t */ && str.charCodeAt(start + 5) === 114 /* r */ && str.charCodeAt(start + 6) === 117 /* u */ && str.charCodeAt(start + 7) === 99 /* c */ && str.charCodeAt(start + 8) === 116 /* t */ && str.charCodeAt(start + 9) === 111 /* o */ && str.charCodeAt(start + 10) === 114 /* r */) ? 64 /* ConstructorKeyword */ : 9 /* IdentifierName */;
+                default: return 9 /* IdentifierName */;
             }
         }
         ScannerUtilities.identifierKind = identifierKind;
@@ -23487,7 +23149,6 @@ var TypeScript;
         Syntax.separatedList = separatedList;
     })(Syntax = TypeScript.Syntax || (TypeScript.Syntax = {}));
 })(TypeScript || (TypeScript = {}));
-///<reference path='references.ts' />
 ///<reference path='references.ts' />
 ///<reference path='references.ts' />
 var TypeScript;
@@ -24512,956 +24173,522 @@ var TypeScript;
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
 (function (TypeScript) {
+    var childCountArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 3, 4, 3, 5, 2, 2, 3, 3, 3, 6, 6, 7, 8, 6, 6, 4, 5, 3, 5, 3, 5, 5, 3, 3, 2, 4, 3, 3, 6, 3, 2, 3, 7, 3, 3, 10, 8, 1, 3, 5, 4, 3, 7, 2, 5, 2, 2, 2, 2, 5, 3, 2, 3, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 0, 2, 2, 2, 3, 4, 3, 3, 3, 2, 2, 4, 3, 2, 6, 2, 2, 2, 2, 3, 3, 6, 2, 2, 4, 1];
     function childCount(element) {
         if (TypeScript.isList(element)) {
             return element.length;
         }
-        switch (element.kind()) {
-            case 122 /* SourceUnit */:
-                return 2;
-            case 123 /* QualifiedName */:
-                return 3;
-            case 124 /* ObjectType */:
-                return 3;
-            case 125 /* FunctionType */:
-                return 4;
-            case 126 /* ArrayType */:
-                return 3;
-            case 127 /* ConstructorType */:
-                return 5;
-            case 128 /* GenericType */:
-                return 2;
-            case 129 /* TypeQuery */:
-                return 2;
-            case 130 /* TupleType */:
-                return 3;
-            case 131 /* UnionType */:
-                return 3;
-            case 132 /* ParenthesizedType */:
-                return 3;
-            case 133 /* InterfaceDeclaration */:
-                return 6;
-            case 134 /* FunctionDeclaration */:
-                return 6;
-            case 135 /* ModuleDeclaration */:
-                return 7;
-            case 136 /* ClassDeclaration */:
-                return 8;
-            case 137 /* EnumDeclaration */:
-                return 6;
-            case 138 /* ImportDeclaration */:
-                return 6;
-            case 139 /* ExportAssignment */:
-                return 4;
-            case 140 /* MemberFunctionDeclaration */:
-                return 5;
-            case 141 /* MemberVariableDeclaration */:
-                return 3;
-            case 142 /* ConstructorDeclaration */:
-                return 5;
-            case 143 /* IndexMemberDeclaration */:
-                return 3;
-            case 144 /* GetAccessor */:
-                return 5;
-            case 145 /* SetAccessor */:
-                return 5;
-            case 146 /* PropertySignature */:
-                return 3;
-            case 147 /* CallSignature */:
-                return 3;
-            case 148 /* ConstructSignature */:
-                return 2;
-            case 149 /* IndexSignature */:
-                return 4;
-            case 150 /* MethodSignature */:
-                return 3;
-            case 151 /* Block */:
-                return 3;
-            case 152 /* IfStatement */:
-                return 6;
-            case 153 /* VariableStatement */:
-                return 3;
-            case 154 /* ExpressionStatement */:
-                return 2;
-            case 155 /* ReturnStatement */:
-                return 3;
-            case 156 /* SwitchStatement */:
-                return 7;
-            case 157 /* BreakStatement */:
-                return 3;
-            case 158 /* ContinueStatement */:
-                return 3;
-            case 159 /* ForStatement */:
-                return 10;
-            case 160 /* ForInStatement */:
-                return 8;
-            case 161 /* EmptyStatement */:
-                return 1;
-            case 162 /* ThrowStatement */:
-                return 3;
-            case 163 /* WhileStatement */:
-                return 5;
-            case 164 /* TryStatement */:
-                return 4;
-            case 165 /* LabeledStatement */:
-                return 3;
-            case 166 /* DoStatement */:
-                return 7;
-            case 167 /* DebuggerStatement */:
-                return 2;
-            case 168 /* WithStatement */:
-                return 5;
-            case 169 /* PrefixUnaryExpression */:
-                return 2;
-            case 170 /* DeleteExpression */:
-                return 2;
-            case 171 /* TypeOfExpression */:
-                return 2;
-            case 172 /* VoidExpression */:
-                return 2;
-            case 173 /* ConditionalExpression */:
-                return 5;
-            case 174 /* BinaryExpression */:
-                return 3;
-            case 175 /* PostfixUnaryExpression */:
-                return 2;
-            case 176 /* MemberAccessExpression */:
-                return 3;
-            case 177 /* InvocationExpression */:
-                return 2;
-            case 178 /* ArrayLiteralExpression */:
-                return 3;
-            case 179 /* ObjectLiteralExpression */:
-                return 3;
-            case 180 /* ObjectCreationExpression */:
-                return 3;
-            case 181 /* ParenthesizedExpression */:
-                return 3;
-            case 182 /* ParenthesizedArrowFunctionExpression */:
-                return 4;
-            case 183 /* SimpleArrowFunctionExpression */:
-                return 4;
-            case 184 /* CastExpression */:
-                return 4;
-            case 185 /* ElementAccessExpression */:
-                return 4;
-            case 186 /* FunctionExpression */:
-                return 4;
-            case 187 /* OmittedExpression */:
-                return 0;
-            case 188 /* TemplateExpression */:
-                return 2;
-            case 189 /* TemplateAccessExpression */:
-                return 2;
-            case 190 /* VariableDeclaration */:
-                return 2;
-            case 191 /* VariableDeclarator */:
-                return 3;
-            case 192 /* ArgumentList */:
-                return 4;
-            case 193 /* ParameterList */:
-                return 3;
-            case 194 /* TypeArgumentList */:
-                return 3;
-            case 195 /* TypeParameterList */:
-                return 3;
-            case 196 /* HeritageClause */:
-                return 2;
-            case 197 /* EqualsValueClause */:
-                return 2;
-            case 198 /* CaseSwitchClause */:
-                return 4;
-            case 199 /* DefaultSwitchClause */:
-                return 3;
-            case 200 /* ElseClause */:
-                return 2;
-            case 201 /* CatchClause */:
-                return 6;
-            case 202 /* FinallyClause */:
-                return 2;
-            case 203 /* TemplateClause */:
-                return 2;
-            case 204 /* TypeParameter */:
-                return 2;
-            case 205 /* Constraint */:
-                return 2;
-            case 206 /* SimplePropertyAssignment */:
-                return 3;
-            case 207 /* FunctionPropertyAssignment */:
-                return 3;
-            case 208 /* Parameter */:
-                return 6;
-            case 209 /* EnumElement */:
-                return 2;
-            case 210 /* TypeAnnotation */:
-                return 2;
-            case 211 /* ExternalModuleReference */:
-                return 4;
-            case 212 /* ModuleNameModuleReference */:
-                return 1;
-            default:
-                return 0;
-        }
+        return childCountArray[element.kind()];
     }
     TypeScript.childCount = childCount;
     function sourceUnitChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.moduleElements;
-            case 1:
-                return node.endOfFileToken;
+            case 0: return node.moduleElements;
+            case 1: return node.endOfFileToken;
         }
     }
     function qualifiedNameChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.left;
-            case 1:
-                return node.dotToken;
-            case 2:
-                return node.right;
+            case 0: return node.left;
+            case 1: return node.dotToken;
+            case 2: return node.right;
         }
     }
     function objectTypeChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.openBraceToken;
-            case 1:
-                return node.typeMembers;
-            case 2:
-                return node.closeBraceToken;
+            case 0: return node.openBraceToken;
+            case 1: return node.typeMembers;
+            case 2: return node.closeBraceToken;
         }
     }
     function functionTypeChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.typeParameterList;
-            case 1:
-                return node.parameterList;
-            case 2:
-                return node.equalsGreaterThanToken;
-            case 3:
-                return node.type;
+            case 0: return node.typeParameterList;
+            case 1: return node.parameterList;
+            case 2: return node.equalsGreaterThanToken;
+            case 3: return node.type;
         }
     }
     function arrayTypeChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.type;
-            case 1:
-                return node.openBracketToken;
-            case 2:
-                return node.closeBracketToken;
+            case 0: return node.type;
+            case 1: return node.openBracketToken;
+            case 2: return node.closeBracketToken;
         }
     }
     function constructorTypeChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.newKeyword;
-            case 1:
-                return node.typeParameterList;
-            case 2:
-                return node.parameterList;
-            case 3:
-                return node.equalsGreaterThanToken;
-            case 4:
-                return node.type;
+            case 0: return node.newKeyword;
+            case 1: return node.typeParameterList;
+            case 2: return node.parameterList;
+            case 3: return node.equalsGreaterThanToken;
+            case 4: return node.type;
         }
     }
     function genericTypeChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.name;
-            case 1:
-                return node.typeArgumentList;
+            case 0: return node.name;
+            case 1: return node.typeArgumentList;
         }
     }
     function typeQueryChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.typeOfKeyword;
-            case 1:
-                return node.name;
+            case 0: return node.typeOfKeyword;
+            case 1: return node.name;
         }
     }
     function tupleTypeChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.openBracketToken;
-            case 1:
-                return node.types;
-            case 2:
-                return node.closeBracketToken;
+            case 0: return node.openBracketToken;
+            case 1: return node.types;
+            case 2: return node.closeBracketToken;
         }
     }
     function unionTypeChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.left;
-            case 1:
-                return node.barToken;
-            case 2:
-                return node.right;
+            case 0: return node.left;
+            case 1: return node.barToken;
+            case 2: return node.right;
         }
     }
     function parenthesizedTypeChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.openParenToken;
-            case 1:
-                return node.type;
-            case 2:
-                return node.closeParenToken;
+            case 0: return node.openParenToken;
+            case 1: return node.type;
+            case 2: return node.closeParenToken;
         }
     }
     function interfaceDeclarationChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.interfaceKeyword;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.typeParameterList;
-            case 4:
-                return node.heritageClauses;
-            case 5:
-                return node.body;
+            case 0: return node.modifiers;
+            case 1: return node.interfaceKeyword;
+            case 2: return node.identifier;
+            case 3: return node.typeParameterList;
+            case 4: return node.heritageClauses;
+            case 5: return node.body;
         }
     }
     function functionDeclarationChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.functionKeyword;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.callSignature;
-            case 4:
-                return node.block;
-            case 5:
-                return node.semicolonToken;
+            case 0: return node.modifiers;
+            case 1: return node.functionKeyword;
+            case 2: return node.identifier;
+            case 3: return node.callSignature;
+            case 4: return node.block;
+            case 5: return node.semicolonToken;
         }
     }
     function moduleDeclarationChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.moduleKeyword;
-            case 2:
-                return node.name;
-            case 3:
-                return node.stringLiteral;
-            case 4:
-                return node.openBraceToken;
-            case 5:
-                return node.moduleElements;
-            case 6:
-                return node.closeBraceToken;
+            case 0: return node.modifiers;
+            case 1: return node.moduleKeyword;
+            case 2: return node.name;
+            case 3: return node.stringLiteral;
+            case 4: return node.openBraceToken;
+            case 5: return node.moduleElements;
+            case 6: return node.closeBraceToken;
         }
     }
     function classDeclarationChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.classKeyword;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.typeParameterList;
-            case 4:
-                return node.heritageClauses;
-            case 5:
-                return node.openBraceToken;
-            case 6:
-                return node.classElements;
-            case 7:
-                return node.closeBraceToken;
+            case 0: return node.modifiers;
+            case 1: return node.classKeyword;
+            case 2: return node.identifier;
+            case 3: return node.typeParameterList;
+            case 4: return node.heritageClauses;
+            case 5: return node.openBraceToken;
+            case 6: return node.classElements;
+            case 7: return node.closeBraceToken;
         }
     }
     function enumDeclarationChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.enumKeyword;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.openBraceToken;
-            case 4:
-                return node.enumElements;
-            case 5:
-                return node.closeBraceToken;
+            case 0: return node.modifiers;
+            case 1: return node.enumKeyword;
+            case 2: return node.identifier;
+            case 3: return node.openBraceToken;
+            case 4: return node.enumElements;
+            case 5: return node.closeBraceToken;
         }
     }
     function importDeclarationChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.importKeyword;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.equalsToken;
-            case 4:
-                return node.moduleReference;
-            case 5:
-                return node.semicolonToken;
+            case 0: return node.modifiers;
+            case 1: return node.importKeyword;
+            case 2: return node.identifier;
+            case 3: return node.equalsToken;
+            case 4: return node.moduleReference;
+            case 5: return node.semicolonToken;
         }
     }
     function exportAssignmentChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.exportKeyword;
-            case 1:
-                return node.equalsToken;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.semicolonToken;
+            case 0: return node.exportKeyword;
+            case 1: return node.equalsToken;
+            case 2: return node.identifier;
+            case 3: return node.semicolonToken;
         }
     }
     function memberFunctionDeclarationChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.propertyName;
-            case 2:
-                return node.callSignature;
-            case 3:
-                return node.block;
-            case 4:
-                return node.semicolonToken;
+            case 0: return node.modifiers;
+            case 1: return node.propertyName;
+            case 2: return node.callSignature;
+            case 3: return node.block;
+            case 4: return node.semicolonToken;
         }
     }
     function memberVariableDeclarationChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.variableDeclarator;
-            case 2:
-                return node.semicolonToken;
+            case 0: return node.modifiers;
+            case 1: return node.variableDeclarator;
+            case 2: return node.semicolonToken;
         }
     }
     function constructorDeclarationChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.constructorKeyword;
-            case 2:
-                return node.callSignature;
-            case 3:
-                return node.block;
-            case 4:
-                return node.semicolonToken;
+            case 0: return node.modifiers;
+            case 1: return node.constructorKeyword;
+            case 2: return node.callSignature;
+            case 3: return node.block;
+            case 4: return node.semicolonToken;
         }
     }
     function indexMemberDeclarationChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.indexSignature;
-            case 2:
-                return node.semicolonToken;
+            case 0: return node.modifiers;
+            case 1: return node.indexSignature;
+            case 2: return node.semicolonToken;
         }
     }
     function getAccessorChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.getKeyword;
-            case 2:
-                return node.propertyName;
-            case 3:
-                return node.callSignature;
-            case 4:
-                return node.block;
+            case 0: return node.modifiers;
+            case 1: return node.getKeyword;
+            case 2: return node.propertyName;
+            case 3: return node.callSignature;
+            case 4: return node.block;
         }
     }
     function setAccessorChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.setKeyword;
-            case 2:
-                return node.propertyName;
-            case 3:
-                return node.callSignature;
-            case 4:
-                return node.block;
+            case 0: return node.modifiers;
+            case 1: return node.setKeyword;
+            case 2: return node.propertyName;
+            case 3: return node.callSignature;
+            case 4: return node.block;
         }
     }
     function propertySignatureChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.propertyName;
-            case 1:
-                return node.questionToken;
-            case 2:
-                return node.typeAnnotation;
+            case 0: return node.propertyName;
+            case 1: return node.questionToken;
+            case 2: return node.typeAnnotation;
         }
     }
     function callSignatureChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.typeParameterList;
-            case 1:
-                return node.parameterList;
-            case 2:
-                return node.typeAnnotation;
+            case 0: return node.typeParameterList;
+            case 1: return node.parameterList;
+            case 2: return node.typeAnnotation;
         }
     }
     function constructSignatureChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.newKeyword;
-            case 1:
-                return node.callSignature;
+            case 0: return node.newKeyword;
+            case 1: return node.callSignature;
         }
     }
     function indexSignatureChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.openBracketToken;
-            case 1:
-                return node.parameters;
-            case 2:
-                return node.closeBracketToken;
-            case 3:
-                return node.typeAnnotation;
+            case 0: return node.openBracketToken;
+            case 1: return node.parameters;
+            case 2: return node.closeBracketToken;
+            case 3: return node.typeAnnotation;
         }
     }
     function methodSignatureChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.propertyName;
-            case 1:
-                return node.questionToken;
-            case 2:
-                return node.callSignature;
+            case 0: return node.propertyName;
+            case 1: return node.questionToken;
+            case 2: return node.callSignature;
         }
     }
     function blockChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.openBraceToken;
-            case 1:
-                return node.statements;
-            case 2:
-                return node.closeBraceToken;
+            case 0: return node.openBraceToken;
+            case 1: return node.statements;
+            case 2: return node.closeBraceToken;
         }
     }
     function ifStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.ifKeyword;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.condition;
-            case 3:
-                return node.closeParenToken;
-            case 4:
-                return node.statement;
-            case 5:
-                return node.elseClause;
+            case 0: return node.ifKeyword;
+            case 1: return node.openParenToken;
+            case 2: return node.condition;
+            case 3: return node.closeParenToken;
+            case 4: return node.statement;
+            case 5: return node.elseClause;
         }
     }
     function variableStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.modifiers;
-            case 1:
-                return node.variableDeclaration;
-            case 2:
-                return node.semicolonToken;
+            case 0: return node.modifiers;
+            case 1: return node.variableDeclaration;
+            case 2: return node.semicolonToken;
         }
     }
     function expressionStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.expression;
-            case 1:
-                return node.semicolonToken;
+            case 0: return node.expression;
+            case 1: return node.semicolonToken;
         }
     }
     function returnStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.returnKeyword;
-            case 1:
-                return node.expression;
-            case 2:
-                return node.semicolonToken;
+            case 0: return node.returnKeyword;
+            case 1: return node.expression;
+            case 2: return node.semicolonToken;
         }
     }
     function switchStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.switchKeyword;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.expression;
-            case 3:
-                return node.closeParenToken;
-            case 4:
-                return node.openBraceToken;
-            case 5:
-                return node.switchClauses;
-            case 6:
-                return node.closeBraceToken;
+            case 0: return node.switchKeyword;
+            case 1: return node.openParenToken;
+            case 2: return node.expression;
+            case 3: return node.closeParenToken;
+            case 4: return node.openBraceToken;
+            case 5: return node.switchClauses;
+            case 6: return node.closeBraceToken;
         }
     }
     function breakStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.breakKeyword;
-            case 1:
-                return node.identifier;
-            case 2:
-                return node.semicolonToken;
+            case 0: return node.breakKeyword;
+            case 1: return node.identifier;
+            case 2: return node.semicolonToken;
         }
     }
     function continueStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.continueKeyword;
-            case 1:
-                return node.identifier;
-            case 2:
-                return node.semicolonToken;
+            case 0: return node.continueKeyword;
+            case 1: return node.identifier;
+            case 2: return node.semicolonToken;
         }
     }
     function forStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.forKeyword;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.variableDeclaration;
-            case 3:
-                return node.initializer;
-            case 4:
-                return node.firstSemicolonToken;
-            case 5:
-                return node.condition;
-            case 6:
-                return node.secondSemicolonToken;
-            case 7:
-                return node.incrementor;
-            case 8:
-                return node.closeParenToken;
-            case 9:
-                return node.statement;
+            case 0: return node.forKeyword;
+            case 1: return node.openParenToken;
+            case 2: return node.variableDeclaration;
+            case 3: return node.initializer;
+            case 4: return node.firstSemicolonToken;
+            case 5: return node.condition;
+            case 6: return node.secondSemicolonToken;
+            case 7: return node.incrementor;
+            case 8: return node.closeParenToken;
+            case 9: return node.statement;
         }
     }
     function forInStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.forKeyword;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.variableDeclaration;
-            case 3:
-                return node.left;
-            case 4:
-                return node.inKeyword;
-            case 5:
-                return node.expression;
-            case 6:
-                return node.closeParenToken;
-            case 7:
-                return node.statement;
+            case 0: return node.forKeyword;
+            case 1: return node.openParenToken;
+            case 2: return node.variableDeclaration;
+            case 3: return node.left;
+            case 4: return node.inKeyword;
+            case 5: return node.expression;
+            case 6: return node.closeParenToken;
+            case 7: return node.statement;
         }
     }
     function emptyStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.semicolonToken;
+            case 0: return node.semicolonToken;
         }
     }
     function throwStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.throwKeyword;
-            case 1:
-                return node.expression;
-            case 2:
-                return node.semicolonToken;
+            case 0: return node.throwKeyword;
+            case 1: return node.expression;
+            case 2: return node.semicolonToken;
         }
     }
     function whileStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.whileKeyword;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.condition;
-            case 3:
-                return node.closeParenToken;
-            case 4:
-                return node.statement;
+            case 0: return node.whileKeyword;
+            case 1: return node.openParenToken;
+            case 2: return node.condition;
+            case 3: return node.closeParenToken;
+            case 4: return node.statement;
         }
     }
     function tryStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.tryKeyword;
-            case 1:
-                return node.block;
-            case 2:
-                return node.catchClause;
-            case 3:
-                return node.finallyClause;
+            case 0: return node.tryKeyword;
+            case 1: return node.block;
+            case 2: return node.catchClause;
+            case 3: return node.finallyClause;
         }
     }
     function labeledStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.identifier;
-            case 1:
-                return node.colonToken;
-            case 2:
-                return node.statement;
+            case 0: return node.identifier;
+            case 1: return node.colonToken;
+            case 2: return node.statement;
         }
     }
     function doStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.doKeyword;
-            case 1:
-                return node.statement;
-            case 2:
-                return node.whileKeyword;
-            case 3:
-                return node.openParenToken;
-            case 4:
-                return node.condition;
-            case 5:
-                return node.closeParenToken;
-            case 6:
-                return node.semicolonToken;
+            case 0: return node.doKeyword;
+            case 1: return node.statement;
+            case 2: return node.whileKeyword;
+            case 3: return node.openParenToken;
+            case 4: return node.condition;
+            case 5: return node.closeParenToken;
+            case 6: return node.semicolonToken;
         }
     }
     function debuggerStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.debuggerKeyword;
-            case 1:
-                return node.semicolonToken;
+            case 0: return node.debuggerKeyword;
+            case 1: return node.semicolonToken;
         }
     }
     function withStatementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.withKeyword;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.condition;
-            case 3:
-                return node.closeParenToken;
-            case 4:
-                return node.statement;
+            case 0: return node.withKeyword;
+            case 1: return node.openParenToken;
+            case 2: return node.condition;
+            case 3: return node.closeParenToken;
+            case 4: return node.statement;
         }
     }
     function prefixUnaryExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.operatorToken;
-            case 1:
-                return node.operand;
+            case 0: return node.operatorToken;
+            case 1: return node.operand;
         }
     }
     function deleteExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.deleteKeyword;
-            case 1:
-                return node.expression;
+            case 0: return node.deleteKeyword;
+            case 1: return node.expression;
         }
     }
     function typeOfExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.typeOfKeyword;
-            case 1:
-                return node.expression;
+            case 0: return node.typeOfKeyword;
+            case 1: return node.expression;
         }
     }
     function voidExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.voidKeyword;
-            case 1:
-                return node.expression;
+            case 0: return node.voidKeyword;
+            case 1: return node.expression;
         }
     }
     function conditionalExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.condition;
-            case 1:
-                return node.questionToken;
-            case 2:
-                return node.whenTrue;
-            case 3:
-                return node.colonToken;
-            case 4:
-                return node.whenFalse;
+            case 0: return node.condition;
+            case 1: return node.questionToken;
+            case 2: return node.whenTrue;
+            case 3: return node.colonToken;
+            case 4: return node.whenFalse;
         }
     }
     function binaryExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.left;
-            case 1:
-                return node.operatorToken;
-            case 2:
-                return node.right;
+            case 0: return node.left;
+            case 1: return node.operatorToken;
+            case 2: return node.right;
         }
     }
     function postfixUnaryExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.operand;
-            case 1:
-                return node.operatorToken;
+            case 0: return node.operand;
+            case 1: return node.operatorToken;
         }
     }
     function memberAccessExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.expression;
-            case 1:
-                return node.dotToken;
-            case 2:
-                return node.name;
+            case 0: return node.expression;
+            case 1: return node.dotToken;
+            case 2: return node.name;
         }
     }
     function invocationExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.expression;
-            case 1:
-                return node.argumentList;
+            case 0: return node.expression;
+            case 1: return node.argumentList;
         }
     }
     function arrayLiteralExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.openBracketToken;
-            case 1:
-                return node.expressions;
-            case 2:
-                return node.closeBracketToken;
+            case 0: return node.openBracketToken;
+            case 1: return node.expressions;
+            case 2: return node.closeBracketToken;
         }
     }
     function objectLiteralExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.openBraceToken;
-            case 1:
-                return node.propertyAssignments;
-            case 2:
-                return node.closeBraceToken;
+            case 0: return node.openBraceToken;
+            case 1: return node.propertyAssignments;
+            case 2: return node.closeBraceToken;
         }
     }
     function objectCreationExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.newKeyword;
-            case 1:
-                return node.expression;
-            case 2:
-                return node.argumentList;
+            case 0: return node.newKeyword;
+            case 1: return node.expression;
+            case 2: return node.argumentList;
         }
     }
     function parenthesizedExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.openParenToken;
-            case 1:
-                return node.expression;
-            case 2:
-                return node.closeParenToken;
+            case 0: return node.openParenToken;
+            case 1: return node.expression;
+            case 2: return node.closeParenToken;
         }
     }
     function parenthesizedArrowFunctionExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.callSignature;
-            case 1:
-                return node.equalsGreaterThanToken;
-            case 2:
-                return node.block;
-            case 3:
-                return node.expression;
+            case 0: return node.callSignature;
+            case 1: return node.equalsGreaterThanToken;
+            case 2: return node.block;
+            case 3: return node.expression;
         }
     }
     function simpleArrowFunctionExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.parameter;
-            case 1:
-                return node.equalsGreaterThanToken;
-            case 2:
-                return node.block;
-            case 3:
-                return node.expression;
+            case 0: return node.parameter;
+            case 1: return node.equalsGreaterThanToken;
+            case 2: return node.block;
+            case 3: return node.expression;
         }
     }
     function castExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.lessThanToken;
-            case 1:
-                return node.type;
-            case 2:
-                return node.greaterThanToken;
-            case 3:
-                return node.expression;
+            case 0: return node.lessThanToken;
+            case 1: return node.type;
+            case 2: return node.greaterThanToken;
+            case 3: return node.expression;
         }
     }
     function elementAccessExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.expression;
-            case 1:
-                return node.openBracketToken;
-            case 2:
-                return node.argumentExpression;
-            case 3:
-                return node.closeBracketToken;
+            case 0: return node.expression;
+            case 1: return node.openBracketToken;
+            case 2: return node.argumentExpression;
+            case 3: return node.closeBracketToken;
         }
     }
     function functionExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.functionKeyword;
-            case 1:
-                return node.identifier;
-            case 2:
-                return node.callSignature;
-            case 3:
-                return node.block;
+            case 0: return node.functionKeyword;
+            case 1: return node.identifier;
+            case 2: return node.callSignature;
+            case 3: return node.block;
         }
     }
     function omittedExpressionChildAt(node, index) {
@@ -25469,242 +24696,172 @@ var TypeScript;
     }
     function templateExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.templateStartToken;
-            case 1:
-                return node.templateClauses;
+            case 0: return node.templateStartToken;
+            case 1: return node.templateClauses;
         }
     }
     function templateAccessExpressionChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.expression;
-            case 1:
-                return node.templateExpression;
+            case 0: return node.expression;
+            case 1: return node.templateExpression;
         }
     }
     function variableDeclarationChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.varKeyword;
-            case 1:
-                return node.variableDeclarators;
+            case 0: return node.varKeyword;
+            case 1: return node.variableDeclarators;
         }
     }
     function variableDeclaratorChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.propertyName;
-            case 1:
-                return node.typeAnnotation;
-            case 2:
-                return node.equalsValueClause;
+            case 0: return node.propertyName;
+            case 1: return node.typeAnnotation;
+            case 2: return node.equalsValueClause;
         }
     }
     function argumentListChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.typeArgumentList;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.arguments;
-            case 3:
-                return node.closeParenToken;
+            case 0: return node.typeArgumentList;
+            case 1: return node.openParenToken;
+            case 2: return node.arguments;
+            case 3: return node.closeParenToken;
         }
     }
     function parameterListChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.openParenToken;
-            case 1:
-                return node.parameters;
-            case 2:
-                return node.closeParenToken;
+            case 0: return node.openParenToken;
+            case 1: return node.parameters;
+            case 2: return node.closeParenToken;
         }
     }
     function typeArgumentListChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.lessThanToken;
-            case 1:
-                return node.typeArguments;
-            case 2:
-                return node.greaterThanToken;
+            case 0: return node.lessThanToken;
+            case 1: return node.typeArguments;
+            case 2: return node.greaterThanToken;
         }
     }
     function typeParameterListChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.lessThanToken;
-            case 1:
-                return node.typeParameters;
-            case 2:
-                return node.greaterThanToken;
+            case 0: return node.lessThanToken;
+            case 1: return node.typeParameters;
+            case 2: return node.greaterThanToken;
         }
     }
     function heritageClauseChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.extendsOrImplementsKeyword;
-            case 1:
-                return node.typeNames;
+            case 0: return node.extendsOrImplementsKeyword;
+            case 1: return node.typeNames;
         }
     }
     function equalsValueClauseChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.equalsToken;
-            case 1:
-                return node.value;
+            case 0: return node.equalsToken;
+            case 1: return node.value;
         }
     }
     function caseSwitchClauseChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.caseKeyword;
-            case 1:
-                return node.expression;
-            case 2:
-                return node.colonToken;
-            case 3:
-                return node.statements;
+            case 0: return node.caseKeyword;
+            case 1: return node.expression;
+            case 2: return node.colonToken;
+            case 3: return node.statements;
         }
     }
     function defaultSwitchClauseChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.defaultKeyword;
-            case 1:
-                return node.colonToken;
-            case 2:
-                return node.statements;
+            case 0: return node.defaultKeyword;
+            case 1: return node.colonToken;
+            case 2: return node.statements;
         }
     }
     function elseClauseChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.elseKeyword;
-            case 1:
-                return node.statement;
+            case 0: return node.elseKeyword;
+            case 1: return node.statement;
         }
     }
     function catchClauseChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.catchKeyword;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.typeAnnotation;
-            case 4:
-                return node.closeParenToken;
-            case 5:
-                return node.block;
+            case 0: return node.catchKeyword;
+            case 1: return node.openParenToken;
+            case 2: return node.identifier;
+            case 3: return node.typeAnnotation;
+            case 4: return node.closeParenToken;
+            case 5: return node.block;
         }
     }
     function finallyClauseChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.finallyKeyword;
-            case 1:
-                return node.block;
+            case 0: return node.finallyKeyword;
+            case 1: return node.block;
         }
     }
     function templateClauseChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.expression;
-            case 1:
-                return node.templateMiddleOrEndToken;
+            case 0: return node.expression;
+            case 1: return node.templateMiddleOrEndToken;
         }
     }
     function typeParameterChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.identifier;
-            case 1:
-                return node.constraint;
+            case 0: return node.identifier;
+            case 1: return node.constraint;
         }
     }
     function constraintChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.extendsKeyword;
-            case 1:
-                return node.typeOrExpression;
+            case 0: return node.extendsKeyword;
+            case 1: return node.typeOrExpression;
         }
     }
     function simplePropertyAssignmentChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.propertyName;
-            case 1:
-                return node.colonToken;
-            case 2:
-                return node.expression;
+            case 0: return node.propertyName;
+            case 1: return node.colonToken;
+            case 2: return node.expression;
         }
     }
     function functionPropertyAssignmentChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.propertyName;
-            case 1:
-                return node.callSignature;
-            case 2:
-                return node.block;
+            case 0: return node.propertyName;
+            case 1: return node.callSignature;
+            case 2: return node.block;
         }
     }
     function parameterChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.dotDotDotToken;
-            case 1:
-                return node.modifiers;
-            case 2:
-                return node.identifier;
-            case 3:
-                return node.questionToken;
-            case 4:
-                return node.typeAnnotation;
-            case 5:
-                return node.equalsValueClause;
+            case 0: return node.dotDotDotToken;
+            case 1: return node.modifiers;
+            case 2: return node.identifier;
+            case 3: return node.questionToken;
+            case 4: return node.typeAnnotation;
+            case 5: return node.equalsValueClause;
         }
     }
     function enumElementChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.propertyName;
-            case 1:
-                return node.equalsValueClause;
+            case 0: return node.propertyName;
+            case 1: return node.equalsValueClause;
         }
     }
     function typeAnnotationChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.colonToken;
-            case 1:
-                return node.type;
+            case 0: return node.colonToken;
+            case 1: return node.type;
         }
     }
     function externalModuleReferenceChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.requireKeyword;
-            case 1:
-                return node.openParenToken;
-            case 2:
-                return node.stringLiteral;
-            case 3:
-                return node.closeParenToken;
+            case 0: return node.requireKeyword;
+            case 1: return node.openParenToken;
+            case 2: return node.stringLiteral;
+            case 3: return node.closeParenToken;
         }
     }
     function moduleNameModuleReferenceChildAt(node, index) {
         switch (index) {
-            case 0:
-                return node.moduleName;
+            case 0: return node.moduleName;
         }
     }
     function childAt(element, index) {
@@ -25712,188 +24869,97 @@ var TypeScript;
             return element[index];
         }
         switch (element.kind()) {
-            case 122 /* SourceUnit */:
-                return sourceUnitChildAt(element, index);
-            case 123 /* QualifiedName */:
-                return qualifiedNameChildAt(element, index);
-            case 124 /* ObjectType */:
-                return objectTypeChildAt(element, index);
-            case 125 /* FunctionType */:
-                return functionTypeChildAt(element, index);
-            case 126 /* ArrayType */:
-                return arrayTypeChildAt(element, index);
-            case 127 /* ConstructorType */:
-                return constructorTypeChildAt(element, index);
-            case 128 /* GenericType */:
-                return genericTypeChildAt(element, index);
-            case 129 /* TypeQuery */:
-                return typeQueryChildAt(element, index);
-            case 130 /* TupleType */:
-                return tupleTypeChildAt(element, index);
-            case 131 /* UnionType */:
-                return unionTypeChildAt(element, index);
-            case 132 /* ParenthesizedType */:
-                return parenthesizedTypeChildAt(element, index);
-            case 133 /* InterfaceDeclaration */:
-                return interfaceDeclarationChildAt(element, index);
-            case 134 /* FunctionDeclaration */:
-                return functionDeclarationChildAt(element, index);
-            case 135 /* ModuleDeclaration */:
-                return moduleDeclarationChildAt(element, index);
-            case 136 /* ClassDeclaration */:
-                return classDeclarationChildAt(element, index);
-            case 137 /* EnumDeclaration */:
-                return enumDeclarationChildAt(element, index);
-            case 138 /* ImportDeclaration */:
-                return importDeclarationChildAt(element, index);
-            case 139 /* ExportAssignment */:
-                return exportAssignmentChildAt(element, index);
-            case 140 /* MemberFunctionDeclaration */:
-                return memberFunctionDeclarationChildAt(element, index);
-            case 141 /* MemberVariableDeclaration */:
-                return memberVariableDeclarationChildAt(element, index);
-            case 142 /* ConstructorDeclaration */:
-                return constructorDeclarationChildAt(element, index);
-            case 143 /* IndexMemberDeclaration */:
-                return indexMemberDeclarationChildAt(element, index);
-            case 144 /* GetAccessor */:
-                return getAccessorChildAt(element, index);
-            case 145 /* SetAccessor */:
-                return setAccessorChildAt(element, index);
-            case 146 /* PropertySignature */:
-                return propertySignatureChildAt(element, index);
-            case 147 /* CallSignature */:
-                return callSignatureChildAt(element, index);
-            case 148 /* ConstructSignature */:
-                return constructSignatureChildAt(element, index);
-            case 149 /* IndexSignature */:
-                return indexSignatureChildAt(element, index);
-            case 150 /* MethodSignature */:
-                return methodSignatureChildAt(element, index);
-            case 151 /* Block */:
-                return blockChildAt(element, index);
-            case 152 /* IfStatement */:
-                return ifStatementChildAt(element, index);
-            case 153 /* VariableStatement */:
-                return variableStatementChildAt(element, index);
-            case 154 /* ExpressionStatement */:
-                return expressionStatementChildAt(element, index);
-            case 155 /* ReturnStatement */:
-                return returnStatementChildAt(element, index);
-            case 156 /* SwitchStatement */:
-                return switchStatementChildAt(element, index);
-            case 157 /* BreakStatement */:
-                return breakStatementChildAt(element, index);
-            case 158 /* ContinueStatement */:
-                return continueStatementChildAt(element, index);
-            case 159 /* ForStatement */:
-                return forStatementChildAt(element, index);
-            case 160 /* ForInStatement */:
-                return forInStatementChildAt(element, index);
-            case 161 /* EmptyStatement */:
-                return emptyStatementChildAt(element, index);
-            case 162 /* ThrowStatement */:
-                return throwStatementChildAt(element, index);
-            case 163 /* WhileStatement */:
-                return whileStatementChildAt(element, index);
-            case 164 /* TryStatement */:
-                return tryStatementChildAt(element, index);
-            case 165 /* LabeledStatement */:
-                return labeledStatementChildAt(element, index);
-            case 166 /* DoStatement */:
-                return doStatementChildAt(element, index);
-            case 167 /* DebuggerStatement */:
-                return debuggerStatementChildAt(element, index);
-            case 168 /* WithStatement */:
-                return withStatementChildAt(element, index);
-            case 169 /* PrefixUnaryExpression */:
-                return prefixUnaryExpressionChildAt(element, index);
-            case 170 /* DeleteExpression */:
-                return deleteExpressionChildAt(element, index);
-            case 171 /* TypeOfExpression */:
-                return typeOfExpressionChildAt(element, index);
-            case 172 /* VoidExpression */:
-                return voidExpressionChildAt(element, index);
-            case 173 /* ConditionalExpression */:
-                return conditionalExpressionChildAt(element, index);
-            case 174 /* BinaryExpression */:
-                return binaryExpressionChildAt(element, index);
-            case 175 /* PostfixUnaryExpression */:
-                return postfixUnaryExpressionChildAt(element, index);
-            case 176 /* MemberAccessExpression */:
-                return memberAccessExpressionChildAt(element, index);
-            case 177 /* InvocationExpression */:
-                return invocationExpressionChildAt(element, index);
-            case 178 /* ArrayLiteralExpression */:
-                return arrayLiteralExpressionChildAt(element, index);
-            case 179 /* ObjectLiteralExpression */:
-                return objectLiteralExpressionChildAt(element, index);
-            case 180 /* ObjectCreationExpression */:
-                return objectCreationExpressionChildAt(element, index);
-            case 181 /* ParenthesizedExpression */:
-                return parenthesizedExpressionChildAt(element, index);
-            case 182 /* ParenthesizedArrowFunctionExpression */:
-                return parenthesizedArrowFunctionExpressionChildAt(element, index);
-            case 183 /* SimpleArrowFunctionExpression */:
-                return simpleArrowFunctionExpressionChildAt(element, index);
-            case 184 /* CastExpression */:
-                return castExpressionChildAt(element, index);
-            case 185 /* ElementAccessExpression */:
-                return elementAccessExpressionChildAt(element, index);
-            case 186 /* FunctionExpression */:
-                return functionExpressionChildAt(element, index);
-            case 187 /* OmittedExpression */:
-                return omittedExpressionChildAt(element, index);
-            case 188 /* TemplateExpression */:
-                return templateExpressionChildAt(element, index);
-            case 189 /* TemplateAccessExpression */:
-                return templateAccessExpressionChildAt(element, index);
-            case 190 /* VariableDeclaration */:
-                return variableDeclarationChildAt(element, index);
-            case 191 /* VariableDeclarator */:
-                return variableDeclaratorChildAt(element, index);
-            case 192 /* ArgumentList */:
-                return argumentListChildAt(element, index);
-            case 193 /* ParameterList */:
-                return parameterListChildAt(element, index);
-            case 194 /* TypeArgumentList */:
-                return typeArgumentListChildAt(element, index);
-            case 195 /* TypeParameterList */:
-                return typeParameterListChildAt(element, index);
-            case 196 /* HeritageClause */:
-                return heritageClauseChildAt(element, index);
-            case 197 /* EqualsValueClause */:
-                return equalsValueClauseChildAt(element, index);
-            case 198 /* CaseSwitchClause */:
-                return caseSwitchClauseChildAt(element, index);
-            case 199 /* DefaultSwitchClause */:
-                return defaultSwitchClauseChildAt(element, index);
-            case 200 /* ElseClause */:
-                return elseClauseChildAt(element, index);
-            case 201 /* CatchClause */:
-                return catchClauseChildAt(element, index);
-            case 202 /* FinallyClause */:
-                return finallyClauseChildAt(element, index);
-            case 203 /* TemplateClause */:
-                return templateClauseChildAt(element, index);
-            case 204 /* TypeParameter */:
-                return typeParameterChildAt(element, index);
-            case 205 /* Constraint */:
-                return constraintChildAt(element, index);
-            case 206 /* SimplePropertyAssignment */:
-                return simplePropertyAssignmentChildAt(element, index);
-            case 207 /* FunctionPropertyAssignment */:
-                return functionPropertyAssignmentChildAt(element, index);
-            case 208 /* Parameter */:
-                return parameterChildAt(element, index);
-            case 209 /* EnumElement */:
-                return enumElementChildAt(element, index);
-            case 210 /* TypeAnnotation */:
-                return typeAnnotationChildAt(element, index);
-            case 211 /* ExternalModuleReference */:
-                return externalModuleReferenceChildAt(element, index);
-            case 212 /* ModuleNameModuleReference */:
-                return moduleNameModuleReferenceChildAt(element, index);
+            case 122 /* SourceUnit */: return sourceUnitChildAt(element, index);
+            case 123 /* QualifiedName */: return qualifiedNameChildAt(element, index);
+            case 124 /* ObjectType */: return objectTypeChildAt(element, index);
+            case 125 /* FunctionType */: return functionTypeChildAt(element, index);
+            case 126 /* ArrayType */: return arrayTypeChildAt(element, index);
+            case 127 /* ConstructorType */: return constructorTypeChildAt(element, index);
+            case 128 /* GenericType */: return genericTypeChildAt(element, index);
+            case 129 /* TypeQuery */: return typeQueryChildAt(element, index);
+            case 130 /* TupleType */: return tupleTypeChildAt(element, index);
+            case 131 /* UnionType */: return unionTypeChildAt(element, index);
+            case 132 /* ParenthesizedType */: return parenthesizedTypeChildAt(element, index);
+            case 133 /* InterfaceDeclaration */: return interfaceDeclarationChildAt(element, index);
+            case 134 /* FunctionDeclaration */: return functionDeclarationChildAt(element, index);
+            case 135 /* ModuleDeclaration */: return moduleDeclarationChildAt(element, index);
+            case 136 /* ClassDeclaration */: return classDeclarationChildAt(element, index);
+            case 137 /* EnumDeclaration */: return enumDeclarationChildAt(element, index);
+            case 138 /* ImportDeclaration */: return importDeclarationChildAt(element, index);
+            case 139 /* ExportAssignment */: return exportAssignmentChildAt(element, index);
+            case 140 /* MemberFunctionDeclaration */: return memberFunctionDeclarationChildAt(element, index);
+            case 141 /* MemberVariableDeclaration */: return memberVariableDeclarationChildAt(element, index);
+            case 142 /* ConstructorDeclaration */: return constructorDeclarationChildAt(element, index);
+            case 143 /* IndexMemberDeclaration */: return indexMemberDeclarationChildAt(element, index);
+            case 144 /* GetAccessor */: return getAccessorChildAt(element, index);
+            case 145 /* SetAccessor */: return setAccessorChildAt(element, index);
+            case 146 /* PropertySignature */: return propertySignatureChildAt(element, index);
+            case 147 /* CallSignature */: return callSignatureChildAt(element, index);
+            case 148 /* ConstructSignature */: return constructSignatureChildAt(element, index);
+            case 149 /* IndexSignature */: return indexSignatureChildAt(element, index);
+            case 150 /* MethodSignature */: return methodSignatureChildAt(element, index);
+            case 151 /* Block */: return blockChildAt(element, index);
+            case 152 /* IfStatement */: return ifStatementChildAt(element, index);
+            case 153 /* VariableStatement */: return variableStatementChildAt(element, index);
+            case 154 /* ExpressionStatement */: return expressionStatementChildAt(element, index);
+            case 155 /* ReturnStatement */: return returnStatementChildAt(element, index);
+            case 156 /* SwitchStatement */: return switchStatementChildAt(element, index);
+            case 157 /* BreakStatement */: return breakStatementChildAt(element, index);
+            case 158 /* ContinueStatement */: return continueStatementChildAt(element, index);
+            case 159 /* ForStatement */: return forStatementChildAt(element, index);
+            case 160 /* ForInStatement */: return forInStatementChildAt(element, index);
+            case 161 /* EmptyStatement */: return emptyStatementChildAt(element, index);
+            case 162 /* ThrowStatement */: return throwStatementChildAt(element, index);
+            case 163 /* WhileStatement */: return whileStatementChildAt(element, index);
+            case 164 /* TryStatement */: return tryStatementChildAt(element, index);
+            case 165 /* LabeledStatement */: return labeledStatementChildAt(element, index);
+            case 166 /* DoStatement */: return doStatementChildAt(element, index);
+            case 167 /* DebuggerStatement */: return debuggerStatementChildAt(element, index);
+            case 168 /* WithStatement */: return withStatementChildAt(element, index);
+            case 169 /* PrefixUnaryExpression */: return prefixUnaryExpressionChildAt(element, index);
+            case 170 /* DeleteExpression */: return deleteExpressionChildAt(element, index);
+            case 171 /* TypeOfExpression */: return typeOfExpressionChildAt(element, index);
+            case 172 /* VoidExpression */: return voidExpressionChildAt(element, index);
+            case 173 /* ConditionalExpression */: return conditionalExpressionChildAt(element, index);
+            case 174 /* BinaryExpression */: return binaryExpressionChildAt(element, index);
+            case 175 /* PostfixUnaryExpression */: return postfixUnaryExpressionChildAt(element, index);
+            case 176 /* MemberAccessExpression */: return memberAccessExpressionChildAt(element, index);
+            case 177 /* InvocationExpression */: return invocationExpressionChildAt(element, index);
+            case 178 /* ArrayLiteralExpression */: return arrayLiteralExpressionChildAt(element, index);
+            case 179 /* ObjectLiteralExpression */: return objectLiteralExpressionChildAt(element, index);
+            case 180 /* ObjectCreationExpression */: return objectCreationExpressionChildAt(element, index);
+            case 181 /* ParenthesizedExpression */: return parenthesizedExpressionChildAt(element, index);
+            case 182 /* ParenthesizedArrowFunctionExpression */: return parenthesizedArrowFunctionExpressionChildAt(element, index);
+            case 183 /* SimpleArrowFunctionExpression */: return simpleArrowFunctionExpressionChildAt(element, index);
+            case 184 /* CastExpression */: return castExpressionChildAt(element, index);
+            case 185 /* ElementAccessExpression */: return elementAccessExpressionChildAt(element, index);
+            case 186 /* FunctionExpression */: return functionExpressionChildAt(element, index);
+            case 187 /* OmittedExpression */: return omittedExpressionChildAt(element, index);
+            case 188 /* TemplateExpression */: return templateExpressionChildAt(element, index);
+            case 189 /* TemplateAccessExpression */: return templateAccessExpressionChildAt(element, index);
+            case 190 /* VariableDeclaration */: return variableDeclarationChildAt(element, index);
+            case 191 /* VariableDeclarator */: return variableDeclaratorChildAt(element, index);
+            case 192 /* ArgumentList */: return argumentListChildAt(element, index);
+            case 193 /* ParameterList */: return parameterListChildAt(element, index);
+            case 194 /* TypeArgumentList */: return typeArgumentListChildAt(element, index);
+            case 195 /* TypeParameterList */: return typeParameterListChildAt(element, index);
+            case 196 /* HeritageClause */: return heritageClauseChildAt(element, index);
+            case 197 /* EqualsValueClause */: return equalsValueClauseChildAt(element, index);
+            case 198 /* CaseSwitchClause */: return caseSwitchClauseChildAt(element, index);
+            case 199 /* DefaultSwitchClause */: return defaultSwitchClauseChildAt(element, index);
+            case 200 /* ElseClause */: return elseClauseChildAt(element, index);
+            case 201 /* CatchClause */: return catchClauseChildAt(element, index);
+            case 202 /* FinallyClause */: return finallyClauseChildAt(element, index);
+            case 203 /* TemplateClause */: return templateClauseChildAt(element, index);
+            case 204 /* TypeParameter */: return typeParameterChildAt(element, index);
+            case 205 /* Constraint */: return constraintChildAt(element, index);
+            case 206 /* SimplePropertyAssignment */: return simplePropertyAssignmentChildAt(element, index);
+            case 207 /* FunctionPropertyAssignment */: return functionPropertyAssignmentChildAt(element, index);
+            case 208 /* Parameter */: return parameterChildAt(element, index);
+            case 209 /* EnumElement */: return enumElementChildAt(element, index);
+            case 210 /* TypeAnnotation */: return typeAnnotationChildAt(element, index);
+            case 211 /* ExternalModuleReference */: return externalModuleReferenceChildAt(element, index);
+            case 212 /* ModuleNameModuleReference */: return moduleNameModuleReferenceChildAt(element, index);
         }
     }
     TypeScript.childAt = childAt;
@@ -25906,190 +24972,98 @@ var TypeScript;
             return undefined;
         }
         switch (element.kind()) {
-            case 122 /* SourceUnit */:
-                return visitor.visitSourceUnit(element);
-            case 123 /* QualifiedName */:
-                return visitor.visitQualifiedName(element);
-            case 124 /* ObjectType */:
-                return visitor.visitObjectType(element);
-            case 125 /* FunctionType */:
-                return visitor.visitFunctionType(element);
-            case 126 /* ArrayType */:
-                return visitor.visitArrayType(element);
-            case 127 /* ConstructorType */:
-                return visitor.visitConstructorType(element);
-            case 128 /* GenericType */:
-                return visitor.visitGenericType(element);
-            case 129 /* TypeQuery */:
-                return visitor.visitTypeQuery(element);
-            case 130 /* TupleType */:
-                return visitor.visitTupleType(element);
-            case 131 /* UnionType */:
-                return visitor.visitUnionType(element);
-            case 132 /* ParenthesizedType */:
-                return visitor.visitParenthesizedType(element);
-            case 133 /* InterfaceDeclaration */:
-                return visitor.visitInterfaceDeclaration(element);
-            case 134 /* FunctionDeclaration */:
-                return visitor.visitFunctionDeclaration(element);
-            case 135 /* ModuleDeclaration */:
-                return visitor.visitModuleDeclaration(element);
-            case 136 /* ClassDeclaration */:
-                return visitor.visitClassDeclaration(element);
-            case 137 /* EnumDeclaration */:
-                return visitor.visitEnumDeclaration(element);
-            case 138 /* ImportDeclaration */:
-                return visitor.visitImportDeclaration(element);
-            case 139 /* ExportAssignment */:
-                return visitor.visitExportAssignment(element);
-            case 140 /* MemberFunctionDeclaration */:
-                return visitor.visitMemberFunctionDeclaration(element);
-            case 141 /* MemberVariableDeclaration */:
-                return visitor.visitMemberVariableDeclaration(element);
-            case 142 /* ConstructorDeclaration */:
-                return visitor.visitConstructorDeclaration(element);
-            case 143 /* IndexMemberDeclaration */:
-                return visitor.visitIndexMemberDeclaration(element);
-            case 144 /* GetAccessor */:
-                return visitor.visitGetAccessor(element);
-            case 145 /* SetAccessor */:
-                return visitor.visitSetAccessor(element);
-            case 146 /* PropertySignature */:
-                return visitor.visitPropertySignature(element);
-            case 147 /* CallSignature */:
-                return visitor.visitCallSignature(element);
-            case 148 /* ConstructSignature */:
-                return visitor.visitConstructSignature(element);
-            case 149 /* IndexSignature */:
-                return visitor.visitIndexSignature(element);
-            case 150 /* MethodSignature */:
-                return visitor.visitMethodSignature(element);
-            case 151 /* Block */:
-                return visitor.visitBlock(element);
-            case 152 /* IfStatement */:
-                return visitor.visitIfStatement(element);
-            case 153 /* VariableStatement */:
-                return visitor.visitVariableStatement(element);
-            case 154 /* ExpressionStatement */:
-                return visitor.visitExpressionStatement(element);
-            case 155 /* ReturnStatement */:
-                return visitor.visitReturnStatement(element);
-            case 156 /* SwitchStatement */:
-                return visitor.visitSwitchStatement(element);
-            case 157 /* BreakStatement */:
-                return visitor.visitBreakStatement(element);
-            case 158 /* ContinueStatement */:
-                return visitor.visitContinueStatement(element);
-            case 159 /* ForStatement */:
-                return visitor.visitForStatement(element);
-            case 160 /* ForInStatement */:
-                return visitor.visitForInStatement(element);
-            case 161 /* EmptyStatement */:
-                return visitor.visitEmptyStatement(element);
-            case 162 /* ThrowStatement */:
-                return visitor.visitThrowStatement(element);
-            case 163 /* WhileStatement */:
-                return visitor.visitWhileStatement(element);
-            case 164 /* TryStatement */:
-                return visitor.visitTryStatement(element);
-            case 165 /* LabeledStatement */:
-                return visitor.visitLabeledStatement(element);
-            case 166 /* DoStatement */:
-                return visitor.visitDoStatement(element);
-            case 167 /* DebuggerStatement */:
-                return visitor.visitDebuggerStatement(element);
-            case 168 /* WithStatement */:
-                return visitor.visitWithStatement(element);
-            case 169 /* PrefixUnaryExpression */:
-                return visitor.visitPrefixUnaryExpression(element);
-            case 170 /* DeleteExpression */:
-                return visitor.visitDeleteExpression(element);
-            case 171 /* TypeOfExpression */:
-                return visitor.visitTypeOfExpression(element);
-            case 172 /* VoidExpression */:
-                return visitor.visitVoidExpression(element);
-            case 173 /* ConditionalExpression */:
-                return visitor.visitConditionalExpression(element);
-            case 174 /* BinaryExpression */:
-                return visitor.visitBinaryExpression(element);
-            case 175 /* PostfixUnaryExpression */:
-                return visitor.visitPostfixUnaryExpression(element);
-            case 176 /* MemberAccessExpression */:
-                return visitor.visitMemberAccessExpression(element);
-            case 177 /* InvocationExpression */:
-                return visitor.visitInvocationExpression(element);
-            case 178 /* ArrayLiteralExpression */:
-                return visitor.visitArrayLiteralExpression(element);
-            case 179 /* ObjectLiteralExpression */:
-                return visitor.visitObjectLiteralExpression(element);
-            case 180 /* ObjectCreationExpression */:
-                return visitor.visitObjectCreationExpression(element);
-            case 181 /* ParenthesizedExpression */:
-                return visitor.visitParenthesizedExpression(element);
-            case 182 /* ParenthesizedArrowFunctionExpression */:
-                return visitor.visitParenthesizedArrowFunctionExpression(element);
-            case 183 /* SimpleArrowFunctionExpression */:
-                return visitor.visitSimpleArrowFunctionExpression(element);
-            case 184 /* CastExpression */:
-                return visitor.visitCastExpression(element);
-            case 185 /* ElementAccessExpression */:
-                return visitor.visitElementAccessExpression(element);
-            case 186 /* FunctionExpression */:
-                return visitor.visitFunctionExpression(element);
-            case 187 /* OmittedExpression */:
-                return visitor.visitOmittedExpression(element);
-            case 188 /* TemplateExpression */:
-                return visitor.visitTemplateExpression(element);
-            case 189 /* TemplateAccessExpression */:
-                return visitor.visitTemplateAccessExpression(element);
-            case 190 /* VariableDeclaration */:
-                return visitor.visitVariableDeclaration(element);
-            case 191 /* VariableDeclarator */:
-                return visitor.visitVariableDeclarator(element);
-            case 192 /* ArgumentList */:
-                return visitor.visitArgumentList(element);
-            case 193 /* ParameterList */:
-                return visitor.visitParameterList(element);
-            case 194 /* TypeArgumentList */:
-                return visitor.visitTypeArgumentList(element);
-            case 195 /* TypeParameterList */:
-                return visitor.visitTypeParameterList(element);
-            case 196 /* HeritageClause */:
-                return visitor.visitHeritageClause(element);
-            case 197 /* EqualsValueClause */:
-                return visitor.visitEqualsValueClause(element);
-            case 198 /* CaseSwitchClause */:
-                return visitor.visitCaseSwitchClause(element);
-            case 199 /* DefaultSwitchClause */:
-                return visitor.visitDefaultSwitchClause(element);
-            case 200 /* ElseClause */:
-                return visitor.visitElseClause(element);
-            case 201 /* CatchClause */:
-                return visitor.visitCatchClause(element);
-            case 202 /* FinallyClause */:
-                return visitor.visitFinallyClause(element);
-            case 203 /* TemplateClause */:
-                return visitor.visitTemplateClause(element);
-            case 204 /* TypeParameter */:
-                return visitor.visitTypeParameter(element);
-            case 205 /* Constraint */:
-                return visitor.visitConstraint(element);
-            case 206 /* SimplePropertyAssignment */:
-                return visitor.visitSimplePropertyAssignment(element);
-            case 207 /* FunctionPropertyAssignment */:
-                return visitor.visitFunctionPropertyAssignment(element);
-            case 208 /* Parameter */:
-                return visitor.visitParameter(element);
-            case 209 /* EnumElement */:
-                return visitor.visitEnumElement(element);
-            case 210 /* TypeAnnotation */:
-                return visitor.visitTypeAnnotation(element);
-            case 211 /* ExternalModuleReference */:
-                return visitor.visitExternalModuleReference(element);
-            case 212 /* ModuleNameModuleReference */:
-                return visitor.visitModuleNameModuleReference(element);
-            default:
-                return visitor.visitToken(element);
+            case 122 /* SourceUnit */: return visitor.visitSourceUnit(element);
+            case 123 /* QualifiedName */: return visitor.visitQualifiedName(element);
+            case 124 /* ObjectType */: return visitor.visitObjectType(element);
+            case 125 /* FunctionType */: return visitor.visitFunctionType(element);
+            case 126 /* ArrayType */: return visitor.visitArrayType(element);
+            case 127 /* ConstructorType */: return visitor.visitConstructorType(element);
+            case 128 /* GenericType */: return visitor.visitGenericType(element);
+            case 129 /* TypeQuery */: return visitor.visitTypeQuery(element);
+            case 130 /* TupleType */: return visitor.visitTupleType(element);
+            case 131 /* UnionType */: return visitor.visitUnionType(element);
+            case 132 /* ParenthesizedType */: return visitor.visitParenthesizedType(element);
+            case 133 /* InterfaceDeclaration */: return visitor.visitInterfaceDeclaration(element);
+            case 134 /* FunctionDeclaration */: return visitor.visitFunctionDeclaration(element);
+            case 135 /* ModuleDeclaration */: return visitor.visitModuleDeclaration(element);
+            case 136 /* ClassDeclaration */: return visitor.visitClassDeclaration(element);
+            case 137 /* EnumDeclaration */: return visitor.visitEnumDeclaration(element);
+            case 138 /* ImportDeclaration */: return visitor.visitImportDeclaration(element);
+            case 139 /* ExportAssignment */: return visitor.visitExportAssignment(element);
+            case 140 /* MemberFunctionDeclaration */: return visitor.visitMemberFunctionDeclaration(element);
+            case 141 /* MemberVariableDeclaration */: return visitor.visitMemberVariableDeclaration(element);
+            case 142 /* ConstructorDeclaration */: return visitor.visitConstructorDeclaration(element);
+            case 143 /* IndexMemberDeclaration */: return visitor.visitIndexMemberDeclaration(element);
+            case 144 /* GetAccessor */: return visitor.visitGetAccessor(element);
+            case 145 /* SetAccessor */: return visitor.visitSetAccessor(element);
+            case 146 /* PropertySignature */: return visitor.visitPropertySignature(element);
+            case 147 /* CallSignature */: return visitor.visitCallSignature(element);
+            case 148 /* ConstructSignature */: return visitor.visitConstructSignature(element);
+            case 149 /* IndexSignature */: return visitor.visitIndexSignature(element);
+            case 150 /* MethodSignature */: return visitor.visitMethodSignature(element);
+            case 151 /* Block */: return visitor.visitBlock(element);
+            case 152 /* IfStatement */: return visitor.visitIfStatement(element);
+            case 153 /* VariableStatement */: return visitor.visitVariableStatement(element);
+            case 154 /* ExpressionStatement */: return visitor.visitExpressionStatement(element);
+            case 155 /* ReturnStatement */: return visitor.visitReturnStatement(element);
+            case 156 /* SwitchStatement */: return visitor.visitSwitchStatement(element);
+            case 157 /* BreakStatement */: return visitor.visitBreakStatement(element);
+            case 158 /* ContinueStatement */: return visitor.visitContinueStatement(element);
+            case 159 /* ForStatement */: return visitor.visitForStatement(element);
+            case 160 /* ForInStatement */: return visitor.visitForInStatement(element);
+            case 161 /* EmptyStatement */: return visitor.visitEmptyStatement(element);
+            case 162 /* ThrowStatement */: return visitor.visitThrowStatement(element);
+            case 163 /* WhileStatement */: return visitor.visitWhileStatement(element);
+            case 164 /* TryStatement */: return visitor.visitTryStatement(element);
+            case 165 /* LabeledStatement */: return visitor.visitLabeledStatement(element);
+            case 166 /* DoStatement */: return visitor.visitDoStatement(element);
+            case 167 /* DebuggerStatement */: return visitor.visitDebuggerStatement(element);
+            case 168 /* WithStatement */: return visitor.visitWithStatement(element);
+            case 169 /* PrefixUnaryExpression */: return visitor.visitPrefixUnaryExpression(element);
+            case 170 /* DeleteExpression */: return visitor.visitDeleteExpression(element);
+            case 171 /* TypeOfExpression */: return visitor.visitTypeOfExpression(element);
+            case 172 /* VoidExpression */: return visitor.visitVoidExpression(element);
+            case 173 /* ConditionalExpression */: return visitor.visitConditionalExpression(element);
+            case 174 /* BinaryExpression */: return visitor.visitBinaryExpression(element);
+            case 175 /* PostfixUnaryExpression */: return visitor.visitPostfixUnaryExpression(element);
+            case 176 /* MemberAccessExpression */: return visitor.visitMemberAccessExpression(element);
+            case 177 /* InvocationExpression */: return visitor.visitInvocationExpression(element);
+            case 178 /* ArrayLiteralExpression */: return visitor.visitArrayLiteralExpression(element);
+            case 179 /* ObjectLiteralExpression */: return visitor.visitObjectLiteralExpression(element);
+            case 180 /* ObjectCreationExpression */: return visitor.visitObjectCreationExpression(element);
+            case 181 /* ParenthesizedExpression */: return visitor.visitParenthesizedExpression(element);
+            case 182 /* ParenthesizedArrowFunctionExpression */: return visitor.visitParenthesizedArrowFunctionExpression(element);
+            case 183 /* SimpleArrowFunctionExpression */: return visitor.visitSimpleArrowFunctionExpression(element);
+            case 184 /* CastExpression */: return visitor.visitCastExpression(element);
+            case 185 /* ElementAccessExpression */: return visitor.visitElementAccessExpression(element);
+            case 186 /* FunctionExpression */: return visitor.visitFunctionExpression(element);
+            case 187 /* OmittedExpression */: return visitor.visitOmittedExpression(element);
+            case 188 /* TemplateExpression */: return visitor.visitTemplateExpression(element);
+            case 189 /* TemplateAccessExpression */: return visitor.visitTemplateAccessExpression(element);
+            case 190 /* VariableDeclaration */: return visitor.visitVariableDeclaration(element);
+            case 191 /* VariableDeclarator */: return visitor.visitVariableDeclarator(element);
+            case 192 /* ArgumentList */: return visitor.visitArgumentList(element);
+            case 193 /* ParameterList */: return visitor.visitParameterList(element);
+            case 194 /* TypeArgumentList */: return visitor.visitTypeArgumentList(element);
+            case 195 /* TypeParameterList */: return visitor.visitTypeParameterList(element);
+            case 196 /* HeritageClause */: return visitor.visitHeritageClause(element);
+            case 197 /* EqualsValueClause */: return visitor.visitEqualsValueClause(element);
+            case 198 /* CaseSwitchClause */: return visitor.visitCaseSwitchClause(element);
+            case 199 /* DefaultSwitchClause */: return visitor.visitDefaultSwitchClause(element);
+            case 200 /* ElseClause */: return visitor.visitElseClause(element);
+            case 201 /* CatchClause */: return visitor.visitCatchClause(element);
+            case 202 /* FinallyClause */: return visitor.visitFinallyClause(element);
+            case 203 /* TemplateClause */: return visitor.visitTemplateClause(element);
+            case 204 /* TypeParameter */: return visitor.visitTypeParameter(element);
+            case 205 /* Constraint */: return visitor.visitConstraint(element);
+            case 206 /* SimplePropertyAssignment */: return visitor.visitSimplePropertyAssignment(element);
+            case 207 /* FunctionPropertyAssignment */: return visitor.visitFunctionPropertyAssignment(element);
+            case 208 /* Parameter */: return visitor.visitParameter(element);
+            case 209 /* EnumElement */: return visitor.visitEnumElement(element);
+            case 210 /* TypeAnnotation */: return visitor.visitTypeAnnotation(element);
+            case 211 /* ExternalModuleReference */: return visitor.visitExternalModuleReference(element);
+            case 212 /* ModuleNameModuleReference */: return visitor.visitModuleNameModuleReference(element);
+            default: return visitor.visitToken(element);
         }
     }
     TypeScript.visitNodeOrToken = visitNodeOrToken;
@@ -26906,16 +25880,11 @@ var TypeScript;
             }
             function getBinaryExpressionPrecedence(tokenKind) {
                 switch (tokenKind) {
-                    case 106 /* BarBarToken */:
-                        return 2 /* LogicalOrExpressionPrecedence */;
-                    case 105 /* AmpersandAmpersandToken */:
-                        return 3 /* LogicalAndExpressionPrecedence */;
-                    case 101 /* BarToken */:
-                        return 4 /* BitwiseOrExpressionPrecedence */;
-                    case 102 /* CaretToken */:
-                        return 5 /* BitwiseExclusiveOrExpressionPrecedence */;
-                    case 100 /* AmpersandToken */:
-                        return 6 /* BitwiseAndExpressionPrecedence */;
+                    case 106 /* BarBarToken */: return 2 /* LogicalOrExpressionPrecedence */;
+                    case 105 /* AmpersandAmpersandToken */: return 3 /* LogicalAndExpressionPrecedence */;
+                    case 101 /* BarToken */: return 4 /* BitwiseOrExpressionPrecedence */;
+                    case 102 /* CaretToken */: return 5 /* BitwiseExclusiveOrExpressionPrecedence */;
+                    case 100 /* AmpersandToken */: return 6 /* BitwiseAndExpressionPrecedence */;
                     case 86 /* EqualsEqualsToken */:
                     case 88 /* ExclamationEqualsToken */:
                     case 89 /* EqualsEqualsEqualsToken */:
@@ -27111,16 +26080,11 @@ var TypeScript;
                 var _modifierCount = modifierCount();
                 if (_modifierCount) {
                     switch (peekToken(_modifierCount).kind()) {
-                        case 51 /* ImportKeyword */:
-                            return parseImportDeclaration();
-                        case 67 /* ModuleKeyword */:
-                            return parseModuleDeclaration();
-                        case 54 /* InterfaceKeyword */:
-                            return parseInterfaceDeclaration();
-                        case 46 /* ClassKeyword */:
-                            return parseClassDeclaration();
-                        case 48 /* EnumKeyword */:
-                            return parseEnumDeclaration();
+                        case 51 /* ImportKeyword */: return parseImportDeclaration();
+                        case 67 /* ModuleKeyword */: return parseModuleDeclaration();
+                        case 54 /* InterfaceKeyword */: return parseInterfaceDeclaration();
+                        case 46 /* ClassKeyword */: return parseClassDeclaration();
+                        case 48 /* EnumKeyword */: return parseEnumDeclaration();
                     }
                 }
                 // No modifiers.  If we see 'class, enum, import and export' we could technically 
@@ -27872,32 +26836,19 @@ var TypeScript;
                         else {
                             break;
                         }
-                    case 30 /* IfKeyword */:
-                        return parseIfStatement(_currentToken);
-                    case 72 /* OpenBraceToken */:
-                        return parseBlock(false, false);
-                    case 35 /* ReturnKeyword */:
-                        return parseReturnStatement(_currentToken);
-                    case 36 /* SwitchKeyword */:
-                        return parseSwitchStatement(_currentToken);
-                    case 38 /* ThrowKeyword */:
-                        return parseThrowStatement(_currentToken);
-                    case 17 /* BreakKeyword */:
-                        return parseBreakStatement(_currentToken);
-                    case 20 /* ContinueKeyword */:
-                        return parseContinueStatement(_currentToken);
-                    case 28 /* ForKeyword */:
-                        return parseForOrForInStatement(_currentToken);
-                    case 44 /* WhileKeyword */:
-                        return parseWhileStatement(_currentToken);
-                    case 45 /* WithKeyword */:
-                        return parseWithStatement(_currentToken);
-                    case 24 /* DoKeyword */:
-                        return parseDoStatement(_currentToken);
-                    case 40 /* TryKeyword */:
-                        return parseTryStatement(_currentToken);
-                    case 21 /* DebuggerKeyword */:
-                        return parseDebuggerStatement(_currentToken);
+                    case 30 /* IfKeyword */: return parseIfStatement(_currentToken);
+                    case 72 /* OpenBraceToken */: return parseBlock(false, false);
+                    case 35 /* ReturnKeyword */: return parseReturnStatement(_currentToken);
+                    case 36 /* SwitchKeyword */: return parseSwitchStatement(_currentToken);
+                    case 38 /* ThrowKeyword */: return parseThrowStatement(_currentToken);
+                    case 17 /* BreakKeyword */: return parseBreakStatement(_currentToken);
+                    case 20 /* ContinueKeyword */: return parseContinueStatement(_currentToken);
+                    case 28 /* ForKeyword */: return parseForOrForInStatement(_currentToken);
+                    case 44 /* WhileKeyword */: return parseWhileStatement(_currentToken);
+                    case 45 /* WithKeyword */: return parseWithStatement(_currentToken);
+                    case 24 /* DoKeyword */: return parseDoStatement(_currentToken);
+                    case 40 /* TryKeyword */: return parseTryStatement(_currentToken);
+                    case 21 /* DebuggerKeyword */: return parseDebuggerStatement(_currentToken);
                 }
                 // Check for common things that might appear where we expect a statement, but which we 
                 // do not want to consume.  This can happen when the user does not terminate their 
@@ -28414,14 +27365,10 @@ var TypeScript;
                     case 95 /* PlusPlusToken */:
                     case 96 /* MinusMinusToken */:
                         return new TypeScript.PrefixUnaryExpressionSyntax(parseNodeData, consumeToken(_currentToken), tryParseUnaryExpressionOrHigher(currentToken(), true));
-                    case 41 /* TypeOfKeyword */:
-                        return parseTypeOfExpression(_currentToken);
-                    case 43 /* VoidKeyword */:
-                        return parseVoidExpression(_currentToken);
-                    case 23 /* DeleteKeyword */:
-                        return parseDeleteExpression(_currentToken);
-                    case 82 /* LessThanToken */:
-                        return parseCastExpression(_currentToken);
+                    case 41 /* TypeOfKeyword */: return parseTypeOfExpression(_currentToken);
+                    case 43 /* VoidKeyword */: return parseVoidExpression(_currentToken);
+                    case 23 /* DeleteKeyword */: return parseDeleteExpression(_currentToken);
+                    case 82 /* LessThanToken */: return parseCastExpression(_currentToken);
                     default:
                         return tryParsePostfixExpressionOrHigher(_currentToken, force);
                 }
@@ -28770,16 +27717,11 @@ var TypeScript;
                     case 10 /* RegularExpressionLiteral */:
                     case 12 /* StringLiteral */:
                         return consumeToken(_currentToken);
-                    case 29 /* FunctionKeyword */:
-                        return parseFunctionExpression(_currentToken);
-                    case 76 /* OpenBracketToken */:
-                        return parseArrayLiteralExpression(_currentToken);
-                    case 72 /* OpenBraceToken */:
-                        return parseObjectLiteralExpression(_currentToken);
-                    case 74 /* OpenParenToken */:
-                        return parseParenthesizedExpression(_currentToken);
-                    case 33 /* NewKeyword */:
-                        return parseObjectCreationExpression(_currentToken);
+                    case 29 /* FunctionKeyword */: return parseFunctionExpression(_currentToken);
+                    case 76 /* OpenBracketToken */: return parseArrayLiteralExpression(_currentToken);
+                    case 72 /* OpenBraceToken */: return parseObjectLiteralExpression(_currentToken);
+                    case 74 /* OpenParenToken */: return parseParenthesizedExpression(_currentToken);
+                    case 33 /* NewKeyword */: return parseObjectCreationExpression(_currentToken);
                     case 13 /* NoSubstitutionTemplateToken */:
                     case 14 /* TemplateStartToken */:
                         return parseTemplateExpression(_currentToken);
@@ -29359,16 +28301,11 @@ var TypeScript;
                             break;
                         }
                         return consumeToken(_currentToken);
-                    case 43 /* VoidKeyword */:
-                        return consumeToken(_currentToken);
-                    case 74 /* OpenParenToken */:
-                        return parseParenthesizedType(_currentToken);
-                    case 72 /* OpenBraceToken */:
-                        return parseObjectType();
-                    case 41 /* TypeOfKeyword */:
-                        return parseTypeQuery(_currentToken);
-                    case 76 /* OpenBracketToken */:
-                        return parseTupleType(_currentToken);
+                    case 43 /* VoidKeyword */: return consumeToken(_currentToken);
+                    case 74 /* OpenParenToken */: return parseParenthesizedType(_currentToken);
+                    case 72 /* OpenBraceToken */: return parseObjectType();
+                    case 41 /* TypeOfKeyword */: return parseTypeQuery(_currentToken);
+                    case 76 /* OpenBracketToken */: return parseTupleType(_currentToken);
                 }
                 return tryParseNameOrGenericType();
             }
@@ -29690,50 +28627,28 @@ var TypeScript;
             }
             function isExpectedListTerminator(currentListType) {
                 switch (currentListType) {
-                    case 0 /* SourceUnit_ModuleElements */:
-                        return isExpectedSourceUnit_ModuleElementsTerminator();
-                    case 1 /* ClassDeclaration_ClassElements */:
-                        return isExpectedClassDeclaration_ClassElementsTerminator();
-                    case 2 /* ModuleDeclaration_ModuleElements */:
-                        return isExpectedModuleDeclaration_ModuleElementsTerminator();
-                    case 3 /* SwitchStatement_SwitchClauses */:
-                        return isExpectedSwitchStatement_SwitchClausesTerminator();
-                    case 4 /* SwitchClause_Statements */:
-                        return isExpectedSwitchClause_StatementsTerminator();
-                    case 5 /* Block_Statements */:
-                        return isExpectedBlock_StatementsTerminator();
-                    case 6 /* TryBlock_Statements */:
-                        return isExpectedTryBlock_StatementsTerminator();
-                    case 7 /* CatchBlock_Statements */:
-                        return isExpectedCatchBlock_StatementsTerminator();
-                    case 8 /* EnumDeclaration_EnumElements */:
-                        return isExpectedEnumDeclaration_EnumElementsTerminator();
-                    case 9 /* ObjectType_TypeMembers */:
-                        return isExpectedObjectType_TypeMembersTerminator();
-                    case 10 /* ClassOrInterfaceDeclaration_HeritageClauses */:
-                        return isExpectedClassOrInterfaceDeclaration_HeritageClausesTerminator();
-                    case 11 /* HeritageClause_TypeNameList */:
-                        return isExpectedHeritageClause_TypeNameListTerminator();
-                    case 12 /* VariableDeclaration_VariableDeclarators_AllowIn */:
-                        return isExpectedVariableDeclaration_VariableDeclarators_AllowInTerminator();
-                    case 13 /* VariableDeclaration_VariableDeclarators_DisallowIn */:
-                        return isExpectedVariableDeclaration_VariableDeclarators_DisallowInTerminator();
-                    case 14 /* ArgumentList_AssignmentExpressions */:
-                        return isExpectedArgumentList_AssignmentExpressionsTerminator();
-                    case 15 /* ObjectLiteralExpression_PropertyAssignments */:
-                        return isExpectedObjectLiteralExpression_PropertyAssignmentsTerminator();
-                    case 16 /* ArrayLiteralExpression_AssignmentExpressions */:
-                        return isExpectedLiteralExpression_AssignmentExpressionsTerminator();
-                    case 17 /* ParameterList_Parameters */:
-                        return isExpectedParameterList_ParametersTerminator();
-                    case 18 /* IndexSignature_Parameters */:
-                        return isExpectedIndexSignature_ParametersTerminator();
-                    case 19 /* TypeArgumentList_Types */:
-                        return isExpectedTypeArgumentList_TypesTerminator();
-                    case 20 /* TypeParameterList_TypeParameters */:
-                        return isExpectedTypeParameterList_TypeParametersTerminator();
-                    case 21 /* TupleType_Types */:
-                        return isExpectedTupleType_TypesTerminator();
+                    case 0 /* SourceUnit_ModuleElements */: return isExpectedSourceUnit_ModuleElementsTerminator();
+                    case 1 /* ClassDeclaration_ClassElements */: return isExpectedClassDeclaration_ClassElementsTerminator();
+                    case 2 /* ModuleDeclaration_ModuleElements */: return isExpectedModuleDeclaration_ModuleElementsTerminator();
+                    case 3 /* SwitchStatement_SwitchClauses */: return isExpectedSwitchStatement_SwitchClausesTerminator();
+                    case 4 /* SwitchClause_Statements */: return isExpectedSwitchClause_StatementsTerminator();
+                    case 5 /* Block_Statements */: return isExpectedBlock_StatementsTerminator();
+                    case 6 /* TryBlock_Statements */: return isExpectedTryBlock_StatementsTerminator();
+                    case 7 /* CatchBlock_Statements */: return isExpectedCatchBlock_StatementsTerminator();
+                    case 8 /* EnumDeclaration_EnumElements */: return isExpectedEnumDeclaration_EnumElementsTerminator();
+                    case 9 /* ObjectType_TypeMembers */: return isExpectedObjectType_TypeMembersTerminator();
+                    case 10 /* ClassOrInterfaceDeclaration_HeritageClauses */: return isExpectedClassOrInterfaceDeclaration_HeritageClausesTerminator();
+                    case 11 /* HeritageClause_TypeNameList */: return isExpectedHeritageClause_TypeNameListTerminator();
+                    case 12 /* VariableDeclaration_VariableDeclarators_AllowIn */: return isExpectedVariableDeclaration_VariableDeclarators_AllowInTerminator();
+                    case 13 /* VariableDeclaration_VariableDeclarators_DisallowIn */: return isExpectedVariableDeclaration_VariableDeclarators_DisallowInTerminator();
+                    case 14 /* ArgumentList_AssignmentExpressions */: return isExpectedArgumentList_AssignmentExpressionsTerminator();
+                    case 15 /* ObjectLiteralExpression_PropertyAssignments */: return isExpectedObjectLiteralExpression_PropertyAssignmentsTerminator();
+                    case 16 /* ArrayLiteralExpression_AssignmentExpressions */: return isExpectedLiteralExpression_AssignmentExpressionsTerminator();
+                    case 17 /* ParameterList_Parameters */: return isExpectedParameterList_ParametersTerminator();
+                    case 18 /* IndexSignature_Parameters */: return isExpectedIndexSignature_ParametersTerminator();
+                    case 19 /* TypeArgumentList_Types */: return isExpectedTypeArgumentList_TypesTerminator();
+                    case 20 /* TypeParameterList_TypeParameters */: return isExpectedTypeParameterList_TypeParametersTerminator();
+                    case 21 /* TupleType_Types */: return isExpectedTupleType_TypesTerminator();
                     default:
                         throw TypeScript.Errors.invalidOperation();
                 }
@@ -29886,52 +28801,29 @@ var TypeScript;
             }
             function isExpectedListItem(currentListType, inErrorRecovery) {
                 switch (currentListType) {
-                    case 0 /* SourceUnit_ModuleElements */:
-                        return isModuleElement(inErrorRecovery);
-                    case 1 /* ClassDeclaration_ClassElements */:
-                        return isClassElement(inErrorRecovery);
-                    case 2 /* ModuleDeclaration_ModuleElements */:
-                        return isModuleElement(inErrorRecovery);
-                    case 3 /* SwitchStatement_SwitchClauses */:
-                        return isSwitchClause();
-                    case 4 /* SwitchClause_Statements */:
-                        return isStatement(modifierCount(), inErrorRecovery);
-                    case 5 /* Block_Statements */:
-                        return isStatement(modifierCount(), inErrorRecovery);
-                    case 6 /* TryBlock_Statements */:
-                        return false;
-                    case 7 /* CatchBlock_Statements */:
-                        return false;
-                    case 8 /* EnumDeclaration_EnumElements */:
-                        return isEnumElement(inErrorRecovery);
-                    case 9 /* ObjectType_TypeMembers */:
-                        return isTypeMember(inErrorRecovery);
-                    case 10 /* ClassOrInterfaceDeclaration_HeritageClauses */:
-                        return isHeritageClause();
-                    case 11 /* HeritageClause_TypeNameList */:
-                        return isHeritageClauseTypeName();
-                    case 12 /* VariableDeclaration_VariableDeclarators_AllowIn */:
-                        return isVariableDeclarator();
-                    case 13 /* VariableDeclaration_VariableDeclarators_DisallowIn */:
-                        return isVariableDeclarator();
-                    case 14 /* ArgumentList_AssignmentExpressions */:
-                        return isExpectedArgumentList_AssignmentExpression();
-                    case 15 /* ObjectLiteralExpression_PropertyAssignments */:
-                        return isPropertyAssignment(inErrorRecovery);
-                    case 16 /* ArrayLiteralExpression_AssignmentExpressions */:
-                        return isAssignmentOrOmittedExpression();
-                    case 17 /* ParameterList_Parameters */:
-                        return isParameter();
-                    case 18 /* IndexSignature_Parameters */:
-                        return isParameter();
-                    case 19 /* TypeArgumentList_Types */:
-                        return isType();
-                    case 20 /* TypeParameterList_TypeParameters */:
-                        return isTypeParameter();
-                    case 21 /* TupleType_Types */:
-                        return isType();
-                    default:
-                        throw TypeScript.Errors.invalidOperation();
+                    case 0 /* SourceUnit_ModuleElements */: return isModuleElement(inErrorRecovery);
+                    case 1 /* ClassDeclaration_ClassElements */: return isClassElement(inErrorRecovery);
+                    case 2 /* ModuleDeclaration_ModuleElements */: return isModuleElement(inErrorRecovery);
+                    case 3 /* SwitchStatement_SwitchClauses */: return isSwitchClause();
+                    case 4 /* SwitchClause_Statements */: return isStatement(modifierCount(), inErrorRecovery);
+                    case 5 /* Block_Statements */: return isStatement(modifierCount(), inErrorRecovery);
+                    case 6 /* TryBlock_Statements */: return false;
+                    case 7 /* CatchBlock_Statements */: return false;
+                    case 8 /* EnumDeclaration_EnumElements */: return isEnumElement(inErrorRecovery);
+                    case 9 /* ObjectType_TypeMembers */: return isTypeMember(inErrorRecovery);
+                    case 10 /* ClassOrInterfaceDeclaration_HeritageClauses */: return isHeritageClause();
+                    case 11 /* HeritageClause_TypeNameList */: return isHeritageClauseTypeName();
+                    case 12 /* VariableDeclaration_VariableDeclarators_AllowIn */: return isVariableDeclarator();
+                    case 13 /* VariableDeclaration_VariableDeclarators_DisallowIn */: return isVariableDeclarator();
+                    case 14 /* ArgumentList_AssignmentExpressions */: return isExpectedArgumentList_AssignmentExpression();
+                    case 15 /* ObjectLiteralExpression_PropertyAssignments */: return isPropertyAssignment(inErrorRecovery);
+                    case 16 /* ArrayLiteralExpression_AssignmentExpressions */: return isAssignmentOrOmittedExpression();
+                    case 17 /* ParameterList_Parameters */: return isParameter();
+                    case 18 /* IndexSignature_Parameters */: return isParameter();
+                    case 19 /* TypeArgumentList_Types */: return isType();
+                    case 20 /* TypeParameterList_TypeParameters */: return isTypeParameter();
+                    case 21 /* TupleType_Types */: return isType();
+                    default: throw TypeScript.Errors.invalidOperation();
                 }
             }
             function isExpectedArgumentList_AssignmentExpression() {
@@ -29949,98 +28841,54 @@ var TypeScript;
             }
             function tryParseExpectedListItemWorker(currentListType, inErrorRecovery) {
                 switch (currentListType) {
-                    case 0 /* SourceUnit_ModuleElements */:
-                        return tryParseModuleElement(inErrorRecovery);
-                    case 1 /* ClassDeclaration_ClassElements */:
-                        return tryParseClassElement(inErrorRecovery);
-                    case 2 /* ModuleDeclaration_ModuleElements */:
-                        return tryParseModuleElement(inErrorRecovery);
-                    case 3 /* SwitchStatement_SwitchClauses */:
-                        return tryParseSwitchClause();
-                    case 4 /* SwitchClause_Statements */:
-                        return tryParseStatement(inErrorRecovery);
-                    case 5 /* Block_Statements */:
-                        return tryParseStatement(inErrorRecovery);
-                    case 6 /* TryBlock_Statements */:
-                        return tryParseStatement(inErrorRecovery);
-                    case 7 /* CatchBlock_Statements */:
-                        return tryParseStatement(inErrorRecovery);
-                    case 8 /* EnumDeclaration_EnumElements */:
-                        return tryParseEnumElement(inErrorRecovery);
-                    case 9 /* ObjectType_TypeMembers */:
-                        return tryParseTypeMember(inErrorRecovery);
-                    case 10 /* ClassOrInterfaceDeclaration_HeritageClauses */:
-                        return tryParseHeritageClause();
-                    case 11 /* HeritageClause_TypeNameList */:
-                        return tryParseHeritageClauseTypeName();
-                    case 12 /* VariableDeclaration_VariableDeclarators_AllowIn */:
-                        return tryParseVariableDeclarator(true, false);
-                    case 13 /* VariableDeclaration_VariableDeclarators_DisallowIn */:
-                        return tryParseVariableDeclarator(false, false);
-                    case 14 /* ArgumentList_AssignmentExpressions */:
-                        return tryParseArgumentListExpression();
-                    case 15 /* ObjectLiteralExpression_PropertyAssignments */:
-                        return tryParsePropertyAssignment(inErrorRecovery);
-                    case 16 /* ArrayLiteralExpression_AssignmentExpressions */:
-                        return tryParseAssignmentOrOmittedExpression();
-                    case 17 /* ParameterList_Parameters */:
-                        return tryParseParameter();
-                    case 18 /* IndexSignature_Parameters */:
-                        return tryParseParameter();
-                    case 19 /* TypeArgumentList_Types */:
-                        return tryParseType();
-                    case 20 /* TypeParameterList_TypeParameters */:
-                        return tryParseTypeParameter();
-                    case 21 /* TupleType_Types */:
-                        return tryParseType();
-                    default:
-                        throw TypeScript.Errors.invalidOperation();
+                    case 0 /* SourceUnit_ModuleElements */: return tryParseModuleElement(inErrorRecovery);
+                    case 1 /* ClassDeclaration_ClassElements */: return tryParseClassElement(inErrorRecovery);
+                    case 2 /* ModuleDeclaration_ModuleElements */: return tryParseModuleElement(inErrorRecovery);
+                    case 3 /* SwitchStatement_SwitchClauses */: return tryParseSwitchClause();
+                    case 4 /* SwitchClause_Statements */: return tryParseStatement(inErrorRecovery);
+                    case 5 /* Block_Statements */: return tryParseStatement(inErrorRecovery);
+                    case 6 /* TryBlock_Statements */: return tryParseStatement(inErrorRecovery);
+                    case 7 /* CatchBlock_Statements */: return tryParseStatement(inErrorRecovery);
+                    case 8 /* EnumDeclaration_EnumElements */: return tryParseEnumElement(inErrorRecovery);
+                    case 9 /* ObjectType_TypeMembers */: return tryParseTypeMember(inErrorRecovery);
+                    case 10 /* ClassOrInterfaceDeclaration_HeritageClauses */: return tryParseHeritageClause();
+                    case 11 /* HeritageClause_TypeNameList */: return tryParseHeritageClauseTypeName();
+                    case 12 /* VariableDeclaration_VariableDeclarators_AllowIn */: return tryParseVariableDeclarator(true, false);
+                    case 13 /* VariableDeclaration_VariableDeclarators_DisallowIn */: return tryParseVariableDeclarator(false, false);
+                    case 14 /* ArgumentList_AssignmentExpressions */: return tryParseArgumentListExpression();
+                    case 15 /* ObjectLiteralExpression_PropertyAssignments */: return tryParsePropertyAssignment(inErrorRecovery);
+                    case 16 /* ArrayLiteralExpression_AssignmentExpressions */: return tryParseAssignmentOrOmittedExpression();
+                    case 17 /* ParameterList_Parameters */: return tryParseParameter();
+                    case 18 /* IndexSignature_Parameters */: return tryParseParameter();
+                    case 19 /* TypeArgumentList_Types */: return tryParseType();
+                    case 20 /* TypeParameterList_TypeParameters */: return tryParseTypeParameter();
+                    case 21 /* TupleType_Types */: return tryParseType();
+                    default: throw TypeScript.Errors.invalidOperation();
                 }
             }
             function getExpectedListElementType(currentListType) {
                 switch (currentListType) {
-                    case 0 /* SourceUnit_ModuleElements */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.module_class_interface_enum_import_or_statement, undefined);
-                    case 10 /* ClassOrInterfaceDeclaration_HeritageClauses */:
-                        return '{';
-                    case 1 /* ClassDeclaration_ClassElements */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.constructor_function_accessor_or_variable, undefined);
-                    case 2 /* ModuleDeclaration_ModuleElements */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.module_class_interface_enum_import_or_statement, undefined);
-                    case 3 /* SwitchStatement_SwitchClauses */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.case_or_default_clause, undefined);
-                    case 4 /* SwitchClause_Statements */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.statement, undefined);
-                    case 5 /* Block_Statements */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.statement, undefined);
-                    case 12 /* VariableDeclaration_VariableDeclarators_AllowIn */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.identifier, undefined);
-                    case 13 /* VariableDeclaration_VariableDeclarators_DisallowIn */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.identifier, undefined);
-                    case 8 /* EnumDeclaration_EnumElements */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.identifier, undefined);
-                    case 9 /* ObjectType_TypeMembers */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.call_construct_index_property_or_function_signature, undefined);
-                    case 14 /* ArgumentList_AssignmentExpressions */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.expression, undefined);
-                    case 11 /* HeritageClause_TypeNameList */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.type_name, undefined);
-                    case 15 /* ObjectLiteralExpression_PropertyAssignments */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.property_or_accessor, undefined);
-                    case 17 /* ParameterList_Parameters */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.parameter, undefined);
-                    case 18 /* IndexSignature_Parameters */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.parameter, undefined);
-                    case 19 /* TypeArgumentList_Types */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.type, undefined);
-                    case 20 /* TypeParameterList_TypeParameters */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.type_parameter, undefined);
-                    case 21 /* TupleType_Types */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.type, undefined);
-                    case 16 /* ArrayLiteralExpression_AssignmentExpressions */:
-                        return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.expression, undefined);
-                    default:
-                        throw TypeScript.Errors.invalidOperation();
+                    case 0 /* SourceUnit_ModuleElements */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.module_class_interface_enum_import_or_statement, undefined);
+                    case 10 /* ClassOrInterfaceDeclaration_HeritageClauses */: return '{';
+                    case 1 /* ClassDeclaration_ClassElements */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.constructor_function_accessor_or_variable, undefined);
+                    case 2 /* ModuleDeclaration_ModuleElements */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.module_class_interface_enum_import_or_statement, undefined);
+                    case 3 /* SwitchStatement_SwitchClauses */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.case_or_default_clause, undefined);
+                    case 4 /* SwitchClause_Statements */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.statement, undefined);
+                    case 5 /* Block_Statements */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.statement, undefined);
+                    case 12 /* VariableDeclaration_VariableDeclarators_AllowIn */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.identifier, undefined);
+                    case 13 /* VariableDeclaration_VariableDeclarators_DisallowIn */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.identifier, undefined);
+                    case 8 /* EnumDeclaration_EnumElements */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.identifier, undefined);
+                    case 9 /* ObjectType_TypeMembers */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.call_construct_index_property_or_function_signature, undefined);
+                    case 14 /* ArgumentList_AssignmentExpressions */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.expression, undefined);
+                    case 11 /* HeritageClause_TypeNameList */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.type_name, undefined);
+                    case 15 /* ObjectLiteralExpression_PropertyAssignments */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.property_or_accessor, undefined);
+                    case 17 /* ParameterList_Parameters */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.parameter, undefined);
+                    case 18 /* IndexSignature_Parameters */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.parameter, undefined);
+                    case 19 /* TypeArgumentList_Types */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.type, undefined);
+                    case 20 /* TypeParameterList_TypeParameters */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.type_parameter, undefined);
+                    case 21 /* TupleType_Types */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.type, undefined);
+                    case 16 /* ArrayLiteralExpression_AssignmentExpressions */: return TypeScript.getLocalizedText(TypeScript.DiagnosticCode.expression, undefined);
+                    default: throw TypeScript.Errors.invalidOperation();
                 }
             }
             return parseSyntaxTree;
@@ -30184,8 +29032,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.moduleElements = moduleElements, this.endOfFileToken = endOfFileToken;
-        moduleElements.parent = this, endOfFileToken.parent = this;
+        this.moduleElements = moduleElements, this.endOfFileToken = endOfFileToken, moduleElements.parent = this, endOfFileToken.parent = this;
     };
     TypeScript.SourceUnitSyntax.prototype.kind = function () {
         return 122 /* SourceUnit */;
@@ -30194,8 +29041,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.left = left, this.dotToken = dotToken, this.right = right;
-        left.parent = this, dotToken.parent = this, right.parent = this;
+        this.left = left, this.dotToken = dotToken, this.right = right, left.parent = this, dotToken.parent = this, right.parent = this;
     };
     TypeScript.QualifiedNameSyntax.prototype.kind = function () {
         return 123 /* QualifiedName */;
@@ -30204,8 +29050,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.openBraceToken = openBraceToken, this.typeMembers = typeMembers, this.closeBraceToken = closeBraceToken;
-        openBraceToken.parent = this, typeMembers.parent = this, closeBraceToken.parent = this;
+        this.openBraceToken = openBraceToken, this.typeMembers = typeMembers, this.closeBraceToken = closeBraceToken, openBraceToken.parent = this, typeMembers.parent = this, closeBraceToken.parent = this;
     };
     TypeScript.ObjectTypeSyntax.prototype.kind = function () {
         return 124 /* ObjectType */;
@@ -30214,8 +29059,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type;
-        typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
+        this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
     };
     TypeScript.FunctionTypeSyntax.prototype.kind = function () {
         return 125 /* FunctionType */;
@@ -30224,8 +29068,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.type = type, this.openBracketToken = openBracketToken, this.closeBracketToken = closeBracketToken;
-        type.parent = this, openBracketToken.parent = this, closeBracketToken.parent = this;
+        this.type = type, this.openBracketToken = openBracketToken, this.closeBracketToken = closeBracketToken, type.parent = this, openBracketToken.parent = this, closeBracketToken.parent = this;
     };
     TypeScript.ArrayTypeSyntax.prototype.kind = function () {
         return 126 /* ArrayType */;
@@ -30234,8 +29077,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.newKeyword = newKeyword, this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type;
-        newKeyword.parent = this, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
+        this.newKeyword = newKeyword, this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.equalsGreaterThanToken = equalsGreaterThanToken, this.type = type, newKeyword.parent = this, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, equalsGreaterThanToken.parent = this, type.parent = this;
     };
     TypeScript.ConstructorTypeSyntax.prototype.kind = function () {
         return 127 /* ConstructorType */;
@@ -30244,8 +29086,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.name = name, this.typeArgumentList = typeArgumentList;
-        name.parent = this, typeArgumentList.parent = this;
+        this.name = name, this.typeArgumentList = typeArgumentList, name.parent = this, typeArgumentList.parent = this;
     };
     TypeScript.GenericTypeSyntax.prototype.kind = function () {
         return 128 /* GenericType */;
@@ -30254,8 +29095,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.typeOfKeyword = typeOfKeyword, this.name = name;
-        typeOfKeyword.parent = this, name.parent = this;
+        this.typeOfKeyword = typeOfKeyword, this.name = name, typeOfKeyword.parent = this, name.parent = this;
     };
     TypeScript.TypeQuerySyntax.prototype.kind = function () {
         return 129 /* TypeQuery */;
@@ -30264,8 +29104,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.openBracketToken = openBracketToken, this.types = types, this.closeBracketToken = closeBracketToken;
-        openBracketToken.parent = this, types.parent = this, closeBracketToken.parent = this;
+        this.openBracketToken = openBracketToken, this.types = types, this.closeBracketToken = closeBracketToken, openBracketToken.parent = this, types.parent = this, closeBracketToken.parent = this;
     };
     TypeScript.TupleTypeSyntax.prototype.kind = function () {
         return 130 /* TupleType */;
@@ -30274,8 +29113,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.left = left, this.barToken = barToken, this.right = right;
-        left.parent = this, barToken.parent = this, right.parent = this;
+        this.left = left, this.barToken = barToken, this.right = right, left.parent = this, barToken.parent = this, right.parent = this;
     };
     TypeScript.UnionTypeSyntax.prototype.kind = function () {
         return 131 /* UnionType */;
@@ -30284,8 +29122,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.openParenToken = openParenToken, this.type = type, this.closeParenToken = closeParenToken;
-        openParenToken.parent = this, type.parent = this, closeParenToken.parent = this;
+        this.openParenToken = openParenToken, this.type = type, this.closeParenToken = closeParenToken, openParenToken.parent = this, type.parent = this, closeParenToken.parent = this;
     };
     TypeScript.ParenthesizedTypeSyntax.prototype.kind = function () {
         return 132 /* ParenthesizedType */;
@@ -30294,8 +29131,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.interfaceKeyword = interfaceKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.body = body;
-        modifiers.parent = this, interfaceKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), heritageClauses.parent = this, body.parent = this;
+        this.modifiers = modifiers, this.interfaceKeyword = interfaceKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.body = body, modifiers.parent = this, interfaceKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), heritageClauses.parent = this, body.parent = this;
     };
     TypeScript.InterfaceDeclarationSyntax.prototype.kind = function () {
         return 133 /* InterfaceDeclaration */;
@@ -30304,8 +29140,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, functionKeyword.parent = this, identifier.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
+        this.modifiers = modifiers, this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken, modifiers.parent = this, functionKeyword.parent = this, identifier.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.FunctionDeclarationSyntax.prototype.kind = function () {
         return 134 /* FunctionDeclaration */;
@@ -30314,8 +29149,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.moduleKeyword = moduleKeyword, this.name = name, this.stringLiteral = stringLiteral, this.openBraceToken = openBraceToken, this.moduleElements = moduleElements, this.closeBraceToken = closeBraceToken;
-        modifiers.parent = this, moduleKeyword.parent = this, name && (name.parent = this), stringLiteral && (stringLiteral.parent = this), openBraceToken.parent = this, moduleElements.parent = this, closeBraceToken.parent = this;
+        this.modifiers = modifiers, this.moduleKeyword = moduleKeyword, this.name = name, this.stringLiteral = stringLiteral, this.openBraceToken = openBraceToken, this.moduleElements = moduleElements, this.closeBraceToken = closeBraceToken, modifiers.parent = this, moduleKeyword.parent = this, name && (name.parent = this), stringLiteral && (stringLiteral.parent = this), openBraceToken.parent = this, moduleElements.parent = this, closeBraceToken.parent = this;
     };
     TypeScript.ModuleDeclarationSyntax.prototype.kind = function () {
         return 135 /* ModuleDeclaration */;
@@ -30324,8 +29158,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.classKeyword = classKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.openBraceToken = openBraceToken, this.classElements = classElements, this.closeBraceToken = closeBraceToken;
-        modifiers.parent = this, classKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), heritageClauses.parent = this, openBraceToken.parent = this, classElements.parent = this, closeBraceToken.parent = this;
+        this.modifiers = modifiers, this.classKeyword = classKeyword, this.identifier = identifier, this.typeParameterList = typeParameterList, this.heritageClauses = heritageClauses, this.openBraceToken = openBraceToken, this.classElements = classElements, this.closeBraceToken = closeBraceToken, modifiers.parent = this, classKeyword.parent = this, identifier.parent = this, typeParameterList && (typeParameterList.parent = this), heritageClauses.parent = this, openBraceToken.parent = this, classElements.parent = this, closeBraceToken.parent = this;
     };
     TypeScript.ClassDeclarationSyntax.prototype.kind = function () {
         return 136 /* ClassDeclaration */;
@@ -30334,8 +29167,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.enumKeyword = enumKeyword, this.identifier = identifier, this.openBraceToken = openBraceToken, this.enumElements = enumElements, this.closeBraceToken = closeBraceToken;
-        modifiers.parent = this, enumKeyword.parent = this, identifier.parent = this, openBraceToken.parent = this, enumElements.parent = this, closeBraceToken.parent = this;
+        this.modifiers = modifiers, this.enumKeyword = enumKeyword, this.identifier = identifier, this.openBraceToken = openBraceToken, this.enumElements = enumElements, this.closeBraceToken = closeBraceToken, modifiers.parent = this, enumKeyword.parent = this, identifier.parent = this, openBraceToken.parent = this, enumElements.parent = this, closeBraceToken.parent = this;
     };
     TypeScript.EnumDeclarationSyntax.prototype.kind = function () {
         return 137 /* EnumDeclaration */;
@@ -30344,8 +29176,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.importKeyword = importKeyword, this.identifier = identifier, this.equalsToken = equalsToken, this.moduleReference = moduleReference, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, importKeyword.parent = this, identifier.parent = this, equalsToken.parent = this, moduleReference.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.modifiers = modifiers, this.importKeyword = importKeyword, this.identifier = identifier, this.equalsToken = equalsToken, this.moduleReference = moduleReference, this.semicolonToken = semicolonToken, modifiers.parent = this, importKeyword.parent = this, identifier.parent = this, equalsToken.parent = this, moduleReference.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.ImportDeclarationSyntax.prototype.kind = function () {
         return 138 /* ImportDeclaration */;
@@ -30354,8 +29185,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.exportKeyword = exportKeyword, this.equalsToken = equalsToken, this.identifier = identifier, this.semicolonToken = semicolonToken;
-        exportKeyword.parent = this, equalsToken.parent = this, identifier.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.exportKeyword = exportKeyword, this.equalsToken = equalsToken, this.identifier = identifier, this.semicolonToken = semicolonToken, exportKeyword.parent = this, equalsToken.parent = this, identifier.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.ExportAssignmentSyntax.prototype.kind = function () {
         return 139 /* ExportAssignment */;
@@ -30364,8 +29194,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, propertyName.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
+        this.modifiers = modifiers, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken, modifiers.parent = this, propertyName.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.MemberFunctionDeclarationSyntax.prototype.kind = function () {
         return 140 /* MemberFunctionDeclaration */;
@@ -30374,8 +29203,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.variableDeclarator = variableDeclarator, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, variableDeclarator.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.modifiers = modifiers, this.variableDeclarator = variableDeclarator, this.semicolonToken = semicolonToken, modifiers.parent = this, variableDeclarator.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.MemberVariableDeclarationSyntax.prototype.kind = function () {
         return 141 /* MemberVariableDeclaration */;
@@ -30384,8 +29212,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.constructorKeyword = constructorKeyword, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, constructorKeyword.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
+        this.modifiers = modifiers, this.constructorKeyword = constructorKeyword, this.callSignature = callSignature, this.block = block, this.semicolonToken = semicolonToken, modifiers.parent = this, constructorKeyword.parent = this, callSignature.parent = this, block && (block.parent = this), semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.ConstructorDeclarationSyntax.prototype.kind = function () {
         return 142 /* ConstructorDeclaration */;
@@ -30394,8 +29221,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.indexSignature = indexSignature, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, indexSignature.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.modifiers = modifiers, this.indexSignature = indexSignature, this.semicolonToken = semicolonToken, modifiers.parent = this, indexSignature.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.IndexMemberDeclarationSyntax.prototype.kind = function () {
         return 143 /* IndexMemberDeclaration */;
@@ -30404,8 +29230,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.getKeyword = getKeyword, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block;
-        modifiers.parent = this, getKeyword.parent = this, propertyName.parent = this, callSignature.parent = this, block.parent = this;
+        this.modifiers = modifiers, this.getKeyword = getKeyword, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, modifiers.parent = this, getKeyword.parent = this, propertyName.parent = this, callSignature.parent = this, block.parent = this;
     };
     TypeScript.GetAccessorSyntax.prototype.kind = function () {
         return 144 /* GetAccessor */;
@@ -30414,8 +29239,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.setKeyword = setKeyword, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block;
-        modifiers.parent = this, setKeyword.parent = this, propertyName.parent = this, callSignature.parent = this, block.parent = this;
+        this.modifiers = modifiers, this.setKeyword = setKeyword, this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, modifiers.parent = this, setKeyword.parent = this, propertyName.parent = this, callSignature.parent = this, block.parent = this;
     };
     TypeScript.SetAccessorSyntax.prototype.kind = function () {
         return 145 /* SetAccessor */;
@@ -30424,8 +29248,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.propertyName = propertyName, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation;
-        propertyName.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this);
+        this.propertyName = propertyName, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation, propertyName.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this);
     };
     TypeScript.PropertySignatureSyntax.prototype.kind = function () {
         return 146 /* PropertySignature */;
@@ -30434,8 +29257,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.typeAnnotation = typeAnnotation;
-        typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, typeAnnotation && (typeAnnotation.parent = this);
+        this.typeParameterList = typeParameterList, this.parameterList = parameterList, this.typeAnnotation = typeAnnotation, typeParameterList && (typeParameterList.parent = this), parameterList.parent = this, typeAnnotation && (typeAnnotation.parent = this);
     };
     TypeScript.CallSignatureSyntax.prototype.kind = function () {
         return 147 /* CallSignature */;
@@ -30444,8 +29266,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.newKeyword = newKeyword, this.callSignature = callSignature;
-        newKeyword.parent = this, callSignature.parent = this;
+        this.newKeyword = newKeyword, this.callSignature = callSignature, newKeyword.parent = this, callSignature.parent = this;
     };
     TypeScript.ConstructSignatureSyntax.prototype.kind = function () {
         return 148 /* ConstructSignature */;
@@ -30454,8 +29275,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.openBracketToken = openBracketToken, this.parameters = parameters, this.closeBracketToken = closeBracketToken, this.typeAnnotation = typeAnnotation;
-        openBracketToken.parent = this, parameters.parent = this, closeBracketToken.parent = this, typeAnnotation && (typeAnnotation.parent = this);
+        this.openBracketToken = openBracketToken, this.parameters = parameters, this.closeBracketToken = closeBracketToken, this.typeAnnotation = typeAnnotation, openBracketToken.parent = this, parameters.parent = this, closeBracketToken.parent = this, typeAnnotation && (typeAnnotation.parent = this);
     };
     TypeScript.IndexSignatureSyntax.prototype.kind = function () {
         return 149 /* IndexSignature */;
@@ -30464,8 +29284,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.propertyName = propertyName, this.questionToken = questionToken, this.callSignature = callSignature;
-        propertyName.parent = this, questionToken && (questionToken.parent = this), callSignature.parent = this;
+        this.propertyName = propertyName, this.questionToken = questionToken, this.callSignature = callSignature, propertyName.parent = this, questionToken && (questionToken.parent = this), callSignature.parent = this;
     };
     TypeScript.MethodSignatureSyntax.prototype.kind = function () {
         return 150 /* MethodSignature */;
@@ -30474,8 +29293,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.openBraceToken = openBraceToken, this.statements = statements, this.closeBraceToken = closeBraceToken;
-        openBraceToken.parent = this, statements.parent = this, closeBraceToken.parent = this;
+        this.openBraceToken = openBraceToken, this.statements = statements, this.closeBraceToken = closeBraceToken, openBraceToken.parent = this, statements.parent = this, closeBraceToken.parent = this;
     };
     TypeScript.BlockSyntax.prototype.kind = function () {
         return 151 /* Block */;
@@ -30484,8 +29302,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.ifKeyword = ifKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, this.elseClause = elseClause;
-        ifKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this, elseClause && (elseClause.parent = this);
+        this.ifKeyword = ifKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, this.elseClause = elseClause, ifKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this, elseClause && (elseClause.parent = this);
     };
     TypeScript.IfStatementSyntax.prototype.kind = function () {
         return 152 /* IfStatement */;
@@ -30494,8 +29311,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.modifiers = modifiers, this.variableDeclaration = variableDeclaration, this.semicolonToken = semicolonToken;
-        modifiers.parent = this, variableDeclaration.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.modifiers = modifiers, this.variableDeclaration = variableDeclaration, this.semicolonToken = semicolonToken, modifiers.parent = this, variableDeclaration.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.VariableStatementSyntax.prototype.kind = function () {
         return 153 /* VariableStatement */;
@@ -30504,8 +29320,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.expression = expression, this.semicolonToken = semicolonToken;
-        expression.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.expression = expression, this.semicolonToken = semicolonToken, expression.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.ExpressionStatementSyntax.prototype.kind = function () {
         return 154 /* ExpressionStatement */;
@@ -30514,8 +29329,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.returnKeyword = returnKeyword, this.expression = expression, this.semicolonToken = semicolonToken;
-        returnKeyword.parent = this, expression && (expression.parent = this), semicolonToken && (semicolonToken.parent = this);
+        this.returnKeyword = returnKeyword, this.expression = expression, this.semicolonToken = semicolonToken, returnKeyword.parent = this, expression && (expression.parent = this), semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.ReturnStatementSyntax.prototype.kind = function () {
         return 155 /* ReturnStatement */;
@@ -30524,8 +29338,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.switchKeyword = switchKeyword, this.openParenToken = openParenToken, this.expression = expression, this.closeParenToken = closeParenToken, this.openBraceToken = openBraceToken, this.switchClauses = switchClauses, this.closeBraceToken = closeBraceToken;
-        switchKeyword.parent = this, openParenToken.parent = this, expression.parent = this, closeParenToken.parent = this, openBraceToken.parent = this, switchClauses.parent = this, closeBraceToken.parent = this;
+        this.switchKeyword = switchKeyword, this.openParenToken = openParenToken, this.expression = expression, this.closeParenToken = closeParenToken, this.openBraceToken = openBraceToken, this.switchClauses = switchClauses, this.closeBraceToken = closeBraceToken, switchKeyword.parent = this, openParenToken.parent = this, expression.parent = this, closeParenToken.parent = this, openBraceToken.parent = this, switchClauses.parent = this, closeBraceToken.parent = this;
     };
     TypeScript.SwitchStatementSyntax.prototype.kind = function () {
         return 156 /* SwitchStatement */;
@@ -30534,8 +29347,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.breakKeyword = breakKeyword, this.identifier = identifier, this.semicolonToken = semicolonToken;
-        breakKeyword.parent = this, identifier && (identifier.parent = this), semicolonToken && (semicolonToken.parent = this);
+        this.breakKeyword = breakKeyword, this.identifier = identifier, this.semicolonToken = semicolonToken, breakKeyword.parent = this, identifier && (identifier.parent = this), semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.BreakStatementSyntax.prototype.kind = function () {
         return 157 /* BreakStatement */;
@@ -30544,8 +29356,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.continueKeyword = continueKeyword, this.identifier = identifier, this.semicolonToken = semicolonToken;
-        continueKeyword.parent = this, identifier && (identifier.parent = this), semicolonToken && (semicolonToken.parent = this);
+        this.continueKeyword = continueKeyword, this.identifier = identifier, this.semicolonToken = semicolonToken, continueKeyword.parent = this, identifier && (identifier.parent = this), semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.ContinueStatementSyntax.prototype.kind = function () {
         return 158 /* ContinueStatement */;
@@ -30554,8 +29365,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.forKeyword = forKeyword, this.openParenToken = openParenToken, this.variableDeclaration = variableDeclaration, this.initializer = initializer, this.firstSemicolonToken = firstSemicolonToken, this.condition = condition, this.secondSemicolonToken = secondSemicolonToken, this.incrementor = incrementor, this.closeParenToken = closeParenToken, this.statement = statement;
-        forKeyword.parent = this, openParenToken.parent = this, variableDeclaration && (variableDeclaration.parent = this), initializer && (initializer.parent = this), firstSemicolonToken.parent = this, condition && (condition.parent = this), secondSemicolonToken.parent = this, incrementor && (incrementor.parent = this), closeParenToken.parent = this, statement.parent = this;
+        this.forKeyword = forKeyword, this.openParenToken = openParenToken, this.variableDeclaration = variableDeclaration, this.initializer = initializer, this.firstSemicolonToken = firstSemicolonToken, this.condition = condition, this.secondSemicolonToken = secondSemicolonToken, this.incrementor = incrementor, this.closeParenToken = closeParenToken, this.statement = statement, forKeyword.parent = this, openParenToken.parent = this, variableDeclaration && (variableDeclaration.parent = this), initializer && (initializer.parent = this), firstSemicolonToken.parent = this, condition && (condition.parent = this), secondSemicolonToken.parent = this, incrementor && (incrementor.parent = this), closeParenToken.parent = this, statement.parent = this;
     };
     TypeScript.ForStatementSyntax.prototype.kind = function () {
         return 159 /* ForStatement */;
@@ -30564,8 +29374,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.forKeyword = forKeyword, this.openParenToken = openParenToken, this.variableDeclaration = variableDeclaration, this.left = left, this.inKeyword = inKeyword, this.expression = expression, this.closeParenToken = closeParenToken, this.statement = statement;
-        forKeyword.parent = this, openParenToken.parent = this, variableDeclaration && (variableDeclaration.parent = this), left && (left.parent = this), inKeyword.parent = this, expression.parent = this, closeParenToken.parent = this, statement.parent = this;
+        this.forKeyword = forKeyword, this.openParenToken = openParenToken, this.variableDeclaration = variableDeclaration, this.left = left, this.inKeyword = inKeyword, this.expression = expression, this.closeParenToken = closeParenToken, this.statement = statement, forKeyword.parent = this, openParenToken.parent = this, variableDeclaration && (variableDeclaration.parent = this), left && (left.parent = this), inKeyword.parent = this, expression.parent = this, closeParenToken.parent = this, statement.parent = this;
     };
     TypeScript.ForInStatementSyntax.prototype.kind = function () {
         return 160 /* ForInStatement */;
@@ -30574,8 +29383,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.semicolonToken = semicolonToken;
-        semicolonToken.parent = this;
+        this.semicolonToken = semicolonToken, semicolonToken.parent = this;
     };
     TypeScript.EmptyStatementSyntax.prototype.kind = function () {
         return 161 /* EmptyStatement */;
@@ -30584,8 +29392,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.throwKeyword = throwKeyword, this.expression = expression, this.semicolonToken = semicolonToken;
-        throwKeyword.parent = this, expression.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.throwKeyword = throwKeyword, this.expression = expression, this.semicolonToken = semicolonToken, throwKeyword.parent = this, expression.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.ThrowStatementSyntax.prototype.kind = function () {
         return 162 /* ThrowStatement */;
@@ -30594,8 +29401,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.whileKeyword = whileKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement;
-        whileKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
+        this.whileKeyword = whileKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, whileKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
     };
     TypeScript.WhileStatementSyntax.prototype.kind = function () {
         return 163 /* WhileStatement */;
@@ -30604,8 +29410,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.tryKeyword = tryKeyword, this.block = block, this.catchClause = catchClause, this.finallyClause = finallyClause;
-        tryKeyword.parent = this, block.parent = this, catchClause && (catchClause.parent = this), finallyClause && (finallyClause.parent = this);
+        this.tryKeyword = tryKeyword, this.block = block, this.catchClause = catchClause, this.finallyClause = finallyClause, tryKeyword.parent = this, block.parent = this, catchClause && (catchClause.parent = this), finallyClause && (finallyClause.parent = this);
     };
     TypeScript.TryStatementSyntax.prototype.kind = function () {
         return 164 /* TryStatement */;
@@ -30614,8 +29419,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.identifier = identifier, this.colonToken = colonToken, this.statement = statement;
-        identifier.parent = this, colonToken.parent = this, statement.parent = this;
+        this.identifier = identifier, this.colonToken = colonToken, this.statement = statement, identifier.parent = this, colonToken.parent = this, statement.parent = this;
     };
     TypeScript.LabeledStatementSyntax.prototype.kind = function () {
         return 165 /* LabeledStatement */;
@@ -30624,8 +29428,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.doKeyword = doKeyword, this.statement = statement, this.whileKeyword = whileKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.semicolonToken = semicolonToken;
-        doKeyword.parent = this, statement.parent = this, whileKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.doKeyword = doKeyword, this.statement = statement, this.whileKeyword = whileKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.semicolonToken = semicolonToken, doKeyword.parent = this, statement.parent = this, whileKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.DoStatementSyntax.prototype.kind = function () {
         return 166 /* DoStatement */;
@@ -30634,8 +29437,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.debuggerKeyword = debuggerKeyword, this.semicolonToken = semicolonToken;
-        debuggerKeyword.parent = this, semicolonToken && (semicolonToken.parent = this);
+        this.debuggerKeyword = debuggerKeyword, this.semicolonToken = semicolonToken, debuggerKeyword.parent = this, semicolonToken && (semicolonToken.parent = this);
     };
     TypeScript.DebuggerStatementSyntax.prototype.kind = function () {
         return 167 /* DebuggerStatement */;
@@ -30644,8 +29446,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.withKeyword = withKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement;
-        withKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
+        this.withKeyword = withKeyword, this.openParenToken = openParenToken, this.condition = condition, this.closeParenToken = closeParenToken, this.statement = statement, withKeyword.parent = this, openParenToken.parent = this, condition.parent = this, closeParenToken.parent = this, statement.parent = this;
     };
     TypeScript.WithStatementSyntax.prototype.kind = function () {
         return 168 /* WithStatement */;
@@ -30654,8 +29455,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.operatorToken = operatorToken, this.operand = operand;
-        operatorToken.parent = this, operand.parent = this;
+        this.operatorToken = operatorToken, this.operand = operand, operatorToken.parent = this, operand.parent = this;
     };
     TypeScript.PrefixUnaryExpressionSyntax.prototype.kind = function () {
         return 169 /* PrefixUnaryExpression */;
@@ -30664,8 +29464,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.deleteKeyword = deleteKeyword, this.expression = expression;
-        deleteKeyword.parent = this, expression.parent = this;
+        this.deleteKeyword = deleteKeyword, this.expression = expression, deleteKeyword.parent = this, expression.parent = this;
     };
     TypeScript.DeleteExpressionSyntax.prototype.kind = function () {
         return 170 /* DeleteExpression */;
@@ -30674,8 +29473,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.typeOfKeyword = typeOfKeyword, this.expression = expression;
-        typeOfKeyword.parent = this, expression.parent = this;
+        this.typeOfKeyword = typeOfKeyword, this.expression = expression, typeOfKeyword.parent = this, expression.parent = this;
     };
     TypeScript.TypeOfExpressionSyntax.prototype.kind = function () {
         return 171 /* TypeOfExpression */;
@@ -30684,8 +29482,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.voidKeyword = voidKeyword, this.expression = expression;
-        voidKeyword.parent = this, expression.parent = this;
+        this.voidKeyword = voidKeyword, this.expression = expression, voidKeyword.parent = this, expression.parent = this;
     };
     TypeScript.VoidExpressionSyntax.prototype.kind = function () {
         return 172 /* VoidExpression */;
@@ -30694,8 +29491,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.condition = condition, this.questionToken = questionToken, this.whenTrue = whenTrue, this.colonToken = colonToken, this.whenFalse = whenFalse;
-        condition.parent = this, questionToken.parent = this, whenTrue.parent = this, colonToken.parent = this, whenFalse.parent = this;
+        this.condition = condition, this.questionToken = questionToken, this.whenTrue = whenTrue, this.colonToken = colonToken, this.whenFalse = whenFalse, condition.parent = this, questionToken.parent = this, whenTrue.parent = this, colonToken.parent = this, whenFalse.parent = this;
     };
     TypeScript.ConditionalExpressionSyntax.prototype.kind = function () {
         return 173 /* ConditionalExpression */;
@@ -30704,8 +29500,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.left = left, this.operatorToken = operatorToken, this.right = right;
-        left.parent = this, operatorToken.parent = this, right.parent = this;
+        this.left = left, this.operatorToken = operatorToken, this.right = right, left.parent = this, operatorToken.parent = this, right.parent = this;
     };
     TypeScript.BinaryExpressionSyntax.prototype.kind = function () {
         return 174 /* BinaryExpression */;
@@ -30714,8 +29509,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.operand = operand, this.operatorToken = operatorToken;
-        operand.parent = this, operatorToken.parent = this;
+        this.operand = operand, this.operatorToken = operatorToken, operand.parent = this, operatorToken.parent = this;
     };
     TypeScript.PostfixUnaryExpressionSyntax.prototype.kind = function () {
         return 175 /* PostfixUnaryExpression */;
@@ -30724,8 +29518,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.expression = expression, this.dotToken = dotToken, this.name = name;
-        expression.parent = this, dotToken.parent = this, name.parent = this;
+        this.expression = expression, this.dotToken = dotToken, this.name = name, expression.parent = this, dotToken.parent = this, name.parent = this;
     };
     TypeScript.MemberAccessExpressionSyntax.prototype.kind = function () {
         return 176 /* MemberAccessExpression */;
@@ -30734,8 +29527,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.expression = expression, this.argumentList = argumentList;
-        expression.parent = this, argumentList.parent = this;
+        this.expression = expression, this.argumentList = argumentList, expression.parent = this, argumentList.parent = this;
     };
     TypeScript.InvocationExpressionSyntax.prototype.kind = function () {
         return 177 /* InvocationExpression */;
@@ -30744,8 +29536,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.openBracketToken = openBracketToken, this.expressions = expressions, this.closeBracketToken = closeBracketToken;
-        openBracketToken.parent = this, expressions.parent = this, closeBracketToken.parent = this;
+        this.openBracketToken = openBracketToken, this.expressions = expressions, this.closeBracketToken = closeBracketToken, openBracketToken.parent = this, expressions.parent = this, closeBracketToken.parent = this;
     };
     TypeScript.ArrayLiteralExpressionSyntax.prototype.kind = function () {
         return 178 /* ArrayLiteralExpression */;
@@ -30754,8 +29545,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.openBraceToken = openBraceToken, this.propertyAssignments = propertyAssignments, this.closeBraceToken = closeBraceToken;
-        openBraceToken.parent = this, propertyAssignments.parent = this, closeBraceToken.parent = this;
+        this.openBraceToken = openBraceToken, this.propertyAssignments = propertyAssignments, this.closeBraceToken = closeBraceToken, openBraceToken.parent = this, propertyAssignments.parent = this, closeBraceToken.parent = this;
     };
     TypeScript.ObjectLiteralExpressionSyntax.prototype.kind = function () {
         return 179 /* ObjectLiteralExpression */;
@@ -30764,8 +29554,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.newKeyword = newKeyword, this.expression = expression, this.argumentList = argumentList;
-        newKeyword.parent = this, expression.parent = this, argumentList && (argumentList.parent = this);
+        this.newKeyword = newKeyword, this.expression = expression, this.argumentList = argumentList, newKeyword.parent = this, expression.parent = this, argumentList && (argumentList.parent = this);
     };
     TypeScript.ObjectCreationExpressionSyntax.prototype.kind = function () {
         return 180 /* ObjectCreationExpression */;
@@ -30774,8 +29563,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.openParenToken = openParenToken, this.expression = expression, this.closeParenToken = closeParenToken;
-        openParenToken.parent = this, expression.parent = this, closeParenToken.parent = this;
+        this.openParenToken = openParenToken, this.expression = expression, this.closeParenToken = closeParenToken, openParenToken.parent = this, expression.parent = this, closeParenToken.parent = this;
     };
     TypeScript.ParenthesizedExpressionSyntax.prototype.kind = function () {
         return 181 /* ParenthesizedExpression */;
@@ -30784,8 +29572,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.callSignature = callSignature, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression;
-        callSignature.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
+        this.callSignature = callSignature, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression, callSignature.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
     };
     TypeScript.ParenthesizedArrowFunctionExpressionSyntax.prototype.kind = function () {
         return 182 /* ParenthesizedArrowFunctionExpression */;
@@ -30794,8 +29581,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.parameter = parameter, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression;
-        parameter.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
+        this.parameter = parameter, this.equalsGreaterThanToken = equalsGreaterThanToken, this.block = block, this.expression = expression, parameter.parent = this, equalsGreaterThanToken.parent = this, block && (block.parent = this), expression && (expression.parent = this);
     };
     TypeScript.SimpleArrowFunctionExpressionSyntax.prototype.kind = function () {
         return 183 /* SimpleArrowFunctionExpression */;
@@ -30804,8 +29590,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.lessThanToken = lessThanToken, this.type = type, this.greaterThanToken = greaterThanToken, this.expression = expression;
-        lessThanToken.parent = this, type.parent = this, greaterThanToken.parent = this, expression.parent = this;
+        this.lessThanToken = lessThanToken, this.type = type, this.greaterThanToken = greaterThanToken, this.expression = expression, lessThanToken.parent = this, type.parent = this, greaterThanToken.parent = this, expression.parent = this;
     };
     TypeScript.CastExpressionSyntax.prototype.kind = function () {
         return 184 /* CastExpression */;
@@ -30814,8 +29599,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.expression = expression, this.openBracketToken = openBracketToken, this.argumentExpression = argumentExpression, this.closeBracketToken = closeBracketToken;
-        expression.parent = this, openBracketToken.parent = this, argumentExpression.parent = this, closeBracketToken.parent = this;
+        this.expression = expression, this.openBracketToken = openBracketToken, this.argumentExpression = argumentExpression, this.closeBracketToken = closeBracketToken, expression.parent = this, openBracketToken.parent = this, argumentExpression.parent = this, closeBracketToken.parent = this;
     };
     TypeScript.ElementAccessExpressionSyntax.prototype.kind = function () {
         return 185 /* ElementAccessExpression */;
@@ -30824,8 +29608,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block;
-        functionKeyword.parent = this, identifier && (identifier.parent = this), callSignature.parent = this, block.parent = this;
+        this.functionKeyword = functionKeyword, this.identifier = identifier, this.callSignature = callSignature, this.block = block, functionKeyword.parent = this, identifier && (identifier.parent = this), callSignature.parent = this, block.parent = this;
     };
     TypeScript.FunctionExpressionSyntax.prototype.kind = function () {
         return 186 /* FunctionExpression */;
@@ -30842,8 +29625,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.templateStartToken = templateStartToken, this.templateClauses = templateClauses;
-        templateStartToken.parent = this, templateClauses.parent = this;
+        this.templateStartToken = templateStartToken, this.templateClauses = templateClauses, templateStartToken.parent = this, templateClauses.parent = this;
     };
     TypeScript.TemplateExpressionSyntax.prototype.kind = function () {
         return 188 /* TemplateExpression */;
@@ -30852,8 +29634,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.expression = expression, this.templateExpression = templateExpression;
-        expression.parent = this, templateExpression.parent = this;
+        this.expression = expression, this.templateExpression = templateExpression, expression.parent = this, templateExpression.parent = this;
     };
     TypeScript.TemplateAccessExpressionSyntax.prototype.kind = function () {
         return 189 /* TemplateAccessExpression */;
@@ -30862,8 +29643,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.varKeyword = varKeyword, this.variableDeclarators = variableDeclarators;
-        varKeyword.parent = this, variableDeclarators.parent = this;
+        this.varKeyword = varKeyword, this.variableDeclarators = variableDeclarators, varKeyword.parent = this, variableDeclarators.parent = this;
     };
     TypeScript.VariableDeclarationSyntax.prototype.kind = function () {
         return 190 /* VariableDeclaration */;
@@ -30872,8 +29652,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.propertyName = propertyName, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause;
-        propertyName.parent = this, typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
+        this.propertyName = propertyName, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause, propertyName.parent = this, typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
     };
     TypeScript.VariableDeclaratorSyntax.prototype.kind = function () {
         return 191 /* VariableDeclarator */;
@@ -30882,8 +29661,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.typeArgumentList = typeArgumentList, this.openParenToken = openParenToken, this.arguments = _arguments, this.closeParenToken = closeParenToken;
-        typeArgumentList && (typeArgumentList.parent = this), openParenToken.parent = this, _arguments.parent = this, closeParenToken.parent = this;
+        this.typeArgumentList = typeArgumentList, this.openParenToken = openParenToken, this.arguments = _arguments, this.closeParenToken = closeParenToken, typeArgumentList && (typeArgumentList.parent = this), openParenToken.parent = this, _arguments.parent = this, closeParenToken.parent = this;
     };
     TypeScript.ArgumentListSyntax.prototype.kind = function () {
         return 192 /* ArgumentList */;
@@ -30892,8 +29670,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.openParenToken = openParenToken, this.parameters = parameters, this.closeParenToken = closeParenToken;
-        openParenToken.parent = this, parameters.parent = this, closeParenToken.parent = this;
+        this.openParenToken = openParenToken, this.parameters = parameters, this.closeParenToken = closeParenToken, openParenToken.parent = this, parameters.parent = this, closeParenToken.parent = this;
     };
     TypeScript.ParameterListSyntax.prototype.kind = function () {
         return 193 /* ParameterList */;
@@ -30902,8 +29679,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.lessThanToken = lessThanToken, this.typeArguments = typeArguments, this.greaterThanToken = greaterThanToken;
-        lessThanToken.parent = this, typeArguments.parent = this, greaterThanToken.parent = this;
+        this.lessThanToken = lessThanToken, this.typeArguments = typeArguments, this.greaterThanToken = greaterThanToken, lessThanToken.parent = this, typeArguments.parent = this, greaterThanToken.parent = this;
     };
     TypeScript.TypeArgumentListSyntax.prototype.kind = function () {
         return 194 /* TypeArgumentList */;
@@ -30912,8 +29688,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.lessThanToken = lessThanToken, this.typeParameters = typeParameters, this.greaterThanToken = greaterThanToken;
-        lessThanToken.parent = this, typeParameters.parent = this, greaterThanToken.parent = this;
+        this.lessThanToken = lessThanToken, this.typeParameters = typeParameters, this.greaterThanToken = greaterThanToken, lessThanToken.parent = this, typeParameters.parent = this, greaterThanToken.parent = this;
     };
     TypeScript.TypeParameterListSyntax.prototype.kind = function () {
         return 195 /* TypeParameterList */;
@@ -30922,8 +29697,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.extendsOrImplementsKeyword = extendsOrImplementsKeyword, this.typeNames = typeNames;
-        extendsOrImplementsKeyword.parent = this, typeNames.parent = this;
+        this.extendsOrImplementsKeyword = extendsOrImplementsKeyword, this.typeNames = typeNames, extendsOrImplementsKeyword.parent = this, typeNames.parent = this;
     };
     TypeScript.HeritageClauseSyntax.prototype.kind = function () {
         return 196 /* HeritageClause */;
@@ -30932,8 +29706,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.equalsToken = equalsToken, this.value = value;
-        equalsToken.parent = this, value.parent = this;
+        this.equalsToken = equalsToken, this.value = value, equalsToken.parent = this, value.parent = this;
     };
     TypeScript.EqualsValueClauseSyntax.prototype.kind = function () {
         return 197 /* EqualsValueClause */;
@@ -30942,8 +29715,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.caseKeyword = caseKeyword, this.expression = expression, this.colonToken = colonToken, this.statements = statements;
-        caseKeyword.parent = this, expression.parent = this, colonToken.parent = this, statements.parent = this;
+        this.caseKeyword = caseKeyword, this.expression = expression, this.colonToken = colonToken, this.statements = statements, caseKeyword.parent = this, expression.parent = this, colonToken.parent = this, statements.parent = this;
     };
     TypeScript.CaseSwitchClauseSyntax.prototype.kind = function () {
         return 198 /* CaseSwitchClause */;
@@ -30952,8 +29724,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.defaultKeyword = defaultKeyword, this.colonToken = colonToken, this.statements = statements;
-        defaultKeyword.parent = this, colonToken.parent = this, statements.parent = this;
+        this.defaultKeyword = defaultKeyword, this.colonToken = colonToken, this.statements = statements, defaultKeyword.parent = this, colonToken.parent = this, statements.parent = this;
     };
     TypeScript.DefaultSwitchClauseSyntax.prototype.kind = function () {
         return 199 /* DefaultSwitchClause */;
@@ -30962,8 +29733,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.elseKeyword = elseKeyword, this.statement = statement;
-        elseKeyword.parent = this, statement.parent = this;
+        this.elseKeyword = elseKeyword, this.statement = statement, elseKeyword.parent = this, statement.parent = this;
     };
     TypeScript.ElseClauseSyntax.prototype.kind = function () {
         return 200 /* ElseClause */;
@@ -30972,8 +29742,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.catchKeyword = catchKeyword, this.openParenToken = openParenToken, this.identifier = identifier, this.typeAnnotation = typeAnnotation, this.closeParenToken = closeParenToken, this.block = block;
-        catchKeyword.parent = this, openParenToken.parent = this, identifier.parent = this, typeAnnotation && (typeAnnotation.parent = this), closeParenToken.parent = this, block.parent = this;
+        this.catchKeyword = catchKeyword, this.openParenToken = openParenToken, this.identifier = identifier, this.typeAnnotation = typeAnnotation, this.closeParenToken = closeParenToken, this.block = block, catchKeyword.parent = this, openParenToken.parent = this, identifier.parent = this, typeAnnotation && (typeAnnotation.parent = this), closeParenToken.parent = this, block.parent = this;
     };
     TypeScript.CatchClauseSyntax.prototype.kind = function () {
         return 201 /* CatchClause */;
@@ -30982,8 +29751,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.finallyKeyword = finallyKeyword, this.block = block;
-        finallyKeyword.parent = this, block.parent = this;
+        this.finallyKeyword = finallyKeyword, this.block = block, finallyKeyword.parent = this, block.parent = this;
     };
     TypeScript.FinallyClauseSyntax.prototype.kind = function () {
         return 202 /* FinallyClause */;
@@ -30992,8 +29760,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.expression = expression, this.templateMiddleOrEndToken = templateMiddleOrEndToken;
-        expression.parent = this, templateMiddleOrEndToken.parent = this;
+        this.expression = expression, this.templateMiddleOrEndToken = templateMiddleOrEndToken, expression.parent = this, templateMiddleOrEndToken.parent = this;
     };
     TypeScript.TemplateClauseSyntax.prototype.kind = function () {
         return 203 /* TemplateClause */;
@@ -31002,8 +29769,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.identifier = identifier, this.constraint = constraint;
-        identifier.parent = this, constraint && (constraint.parent = this);
+        this.identifier = identifier, this.constraint = constraint, identifier.parent = this, constraint && (constraint.parent = this);
     };
     TypeScript.TypeParameterSyntax.prototype.kind = function () {
         return 204 /* TypeParameter */;
@@ -31012,8 +29778,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.extendsKeyword = extendsKeyword, this.typeOrExpression = typeOrExpression;
-        extendsKeyword.parent = this, typeOrExpression.parent = this;
+        this.extendsKeyword = extendsKeyword, this.typeOrExpression = typeOrExpression, extendsKeyword.parent = this, typeOrExpression.parent = this;
     };
     TypeScript.ConstraintSyntax.prototype.kind = function () {
         return 205 /* Constraint */;
@@ -31022,8 +29787,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.propertyName = propertyName, this.colonToken = colonToken, this.expression = expression;
-        propertyName.parent = this, colonToken.parent = this, expression.parent = this;
+        this.propertyName = propertyName, this.colonToken = colonToken, this.expression = expression, propertyName.parent = this, colonToken.parent = this, expression.parent = this;
     };
     TypeScript.SimplePropertyAssignmentSyntax.prototype.kind = function () {
         return 206 /* SimplePropertyAssignment */;
@@ -31032,8 +29796,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.propertyName = propertyName, this.callSignature = callSignature, this.block = block;
-        propertyName.parent = this, callSignature.parent = this, block.parent = this;
+        this.propertyName = propertyName, this.callSignature = callSignature, this.block = block, propertyName.parent = this, callSignature.parent = this, block.parent = this;
     };
     TypeScript.FunctionPropertyAssignmentSyntax.prototype.kind = function () {
         return 207 /* FunctionPropertyAssignment */;
@@ -31042,8 +29805,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.dotDotDotToken = dotDotDotToken, this.modifiers = modifiers, this.identifier = identifier, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause;
-        dotDotDotToken && (dotDotDotToken.parent = this), modifiers.parent = this, identifier.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
+        this.dotDotDotToken = dotDotDotToken, this.modifiers = modifiers, this.identifier = identifier, this.questionToken = questionToken, this.typeAnnotation = typeAnnotation, this.equalsValueClause = equalsValueClause, dotDotDotToken && (dotDotDotToken.parent = this), modifiers.parent = this, identifier.parent = this, questionToken && (questionToken.parent = this), typeAnnotation && (typeAnnotation.parent = this), equalsValueClause && (equalsValueClause.parent = this);
     };
     TypeScript.ParameterSyntax.prototype.kind = function () {
         return 208 /* Parameter */;
@@ -31052,8 +29814,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.propertyName = propertyName, this.equalsValueClause = equalsValueClause;
-        propertyName.parent = this, equalsValueClause && (equalsValueClause.parent = this);
+        this.propertyName = propertyName, this.equalsValueClause = equalsValueClause, propertyName.parent = this, equalsValueClause && (equalsValueClause.parent = this);
     };
     TypeScript.EnumElementSyntax.prototype.kind = function () {
         return 209 /* EnumElement */;
@@ -31062,8 +29823,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.colonToken = colonToken, this.type = type;
-        colonToken.parent = this, type.parent = this;
+        this.colonToken = colonToken, this.type = type, colonToken.parent = this, type.parent = this;
     };
     TypeScript.TypeAnnotationSyntax.prototype.kind = function () {
         return 210 /* TypeAnnotation */;
@@ -31072,8 +29832,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.requireKeyword = requireKeyword, this.openParenToken = openParenToken, this.stringLiteral = stringLiteral, this.closeParenToken = closeParenToken;
-        requireKeyword.parent = this, openParenToken.parent = this, stringLiteral.parent = this, closeParenToken.parent = this;
+        this.requireKeyword = requireKeyword, this.openParenToken = openParenToken, this.stringLiteral = stringLiteral, this.closeParenToken = closeParenToken, requireKeyword.parent = this, openParenToken.parent = this, stringLiteral.parent = this, closeParenToken.parent = this;
     };
     TypeScript.ExternalModuleReferenceSyntax.prototype.kind = function () {
         return 211 /* ExternalModuleReference */;
@@ -31082,8 +29841,7 @@ var TypeScript;
         if (data) {
             this.__data = data;
         }
-        this.moduleName = moduleName;
-        moduleName.parent = this;
+        this.moduleName = moduleName, moduleName.parent = this;
     };
     TypeScript.ModuleNameModuleReferenceSyntax.prototype.kind = function () {
         return 212 /* ModuleNameModuleReference */;
@@ -39633,42 +38391,24 @@ var ts;
         }
         function getNodeKind(node) {
             switch (node.kind) {
-                case 188 /* ModuleDeclaration */:
-                    return ScriptElementKind.moduleElement;
-                case 184 /* ClassDeclaration */:
-                    return ScriptElementKind.classElement;
-                case 185 /* InterfaceDeclaration */:
-                    return ScriptElementKind.interfaceElement;
-                case 186 /* TypeAliasDeclaration */:
-                    return ScriptElementKind.typeElement;
-                case 187 /* EnumDeclaration */:
-                    return ScriptElementKind.enumElement;
-                case 181 /* VariableDeclaration */:
-                    return node.flags & 4096 /* Const */ ? ScriptElementKind.constantElement : ScriptElementKind.variableElement;
-                case 182 /* FunctionDeclaration */:
-                    return ScriptElementKind.functionElement;
-                case 127 /* GetAccessor */:
-                    return ScriptElementKind.memberGetAccessorElement;
-                case 128 /* SetAccessor */:
-                    return ScriptElementKind.memberSetAccessorElement;
-                case 125 /* Method */:
-                    return ScriptElementKind.memberFunctionElement;
-                case 124 /* Property */:
-                    return ScriptElementKind.memberVariableElement;
-                case 131 /* IndexSignature */:
-                    return ScriptElementKind.indexSignatureElement;
-                case 130 /* ConstructSignature */:
-                    return ScriptElementKind.constructSignatureElement;
-                case 129 /* CallSignature */:
-                    return ScriptElementKind.callSignatureElement;
-                case 126 /* Constructor */:
-                    return ScriptElementKind.constructorImplementationElement;
-                case 122 /* TypeParameter */:
-                    return ScriptElementKind.typeParameterElement;
-                case 192 /* EnumMember */:
-                    return ScriptElementKind.variableElement;
-                case 123 /* Parameter */:
-                    return (node.flags & ts.NodeFlags.AccessibilityModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
+                case 188 /* ModuleDeclaration */: return ScriptElementKind.moduleElement;
+                case 184 /* ClassDeclaration */: return ScriptElementKind.classElement;
+                case 185 /* InterfaceDeclaration */: return ScriptElementKind.interfaceElement;
+                case 186 /* TypeAliasDeclaration */: return ScriptElementKind.typeElement;
+                case 187 /* EnumDeclaration */: return ScriptElementKind.enumElement;
+                case 181 /* VariableDeclaration */: return node.flags & 4096 /* Const */ ? ScriptElementKind.constantElement : ScriptElementKind.variableElement;
+                case 182 /* FunctionDeclaration */: return ScriptElementKind.functionElement;
+                case 127 /* GetAccessor */: return ScriptElementKind.memberGetAccessorElement;
+                case 128 /* SetAccessor */: return ScriptElementKind.memberSetAccessorElement;
+                case 125 /* Method */: return ScriptElementKind.memberFunctionElement;
+                case 124 /* Property */: return ScriptElementKind.memberVariableElement;
+                case 131 /* IndexSignature */: return ScriptElementKind.indexSignatureElement;
+                case 130 /* ConstructSignature */: return ScriptElementKind.constructSignatureElement;
+                case 129 /* CallSignature */: return ScriptElementKind.callSignatureElement;
+                case 126 /* Constructor */: return ScriptElementKind.constructorImplementationElement;
+                case 122 /* TypeParameter */: return ScriptElementKind.typeParameterElement;
+                case 192 /* EnumMember */: return ScriptElementKind.variableElement;
+                case 123 /* Parameter */: return (node.flags & ts.NodeFlags.AccessibilityModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
             }
             return ScriptElementKind.unknown;
         }
@@ -41539,22 +40279,14 @@ var ts;
             return result;
             function getMatchingTokenKind(token) {
                 switch (token.kind) {
-                    case 13 /* OpenBraceToken */:
-                        return 14 /* CloseBraceToken */;
-                    case 15 /* OpenParenToken */:
-                        return 16 /* CloseParenToken */;
-                    case 17 /* OpenBracketToken */:
-                        return 18 /* CloseBracketToken */;
-                    case 23 /* LessThanToken */:
-                        return 24 /* GreaterThanToken */;
-                    case 14 /* CloseBraceToken */:
-                        return 13 /* OpenBraceToken */;
-                    case 16 /* CloseParenToken */:
-                        return 15 /* OpenParenToken */;
-                    case 18 /* CloseBracketToken */:
-                        return 17 /* OpenBracketToken */;
-                    case 24 /* GreaterThanToken */:
-                        return 23 /* LessThanToken */;
+                    case 13 /* OpenBraceToken */: return 14 /* CloseBraceToken */;
+                    case 15 /* OpenParenToken */: return 16 /* CloseParenToken */;
+                    case 17 /* OpenBracketToken */: return 18 /* CloseBracketToken */;
+                    case 23 /* LessThanToken */: return 24 /* GreaterThanToken */;
+                    case 14 /* CloseBraceToken */: return 13 /* OpenBraceToken */;
+                    case 16 /* CloseParenToken */: return 15 /* OpenParenToken */;
+                    case 18 /* CloseBracketToken */: return 17 /* OpenBracketToken */;
+                    case 24 /* GreaterThanToken */: return 23 /* LessThanToken */;
                 }
                 return undefined;
             }
@@ -42015,8 +40747,7 @@ var ts;
                 case 51 /* EqualsToken */:
                 case 22 /* CommaToken */:
                     return true;
-                default:
-                    return false;
+                default: return false;
             }
         }
         function isPrefixUnaryExpressionOperatorToken(token) {
