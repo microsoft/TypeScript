@@ -216,11 +216,8 @@ function foo(x) {
 }
 function bar(e) {
     switch (e) {
-        case 1 /* V1 */:
-            return 1;
-        case 101 /* V2 */:
-            return 1;
-        case 64 /* V3 */:
-            return 1;
+        case 1 /* V1 */: return 1;
+        case 101 /* V2 */: return 1;
+        case 64 /* V3 */: return 1;
     }
 }

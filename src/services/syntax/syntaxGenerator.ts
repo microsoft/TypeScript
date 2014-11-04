@@ -449,7 +449,7 @@ var definitions:ITypeDefinition[] = [
         interfaces: ['IMemberExpressionSyntax', 'ICallExpressionSyntax'],
         children: [
             <any>{ name: 'expression', type: 'ILeftHandSideExpressionSyntax' },
-            <any>{ name: 'templateExpression', type: 'IPrimaryExpressionSyntax' },
+            <any>{ name: 'templateExpression', type: 'IPrimaryExpressionSyntax' }
         ]
     },
     <any>{
@@ -458,7 +458,7 @@ var definitions:ITypeDefinition[] = [
         interfaces: ['IPrimaryExpressionSyntax'],
         children: [
             <any>{ name: 'templateStartToken', isToken: true, excludeFromAST: true },
-            <any>{ name: 'templateClauses', isList: true, elementType: 'TemplateClauseSyntax' },
+            <any>{ name: 'templateClauses', isList: true, elementType: 'TemplateClauseSyntax' }
         ]
     },
     <any>{
@@ -466,7 +466,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         children: [
             <any>{ name: 'expression', type: 'IExpressionSyntax' },
-            <any>{ name: 'templateMiddleOrEndToken', isToken: true, elementType: 'TemplateSpanSyntax' },
+            <any>{ name: 'templateMiddleOrEndToken', isToken: true, elementType: 'TemplateSpanSyntax' }
         ]
     },
     <any>{
@@ -1502,18 +1502,25 @@ function generateServicesUtilities(): string {
     var result = "";
     result += "module TypeScript {\r\n";
 
+    result += "    var childCountArray = [";
+    for (var i = 0, n = TypeScript.SyntaxKind.LastNode; i <= n; i++) {
+        if (i) {
+            result += ", ";
+        }
+
+        if (i <= TypeScript.SyntaxKind.LastToken) {
+            result += "0";
+        }
+        else {
+            var definition = TypeScript.ArrayUtilities.first(definitions,d => firstKind(d) === i);
+            result += definition.children.length;
+        }
+    }
+    result += "];\r\n\r\n";
+
     result += "    export function childCount(element: ISyntaxElement): number {\r\n";
     result += "        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element).length; }\r\n";
-    result += "        switch (element.kind()) {\r\n";
-
-    for (var i = 0; i < definitions.length; i++) {
-        var definition = definitions[i];
-        result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ": return " + definition.children.length + ";\r\n";
-    }
-
-    result += "            default: return 0;\r\n"
-
-    result += "        }\r\n";
+    result += "        return childCountArray[element.kind()];\r\n";
     result += "    }\r\n\r\n";
 
     for (var i = 0; i < definitions.length; i++) {

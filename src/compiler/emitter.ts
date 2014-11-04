@@ -1351,6 +1351,10 @@ module ts {
                 emitToken(SyntaxKind.CloseBraceToken, node.clauses.end);
             }
 
+            function isOnSameLine(node1: Node, node2: Node) {
+                return getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node1.pos)) === getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node2.pos));
+            }
+
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
                 if (node.kind === SyntaxKind.CaseClause) {
                     write("case ");
@@ -1360,9 +1364,16 @@ module ts {
                 else {
                     write("default:");
                 }
-                increaseIndent();
-                emitLines(node.statements);
-                decreaseIndent();
+
+                if (node.statements.length === 1 && isOnSameLine(node, node.statements[0])) {
+                    write(" ");
+                    emit(node.statements[0]);
+                }
+                else {
+                    increaseIndent();
+                    emitLines(node.statements);
+                    decreaseIndent();
+                }
             }
 
             function emitThrowStatement(node: ThrowStatement) {
