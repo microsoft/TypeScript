@@ -349,12 +349,13 @@ module TypeScript.Scanner {
         }
 
         function reset(_text: ISimpleText, _start: number, _end: number) {
-            Debug.assert(_start <= _text.length(), "Token's start was not within the bounds of text: " + _start + " - [0, " + _text.length() + ")");
-            Debug.assert(_end <= _text.length(), "Token's end was not within the bounds of text: " + _end + " - [0, " + _text.length() + ")");
+            var textLength = _text.length();
+            Debug.assert(_start <= textLength, "Token's start was not within the bounds of text.");
+            Debug.assert(_end <= textLength, "Token's end was not within the bounds of text:");
 
             if (!str || text !== _text) {
                 text = _text;
-                str = _text.substr(0, _text.length());
+                str = _text.substr(0, textLength);
             }
 
             start = _start;

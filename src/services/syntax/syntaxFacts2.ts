@@ -2,16 +2,8 @@
 
 module TypeScript.SyntaxFacts {
     export function isDirectivePrologueElement(node: ISyntaxNodeOrToken): boolean {
-        if (node.kind === SyntaxKind.ExpressionStatement) {
-            var expressionStatement = <ExpressionStatementSyntax>node;
-            var expression = expressionStatement.expression;
-
-            if (expression.kind === SyntaxKind.StringLiteral) {
-                return true;
-            }
-        }
-
-        return false;
+        return node.kind === SyntaxKind.ExpressionStatement &&
+            (<ExpressionStatementSyntax>node).expression.kind === SyntaxKind.StringLiteral;
     }
 
     export function isUseStrictDirective(node: ISyntaxNodeOrToken): boolean {
