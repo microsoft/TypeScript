@@ -30,7 +30,7 @@ module Utils {
     var global = <any>Function("return this").call(null);
 
     // Setup some globals based on the current environment
-    export enum ExecutionEnvironment {
+    export const enum ExecutionEnvironment {
         Node,
         Browser,
         CScript

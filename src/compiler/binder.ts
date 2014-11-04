@@ -5,7 +5,7 @@
 
 module ts {
 
-    export enum ModuleInstanceState {
+    export const enum ModuleInstanceState {
         NonInstantiated = 0,
         Instantiated    = 1,
         ConstEnumOnly   = 2

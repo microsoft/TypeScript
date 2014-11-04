@@ -1898,7 +1898,8 @@ module ts {
 
             function emitEnumDeclaration(node: EnumDeclaration) {
                 // const enums are completely erased during compilation.
-                if (isConstEnumDeclaration(node) && !compilerOptions.preserveConstEnums) {
+                var isConstEnum = isConstEnumDeclaration(node);
+                if (isConstEnum && !compilerOptions.preserveConstEnums) {
                     return;
                 }
                 emitLeadingComments(node);
@@ -1918,7 +1919,7 @@ module ts {
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
-                emitEnumMemberDeclarations();
+                emitEnumMemberDeclarations(isConstEnum);
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
@@ -1941,7 +1942,7 @@ module ts {
                 }
                 emitTrailingComments(node);
 
-                function emitEnumMemberDeclarations() {
+                function emitEnumMemberDeclarations(isConstEnum: boolean) {
                     forEach(node.members, member => {
                         writeLine();
                         emitLeadingComments(member);
@@ -1952,7 +1953,7 @@ module ts {
                         write("[");
                         emitQuotedIdentifier(member.name);
                         write("] = ");
-                        if (member.initializer) {
+                        if (member.initializer && !isConstEnum) {
                             emit(member.initializer);
                         }
                         else {
@@ -2829,7 +2830,7 @@ module ts {
                                 break;
 
                             default:
-                                Debug.fail("This is unknown parent for type parameter: " + SyntaxKind[node.parent.kind]);
+                                Debug.fail("This is unknown parent for type parameter: " + node.parent.kind);
                         }
 
                         return {
@@ -3225,7 +3226,7 @@ module ts {
                             break;
 
                         default:
-                            Debug.fail("This is unknown kind for signature: " + SyntaxKind[node.kind]);
+                            Debug.fail("This is unknown kind for signature: " + node.kind);
                     }
 
                     return {
@@ -3310,7 +3311,7 @@ module ts {
                             break;
 
                         default:
-                            Debug.fail("This is unknown parent for parameter: " + SyntaxKind[node.parent.kind]);
+                            Debug.fail("This is unknown parent for parameter: " + node.parent.kind);
                     }
 
                     return {

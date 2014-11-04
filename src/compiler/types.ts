@@ -9,7 +9,7 @@ module ts {
     }
 
     // token > SyntaxKind.Identifer => token is a keyword
-    export enum SyntaxKind {
+    export const enum SyntaxKind {
         Unknown,
         EndOfFileToken,
         SingleLineCommentTrivia,
@@ -249,7 +249,7 @@ module ts {
         LastTemplateToken = TemplateTail
     }
 
-    export enum NodeFlags {
+    export const enum NodeFlags {
         Export           = 0x00000001,  // Declarations
         Ambient          = 0x00000002,  // Declarations
         QuestionMark     = 0x00000004,  // Parameter/Property/Method
@@ -722,7 +722,7 @@ module ts {
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
     }
 
-    export enum TypeFormatFlags {
+    export const enum TypeFormatFlags {
         None                            = 0x00000000, 
         WriteArrayAsGenericType         = 0x00000001,  // Write Array<T> instead T[]
         UseTypeOfFunction               = 0x00000002,  // Write typeof instead of function type literal
@@ -733,7 +733,7 @@ module ts {
         InElementType                   = 0x00000040,  // Writing an array or union element type
     }
 
-    export enum SymbolFormatFlags {
+    export const enum SymbolFormatFlags {
         None                            = 0x00000000,
         WriteTypeParametersOrArguments  = 0x00000001,  // Write symbols's type argument if it is instantiated symbol
                                                        // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
@@ -744,7 +744,7 @@ module ts {
                                                        // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
     }
 
-    export enum SymbolAccessibility {
+    export const enum SymbolAccessibility {
         Accessible,
         NotAccessible,
         CannotBeNamed
@@ -778,7 +778,7 @@ module ts {
         hasEarlyErrors(sourceFile?: SourceFile): boolean;
     }
 
-    export enum SymbolFlags {
+    export const enum SymbolFlags {
         FunctionScopedVariable = 0x00000001,  // Variable (var) or parameter
         BlockScopedVariable    = 0x00000002,  // A block-scoped variable (let or const)
         Property               = 0x00000004,  // Property or enum member
@@ -890,7 +890,7 @@ module ts {
         [index: string]: Symbol;
     }
 
-    export enum NodeCheckFlags {
+    export const enum NodeCheckFlags {
         TypeChecked        = 0x00000001,  // Node has been type checked
         LexicalThis        = 0x00000002,  // Lexical 'this' reference
         CaptureThis        = 0x00000004,  // Lexical 'this' used in body
@@ -915,7 +915,7 @@ module ts {
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
     }
 
-    export enum TypeFlags {
+    export const enum TypeFlags {
         Any                = 0x00000001,
         String             = 0x00000002,
         Number             = 0x00000004,
@@ -1012,7 +1012,7 @@ module ts {
         mapper?: TypeMapper;     // Instantiation mapper
     }
 
-    export enum SignatureKind {
+    export const enum SignatureKind {
         Call,
         Construct,
     }
@@ -1032,7 +1032,7 @@ module ts {
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
     }
 
-    export enum IndexKind {
+    export const enum IndexKind {
         String,
         Number,
     }
@@ -1112,7 +1112,7 @@ module ts {
         [option: string]: string | number | boolean;
     }
 
-    export enum ModuleKind {
+    export const enum ModuleKind {
         None,
         CommonJS,
         AMD,
@@ -1127,7 +1127,7 @@ module ts {
     }
 
 
-    export enum ScriptTarget {
+    export const enum ScriptTarget {
         ES3,
         ES5,
         ES6,
@@ -1149,7 +1149,7 @@ module ts {
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'.
     }
 
-    export enum CharacterCodes {
+    export const enum CharacterCodes {
         nullCharacter = 0,
         maxAsciiCharacter = 0x7F,
 
