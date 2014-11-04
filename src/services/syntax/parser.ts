@@ -711,12 +711,16 @@ module TypeScript.Parser {
             return sourceUnit;
         }
 
+        function isDirectivePrologueElement(node: ISyntaxNodeOrToken): boolean {
+            return node.kind === SyntaxKind.ExpressionStatement &&
+                (<ExpressionStatementSyntax>node).expression.kind === SyntaxKind.StringLiteral;
+        }
+
         function updateStrictModeState(items: any[]): void {
             if (!isInStrictMode) {
                 // Check if all the items are directive prologue elements.
-                for (var i = 0; i < items.length; i++) {
-                    var item = items[i];
-                    if (!SyntaxFacts.isDirectivePrologueElement(item)) {
+                for (var i = 0, n = items.length; i < n; i++) {
+                    if (!isDirectivePrologueElement(items[i])) {
                         return;
                     }
                 }
@@ -3864,7 +3868,7 @@ module TypeScript.Parser {
         }
 
         function tryParseExpectedListItem(
-                currentListType: ListParsingState, inErrorRecovery: boolean, items: ISyntaxElement[], processItems: (items: any[]) => void): boolean {
+                currentListType: ListParsingState, inErrorRecovery: boolean, items: ISyntaxNodeOrToken[], processItems: (items: ISyntaxNodeOrToken[]) => void): boolean {
             var item = tryParseExpectedListItemWorker(currentListType, inErrorRecovery);
 
             if (item === undefined) {
@@ -3886,7 +3890,7 @@ module TypeScript.Parser {
                    currentToken().kind === SyntaxKind.EndOfFileToken;
         }
 
-        function parseSyntaxListWorker<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState, skippedTokens: ISyntaxToken[], processItems: (items: any[]) => void ): T[] {
+        function parseSyntaxListWorker<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState, skippedTokens: ISyntaxToken[], processItems: (items: ISyntaxNodeOrToken[]) => void ): T[] {
             var items: T[] = [];
 
             while (true) {
