@@ -2,11 +2,11 @@
 
 module TypeScript.SyntaxFacts {
     export function isDirectivePrologueElement(node: ISyntaxNodeOrToken): boolean {
-        if (node.kind() === SyntaxKind.ExpressionStatement) {
+        if (node.kind === SyntaxKind.ExpressionStatement) {
             var expressionStatement = <ExpressionStatementSyntax>node;
             var expression = expressionStatement.expression;
 
-            if (expression.kind() === SyntaxKind.StringLiteral) {
+            if (expression.kind === SyntaxKind.StringLiteral) {
                 return true;
             }
         }
@@ -23,7 +23,7 @@ module TypeScript.SyntaxFacts {
     }
 
     export function isIdentifierNameOrAnyKeyword(token: ISyntaxToken): boolean {
-        var tokenKind = token.kind();
+        var tokenKind = token.kind;
         return tokenKind === SyntaxKind.IdentifierName || SyntaxFacts.isAnyKeyword(tokenKind);
     }
 
