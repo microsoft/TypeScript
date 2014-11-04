@@ -235,7 +235,20 @@ module TypeScript.IncrementalParser {
                 !_oldSourceUnitCursor.isFinished();
         }
 
-        function updateTokens(nodeOrToken: ISyntaxNodeOrToken): void {
+        function updateTokenPosition(token: ISyntaxToken): void {
+            // If we got a node or token, and we're past the range of edited text, then walk its
+            // constituent tokens, making sure all their positions are correct.  We don't need to
+            // do this for the tokens before the edited range (since their positions couldn't have 
+            // been affected by the edit), and we don't need to do this for the tokens in the 
+            // edited range, as their positions will be correct when the underlying parser source 
+            // creates them.
+
+            if (isPastChangeRange()) {
+                token.setFullStart(absolutePosition());
+            }
+        }
+
+        function updateNodePosition(node: ISyntaxNode): void {
             // If we got a node or token, and we're past the range of edited text, then walk its
             // constituent tokens, making sure all their positions are correct.  We don't need to
             // do this for the tokens before the edited range (since their positions couldn't have 
@@ -246,18 +259,13 @@ module TypeScript.IncrementalParser {
             if (isPastChangeRange()) {
                 var position = absolutePosition();
 
-                if (isToken(nodeOrToken)) {
-                    (<ISyntaxToken>nodeOrToken).setFullStart(position);
-                }
-                else {
-                    var tokens = getTokens(<ISyntaxNode>nodeOrToken);
+                var tokens = getTokens(node);
 
-                    for (var i = 0, n = tokens.length; i < n; i++) {
-                        var token = tokens[i];
-                        token.setFullStart(position);
+                for (var i = 0, n = tokens.length; i < n; i++) {
+                    var token = tokens[i];
+                    token.setFullStart(position);
 
-                        position += token.fullWidth();
-                    }
+                    position += token.fullWidth();
                 }
             }
         }
@@ -284,7 +292,7 @@ module TypeScript.IncrementalParser {
                 var node = tryGetNodeFromOldSourceUnit();
                 if (node) {
                     // Make sure the positions for the tokens in this node are correct.
-                    updateTokens(node);
+                    updateNodePosition(node);
                     return node;
                 }
             }
@@ -298,7 +306,7 @@ module TypeScript.IncrementalParser {
                 var token = tryGetTokenFromOldSourceUnit();
                 if (token) {
                     // Make sure the token's position/text is correct.
-                    updateTokens(token);
+                    updateTokenPosition(token);
                     return token;
                 }
             }
