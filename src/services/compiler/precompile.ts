@@ -99,26 +99,26 @@ module TypeScript {
         var start = new Date().getTime();
         // Look for: 
         // import foo = module("foo")
-        while (token.kind() !== SyntaxKind.EndOfFileToken) {
-            if (token.kind() === SyntaxKind.ImportKeyword) {
+        while (token.kind !== SyntaxKind.EndOfFileToken) {
+            if (token.kind === SyntaxKind.ImportKeyword) {
                 var importToken = token;
                 token = scanner.scan(/*allowRegularExpression:*/ false);
 
                 if (SyntaxFacts.isIdentifierNameOrAnyKeyword(token)) {
                     token = scanner.scan(/*allowRegularExpression:*/ false);
 
-                    if (token.kind() === SyntaxKind.EqualsToken) {
+                    if (token.kind === SyntaxKind.EqualsToken) {
                         token = scanner.scan(/*allowRegularExpression:*/ false);
 
-                        if (token.kind() === SyntaxKind.ModuleKeyword || token.kind() === SyntaxKind.RequireKeyword) {
+                        if (token.kind === SyntaxKind.ModuleKeyword || token.kind === SyntaxKind.RequireKeyword) {
                             token = scanner.scan(/*allowRegularExpression:*/ false);
 
-                            if (token.kind() === SyntaxKind.OpenParenToken) {
+                            if (token.kind === SyntaxKind.OpenParenToken) {
                                 token = scanner.scan(/*allowRegularExpression:*/ false);
 
                                 lineMap.fillLineAndCharacterFromPosition(TypeScript.start(importToken, text), lineChar);
 
-                                if (token.kind() === SyntaxKind.StringLiteral) {
+                                if (token.kind === SyntaxKind.StringLiteral) {
                                     var ref = {
                                         line: lineChar.line,
                                         character: lineChar.character,

@@ -3,7 +3,7 @@ module TypeScript {
 
     export function childCount(element: ISyntaxElement): number {
         if (isList(element)) { return (<ISyntaxNodeOrToken[]>element).length; }
-        return childCountArray[element.kind()];
+        return childCountArray[element.kind];
     }
 
     function sourceUnitChildAt(node: SourceUnitSyntax, index: number): ISyntaxElement {
@@ -691,7 +691,7 @@ module TypeScript {
     }
     export function childAt(element: ISyntaxElement, index: number): ISyntaxElement {
         if (isList(element)) { return (<ISyntaxNodeOrToken[]>element)[index]; }
-        switch (element.kind()) {
+        switch (element.kind) {
             case SyntaxKind.SourceUnit: return sourceUnitChildAt(<SourceUnitSyntax>element, index);
             case SyntaxKind.QualifiedName: return qualifiedNameChildAt(<QualifiedNameSyntax>element, index);
             case SyntaxKind.ObjectType: return objectTypeChildAt(<ObjectTypeSyntax>element, index);

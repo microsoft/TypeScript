@@ -6,7 +6,7 @@ module TypeScript {
             // Debug.assert(!isShared(element));
 
             while (element) {
-                if (element.kind() === SyntaxKind.SourceUnit) {
+                if (element.kind === SyntaxKind.SourceUnit) {
                     return (<SourceUnitSyntax>element).syntaxTree;
                 }
 
@@ -137,7 +137,7 @@ module TypeScript {
     }
 
     function tryGetEndOfFileAt(element: ISyntaxElement, position: number): ISyntaxToken {
-        if (element.kind() === SyntaxKind.SourceUnit && position === fullWidth(element)) {
+        if (element.kind === SyntaxKind.SourceUnit && position === fullWidth(element)) {
             var sourceUnit = <SourceUnitSyntax>element;
             return sourceUnit.endOfFileToken;
         }
@@ -146,7 +146,7 @@ module TypeScript {
     }
 
     export function nextToken(token: ISyntaxToken, text?: ISimpleText): ISyntaxToken {
-        if (token.kind() === SyntaxKind.EndOfFileToken) {
+        if (token.kind === SyntaxKind.EndOfFileToken) {
             return undefined;
         }
 
@@ -155,7 +155,7 @@ module TypeScript {
 
     export function isNode(element: ISyntaxElement): boolean {
         if (element) {
-            var kind = element.kind();
+            var kind = element.kind;
             return kind >= SyntaxKind.FirstNode && kind <= SyntaxKind.LastNode;
         }
 
@@ -168,7 +168,7 @@ module TypeScript {
 
     export function isToken(element: ISyntaxElement): boolean {
         if (element) {
-            return isTokenKind(element.kind());
+            return isTokenKind(element.kind);
         }
 
         return false;
@@ -227,7 +227,7 @@ module TypeScript {
 
     export function firstToken(element: ISyntaxElement): ISyntaxToken {
         if (element) {
-            var kind = element.kind();
+            var kind = element.kind;
 
             if (isTokenKind(kind)) {
                 return (<ISyntaxToken>element).fullWidth() > 0 || kind === SyntaxKind.EndOfFileToken ? <ISyntaxToken>element : undefined;
@@ -246,10 +246,10 @@ module TypeScript {
 
     export function lastToken(element: ISyntaxElement): ISyntaxToken {
         if (isToken(element)) {
-            return fullWidth(element) > 0 || element.kind() === SyntaxKind.EndOfFileToken ? <ISyntaxToken>element : undefined;
+            return fullWidth(element) > 0 || element.kind === SyntaxKind.EndOfFileToken ? <ISyntaxToken>element : undefined;
         }
 
-        if (element.kind() === SyntaxKind.SourceUnit) {
+        if (element.kind === SyntaxKind.SourceUnit) {
             return (<SourceUnitSyntax>element).endOfFileToken;
         }
 
@@ -366,7 +366,7 @@ module TypeScript {
     }
 
     export interface ISyntaxElement {
-        kind(): SyntaxKind;
+        kind: SyntaxKind;
         parent: ISyntaxElement;
     }
 

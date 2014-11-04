@@ -1982,7 +1982,7 @@ function generateConstructorFunction(definition) {
         result += ";\r\n";
     }
     result += "    };\r\n";
-    result += "    " + definition.name + ".prototype.kind = function() { return SyntaxKind." + getNameWithoutSuffix(definition) + "; }\r\n";
+    result += "    " + definition.name + ".prototype.kind = SyntaxKind." + getNameWithoutSuffix(definition) + ";\r\n";
     return result;
 }
 function generateSyntaxInterfaces() {
@@ -2202,7 +2202,7 @@ function generateVisitor() {
     result += "module TypeScript {\r\n";
     result += "    export function visitNodeOrToken(visitor: ISyntaxVisitor, element: ISyntaxNodeOrToken): any {\r\n";
     result += "        if (element === undefined) { return undefined; }\r\n";
-    result += "        switch (element.kind()) {\r\n";
+    result += "        switch (element.kind) {\r\n";
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
         result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ": ";
@@ -2240,7 +2240,7 @@ function generateServicesUtilities() {
     result += "];\r\n\r\n";
     result += "    export function childCount(element: ISyntaxElement): number {\r\n";
     result += "        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element).length; }\r\n";
-    result += "        return childCountArray[element.kind()];\r\n";
+    result += "        return childCountArray[element.kind];\r\n";
     result += "    }\r\n\r\n";
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
@@ -2259,7 +2259,7 @@ function generateServicesUtilities() {
     }
     result += "    export function childAt(element: ISyntaxElement, index: number): ISyntaxElement {\r\n";
     result += "        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element)[index]; }\r\n";
-    result += "        switch (element.kind()) {\r\n";
+    result += "        switch (element.kind) {\r\n";
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
         result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ": return " + camelCase(getNameWithoutSuffix(definition)) + "ChildAt(<" + definition.name + ">element, index);\r\n";

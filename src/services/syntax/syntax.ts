@@ -9,7 +9,7 @@ module TypeScript.Syntax {
             if (isToken(child)) {
                 var token = <ISyntaxToken>child;
                 // If a token is skipped, return true. Or if it is a missing token. The only empty token that is not missing is EOF
-                if (token.hasSkippedToken() || (width(token) === 0 && token.kind() !== SyntaxKind.EndOfFileToken)) {
+                if (token.hasSkippedToken() || (width(token) === 0 && token.kind !== SyntaxKind.EndOfFileToken)) {
                     return true;
                 }
             }
@@ -19,7 +19,7 @@ module TypeScript.Syntax {
     }
 
     export function isUnterminatedStringLiteral(token: ISyntaxToken): boolean {
-        if (token && token.kind() === SyntaxKind.StringLiteral) {
+        if (token && token.kind === SyntaxKind.StringLiteral) {
             var text = token.text();
             return text.length < 2 || text.charCodeAt(text.length - 1) !== text.charCodeAt(0);
         }
@@ -55,7 +55,7 @@ module TypeScript.Syntax {
         var triviaList: ISyntaxTriviaList = undefined;
         var lastTriviaBeforeToken: ISyntaxTrivia = undefined;
 
-        if (positionedToken.kind() === SyntaxKind.EndOfFileToken) {
+        if (positionedToken.kind === SyntaxKind.EndOfFileToken) {
             // Check if the trivia is leading on the EndOfFile token
             if (positionedToken.hasLeadingTrivia()) {
                 triviaList = positionedToken.leadingTrivia();
@@ -106,14 +106,14 @@ module TypeScript.Syntax {
         var positionedToken = findToken(sourceUnit, position);
 
         if (positionedToken) {
-            if (positionedToken.kind() === SyntaxKind.EndOfFileToken) {
+            if (positionedToken.kind === SyntaxKind.EndOfFileToken) {
                 // EndOfFile token, enusre it did not follow an unterminated string literal
                 positionedToken = previousToken(positionedToken);
                 return positionedToken && positionedToken.trailingTriviaWidth() === 0 && isUnterminatedStringLiteral(positionedToken);
             }
             else if (position > start(positionedToken)) {
                 // Ensure position falls enterily within the literal if it is terminated, or the line if it is not
-                return (position < end(positionedToken) && (positionedToken.kind() === TypeScript.SyntaxKind.StringLiteral || positionedToken.kind() === TypeScript.SyntaxKind.RegularExpressionLiteral)) ||
+                return (position < end(positionedToken) && (positionedToken.kind === TypeScript.SyntaxKind.StringLiteral || positionedToken.kind === TypeScript.SyntaxKind.RegularExpressionLiteral)) ||
                     (position <= end(positionedToken) && isUnterminatedStringLiteral(positionedToken));
             }
         }
@@ -123,7 +123,7 @@ module TypeScript.Syntax {
 
     export function getAncestorOfKind(positionedToken: ISyntaxElement, kind: SyntaxKind): ISyntaxElement {
         while (positionedToken && positionedToken.parent) {
-            if (positionedToken.parent.kind() === kind) {
+            if (positionedToken.parent.kind === kind) {
                 return positionedToken.parent;
             }
 
@@ -139,10 +139,10 @@ module TypeScript.Syntax {
 
     export function isIntegerLiteral(expression: IExpressionSyntax): boolean {
         if (expression) {
-            switch (expression.kind()) {
+            switch (expression.kind) {
                 case SyntaxKind.PrefixUnaryExpression:
                     var prefixExpr = <PrefixUnaryExpressionSyntax>expression;
-                    if (prefixExpr.operatorToken.kind() == SyntaxKind.PlusToken || prefixExpr.operatorToken.kind() === SyntaxKind.MinusToken) {
+                    if (prefixExpr.operatorToken.kind == SyntaxKind.PlusToken || prefixExpr.operatorToken.kind === SyntaxKind.MinusToken) {
                         // Note: if there is a + or - sign, we can only allow a normal integer following
                         // (and not a hex integer).  i.e. -0xA is a legal expression, but it is not a 
                         // *literal*.
