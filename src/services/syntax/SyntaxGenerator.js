@@ -1955,22 +1955,17 @@ function generateConstructorFunction(definition) {
     result += ") {\r\n";
     result += "        if (data) { this.__data = data; }\r\n";
     if (definition.children.length) {
-        result += "        ";
         for (var i = 0; i < definition.children.length; i++) {
             if (i) {
-                result += ", ";
+                result += ",\r\n";
             }
             var child = definition.children[i];
-            result += "this." + child.name + " = " + getSafeName(child);
+            result += "        this." + child.name + " = " + getSafeName(child);
         }
-        result += ";\r\n";
     }
     if (definition.children.length > 0) {
-        result += "        ";
         for (var i = 0; i < definition.children.length; i++) {
-            if (i) {
-                result += ", ";
-            }
+            result += ",\r\n        ";
             var child = definition.children[i];
             if (child.isOptional) {
                 result += getSafeName(child) + " && (" + getSafeName(child) + ".parent = this)";
