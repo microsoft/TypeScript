@@ -9,7 +9,7 @@ module ts {
     // x | y is False if both x and y are False.
     // x | y is Maybe if either x or y is Maybe, but neither x or y is True.
     // x | y is True if either x or y is True.
-    export enum Ternary {
+    export const enum Ternary {
         False = 0,
         Maybe = 1,
         True  = -1
@@ -19,7 +19,7 @@ module ts {
         [index: string]: T;
     }
 
-    export enum Comparison {
+    export const enum Comparison {
         LessThan    = -1,
         EqualTo     = 0,
         GreaterThan = 1
@@ -648,7 +648,7 @@ module ts {
         getSignatureConstructor: () => <any>Signature
     }
 
-    export enum AssertionLevel {
+    export const enum AssertionLevel {
         None = 0,
         Normal = 1,
         Aggressive = 2,

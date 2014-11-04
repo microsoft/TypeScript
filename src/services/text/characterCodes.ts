@@ -104,6 +104,7 @@ module TypeScript {
         asterisk = 42,              // *
         at = 64,                    // @
         backslash = 92,             // \
+        backtick = 96,              // `
         bar = 124,                  // |
         caret = 94,                 // ^
         closeBrace = 125,           // }

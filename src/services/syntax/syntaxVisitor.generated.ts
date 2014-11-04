@@ -3,8 +3,7 @@
 module TypeScript {
     export function visitNodeOrToken(visitor: ISyntaxVisitor, element: ISyntaxNodeOrToken): any {
         if (element === undefined) { return undefined; }
-        if (isToken(element)) { return visitor.visitToken(<ISyntaxToken>element); }
-        switch (element.kind()) {
+        switch (element.kind) {
             case SyntaxKind.SourceUnit: return visitor.visitSourceUnit(<SourceUnitSyntax>element);
             case SyntaxKind.QualifiedName: return visitor.visitQualifiedName(<QualifiedNameSyntax>element);
             case SyntaxKind.ObjectType: return visitor.visitObjectType(<ObjectTypeSyntax>element);
@@ -71,6 +70,8 @@ module TypeScript {
             case SyntaxKind.ElementAccessExpression: return visitor.visitElementAccessExpression(<ElementAccessExpressionSyntax>element);
             case SyntaxKind.FunctionExpression: return visitor.visitFunctionExpression(<FunctionExpressionSyntax>element);
             case SyntaxKind.OmittedExpression: return visitor.visitOmittedExpression(<OmittedExpressionSyntax>element);
+            case SyntaxKind.TemplateExpression: return visitor.visitTemplateExpression(<TemplateExpressionSyntax>element);
+            case SyntaxKind.TemplateAccessExpression: return visitor.visitTemplateAccessExpression(<TemplateAccessExpressionSyntax>element);
             case SyntaxKind.VariableDeclaration: return visitor.visitVariableDeclaration(<VariableDeclarationSyntax>element);
             case SyntaxKind.VariableDeclarator: return visitor.visitVariableDeclarator(<VariableDeclaratorSyntax>element);
             case SyntaxKind.ArgumentList: return visitor.visitArgumentList(<ArgumentListSyntax>element);
@@ -84,6 +85,7 @@ module TypeScript {
             case SyntaxKind.ElseClause: return visitor.visitElseClause(<ElseClauseSyntax>element);
             case SyntaxKind.CatchClause: return visitor.visitCatchClause(<CatchClauseSyntax>element);
             case SyntaxKind.FinallyClause: return visitor.visitFinallyClause(<FinallyClauseSyntax>element);
+            case SyntaxKind.TemplateClause: return visitor.visitTemplateClause(<TemplateClauseSyntax>element);
             case SyntaxKind.TypeParameter: return visitor.visitTypeParameter(<TypeParameterSyntax>element);
             case SyntaxKind.Constraint: return visitor.visitConstraint(<ConstraintSyntax>element);
             case SyntaxKind.SimplePropertyAssignment: return visitor.visitSimplePropertyAssignment(<SimplePropertyAssignmentSyntax>element);
@@ -93,9 +95,8 @@ module TypeScript {
             case SyntaxKind.TypeAnnotation: return visitor.visitTypeAnnotation(<TypeAnnotationSyntax>element);
             case SyntaxKind.ExternalModuleReference: return visitor.visitExternalModuleReference(<ExternalModuleReferenceSyntax>element);
             case SyntaxKind.ModuleNameModuleReference: return visitor.visitModuleNameModuleReference(<ModuleNameModuleReferenceSyntax>element);
+            default: return visitor.visitToken(<ISyntaxToken>element);
         }
-
-        throw Errors.invalidOperation();
     }
 
     export interface ISyntaxVisitor {
@@ -166,6 +167,8 @@ module TypeScript {
         visitElementAccessExpression(node: ElementAccessExpressionSyntax): any;
         visitFunctionExpression(node: FunctionExpressionSyntax): any;
         visitOmittedExpression(node: OmittedExpressionSyntax): any;
+        visitTemplateExpression(node: TemplateExpressionSyntax): any;
+        visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): any;
         visitVariableDeclaration(node: VariableDeclarationSyntax): any;
         visitVariableDeclarator(node: VariableDeclaratorSyntax): any;
         visitArgumentList(node: ArgumentListSyntax): any;
@@ -179,6 +182,7 @@ module TypeScript {
         visitElseClause(node: ElseClauseSyntax): any;
         visitCatchClause(node: CatchClauseSyntax): any;
         visitFinallyClause(node: FinallyClauseSyntax): any;
+        visitTemplateClause(node: TemplateClauseSyntax): any;
         visitTypeParameter(node: TypeParameterSyntax): any;
         visitConstraint(node: ConstraintSyntax): any;
         visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): any;

@@ -1,0 +1,39 @@
+tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(14,8): error TS1005: '=' expected.
+tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(14,12): error TS1005: '(' expected.
+tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(4,22): error TS2312: An interface may only extend a class or another interface.
+tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(5,21): error TS2422: A class may only implement another class or interface.
+tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(10,6): error TS2300: Duplicate identifier 'T2'.
+tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(11,6): error TS2300: Duplicate identifier 'T2'.
+tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(14,19): error TS2304: Cannot find name 'T'.
+
+
+==== tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts (7 errors) ====
+    type T1 = { x: string }
+    
+    // An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.
+    interface I1 extends T1 { y: string }
+                         ~~
+!!! error TS2312: An interface may only extend a class or another interface.
+    class C1 implements T1 {
+                        ~~
+!!! error TS2422: A class may only implement another class or interface.
+        x: string;
+    }
+    
+    // An interface can have multiple merged declarations, but a type alias for an object type literal cannot.
+    type T2 = { x: string }
+         ~~
+!!! error TS2300: Duplicate identifier 'T2'.
+    type T2 = { y: number }
+         ~~
+!!! error TS2300: Duplicate identifier 'T2'.
+    
+    // An interface can have type parameters, but a type alias for an object type literal cannot.
+    type T3<T> = { x: T }
+           ~
+!!! error TS1005: '=' expected.
+               ~
+!!! error TS1005: '(' expected.
+                      ~
+!!! error TS2304: Cannot find name 'T'.
+    

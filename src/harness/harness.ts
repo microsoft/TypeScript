@@ -30,7 +30,7 @@ module Utils {
     var global = <any>Function("return this").call(null);
 
     // Setup some globals based on the current environment
-    export enum ExecutionEnvironment {
+    export const enum ExecutionEnvironment {
         Node,
         Browser,
         CScript
@@ -757,7 +757,6 @@ module Harness {
                         case 'codepage':
                         case 'createFileLog':
                         case 'filename':
-                        case 'propagateenumconstants':
                         case 'removecomments':
                         case 'watch':
                         case 'allowautomaticsemicoloninsertion':
@@ -772,7 +771,9 @@ module Harness {
                         case 'errortruncation':
                             options.noErrorTruncation = setting.value === 'false';
                             break;
-
+                        case 'preserveconstenums':
+                            options.preserveConstEnums = setting.value === 'true';
+                            break;
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
@@ -1147,7 +1148,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

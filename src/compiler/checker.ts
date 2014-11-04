@@ -187,7 +187,8 @@ module ts {
             if (flags & SymbolFlags.Function) result |= SymbolFlags.FunctionExcludes;
             if (flags & SymbolFlags.Class) result |= SymbolFlags.ClassExcludes;
             if (flags & SymbolFlags.Interface) result |= SymbolFlags.InterfaceExcludes;
-            if (flags & SymbolFlags.Enum) result |= SymbolFlags.EnumExcludes;
+            if (flags & SymbolFlags.RegularEnum) result |= SymbolFlags.RegularEnumExcludes;
+            if (flags & SymbolFlags.ConstEnum) result |= SymbolFlags.ConstEnumExcludes;
             if (flags & SymbolFlags.ValueModule) result |= SymbolFlags.ValueModuleExcludes;
             if (flags & SymbolFlags.Method) result |= SymbolFlags.MethodExcludes;
             if (flags & SymbolFlags.GetAccessor) result |= SymbolFlags.GetAccessorExcludes;
@@ -208,6 +209,7 @@ module ts {
             result.declarations = symbol.declarations.slice(0);
             result.parent = symbol.parent;
             if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
+            if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
             if (symbol.members) result.members = cloneSymbolTable(symbol.members);
             if (symbol.exports) result.exports = cloneSymbolTable(symbol.exports);
             recordMergedSymbol(result, symbol);
@@ -216,6 +218,10 @@ module ts {
 
         function extendSymbol(target: Symbol, source: Symbol) {
             if (!(target.flags & getExcludedSymbolFlags(source.flags))) {
+                if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
+                    // reset flag when merging instantiated module into value module that has only const enums
+                    target.constEnumOnlyModule = false;
+                }
                 target.flags |= source.flags;
                 if (!target.valueDeclaration && source.valueDeclaration) target.valueDeclaration = source.valueDeclaration;
                 forEach(source.declarations, node => {
@@ -308,6 +314,22 @@ module ts {
             }
 
             // return undefined if we can't find a symbol.
+        }
+
+        /** Returns true if node1 is defined before node 2**/
+        function isDefinedBefore(node1: Node, node2: Node): boolean {
+            var file1 = getSourceFileOfNode(node1);
+            var file2 = getSourceFileOfNode(node2);
+            if (file1 === file2) {
+                return node1.pos <= node2.pos;
+            }
+
+            if (!compilerOptions.out) {
+                return true;
+            }
+
+            var sourceFiles = program.getSourceFiles();
+            return sourceFiles.indexOf(file1) <= sourceFiles.indexOf(file2);
         }
 
         // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
@@ -429,18 +451,8 @@ module ts {
                     // Block-scoped variables cannot be used before their definition
                     var declaration = forEach(result.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
                     Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
-                    var declarationSourceFile = getSourceFileOfNode(declaration);
-                    var referenceSourceFile = getSourceFileOfNode(errorLocation);
-                    if (declarationSourceFile === referenceSourceFile) {
-                        if (declaration.pos > errorLocation.pos) {
-                            error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
-                        }
-                    }
-                    else if (compilerOptions.out) {
-                        var sourceFiles = program.getSourceFiles();
-                        if (sourceFiles.indexOf(referenceSourceFile) < sourceFiles.indexOf(declarationSourceFile)) {
-                            error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
-                        }
+                    if (!isDefinedBefore(declaration, errorLocation)) {
+                        error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, identifierToString(declaration.name));
                     }
                 }
             }
@@ -1595,7 +1607,7 @@ module ts {
                         return true;
 
                     default:
-                        Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + SyntaxKind[node.kind]);
+                        Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + node.kind);
                 }
             }
 
@@ -4452,8 +4464,8 @@ module ts {
 
             if (symbol.flags & SymbolFlags.Import) {
                 // Mark the import as referenced so that we emit it in the final .js file.
-                // exception: identifiers that appear in type queries
-                getSymbolLinks(symbol).referenced = !isInTypeQuery(node);
+                // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
+                getSymbolLinks(symbol).referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
             }
 
             checkCollisionWithCapturedSuperVariable(node, node);
@@ -5107,6 +5119,10 @@ module ts {
 
             if (objectType === unknownType) return unknownType;
 
+            if (isConstEnumObjectType(objectType) && node.index.kind !== SyntaxKind.StringLiteral) {
+                error(node.index, Diagnostics.Index_expression_arguments_in_const_enums_must_be_of_type_string);
+            }
+
             // TypeScript 1.0 spec (April 2014): 4.10 Property Access
             // - If IndexExpr is a string literal or a numeric literal and ObjExpr's apparent type has a property with the name 
             //    given by that literal(converted to its string representation in the case of a numeric literal), the property access is of the type of that property.
@@ -5121,6 +5137,7 @@ module ts {
                 var name = (<LiteralExpression>node.index).text;
                 var prop = getPropertyOfType(objectType, name);
                 if (prop) {
+                    getNodeLinks(node).resolvedSymbol = prop;
                     return getTypeOfSymbol(prop);
                 }
             }
@@ -6086,6 +6103,14 @@ module ts {
             return (type.flags & TypeFlags.Structured) !== 0;
         }
 
+        function isConstEnumObjectType(type: Type) : boolean {
+            return type.flags & (TypeFlags.ObjectType | TypeFlags.Anonymous) && type.symbol && isConstEnumSymbol(type.symbol);
+        }
+
+        function isConstEnumSymbol(symbol: Symbol): boolean {
+            return (symbol.flags & SymbolFlags.ConstEnum) !== 0;
+        }
+
         function checkInstanceOfExpression(node: BinaryExpression, leftType: Type, rightType: Type): Type {
             // TypeScript 1.0 spec (April 2014): 4.15.4
             // The instanceof operator requires the left operand to be of type Any, an object type, or a type parameter type,
@@ -6321,6 +6346,21 @@ module ts {
                             type = getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, contextualMapper));
                         }
                     }
+                }
+            }
+
+            if (isConstEnumObjectType(type)) {
+                // enum object type for const enums are only permitted in:
+                // - 'left' in property access 
+                // - 'object' in indexed access
+                // - target in rhs of import statement
+                var ok =
+                    (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).left === node) ||
+                    (node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).object === node) ||
+                    ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<EntityName>node));
+
+                if (!ok) {
+                    error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment);
                 }
             }
             return type;
@@ -6997,7 +7037,7 @@ module ts {
                     case SyntaxKind.InterfaceDeclaration:
                         return SymbolFlags.ExportType;
                     case SyntaxKind.ModuleDeclaration:
-                        return (<ModuleDeclaration>d).name.kind === SyntaxKind.StringLiteral || isInstantiated(d)
+                        return (<ModuleDeclaration>d).name.kind === SyntaxKind.StringLiteral || getModuleInstanceState(d) !== ModuleInstanceState.NonInstantiated
                             ? SymbolFlags.ExportNamespace | SymbolFlags.ExportValue
                             : SymbolFlags.ExportNamespace;
                     case SyntaxKind.ClassDeclaration:
@@ -7234,7 +7274,7 @@ module ts {
             }
 
             // Uninstantiated modules shouldnt do this check
-            if (node.kind === SyntaxKind.ModuleDeclaration && !isInstantiated(node)) {
+            if (node.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                 return;
             }
 
@@ -7796,24 +7836,8 @@ module ts {
         }
 
         function checkTypeAliasDeclaration(node: TypeAliasDeclaration) {
+            checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             checkSourceElement(node.type);
-        }
-
-        function getConstantValueForExpression(node: Expression): number {
-            var isNegative = false;
-            if (node.kind === SyntaxKind.PrefixOperator) {
-                var unaryExpression = <UnaryExpression>node;
-                if (unaryExpression.operator === SyntaxKind.MinusToken || unaryExpression.operator === SyntaxKind.PlusToken) {
-                    node = unaryExpression.operand;
-                    isNegative = unaryExpression.operator === SyntaxKind.MinusToken;
-                }
-            }
-            if (node.kind === SyntaxKind.NumericLiteral) {
-                var literalText = (<LiteralExpression>node).text;
-                return isNegative ? -literalText : +literalText;
-            }
-
-            return undefined;
         }
 
         function computeEnumMemberValues(node: EnumDeclaration) {
@@ -7824,6 +7848,7 @@ module ts {
                 var enumType = getDeclaredTypeOfSymbol(enumSymbol);
                 var autoValue = 0;
                 var ambient = isInAmbientContext(node);
+                var enumIsConst = isConstEnumDeclaration(node);
 
                 forEach(node.members, member => {
                     if(isNumericName(member.name.text)) {
@@ -7831,16 +7856,30 @@ module ts {
                     }
                     var initializer = member.initializer;
                     if (initializer) {
-                        autoValue = getConstantValueForExpression(initializer);
-                        if (autoValue === undefined && !ambient) {
-                            // Only here do we need to check that the initializer is assignable to the enum type.
-                            // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
-                            // Also, we do not need to check this for ambients because there is already
-                            // a syntax error if it is not a constant.
+                        autoValue = getConstantValueForEnumMemberInitializer(initializer, enumIsConst);
+                        if (autoValue === undefined) {
+                            if (enumIsConst) {
+                                error(initializer, Diagnostics.In_const_enum_declarations_member_initializer_must_be_constant_expression);
+                            }
+                            else if (!ambient) {
+                                // Only here do we need to check that the initializer is assignable to the enum type.
+                                // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
+                                // Also, we do not need to check this for ambients because there is already
+                                // a syntax error if it is not a constant.
                             checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
+                            }
                         }
+                        else if (enumIsConst) {
+                            if (isNaN(autoValue)) {
+                                error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN);
+                            }
+                            else if (!isFinite(autoValue)) {
+                                error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
+                            }
+                        }
+
                     }
-                    else if (ambient) {
+                    else if (ambient && !enumIsConst) {
                         autoValue = undefined;
                     }
 
@@ -7850,6 +7889,110 @@ module ts {
                 });
 
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
+            }
+
+            function getConstantValueForEnumMemberInitializer(initializer: Expression, enumIsConst: boolean): number {
+                return evalConstant(initializer);
+
+                function evalConstant(e: Node): number {
+                    switch (e.kind) {
+                        case SyntaxKind.PrefixOperator:
+                            var value = evalConstant((<UnaryExpression>e).operand);
+                            if (value === undefined) {
+                                return undefined;
+                            }
+                            switch ((<UnaryExpression>e).operator) {
+                                case SyntaxKind.PlusToken: return value;
+                                case SyntaxKind.MinusToken: return -value;
+                                case SyntaxKind.TildeToken: return enumIsConst ? ~value : undefined;
+                            }
+                            return undefined;
+                        case SyntaxKind.BinaryExpression:
+                            if (!enumIsConst) {
+                                return undefined;
+                            }
+
+                            var left = evalConstant((<BinaryExpression>e).left);
+                            if (left === undefined) {
+                                return undefined;
+                            }
+                            var right = evalConstant((<BinaryExpression>e).right);
+                            if (right === undefined) {
+                                return undefined;
+                            }
+                            switch ((<BinaryExpression>e).operator) {
+                                case SyntaxKind.BarToken: return left | right;
+                                case SyntaxKind.AmpersandToken: return left & right;
+                                case SyntaxKind.GreaterThanGreaterThanToken: return left >> right;
+                                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken: return left >>> right;
+                                case SyntaxKind.LessThanLessThanToken: return left << right;
+                                case SyntaxKind.CaretToken: return left ^ right;
+                                case SyntaxKind.AsteriskToken: return left * right;
+                                case SyntaxKind.SlashToken: return left / right;
+                                case SyntaxKind.PlusToken: return left + right;
+                                case SyntaxKind.MinusToken: return left - right;
+                                case SyntaxKind.PercentToken: return left % right;
+                            }
+                            return undefined;
+                        case SyntaxKind.NumericLiteral:
+                            return +(<LiteralExpression>e).text;
+                        case SyntaxKind.ParenExpression:
+                            return enumIsConst ? evalConstant((<ParenExpression>e).expression) : undefined;
+                        case SyntaxKind.Identifier:
+                        case SyntaxKind.IndexedAccess:
+                        case SyntaxKind.PropertyAccess:
+                            if (!enumIsConst) {
+                                return undefined;
+                            }
+
+                            var member = initializer.parent;
+                            var currentType = getTypeOfSymbol(getSymbolOfNode(member.parent));
+                            var enumType: Type;
+                            var propertyName: string;
+
+                            if (e.kind === SyntaxKind.Identifier) {
+                                // unqualified names can refer to member that reside in different declaration of the enum so just doing name resolution won't work.
+                                // instead pick current enum type and later try to fetch member from the type
+                                enumType = currentType;
+                                propertyName = (<Identifier>e).text;
+                            }
+                            else {
+                                if (e.kind === SyntaxKind.IndexedAccess) {
+                                    if ((<IndexedAccess>e).index.kind !== SyntaxKind.StringLiteral) {
+                                        return undefined;
+                                    }
+                                    var enumType = getTypeOfNode((<IndexedAccess>e).object);
+                                    propertyName = (<LiteralExpression>(<IndexedAccess>e).index).text;
+                                }
+                                else {
+                                    var enumType = getTypeOfNode((<PropertyAccess>e).left);
+                                    propertyName = (<PropertyAccess>e).right.text;
+                                }
+                                if (enumType !== currentType) {
+                                    return undefined;
+                                }
+                            }
+
+                            if (propertyName === undefined) {
+                                return undefined;
+                            }
+                            var property = getPropertyOfObjectType(enumType, propertyName);
+                            if (!property || !(property.flags & SymbolFlags.EnumMember)) {
+                                return undefined;
+                            }
+                            var propertyDecl = property.valueDeclaration;
+                            // self references are illegal
+                            if (member === propertyDecl) {
+                                return undefined;
+                            }
+
+                            // illegal case: forward reference
+                            if (!isDefinedBefore(propertyDecl, member)) {
+                                return undefined;
+                            }
+                            return <number>getNodeLinks(propertyDecl).enumMemberValue;
+                    }
+                }
             }
         }
 
@@ -7874,6 +8017,16 @@ module ts {
             var enumSymbol = getSymbolOfNode(node);
             var firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
             if (node === firstDeclaration) {
+                if (enumSymbol.declarations.length > 1) {
+                    var enumIsConst = isConstEnumDeclaration(node);
+                    // check that const is placed\omitted on all enum declarations
+                    forEach(enumSymbol.declarations, decl => {
+                        if (isConstEnumDeclaration(<EnumDeclaration>decl) !== enumIsConst) {
+                            error(decl.name, Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
+                        }
+                    });
+                }
+
                 var seenEnumMissingInitialInitializer = false;
                 forEach(enumSymbol.declarations, declaration => {
                     // return true if we hit a violation of the rule, false otherwise
@@ -8707,17 +8860,16 @@ module ts {
 
         function getExportAssignmentName(node: SourceFile): string {
             var symbol = getExportAssignmentSymbol(getSymbolOfNode(node));
-            return symbol && symbolIsValue(symbol) ? symbolToString(symbol): undefined;
+            return symbol && symbolIsValue(symbol) && !isConstEnumSymbol(symbol) ? symbolToString(symbol): undefined;
         }
 
-        function isTopLevelValueImportedViaEntityName(node: ImportDeclaration): boolean {
+        function isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean {
             if (node.parent.kind !== SyntaxKind.SourceFile || !node.entityName) {
                 // parent is not source file or it is not reference to internal module
                 return false;
             }
             var symbol = getSymbolOfNode(node);
-            var target = resolveImport(symbol);
-            return target !== unknownSymbol && ((target.flags & SymbolFlags.Value) !== 0);
+            return isImportResolvedToValue(getSymbolOfNode(node));
         }
 
         function hasSemanticErrors() {
@@ -8729,6 +8881,16 @@ module ts {
             return forEach(getDiagnostics(sourceFile), d => d.isEarly);
         }
 
+        function isImportResolvedToValue(symbol: Symbol): boolean {
+            var target = resolveImport(symbol);
+            // const enums and modules that contain only const enums are not considered values from the emit perespective
+            return target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target);
+        }
+
+        function isConstEnumOrConstEnumOnlyModule(s: Symbol): boolean {
+            return isConstEnumSymbol(s) || s.constEnumOnlyModule;
+        }
+
         function isReferencedImportDeclaration(node: ImportDeclaration): boolean {
             var symbol = getSymbolOfNode(node);
             if (getSymbolLinks(symbol).referenced) {
@@ -8737,10 +8899,7 @@ module ts {
             // logic below will answer 'true' for exported import declaration in a nested module that itself is not exported.
             // As a consequence this might cause emitting extra.
             if (node.flags & NodeFlags.Export) {
-                var target = resolveImport(symbol);
-                if (target !== unknownSymbol && target.flags & SymbolFlags.Value) {
-                    return true;
-                }
+                return isImportResolvedToValue(symbol);
             }
             return false;
         }
@@ -8775,7 +8934,7 @@ module ts {
             return getNodeLinks(node).enumMemberValue;
         }
 
-        function getConstantValue(node: PropertyAccess): number {
+        function getConstantValue(node: PropertyAccess | IndexedAccess): number {
             var symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 var declaration = symbol.valueDeclaration;
@@ -8810,7 +8969,7 @@ module ts {
                 isReferencedImportDeclaration: isReferencedImportDeclaration,
                 getNodeCheckFlags: getNodeCheckFlags,
                 getEnumMemberValue: getEnumMemberValue,
-                isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
+                isTopLevelValueImportWithEntityName: isTopLevelValueImportWithEntityName,
                 hasSemanticErrors: hasSemanticErrors,
                 hasEarlyErrors: hasEarlyErrors,
                 isDeclarationVisible: isDeclarationVisible,

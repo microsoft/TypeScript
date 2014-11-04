@@ -20,7 +20,7 @@ module TypeScript.PrettyPrinter {
                 return 0;
             }
 
-            if (lastToken(element1).kind() === SyntaxKind.CloseBraceToken) {
+            if (lastToken(element1).kind === SyntaxKind.CloseBraceToken) {
                 return 2;
             }
 
@@ -40,7 +40,7 @@ module TypeScript.PrettyPrinter {
                 return 0;
             }
 
-            if (lastToken(element1).kind() === SyntaxKind.CloseBraceToken) {
+            if (lastToken(element1).kind === SyntaxKind.CloseBraceToken) {
                 return 2;
             }
 
@@ -150,7 +150,7 @@ module TypeScript.PrettyPrinter {
                         this.ensureSpace();
                     }
 
-                    visitNodeOrToken(this, childAt(list, i));
+                    visitNodeOrToken(this, list[i]);
                 }
                 else {
                     this.appendToken(<ISyntaxToken>childAt(list, i));
@@ -165,7 +165,7 @@ module TypeScript.PrettyPrinter {
                         this.ensureNewLine();
                     }
 
-                    visitNodeOrToken(this, childAt(list, i));
+                    visitNodeOrToken(this, list[i]);
                 }
                 else {
                     this.appendToken(<ISyntaxToken>childAt(list, i));
@@ -278,7 +278,7 @@ module TypeScript.PrettyPrinter {
             }
 
             for (var i = 0, n = childCount(node.typeMembers); i < n; i++) {
-                visitNodeOrToken(this, childAt(node.typeMembers, i));
+                visitNodeOrToken(this, node.typeMembers[i]);
 
                 if (appendNewLines) {
                     this.ensureNewLine();
@@ -552,7 +552,7 @@ module TypeScript.PrettyPrinter {
         public visitBinaryExpression(node: BinaryExpressionSyntax): void {
             visitNodeOrToken(this, node.left);
 
-            if (node.operatorToken.kind() !== SyntaxKind.CommaToken) {
+            if (node.operatorToken.kind !== SyntaxKind.CommaToken) {
                 this.ensureSpace();
             }
 
@@ -628,7 +628,7 @@ module TypeScript.PrettyPrinter {
         }
 
         private appendBlockOrStatement(node: IStatementSyntax): void {
-            if (node.kind() === SyntaxKind.Block) {
+            if (node.kind === SyntaxKind.Block) {
                 this.ensureSpace();
                 visitNodeOrToken(this, node);
             }
@@ -654,7 +654,7 @@ module TypeScript.PrettyPrinter {
             this.ensureNewLine();
             this.appendToken(node.elseKeyword);
 
-            if (node.statement.kind() === SyntaxKind.IfStatement) {
+            if (node.statement.kind === SyntaxKind.IfStatement) {
                 this.ensureSpace();
                 visitNodeOrToken(this, node.statement);
             }
@@ -774,9 +774,9 @@ module TypeScript.PrettyPrinter {
         }
 
         private appendSwitchClauseStatements(node: ISwitchClauseSyntax): void {
-            if (childCount(node.statements) === 1 && childAt(node.statements, 0).kind() === SyntaxKind.Block) {
+            if (childCount(node.statements) === 1 && childAt(node.statements, 0).kind === SyntaxKind.Block) {
                 this.ensureSpace();
-                visitNodeOrToken(this, childAt(node.statements, 0));
+                visitNodeOrToken(this, node.statements[0]);
             }
             else if (childCount(node.statements) > 0) {
                 this.ensureNewLine();
@@ -1022,6 +1022,24 @@ module TypeScript.PrettyPrinter {
         public visitDebuggerStatement(node: DebuggerStatementSyntax): void {
             this.appendToken(node.debuggerKeyword);
             this.appendToken(node.semicolonToken);
+        }
+
+        public visitTemplateExpression(node: TemplateExpressionSyntax): void {
+            this.appendToken(node.templateStartToken);
+            this.ensureSpace();
+            this.appendSpaceList(node.templateClauses);
+        }
+
+        public visitTemplateClause(node: TemplateClauseSyntax): void {
+            visitNodeOrToken(this, node.expression);
+            this.ensureSpace();
+            this.appendToken(node.templateMiddleOrEndToken);
+        }
+
+        public visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): void {
+            visitNodeOrToken(this, node.expression);
+            this.ensureSpace();
+            visitNodeOrToken(this, node.templateExpression);
         }
     }
 }

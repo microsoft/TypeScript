@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/templates/templateStringInPropertyName2.ts(1,9): error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/templateStringInPropertyName2.ts(1,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/templateStringInPropertyName2.ts(2,5): error TS1136: Property assignment expected.
 tests/cases/conformance/es6/templates/templateStringInPropertyName2.ts(2,32): error TS1005: ',' expected.
 tests/cases/conformance/es6/templates/templateStringInPropertyName2.ts(2,34): error TS1134: Variable declaration expected.
@@ -12,7 +12,7 @@ tests/cases/conformance/es6/templates/templateStringInPropertyName2.ts(1,9): err
             ~
         `abc${ 123 }def${ 456 }ghi`: 321
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1160: Tagged templates are only available when targeting ECMAScript 6 and higher.
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
         ~~~~~~
 !!! error TS1136: Property assignment expected.
                                    ~

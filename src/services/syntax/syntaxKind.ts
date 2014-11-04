@@ -5,8 +5,6 @@ module TypeScript {
         // Variable width tokens, trivia and lists.
         None,
         List,
-        SeparatedList,
-        TriviaList,
 
         // Trivia
         WhitespaceTrivia,
@@ -27,6 +25,12 @@ module TypeScript {
         RegularExpressionLiteral,
         NumericLiteral,
         StringLiteral,
+
+        // Template tokens
+        NoSubstitutionTemplateToken,
+        TemplateStartToken,
+        TemplateMiddleToken,
+        TemplateEndToken,
 
         // All fixed width tokens follow.
 
@@ -228,6 +232,8 @@ module TypeScript {
         ElementAccessExpression,
         FunctionExpression,
         OmittedExpression,
+        TemplateExpression,
+        TemplateAccessExpression,
 
         // Variable declarations
         VariableDeclaration,
@@ -247,6 +253,7 @@ module TypeScript {
         ElseClause,
         CatchClause,
         FinallyClause,
+        TemplateClause,
 
         // Generics
         TypeParameter,

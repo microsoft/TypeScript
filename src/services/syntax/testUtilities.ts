@@ -1,6 +1,6 @@
 module TypeScript {
     function assertParent(parent: ISyntaxElement, child: ISyntaxElement) {
-        if (child && !TypeScript.isShared(child)) {
+        if (child) {
             return Debug.assert(parent === child.parent);
         }
     }
@@ -9,10 +9,10 @@ module TypeScript {
         if (node1 === node2) { return true; }
         if (!node1 || !node2) { return false; }
 
-        Debug.assert(node1.kind() === TypeScript.SyntaxKind.SourceUnit || node1.parent);
-        Debug.assert(node2.kind() === TypeScript.SyntaxKind.SourceUnit || node2.parent);
+        Debug.assert(node1.kind === TypeScript.SyntaxKind.SourceUnit || node1.parent);
+        Debug.assert(node2.kind === TypeScript.SyntaxKind.SourceUnit || node2.parent);
 
-        if (node1.kind() !== node2.kind()) { return false; }
+        if (node1.kind !== node2.kind) { return false; }
         if (childCount(node1) !== childCount(node2)) { return false; }
 
         for (var i = 0, n = childCount(node1); i < n; i++) {
@@ -41,8 +41,8 @@ module TypeScript {
             return false;
         }
 
-        Debug.assert(node1.kind() === TypeScript.SyntaxKind.SourceUnit || node1.parent);
-        Debug.assert(node2.kind() === TypeScript.SyntaxKind.SourceUnit || node2.parent);
+        Debug.assert(node1.kind === TypeScript.SyntaxKind.SourceUnit || node1.parent);
+        Debug.assert(node2.kind === TypeScript.SyntaxKind.SourceUnit || node2.parent);
 
         if (TypeScript.isToken(node1)) {
             return TypeScript.isToken(node2) ? tokenStructuralEquals(<TypeScript.ISyntaxToken>node1, <TypeScript.ISyntaxToken>node2, text1, text2) : false;
@@ -63,7 +63,7 @@ module TypeScript {
         Debug.assert(token1.parent);
         Debug.assert(token2.parent);
 
-        return token1.kind() === token2.kind() &&
+        return token1.kind === token2.kind &&
             TypeScript.width(token1) === TypeScript.width(token2) &&
             token1.fullWidth() === token2.fullWidth() &&
             token1.fullStart() === token2.fullStart() &&
@@ -102,8 +102,8 @@ module TypeScript {
     }
 
     function listStructuralEquals<T extends TypeScript.ISyntaxNodeOrToken>(list1: T[], list2: T[], checkParents: boolean, text1: ISimpleText, text2: ISimpleText): boolean {
-        Debug.assert(TypeScript.isShared(list1) || list1.parent);
-        Debug.assert(TypeScript.isShared(list2) || list2.parent);
+        Debug.assert(list1.parent);
+        Debug.assert(list2.parent);
 
         if (childCount(list1) !== childCount(list2)) {
             return false;
@@ -118,32 +118,7 @@ module TypeScript {
                 assertParent(list2, child2);
             }
 
-            if (!nodeOrTokenStructuralEquals(child1, child2, checkParents, text1, text2)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    function separatedListStructuralEquals<T extends TypeScript.ISyntaxNodeOrToken>(list1: T[], list2: T[], checkParents: boolean, text1: ISimpleText, text2: ISimpleText): boolean {
-        Debug.assert(TypeScript.isShared(list1) || list1.parent);
-        Debug.assert(TypeScript.isShared(list2) || list2.parent);
-
-        if (childCount(list1) !== childCount(list2)) {
-            return false;
-        }
-
-        for (var i = 0, n = childCount(list1); i < n; i++) {
-            var element1 = childAt(list1, i);
-            var element2 = childAt(list2, i);
-
-            if (checkParents) {
-                assertParent(list1, element1);
-                assertParent(list2, element2);
-            }
-
-            if (!nodeOrTokenStructuralEquals(element1, element2, checkParents, text1, text2)) {
+            if (!elementStructuralEquals(child1, child2, checkParents, text1, text2)) {
                 return false;
             }
         }
@@ -160,10 +135,10 @@ module TypeScript {
             return false;
         }
 
-        Debug.assert(element1.kind() === SyntaxKind.SourceUnit || element1.parent);
-        Debug.assert(element2.kind() === SyntaxKind.SourceUnit || element2.parent);
+        Debug.assert(element1.kind === SyntaxKind.SourceUnit || element1.parent);
+        Debug.assert(element2.kind === SyntaxKind.SourceUnit || element2.parent);
 
-        if (element2.kind() !== element2.kind()) {
+        if (element2.kind !== element2.kind) {
             return false;
         }
 
@@ -191,9 +166,6 @@ module TypeScript {
         }
         else if (TypeScript.isList(element1)) {
             return listStructuralEquals(<TypeScript.ISyntaxNodeOrToken[]>element1, <TypeScript.ISyntaxNodeOrToken[]>element2, checkParents, text1, text2);
-        }
-        else if (TypeScript.isSeparatedList(element1)) {
-            return separatedListStructuralEquals(<TypeScript.ISyntaxNodeOrToken[]>element1, <TypeScript.ISyntaxNodeOrToken[]>element2, checkParents, text1, text2);
         }
 
         throw TypeScript.Errors.invalidOperation();

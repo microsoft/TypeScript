@@ -1031,19 +1031,29 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitPropertyAccess(node: PropertyAccess) {
+            function tryEmitConstantValue(node: PropertyAccess | IndexedAccess): boolean {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
-                    write(constantValue.toString() + " /* " + identifierToString(node.right) + " */");
+                    var propertyName = node.kind === SyntaxKind.PropertyAccess ? identifierToString((<PropertyAccess>node).right) : getTextOfNode((<IndexedAccess>node).index);
+                    write(constantValue.toString() + " /* " + propertyName + " */");
+                    return true;
                 }
-                else {
-                    emit(node.left);
-                    write(".");
-                    emit(node.right);
+                return false;
+            }
+
+            function emitPropertyAccess(node: PropertyAccess) {
+                if (tryEmitConstantValue(node)) {
+                    return;
                 }
+                emit(node.left);
+                write(".");
+                emit(node.right);
             }
 
             function emitIndexedAccess(node: IndexedAccess) {
+                if (tryEmitConstantValue(node)) {
+                    return;
+                }
                 emit(node.object);
                 write("[");
                 emit(node.index);
@@ -1341,6 +1351,10 @@ module ts {
                 emitToken(SyntaxKind.CloseBraceToken, node.clauses.end);
             }
 
+            function isOnSameLine(node1: Node, node2: Node) {
+                return getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node1.pos)) === getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node2.pos));
+            }
+
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
                 if (node.kind === SyntaxKind.CaseClause) {
                     write("case ");
@@ -1350,9 +1364,16 @@ module ts {
                 else {
                     write("default:");
                 }
-                increaseIndent();
-                emitLines(node.statements);
-                decreaseIndent();
+
+                if (node.statements.length === 1 && isOnSameLine(node, node.statements[0])) {
+                    write(" ");
+                    emit(node.statements[0]);
+                }
+                else {
+                    increaseIndent();
+                    emitLines(node.statements);
+                    decreaseIndent();
+                }
             }
 
             function emitThrowStatement(node: ThrowStatement) {
@@ -1876,6 +1897,11 @@ module ts {
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
+                // const enums are completely erased during compilation.
+                var isConstEnum = isConstEnumDeclaration(node);
+                if (isConstEnum && !compilerOptions.preserveConstEnums) {
+                    return;
+                }
                 emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
@@ -1893,7 +1919,7 @@ module ts {
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
-                emitEnumMemberDeclarations();
+                emitEnumMemberDeclarations(isConstEnum);
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
@@ -1916,7 +1942,7 @@ module ts {
                 }
                 emitTrailingComments(node);
 
-                function emitEnumMemberDeclarations() {
+                function emitEnumMemberDeclarations(isConstEnum: boolean) {
                     forEach(node.members, member => {
                         writeLine();
                         emitLeadingComments(member);
@@ -1927,7 +1953,7 @@ module ts {
                         write("[");
                         emitQuotedIdentifier(member.name);
                         write("] = ");
-                        if (member.initializer) {
+                        if (member.initializer && !isConstEnum) {
                             emit(member.initializer);
                         }
                         else {
@@ -1950,7 +1976,7 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (!isInstantiated(node)) {
+                if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
                 emitLeadingComments(node);
@@ -2002,7 +2028,7 @@ module ts {
                     // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
                     // - current file is not external module
                     // - import declaration is top level and target is value imported by entity name
-                    emitImportDeclaration = !isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportedViaEntityName(node);
+                    emitImportDeclaration = !isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportWithEntityName(node);
                 }
 
                 if (emitImportDeclaration) {
@@ -2722,6 +2748,9 @@ module ts {
                 if (resolver.isDeclarationVisible(node)) {
                     emitJsDocComments(node);
                     emitDeclarationFlags(node);
+                    if (isConstEnumDeclaration(node)) {
+                        write("const ")
+                    }
                     write("enum ");
                     emitSourceTextOfNode(node.name);
                     write(" {");
@@ -2801,7 +2830,7 @@ module ts {
                                 break;
 
                             default:
-                                Debug.fail("This is unknown parent for type parameter: " + SyntaxKind[node.parent.kind]);
+                                Debug.fail("This is unknown parent for type parameter: " + node.parent.kind);
                         }
 
                         return {
@@ -3197,7 +3226,7 @@ module ts {
                             break;
 
                         default:
-                            Debug.fail("This is unknown kind for signature: " + SyntaxKind[node.kind]);
+                            Debug.fail("This is unknown kind for signature: " + node.kind);
                     }
 
                     return {
@@ -3282,7 +3311,7 @@ module ts {
                             break;
 
                         default:
-                            Debug.fail("This is unknown parent for parameter: " + SyntaxKind[node.parent.kind]);
+                            Debug.fail("This is unknown parent for parameter: " + node.parent.kind);
                     }
 
                     return {

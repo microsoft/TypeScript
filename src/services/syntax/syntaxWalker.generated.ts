@@ -15,14 +15,7 @@ module TypeScript {
 
         public visitList(list: ISyntaxNodeOrToken[]): void {
             for (var i = 0, n = list.length; i < n; i++) {
-               visitNodeOrToken(this, list[i]);
-            }
-        }
-
-        public visitSeparatedList(list: ISyntaxNodeOrToken[]): void {
-            for (var i = 0, n = childCount(list); i < n; i++) {
-                var item = childAt(list, i);
-                visitNodeOrToken(this, item);
+                visitNodeOrToken(this, list[i]);
             }
         }
 
@@ -39,7 +32,7 @@ module TypeScript {
 
         public visitObjectType(node: ObjectTypeSyntax): void {
             this.visitToken(node.openBraceToken);
-            this.visitSeparatedList(node.typeMembers);
+            this.visitList(node.typeMembers);
             this.visitToken(node.closeBraceToken);
         }
 
@@ -76,7 +69,7 @@ module TypeScript {
 
         public visitTupleType(node: TupleTypeSyntax): void {
             this.visitToken(node.openBracketToken);
-            this.visitSeparatedList(node.types);
+            this.visitList(node.types);
             this.visitToken(node.closeBracketToken);
         }
 
@@ -136,7 +129,7 @@ module TypeScript {
             this.visitToken(node.enumKeyword);
             this.visitToken(node.identifier);
             this.visitToken(node.openBraceToken);
-            this.visitSeparatedList(node.enumElements);
+            this.visitList(node.enumElements);
             this.visitToken(node.closeBraceToken);
         }
 
@@ -219,7 +212,7 @@ module TypeScript {
 
         public visitIndexSignature(node: IndexSignatureSyntax): void {
             this.visitToken(node.openBracketToken);
-            this.visitSeparatedList(node.parameters);
+            this.visitList(node.parameters);
             this.visitToken(node.closeBracketToken);
             visitNodeOrToken(this, node.typeAnnotation);
         }
@@ -414,13 +407,13 @@ module TypeScript {
 
         public visitArrayLiteralExpression(node: ArrayLiteralExpressionSyntax): void {
             this.visitToken(node.openBracketToken);
-            this.visitSeparatedList(node.expressions);
+            this.visitList(node.expressions);
             this.visitToken(node.closeBracketToken);
         }
 
         public visitObjectLiteralExpression(node: ObjectLiteralExpressionSyntax): void {
             this.visitToken(node.openBraceToken);
-            this.visitSeparatedList(node.propertyAssignments);
+            this.visitList(node.propertyAssignments);
             this.visitToken(node.closeBraceToken);
         }
 
@@ -474,9 +467,19 @@ module TypeScript {
         public visitOmittedExpression(node: OmittedExpressionSyntax): void {
         }
 
+        public visitTemplateExpression(node: TemplateExpressionSyntax): void {
+            this.visitToken(node.templateStartToken);
+            this.visitList(node.templateClauses);
+        }
+
+        public visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): void {
+            visitNodeOrToken(this, node.expression);
+            visitNodeOrToken(this, node.templateExpression);
+        }
+
         public visitVariableDeclaration(node: VariableDeclarationSyntax): void {
             this.visitToken(node.varKeyword);
-            this.visitSeparatedList(node.variableDeclarators);
+            this.visitList(node.variableDeclarators);
         }
 
         public visitVariableDeclarator(node: VariableDeclaratorSyntax): void {
@@ -488,31 +491,31 @@ module TypeScript {
         public visitArgumentList(node: ArgumentListSyntax): void {
             visitNodeOrToken(this, node.typeArgumentList);
             this.visitToken(node.openParenToken);
-            this.visitSeparatedList(node.arguments);
+            this.visitList(node.arguments);
             this.visitToken(node.closeParenToken);
         }
 
         public visitParameterList(node: ParameterListSyntax): void {
             this.visitToken(node.openParenToken);
-            this.visitSeparatedList(node.parameters);
+            this.visitList(node.parameters);
             this.visitToken(node.closeParenToken);
         }
 
         public visitTypeArgumentList(node: TypeArgumentListSyntax): void {
             this.visitToken(node.lessThanToken);
-            this.visitSeparatedList(node.typeArguments);
+            this.visitList(node.typeArguments);
             this.visitToken(node.greaterThanToken);
         }
 
         public visitTypeParameterList(node: TypeParameterListSyntax): void {
             this.visitToken(node.lessThanToken);
-            this.visitSeparatedList(node.typeParameters);
+            this.visitList(node.typeParameters);
             this.visitToken(node.greaterThanToken);
         }
 
         public visitHeritageClause(node: HeritageClauseSyntax): void {
             this.visitToken(node.extendsOrImplementsKeyword);
-            this.visitSeparatedList(node.typeNames);
+            this.visitList(node.typeNames);
         }
 
         public visitEqualsValueClause(node: EqualsValueClauseSyntax): void {
@@ -550,6 +553,11 @@ module TypeScript {
         public visitFinallyClause(node: FinallyClauseSyntax): void {
             this.visitToken(node.finallyKeyword);
             visitNodeOrToken(this, node.block);
+        }
+
+        public visitTemplateClause(node: TemplateClauseSyntax): void {
+            visitNodeOrToken(this, node.expression);
+            this.visitToken(node.templateMiddleOrEndToken);
         }
 
         public visitTypeParameter(node: TypeParameterSyntax): void {

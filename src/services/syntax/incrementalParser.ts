@@ -235,7 +235,7 @@ module TypeScript.IncrementalParser {
                 !_oldSourceUnitCursor.isFinished();
         }
 
-        function updateTokens(nodeOrToken: ISyntaxNodeOrToken): void {
+        function updateTokenPosition(token: ISyntaxToken): void {
             // If we got a node or token, and we're past the range of edited text, then walk its
             // constituent tokens, making sure all their positions are correct.  We don't need to
             // do this for the tokens before the edited range (since their positions couldn't have 
@@ -243,14 +243,46 @@ module TypeScript.IncrementalParser {
             // edited range, as their positions will be correct when the underlying parser source 
             // creates them.
 
-            var position = absolutePosition();
-            var tokenWasMoved = isPastChangeRange() && fullStart(nodeOrToken) !== position;
-
-            if (tokenWasMoved) {
-                setTokenFullStartWalker.position = position;
-
-                visitNodeOrToken(setTokenFullStartWalker, nodeOrToken);
+            if (isPastChangeRange()) {
+                token.setFullStart(absolutePosition());
             }
+        }
+
+        function updateNodePosition(node: ISyntaxNode): void {
+            // If we got a node or token, and we're past the range of edited text, then walk its
+            // constituent tokens, making sure all their positions are correct.  We don't need to
+            // do this for the tokens before the edited range (since their positions couldn't have 
+            // been affected by the edit), and we don't need to do this for the tokens in the 
+            // edited range, as their positions will be correct when the underlying parser source 
+            // creates them.
+
+            if (isPastChangeRange()) {
+                var position = absolutePosition();
+
+                var tokens = getTokens(node);
+
+                for (var i = 0, n = tokens.length; i < n; i++) {
+                    var token = tokens[i];
+                    token.setFullStart(position);
+
+                    position += token.fullWidth();
+                }
+            }
+        }
+
+        function getTokens(node: ISyntaxNode): ISyntaxToken[] {
+            var tokens = node.__cachedTokens;
+            if (!tokens) {
+                tokens = [];
+                tokenCollectorWalker.tokens = tokens;
+
+                visitNodeOrToken(tokenCollectorWalker, node);
+
+                node.__cachedTokens = tokens;
+                tokenCollectorWalker.tokens = undefined;
+            }
+
+            return tokens;
         }
 
         function currentNode(): ISyntaxNode {
@@ -260,7 +292,7 @@ module TypeScript.IncrementalParser {
                 var node = tryGetNodeFromOldSourceUnit();
                 if (node) {
                     // Make sure the positions for the tokens in this node are correct.
-                    updateTokens(node);
+                    updateNodePosition(node);
                     return node;
                 }
             }
@@ -274,7 +306,7 @@ module TypeScript.IncrementalParser {
                 var token = tryGetTokenFromOldSourceUnit();
                 if (token) {
                     // Make sure the token's position/text is correct.
-                    updateTokens(token);
+                    updateTokenPosition(token);
                     return token;
                 }
             }
@@ -702,6 +734,10 @@ module TypeScript.IncrementalParser {
             return isNode(element) ? <ISyntaxNode>element : undefined;
         }
 
+        function isEmptyList(element: ISyntaxElement) {
+            return isList(element) && (<ISyntaxNodeOrToken[]>element).length === 0;
+        }
+
         function moveToFirstChild() {
             var nodeOrToken = currentNodeOrToken();
             if (nodeOrToken === undefined) {
@@ -721,7 +757,7 @@ module TypeScript.IncrementalParser {
             // next sibling of the empty node.
             for (var i = 0, n = childCount(nodeOrToken); i < n; i++) {
                 var child = childAt(nodeOrToken, i);
-                if (child && !isShared(child)) {
+                if (child && !isEmptyList(child)) {
                     // Great, we found a real child.  Push that.
                     pushElement(child, /*indexInParent:*/ i);
 
@@ -749,14 +785,13 @@ module TypeScript.IncrementalParser {
                 for (var i = currentPiece.indexInParent + 1, n = childCount(parent); i < n; i++) {
                     var sibling = childAt(parent, i);
 
-                    if (sibling && !isShared(sibling)) {
+                    if (sibling && !isEmptyList(sibling)) {
                         // We found a good sibling that we can move to.  Just reuse our existing piece
                         // so we don't have to push/pop.
                         currentPiece.element = sibling;
                         currentPiece.indexInParent = i;
 
-                        // The sibling might have been a list.  Move to it's first child.  it must have
-                        // one since this was a non-shared element.
+                        // The sibling might have been a list.  Move to it's first child.
                         moveToFirstChildIfList();
                         return;
                     }
@@ -777,7 +812,7 @@ module TypeScript.IncrementalParser {
         function moveToFirstChildIfList(): void {
             var element = pieces[currentPieceIndex].element;
 
-            if (isList(element) || isSeparatedList(element)) {
+            if (isList(element)) {
                 // We cannot ever get an empty list in our piece path.  Empty lists are 'shared' and
                 // we make sure to filter that out before pushing any children.
                 // Debug.assert(childCount(element) > 0);
@@ -841,21 +876,17 @@ module TypeScript.IncrementalParser {
     // A simple walker we use to hit all the tokens of a node and update their positions when they
     // are reused in a different location because of an incremental parse.
 
-    class SetTokenFullStartWalker extends SyntaxWalker {
-        public position: number;
+    class TokenCollectorWalker extends SyntaxWalker {
+        public tokens: ISyntaxToken[] = [];
 
         public visitToken(token: ISyntaxToken): void {
-            var position = this.position;
-            token.setFullStart(position);
-
-            this.position = position + token.fullWidth();
+            this.tokens.push(token);
         }
     }
 
-    var setTokenFullStartWalker = new SetTokenFullStartWalker();
+    var tokenCollectorWalker = new TokenCollectorWalker();
 
     export function parse(oldSyntaxTree: SyntaxTree, textChangeRange: TextChangeRange, newText: ISimpleText): SyntaxTree {
-        Debug.assert(oldSyntaxTree.isConcrete(), "Can only incrementally parse a concrete syntax tree.");
         if (textChangeRange.isUnchanged()) {
             return oldSyntaxTree;
         }

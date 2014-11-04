@@ -50,12 +50,12 @@ var r3 = undefined + b;
 var r4 = undefined + 1;
 var r5 = undefined + c;
 var r6 = undefined + 0 /* a */;
-var r7 = undefined + E['a'];
+var r7 = undefined + 0 /* 'a' */;
 var r8 = b + undefined;
 var r9 = 1 + undefined;
 var r10 = c + undefined;
 var r11 = 0 /* a */ + undefined;
-var r12 = E['a'] + undefined;
+var r12 = 0 /* 'a' */ + undefined;
 // undefined + string
 var r13 = undefined + d;
 var r14 = undefined + '';

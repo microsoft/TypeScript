@@ -37,11 +37,11 @@ var ENUM1;
 // enum type var
 var ResultIsBoolean1 = !ENUM;
 // enum type expressions
-var ResultIsBoolean2 = !ENUM["B"];
-var ResultIsBoolean3 = !(1 /* B */ + ENUM["C"]);
+var ResultIsBoolean2 = !1 /* "B" */;
+var ResultIsBoolean3 = !(1 /* B */ + 2 /* "C" */);
 // multiple ! operators
 var ResultIsBoolean4 = !!ENUM;
-var ResultIsBoolean5 = !!!(ENUM["B"] + 2 /* C */);
+var ResultIsBoolean5 = !!!(1 /* "B" */ + 2 /* C */);
 // miss assignment operators
 !ENUM;
 !ENUM1;

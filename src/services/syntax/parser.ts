@@ -1,10 +1,6 @@
 ///<reference path='references.ts' />
 
 module TypeScript.Parser {
-    // The factory used to produce parse tree nodes.  Injected normally by the 
-    // TypeScript.Syntax.Abstract or TypeScript.Syntax.Conrete modules.
-    export var syntaxFactory: Syntax.ISyntaxFactory;
-
     // Interface that represents the source that the parser pulls tokens from.  Essentially, this 
     // is the interface that the parser needs an underlying scanner to provide.  This allows us to
     // separate out "what" the parser does with the tokens it retrieves versus "how" it obtains
@@ -135,12 +131,6 @@ module TypeScript.Parser {
         return result;
     }
 
-    function returnZeroLengthArray(array: any[]) {
-        if (array.length === 0) {
-            returnArray(array);
-        }
-    }
-
     function returnArray(array: any[]) {
         array.length = 0;
         arrayPool[arrayPoolCount] = array;
@@ -226,7 +216,7 @@ module TypeScript.Parser {
             var allDiagnostics = source.tokenDiagnostics().concat(diagnostics);
             allDiagnostics.sort((a: Diagnostic, b: Diagnostic) => a.start() - b.start());
 
-            return new SyntaxTree(syntaxFactory.isConcrete, sourceUnit, isDeclaration, allDiagnostics, fileName, source.text, languageVersion);
+            return new SyntaxTree(sourceUnit, isDeclaration, allDiagnostics, fileName, source.text, languageVersion);
         }
 
         function getRewindPoint(): IParserRewindPoint {
@@ -300,7 +290,7 @@ module TypeScript.Parser {
         //we should keep it simple so that it can be inlined.
         function eatToken(kind: SyntaxKind): ISyntaxToken {
             var token = currentToken();
-            if (token.kind() === kind) {
+            if (token.kind === kind) {
                 return consumeToken(token);
             }
 
@@ -311,7 +301,7 @@ module TypeScript.Parser {
         // Eats the token if it is there.  Otherwise does nothing.  Will not report errors.
         function tryEatToken(kind: SyntaxKind): ISyntaxToken {
             var _currentToken = currentToken();
-            if (_currentToken.kind() === kind) {
+            if (_currentToken.kind === kind) {
                 return consumeToken(_currentToken);
             }
 
@@ -323,7 +313,7 @@ module TypeScript.Parser {
         // on the state of the parser.  For example, 'yield' is an identifier *unless* the parser 
         // is in strict mode.
         function isIdentifier(token: ISyntaxToken): boolean {
-            var tokenKind = token.kind();
+            var tokenKind = token.kind;
 
             if (tokenKind === SyntaxKind.IdentifierName) {
                 return true;
@@ -352,7 +342,7 @@ module TypeScript.Parser {
             var token = currentToken();
 
             // If we have an identifier name, then consume and return it.
-            var tokenKind = token.kind();
+            var tokenKind = token.kind;
             if (tokenKind === SyntaxKind.IdentifierName) {
                 return consumeToken(token);
             }
@@ -378,7 +368,7 @@ module TypeScript.Parser {
             if (isIdentifier(token)) {
                 consumeToken(token);
 
-                if (token.kind() === SyntaxKind.IdentifierName) {
+                if (token.kind === SyntaxKind.IdentifierName) {
                     return token;
                 }
 
@@ -408,7 +398,7 @@ module TypeScript.Parser {
             var token = currentToken();
 
             // An automatic semicolon is always allowed if we're at the end of the file.
-            var tokenKind = token.kind();
+            var tokenKind = token.kind;
             if (tokenKind === SyntaxKind.EndOfFileToken) {
                 return true;
             }
@@ -433,7 +423,7 @@ module TypeScript.Parser {
         function canEatExplicitOrAutomaticSemicolon(allowWithoutNewline: boolean): boolean {
             var token = currentToken();
 
-            if (token.kind() === SyntaxKind.SemicolonToken) {
+            if (token.kind === SyntaxKind.SemicolonToken) {
                 return true;
             }
 
@@ -444,7 +434,7 @@ module TypeScript.Parser {
             var token = currentToken();
 
             // If we see a semicolon, then we can definitely eat it.
-            if (token.kind() === SyntaxKind.SemicolonToken) {
+            if (token.kind === SyntaxKind.SemicolonToken) {
                 return consumeToken(token);
             }
 
@@ -469,7 +459,7 @@ module TypeScript.Parser {
             return Syntax.emptyToken(expectedKind);
         }
 
-        function getExpectedTokenDiagnostic(expectedKind: SyntaxKind, actual: ISyntaxToken, diagnosticCode: string): Diagnostic {
+        function getExpectedTokenDiagnostic(expectedKind: SyntaxKind, actual?: ISyntaxToken, diagnosticCode?: string): Diagnostic {
             var token = currentToken();
 
             var args: any[] = undefined;
@@ -484,9 +474,9 @@ module TypeScript.Parser {
                     // They wanted an identifier.
 
                     // If the user supplied a keyword, give them a specialized message.
-                    if (actual && SyntaxFacts.isAnyKeyword(actual.kind())) {
+                    if (actual && SyntaxFacts.isAnyKeyword(actual.kind)) {
                         diagnosticCode = DiagnosticCode.Identifier_expected_0_is_a_keyword;
-                        args = [SyntaxFacts.getText(actual.kind())];
+                        args = [SyntaxFacts.getText(actual.kind)];
                     }
                     else {
                         // Otherwise just report that an identifier was expected.
@@ -557,11 +547,13 @@ module TypeScript.Parser {
             // when next requested.
             while (true) {
                 // Parent must be a list or a node.  All of those have a 'data' element.
-                Debug.assert(isNode(parent) || isList(parent) || isSeparatedList(parent));
-                var dataElement = <{ data: number }><any>parent;
-                if (dataElement.data) {
-                    dataElement.data &= SyntaxConstants.NodeParsedInStrictModeMask
+                Debug.assert(isNode(parent) || isList(parent));
+                var dataElement = <ISyntaxNode>parent;
+                if (dataElement.__data) {
+                    dataElement.__data &= SyntaxConstants.NodeParsedInStrictModeMask
                 }
+
+                dataElement.__cachedTokens = undefined;
 
                 if (parent === node) {
                     break;
@@ -592,20 +584,6 @@ module TypeScript.Parser {
                     }
                 }
             }
-            else if (isSeparatedList(parent)) {
-                var list2 = <ISyntaxNodeOrToken[]>parent;
-                for (var i = 0, n = childCount(list2); i < n; i++) {
-                    if (childAt(list2, i) === oldToken) {
-                        if (i % 2 === 0) {
-                            list2[i / 2] = newToken;
-                        }
-                        else {
-                            list2.separators[(i - 1) / 2] = newToken;
-                        }
-                        return;
-                    }
-                }
-            }
 
             throw Errors.invalidOperation();
         }
@@ -630,7 +608,7 @@ module TypeScript.Parser {
         }
 
         function addSkippedTokensBeforeToken(token: ISyntaxToken, skippedTokens: ISyntaxToken[]): ISyntaxToken {
-            // Debug.assert(token.fullWidth() > 0 || token.kind() === SyntaxKind.EndOfFileToken);
+            // Debug.assert(token.fullWidth() > 0 || token.kind === SyntaxKind.EndOfFileToken);
             // Debug.assert(skippedTokens.length > 0);
 
             var leadingTrivia: ISyntaxTrivia[] = [];
@@ -717,8 +695,8 @@ module TypeScript.Parser {
             var moduleElements = parseSyntaxList<IModuleElementSyntax>(ListParsingState.SourceUnit_ModuleElements, skippedTokens, updateStrictModeState);
 
             setStrictMode(savedIsInStrictMode);
-
-            var sourceUnit = new syntaxFactory.SourceUnitSyntax(parseNodeData, moduleElements, currentToken());
+            
+            var sourceUnit = new SourceUnitSyntax(parseNodeData, moduleElements, currentToken());
 
             sourceUnit = <SourceUnitSyntax>addSkippedTokensBeforeNode(sourceUnit, skippedTokens);
 
@@ -733,12 +711,16 @@ module TypeScript.Parser {
             return sourceUnit;
         }
 
+        function isDirectivePrologueElement(node: ISyntaxNodeOrToken): boolean {
+            return node.kind === SyntaxKind.ExpressionStatement &&
+                (<ExpressionStatementSyntax>node).expression.kind === SyntaxKind.StringLiteral;
+        }
+
         function updateStrictModeState(items: any[]): void {
             if (!isInStrictMode) {
                 // Check if all the items are directive prologue elements.
-                for (var i = 0; i < items.length; i++) {
-                    var item = items[i];
-                    if (!SyntaxFacts.isDirectivePrologueElement(item)) {
+                for (var i = 0, n = items.length; i < n; i++) {
+                    if (!isDirectivePrologueElement(items[i])) {
                         return;
                     }
                 }
@@ -770,7 +752,7 @@ module TypeScript.Parser {
             if (_modifierCount) {
                 // if we have modifiers, then these are definitely TS constructs and we can 
                 // immediately start parsing them.
-                switch (peekToken(_modifierCount).kind()) {
+                switch (peekToken(_modifierCount).kind) {
                     case SyntaxKind.ImportKeyword: return parseImportDeclaration();
                     case SyntaxKind.ModuleKeyword: return parseModuleDeclaration();
                     case SyntaxKind.InterfaceKeyword: return parseInterfaceDeclaration();
@@ -786,10 +768,10 @@ module TypeScript.Parser {
             // consuming these, we only parse them out if we can see enough context to 'prove' that
             // they really do start the module element
             var nextToken = peekToken(1);
-            var currentTokenKind = _currentToken.kind();
+            var currentTokenKind = _currentToken.kind;
             switch (currentTokenKind) {
                 case SyntaxKind.ModuleKeyword:
-                    if (isIdentifier(nextToken) || nextToken.kind() === SyntaxKind.StringLiteral) {
+                    if (isIdentifier(nextToken) || nextToken.kind === SyntaxKind.StringLiteral) {
                         return parseModuleDeclaration();
                     }
                     break;
@@ -821,7 +803,7 @@ module TypeScript.Parser {
                 case SyntaxKind.ExportKeyword:
                     // 'export' could be a modifier on a statement (like export var ...).  So we 
                     // only want to parse out an export assignment here if we actually see the equals.
-                    if (nextToken.kind() === SyntaxKind.EqualsToken) {
+                    if (nextToken.kind === SyntaxKind.EqualsToken) {
                         return parseExportAssignment();
                     }
                     break;
@@ -831,12 +813,12 @@ module TypeScript.Parser {
         }
 
         function parseImportDeclaration(): ImportDeclarationSyntax {
-            return new syntaxFactory.ImportDeclarationSyntax(parseNodeData,
+            return new ImportDeclarationSyntax(parseNodeData,
                 parseModifiers(), eatToken(SyntaxKind.ImportKeyword), eatIdentifierToken(), eatToken(SyntaxKind.EqualsToken), parseModuleReference(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function parseExportAssignment(): ExportAssignmentSyntax {
-            return new syntaxFactory.ExportAssignmentSyntax(parseNodeData,
+            return new ExportAssignmentSyntax(parseNodeData,
                 eatToken(SyntaxKind.ExportKeyword), eatToken(SyntaxKind.EqualsToken), eatIdentifierToken(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
@@ -845,22 +827,22 @@ module TypeScript.Parser {
         }
 
         function isExternalModuleReference(): boolean {
-            return currentToken().kind() === SyntaxKind.RequireKeyword &&
-                   peekToken(1).kind() === SyntaxKind.OpenParenToken;
+            return currentToken().kind === SyntaxKind.RequireKeyword &&
+                   peekToken(1).kind === SyntaxKind.OpenParenToken;
         }
 
         function parseExternalModuleReference(): ExternalModuleReferenceSyntax {
-            return new syntaxFactory.ExternalModuleReferenceSyntax(parseNodeData,
+            return new ExternalModuleReferenceSyntax(parseNodeData,
                 eatToken(SyntaxKind.RequireKeyword), eatToken(SyntaxKind.OpenParenToken), eatToken(SyntaxKind.StringLiteral), eatToken(SyntaxKind.CloseParenToken));
         }
 
         function parseModuleNameModuleReference(): ModuleNameModuleReferenceSyntax {
-            return new syntaxFactory.ModuleNameModuleReferenceSyntax(parseNodeData, parseName(/*allowIdentifierNames:*/ false));
+            return new ModuleNameModuleReferenceSyntax(parseNodeData, parseName(/*allowIdentifierNames:*/ false));
         }
 
         function tryParseTypeArgumentList(inExpression: boolean): TypeArgumentListSyntax {
             var _currentToken = currentToken();
-            if (_currentToken.kind() !== SyntaxKind.LessThanToken) {
+            if (_currentToken.kind !== SyntaxKind.LessThanToken) {
                 return undefined;
             }
 
@@ -873,7 +855,7 @@ module TypeScript.Parser {
                 var typeArguments = parseSeparatedSyntaxList<ITypeSyntax>(ListParsingState.TypeArgumentList_Types, skippedTokens);
                 lessThanToken = addSkippedTokensAfterToken(lessThanToken, skippedTokens);
 
-                return new syntaxFactory.TypeArgumentListSyntax(parseNodeData, lessThanToken, typeArguments, eatToken(SyntaxKind.GreaterThanToken));
+                return new TypeArgumentListSyntax(parseNodeData, lessThanToken, typeArguments, eatToken(SyntaxKind.GreaterThanToken));
             }
 
             // If we're in an expression, then we only want to consume this as a type argument list
@@ -893,14 +875,14 @@ module TypeScript.Parser {
             // We're in a context where '<' could be the start of a type argument list, or part
             // of an arithmetic expression.  We'll presume it's the latter unless we see the '>'
             // and a following token that guarantees that it's supposed to be a type argument list.
-            if (greaterThanToken.fullWidth() === 0 || !canFollowTypeArgumentListInExpression(currentToken().kind())) {
+            if (greaterThanToken.fullWidth() === 0 || !canFollowTypeArgumentListInExpression(currentToken().kind)) {
                 rewind(rewindPoint);
                 releaseRewindPoint(rewindPoint);
                 return undefined;
             }
             else {
                 releaseRewindPoint(rewindPoint);
-                return new syntaxFactory.TypeArgumentListSyntax(parseNodeData, lessThanToken, typeArguments, greaterThanToken);
+                return new TypeArgumentListSyntax(parseNodeData, lessThanToken, typeArguments, greaterThanToken);
             }
         }
 
@@ -965,7 +947,7 @@ module TypeScript.Parser {
             // the code would be implicitly: "name.keyword; identifierNameOrKeyword".  
             // In the first case though, ASI will not take effect because there is not a
             // line terminator after the keyword.
-            if (SyntaxFacts.isAnyKeyword(_currentToken.kind()) &&
+            if (SyntaxFacts.isAnyKeyword(_currentToken.kind) &&
                 previousTokenHasTrailingNewLine(_currentToken)) {
 
                 var token1 = peekToken(1);
@@ -989,11 +971,11 @@ module TypeScript.Parser {
             // Call eatIdentifierName to convert the token to an identifier if it is as keyword.
             var current: INameSyntax = eatIdentifierToken();
 
-            while (shouldContinue && currentToken().kind() === SyntaxKind.DotToken) {
+            while (shouldContinue && currentToken().kind === SyntaxKind.DotToken) {
                 var dotToken = consumeToken(currentToken());
                 var identifierName = eatRightSideOfName(allowIdentifierNames);
 
-                current = new syntaxFactory.QualifiedNameSyntax(parseNodeData, current, dotToken, identifierName);
+                current = new QualifiedNameSyntax(parseNodeData, current, dotToken, identifierName);
                 shouldContinue = identifierName.fullWidth() > 0;
             }
 
@@ -1006,7 +988,7 @@ module TypeScript.Parser {
             var identifier = eatIdentifierToken();
 
             var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
-            var enumElements = Syntax.emptySeparatedList<EnumElementSyntax>();
+            var enumElements: ISeparatedSyntaxList<EnumElementSyntax>;
 
             if (openBraceToken.fullWidth() > 0) {
                 var skippedTokens: ISyntaxToken[] = getArray();
@@ -1014,12 +996,12 @@ module TypeScript.Parser {
                 openBraceToken = addSkippedTokensAfterToken(openBraceToken, skippedTokens);
             }
 
-            return new syntaxFactory.EnumDeclarationSyntax(parseNodeData, modifiers, enumKeyword, identifier, openBraceToken, enumElements, eatToken(SyntaxKind.CloseBraceToken));
+            return new EnumDeclarationSyntax(parseNodeData, modifiers, enumKeyword, identifier, openBraceToken, enumElements || <any>[], eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function isEnumElement(inErrorRecovery: boolean): boolean {
             var node = currentNode();
-            if (node && node.kind() === SyntaxKind.EnumElement) {
+            if (node && node.kind === SyntaxKind.EnumElement) {
                 return true;
             }
 
@@ -1032,7 +1014,7 @@ module TypeScript.Parser {
 
         function tryParseEnumElement(inErrorRecovery: boolean): EnumElementSyntax {
             var node = currentNode();
-            if (node && node.kind() === SyntaxKind.EnumElement) {
+            if (node && node.kind === SyntaxKind.EnumElement) {
                 consumeNode(node);
                 return <EnumElementSyntax>node;
             }
@@ -1041,7 +1023,7 @@ module TypeScript.Parser {
                 return undefined;
             }
 
-            return new syntaxFactory.EnumElementSyntax(parseNodeData, eatPropertyName(), tryParseEnumElementEqualsValueClause());
+            return new EnumElementSyntax(parseNodeData, eatPropertyName(), tryParseEnumElementEqualsValueClause());
         }
 
         function isModifierKind(kind: SyntaxKind): boolean {
@@ -1059,13 +1041,13 @@ module TypeScript.Parser {
         }
 
         function isModifier(token: ISyntaxToken, index: number): boolean {
-            if (isModifierKind(token.kind())) {
+            if (isModifierKind(token.kind)) {
                 // These are modifiers only if we see an actual keyword, identifier, string literal
                 // or number following.
                 // Note: we also allow [ for error conditions.  
                 // [   is for:     static [a: number]
                 var nextToken = peekToken(index + 1);
-                var nextTokenKind = nextToken.kind();
+                var nextTokenKind = nextToken.kind;
 
                 switch (nextTokenKind) {
                     case SyntaxKind.IdentifierName:
@@ -1103,17 +1085,11 @@ module TypeScript.Parser {
                 break;
             }
 
-            var result = Syntax.list(tokens);
-
-            // If the tokens array is greater than one, then we can't return it.  It will have been 
-            // copied directly into the syntax list.
-            returnZeroLengthArray(tokens);
-
-            return result;
+            return Syntax.list(tokens);
         }
 
         function parseHeritageClauses(): HeritageClauseSyntax[] {
-            var heritageClauses = Syntax.emptyList<HeritageClauseSyntax>();
+            var heritageClauses: HeritageClauseSyntax[];
 
             if (isHeritageClause()) {
                 // NOTE: we can pass "undefined" for the skipped tokens here as we know we can't get
@@ -1122,7 +1098,7 @@ module TypeScript.Parser {
                 heritageClauses = parseSyntaxList<HeritageClauseSyntax>(ListParsingState.ClassOrInterfaceDeclaration_HeritageClauses, undefined);
             }
 
-            return heritageClauses;
+            return heritageClauses || [];
         }
 
         function tryParseHeritageClauseTypeName(): ITypeSyntax {
@@ -1136,7 +1112,7 @@ module TypeScript.Parser {
             var typeParameterList = tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false);
             var heritageClauses = parseHeritageClauses();
             var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
-            var classElements = Syntax.emptyList<IClassElementSyntax>();
+            var classElements: IClassElementSyntax[];
 
             if (openBraceToken.fullWidth() > 0) {
                 var skippedTokens: ISyntaxToken[] = getArray();
@@ -1144,12 +1120,12 @@ module TypeScript.Parser {
                 openBraceToken = addSkippedTokensAfterToken(openBraceToken, skippedTokens);
             };
 
-            return new syntaxFactory.ClassDeclarationSyntax(parseNodeData,
-                modifiers, classKeyword, identifier, typeParameterList, heritageClauses, openBraceToken, classElements, eatToken(SyntaxKind.CloseBraceToken));
+            return new ClassDeclarationSyntax(parseNodeData,
+                modifiers, classKeyword, identifier, typeParameterList, heritageClauses, openBraceToken, classElements || [], eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function isAccessor(modifierCount: number, inErrorRecovery: boolean): boolean {
-            var tokenKind = peekToken(modifierCount).kind();
+            var tokenKind = peekToken(modifierCount).kind;
             if (tokenKind !== SyntaxKind.GetKeyword &&
                 tokenKind !== SyntaxKind.SetKeyword) {
                 return false;
@@ -1161,7 +1137,7 @@ module TypeScript.Parser {
         function parseAccessor(checkForStrictMode: boolean): ISyntaxNode {
             var modifiers = parseModifiers();
             var _currenToken = currentToken();
-            var tokenKind = _currenToken.kind();
+            var tokenKind = _currenToken.kind;
 
             if (tokenKind === SyntaxKind.GetKeyword) {
                 return parseGetMemberAccessorDeclaration(modifiers, _currenToken, checkForStrictMode);
@@ -1175,14 +1151,14 @@ module TypeScript.Parser {
         }
 
         function parseGetMemberAccessorDeclaration(modifiers: ISyntaxToken[], getKeyword: ISyntaxToken, checkForStrictMode: boolean): GetAccessorSyntax {
-            return new syntaxFactory.GetAccessorSyntax(parseNodeData,
+            return new GetAccessorSyntax(parseNodeData,
                 modifiers, consumeToken(getKeyword), eatPropertyName(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
                 parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, checkForStrictMode));
         }
 
         function parseSetMemberAccessorDeclaration(modifiers: ISyntaxToken[], setKeyword: ISyntaxToken, checkForStrictMode: boolean): SetAccessorSyntax {
-            return new syntaxFactory.SetAccessorSyntax(parseNodeData,
+            return new SetAccessorSyntax(parseNodeData,
                 modifiers, consumeToken(setKeyword), eatPropertyName(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
                 parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, checkForStrictMode));
@@ -1236,7 +1212,7 @@ module TypeScript.Parser {
             // assume this is a constructor.  That means, if a user writes "public constructor;"
             // it won't be viewed as a member.  As a workaround, they can simply write:
             //      public 'constructor';
-            return peekToken(modifierCount).kind() === SyntaxKind.ConstructorKeyword;
+            return peekToken(modifierCount).kind === SyntaxKind.ConstructorKeyword;
         }
 
         function parseConstructorDeclaration(): ConstructorDeclarationSyntax {
@@ -1254,7 +1230,7 @@ module TypeScript.Parser {
                 semicolonToken = eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
             }
 
-            return new syntaxFactory.ConstructorDeclarationSyntax(parseNodeData, modifiers, constructorKeyword, callSignature, block, semicolonToken);
+            return new ConstructorDeclarationSyntax(parseNodeData, modifiers, constructorKeyword, callSignature, block, semicolonToken);
         }
 
         function isMemberFunctionDeclaration(modifierCount: number, inErrorRecovery: boolean): boolean {
@@ -1280,7 +1256,7 @@ module TypeScript.Parser {
                 semicolon = eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
             }
 
-            return new syntaxFactory.MemberFunctionDeclarationSyntax(parseNodeData, modifiers, propertyName, callSignature, block, semicolon);
+            return new MemberFunctionDeclarationSyntax(parseNodeData, modifiers, propertyName, callSignature, block, semicolon);
         }
         
         function isDefinitelyMemberVariablePropertyName(index: number): boolean {
@@ -1292,9 +1268,9 @@ module TypeScript.Parser {
             //      public }
             //      public <eof>
             //      public <newline>
-            if (SyntaxFacts.isAnyKeyword(peekToken(index).kind())) {
+            if (SyntaxFacts.isAnyKeyword(peekToken(index).kind)) {
                 var nextToken = peekToken(index + 1);
-                switch (nextToken.kind()) {
+                switch (nextToken.kind) {
                     case SyntaxKind.SemicolonToken:
                     case SyntaxKind.EqualsToken:
                     case SyntaxKind.ColonToken:
@@ -1316,7 +1292,7 @@ module TypeScript.Parser {
         }
 
         function parseMemberVariableDeclaration(): MemberVariableDeclarationSyntax {
-            return new syntaxFactory.MemberVariableDeclarationSyntax(parseNodeData,
+            return new MemberVariableDeclarationSyntax(parseNodeData,
                 parseModifiers(),
                 tryParseVariableDeclarator(/*allowIn:*/ true, /*allowPropertyName:*/ true), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
@@ -1326,14 +1302,14 @@ module TypeScript.Parser {
         }
 
         function parseIndexMemberDeclaration(): IndexMemberDeclarationSyntax {
-            return new syntaxFactory.IndexMemberDeclarationSyntax(parseNodeData,
+            return new IndexMemberDeclarationSyntax(parseNodeData,
                 parseModifiers(), parseIndexSignature(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewLine:*/ false));
         }
 
         function tryAddUnexpectedEqualsGreaterThanToken(callSignature: CallSignatureSyntax): boolean {
             var token0 = currentToken();
 
-            var hasEqualsGreaterThanToken = token0.kind() === SyntaxKind.EqualsGreaterThanToken;
+            var hasEqualsGreaterThanToken = token0.kind === SyntaxKind.EqualsGreaterThanToken;
             if (hasEqualsGreaterThanToken) {
                 // We can only do this if the call signature actually contains a final token that we 
                 // could add the => to.
@@ -1349,11 +1325,7 @@ module TypeScript.Parser {
 
                     consumeToken(token0);
 
-                    // Note: we only do this if we're creating a concrete syntax tree (which contains
-                    // everything, including skipped tokens, in it).
-                    if (syntaxFactory.isConcrete) {
-                        addSkippedTokenAfterNode(callSignature, token0);
-                    }
+                    addSkippedTokenAfterNode(callSignature, token0);
                     return true;
                 }
             }
@@ -1363,7 +1335,7 @@ module TypeScript.Parser {
         }
 
         function isFunctionDeclaration(modifierCount: number): boolean {
-            return peekToken(modifierCount).kind() === SyntaxKind.FunctionKeyword;
+            return peekToken(modifierCount).kind === SyntaxKind.FunctionKeyword;
         }
 
         function parseFunctionDeclaration(): FunctionDeclarationSyntax {
@@ -1387,7 +1359,7 @@ module TypeScript.Parser {
                 semicolonToken = eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
             }
 
-            return new syntaxFactory.FunctionDeclarationSyntax(parseNodeData, modifiers, functionKeyword, identifier, callSignature, block, semicolonToken);
+            return new FunctionDeclarationSyntax(parseNodeData, modifiers, functionKeyword, identifier, callSignature, block, semicolonToken);
         }
 
         function parseModuleDeclaration(): ModuleDeclarationSyntax {
@@ -1397,7 +1369,7 @@ module TypeScript.Parser {
             var moduleName: INameSyntax = undefined;
             var stringLiteral: ISyntaxToken = undefined;
 
-            if (currentToken().kind() === SyntaxKind.StringLiteral) {
+            if (currentToken().kind === SyntaxKind.StringLiteral) {
                 stringLiteral = eatToken(SyntaxKind.StringLiteral);
             }
             else {
@@ -1406,19 +1378,19 @@ module TypeScript.Parser {
 
             var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
 
-            var moduleElements = Syntax.emptyList<IModuleElementSyntax>();
+            var moduleElements: IModuleElementSyntax[];
             if (openBraceToken.fullWidth() > 0) {
                 var skippedTokens: ISyntaxToken[] = getArray();
                 moduleElements = parseSyntaxList<IModuleElementSyntax>(ListParsingState.ModuleDeclaration_ModuleElements, skippedTokens);
                 openBraceToken = addSkippedTokensAfterToken(openBraceToken, skippedTokens);
             }
 
-            return new syntaxFactory.ModuleDeclarationSyntax(parseNodeData,
-                modifiers, moduleKeyword, moduleName, stringLiteral, openBraceToken, moduleElements, eatToken(SyntaxKind.CloseBraceToken));
+            return new ModuleDeclarationSyntax(parseNodeData,
+                modifiers, moduleKeyword, moduleName, stringLiteral, openBraceToken, moduleElements || [], eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function parseInterfaceDeclaration(): InterfaceDeclarationSyntax {
-            return new syntaxFactory.InterfaceDeclarationSyntax(parseNodeData,
+            return new InterfaceDeclarationSyntax(parseNodeData,
                 parseModifiers(), eatToken(SyntaxKind.InterfaceKeyword), eatIdentifierToken(),
                 tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false), parseHeritageClauses(), parseObjectType());
         }
@@ -1426,27 +1398,27 @@ module TypeScript.Parser {
         function parseObjectType(): ObjectTypeSyntax {
             var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
 
-            var typeMembers = Syntax.emptySeparatedList<ITypeMemberSyntax>();
+            var typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>;
             if (openBraceToken.fullWidth() > 0) {
                 var skippedTokens: ISyntaxToken[] = getArray();
                 typeMembers = parseSeparatedSyntaxList<ITypeMemberSyntax>(ListParsingState.ObjectType_TypeMembers, skippedTokens);
                 openBraceToken = addSkippedTokensAfterToken(openBraceToken, skippedTokens);
             }
 
-            return new syntaxFactory.ObjectTypeSyntax(parseNodeData, openBraceToken, typeMembers, eatToken(SyntaxKind.CloseBraceToken));
+            return new ObjectTypeSyntax(parseNodeData, openBraceToken, typeMembers || <any>[], eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function parseTupleType(currentToken: ISyntaxToken): TupleTypeSyntax {
             var openBracket = consumeToken(currentToken);
 
-            var types = Syntax.emptySeparatedList<ITypeSyntax>();
+            var types: ISeparatedSyntaxList<ITypeSyntax>;
             if (openBracket.fullWidth() > 0) {
                 var skippedTokens: ISyntaxToken[] = getArray();
                 types = parseSeparatedSyntaxList<ITypeSyntax>(ListParsingState.TupleType_Types, skippedTokens);
                 openBracket = addSkippedTokensAfterToken(openBracket, skippedTokens);
             }
 
-            return new syntaxFactory.TupleTypeSyntax(parseNodeData, openBracket, types, eatToken(SyntaxKind.CloseBracketToken));
+            return new TupleTypeSyntax(parseNodeData, openBracket, types || <any>[], eatToken(SyntaxKind.CloseBracketToken));
         }
 
         function isTypeMember(inErrorRecovery: boolean): boolean {
@@ -1491,7 +1463,7 @@ module TypeScript.Parser {
         }
 
         function parseConstructSignature(): ConstructSignatureSyntax {
-            return new syntaxFactory.ConstructSignatureSyntax(parseNodeData, eatToken(SyntaxKind.NewKeyword), parseCallSignature(/*requireCompleteTypeParameterList:*/ false));
+            return new ConstructSignatureSyntax(parseNodeData, eatToken(SyntaxKind.NewKeyword), parseCallSignature(/*requireCompleteTypeParameterList:*/ false));
         }
 
         function parseIndexSignature(): IndexSignatureSyntax {
@@ -1501,27 +1473,27 @@ module TypeScript.Parser {
             var parameters = parseSeparatedSyntaxList<ParameterSyntax>(ListParsingState.IndexSignature_Parameters, skippedTokens);
             openBracketToken = addSkippedTokensAfterToken(openBracketToken, skippedTokens);
 
-            return new syntaxFactory.IndexSignatureSyntax(parseNodeData,
+            return new IndexSignatureSyntax(parseNodeData,
                 openBracketToken, parameters, eatToken(SyntaxKind.CloseBracketToken), parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false));
         }
 
         function parseMethodSignature(): MethodSignatureSyntax {
-            return new syntaxFactory.MethodSignatureSyntax(parseNodeData,
+            return new MethodSignatureSyntax(parseNodeData,
                 eatPropertyName(), tryEatToken(SyntaxKind.QuestionToken), parseCallSignature(/*requireCompleteTypeParameterList:*/ false));
         }
 
         function parsePropertySignature(): PropertySignatureSyntax {
-            return new syntaxFactory.PropertySignatureSyntax(parseNodeData,
+            return new PropertySignatureSyntax(parseNodeData,
                 eatPropertyName(), tryEatToken(SyntaxKind.QuestionToken), parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false));
         }
 
         function isCallSignature(peekIndex: number): boolean {
-            var tokenKind = peekToken(peekIndex).kind();
+            var tokenKind = peekToken(peekIndex).kind;
             return tokenKind === SyntaxKind.OpenParenToken || tokenKind === SyntaxKind.LessThanToken;
         }
 
         function isConstructSignature(): boolean {
-            if (currentToken().kind() !== SyntaxKind.NewKeyword) {
+            if (currentToken().kind !== SyntaxKind.NewKeyword) {
                 return false;
             }
 
@@ -1529,7 +1501,7 @@ module TypeScript.Parser {
         }
 
         function isIndexSignature(peekIndex: number): boolean {
-            return peekToken(peekIndex).kind() === SyntaxKind.OpenBracketToken;
+            return peekToken(peekIndex).kind === SyntaxKind.OpenBracketToken;
         }
 
         function isMethodSignature(inErrorRecovery: boolean): boolean {
@@ -1540,7 +1512,7 @@ module TypeScript.Parser {
                 }
 
                 // id?(
-                if (peekToken(1).kind() === SyntaxKind.QuestionToken &&
+                if (peekToken(1).kind === SyntaxKind.QuestionToken &&
                     isCallSignature(2)) {
                     return true;
                 }
@@ -1578,12 +1550,12 @@ module TypeScript.Parser {
         }
 
         function isHeritageClause(): boolean {
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
             return tokenKind === SyntaxKind.ExtendsKeyword || tokenKind === SyntaxKind.ImplementsKeyword;
         }
 
         function isNotHeritageClauseTypeName(): boolean {
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
             if (tokenKind === SyntaxKind.ImplementsKeyword ||
                 tokenKind === SyntaxKind.ExtendsKeyword) {
 
@@ -1605,7 +1577,7 @@ module TypeScript.Parser {
 
         function tryParseHeritageClause(): HeritageClauseSyntax {
             var extendsOrImplementsKeyword = currentToken();
-            var tokenKind = extendsOrImplementsKeyword.kind();
+            var tokenKind = extendsOrImplementsKeyword.kind;
             if (tokenKind !== SyntaxKind.ExtendsKeyword && tokenKind !== SyntaxKind.ImplementsKeyword) {
                 return undefined;
             }
@@ -1616,15 +1588,13 @@ module TypeScript.Parser {
             var typeNames = parseSeparatedSyntaxList<INameSyntax>(ListParsingState.HeritageClause_TypeNameList, skippedTokens);
             extendsOrImplementsKeyword = addSkippedTokensAfterToken(extendsOrImplementsKeyword, skippedTokens);
 
-            return new syntaxFactory.HeritageClauseSyntax(parseNodeData, extendsOrImplementsKeyword, typeNames);
+            return new HeritageClauseSyntax(parseNodeData, extendsOrImplementsKeyword, typeNames);
         }
 
-        function isInterfaceEnumClassModuleImportOrExport(modifierCount: number): boolean {
-            var _currentToken = currentToken();
-
+        function isInterfaceEnumClassModuleImportOrExport(modifierCount: number, _currentToken?: ISyntaxToken): boolean {
             if (modifierCount) {
                 // Any of these keywords following a modifier is definitely a TS construct.
-                switch (peekToken(modifierCount).kind()) {
+                switch (peekToken(modifierCount).kind) {
                     case SyntaxKind.ImportKeyword: 
                     case SyntaxKind.ModuleKeyword: 
                     case SyntaxKind.InterfaceKeyword: 
@@ -1634,6 +1604,8 @@ module TypeScript.Parser {
                 }
             }
 
+            _currentToken = _currentToken || currentToken();
+
             // no modifiers.  While certain of these keywords are javascript keywords as well, it
             // is possible to run into them in some circumstances in error recovery where we don't
             // want to consider them the start of the module element construct.  For example, they
@@ -1641,27 +1613,18 @@ module TypeScript.Parser {
             // make sure it really is the start of a module element.
             var nextToken = peekToken(1);
 
-            switch (_currentToken.kind()) {
+            switch (_currentToken.kind) {
                 case SyntaxKind.ModuleKeyword:
-                    if (isIdentifier(nextToken) || nextToken.kind() === SyntaxKind.StringLiteral) {
-                        return true;
-                    }
-                    break;
+                    return isIdentifier(nextToken) || nextToken.kind === SyntaxKind.StringLiteral;
 
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.InterfaceKeyword:
-                    if (isIdentifier(nextToken)) {
-                        return true;
-                    }
-                    break;
+                    return isIdentifier(nextToken);
 
                 case SyntaxKind.ExportKeyword:
-                    if (nextToken.kind() === SyntaxKind.EqualsToken) {
-                        return true;
-                    }
-                    break;
+                    return nextToken.kind === SyntaxKind.EqualsToken;
             }
 
             return false;
@@ -1673,7 +1636,7 @@ module TypeScript.Parser {
             }
 
             var _currentToken = currentToken();
-            var currentTokenKind = _currentToken.kind();
+            var currentTokenKind = _currentToken.kind;
             switch (currentTokenKind) {
                 // ERROR RECOVERY
                 case SyntaxKind.PublicKeyword:
@@ -1714,7 +1677,7 @@ module TypeScript.Parser {
             // do not want to consume.  This can happen when the user does not terminate their 
             // existing block properly.  We don't want to accidently consume these as expression 
             // below.
-            if (isInterfaceEnumClassModuleImportOrExport(modifierCount)) {
+            if (isInterfaceEnumClassModuleImportOrExport(modifierCount, _currentToken)) {
                 return false;
             }
 
@@ -1738,7 +1701,7 @@ module TypeScript.Parser {
             }
 
             var _currentToken = currentToken();
-            var currentTokenKind = _currentToken.kind();
+            var currentTokenKind = _currentToken.kind;
             return tryParseStatementWorker(_currentToken, currentTokenKind, modifierCount(), inErrorRecovery);
         }
 
@@ -1780,7 +1743,7 @@ module TypeScript.Parser {
             // do not want to consume.  This can happen when the user does not terminate their 
             // existing block properly.  We don't want to accidently consume these as expression 
             // below.
-            if (isInterfaceEnumClassModuleImportOrExport(modifierCount)) {
+            if (isInterfaceEnumClassModuleImportOrExport(modifierCount, _currentToken)) {
                 return undefined;
             }
             else if (isVariableStatement(modifierCount)) {
@@ -1804,7 +1767,7 @@ module TypeScript.Parser {
         }
 
         function parseDebuggerStatement(debuggerKeyword: ISyntaxToken): DebuggerStatementSyntax {
-            return new syntaxFactory.DebuggerStatementSyntax(parseNodeData, consumeToken(debuggerKeyword), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+            return new DebuggerStatementSyntax(parseNodeData, consumeToken(debuggerKeyword), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function parseDoStatement(doKeyword: ISyntaxToken): DoStatementSyntax {
@@ -1812,17 +1775,17 @@ module TypeScript.Parser {
             // 157 min --- All allen at wirfs-brock.com CONF --- "do{;}while(false)false" prohibited in 
             // spec but allowed in consensus reality. Approved -- this is the de-facto standard whereby
             //  do;while(0)x will have a semicolon inserted before x.
-            return new syntaxFactory.DoStatementSyntax(parseNodeData,
+            return new DoStatementSyntax(parseNodeData,
                 consumeToken(doKeyword), parseStatement(/*inErrorRecovery:*/ false), eatToken(SyntaxKind.WhileKeyword), eatToken(SyntaxKind.OpenParenToken),
                 parseExpression(/*allowIn:*/ true), eatToken(SyntaxKind.CloseParenToken), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ true));
         }
 
         function isLabeledStatement(currentToken: ISyntaxToken): boolean {
-            return isIdentifier(currentToken) && peekToken(1).kind() === SyntaxKind.ColonToken;
+            return isIdentifier(currentToken) && peekToken(1).kind === SyntaxKind.ColonToken;
         }
 
         function parseLabeledStatement(identifierToken: ISyntaxToken): LabeledStatementSyntax {
-            return new syntaxFactory.LabeledStatementSyntax(parseNodeData,
+            return new LabeledStatementSyntax(parseNodeData,
                 consumeToken(identifierToken), eatToken(SyntaxKind.ColonToken), parseStatement(/*inErrorRecovery:*/ false));
         }
 
@@ -1835,18 +1798,18 @@ module TypeScript.Parser {
             listParsingState = savedListParsingState;
 
             var catchClause: CatchClauseSyntax = undefined;
-            if (currentToken().kind() === SyntaxKind.CatchKeyword) {
+            if (currentToken().kind === SyntaxKind.CatchKeyword) {
                 catchClause = parseCatchClause();
             }
 
             // If we don't have a catch clause, then we must have a finally clause.  Try to parse
             // one out no matter what.
             var finallyClause: FinallyClauseSyntax = undefined;
-            if (!catchClause || currentToken().kind() === SyntaxKind.FinallyKeyword) {
+            if (!catchClause || currentToken().kind === SyntaxKind.FinallyKeyword) {
                 finallyClause = parseFinallyClause();
             }
 
-            return new syntaxFactory.TryStatementSyntax(parseNodeData, tryKeyword, block, catchClause, finallyClause);
+            return new TryStatementSyntax(parseNodeData, tryKeyword, block, catchClause, finallyClause);
         }
 
         function parseCatchClauseBlock(): BlockSyntax {
@@ -1859,23 +1822,23 @@ module TypeScript.Parser {
         }
 
         function parseCatchClause(): CatchClauseSyntax {
-            return new syntaxFactory.CatchClauseSyntax(parseNodeData,
+            return new CatchClauseSyntax(parseNodeData,
                 eatToken(SyntaxKind.CatchKeyword), eatToken(SyntaxKind.OpenParenToken), eatIdentifierToken(),
                 parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false), eatToken(SyntaxKind.CloseParenToken), parseCatchClauseBlock());
         }
 
         function parseFinallyClause(): FinallyClauseSyntax {
-            return new syntaxFactory.FinallyClauseSyntax(parseNodeData,
+            return new FinallyClauseSyntax(parseNodeData,
                 eatToken(SyntaxKind.FinallyKeyword), parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ false));
         }
 
         function parseWithStatement(withKeyword: ISyntaxToken): WithStatementSyntax {
-            return new syntaxFactory.WithStatementSyntax(parseNodeData,
+            return new WithStatementSyntax(parseNodeData,
                 consumeToken(withKeyword), eatToken(SyntaxKind.OpenParenToken), parseExpression(/*allowIn:*/ true), eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
         }
 
         function parseWhileStatement(whileKeyword: ISyntaxToken): WhileStatementSyntax {
-            return new syntaxFactory.WhileStatementSyntax(parseNodeData,
+            return new WhileStatementSyntax(parseNodeData,
                 consumeToken(whileKeyword), eatToken(SyntaxKind.OpenParenToken), parseExpression(/*allowIn:*/ true), eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
         }
 
@@ -1890,11 +1853,11 @@ module TypeScript.Parser {
                 return false;
             }
 
-            return currentToken.kind() === SyntaxKind.SemicolonToken;
+            return currentToken.kind === SyntaxKind.SemicolonToken;
         }
 
         function parseEmptyStatement(semicolonToken: ISyntaxToken): EmptyStatementSyntax {
-            return new syntaxFactory.EmptyStatementSyntax(parseNodeData, consumeToken(semicolonToken));
+            return new EmptyStatementSyntax(parseNodeData, consumeToken(semicolonToken));
         }
 
         function parseForOrForInStatement(forKeyword: ISyntaxToken): IStatementSyntax {
@@ -1904,7 +1867,7 @@ module TypeScript.Parser {
             var openParenToken = eatToken(SyntaxKind.OpenParenToken);
 
             var _currentToken = currentToken();
-            var tokenKind = _currentToken.kind();
+            var tokenKind = _currentToken.kind;
             if (tokenKind === SyntaxKind.VarKeyword) {
                 // for ( var VariableDeclarationListNoIn; Expressionopt ; Expressionopt ) Statement
                 // for ( var VariableDeclarationNoIn in Expression ) Statement
@@ -1922,14 +1885,14 @@ module TypeScript.Parser {
         }
 
         function parseForOrForInStatementWithVariableDeclaration(forKeyword: ISyntaxToken, openParenToken: ISyntaxToken): IStatementSyntax {
-            // Debug.assert(forKeyword.kind === SyntaxKind.ForKeyword && openParenToken.kind() === SyntaxKind.OpenParenToken);
-            // Debug.assert(currentToken().kind() === SyntaxKind.VarKeyword);
+            // Debug.assert(forKeyword.kind === SyntaxKind.ForKeyword && openParenToken.kind === SyntaxKind.OpenParenToken);
+            // Debug.assert(currentToken().kind === SyntaxKind.VarKeyword);
 
             // for ( var VariableDeclarationListNoIn; Expressionopt ; Expressionopt ) Statement
             // for ( var VariableDeclarationNoIn in Expression ) Statement
 
             var variableDeclaration = parseVariableDeclaration(/*allowIn:*/ false);
-            return currentToken().kind() === SyntaxKind.InKeyword 
+            return currentToken().kind === SyntaxKind.InKeyword 
                 ? parseForInStatementWithVariableDeclarationOrInitializer(forKeyword, openParenToken, variableDeclaration, undefined)
                 : parseForStatementWithVariableDeclarationOrInitializer(forKeyword, openParenToken, variableDeclaration, undefined);
         }
@@ -1937,33 +1900,33 @@ module TypeScript.Parser {
         function parseForInStatementWithVariableDeclarationOrInitializer(forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, variableDeclaration: VariableDeclarationSyntax, initializer: IExpressionSyntax): ForInStatementSyntax {
             // for ( var VariableDeclarationNoIn in Expression ) Statement
 
-            return new syntaxFactory.ForInStatementSyntax(parseNodeData,
+            return new ForInStatementSyntax(parseNodeData,
                 forKeyword, openParenToken, variableDeclaration, initializer, eatToken(SyntaxKind.InKeyword),
                 parseExpression(/*allowIn:*/ true), eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
         }
 
         function parseForOrForInStatementWithInitializer(forKeyword: ISyntaxToken, openParenToken: ISyntaxToken): IStatementSyntax {
-            // Debug.assert(forKeyword.kind() === SyntaxKind.ForKeyword && openParenToken.kind() === SyntaxKind.OpenParenToken);
+            // Debug.assert(forKeyword.kind === SyntaxKind.ForKeyword && openParenToken.kind === SyntaxKind.OpenParenToken);
 
             // for ( ExpressionNoInopt; Expressionopt ; Expressionopt ) Statement
             // for ( LeftHandSideExpression in Expression ) Statement
 
             var initializer = parseExpression(/*allowIn:*/ false);
-            return currentToken().kind() === SyntaxKind.InKeyword
+            return currentToken().kind === SyntaxKind.InKeyword
                 ? parseForInStatementWithVariableDeclarationOrInitializer(forKeyword, openParenToken, undefined, initializer)
                 : parseForStatementWithVariableDeclarationOrInitializer(forKeyword, openParenToken, undefined, initializer);
         }
 
         function parseForStatementWithNoVariableDeclarationOrInitializer(forKeyword: ISyntaxToken, openParenToken: ISyntaxToken): ForStatementSyntax {
-            // Debug.assert(forKeyword.kind() === SyntaxKind.ForKeyword && openParenToken.kind() === SyntaxKind.OpenParenToken);
-            // Debug.assert(currentToken().kind() === SyntaxKind.SemicolonToken);
+            // Debug.assert(forKeyword.kind === SyntaxKind.ForKeyword && openParenToken.kind === SyntaxKind.OpenParenToken);
+            // Debug.assert(currentToken().kind === SyntaxKind.SemicolonToken);
             // for ( ; Expressionopt ; Expressionopt ) Statement
 
             return parseForStatementWithVariableDeclarationOrInitializer(forKeyword, openParenToken, /*variableDeclaration:*/ undefined, /*initializer:*/ undefined);
         }
 
         function tryParseForStatementCondition(): IExpressionSyntax {
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
             if (tokenKind !== SyntaxKind.SemicolonToken &&
                 tokenKind !== SyntaxKind.CloseParenToken &&
                 tokenKind !== SyntaxKind.EndOfFileToken) {
@@ -1974,7 +1937,7 @@ module TypeScript.Parser {
         }
 
         function tryParseForStatementIncrementor(): IExpressionSyntax {
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
             if (tokenKind !== SyntaxKind.CloseParenToken &&
                 tokenKind !== SyntaxKind.EndOfFileToken) {
                 return parseExpression(/*allowIn:*/ true);
@@ -1988,7 +1951,7 @@ module TypeScript.Parser {
             // a semicolon is never inserted automatically if the semicolon would then ... become 
             // one of the two semicolons in the header of a for statement
 
-            return new syntaxFactory.ForStatementSyntax(parseNodeData,
+            return new ForStatementSyntax(parseNodeData,
                 forKeyword, openParenToken, variableDeclaration, initializer,
                 eatToken(SyntaxKind.SemicolonToken), tryParseForStatementCondition(),
                 eatToken(SyntaxKind.SemicolonToken), tryParseForStatementIncrementor(),
@@ -2009,12 +1972,12 @@ module TypeScript.Parser {
         }
 
         function parseBreakStatement(breakKeyword: ISyntaxToken): BreakStatementSyntax {
-            return new syntaxFactory.BreakStatementSyntax(parseNodeData,
+            return new BreakStatementSyntax(parseNodeData,
                 consumeToken(breakKeyword), tryEatBreakOrContinueLabel(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function parseContinueStatement(continueKeyword: ISyntaxToken): ContinueStatementSyntax {
-            return new syntaxFactory.ContinueStatementSyntax(parseNodeData,
+            return new ContinueStatementSyntax(parseNodeData,
                 consumeToken(continueKeyword), tryEatBreakOrContinueLabel(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
@@ -2027,14 +1990,14 @@ module TypeScript.Parser {
             var closeParenToken = eatToken(SyntaxKind.CloseParenToken);
             var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
 
-            var switchClauses = Syntax.emptyList<ISwitchClauseSyntax>();
+            var switchClauses: ISwitchClauseSyntax[];
             if (openBraceToken.fullWidth() > 0) {
                 var skippedTokens: ISyntaxToken[] = getArray();
                 switchClauses = parseSyntaxList<ISwitchClauseSyntax>(ListParsingState.SwitchStatement_SwitchClauses, skippedTokens);
                 openBraceToken = addSkippedTokensAfterToken(openBraceToken, skippedTokens);
             }
 
-            return new syntaxFactory.SwitchStatementSyntax(parseNodeData, switchKeyword, openParenToken, expression, closeParenToken, openBraceToken, switchClauses, eatToken(SyntaxKind.CloseBraceToken));
+            return new SwitchStatementSyntax(parseNodeData, switchKeyword, openParenToken, expression, closeParenToken, openBraceToken, switchClauses || [], eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function isSwitchClause(): boolean {
@@ -2042,7 +2005,7 @@ module TypeScript.Parser {
                 return true;
             }
 
-            var currentTokenKind = currentToken().kind();
+            var currentTokenKind = currentToken().kind;
             return currentTokenKind === SyntaxKind.CaseKeyword || currentTokenKind === SyntaxKind.DefaultKeyword;
         }
 
@@ -2055,7 +2018,7 @@ module TypeScript.Parser {
             }
 
             var _currentToken = currentToken();
-            var kind = _currentToken.kind();
+            var kind = _currentToken.kind;
             if (kind === SyntaxKind.CaseKeyword) {
                 return parseCaseSwitchClause(_currentToken);
             }
@@ -2073,7 +2036,7 @@ module TypeScript.Parser {
             consumeToken(caseKeyword);
             var expression = parseExpression(/*allowIn:*/ true);
             var colonToken = eatToken(SyntaxKind.ColonToken);
-            var statements = Syntax.emptyList<IStatementSyntax>();
+            var statements: IStatementSyntax[];
 
             // TODO: allow parsing of the list evne if there's no colon.  However, we have to make 
             // sure we add any skipped tokens to the right previous node or token.
@@ -2083,7 +2046,7 @@ module TypeScript.Parser {
                 colonToken = addSkippedTokensAfterToken(colonToken, skippedTokens);
             }
 
-            return new syntaxFactory.CaseSwitchClauseSyntax(parseNodeData, caseKeyword, expression, colonToken, statements);
+            return new CaseSwitchClauseSyntax(parseNodeData, caseKeyword, expression, colonToken, statements || []);
         }
 
         function parseDefaultSwitchClause(defaultKeyword: ISyntaxToken): DefaultSwitchClauseSyntax {
@@ -2091,7 +2054,7 @@ module TypeScript.Parser {
 
             consumeToken(defaultKeyword);
             var colonToken = eatToken(SyntaxKind.ColonToken);
-            var statements = Syntax.emptyList<IStatementSyntax>();
+            var statements: IStatementSyntax[];
 
             // TODO: Allow parsing without a colon here.  However, ensure that we attach any skipped 
             // tokens to the defaultKeyword.
@@ -2101,7 +2064,7 @@ module TypeScript.Parser {
                 colonToken = addSkippedTokensAfterToken(colonToken, skippedTokens);
             }
 
-            return new syntaxFactory.DefaultSwitchClauseSyntax(parseNodeData, defaultKeyword, colonToken, statements);
+            return new DefaultSwitchClauseSyntax(parseNodeData, defaultKeyword, colonToken, statements || []);
         }
 
         function parseThrowStatementExpression(): IExpressionSyntax {
@@ -2114,7 +2077,7 @@ module TypeScript.Parser {
         }
 
         function parseThrowStatement(throwKeyword: ISyntaxToken): ThrowStatementSyntax {
-            return new syntaxFactory.ThrowStatementSyntax(parseNodeData,
+            return new ThrowStatementSyntax(parseNodeData,
                 consumeToken(throwKeyword), parseThrowStatementExpression(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
@@ -2123,37 +2086,41 @@ module TypeScript.Parser {
         }
 
         function parseReturnStatement(returnKeyword: ISyntaxToken): ReturnStatementSyntax {
-            return new syntaxFactory.ReturnStatementSyntax(parseNodeData,
+            return new ReturnStatementSyntax(parseNodeData,
                 consumeToken(returnKeyword), tryParseReturnStatementExpression(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function isExpressionStatement(currentToken: ISyntaxToken): boolean {
             // As per the gramar, neither { nor 'function' can start an expression statement.
-            var tokenKind = currentToken.kind();
+            var tokenKind = currentToken.kind;
             return tokenKind !== SyntaxKind.OpenBraceToken && tokenKind !== SyntaxKind.FunctionKeyword && isExpression(currentToken);
         }
 
         function isAssignmentOrOmittedExpression(): boolean {
             var _currentToken = currentToken();
-            return _currentToken.kind() === SyntaxKind.CommaToken || isExpression(_currentToken);
+            return _currentToken.kind === SyntaxKind.CommaToken || isExpression(_currentToken);
         }
 
         function tryParseAssignmentOrOmittedExpression(): IExpressionSyntax {
             // Debug.assert(isAssignmentOrOmittedExpression());
 
-            if (currentToken().kind() === SyntaxKind.CommaToken) {
-                return new syntaxFactory.OmittedExpressionSyntax(parseNodeData);
+            if (currentToken().kind === SyntaxKind.CommaToken) {
+                return new OmittedExpressionSyntax(parseNodeData);
             }
 
             return tryParseAssignmentExpressionOrHigher(/*force:*/ false, /*allowIn:*/ true);
         }
 
         function isExpression(currentToken: ISyntaxToken): boolean {
-            switch (currentToken.kind()) {
+            switch (currentToken.kind) {
                 // Literals
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.RegularExpressionLiteral:
+
+                // Templates
+                case SyntaxKind.NoSubstitutionTemplateToken:
+                case SyntaxKind.TemplateStartToken:
 
                  // For array literals.
                 case SyntaxKind.OpenBracketToken:
@@ -2216,34 +2183,34 @@ module TypeScript.Parser {
         }
 
         function parseExpressionStatement(): ExpressionStatementSyntax {
-            return new syntaxFactory.ExpressionStatementSyntax(parseNodeData, parseExpression(/*allowIn:*/ true), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+            return new ExpressionStatementSyntax(parseNodeData, parseExpression(/*allowIn:*/ true), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function parseIfStatement(ifKeyword: ISyntaxToken): IfStatementSyntax {
-            return new syntaxFactory.IfStatementSyntax(parseNodeData,
+            return new IfStatementSyntax(parseNodeData,
                 consumeToken(ifKeyword), eatToken(SyntaxKind.OpenParenToken), parseExpression(/*allowIn:*/ true),
                 eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false), parseOptionalElseClause());
         }
 
         function parseOptionalElseClause(): ElseClauseSyntax {
-            return currentToken().kind() === SyntaxKind.ElseKeyword ? parseElseClause() : undefined;
+            return currentToken().kind === SyntaxKind.ElseKeyword ? parseElseClause() : undefined;
         }
 
         function parseElseClause(): ElseClauseSyntax {
-            return new syntaxFactory.ElseClauseSyntax(parseNodeData, eatToken(SyntaxKind.ElseKeyword), parseStatement(/*inErrorRecovery:*/ false));
+            return new ElseClauseSyntax(parseNodeData, eatToken(SyntaxKind.ElseKeyword), parseStatement(/*inErrorRecovery:*/ false));
         }
 
         function isVariableStatement(modifierCount: number): boolean {
-            return peekToken(modifierCount).kind() === SyntaxKind.VarKeyword;
+            return peekToken(modifierCount).kind === SyntaxKind.VarKeyword;
         }
 
         function parseVariableStatement(): VariableStatementSyntax {
-            return new syntaxFactory.VariableStatementSyntax(parseNodeData,
+            return new VariableStatementSyntax(parseNodeData,
                 parseModifiers(), parseVariableDeclaration(/*allowIn:*/ true), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function parseVariableDeclaration(allowIn: boolean): VariableDeclarationSyntax {
-            // Debug.assert(currentToken().kind() === SyntaxKind.VarKeyword);
+            // Debug.assert(currentToken().kind === SyntaxKind.VarKeyword);
 
             var varKeyword = eatToken(SyntaxKind.VarKeyword);
             // Debug.assert(varKeyword.fullWidth() > 0);
@@ -2256,12 +2223,12 @@ module TypeScript.Parser {
             var variableDeclarators = parseSeparatedSyntaxList<VariableDeclaratorSyntax>(listParsingState, skippedTokens);
             varKeyword = addSkippedTokensAfterToken(varKeyword, skippedTokens);
 
-            return new syntaxFactory.VariableDeclarationSyntax(parseNodeData, varKeyword, variableDeclarators);
+            return new VariableDeclarationSyntax(parseNodeData, varKeyword, variableDeclarators);
         }
 
         function isVariableDeclarator(): boolean {
             var node = currentNode();
-            if (node && node.kind() === SyntaxKind.VariableDeclarator) {
+            if (node && node.kind === SyntaxKind.VariableDeclarator) {
                 return true;
             }
 
@@ -2269,7 +2236,7 @@ module TypeScript.Parser {
         }
 
         function canReuseVariableDeclaratorNode(node: ISyntaxNode) {
-            if (!node || node.kind() !== SyntaxKind.VariableDeclarator) {
+            if (!node || node.kind !== SyntaxKind.VariableDeclarator) {
                 return false;
             }
 
@@ -2324,12 +2291,12 @@ module TypeScript.Parser {
                 }
             }
 
-            return new syntaxFactory.VariableDeclaratorSyntax(parseNodeData, propertyName, typeAnnotation, equalsValueClause);
+            return new VariableDeclaratorSyntax(parseNodeData, propertyName, typeAnnotation, equalsValueClause);
         }
 
         function isEqualsValueClause(inParameter: boolean): boolean {
             var token0 = currentToken();
-            if (token0.kind() === SyntaxKind.EqualsToken) {
+            if (token0.kind === SyntaxKind.EqualsToken) {
                 return true;
             }
 
@@ -2337,7 +2304,7 @@ module TypeScript.Parser {
             // there is no newline after the last token and if we're on an expression.  If so, parse
             // this as an equals-value clause with a missing equals.
             if (!previousTokenHasTrailingNewLine(token0)) {
-                var tokenKind = token0.kind();
+                var tokenKind = token0.kind;
 
                 // The 'isExpression' call below returns true for "=>".  That's because it smartly
                 // assumes that there is just a missing identifier and the user wanted a lambda.  
@@ -2365,7 +2332,7 @@ module TypeScript.Parser {
         }
 
         function parseEqualsValueClause(allowIn: boolean): EqualsValueClauseSyntax {
-            return new syntaxFactory.EqualsValueClauseSyntax(parseNodeData,
+            return new EqualsValueClauseSyntax(parseNodeData,
                 eatToken(SyntaxKind.EqualsToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, allowIn));
         }
 
@@ -2377,11 +2344,11 @@ module TypeScript.Parser {
             var leftOperand = tryParseAssignmentExpressionOrHigher(/*force:*/ true, allowIn);
             while (true) {
                 var _currentToken = currentToken();
-                if (_currentToken.kind() !== SyntaxKind.CommaToken) {
+                if (_currentToken.kind !== SyntaxKind.CommaToken) {
                     break;
                 }
 
-                leftOperand = new syntaxFactory.BinaryExpressionSyntax(parseNodeData, leftOperand, consumeToken(_currentToken), 
+                leftOperand = new BinaryExpressionSyntax(parseNodeData, leftOperand, consumeToken(_currentToken), 
                     tryParseAssignmentExpressionOrHigher(/*force:*/ true, allowIn));
             }
 
@@ -2444,8 +2411,8 @@ module TypeScript.Parser {
                 var operatorToken = currentOperatorToken();
 
                 // Check for recursive assignment expressions.
-                if (SyntaxFacts.isAssignmentOperatorToken(operatorToken.kind())) {
-                    return new syntaxFactory.BinaryExpressionSyntax(parseNodeData, leftOperand, consumeToken(operatorToken), 
+                if (SyntaxFacts.isAssignmentOperatorToken(operatorToken.kind)) {
+                    return new BinaryExpressionSyntax(parseNodeData, leftOperand, consumeToken(operatorToken), 
                         tryParseAssignmentExpressionOrHigher(/*force:*/ true, allowIn));
                 }
             }
@@ -2461,7 +2428,7 @@ module TypeScript.Parser {
         }
 
         function tryParseUnaryExpressionOrHigher(_currentToken: ISyntaxToken, force: boolean): IUnaryExpressionSyntax {
-            var currentTokenKind = _currentToken.kind();
+            var currentTokenKind = _currentToken.kind;
 
             switch (currentTokenKind) {
                 case SyntaxKind.PlusToken:
@@ -2470,7 +2437,7 @@ module TypeScript.Parser {
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
-                    return new syntaxFactory.PrefixUnaryExpressionSyntax(parseNodeData, consumeToken(_currentToken), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
+                    return new PrefixUnaryExpressionSyntax(parseNodeData, consumeToken(_currentToken), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
                 case SyntaxKind.TypeOfKeyword: return parseTypeOfExpression(_currentToken);
                 case SyntaxKind.VoidKeyword:   return parseVoidExpression(_currentToken);
                 case SyntaxKind.DeleteKeyword: return parseDeleteExpression(_currentToken);
@@ -2503,14 +2470,14 @@ module TypeScript.Parser {
             var _currentToken = currentToken();
 
             // Now check for conditional expression.
-            if (_currentToken.kind() !== SyntaxKind.QuestionToken) {
+            if (_currentToken.kind !== SyntaxKind.QuestionToken) {
                 return leftOperand;
             }
 
             // Note: we explicitly do *not* pass 'allowIn' to the whenTrue part.  An 'in' expression is always
             // allowed in the 'true' part of a conditional expression.
 
-            return new syntaxFactory.ConditionalExpressionSyntax(parseNodeData,
+            return new ConditionalExpressionSyntax(parseNodeData,
                 leftOperand, consumeToken(_currentToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true),
                 eatToken(SyntaxKind.ColonToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, allowIn));
         }
@@ -2521,7 +2488,7 @@ module TypeScript.Parser {
                 // currentOperatorToken versus currentToken here so that we merge token sequences
                 // like > and = into >=
                 var operatorToken = currentOperatorToken();
-                var tokenKind = operatorToken.kind();
+                var tokenKind = operatorToken.kind;
 
                 // Only proceed if we see binary expression token.  However we don't parse 
                 // assignment expressions or comma expressions here.  Those are taken care of 
@@ -2551,7 +2518,7 @@ module TypeScript.Parser {
                 // Precedence is okay, so we'll "take" this operator.
                 // Now skip the operator token we're on.
 
-                leftOperand = new syntaxFactory.BinaryExpressionSyntax(parseNodeData, leftOperand, consumeToken(operatorToken), 
+                leftOperand = new BinaryExpressionSyntax(parseNodeData, leftOperand, consumeToken(operatorToken), 
                     tryParseBinaryExpressionOrHigher(currentToken(), /*force:*/ true, newPrecedence, allowIn));
             }
 
@@ -2563,7 +2530,7 @@ module TypeScript.Parser {
 
             // If we see a > we need to see if we can actually merge this contextually into a 
             // >>  >>>  >=  >>=  >>>=  token.
-            if (token0.kind() === SyntaxKind.GreaterThanToken) {
+            if (token0.kind === SyntaxKind.GreaterThanToken) {
                 return currentContextualToken();
                 // var kind = token0.kind;
                 //Debug.assert(kind() === SyntaxKind.GreaterThanToken || kind() === SyntaxKind.GreaterThanGreaterThanToken ||
@@ -2633,11 +2600,11 @@ module TypeScript.Parser {
         function parseCallExpressionRest(expression: ILeftHandSideExpressionSyntax): ILeftHandSideExpressionSyntax {
             while (true) {
                 var _currentToken = currentToken();
-                var currentTokenKind = _currentToken.kind();
+                var currentTokenKind = _currentToken.kind;
 
                 switch (currentTokenKind) {
                     case SyntaxKind.OpenParenToken:
-                        expression = new syntaxFactory.InvocationExpressionSyntax(parseNodeData, expression, parseArgumentList(/*typeArgumentList:*/ undefined));
+                        expression = new InvocationExpressionSyntax(parseNodeData, expression, parseArgumentList(/*typeArgumentList:*/ undefined));
                         continue;
 
                     case SyntaxKind.LessThanToken:
@@ -2650,7 +2617,7 @@ module TypeScript.Parser {
                             break;
                         }
 
-                        expression = new syntaxFactory.InvocationExpressionSyntax(parseNodeData, expression, argumentList);
+                        expression = new InvocationExpressionSyntax(parseNodeData, expression, argumentList);
                         continue;
 
                     case SyntaxKind.OpenBracketToken:
@@ -2658,7 +2625,12 @@ module TypeScript.Parser {
                         continue;
 
                     case SyntaxKind.DotToken:
-                        expression = new syntaxFactory.MemberAccessExpressionSyntax(parseNodeData, expression, consumeToken(_currentToken), eatIdentifierNameToken());
+                        expression = new MemberAccessExpressionSyntax(parseNodeData, expression, consumeToken(_currentToken), eatIdentifierNameToken());
+                        continue;
+
+                    case SyntaxKind.NoSubstitutionTemplateToken:
+                    case SyntaxKind.TemplateStartToken:
+                        expression = new TemplateAccessExpressionSyntax(parseNodeData, expression, parseTemplateExpression(_currentToken));
                         continue;
                 }
 
@@ -2669,7 +2641,7 @@ module TypeScript.Parser {
         function parseMemberExpressionRest(expression: IMemberExpressionSyntax, inObjectCreation: boolean): IMemberExpressionSyntax {
             while (true) {
                 var _currentToken = currentToken();
-                var currentTokenKind = _currentToken.kind();
+                var currentTokenKind = _currentToken.kind;
 
                 switch (currentTokenKind) {
                     case SyntaxKind.OpenBracketToken:
@@ -2677,7 +2649,12 @@ module TypeScript.Parser {
                         continue;
 
                     case SyntaxKind.DotToken:
-                        expression = new syntaxFactory.MemberAccessExpressionSyntax(parseNodeData, expression, consumeToken(_currentToken), eatIdentifierNameToken());
+                        expression = new MemberAccessExpressionSyntax(parseNodeData, expression, consumeToken(_currentToken), eatIdentifierNameToken());
+                        continue;
+
+                    case SyntaxKind.NoSubstitutionTemplateToken:
+                    case SyntaxKind.TemplateStartToken:
+                        expression = new TemplateAccessExpressionSyntax(parseNodeData, expression, parseTemplateExpression(_currentToken));
                         continue;
                 }
 
@@ -2718,7 +2695,7 @@ module TypeScript.Parser {
             // CallExpression productions.
 
             var expression: ILeftHandSideExpressionSyntax = undefined;
-            if (_currentToken.kind() === SyntaxKind.SuperKeyword) {
+            if (_currentToken.kind === SyntaxKind.SuperKeyword) {
                 expression = parseSuperExpression(_currentToken);
             }
             else {
@@ -2738,10 +2715,10 @@ module TypeScript.Parser {
 
             // If we have seen "super" it must be followed by '(' or '.'.
             // If it wasn't then just try to parse out a '.' and report an error.
-            var currentTokenKind = currentToken().kind();
+            var currentTokenKind = currentToken().kind;
             return currentTokenKind === SyntaxKind.OpenParenToken || currentTokenKind === SyntaxKind.DotToken
                 ? expression
-                : new syntaxFactory.MemberAccessExpressionSyntax(parseNodeData, expression, eatToken(SyntaxKind.DotToken), eatIdentifierNameToken());
+                : new MemberAccessExpressionSyntax(parseNodeData, expression, eatToken(SyntaxKind.DotToken), eatIdentifierNameToken());
         }
 
         function tryParsePostfixExpressionOrHigher(_currentToken: ISyntaxToken, force: boolean): IPostfixExpressionSyntax {
@@ -2751,7 +2728,7 @@ module TypeScript.Parser {
             }
 
             var _currentToken = currentToken();
-            var currentTokenKind = _currentToken.kind();
+            var currentTokenKind = _currentToken.kind;
 
             switch (currentTokenKind) {
                 case SyntaxKind.PlusPlusToken:
@@ -2762,21 +2739,21 @@ module TypeScript.Parser {
                         break;
                     }
 
-                    return new syntaxFactory.PostfixUnaryExpressionSyntax(parseNodeData, expression, consumeToken(_currentToken));
+                    return new PostfixUnaryExpressionSyntax(parseNodeData, expression, consumeToken(_currentToken));
             }
 
             return expression;
         }
 
         function tryParseGenericArgumentList(): ArgumentListSyntax {
-            // Debug.assert(currentToken().kind() === SyntaxKind.LessThanToken);
+            // Debug.assert(currentToken().kind === SyntaxKind.LessThanToken);
             // If we have a '<', then only parse this as a arugment list if the type arguments
             // are complete and we have an open paren.  if we don't, rewind and return nothing.
             var rewindPoint = getRewindPoint();
 
             var typeArgumentList = tryParseTypeArgumentList(/*inExpression:*/ true);
             var token0 = currentToken();
-            var tokenKind = token0.kind();
+            var tokenKind = token0.kind;
 
             var isOpenParen = tokenKind === SyntaxKind.OpenParenToken;
             var isDot = tokenKind === SyntaxKind.DotToken;
@@ -2804,8 +2781,8 @@ module TypeScript.Parser {
                         DiagnosticCode.A_parameter_list_must_follow_a_generic_type_argument_list_expected, undefined);
                     addDiagnostic(diagnostic);
 
-                    return new syntaxFactory.ArgumentListSyntax(parseNodeData, typeArgumentList,
-                        Syntax.emptyToken(SyntaxKind.OpenParenToken), Syntax.emptySeparatedList<IExpressionSyntax>(), Syntax.emptyToken(SyntaxKind.CloseParenToken));
+                    return new ArgumentListSyntax(parseNodeData, typeArgumentList,
+                        Syntax.emptyToken(SyntaxKind.OpenParenToken), <any>[], Syntax.emptyToken(SyntaxKind.CloseParenToken));
                 }
                 else {
                     return parseArgumentList(typeArgumentList);
@@ -2814,7 +2791,7 @@ module TypeScript.Parser {
         }
 
         function tryParseArgumentList(): ArgumentListSyntax {
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
             if (tokenKind === SyntaxKind.LessThanToken) {
                 return tryParseGenericArgumentList();
             }
@@ -2830,7 +2807,7 @@ module TypeScript.Parser {
             var openParenToken = eatToken(SyntaxKind.OpenParenToken);
 
             // Don't use the name 'arguments' it prevents V8 from optimizing this method.
-            var _arguments = Syntax.emptySeparatedList<IExpressionSyntax>();
+            var _arguments: ISeparatedSyntaxList<IExpressionSyntax>;
 
             if (openParenToken.fullWidth() > 0) {
                 var skippedTokens: ISyntaxToken[] = getArray();
@@ -2838,7 +2815,7 @@ module TypeScript.Parser {
                 openParenToken = addSkippedTokensAfterToken(openParenToken, skippedTokens);
             }
 
-            return new syntaxFactory.ArgumentListSyntax(parseNodeData, typeArgumentList, openParenToken, _arguments, eatToken(SyntaxKind.CloseParenToken));
+            return new ArgumentListSyntax(parseNodeData, typeArgumentList, openParenToken, _arguments || <any>[], eatToken(SyntaxKind.CloseParenToken));
         }
 
         function tryParseArgumentListExpression(): IExpressionSyntax {
@@ -2849,14 +2826,14 @@ module TypeScript.Parser {
             // after the open paren, we still want to force parsing an expression (which will
             // cause a missing identiifer to be created), so that we will then consume the
             // comma and the following list items).
-            var force = currentToken().kind() === SyntaxKind.CommaToken;
+            var force = currentToken().kind === SyntaxKind.CommaToken;
             return tryParseAssignmentExpressionOrHigher(force, /*allowIn:*/ true);
         }
 
         function parseElementAccessArgumentExpression(openBracketToken: ISyntaxToken, inObjectCreation: boolean) {
             // It's not uncommon for a user to write: "new Type[]".  Check for that common pattern
             // and report a better error message.
-            if (inObjectCreation && currentToken().kind() === SyntaxKind.CloseBracketToken) {
+            if (inObjectCreation && currentToken().kind === SyntaxKind.CloseBracketToken) {
                 var errorStart = start(openBracketToken, source.text);
                 var errorEnd = end(currentToken(), source.text);
                 var diagnostic = new Diagnostic(fileName, source.text.lineMap(), errorStart, errorEnd - errorStart,
@@ -2871,8 +2848,8 @@ module TypeScript.Parser {
         }
 
         function parseElementAccessExpression(expression: ILeftHandSideExpressionSyntax, openBracketToken: ISyntaxToken, inObjectCreation: boolean): ElementAccessExpressionSyntax {
-            // Debug.assert(currentToken().kind() === SyntaxKind.OpenBracketToken);
-            return new syntaxFactory.ElementAccessExpressionSyntax(parseNodeData, expression, consumeToken(openBracketToken),
+            // Debug.assert(currentToken().kind === SyntaxKind.OpenBracketToken);
+            return new ElementAccessExpressionSyntax(parseNodeData, expression, consumeToken(openBracketToken),
                 parseElementAccessArgumentExpression(openBracketToken, inObjectCreation), eatToken(SyntaxKind.CloseBracketToken));
         }
 
@@ -2881,7 +2858,7 @@ module TypeScript.Parser {
                 return eatIdentifierToken();
             }
 
-            var currentTokenKind = _currentToken.kind();
+            var currentTokenKind = _currentToken.kind;
             switch (currentTokenKind) {
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.TrueKeyword:
@@ -2892,11 +2869,15 @@ module TypeScript.Parser {
                 case SyntaxKind.StringLiteral:
                     return consumeToken(_currentToken);
 
-                case SyntaxKind.FunctionKeyword:  return parseFunctionExpression(_currentToken);
-                case SyntaxKind.OpenBracketToken: return parseArrayLiteralExpression(_currentToken);
-                case SyntaxKind.OpenBraceToken:   return parseObjectLiteralExpression(_currentToken);
-                case SyntaxKind.OpenParenToken:   return parseParenthesizedExpression(_currentToken);
-                case SyntaxKind.NewKeyword:       return parseObjectCreationExpression(_currentToken);
+                case SyntaxKind.FunctionKeyword:    return parseFunctionExpression(_currentToken);
+                case SyntaxKind.OpenBracketToken:   return parseArrayLiteralExpression(_currentToken);
+                case SyntaxKind.OpenBraceToken:     return parseObjectLiteralExpression(_currentToken);
+                case SyntaxKind.OpenParenToken:     return parseParenthesizedExpression(_currentToken);
+                case SyntaxKind.NewKeyword:         return parseObjectCreationExpression(_currentToken);
+
+                case SyntaxKind.NoSubstitutionTemplateToken:
+                case SyntaxKind.TemplateStartToken:
+                    return parseTemplateExpression(_currentToken);
 
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
@@ -2924,7 +2905,7 @@ module TypeScript.Parser {
             // contexts.
 
             // var currentToken = this.currentToken();
-            // Debug.assert(SyntaxFacts.isAnyDivideToken(currentToken.kind()));
+            // Debug.assert(SyntaxFacts.isAnyDivideToken(currentToken.kind));
 
             // Ok, from our quick lexical check, this could be a place where a regular expression could
             // go.  Now we have to do a bunch of work.  Ask the source to retrive the token at the 
@@ -2933,9 +2914,9 @@ module TypeScript.Parser {
 
             // Note: we *must* have gotten a /, /= or regular expression.  Or else something went *very*
             // wrong with our logic above.
-            // Debug.assert(SyntaxFacts.isAnyDivideOrRegularExpressionToken(currentToken.kind()));
+            // Debug.assert(SyntaxFacts.isAnyDivideOrRegularExpressionToken(currentToken.kind));
 
-            var tokenKind = currentToken.kind();
+            var tokenKind = currentToken.kind;
             if (tokenKind === SyntaxKind.SlashToken || tokenKind === SyntaxKind.SlashEqualsToken) {
                 // Still came back as a / or /=.   This is not a regular expression literal.
                 return undefined;
@@ -2951,19 +2932,19 @@ module TypeScript.Parser {
         }
 
         function parseTypeOfExpression(typeOfKeyword: ISyntaxToken): TypeOfExpressionSyntax {
-            return new syntaxFactory.TypeOfExpressionSyntax(parseNodeData, consumeToken(typeOfKeyword), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
+            return new TypeOfExpressionSyntax(parseNodeData, consumeToken(typeOfKeyword), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
         }
 
         function parseDeleteExpression(deleteKeyword: ISyntaxToken): DeleteExpressionSyntax {
-            return new syntaxFactory.DeleteExpressionSyntax(parseNodeData, consumeToken(deleteKeyword), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
+            return new DeleteExpressionSyntax(parseNodeData, consumeToken(deleteKeyword), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
         }
 
         function parseVoidExpression(voidKeyword: ISyntaxToken): VoidExpressionSyntax {
-            return new syntaxFactory.VoidExpressionSyntax(parseNodeData, consumeToken(voidKeyword), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
+            return new VoidExpressionSyntax(parseNodeData, consumeToken(voidKeyword), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
         }
 
         function parseFunctionExpression(functionKeyword: ISyntaxToken): FunctionExpressionSyntax {
-            return new syntaxFactory.FunctionExpressionSyntax(parseNodeData,
+            return new FunctionExpressionSyntax(parseNodeData,
                 consumeToken(functionKeyword), eatOptionalIdentifierToken(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
                 parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ true));
@@ -2979,22 +2960,59 @@ module TypeScript.Parser {
             // See comment in tryParseMemberExpressionOrHigher for a more complete explanation of
             // this decision.
 
-            return new syntaxFactory.ObjectCreationExpressionSyntax(parseNodeData,
+            return new ObjectCreationExpressionSyntax(parseNodeData,
                 consumeToken(newKeyword), tryParseMemberExpressionOrHigher(currentToken(), /*force:*/ true, /*inObjectCreation:*/ true), tryParseArgumentList());
         }
 
+        function parseTemplateExpression(startToken: ISyntaxToken): IPrimaryExpressionSyntax {
+            consumeToken(startToken);
+
+            if (startToken.kind === SyntaxKind.NoSubstitutionTemplateToken) {
+                return startToken;
+            }
+            
+            var templateClauses: TemplateClauseSyntax[] = getArray();
+
+            do {
+                // Keep consuming template spans as long as the last one we keep getting template
+                // middle pieces.
+                templateClauses.push(parseTemplateClause());
+            }
+            while (templateClauses[templateClauses.length - 1].templateMiddleOrEndToken.kind === SyntaxKind.TemplateMiddleToken);
+            
+            return new TemplateExpressionSyntax(parseNodeData, startToken, Syntax.list(templateClauses));
+        }
+
+        function parseTemplateClause(): TemplateClauseSyntax {
+            var expression = parseExpression(/*allowIn:*/ true);
+            var token = currentToken();
+
+            if (token.kind === SyntaxKind.CloseBraceToken) {
+                token = currentContextualToken();
+                Debug.assert(token.kind === SyntaxKind.TemplateMiddleToken || token.kind === SyntaxKind.TemplateEndToken);
+                consumeToken(token);
+            }
+            else {
+                var diagnostic = getExpectedTokenDiagnostic(SyntaxKind.CloseBraceToken);
+                addDiagnostic(diagnostic);
+                token = Syntax.emptyToken(SyntaxKind.TemplateEndToken);
+            }
+
+            return new TemplateClauseSyntax(parseNodeData, expression, token);
+        }
+
         function parseCastExpression(lessThanToken: ISyntaxToken): CastExpressionSyntax {
-            return new syntaxFactory.CastExpressionSyntax(parseNodeData,
+            return new CastExpressionSyntax(parseNodeData,
                 consumeToken(lessThanToken), parseType(), eatToken(SyntaxKind.GreaterThanToken), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
         }
 
         function parseParenthesizedExpression(openParenToken: ISyntaxToken): ParenthesizedExpressionSyntax {
-            return new syntaxFactory.ParenthesizedExpressionSyntax(parseNodeData,
+            return new ParenthesizedExpressionSyntax(parseNodeData,
                 consumeToken(openParenToken), parseExpression(/*allowIn:*/ true), eatToken(SyntaxKind.CloseParenToken));
         }
 
         function tryParseParenthesizedArrowFunctionExpression(): ParenthesizedArrowFunctionExpressionSyntax {
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
             if (tokenKind !== SyntaxKind.OpenParenToken && tokenKind !== SyntaxKind.LessThanToken) {
                 return undefined;
             }
@@ -3034,11 +3052,11 @@ module TypeScript.Parser {
 
         function tryParseParenthesizedArrowFunctionExpressionWorker(requireArrow: boolean): ParenthesizedArrowFunctionExpressionSyntax {
             var _currentToken = currentToken();
-            // Debug.assert(currentToken.kind() === SyntaxKind.OpenParenToken || currentToken.kind() === SyntaxKind.LessThanToken);
+            // Debug.assert(currentToken.kind === SyntaxKind.OpenParenToken || currentToken.kind === SyntaxKind.LessThanToken);
 
             var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ true);
 
-            if (requireArrow && currentToken().kind() !== SyntaxKind.EqualsGreaterThanToken) {
+            if (requireArrow && currentToken().kind !== SyntaxKind.EqualsGreaterThanToken) {
                 return undefined;
             }
 
@@ -3050,7 +3068,7 @@ module TypeScript.Parser {
                 expression = tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true);
             }
 
-            return new syntaxFactory.ParenthesizedArrowFunctionExpressionSyntax(parseNodeData, callSignature, equalsGreaterThanToken, block, expression);
+            return new ParenthesizedArrowFunctionExpressionSyntax(parseNodeData, callSignature, equalsGreaterThanToken, block, expression);
         }
 
         function tryParseArrowFunctionBlock(): BlockSyntax {
@@ -3086,12 +3104,12 @@ module TypeScript.Parser {
             // ERROR RECOVERY TWEAK:
             // If we see a standalone => try to parse it as an arrow function as that's likely what
             // the user intended to write.
-            if (_currentToken.kind() === SyntaxKind.EqualsGreaterThanToken) {
+            if (_currentToken.kind === SyntaxKind.EqualsGreaterThanToken) {
                 return true;
             }
 
             return isIdentifier(_currentToken) &&
-                   peekToken(1).kind() === SyntaxKind.EqualsGreaterThanToken;
+                   peekToken(1).kind === SyntaxKind.EqualsGreaterThanToken;
         }
 
         function parseSimpleArrowFunctionExpression(): SimpleArrowFunctionExpressionSyntax {
@@ -3106,23 +3124,23 @@ module TypeScript.Parser {
                 expression = tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true);
             }
 
-            return new syntaxFactory.SimpleArrowFunctionExpressionSyntax(parseNodeData, parameter, equalsGreaterThanToken, block, expression);
+            return new SimpleArrowFunctionExpressionSyntax(parseNodeData, parameter, equalsGreaterThanToken, block, expression);
         }
 
         function isBlock(): boolean {
-            return currentToken().kind() === SyntaxKind.OpenBraceToken;
+            return currentToken().kind === SyntaxKind.OpenBraceToken;
         }
 
         function isDefinitelyArrowFunctionExpression(): boolean {
             var token0 = currentToken();
-            if (token0.kind() !== SyntaxKind.OpenParenToken) {
+            if (token0.kind !== SyntaxKind.OpenParenToken) {
                 // If it didn't start with an (, then it could be generic.  That's too complicated 
                 // and we can't say it's 'definitely' an arrow function.             
                 return false;
             }
 
             var token1 = peekToken(1);
-            var token1Kind = token1.kind();
+            var token1Kind = token1.kind;
 
             var token2: ISyntaxToken;
 
@@ -3135,7 +3153,7 @@ module TypeScript.Parser {
                 //      "():"  or  "() =>"  or "() {}".  Note: the last one is illegal.  However it
                 // most likely is a missing => and not a parenthesized expression.
                 token2 = peekToken(2);
-                var token2Kind = token2.kind();
+                var token2Kind = token2.kind;
                 return token2Kind === SyntaxKind.ColonToken ||
                        token2Kind === SyntaxKind.EqualsGreaterThanToken ||
                        token2Kind === SyntaxKind.OpenBraceToken;
@@ -3148,7 +3166,7 @@ module TypeScript.Parser {
             }
 
             token2 = peekToken(2); 
-            token2Kind = token2.kind();
+            token2Kind = token2.kind;
 
             if (SyntaxFacts.isAccessibilityModifier(token1Kind)) {
                 if (isIdentifier(token2)) {
@@ -3177,7 +3195,7 @@ module TypeScript.Parser {
             }
 
             var token3 = peekToken(3);
-            var token3Kind = token3.kind();
+            var token3Kind = token3.kind;
             if (token2Kind === SyntaxKind.QuestionToken) {
                 // (id?
                 // Could be an arrow function, or a parenthesized conditional expression.
@@ -3220,7 +3238,7 @@ module TypeScript.Parser {
 
         function isPossiblyArrowFunctionExpression(): boolean {
             var token0 = currentToken();
-            if (token0.kind() !== SyntaxKind.OpenParenToken) {
+            if (token0.kind !== SyntaxKind.OpenParenToken) {
                 // If it didn't start with an (, then it could be generic.  That's too complicated 
                 // and we have to say it's possibly an arrow function.
                 return true;
@@ -3235,7 +3253,7 @@ module TypeScript.Parser {
             }
 
             var token2 = peekToken(2);
-            var token2Kind = token2.kind();
+            var token2Kind = token2.kind;
             if (token2Kind === SyntaxKind.EqualsToken) {
                 // (id =
                 //
@@ -3258,7 +3276,7 @@ module TypeScript.Parser {
                 // (id)
 
                 var token3 = peekToken(3);
-                if (token3.kind() === SyntaxKind.ColonToken) {
+                if (token3.kind === SyntaxKind.ColonToken) {
                     // (id):
                     //
                     // This could be an arrow function. i.e. (id): number => { }
@@ -3273,7 +3291,7 @@ module TypeScript.Parser {
         }
 
         function parseObjectLiteralExpression(openBraceToken: ISyntaxToken): ObjectLiteralExpressionSyntax {
-            // Debug.assert(currentToken().kind() === SyntaxKind.OpenBraceToken);
+            // Debug.assert(currentToken().kind === SyntaxKind.OpenBraceToken);
 
             consumeToken(openBraceToken);
             // Debug.assert(openBraceToken.fullWidth() > 0);
@@ -3282,7 +3300,7 @@ module TypeScript.Parser {
             var propertyAssignments = parseSeparatedSyntaxList<IPropertyAssignmentSyntax>(ListParsingState.ObjectLiteralExpression_PropertyAssignments, skippedTokens);
             openBraceToken = addSkippedTokensAfterToken(openBraceToken, skippedTokens);
 
-            return new syntaxFactory.ObjectLiteralExpressionSyntax(parseNodeData, openBraceToken, propertyAssignments, eatToken(SyntaxKind.CloseBraceToken));
+            return new ObjectLiteralExpressionSyntax(parseNodeData, openBraceToken, propertyAssignments, eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function tryParsePropertyAssignment(inErrorRecovery: boolean): IPropertyAssignmentSyntax {
@@ -3321,7 +3339,7 @@ module TypeScript.Parser {
         }
 
         function parseFunctionPropertyAssignment(): FunctionPropertyAssignmentSyntax {
-            return new syntaxFactory.FunctionPropertyAssignmentSyntax(parseNodeData,
+            return new FunctionPropertyAssignmentSyntax(parseNodeData,
                 eatPropertyName(), parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
                 parseBlock(/*parseBlockEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ true));
         }
@@ -3331,7 +3349,7 @@ module TypeScript.Parser {
         }
 
         function parseSimplePropertyAssignment(): SimplePropertyAssignmentSyntax {
-            return new syntaxFactory.SimplePropertyAssignmentSyntax(parseNodeData,
+            return new SimplePropertyAssignmentSyntax(parseNodeData,
                 eatPropertyName(), eatToken(SyntaxKind.ColonToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true));
         }
 
@@ -3354,12 +3372,14 @@ module TypeScript.Parser {
                 }
             }
 
-            var kind = token.kind();
-            return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral;
+            // We allow a template literal while parser for error tolerance.  We'll report errors
+            // on this later in the grammar checker walker.
+            var kind = token.kind;
+            return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral || kind === SyntaxKind.NoSubstitutionTemplateToken;
         }
 
         function parseArrayLiteralExpression(openBracketToken: ISyntaxToken): ArrayLiteralExpressionSyntax {
-            // Debug.assert(currentToken().kind() === SyntaxKind.OpenBracketToken);
+            // Debug.assert(currentToken().kind === SyntaxKind.OpenBracketToken);
             consumeToken(openBracketToken);
             // Debug.assert(openBracketToken.fullWidth() > 0);
 
@@ -3367,12 +3387,12 @@ module TypeScript.Parser {
             var expressions = parseSeparatedSyntaxList<IExpressionSyntax>(ListParsingState.ArrayLiteralExpression_AssignmentExpressions, skippedTokens);
             openBracketToken = addSkippedTokensAfterToken(openBracketToken, skippedTokens);
 
-            return new syntaxFactory.ArrayLiteralExpressionSyntax(parseNodeData, openBracketToken, expressions, eatToken(SyntaxKind.CloseBracketToken));
+            return new ArrayLiteralExpressionSyntax(parseNodeData, openBracketToken, expressions, eatToken(SyntaxKind.CloseBracketToken));
         }
 
         function parseBlock(parseBlockEvenWithNoOpenBrace: boolean, checkForStrictMode: boolean): BlockSyntax {
             var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
-            var statements = Syntax.emptyList<IStatementSyntax>();
+            var statements: IStatementSyntax[];
 
             if (parseBlockEvenWithNoOpenBrace || openBraceToken.fullWidth() > 0) {
                 var savedIsInStrictMode = isInStrictMode;
@@ -3385,17 +3405,17 @@ module TypeScript.Parser {
                 setStrictMode(savedIsInStrictMode);
             }
 
-            return new syntaxFactory.BlockSyntax(parseNodeData, openBraceToken, statements, eatToken(SyntaxKind.CloseBraceToken));
+            return new BlockSyntax(parseNodeData, openBraceToken, statements || [], eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function parseCallSignature(requireCompleteTypeParameterList: boolean): CallSignatureSyntax {
-            return new syntaxFactory.CallSignatureSyntax(parseNodeData,
+            return new CallSignatureSyntax(parseNodeData,
                 tryParseTypeParameterList(requireCompleteTypeParameterList), parseParameterList(), parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false));
         }
 
         function tryParseTypeParameterList(requireCompleteTypeParameterList: boolean): TypeParameterListSyntax {
             var _currentToken = currentToken();
-            if (_currentToken.kind() !== SyntaxKind.LessThanToken) {
+            if (_currentToken.kind !== SyntaxKind.LessThanToken) {
                 return undefined;
             }
 
@@ -3417,7 +3437,7 @@ module TypeScript.Parser {
             }
             else {
                 releaseRewindPoint(rewindPoint);
-                return new syntaxFactory.TypeParameterListSyntax(parseNodeData, lessThanToken, typeParameters, greaterThanToken);
+                return new TypeParameterListSyntax(parseNodeData, lessThanToken, typeParameters, greaterThanToken);
             }
         }
 
@@ -3431,22 +3451,22 @@ module TypeScript.Parser {
                 return undefined;
             }
 
-            return new syntaxFactory.TypeParameterSyntax(parseNodeData, eatIdentifierToken(), tryParseConstraint());
+            return new TypeParameterSyntax(parseNodeData, eatIdentifierToken(), tryParseConstraint());
         }
 
         function tryParseConstraint(): ConstraintSyntax {
-            if (currentToken().kind() !== SyntaxKind.ExtendsKeyword) {
+            if (currentToken().kind !== SyntaxKind.ExtendsKeyword) {
                 return undefined;
             }
 
-            return new syntaxFactory.ConstraintSyntax(parseNodeData, eatToken(SyntaxKind.ExtendsKeyword), parseTypeOrExpression());
+            return new ConstraintSyntax(parseNodeData, eatToken(SyntaxKind.ExtendsKeyword), parseTypeOrExpression());
         }
 
         function tryParseParameterList(): ParameterListSyntax {
-            if (currentToken().kind() === SyntaxKind.OpenParenToken) {
+            if (currentToken().kind === SyntaxKind.OpenParenToken) {
                 var token1 = peekToken(1);
 
-                if (token1.kind() === SyntaxKind.CloseParenToken || isParameterHelper(token1)) {
+                if (token1.kind === SyntaxKind.CloseParenToken || isParameterHelper(token1)) {
                     return parseParameterList();
                 }
             }
@@ -3456,7 +3476,7 @@ module TypeScript.Parser {
 
         function parseParameterList(): ParameterListSyntax {
             var openParenToken = eatToken(SyntaxKind.OpenParenToken);
-            var parameters = Syntax.emptySeparatedList<ParameterSyntax>();
+            var parameters: ISeparatedSyntaxList<ParameterSyntax>;
 
             if (openParenToken.fullWidth() > 0) {
                 var skippedTokens: ISyntaxToken[] = getArray();
@@ -3464,17 +3484,17 @@ module TypeScript.Parser {
                 openParenToken = addSkippedTokensAfterToken(openParenToken, skippedTokens);
             }
 
-            return new syntaxFactory.ParameterListSyntax(parseNodeData, openParenToken, parameters, eatToken(SyntaxKind.CloseParenToken));
+            return new ParameterListSyntax(parseNodeData, openParenToken, parameters || <any>[], eatToken(SyntaxKind.CloseParenToken));
         }
 
         function parseOptionalTypeAnnotation(allowStringLiteral: boolean): TypeAnnotationSyntax {
-            return currentToken().kind() === SyntaxKind.ColonToken ? parseTypeAnnotation(allowStringLiteral) : undefined;
+            return currentToken().kind === SyntaxKind.ColonToken ? parseTypeAnnotation(allowStringLiteral) : undefined;
         }
 
         function parseTypeAnnotationType(allowStringLiteral: boolean): ITypeSyntax {
             if (allowStringLiteral) {
                 var _currentToken = currentToken();
-                if (_currentToken.kind() === SyntaxKind.StringLiteral) {
+                if (_currentToken.kind === SyntaxKind.StringLiteral) {
                     return consumeToken(_currentToken);
                 }
             }
@@ -3483,13 +3503,13 @@ module TypeScript.Parser {
         }
 
         function parseTypeAnnotation(allowStringLiteral: boolean): TypeAnnotationSyntax {
-            return new syntaxFactory.TypeAnnotationSyntax(parseNodeData, consumeToken(currentToken()), parseTypeAnnotationType(allowStringLiteral));
+            return new TypeAnnotationSyntax(parseNodeData, consumeToken(currentToken()), parseTypeAnnotationType(allowStringLiteral));
         }
 
         function isType(): boolean {
             var _currentToken = currentToken();
 
-            switch (_currentToken.kind()) {
+            switch (_currentToken.kind) {
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.NumberKeyword:
@@ -3537,7 +3557,7 @@ module TypeScript.Parser {
                 return parseFunctionType();
             }
 
-            if (currentToken().kind() === SyntaxKind.NewKeyword) {
+            if (currentToken().kind === SyntaxKind.NewKeyword) {
                 return parseConstructorType();
             }
 
@@ -3549,11 +3569,11 @@ module TypeScript.Parser {
 
             if (type) {
                 var barToken: ISyntaxToken;
-                while ((barToken = currentToken()).kind() === SyntaxKind.BarToken) {
+                while ((barToken = currentToken()).kind === SyntaxKind.BarToken) {
                     consumeToken(barToken);
                     var right = parsePrimaryType();
 
-                    type = new syntaxFactory.UnionTypeSyntax(parseNodeData, type, barToken, right);
+                    type = new UnionTypeSyntax(parseNodeData, type, barToken, right);
                 } 
             }
 
@@ -3577,30 +3597,30 @@ module TypeScript.Parser {
                 var _currentToken = currentToken();
 
                 if (previousTokenHasTrailingNewLine(_currentToken) ||
-                    _currentToken.kind() !== SyntaxKind.OpenBracketToken) {
+                    _currentToken.kind !== SyntaxKind.OpenBracketToken) {
                     break;
                 }
 
-                type = new syntaxFactory.ArrayTypeSyntax(parseNodeData, type, consumeToken(_currentToken), eatToken(SyntaxKind.CloseBracketToken));
+                type = new ArrayTypeSyntax(parseNodeData, type, consumeToken(_currentToken), eatToken(SyntaxKind.CloseBracketToken));
             }
 
             return type;
         }
 
         function parseTypeQuery(typeOfKeyword: ISyntaxToken): TypeQuerySyntax {
-            return new syntaxFactory.TypeQuerySyntax(parseNodeData, consumeToken(typeOfKeyword), parseName(/*allowIdentifierNames:*/ true));
+            return new TypeQuerySyntax(parseNodeData, consumeToken(typeOfKeyword), parseName(/*allowIdentifierNames:*/ true));
         }
 
         function tryParseNonArrayType(): ITypeSyntax {
             var _currentToken = currentToken();
-            switch (_currentToken.kind()) {
+            switch (_currentToken.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.StringKeyword:
                     // if any of these are followed by '.', then this is actually a module name,
                     // and these keywords will be reinterpreted as an identifier.
-                    if (peekToken(1).kind() === SyntaxKind.DotToken) {
+                    if (peekToken(1).kind === SyntaxKind.DotToken) {
                         break;
                     }
 
@@ -3616,7 +3636,7 @@ module TypeScript.Parser {
         }
 
         function parseParenthesizedType(openParenToken: ISyntaxToken): ParenthesizedTypeSyntax {
-            return new syntaxFactory.ParenthesizedTypeSyntax(parseNodeData, consumeToken(openParenToken), parseType(), eatToken(SyntaxKind.CloseParenToken));
+            return new ParenthesizedTypeSyntax(parseNodeData, consumeToken(openParenToken), parseType(), eatToken(SyntaxKind.CloseParenToken));
         }
 
         function tryParseNameOrGenericType(): ITypeSyntax {
@@ -3636,12 +3656,12 @@ module TypeScript.Parser {
             var typeArgumentList = tryParseTypeArgumentList(/*inExpression:*/ false);
             return !typeArgumentList
                 ? name
-                : new syntaxFactory.GenericTypeSyntax(parseNodeData, name, typeArgumentList);
+                : new GenericTypeSyntax(parseNodeData, name, typeArgumentList);
         }
 
         function isFunctionType(): boolean {
             var token0 = currentToken();
-            var token0Kind = token0.kind();
+            var token0Kind = token0.kind;
 
             // If we see a  <  then we consider ourselves to be definitely in a (generic) function type.
             if (token0Kind === SyntaxKind.LessThanToken) {
@@ -3655,7 +3675,7 @@ module TypeScript.Parser {
             // parenthesized type.
             if (token0Kind === SyntaxKind.OpenParenToken) {
                 var token1 = peekToken(1);
-                var token1Kind = token1.kind();
+                var token1Kind = token1.kind;
 
                 if (token1Kind === SyntaxKind.CloseParenToken || token1Kind === SyntaxKind.DotDotDotToken) {
                     // () 
@@ -3670,7 +3690,7 @@ module TypeScript.Parser {
                     // could be a function type or a parenthesized type.
 
                     var token2 = peekToken(2);
-                    var token2Kind = token2.kind();
+                    var token2Kind = token2.kind;
 
                     if (token2Kind === SyntaxKind.ColonToken ||
                         token2Kind === SyntaxKind.CommaToken ||
@@ -3692,7 +3712,7 @@ module TypeScript.Parser {
                         // ( id )
                         //
                         // Only a function type if we see an arrow following it.
-                        return peekToken(3).kind() === SyntaxKind.EqualsGreaterThanToken;
+                        return peekToken(3).kind === SyntaxKind.EqualsGreaterThanToken;
                     }
                 }
             }
@@ -3705,18 +3725,18 @@ module TypeScript.Parser {
             var typeParameterList = tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false);
             var parameterList = parseParameterList();
 
-            return new syntaxFactory.FunctionTypeSyntax(parseNodeData,
+            return new FunctionTypeSyntax(parseNodeData,
                 typeParameterList, parameterList, eatToken(SyntaxKind.EqualsGreaterThanToken), parseType());
         }
 
         function parseConstructorType(): ConstructorTypeSyntax {
-            return new syntaxFactory.ConstructorTypeSyntax(parseNodeData,
+            return new ConstructorTypeSyntax(parseNodeData,
                 eatToken(SyntaxKind.NewKeyword), tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false),
                 parseParameterList(), eatToken(SyntaxKind.EqualsGreaterThanToken), parseType());
         }
 
         function isParameter(): boolean {
-            if (currentNode() && currentNode().kind() === SyntaxKind.Parameter) {
+            if (currentNode() && currentNode().kind === SyntaxKind.Parameter) {
                 return true;
             }
 
@@ -3724,21 +3744,21 @@ module TypeScript.Parser {
         }
 
         function isParameterHelper(token: ISyntaxToken): boolean {
-            var tokenKind = token.kind();
+            var tokenKind = token.kind;
             return tokenKind === SyntaxKind.DotDotDotToken ||
                    isModifierKind(tokenKind) ||
                    isIdentifier(token);
         }
 
         function eatSimpleParameter() {
-            return new syntaxFactory.ParameterSyntax(parseNodeData,
-                /*dotDotDotToken:*/ undefined, /*modifiers:*/ Syntax.emptyList<ISyntaxToken>(), eatIdentifierToken(),
+            return new ParameterSyntax(parseNodeData,
+                /*dotDotDotToken:*/ undefined, /*modifiers:*/ [], eatIdentifierToken(),
                 /*questionToken:*/ undefined, /*typeAnnotation:*/ undefined, /*equalsValueClause:*/ undefined);
         }
 
         function tryParseParameter(): ParameterSyntax {
             var node = currentNode();
-            if (node && node.kind() === SyntaxKind.Parameter) {
+            if (node && node.kind === SyntaxKind.Parameter) {
                 consumeNode(node);
                 return <ParameterSyntax>node;
             }
@@ -3754,7 +3774,7 @@ module TypeScript.Parser {
                 // If we see a modifier alone in a parameter list, like:      foo(static)
                 //
                 // then treat it like modifier, and continue parsing the parameter.
-                if (isModifierKind(_currentToken.kind())) {
+                if (isModifierKind(_currentToken.kind)) {
                     modifiers = Syntax.list([consumeToken(_currentToken)]);
                 }
                 else {
@@ -3771,7 +3791,7 @@ module TypeScript.Parser {
                 equalsValueClause = parseEqualsValueClause(/*allowIn:*/ true);
             }
 
-            return new syntaxFactory.ParameterSyntax(parseNodeData, dotDotDotToken, modifiers, identifier, questionToken, typeAnnotation, equalsValueClause);
+            return new ParameterSyntax(parseNodeData, dotDotDotToken, modifiers, identifier, questionToken, typeAnnotation, equalsValueClause);
         }
 
         function parseSyntaxList<T extends ISyntaxNodeOrToken>(
@@ -3786,7 +3806,7 @@ module TypeScript.Parser {
             return result;
         }
 
-        function parseSeparatedSyntaxList<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState, skippedTokens: ISyntaxToken[]): T[] {
+        function parseSeparatedSyntaxList<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState, skippedTokens: ISyntaxToken[]): ISeparatedSyntaxList<T> {
             var savedListParsingState = listParsingState;
             listParsingState |= (1 << currentListType);
 
@@ -3799,7 +3819,7 @@ module TypeScript.Parser {
 
         // Returns true if we should abort parsing.
         function abortParsingListOrMoveToNextToken<T extends ISyntaxNodeOrToken>(
-                currentListType: ListParsingState, nodes: T[], separators: ISyntaxToken[], skippedTokens: ISyntaxToken[]): boolean {
+                currentListType: ListParsingState, nodeAndSeparators: ISyntaxNodeOrToken[], skippedTokens: ISyntaxToken[]): boolean {
             // Ok.  We're at a token that is not a terminator for the list and wasn't the start of 
             // an item in the list. Definitely report an error for this token.
             reportUnexpectedTokenDiagnostic(currentListType);
@@ -3819,42 +3839,36 @@ module TypeScript.Parser {
 
             // Otherwise, if none of the lists we're in can capture this token, then we need to 
             // unilaterally skip it.  Note: we've already reported an error above.
-            addSkippedTokenToList(nodes, separators, skippedTokens, consumeToken(currentToken()));
+            addSkippedTokenToList(nodeAndSeparators, skippedTokens, consumeToken(currentToken()));
 
             // Continue parsing this list.  Attach this token to whatever we've seen already.
             return false;
         }
-        
-        function addSkippedTokenToList<T extends ISyntaxNodeOrToken>(
-                nodes: T[], separators: ISyntaxToken[], skippedTokens: ISyntaxToken[], skippedToken: ISyntaxToken): void {
+
+        function addSkippedTokenToList(
+            nodesAndSeparators: ISyntaxNodeOrToken[], skippedTokens: ISyntaxToken[], skippedToken: ISyntaxToken): void {
             // Now, add this skipped token to the last item we successfully parsed in the list.  Or
             // add it to the list of skipped tokens if we haven't parsed anything.  Our caller will
             // have to deal with them.
             //
-            // Note: we only bother doing this if we're creating a concrete syntax tree.
-            if (syntaxFactory.isConcrete) {
-                var length = nodes.length + (separators ? separators.length : 0);
+            var length = nodesAndSeparators.length;
 
-                for (var i = length - 1; i >= 0; i--) {
-                    var array: ISyntaxNodeOrToken[] = separators && (i % 2 === 1) ? separators : nodes;
-                    var arrayIndex = separators ? IntegerUtilities.integerDivide(i, 2) : i;
-
-                    var item = array[arrayIndex];
-                    var _lastToken = lastToken(item);
-                    if (_lastToken && _lastToken.fullWidth() > 0) {
-                        array[arrayIndex] = <T>addSkippedTokenAfterNodeOrToken(item, skippedToken);
-                        return;
-                    }
+            for (var i = length - 1; i >= 0; i--) {
+                var item = nodesAndSeparators[i];
+                var _lastToken = lastToken(item);
+                if (_lastToken && _lastToken.fullWidth() > 0) {
+                    nodesAndSeparators[i] = addSkippedTokenAfterNodeOrToken(item, skippedToken);
+                    return;
                 }
-
-                // Didn't have anything in the list we could add to.  Add to the skipped items array
-                // for our caller to handle.
-                skippedTokens.push(skippedToken);
             }
+
+            // Didn't have anything in the list we could add to.  Add to the skipped items array
+            // for our caller to handle.
+            skippedTokens.push(skippedToken);
         }
 
         function tryParseExpectedListItem(
-                currentListType: ListParsingState, inErrorRecovery: boolean, items: ISyntaxElement[], processItems: (items: any[]) => void): boolean {
+                currentListType: ListParsingState, inErrorRecovery: boolean, items: ISyntaxNodeOrToken[], processItems: (items: ISyntaxNodeOrToken[]) => void): boolean {
             var item = tryParseExpectedListItemWorker(currentListType, inErrorRecovery);
 
             if (item === undefined) {
@@ -3873,11 +3887,11 @@ module TypeScript.Parser {
 
         function listIsTerminated(currentListType: ListParsingState): boolean {
             return isExpectedListTerminator(currentListType) ||
-                   currentToken().kind() === SyntaxKind.EndOfFileToken;
+                   currentToken().kind === SyntaxKind.EndOfFileToken;
         }
 
-        function parseSyntaxListWorker<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState, skippedTokens: ISyntaxToken[], processItems: (items: any[]) => void ): T[] {
-            var items: T[] = getArray();
+        function parseSyntaxListWorker<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState, skippedTokens: ISyntaxToken[], processItems: (items: ISyntaxNodeOrToken[]) => void ): T[] {
+            var items: T[] = [];
 
             while (true) {
                 // Try to parse an item of the list.  If we fail then decide if we need to abort or 
@@ -3895,7 +3909,7 @@ module TypeScript.Parser {
 
                     // List wasn't complete and we didn't get an item.  Figure out if we should bail out
                     // or skip a token and continue.
-                    var abort = abortParsingListOrMoveToNextToken(currentListType, items, /*separators:*/ undefined, skippedTokens);
+                    var abort = abortParsingListOrMoveToNextToken(currentListType, items, skippedTokens);
                     if (abort) {
                         break;
                     }
@@ -3905,18 +3919,11 @@ module TypeScript.Parser {
                 // and didn't want to abort. Continue parsing elements.
             }
 
-            var result = Syntax.list<T>(items);
-
-            // Can't return if it has more then 1 element.  In that case, the list will have been
-            // copied into the SyntaxList.
-            returnZeroLengthArray(items);
-
-            return result;
+            return Syntax.list<T>(items);
         }
 
-        function parseSeparatedSyntaxListWorker<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState, skippedTokens: ISyntaxToken[]): T[] {
-            var nodes: T[] = getArray();
-            var separators: ISyntaxToken[] = getArray();
+        function parseSeparatedSyntaxListWorker<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState, skippedTokens: ISyntaxToken[]): ISeparatedSyntaxList<T> {
+            var nodesAndSeparators: ISyntaxNodeOrToken[] = [];
 
             // Debug.assert(nodes.length === 0);
             // Debug.assert(separators.length === 0);
@@ -3934,7 +3941,7 @@ module TypeScript.Parser {
                 // continue parsing.
 
                 // Debug.assert(oldItemsCount % 2 === 0);
-                var succeeded = tryParseExpectedListItem(currentListType, inErrorRecovery, nodes, /*processItems:*/ undefined);
+                var succeeded = tryParseExpectedListItem(currentListType, inErrorRecovery, nodesAndSeparators, /*processItems:*/ undefined);
 
                 if (!succeeded) {
                     // We weren't able to parse out a list element.
@@ -3948,7 +3955,7 @@ module TypeScript.Parser {
 
                     // List wasn't complete and we didn't get an item.  Figure out if we should bail out
                     // or skip a token and continue.
-                    var abort = abortParsingListOrMoveToNextToken(currentListType, nodes, separators, skippedTokens);
+                    var abort = abortParsingListOrMoveToNextToken(currentListType, nodesAndSeparators, skippedTokens);
                     if (abort) {
                         break;
                     }
@@ -3970,10 +3977,10 @@ module TypeScript.Parser {
                 // allow 'comma' as a separator (for error tolerance).  We will later do a post pass
                 // to report when a comma was used improperly in a list that needed semicolons.
                 var _currentToken = currentToken();
-                var tokenKind = _currentToken.kind();
+                var tokenKind = _currentToken.kind;
                 if (tokenKind === _separatorKind || tokenKind === SyntaxKind.CommaToken) {
                     // Consume the last separator and continue parsing list elements.
-                    separators.push(consumeToken(_currentToken));
+                    nodesAndSeparators.push(consumeToken(_currentToken));
                     continue;
                 }
 
@@ -4001,7 +4008,7 @@ module TypeScript.Parser {
 
                 if (allowAutomaticSemicolonInsertion && canEatAutomaticSemicolon(/*allowWithoutNewline:*/ false)) {
                     var semicolonToken = eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) || Syntax.emptyToken(SyntaxKind.SemicolonToken);
-                    separators.push(semicolonToken);
+                    nodesAndSeparators.push(semicolonToken);
                     // Debug.assert(items.length % 2 === 0);
                     continue;
                 }
@@ -4011,7 +4018,7 @@ module TypeScript.Parser {
                 // This time mark that we're in error recovery mode though.
                 //
                 // Note: trying to eat this token will emit the appropriate diagnostic.
-                separators.push(eatToken(_separatorKind));
+                nodesAndSeparators.push(eatToken(_separatorKind));
 
                 // Now that we're in 'error recovery' mode we cantweak some parsing rules as 
                 // appropriate.  For example, if we have:
@@ -4027,14 +4034,7 @@ module TypeScript.Parser {
                 inErrorRecovery = true;
             }
 
-            var result = Syntax.separatedList<T>(nodes, separators);
-
-            // Can't return if it has more then 0 elements.  In that case, the list will have been
-            // copied into the SyntaxList.
-            returnZeroLengthArray(nodes);
-            returnZeroLengthArray(separators);
-
-            return result;
+            return Syntax.separatedList<T>(nodesAndSeparators);
         }
 
         function reportUnexpectedTokenDiagnostic(listType: ListParsingState): void {
@@ -4085,32 +4085,32 @@ module TypeScript.Parser {
         }
 
         function isExpectedSourceUnit_ModuleElementsTerminator(): boolean {
-            return currentToken().kind() === SyntaxKind.EndOfFileToken;
+            return currentToken().kind === SyntaxKind.EndOfFileToken;
         }
 
         function isExpectedEnumDeclaration_EnumElementsTerminator(): boolean {
-            return currentToken().kind() === SyntaxKind.CloseBraceToken;
+            return currentToken().kind === SyntaxKind.CloseBraceToken;
         }
 
         function isExpectedModuleDeclaration_ModuleElementsTerminator(): boolean {
-            return currentToken().kind() === SyntaxKind.CloseBraceToken;
+            return currentToken().kind === SyntaxKind.CloseBraceToken;
         }
 
         function isExpectedObjectType_TypeMembersTerminator(): boolean {
-            return currentToken().kind() === SyntaxKind.CloseBraceToken;
+            return currentToken().kind === SyntaxKind.CloseBraceToken;
         }
 
         function isExpectedObjectLiteralExpression_PropertyAssignmentsTerminator(): boolean {
-            return currentToken().kind() === SyntaxKind.CloseBraceToken;
+            return currentToken().kind === SyntaxKind.CloseBraceToken;
         }
 
         function isExpectedLiteralExpression_AssignmentExpressionsTerminator(): boolean {
-            return currentToken().kind() === SyntaxKind.CloseBracketToken;
+            return currentToken().kind === SyntaxKind.CloseBracketToken;
         }
 
         function isExpectedTypeArgumentList_TypesTerminator(): boolean {
             var token = currentToken();
-            var tokenKind = token.kind();
+            var tokenKind = token.kind;
             if (tokenKind === SyntaxKind.GreaterThanToken) {
                 return true;
             }
@@ -4127,7 +4127,7 @@ module TypeScript.Parser {
 
         function isExpectedTupleType_TypesTerminator(): boolean {
             var token = currentToken();
-            var tokenKind = token.kind();
+            var tokenKind = token.kind;
             if (tokenKind === SyntaxKind.CloseBracketToken) {
                 return true;
             }
@@ -4137,7 +4137,7 @@ module TypeScript.Parser {
         }
 
         function isExpectedTypeParameterList_TypeParametersTerminator(): boolean {
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
             if (tokenKind === SyntaxKind.GreaterThanToken) {
                 return true;
             }
@@ -4155,7 +4155,7 @@ module TypeScript.Parser {
         }
 
         function isExpectedParameterList_ParametersTerminator(): boolean {
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
             if (tokenKind === SyntaxKind.CloseParenToken) {
                 return true;
             }
@@ -4176,7 +4176,7 @@ module TypeScript.Parser {
         }
 
         function isExpectedIndexSignature_ParametersTerminator() {
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
             if (tokenKind === SyntaxKind.CloseBracketToken) {
                 return true;
             }
@@ -4192,7 +4192,7 @@ module TypeScript.Parser {
 
         function isExpectedVariableDeclaration_VariableDeclarators_DisallowInTerminator(): boolean {
             // This is the case when we're parsing variable declarations in a for/for-in statement.
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
 
             if (tokenKind === SyntaxKind.SemicolonToken ||
                 tokenKind === SyntaxKind.CloseParenToken) {
@@ -4213,7 +4213,7 @@ module TypeScript.Parser {
             // For better error recovery, if we see a => then we just stop immediately.  We've got an
             // arrow function here and it's going to be very unlikely that we'll resynchronize and get
             // another variable declaration.
-            if (currentToken().kind() === SyntaxKind.EqualsGreaterThanToken) {
+            if (currentToken().kind === SyntaxKind.EqualsGreaterThanToken) {
                 return true;
             }
 
@@ -4222,7 +4222,7 @@ module TypeScript.Parser {
         }
 
         function isExpectedClassOrInterfaceDeclaration_HeritageClausesTerminator(): boolean {
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
             if (tokenKind === SyntaxKind.OpenBraceToken || tokenKind === SyntaxKind.CloseBraceToken) {
                 return true;
             }
@@ -4231,7 +4231,7 @@ module TypeScript.Parser {
         }
 
         function isExpectedHeritageClause_TypeNameListTerminator(): boolean {
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
             if (tokenKind === SyntaxKind.ExtendsKeyword || tokenKind === SyntaxKind.ImplementsKeyword) {
                 return true;
             }
@@ -4245,36 +4245,36 @@ module TypeScript.Parser {
 
         function isExpectedArgumentList_AssignmentExpressionsTerminator(): boolean {
             var token0 = currentToken();
-            var tokenKind = token0.kind();
+            var tokenKind = token0.kind;
             return tokenKind === SyntaxKind.CloseParenToken ||
                    tokenKind === SyntaxKind.SemicolonToken;
         }
 
         function isExpectedClassDeclaration_ClassElementsTerminator(): boolean {
-            return currentToken().kind() === SyntaxKind.CloseBraceToken;
+            return currentToken().kind === SyntaxKind.CloseBraceToken;
         }
 
         function isExpectedSwitchStatement_SwitchClausesTerminator(): boolean {
-            return currentToken().kind() === SyntaxKind.CloseBraceToken;
+            return currentToken().kind === SyntaxKind.CloseBraceToken;
         }
 
         function isExpectedSwitchClause_StatementsTerminator(): boolean {
-            return currentToken().kind() === SyntaxKind.CloseBraceToken ||
+            return currentToken().kind === SyntaxKind.CloseBraceToken ||
                    isSwitchClause();
         }
 
         function isExpectedBlock_StatementsTerminator(): boolean {
-            return currentToken().kind() === SyntaxKind.CloseBraceToken;
+            return currentToken().kind === SyntaxKind.CloseBraceToken;
         }
 
         function isExpectedTryBlock_StatementsTerminator(): boolean {
-            var tokenKind = currentToken().kind();
+            var tokenKind = currentToken().kind;
             return tokenKind === SyntaxKind.CatchKeyword ||
                     tokenKind === SyntaxKind.FinallyKeyword;
         }
 
         function isExpectedCatchBlock_StatementsTerminator(): boolean {
-            return currentToken().kind() === SyntaxKind.FinallyKeyword;
+            return currentToken().kind === SyntaxKind.FinallyKeyword;
         }
 
         function isExpectedListItem(currentListType: ListParsingState, inErrorRecovery: boolean): any {
@@ -4318,7 +4318,7 @@ module TypeScript.Parser {
             // If we're on a comma then the user has written something like "Foo(a,," or "Foo(,".
             // Instead of skipping the comma, create an empty expression to go before the comma 
             // so that the tree is more well formed and doesn't have skipped tokens.
-            if (_currentToken.kind() === SyntaxKind.CommaToken) {
+            if (_currentToken.kind === SyntaxKind.CommaToken) {
                 return true;
             }
 

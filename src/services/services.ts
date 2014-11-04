@@ -1065,7 +1065,7 @@ module ts {
         emitOutputStatus: EmitReturnStatus;
     }
 
-    export enum OutputFileType {
+    export const enum OutputFileType {
         JavaScript,
         SourceMap,
         Declaration
@@ -1077,7 +1077,7 @@ module ts {
         text: string;
     }
 
-    export enum EndOfLineState {
+    export const enum EndOfLineState {
         Start,
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
@@ -1780,7 +1780,7 @@ module ts {
         var buckets: Map<Map<DocumentRegistryEntry>> = {};
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
-            return "_" + ScriptTarget[settings.target]; //  + "|" + settings.propagateEnumConstantoString()
+            return "_" + settings.target; //  + "|" + settings.propagateEnumConstantoString()
         }
 
         function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): Map<DocumentRegistryEntry> {
@@ -2028,7 +2028,7 @@ module ts {
         }
     }
 
-    enum SemanticMeaning {
+    const enum SemanticMeaning {
         None = 0x0,
         Value = 0x1,
         Type = 0x2,
@@ -2036,7 +2036,7 @@ module ts {
         All = Value | Type | Namespace
     }
 
-    enum BreakContinueSearchType {
+    const enum BreakContinueSearchType {
         None = 0x0,
         Unlabeled = 0x1,
         Labeled = 0x2,
@@ -2335,24 +2335,35 @@ module ts {
 
             filename = TypeScript.switchToForwardSlashes(filename);
 
+            var syntacticStart = new Date().getTime();
             var sourceFile = getSourceFile(filename);
 
+            var start = new Date().getTime();
             var currentToken = getTokenAtPosition(sourceFile, position);
+            host.log("getCompletionsAtPosition: Get current token: " + (new Date().getTime() - start));
 
+            var start = new Date().getTime();
             // Completion not allowed inside comments, bail out if this is the case
-            if (isInsideComment(sourceFile, currentToken, position)) {
+            var insideComment = isInsideComment(sourceFile, currentToken, position);
+            host.log("getCompletionsAtPosition: Is inside comment: " + (new Date().getTime() - start));
+            
+            if (insideComment) {
                 host.log("Returning an empty list because completion was inside a comment.");
                 return undefined;
             }
 
             // The decision to provide completion depends on the previous token, so find it
             // Note: previousToken can be undefined if we are the beginning of the file
+            var start = new Date().getTime();
             var previousToken = findPrecedingToken(position, sourceFile);
+            host.log("getCompletionsAtPosition: Get previous token 1: " + (new Date().getTime() - start));
 
             // The caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier to the previous token
             if (previousToken && position <= previousToken.end && previousToken.kind === SyntaxKind.Identifier) {
+                var start = new Date().getTime();
                 previousToken = findPrecedingToken(previousToken.pos, sourceFile);
+                host.log("getCompletionsAtPosition: Get previous token 2: " + (new Date().getTime() - start));
             }
 
             // Check if this is a valid completion location
@@ -2383,8 +2394,10 @@ module ts {
                 symbols: {},
                 typeChecker: typeInfoResolver
             };
+            host.log("getCompletionsAtPosition: Syntactic work: " + (new Date().getTime() - syntacticStart));
 
             // Populate the completion list
+            var semanticStart = new Date().getTime();
             if (isRightOfDot) {
                 // Right of dot member completion list
                 var symbols: Symbol[] = [];
@@ -2454,6 +2467,7 @@ module ts {
             if (!isMemberCompletion) {
                 Array.prototype.push.apply(activeCompletionSession.entries, keywordCompletions);
             }
+            host.log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
 
             return {
                 isMemberCompletion: isMemberCompletion,
@@ -2461,6 +2475,7 @@ module ts {
             };
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
+                var start = new Date().getTime();
                 forEach(symbols, symbol => {
                     var entry = createCompletionEntry(symbol, session.typeChecker);
                     if (entry && !lookUp(session.symbols, entry.name)) {
@@ -2468,12 +2483,16 @@ module ts {
                         session.symbols[entry.name] = symbol;
                     }
                 });
+                host.log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - semanticStart));
             }
 
             function isCompletionListBlocker(previousToken: Node): boolean {
-                return isInStringOrRegularExpressionOrTemplateLiteral(previousToken) ||
+                var start = new Date().getTime();
+                var result = isInStringOrRegularExpressionOrTemplateLiteral(previousToken) ||
                     isIdentifierDefinitionLocation(previousToken) ||
                     isRightOfIllegalDot(previousToken);
+                host.log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - semanticStart));
+                return result;
             }
 
             function isInStringOrRegularExpressionOrTemplateLiteral(previousToken: Node): boolean {
@@ -4572,7 +4591,7 @@ module ts {
                     if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
                         return SemanticMeaning.Namespace | SemanticMeaning.Value;
                     }
-                    else if (isInstantiated(node)) {
+                    else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {
                         return SemanticMeaning.Namespace | SemanticMeaning.Value;
                     }
                     else {
@@ -4849,7 +4868,7 @@ module ts {
                  */
                 function hasValueSideModule(symbol: Symbol): boolean {
                     return forEach(symbol.declarations, declaration => {
-                        return declaration.kind === SyntaxKind.ModuleDeclaration && isInstantiated(declaration);
+                        return declaration.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(declaration) == ModuleInstanceState.Instantiated;
                     });
                 }
             }
@@ -5135,9 +5154,17 @@ module ts {
         }
 
         function getTodoComments(filename: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
+            // Note: while getting todo comments seems like a syntactic operation, we actually 
+            // treat it as a semantic operation here.  This is because we expect our host to call
+            // this on every single file.  If we treat this syntactically, then that will cause
+            // us to populate and throw away the tree in our syntax tree cache for each file.  By
+            // treating this as a semantic operation, we can access any tree without throwing 
+            // anything away.
+            synchronizeHostData();
+
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var sourceFile = getCurrentSourceFile(filename);
+            var sourceFile = getSourceFile(filename);
 
             cancellationToken.throwIfCancellationRequested();
 

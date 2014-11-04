@@ -74,7 +74,7 @@ module TypeScript {
             return undefined;
         }
 
-        var kind = token.kind();
+        var kind = token.kind;
         var text = token.text();
 
         if (kind === SyntaxKind.IdentifierName) {
@@ -98,15 +98,23 @@ module TypeScript {
             return IntegerUtilities.isHexInteger(text) ? parseInt(text, /*radix:*/ 16) : parseFloat(text);
         }
         else if (kind === SyntaxKind.StringLiteral) {
-            if (text.length > 1 && text.charCodeAt(text.length - 1) === text.charCodeAt(0)) {
-                // Properly terminated.  Remove the quotes, and massage any escape characters we see.
-                return massageEscapes(text.substr(1, text.length - 2));
-            }
-            else {
-                // Not property terminated.  Remove the first quote and massage any escape characters we see.
-                return massageEscapes(text.substr(1));
-
-            }
+            return (text.length > 1 && text.charCodeAt(text.length - 1) === text.charCodeAt(0)) 
+                ? massageEscapes(text.substr(1, text.length - "''".length))
+                : massageEscapes(text.substr(1));
+        }
+        else if (kind === SyntaxKind.NoSubstitutionTemplateToken || kind === SyntaxKind.TemplateEndToken) {
+            // Both of these template types may be missing their closing backtick (if they were at 
+            // the end of the file).  Check to make sure it is there before grabbing the portion
+            // we're examining.
+            return (text.length > 1 && text.charCodeAt(text.length - 1) === CharacterCodes.backtick) 
+                ? massageTemplate(text.substr(1, text.length - "``".length))
+                : massageTemplate(text.substr(1));
+        }
+        else if (kind === SyntaxKind.TemplateStartToken || kind === SyntaxKind.TemplateMiddleToken) {
+            // Both these tokens must have been properly ended.  i.e. if it didn't end with a ${
+            // then we would not have parsed a start or middle token out at all.  So we don't
+            // need to check for an incomplete token.
+            return massageTemplate(text.substr(1, text.length - "`${".length));
         }
         else if (kind === SyntaxKind.RegularExpressionLiteral) {
             return regularExpressionValue(text);
@@ -122,6 +130,18 @@ module TypeScript {
     export function tokenValueText(token: ISyntaxToken): string {
         var value = tokenValue(token);
         return value === undefined ? "" : massageDisallowedIdentifiers(value.toString());
+    }
+
+    function massageTemplate(text: string): string {
+        // First, convert all carriage-return newlines into line-feed newlines.  This is due to:
+        //
+        // The TRV of LineTerminatorSequence :: <CR> is the code unit value 0x000A.
+        // ...
+        // The TRV of LineTerminatorSequence :: <CR><LF> is the sequence consisting of the code unit value 0x000A.
+        text = text.replace("\r\n", "\n").replace("\r", "\n");
+
+        // Now remove any escape characters that may be in the string.
+        return massageEscapes(text);
     }
 
     export function massageEscapes(text: string): string {
@@ -264,7 +284,7 @@ module TypeScript {
 
 module TypeScript.Syntax {
     export function realizeToken(token: ISyntaxToken, text: ISimpleText): ISyntaxToken {
-        return new RealizedToken(token.fullStart(), token.kind(), token.isKeywordConvertedToIdentifier(), token.leadingTrivia(text), token.text(), token.trailingTrivia(text));
+        return new RealizedToken(token.fullStart(), token.kind, token.isKeywordConvertedToIdentifier(), token.leadingTrivia(text), token.text(), token.trailingTrivia(text));
     }
 
     export function convertKeywordToIdentifier(token: ISyntaxToken): ISyntaxToken {
@@ -272,11 +292,11 @@ module TypeScript.Syntax {
     }
 
     export function withLeadingTrivia(token: ISyntaxToken, leadingTrivia: ISyntaxTriviaList, text: ISimpleText): ISyntaxToken {
-        return new RealizedToken(token.fullStart(), token.kind(), token.isKeywordConvertedToIdentifier(), leadingTrivia, token.text(), token.trailingTrivia(text));
+        return new RealizedToken(token.fullStart(), token.kind, token.isKeywordConvertedToIdentifier(), leadingTrivia, token.text(), token.trailingTrivia(text));
     }
 
     export function withTrailingTrivia(token: ISyntaxToken, trailingTrivia: ISyntaxTriviaList, text: ISimpleText): ISyntaxToken {
-        return new RealizedToken(token.fullStart(), token.kind(), token.isKeywordConvertedToIdentifier(), token.leadingTrivia(text), token.text(), trailingTrivia);
+        return new RealizedToken(token.fullStart(), token.kind, token.isKeywordConvertedToIdentifier(), token.leadingTrivia(text), token.text(), trailingTrivia);
     }
 
     export function emptyToken(kind: SyntaxKind): ISyntaxToken {
@@ -284,21 +304,22 @@ module TypeScript.Syntax {
     }
 
     class EmptyToken implements ISyntaxToken {
-        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any;
+        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
+        public parent: ISyntaxElement;
 
-        constructor(private _kind: SyntaxKind) {
+        constructor(public kind: SyntaxKind) {
         }
 
         public setFullStart(fullStart: number): void {
             // An empty token is always at the -1 position.
         }
 
-        public kind(): SyntaxKind {
-            return this._kind;
-        }
+        public childCount() { return 0 }
+        public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
+        public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
         public clone(): ISyntaxToken {
-            return new EmptyToken(this.kind());
+            return new EmptyToken(this.kind);
         }
 
         // Empty tokens are never incrementally reusable.
@@ -338,7 +359,7 @@ module TypeScript.Syntax {
             while (true) {
                 var parent = current.parent;
                 if (parent === undefined) {
-                    Debug.assert(current.kind() === SyntaxKind.SourceUnit, "We had a node without a parent that was not the root node!");
+                    Debug.assert(current.kind === SyntaxKind.SourceUnit, "We had a node without a parent that was not the root node!");
 
                     // We walked all the way to the top, and never found a previous element.  This 
                     // can happen with code like:
@@ -397,22 +418,21 @@ module TypeScript.Syntax {
 
     class RealizedToken implements ISyntaxToken {
         private _fullStart: number;
-        private _kind: SyntaxKind;
         private _isKeywordConvertedToIdentifier: boolean;
         private _leadingTrivia: ISyntaxTriviaList;
         private _text: string;
         private _trailingTrivia: ISyntaxTriviaList;
 
-        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any;
+        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
+        public parent: ISyntaxElement;
 
         constructor(fullStart: number,
-            kind: SyntaxKind,
+            public kind: SyntaxKind,
             isKeywordConvertedToIdentifier: boolean,
             leadingTrivia: ISyntaxTriviaList,
             text: string,
             trailingTrivia: ISyntaxTriviaList) {
             this._fullStart = fullStart;
-            this._kind = kind;
             this._isKeywordConvertedToIdentifier = isKeywordConvertedToIdentifier;
             this._text = text;
 
@@ -432,12 +452,12 @@ module TypeScript.Syntax {
             this._fullStart = fullStart;
         }
 
-        public kind(): SyntaxKind {
-            return this._kind;
-        }
+        public childCount() { return 0 }
+        public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
+        public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
         public clone(): ISyntaxToken {
-            return new RealizedToken(this._fullStart, this.kind(), this._isKeywordConvertedToIdentifier, this._leadingTrivia, this._text, this._trailingTrivia);
+            return new RealizedToken(this._fullStart, this.kind, this._isKeywordConvertedToIdentifier, this._leadingTrivia, this._text, this._trailingTrivia);
         }
 
         // Realized tokens are created from the parser.  They are *never* incrementally reusable.
@@ -468,18 +488,20 @@ module TypeScript.Syntax {
     }
 
     class ConvertedKeywordToken implements ISyntaxToken {
-        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any;
+        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
+        public parent: ISyntaxElement;
+        public kind: SyntaxKind;
 
         constructor(private underlyingToken: ISyntaxToken) {
-        }
-
-        public kind() {
-            return SyntaxKind.IdentifierName;
         }
 
         public setFullStart(fullStart: number): void {
             this.underlyingToken.setFullStart(fullStart);
         }
+
+        public childCount() { return 0 }
+        public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
+        public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
         public fullStart(): number {
             return this.underlyingToken.fullStart();
@@ -559,4 +581,5 @@ module TypeScript.Syntax {
             return new ConvertedKeywordToken(this.underlyingToken);
         }
     }
+    ConvertedKeywordToken.prototype.kind = SyntaxKind.IdentifierName;
 }

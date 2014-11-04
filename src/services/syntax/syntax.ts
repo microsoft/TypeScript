@@ -3,24 +3,13 @@
 module TypeScript.Syntax {
     export var _nextSyntaxID: number = 1;
 
-    export function childIndex(parent: ISyntaxElement, child: ISyntaxElement) {
-        for (var i = 0, n = childCount(parent); i < n; i++) {
-            var current = childAt(parent, i);
-            if (current === child) {
-                return i;
-            }
-        }
-
-        throw Errors.invalidOperation();
-    }
-
     export function nodeHasSkippedOrMissingTokens(node: ISyntaxNode): boolean {
         for (var i = 0; i < childCount(node); i++) {
             var child = childAt(node, i);
             if (isToken(child)) {
                 var token = <ISyntaxToken>child;
                 // If a token is skipped, return true. Or if it is a missing token. The only empty token that is not missing is EOF
-                if (token.hasSkippedToken() || (width(token) === 0 && token.kind() !== SyntaxKind.EndOfFileToken)) {
+                if (token.hasSkippedToken() || (width(token) === 0 && token.kind !== SyntaxKind.EndOfFileToken)) {
                     return true;
                 }
             }
@@ -30,7 +19,7 @@ module TypeScript.Syntax {
     }
 
     export function isUnterminatedStringLiteral(token: ISyntaxToken): boolean {
-        if (token && token.kind() === SyntaxKind.StringLiteral) {
+        if (token && token.kind === SyntaxKind.StringLiteral) {
             var text = token.text();
             return text.length < 2 || text.charCodeAt(text.length - 1) !== text.charCodeAt(0);
         }
@@ -66,7 +55,7 @@ module TypeScript.Syntax {
         var triviaList: ISyntaxTriviaList = undefined;
         var lastTriviaBeforeToken: ISyntaxTrivia = undefined;
 
-        if (positionedToken.kind() === SyntaxKind.EndOfFileToken) {
+        if (positionedToken.kind === SyntaxKind.EndOfFileToken) {
             // Check if the trivia is leading on the EndOfFile token
             if (positionedToken.hasLeadingTrivia()) {
                 triviaList = positionedToken.leadingTrivia();
@@ -117,14 +106,14 @@ module TypeScript.Syntax {
         var positionedToken = findToken(sourceUnit, position);
 
         if (positionedToken) {
-            if (positionedToken.kind() === SyntaxKind.EndOfFileToken) {
+            if (positionedToken.kind === SyntaxKind.EndOfFileToken) {
                 // EndOfFile token, enusre it did not follow an unterminated string literal
                 positionedToken = previousToken(positionedToken);
                 return positionedToken && positionedToken.trailingTriviaWidth() === 0 && isUnterminatedStringLiteral(positionedToken);
             }
             else if (position > start(positionedToken)) {
                 // Ensure position falls enterily within the literal if it is terminated, or the line if it is not
-                return (position < end(positionedToken) && (positionedToken.kind() === TypeScript.SyntaxKind.StringLiteral || positionedToken.kind() === TypeScript.SyntaxKind.RegularExpressionLiteral)) ||
+                return (position < end(positionedToken) && (positionedToken.kind === TypeScript.SyntaxKind.StringLiteral || positionedToken.kind === TypeScript.SyntaxKind.RegularExpressionLiteral)) ||
                     (position <= end(positionedToken) && isUnterminatedStringLiteral(positionedToken));
             }
         }
@@ -132,43 +121,9 @@ module TypeScript.Syntax {
         return false;
     }
 
-    function findSkippedTokenOnLeftInTriviaList(positionedToken: ISyntaxToken, position: number, lookInLeadingTriviaList: boolean): ISyntaxToken {
-        var triviaList: TypeScript.ISyntaxTriviaList = undefined;
-        var fullEnd: number;
-
-        if (lookInLeadingTriviaList) {
-            triviaList = positionedToken.leadingTrivia();
-            fullEnd = positionedToken.fullStart() + triviaList.fullWidth();
-        }
-        else {
-            triviaList = positionedToken.trailingTrivia();
-            fullEnd = TypeScript.fullEnd(positionedToken);
-        }
-
-        if (triviaList && triviaList.hasSkippedToken()) {
-            for (var i = triviaList.count() - 1; i >= 0; i--) {
-                var trivia = triviaList.syntaxTriviaAt(i);
-                var triviaWidth = trivia.fullWidth();
-
-                if (trivia.isSkippedToken() && position >= fullEnd) {
-                    return trivia.skippedToken();
-                }
-
-                fullEnd -= triviaWidth;
-            }
-        }
-
-        return undefined;
-    }
-
-    export function findSkippedTokenOnLeft(positionedToken: ISyntaxToken, position: number): ISyntaxToken {
-        var positionInLeadingTriviaList = (position < start(positionedToken));
-        return findSkippedTokenOnLeftInTriviaList(positionedToken, position, /*lookInLeadingTriviaList*/ positionInLeadingTriviaList);
-    }
-
     export function getAncestorOfKind(positionedToken: ISyntaxElement, kind: SyntaxKind): ISyntaxElement {
         while (positionedToken && positionedToken.parent) {
-            if (positionedToken.parent.kind() === kind) {
+            if (positionedToken.parent.kind === kind) {
                 return positionedToken.parent;
             }
 
@@ -184,10 +139,10 @@ module TypeScript.Syntax {
 
     export function isIntegerLiteral(expression: IExpressionSyntax): boolean {
         if (expression) {
-            switch (expression.kind()) {
+            switch (expression.kind) {
                 case SyntaxKind.PrefixUnaryExpression:
                     var prefixExpr = <PrefixUnaryExpressionSyntax>expression;
-                    if (prefixExpr.operatorToken.kind() == SyntaxKind.PlusToken || prefixExpr.operatorToken.kind() === SyntaxKind.MinusToken) {
+                    if (prefixExpr.operatorToken.kind == SyntaxKind.PlusToken || prefixExpr.operatorToken.kind === SyntaxKind.MinusToken) {
                         // Note: if there is a + or - sign, we can only allow a normal integer following
                         // (and not a hex integer).  i.e. -0xA is a legal expression, but it is not a 
                         // *literal*.
@@ -218,17 +173,13 @@ module TypeScript.Syntax {
         return <ISyntaxNode>current;
     }
 
-    export function findTokenOnLeft(element: ISyntaxElement, position: number, includeSkippedTokens: boolean = false): ISyntaxToken {
-        var positionedToken = findToken(element, position, /*includeSkippedTokens*/ false);
+    export function findTokenOnLeft(sourceUnit: SourceUnitSyntax, position: number): ISyntaxToken {
+        var positionedToken = findToken(sourceUnit, position);
         var _start = start(positionedToken);
 
         // Position better fall within this token.
         // Debug.assert(position >= positionedToken.fullStart());
         // Debug.assert(position < positionedToken.fullEnd() || positionedToken.token().tokenKind === SyntaxKind.EndOfFileToken);
-
-        if (includeSkippedTokens) {
-            positionedToken = findSkippedTokenOnLeft(positionedToken, position) || positionedToken;
-        }
 
         // if position is after the start of the token, then this token is the token on the left.
         if (position > _start) {
@@ -241,26 +192,22 @@ module TypeScript.Syntax {
             return undefined;
         }
 
-        return previousToken(positionedToken, includeSkippedTokens);
+        return previousToken(positionedToken);
     }
 
-    export function findCompleteTokenOnLeft(element: ISyntaxElement, position: number, includeSkippedTokens: boolean = false): ISyntaxToken {
-        var positionedToken = findToken(element, position, /*includeSkippedTokens*/ false);
+    export function findCompleteTokenOnLeft(sourceUnit: SourceUnitSyntax, position: number): ISyntaxToken {
+        var positionedToken = findToken(sourceUnit, position);
 
         // Position better fall within this token.
         // Debug.assert(position >= positionedToken.fullStart());
         // Debug.assert(position < positionedToken.fullEnd() || positionedToken.token().tokenKind === SyntaxKind.EndOfFileToken);
-
-        if (includeSkippedTokens) {
-            positionedToken = findSkippedTokenOnLeft(positionedToken, position) || positionedToken;
-        }
 
         // if position is after the end of the token, then this token is the token on the left.
         if (width(positionedToken) > 0 && position >= end(positionedToken)) {
             return positionedToken;
         }
 
-        return previousToken(positionedToken, includeSkippedTokens);
+        return previousToken(positionedToken);
     }
 
     export function firstTokenInLineContainingPosition(syntaxTree: SyntaxTree, position: number): ISyntaxToken {

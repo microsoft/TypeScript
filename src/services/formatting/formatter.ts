@@ -78,7 +78,7 @@ module TypeScript.Services.Formatting {
             }
 
             // Push the token
-            var currentTokenSpan = new TokenSpan(token.kind(), position, width(token));
+            var currentTokenSpan = new TokenSpan(token.kind, position, width(token));
             if (!this.parent().hasSkippedOrMissingTokenChild()) {
                 if (this.previousTokenSpan) {
                     // Note that formatPair calls TrimWhitespaceInLineRange in between the 2 tokens
