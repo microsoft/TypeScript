@@ -666,7 +666,7 @@ module ts {
         return undefined;
     }
 
-    enum ParsingContext {
+    const enum ParsingContext {
         SourceElements,          // Elements in source file
         ModuleElements,          // Elements in module declaration
         BlockStatements,         // Statements in block
@@ -687,7 +687,7 @@ module ts {
         Count                    // Number of parsing contexts
     }
 
-    enum Tristate {
+    const enum Tristate {
         False,
         True,
         Unknown
@@ -715,13 +715,13 @@ module ts {
         }
     };
 
-    enum LookAheadMode {
+    const enum LookAheadMode {
         NotLookingAhead,
         NoErrorYet,
         Error
     }
 
-    enum ModifierContext {
+    const enum ModifierContext {
         SourceElements,          // Top level elements in a source file
         ModuleElements,          // Elements in module declaration
         ClassMembers,            // Members in class declaration
@@ -730,7 +730,7 @@ module ts {
 
     // Tracks whether we nested (directly or indirectly) in a certain control block.
     // Used for validating break and continue statements.
-    enum ControlBlockContext {
+    const enum ControlBlockContext {
         NotNested,
         Nested,
         CrossingFunctionBoundary
@@ -2734,7 +2734,7 @@ module ts {
                     currentKind = SetAccesor;
                 }
                 else {
-                    Debug.fail("Unexpected syntax kind:" + SyntaxKind[p.kind]);
+                    Debug.fail("Unexpected syntax kind:" + p.kind);
                 }
 
                 if (!hasProperty(seen, p.name.text)) {

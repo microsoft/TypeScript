@@ -2829,7 +2829,7 @@ module ts {
                                 break;
 
                             default:
-                                Debug.fail("This is unknown parent for type parameter: " + SyntaxKind[node.parent.kind]);
+                                Debug.fail("This is unknown parent for type parameter: " + node.parent.kind);
                         }
 
                         return {
@@ -3225,7 +3225,7 @@ module ts {
                             break;
 
                         default:
-                            Debug.fail("This is unknown kind for signature: " + SyntaxKind[node.kind]);
+                            Debug.fail("This is unknown kind for signature: " + node.kind);
                     }
 
                     return {
@@ -3310,7 +3310,7 @@ module ts {
                             break;
 
                         default:
-                            Debug.fail("This is unknown parent for parameter: " + SyntaxKind[node.parent.kind]);
+                            Debug.fail("This is unknown parent for parameter: " + node.parent.kind);
                     }
 
                     return {

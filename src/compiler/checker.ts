@@ -1606,7 +1606,7 @@ module ts {
                         return true;
 
                     default:
-                        Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + SyntaxKind[node.kind]);
+                        Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + node.kind);
                 }
             }
 
