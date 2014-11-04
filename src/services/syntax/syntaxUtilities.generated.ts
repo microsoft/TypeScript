@@ -696,4 +696,8 @@ module TypeScript {
         if (isList(element)) { return (<ISyntaxNodeOrToken[]>element)[index]; }
         return childAtArray[element.kind](element, index);
     }
+
+    export function getChildAtFunction(element: ISyntaxNodeOrToken): (nodeOrToken: ISyntaxElement, index: number) => ISyntaxElement {
+        return childAtArray[element.kind];
+    }
 }

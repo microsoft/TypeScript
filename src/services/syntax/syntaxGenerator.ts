@@ -1534,7 +1534,7 @@ function generateServicesUtilities(): string {
             result += "0";
         }
         else {
-            var definition = TypeScript.ArrayUtilities.first(definitions,d => firstKind(d) === i);
+            var definition = TypeScript.ArrayUtilities.first(definitions, d => firstKind(d) === i);
             result += definition.children.length;
         }
     }
@@ -1609,7 +1609,12 @@ function generateServicesUtilities(): string {
     //}
 
     //result += "        }\r\n";
+    result += "    }\r\n\r\n";
+
+    result += "    export function getChildAtFunction(element: ISyntaxNodeOrToken): (nodeOrToken: ISyntaxElement, index: number) => ISyntaxElement {\r\n";
+    result += "        return childAtArray[element.kind];\r\n";
     result += "    }\r\n";
+
 
     result += "}";
 

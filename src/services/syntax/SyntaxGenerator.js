@@ -2261,7 +2261,6 @@ function generateServicesUtilities() {
         }
         result += "undefined";
     }
-    ;
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
         result += ",\r\n";
@@ -2282,6 +2281,9 @@ function generateServicesUtilities() {
     result += "    export function childAt(element: ISyntaxElement, index: number): ISyntaxElement {\r\n";
     result += "        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element)[index]; }\r\n";
     result += "        return childAtArray[element.kind](element, index);\r\n";
+    result += "    }\r\n\r\n";
+    result += "    export function getChildAtFunction(element: ISyntaxNodeOrToken): (nodeOrToken: ISyntaxElement, index: number) => ISyntaxElement {\r\n";
+    result += "        return childAtArray[element.kind];\r\n";
     result += "    }\r\n";
     result += "}";
     return result;
