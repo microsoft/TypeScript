@@ -3,7 +3,7 @@
 module TypeScript {
     export class SyntaxUtilities {
         public static isAnyFunctionExpressionOrDeclaration(ast: ISyntaxElement): boolean {
-            switch (ast.kind()) {
+            switch (ast.kind) {
                 case SyntaxKind.SimpleArrowFunctionExpression:
                 case SyntaxKind.ParenthesizedArrowFunctionExpression:
                 case SyntaxKind.FunctionExpression:
@@ -34,7 +34,7 @@ module TypeScript {
 
         public static isLeftHandSizeExpression(element: ISyntaxElement) {
             if (element) {
-                switch (element.kind()) {
+                switch (element.kind) {
                     case SyntaxKind.MemberAccessExpression:
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.TemplateAccessExpression:
@@ -62,7 +62,7 @@ module TypeScript {
 
         public static isSwitchClause(element: ISyntaxElement) {
             if (element) {
-                switch (element.kind()) {
+                switch (element.kind) {
                     case SyntaxKind.CaseSwitchClause:
                     case SyntaxKind.DefaultSwitchClause:
                         return true;
@@ -74,7 +74,7 @@ module TypeScript {
 
         public static isTypeMember(element: ISyntaxElement) {
             if (element) {
-                switch (element.kind()) {
+                switch (element.kind) {
                     case SyntaxKind.ConstructSignature:
                     case SyntaxKind.MethodSignature:
                     case SyntaxKind.IndexSignature:
@@ -89,7 +89,7 @@ module TypeScript {
 
         public static isClassElement(element: ISyntaxElement) {
             if (element) {
-                switch (element.kind()) {
+                switch (element.kind) {
                     case SyntaxKind.ConstructorDeclaration:
                     case SyntaxKind.IndexMemberDeclaration:
                     case SyntaxKind.MemberFunctionDeclaration:
@@ -106,7 +106,7 @@ module TypeScript {
 
         public static isModuleElement(element: ISyntaxElement) {
             if (element) {
-                switch (element.kind()) {
+                switch (element.kind) {
                     case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ExportAssignment:
                     case SyntaxKind.ClassDeclaration:
@@ -143,7 +143,7 @@ module TypeScript {
 
         public static isStatement(element: ISyntaxElement) {
             if (element) {
-                switch (element.kind()) {
+                switch (element.kind) {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.VariableStatement:
                     case SyntaxKind.Block:
@@ -173,8 +173,8 @@ module TypeScript {
         public static isAngleBracket(positionedElement: ISyntaxElement): boolean {
             var element = positionedElement;
             var parent = positionedElement.parent;
-            if (parent && (element.kind() === SyntaxKind.LessThanToken || element.kind() === SyntaxKind.GreaterThanToken)) {
-                switch (parent.kind()) {
+            if (parent && (element.kind === SyntaxKind.LessThanToken || element.kind === SyntaxKind.GreaterThanToken)) {
+                switch (parent.kind) {
                     case SyntaxKind.TypeArgumentList:
                     case SyntaxKind.TypeParameterList:
                     case SyntaxKind.CastExpression:
@@ -188,7 +188,7 @@ module TypeScript {
         public static getToken(list: ISyntaxToken[], kind: SyntaxKind): ISyntaxToken {
             for (var i = 0, n = list.length; i < n; i++) {
                 var token = list[i];
-                if (token.kind() === kind) {
+                if (token.kind === kind) {
                     return token;
                 }
             }
@@ -205,7 +205,7 @@ module TypeScript {
         }
 
         public static getExportKeyword(moduleElement: IModuleElementSyntax): ISyntaxToken {
-            switch (moduleElement.kind()) {
+            switch (moduleElement.kind) {
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.FunctionDeclaration:
@@ -225,7 +225,7 @@ module TypeScript {
             }
 
             var node = positionNode;
-            switch (node.kind()) {
+            switch (node.kind) {
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.FunctionDeclaration:

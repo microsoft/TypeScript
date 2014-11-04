@@ -119,7 +119,7 @@ module TypeScript.Services.Formatting {
 
             }
 
-            if (token.kind() !== SyntaxKind.EndOfFileToken && indentNextTokenOrTrivia) {
+            if (token.kind !== SyntaxKind.EndOfFileToken && indentNextTokenOrTrivia) {
                 // If the last trivia item was a new line, or no trivia items were encounterd record the 
                 // indentation edit at the token position
                 if (indentationString.length > 0) {

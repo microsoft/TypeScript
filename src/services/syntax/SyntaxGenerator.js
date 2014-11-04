@@ -1982,7 +1982,7 @@ function generateConstructorFunction(definition) {
         result += ";\r\n";
     }
     result += "    };\r\n";
-    result += "    " + definition.name + ".prototype.kind = function() { return SyntaxKind." + getNameWithoutSuffix(definition) + "; }\r\n";
+    result += "    " + definition.name + ".prototype.kind = SyntaxKind." + getNameWithoutSuffix(definition) + ";\r\n";
     return result;
 }
 function generateSyntaxInterfaces() {
@@ -2154,16 +2154,28 @@ function max(array, func) {
     }
     return max;
 }
+function generateUtilities() {
+    var result = "";
+    result += "        var fixedWidthArray = [";
+    for (var i = 0; i <= TypeScript.SyntaxKind.LastFixedWidth; i++) {
+        if (i) {
+            result += ", ";
+        }
+        if (i < TypeScript.SyntaxKind.FirstFixedWidth) {
+            result += "0";
+        }
+        else {
+            result += TypeScript.SyntaxFacts.getText(i).length;
+        }
+    }
+    result += "];\r\n";
+    result += "        function fixedWidthTokenLength(kind: SyntaxKind) {\r\n";
+    result += "            return fixedWidthArray[kind];\r\n";
+    result += "        }\r\n";
+    return result;
+}
 function generateScannerUtilities() {
     var result = "///<reference path='references.ts' />\r\n" + "\r\n" + "module TypeScript {\r\n" + "    export module ScannerUtilities {\r\n";
-    result += "        export function fixedWidthTokenLength(kind: SyntaxKind) {\r\n";
-    result += "            switch (kind) {\r\n";
-    for (var k = TypeScript.SyntaxKind.FirstFixedWidth; k <= TypeScript.SyntaxKind.LastFixedWidth; k++) {
-        result += "                case SyntaxKind." + syntaxKindName(k) + ": return " + TypeScript.SyntaxFacts.getText(k).length + ";\r\n";
-    }
-    result += "                default: throw new Error();\r\n";
-    result += "            }\r\n";
-    result += "        }\r\n\r\n";
     var i;
     var keywords = [];
     for (i = TypeScript.SyntaxKind.FirstKeyword; i <= TypeScript.SyntaxKind.LastKeyword; i++) {
@@ -2202,7 +2214,7 @@ function generateVisitor() {
     result += "module TypeScript {\r\n";
     result += "    export function visitNodeOrToken(visitor: ISyntaxVisitor, element: ISyntaxNodeOrToken): any {\r\n";
     result += "        if (element === undefined) { return undefined; }\r\n";
-    result += "        switch (element.kind()) {\r\n";
+    result += "        switch (element.kind) {\r\n";
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
         result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ": ";
@@ -2240,31 +2252,38 @@ function generateServicesUtilities() {
     result += "];\r\n\r\n";
     result += "    export function childCount(element: ISyntaxElement): number {\r\n";
     result += "        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element).length; }\r\n";
-    result += "        return childCountArray[element.kind()];\r\n";
+    result += "        return childCountArray[element.kind];\r\n";
     result += "    }\r\n\r\n";
+    result += "    var childAtArray: ((nodeOrToken: ISyntaxElement, index: number) => ISyntaxElement)[] = [\r\n        ";
+    for (var i = 0; i < TypeScript.SyntaxKind.FirstNode; i++) {
+        if (i) {
+            result += ", ";
+        }
+        result += "undefined";
+    }
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
-        result += "    function " + camelCase(getNameWithoutSuffix(definition)) + "ChildAt(node: " + definition.name + ", index: number): ISyntaxElement {\r\n";
+        result += ",\r\n";
+        result += "        (node: " + definition.name + ", index: number): ISyntaxElement => {\r\n";
         if (definition.children.length) {
-            result += "        switch (index) {\r\n";
+            result += "            switch (index) {\r\n";
             for (var j = 0; j < definition.children.length; j++) {
-                result += "            case " + j + ": return node." + definition.children[j].name + ";\r\n";
+                result += "                case " + j + ": return node." + definition.children[j].name + ";\r\n";
             }
-            result += "        }\r\n";
+            result += "            }\r\n";
         }
         else {
-            result += "        throw Errors.invalidOperation();\r\n";
+            result += "            throw Errors.invalidOperation();\r\n";
         }
-        result += "    }\r\n";
+        result += "        }";
     }
+    result += "\r\n    ];\r\n";
     result += "    export function childAt(element: ISyntaxElement, index: number): ISyntaxElement {\r\n";
     result += "        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element)[index]; }\r\n";
-    result += "        switch (element.kind()) {\r\n";
-    for (var i = 0; i < definitions.length; i++) {
-        var definition = definitions[i];
-        result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ": return " + camelCase(getNameWithoutSuffix(definition)) + "ChildAt(<" + definition.name + ">element, index);\r\n";
-    }
-    result += "        }\r\n";
+    result += "        return childAtArray[element.kind](element, index);\r\n";
+    result += "    }\r\n\r\n";
+    result += "    export function getChildAtFunction(element: ISyntaxNodeOrToken): (nodeOrToken: ISyntaxElement, index: number) => ISyntaxElement {\r\n";
+    result += "        return childAtArray[element.kind];\r\n";
     result += "    }\r\n";
     result += "}";
     return result;
@@ -2275,9 +2294,11 @@ var walker = generateWalker();
 var scannerUtilities = generateScannerUtilities();
 var visitor = generateVisitor();
 var servicesUtilities = generateServicesUtilities();
+var utilities = generateUtilities();
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.concrete.generated.ts", syntaxNodesConcrete, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxInterfaces.generated.ts", syntaxInterfaces, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxWalker.generated.ts", walker, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\scannerUtilities.generated.ts", scannerUtilities, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxVisitor.generated.ts", visitor, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxUtilities.generated.ts", servicesUtilities, false);
+sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\utilities.generated.ts", utilities, false);
