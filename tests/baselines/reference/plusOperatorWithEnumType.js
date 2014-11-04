@@ -35,8 +35,8 @@ var ENUM1;
 var ResultIsNumber1 = +ENUM;
 var ResultIsNumber2 = +ENUM1;
 // enum type expressions
-var ResultIsNumber3 = +ENUM1["A"];
-var ResultIsNumber4 = +(ENUM[0] + ENUM1["B"]);
+var ResultIsNumber3 = +0 /* "A" */;
+var ResultIsNumber4 = +(ENUM[0] + 1 /* "B" */);
 // miss assignment operators
 +ENUM;
 +ENUM1;

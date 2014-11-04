@@ -50,12 +50,12 @@ var r3 = null + b;
 var r4 = null + 1;
 var r5 = null + c;
 var r6 = null + 0 /* a */;
-var r7 = null + E['a'];
+var r7 = null + 0 /* 'a' */;
 var r8 = b + null;
 var r9 = 1 + null;
 var r10 = c + null;
 var r11 = 0 /* a */ + null;
-var r12 = E['a'] + null;
+var r12 = 0 /* 'a' */ + null;
 // null + string
 var r13 = null + d;
 var r14 = null + '';
