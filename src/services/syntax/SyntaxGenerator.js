@@ -2149,16 +2149,28 @@ function max(array, func) {
     }
     return max;
 }
+function generateUtilities() {
+    var result = "";
+    result += "        var fixedWidthArray = [";
+    for (var i = 0; i <= TypeScript.SyntaxKind.LastFixedWidth; i++) {
+        if (i) {
+            result += ", ";
+        }
+        if (i < TypeScript.SyntaxKind.FirstFixedWidth) {
+            result += "0";
+        }
+        else {
+            result += TypeScript.SyntaxFacts.getText(i).length;
+        }
+    }
+    result += "];\r\n";
+    result += "        export function fixedWidthTokenLength(kind: SyntaxKind) {\r\n";
+    result += "            return fixedWidthArray[kind];\r\n";
+    result += "        }\r\n";
+    return result;
+}
 function generateScannerUtilities() {
     var result = "///<reference path='references.ts' />\r\n" + "\r\n" + "module TypeScript {\r\n" + "    export module ScannerUtilities {\r\n";
-    result += "        export function fixedWidthTokenLength(kind: SyntaxKind) {\r\n";
-    result += "            switch (kind) {\r\n";
-    for (var k = TypeScript.SyntaxKind.FirstFixedWidth; k <= TypeScript.SyntaxKind.LastFixedWidth; k++) {
-        result += "                case SyntaxKind." + syntaxKindName(k) + ": return " + TypeScript.SyntaxFacts.getText(k).length + ";\r\n";
-    }
-    result += "                default: throw new Error();\r\n";
-    result += "            }\r\n";
-    result += "        }\r\n\r\n";
     var i;
     var keywords = [];
     for (i = TypeScript.SyntaxKind.FirstKeyword; i <= TypeScript.SyntaxKind.LastKeyword; i++) {
@@ -2270,9 +2282,11 @@ var walker = generateWalker();
 var scannerUtilities = generateScannerUtilities();
 var visitor = generateVisitor();
 var servicesUtilities = generateServicesUtilities();
+var utilities = generateUtilities();
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.concrete.generated.ts", syntaxNodesConcrete, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxInterfaces.generated.ts", syntaxInterfaces, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxWalker.generated.ts", walker, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\scannerUtilities.generated.ts", scannerUtilities, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxVisitor.generated.ts", visitor, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxUtilities.generated.ts", servicesUtilities, false);
+sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\utilities.generated.ts", utilities, false);
