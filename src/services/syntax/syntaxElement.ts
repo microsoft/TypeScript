@@ -367,7 +367,7 @@ module TypeScript {
 
     export interface ISyntaxElement {
         kind(): SyntaxKind;
-        parent?: ISyntaxElement;
+        parent: ISyntaxElement;
     }
 
     export interface ISyntaxNode extends ISyntaxNodeOrToken {

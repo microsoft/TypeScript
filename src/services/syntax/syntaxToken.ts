@@ -305,6 +305,7 @@ module TypeScript.Syntax {
 
     class EmptyToken implements ISyntaxToken {
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
+        public parent: ISyntaxElement;
 
         constructor(private _kind: SyntaxKind) {
         }
@@ -428,6 +429,7 @@ module TypeScript.Syntax {
         private _trailingTrivia: ISyntaxTriviaList;
 
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
+        public parent: ISyntaxElement;
 
         constructor(fullStart: number,
             kind: SyntaxKind,
@@ -497,6 +499,7 @@ module TypeScript.Syntax {
 
     class ConvertedKeywordToken implements ISyntaxToken {
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
+        public parent: ISyntaxElement;
 
         constructor(private underlyingToken: ISyntaxToken) {
         }
