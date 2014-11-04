@@ -19800,11 +19800,12 @@ var TypeScript;
                 index = _index;
             }
             function reset(_text, _start, _end) {
-                TypeScript.Debug.assert(_start <= _text.length(), "Token's start was not within the bounds of text: " + _start + " - [0, " + _text.length() + ")");
-                TypeScript.Debug.assert(_end <= _text.length(), "Token's end was not within the bounds of text: " + _end + " - [0, " + _text.length() + ")");
+                var textLength = _text.length();
+                TypeScript.Debug.assert(_start <= textLength, "Token's start was not within the bounds of text.");
+                TypeScript.Debug.assert(_end <= textLength, "Token's end was not within the bounds of text:");
                 if (!str || text !== _text) {
                     text = _text;
-                    str = _text.substr(0, _text.length());
+                    str = _text.substr(0, textLength);
                 }
                 start = _start;
                 end = _end;
@@ -20713,8 +20714,11 @@ var TypeScript;
             }
             function resetToPosition(absolutePosition) {
                 TypeScript.Debug.assert(absolutePosition <= text.length(), "Trying to set the position outside the bounds of the text!");
+                var resetBackward = absolutePosition <= _absolutePosition;
                 _absolutePosition = absolutePosition;
-                removeDiagnosticsOnOrAfterPosition(absolutePosition);
+                if (resetBackward) {
+                    removeDiagnosticsOnOrAfterPosition(absolutePosition);
+                }
                 slidingWindow.disgardAllItemsFromCurrentIndexOnwards();
                 scanner.setIndex(absolutePosition);
             }
@@ -21206,7 +21210,7 @@ var TypeScript;
         if (position < 0) {
             throw TypeScript.Errors.argumentOutOfRange("position");
         }
-        var token = findTokenWorker(sourceUnit, 0, position);
+        var token = findTokenInNodeOrToken(sourceUnit, 0, position);
         if (token) {
             TypeScript.Debug.assert(token.fullWidth() > 0);
             return token;
@@ -21257,11 +21261,32 @@ var TypeScript;
         return undefined;
     }
     function findTokenWorker(element, elementPosition, position) {
-        if (isToken(element)) {
-            return element;
+        if (isList(element)) {
+            return findTokenInList(element, elementPosition, position);
         }
-        for (var i = 0, n = TypeScript.childCount(element); i < n; i++) {
-            var child = TypeScript.childAt(element, i);
+        else {
+            return findTokenInNodeOrToken(element, elementPosition, position);
+        }
+    }
+    function findTokenInList(list, elementPosition, position) {
+        for (var i = 0, n = list.length; i < n; i++) {
+            var child = list[i];
+            var childFullWidth = fullWidth(child);
+            var elementEndPosition = elementPosition + childFullWidth;
+            if (position < elementEndPosition) {
+                return findTokenWorker(child, elementPosition, position);
+            }
+            elementPosition = elementEndPosition;
+        }
+        return undefined;
+    }
+    function findTokenInNodeOrToken(nodeOrToken, elementPosition, position) {
+        if (isToken(nodeOrToken)) {
+            return nodeOrToken;
+        }
+        var childAtFunction = TypeScript.getChildAtFunction(nodeOrToken);
+        for (var i = 0, n = TypeScript.childCount(nodeOrToken); i < n; i++) {
+            var child = childAtFunction(nodeOrToken, i);
             if (child) {
                 var childFullWidth = fullWidth(child);
                 var elementEndPosition = elementPosition + childFullWidth;
@@ -21466,14 +21491,7 @@ var TypeScript;
     var SyntaxFacts;
     (function (SyntaxFacts) {
         function isDirectivePrologueElement(node) {
-            if (node.kind === 154 /* ExpressionStatement */) {
-                var expressionStatement = node;
-                var expression = expressionStatement.expression;
-                if (expression.kind === 12 /* StringLiteral */) {
-                    return true;
-                }
-            }
-            return false;
+            return node.kind === 154 /* ExpressionStatement */ && node.expression.kind === 12 /* StringLiteral */;
         }
         SyntaxFacts.isDirectivePrologueElement = isDirectivePrologueElement;
         function isUseStrictDirective(node) {
@@ -22504,788 +22522,824 @@ var TypeScript;
         return childCountArray[element.kind];
     }
     TypeScript.childCount = childCount;
-    function sourceUnitChildAt(node, index) {
-        switch (index) {
-            case 0: return node.moduleElements;
-            case 1: return node.endOfFileToken;
-        }
-    }
-    function qualifiedNameChildAt(node, index) {
-        switch (index) {
-            case 0: return node.left;
-            case 1: return node.dotToken;
-            case 2: return node.right;
-        }
-    }
-    function objectTypeChildAt(node, index) {
-        switch (index) {
-            case 0: return node.openBraceToken;
-            case 1: return node.typeMembers;
-            case 2: return node.closeBraceToken;
-        }
-    }
-    function functionTypeChildAt(node, index) {
-        switch (index) {
-            case 0: return node.typeParameterList;
-            case 1: return node.parameterList;
-            case 2: return node.equalsGreaterThanToken;
-            case 3: return node.type;
-        }
-    }
-    function arrayTypeChildAt(node, index) {
-        switch (index) {
-            case 0: return node.type;
-            case 1: return node.openBracketToken;
-            case 2: return node.closeBracketToken;
-        }
-    }
-    function constructorTypeChildAt(node, index) {
-        switch (index) {
-            case 0: return node.newKeyword;
-            case 1: return node.typeParameterList;
-            case 2: return node.parameterList;
-            case 3: return node.equalsGreaterThanToken;
-            case 4: return node.type;
-        }
-    }
-    function genericTypeChildAt(node, index) {
-        switch (index) {
-            case 0: return node.name;
-            case 1: return node.typeArgumentList;
-        }
-    }
-    function typeQueryChildAt(node, index) {
-        switch (index) {
-            case 0: return node.typeOfKeyword;
-            case 1: return node.name;
-        }
-    }
-    function tupleTypeChildAt(node, index) {
-        switch (index) {
-            case 0: return node.openBracketToken;
-            case 1: return node.types;
-            case 2: return node.closeBracketToken;
-        }
-    }
-    function unionTypeChildAt(node, index) {
-        switch (index) {
-            case 0: return node.left;
-            case 1: return node.barToken;
-            case 2: return node.right;
-        }
-    }
-    function parenthesizedTypeChildAt(node, index) {
-        switch (index) {
-            case 0: return node.openParenToken;
-            case 1: return node.type;
-            case 2: return node.closeParenToken;
-        }
-    }
-    function interfaceDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.interfaceKeyword;
-            case 2: return node.identifier;
-            case 3: return node.typeParameterList;
-            case 4: return node.heritageClauses;
-            case 5: return node.body;
-        }
-    }
-    function functionDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.functionKeyword;
-            case 2: return node.identifier;
-            case 3: return node.callSignature;
-            case 4: return node.block;
-            case 5: return node.semicolonToken;
-        }
-    }
-    function moduleDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.moduleKeyword;
-            case 2: return node.name;
-            case 3: return node.stringLiteral;
-            case 4: return node.openBraceToken;
-            case 5: return node.moduleElements;
-            case 6: return node.closeBraceToken;
-        }
-    }
-    function classDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.classKeyword;
-            case 2: return node.identifier;
-            case 3: return node.typeParameterList;
-            case 4: return node.heritageClauses;
-            case 5: return node.openBraceToken;
-            case 6: return node.classElements;
-            case 7: return node.closeBraceToken;
-        }
-    }
-    function enumDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.enumKeyword;
-            case 2: return node.identifier;
-            case 3: return node.openBraceToken;
-            case 4: return node.enumElements;
-            case 5: return node.closeBraceToken;
-        }
-    }
-    function importDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.importKeyword;
-            case 2: return node.identifier;
-            case 3: return node.equalsToken;
-            case 4: return node.moduleReference;
-            case 5: return node.semicolonToken;
-        }
-    }
-    function exportAssignmentChildAt(node, index) {
-        switch (index) {
-            case 0: return node.exportKeyword;
-            case 1: return node.equalsToken;
-            case 2: return node.identifier;
-            case 3: return node.semicolonToken;
-        }
-    }
-    function memberFunctionDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.propertyName;
-            case 2: return node.callSignature;
-            case 3: return node.block;
-            case 4: return node.semicolonToken;
-        }
-    }
-    function memberVariableDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.variableDeclarator;
-            case 2: return node.semicolonToken;
-        }
-    }
-    function constructorDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.constructorKeyword;
-            case 2: return node.callSignature;
-            case 3: return node.block;
-            case 4: return node.semicolonToken;
-        }
-    }
-    function indexMemberDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.indexSignature;
-            case 2: return node.semicolonToken;
-        }
-    }
-    function getAccessorChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.getKeyword;
-            case 2: return node.propertyName;
-            case 3: return node.callSignature;
-            case 4: return node.block;
-        }
-    }
-    function setAccessorChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.setKeyword;
-            case 2: return node.propertyName;
-            case 3: return node.callSignature;
-            case 4: return node.block;
-        }
-    }
-    function propertySignatureChildAt(node, index) {
-        switch (index) {
-            case 0: return node.propertyName;
-            case 1: return node.questionToken;
-            case 2: return node.typeAnnotation;
-        }
-    }
-    function callSignatureChildAt(node, index) {
-        switch (index) {
-            case 0: return node.typeParameterList;
-            case 1: return node.parameterList;
-            case 2: return node.typeAnnotation;
-        }
-    }
-    function constructSignatureChildAt(node, index) {
-        switch (index) {
-            case 0: return node.newKeyword;
-            case 1: return node.callSignature;
-        }
-    }
-    function indexSignatureChildAt(node, index) {
-        switch (index) {
-            case 0: return node.openBracketToken;
-            case 1: return node.parameters;
-            case 2: return node.closeBracketToken;
-            case 3: return node.typeAnnotation;
-        }
-    }
-    function methodSignatureChildAt(node, index) {
-        switch (index) {
-            case 0: return node.propertyName;
-            case 1: return node.questionToken;
-            case 2: return node.callSignature;
-        }
-    }
-    function blockChildAt(node, index) {
-        switch (index) {
-            case 0: return node.openBraceToken;
-            case 1: return node.statements;
-            case 2: return node.closeBraceToken;
-        }
-    }
-    function ifStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.ifKeyword;
-            case 1: return node.openParenToken;
-            case 2: return node.condition;
-            case 3: return node.closeParenToken;
-            case 4: return node.statement;
-            case 5: return node.elseClause;
-        }
-    }
-    function variableStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.modifiers;
-            case 1: return node.variableDeclaration;
-            case 2: return node.semicolonToken;
-        }
-    }
-    function expressionStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.expression;
-            case 1: return node.semicolonToken;
-        }
-    }
-    function returnStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.returnKeyword;
-            case 1: return node.expression;
-            case 2: return node.semicolonToken;
-        }
-    }
-    function switchStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.switchKeyword;
-            case 1: return node.openParenToken;
-            case 2: return node.expression;
-            case 3: return node.closeParenToken;
-            case 4: return node.openBraceToken;
-            case 5: return node.switchClauses;
-            case 6: return node.closeBraceToken;
-        }
-    }
-    function breakStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.breakKeyword;
-            case 1: return node.identifier;
-            case 2: return node.semicolonToken;
-        }
-    }
-    function continueStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.continueKeyword;
-            case 1: return node.identifier;
-            case 2: return node.semicolonToken;
-        }
-    }
-    function forStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.forKeyword;
-            case 1: return node.openParenToken;
-            case 2: return node.variableDeclaration;
-            case 3: return node.initializer;
-            case 4: return node.firstSemicolonToken;
-            case 5: return node.condition;
-            case 6: return node.secondSemicolonToken;
-            case 7: return node.incrementor;
-            case 8: return node.closeParenToken;
-            case 9: return node.statement;
-        }
-    }
-    function forInStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.forKeyword;
-            case 1: return node.openParenToken;
-            case 2: return node.variableDeclaration;
-            case 3: return node.left;
-            case 4: return node.inKeyword;
-            case 5: return node.expression;
-            case 6: return node.closeParenToken;
-            case 7: return node.statement;
-        }
-    }
-    function emptyStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.semicolonToken;
-        }
-    }
-    function throwStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.throwKeyword;
-            case 1: return node.expression;
-            case 2: return node.semicolonToken;
-        }
-    }
-    function whileStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.whileKeyword;
-            case 1: return node.openParenToken;
-            case 2: return node.condition;
-            case 3: return node.closeParenToken;
-            case 4: return node.statement;
-        }
-    }
-    function tryStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.tryKeyword;
-            case 1: return node.block;
-            case 2: return node.catchClause;
-            case 3: return node.finallyClause;
-        }
-    }
-    function labeledStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.identifier;
-            case 1: return node.colonToken;
-            case 2: return node.statement;
-        }
-    }
-    function doStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.doKeyword;
-            case 1: return node.statement;
-            case 2: return node.whileKeyword;
-            case 3: return node.openParenToken;
-            case 4: return node.condition;
-            case 5: return node.closeParenToken;
-            case 6: return node.semicolonToken;
-        }
-    }
-    function debuggerStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.debuggerKeyword;
-            case 1: return node.semicolonToken;
-        }
-    }
-    function withStatementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.withKeyword;
-            case 1: return node.openParenToken;
-            case 2: return node.condition;
-            case 3: return node.closeParenToken;
-            case 4: return node.statement;
-        }
-    }
-    function prefixUnaryExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.operatorToken;
-            case 1: return node.operand;
-        }
-    }
-    function deleteExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.deleteKeyword;
-            case 1: return node.expression;
-        }
-    }
-    function typeOfExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.typeOfKeyword;
-            case 1: return node.expression;
-        }
-    }
-    function voidExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.voidKeyword;
-            case 1: return node.expression;
-        }
-    }
-    function conditionalExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.condition;
-            case 1: return node.questionToken;
-            case 2: return node.whenTrue;
-            case 3: return node.colonToken;
-            case 4: return node.whenFalse;
-        }
-    }
-    function binaryExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.left;
-            case 1: return node.operatorToken;
-            case 2: return node.right;
-        }
-    }
-    function postfixUnaryExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.operand;
-            case 1: return node.operatorToken;
-        }
-    }
-    function memberAccessExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.expression;
-            case 1: return node.dotToken;
-            case 2: return node.name;
-        }
-    }
-    function invocationExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.expression;
-            case 1: return node.argumentList;
-        }
-    }
-    function arrayLiteralExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.openBracketToken;
-            case 1: return node.expressions;
-            case 2: return node.closeBracketToken;
-        }
-    }
-    function objectLiteralExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.openBraceToken;
-            case 1: return node.propertyAssignments;
-            case 2: return node.closeBraceToken;
-        }
-    }
-    function objectCreationExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.newKeyword;
-            case 1: return node.expression;
-            case 2: return node.argumentList;
-        }
-    }
-    function parenthesizedExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.openParenToken;
-            case 1: return node.expression;
-            case 2: return node.closeParenToken;
-        }
-    }
-    function parenthesizedArrowFunctionExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.callSignature;
-            case 1: return node.equalsGreaterThanToken;
-            case 2: return node.block;
-            case 3: return node.expression;
-        }
-    }
-    function simpleArrowFunctionExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.parameter;
-            case 1: return node.equalsGreaterThanToken;
-            case 2: return node.block;
-            case 3: return node.expression;
-        }
-    }
-    function castExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.lessThanToken;
-            case 1: return node.type;
-            case 2: return node.greaterThanToken;
-            case 3: return node.expression;
-        }
-    }
-    function elementAccessExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.expression;
-            case 1: return node.openBracketToken;
-            case 2: return node.argumentExpression;
-            case 3: return node.closeBracketToken;
-        }
-    }
-    function functionExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.functionKeyword;
-            case 1: return node.identifier;
-            case 2: return node.callSignature;
-            case 3: return node.block;
-        }
-    }
-    function omittedExpressionChildAt(node, index) {
-        throw TypeScript.Errors.invalidOperation();
-    }
-    function templateExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.templateStartToken;
-            case 1: return node.templateClauses;
-        }
-    }
-    function templateAccessExpressionChildAt(node, index) {
-        switch (index) {
-            case 0: return node.expression;
-            case 1: return node.templateExpression;
-        }
-    }
-    function variableDeclarationChildAt(node, index) {
-        switch (index) {
-            case 0: return node.varKeyword;
-            case 1: return node.variableDeclarators;
-        }
-    }
-    function variableDeclaratorChildAt(node, index) {
-        switch (index) {
-            case 0: return node.propertyName;
-            case 1: return node.typeAnnotation;
-            case 2: return node.equalsValueClause;
-        }
-    }
-    function argumentListChildAt(node, index) {
-        switch (index) {
-            case 0: return node.typeArgumentList;
-            case 1: return node.openParenToken;
-            case 2: return node.arguments;
-            case 3: return node.closeParenToken;
-        }
-    }
-    function parameterListChildAt(node, index) {
-        switch (index) {
-            case 0: return node.openParenToken;
-            case 1: return node.parameters;
-            case 2: return node.closeParenToken;
-        }
-    }
-    function typeArgumentListChildAt(node, index) {
-        switch (index) {
-            case 0: return node.lessThanToken;
-            case 1: return node.typeArguments;
-            case 2: return node.greaterThanToken;
-        }
-    }
-    function typeParameterListChildAt(node, index) {
-        switch (index) {
-            case 0: return node.lessThanToken;
-            case 1: return node.typeParameters;
-            case 2: return node.greaterThanToken;
-        }
-    }
-    function heritageClauseChildAt(node, index) {
-        switch (index) {
-            case 0: return node.extendsOrImplementsKeyword;
-            case 1: return node.typeNames;
-        }
-    }
-    function equalsValueClauseChildAt(node, index) {
-        switch (index) {
-            case 0: return node.equalsToken;
-            case 1: return node.value;
-        }
-    }
-    function caseSwitchClauseChildAt(node, index) {
-        switch (index) {
-            case 0: return node.caseKeyword;
-            case 1: return node.expression;
-            case 2: return node.colonToken;
-            case 3: return node.statements;
-        }
-    }
-    function defaultSwitchClauseChildAt(node, index) {
-        switch (index) {
-            case 0: return node.defaultKeyword;
-            case 1: return node.colonToken;
-            case 2: return node.statements;
-        }
-    }
-    function elseClauseChildAt(node, index) {
-        switch (index) {
-            case 0: return node.elseKeyword;
-            case 1: return node.statement;
-        }
-    }
-    function catchClauseChildAt(node, index) {
-        switch (index) {
-            case 0: return node.catchKeyword;
-            case 1: return node.openParenToken;
-            case 2: return node.identifier;
-            case 3: return node.typeAnnotation;
-            case 4: return node.closeParenToken;
-            case 5: return node.block;
-        }
-    }
-    function finallyClauseChildAt(node, index) {
-        switch (index) {
-            case 0: return node.finallyKeyword;
-            case 1: return node.block;
-        }
-    }
-    function templateClauseChildAt(node, index) {
-        switch (index) {
-            case 0: return node.expression;
-            case 1: return node.templateMiddleOrEndToken;
-        }
-    }
-    function typeParameterChildAt(node, index) {
-        switch (index) {
-            case 0: return node.identifier;
-            case 1: return node.constraint;
-        }
-    }
-    function constraintChildAt(node, index) {
-        switch (index) {
-            case 0: return node.extendsKeyword;
-            case 1: return node.typeOrExpression;
-        }
-    }
-    function simplePropertyAssignmentChildAt(node, index) {
-        switch (index) {
-            case 0: return node.propertyName;
-            case 1: return node.colonToken;
-            case 2: return node.expression;
-        }
-    }
-    function functionPropertyAssignmentChildAt(node, index) {
-        switch (index) {
-            case 0: return node.propertyName;
-            case 1: return node.callSignature;
-            case 2: return node.block;
-        }
-    }
-    function parameterChildAt(node, index) {
-        switch (index) {
-            case 0: return node.dotDotDotToken;
-            case 1: return node.modifiers;
-            case 2: return node.identifier;
-            case 3: return node.questionToken;
-            case 4: return node.typeAnnotation;
-            case 5: return node.equalsValueClause;
-        }
-    }
-    function enumElementChildAt(node, index) {
-        switch (index) {
-            case 0: return node.propertyName;
-            case 1: return node.equalsValueClause;
-        }
-    }
-    function typeAnnotationChildAt(node, index) {
-        switch (index) {
-            case 0: return node.colonToken;
-            case 1: return node.type;
-        }
-    }
-    function externalModuleReferenceChildAt(node, index) {
-        switch (index) {
-            case 0: return node.requireKeyword;
-            case 1: return node.openParenToken;
-            case 2: return node.stringLiteral;
-            case 3: return node.closeParenToken;
-        }
-    }
-    function moduleNameModuleReferenceChildAt(node, index) {
-        switch (index) {
-            case 0: return node.moduleName;
-        }
-    }
+    var childAtArray = [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        function (node, index) {
+            switch (index) {
+                case 0: return node.moduleElements;
+                case 1: return node.endOfFileToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.left;
+                case 1: return node.dotToken;
+                case 2: return node.right;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.openBraceToken;
+                case 1: return node.typeMembers;
+                case 2: return node.closeBraceToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.typeParameterList;
+                case 1: return node.parameterList;
+                case 2: return node.equalsGreaterThanToken;
+                case 3: return node.type;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.type;
+                case 1: return node.openBracketToken;
+                case 2: return node.closeBracketToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.newKeyword;
+                case 1: return node.typeParameterList;
+                case 2: return node.parameterList;
+                case 3: return node.equalsGreaterThanToken;
+                case 4: return node.type;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.name;
+                case 1: return node.typeArgumentList;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.typeOfKeyword;
+                case 1: return node.name;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.openBracketToken;
+                case 1: return node.types;
+                case 2: return node.closeBracketToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.left;
+                case 1: return node.barToken;
+                case 2: return node.right;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.openParenToken;
+                case 1: return node.type;
+                case 2: return node.closeParenToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.interfaceKeyword;
+                case 2: return node.identifier;
+                case 3: return node.typeParameterList;
+                case 4: return node.heritageClauses;
+                case 5: return node.body;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.functionKeyword;
+                case 2: return node.identifier;
+                case 3: return node.callSignature;
+                case 4: return node.block;
+                case 5: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.moduleKeyword;
+                case 2: return node.name;
+                case 3: return node.stringLiteral;
+                case 4: return node.openBraceToken;
+                case 5: return node.moduleElements;
+                case 6: return node.closeBraceToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.classKeyword;
+                case 2: return node.identifier;
+                case 3: return node.typeParameterList;
+                case 4: return node.heritageClauses;
+                case 5: return node.openBraceToken;
+                case 6: return node.classElements;
+                case 7: return node.closeBraceToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.enumKeyword;
+                case 2: return node.identifier;
+                case 3: return node.openBraceToken;
+                case 4: return node.enumElements;
+                case 5: return node.closeBraceToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.importKeyword;
+                case 2: return node.identifier;
+                case 3: return node.equalsToken;
+                case 4: return node.moduleReference;
+                case 5: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.exportKeyword;
+                case 1: return node.equalsToken;
+                case 2: return node.identifier;
+                case 3: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.propertyName;
+                case 2: return node.callSignature;
+                case 3: return node.block;
+                case 4: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.variableDeclarator;
+                case 2: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.constructorKeyword;
+                case 2: return node.callSignature;
+                case 3: return node.block;
+                case 4: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.indexSignature;
+                case 2: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.getKeyword;
+                case 2: return node.propertyName;
+                case 3: return node.callSignature;
+                case 4: return node.block;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.setKeyword;
+                case 2: return node.propertyName;
+                case 3: return node.callSignature;
+                case 4: return node.block;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.propertyName;
+                case 1: return node.questionToken;
+                case 2: return node.typeAnnotation;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.typeParameterList;
+                case 1: return node.parameterList;
+                case 2: return node.typeAnnotation;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.newKeyword;
+                case 1: return node.callSignature;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.openBracketToken;
+                case 1: return node.parameters;
+                case 2: return node.closeBracketToken;
+                case 3: return node.typeAnnotation;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.propertyName;
+                case 1: return node.questionToken;
+                case 2: return node.callSignature;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.openBraceToken;
+                case 1: return node.statements;
+                case 2: return node.closeBraceToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.ifKeyword;
+                case 1: return node.openParenToken;
+                case 2: return node.condition;
+                case 3: return node.closeParenToken;
+                case 4: return node.statement;
+                case 5: return node.elseClause;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.modifiers;
+                case 1: return node.variableDeclaration;
+                case 2: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.expression;
+                case 1: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.returnKeyword;
+                case 1: return node.expression;
+                case 2: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.switchKeyword;
+                case 1: return node.openParenToken;
+                case 2: return node.expression;
+                case 3: return node.closeParenToken;
+                case 4: return node.openBraceToken;
+                case 5: return node.switchClauses;
+                case 6: return node.closeBraceToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.breakKeyword;
+                case 1: return node.identifier;
+                case 2: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.continueKeyword;
+                case 1: return node.identifier;
+                case 2: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.forKeyword;
+                case 1: return node.openParenToken;
+                case 2: return node.variableDeclaration;
+                case 3: return node.initializer;
+                case 4: return node.firstSemicolonToken;
+                case 5: return node.condition;
+                case 6: return node.secondSemicolonToken;
+                case 7: return node.incrementor;
+                case 8: return node.closeParenToken;
+                case 9: return node.statement;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.forKeyword;
+                case 1: return node.openParenToken;
+                case 2: return node.variableDeclaration;
+                case 3: return node.left;
+                case 4: return node.inKeyword;
+                case 5: return node.expression;
+                case 6: return node.closeParenToken;
+                case 7: return node.statement;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.throwKeyword;
+                case 1: return node.expression;
+                case 2: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.whileKeyword;
+                case 1: return node.openParenToken;
+                case 2: return node.condition;
+                case 3: return node.closeParenToken;
+                case 4: return node.statement;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.tryKeyword;
+                case 1: return node.block;
+                case 2: return node.catchClause;
+                case 3: return node.finallyClause;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.identifier;
+                case 1: return node.colonToken;
+                case 2: return node.statement;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.doKeyword;
+                case 1: return node.statement;
+                case 2: return node.whileKeyword;
+                case 3: return node.openParenToken;
+                case 4: return node.condition;
+                case 5: return node.closeParenToken;
+                case 6: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.debuggerKeyword;
+                case 1: return node.semicolonToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.withKeyword;
+                case 1: return node.openParenToken;
+                case 2: return node.condition;
+                case 3: return node.closeParenToken;
+                case 4: return node.statement;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.operatorToken;
+                case 1: return node.operand;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.deleteKeyword;
+                case 1: return node.expression;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.typeOfKeyword;
+                case 1: return node.expression;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.voidKeyword;
+                case 1: return node.expression;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.condition;
+                case 1: return node.questionToken;
+                case 2: return node.whenTrue;
+                case 3: return node.colonToken;
+                case 4: return node.whenFalse;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.left;
+                case 1: return node.operatorToken;
+                case 2: return node.right;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.operand;
+                case 1: return node.operatorToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.expression;
+                case 1: return node.dotToken;
+                case 2: return node.name;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.expression;
+                case 1: return node.argumentList;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.openBracketToken;
+                case 1: return node.expressions;
+                case 2: return node.closeBracketToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.openBraceToken;
+                case 1: return node.propertyAssignments;
+                case 2: return node.closeBraceToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.newKeyword;
+                case 1: return node.expression;
+                case 2: return node.argumentList;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.openParenToken;
+                case 1: return node.expression;
+                case 2: return node.closeParenToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.callSignature;
+                case 1: return node.equalsGreaterThanToken;
+                case 2: return node.block;
+                case 3: return node.expression;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.parameter;
+                case 1: return node.equalsGreaterThanToken;
+                case 2: return node.block;
+                case 3: return node.expression;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.lessThanToken;
+                case 1: return node.type;
+                case 2: return node.greaterThanToken;
+                case 3: return node.expression;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.expression;
+                case 1: return node.openBracketToken;
+                case 2: return node.argumentExpression;
+                case 3: return node.closeBracketToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.functionKeyword;
+                case 1: return node.identifier;
+                case 2: return node.callSignature;
+                case 3: return node.block;
+            }
+        },
+        function (node, index) {
+            throw TypeScript.Errors.invalidOperation();
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.templateStartToken;
+                case 1: return node.templateClauses;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.expression;
+                case 1: return node.templateExpression;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.varKeyword;
+                case 1: return node.variableDeclarators;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.propertyName;
+                case 1: return node.typeAnnotation;
+                case 2: return node.equalsValueClause;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.typeArgumentList;
+                case 1: return node.openParenToken;
+                case 2: return node.arguments;
+                case 3: return node.closeParenToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.openParenToken;
+                case 1: return node.parameters;
+                case 2: return node.closeParenToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.lessThanToken;
+                case 1: return node.typeArguments;
+                case 2: return node.greaterThanToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.lessThanToken;
+                case 1: return node.typeParameters;
+                case 2: return node.greaterThanToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.extendsOrImplementsKeyword;
+                case 1: return node.typeNames;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.equalsToken;
+                case 1: return node.value;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.caseKeyword;
+                case 1: return node.expression;
+                case 2: return node.colonToken;
+                case 3: return node.statements;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.defaultKeyword;
+                case 1: return node.colonToken;
+                case 2: return node.statements;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.elseKeyword;
+                case 1: return node.statement;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.catchKeyword;
+                case 1: return node.openParenToken;
+                case 2: return node.identifier;
+                case 3: return node.typeAnnotation;
+                case 4: return node.closeParenToken;
+                case 5: return node.block;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.finallyKeyword;
+                case 1: return node.block;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.expression;
+                case 1: return node.templateMiddleOrEndToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.identifier;
+                case 1: return node.constraint;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.extendsKeyword;
+                case 1: return node.typeOrExpression;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.propertyName;
+                case 1: return node.colonToken;
+                case 2: return node.expression;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.propertyName;
+                case 1: return node.callSignature;
+                case 2: return node.block;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.dotDotDotToken;
+                case 1: return node.modifiers;
+                case 2: return node.identifier;
+                case 3: return node.questionToken;
+                case 4: return node.typeAnnotation;
+                case 5: return node.equalsValueClause;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.propertyName;
+                case 1: return node.equalsValueClause;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.colonToken;
+                case 1: return node.type;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.requireKeyword;
+                case 1: return node.openParenToken;
+                case 2: return node.stringLiteral;
+                case 3: return node.closeParenToken;
+            }
+        },
+        function (node, index) {
+            switch (index) {
+                case 0: return node.moduleName;
+            }
+        }
+    ];
     function childAt(element, index) {
         if (TypeScript.isList(element)) {
             return element[index];
         }
-        switch (element.kind) {
-            case 122 /* SourceUnit */: return sourceUnitChildAt(element, index);
-            case 123 /* QualifiedName */: return qualifiedNameChildAt(element, index);
-            case 124 /* ObjectType */: return objectTypeChildAt(element, index);
-            case 125 /* FunctionType */: return functionTypeChildAt(element, index);
-            case 126 /* ArrayType */: return arrayTypeChildAt(element, index);
-            case 127 /* ConstructorType */: return constructorTypeChildAt(element, index);
-            case 128 /* GenericType */: return genericTypeChildAt(element, index);
-            case 129 /* TypeQuery */: return typeQueryChildAt(element, index);
-            case 130 /* TupleType */: return tupleTypeChildAt(element, index);
-            case 131 /* UnionType */: return unionTypeChildAt(element, index);
-            case 132 /* ParenthesizedType */: return parenthesizedTypeChildAt(element, index);
-            case 133 /* InterfaceDeclaration */: return interfaceDeclarationChildAt(element, index);
-            case 134 /* FunctionDeclaration */: return functionDeclarationChildAt(element, index);
-            case 135 /* ModuleDeclaration */: return moduleDeclarationChildAt(element, index);
-            case 136 /* ClassDeclaration */: return classDeclarationChildAt(element, index);
-            case 137 /* EnumDeclaration */: return enumDeclarationChildAt(element, index);
-            case 138 /* ImportDeclaration */: return importDeclarationChildAt(element, index);
-            case 139 /* ExportAssignment */: return exportAssignmentChildAt(element, index);
-            case 140 /* MemberFunctionDeclaration */: return memberFunctionDeclarationChildAt(element, index);
-            case 141 /* MemberVariableDeclaration */: return memberVariableDeclarationChildAt(element, index);
-            case 142 /* ConstructorDeclaration */: return constructorDeclarationChildAt(element, index);
-            case 143 /* IndexMemberDeclaration */: return indexMemberDeclarationChildAt(element, index);
-            case 144 /* GetAccessor */: return getAccessorChildAt(element, index);
-            case 145 /* SetAccessor */: return setAccessorChildAt(element, index);
-            case 146 /* PropertySignature */: return propertySignatureChildAt(element, index);
-            case 147 /* CallSignature */: return callSignatureChildAt(element, index);
-            case 148 /* ConstructSignature */: return constructSignatureChildAt(element, index);
-            case 149 /* IndexSignature */: return indexSignatureChildAt(element, index);
-            case 150 /* MethodSignature */: return methodSignatureChildAt(element, index);
-            case 151 /* Block */: return blockChildAt(element, index);
-            case 152 /* IfStatement */: return ifStatementChildAt(element, index);
-            case 153 /* VariableStatement */: return variableStatementChildAt(element, index);
-            case 154 /* ExpressionStatement */: return expressionStatementChildAt(element, index);
-            case 155 /* ReturnStatement */: return returnStatementChildAt(element, index);
-            case 156 /* SwitchStatement */: return switchStatementChildAt(element, index);
-            case 157 /* BreakStatement */: return breakStatementChildAt(element, index);
-            case 158 /* ContinueStatement */: return continueStatementChildAt(element, index);
-            case 159 /* ForStatement */: return forStatementChildAt(element, index);
-            case 160 /* ForInStatement */: return forInStatementChildAt(element, index);
-            case 161 /* EmptyStatement */: return emptyStatementChildAt(element, index);
-            case 162 /* ThrowStatement */: return throwStatementChildAt(element, index);
-            case 163 /* WhileStatement */: return whileStatementChildAt(element, index);
-            case 164 /* TryStatement */: return tryStatementChildAt(element, index);
-            case 165 /* LabeledStatement */: return labeledStatementChildAt(element, index);
-            case 166 /* DoStatement */: return doStatementChildAt(element, index);
-            case 167 /* DebuggerStatement */: return debuggerStatementChildAt(element, index);
-            case 168 /* WithStatement */: return withStatementChildAt(element, index);
-            case 169 /* PrefixUnaryExpression */: return prefixUnaryExpressionChildAt(element, index);
-            case 170 /* DeleteExpression */: return deleteExpressionChildAt(element, index);
-            case 171 /* TypeOfExpression */: return typeOfExpressionChildAt(element, index);
-            case 172 /* VoidExpression */: return voidExpressionChildAt(element, index);
-            case 173 /* ConditionalExpression */: return conditionalExpressionChildAt(element, index);
-            case 174 /* BinaryExpression */: return binaryExpressionChildAt(element, index);
-            case 175 /* PostfixUnaryExpression */: return postfixUnaryExpressionChildAt(element, index);
-            case 176 /* MemberAccessExpression */: return memberAccessExpressionChildAt(element, index);
-            case 177 /* InvocationExpression */: return invocationExpressionChildAt(element, index);
-            case 178 /* ArrayLiteralExpression */: return arrayLiteralExpressionChildAt(element, index);
-            case 179 /* ObjectLiteralExpression */: return objectLiteralExpressionChildAt(element, index);
-            case 180 /* ObjectCreationExpression */: return objectCreationExpressionChildAt(element, index);
-            case 181 /* ParenthesizedExpression */: return parenthesizedExpressionChildAt(element, index);
-            case 182 /* ParenthesizedArrowFunctionExpression */: return parenthesizedArrowFunctionExpressionChildAt(element, index);
-            case 183 /* SimpleArrowFunctionExpression */: return simpleArrowFunctionExpressionChildAt(element, index);
-            case 184 /* CastExpression */: return castExpressionChildAt(element, index);
-            case 185 /* ElementAccessExpression */: return elementAccessExpressionChildAt(element, index);
-            case 186 /* FunctionExpression */: return functionExpressionChildAt(element, index);
-            case 187 /* OmittedExpression */: return omittedExpressionChildAt(element, index);
-            case 188 /* TemplateExpression */: return templateExpressionChildAt(element, index);
-            case 189 /* TemplateAccessExpression */: return templateAccessExpressionChildAt(element, index);
-            case 190 /* VariableDeclaration */: return variableDeclarationChildAt(element, index);
-            case 191 /* VariableDeclarator */: return variableDeclaratorChildAt(element, index);
-            case 192 /* ArgumentList */: return argumentListChildAt(element, index);
-            case 193 /* ParameterList */: return parameterListChildAt(element, index);
-            case 194 /* TypeArgumentList */: return typeArgumentListChildAt(element, index);
-            case 195 /* TypeParameterList */: return typeParameterListChildAt(element, index);
-            case 196 /* HeritageClause */: return heritageClauseChildAt(element, index);
-            case 197 /* EqualsValueClause */: return equalsValueClauseChildAt(element, index);
-            case 198 /* CaseSwitchClause */: return caseSwitchClauseChildAt(element, index);
-            case 199 /* DefaultSwitchClause */: return defaultSwitchClauseChildAt(element, index);
-            case 200 /* ElseClause */: return elseClauseChildAt(element, index);
-            case 201 /* CatchClause */: return catchClauseChildAt(element, index);
-            case 202 /* FinallyClause */: return finallyClauseChildAt(element, index);
-            case 203 /* TemplateClause */: return templateClauseChildAt(element, index);
-            case 204 /* TypeParameter */: return typeParameterChildAt(element, index);
-            case 205 /* Constraint */: return constraintChildAt(element, index);
-            case 206 /* SimplePropertyAssignment */: return simplePropertyAssignmentChildAt(element, index);
-            case 207 /* FunctionPropertyAssignment */: return functionPropertyAssignmentChildAt(element, index);
-            case 208 /* Parameter */: return parameterChildAt(element, index);
-            case 209 /* EnumElement */: return enumElementChildAt(element, index);
-            case 210 /* TypeAnnotation */: return typeAnnotationChildAt(element, index);
-            case 211 /* ExternalModuleReference */: return externalModuleReferenceChildAt(element, index);
-            case 212 /* ModuleNameModuleReference */: return moduleNameModuleReferenceChildAt(element, index);
-        }
+        return childAtArray[element.kind](element, index);
     }
     TypeScript.childAt = childAt;
+    function getChildAtFunction(element) {
+        return childAtArray[element.kind];
+    }
+    TypeScript.getChildAtFunction = getChildAtFunction;
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
 (function (TypeScript) {
@@ -24275,11 +24329,13 @@ var TypeScript;
                 }
                 return sourceUnit;
             }
+            function isDirectivePrologueElement(node) {
+                return node.kind === 154 /* ExpressionStatement */ && node.expression.kind === 12 /* StringLiteral */;
+            }
             function updateStrictModeState(items) {
                 if (!isInStrictMode) {
-                    for (var i = 0; i < items.length; i++) {
-                        var item = items[i];
-                        if (!TypeScript.SyntaxFacts.isDirectivePrologueElement(item)) {
+                    for (var i = 0, n = items.length; i < n; i++) {
+                        if (!isDirectivePrologueElement(items[i])) {
                             return;
                         }
                     }
