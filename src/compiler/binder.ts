@@ -350,6 +350,7 @@ module ts {
                     break;
                 case SyntaxKind.Property:
                 case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShortHandPropertyAssignment:
                     bindDeclaration(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.EnumMember:

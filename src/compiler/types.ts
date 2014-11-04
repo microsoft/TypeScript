@@ -165,6 +165,7 @@ module ts {
         ArrayLiteral,
         ObjectLiteral,
         PropertyAssignment,
+        ShortHandPropertyAssignment,
         PropertyAccess,
         IndexedAccess,
         CallExpression,
@@ -327,6 +328,10 @@ module ts {
     export interface PropertyDeclaration extends Declaration {
         type?: TypeNode;
         initializer?: Expression;
+    }
+
+    export interface ShortHandPropertyDeclaration extends PropertyDeclaration {
+        name: Identifier;
     }
 
     export interface ParameterDeclaration extends VariableDeclaration { }

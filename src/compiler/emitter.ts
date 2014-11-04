@@ -1033,6 +1033,16 @@ module ts {
                 emitTrailingComments(node);
             }
 
+            function emitShortHandPropertyAssignment(node: ShortHandPropertyDeclaration) {
+                emitLeadingComments(node);
+                emit(node.name);
+                if (compilerOptions.target !== ScriptTarget.ES6) {
+                    write(": ");
+                    emit(node.name);
+                }
+                emitTrailingComments(node);
+            }
+
             function tryEmitConstantValue(node: PropertyAccess | IndexedAccess): boolean {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
@@ -2250,6 +2260,8 @@ module ts {
                         return emitObjectLiteral(<ObjectLiteral>node);
                     case SyntaxKind.PropertyAssignment:
                         return emitPropertyAssignment(<PropertyDeclaration>node);
+                    case SyntaxKind.ShortHandPropertyAssignment:
+                        return emitShortHandPropertyAssignment(<ShortHandPropertyDeclaration>node);
                     case SyntaxKind.PropertyAccess:
                         return emitPropertyAccess(<PropertyAccess>node);
                     case SyntaxKind.IndexedAccess:

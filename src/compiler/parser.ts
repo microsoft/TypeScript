@@ -198,6 +198,7 @@ module ts {
                     child((<ParameterDeclaration>node).initializer);
             case SyntaxKind.Property:
             case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShortHandPropertyAssignment:
                 return child((<PropertyDeclaration>node).name) ||
                     child((<PropertyDeclaration>node).type) ||
                     child((<PropertyDeclaration>node).initializer);
@@ -2669,9 +2670,11 @@ module ts {
 
         function parsePropertyAssignment(): PropertyDeclaration {
             var nodePos = scanner.getStartPos();
+            var nameToken = token;
             var propertyName = parsePropertyName();
+            var node: PropertyDeclaration;
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                var node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
+                node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
                 node.name = propertyName;
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
                 var body = parseBody(/* ignoreMissingOpenBrace */ false);
@@ -2683,8 +2686,19 @@ module ts {
                 node.initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
                 return finishNode(node);
             }
+            if (token === SyntaxKind.QuestionToken) {
+                var questionStart = scanner.getTokenPos();
+                errorAtPos(questionStart, scanner.getStartPos() - questionStart, Diagnostics.A_object_member_cannot_be_declared_optional);
+                nextToken();
+            }
+
+            // Parse to check if it is short-hand property assignment or normal property assignment
+            if (token !== SyntaxKind.ColonToken && nameToken === SyntaxKind.Identifier) {
+                node = <ShortHandPropertyDeclaration>createNode(SyntaxKind.ShortHandPropertyAssignment, nodePos);
+                node.name = propertyName;
+            }
             else {
-                var node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
+                node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
                 node.name = propertyName;
                 parseExpected(SyntaxKind.ColonToken);
                 node.initializer = parseAssignmentExpression(false);
@@ -2735,6 +2749,9 @@ module ts {
                 // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields 
                 var currentKind: number;
                 if (p.kind === SyntaxKind.PropertyAssignment) {
+                    currentKind = Property;
+                }
+                else if (p.kind === SyntaxKind.ShortHandPropertyAssignment) {
                     currentKind = Property;
                 }
                 else if (p.kind === SyntaxKind.GetAccessor) {
