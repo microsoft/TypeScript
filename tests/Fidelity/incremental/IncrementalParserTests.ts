@@ -16,7 +16,7 @@ module TypeScript {
 
         private static collect(element: ISyntaxElement, result: ISyntaxElement[]) {
             if (element) {
-                var kind = element.kind();
+                var kind = element.kind;
                 result.push(element);
 
                 for (var i = 0, n = childCount(element); i < n; i++) {
