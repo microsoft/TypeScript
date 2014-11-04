@@ -1545,35 +1545,71 @@ function generateServicesUtilities(): string {
     result += "        return childCountArray[element.kind];\r\n";
     result += "    }\r\n\r\n";
 
+    result += "    var childAtArray: ((nodeOrToken: ISyntaxElement, index: number) => ISyntaxElement)[] = [\r\n        ";
+
+    for (var i = 0; i < TypeScript.SyntaxKind.FirstNode; i++) {
+        if (i) {
+            result += ", ";
+        }
+
+        result += "undefined";
+    }
+;
+
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];
-        result += "    function " + camelCase(getNameWithoutSuffix(definition)) + "ChildAt(node: " + definition.name + ", index: number): ISyntaxElement {\r\n";
+        result += ",\r\n"
+        result += "        (node: " + definition.name + ", index: number): ISyntaxElement => {\r\n";
+
         if (definition.children.length) {
-            result += "        switch (index) {\r\n";
+            result += "            switch (index) {\r\n";
 
             for (var j = 0; j < definition.children.length; j++) {
-                result += "            case " + j + ": return node." + definition.children[j].name + ";\r\n";
+                result += "                case " + j + ": return node." + definition.children[j].name + ";\r\n";
             }
 
-            result += "        }\r\n";
+            result += "            }\r\n";
         }
         else {
-            result += "        throw Errors.invalidOperation();\r\n";
+            result += "            throw Errors.invalidOperation();\r\n";
         }
-        result += "    }\r\n";
+
+
+        result += "        }";
     }
+
+    result += "\r\n    ];\r\n";
+
+    //for (var i = 0; i < definitions.length; i++) {
+    //    var definition = definitions[i];
+    //    result += "    function " + camelCase(getNameWithoutSuffix(definition)) + "ChildAt(node: " + definition.name + ", index: number): ISyntaxElement {\r\n";
+    //    if (definition.children.length) {
+    //        result += "        switch (index) {\r\n";
+
+    //        for (var j = 0; j < definition.children.length; j++) {
+    //            result += "            case " + j + ": return node." + definition.children[j].name + ";\r\n";
+    //        }
+
+    //        result += "        }\r\n";
+    //    }
+    //    else {
+    //        result += "        throw Errors.invalidOperation();\r\n";
+    //    }
+    //    result += "    }\r\n";
+    //}
 
 
     result += "    export function childAt(element: ISyntaxElement, index: number): ISyntaxElement {\r\n";
     result += "        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element)[index]; }\r\n";
-    result += "        switch (element.kind) {\r\n";
+    result += "        return childAtArray[element.kind](element, index);\r\n";
+    //result += "        switch (element.kind) {\r\n";
 
-    for (var i = 0; i < definitions.length; i++) {
-        var definition = definitions[i];
-        result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ": return " + camelCase(getNameWithoutSuffix(definition)) + "ChildAt(<" + definition.name + ">element, index);\r\n";
-    }
+    //for (var i = 0; i < definitions.length; i++) {
+    //    var definition = definitions[i];
+    //    result += "            case SyntaxKind." + getNameWithoutSuffix(definition) + ": return " + camelCase(getNameWithoutSuffix(definition)) + "ChildAt(<" + definition.name + ">element, index);\r\n";
+    //}
 
-    result += "        }\r\n";
+    //result += "        }\r\n";
     result += "    }\r\n";
 
     result += "}";
