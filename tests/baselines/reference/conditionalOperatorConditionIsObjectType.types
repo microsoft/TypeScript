@@ -74,6 +74,12 @@ condObject ? exprIsObject1 : exprIsObject2;
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
+condObject ? exprString1 : exprBoolean1; // union
+>condObject ? exprString1 : exprBoolean1 : string | boolean
+>condObject : Object
+>exprString1 : string
+>exprBoolean1 : boolean
+
 //Cond is an object type literal
 ((a: string) => a.length) ? exprAny1 : exprAny2;
 >((a: string) => a.length) ? exprAny1 : exprAny2 : any
@@ -122,6 +128,15 @@ condObject ? exprIsObject1 : exprIsObject2;
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
+({ a: 1, b: "s" }) ? exprString1: exprBoolean1; // union
+>({ a: 1, b: "s" }) ? exprString1: exprBoolean1 : string | boolean
+>({ a: 1, b: "s" }) : { a: number; b: string; }
+>{ a: 1, b: "s" } : { a: number; b: string; }
+>a : number
+>b : string
+>exprString1 : string
+>exprBoolean1 : boolean
+
 //Cond is an object type expression
 foo() ? exprAny1 : exprAny2;
 >foo() ? exprAny1 : exprAny2 : any
@@ -162,6 +177,13 @@ condObject.valueOf() ? exprIsObject1 : exprIsObject2;
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
+new Date() ? exprString1 : exprBoolean1; // union
+>new Date() ? exprString1 : exprBoolean1 : string | boolean
+>new Date() : Date
+>Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>exprString1 : string
+>exprBoolean1 : boolean
+
 //Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condObject ? exprAny1 : exprAny2;
 >resultIsAny1 : any
@@ -197,6 +219,13 @@ var resultIsObject1 = condObject ? exprIsObject1 : exprIsObject2;
 >condObject : Object
 >exprIsObject1 : Object
 >exprIsObject2 : Object
+
+var resultIsStringOrBoolean1 = condObject ? exprString1 : exprBoolean1; // union
+>resultIsStringOrBoolean1 : string | boolean
+>condObject ? exprString1 : exprBoolean1 : string | boolean
+>condObject : Object
+>exprString1 : string
+>exprBoolean1 : boolean
 
 var resultIsAny2 = ((a: string) => a.length) ? exprAny1 : exprAny2;
 >resultIsAny2 : any
@@ -250,6 +279,16 @@ var resultIsObject2 = ({ a: 1, b: "s" }) ? exprIsObject1 : exprIsObject2;
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
+var resultIsStringOrBoolean2 = ({ a: 1, b: "s" }) ? exprString1 : exprBoolean1; // union
+>resultIsStringOrBoolean2 : string | boolean
+>({ a: 1, b: "s" }) ? exprString1 : exprBoolean1 : string | boolean
+>({ a: 1, b: "s" }) : { a: number; b: string; }
+>{ a: 1, b: "s" } : { a: number; b: string; }
+>a : number
+>b : string
+>exprString1 : string
+>exprBoolean1 : boolean
+
 var resultIsAny3 = foo() ? exprAny1 : exprAny2;
 >resultIsAny3 : any
 >foo() ? exprAny1 : exprAny2 : any
@@ -293,4 +332,14 @@ var resultIsObject3 = condObject.valueOf() ? exprIsObject1 : exprIsObject2;
 >valueOf : () => Object
 >exprIsObject1 : Object
 >exprIsObject2 : Object
+
+var resultIsStringOrBoolean3 = C.doIt() ? exprString1 : exprBoolean1; // union
+>resultIsStringOrBoolean3 : string | boolean
+>C.doIt() ? exprString1 : exprBoolean1 : string | boolean
+>C.doIt() : void
+>C.doIt : () => void
+>C : typeof C
+>doIt : () => void
+>exprString1 : string
+>exprBoolean1 : boolean
 
