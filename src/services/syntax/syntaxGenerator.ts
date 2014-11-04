@@ -1554,7 +1554,6 @@ function generateServicesUtilities(): string {
 
         result += "undefined";
     }
-;
 
     for (var i = 0; i < definitions.length; i++) {
         var definition = definitions[i];

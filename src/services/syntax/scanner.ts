@@ -1648,11 +1648,14 @@ module TypeScript.Scanner {
 
         function resetToPosition(absolutePosition: number): void {
             Debug.assert(absolutePosition <= text.length(), "Trying to set the position outside the bounds of the text!");
+            var resetBackward = absolutePosition <= _absolutePosition;
 
             _absolutePosition = absolutePosition;
 
-            // First, remove any diagnostics that came after this position.
-            removeDiagnosticsOnOrAfterPosition(absolutePosition);
+            if (resetBackward) {
+                // First, remove any diagnostics that came after this position.
+                removeDiagnosticsOnOrAfterPosition(absolutePosition);
+            }
 
             // Now, tell our sliding window to throw away all tokens after this position as well.
             slidingWindow.disgardAllItemsFromCurrentIndexOnwards();
