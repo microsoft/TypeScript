@@ -450,7 +450,7 @@ module TypeScript {
         _memberDeclarationBrand: any;
     }
 
-    export interface IPropertyAssignmentSyntax extends ISyntaxNode {
+    export interface IPropertyAssignmentSyntax extends ISyntaxNodeOrToken {
         _propertyAssignmentBrand: any;
     }
 
