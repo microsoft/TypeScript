@@ -3396,16 +3396,9 @@ module TypeScript.Parser {
         function isPropertyName(peekIndex: number, inErrorRecovery: boolean): boolean {
             var token = peekToken(peekIndex);
             if (token.kind === SyntaxKind.OpenBracketToken) {
-                // If we're in a class declaration.
-                // it's a property name as long as it doesn't start with:
-                //
-                //      [id:
-                //
-                // If it starts with that, then it's an index signature.  Fortunately, there is no 
-                // ambiguity in the language as a property name must have an assignment expression
-                // after the open bracket (and no assignment expressions start with "id:").
-                var isIndexSignature = isIdentifier(peekToken(peekIndex + 1)) && peekToken(peekIndex + 2).kind === SyntaxKind.ColonToken;
-                return !isIndexSignature;
+                // A '[' only starts a property name as long as we're sure it doesn't start an
+                // index signature.
+                return !isIndexSignature(peekIndex);
             }
 
             return isPropertyNameToken(token, inErrorRecovery);
