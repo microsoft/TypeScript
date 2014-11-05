@@ -450,8 +450,17 @@ module TypeScript {
         _memberDeclarationBrand: any;
     }
 
-    export interface IPropertyAssignmentSyntax extends IClassElementSyntax {
+    export interface IPropertyAssignmentSyntax extends ISyntaxNode {
         _propertyAssignmentBrand: any;
+    }
+
+    export interface IAccessorSyntax extends IPropertyAssignmentSyntax, IMemberDeclarationSyntax {
+        _accessorBrand: any;
+
+        modifiers: ISyntaxToken[];
+        propertyName: ISyntaxToken;
+        callSignature: CallSignatureSyntax;
+        block: BlockSyntax;
     }
 
     export interface ISwitchClauseSyntax extends ISyntaxNode {
