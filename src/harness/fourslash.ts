@@ -2368,7 +2368,7 @@ module FourSlash {
         };
     }
 
-    enum State {
+    const enum State {
         none,
         inSlashStarMarker,
         inObjectMarker

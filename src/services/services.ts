@@ -1065,7 +1065,7 @@ module ts {
         emitOutputStatus: EmitReturnStatus;
     }
 
-    export enum OutputFileType {
+    export const enum OutputFileType {
         JavaScript,
         SourceMap,
         Declaration
@@ -1077,7 +1077,7 @@ module ts {
         text: string;
     }
 
-    export enum EndOfLineState {
+    export const enum EndOfLineState {
         Start,
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
@@ -1780,7 +1780,7 @@ module ts {
         var buckets: Map<Map<DocumentRegistryEntry>> = {};
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
-            return "_" + ScriptTarget[settings.target]; //  + "|" + settings.propagateEnumConstantoString()
+            return "_" + settings.target; //  + "|" + settings.propagateEnumConstantoString()
         }
 
         function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): Map<DocumentRegistryEntry> {
@@ -2028,7 +2028,7 @@ module ts {
         }
     }
 
-    enum SemanticMeaning {
+    const enum SemanticMeaning {
         None = 0x0,
         Value = 0x1,
         Type = 0x2,
@@ -2036,7 +2036,7 @@ module ts {
         All = Value | Type | Namespace
     }
 
-    enum BreakContinueSearchType {
+    const enum BreakContinueSearchType {
         None = 0x0,
         Unlabeled = 0x1,
         Labeled = 0x2,
