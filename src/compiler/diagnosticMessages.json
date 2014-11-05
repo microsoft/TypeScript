@@ -572,10 +572,6 @@
         "category": "Error",
         "code": 2322
     },
-    "Type '{0}' is not assignable to type '{1}'.": {
-        "category": "Error",
-        "code": 2323
-    },
     "Property '{0}' is missing in type '{1}'.": {
         "category": "Error",
         "code": 2324

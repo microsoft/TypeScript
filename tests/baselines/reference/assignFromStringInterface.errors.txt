@@ -1,4 +1,4 @@
-tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts(3,1): error TS2323: Type 'String' is not assignable to type 'string'.
+tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts(3,1): error TS2322: Type 'String' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts (1 errors) ====
@@ -6,5 +6,5 @@ tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts(3,1
     var a: String;
     x = a;
     ~
-!!! error TS2323: Type 'String' is not assignable to type 'string'.
+!!! error TS2322: Type 'String' is not assignable to type 'string'.
     a = x;
