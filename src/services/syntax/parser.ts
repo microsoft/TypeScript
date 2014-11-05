@@ -1986,7 +1986,17 @@ module TypeScript.Parser {
 
             consumeToken(switchKeyword);
             var openParenToken = eatToken(SyntaxKind.OpenParenToken);
-            var expression = parseExpression(/*allowIn:*/ true);
+            var expression: IExpressionSyntax;
+
+            // if we have  "switch {"
+            // then don't try to consume the { as the start of an expression.
+            if (openParenToken.fullWidth() === 0 && currentToken().kind === SyntaxKind.OpenBraceToken) {
+                expression = eatIdentifierToken();
+            }
+            else {
+                expression = parseExpression(/*allowIn:*/ true);
+            }
+
             var closeParenToken = eatToken(SyntaxKind.CloseParenToken);
             var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
 
@@ -3312,8 +3322,23 @@ module TypeScript.Parser {
             else if (isFunctionPropertyAssignment(inErrorRecovery)) {
                 return parseFunctionPropertyAssignment();
             }
-            else if (isSimplePropertyAssignment(inErrorRecovery)) {
-                return parseSimplePropertyAssignment();
+            else if (isSimpleOrShorthandPropertyAssignment(inErrorRecovery)) {
+                var _currentToken = currentToken();
+                if (isIdentifier(_currentToken) && peekToken(1).kind !== SyntaxKind.ColonToken) {
+                    // To be a shorthand property assignment we must have an identifier (and not a 
+                    // keyword or literal) and it must not be followed by a colon. 
+                    return consumeToken(_currentToken);
+                }
+                else {
+                    // If we didn't have an identifier, then we must have gotten a keyword or a
+                    // literal.  Neither of these are allowed in a shorthand property, so this must
+                    // be a simple property assignment.
+                    //
+                    // Also, if we have an identifier and it is followed by a colon then this is 
+                    // definitely a simple property assignment.
+                    return new SimplePropertyAssignmentSyntax(parseNodeData,
+                        eatPropertyName(), eatToken(SyntaxKind.ColonToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true));
+                }
             }
             else {
                 return undefined;
@@ -3323,7 +3348,7 @@ module TypeScript.Parser {
         function isPropertyAssignment(inErrorRecovery: boolean): boolean {
             return isAccessor(modifierCount(), inErrorRecovery) ||
                    isFunctionPropertyAssignment(inErrorRecovery) ||
-                   isSimplePropertyAssignment(inErrorRecovery);
+                   isSimpleOrShorthandPropertyAssignment(inErrorRecovery);
         }
 
         function eatPropertyName(): ISyntaxToken {
@@ -3344,13 +3369,8 @@ module TypeScript.Parser {
                 parseBlock(/*parseBlockEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ true));
         }
 
-        function isSimplePropertyAssignment(inErrorRecovery: boolean): boolean {
+        function isSimpleOrShorthandPropertyAssignment(inErrorRecovery: boolean): boolean {
             return isPropertyName(currentToken(), inErrorRecovery);
-        }
-
-        function parseSimplePropertyAssignment(): SimplePropertyAssignmentSyntax {
-            return new SimplePropertyAssignmentSyntax(parseNodeData,
-                eatPropertyName(), eatToken(SyntaxKind.ColonToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true));
         }
 
         function isPropertyName(token: ISyntaxToken, inErrorRecovery: boolean): boolean {
@@ -3372,6 +3392,10 @@ module TypeScript.Parser {
                 }
             }
 
+            return isLiteralPropertyName(token);
+        }
+
+        function isLiteralPropertyName(token: ISyntaxToken): boolean {
             // We allow a template literal while parser for error tolerance.  We'll report errors
             // on this later in the grammar checker walker.
             var kind = token.kind;
