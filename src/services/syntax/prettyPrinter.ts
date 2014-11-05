@@ -35,7 +35,7 @@ module TypeScript.PrettyPrinter {
             return 1;
         }
 
-        private newLineCountBetweenStatements(element1: IClassElementSyntax, element2: IClassElementSyntax): number {
+        private newLineCountBetweenStatements(element1: IStatementSyntax, element2: IStatementSyntax): number {
             if (!element1 || !element2) {
                 return 0;
             }

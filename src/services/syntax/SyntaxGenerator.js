@@ -1510,7 +1510,7 @@ var definitions = [
     {
         name: 'GetAccessorSyntax',
         baseType: 'ISyntaxNode',
-        interfaces: ['IMemberDeclarationSyntax', 'IPropertyAssignmentSyntax'],
+        interfaces: ['IAccessorSyntax'],
         children: [
             { name: 'modifiers', isList: true, elementType: 'ISyntaxToken', isTypeScriptSpecific: true },
             { name: 'getKeyword', isToken: true, excludeFromAST: true },
@@ -1522,7 +1522,7 @@ var definitions = [
     {
         name: 'SetAccessorSyntax',
         baseType: 'ISyntaxNode',
-        interfaces: ['IMemberDeclarationSyntax', 'IPropertyAssignmentSyntax'],
+        interfaces: ['IAccessorSyntax'],
         children: [
             { name: 'modifiers', isList: true, elementType: 'ISyntaxToken', isTypeScriptSpecific: true },
             { name: 'setKeyword', isToken: true, excludeFromAST: true },
@@ -1907,43 +1907,6 @@ function getSafeName(child) {
     }
     return child.name;
 }
-function generateBrands(definition, accessibility) {
-    var properties = "";
-    var types = [];
-    if (definition.interfaces) {
-        var ifaces = definition.interfaces.slice(0);
-        var i;
-        for (i = 0; i < ifaces.length; i++) {
-            var current = ifaces[i];
-            while (current !== undefined) {
-                if (!TypeScript.ArrayUtilities.contains(ifaces, current)) {
-                    ifaces.push(current);
-                }
-                current = interfaces[current];
-            }
-        }
-        for (i = 0; i < ifaces.length; i++) {
-            var type = ifaces[i];
-            type = getStringWithoutSuffix(type);
-            if (isInterface(type)) {
-                type = "_" + type.substr(1, 1).toLowerCase() + type.substr(2) + "Brand";
-            }
-            types.push(type);
-        }
-    }
-    types.push("_syntaxNodeOrTokenBrand");
-    if (types.length > 0) {
-        properties += "       ";
-        for (var i = 0; i < types.length; i++) {
-            if (accessibility) {
-                properties += " public ";
-            }
-            properties += types[i] + ": any;";
-        }
-        properties += "\r\n";
-    }
-    return properties;
-}
 function generateConstructorFunction(definition) {
     var result = "    export var " + definition.name + ": " + getNameWithoutSuffix(definition) + "Constructor = <any>function(data: number";
     for (var i = 0; i < definition.children.length; i++) {
@@ -1983,6 +1946,19 @@ function generateConstructorFunction(definition) {
     }
     result += "    };\r\n";
     result += "    " + definition.name + ".prototype.kind = SyntaxKind." + getNameWithoutSuffix(definition) + ";\r\n";
+    result += "    " + definition.name + ".prototype.childCount = " + definition.children.length + ";\r\n";
+    result += "    " + definition.name + ".prototype.childAt = function(index: number): ISyntaxElement {\r\n";
+    if (definition.children.length) {
+        result += "        switch (index) {\r\n";
+        for (var j = 0; j < definition.children.length; j++) {
+            result += "            case " + j + ": return this." + definition.children[j].name + ";\r\n";
+        }
+        result += "        }\r\n";
+    }
+    else {
+        result += "        throw Errors.invalidOperation();\r\n";
+    }
+    result += "    }\r\n";
     return result;
 }
 function generateSyntaxInterfaces() {
@@ -2233,72 +2209,16 @@ function generateVisitor() {
     result += "\r\n}";
     return result;
 }
-function generateServicesUtilities() {
-    var result = "";
-    result += "module TypeScript {\r\n";
-    result += "    var childCountArray = [";
-    for (var i = 0, n = TypeScript.SyntaxKind.LastNode; i <= n; i++) {
-        if (i) {
-            result += ", ";
-        }
-        if (i <= TypeScript.SyntaxKind.LastToken) {
-            result += "0";
-        }
-        else {
-            var definition = TypeScript.ArrayUtilities.first(definitions, function (d) { return firstKind(d) === i; });
-            result += definition.children.length;
-        }
-    }
-    result += "];\r\n\r\n";
-    result += "    export function childCount(element: ISyntaxElement): number {\r\n";
-    result += "        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element).length; }\r\n";
-    result += "        return childCountArray[element.kind];\r\n";
-    result += "    }\r\n\r\n";
-    result += "    var childAtArray: ((nodeOrToken: ISyntaxElement, index: number) => ISyntaxElement)[] = [\r\n        ";
-    for (var i = 0; i < TypeScript.SyntaxKind.FirstNode; i++) {
-        if (i) {
-            result += ", ";
-        }
-        result += "undefined";
-    }
-    for (var i = 0; i < definitions.length; i++) {
-        var definition = definitions[i];
-        result += ",\r\n";
-        result += "        (node: " + definition.name + ", index: number): ISyntaxElement => {\r\n";
-        if (definition.children.length) {
-            result += "            switch (index) {\r\n";
-            for (var j = 0; j < definition.children.length; j++) {
-                result += "                case " + j + ": return node." + definition.children[j].name + ";\r\n";
-            }
-            result += "            }\r\n";
-        }
-        else {
-            result += "            throw Errors.invalidOperation();\r\n";
-        }
-        result += "        }";
-    }
-    result += "\r\n    ];\r\n";
-    result += "    export function childAt(element: ISyntaxElement, index: number): ISyntaxElement {\r\n";
-    result += "        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element)[index]; }\r\n";
-    result += "        return childAtArray[element.kind](element, index);\r\n";
-    result += "    }\r\n\r\n";
-    result += "    export function getChildAtFunction(element: ISyntaxNodeOrToken): (nodeOrToken: ISyntaxElement, index: number) => ISyntaxElement {\r\n";
-    result += "        return childAtArray[element.kind];\r\n";
-    result += "    }\r\n";
-    result += "}";
-    return result;
-}
 var syntaxNodesConcrete = generateNodes();
 var syntaxInterfaces = generateSyntaxInterfaces();
 var walker = generateWalker();
 var scannerUtilities = generateScannerUtilities();
 var visitor = generateVisitor();
-var servicesUtilities = generateServicesUtilities();
 var utilities = generateUtilities();
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxNodes.concrete.generated.ts", syntaxNodesConcrete, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxInterfaces.generated.ts", syntaxInterfaces, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxWalker.generated.ts", walker, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\scannerUtilities.generated.ts", scannerUtilities, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxVisitor.generated.ts", visitor, false);
-sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\syntaxUtilities.generated.ts", servicesUtilities, false);
 sys.writeFile(sys.getCurrentDirectory() + "\\src\\services\\syntax\\utilities.generated.ts", utilities, false);
+//# sourceMappingURL=file:///C:/VSPro_1/src/typescript/public_cyrusn/src/services/syntax/SyntaxGenerator.js.map

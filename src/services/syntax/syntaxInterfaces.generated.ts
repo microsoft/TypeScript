@@ -182,7 +182,7 @@ module TypeScript {
     }
     export interface IndexMemberDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], indexSignature: IndexSignatureSyntax, semicolonToken: ISyntaxToken): IndexMemberDeclarationSyntax }
 
-    export interface GetAccessorSyntax extends ISyntaxNode, IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
+    export interface GetAccessorSyntax extends ISyntaxNode, IAccessorSyntax {
         modifiers: ISyntaxToken[];
         getKeyword: ISyntaxToken;
         propertyName: ISyntaxToken;
@@ -191,7 +191,7 @@ module TypeScript {
     }
     export interface GetAccessorConstructor { new (data: number, modifiers: ISyntaxToken[], getKeyword: ISyntaxToken, propertyName: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax): GetAccessorSyntax }
 
-    export interface SetAccessorSyntax extends ISyntaxNode, IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
+    export interface SetAccessorSyntax extends ISyntaxNode, IAccessorSyntax {
         modifiers: ISyntaxToken[];
         setKeyword: ISyntaxToken;
         propertyName: ISyntaxToken;
