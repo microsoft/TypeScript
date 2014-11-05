@@ -238,7 +238,7 @@ module ts {
         }
 
         if (isAnyFunction(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
-            return (<FunctionDeclaration>node).typeParameters;
+            return (<FunctionLike>node).typeParameters;
         }
 
         return undefined;

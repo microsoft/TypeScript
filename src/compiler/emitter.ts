@@ -86,8 +86,9 @@ module ts {
             var getAccessor: AccessorDeclaration;
             var setAccessor: AccessorDeclaration;
             forEach(node.members, (member: Declaration) => {
+                // TODO(jfreeman): Handle computed names for accessor matching
                 if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) &&
-                    member.name.text === accessor.name.text &&
+                    (<Identifier>member.name).text === (<Identifier>accessor.name).text &&
                     (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
                     if (!firstAccessor) {
                         firstAccessor = <AccessorDeclaration>member;
@@ -577,7 +578,8 @@ module ts {
                         node.kind === SyntaxKind.EnumDeclaration) {
                         // Declaration and has associated name use it
                         if ((<Declaration>node).name) {
-                            scopeName = (<Declaration>node).name.text;
+                            // TODO(jfreeman): Ask shkamat about what this name should be for source maps
+                            scopeName = (<Identifier>(<Declaration>node).name).text;
                         }
                         recordScopeNameStart(scopeName);
                     }
@@ -907,15 +909,15 @@ module ts {
 
             // This function specifically handles numeric/string literals for enum and accessor 'identifiers'.
             // In a sense, it does not actually emit identifiers as much as it declares a name for a specific property.
-            function emitQuotedIdentifier(node: Identifier) {
+            function emitExpressionForPropertyName(node: Identifier | ComputedPropertyName) {
                 if (node.kind === SyntaxKind.StringLiteral) {
-                    emitLiteral(node);
+                    emitLiteral(<LiteralExpression>node);
                 }
                 else {
                     write("\"");
 
                     if (node.kind === SyntaxKind.NumericLiteral) {
-                        write(node.text);
+                        write((<LiteralExpression>node).text);
                     }
                     else {
                         write(getSourceTextOfLocalNode(node));
@@ -1034,7 +1036,7 @@ module ts {
             function tryEmitConstantValue(node: PropertyAccess | IndexedAccess): boolean {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
-                    var propertyName = node.kind === SyntaxKind.PropertyAccess ? identifierToString((<PropertyAccess>node).right) : getTextOfNode((<IndexedAccess>node).index);
+                    var propertyName = node.kind === SyntaxKind.PropertyAccess ? declarationNameToString((<PropertyAccess>node).right) : getTextOfNode((<IndexedAccess>node).index);
                     write(constantValue.toString() + " /* " + propertyName + " */");
                     return true;
                 }
@@ -1464,7 +1466,7 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitDefaultValueAssignments(node: FunctionDeclaration) {
+            function emitDefaultValueAssignments(node: FunctionLike) {
                 forEach(node.parameters, param => {
                     if (param.initializer) {
                         writeLine();
@@ -1484,7 +1486,7 @@ module ts {
                 });
             }
 
-            function emitRestParameter(node: FunctionDeclaration) {
+            function emitRestParameter(node: FunctionLike) {
                 if (hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
@@ -1530,7 +1532,7 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitFunctionDeclaration(node: FunctionDeclaration) {
+            function emitFunctionDeclaration(node: FunctionLike) {
                 if (!node.body) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
@@ -1558,7 +1560,7 @@ module ts {
                 }
             }
 
-            function emitSignatureParameters(node: FunctionDeclaration) {
+            function emitSignatureParameters(node: FunctionLike) {
                 increaseIndent();
                 write("(");
                 if (node) {
@@ -1568,7 +1570,7 @@ module ts {
                 decreaseIndent();
             }
 
-            function emitSignatureAndBody(node: FunctionDeclaration) {
+            function emitSignatureAndBody(node: FunctionLike) {
                 emitSignatureParameters(node);
                 write(" {");
                 scopeEmitStart(node);
@@ -1665,7 +1667,8 @@ module ts {
                 });
             }
 
-            function emitMemberAccess(memberName: Identifier) {
+            // TODO(jfreeman): Account for computed property name
+            function emitMemberAccess(memberName: Identifier | ComputedPropertyName) {
                 if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
                     write("[");
                     emitNode(memberName);
@@ -1738,7 +1741,7 @@ module ts {
                                 write(".prototype");
                             }
                             write(", ");
-                            emitQuotedIdentifier((<AccessorDeclaration>member).name);
+                            emitExpressionForPropertyName((<AccessorDeclaration>member).name);
                             emitEnd((<AccessorDeclaration>member).name);
                             write(", {");
                             increaseIndent();
@@ -1951,7 +1954,7 @@ module ts {
                         write("[");
                         write(resolver.getLocalNameOfContainer(node));
                         write("[");
-                        emitQuotedIdentifier(member.name);
+                        emitExpressionForPropertyName(member.name);
                         write("] = ");
                         if (member.initializer && !isConstEnum) {
                             emit(member.initializer);
@@ -1960,7 +1963,7 @@ module ts {
                             write(resolver.getEnumMemberValue(member).toString());
                         }
                         write("] = ");
-                        emitQuotedIdentifier(member.name);
+                        emitExpressionForPropertyName(member.name);
                         emitEnd(member);
                         write(";");
                         emitTrailingComments(member);
@@ -2072,8 +2075,11 @@ module ts {
             function getExternalImportDeclarations(node: SourceFile): ImportDeclaration[] {
                 var result: ImportDeclaration[] = [];
                 forEach(node.statements, stat => {
-                    if (stat.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>stat).externalModuleName && resolver.isReferencedImportDeclaration(stat)) {
-                        result.push(<ImportDeclaration>stat);
+                    if (stat.kind === SyntaxKind.ImportDeclaration) {
+                        var importDeclaration = <ImportDeclaration>stat;
+                        if (importDeclaration.externalModuleName && resolver.isReferencedImportDeclaration(importDeclaration)) {
+                            result.push(importDeclaration);
+                        }
                     }
                 });
                 return result;
@@ -2261,7 +2267,7 @@ module ts {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
-                        return emitFunctionDeclaration(<FunctionDeclaration>node);
+                        return emitFunctionDeclaration(<FunctionLike>node);
                     case SyntaxKind.PrefixOperator:
                     case SyntaxKind.PostfixOperator:
                         return emitUnaryExpression(<UnaryExpression>node);
@@ -2504,7 +2510,7 @@ module ts {
             var getSymbolVisibilityDiagnosticMessage: (symbolAccesibilityResult: SymbolAccessiblityResult) => {
                 errorNode: Node;
                 diagnosticMessage: DiagnosticMessage;
-                typeName?: Identifier
+                typeName?: Identifier | ComputedPropertyName
             }
 
             function createTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
@@ -2966,11 +2972,12 @@ module ts {
             function emitPropertyDeclaration(node: PropertyDeclaration) {
                 emitJsDocComments(node);
                 emitDeclarationFlags(node);
-                emitVariableDeclaration(node);
+                emitVariableDeclaration(<VariableDeclaration>node);
                 write(";");
                 writeLine();
             }
 
+            // TODO(jfreeman): Factor out common part of property definition, but treat name differently
             function emitVariableDeclaration(node: VariableDeclaration) {
                 // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
                 // so there is no check needed to see if declaration is visible
@@ -2998,6 +3005,7 @@ module ts {
                     }
                     // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
                     else if (node.kind === SyntaxKind.Property) {
+                        // TODO(jfreeman): Deal with computed properties in error reporting.
                         if (node.flags & NodeFlags.Static) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
@@ -3081,6 +3089,7 @@ module ts {
                         return {
                             diagnosticMessage: diagnosticMessage,
                             errorNode: <Node>node.parameters[0],
+                            // TODO(jfreeman): Investigate why we are passing node.name instead of node.parameters[0].name
                             typeName: node.name
                         };
                     }
@@ -3108,7 +3117,7 @@ module ts {
                 }
             }
 
-            function emitFunctionDeclaration(node: FunctionDeclaration) {
+            function emitFunctionDeclaration(node: FunctionLike) {
                 // If we are emitting Method/Constructor it isn't moduleElement and hence already determined to be emitting
                 // so no need to verify if the declaration is visible
                 if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
@@ -3327,7 +3336,7 @@ module ts {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.Method:
-                        return emitFunctionDeclaration(<FunctionDeclaration>node);
+                        return emitFunctionDeclaration(<FunctionLike>node);
                     case SyntaxKind.ConstructSignature:
                         return emitConstructSignatureDeclaration(<SignatureDeclaration>node);
                     case SyntaxKind.CallSignature:
