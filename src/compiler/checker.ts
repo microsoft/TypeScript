@@ -4255,7 +4255,10 @@ module ts {
                     case SyntaxKind.BinaryExpression:
                         return isAssignedInBinaryExpression(<BinaryExpression>node);
                     case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.PatternDeclaration:
                         return isAssignedInVariableDeclaration(<VariableDeclaration>node);
+                    case SyntaxKind.ObjectBindingPattern:
+                    case SyntaxKind.ArrayBindingPattern:
                     case SyntaxKind.ArrayLiteral:
                     case SyntaxKind.ObjectLiteral:
                     case SyntaxKind.PropertyAccess:
@@ -8034,6 +8037,9 @@ module ts {
                     break;
                 case SyntaxKind.Parameter:
                 case SyntaxKind.Property:
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
+                case SyntaxKind.PatternDeclaration:
                 case SyntaxKind.ArrayLiteral:
                 case SyntaxKind.ObjectLiteral:
                 case SyntaxKind.PropertyAssignment:

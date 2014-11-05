@@ -479,6 +479,14 @@
         "category": "Error",
         "code": 1159
     },
+    "Property destructuring pattern expected.": {
+        "category": "Error",
+        "code": 1160
+    },
+    "Array element destructuring pattern expected.": {
+        "category": "Error",
+        "code": 1161
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

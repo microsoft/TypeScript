@@ -162,6 +162,10 @@ module ts {
         TupleType,
         UnionType,
         ParenType,
+        // Binding patterns
+        ObjectBindingPattern,
+        ArrayBindingPattern,
+        PatternDeclaration,
         // Expression
         ArrayLiteral,
         ObjectLiteral,
@@ -313,8 +317,25 @@ module ts {
     export interface SignatureDeclaration extends Declaration, ParsedSignature { }
 
     export interface VariableDeclaration extends Declaration {
+        pattern?: BindingPattern;
         type?: TypeNode;
         initializer?: Expression;
+    }
+
+    export interface BindingPattern extends Node {
+        declarations: PatternDeclaration[];
+    }
+
+    export interface PatternDeclaration extends Declaration {
+        propertyName?: Identifier;  // Binding property name
+        name?: Identifier;          // Declared variable name (pattern = undefined)
+        pattern?: BindingPattern;   // Nested binding pattern (name = undefined)
+        initializer?: Expression;   // Optional initializer
+    }
+
+    export interface NameOrPatternNode extends Node {
+        name?: Identifier;
+        pattern?: BindingPattern;
     }
 
     export interface PropertyDeclaration extends VariableDeclaration { }

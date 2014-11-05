@@ -289,7 +289,6 @@ module ts {
                     }
                     declareSymbol(blockScopeContainer.locals, undefined, node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
             }
-
             bindChildren(node, SymbolFlags.BlockScopedVariable, /*isBlockScopeContainer*/ false);
         }
 
@@ -303,11 +302,17 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.VariableDeclaration:
-                    if (node.flags & NodeFlags.BlockScoped) {
-                        bindBlockScopedVariableDeclaration(<Declaration>node);
+                case SyntaxKind.PatternDeclaration:
+                    if ((<Declaration>node).name) {
+                        if (node.flags & NodeFlags.BlockScoped) {
+                            bindBlockScopedVariableDeclaration(<Declaration>node);
+                        }
+                        else {
+                            bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes, /*isBlockScopeContainer*/ false);
+                        }
                     }
                     else {
-                        bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes, /*isBlockScopeContainer*/ false);
+                        bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     }
                     break;
                 case SyntaxKind.Property:
@@ -377,7 +382,6 @@ module ts {
                         bindAnonymousDeclaration(node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).filename) + '"', /*isBlockScopeContainer*/ true);
                         break;
                     }
-
                 case SyntaxKind.Block:
                 case SyntaxKind.TryBlock:
                 case SyntaxKind.CatchBlock:
@@ -385,9 +389,8 @@ module ts {
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.SwitchStatement:
-                    bindChildren(node, 0 , true);
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ true);
                     break;
-
                 default:
                     var saveParent = parent;
                     parent = node;

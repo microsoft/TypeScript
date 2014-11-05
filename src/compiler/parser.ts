@@ -229,6 +229,14 @@ module ts {
                 return children((<UnionTypeNode>node).types);
             case SyntaxKind.ParenType:
                 return child((<ParenTypeNode>node).type);
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.ArrayBindingPattern:
+                return children((<BindingPattern>node).declarations);
+            case SyntaxKind.PatternDeclaration:
+                return child((<PatternDeclaration>node).propertyName) ||
+                    child((<PatternDeclaration>node).name) ||
+                    child((<PatternDeclaration>node).pattern) ||
+                    child((<PatternDeclaration>node).initializer);
             case SyntaxKind.ArrayLiteral:
                 return children((<ArrayLiteral>node).elements);
             case SyntaxKind.ObjectLiteral:
@@ -506,6 +514,7 @@ module ts {
                     case SyntaxKind.Property:
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyAssignment:
+                    case SyntaxKind.PatternDeclaration:
                         return (<VariableDeclaration>parent).initializer === node;
                     case SyntaxKind.ExpressionStatement:
                     case SyntaxKind.IfStatement:
@@ -663,24 +672,26 @@ module ts {
     }
 
     enum ParsingContext {
-        SourceElements,          // Elements in source file
-        ModuleElements,          // Elements in module declaration
-        BlockStatements,         // Statements in block
-        SwitchClauses,           // Clauses in switch statement
-        SwitchClauseStatements,  // Statements in switch clause
-        TypeMembers,             // Members in interface or type literal
-        ClassMembers,            // Members in class declaration
-        EnumMembers,             // Members in enum declaration
-        BaseTypeReferences,      // Type references in extends or implements clause
-        VariableDeclarations,    // Variable declarations in variable statement
-        ArgumentExpressions,     // Expressions in argument list
-        ObjectLiteralMembers,    // Members in object literal
-        ArrayLiteralMembers,     // Members in array literal
-        Parameters,              // Parameters in parameter list
-        TypeParameters,          // Type parameters in type parameter list
-        TypeArguments,           // Type arguments in type argument list
-        TupleElementTypes,       // Element types in tuple element type list
-        Count                    // Number of parsing contexts
+        SourceElements,             // Elements in source file
+        ModuleElements,             // Elements in module declaration
+        BlockStatements,            // Statements in block
+        SwitchClauses,              // Clauses in switch statement
+        SwitchClauseStatements,     // Statements in switch clause
+        TypeMembers,                // Members in interface or type literal
+        ClassMembers,               // Members in class declaration
+        EnumMembers,                // Members in enum declaration
+        BaseTypeReferences,         // Type references in extends or implements clause
+        VariableDeclarations,       // Variable declarations in variable statement
+        ObjectBindingDeclarations,  // Binding elements in object binding list
+        ArrayBindingDeclarations,   // Binding elements in array binding list
+        ArgumentExpressions,        // Expressions in argument list
+        ObjectLiteralMembers,       // Members in object literal
+        ArrayLiteralMembers,        // Members in array literal
+        Parameters,                 // Parameters in parameter list
+        TypeParameters,             // Type parameters in type parameter list
+        TypeArguments,              // Type arguments in type argument list
+        TupleElementTypes,          // Element types in tuple element type list
+        Count                       // Number of parsing contexts
     }
 
     enum Tristate {
@@ -701,6 +712,8 @@ module ts {
             case ParsingContext.EnumMembers:            return Diagnostics.Enum_member_expected;
             case ParsingContext.BaseTypeReferences:     return Diagnostics.Type_reference_expected;
             case ParsingContext.VariableDeclarations:   return Diagnostics.Variable_declaration_expected;
+            case ParsingContext.ObjectBindingDeclarations:  return Diagnostics.Property_destructuring_pattern_expected;
+            case ParsingContext.ArrayBindingDeclarations:   return Diagnostics.Array_element_destructuring_pattern_expected;
             case ParsingContext.ArgumentExpressions:    return Diagnostics.Argument_expression_expected;
             case ParsingContext.ObjectLiteralMembers:   return Diagnostics.Property_assignment_expected;
             case ParsingContext.ArrayLiteralMembers:    return Diagnostics.Expression_or_comma_expected;
@@ -1174,6 +1187,9 @@ module ts {
                 case ParsingContext.BaseTypeReferences:
                     return isIdentifier() && ((token !== SyntaxKind.ExtendsKeyword && token !== SyntaxKind.ImplementsKeyword) || !lookAhead(() => (nextToken(), isIdentifier())));
                 case ParsingContext.VariableDeclarations:
+                case ParsingContext.ObjectBindingDeclarations:
+                case ParsingContext.ArrayBindingDeclarations:
+                    return isIdentifierOrPattern();
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArgumentExpressions:
@@ -1205,6 +1221,7 @@ module ts {
                 case ParsingContext.ClassMembers:
                 case ParsingContext.EnumMembers:
                 case ParsingContext.ObjectLiteralMembers:
+                case ParsingContext.ObjectBindingDeclarations:
                     return token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
@@ -1220,6 +1237,7 @@ module ts {
                     return token === SyntaxKind.CloseParenToken || token === SyntaxKind.SemicolonToken;
                 case ParsingContext.ArrayLiteralMembers:
                 case ParsingContext.TupleElementTypes:
+                case ParsingContext.ArrayBindingDeclarations:
                     return token === SyntaxKind.CloseBracketToken;
                 case ParsingContext.Parameters:
                     // Tokens other than ')' and ']' (the latter for index signatures) are here for better error recovery
@@ -3356,11 +3374,68 @@ module ts {
 
         // DECLARATIONS
 
+        function parseBindingDeclaration(flags: NodeFlags, context: ParsingContext): PatternDeclaration {
+            var node = <PatternDeclaration>createNode(SyntaxKind.PatternDeclaration);
+            node.flags = flags;
+            if (context === ParsingContext.ObjectBindingDeclarations) {
+                var id = parseIdentifier();
+                if (parseOptional(SyntaxKind.ColonToken)) {
+                    node.propertyName = id;
+                    parseIdentifierOrPatternOfNode(node, flags);
+                }
+                else {
+                    node.name = id;
+                }
+            }
+            else {
+                parseIdentifierOrPatternOfNode(node, flags);
+            }
+            return finishNode(node);
+        }
+
+        function parseBindingList(flags: NodeFlags, context: ParsingContext): NodeArray<PatternDeclaration> {
+            return parseDelimitedList(context, () => parseBindingDeclaration(flags, context), /*allowTrailingComma*/ true);
+        }
+
+        function parseObjectBindingPattern(flags: NodeFlags): BindingPattern {
+            var node = <BindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
+            node.flags = flags;
+            parseExpected(SyntaxKind.OpenBraceToken);
+            node.declarations = parseBindingList(flags, ParsingContext.ObjectBindingDeclarations);
+            parseExpected(SyntaxKind.CloseBraceToken);
+            return finishNode(node);
+        }
+
+        function parseArrayBindingPattern(flags: NodeFlags): BindingPattern {
+            var node = <BindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
+            node.flags = flags;
+            parseExpected(SyntaxKind.OpenBracketToken);
+            node.declarations = parseBindingList(flags, ParsingContext.ArrayBindingDeclarations);
+            parseExpected(SyntaxKind.CloseBracketToken);
+            return finishNode(node);
+        }
+
+        function isIdentifierOrPattern() {
+            return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.OpenBracketToken || isIdentifier();
+        }
+
+        function parseIdentifierOrPatternOfNode(node: NameOrPatternNode, flags: NodeFlags) {
+            if (token === SyntaxKind.OpenBracketToken) {
+                node.pattern = parseArrayBindingPattern(flags);
+            }
+            else if (token === SyntaxKind.OpenBraceToken) {
+                node.pattern = parseObjectBindingPattern(flags);
+            }
+            else {
+                node.name = parseIdentifier();
+            }
+        }
+
         function parseVariableDeclaration(flags: NodeFlags, noIn?: boolean): VariableDeclaration {
             var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
             node.flags = flags;
             var errorCountBeforeVariableDeclaration = file.syntacticErrors.length;
-            node.name = parseIdentifier();
+            parseIdentifierOrPatternOfNode(node, flags);
             node.type = parseTypeAnnotation();
 
             // Issue any initializer-related errors on the equals token
