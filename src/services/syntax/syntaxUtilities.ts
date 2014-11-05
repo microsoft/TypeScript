@@ -1,8 +1,18 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
-    export class SyntaxUtilities {
-        public static isAnyFunctionExpressionOrDeclaration(ast: ISyntaxElement): boolean {
+    export function childCount(element: ISyntaxElement): number {
+        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element).length; }
+        return (<ISyntaxNodeOrToken>element).childCount;
+    }
+
+    export function childAt(element: ISyntaxElement, index: number): ISyntaxElement {
+        if (isList(element)) { return (<ISyntaxNodeOrToken[]>element)[index]; }
+        return (<ISyntaxNodeOrToken>element).childAt(index);
+    }
+
+    export module SyntaxUtilities {
+        export function isAnyFunctionExpressionOrDeclaration(ast: ISyntaxElement): boolean {
             switch (ast.kind) {
                 case SyntaxKind.SimpleArrowFunctionExpression:
                 case SyntaxKind.ParenthesizedArrowFunctionExpression:
@@ -19,7 +29,7 @@ module TypeScript {
             return false;
         }
 
-        public static isLastTokenOnLine(token: ISyntaxToken, text: ISimpleText): boolean {
+        export function isLastTokenOnLine(token: ISyntaxToken, text: ISimpleText): boolean {
             var _nextToken = nextToken(token, text);
             if (_nextToken === undefined) {
                 return true;
@@ -32,7 +42,7 @@ module TypeScript {
             return tokenLine !== nextTokenLine;
         }
 
-        public static isLeftHandSizeExpression(element: ISyntaxElement) {
+        export function isLeftHandSizeExpression(element: ISyntaxElement) {
             if (element) {
                 switch (element.kind) {
                     case SyntaxKind.MemberAccessExpression:
@@ -60,7 +70,7 @@ module TypeScript {
             return false;
         }
 
-        public static isSwitchClause(element: ISyntaxElement) {
+        export function isSwitchClause(element: ISyntaxElement) {
             if (element) {
                 switch (element.kind) {
                     case SyntaxKind.CaseSwitchClause:
@@ -72,7 +82,7 @@ module TypeScript {
             return false;
         }
 
-        public static isTypeMember(element: ISyntaxElement) {
+        export function isTypeMember(element: ISyntaxElement) {
             if (element) {
                 switch (element.kind) {
                     case SyntaxKind.ConstructSignature:
@@ -87,7 +97,7 @@ module TypeScript {
             return false;
         }
 
-        public static isClassElement(element: ISyntaxElement) {
+        export function isClassElement(element: ISyntaxElement) {
             if (element) {
                 switch (element.kind) {
                     case SyntaxKind.ConstructorDeclaration:
@@ -104,7 +114,7 @@ module TypeScript {
             return false;
         }
 
-        public static isModuleElement(element: ISyntaxElement) {
+        export function isModuleElement(element: ISyntaxElement) {
             if (element) {
                 switch (element.kind) {
                     case SyntaxKind.ImportDeclaration:
@@ -141,7 +151,7 @@ module TypeScript {
             return false;
         }
 
-        public static isStatement(element: ISyntaxElement) {
+        export function isStatement(element: ISyntaxElement) {
             if (element) {
                 switch (element.kind) {
                     case SyntaxKind.FunctionDeclaration:
@@ -170,7 +180,7 @@ module TypeScript {
             return false;
         }
 
-        public static isAngleBracket(positionedElement: ISyntaxElement): boolean {
+        export function isAngleBracket(positionedElement: ISyntaxElement): boolean {
             var element = positionedElement;
             var parent = positionedElement.parent;
             if (parent && (element.kind === SyntaxKind.LessThanToken || element.kind === SyntaxKind.GreaterThanToken)) {
@@ -185,7 +195,7 @@ module TypeScript {
             return false;
         }
 
-        public static getToken(list: ISyntaxToken[], kind: SyntaxKind): ISyntaxToken {
+        export function getToken(list: ISyntaxToken[], kind: SyntaxKind): ISyntaxToken {
             for (var i = 0, n = list.length; i < n; i++) {
                 var token = list[i];
                 if (token.kind === kind) {
@@ -196,15 +206,15 @@ module TypeScript {
             return undefined;
         }
 
-        public static containsToken(list: ISyntaxToken[], kind: SyntaxKind): boolean {
+        export function containsToken(list: ISyntaxToken[], kind: SyntaxKind): boolean {
             return !!SyntaxUtilities.getToken(list, kind);
         }
 
-        public static hasExportKeyword(moduleElement: IModuleElementSyntax): boolean {
+        export function hasExportKeyword(moduleElement: IModuleElementSyntax): boolean {
             return !!SyntaxUtilities.getExportKeyword(moduleElement);
         }
 
-        public static getExportKeyword(moduleElement: IModuleElementSyntax): ISyntaxToken {
+        export function getExportKeyword(moduleElement: IModuleElementSyntax): ISyntaxToken {
             switch (moduleElement.kind) {
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.ClassDeclaration:
@@ -219,7 +229,7 @@ module TypeScript {
             }
         }
 
-        public static isAmbientDeclarationSyntax(positionNode: ISyntaxNode): boolean {
+        export function isAmbientDeclarationSyntax(positionNode: ISyntaxNode): boolean {
             if (!positionNode) {
                 return false;
             }

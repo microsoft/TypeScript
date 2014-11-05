@@ -221,6 +221,7 @@ module TypeScript.Scanner {
     class FixedWidthTokenWithNoTrivia implements ISyntaxToken {
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
         public parent: ISyntaxElement;
+        public childCount: number;
 
         constructor(private _fullStart: number, public kind: SyntaxKind) {
         }
@@ -228,8 +229,7 @@ module TypeScript.Scanner {
         public setFullStart(fullStart: number): void {
             this._fullStart = fullStart;
         }
-
-        public childCount() { return 0 }
+        
         public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
         public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
@@ -251,10 +251,12 @@ module TypeScript.Scanner {
         public hasTrailingComment(): boolean { return false; }
         public clone(): ISyntaxToken { return new FixedWidthTokenWithNoTrivia(this._fullStart, this.kind); }
     }
+    FixedWidthTokenWithNoTrivia.prototype.childCount = 0;
 
     class LargeScannerToken implements ISyntaxToken {
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
         public parent: ISyntaxElement;
+        public childCount: number;
 
         private cachedText: string;
 
@@ -268,7 +270,6 @@ module TypeScript.Scanner {
             this._fullStart = fullStart;
         }
 
-        public childCount() { return 0 }
         public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
         public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
@@ -310,6 +311,7 @@ module TypeScript.Scanner {
         public hasTrailingComment(): boolean { return largeTokenUnpackHasTrailingComment(this._packedFullWidthAndInfo); }
         public clone(): ISyntaxToken { return new LargeScannerToken(this._fullStart, this.kind, this._packedFullWidthAndInfo, this.cachedText); }
     }
+    LargeScannerToken.prototype.childCount = 0;
 
     export interface DiagnosticCallback {
         (position: number, width: number, key: string, arguments: any[]): void;

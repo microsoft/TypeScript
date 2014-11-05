@@ -144,9 +144,8 @@ module TypeScript {
             return <ISyntaxToken>nodeOrToken;
         }
 
-        var childAtFunction = getChildAtFunction(nodeOrToken);
         for (var i = 0, n = childCount(nodeOrToken); i < n; i++) {
-            var child = childAtFunction(nodeOrToken, i);
+            var child = nodeOrToken.childAt(i);
 
             if (child) {
                 var childFullWidth = fullWidth(child);
