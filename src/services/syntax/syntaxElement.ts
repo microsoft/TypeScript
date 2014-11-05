@@ -144,9 +144,8 @@ module TypeScript {
             return <ISyntaxToken>nodeOrToken;
         }
 
-        var childAtFunction = getChildAtFunction(nodeOrToken);
         for (var i = 0, n = childCount(nodeOrToken); i < n; i++) {
-            var child = childAtFunction(nodeOrToken, i);
+            var child = nodeOrToken.childAt(i);
 
             if (child) {
                 var childFullWidth = fullWidth(child);
@@ -335,27 +334,52 @@ module TypeScript {
         return info;
     }
 
-    function computeData(element: ISyntaxElement): number {
-        var slotCount = childCount(element);
+    function combineData(fullWidth: number, isIncrementallyUnusable: boolean) {
+        return (fullWidth << SyntaxConstants.NodeFullWidthShift)
+            | (isIncrementallyUnusable ? SyntaxConstants.NodeIncrementallyUnusableMask : 0)
+            | SyntaxConstants.NodeDataComputed;
+    }
 
+    function listComputeData(list: ISyntaxNodeOrToken[]): number {
         var fullWidth = 0;
+        var isIncrementallyUnusable = false;
+
+        for (var i = 0, n = list.length; i < n; i++) {
+            var child: ISyntaxElement = list[i];
+
+            fullWidth += TypeScript.fullWidth(child);
+            isIncrementallyUnusable = isIncrementallyUnusable || TypeScript.isIncrementallyUnusable(child);
+        }
+
+        return combineData(fullWidth, isIncrementallyUnusable);
+    }
+
+    function computeData(element: ISyntaxElement): number {
+        if (isList(element)) {
+            return listComputeData(<ISyntaxNodeOrToken[]>element);
+        }
+        else {
+            return nodeOrTokenComputeData(<ISyntaxNodeOrToken>element);
+        }
+    }
+
+    function nodeOrTokenComputeData(nodeOrToken: ISyntaxNodeOrToken) {
+        var fullWidth = 0;
+        var slotCount = nodeOrToken.childCount;
 
         // If we have no children (like an OmmittedExpressionSyntax), we're automatically not reusable.
-        var isIncrementallyUnusable = slotCount === 0 && !isList(element);
+        var isIncrementallyUnusable = slotCount === 0;
 
         for (var i = 0, n = slotCount; i < n; i++) {
-            var child = childAt(element, i);
+            var child = nodeOrToken.childAt(i);
 
             if (child) {
                 fullWidth += TypeScript.fullWidth(child);
-
                 isIncrementallyUnusable = isIncrementallyUnusable || TypeScript.isIncrementallyUnusable(child);
             }
         }
 
-        return (fullWidth << SyntaxConstants.NodeFullWidthShift)
-            | (isIncrementallyUnusable ? SyntaxConstants.NodeIncrementallyUnusableMask : 0)
-            | SyntaxConstants.NodeDataComputed;
+        return combineData(fullWidth, isIncrementallyUnusable);
     }
 
     export function start(element: ISyntaxElement, text?: ISimpleText): number {
@@ -407,6 +431,7 @@ module TypeScript {
     }
 
     export interface IModuleElementSyntax extends ISyntaxNode {
+        _moduleElementBrand: any;
     }
 
     export interface IStatementSyntax extends IModuleElementSyntax {
@@ -414,15 +439,28 @@ module TypeScript {
     }
 
     export interface ITypeMemberSyntax extends ISyntaxNode {
+        _typeMemberBrand: any;
     }
 
     export interface IClassElementSyntax extends ISyntaxNode {
+        _classElementBrand: any;
     }
 
     export interface IMemberDeclarationSyntax extends IClassElementSyntax {
+        _memberDeclarationBrand: any;
     }
 
-    export interface IPropertyAssignmentSyntax extends IClassElementSyntax {
+    export interface IPropertyAssignmentSyntax extends ISyntaxNode {
+        _propertyAssignmentBrand: any;
+    }
+
+    export interface IAccessorSyntax extends IPropertyAssignmentSyntax, IMemberDeclarationSyntax {
+        _accessorBrand: any;
+
+        modifiers: ISyntaxToken[];
+        propertyName: ISyntaxToken;
+        callSignature: CallSignatureSyntax;
+        block: BlockSyntax;
     }
 
     export interface ISwitchClauseSyntax extends ISyntaxNode {
@@ -464,5 +502,6 @@ module TypeScript {
     }
 
     export interface INameSyntax extends ITypeSyntax {
+        _nameBrand: any;
     }
 }

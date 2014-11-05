@@ -1,6 +1,6 @@
-tests/cases/compiler/genericTypeAssertions4.ts(19,5): error TS2323: Type 'A' is not assignable to type 'T'.
-tests/cases/compiler/genericTypeAssertions4.ts(20,5): error TS2323: Type 'B' is not assignable to type 'T'.
-tests/cases/compiler/genericTypeAssertions4.ts(21,5): error TS2323: Type 'C' is not assignable to type 'T'.
+tests/cases/compiler/genericTypeAssertions4.ts(19,5): error TS2322: Type 'A' is not assignable to type 'T'.
+tests/cases/compiler/genericTypeAssertions4.ts(20,5): error TS2322: Type 'B' is not assignable to type 'T'.
+tests/cases/compiler/genericTypeAssertions4.ts(21,5): error TS2322: Type 'C' is not assignable to type 'T'.
 tests/cases/compiler/genericTypeAssertions4.ts(23,9): error TS2352: Neither type 'B' nor type 'T' is assignable to the other.
 tests/cases/compiler/genericTypeAssertions4.ts(24,9): error TS2352: Neither type 'C' nor type 'T' is assignable to the other.
 
@@ -26,13 +26,13 @@ tests/cases/compiler/genericTypeAssertions4.ts(24,9): error TS2352: Neither type
         var y = x;
         y = a; // error: cannot convert A to T
         ~
-!!! error TS2323: Type 'A' is not assignable to type 'T'.
+!!! error TS2322: Type 'A' is not assignable to type 'T'.
         y = b; // error: cannot convert B to T
         ~
-!!! error TS2323: Type 'B' is not assignable to type 'T'.
+!!! error TS2322: Type 'B' is not assignable to type 'T'.
         y = c; // error: cannot convert C to T
         ~
-!!! error TS2323: Type 'C' is not assignable to type 'T'.
+!!! error TS2322: Type 'C' is not assignable to type 'T'.
         y = <T>a;
         y = <T>b; // error: cannot convert B to T
             ~~~~

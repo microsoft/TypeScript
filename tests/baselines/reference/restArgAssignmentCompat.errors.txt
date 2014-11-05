@@ -1,4 +1,4 @@
-tests/cases/compiler/restArgAssignmentCompat.ts(7,1): error TS2323: Type '(...x: number[]) => void' is not assignable to type '(x: number[], y: string) => void'.
+tests/cases/compiler/restArgAssignmentCompat.ts(7,1): error TS2322: Type '(...x: number[]) => void' is not assignable to type '(x: number[], y: string) => void'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'number' is not assignable to type 'number[]'.
       Property 'length' is missing in type 'Number'.
@@ -13,9 +13,9 @@ tests/cases/compiler/restArgAssignmentCompat.ts(7,1): error TS2323: Type '(...x:
     var n = g;
     n = f;
     ~
-!!! error TS2323: Type '(...x: number[]) => void' is not assignable to type '(x: number[], y: string) => void'.
-!!! error TS2323:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2323:     Type 'number' is not assignable to type 'number[]'.
-!!! error TS2323:       Property 'length' is missing in type 'Number'.
+!!! error TS2322: Type '(...x: number[]) => void' is not assignable to type '(x: number[], y: string) => void'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'number' is not assignable to type 'number[]'.
+!!! error TS2322:       Property 'length' is missing in type 'Number'.
     n([4], 'foo');
     

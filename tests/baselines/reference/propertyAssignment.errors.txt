@@ -1,6 +1,6 @@
 tests/cases/compiler/propertyAssignment.ts(6,14): error TS1022: An index signature parameter must have a type annotation.
-tests/cases/compiler/propertyAssignment.ts(14,1): error TS2323: Type '{ x: number; }' is not assignable to type 'new () => any'.
-tests/cases/compiler/propertyAssignment.ts(16,1): error TS2323: Type '{ x: number; }' is not assignable to type '() => void'.
+tests/cases/compiler/propertyAssignment.ts(14,1): error TS2322: Type '{ x: number; }' is not assignable to type 'new () => any'.
+tests/cases/compiler/propertyAssignment.ts(16,1): error TS2322: Type '{ x: number; }' is not assignable to type '() => void'.
 
 
 ==== tests/cases/compiler/propertyAssignment.ts (3 errors) ====
@@ -21,8 +21,8 @@ tests/cases/compiler/propertyAssignment.ts(16,1): error TS2323: Type '{ x: numbe
     
     foo1 = bar1; // should be an error
     ~~~~
-!!! error TS2323: Type '{ x: number; }' is not assignable to type 'new () => any'.
+!!! error TS2322: Type '{ x: number; }' is not assignable to type 'new () => any'.
     foo2 = bar2; 
     foo3 = bar3; // should be an error
     ~~~~
-!!! error TS2323: Type '{ x: number; }' is not assignable to type '() => void'.
+!!! error TS2322: Type '{ x: number; }' is not assignable to type '() => void'.

@@ -1,4 +1,4 @@
-tests/cases/compiler/assignmentCompatability39.ts(9,1): error TS2323: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithTwoPublic<number, string>'.
+tests/cases/compiler/assignmentCompatability39.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithTwoPublic<number, string>'.
   Property 'two' is optional in type 'interfaceWithPublicAndOptional<number, string>' but required in type 'classWithTwoPublic<number, string>'.
 
 
@@ -13,5 +13,5 @@ tests/cases/compiler/assignmentCompatability39.ts(9,1): error TS2323: Type 'inte
     }
     __test2__.__val__x2 = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~
-!!! error TS2323: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithTwoPublic<number, string>'.
-!!! error TS2323:   Property 'two' is optional in type 'interfaceWithPublicAndOptional<number, string>' but required in type 'classWithTwoPublic<number, string>'.
+!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithTwoPublic<number, string>'.
+!!! error TS2322:   Property 'two' is optional in type 'interfaceWithPublicAndOptional<number, string>' but required in type 'classWithTwoPublic<number, string>'.
