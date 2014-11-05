@@ -3,9 +3,9 @@
     "languageVersion": "EcmaScript5",
     "diagnostics": [
         {
-            "start": 24,
-            "length": 1,
-            "diagnosticCode": "Index signature parameter must have a type annotation."
+            "start": 23,
+            "length": 3,
+            "diagnosticCode": "Computed property names cannot be used here."
         },
         {
             "start": 37,
@@ -111,69 +111,66 @@
                     },
                     "typeMembers": [
                         {
-                            "kind": "IndexSignature",
+                            "kind": "PropertySignature",
                             "fullStart": 15,
                             "fullEnd": 26,
                             "start": 23,
                             "end": 26,
                             "fullWidth": 11,
                             "width": 3,
-                            "openBracketToken": {
-                                "kind": "OpenBracketToken",
+                            "propertyName": {
+                                "kind": "ComputedPropertyName",
                                 "fullStart": 15,
-                                "fullEnd": 24,
+                                "fullEnd": 26,
                                 "start": 23,
-                                "end": 24,
-                                "fullWidth": 9,
-                                "width": 1,
-                                "text": "[",
-                                "value": "[",
-                                "valueText": "[",
-                                "hasLeadingTrivia": true,
-                                "leadingTrivia": [
-                                    {
-                                        "kind": "WhitespaceTrivia",
-                                        "fullStart": 15,
-                                        "fullEnd": 23,
-                                        "text": "        "
-                                    }
-                                ]
-                            },
-                            "parameters": [
-                                {
-                                    "kind": "Parameter",
+                                "end": 26,
+                                "fullWidth": 11,
+                                "width": 3,
+                                "openBracketToken": {
+                                    "kind": "OpenBracketToken",
+                                    "fullStart": 15,
+                                    "fullEnd": 24,
+                                    "start": 23,
+                                    "end": 24,
+                                    "fullWidth": 9,
+                                    "width": 1,
+                                    "text": "[",
+                                    "value": "[",
+                                    "valueText": "[",
+                                    "hasLeadingTrivia": true,
+                                    "leadingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "fullStart": 15,
+                                            "fullEnd": 23,
+                                            "text": "        "
+                                        }
+                                    ]
+                                },
+                                "expression": {
+                                    "kind": "IdentifierName",
                                     "fullStart": 24,
                                     "fullEnd": 25,
                                     "start": 24,
                                     "end": 25,
                                     "fullWidth": 1,
                                     "width": 1,
-                                    "modifiers": [],
-                                    "identifier": {
-                                        "kind": "IdentifierName",
-                                        "fullStart": 24,
-                                        "fullEnd": 25,
-                                        "start": 24,
-                                        "end": 25,
-                                        "fullWidth": 1,
-                                        "width": 1,
-                                        "text": "p",
-                                        "value": "p",
-                                        "valueText": "p"
-                                    }
+                                    "text": "p",
+                                    "value": "p",
+                                    "valueText": "p"
+                                },
+                                "closeBracketToken": {
+                                    "kind": "CloseBracketToken",
+                                    "fullStart": 25,
+                                    "fullEnd": 26,
+                                    "start": 25,
+                                    "end": 26,
+                                    "fullWidth": 1,
+                                    "width": 1,
+                                    "text": "]",
+                                    "value": "]",
+                                    "valueText": "]"
                                 }
-                            ],
-                            "closeBracketToken": {
-                                "kind": "CloseBracketToken",
-                                "fullStart": 25,
-                                "fullEnd": 26,
-                                "start": 25,
-                                "end": 26,
-                                "fullWidth": 1,
-                                "width": 1,
-                                "text": "]",
-                                "value": "]",
-                                "valueText": "]"
                             }
                         },
                         {

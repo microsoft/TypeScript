@@ -1,16 +1,6 @@
 {
     "isDeclaration": false,
     "languageVersion": "EcmaScript5",
-    "diagnostics": [
-        {
-            "start": 428,
-            "length": 1,
-            "diagnosticCode": "'{0}' expected.",
-            "arguments": [
-                ":"
-            ]
-        }
-    ],
     "sourceUnit": {
         "kind": "SourceUnit",
         "fullStart": 0,
@@ -19,7 +9,6 @@
         "end": 516,
         "fullWidth": 516,
         "width": 208,
-        "isIncrementallyUnusable": true,
         "moduleElements": [
             {
                 "kind": "FunctionDeclaration",
@@ -233,7 +222,6 @@
                 "end": 432,
                 "fullWidth": 104,
                 "width": 13,
-                "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "BinaryExpression",
                     "fullStart": 329,
@@ -242,7 +230,6 @@
                     "end": 431,
                     "fullWidth": 102,
                     "width": 12,
-                    "isIncrementallyUnusable": true,
                     "left": {
                         "kind": "IdentifierName",
                         "fullStart": 329,
@@ -310,7 +297,6 @@
                         "end": 431,
                         "fullWidth": 10,
                         "width": 10,
-                        "isIncrementallyUnusable": true,
                         "expression": {
                             "kind": "ObjectLiteralExpression",
                             "fullStart": 421,
@@ -319,7 +305,6 @@
                             "end": 429,
                             "fullWidth": 8,
                             "width": 8,
-                            "isIncrementallyUnusable": true,
                             "openBraceToken": {
                                 "kind": "OpenBraceToken",
                                 "fullStart": 421,
@@ -334,46 +319,16 @@
                             },
                             "propertyAssignments": [
                                 {
-                                    "kind": "SimplePropertyAssignment",
+                                    "kind": "IdentifierName",
                                     "fullStart": 422,
                                     "fullEnd": 428,
                                     "start": 422,
                                     "end": 428,
                                     "fullWidth": 6,
                                     "width": 6,
-                                    "isIncrementallyUnusable": true,
-                                    "propertyName": {
-                                        "kind": "IdentifierName",
-                                        "fullStart": 422,
-                                        "fullEnd": 428,
-                                        "start": 422,
-                                        "end": 428,
-                                        "fullWidth": 6,
-                                        "width": 6,
-                                        "text": "__func",
-                                        "value": "__func",
-                                        "valueText": "___func"
-                                    },
-                                    "colonToken": {
-                                        "kind": "ColonToken",
-                                        "fullStart": 428,
-                                        "fullEnd": 428,
-                                        "start": 428,
-                                        "end": 428,
-                                        "fullWidth": 0,
-                                        "width": 0,
-                                        "text": ""
-                                    },
-                                    "expression": {
-                                        "kind": "IdentifierName",
-                                        "fullStart": 428,
-                                        "fullEnd": 428,
-                                        "start": 428,
-                                        "end": 428,
-                                        "fullWidth": 0,
-                                        "width": 0,
-                                        "text": ""
-                                    }
+                                    "text": "__func",
+                                    "value": "__func",
+                                    "valueText": "___func"
                                 }
                             ],
                             "closeBraceToken": {

@@ -3,7 +3,7 @@
     "languageVersion": "EcmaScript3",
     "diagnostics": [
         {
-            "start": 19,
+            "start": 15,
             "length": 3,
             "diagnosticCode": "Accessors are only available when targeting ECMAScript 5 and higher."
         }

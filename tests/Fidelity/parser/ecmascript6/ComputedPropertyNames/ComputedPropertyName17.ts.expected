@@ -1,30 +1,23 @@
 {
     "isDeclaration": false,
-    "languageVersion": "EcmaScript3",
-    "diagnostics": [
-        {
-            "start": 10,
-            "length": 3,
-            "diagnosticCode": "Accessors are only available when targeting ECMAScript 5 and higher."
-        }
-    ],
+    "languageVersion": "EcmaScript6",
     "sourceUnit": {
         "kind": "SourceUnit",
         "fullStart": 0,
-        "fullEnd": 27,
+        "fullEnd": 26,
         "start": 0,
-        "end": 27,
-        "fullWidth": 27,
-        "width": 27,
+        "end": 26,
+        "fullWidth": 26,
+        "width": 26,
         "moduleElements": [
             {
                 "kind": "VariableStatement",
                 "fullStart": 0,
-                "fullEnd": 27,
+                "fullEnd": 26,
                 "start": 0,
-                "end": 27,
-                "fullWidth": 27,
-                "width": 27,
+                "end": 26,
+                "fullWidth": 26,
+                "width": 26,
                 "modifiers": [],
                 "variableDeclaration": {
                     "kind": "VariableDeclaration",
@@ -175,16 +168,49 @@
                                                 ]
                                             },
                                             "propertyName": {
-                                                "kind": "IdentifierName",
+                                                "kind": "ComputedPropertyName",
                                                 "fullStart": 14,
                                                 "fullEnd": 17,
                                                 "start": 14,
                                                 "end": 17,
                                                 "fullWidth": 3,
                                                 "width": 3,
-                                                "text": "Foo",
-                                                "value": "Foo",
-                                                "valueText": "Foo"
+                                                "openBracketToken": {
+                                                    "kind": "OpenBracketToken",
+                                                    "fullStart": 14,
+                                                    "fullEnd": 15,
+                                                    "start": 14,
+                                                    "end": 15,
+                                                    "fullWidth": 1,
+                                                    "width": 1,
+                                                    "text": "[",
+                                                    "value": "[",
+                                                    "valueText": "["
+                                                },
+                                                "expression": {
+                                                    "kind": "IdentifierName",
+                                                    "fullStart": 15,
+                                                    "fullEnd": 16,
+                                                    "start": 15,
+                                                    "end": 16,
+                                                    "fullWidth": 1,
+                                                    "width": 1,
+                                                    "text": "e",
+                                                    "value": "e",
+                                                    "valueText": "e"
+                                                },
+                                                "closeBracketToken": {
+                                                    "kind": "CloseBracketToken",
+                                                    "fullStart": 16,
+                                                    "fullEnd": 17,
+                                                    "start": 16,
+                                                    "end": 17,
+                                                    "fullWidth": 1,
+                                                    "width": 1,
+                                                    "text": "]",
+                                                    "value": "]",
+                                                    "valueText": "]"
+                                                }
                                             },
                                             "callSignature": {
                                                 "kind": "CallSignature",
@@ -232,9 +258,9 @@
                                                                 "end": 19,
                                                                 "fullWidth": 1,
                                                                 "width": 1,
-                                                                "text": "a",
-                                                                "value": "a",
-                                                                "valueText": "a"
+                                                                "text": "v",
+                                                                "value": "v",
+                                                                "valueText": "v"
                                                             }
                                                         }
                                                     ],
@@ -331,27 +357,15 @@
                             }
                         }
                     ]
-                },
-                "semicolonToken": {
-                    "kind": "SemicolonToken",
-                    "fullStart": 26,
-                    "fullEnd": 27,
-                    "start": 26,
-                    "end": 27,
-                    "fullWidth": 1,
-                    "width": 1,
-                    "text": ";",
-                    "value": ";",
-                    "valueText": ";"
                 }
             }
         ],
         "endOfFileToken": {
             "kind": "EndOfFileToken",
-            "fullStart": 27,
-            "fullEnd": 27,
-            "start": 27,
-            "end": 27,
+            "fullStart": 26,
+            "fullEnd": 26,
+            "start": 26,
+            "end": 26,
             "fullWidth": 0,
             "width": 0,
             "text": ""
@@ -361,6 +375,6 @@
         "lineStarts": [
             0
         ],
-        "length": 27
+        "length": 26
     }
 }

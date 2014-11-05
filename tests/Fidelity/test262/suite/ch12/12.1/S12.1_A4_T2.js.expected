@@ -1,16 +1,6 @@
 {
     "isDeclaration": false,
     "languageVersion": "EcmaScript5",
-    "diagnostics": [
-        {
-            "start": 400,
-            "length": 1,
-            "diagnosticCode": "'{0}' expected.",
-            "arguments": [
-                ":"
-            ]
-        }
-    ],
     "sourceUnit": {
         "kind": "SourceUnit",
         "fullStart": 0,
@@ -19,7 +9,6 @@
         "end": 486,
         "fullWidth": 486,
         "width": 185,
-        "isIncrementallyUnusable": true,
         "moduleElements": [
             {
                 "kind": "ExpressionStatement",
@@ -158,7 +147,6 @@
                 "end": 402,
                 "fullWidth": 97,
                 "width": 6,
-                "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "BinaryExpression",
                     "fullStart": 306,
@@ -167,7 +155,6 @@
                     "end": 401,
                     "fullWidth": 95,
                     "width": 5,
-                    "isIncrementallyUnusable": true,
                     "left": {
                         "kind": "IdentifierName",
                         "fullStart": 306,
@@ -235,7 +222,6 @@
                         "end": 401,
                         "fullWidth": 3,
                         "width": 3,
-                        "isIncrementallyUnusable": true,
                         "openBraceToken": {
                             "kind": "OpenBraceToken",
                             "fullStart": 398,
@@ -250,46 +236,16 @@
                         },
                         "propertyAssignments": [
                             {
-                                "kind": "SimplePropertyAssignment",
+                                "kind": "IdentifierName",
                                 "fullStart": 399,
                                 "fullEnd": 400,
                                 "start": 399,
                                 "end": 400,
                                 "fullWidth": 1,
                                 "width": 1,
-                                "isIncrementallyUnusable": true,
-                                "propertyName": {
-                                    "kind": "IdentifierName",
-                                    "fullStart": 399,
-                                    "fullEnd": 400,
-                                    "start": 399,
-                                    "end": 400,
-                                    "fullWidth": 1,
-                                    "width": 1,
-                                    "text": "x",
-                                    "value": "x",
-                                    "valueText": "x"
-                                },
-                                "colonToken": {
-                                    "kind": "ColonToken",
-                                    "fullStart": 400,
-                                    "fullEnd": 400,
-                                    "start": 400,
-                                    "end": 400,
-                                    "fullWidth": 0,
-                                    "width": 0,
-                                    "text": ""
-                                },
-                                "expression": {
-                                    "kind": "IdentifierName",
-                                    "fullStart": 400,
-                                    "fullEnd": 400,
-                                    "start": 400,
-                                    "end": 400,
-                                    "fullWidth": 0,
-                                    "width": 0,
-                                    "text": ""
-                                }
+                                "text": "x",
+                                "value": "x",
+                                "valueText": "x"
                             }
                         ],
                         "closeBraceToken": {
