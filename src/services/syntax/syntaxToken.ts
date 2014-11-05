@@ -306,6 +306,7 @@ module TypeScript.Syntax {
     class EmptyToken implements ISyntaxToken {
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
         public parent: ISyntaxElement;
+        public childCount: number;
 
         constructor(public kind: SyntaxKind) {
         }
@@ -314,7 +315,6 @@ module TypeScript.Syntax {
             // An empty token is always at the -1 position.
         }
 
-        public childCount() { return 0 }
         public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
         public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
@@ -415,6 +415,7 @@ module TypeScript.Syntax {
         public leadingTrivia(): ISyntaxTriviaList { return Syntax.emptyTriviaList; }
         public trailingTrivia(): ISyntaxTriviaList { return Syntax.emptyTriviaList; }
     }
+    EmptyToken.prototype.childCount = 0;
 
     class RealizedToken implements ISyntaxToken {
         private _fullStart: number;
@@ -425,6 +426,7 @@ module TypeScript.Syntax {
 
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
         public parent: ISyntaxElement;
+        public childCount: number;
 
         constructor(fullStart: number,
             public kind: SyntaxKind,
@@ -452,7 +454,6 @@ module TypeScript.Syntax {
             this._fullStart = fullStart;
         }
 
-        public childCount() { return 0 }
         public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
         public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
@@ -486,11 +487,13 @@ module TypeScript.Syntax {
         public leadingTrivia(): ISyntaxTriviaList { return this._leadingTrivia; }
         public trailingTrivia(): ISyntaxTriviaList { return this._trailingTrivia; }
     }
+    RealizedToken.prototype.childCount = 0;
 
     class ConvertedKeywordToken implements ISyntaxToken {
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
         public parent: ISyntaxElement;
         public kind: SyntaxKind;
+        public childCount: number;
 
         constructor(private underlyingToken: ISyntaxToken) {
         }
@@ -499,7 +502,6 @@ module TypeScript.Syntax {
             this.underlyingToken.setFullStart(fullStart);
         }
 
-        public childCount() { return 0 }
         public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
         public accept(visitor: ISyntaxVisitor): any { return visitor.visitToken(this) }
 
@@ -582,4 +584,5 @@ module TypeScript.Syntax {
         }
     }
     ConvertedKeywordToken.prototype.kind = SyntaxKind.IdentifierName;
+    ConvertedKeywordToken.prototype.childCount = 0;
 }
