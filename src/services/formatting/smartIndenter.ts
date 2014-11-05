@@ -296,8 +296,8 @@ module ts.formatting {
             return column;
         }
 
-        export function nodeContentIsAlwaysIndented(n: Node): boolean {
-            switch (n.kind) {
+        export function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
+            switch (kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
@@ -327,7 +327,7 @@ module ts.formatting {
         }
 
         export function shouldIndentChildNode(parent: Node, child: Node): boolean {
-            if (nodeContentIsAlwaysIndented(parent)) {
+            if (nodeContentIsAlwaysIndented(parent.kind)) {
                 return true;
             }
             switch (parent.kind) {
