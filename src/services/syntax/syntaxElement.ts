@@ -458,7 +458,7 @@ module TypeScript {
         _accessorBrand: any;
 
         modifiers: ISyntaxToken[];
-        propertyName: ISyntaxToken;
+        propertyName: IPropertyNameSyntax;
         callSignature: CallSignatureSyntax;
         block: BlockSyntax;
     }
@@ -503,5 +503,9 @@ module TypeScript {
 
     export interface INameSyntax extends ITypeSyntax {
         _nameBrand: any;
+    }
+
+    export interface IPropertyNameSyntax extends ISyntaxNodeOrToken {
+        _propertyNameBrand: any;
     }
 }
