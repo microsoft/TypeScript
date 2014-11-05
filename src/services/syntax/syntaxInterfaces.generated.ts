@@ -673,6 +673,13 @@ module TypeScript {
     }
     export interface TypeAnnotationConstructor { new (data: number, colonToken: ISyntaxToken, type: ITypeSyntax): TypeAnnotationSyntax }
 
+    export interface ComputedPropertyNameSyntax extends ISyntaxNode, IPropertyNameSyntax {
+        openBracketToken: ISyntaxToken;
+        expression: IExpressionSyntax;
+        closeBracketToken: ISyntaxToken;
+    }
+    export interface ComputedPropertyNameConstructor { new (data: number, openBracketToken: ISyntaxToken, expression: IExpressionSyntax, closeBracketToken: ISyntaxToken): ComputedPropertyNameSyntax }
+
     export interface ExternalModuleReferenceSyntax extends ISyntaxNode, IModuleReferenceSyntax {
         requireKeyword: ISyntaxToken;
         openParenToken: ISyntaxToken;

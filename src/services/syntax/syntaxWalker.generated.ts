@@ -601,6 +601,12 @@ module TypeScript {
             visitNodeOrToken(this, node.type);
         }
 
+        public visitComputedPropertyName(node: ComputedPropertyNameSyntax): void {
+            this.visitToken(node.openBracketToken);
+            visitNodeOrToken(this, node.expression);
+            this.visitToken(node.closeBracketToken);
+        }
+
         public visitExternalModuleReference(node: ExternalModuleReferenceSyntax): void {
             this.visitToken(node.requireKeyword);
             this.visitToken(node.openParenToken);

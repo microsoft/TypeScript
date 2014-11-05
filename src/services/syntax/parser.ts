@@ -1005,7 +1005,7 @@ module TypeScript.Parser {
                 return true;
             }
 
-            return isPropertyName(currentToken(), inErrorRecovery);
+            return isPropertyName(/*peekToken:*/ 0, inErrorRecovery);
         }
 
         function tryParseEnumElementEqualsValueClause(): EqualsValueClauseSyntax {
@@ -1019,11 +1019,11 @@ module TypeScript.Parser {
                 return <EnumElementSyntax>node;
             }
 
-            if (!isPropertyName(currentToken(), inErrorRecovery)) {
+            if (!isPropertyName(/*peekToken:*/ 0, inErrorRecovery)) {
                 return undefined;
             }
 
-            return new EnumElementSyntax(parseNodeData, eatPropertyName(), tryParseEnumElementEqualsValueClause());
+            return new EnumElementSyntax(parseNodeData, parsePropertyName(), tryParseEnumElementEqualsValueClause());
         }
 
         function isModifierKind(kind: SyntaxKind): boolean {
@@ -1131,7 +1131,7 @@ module TypeScript.Parser {
                 return false;
             }
 
-            return isPropertyName(peekToken(modifierCount + 1), inErrorRecovery);
+            return isPropertyName(/*peekIndex:*/ modifierCount + 1, inErrorRecovery);
         }
 
         function parseAccessor(checkForStrictMode: boolean): IAccessorSyntax {
@@ -1152,14 +1152,14 @@ module TypeScript.Parser {
 
         function parseGetMemberAccessorDeclaration(modifiers: ISyntaxToken[], getKeyword: ISyntaxToken, checkForStrictMode: boolean): GetAccessorSyntax {
             return new GetAccessorSyntax(parseNodeData,
-                modifiers, consumeToken(getKeyword), eatPropertyName(),
+                modifiers, consumeToken(getKeyword), parsePropertyName(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
                 parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, checkForStrictMode));
         }
 
         function parseSetMemberAccessorDeclaration(modifiers: ISyntaxToken[], setKeyword: ISyntaxToken, checkForStrictMode: boolean): SetAccessorSyntax {
             return new SetAccessorSyntax(parseNodeData,
-                modifiers, consumeToken(setKeyword), eatPropertyName(),
+                modifiers, consumeToken(setKeyword), parsePropertyName(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
                 parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, checkForStrictMode));
         }
@@ -1173,10 +1173,48 @@ module TypeScript.Parser {
             // checks for a subset of the conditions of the previous two calls.
             var _modifierCount = modifierCount();
             return isConstructorDeclaration(_modifierCount) ||
-                   isMemberFunctionDeclaration(_modifierCount, inErrorRecovery) ||
                    isAccessor(_modifierCount, inErrorRecovery) ||
-                   isMemberVariableDeclaration(_modifierCount, inErrorRecovery) ||
-                   isIndexMemberDeclaration(_modifierCount);
+                   isIndexMemberDeclaration(_modifierCount) ||
+                   isMemberVariableOrFunctionDeclaration(_modifierCount, inErrorRecovery);
+        }
+
+        function isMemberVariableOrFunctionDeclaration(peekIndex: number, inErrorRecovery: boolean) {
+            // Check if its the start of a property or method.  Both must start with a property name.
+            if (!isPropertyName(peekIndex, inErrorRecovery)) {
+                return false;
+            }
+
+            if (!SyntaxFacts.isAnyKeyword(peekToken(peekIndex).kind)) {
+                // It wasn't a keyword.  So this is definitely a member variable or function.
+                return true;
+            }
+
+            // Keywords *can* technically start properties and methods.  However, they often
+            // are actually intended to start a real ts/js construct.  Only accept a keyword
+            // if it is definitely a property or method.
+            // keywords are also property names.  Only accept a keyword as a property 
+            // name if is of the form:
+            //      public;
+            //      public=
+            //      public:
+            //      public }
+            //      public(
+            //      public<
+            //      public <eof>
+            //      public <newline>
+            var nextToken = peekToken(peekIndex + 1);
+            switch (nextToken.kind) {
+                case SyntaxKind.SemicolonToken:
+                case SyntaxKind.EqualsToken:
+                case SyntaxKind.ColonToken:
+                case SyntaxKind.CloseBraceToken:
+                case SyntaxKind.OpenParenToken:
+                case SyntaxKind.LessThanToken:
+                case SyntaxKind.EndOfFileToken:
+                    return true;
+                default:
+                    return previousTokenHasTrailingNewLine(nextToken);
+            }
         }
 
         function tryParseClassElement(inErrorRecovery: boolean): IClassElementSyntax {
@@ -1186,21 +1224,28 @@ module TypeScript.Parser {
                 return <IClassElementSyntax>node;
             }
 
+            // Have to check for indexers before anything else.  That way if we see "[foo:" we 
+            // parse it out as an indexer and not a member function or variable.
             var _modifierCount = modifierCount();
             if (isConstructorDeclaration(_modifierCount)) {
                 return parseConstructorDeclaration();
             }
-            else if (isMemberFunctionDeclaration(_modifierCount, inErrorRecovery)) {
-                return parseMemberFunctionDeclaration();
+            else if (isIndexMemberDeclaration(_modifierCount)) {
+                return parseIndexMemberDeclaration();
             }
             else if (isAccessor(_modifierCount, inErrorRecovery)) {
                 return parseAccessor(/*checkForStrictMode:*/ false);
             }
-            else if (isMemberVariableDeclaration(_modifierCount, inErrorRecovery)) {
-                return parseMemberVariableDeclaration();
-            }
-            else if (isIndexMemberDeclaration(_modifierCount)) {
-                return parseIndexMemberDeclaration();
+            else if (isMemberVariableOrFunctionDeclaration(/*peekIndex:*/ _modifierCount, inErrorRecovery)) {
+                var modifiers = parseModifiers();
+                var propertyName = parsePropertyName();
+
+                if (isCallSignature(/*peekIndex:*/ 0)) {
+                    return parseMemberFunctionDeclaration(modifiers, propertyName);
+                }
+                else {
+                    return parseMemberVariableDeclaration(modifiers, propertyName);
+                }
             }
             else {
                 return undefined;
@@ -1233,13 +1278,7 @@ module TypeScript.Parser {
             return new ConstructorDeclarationSyntax(parseNodeData, modifiers, constructorKeyword, callSignature, block, semicolonToken);
         }
 
-        function isMemberFunctionDeclaration(modifierCount: number, inErrorRecovery: boolean): boolean {
-            return isPropertyName(peekToken(modifierCount), inErrorRecovery) && isCallSignature(modifierCount + 1);
-        }
-
-        function parseMemberFunctionDeclaration(): MemberFunctionDeclarationSyntax {
-            var modifiers = parseModifiers();
-            var propertyName = eatPropertyName();
+        function parseMemberFunctionDeclaration(modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax): MemberFunctionDeclarationSyntax {
             var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ false);
 
             // If we got an errant => then we want to parse what's coming up without requiring an
@@ -1259,42 +1298,13 @@ module TypeScript.Parser {
             return new MemberFunctionDeclarationSyntax(parseNodeData, modifiers, propertyName, callSignature, block, semicolon);
         }
         
-        function isDefinitelyMemberVariablePropertyName(index: number): boolean {
-            // keywords are also property names.  Only accept a keyword as a property 
-            // name if is of the form:
-            //      public;
-            //      public=
-            //      public:
-            //      public }
-            //      public <eof>
-            //      public <newline>
-            if (SyntaxFacts.isAnyKeyword(peekToken(index).kind)) {
-                var nextToken = peekToken(index + 1);
-                switch (nextToken.kind) {
-                    case SyntaxKind.SemicolonToken:
-                    case SyntaxKind.EqualsToken:
-                    case SyntaxKind.ColonToken:
-                    case SyntaxKind.CloseBraceToken:
-                    case SyntaxKind.EndOfFileToken:
-                       return true;
-                    default:
-                        return previousTokenHasTrailingNewLine(nextToken);
-                }
-            }
-            else {
-                // If was a property name and not a keyword, then we're good to go.
-                return true;
-            }
-        }
-
-        function isMemberVariableDeclaration(modifierCount: number, inErrorRecover: boolean): boolean {
-            return isPropertyName(peekToken(modifierCount), inErrorRecover) && isDefinitelyMemberVariablePropertyName(modifierCount);
-        }
-
-        function parseMemberVariableDeclaration(): MemberVariableDeclarationSyntax {
+        function parseMemberVariableDeclaration(modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax): MemberVariableDeclarationSyntax {
             return new MemberVariableDeclarationSyntax(parseNodeData,
-                parseModifiers(),
-                tryParseVariableDeclarator(/*allowIn:*/ true, /*allowPropertyName:*/ true), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                modifiers,
+                new VariableDeclaratorSyntax(parseNodeData, propertyName,
+                    parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false), 
+                    isEqualsValueClause(/*inParameter*/ false) ? parseEqualsValueClause(/*allowIn:*/ true) : undefined),
+                eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function isIndexMemberDeclaration(modifierCount: number): boolean {
@@ -1429,8 +1439,36 @@ module TypeScript.Parser {
             return isCallSignature(/*tokenIndex:*/ 0) ||
                    isConstructSignature() ||
                    isIndexSignature(/*tokenIndex:*/ 0) ||
-                   isMethodSignature(inErrorRecovery) ||
-                   isPropertySignature(inErrorRecovery);
+                   isMethodOrPropertySignature(inErrorRecovery);
+        }
+
+        function isMethodOrPropertySignature(inErrorRecovery: boolean): boolean {
+            var _currentToken = currentToken();
+
+            // Keywords can start properties.  However, they're often intended to start something
+            // else.  If we see a modifier before something that can be a property, then don't
+            // try parse it out as a property.  For example, if we have:
+            //
+            //      public foo
+            //
+            // Then don't parse 'public' as a property name.  Note: if you have:
+            //
+            //      public
+            //      foo
+            //
+            // Then we *should* parse it as a property name, as ASI takes effect here.
+            if (isModifier(_currentToken, /*index:*/ 0)) {
+                var token1 = peekToken(1);
+                if (!existsNewLineBetweenTokens(_currentToken, token1, source.text) &&
+                    isPropertyNameToken(token1, inErrorRecovery)) {
+
+                    return false;
+                }
+            }
+
+            // Note: property names also start function signatures.  So it's important that we call this
+            // after we calll isFunctionSignature.
+            return isPropertyName(/*peekIndex:*/ 0, inErrorRecovery);
         }
 
         function tryParseTypeMember(inErrorRecovery: boolean): ITypeMemberSyntax {
@@ -1449,13 +1487,16 @@ module TypeScript.Parser {
             else if (isIndexSignature(/*tokenIndex:*/ 0)) {
                 return parseIndexSignature();
             }
-            else if (isMethodSignature(inErrorRecovery)) {
-                // Note: it is important that isFunctionSignature is called before isPropertySignature.
-                // isPropertySignature checks for a subset of isFunctionSignature.
-                return parseMethodSignature();
-            }
-            else if (isPropertySignature(inErrorRecovery)) {
-                return parsePropertySignature();
+            else if (isMethodOrPropertySignature(inErrorRecovery)) {
+                var propertyName = parsePropertyName();
+                var questionToken = tryEatToken(SyntaxKind.QuestionToken);
+
+                if (isCallSignature(/*peekIndex:*/ 0)) {
+                    return parseMethodSignature(propertyName, questionToken);
+                }
+                else {
+                    return parsePropertySignature(propertyName, questionToken);
+                }
             }
             else {
                 return undefined;
@@ -1477,14 +1518,14 @@ module TypeScript.Parser {
                 openBracketToken, parameters, eatToken(SyntaxKind.CloseBracketToken), parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false));
         }
 
-        function parseMethodSignature(): MethodSignatureSyntax {
+        function parseMethodSignature(propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken): MethodSignatureSyntax {
             return new MethodSignatureSyntax(parseNodeData,
-                eatPropertyName(), tryEatToken(SyntaxKind.QuestionToken), parseCallSignature(/*requireCompleteTypeParameterList:*/ false));
+                propertyName, questionToken, parseCallSignature(/*requireCompleteTypeParameterList:*/ false));
         }
 
-        function parsePropertySignature(): PropertySignatureSyntax {
+        function parsePropertySignature(propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken): PropertySignatureSyntax {
             return new PropertySignatureSyntax(parseNodeData,
-                eatPropertyName(), tryEatToken(SyntaxKind.QuestionToken), parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false));
+                propertyName, questionToken, parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false));
         }
 
         function isCallSignature(peekIndex: number): boolean {
@@ -1501,52 +1542,34 @@ module TypeScript.Parser {
         }
 
         function isIndexSignature(peekIndex: number): boolean {
-            return peekToken(peekIndex).kind === SyntaxKind.OpenBracketToken;
-        }
-
-        function isMethodSignature(inErrorRecovery: boolean): boolean {
-            if (isPropertyName(currentToken(), inErrorRecovery)) {
-                // id(
-                if (isCallSignature(1)) {
+            // In order to be considered an index signature, we need to see at least:
+            //
+            //      [a:
+            //      [...
+            //      [a,
+            //      [public a
+            //      []
+            //
+            // Otherwise, we will think that this is the start of a computed property name
+            // for a function or variable.
+            if (peekToken(peekIndex).kind === SyntaxKind.OpenBracketToken) {
+                var token1 = peekToken(peekIndex + 1);
+                if (token1.kind === SyntaxKind.DotDotDotToken || token1.kind === SyntaxKind.CloseBracketToken) {
                     return true;
                 }
-
-                // id?(
-                if (peekToken(1).kind === SyntaxKind.QuestionToken &&
-                    isCallSignature(2)) {
-                    return true;
+                if (isIdentifier(token1)) {
+                    var token2 = peekToken(peekIndex + 2);
+                    if (token2.kind === SyntaxKind.ColonToken || token2.kind === SyntaxKind.CommaToken) {
+                        return true;
+                    }
+                }
+                if (token1.kind === SyntaxKind.PublicKeyword || token1.kind === SyntaxKind.PrivateKeyword) {
+                    var token2 = peekToken(peekIndex + 2);
+                    return isIdentifier(token2);
                 }
             }
 
             return false;
-        }
-
-        function isPropertySignature(inErrorRecovery: boolean): boolean {
-            var _currentToken = currentToken();
-
-            // Keywords can start properties.  However, they're often intended to start something
-            // else.  If we see a modifier before something that can be a property, then don't
-            // try parse it out as a property.  For example, if we have:
-            //
-            //      public foo
-            //
-            // Then don't parse 'public' as a property name.  Note: if you have:
-            //
-            //      public
-            //      foo
-            //
-            // Then we *should* parse it as a property name, as ASI takes effect here.
-            if (isModifier(_currentToken, /*index:*/ 0)) {
-                if (!existsNewLineBetweenTokens(_currentToken, peekToken(1), source.text) &&
-                    isPropertyName(peekToken(1), inErrorRecovery)) {
-
-                    return false;
-                }
-            }
-
-            // Note: property names also start function signatures.  So it's important that we call this
-            // after we calll isFunctionSignature.
-            return isPropertyName(_currentToken, inErrorRecovery);
         }
 
         function isHeritageClause(): boolean {
@@ -2268,7 +2291,7 @@ module TypeScript.Parser {
             return variableDeclarator.equalsValueClause === undefined;
         }
 
-        function tryParseVariableDeclarator(allowIn: boolean, allowPropertyName: boolean): VariableDeclaratorSyntax {
+        function tryParseVariableDeclarator(allowIn: boolean): VariableDeclaratorSyntax {
             // TODO(cyrusn): What if the 'allowIn' context has changed between when we last parsed 
             // and now?  We could end up with an incorrect tree.  For example, say we had in the old 
             // tree "var i = a in b".  Then, in the new tree the declarator portion moved into:
@@ -2281,19 +2304,15 @@ module TypeScript.Parser {
                 return <VariableDeclaratorSyntax>node;
             }
 
-            if (allowPropertyName) {
-                // Debug.assert(isPropertyName(currentToken(), /*inErrorRecovery:*/ false));
-            }
-
-            if (!allowPropertyName && !isIdentifier(currentToken())) {
+            if (!isIdentifier(currentToken())) {
                 return undefined;
             }
 
-            var propertyName = allowPropertyName ? eatPropertyName() : eatIdentifierToken();
+            var propertyName = eatIdentifierToken();
             var equalsValueClause: EqualsValueClauseSyntax = undefined;
             var typeAnnotation: TypeAnnotationSyntax = undefined;
 
-            if (propertyName.fullWidth() > 0) {
+            if (fullWidth(propertyName) > 0) {
                 typeAnnotation = parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false);
 
                 if (isEqualsValueClause(/*inParameter*/ false)) {
@@ -3319,15 +3338,40 @@ module TypeScript.Parser {
             if (isAccessor(modifierCount(), inErrorRecovery)) {
                 return parseAccessor(/*checkForStrictMode:*/ true);
             }
-            else if (isFunctionPropertyAssignment(inErrorRecovery)) {
-                return parseFunctionPropertyAssignment();
-            }
-            else if (isSimpleOrShorthandPropertyAssignment(inErrorRecovery)) {
-                var _currentToken = currentToken();
-                if (isIdentifier(_currentToken) && peekToken(1).kind !== SyntaxKind.ColonToken) {
-                    // To be a shorthand property assignment we must have an identifier (and not a 
-                    // keyword or literal) and it must not be followed by a colon. 
+
+            // Note: we don't want to call parsePropertyName here yet as it will convert a keyword
+            // to an identifier name.  We don't want to do that yet as a keyword is not legal as a
+            // shorthand property assignment.
+
+            var _currentToken = currentToken();
+            if (isIdentifier(_currentToken)) {
+                var token1 = peekToken(1);
+                if (token1.kind !== SyntaxKind.ColonToken &&
+                    token1.kind !== SyntaxKind.OpenParenToken &&
+                    token1.kind !== SyntaxKind.LessThanToken) {
+
+                    // If we don't have one of:
+                    //
+                    // id:
+                    // id(
+                    // id<
+                    //
+                    // then this is a shorthand property assignment.  Just return the identifier 
+                    // token as is.
                     return consumeToken(_currentToken);
+                }
+            }
+
+            // All the rest of the property assignments start with property names.  They are:
+            //      id: e
+            //      [e1]: e2
+            //      id() { }
+            //      [e]() { } 
+            if (isPropertyName(/*peekIndex:*/ 0, inErrorRecovery)) {
+                var propertyName = parsePropertyName();
+
+                if (isCallSignature(/*peekIndex:*/ 0)) {
+                    return parseFunctionPropertyAssignment(propertyName);
                 }
                 else {
                     // If we didn't have an identifier, then we must have gotten a keyword or a
@@ -3337,43 +3381,37 @@ module TypeScript.Parser {
                     // Also, if we have an identifier and it is followed by a colon then this is 
                     // definitely a simple property assignment.
                     return new SimplePropertyAssignmentSyntax(parseNodeData,
-                        eatPropertyName(), eatToken(SyntaxKind.ColonToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true));
+                        propertyName, eatToken(SyntaxKind.ColonToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true));
                 }
             }
-            else {
-                return undefined;
-            }
+
+            return undefined;
         }
 
         function isPropertyAssignment(inErrorRecovery: boolean): boolean {
             return isAccessor(modifierCount(), inErrorRecovery) ||
-                   isFunctionPropertyAssignment(inErrorRecovery) ||
-                   isSimpleOrShorthandPropertyAssignment(inErrorRecovery);
+                   isPropertyName(/*peekIndex:*/ 0, inErrorRecovery);
         }
 
-        function eatPropertyName(): ISyntaxToken {
-            var _currentToken = currentToken();
-            return SyntaxFacts.isIdentifierNameOrAnyKeyword(_currentToken)
-                ? eatIdentifierNameToken()
-                : consumeToken(_currentToken);
+        function isPropertyName(peekIndex: number, inErrorRecovery: boolean): boolean {
+            var token = peekToken(peekIndex);
+            if (token.kind === SyntaxKind.OpenBracketToken) {
+                // If we're in a class declaration.
+                // it's a property name as long as it doesn't start with:
+                //
+                //      [id:
+                //
+                // If it starts with that, then it's an index signature.  Fortunately, there is no 
+                // ambiguity in the language as a property name must have an assignment expression
+                // after the open bracket (and no assignment expressions start with "id:").
+                var isIndexSignature = isIdentifier(peekToken(peekIndex + 1)) && peekToken(peekIndex + 2).kind === SyntaxKind.ColonToken;
+                return !isIndexSignature;
+            }
+
+            return isPropertyNameToken(token, inErrorRecovery);
         }
 
-        function isFunctionPropertyAssignment(inErrorRecovery: boolean): boolean {
-            return isPropertyName(currentToken(), inErrorRecovery) &&
-                   isCallSignature(/*peekIndex:*/ 1);
-        }
-
-        function parseFunctionPropertyAssignment(): FunctionPropertyAssignmentSyntax {
-            return new FunctionPropertyAssignmentSyntax(parseNodeData,
-                eatPropertyName(), parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
-                parseBlock(/*parseBlockEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ true));
-        }
-
-        function isSimpleOrShorthandPropertyAssignment(inErrorRecovery: boolean): boolean {
-            return isPropertyName(currentToken(), inErrorRecovery);
-        }
-
-        function isPropertyName(token: ISyntaxToken, inErrorRecovery: boolean): boolean {
+        function isPropertyNameToken(token: ISyntaxToken, inErrorRecovery: boolean): boolean {
             // NOTE: we do *not* want to check "isIdentifier" here.  Any IdentifierName is 
             // allowed here, even reserved words like keywords.
             if (SyntaxFacts.isIdentifierNameOrAnyKeyword(token)) {
@@ -3400,6 +3438,32 @@ module TypeScript.Parser {
             // on this later in the grammar checker walker.
             var kind = token.kind;
             return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral || kind === SyntaxKind.NoSubstitutionTemplateToken;
+        }
+
+        function parsePropertyName(): IPropertyNameSyntax {
+            var _currentToken = currentToken();
+            if (_currentToken.kind === SyntaxKind.OpenBracketToken) {
+                return parseComputedPropertyName(_currentToken);
+            }
+            else if (SyntaxFacts.isIdentifierNameOrAnyKeyword(_currentToken)) {
+                // If it was a keyword, convert it to an identifier name.
+                return eatIdentifierNameToken();
+            }
+            else {
+                // Must have been a literal.
+                return consumeToken(_currentToken);
+            }
+        }
+
+        function parseComputedPropertyName(openBracketToken: ISyntaxToken): ComputedPropertyNameSyntax {
+            return new ComputedPropertyNameSyntax(parseNodeData,
+                consumeToken(openBracketToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true), eatToken(SyntaxKind.CloseBracketToken));
+        }
+
+        function parseFunctionPropertyAssignment(propertyName: IPropertyNameSyntax): FunctionPropertyAssignmentSyntax {
+            return new FunctionPropertyAssignmentSyntax(parseNodeData,
+                propertyName, parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
+                parseBlock(/*parseBlockEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ true));
         }
 
         function parseArrayLiteralExpression(openBracketToken: ISyntaxToken): ArrayLiteralExpressionSyntax {
@@ -4363,8 +4427,8 @@ module TypeScript.Parser {
                 case ListParsingState.ObjectType_TypeMembers:                               return tryParseTypeMember(inErrorRecovery);
                 case ListParsingState.ClassOrInterfaceDeclaration_HeritageClauses:          return tryParseHeritageClause();
                 case ListParsingState.HeritageClause_TypeNameList:                          return tryParseHeritageClauseTypeName();
-                case ListParsingState.VariableDeclaration_VariableDeclarators_AllowIn:      return tryParseVariableDeclarator(/*allowIn:*/ true, /*allowIdentifierName:*/ false);
-                case ListParsingState.VariableDeclaration_VariableDeclarators_DisallowIn:   return tryParseVariableDeclarator(/*allowIn:*/ false, /*allowIdentifierName:*/ false);
+                case ListParsingState.VariableDeclaration_VariableDeclarators_AllowIn:      return tryParseVariableDeclarator(/*allowIn:*/ true);
+                case ListParsingState.VariableDeclaration_VariableDeclarators_DisallowIn:   return tryParseVariableDeclarator(/*allowIn:*/ false);
                 case ListParsingState.ArgumentList_AssignmentExpressions:                   return tryParseArgumentListExpression();
                 case ListParsingState.ObjectLiteralExpression_PropertyAssignments:          return tryParsePropertyAssignment(inErrorRecovery);
                 case ListParsingState.ArrayLiteralExpression_AssignmentExpressions:         return tryParseAssignmentOrOmittedExpression();

@@ -97,6 +97,7 @@ module TypeScript {
     "Expression expected.": { "code": 1109, "category": DiagnosticCategory.Error },
     "Type expected.": { "code": 1110, "category": DiagnosticCategory.Error },
     "Template literal cannot be used as an element name.": { "code": 1111, "category": DiagnosticCategory.Error },
+    "Computed property names cannot be used here.": { "code": 1112, "category": DiagnosticCategory.Error },
     "Duplicate identifier '{0}'.": { "code": 2000, "category": DiagnosticCategory.Error },
     "The name '{0}' does not exist in the current scope.": { "code": 2001, "category": DiagnosticCategory.Error },
     "The name '{0}' does not refer to a value.": { "code": 2002, "category": DiagnosticCategory.Error },
