@@ -272,7 +272,7 @@ module ts.formatting {
                 getDelta: () => delta,
                 recomputeIndentation: (lineAdded) => {
                     if (parentIndentation) {
-                        parentIndentation.recomputeIndentation(lineAdded);
+                        //parentIndentation.recomputeIndentation(lineAdded);
                     }
                     var delta = getIndentationDelta(node, lineAdded);
                     if (delta) {
