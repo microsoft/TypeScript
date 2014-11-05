@@ -168,6 +168,10 @@ var n = function () {
     return 5;
 }();
 
+// Otherwise, the inferred return type is the first of the types of the return statement expressions
+// in the function body that is a supertype of each of the others, 
+// ignoring return statements with no expressions.
+// A compile - time error occurs if no return statement expression has a type that is a supertype of each of the others.
 // FunctionExpression with no return type annotation with multiple return statements with subtype relation between returns
 class Base { private m; }
 >Base : Base
@@ -292,6 +296,107 @@ function f6(): number {
     return;
 }
 
+class Derived2 extends Base { private r: string; }
+>Derived2 : Derived2
+>Base : Base
+>r : string
 
+class AnotherClass { private x }
+>AnotherClass : AnotherClass
+>x : any
 
+// if f is a contextually typed function expression, the inferred return type is the union type
+// of the types of the return statement expressions in the function body, 
+// ignoring return statements with no expressions.
+var f7: (x: number) => string | number = x => { // should be (x: number) => number | string
+>f7 : (x: number) => string | number
+>x : number
+>x => { // should be (x: number) => number | string    if (x < 0) { return x; }    return x.toString();} : (x: number) => string | number
+>x : number
 
+    if (x < 0) { return x; }
+>x < 0 : boolean
+>x : number
+>x : number
+
+    return x.toString();
+>x.toString() : string
+>x.toString : (radix?: number) => string
+>x : number
+>toString : (radix?: number) => string
+}
+var f8: (x: number) => any = x => { // should be (x: number) => Base
+>f8 : (x: number) => any
+>x : number
+>x => { // should be (x: number) => Base    return new Base();    return new Derived2();} : (x: number) => Base
+>x : number
+
+    return new Base();
+>new Base() : Base
+>Base : typeof Base
+
+    return new Derived2();
+>new Derived2() : Derived2
+>Derived2 : typeof Derived2
+}
+var f9: (x: number) => any = x => { // should be (x: number) => Base
+>f9 : (x: number) => any
+>x : number
+>x => { // should be (x: number) => Base    return new Base();    return new Derived();    return new Derived2();} : (x: number) => Base
+>x : number
+
+    return new Base();
+>new Base() : Base
+>Base : typeof Base
+
+    return new Derived();
+>new Derived() : Derived
+>Derived : typeof Derived
+
+    return new Derived2();
+>new Derived2() : Derived2
+>Derived2 : typeof Derived2
+}
+var f10: (x: number) => any = x => { // should be (x: number) => Derived | Derived1
+>f10 : (x: number) => any
+>x : number
+>x => { // should be (x: number) => Derived | Derived1    return new Derived();    return new Derived2();} : (x: number) => Derived | Derived2
+>x : number
+
+    return new Derived();
+>new Derived() : Derived
+>Derived : typeof Derived
+
+    return new Derived2();
+>new Derived2() : Derived2
+>Derived2 : typeof Derived2
+}
+var f11: (x: number) => any = x => { // should be (x: number) => Base | AnotherClass
+>f11 : (x: number) => any
+>x : number
+>x => { // should be (x: number) => Base | AnotherClass    return new Base();    return new AnotherClass();} : (x: number) => Base | AnotherClass
+>x : number
+
+    return new Base();
+>new Base() : Base
+>Base : typeof Base
+
+    return new AnotherClass();
+>new AnotherClass() : AnotherClass
+>AnotherClass : typeof AnotherClass
+}
+var f12: (x: number) => any = x => { // should be (x: number) => Base | AnotherClass
+>f12 : (x: number) => any
+>x : number
+>x => { // should be (x: number) => Base | AnotherClass    return new Base();    return; // should be ignored    return new AnotherClass();} : (x: number) => Base | AnotherClass
+>x : number
+
+    return new Base();
+>new Base() : Base
+>Base : typeof Base
+
+    return; // should be ignored
+    return new AnotherClass();
+>new AnotherClass() : AnotherClass
+>AnotherClass : typeof AnotherClass
+}
