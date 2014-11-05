@@ -304,7 +304,7 @@ module TypeScript.Syntax {
     }
 
     class EmptyToken implements ISyntaxToken {
-        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
+        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _nameBrand: any; public _syntaxNodeOrTokenBrand: any;
         public parent: ISyntaxElement;
         public childCount: number;
 
@@ -418,13 +418,14 @@ module TypeScript.Syntax {
     EmptyToken.prototype.childCount = 0;
 
     class RealizedToken implements ISyntaxToken {
+        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _nameBrand: any; public _syntaxNodeOrTokenBrand: any;
+
         private _fullStart: number;
         private _isKeywordConvertedToIdentifier: boolean;
         private _leadingTrivia: ISyntaxTriviaList;
         private _text: string;
         private _trailingTrivia: ISyntaxTriviaList;
 
-        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
         public parent: ISyntaxElement;
         public childCount: number;
 
@@ -490,7 +491,8 @@ module TypeScript.Syntax {
     RealizedToken.prototype.childCount = 0;
 
     class ConvertedKeywordToken implements ISyntaxToken {
-        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _syntaxNodeOrTokenBrand: any;
+        public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _nameBrand: any; public _syntaxNodeOrTokenBrand: any;
+
         public parent: ISyntaxElement;
         public kind: SyntaxKind;
         public childCount: number;

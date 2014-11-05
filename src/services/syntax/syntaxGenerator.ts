@@ -1055,54 +1055,6 @@ function getSafeName(child: IMemberDefinition) {
     return child.name;
 }
 
-function generateBrands(definition: ITypeDefinition, accessibility: boolean): string {
-    var properties = "";
-
-    var types: string[] = [];
-    if (definition.interfaces) {
-        var ifaces = definition.interfaces.slice(0);
-        var i: number;
-        for (i = 0; i < ifaces.length; i++) {
-            var current = ifaces[i];
-
-            while (current !== undefined) {
-                if (!TypeScript.ArrayUtilities.contains(ifaces, current)) {
-                    ifaces.push(current);
-                }
-
-                current = interfaces[current];
-            }
-        }
-
-        for (i = 0; i < ifaces.length; i++) {
-            var type = ifaces[i];
-            type = getStringWithoutSuffix(type);
-            if (isInterface(type)) {
-                type = "_" + type.substr(1, 1).toLowerCase() + type.substr(2) + "Brand";
-            }
-
-            types.push(type);
-        }
-    }
-
-    types.push("_syntaxNodeOrTokenBrand");
-    if (types.length > 0) {
-        properties += "       ";
-
-        for (var i = 0; i < types.length; i++) {
-            if (accessibility) {
-                properties += " public ";
-            }
-
-            properties += types[i] + ": any;";
-        }
-
-        properties += "\r\n";
-    }
-
-    return properties;
-}
-
 function generateConstructorFunction(definition: ITypeDefinition) {
     var result = "    export var " + definition.name + ": " + getNameWithoutSuffix(definition) + "Constructor = <any>function(data: number";
 

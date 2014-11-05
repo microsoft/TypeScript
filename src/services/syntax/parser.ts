@@ -1134,7 +1134,7 @@ module TypeScript.Parser {
             return isPropertyName(peekToken(modifierCount + 1), inErrorRecovery);
         }
 
-        function parseAccessor(checkForStrictMode: boolean): ISyntaxNode {
+        function parseAccessor(checkForStrictMode: boolean): IPropertyAssignmentSyntax {
             var modifiers = parseModifiers();
             var _currenToken = currentToken();
             var tokenKind = _currenToken.kind;

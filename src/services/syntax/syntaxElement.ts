@@ -431,6 +431,7 @@ module TypeScript {
     }
 
     export interface IModuleElementSyntax extends ISyntaxNode {
+        _moduleElementBrand: any;
     }
 
     export interface IStatementSyntax extends IModuleElementSyntax {
@@ -438,15 +439,19 @@ module TypeScript {
     }
 
     export interface ITypeMemberSyntax extends ISyntaxNode {
+        _typeMemberBrand: any;
     }
 
     export interface IClassElementSyntax extends ISyntaxNode {
+        _classElementBrand: any;
     }
 
     export interface IMemberDeclarationSyntax extends IClassElementSyntax {
+        _memberDeclarationBrand: any;
     }
 
     export interface IPropertyAssignmentSyntax extends IClassElementSyntax {
+        _propertyAssignmentBrand: any;
     }
 
     export interface ISwitchClauseSyntax extends ISyntaxNode {
@@ -488,5 +493,6 @@ module TypeScript {
     }
 
     export interface INameSyntax extends ITypeSyntax {
+        _nameBrand: any;
     }
 }
