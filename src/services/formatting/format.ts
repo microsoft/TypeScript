@@ -646,7 +646,7 @@ module ts.formatting {
                         }
                     }
                 }
-                if (isTokenInRange) {
+                if (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) {
                     insertIndentation(currentTokenInfo.token.pos, indentation.getEffectiveIndentation(tokenStart.line, currentTokenInfo.token.kind), lineAdded);
                 }
             }
