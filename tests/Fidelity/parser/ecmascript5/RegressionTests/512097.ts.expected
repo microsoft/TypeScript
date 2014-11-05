@@ -7,7 +7,7 @@
             "length": 1,
             "diagnosticCode": "'{0}' expected.",
             "arguments": [
-                ":"
+                ","
             ]
         },
         {
@@ -162,46 +162,16 @@
                                     },
                                     "propertyAssignments": [
                                         {
-                                            "kind": "SimplePropertyAssignment",
+                                            "kind": "IdentifierName",
                                             "fullStart": 11,
                                             "fullEnd": 13,
                                             "start": 11,
                                             "end": 13,
                                             "fullWidth": 2,
                                             "width": 2,
-                                            "isIncrementallyUnusable": true,
-                                            "propertyName": {
-                                                "kind": "IdentifierName",
-                                                "fullStart": 11,
-                                                "fullEnd": 13,
-                                                "start": 11,
-                                                "end": 13,
-                                                "fullWidth": 2,
-                                                "width": 2,
-                                                "text": "aa",
-                                                "value": "aa",
-                                                "valueText": "aa"
-                                            },
-                                            "colonToken": {
-                                                "kind": "ColonToken",
-                                                "fullStart": 13,
-                                                "fullEnd": 13,
-                                                "start": 13,
-                                                "end": 13,
-                                                "fullWidth": 0,
-                                                "width": 0,
-                                                "text": ""
-                                            },
-                                            "expression": {
-                                                "kind": "IdentifierName",
-                                                "fullStart": 13,
-                                                "fullEnd": 13,
-                                                "start": 13,
-                                                "end": 13,
-                                                "fullWidth": 0,
-                                                "width": 0,
-                                                "text": ""
-                                            }
+                                            "text": "aa",
+                                            "value": "aa",
+                                            "valueText": "aa"
                                         },
                                         {
                                             "kind": "CommaToken",

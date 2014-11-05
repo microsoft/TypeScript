@@ -1,16 +1,6 @@
 {
     "isDeclaration": false,
     "languageVersion": "EcmaScript5",
-    "diagnostics": [
-        {
-            "start": 430,
-            "length": 1,
-            "diagnosticCode": "'{0}' expected.",
-            "arguments": [
-                ":"
-            ]
-        }
-    ],
     "sourceUnit": {
         "kind": "SourceUnit",
         "fullStart": 0,
@@ -19,7 +9,6 @@
         "end": 531,
         "fullWidth": 531,
         "width": 224,
-        "isIncrementallyUnusable": true,
         "moduleElements": [
             {
                 "kind": "VariableStatement",
@@ -283,7 +272,6 @@
                 "end": 446,
                 "fullWidth": 120,
                 "width": 31,
-                "isIncrementallyUnusable": true,
                 "forKeyword": {
                     "kind": "ForKeyword",
                     "fullStart": 326,
@@ -393,7 +381,6 @@
                     "end": 431,
                     "fullWidth": 7,
                     "width": 7,
-                    "isIncrementallyUnusable": true,
                     "openBraceToken": {
                         "kind": "OpenBraceToken",
                         "fullStart": 424,
@@ -408,46 +395,16 @@
                     },
                     "propertyAssignments": [
                         {
-                            "kind": "SimplePropertyAssignment",
+                            "kind": "IdentifierName",
                             "fullStart": 425,
                             "fullEnd": 430,
                             "start": 425,
                             "end": 430,
                             "fullWidth": 5,
                             "width": 5,
-                            "isIncrementallyUnusable": true,
-                            "propertyName": {
-                                "kind": "IdentifierName",
-                                "fullStart": 425,
-                                "fullEnd": 430,
-                                "start": 425,
-                                "end": 430,
-                                "fullWidth": 5,
-                                "width": 5,
-                                "text": "__arr",
-                                "value": "__arr",
-                                "valueText": "___arr"
-                            },
-                            "colonToken": {
-                                "kind": "ColonToken",
-                                "fullStart": 430,
-                                "fullEnd": 430,
-                                "start": 430,
-                                "end": 430,
-                                "fullWidth": 0,
-                                "width": 0,
-                                "text": ""
-                            },
-                            "expression": {
-                                "kind": "IdentifierName",
-                                "fullStart": 430,
-                                "fullEnd": 430,
-                                "start": 430,
-                                "end": 430,
-                                "fullWidth": 0,
-                                "width": 0,
-                                "text": ""
-                            }
+                            "text": "__arr",
+                            "value": "__arr",
+                            "valueText": "___arr"
                         }
                     ],
                     "closeBraceToken": {
