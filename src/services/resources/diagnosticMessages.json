@@ -375,6 +375,10 @@
         "category": "Error",
         "code": 1111
     },
+    "Computed property names cannot be used here.": {
+        "category": "Error",
+        "code": 1112
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2000

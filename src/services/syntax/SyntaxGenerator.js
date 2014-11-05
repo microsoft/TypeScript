@@ -620,8 +620,9 @@ var TypeScript;
         SyntaxKind[SyntaxKind["Parameter"] = 208] = "Parameter";
         SyntaxKind[SyntaxKind["EnumElement"] = 209] = "EnumElement";
         SyntaxKind[SyntaxKind["TypeAnnotation"] = 210] = "TypeAnnotation";
-        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 211] = "ExternalModuleReference";
-        SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 212] = "ModuleNameModuleReference";
+        SyntaxKind[SyntaxKind["ComputedPropertyName"] = 211] = "ComputedPropertyName";
+        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 212] = "ExternalModuleReference";
+        SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 213] = "ModuleNameModuleReference";
         SyntaxKind[SyntaxKind["FirstStandardKeyword"] = SyntaxKind.BreakKeyword] = "FirstStandardKeyword";
         SyntaxKind[SyntaxKind["LastStandardKeyword"] = SyntaxKind.WithKeyword] = "LastStandardKeyword";
         SyntaxKind[SyntaxKind["FirstFutureReservedKeyword"] = SyntaxKind.ClassKeyword] = "FirstFutureReservedKeyword";
@@ -1737,6 +1738,16 @@ var definitions = [
             { name: 'openBraceToken', isToken: true, excludeFromAST: true },
             { name: 'propertyAssignments', isSeparatedList: true, elementType: 'IPropertyAssignmentSyntax' },
             { name: 'closeBraceToken', isToken: true, excludeFromAST: true }
+        ]
+    },
+    {
+        name: 'ComputedPropertyNameSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['IPropertyNameSyntax'],
+        children: [
+            { name: 'openBracketToken', isToken: true },
+            { name: 'expression', type: 'IExpressionSyntax' },
+            { name: 'closeBracketToken', isToken: true }
         ]
     },
     {

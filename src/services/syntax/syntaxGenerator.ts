@@ -890,6 +890,16 @@ var definitions:ITypeDefinition[] = [
         ]
     },
     <any>{
+        name: 'ComputedPropertyNameSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['IPropertyNameSyntax'],
+        children: [
+            <any>{ name: 'openBracketToken', isToken: true },
+            <any>{ name: 'expression', type: 'IExpressionSyntax' },
+            <any>{ name: 'closeBracketToken', isToken: true }
+        ]
+    },
+    <any>{
         name: 'SimplePropertyAssignmentSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IPropertyAssignmentSyntax'],

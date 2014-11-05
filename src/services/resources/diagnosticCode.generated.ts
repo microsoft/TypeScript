@@ -95,6 +95,7 @@ module TypeScript {
         Expression_expected: "Expression expected.",
         Type_expected: "Type expected.",
         Template_literal_cannot_be_used_as_an_element_name: "Template literal cannot be used as an element name.",
+        Computed_property_names_cannot_be_used_here: "Computed property names cannot be used here.",
         Duplicate_identifier_0: "Duplicate identifier '{0}'.",
         The_name_0_does_not_exist_in_the_current_scope: "The name '{0}' does not exist in the current scope.",
         The_name_0_does_not_refer_to_a_value: "The name '{0}' does not refer to a value.",

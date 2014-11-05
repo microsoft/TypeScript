@@ -1835,6 +1835,25 @@ module TypeScript {
         }
     }
 
+    export var ComputedPropertyNameSyntax: ComputedPropertyNameConstructor = <any>function(data: number, openBracketToken: ISyntaxToken, expression: IExpressionSyntax, closeBracketToken: ISyntaxToken) {
+        if (data) { this.__data = data; }
+        this.openBracketToken = openBracketToken,
+        this.expression = expression,
+        this.closeBracketToken = closeBracketToken,
+        openBracketToken.parent = this,
+        expression.parent = this,
+        closeBracketToken.parent = this;
+    };
+    ComputedPropertyNameSyntax.prototype.kind = SyntaxKind.ComputedPropertyName;
+    ComputedPropertyNameSyntax.prototype.childCount = 3;
+    ComputedPropertyNameSyntax.prototype.childAt = function(index: number): ISyntaxElement {
+        switch (index) {
+            case 0: return this.openBracketToken;
+            case 1: return this.expression;
+            case 2: return this.closeBracketToken;
+        }
+    }
+
     export var ExternalModuleReferenceSyntax: ExternalModuleReferenceConstructor = <any>function(data: number, requireKeyword: ISyntaxToken, openParenToken: ISyntaxToken, stringLiteral: ISyntaxToken, closeParenToken: ISyntaxToken) {
         if (data) { this.__data = data; }
         this.requireKeyword = requireKeyword,
