@@ -1,5 +1,4 @@
 /// <reference path="core.ts"/>
-/// <reference path="scanner.ts"/>
 
 module ts {
 

@@ -409,7 +409,7 @@ module TypeScript {
         }
     }
 
-    export var MemberFunctionDeclarationSyntax: MemberFunctionDeclarationConstructor = <any>function(data: number, modifiers: ISyntaxToken[], propertyName: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax, semicolonToken: ISyntaxToken) {
+    export var MemberFunctionDeclarationSyntax: MemberFunctionDeclarationConstructor = <any>function(data: number, modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax, semicolonToken: ISyntaxToken) {
         if (data) { this.__data = data; }
         this.modifiers = modifiers,
         this.propertyName = propertyName,
@@ -497,7 +497,7 @@ module TypeScript {
         }
     }
 
-    export var GetAccessorSyntax: GetAccessorConstructor = <any>function(data: number, modifiers: ISyntaxToken[], getKeyword: ISyntaxToken, propertyName: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax) {
+    export var GetAccessorSyntax: GetAccessorConstructor = <any>function(data: number, modifiers: ISyntaxToken[], getKeyword: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax) {
         if (data) { this.__data = data; }
         this.modifiers = modifiers,
         this.getKeyword = getKeyword,
@@ -522,7 +522,7 @@ module TypeScript {
         }
     }
 
-    export var SetAccessorSyntax: SetAccessorConstructor = <any>function(data: number, modifiers: ISyntaxToken[], setKeyword: ISyntaxToken, propertyName: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax) {
+    export var SetAccessorSyntax: SetAccessorConstructor = <any>function(data: number, modifiers: ISyntaxToken[], setKeyword: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax) {
         if (data) { this.__data = data; }
         this.modifiers = modifiers,
         this.setKeyword = setKeyword,
@@ -547,7 +547,7 @@ module TypeScript {
         }
     }
 
-    export var PropertySignatureSyntax: PropertySignatureConstructor = <any>function(data: number, propertyName: ISyntaxToken, questionToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax) {
+    export var PropertySignatureSyntax: PropertySignatureConstructor = <any>function(data: number, propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax) {
         if (data) { this.__data = data; }
         this.propertyName = propertyName,
         this.questionToken = questionToken,
@@ -623,7 +623,7 @@ module TypeScript {
         }
     }
 
-    export var MethodSignatureSyntax: MethodSignatureConstructor = <any>function(data: number, propertyName: ISyntaxToken, questionToken: ISyntaxToken, callSignature: CallSignatureSyntax) {
+    export var MethodSignatureSyntax: MethodSignatureConstructor = <any>function(data: number, propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken, callSignature: CallSignatureSyntax) {
         if (data) { this.__data = data; }
         this.propertyName = propertyName,
         this.questionToken = questionToken,
@@ -1458,7 +1458,7 @@ module TypeScript {
         }
     }
 
-    export var VariableDeclaratorSyntax: VariableDeclaratorConstructor = <any>function(data: number, propertyName: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, equalsValueClause: EqualsValueClauseSyntax) {
+    export var VariableDeclaratorSyntax: VariableDeclaratorConstructor = <any>function(data: number, propertyName: IPropertyNameSyntax, typeAnnotation: TypeAnnotationSyntax, equalsValueClause: EqualsValueClauseSyntax) {
         if (data) { this.__data = data; }
         this.propertyName = propertyName,
         this.typeAnnotation = typeAnnotation,
@@ -1737,7 +1737,7 @@ module TypeScript {
         }
     }
 
-    export var SimplePropertyAssignmentSyntax: SimplePropertyAssignmentConstructor = <any>function(data: number, propertyName: ISyntaxToken, colonToken: ISyntaxToken, expression: IExpressionSyntax) {
+    export var SimplePropertyAssignmentSyntax: SimplePropertyAssignmentConstructor = <any>function(data: number, propertyName: IPropertyNameSyntax, colonToken: ISyntaxToken, expression: IExpressionSyntax) {
         if (data) { this.__data = data; }
         this.propertyName = propertyName,
         this.colonToken = colonToken,
@@ -1756,7 +1756,7 @@ module TypeScript {
         }
     }
 
-    export var FunctionPropertyAssignmentSyntax: FunctionPropertyAssignmentConstructor = <any>function(data: number, propertyName: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax) {
+    export var FunctionPropertyAssignmentSyntax: FunctionPropertyAssignmentConstructor = <any>function(data: number, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax) {
         if (data) { this.__data = data; }
         this.propertyName = propertyName,
         this.callSignature = callSignature,
@@ -1803,7 +1803,7 @@ module TypeScript {
         }
     }
 
-    export var EnumElementSyntax: EnumElementConstructor = <any>function(data: number, propertyName: ISyntaxToken, equalsValueClause: EqualsValueClauseSyntax) {
+    export var EnumElementSyntax: EnumElementConstructor = <any>function(data: number, propertyName: IPropertyNameSyntax, equalsValueClause: EqualsValueClauseSyntax) {
         if (data) { this.__data = data; }
         this.propertyName = propertyName,
         this.equalsValueClause = equalsValueClause,

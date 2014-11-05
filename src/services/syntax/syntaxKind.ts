@@ -261,8 +261,6 @@ module TypeScript {
 
         // Property Assignment
         SimplePropertyAssignment,
-        // GetAccessorPropertyAssignment,
-        // SetAccessorPropertyAssignment,
         FunctionPropertyAssignment,
 
         // Misc.

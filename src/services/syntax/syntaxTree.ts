@@ -624,7 +624,7 @@ module TypeScript {
 
         public visitGetAccessor(node: GetAccessorSyntax): void {
             if (this.checkForAccessorDeclarationInAmbientContext(node) ||
-                this.checkEcmaScriptVersionIsAtLeast(node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
+                this.checkEcmaScriptVersionIsAtLeast(node.getKeyword, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
                 this.checkForDisallowedModifiers(node.modifiers) ||
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
@@ -700,7 +700,7 @@ module TypeScript {
 
         public visitSetAccessor(node: SetAccessorSyntax): void {
             if (this.checkForAccessorDeclarationInAmbientContext(node) ||
-                this.checkEcmaScriptVersionIsAtLeast(node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
+                this.checkEcmaScriptVersionIsAtLeast(node.setKeyword, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
                 this.checkForDisallowedModifiers(node.modifiers) ||
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
@@ -1417,9 +1417,9 @@ module TypeScript {
             super.visitVariableDeclarator(node);
         }
 
-        private checkForTemplatePropertyName(token: ISyntaxToken): boolean {
-            if (token.kind === SyntaxKind.NoSubstitutionTemplateToken) {
-                this.pushDiagnostic(token, DiagnosticCode.Template_literal_cannot_be_used_as_an_element_name);
+        private checkForTemplatePropertyName(propertyName: IPropertyNameSyntax): boolean {
+            if (propertyName.kind === SyntaxKind.NoSubstitutionTemplateToken) {
+                this.pushDiagnostic(propertyName, DiagnosticCode.Template_literal_cannot_be_used_as_an_element_name);
                 return true;
             }
 
@@ -1428,7 +1428,8 @@ module TypeScript {
 
         private checkVariableDeclaratorIdentifier(node: VariableDeclaratorSyntax): boolean {
             if (node.parent.kind !== SyntaxKind.MemberVariableDeclaration) {
-                if (this.checkForDisallowedEvalOrArguments(node, node.propertyName)) {
+                Debug.assert(isToken(node.propertyName), "A normal variable declarator must always have a token for a name.");
+                if (this.checkForDisallowedEvalOrArguments(node, <ISyntaxToken>node.propertyName)) {
                     return true;
                 }
             }
