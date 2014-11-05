@@ -82,7 +82,7 @@ var harnessSources = [
 ].map(function (f) {
     return path.join(harnessDirectory, f);
 }).concat([
-	"services/colorization.ts",
+    "services/colorization.ts",
     "services/documentRegistry.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
@@ -145,7 +145,7 @@ var compilerFilename = "tsc.js";
     * @param useBuiltCompiler: true to use the built compiler, false to use the LKG
     * @param noOutFile: true to compile without using --out
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, keepOutput) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "-removeComments --module commonjs -noImplicitAny ";
@@ -180,7 +180,9 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
             complete();
         });
         ex.addListener("error", function() {
-            fs.unlinkSync(outFile);
+            if (!keepOutput) {
+                fs.unlinkSync(outFile);
+            }
             console.log("Compilation of " + outFile + " unsuccessful");
         });
         ex.run();    
@@ -267,12 +269,17 @@ task("release", function() {
 // Set the default task to "local"
 task("default", ["local"]);
 
-
 // Cleans the built directory
 desc("Cleans the compiler output, declare files, and tests");
 task("clean", function() {
     jake.rmRf(builtDirectory);
 });
+
+var analyzerFile = path.join(builtLocalDirectory, "analyzer.js")
+compileFile(analyzerFile, ["src/services/compiler/precompile.ts", "src/services/analyzer.ts"], [builtLocalDirectory].concat(servicesSources), [], true, false, true);
+
+desc("Builds analyzer");
+task("analyzer", [analyzerFile]);
 
 // generate declarations for compiler and services
 desc("Generate declarations for compiler and services");
@@ -489,6 +496,7 @@ task('diff-rwc', function () {
 
 desc("Builds the test sources and automation in debug mode");
 task("tests-debug", ["setDebugMode", "tests"]);
+
 
 
 // Makes the test results the new baseline
