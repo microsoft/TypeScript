@@ -1,4 +1,4 @@
-tests/cases/compiler/numberToString.ts(2,12): error TS2323: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/numberToString.ts(2,12): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/numberToString.ts(9,4): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
@@ -6,7 +6,7 @@ tests/cases/compiler/numberToString.ts(9,4): error TS2345: Argument of type 'num
     function f1(n:number):string {
         return n; // error return type mismatch
                ~
-!!! error TS2323: Type 'number' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     }
     
     function f2(s:string):void {

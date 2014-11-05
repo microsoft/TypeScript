@@ -1,4 +1,4 @@
-tests/cases/compiler/extendGenericArray2.ts(8,5): error TS2323: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/extendGenericArray2.ts(8,5): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/extendGenericArray2.ts (1 errors) ====
@@ -11,4 +11,4 @@ tests/cases/compiler/extendGenericArray2.ts(8,5): error TS2323: Type 'string' is
     var arr: string[] = [];
     var y: number = arr.x;
         ~
-!!! error TS2323: Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.

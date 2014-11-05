@@ -1,4 +1,4 @@
-tests/cases/compiler/deleteOperator1.ts(4,5): error TS2323: Type 'boolean' is not assignable to type 'number'.
+tests/cases/compiler/deleteOperator1.ts(4,5): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/deleteOperator1.ts (1 errors) ====
@@ -7,4 +7,4 @@ tests/cases/compiler/deleteOperator1.ts(4,5): error TS2323: Type 'boolean' is no
     var y: any = delete a;
     var z: number = delete a;
         ~
-!!! error TS2323: Type 'boolean' is not assignable to type 'number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
