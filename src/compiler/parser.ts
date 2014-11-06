@@ -3572,7 +3572,7 @@ module ts {
             // A common error is to try to declare an accessor in an ambient class.
             if (inAmbientContext && canParseSemicolon()) {
                 parseSemicolon();
-                node.body = createMissingNode();
+                node.body = <Block>createMissingNode();
             }
             else {
                 node.body = parseBody(/* ignoreMissingOpenBrace */ false);

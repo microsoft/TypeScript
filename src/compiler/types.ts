@@ -336,13 +336,20 @@ module ts {
 
     export interface FunctionDeclaration extends FunctionLike {
         name: Identifier;
+        body?: Block;
     }
 
-    export interface MethodDeclaration extends FunctionLike { }
+    export interface MethodDeclaration extends FunctionLike {
+        body?: Block;
+    }
 
-    export interface ConstructorDeclaration extends FunctionLike { }
+    export interface ConstructorDeclaration extends FunctionLike {
+        body?: Block;
+    }
 
-    export interface AccessorDeclaration extends FunctionLike { }
+    export interface AccessorDeclaration extends FunctionLike {
+        body?: Block;
+    }
 
     export interface TypeNode extends Node { }
 
