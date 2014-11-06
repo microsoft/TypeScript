@@ -12,8 +12,8 @@
 /// <reference path='signatureHelp.ts' />
 /// <reference path='utilities.ts' />
 /// <reference path='formatting\formatting.ts' />
-/// <reference path='formatting\smartIndenter.ts' />
-/// <reference path='formatting\format.ts' />
+/// <reference path='smartIndenter.ts' />
+/// <reference path='format.ts' />
 
 /// <reference path='core\references.ts' />
 /// <reference path='resources\references.ts' />

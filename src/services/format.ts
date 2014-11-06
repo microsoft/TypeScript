@@ -1,8 +1,7 @@
-///<reference path='..\services.ts' />
-///<reference path='stringUtilities.ts' />
-///<reference path='lineMapUtilities.ts' />
-///<reference path='formattingScanner.ts' />
-///<reference path='new\rulesProvider.ts' />
+///<reference path='services.ts' />
+///<reference path='format\indentation.ts' />
+///<reference path='format\formattingScanner.ts' />
+///<reference path='format\rulesProvider.ts' />
 
 module ts.formatting {
 
@@ -25,10 +24,10 @@ module ts.formatting {
         getEffectiveCommentIndentation(commentLine: number): number;
         getDelta(): number;
         getIndentation(): number;
+        setDelta(delta: number): number;
         getCommentIndentation(): number;
         increaseCommentIndentation(delta: number): void;
         recomputeIndentation(lineAddedByFormatting: boolean): void;
-        setDelta(delta: number): number;
     }
 
     export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[] {

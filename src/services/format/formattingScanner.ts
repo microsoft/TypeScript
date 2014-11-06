@@ -1,3 +1,5 @@
+/// <reference path="..\..\compiler\scanner.ts"/>
+
 module ts.formatting {
     var scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false);
 
