@@ -48,10 +48,10 @@
             {
                 "kind": "TryStatement",
                 "fullStart": 0,
-                "fullEnd": 410,
+                "fullEnd": 405,
                 "start": 371,
                 "end": 404,
-                "fullWidth": 410,
+                "fullWidth": 405,
                 "width": 33,
                 "isIncrementallyUnusable": true,
                 "tryKeyword": {
@@ -364,12 +364,11 @@
                 "catchClause": {
                     "kind": "CatchClause",
                     "fullStart": 393,
-                    "fullEnd": 410,
+                    "fullEnd": 405,
                     "start": 393,
                     "end": 404,
-                    "fullWidth": 17,
+                    "fullWidth": 12,
                     "width": 11,
-                    "isIncrementallyUnusable": true,
                     "catchKeyword": {
                         "kind": "CatchKeyword",
                         "fullStart": 393,
@@ -421,12 +420,11 @@
                     "block": {
                         "kind": "Block",
                         "fullStart": 402,
-                        "fullEnd": 410,
+                        "fullEnd": 405,
                         "start": 402,
                         "end": 404,
-                        "fullWidth": 8,
+                        "fullWidth": 3,
                         "width": 2,
-                        "isIncrementallyUnusable": true,
                         "openBraceToken": {
                             "kind": "OpenBraceToken",
                             "fullStart": 402,
@@ -443,38 +441,22 @@
                         "closeBraceToken": {
                             "kind": "CloseBraceToken",
                             "fullStart": 403,
-                            "fullEnd": 410,
+                            "fullEnd": 405,
                             "start": 403,
                             "end": 404,
-                            "fullWidth": 7,
+                            "fullWidth": 2,
                             "width": 1,
                             "text": "}",
                             "value": "}",
                             "valueText": "}",
                             "hasTrailingTrivia": true,
                             "hasTrailingNewLine": true,
-                            "hasTrailingSkippedText": true,
                             "trailingTrivia": [
                                 {
                                     "kind": "NewLineTrivia",
                                     "fullStart": 404,
                                     "fullEnd": 405,
                                     "text": "\n"
-                                },
-                                {
-                                    "kind": "SkippedTokenTrivia",
-                                    "skippedToken": {
-                                        "kind": "CatchKeyword",
-                                        "fullStart": 405,
-                                        "fullEnd": 410,
-                                        "start": 405,
-                                        "end": 410,
-                                        "fullWidth": 5,
-                                        "width": 5,
-                                        "text": "catch",
-                                        "value": "catch",
-                                        "valueText": "catch"
-                                    }
                                 }
                             ]
                         }
@@ -483,32 +465,52 @@
             },
             {
                 "kind": "ExpressionStatement",
-                "fullStart": 410,
+                "fullStart": 405,
                 "fullEnd": 414,
                 "start": 410,
                 "end": 414,
-                "fullWidth": 4,
+                "fullWidth": 9,
                 "width": 4,
                 "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "ParenthesizedExpression",
-                    "fullStart": 410,
+                    "fullStart": 405,
                     "fullEnd": 414,
                     "start": 410,
                     "end": 414,
-                    "fullWidth": 4,
+                    "fullWidth": 9,
                     "width": 4,
+                    "isIncrementallyUnusable": true,
                     "openParenToken": {
                         "kind": "OpenParenToken",
-                        "fullStart": 410,
+                        "fullStart": 405,
                         "fullEnd": 411,
                         "start": 410,
                         "end": 411,
-                        "fullWidth": 1,
+                        "fullWidth": 6,
                         "width": 1,
                         "text": "(",
                         "value": "(",
-                        "valueText": "("
+                        "valueText": "(",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingSkippedText": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "SkippedTokenTrivia",
+                                "skippedToken": {
+                                    "kind": "CatchKeyword",
+                                    "fullStart": 405,
+                                    "fullEnd": 410,
+                                    "start": 405,
+                                    "end": 410,
+                                    "fullWidth": 5,
+                                    "width": 5,
+                                    "text": "catch",
+                                    "value": "catch",
+                                    "valueText": "catch"
+                                }
+                            }
+                        ]
                     },
                     "expression": {
                         "kind": "IdentifierName",

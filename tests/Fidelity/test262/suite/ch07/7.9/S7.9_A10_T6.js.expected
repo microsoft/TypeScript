@@ -24,12 +24,11 @@
             {
                 "kind": "Block",
                 "fullStart": 0,
-                "fullEnd": 312,
+                "fullEnd": 309,
                 "start": 306,
                 "end": 308,
-                "fullWidth": 312,
+                "fullWidth": 309,
                 "width": 2,
-                "isIncrementallyUnusable": true,
                 "openBraceToken": {
                     "kind": "OpenBraceToken",
                     "fullStart": 0,
@@ -111,24 +110,51 @@
                 "closeBraceToken": {
                     "kind": "CloseBraceToken",
                     "fullStart": 307,
-                    "fullEnd": 312,
+                    "fullEnd": 309,
                     "start": 307,
                     "end": 308,
-                    "fullWidth": 5,
+                    "fullWidth": 2,
                     "width": 1,
                     "text": "}",
                     "value": "}",
                     "valueText": "}",
                     "hasTrailingTrivia": true,
                     "hasTrailingNewLine": true,
-                    "hasTrailingSkippedText": true,
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",
                             "fullStart": 308,
                             "fullEnd": 309,
                             "text": "\n"
-                        },
+                        }
+                    ]
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 309,
+                "fullEnd": 314,
+                "start": 312,
+                "end": 313,
+                "fullWidth": 5,
+                "width": 1,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "NumericLiteral",
+                    "fullStart": 309,
+                    "fullEnd": 314,
+                    "start": 312,
+                    "end": 313,
+                    "fullWidth": 5,
+                    "width": 1,
+                    "text": "1",
+                    "value": 1,
+                    "valueText": "1",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "leadingTrivia": [
                         {
                             "kind": "WhitespaceTrivia",
                             "fullStart": 309,
@@ -156,30 +182,7 @@
                             "fullEnd": 312,
                             "text": " "
                         }
-                    ]
-                }
-            },
-            {
-                "kind": "ExpressionStatement",
-                "fullStart": 312,
-                "fullEnd": 314,
-                "start": 312,
-                "end": 313,
-                "fullWidth": 2,
-                "width": 1,
-                "expression": {
-                    "kind": "NumericLiteral",
-                    "fullStart": 312,
-                    "fullEnd": 314,
-                    "start": 312,
-                    "end": 313,
-                    "fullWidth": 2,
-                    "width": 1,
-                    "text": "1",
-                    "value": 1,
-                    "valueText": "1",
-                    "hasTrailingTrivia": true,
-                    "hasTrailingNewLine": true,
+                    ],
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",

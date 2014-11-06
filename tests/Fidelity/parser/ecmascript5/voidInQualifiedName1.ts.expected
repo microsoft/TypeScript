@@ -65,12 +65,11 @@
                         {
                             "kind": "VariableDeclarator",
                             "fullStart": 4,
-                            "fullEnd": 13,
+                            "fullEnd": 12,
                             "start": 4,
                             "end": 12,
-                            "fullWidth": 9,
+                            "fullWidth": 8,
                             "width": 8,
-                            "isIncrementallyUnusable": true,
                             "propertyName": {
                                 "kind": "IdentifierName",
                                 "fullStart": 4,
@@ -95,12 +94,11 @@
                             "typeAnnotation": {
                                 "kind": "TypeAnnotation",
                                 "fullStart": 6,
-                                "fullEnd": 13,
+                                "fullEnd": 12,
                                 "start": 6,
                                 "end": 12,
-                                "fullWidth": 7,
+                                "fullWidth": 6,
                                 "width": 6,
-                                "isIncrementallyUnusable": true,
                                 "colonToken": {
                                     "kind": "ColonToken",
                                     "fullStart": 6,
@@ -125,65 +123,66 @@
                                 "type": {
                                     "kind": "VoidKeyword",
                                     "fullStart": 8,
-                                    "fullEnd": 13,
+                                    "fullEnd": 12,
                                     "start": 8,
                                     "end": 12,
-                                    "fullWidth": 5,
+                                    "fullWidth": 4,
                                     "width": 4,
                                     "text": "void",
                                     "value": "void",
-                                    "valueText": "void",
-                                    "hasTrailingTrivia": true,
-                                    "hasTrailingSkippedText": true,
-                                    "trailingTrivia": [
-                                        {
-                                            "kind": "SkippedTokenTrivia",
-                                            "skippedToken": {
-                                                "kind": "DotToken",
-                                                "fullStart": 12,
-                                                "fullEnd": 13,
-                                                "start": 12,
-                                                "end": 13,
-                                                "fullWidth": 1,
-                                                "width": 1,
-                                                "text": ".",
-                                                "value": ".",
-                                                "valueText": "."
-                                            }
-                                        }
-                                    ]
+                                    "valueText": "void"
                                 }
                             }
                         },
                         {
                             "kind": "CommaToken",
-                            "fullStart": 13,
-                            "fullEnd": 13,
-                            "start": 13,
-                            "end": 13,
+                            "fullStart": 12,
+                            "fullEnd": 12,
+                            "start": 12,
+                            "end": 12,
                             "fullWidth": 0,
                             "width": 0,
                             "text": ""
                         },
                         {
                             "kind": "VariableDeclarator",
-                            "fullStart": 13,
+                            "fullStart": 12,
                             "fullEnd": 14,
                             "start": 13,
                             "end": 14,
-                            "fullWidth": 1,
+                            "fullWidth": 2,
                             "width": 1,
+                            "isIncrementallyUnusable": true,
                             "propertyName": {
                                 "kind": "IdentifierName",
-                                "fullStart": 13,
+                                "fullStart": 12,
                                 "fullEnd": 14,
                                 "start": 13,
                                 "end": 14,
-                                "fullWidth": 1,
+                                "fullWidth": 2,
                                 "width": 1,
                                 "text": "x",
                                 "value": "x",
-                                "valueText": "x"
+                                "valueText": "x",
+                                "hasLeadingTrivia": true,
+                                "hasLeadingSkippedText": true,
+                                "leadingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "DotToken",
+                                            "fullStart": 12,
+                                            "fullEnd": 13,
+                                            "start": 12,
+                                            "end": 13,
+                                            "fullWidth": 1,
+                                            "width": 1,
+                                            "text": ".",
+                                            "value": ".",
+                                            "valueText": "."
+                                        }
+                                    }
+                                ]
                             }
                         }
                     ]

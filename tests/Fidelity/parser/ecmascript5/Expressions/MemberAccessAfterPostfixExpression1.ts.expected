@@ -24,21 +24,20 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 0,
-                "fullEnd": 4,
+                "fullEnd": 3,
                 "start": 0,
                 "end": 3,
-                "fullWidth": 4,
+                "fullWidth": 3,
                 "width": 3,
                 "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "PostfixUnaryExpression",
                     "fullStart": 0,
-                    "fullEnd": 4,
+                    "fullEnd": 3,
                     "start": 0,
                     "end": 3,
-                    "fullWidth": 4,
+                    "fullWidth": 3,
                     "width": 3,
-                    "isIncrementallyUnusable": true,
                     "operand": {
                         "kind": "IdentifierName",
                         "fullStart": 0,
@@ -54,17 +53,59 @@
                     "operatorToken": {
                         "kind": "MinusMinusToken",
                         "fullStart": 1,
-                        "fullEnd": 4,
+                        "fullEnd": 3,
                         "start": 1,
                         "end": 3,
-                        "fullWidth": 3,
+                        "fullWidth": 2,
                         "width": 2,
                         "text": "--",
                         "value": "--",
-                        "valueText": "--",
-                        "hasTrailingTrivia": true,
-                        "hasTrailingSkippedText": true,
-                        "trailingTrivia": [
+                        "valueText": "--"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 3,
+                    "fullEnd": 3,
+                    "start": 3,
+                    "end": 3,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "text": ""
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 3,
+                "fullEnd": 14,
+                "start": 4,
+                "end": 14,
+                "fullWidth": 11,
+                "width": 10,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "InvocationExpression",
+                    "fullStart": 3,
+                    "fullEnd": 14,
+                    "start": 4,
+                    "end": 14,
+                    "fullWidth": 11,
+                    "width": 10,
+                    "isIncrementallyUnusable": true,
+                    "expression": {
+                        "kind": "IdentifierName",
+                        "fullStart": 3,
+                        "fullEnd": 12,
+                        "start": 4,
+                        "end": 12,
+                        "fullWidth": 9,
+                        "width": 8,
+                        "text": "toString",
+                        "value": "toString",
+                        "valueText": "toString",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingSkippedText": true,
+                        "leadingTrivia": [
                             {
                                 "kind": "SkippedTokenTrivia",
                                 "skippedToken": {
@@ -81,46 +122,6 @@
                                 }
                             }
                         ]
-                    }
-                },
-                "semicolonToken": {
-                    "kind": "SemicolonToken",
-                    "fullStart": 4,
-                    "fullEnd": 4,
-                    "start": 4,
-                    "end": 4,
-                    "fullWidth": 0,
-                    "width": 0,
-                    "text": ""
-                }
-            },
-            {
-                "kind": "ExpressionStatement",
-                "fullStart": 4,
-                "fullEnd": 14,
-                "start": 4,
-                "end": 14,
-                "fullWidth": 10,
-                "width": 10,
-                "expression": {
-                    "kind": "InvocationExpression",
-                    "fullStart": 4,
-                    "fullEnd": 14,
-                    "start": 4,
-                    "end": 14,
-                    "fullWidth": 10,
-                    "width": 10,
-                    "expression": {
-                        "kind": "IdentifierName",
-                        "fullStart": 4,
-                        "fullEnd": 12,
-                        "start": 4,
-                        "end": 12,
-                        "fullWidth": 8,
-                        "width": 8,
-                        "text": "toString",
-                        "value": "toString",
-                        "valueText": "toString"
                     },
                     "argumentList": {
                         "kind": "ArgumentList",

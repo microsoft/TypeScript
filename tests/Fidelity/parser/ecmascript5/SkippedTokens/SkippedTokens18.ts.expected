@@ -40,19 +40,19 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 0,
-                "fullEnd": 7,
+                "fullEnd": 6,
                 "start": 0,
                 "end": 5,
-                "fullWidth": 7,
+                "fullWidth": 6,
                 "width": 5,
                 "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "InvocationExpression",
                     "fullStart": 0,
-                    "fullEnd": 7,
+                    "fullEnd": 6,
                     "start": 0,
                     "end": 5,
-                    "fullWidth": 7,
+                    "fullWidth": 6,
                     "width": 5,
                     "isIncrementallyUnusable": true,
                     "expression": {
@@ -70,10 +70,10 @@
                     "argumentList": {
                         "kind": "ArgumentList",
                         "fullStart": 3,
-                        "fullEnd": 7,
+                        "fullEnd": 6,
                         "start": 3,
                         "end": 5,
-                        "fullWidth": 4,
+                        "fullWidth": 3,
                         "width": 2,
                         "isIncrementallyUnusable": true,
                         "openParenToken": {
@@ -92,44 +92,30 @@
                             {
                                 "kind": "IdentifierName",
                                 "fullStart": 4,
-                                "fullEnd": 7,
+                                "fullEnd": 6,
                                 "start": 4,
                                 "end": 5,
-                                "fullWidth": 3,
+                                "fullWidth": 2,
                                 "width": 1,
                                 "text": "a",
                                 "value": "a",
                                 "valueText": "a",
                                 "hasTrailingTrivia": true,
-                                "hasTrailingSkippedText": true,
                                 "trailingTrivia": [
                                     {
                                         "kind": "WhitespaceTrivia",
                                         "fullStart": 5,
                                         "fullEnd": 6,
                                         "text": " "
-                                    },
-                                    {
-                                        "kind": "SkippedTokenTrivia",
-                                        "skippedToken": {
-                                            "kind": "ErrorToken",
-                                            "fullStart": 6,
-                                            "fullEnd": 7,
-                                            "start": 6,
-                                            "end": 7,
-                                            "fullWidth": 1,
-                                            "width": 1,
-                                            "text": "\\"
-                                        }
                                     }
                                 ]
                             },
                             {
                                 "kind": "CommaToken",
-                                "fullStart": 7,
-                                "fullEnd": 7,
-                                "start": 7,
-                                "end": 7,
+                                "fullStart": 6,
+                                "fullEnd": 6,
+                                "start": 6,
+                                "end": 6,
                                 "fullWidth": 0,
                                 "width": 0,
                                 "text": ""
@@ -137,10 +123,10 @@
                         ],
                         "closeParenToken": {
                             "kind": "CloseParenToken",
-                            "fullStart": 7,
-                            "fullEnd": 7,
-                            "start": 7,
-                            "end": 7,
+                            "fullStart": 6,
+                            "fullEnd": 6,
+                            "start": 6,
+                            "end": 6,
                             "fullWidth": 0,
                             "width": 0,
                             "text": ""
@@ -151,13 +137,30 @@
         ],
         "endOfFileToken": {
             "kind": "EndOfFileToken",
-            "fullStart": 7,
+            "fullStart": 6,
             "fullEnd": 7,
             "start": 7,
             "end": 7,
-            "fullWidth": 0,
+            "fullWidth": 1,
             "width": 0,
-            "text": ""
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 6,
+                        "fullEnd": 7,
+                        "start": 6,
+                        "end": 7,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
         }
     },
     "lineMap": {

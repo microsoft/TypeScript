@@ -77,73 +77,77 @@
                     "openBraceToken": {
                         "kind": "OpenBraceToken",
                         "fullStart": 13,
-                        "fullEnd": 27,
+                        "fullEnd": 16,
                         "start": 13,
                         "end": 14,
-                        "fullWidth": 14,
+                        "fullWidth": 3,
                         "width": 1,
                         "text": "{",
                         "value": "{",
                         "valueText": "{",
                         "hasTrailingTrivia": true,
                         "hasTrailingNewLine": true,
-                        "hasTrailingSkippedText": true,
                         "trailingTrivia": [
                             {
                                 "kind": "NewLineTrivia",
                                 "fullStart": 14,
                                 "fullEnd": 16,
                                 "text": "\r\n"
-                            },
-                            {
-                                "kind": "WhitespaceTrivia",
-                                "fullStart": 16,
-                                "fullEnd": 20,
-                                "text": "    "
-                            },
-                            {
-                                "kind": "SkippedTokenTrivia",
-                                "skippedToken": {
-                                    "kind": "PublicKeyword",
-                                    "fullStart": 20,
-                                    "fullEnd": 26,
-                                    "start": 20,
-                                    "end": 26,
-                                    "fullWidth": 6,
-                                    "width": 6,
-                                    "text": "public",
-                                    "value": "public",
-                                    "valueText": "public"
-                                }
-                            },
-                            {
-                                "kind": "WhitespaceTrivia",
-                                "fullStart": 26,
-                                "fullEnd": 27,
-                                "text": " "
                             }
                         ]
                     },
                     "typeMembers": [
                         {
                             "kind": "PropertySignature",
-                            "fullStart": 27,
+                            "fullStart": 16,
                             "fullEnd": 30,
                             "start": 27,
                             "end": 30,
-                            "fullWidth": 3,
+                            "fullWidth": 14,
                             "width": 3,
+                            "isIncrementallyUnusable": true,
                             "propertyName": {
                                 "kind": "IdentifierName",
-                                "fullStart": 27,
+                                "fullStart": 16,
                                 "fullEnd": 30,
                                 "start": 27,
                                 "end": 30,
-                                "fullWidth": 3,
+                                "fullWidth": 14,
                                 "width": 3,
                                 "text": "biz",
                                 "value": "biz",
-                                "valueText": "biz"
+                                "valueText": "biz",
+                                "hasLeadingTrivia": true,
+                                "hasLeadingSkippedText": true,
+                                "leadingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "fullStart": 16,
+                                        "fullEnd": 20,
+                                        "text": "    "
+                                    },
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "PublicKeyword",
+                                            "fullStart": 20,
+                                            "fullEnd": 26,
+                                            "start": 20,
+                                            "end": 26,
+                                            "fullWidth": 6,
+                                            "width": 6,
+                                            "text": "public",
+                                            "value": "public",
+                                            "valueText": "public"
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "fullStart": 26,
+                                        "fullEnd": 27,
+                                        "text": " "
+                                    }
+                                ]
                             }
                         },
                         {

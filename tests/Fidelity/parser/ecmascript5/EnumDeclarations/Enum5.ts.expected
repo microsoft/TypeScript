@@ -253,26 +253,57 @@
                     {
                         "kind": "EnumElement",
                         "fullStart": 26,
-                        "fullEnd": 29,
+                        "fullEnd": 27,
                         "start": 26,
                         "end": 27,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "propertyName": {
+                            "kind": "IdentifierName",
+                            "fullStart": 26,
+                            "fullEnd": 27,
+                            "start": 26,
+                            "end": 27,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": "a",
+                            "value": "a",
+                            "valueText": "a"
+                        }
+                    },
+                    {
+                        "kind": "CommaToken",
+                        "fullStart": 27,
+                        "fullEnd": 27,
+                        "start": 27,
+                        "end": 27,
+                        "fullWidth": 0,
+                        "width": 0,
+                        "text": ""
+                    },
+                    {
+                        "kind": "EnumElement",
+                        "fullStart": 27,
+                        "fullEnd": 30,
+                        "start": 29,
+                        "end": 30,
                         "fullWidth": 3,
                         "width": 1,
                         "isIncrementallyUnusable": true,
                         "propertyName": {
-                            "kind": "IdentifierName",
-                            "fullStart": 26,
-                            "fullEnd": 29,
-                            "start": 26,
-                            "end": 27,
+                            "kind": "NumericLiteral",
+                            "fullStart": 27,
+                            "fullEnd": 30,
+                            "start": 29,
+                            "end": 30,
                             "fullWidth": 3,
                             "width": 1,
-                            "text": "a",
-                            "value": "a",
-                            "valueText": "a",
-                            "hasTrailingTrivia": true,
-                            "hasTrailingSkippedText": true,
-                            "trailingTrivia": [
+                            "text": "1",
+                            "value": 1,
+                            "valueText": "1",
+                            "hasLeadingTrivia": true,
+                            "hasLeadingSkippedText": true,
+                            "leadingTrivia": [
                                 {
                                     "kind": "SkippedTokenTrivia",
                                     "skippedToken": {
@@ -295,37 +326,6 @@
                                     "text": " "
                                 }
                             ]
-                        }
-                    },
-                    {
-                        "kind": "CommaToken",
-                        "fullStart": 29,
-                        "fullEnd": 29,
-                        "start": 29,
-                        "end": 29,
-                        "fullWidth": 0,
-                        "width": 0,
-                        "text": ""
-                    },
-                    {
-                        "kind": "EnumElement",
-                        "fullStart": 29,
-                        "fullEnd": 30,
-                        "start": 29,
-                        "end": 30,
-                        "fullWidth": 1,
-                        "width": 1,
-                        "propertyName": {
-                            "kind": "NumericLiteral",
-                            "fullStart": 29,
-                            "fullEnd": 30,
-                            "start": 29,
-                            "end": 30,
-                            "fullWidth": 1,
-                            "width": 1,
-                            "text": "1",
-                            "value": 1,
-                            "valueText": "1"
                         }
                     },
                     {
@@ -492,26 +492,57 @@
                     {
                         "kind": "EnumElement",
                         "fullStart": 48,
-                        "fullEnd": 51,
+                        "fullEnd": 49,
                         "start": 48,
                         "end": 49,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "propertyName": {
+                            "kind": "IdentifierName",
+                            "fullStart": 48,
+                            "fullEnd": 49,
+                            "start": 48,
+                            "end": 49,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": "b",
+                            "value": "b",
+                            "valueText": "b"
+                        }
+                    },
+                    {
+                        "kind": "CommaToken",
+                        "fullStart": 49,
+                        "fullEnd": 49,
+                        "start": 49,
+                        "end": 49,
+                        "fullWidth": 0,
+                        "width": 0,
+                        "text": ""
+                    },
+                    {
+                        "kind": "EnumElement",
+                        "fullStart": 49,
+                        "fullEnd": 52,
+                        "start": 51,
+                        "end": 52,
                         "fullWidth": 3,
                         "width": 1,
                         "isIncrementallyUnusable": true,
                         "propertyName": {
-                            "kind": "IdentifierName",
-                            "fullStart": 48,
-                            "fullEnd": 51,
-                            "start": 48,
-                            "end": 49,
+                            "kind": "NumericLiteral",
+                            "fullStart": 49,
+                            "fullEnd": 52,
+                            "start": 51,
+                            "end": 52,
                             "fullWidth": 3,
                             "width": 1,
-                            "text": "b",
-                            "value": "b",
-                            "valueText": "b",
-                            "hasTrailingTrivia": true,
-                            "hasTrailingSkippedText": true,
-                            "trailingTrivia": [
+                            "text": "1",
+                            "value": 1,
+                            "valueText": "1",
+                            "hasLeadingTrivia": true,
+                            "hasLeadingSkippedText": true,
+                            "leadingTrivia": [
                                 {
                                     "kind": "SkippedTokenTrivia",
                                     "skippedToken": {
@@ -534,37 +565,6 @@
                                     "text": " "
                                 }
                             ]
-                        }
-                    },
-                    {
-                        "kind": "CommaToken",
-                        "fullStart": 51,
-                        "fullEnd": 51,
-                        "start": 51,
-                        "end": 51,
-                        "fullWidth": 0,
-                        "width": 0,
-                        "text": ""
-                    },
-                    {
-                        "kind": "EnumElement",
-                        "fullStart": 51,
-                        "fullEnd": 52,
-                        "start": 51,
-                        "end": 52,
-                        "fullWidth": 1,
-                        "width": 1,
-                        "propertyName": {
-                            "kind": "NumericLiteral",
-                            "fullStart": 51,
-                            "fullEnd": 52,
-                            "start": 51,
-                            "end": 52,
-                            "fullWidth": 1,
-                            "width": 1,
-                            "text": "1",
-                            "value": 1,
-                            "valueText": "1"
                         }
                     },
                     {
@@ -633,26 +633,58 @@
                     {
                         "kind": "EnumElement",
                         "fullStart": 57,
-                        "fullEnd": 60,
+                        "fullEnd": 58,
                         "start": 57,
                         "end": 58,
-                        "fullWidth": 3,
+                        "fullWidth": 1,
                         "width": 1,
-                        "isIncrementallyUnusable": true,
                         "propertyName": {
                             "kind": "IdentifierName",
                             "fullStart": 57,
-                            "fullEnd": 60,
+                            "fullEnd": 58,
                             "start": 57,
                             "end": 58,
-                            "fullWidth": 3,
+                            "fullWidth": 1,
                             "width": 1,
                             "text": "d",
                             "value": "d",
-                            "valueText": "d",
+                            "valueText": "d"
+                        }
+                    },
+                    {
+                        "kind": "CommaToken",
+                        "fullStart": 58,
+                        "fullEnd": 58,
+                        "start": 58,
+                        "end": 58,
+                        "fullWidth": 0,
+                        "width": 0,
+                        "text": ""
+                    },
+                    {
+                        "kind": "EnumElement",
+                        "fullStart": 58,
+                        "fullEnd": 66,
+                        "start": 60,
+                        "end": 65,
+                        "fullWidth": 8,
+                        "width": 5,
+                        "isIncrementallyUnusable": true,
+                        "propertyName": {
+                            "kind": "NumericLiteral",
+                            "fullStart": 58,
+                            "fullEnd": 62,
+                            "start": 60,
+                            "end": 61,
+                            "fullWidth": 4,
+                            "width": 1,
+                            "text": "2",
+                            "value": 2,
+                            "valueText": "2",
+                            "hasLeadingTrivia": true,
+                            "hasLeadingSkippedText": true,
                             "hasTrailingTrivia": true,
-                            "hasTrailingSkippedText": true,
-                            "trailingTrivia": [
+                            "leadingTrivia": [
                                 {
                                     "kind": "SkippedTokenTrivia",
                                     "skippedToken": {
@@ -674,39 +706,7 @@
                                     "fullEnd": 60,
                                     "text": " "
                                 }
-                            ]
-                        }
-                    },
-                    {
-                        "kind": "CommaToken",
-                        "fullStart": 60,
-                        "fullEnd": 60,
-                        "start": 60,
-                        "end": 60,
-                        "fullWidth": 0,
-                        "width": 0,
-                        "text": ""
-                    },
-                    {
-                        "kind": "EnumElement",
-                        "fullStart": 60,
-                        "fullEnd": 66,
-                        "start": 60,
-                        "end": 65,
-                        "fullWidth": 6,
-                        "width": 5,
-                        "propertyName": {
-                            "kind": "NumericLiteral",
-                            "fullStart": 60,
-                            "fullEnd": 62,
-                            "start": 60,
-                            "end": 61,
-                            "fullWidth": 2,
-                            "width": 1,
-                            "text": "2",
-                            "value": 2,
-                            "valueText": "2",
-                            "hasTrailingTrivia": true,
+                            ],
                             "trailingTrivia": [
                                 {
                                     "kind": "WhitespaceTrivia",

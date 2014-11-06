@@ -24,19 +24,19 @@
             {
                 "kind": "BreakStatement",
                 "fullStart": 0,
-                "fullEnd": 323,
+                "fullEnd": 321,
                 "start": 315,
                 "end": 320,
-                "fullWidth": 323,
+                "fullWidth": 321,
                 "width": 5,
                 "isIncrementallyUnusable": true,
                 "breakKeyword": {
                     "kind": "BreakKeyword",
                     "fullStart": 0,
-                    "fullEnd": 323,
+                    "fullEnd": 321,
                     "start": 315,
                     "end": 320,
-                    "fullWidth": 323,
+                    "fullWidth": 321,
                     "width": 5,
                     "text": "break",
                     "value": "break",
@@ -45,7 +45,6 @@
                     "hasLeadingComment": true,
                     "hasLeadingNewLine": true,
                     "hasTrailingTrivia": true,
-                    "hasTrailingSkippedText": true,
                     "leadingTrivia": [
                         {
                             "kind": "SingleLineCommentTrivia",
@@ -102,7 +101,43 @@
                             "fullStart": 320,
                             "fullEnd": 321,
                             "text": " "
-                        },
+                        }
+                    ]
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 321,
+                    "fullEnd": 321,
+                    "start": 321,
+                    "end": 321,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "text": ""
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 321,
+                "fullEnd": 326,
+                "start": 323,
+                "end": 325,
+                "fullWidth": 5,
+                "width": 2,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "NumericLiteral",
+                    "fullStart": 321,
+                    "fullEnd": 324,
+                    "start": 323,
+                    "end": 324,
+                    "fullWidth": 3,
+                    "width": 1,
+                    "text": "1",
+                    "value": 1,
+                    "valueText": "1",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
+                    "leadingTrivia": [
                         {
                             "kind": "SkippedTokenTrivia",
                             "skippedToken": {
@@ -125,37 +160,6 @@
                             "text": " "
                         }
                     ]
-                },
-                "semicolonToken": {
-                    "kind": "SemicolonToken",
-                    "fullStart": 323,
-                    "fullEnd": 323,
-                    "start": 323,
-                    "end": 323,
-                    "fullWidth": 0,
-                    "width": 0,
-                    "text": ""
-                }
-            },
-            {
-                "kind": "ExpressionStatement",
-                "fullStart": 323,
-                "fullEnd": 326,
-                "start": 323,
-                "end": 325,
-                "fullWidth": 3,
-                "width": 2,
-                "expression": {
-                    "kind": "NumericLiteral",
-                    "fullStart": 323,
-                    "fullEnd": 324,
-                    "start": 323,
-                    "end": 324,
-                    "fullWidth": 1,
-                    "width": 1,
-                    "text": "1",
-                    "value": 1,
-                    "valueText": "1"
                 },
                 "semicolonToken": {
                     "kind": "SemicolonToken",

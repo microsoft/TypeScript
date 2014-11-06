@@ -119,12 +119,11 @@
             {
                 "kind": "VariableStatement",
                 "fullStart": 14,
-                "fullEnd": 48,
+                "fullEnd": 45,
                 "start": 16,
                 "end": 43,
-                "fullWidth": 34,
+                "fullWidth": 31,
                 "width": 27,
-                "isIncrementallyUnusable": true,
                 "modifiers": [],
                 "variableDeclaration": {
                     "kind": "VariableDeclaration",
@@ -242,43 +241,21 @@
                 "semicolonToken": {
                     "kind": "SemicolonToken",
                     "fullStart": 42,
-                    "fullEnd": 48,
+                    "fullEnd": 45,
                     "start": 42,
                     "end": 43,
-                    "fullWidth": 6,
+                    "fullWidth": 3,
                     "width": 1,
                     "text": ";",
                     "value": ";",
                     "valueText": ";",
                     "hasTrailingTrivia": true,
                     "hasTrailingNewLine": true,
-                    "hasTrailingSkippedText": true,
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",
                             "fullStart": 43,
                             "fullEnd": 45,
-                            "text": "\r\n"
-                        },
-                        {
-                            "kind": "SkippedTokenTrivia",
-                            "skippedToken": {
-                                "kind": "CloseBraceToken",
-                                "fullStart": 45,
-                                "fullEnd": 46,
-                                "start": 45,
-                                "end": 46,
-                                "fullWidth": 1,
-                                "width": 1,
-                                "text": "}",
-                                "value": "}",
-                                "valueText": "}"
-                            }
-                        },
-                        {
-                            "kind": "NewLineTrivia",
-                            "fullStart": 46,
-                            "fullEnd": 48,
                             "text": "\r\n"
                         }
                     ]
@@ -287,13 +264,39 @@
         ],
         "endOfFileToken": {
             "kind": "EndOfFileToken",
-            "fullStart": 48,
+            "fullStart": 45,
             "fullEnd": 48,
             "start": 48,
             "end": 48,
-            "fullWidth": 0,
+            "fullWidth": 3,
             "width": 0,
-            "text": ""
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingNewLine": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "CloseBraceToken",
+                        "fullStart": 45,
+                        "fullEnd": 46,
+                        "start": 45,
+                        "end": 46,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "}",
+                        "value": "}",
+                        "valueText": "}"
+                    }
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 46,
+                    "fullEnd": 48,
+                    "text": "\r\n"
+                }
+            ]
         }
     },
     "lineMap": {

@@ -21,19 +21,19 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 0,
-                "fullEnd": 8,
+                "fullEnd": 6,
                 "start": 0,
                 "end": 4,
-                "fullWidth": 8,
+                "fullWidth": 6,
                 "width": 4,
                 "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "BinaryExpression",
                     "fullStart": 0,
-                    "fullEnd": 8,
+                    "fullEnd": 6,
                     "start": 0,
                     "end": 4,
-                    "fullWidth": 8,
+                    "fullWidth": 6,
                     "width": 4,
                     "isIncrementallyUnusable": true,
                     "left": {
@@ -60,53 +60,31 @@
                     "operatorToken": {
                         "kind": "GreaterThanGreaterThanToken",
                         "fullStart": 2,
-                        "fullEnd": 8,
+                        "fullEnd": 6,
                         "start": 2,
                         "end": 4,
-                        "fullWidth": 6,
+                        "fullWidth": 4,
                         "width": 2,
                         "text": ">>",
                         "value": ">>",
                         "valueText": ">>",
                         "hasTrailingTrivia": true,
                         "hasTrailingNewLine": true,
-                        "hasTrailingSkippedText": true,
                         "trailingTrivia": [
                             {
                                 "kind": "NewLineTrivia",
                                 "fullStart": 4,
                                 "fullEnd": 6,
                                 "text": "\r\n"
-                            },
-                            {
-                                "kind": "SkippedTokenTrivia",
-                                "skippedToken": {
-                                    "kind": "EqualsToken",
-                                    "fullStart": 6,
-                                    "fullEnd": 7,
-                                    "start": 6,
-                                    "end": 7,
-                                    "fullWidth": 1,
-                                    "width": 1,
-                                    "text": "=",
-                                    "value": "=",
-                                    "valueText": "="
-                                }
-                            },
-                            {
-                                "kind": "WhitespaceTrivia",
-                                "fullStart": 7,
-                                "fullEnd": 8,
-                                "text": " "
                             }
                         ]
                     },
                     "right": {
                         "kind": "IdentifierName",
-                        "fullStart": 8,
-                        "fullEnd": 8,
-                        "start": 8,
-                        "end": 8,
+                        "fullStart": 6,
+                        "fullEnd": 6,
+                        "start": 6,
+                        "end": 6,
                         "fullWidth": 0,
                         "width": 0,
                         "text": ""
@@ -115,23 +93,49 @@
             },
             {
                 "kind": "ExpressionStatement",
-                "fullStart": 8,
+                "fullStart": 6,
                 "fullEnd": 10,
                 "start": 8,
                 "end": 10,
-                "fullWidth": 2,
+                "fullWidth": 4,
                 "width": 2,
+                "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "NumericLiteral",
-                    "fullStart": 8,
+                    "fullStart": 6,
                     "fullEnd": 9,
                     "start": 8,
                     "end": 9,
-                    "fullWidth": 1,
+                    "fullWidth": 3,
                     "width": 1,
                     "text": "2",
                     "value": 2,
-                    "valueText": "2"
+                    "valueText": "2",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "EqualsToken",
+                                "fullStart": 6,
+                                "fullEnd": 7,
+                                "start": 6,
+                                "end": 7,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": "=",
+                                "value": "=",
+                                "valueText": "="
+                            }
+                        },
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 7,
+                            "fullEnd": 8,
+                            "text": " "
+                        }
+                    ]
                 },
                 "semicolonToken": {
                     "kind": "SemicolonToken",

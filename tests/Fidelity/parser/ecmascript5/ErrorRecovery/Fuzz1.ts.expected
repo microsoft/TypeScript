@@ -155,26 +155,25 @@
                     {
                         "kind": "ExpressionStatement",
                         "fullStart": 11,
-                        "fullEnd": 22,
+                        "fullEnd": 15,
                         "start": 13,
                         "end": 14,
-                        "fullWidth": 11,
+                        "fullWidth": 4,
                         "width": 1,
                         "isIncrementallyUnusable": true,
                         "expression": {
                             "kind": "IdentifierName",
                             "fullStart": 11,
-                            "fullEnd": 22,
+                            "fullEnd": 15,
                             "start": 13,
                             "end": 14,
-                            "fullWidth": 11,
+                            "fullWidth": 4,
                             "width": 1,
                             "text": "_",
                             "value": "_",
                             "valueText": "_",
                             "hasLeadingTrivia": true,
                             "hasTrailingTrivia": true,
-                            "hasTrailingSkippedText": true,
                             "leadingTrivia": [
                                 {
                                     "kind": "WhitespaceTrivia",
@@ -189,7 +188,43 @@
                                     "fullStart": 14,
                                     "fullEnd": 15,
                                     "text": " "
-                                },
+                                }
+                            ]
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "fullStart": 15,
+                            "fullEnd": 15,
+                            "start": 15,
+                            "end": 15,
+                            "fullWidth": 0,
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "TryStatement",
+                        "fullStart": 15,
+                        "fullEnd": 25,
+                        "start": 22,
+                        "end": 25,
+                        "fullWidth": 10,
+                        "width": 3,
+                        "isIncrementallyUnusable": true,
+                        "tryKeyword": {
+                            "kind": "TryKeyword",
+                            "fullStart": 15,
+                            "fullEnd": 25,
+                            "start": 22,
+                            "end": 25,
+                            "fullWidth": 10,
+                            "width": 3,
+                            "text": "try",
+                            "value": "try",
+                            "valueText": "try",
+                            "hasLeadingTrivia": true,
+                            "hasLeadingSkippedText": true,
+                            "leadingTrivia": [
                                 {
                                     "kind": "SkippedTokenTrivia",
                                     "skippedToken": {
@@ -212,38 +247,6 @@
                                     "text": " "
                                 }
                             ]
-                        },
-                        "semicolonToken": {
-                            "kind": "SemicolonToken",
-                            "fullStart": 22,
-                            "fullEnd": 22,
-                            "start": 22,
-                            "end": 22,
-                            "fullWidth": 0,
-                            "width": 0,
-                            "text": ""
-                        }
-                    },
-                    {
-                        "kind": "TryStatement",
-                        "fullStart": 22,
-                        "fullEnd": 25,
-                        "start": 22,
-                        "end": 25,
-                        "fullWidth": 3,
-                        "width": 3,
-                        "isIncrementallyUnusable": true,
-                        "tryKeyword": {
-                            "kind": "TryKeyword",
-                            "fullStart": 22,
-                            "fullEnd": 25,
-                            "start": 22,
-                            "end": 25,
-                            "fullWidth": 3,
-                            "width": 3,
-                            "text": "try",
-                            "value": "try",
-                            "valueText": "try"
                         },
                         "block": {
                             "kind": "Block",

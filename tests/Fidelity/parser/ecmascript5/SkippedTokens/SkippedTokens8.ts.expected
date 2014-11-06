@@ -32,70 +32,30 @@
             {
                 "kind": "EmptyStatement",
                 "fullStart": 0,
-                "fullEnd": 20,
+                "fullEnd": 3,
                 "start": 0,
                 "end": 1,
-                "fullWidth": 20,
+                "fullWidth": 3,
                 "width": 1,
-                "isIncrementallyUnusable": true,
                 "semicolonToken": {
                     "kind": "SemicolonToken",
                     "fullStart": 0,
-                    "fullEnd": 20,
+                    "fullEnd": 3,
                     "start": 0,
                     "end": 1,
-                    "fullWidth": 20,
+                    "fullWidth": 3,
                     "width": 1,
                     "text": ";",
                     "value": ";",
                     "valueText": ";",
                     "hasTrailingTrivia": true,
-                    "hasTrailingComment": true,
                     "hasTrailingNewLine": true,
-                    "hasTrailingSkippedText": true,
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",
                             "fullStart": 1,
                             "fullEnd": 3,
                             "text": "\r\n"
-                        },
-                        {
-                            "kind": "MultiLineCommentTrivia",
-                            "fullStart": 3,
-                            "fullEnd": 10,
-                            "text": "/*foo*/"
-                        },
-                        {
-                            "kind": "WhitespaceTrivia",
-                            "fullStart": 10,
-                            "fullEnd": 11,
-                            "text": " "
-                        },
-                        {
-                            "kind": "SkippedTokenTrivia",
-                            "skippedToken": {
-                                "kind": "ErrorToken",
-                                "fullStart": 11,
-                                "fullEnd": 12,
-                                "start": 11,
-                                "end": 12,
-                                "fullWidth": 1,
-                                "width": 1,
-                                "text": "\\"
-                            }
-                        },
-                        {
-                            "kind": "WhitespaceTrivia",
-                            "fullStart": 12,
-                            "fullEnd": 13,
-                            "text": " "
-                        },
-                        {
-                            "kind": "MultiLineCommentTrivia",
-                            "fullStart": 13,
-                            "fullEnd": 20,
-                            "text": "/*bar*/"
                         }
                     ]
                 }
@@ -103,13 +63,55 @@
         ],
         "endOfFileToken": {
             "kind": "EndOfFileToken",
-            "fullStart": 20,
+            "fullStart": 3,
             "fullEnd": 20,
             "start": 20,
             "end": 20,
-            "fullWidth": 0,
+            "fullWidth": 17,
             "width": 0,
-            "text": ""
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "fullStart": 3,
+                    "fullEnd": 10,
+                    "text": "/*foo*/"
+                },
+                {
+                    "kind": "WhitespaceTrivia",
+                    "fullStart": 10,
+                    "fullEnd": 11,
+                    "text": " "
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 11,
+                        "fullEnd": 12,
+                        "start": 11,
+                        "end": 12,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                },
+                {
+                    "kind": "WhitespaceTrivia",
+                    "fullStart": 12,
+                    "fullEnd": 13,
+                    "text": " "
+                },
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "fullStart": 13,
+                    "fullEnd": 20,
+                    "text": "/*bar*/"
+                }
+            ]
         }
     },
     "lineMap": {

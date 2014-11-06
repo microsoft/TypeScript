@@ -120,24 +120,41 @@
                 "openBraceToken": {
                     "kind": "OpenBraceToken",
                     "fullStart": 35,
-                    "fullEnd": 49,
+                    "fullEnd": 38,
                     "start": 35,
                     "end": 36,
-                    "fullWidth": 14,
+                    "fullWidth": 3,
                     "width": 1,
                     "text": "{",
                     "value": "{",
                     "valueText": "{",
                     "hasTrailingTrivia": true,
                     "hasTrailingNewLine": true,
-                    "hasTrailingSkippedText": true,
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",
                             "fullStart": 36,
                             "fullEnd": 38,
                             "text": "\r\n"
-                        },
+                        }
+                    ]
+                },
+                "enumElements": [],
+                "closeBraceToken": {
+                    "kind": "CloseBraceToken",
+                    "fullStart": 38,
+                    "fullEnd": 54,
+                    "start": 53,
+                    "end": 54,
+                    "fullWidth": 16,
+                    "width": 1,
+                    "text": "}",
+                    "value": "}",
+                    "valueText": "}",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingNewLine": true,
+                    "hasLeadingSkippedText": true,
+                    "leadingTrivia": [
                         {
                             "kind": "WhitespaceTrivia",
                             "fullStart": 38,
@@ -164,23 +181,7 @@
                             "fullStart": 47,
                             "fullEnd": 49,
                             "text": "\r\n"
-                        }
-                    ]
-                },
-                "enumElements": [],
-                "closeBraceToken": {
-                    "kind": "CloseBraceToken",
-                    "fullStart": 49,
-                    "fullEnd": 54,
-                    "start": 53,
-                    "end": 54,
-                    "fullWidth": 5,
-                    "width": 1,
-                    "text": "}",
-                    "value": "}",
-                    "valueText": "}",
-                    "hasLeadingTrivia": true,
-                    "leadingTrivia": [
+                        },
                         {
                             "kind": "WhitespaceTrivia",
                             "fullStart": 49,

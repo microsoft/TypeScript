@@ -47,19 +47,19 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 0,
-                "fullEnd": 338,
+                "fullEnd": 336,
                 "start": 334,
                 "end": 336,
-                "fullWidth": 338,
+                "fullWidth": 336,
                 "width": 2,
                 "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "BinaryExpression",
                     "fullStart": 0,
-                    "fullEnd": 338,
+                    "fullEnd": 336,
                     "start": 334,
                     "end": 336,
-                    "fullWidth": 338,
+                    "fullWidth": 336,
                     "width": 2,
                     "isIncrementallyUnusable": true,
                     "left": {
@@ -152,18 +152,72 @@
                     "right": {
                         "kind": "IdentifierName",
                         "fullStart": 335,
-                        "fullEnd": 338,
+                        "fullEnd": 336,
                         "start": 335,
                         "end": 336,
-                        "fullWidth": 3,
+                        "fullWidth": 1,
                         "width": 1,
                         "text": "a",
                         "value": "a",
-                        "valueText": "a",
+                        "valueText": "a"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 336,
+                    "fullEnd": 336,
+                    "start": 336,
+                    "end": 336,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "text": ""
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 336,
+                "fullEnd": 340,
+                "start": 338,
+                "end": 339,
+                "fullWidth": 4,
+                "width": 1,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "BinaryExpression",
+                    "fullStart": 336,
+                    "fullEnd": 340,
+                    "start": 338,
+                    "end": 339,
+                    "fullWidth": 4,
+                    "width": 1,
+                    "isIncrementallyUnusable": true,
+                    "left": {
+                        "kind": "IdentifierName",
+                        "fullStart": 336,
+                        "fullEnd": 336,
+                        "start": 336,
+                        "end": 336,
+                        "fullWidth": 0,
+                        "width": 0,
+                        "text": ""
+                    },
+                    "operatorToken": {
+                        "kind": "SlashToken",
+                        "fullStart": 336,
+                        "fullEnd": 340,
+                        "start": 338,
+                        "end": 339,
+                        "fullWidth": 4,
+                        "width": 1,
+                        "text": "/",
+                        "value": "/",
+                        "valueText": "/",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingNewLine": true,
+                        "hasLeadingSkippedText": true,
                         "hasTrailingTrivia": true,
                         "hasTrailingNewLine": true,
-                        "hasTrailingSkippedText": true,
-                        "trailingTrivia": [
+                        "leadingTrivia": [
                             {
                                 "kind": "SkippedTokenTrivia",
                                 "skippedToken": {
@@ -183,61 +237,7 @@
                                 "fullEnd": 338,
                                 "text": "\n"
                             }
-                        ]
-                    }
-                },
-                "semicolonToken": {
-                    "kind": "SemicolonToken",
-                    "fullStart": 338,
-                    "fullEnd": 338,
-                    "start": 338,
-                    "end": 338,
-                    "fullWidth": 0,
-                    "width": 0,
-                    "text": ""
-                }
-            },
-            {
-                "kind": "ExpressionStatement",
-                "fullStart": 338,
-                "fullEnd": 340,
-                "start": 338,
-                "end": 339,
-                "fullWidth": 2,
-                "width": 1,
-                "isIncrementallyUnusable": true,
-                "expression": {
-                    "kind": "BinaryExpression",
-                    "fullStart": 338,
-                    "fullEnd": 340,
-                    "start": 338,
-                    "end": 339,
-                    "fullWidth": 2,
-                    "width": 1,
-                    "isIncrementallyUnusable": true,
-                    "left": {
-                        "kind": "IdentifierName",
-                        "fullStart": 338,
-                        "fullEnd": 338,
-                        "start": 338,
-                        "end": 338,
-                        "fullWidth": 0,
-                        "width": 0,
-                        "text": ""
-                    },
-                    "operatorToken": {
-                        "kind": "SlashToken",
-                        "fullStart": 338,
-                        "fullEnd": 340,
-                        "start": 338,
-                        "end": 339,
-                        "fullWidth": 2,
-                        "width": 1,
-                        "text": "/",
-                        "value": "/",
-                        "valueText": "/",
-                        "hasTrailingTrivia": true,
-                        "hasTrailingNewLine": true,
+                        ],
                         "trailingTrivia": [
                             {
                                 "kind": "NewLineTrivia",

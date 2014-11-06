@@ -47,19 +47,19 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 0,
-                "fullEnd": 279,
+                "fullEnd": 278,
                 "start": 276,
                 "end": 278,
-                "fullWidth": 279,
+                "fullWidth": 278,
                 "width": 2,
                 "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "BinaryExpression",
                     "fullStart": 0,
-                    "fullEnd": 279,
+                    "fullEnd": 278,
                     "start": 276,
                     "end": 278,
-                    "fullWidth": 279,
+                    "fullWidth": 278,
                     "width": 2,
                     "isIncrementallyUnusable": true,
                     "left": {
@@ -152,17 +152,71 @@
                     "right": {
                         "kind": "IdentifierName",
                         "fullStart": 277,
-                        "fullEnd": 279,
+                        "fullEnd": 278,
                         "start": 277,
                         "end": 278,
-                        "fullWidth": 2,
+                        "fullWidth": 1,
                         "width": 1,
                         "text": "a",
                         "value": "a",
-                        "valueText": "a",
+                        "valueText": "a"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 278,
+                    "fullEnd": 278,
+                    "start": 278,
+                    "end": 278,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "text": ""
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 278,
+                "fullEnd": 281,
+                "start": 279,
+                "end": 280,
+                "fullWidth": 3,
+                "width": 1,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "BinaryExpression",
+                    "fullStart": 278,
+                    "fullEnd": 281,
+                    "start": 279,
+                    "end": 280,
+                    "fullWidth": 3,
+                    "width": 1,
+                    "isIncrementallyUnusable": true,
+                    "left": {
+                        "kind": "IdentifierName",
+                        "fullStart": 278,
+                        "fullEnd": 278,
+                        "start": 278,
+                        "end": 278,
+                        "fullWidth": 0,
+                        "width": 0,
+                        "text": ""
+                    },
+                    "operatorToken": {
+                        "kind": "SlashToken",
+                        "fullStart": 278,
+                        "fullEnd": 281,
+                        "start": 279,
+                        "end": 280,
+                        "fullWidth": 3,
+                        "width": 1,
+                        "text": "/",
+                        "value": "/",
+                        "valueText": "/",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingSkippedText": true,
                         "hasTrailingTrivia": true,
-                        "hasTrailingSkippedText": true,
-                        "trailingTrivia": [
+                        "hasTrailingNewLine": true,
+                        "leadingTrivia": [
                             {
                                 "kind": "SkippedTokenTrivia",
                                 "skippedToken": {
@@ -176,61 +230,7 @@
                                     "text": "\\"
                                 }
                             }
-                        ]
-                    }
-                },
-                "semicolonToken": {
-                    "kind": "SemicolonToken",
-                    "fullStart": 279,
-                    "fullEnd": 279,
-                    "start": 279,
-                    "end": 279,
-                    "fullWidth": 0,
-                    "width": 0,
-                    "text": ""
-                }
-            },
-            {
-                "kind": "ExpressionStatement",
-                "fullStart": 279,
-                "fullEnd": 281,
-                "start": 279,
-                "end": 280,
-                "fullWidth": 2,
-                "width": 1,
-                "isIncrementallyUnusable": true,
-                "expression": {
-                    "kind": "BinaryExpression",
-                    "fullStart": 279,
-                    "fullEnd": 281,
-                    "start": 279,
-                    "end": 280,
-                    "fullWidth": 2,
-                    "width": 1,
-                    "isIncrementallyUnusable": true,
-                    "left": {
-                        "kind": "IdentifierName",
-                        "fullStart": 279,
-                        "fullEnd": 279,
-                        "start": 279,
-                        "end": 279,
-                        "fullWidth": 0,
-                        "width": 0,
-                        "text": ""
-                    },
-                    "operatorToken": {
-                        "kind": "SlashToken",
-                        "fullStart": 279,
-                        "fullEnd": 281,
-                        "start": 279,
-                        "end": 280,
-                        "fullWidth": 2,
-                        "width": 1,
-                        "text": "/",
-                        "value": "/",
-                        "valueText": "/",
-                        "hasTrailingTrivia": true,
-                        "hasTrailingNewLine": true,
+                        ],
                         "trailingTrivia": [
                             {
                                 "kind": "NewLineTrivia",

@@ -687,12 +687,11 @@
                     {
                         "kind": "MemberFunctionDeclaration",
                         "fullStart": 132,
-                        "fullEnd": 157,
+                        "fullEnd": 154,
                         "start": 138,
                         "end": 154,
-                        "fullWidth": 25,
+                        "fullWidth": 22,
                         "width": 16,
-                        "isIncrementallyUnusable": true,
                         "modifiers": [
                             {
                                 "kind": "PublicKeyword",
@@ -799,12 +798,11 @@
                         "block": {
                             "kind": "Block",
                             "fullStart": 151,
-                            "fullEnd": 157,
+                            "fullEnd": 154,
                             "start": 151,
                             "end": 154,
-                            "fullWidth": 6,
+                            "fullWidth": 3,
                             "width": 3,
-                            "isIncrementallyUnusable": true,
                             "openBraceToken": {
                                 "kind": "OpenBraceToken",
                                 "fullStart": 151,
@@ -830,18 +828,43 @@
                             "closeBraceToken": {
                                 "kind": "CloseBraceToken",
                                 "fullStart": 153,
-                                "fullEnd": 157,
+                                "fullEnd": 154,
                                 "start": 153,
                                 "end": 154,
-                                "fullWidth": 4,
+                                "fullWidth": 1,
                                 "width": 1,
                                 "text": "}",
                                 "value": "}",
-                                "valueText": "}",
+                                "valueText": "}"
+                            }
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullStart": 154,
+                        "fullEnd": 175,
+                        "start": 163,
+                        "end": 173,
+                        "fullWidth": 21,
+                        "width": 10,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [
+                            {
+                                "kind": "PublicKeyword",
+                                "fullStart": 154,
+                                "fullEnd": 170,
+                                "start": 163,
+                                "end": 169,
+                                "fullWidth": 16,
+                                "width": 6,
+                                "text": "public",
+                                "value": "public",
+                                "valueText": "public",
+                                "hasLeadingTrivia": true,
+                                "hasLeadingNewLine": true,
+                                "hasLeadingSkippedText": true,
                                 "hasTrailingTrivia": true,
-                                "hasTrailingNewLine": true,
-                                "hasTrailingSkippedText": true,
-                                "trailingTrivia": [
+                                "leadingTrivia": [
                                     {
                                         "kind": "SkippedTokenTrivia",
                                         "skippedToken": {
@@ -862,35 +885,7 @@
                                         "fullStart": 155,
                                         "fullEnd": 157,
                                         "text": "\r\n"
-                                    }
-                                ]
-                            }
-                        }
-                    },
-                    {
-                        "kind": "MemberVariableDeclaration",
-                        "fullStart": 157,
-                        "fullEnd": 175,
-                        "start": 163,
-                        "end": 173,
-                        "fullWidth": 18,
-                        "width": 10,
-                        "modifiers": [
-                            {
-                                "kind": "PublicKeyword",
-                                "fullStart": 157,
-                                "fullEnd": 170,
-                                "start": 163,
-                                "end": 169,
-                                "fullWidth": 13,
-                                "width": 6,
-                                "text": "public",
-                                "value": "public",
-                                "valueText": "public",
-                                "hasLeadingTrivia": true,
-                                "hasLeadingNewLine": true,
-                                "hasTrailingTrivia": true,
-                                "leadingTrivia": [
+                                    },
                                     {
                                         "kind": "NewLineTrivia",
                                         "fullStart": 157,

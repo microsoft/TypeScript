@@ -24,19 +24,19 @@
             {
                 "kind": "TryStatement",
                 "fullStart": 0,
-                "fullEnd": 318,
+                "fullEnd": 316,
                 "start": 312,
                 "end": 315,
-                "fullWidth": 318,
+                "fullWidth": 316,
                 "width": 3,
                 "isIncrementallyUnusable": true,
                 "tryKeyword": {
                     "kind": "TryKeyword",
                     "fullStart": 0,
-                    "fullEnd": 318,
+                    "fullEnd": 316,
                     "start": 312,
                     "end": 315,
-                    "fullWidth": 318,
+                    "fullWidth": 316,
                     "width": 3,
                     "text": "try",
                     "value": "try",
@@ -45,7 +45,6 @@
                     "hasLeadingComment": true,
                     "hasLeadingNewLine": true,
                     "hasTrailingTrivia": true,
-                    "hasTrailingSkippedText": true,
                     "leadingTrivia": [
                         {
                             "kind": "SingleLineCommentTrivia",
@@ -102,7 +101,115 @@
                             "fullStart": 315,
                             "fullEnd": 316,
                             "text": " "
+                        }
+                    ]
+                },
+                "block": {
+                    "kind": "Block",
+                    "fullStart": -1,
+                    "fullEnd": -1,
+                    "start": -1,
+                    "end": -1,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "isIncrementallyUnusable": true,
+                    "openBraceToken": {
+                        "kind": "OpenBraceToken",
+                        "fullStart": 316,
+                        "fullEnd": 316,
+                        "start": 316,
+                        "end": 316,
+                        "fullWidth": 0,
+                        "width": 0,
+                        "text": ""
+                    },
+                    "statements": [],
+                    "closeBraceToken": {
+                        "kind": "CloseBraceToken",
+                        "fullStart": 316,
+                        "fullEnd": 316,
+                        "start": 316,
+                        "end": 316,
+                        "fullWidth": 0,
+                        "width": 0,
+                        "text": ""
+                    }
+                },
+                "finallyClause": {
+                    "kind": "FinallyClause",
+                    "fullStart": -1,
+                    "fullEnd": -1,
+                    "start": -1,
+                    "end": -1,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "isIncrementallyUnusable": true,
+                    "finallyKeyword": {
+                        "kind": "FinallyKeyword",
+                        "fullStart": 316,
+                        "fullEnd": 316,
+                        "start": 316,
+                        "end": 316,
+                        "fullWidth": 0,
+                        "width": 0,
+                        "text": ""
+                    },
+                    "block": {
+                        "kind": "Block",
+                        "fullStart": -1,
+                        "fullEnd": -1,
+                        "start": -1,
+                        "end": -1,
+                        "fullWidth": 0,
+                        "width": 0,
+                        "isIncrementallyUnusable": true,
+                        "openBraceToken": {
+                            "kind": "OpenBraceToken",
+                            "fullStart": 316,
+                            "fullEnd": 316,
+                            "start": 316,
+                            "end": 316,
+                            "fullWidth": 0,
+                            "width": 0,
+                            "text": ""
                         },
+                        "statements": [],
+                        "closeBraceToken": {
+                            "kind": "CloseBraceToken",
+                            "fullStart": 316,
+                            "fullEnd": 316,
+                            "start": 316,
+                            "end": 316,
+                            "fullWidth": 0,
+                            "width": 0,
+                            "text": ""
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 316,
+                "fullEnd": 321,
+                "start": 318,
+                "end": 320,
+                "fullWidth": 5,
+                "width": 2,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "NumericLiteral",
+                    "fullStart": 316,
+                    "fullEnd": 319,
+                    "start": 318,
+                    "end": 319,
+                    "fullWidth": 3,
+                    "width": 1,
+                    "text": "1",
+                    "value": 1,
+                    "valueText": "1",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
+                    "leadingTrivia": [
                         {
                             "kind": "SkippedTokenTrivia",
                             "skippedToken": {
@@ -125,109 +232,6 @@
                             "text": " "
                         }
                     ]
-                },
-                "block": {
-                    "kind": "Block",
-                    "fullStart": -1,
-                    "fullEnd": -1,
-                    "start": -1,
-                    "end": -1,
-                    "fullWidth": 0,
-                    "width": 0,
-                    "isIncrementallyUnusable": true,
-                    "openBraceToken": {
-                        "kind": "OpenBraceToken",
-                        "fullStart": 318,
-                        "fullEnd": 318,
-                        "start": 318,
-                        "end": 318,
-                        "fullWidth": 0,
-                        "width": 0,
-                        "text": ""
-                    },
-                    "statements": [],
-                    "closeBraceToken": {
-                        "kind": "CloseBraceToken",
-                        "fullStart": 318,
-                        "fullEnd": 318,
-                        "start": 318,
-                        "end": 318,
-                        "fullWidth": 0,
-                        "width": 0,
-                        "text": ""
-                    }
-                },
-                "finallyClause": {
-                    "kind": "FinallyClause",
-                    "fullStart": -1,
-                    "fullEnd": -1,
-                    "start": -1,
-                    "end": -1,
-                    "fullWidth": 0,
-                    "width": 0,
-                    "isIncrementallyUnusable": true,
-                    "finallyKeyword": {
-                        "kind": "FinallyKeyword",
-                        "fullStart": 318,
-                        "fullEnd": 318,
-                        "start": 318,
-                        "end": 318,
-                        "fullWidth": 0,
-                        "width": 0,
-                        "text": ""
-                    },
-                    "block": {
-                        "kind": "Block",
-                        "fullStart": -1,
-                        "fullEnd": -1,
-                        "start": -1,
-                        "end": -1,
-                        "fullWidth": 0,
-                        "width": 0,
-                        "isIncrementallyUnusable": true,
-                        "openBraceToken": {
-                            "kind": "OpenBraceToken",
-                            "fullStart": 318,
-                            "fullEnd": 318,
-                            "start": 318,
-                            "end": 318,
-                            "fullWidth": 0,
-                            "width": 0,
-                            "text": ""
-                        },
-                        "statements": [],
-                        "closeBraceToken": {
-                            "kind": "CloseBraceToken",
-                            "fullStart": 318,
-                            "fullEnd": 318,
-                            "start": 318,
-                            "end": 318,
-                            "fullWidth": 0,
-                            "width": 0,
-                            "text": ""
-                        }
-                    }
-                }
-            },
-            {
-                "kind": "ExpressionStatement",
-                "fullStart": 318,
-                "fullEnd": 321,
-                "start": 318,
-                "end": 320,
-                "fullWidth": 3,
-                "width": 2,
-                "expression": {
-                    "kind": "NumericLiteral",
-                    "fullStart": 318,
-                    "fullEnd": 319,
-                    "start": 318,
-                    "end": 319,
-                    "fullWidth": 1,
-                    "width": 1,
-                    "text": "1",
-                    "value": 1,
-                    "valueText": "1"
                 },
                 "semicolonToken": {
                     "kind": "SemicolonToken",

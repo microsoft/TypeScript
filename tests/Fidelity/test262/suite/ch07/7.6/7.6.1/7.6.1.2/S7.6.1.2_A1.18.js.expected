@@ -136,10 +136,10 @@
             {
                 "kind": "VariableStatement",
                 "fullStart": 402,
-                "fullEnd": 418,
+                "fullEnd": 406,
                 "start": 402,
                 "end": 405,
-                "fullWidth": 16,
+                "fullWidth": 4,
                 "width": 3,
                 "isIncrementallyUnusable": true,
                 "parsedInStrictMode": true,
@@ -147,73 +147,29 @@
                 "variableDeclaration": {
                     "kind": "VariableDeclaration",
                     "fullStart": 402,
-                    "fullEnd": 418,
+                    "fullEnd": 406,
                     "start": 402,
                     "end": 405,
-                    "fullWidth": 16,
+                    "fullWidth": 4,
                     "width": 3,
-                    "isIncrementallyUnusable": true,
                     "parsedInStrictMode": true,
                     "varKeyword": {
                         "kind": "VarKeyword",
                         "fullStart": 402,
-                        "fullEnd": 418,
+                        "fullEnd": 406,
                         "start": 402,
                         "end": 405,
-                        "fullWidth": 16,
+                        "fullWidth": 4,
                         "width": 3,
                         "text": "var",
                         "value": "var",
                         "valueText": "var",
                         "hasTrailingTrivia": true,
-                        "hasTrailingSkippedText": true,
                         "trailingTrivia": [
                             {
                                 "kind": "WhitespaceTrivia",
                                 "fullStart": 405,
                                 "fullEnd": 406,
-                                "text": " "
-                            },
-                            {
-                                "kind": "SkippedTokenTrivia",
-                                "skippedToken": {
-                                    "kind": "InterfaceKeyword",
-                                    "fullStart": 406,
-                                    "fullEnd": 415,
-                                    "start": 406,
-                                    "end": 415,
-                                    "fullWidth": 9,
-                                    "width": 9,
-                                    "text": "interface",
-                                    "value": "interface",
-                                    "valueText": "interface"
-                                }
-                            },
-                            {
-                                "kind": "WhitespaceTrivia",
-                                "fullStart": 415,
-                                "fullEnd": 416,
-                                "text": " "
-                            },
-                            {
-                                "kind": "SkippedTokenTrivia",
-                                "skippedToken": {
-                                    "kind": "EqualsToken",
-                                    "fullStart": 416,
-                                    "fullEnd": 417,
-                                    "start": 416,
-                                    "end": 417,
-                                    "fullWidth": 1,
-                                    "width": 1,
-                                    "text": "=",
-                                    "value": "=",
-                                    "valueText": "="
-                                }
-                            },
-                            {
-                                "kind": "WhitespaceTrivia",
-                                "fullStart": 417,
-                                "fullEnd": 418,
                                 "text": " "
                             }
                         ]
@@ -222,10 +178,10 @@
                 },
                 "semicolonToken": {
                     "kind": "SemicolonToken",
-                    "fullStart": 418,
-                    "fullEnd": 418,
-                    "start": 418,
-                    "end": 418,
+                    "fullStart": 406,
+                    "fullEnd": 406,
+                    "start": 406,
+                    "end": 406,
                     "fullWidth": 0,
                     "width": 0,
                     "text": ""
@@ -233,24 +189,71 @@
             },
             {
                 "kind": "ExpressionStatement",
-                "fullStart": 418,
+                "fullStart": 406,
                 "fullEnd": 421,
                 "start": 418,
                 "end": 420,
-                "fullWidth": 3,
+                "fullWidth": 15,
                 "width": 2,
+                "isIncrementallyUnusable": true,
                 "parsedInStrictMode": true,
                 "expression": {
                     "kind": "NumericLiteral",
-                    "fullStart": 418,
+                    "fullStart": 406,
                     "fullEnd": 419,
                     "start": 418,
                     "end": 419,
-                    "fullWidth": 1,
+                    "fullWidth": 13,
                     "width": 1,
                     "text": "1",
                     "value": 1,
-                    "valueText": "1"
+                    "valueText": "1",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "InterfaceKeyword",
+                                "fullStart": 406,
+                                "fullEnd": 415,
+                                "start": 406,
+                                "end": 415,
+                                "fullWidth": 9,
+                                "width": 9,
+                                "text": "interface",
+                                "value": "interface",
+                                "valueText": "interface"
+                            }
+                        },
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 415,
+                            "fullEnd": 416,
+                            "text": " "
+                        },
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "EqualsToken",
+                                "fullStart": 416,
+                                "fullEnd": 417,
+                                "start": 416,
+                                "end": 417,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": "=",
+                                "value": "=",
+                                "valueText": "="
+                            }
+                        },
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 417,
+                            "fullEnd": 418,
+                            "text": " "
+                        }
+                    ]
                 },
                 "semicolonToken": {
                     "kind": "SemicolonToken",

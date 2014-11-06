@@ -21,19 +21,19 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 0,
-                "fullEnd": 29,
+                "fullEnd": 28,
                 "start": 0,
                 "end": 27,
-                "fullWidth": 29,
+                "fullWidth": 28,
                 "width": 27,
                 "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "BinaryExpression",
                     "fullStart": 0,
-                    "fullEnd": 29,
+                    "fullEnd": 28,
                     "start": 0,
                     "end": 27,
-                    "fullWidth": 29,
+                    "fullWidth": 28,
                     "width": 27,
                     "isIncrementallyUnusable": true,
                     "left": {
@@ -81,10 +81,10 @@
                     "right": {
                         "kind": "BinaryExpression",
                         "fullStart": 11,
-                        "fullEnd": 29,
+                        "fullEnd": 28,
                         "start": 11,
                         "end": 27,
-                        "fullWidth": 18,
+                        "fullWidth": 17,
                         "width": 16,
                         "isIncrementallyUnusable": true,
                         "left": {
@@ -144,46 +144,30 @@
                         "operatorToken": {
                             "kind": "GreaterThanGreaterThanToken",
                             "fullStart": 25,
-                            "fullEnd": 29,
+                            "fullEnd": 28,
                             "start": 25,
                             "end": 27,
-                            "fullWidth": 4,
+                            "fullWidth": 3,
                             "width": 2,
                             "text": ">>",
                             "value": ">>",
                             "valueText": ">>",
                             "hasTrailingTrivia": true,
-                            "hasTrailingSkippedText": true,
                             "trailingTrivia": [
                                 {
                                     "kind": "WhitespaceTrivia",
                                     "fullStart": 27,
                                     "fullEnd": 28,
                                     "text": " "
-                                },
-                                {
-                                    "kind": "SkippedTokenTrivia",
-                                    "skippedToken": {
-                                        "kind": "CloseParenToken",
-                                        "fullStart": 28,
-                                        "fullEnd": 29,
-                                        "start": 28,
-                                        "end": 29,
-                                        "fullWidth": 1,
-                                        "width": 1,
-                                        "text": ")",
-                                        "value": ")",
-                                        "valueText": ")"
-                                    }
                                 }
                             ]
                         },
                         "right": {
                             "kind": "IdentifierName",
-                            "fullStart": 29,
-                            "fullEnd": 29,
-                            "start": 29,
-                            "end": 29,
+                            "fullStart": 28,
+                            "fullEnd": 28,
+                            "start": 28,
+                            "end": 28,
                             "fullWidth": 0,
                             "width": 0,
                             "text": ""
@@ -192,10 +176,10 @@
                 },
                 "semicolonToken": {
                     "kind": "SemicolonToken",
-                    "fullStart": 29,
-                    "fullEnd": 29,
-                    "start": 29,
-                    "end": 29,
+                    "fullStart": 28,
+                    "fullEnd": 28,
+                    "start": 28,
+                    "end": 28,
                     "fullWidth": 0,
                     "width": 0,
                     "text": ""
@@ -203,23 +187,43 @@
             },
             {
                 "kind": "EmptyStatement",
-                "fullStart": 29,
+                "fullStart": 28,
                 "fullEnd": 30,
                 "start": 29,
                 "end": 30,
-                "fullWidth": 1,
+                "fullWidth": 2,
                 "width": 1,
+                "isIncrementallyUnusable": true,
                 "semicolonToken": {
                     "kind": "SemicolonToken",
-                    "fullStart": 29,
+                    "fullStart": 28,
                     "fullEnd": 30,
                     "start": 29,
                     "end": 30,
-                    "fullWidth": 1,
+                    "fullWidth": 2,
                     "width": 1,
                     "text": ";",
                     "value": ";",
-                    "valueText": ";"
+                    "valueText": ";",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "CloseParenToken",
+                                "fullStart": 28,
+                                "fullEnd": 29,
+                                "start": 28,
+                                "end": 29,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": ")",
+                                "value": ")",
+                                "valueText": ")"
+                            }
+                        }
+                    ]
                 }
             }
         ],

@@ -316,26 +316,59 @@
             {
                 "kind": "BreakStatement",
                 "fullStart": 35,
-                "fullEnd": 42,
+                "fullEnd": 40,
                 "start": 35,
                 "end": 40,
-                "fullWidth": 7,
+                "fullWidth": 5,
                 "width": 5,
                 "isIncrementallyUnusable": true,
                 "breakKeyword": {
                     "kind": "BreakKeyword",
                     "fullStart": 35,
-                    "fullEnd": 42,
+                    "fullEnd": 40,
                     "start": 35,
                     "end": 40,
-                    "fullWidth": 7,
+                    "fullWidth": 5,
                     "width": 5,
                     "text": "break",
                     "value": "break",
-                    "valueText": "break",
+                    "valueText": "break"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 40,
+                    "fullEnd": 40,
+                    "start": 40,
+                    "end": 40,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "text": ""
+                }
+            },
+            {
+                "kind": "Block",
+                "fullStart": 40,
+                "fullEnd": 47,
+                "start": 42,
+                "end": 45,
+                "fullWidth": 7,
+                "width": 3,
+                "isIncrementallyUnusable": true,
+                "openBraceToken": {
+                    "kind": "OpenBraceToken",
+                    "fullStart": 40,
+                    "fullEnd": 44,
+                    "start": 42,
+                    "end": 43,
+                    "fullWidth": 4,
+                    "width": 1,
+                    "text": "{",
+                    "value": "{",
+                    "valueText": "{",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
                     "hasTrailingTrivia": true,
-                    "hasTrailingSkippedText": true,
-                    "trailingTrivia": [
+                    "leadingTrivia": [
                         {
                             "kind": "SkippedTokenTrivia",
                             "skippedToken": {
@@ -357,40 +390,7 @@
                             "fullEnd": 42,
                             "text": " "
                         }
-                    ]
-                },
-                "semicolonToken": {
-                    "kind": "SemicolonToken",
-                    "fullStart": 42,
-                    "fullEnd": 42,
-                    "start": 42,
-                    "end": 42,
-                    "fullWidth": 0,
-                    "width": 0,
-                    "text": ""
-                }
-            },
-            {
-                "kind": "Block",
-                "fullStart": 42,
-                "fullEnd": 48,
-                "start": 42,
-                "end": 45,
-                "fullWidth": 6,
-                "width": 3,
-                "isIncrementallyUnusable": true,
-                "openBraceToken": {
-                    "kind": "OpenBraceToken",
-                    "fullStart": 42,
-                    "fullEnd": 44,
-                    "start": 42,
-                    "end": 43,
-                    "fullWidth": 2,
-                    "width": 1,
-                    "text": "{",
-                    "value": "{",
-                    "valueText": "{",
-                    "hasTrailingTrivia": true,
+                    ],
                     "trailingTrivia": [
                         {
                             "kind": "WhitespaceTrivia",
@@ -404,38 +404,22 @@
                 "closeBraceToken": {
                     "kind": "CloseBraceToken",
                     "fullStart": 44,
-                    "fullEnd": 48,
+                    "fullEnd": 47,
                     "start": 44,
                     "end": 45,
-                    "fullWidth": 4,
+                    "fullWidth": 3,
                     "width": 1,
                     "text": "}",
                     "value": "}",
                     "valueText": "}",
                     "hasTrailingTrivia": true,
                     "hasTrailingNewLine": true,
-                    "hasTrailingSkippedText": true,
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",
                             "fullStart": 45,
                             "fullEnd": 47,
                             "text": "\r\n"
-                        },
-                        {
-                            "kind": "SkippedTokenTrivia",
-                            "skippedToken": {
-                                "kind": "CloseBraceToken",
-                                "fullStart": 47,
-                                "fullEnd": 48,
-                                "start": 47,
-                                "end": 48,
-                                "fullWidth": 1,
-                                "width": 1,
-                                "text": "}",
-                                "value": "}",
-                                "valueText": "}"
-                            }
                         }
                     ]
                 }
@@ -443,13 +427,32 @@
         ],
         "endOfFileToken": {
             "kind": "EndOfFileToken",
-            "fullStart": 48,
+            "fullStart": 47,
             "fullEnd": 48,
             "start": 48,
             "end": 48,
-            "fullWidth": 0,
+            "fullWidth": 1,
             "width": 0,
-            "text": ""
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "CloseBraceToken",
+                        "fullStart": 47,
+                        "fullEnd": 48,
+                        "start": 47,
+                        "end": 48,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "}",
+                        "value": "}",
+                        "valueText": "}"
+                    }
+                }
+            ]
         }
     },
     "lineMap": {

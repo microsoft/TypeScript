@@ -40,10 +40,10 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 0,
-                "fullEnd": 312,
+                "fullEnd": 308,
                 "start": 304,
                 "end": 308,
-                "fullWidth": 312,
+                "fullWidth": 308,
                 "width": 4,
                 "isIncrementallyUnusable": true,
                 "expression": {
@@ -180,17 +180,41 @@
                 "semicolonToken": {
                     "kind": "SemicolonToken",
                     "fullStart": 307,
-                    "fullEnd": 312,
+                    "fullEnd": 308,
                     "start": 307,
                     "end": 308,
-                    "fullWidth": 5,
+                    "fullWidth": 1,
                     "width": 1,
                     "text": ";",
                     "value": ";",
-                    "valueText": ";",
+                    "valueText": ";"
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 308,
+                "fullEnd": 314,
+                "start": 312,
+                "end": 313,
+                "fullWidth": 6,
+                "width": 1,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "NumericLiteral",
+                    "fullStart": 308,
+                    "fullEnd": 314,
+                    "start": 312,
+                    "end": 313,
+                    "fullWidth": 6,
+                    "width": 1,
+                    "text": "1",
+                    "value": 1,
+                    "valueText": "1",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
                     "hasTrailingTrivia": true,
-                    "hasTrailingSkippedText": true,
-                    "trailingTrivia": [
+                    "hasTrailingNewLine": true,
+                    "leadingTrivia": [
                         {
                             "kind": "SkippedTokenTrivia",
                             "skippedToken": {
@@ -233,30 +257,7 @@
                             "fullEnd": 312,
                             "text": " "
                         }
-                    ]
-                }
-            },
-            {
-                "kind": "ExpressionStatement",
-                "fullStart": 312,
-                "fullEnd": 314,
-                "start": 312,
-                "end": 313,
-                "fullWidth": 2,
-                "width": 1,
-                "expression": {
-                    "kind": "NumericLiteral",
-                    "fullStart": 312,
-                    "fullEnd": 314,
-                    "start": 312,
-                    "end": 313,
-                    "fullWidth": 2,
-                    "width": 1,
-                    "text": "1",
-                    "value": 1,
-                    "valueText": "1",
-                    "hasTrailingTrivia": true,
-                    "hasTrailingNewLine": true,
+                    ],
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",

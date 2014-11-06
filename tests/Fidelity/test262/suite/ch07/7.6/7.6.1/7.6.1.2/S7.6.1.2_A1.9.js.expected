@@ -40,29 +40,28 @@
             {
                 "kind": "VariableStatement",
                 "fullStart": 0,
-                "fullEnd": 324,
+                "fullEnd": 317,
                 "start": 313,
                 "end": 316,
-                "fullWidth": 324,
+                "fullWidth": 317,
                 "width": 3,
                 "isIncrementallyUnusable": true,
                 "modifiers": [],
                 "variableDeclaration": {
                     "kind": "VariableDeclaration",
                     "fullStart": 0,
-                    "fullEnd": 324,
+                    "fullEnd": 317,
                     "start": 313,
                     "end": 316,
-                    "fullWidth": 324,
+                    "fullWidth": 317,
                     "width": 3,
-                    "isIncrementallyUnusable": true,
                     "varKeyword": {
                         "kind": "VarKeyword",
                         "fullStart": 0,
-                        "fullEnd": 324,
+                        "fullEnd": 317,
                         "start": 313,
                         "end": 316,
-                        "fullWidth": 324,
+                        "fullWidth": 317,
                         "width": 3,
                         "text": "var",
                         "value": "var",
@@ -71,7 +70,6 @@
                         "hasLeadingComment": true,
                         "hasLeadingNewLine": true,
                         "hasTrailingTrivia": true,
-                        "hasTrailingSkippedText": true,
                         "leadingTrivia": [
                             {
                                 "kind": "SingleLineCommentTrivia",
@@ -128,48 +126,6 @@
                                 "fullStart": 316,
                                 "fullEnd": 317,
                                 "text": " "
-                            },
-                            {
-                                "kind": "SkippedTokenTrivia",
-                                "skippedToken": {
-                                    "kind": "EnumKeyword",
-                                    "fullStart": 317,
-                                    "fullEnd": 321,
-                                    "start": 317,
-                                    "end": 321,
-                                    "fullWidth": 4,
-                                    "width": 4,
-                                    "text": "enum",
-                                    "value": "enum",
-                                    "valueText": "enum"
-                                }
-                            },
-                            {
-                                "kind": "WhitespaceTrivia",
-                                "fullStart": 321,
-                                "fullEnd": 322,
-                                "text": " "
-                            },
-                            {
-                                "kind": "SkippedTokenTrivia",
-                                "skippedToken": {
-                                    "kind": "EqualsToken",
-                                    "fullStart": 322,
-                                    "fullEnd": 323,
-                                    "start": 322,
-                                    "end": 323,
-                                    "fullWidth": 1,
-                                    "width": 1,
-                                    "text": "=",
-                                    "value": "=",
-                                    "valueText": "="
-                                }
-                            },
-                            {
-                                "kind": "WhitespaceTrivia",
-                                "fullStart": 323,
-                                "fullEnd": 324,
-                                "text": " "
                             }
                         ]
                     },
@@ -177,10 +133,10 @@
                 },
                 "semicolonToken": {
                     "kind": "SemicolonToken",
-                    "fullStart": 324,
-                    "fullEnd": 324,
-                    "start": 324,
-                    "end": 324,
+                    "fullStart": 317,
+                    "fullEnd": 317,
+                    "start": 317,
+                    "end": 317,
                     "fullWidth": 0,
                     "width": 0,
                     "text": ""
@@ -188,23 +144,70 @@
             },
             {
                 "kind": "ExpressionStatement",
-                "fullStart": 324,
+                "fullStart": 317,
                 "fullEnd": 327,
                 "start": 324,
                 "end": 326,
-                "fullWidth": 3,
+                "fullWidth": 10,
                 "width": 2,
+                "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "NumericLiteral",
-                    "fullStart": 324,
+                    "fullStart": 317,
                     "fullEnd": 325,
                     "start": 324,
                     "end": 325,
-                    "fullWidth": 1,
+                    "fullWidth": 8,
                     "width": 1,
                     "text": "1",
                     "value": 1,
-                    "valueText": "1"
+                    "valueText": "1",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "EnumKeyword",
+                                "fullStart": 317,
+                                "fullEnd": 321,
+                                "start": 317,
+                                "end": 321,
+                                "fullWidth": 4,
+                                "width": 4,
+                                "text": "enum",
+                                "value": "enum",
+                                "valueText": "enum"
+                            }
+                        },
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 321,
+                            "fullEnd": 322,
+                            "text": " "
+                        },
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "EqualsToken",
+                                "fullStart": 322,
+                                "fullEnd": 323,
+                                "start": 322,
+                                "end": 323,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": "=",
+                                "value": "=",
+                                "valueText": "="
+                            }
+                        },
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 323,
+                            "fullEnd": 324,
+                            "text": " "
+                        }
+                    ]
                 },
                 "semicolonToken": {
                     "kind": "SemicolonToken",

@@ -181,12 +181,11 @@
             {
                 "kind": "FunctionDeclaration",
                 "fullStart": 21,
-                "fullEnd": 50,
+                "fullEnd": 44,
                 "start": 23,
                 "end": 42,
-                "fullWidth": 29,
+                "fullWidth": 23,
                 "width": 19,
-                "isIncrementallyUnusable": true,
                 "modifiers": [],
                 "functionKeyword": {
                     "kind": "FunctionKeyword",
@@ -286,12 +285,11 @@
                 "block": {
                     "kind": "Block",
                     "fullStart": 38,
-                    "fullEnd": 50,
+                    "fullEnd": 44,
                     "start": 38,
                     "end": 42,
-                    "fullWidth": 12,
+                    "fullWidth": 6,
                     "width": 4,
-                    "isIncrementallyUnusable": true,
                     "openBraceToken": {
                         "kind": "OpenBraceToken",
                         "fullStart": 38,
@@ -318,65 +316,22 @@
                     "closeBraceToken": {
                         "kind": "CloseBraceToken",
                         "fullStart": 41,
-                        "fullEnd": 50,
+                        "fullEnd": 44,
                         "start": 41,
                         "end": 42,
-                        "fullWidth": 9,
+                        "fullWidth": 3,
                         "width": 1,
                         "text": "}",
                         "value": "}",
                         "valueText": "}",
                         "hasTrailingTrivia": true,
                         "hasTrailingNewLine": true,
-                        "hasTrailingSkippedText": true,
                         "trailingTrivia": [
                             {
                                 "kind": "NewLineTrivia",
                                 "fullStart": 42,
                                 "fullEnd": 44,
                                 "text": "\r\n"
-                            },
-                            {
-                                "kind": "NewLineTrivia",
-                                "fullStart": 44,
-                                "fullEnd": 46,
-                                "text": "\r\n"
-                            },
-                            {
-                                "kind": "SkippedTokenTrivia",
-                                "skippedToken": {
-                                    "kind": "CloseParenToken",
-                                    "fullStart": 46,
-                                    "fullEnd": 47,
-                                    "start": 46,
-                                    "end": 47,
-                                    "fullWidth": 1,
-                                    "width": 1,
-                                    "text": ")",
-                                    "value": ")",
-                                    "valueText": ")"
-                                }
-                            },
-                            {
-                                "kind": "NewLineTrivia",
-                                "fullStart": 47,
-                                "fullEnd": 49,
-                                "text": "\r\n"
-                            },
-                            {
-                                "kind": "SkippedTokenTrivia",
-                                "skippedToken": {
-                                    "kind": "CloseParenToken",
-                                    "fullStart": 49,
-                                    "fullEnd": 50,
-                                    "start": 49,
-                                    "end": 50,
-                                    "fullWidth": 1,
-                                    "width": 1,
-                                    "text": ")",
-                                    "value": ")",
-                                    "valueText": ")"
-                                }
                             }
                         ]
                     }
@@ -385,13 +340,60 @@
         ],
         "endOfFileToken": {
             "kind": "EndOfFileToken",
-            "fullStart": 50,
+            "fullStart": 44,
             "fullEnd": 50,
             "start": 50,
             "end": 50,
-            "fullWidth": 0,
+            "fullWidth": 6,
             "width": 0,
-            "text": ""
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingNewLine": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 44,
+                    "fullEnd": 46,
+                    "text": "\r\n"
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "CloseParenToken",
+                        "fullStart": 46,
+                        "fullEnd": 47,
+                        "start": 46,
+                        "end": 47,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": ")",
+                        "value": ")",
+                        "valueText": ")"
+                    }
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 47,
+                    "fullEnd": 49,
+                    "text": "\r\n"
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "CloseParenToken",
+                        "fullStart": 49,
+                        "fullEnd": 50,
+                        "start": 49,
+                        "end": 50,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": ")",
+                        "value": ")",
+                        "valueText": ")"
+                    }
+                }
+            ]
         }
     },
     "lineMap": {

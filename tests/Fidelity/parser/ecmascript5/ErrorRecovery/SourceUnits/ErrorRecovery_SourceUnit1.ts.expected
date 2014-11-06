@@ -24,12 +24,11 @@
             {
                 "kind": "ClassDeclaration",
                 "fullStart": 0,
-                "fullEnd": 17,
+                "fullEnd": 14,
                 "start": 0,
                 "end": 12,
-                "fullWidth": 17,
+                "fullWidth": 14,
                 "width": 12,
-                "isIncrementallyUnusable": true,
                 "modifiers": [],
                 "classKeyword": {
                     "kind": "ClassKeyword",
@@ -100,24 +99,52 @@
                 "closeBraceToken": {
                     "kind": "CloseBraceToken",
                     "fullStart": 11,
-                    "fullEnd": 17,
+                    "fullEnd": 14,
                     "start": 11,
                     "end": 12,
-                    "fullWidth": 6,
+                    "fullWidth": 3,
                     "width": 1,
                     "text": "}",
                     "value": "}",
                     "valueText": "}",
                     "hasTrailingTrivia": true,
                     "hasTrailingNewLine": true,
-                    "hasTrailingSkippedText": true,
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",
                             "fullStart": 12,
                             "fullEnd": 14,
                             "text": "\r\n"
-                        },
+                        }
+                    ]
+                }
+            },
+            {
+                "kind": "ClassDeclaration",
+                "fullStart": 14,
+                "fullEnd": 29,
+                "start": 17,
+                "end": 29,
+                "fullWidth": 15,
+                "width": 12,
+                "isIncrementallyUnusable": true,
+                "modifiers": [],
+                "classKeyword": {
+                    "kind": "ClassKeyword",
+                    "fullStart": 14,
+                    "fullEnd": 23,
+                    "start": 17,
+                    "end": 22,
+                    "fullWidth": 9,
+                    "width": 5,
+                    "text": "class",
+                    "value": "class",
+                    "valueText": "class",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingNewLine": true,
+                    "hasLeadingSkippedText": true,
+                    "hasTrailingTrivia": true,
+                    "leadingTrivia": [
                         {
                             "kind": "SkippedTokenTrivia",
                             "skippedToken": {
@@ -139,30 +166,7 @@
                             "fullEnd": 17,
                             "text": "\r\n"
                         }
-                    ]
-                }
-            },
-            {
-                "kind": "ClassDeclaration",
-                "fullStart": 17,
-                "fullEnd": 29,
-                "start": 17,
-                "end": 29,
-                "fullWidth": 12,
-                "width": 12,
-                "modifiers": [],
-                "classKeyword": {
-                    "kind": "ClassKeyword",
-                    "fullStart": 17,
-                    "fullEnd": 23,
-                    "start": 17,
-                    "end": 22,
-                    "fullWidth": 6,
-                    "width": 5,
-                    "text": "class",
-                    "value": "class",
-                    "valueText": "class",
-                    "hasTrailingTrivia": true,
+                    ],
                     "trailingTrivia": [
                         {
                             "kind": "WhitespaceTrivia",

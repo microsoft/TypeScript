@@ -389,21 +389,20 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 645,
-                "fullEnd": 653,
+                "fullEnd": 652,
                 "start": 645,
                 "end": 652,
-                "fullWidth": 8,
+                "fullWidth": 7,
                 "width": 7,
                 "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "PostfixUnaryExpression",
                     "fullStart": 645,
-                    "fullEnd": 653,
+                    "fullEnd": 652,
                     "start": 645,
                     "end": 652,
-                    "fullWidth": 8,
+                    "fullWidth": 7,
                     "width": 7,
-                    "isIncrementallyUnusable": true,
                     "operand": {
                         "kind": "IdentifierName",
                         "fullStart": 645,
@@ -419,41 +418,22 @@
                     "operatorToken": {
                         "kind": "MinusMinusToken",
                         "fullStart": 650,
-                        "fullEnd": 653,
+                        "fullEnd": 652,
                         "start": 650,
                         "end": 652,
-                        "fullWidth": 3,
+                        "fullWidth": 2,
                         "width": 2,
                         "text": "--",
                         "value": "--",
-                        "valueText": "--",
-                        "hasTrailingTrivia": true,
-                        "hasTrailingSkippedText": true,
-                        "trailingTrivia": [
-                            {
-                                "kind": "SkippedTokenTrivia",
-                                "skippedToken": {
-                                    "kind": "CloseParenToken",
-                                    "fullStart": 652,
-                                    "fullEnd": 653,
-                                    "start": 652,
-                                    "end": 653,
-                                    "fullWidth": 1,
-                                    "width": 1,
-                                    "text": ")",
-                                    "value": ")",
-                                    "valueText": ")"
-                                }
-                            }
-                        ]
+                        "valueText": "--"
                     }
                 },
                 "semicolonToken": {
                     "kind": "SemicolonToken",
-                    "fullStart": 653,
-                    "fullEnd": 653,
-                    "start": 653,
-                    "end": 653,
+                    "fullStart": 652,
+                    "fullEnd": 652,
+                    "start": 652,
+                    "end": 652,
                     "fullWidth": 0,
                     "width": 0,
                     "text": ""
@@ -461,25 +441,45 @@
             },
             {
                 "kind": "EmptyStatement",
-                "fullStart": 653,
+                "fullStart": 652,
                 "fullEnd": 655,
                 "start": 653,
                 "end": 654,
-                "fullWidth": 2,
+                "fullWidth": 3,
                 "width": 1,
+                "isIncrementallyUnusable": true,
                 "semicolonToken": {
                     "kind": "SemicolonToken",
-                    "fullStart": 653,
+                    "fullStart": 652,
                     "fullEnd": 655,
                     "start": 653,
                     "end": 654,
-                    "fullWidth": 2,
+                    "fullWidth": 3,
                     "width": 1,
                     "text": ";",
                     "value": ";",
                     "valueText": ";",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
                     "hasTrailingTrivia": true,
                     "hasTrailingNewLine": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "CloseParenToken",
+                                "fullStart": 652,
+                                "fullEnd": 653,
+                                "start": 652,
+                                "end": 653,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": ")",
+                                "value": ")",
+                                "valueText": ")"
+                            }
+                        }
+                    ],
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",

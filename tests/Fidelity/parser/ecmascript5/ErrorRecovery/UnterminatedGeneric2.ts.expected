@@ -586,19 +586,19 @@
                                             {
                                                 "kind": "ExpressionStatement",
                                                 "fullStart": 101,
-                                                "fullEnd": 143,
+                                                "fullEnd": 141,
                                                 "start": 109,
                                                 "end": 141,
-                                                "fullWidth": 42,
+                                                "fullWidth": 40,
                                                 "width": 32,
                                                 "isIncrementallyUnusable": true,
                                                 "expression": {
                                                     "kind": "InvocationExpression",
                                                     "fullStart": 101,
-                                                    "fullEnd": 143,
+                                                    "fullEnd": 141,
                                                     "start": 109,
                                                     "end": 141,
-                                                    "fullWidth": 42,
+                                                    "fullWidth": 40,
                                                     "width": 32,
                                                     "isIncrementallyUnusable": true,
                                                     "expression": {
@@ -625,10 +625,10 @@
                                                     "argumentList": {
                                                         "kind": "ArgumentList",
                                                         "fullStart": 115,
-                                                        "fullEnd": 143,
+                                                        "fullEnd": 141,
                                                         "start": 115,
                                                         "end": 141,
-                                                        "fullWidth": 28,
+                                                        "fullWidth": 26,
                                                         "width": 26,
                                                         "isIncrementallyUnusable": true,
                                                         "openParenToken": {
@@ -647,17 +647,40 @@
                                                             {
                                                                 "kind": "IdentifierName",
                                                                 "fullStart": 116,
-                                                                "fullEnd": 125,
+                                                                "fullEnd": 123,
                                                                 "start": 116,
                                                                 "end": 123,
-                                                                "fullWidth": 9,
+                                                                "fullWidth": 7,
                                                                 "width": 7,
                                                                 "text": "context",
                                                                 "value": "context",
-                                                                "valueText": "context",
-                                                                "hasTrailingTrivia": true,
-                                                                "hasTrailingSkippedText": true,
-                                                                "trailingTrivia": [
+                                                                "valueText": "context"
+                                                            },
+                                                            {
+                                                                "kind": "CommaToken",
+                                                                "fullStart": 123,
+                                                                "fullEnd": 123,
+                                                                "start": 123,
+                                                                "end": 123,
+                                                                "fullWidth": 0,
+                                                                "width": 0,
+                                                                "text": ""
+                                                            },
+                                                            {
+                                                                "kind": "IdentifierName",
+                                                                "fullStart": 123,
+                                                                "fullEnd": 128,
+                                                                "start": 125,
+                                                                "end": 128,
+                                                                "fullWidth": 5,
+                                                                "width": 3,
+                                                                "text": "any",
+                                                                "value": "any",
+                                                                "valueText": "any",
+                                                                "isKeywordConvertedToIdentifier": true,
+                                                                "hasLeadingTrivia": true,
+                                                                "hasLeadingSkippedText": true,
+                                                                "leadingTrivia": [
                                                                     {
                                                                         "kind": "SkippedTokenTrivia",
                                                                         "skippedToken": {
@@ -683,29 +706,6 @@
                                                             },
                                                             {
                                                                 "kind": "CommaToken",
-                                                                "fullStart": 125,
-                                                                "fullEnd": 125,
-                                                                "start": 125,
-                                                                "end": 125,
-                                                                "fullWidth": 0,
-                                                                "width": 0,
-                                                                "text": ""
-                                                            },
-                                                            {
-                                                                "kind": "IdentifierName",
-                                                                "fullStart": 125,
-                                                                "fullEnd": 128,
-                                                                "start": 125,
-                                                                "end": 128,
-                                                                "fullWidth": 3,
-                                                                "width": 3,
-                                                                "text": "any",
-                                                                "value": "any",
-                                                                "valueText": "any",
-                                                                "isKeywordConvertedToIdentifier": true
-                                                            },
-                                                            {
-                                                                "kind": "CommaToken",
                                                                 "fullStart": 128,
                                                                 "fullEnd": 130,
                                                                 "start": 128,
@@ -728,17 +728,40 @@
                                                             {
                                                                 "kind": "IdentifierName",
                                                                 "fullStart": 130,
-                                                                "fullEnd": 137,
+                                                                "fullEnd": 135,
                                                                 "start": 130,
                                                                 "end": 135,
-                                                                "fullWidth": 7,
+                                                                "fullWidth": 5,
                                                                 "width": 5,
                                                                 "text": "value",
                                                                 "value": "value",
-                                                                "valueText": "value",
-                                                                "hasTrailingTrivia": true,
-                                                                "hasTrailingSkippedText": true,
-                                                                "trailingTrivia": [
+                                                                "valueText": "value"
+                                                            },
+                                                            {
+                                                                "kind": "CommaToken",
+                                                                "fullStart": 135,
+                                                                "fullEnd": 135,
+                                                                "start": 135,
+                                                                "end": 135,
+                                                                "fullWidth": 0,
+                                                                "width": 0,
+                                                                "text": ""
+                                                            },
+                                                            {
+                                                                "kind": "IdentifierName",
+                                                                "fullStart": 135,
+                                                                "fullEnd": 140,
+                                                                "start": 137,
+                                                                "end": 140,
+                                                                "fullWidth": 5,
+                                                                "width": 3,
+                                                                "text": "any",
+                                                                "value": "any",
+                                                                "valueText": "any",
+                                                                "isKeywordConvertedToIdentifier": true,
+                                                                "hasLeadingTrivia": true,
+                                                                "hasLeadingSkippedText": true,
+                                                                "leadingTrivia": [
                                                                     {
                                                                         "kind": "SkippedTokenTrivia",
                                                                         "skippedToken": {
@@ -761,76 +784,28 @@
                                                                         "text": " "
                                                                     }
                                                                 ]
-                                                            },
-                                                            {
-                                                                "kind": "CommaToken",
-                                                                "fullStart": 137,
-                                                                "fullEnd": 137,
-                                                                "start": 137,
-                                                                "end": 137,
-                                                                "fullWidth": 0,
-                                                                "width": 0,
-                                                                "text": ""
-                                                            },
-                                                            {
-                                                                "kind": "IdentifierName",
-                                                                "fullStart": 137,
-                                                                "fullEnd": 140,
-                                                                "start": 137,
-                                                                "end": 140,
-                                                                "fullWidth": 3,
-                                                                "width": 3,
-                                                                "text": "any",
-                                                                "value": "any",
-                                                                "valueText": "any",
-                                                                "isKeywordConvertedToIdentifier": true
                                                             }
                                                         ],
                                                         "closeParenToken": {
                                                             "kind": "CloseParenToken",
                                                             "fullStart": 140,
-                                                            "fullEnd": 143,
+                                                            "fullEnd": 141,
                                                             "start": 140,
                                                             "end": 141,
-                                                            "fullWidth": 3,
+                                                            "fullWidth": 1,
                                                             "width": 1,
                                                             "text": ")",
                                                             "value": ")",
-                                                            "valueText": ")",
-                                                            "hasTrailingTrivia": true,
-                                                            "hasTrailingSkippedText": true,
-                                                            "trailingTrivia": [
-                                                                {
-                                                                    "kind": "SkippedTokenTrivia",
-                                                                    "skippedToken": {
-                                                                        "kind": "ColonToken",
-                                                                        "fullStart": 141,
-                                                                        "fullEnd": 142,
-                                                                        "start": 141,
-                                                                        "end": 142,
-                                                                        "fullWidth": 1,
-                                                                        "width": 1,
-                                                                        "text": ":",
-                                                                        "value": ":",
-                                                                        "valueText": ":"
-                                                                    }
-                                                                },
-                                                                {
-                                                                    "kind": "WhitespaceTrivia",
-                                                                    "fullStart": 142,
-                                                                    "fullEnd": 143,
-                                                                    "text": " "
-                                                                }
-                                                            ]
+                                                            "valueText": ")"
                                                         }
                                                     }
                                                 },
                                                 "semicolonToken": {
                                                     "kind": "SemicolonToken",
-                                                    "fullStart": 143,
-                                                    "fullEnd": 143,
-                                                    "start": 143,
-                                                    "end": 143,
+                                                    "fullStart": 141,
+                                                    "fullEnd": 141,
+                                                    "start": 141,
+                                                    "end": 141,
                                                     "fullWidth": 0,
                                                     "width": 0,
                                                     "text": ""
@@ -838,24 +813,50 @@
                                             },
                                             {
                                                 "kind": "ExpressionStatement",
-                                                "fullStart": 143,
+                                                "fullStart": 141,
                                                 "fullEnd": 149,
                                                 "start": 143,
                                                 "end": 147,
-                                                "fullWidth": 6,
+                                                "fullWidth": 8,
                                                 "width": 4,
+                                                "isIncrementallyUnusable": true,
                                                 "expression": {
                                                     "kind": "IdentifierName",
-                                                    "fullStart": 143,
+                                                    "fullStart": 141,
                                                     "fullEnd": 146,
                                                     "start": 143,
                                                     "end": 146,
-                                                    "fullWidth": 3,
+                                                    "fullWidth": 5,
                                                     "width": 3,
                                                     "text": "any",
                                                     "value": "any",
                                                     "valueText": "any",
-                                                    "isKeywordConvertedToIdentifier": true
+                                                    "isKeywordConvertedToIdentifier": true,
+                                                    "hasLeadingTrivia": true,
+                                                    "hasLeadingSkippedText": true,
+                                                    "leadingTrivia": [
+                                                        {
+                                                            "kind": "SkippedTokenTrivia",
+                                                            "skippedToken": {
+                                                                "kind": "ColonToken",
+                                                                "fullStart": 141,
+                                                                "fullEnd": 142,
+                                                                "start": 141,
+                                                                "end": 142,
+                                                                "fullWidth": 1,
+                                                                "width": 1,
+                                                                "text": ":",
+                                                                "value": ":",
+                                                                "valueText": ":"
+                                                            }
+                                                        },
+                                                        {
+                                                            "kind": "WhitespaceTrivia",
+                                                            "fullStart": 142,
+                                                            "fullEnd": 143,
+                                                            "text": " "
+                                                        }
+                                                    ]
                                                 },
                                                 "semicolonToken": {
                                                     "kind": "SemicolonToken",

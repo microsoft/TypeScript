@@ -51,10 +51,10 @@
                     "varKeyword": {
                         "kind": "VarKeyword",
                         "fullStart": 0,
-                        "fullEnd": 366,
+                        "fullEnd": 365,
                         "start": 362,
                         "end": 365,
-                        "fullWidth": 366,
+                        "fullWidth": 365,
                         "width": 3,
                         "text": "var",
                         "value": "var",
@@ -62,8 +62,6 @@
                         "hasLeadingTrivia": true,
                         "hasLeadingComment": true,
                         "hasLeadingNewLine": true,
-                        "hasTrailingTrivia": true,
-                        "hasTrailingSkippedText": true,
                         "leadingTrivia": [
                             {
                                 "kind": "SingleLineCommentTrivia",
@@ -113,43 +111,46 @@
                                 "fullEnd": 362,
                                 "text": "\n"
                             }
-                        ],
-                        "trailingTrivia": [
-                            {
-                                "kind": "SkippedTokenTrivia",
-                                "skippedToken": {
-                                    "kind": "ErrorToken",
-                                    "fullStart": 365,
-                                    "fullEnd": 366,
-                                    "start": 365,
-                                    "end": 366,
-                                    "fullWidth": 1,
-                                    "width": 1,
-                                    "text": "\\"
-                                }
-                            }
                         ]
                     },
                     "variableDeclarators": [
                         {
                             "kind": "VariableDeclarator",
-                            "fullStart": 366,
+                            "fullStart": 365,
                             "fullEnd": 372,
                             "start": 366,
                             "end": 372,
-                            "fullWidth": 6,
+                            "fullWidth": 7,
                             "width": 6,
+                            "isIncrementallyUnusable": true,
                             "propertyName": {
                                 "kind": "IdentifierName",
-                                "fullStart": 366,
+                                "fullStart": 365,
                                 "fullEnd": 372,
                                 "start": 366,
                                 "end": 372,
-                                "fullWidth": 6,
+                                "fullWidth": 7,
                                 "width": 6,
                                 "text": "u000Cx",
                                 "value": "u000Cx",
-                                "valueText": "u000Cx"
+                                "valueText": "u000Cx",
+                                "hasLeadingTrivia": true,
+                                "hasLeadingSkippedText": true,
+                                "leadingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "ErrorToken",
+                                            "fullStart": 365,
+                                            "fullEnd": 366,
+                                            "start": 365,
+                                            "end": 366,
+                                            "fullWidth": 1,
+                                            "width": 1,
+                                            "text": "\\"
+                                        }
+                                    }
+                                ]
                             }
                         }
                     ]

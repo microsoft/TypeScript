@@ -92,49 +92,21 @@
                 "openBraceToken": {
                     "kind": "OpenBraceToken",
                     "fullStart": 9,
-                    "fullEnd": 18,
+                    "fullEnd": 12,
                     "start": 9,
                     "end": 10,
-                    "fullWidth": 9,
+                    "fullWidth": 3,
                     "width": 1,
                     "text": "{",
                     "value": "{",
                     "valueText": "{",
                     "hasTrailingTrivia": true,
                     "hasTrailingNewLine": true,
-                    "hasTrailingSkippedText": true,
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",
                             "fullStart": 10,
                             "fullEnd": 12,
-                            "text": "\r\n"
-                        },
-                        {
-                            "kind": "WhitespaceTrivia",
-                            "fullStart": 12,
-                            "fullEnd": 15,
-                            "text": "   "
-                        },
-                        {
-                            "kind": "SkippedTokenTrivia",
-                            "skippedToken": {
-                                "kind": "BarToken",
-                                "fullStart": 15,
-                                "fullEnd": 16,
-                                "start": 15,
-                                "end": 16,
-                                "fullWidth": 1,
-                                "width": 1,
-                                "text": "|",
-                                "value": "|",
-                                "valueText": "|"
-                            }
-                        },
-                        {
-                            "kind": "NewLineTrivia",
-                            "fullStart": 16,
-                            "fullEnd": 18,
                             "text": "\r\n"
                         }
                     ]
@@ -142,8 +114,8 @@
                 "moduleElements": [
                     {
                         "kind": "ClassDeclaration",
-                        "fullStart": 18,
-                        "fullEnd": 44,
+                        "fullStart": 12,
+                        "fullEnd": 38,
                         "start": 21,
                         "end": 36,
                         "fullWidth": 26,
@@ -152,18 +124,47 @@
                         "modifiers": [],
                         "classKeyword": {
                             "kind": "ClassKeyword",
-                            "fullStart": 18,
+                            "fullStart": 12,
                             "fullEnd": 27,
                             "start": 21,
                             "end": 26,
-                            "fullWidth": 9,
+                            "fullWidth": 15,
                             "width": 5,
                             "text": "class",
                             "value": "class",
                             "valueText": "class",
                             "hasLeadingTrivia": true,
+                            "hasLeadingNewLine": true,
+                            "hasLeadingSkippedText": true,
                             "hasTrailingTrivia": true,
                             "leadingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "fullStart": 12,
+                                    "fullEnd": 15,
+                                    "text": "   "
+                                },
+                                {
+                                    "kind": "SkippedTokenTrivia",
+                                    "skippedToken": {
+                                        "kind": "BarToken",
+                                        "fullStart": 15,
+                                        "fullEnd": 16,
+                                        "start": 15,
+                                        "end": 16,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": "|",
+                                        "value": "|",
+                                        "valueText": "|"
+                                    }
+                                },
+                                {
+                                    "kind": "NewLineTrivia",
+                                    "fullStart": 16,
+                                    "fullEnd": 18,
+                                    "text": "\r\n"
+                                },
                                 {
                                     "kind": "WhitespaceTrivia",
                                     "fullStart": 18,
@@ -228,10 +229,10 @@
                         "closeBraceToken": {
                             "kind": "CloseBraceToken",
                             "fullStart": 32,
-                            "fullEnd": 44,
+                            "fullEnd": 38,
                             "start": 35,
                             "end": 36,
-                            "fullWidth": 12,
+                            "fullWidth": 6,
                             "width": 1,
                             "text": "}",
                             "value": "}",
@@ -239,7 +240,6 @@
                             "hasLeadingTrivia": true,
                             "hasTrailingTrivia": true,
                             "hasTrailingNewLine": true,
-                            "hasTrailingSkippedText": true,
                             "leadingTrivia": [
                                 {
                                     "kind": "WhitespaceTrivia",
@@ -254,7 +254,36 @@
                                     "fullStart": 36,
                                     "fullEnd": 38,
                                     "text": "\r\n"
-                                },
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "kind": "EnumDeclaration",
+                        "fullStart": 38,
+                        "fullEnd": 61,
+                        "start": 47,
+                        "end": 61,
+                        "fullWidth": 23,
+                        "width": 14,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "enumKeyword": {
+                            "kind": "EnumKeyword",
+                            "fullStart": 38,
+                            "fullEnd": 52,
+                            "start": 47,
+                            "end": 51,
+                            "fullWidth": 14,
+                            "width": 4,
+                            "text": "enum",
+                            "value": "enum",
+                            "valueText": "enum",
+                            "hasLeadingTrivia": true,
+                            "hasLeadingNewLine": true,
+                            "hasLeadingSkippedText": true,
+                            "hasTrailingTrivia": true,
+                            "leadingTrivia": [
                                 {
                                     "kind": "WhitespaceTrivia",
                                     "fullStart": 38,
@@ -281,33 +310,7 @@
                                     "fullStart": 42,
                                     "fullEnd": 44,
                                     "text": "\r\n"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "kind": "EnumDeclaration",
-                        "fullStart": 44,
-                        "fullEnd": 61,
-                        "start": 47,
-                        "end": 61,
-                        "fullWidth": 17,
-                        "width": 14,
-                        "modifiers": [],
-                        "enumKeyword": {
-                            "kind": "EnumKeyword",
-                            "fullStart": 44,
-                            "fullEnd": 52,
-                            "start": 47,
-                            "end": 51,
-                            "fullWidth": 8,
-                            "width": 4,
-                            "text": "enum",
-                            "value": "enum",
-                            "valueText": "enum",
-                            "hasLeadingTrivia": true,
-                            "hasTrailingTrivia": true,
-                            "leadingTrivia": [
+                                },
                                 {
                                     "kind": "WhitespaceTrivia",
                                     "fullStart": 44,

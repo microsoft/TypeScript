@@ -129,17 +129,29 @@
                                 {
                                     "kind": "CommaToken",
                                     "fullStart": 7,
-                                    "fullEnd": 10,
+                                    "fullEnd": 8,
                                     "start": 7,
                                     "end": 8,
-                                    "fullWidth": 3,
+                                    "fullWidth": 1,
                                     "width": 1,
                                     "text": ",",
                                     "value": ",",
-                                    "valueText": ",",
-                                    "hasTrailingTrivia": true,
-                                    "hasTrailingSkippedText": true,
-                                    "trailingTrivia": [
+                                    "valueText": ","
+                                },
+                                {
+                                    "kind": "IdentifierName",
+                                    "fullStart": 8,
+                                    "fullEnd": 11,
+                                    "start": 10,
+                                    "end": 11,
+                                    "fullWidth": 3,
+                                    "width": 1,
+                                    "text": "C",
+                                    "value": "C",
+                                    "valueText": "C",
+                                    "hasLeadingTrivia": true,
+                                    "hasLeadingSkippedText": true,
+                                    "leadingTrivia": [
                                         {
                                             "kind": "SkippedTokenTrivia",
                                             "skippedToken": {
@@ -160,18 +172,6 @@
                                             "text": " "
                                         }
                                     ]
-                                },
-                                {
-                                    "kind": "IdentifierName",
-                                    "fullStart": 10,
-                                    "fullEnd": 11,
-                                    "start": 10,
-                                    "end": 11,
-                                    "fullWidth": 1,
-                                    "width": 1,
-                                    "text": "C",
-                                    "value": "C",
-                                    "valueText": "C"
                                 }
                             ],
                             "greaterThanToken": {

@@ -212,37 +212,20 @@
                     "openBraceToken": {
                         "kind": "OpenBraceToken",
                         "fullStart": 325,
-                        "fullEnd": 327,
+                        "fullEnd": 326,
                         "start": 325,
                         "end": 326,
-                        "fullWidth": 2,
+                        "fullWidth": 1,
                         "width": 1,
                         "text": "{",
                         "value": "{",
-                        "valueText": "{",
-                        "hasTrailingTrivia": true,
-                        "hasTrailingSkippedText": true,
-                        "trailingTrivia": [
-                            {
-                                "kind": "SkippedTokenTrivia",
-                                "skippedToken": {
-                                    "kind": "ErrorToken",
-                                    "fullStart": 326,
-                                    "fullEnd": 327,
-                                    "start": 326,
-                                    "end": 327,
-                                    "fullWidth": 1,
-                                    "width": 1,
-                                    "text": "\\"
-                                }
-                            }
-                        ]
+                        "valueText": "{"
                     },
                     "statements": [
                         {
                             "kind": "ExpressionStatement",
-                            "fullStart": 327,
-                            "fullEnd": 329,
+                            "fullStart": 326,
+                            "fullEnd": 328,
                             "start": 327,
                             "end": 328,
                             "fullWidth": 2,
@@ -250,8 +233,8 @@
                             "isIncrementallyUnusable": true,
                             "expression": {
                                 "kind": "IdentifierName",
-                                "fullStart": 327,
-                                "fullEnd": 329,
+                                "fullStart": 326,
+                                "fullEnd": 328,
                                 "start": 327,
                                 "end": 328,
                                 "fullWidth": 2,
@@ -259,9 +242,58 @@
                                 "text": "A",
                                 "value": "A",
                                 "valueText": "A",
-                                "hasTrailingTrivia": true,
-                                "hasTrailingSkippedText": true,
-                                "trailingTrivia": [
+                                "hasLeadingTrivia": true,
+                                "hasLeadingSkippedText": true,
+                                "leadingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "ErrorToken",
+                                            "fullStart": 326,
+                                            "fullEnd": 327,
+                                            "start": 326,
+                                            "end": 327,
+                                            "fullWidth": 1,
+                                            "width": 1,
+                                            "text": "\\"
+                                        }
+                                    }
+                                ]
+                            },
+                            "semicolonToken": {
+                                "kind": "SemicolonToken",
+                                "fullStart": 328,
+                                "fullEnd": 328,
+                                "start": 328,
+                                "end": 328,
+                                "fullWidth": 0,
+                                "width": 0,
+                                "text": ""
+                            }
+                        },
+                        {
+                            "kind": "ExpressionStatement",
+                            "fullStart": 328,
+                            "fullEnd": 330,
+                            "start": 329,
+                            "end": 330,
+                            "fullWidth": 2,
+                            "width": 1,
+                            "isIncrementallyUnusable": true,
+                            "expression": {
+                                "kind": "IdentifierName",
+                                "fullStart": 328,
+                                "fullEnd": 330,
+                                "start": 329,
+                                "end": 330,
+                                "fullWidth": 2,
+                                "width": 1,
+                                "text": "B",
+                                "value": "B",
+                                "valueText": "B",
+                                "hasLeadingTrivia": true,
+                                "hasLeadingSkippedText": true,
+                                "leadingTrivia": [
                                     {
                                         "kind": "SkippedTokenTrivia",
                                         "skippedToken": {
@@ -279,10 +311,10 @@
                             },
                             "semicolonToken": {
                                 "kind": "SemicolonToken",
-                                "fullStart": 329,
-                                "fullEnd": 329,
-                                "start": 329,
-                                "end": 329,
+                                "fullStart": 330,
+                                "fullEnd": 330,
+                                "start": 330,
+                                "end": 330,
                                 "fullWidth": 0,
                                 "width": 0,
                                 "text": ""
@@ -290,27 +322,27 @@
                         },
                         {
                             "kind": "ExpressionStatement",
-                            "fullStart": 329,
-                            "fullEnd": 331,
-                            "start": 329,
-                            "end": 330,
+                            "fullStart": 330,
+                            "fullEnd": 332,
+                            "start": 331,
+                            "end": 332,
                             "fullWidth": 2,
                             "width": 1,
                             "isIncrementallyUnusable": true,
                             "expression": {
                                 "kind": "IdentifierName",
-                                "fullStart": 329,
-                                "fullEnd": 331,
-                                "start": 329,
-                                "end": 330,
+                                "fullStart": 330,
+                                "fullEnd": 332,
+                                "start": 331,
+                                "end": 332,
                                 "fullWidth": 2,
                                 "width": 1,
-                                "text": "B",
-                                "value": "B",
-                                "valueText": "B",
-                                "hasTrailingTrivia": true,
-                                "hasTrailingSkippedText": true,
-                                "trailingTrivia": [
+                                "text": "C",
+                                "value": "C",
+                                "valueText": "C",
+                                "hasLeadingTrivia": true,
+                                "hasLeadingSkippedText": true,
+                                "leadingTrivia": [
                                     {
                                         "kind": "SkippedTokenTrivia",
                                         "skippedToken": {
@@ -325,37 +357,6 @@
                                         }
                                     }
                                 ]
-                            },
-                            "semicolonToken": {
-                                "kind": "SemicolonToken",
-                                "fullStart": 331,
-                                "fullEnd": 331,
-                                "start": 331,
-                                "end": 331,
-                                "fullWidth": 0,
-                                "width": 0,
-                                "text": ""
-                            }
-                        },
-                        {
-                            "kind": "ExpressionStatement",
-                            "fullStart": 331,
-                            "fullEnd": 332,
-                            "start": 331,
-                            "end": 332,
-                            "fullWidth": 1,
-                            "width": 1,
-                            "expression": {
-                                "kind": "IdentifierName",
-                                "fullStart": 331,
-                                "fullEnd": 332,
-                                "start": 331,
-                                "end": 332,
-                                "fullWidth": 1,
-                                "width": 1,
-                                "text": "C",
-                                "value": "C",
-                                "valueText": "C"
                             }
                         }
                     ],

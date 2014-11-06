@@ -282,12 +282,11 @@
             {
                 "kind": "Block",
                 "fullStart": 371,
-                "fullEnd": 381,
+                "fullEnd": 376,
                 "start": 371,
                 "end": 375,
-                "fullWidth": 10,
+                "fullWidth": 5,
                 "width": 4,
-                "isIncrementallyUnusable": true,
                 "openBraceToken": {
                     "kind": "OpenBraceToken",
                     "fullStart": 371,
@@ -320,70 +319,74 @@
                 "closeBraceToken": {
                     "kind": "CloseBraceToken",
                     "fullStart": 374,
-                    "fullEnd": 381,
+                    "fullEnd": 376,
                     "start": 374,
                     "end": 375,
-                    "fullWidth": 7,
+                    "fullWidth": 2,
                     "width": 1,
                     "text": "}",
                     "value": "}",
                     "valueText": "}",
                     "hasTrailingTrivia": true,
                     "hasTrailingNewLine": true,
-                    "hasTrailingSkippedText": true,
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",
                             "fullStart": 375,
                             "fullEnd": 376,
                             "text": "\n"
-                        },
-                        {
-                            "kind": "SkippedTokenTrivia",
-                            "skippedToken": {
-                                "kind": "CatchKeyword",
-                                "fullStart": 376,
-                                "fullEnd": 381,
-                                "start": 376,
-                                "end": 381,
-                                "fullWidth": 5,
-                                "width": 5,
-                                "text": "catch",
-                                "value": "catch",
-                                "valueText": "catch"
-                            }
                         }
                     ]
                 }
             },
             {
                 "kind": "ExpressionStatement",
-                "fullStart": 381,
+                "fullStart": 376,
                 "fullEnd": 384,
                 "start": 381,
                 "end": 384,
-                "fullWidth": 3,
+                "fullWidth": 8,
                 "width": 3,
                 "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "ParenthesizedExpression",
-                    "fullStart": 381,
+                    "fullStart": 376,
                     "fullEnd": 384,
                     "start": 381,
                     "end": 384,
-                    "fullWidth": 3,
+                    "fullWidth": 8,
                     "width": 3,
+                    "isIncrementallyUnusable": true,
                     "openParenToken": {
                         "kind": "OpenParenToken",
-                        "fullStart": 381,
+                        "fullStart": 376,
                         "fullEnd": 382,
                         "start": 381,
                         "end": 382,
-                        "fullWidth": 1,
+                        "fullWidth": 6,
                         "width": 1,
                         "text": "(",
                         "value": "(",
-                        "valueText": "("
+                        "valueText": "(",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingSkippedText": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "SkippedTokenTrivia",
+                                "skippedToken": {
+                                    "kind": "CatchKeyword",
+                                    "fullStart": 376,
+                                    "fullEnd": 381,
+                                    "start": 376,
+                                    "end": 381,
+                                    "fullWidth": 5,
+                                    "width": 5,
+                                    "text": "catch",
+                                    "value": "catch",
+                                    "valueText": "catch"
+                                }
+                            }
+                        ]
                     },
                     "expression": {
                         "kind": "IdentifierName",

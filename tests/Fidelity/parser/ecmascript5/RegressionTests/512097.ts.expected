@@ -32,10 +32,10 @@
             {
                 "kind": "VariableStatement",
                 "fullStart": 0,
-                "fullEnd": 83,
+                "fullEnd": 15,
                 "start": 0,
                 "end": 14,
-                "fullWidth": 83,
+                "fullWidth": 15,
                 "width": 14,
                 "isIncrementallyUnusable": true,
                 "modifiers": [],
@@ -202,25 +202,51 @@
                 "semicolonToken": {
                     "kind": "SemicolonToken",
                     "fullStart": 13,
-                    "fullEnd": 83,
+                    "fullEnd": 15,
                     "start": 13,
                     "end": 14,
-                    "fullWidth": 70,
+                    "fullWidth": 2,
                     "width": 1,
                     "text": ";",
                     "value": ";",
                     "valueText": ";",
                     "hasTrailingTrivia": true,
-                    "hasTrailingComment": true,
-                    "hasTrailingNewLine": true,
-                    "hasTrailingSkippedText": true,
                     "trailingTrivia": [
                         {
                             "kind": "WhitespaceTrivia",
                             "fullStart": 14,
                             "fullEnd": 15,
                             "text": " "
-                        },
+                        }
+                    ]
+                }
+            },
+            {
+                "kind": "IfStatement",
+                "fullStart": 15,
+                "fullEnd": 99,
+                "start": 85,
+                "end": 99,
+                "fullWidth": 84,
+                "width": 14,
+                "isIncrementallyUnusable": true,
+                "ifKeyword": {
+                    "kind": "IfKeyword",
+                    "fullStart": 15,
+                    "fullEnd": 88,
+                    "start": 85,
+                    "end": 87,
+                    "fullWidth": 73,
+                    "width": 2,
+                    "text": "if",
+                    "value": "if",
+                    "valueText": "if",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingComment": true,
+                    "hasLeadingNewLine": true,
+                    "hasLeadingSkippedText": true,
+                    "hasTrailingTrivia": true,
+                    "leadingTrivia": [
                         {
                             "kind": "SkippedTokenTrivia",
                             "skippedToken": {
@@ -253,33 +279,7 @@
                             "fullStart": 81,
                             "fullEnd": 83,
                             "text": "\r\n"
-                        }
-                    ]
-                }
-            },
-            {
-                "kind": "IfStatement",
-                "fullStart": 83,
-                "fullEnd": 99,
-                "start": 85,
-                "end": 99,
-                "fullWidth": 16,
-                "width": 14,
-                "ifKeyword": {
-                    "kind": "IfKeyword",
-                    "fullStart": 83,
-                    "fullEnd": 88,
-                    "start": 85,
-                    "end": 87,
-                    "fullWidth": 5,
-                    "width": 2,
-                    "text": "if",
-                    "value": "if",
-                    "valueText": "if",
-                    "hasLeadingTrivia": true,
-                    "hasLeadingNewLine": true,
-                    "hasTrailingTrivia": true,
-                    "leadingTrivia": [
+                        },
                         {
                             "kind": "NewLineTrivia",
                             "fullStart": 83,

@@ -40,19 +40,19 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 0,
-                "fullEnd": 379,
+                "fullEnd": 372,
                 "start": 367,
                 "end": 371,
-                "fullWidth": 379,
+                "fullWidth": 372,
                 "width": 4,
                 "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "ParenthesizedArrowFunctionExpression",
                     "fullStart": 0,
-                    "fullEnd": 379,
+                    "fullEnd": 372,
                     "start": 367,
                     "end": 371,
-                    "fullWidth": 379,
+                    "fullWidth": 372,
                     "width": 4,
                     "isIncrementallyUnusable": true,
                     "callSignature": {
@@ -194,12 +194,11 @@
                     "block": {
                         "kind": "Block",
                         "fullStart": 369,
-                        "fullEnd": 379,
+                        "fullEnd": 372,
                         "start": 369,
                         "end": 371,
-                        "fullWidth": 10,
+                        "fullWidth": 3,
                         "width": 2,
-                        "isIncrementallyUnusable": true,
                         "openBraceToken": {
                             "kind": "OpenBraceToken",
                             "fullStart": 369,
@@ -216,38 +215,22 @@
                         "closeBraceToken": {
                             "kind": "CloseBraceToken",
                             "fullStart": 370,
-                            "fullEnd": 379,
+                            "fullEnd": 372,
                             "start": 370,
                             "end": 371,
-                            "fullWidth": 9,
+                            "fullWidth": 2,
                             "width": 1,
                             "text": "}",
                             "value": "}",
                             "valueText": "}",
                             "hasTrailingTrivia": true,
                             "hasTrailingNewLine": true,
-                            "hasTrailingSkippedText": true,
                             "trailingTrivia": [
                                 {
                                     "kind": "NewLineTrivia",
                                     "fullStart": 371,
                                     "fullEnd": 372,
                                     "text": "\n"
-                                },
-                                {
-                                    "kind": "SkippedTokenTrivia",
-                                    "skippedToken": {
-                                        "kind": "FinallyKeyword",
-                                        "fullStart": 372,
-                                        "fullEnd": 379,
-                                        "start": 372,
-                                        "end": 379,
-                                        "fullWidth": 7,
-                                        "width": 7,
-                                        "text": "finally",
-                                        "value": "finally",
-                                        "valueText": "finally"
-                                    }
                                 }
                             ]
                         }
@@ -256,23 +239,43 @@
             },
             {
                 "kind": "Block",
-                "fullStart": 379,
+                "fullStart": 372,
                 "fullEnd": 382,
                 "start": 379,
                 "end": 381,
-                "fullWidth": 3,
+                "fullWidth": 10,
                 "width": 2,
+                "isIncrementallyUnusable": true,
                 "openBraceToken": {
                     "kind": "OpenBraceToken",
-                    "fullStart": 379,
+                    "fullStart": 372,
                     "fullEnd": 380,
                     "start": 379,
                     "end": 380,
-                    "fullWidth": 1,
+                    "fullWidth": 8,
                     "width": 1,
                     "text": "{",
                     "value": "{",
-                    "valueText": "{"
+                    "valueText": "{",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "FinallyKeyword",
+                                "fullStart": 372,
+                                "fullEnd": 379,
+                                "start": 372,
+                                "end": 379,
+                                "fullWidth": 7,
+                                "width": 7,
+                                "text": "finally",
+                                "value": "finally",
+                                "valueText": "finally"
+                            }
+                        }
+                    ]
                 },
                 "statements": [],
                 "closeBraceToken": {

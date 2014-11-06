@@ -619,12 +619,11 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 522,
-                "fullEnd": 533,
+                "fullEnd": 530,
                 "start": 522,
                 "end": 530,
-                "fullWidth": 11,
+                "fullWidth": 8,
                 "width": 8,
-                "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "BinaryExpression",
                     "fullStart": 522,
@@ -673,17 +672,40 @@
                 "semicolonToken": {
                     "kind": "SemicolonToken",
                     "fullStart": 529,
-                    "fullEnd": 533,
+                    "fullEnd": 530,
                     "start": 529,
                     "end": 530,
-                    "fullWidth": 4,
+                    "fullWidth": 1,
                     "width": 1,
                     "text": ";",
                     "value": ";",
-                    "valueText": ";",
+                    "valueText": ";"
+                }
+            },
+            {
+                "kind": "Block",
+                "fullStart": 530,
+                "fullEnd": 554,
+                "start": 533,
+                "end": 554,
+                "fullWidth": 24,
+                "width": 21,
+                "isIncrementallyUnusable": true,
+                "openBraceToken": {
+                    "kind": "OpenBraceToken",
+                    "fullStart": 530,
+                    "fullEnd": 535,
+                    "start": 533,
+                    "end": 534,
+                    "fullWidth": 5,
+                    "width": 1,
+                    "text": "{",
+                    "value": "{",
+                    "valueText": "{",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
                     "hasTrailingTrivia": true,
-                    "hasTrailingSkippedText": true,
-                    "trailingTrivia": [
+                    "leadingTrivia": [
                         {
                             "kind": "SkippedTokenTrivia",
                             "skippedToken": {
@@ -720,29 +742,7 @@
                             "fullEnd": 533,
                             "text": " "
                         }
-                    ]
-                }
-            },
-            {
-                "kind": "Block",
-                "fullStart": 533,
-                "fullEnd": 554,
-                "start": 533,
-                "end": 554,
-                "fullWidth": 21,
-                "width": 21,
-                "openBraceToken": {
-                    "kind": "OpenBraceToken",
-                    "fullStart": 533,
-                    "fullEnd": 535,
-                    "start": 533,
-                    "end": 534,
-                    "fullWidth": 2,
-                    "width": 1,
-                    "text": "{",
-                    "value": "{",
-                    "valueText": "{",
-                    "hasTrailingTrivia": true,
+                    ],
                     "trailingTrivia": [
                         {
                             "kind": "WhitespaceTrivia",

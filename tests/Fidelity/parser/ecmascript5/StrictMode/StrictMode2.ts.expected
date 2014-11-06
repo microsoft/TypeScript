@@ -250,12 +250,11 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 33,
-                "fullEnd": 48,
+                "fullEnd": 42,
                 "start": 33,
                 "end": 40,
-                "fullWidth": 15,
+                "fullWidth": 9,
                 "width": 7,
-                "isIncrementallyUnusable": true,
                 "parsedInStrictMode": true,
                 "expression": {
                     "kind": "InvocationExpression",
@@ -317,73 +316,76 @@
                 "semicolonToken": {
                     "kind": "SemicolonToken",
                     "fullStart": 39,
-                    "fullEnd": 48,
+                    "fullEnd": 42,
                     "start": 39,
                     "end": 40,
-                    "fullWidth": 9,
+                    "fullWidth": 3,
                     "width": 1,
                     "text": ";",
                     "value": ";",
                     "valueText": ";",
                     "hasTrailingTrivia": true,
                     "hasTrailingNewLine": true,
-                    "hasTrailingSkippedText": true,
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",
                             "fullStart": 40,
                             "fullEnd": 42,
                             "text": "\r\n"
-                        },
-                        {
-                            "kind": "SkippedTokenTrivia",
-                            "skippedToken": {
-                                "kind": "StaticKeyword",
-                                "fullStart": 42,
-                                "fullEnd": 48,
-                                "start": 42,
-                                "end": 48,
-                                "fullWidth": 6,
-                                "width": 6,
-                                "text": "static",
-                                "value": "static",
-                                "valueText": "static"
-                            }
                         }
                     ]
                 }
             },
             {
                 "kind": "ExpressionStatement",
-                "fullStart": 48,
+                "fullStart": 42,
                 "fullEnd": 51,
                 "start": 48,
                 "end": 51,
-                "fullWidth": 3,
+                "fullWidth": 9,
                 "width": 3,
                 "isIncrementallyUnusable": true,
                 "parsedInStrictMode": true,
                 "expression": {
                     "kind": "ParenthesizedExpression",
-                    "fullStart": 48,
+                    "fullStart": 42,
                     "fullEnd": 50,
                     "start": 48,
                     "end": 50,
-                    "fullWidth": 2,
+                    "fullWidth": 8,
                     "width": 2,
                     "isIncrementallyUnusable": true,
                     "parsedInStrictMode": true,
                     "openParenToken": {
                         "kind": "OpenParenToken",
-                        "fullStart": 48,
+                        "fullStart": 42,
                         "fullEnd": 49,
                         "start": 48,
                         "end": 49,
-                        "fullWidth": 1,
+                        "fullWidth": 7,
                         "width": 1,
                         "text": "(",
                         "value": "(",
-                        "valueText": "("
+                        "valueText": "(",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingSkippedText": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "SkippedTokenTrivia",
+                                "skippedToken": {
+                                    "kind": "StaticKeyword",
+                                    "fullStart": 42,
+                                    "fullEnd": 48,
+                                    "start": 42,
+                                    "end": 48,
+                                    "fullWidth": 6,
+                                    "width": 6,
+                                    "text": "static",
+                                    "value": "static",
+                                    "valueText": "static"
+                                }
+                            }
+                        ]
                     },
                     "expression": {
                         "kind": "IdentifierName",

@@ -269,32 +269,66 @@
                         {
                             "kind": "VariableDeclarator",
                             "fullStart": 432,
-                            "fullEnd": 437,
+                            "fullEnd": 434,
                             "start": 432,
                             "end": 433,
-                            "fullWidth": 5,
+                            "fullWidth": 2,
                             "width": 1,
-                            "isIncrementallyUnusable": true,
                             "propertyName": {
                                 "kind": "IdentifierName",
                                 "fullStart": 432,
-                                "fullEnd": 437,
+                                "fullEnd": 434,
                                 "start": 432,
                                 "end": 433,
-                                "fullWidth": 5,
+                                "fullWidth": 2,
                                 "width": 1,
                                 "text": "x",
                                 "value": "x",
                                 "valueText": "x",
                                 "hasTrailingTrivia": true,
-                                "hasTrailingSkippedText": true,
                                 "trailingTrivia": [
                                     {
                                         "kind": "WhitespaceTrivia",
                                         "fullStart": 433,
                                         "fullEnd": 434,
                                         "text": " "
-                                    },
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "kind": "CommaToken",
+                            "fullStart": 434,
+                            "fullEnd": 434,
+                            "start": 434,
+                            "end": 434,
+                            "fullWidth": 0,
+                            "width": 0,
+                            "text": ""
+                        },
+                        {
+                            "kind": "VariableDeclarator",
+                            "fullStart": 434,
+                            "fullEnd": 442,
+                            "start": 437,
+                            "end": 442,
+                            "fullWidth": 8,
+                            "width": 5,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "IdentifierName",
+                                "fullStart": 434,
+                                "fullEnd": 442,
+                                "start": 437,
+                                "end": 442,
+                                "fullWidth": 8,
+                                "width": 5,
+                                "text": "__arr",
+                                "value": "__arr",
+                                "valueText": "___arr",
+                                "hasLeadingTrivia": true,
+                                "hasLeadingSkippedText": true,
+                                "leadingTrivia": [
                                     {
                                         "kind": "SkippedTokenTrivia",
                                         "skippedToken": {
@@ -317,37 +351,6 @@
                                         "text": " "
                                     }
                                 ]
-                            }
-                        },
-                        {
-                            "kind": "CommaToken",
-                            "fullStart": 437,
-                            "fullEnd": 437,
-                            "start": 437,
-                            "end": 437,
-                            "fullWidth": 0,
-                            "width": 0,
-                            "text": ""
-                        },
-                        {
-                            "kind": "VariableDeclarator",
-                            "fullStart": 437,
-                            "fullEnd": 442,
-                            "start": 437,
-                            "end": 442,
-                            "fullWidth": 5,
-                            "width": 5,
-                            "propertyName": {
-                                "kind": "IdentifierName",
-                                "fullStart": 437,
-                                "fullEnd": 442,
-                                "start": 437,
-                                "end": 442,
-                                "fullWidth": 5,
-                                "width": 5,
-                                "text": "__arr",
-                                "value": "__arr",
-                                "valueText": "___arr"
                             }
                         }
                     ]

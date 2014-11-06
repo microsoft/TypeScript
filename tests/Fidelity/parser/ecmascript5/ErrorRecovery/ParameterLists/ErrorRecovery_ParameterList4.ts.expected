@@ -120,47 +120,47 @@
                             {
                                 "kind": "CommaToken",
                                 "fullStart": 12,
-                                "fullEnd": 14,
+                                "fullEnd": 13,
                                 "start": 12,
                                 "end": 13,
-                                "fullWidth": 2,
+                                "fullWidth": 1,
                                 "width": 1,
                                 "text": ",",
                                 "value": ",",
-                                "valueText": ",",
-                                "hasTrailingTrivia": true,
-                                "hasTrailingSkippedText": true,
-                                "trailingTrivia": [
-                                    {
-                                        "kind": "SkippedTokenTrivia",
-                                        "skippedToken": {
-                                            "kind": "BarToken",
-                                            "fullStart": 13,
-                                            "fullEnd": 14,
-                                            "start": 13,
-                                            "end": 14,
-                                            "fullWidth": 1,
-                                            "width": 1,
-                                            "text": "|",
-                                            "value": "|",
-                                            "valueText": "|"
-                                        }
-                                    }
-                                ]
+                                "valueText": ","
                             }
                         ],
                         "closeParenToken": {
                             "kind": "CloseParenToken",
-                            "fullStart": 14,
+                            "fullStart": 13,
                             "fullEnd": 16,
                             "start": 14,
                             "end": 15,
-                            "fullWidth": 2,
+                            "fullWidth": 3,
                             "width": 1,
                             "text": ")",
                             "value": ")",
                             "valueText": ")",
+                            "hasLeadingTrivia": true,
+                            "hasLeadingSkippedText": true,
                             "hasTrailingTrivia": true,
+                            "leadingTrivia": [
+                                {
+                                    "kind": "SkippedTokenTrivia",
+                                    "skippedToken": {
+                                        "kind": "BarToken",
+                                        "fullStart": 13,
+                                        "fullEnd": 14,
+                                        "start": 13,
+                                        "end": 14,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": "|",
+                                        "value": "|",
+                                        "valueText": "|"
+                                    }
+                                }
+                            ],
                             "trailingTrivia": [
                                 {
                                     "kind": "WhitespaceTrivia",

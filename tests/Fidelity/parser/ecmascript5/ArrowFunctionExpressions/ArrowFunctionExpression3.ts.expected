@@ -32,19 +32,19 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 0,
-                "fullEnd": 20,
+                "fullEnd": 19,
                 "start": 0,
                 "end": 19,
-                "fullWidth": 20,
+                "fullWidth": 19,
                 "width": 19,
                 "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "BinaryExpression",
                     "fullStart": 0,
-                    "fullEnd": 20,
+                    "fullEnd": 19,
                     "start": 0,
                     "end": 19,
-                    "fullWidth": 20,
+                    "fullWidth": 19,
                     "width": 19,
                     "isIncrementallyUnusable": true,
                     "left": {
@@ -92,10 +92,10 @@
                     "right": {
                         "kind": "BinaryExpression",
                         "fullStart": 4,
-                        "fullEnd": 20,
+                        "fullEnd": 19,
                         "start": 4,
                         "end": 19,
-                        "fullWidth": 16,
+                        "fullWidth": 15,
                         "width": 15,
                         "isIncrementallyUnusable": true,
                         "left": {
@@ -288,42 +288,23 @@
                         "right": {
                             "kind": "IdentifierName",
                             "fullStart": 18,
-                            "fullEnd": 20,
+                            "fullEnd": 19,
                             "start": 18,
                             "end": 19,
-                            "fullWidth": 2,
+                            "fullWidth": 1,
                             "width": 1,
                             "text": "a",
                             "value": "a",
-                            "valueText": "a",
-                            "hasTrailingTrivia": true,
-                            "hasTrailingSkippedText": true,
-                            "trailingTrivia": [
-                                {
-                                    "kind": "SkippedTokenTrivia",
-                                    "skippedToken": {
-                                        "kind": "CloseParenToken",
-                                        "fullStart": 19,
-                                        "fullEnd": 20,
-                                        "start": 19,
-                                        "end": 20,
-                                        "fullWidth": 1,
-                                        "width": 1,
-                                        "text": ")",
-                                        "value": ")",
-                                        "valueText": ")"
-                                    }
-                                }
-                            ]
+                            "valueText": "a"
                         }
                     }
                 },
                 "semicolonToken": {
                     "kind": "SemicolonToken",
-                    "fullStart": 20,
-                    "fullEnd": 20,
-                    "start": 20,
-                    "end": 20,
+                    "fullStart": 19,
+                    "fullEnd": 19,
+                    "start": 19,
+                    "end": 19,
                     "fullWidth": 0,
                     "width": 0,
                     "text": ""
@@ -332,13 +313,32 @@
         ],
         "endOfFileToken": {
             "kind": "EndOfFileToken",
-            "fullStart": 20,
+            "fullStart": 19,
             "fullEnd": 20,
             "start": 20,
             "end": 20,
-            "fullWidth": 0,
+            "fullWidth": 1,
             "width": 0,
-            "text": ""
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "CloseParenToken",
+                        "fullStart": 19,
+                        "fullEnd": 20,
+                        "start": 19,
+                        "end": 20,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": ")",
+                        "value": ")",
+                        "valueText": ")"
+                    }
+                }
+            ]
         }
     },
     "lineMap": {

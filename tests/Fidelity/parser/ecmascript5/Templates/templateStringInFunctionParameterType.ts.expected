@@ -129,26 +129,60 @@
             {
                 "kind": "ExpressionStatement",
                 "fullStart": 11,
-                "fullEnd": 19,
+                "fullEnd": 18,
                 "start": 11,
                 "end": 18,
-                "fullWidth": 8,
+                "fullWidth": 7,
                 "width": 7,
                 "isIncrementallyUnusable": true,
                 "expression": {
                     "kind": "NoSubstitutionTemplateToken",
                     "fullStart": 11,
-                    "fullEnd": 19,
+                    "fullEnd": 18,
                     "start": 11,
                     "end": 18,
-                    "fullWidth": 8,
+                    "fullWidth": 7,
                     "width": 7,
                     "text": "`hello`",
                     "value": "hello",
-                    "valueText": "hello",
+                    "valueText": "hello"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 18,
+                    "fullEnd": 18,
+                    "start": 18,
+                    "end": 18,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "text": ""
+                }
+            },
+            {
+                "kind": "EmptyStatement",
+                "fullStart": 18,
+                "fullEnd": 22,
+                "start": 19,
+                "end": 20,
+                "fullWidth": 4,
+                "width": 1,
+                "isIncrementallyUnusable": true,
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 18,
+                    "fullEnd": 22,
+                    "start": 19,
+                    "end": 20,
+                    "fullWidth": 4,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
                     "hasTrailingTrivia": true,
-                    "hasTrailingSkippedText": true,
-                    "trailingTrivia": [
+                    "hasTrailingNewLine": true,
+                    "leadingTrivia": [
                         {
                             "kind": "SkippedTokenTrivia",
                             "skippedToken": {
@@ -164,40 +198,7 @@
                                 "valueText": ")"
                             }
                         }
-                    ]
-                },
-                "semicolonToken": {
-                    "kind": "SemicolonToken",
-                    "fullStart": 19,
-                    "fullEnd": 19,
-                    "start": 19,
-                    "end": 19,
-                    "fullWidth": 0,
-                    "width": 0,
-                    "text": ""
-                }
-            },
-            {
-                "kind": "EmptyStatement",
-                "fullStart": 19,
-                "fullEnd": 22,
-                "start": 19,
-                "end": 20,
-                "fullWidth": 3,
-                "width": 1,
-                "semicolonToken": {
-                    "kind": "SemicolonToken",
-                    "fullStart": 19,
-                    "fullEnd": 22,
-                    "start": 19,
-                    "end": 20,
-                    "fullWidth": 3,
-                    "width": 1,
-                    "text": ";",
-                    "value": ";",
-                    "valueText": ";",
-                    "hasTrailingTrivia": true,
-                    "hasTrailingNewLine": true,
+                    ],
                     "trailingTrivia": [
                         {
                             "kind": "NewLineTrivia",
