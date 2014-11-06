@@ -572,10 +572,6 @@
         "category": "Error",
         "code": 2322
     },
-    "Type '{0}' is not assignable to type '{1}'.": {
-        "category": "Error",
-        "code": 2323
-    },
     "Property '{0}' is missing in type '{1}'.": {
         "category": "Error",
         "code": 2324
@@ -1409,13 +1405,35 @@
         "category": "Error",
         "code": 4081
     },
-
-    
+    "Enum declarations must all be const or non-const.": {
+        "category": "Error",
+        "code": 4082
+    },
+    "In 'const' enum declarations member initializer must be constant expression.": {
+        "category": "Error",
+        "code": 4083,
+        "isEarly": true
+    },
+    "'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.": {
+        "category": "Error",
+        "code": 4084
+    },
+    "Index expression arguments in 'const' enums must be of type 'string'.": {
+        "category": "Error",
+        "code": 4085
+    },
+    "'const' enum member initializer was evaluated to a non-finite value.": {
+        "category": "Error",
+        "code": 4086
+    },
+    "'const' enum member initializer was evaluated to disallowed value 'NaN'.": {
+        "category": "Error",
+        "code": 4087
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
     },
-
     "Cannot find the common subdirectory path for the input files.": {
         "category": "Error",
         "code": 5009
@@ -1467,6 +1485,10 @@
     "Redirect output structure to the directory.": {
         "category": "Message",
         "code": 6006
+    },
+    "Do not erase const enum declarations in generated code.": {
+        "category": "Message",
+        "code": 6007
     },
     "Do not emit comments to output.": {
         "category": "Message",

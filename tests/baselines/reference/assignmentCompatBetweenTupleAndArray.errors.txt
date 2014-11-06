@@ -1,9 +1,9 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts(17,1): error TS2323: Type '[number, string]' is not assignable to type 'number[]'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts(17,1): error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
   Types of property 'pop' are incompatible.
     Type '() => string | number' is not assignable to type '() => number'.
       Type 'string | number' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts(18,1): error TS2323: Type '{}[]' is not assignable to type '[{}]'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts(18,1): error TS2322: Type '{}[]' is not assignable to type '[{}]'.
   Property '0' is missing in type '{}[]'.
 
 
@@ -26,13 +26,13 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     // error
     numArray = numStrTuple;
     ~~~~~~~~
-!!! error TS2323: Type '[number, string]' is not assignable to type 'number[]'.
-!!! error TS2323:   Types of property 'pop' are incompatible.
-!!! error TS2323:     Type '() => string | number' is not assignable to type '() => number'.
-!!! error TS2323:       Type 'string | number' is not assignable to type 'number'.
-!!! error TS2323:         Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
+!!! error TS2322:   Types of property 'pop' are incompatible.
+!!! error TS2322:     Type '() => string | number' is not assignable to type '() => number'.
+!!! error TS2322:       Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:         Type 'string' is not assignable to type 'number'.
     emptyObjTuple = emptyObjArray;
     ~~~~~~~~~~~~~
-!!! error TS2323: Type '{}[]' is not assignable to type '[{}]'.
-!!! error TS2323:   Property '0' is missing in type '{}[]'.
+!!! error TS2322: Type '{}[]' is not assignable to type '[{}]'.
+!!! error TS2322:   Property '0' is missing in type '{}[]'.
     

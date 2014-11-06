@@ -261,14 +261,13 @@ module TypeScript {
 
         // Property Assignment
         SimplePropertyAssignment,
-        // GetAccessorPropertyAssignment,
-        // SetAccessorPropertyAssignment,
         FunctionPropertyAssignment,
 
         // Misc.
         Parameter,
         EnumElement,
         TypeAnnotation,
+        ComputedPropertyName,
         ExternalModuleReference,
         ModuleNameModuleReference,
 

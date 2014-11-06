@@ -6,7 +6,7 @@ module TypeScript {
             // Debug.assert(!isShared(element));
 
             while (element) {
-                if (element.kind() === SyntaxKind.SourceUnit) {
+                if (element.kind === SyntaxKind.SourceUnit) {
                     return (<SourceUnitSyntax>element).syntaxTree;
                 }
 
@@ -53,7 +53,7 @@ module TypeScript {
             throw Errors.argumentOutOfRange("position");
         }
 
-        var token = findTokenWorker(sourceUnit, 0, position);
+        var token = findTokenInNodeOrToken(sourceUnit, 0, position);
         if (token) {
             Debug.assert(token.fullWidth() > 0);
             return token;
@@ -113,13 +113,39 @@ module TypeScript {
     }
 
     function findTokenWorker(element: ISyntaxElement, elementPosition: number, position: number): ISyntaxToken {
-        if (isToken(element)) {
-            return <ISyntaxToken>element;
+        if (isList(element)) {
+            return findTokenInList(<ISyntaxNodeOrToken[]>element, elementPosition, position);
+        }
+        else {
+            return findTokenInNodeOrToken(<ISyntaxNodeOrToken>element, elementPosition, position);
+        }
+    }
+
+    function findTokenInList(list: ISyntaxNodeOrToken[], elementPosition: number, position: number): ISyntaxToken {
+        for (var i = 0, n = list.length; i < n; i++) {
+            var child = list[i];
+
+            var childFullWidth = fullWidth(child);
+            var elementEndPosition = elementPosition + childFullWidth;
+
+            if (position < elementEndPosition) {
+                return findTokenWorker(child, elementPosition, position);
+            }
+
+            elementPosition = elementEndPosition;
         }
 
-        // Consider: we could use a binary search here to find the child more quickly.
-        for (var i = 0, n = childCount(element); i < n; i++) {
-            var child = childAt(element, i);
+        return undefined;
+    }
+
+
+    function findTokenInNodeOrToken(nodeOrToken: ISyntaxNodeOrToken, elementPosition: number, position: number): ISyntaxToken {
+        if (isToken(nodeOrToken)) {
+            return <ISyntaxToken>nodeOrToken;
+        }
+
+        for (var i = 0, n = childCount(nodeOrToken); i < n; i++) {
+            var child = nodeOrToken.childAt(i);
 
             if (child) {
                 var childFullWidth = fullWidth(child);
@@ -137,7 +163,7 @@ module TypeScript {
     }
 
     function tryGetEndOfFileAt(element: ISyntaxElement, position: number): ISyntaxToken {
-        if (element.kind() === SyntaxKind.SourceUnit && position === fullWidth(element)) {
+        if (element.kind === SyntaxKind.SourceUnit && position === fullWidth(element)) {
             var sourceUnit = <SourceUnitSyntax>element;
             return sourceUnit.endOfFileToken;
         }
@@ -146,7 +172,7 @@ module TypeScript {
     }
 
     export function nextToken(token: ISyntaxToken, text?: ISimpleText): ISyntaxToken {
-        if (token.kind() === SyntaxKind.EndOfFileToken) {
+        if (token.kind === SyntaxKind.EndOfFileToken) {
             return undefined;
         }
 
@@ -155,7 +181,7 @@ module TypeScript {
 
     export function isNode(element: ISyntaxElement): boolean {
         if (element) {
-            var kind = element.kind();
+            var kind = element.kind;
             return kind >= SyntaxKind.FirstNode && kind <= SyntaxKind.LastNode;
         }
 
@@ -168,7 +194,7 @@ module TypeScript {
 
     export function isToken(element: ISyntaxElement): boolean {
         if (element) {
-            return isTokenKind(element.kind());
+            return isTokenKind(element.kind);
         }
 
         return false;
@@ -227,7 +253,7 @@ module TypeScript {
 
     export function firstToken(element: ISyntaxElement): ISyntaxToken {
         if (element) {
-            var kind = element.kind();
+            var kind = element.kind;
 
             if (isTokenKind(kind)) {
                 return (<ISyntaxToken>element).fullWidth() > 0 || kind === SyntaxKind.EndOfFileToken ? <ISyntaxToken>element : undefined;
@@ -246,10 +272,10 @@ module TypeScript {
 
     export function lastToken(element: ISyntaxElement): ISyntaxToken {
         if (isToken(element)) {
-            return fullWidth(element) > 0 || element.kind() === SyntaxKind.EndOfFileToken ? <ISyntaxToken>element : undefined;
+            return fullWidth(element) > 0 || element.kind === SyntaxKind.EndOfFileToken ? <ISyntaxToken>element : undefined;
         }
 
-        if (element.kind() === SyntaxKind.SourceUnit) {
+        if (element.kind === SyntaxKind.SourceUnit) {
             return (<SourceUnitSyntax>element).endOfFileToken;
         }
 
@@ -308,27 +334,52 @@ module TypeScript {
         return info;
     }
 
-    function computeData(element: ISyntaxElement): number {
-        var slotCount = childCount(element);
+    function combineData(fullWidth: number, isIncrementallyUnusable: boolean) {
+        return (fullWidth << SyntaxConstants.NodeFullWidthShift)
+            | (isIncrementallyUnusable ? SyntaxConstants.NodeIncrementallyUnusableMask : 0)
+            | SyntaxConstants.NodeDataComputed;
+    }
 
+    function listComputeData(list: ISyntaxNodeOrToken[]): number {
         var fullWidth = 0;
+        var isIncrementallyUnusable = false;
+
+        for (var i = 0, n = list.length; i < n; i++) {
+            var child: ISyntaxElement = list[i];
+
+            fullWidth += TypeScript.fullWidth(child);
+            isIncrementallyUnusable = isIncrementallyUnusable || TypeScript.isIncrementallyUnusable(child);
+        }
+
+        return combineData(fullWidth, isIncrementallyUnusable);
+    }
+
+    function computeData(element: ISyntaxElement): number {
+        if (isList(element)) {
+            return listComputeData(<ISyntaxNodeOrToken[]>element);
+        }
+        else {
+            return nodeOrTokenComputeData(<ISyntaxNodeOrToken>element);
+        }
+    }
+
+    function nodeOrTokenComputeData(nodeOrToken: ISyntaxNodeOrToken) {
+        var fullWidth = 0;
+        var slotCount = nodeOrToken.childCount;
 
         // If we have no children (like an OmmittedExpressionSyntax), we're automatically not reusable.
-        var isIncrementallyUnusable = slotCount === 0 && !isList(element);
+        var isIncrementallyUnusable = slotCount === 0;
 
         for (var i = 0, n = slotCount; i < n; i++) {
-            var child = childAt(element, i);
+            var child = nodeOrToken.childAt(i);
 
             if (child) {
                 fullWidth += TypeScript.fullWidth(child);
-
                 isIncrementallyUnusable = isIncrementallyUnusable || TypeScript.isIncrementallyUnusable(child);
             }
         }
 
-        return (fullWidth << SyntaxConstants.NodeFullWidthShift)
-            | (isIncrementallyUnusable ? SyntaxConstants.NodeIncrementallyUnusableMask : 0)
-            | SyntaxConstants.NodeDataComputed;
+        return combineData(fullWidth, isIncrementallyUnusable);
     }
 
     export function start(element: ISyntaxElement, text?: ISimpleText): number {
@@ -366,8 +417,8 @@ module TypeScript {
     }
 
     export interface ISyntaxElement {
-        kind(): SyntaxKind;
-        parent?: ISyntaxElement;
+        kind: SyntaxKind;
+        parent: ISyntaxElement;
     }
 
     export interface ISyntaxNode extends ISyntaxNodeOrToken {
@@ -380,6 +431,7 @@ module TypeScript {
     }
 
     export interface IModuleElementSyntax extends ISyntaxNode {
+        _moduleElementBrand: any;
     }
 
     export interface IStatementSyntax extends IModuleElementSyntax {
@@ -387,15 +439,28 @@ module TypeScript {
     }
 
     export interface ITypeMemberSyntax extends ISyntaxNode {
+        _typeMemberBrand: any;
     }
 
     export interface IClassElementSyntax extends ISyntaxNode {
+        _classElementBrand: any;
     }
 
     export interface IMemberDeclarationSyntax extends IClassElementSyntax {
+        _memberDeclarationBrand: any;
     }
 
-    export interface IPropertyAssignmentSyntax extends IClassElementSyntax {
+    export interface IPropertyAssignmentSyntax extends ISyntaxNodeOrToken {
+        _propertyAssignmentBrand: any;
+    }
+
+    export interface IAccessorSyntax extends IPropertyAssignmentSyntax, IMemberDeclarationSyntax {
+        _accessorBrand: any;
+
+        modifiers: ISyntaxToken[];
+        propertyName: IPropertyNameSyntax;
+        callSignature: CallSignatureSyntax;
+        block: BlockSyntax;
     }
 
     export interface ISwitchClauseSyntax extends ISyntaxNode {
@@ -437,5 +502,10 @@ module TypeScript {
     }
 
     export interface INameSyntax extends ITypeSyntax {
+        _nameBrand: any;
+    }
+
+    export interface IPropertyNameSyntax extends ISyntaxNodeOrToken {
+        _propertyNameBrand: any;
     }
 }
