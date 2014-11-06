@@ -9,6 +9,12 @@ module ts.formatting {
         close(): void;
     }
 
+    const enum ScanAction{
+        Normal,
+        RescanGreaterThanToken,
+        RescanSlashToken
+    }
+
     export function getFormattingScanner(sourceFile: SourceFile, enclosingNode: Node, range: TextRange): FormattingScanner {
 
         scanner.setText(sourceFile.text);
@@ -17,23 +23,26 @@ module ts.formatting {
         var wasNewLine: boolean = true;
         var leadingTrivia: TextRangeWithKind[];
         var trailingTrivia: TextRangeWithKind[];
+        
         var savedStartPos: number;
+        var lastScanAction: ScanAction;
         var lastTokenInfo: TokenInfo;
 
         return {
             advance: advance,
             readTokenInfo: readTokenInfo,
             isOnToken: isOnToken,
-            lastTrailingTriviaWasNewLine: lastTrailingTriviaWasNewLine,
-            close: () => scanner.setText(undefined)
+            lastTrailingTriviaWasNewLine: () => wasNewLine,
+            close: () => {
+                lastTokenInfo = undefined;
+                scanner.setText(undefined);
+            }
         }
-
 
         function advance(): void {
             lastTokenInfo = undefined;
             var isStarted = scanner.getStartPos() !== enclosingNode.pos;
 
-            // accumulate leading trivia and token
             if (isStarted) {
                 if (trailingTrivia) {
                     Debug.assert(trailingTrivia.length !== 0);
@@ -79,17 +88,28 @@ module ts.formatting {
             savedStartPos = scanner.getStartPos();
         }
 
-        function startsWithGreaterThanToken(t: SyntaxKind): boolean {
-            switch(t) {
+        function shouldRescanGreaterThanToken(container: Node): boolean {
+            if (container.kind !== SyntaxKind.BinaryExpression) {
+                return false;
+            }
+            switch ((<BinaryExpression>container).operator) {
                 case SyntaxKind.GreaterThanEqualsToken:
                 case SyntaxKind.GreaterThanGreaterThanEqualsToken:
                 case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
                 case SyntaxKind.GreaterThanGreaterThanToken:
                     return true;
-                default:
-                    return false;
             }
+
+            return false;
+        }
+
+        function shouldRescanSlashToken(container: Node): boolean {
+            return container.kind === SyntaxKind.RegularExpressionLiteral;
+        }
+
+        function startsWithSlashToken(t: SyntaxKind): boolean {
+            return t === SyntaxKind.SlashToken || t === SyntaxKind.SlashEqualsToken;
         }
 
         function readTokenInfo(n: Node): TokenInfo {
@@ -101,8 +121,21 @@ module ts.formatting {
                 };
 
             }
+
             if (lastTokenInfo) {
-                //return lastTokenInfo;
+                if (shouldRescanGreaterThanToken(n)) {
+                    if (lastScanAction === ScanAction.RescanGreaterThanToken) {
+                        return lastTokenInfo;
+                    }
+                }
+                else if (shouldRescanSlashToken(n)) {
+                    if (lastScanAction === ScanAction.RescanSlashToken) {
+                        return lastTokenInfo;
+                    }
+                }
+                else if (lastScanAction === ScanAction.Normal) {
+                    return lastTokenInfo;
+                }
             }
 
             if (scanner.getStartPos() !== savedStartPos) {
@@ -110,15 +143,21 @@ module ts.formatting {
                 scanner.scan();
             }
 
-            var current = scanner.getToken();
+            var currentToken = scanner.getToken();
             var endPos: number;
-            if (n.kind === SyntaxKind.BinaryExpression && startsWithGreaterThanToken((<BinaryExpression>n).operator) && current === SyntaxKind.GreaterThanToken) {
-                current = scanner.reScanGreaterToken();
-                Debug.assert((<BinaryExpression>n).operator === current);
+
+            if (currentToken === SyntaxKind.GreaterThanToken && shouldRescanGreaterThanToken(n)) {
+                currentToken = scanner.reScanGreaterToken();
+                Debug.assert((<BinaryExpression>n).operator === currentToken);
+                lastScanAction = ScanAction.RescanGreaterThanToken;
             }
-            else if (n.kind === SyntaxKind.RegularExpressionLiteral && current === SyntaxKind.SlashToken) {
-                current = scanner.reScanSlashToken();
-                Debug.assert(n.kind === current);
+            else if (n.kind === SyntaxKind.RegularExpressionLiteral && startsWithSlashToken(currentToken)) {
+                currentToken = scanner.reScanSlashToken();
+                Debug.assert(n.kind === currentToken);
+                lastScanAction = ScanAction.RescanSlashToken;
+            }
+            else {
+                lastScanAction = ScanAction.Normal;
             }
 
             endPos = scanner.getTextPos();
@@ -126,18 +165,18 @@ module ts.formatting {
             var token: TextRangeWithKind = {
                 pos: scanner.getStartPos(),
                 end: scanner.getTextPos(),
-                kind: current
+                kind: currentToken
             }
 
             while(scanner.getStartPos() < range.end) {
-                current = scanner.scan();
-                if (!isTrivia(current)) {
+                currentToken = scanner.scan();
+                if (!isTrivia(currentToken)) {
                     break;
                 }
                 var trivia = {
                     pos: scanner.getStartPos(),
                     end: scanner.getTextPos(),
-                    kind: current
+                    kind: currentToken
                 };
 
                 if (!trailingTrivia) {
@@ -146,7 +185,7 @@ module ts.formatting {
 
                 trailingTrivia.push(trivia);
 
-                if (current === SyntaxKind.NewLineTrivia) {
+                if (currentToken === SyntaxKind.NewLineTrivia) {
                     // move past new line
                     scanner.scan();
                     break;
@@ -164,10 +203,6 @@ module ts.formatting {
             var current = (lastTokenInfo && lastTokenInfo.token.kind) ||  scanner.getToken();
             var startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
             return startPos < range.end && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
-        }
-
-        function lastTrailingTriviaWasNewLine(): boolean {
-            return wasNewLine;
         }
     }
 }
