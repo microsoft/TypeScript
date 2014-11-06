@@ -24572,7 +24572,7 @@ var TypeScript;
                 var propertyName = eatIdentifierToken();
                 var equalsValueClause = undefined;
                 var typeAnnotation = undefined;
-                if (TypeScript.fullWidth(propertyName) > 0) {
+                if (propertyName.fullWidth() > 0) {
                     typeAnnotation = parseOptionalTypeAnnotation(false);
                     if (isEqualsValueClause(false)) {
                         equalsValueClause = parseEqualsValueClause(allowIn);
@@ -25105,8 +25105,7 @@ var TypeScript;
             function isPropertyName(peekIndex, inErrorRecovery) {
                 var token = peekToken(peekIndex);
                 if (token.kind === 76 /* OpenBracketToken */) {
-                    var isIndexSignature = isIdentifier(peekToken(peekIndex + 1)) && peekToken(peekIndex + 2).kind === 108 /* ColonToken */;
-                    return !isIndexSignature;
+                    return !isIndexSignature(peekIndex);
                 }
                 return isPropertyNameToken(token, inErrorRecovery);
             }
@@ -31343,6 +31342,13 @@ var Program = (function () {
         var contents = TypeScript.Environment.readFile(fileName, undefined).contents;
         totalSize += contents.length;
         var text = TypeScript.SimpleText.fromString(contents);
+
+if (false) {
+        var andersStart = new Date().getTime();
+        var andersText = ts.createSourceFile(fileName, contents, 2 /* ES6 */, "0");
+        andersTime += (new Date().getTime() - andersStart);
+}
+//return;
         var start = new Date().getTime();
         var tree = TypeScript.Parser.parse(fileName, text, languageVersion, isDTSFile(fileName));
         var delta = new Date().getTime() - start;
@@ -31550,7 +31556,7 @@ var totalSize = 0;
 var program = new Program();
 totalTime = 0;
 totalSize = 0;
-program.runAllTests(true);
+program.runAllTests(false);
 var count = 1;
 TypeScript.Environment.standardOut.WriteLine("Total time: " + (totalTime / count));
 TypeScript.Environment.standardOut.WriteLine("Total size: " + (totalSize / count));

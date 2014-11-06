@@ -647,11 +647,9 @@ class Program {
 
         var text = TypeScript.SimpleText.fromString(contents);
 
-        //var andersText = ts.createSourceFile(fileName, contents);
-        //timer.start();
-        //var andersTree = ts.parseSourceFile(andersText);
-        //timer.end();
-        //andersTime += timer.time;
+        var andersStart = new Date().getTime();
+        var andersText = ts.createSourceFile(fileName, contents, ts.ScriptTarget.ES6, "0");
+        andersTime += (new Date().getTime() - andersStart);
 
         var start = new Date().getTime();
         var tree = TypeScript.Parser.parse(fileName, text, languageVersion, isDTSFile(fileName));
