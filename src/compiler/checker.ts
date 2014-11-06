@@ -5271,21 +5271,28 @@ module ts {
             var mapper = createInferenceMapper(context);
             // First infer from arguments that are not context sensitive
             for (var i = 0; i < args.length; i++) {
-                // TODO (drosen): This breaks hard when inferring on a tagged template.
                 if (args[i].kind === SyntaxKind.OmittedExpression) {
                     continue;
                 }
                 if (!excludeArgument || excludeArgument[i] === undefined) {
                     var parameterType = getTypeAtPosition(signature, i);
+
+                    if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                        inferTypes(context, globalTemplateStringsArrayType, parameterType);
+                        continue;
+                    }
+
                     inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
                 }
             }
+
             // Next, infer from those context sensitive arguments that are no longer excluded
             if (excludeArgument) {
                 for (var i = 0; i < args.length; i++) {
                     if (args[i].kind === SyntaxKind.OmittedExpression) {
                         continue;
                     }
+                    // No need to special-case tagged templates; their excludeArgument value will be 'undefined'.
                     if (excludeArgument[i] === false) {
                         var parameterType = getTypeAtPosition(signature, i);
                         inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
@@ -5325,19 +5332,20 @@ module ts {
             return typeArgumentsAreAssignable;
         }
 
-        function checkApplicableSignature(node: CallExpression | TaggedTemplateExpression, callArguments: Node[], signature: Signature, relation: Map<Ternary>, excludeArgument: boolean[], reportErrors: boolean) {
-            for (var i = 0; i < callArguments.length; i++) {
-                var arg = callArguments[i];
+        function checkApplicableSignature(node: CallExpression | TaggedTemplateExpression, args: Node[], signature: Signature, relation: Map<Ternary>, excludeArgument: boolean[], reportErrors: boolean) {
+            for (var i = 0; i < args.length; i++) {
+                var arg = args[i];
                 var argType: Type;
 
-                if (arg && arg.kind === SyntaxKind.OmittedExpression) {
+                if (arg.kind === SyntaxKind.OmittedExpression) {
                     continue;
                 }
 
                 var paramType = getTypeAtPosition(signature, i);
 
                 if (i === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
-                    arg = (<TaggedTemplateExpression>node).template; // just to report an error on the template
+                    // A tagged template expression has something of a
+                    // "virtual" parameter with the "cooked" strings array type.
                     argType = globalTemplateStringsArrayType;
                 }
                 else {
@@ -5369,9 +5377,7 @@ module ts {
             var args: Expression[];
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 var template = (<TaggedTemplateExpression>node).template;
-                // REVIEW: Should this be undefined or template?
-                //         I currently use 'undefined' mostly to catch places we are not accounting for.
-                args = [undefined];
+                args = [template];
 
                 if (template.kind === SyntaxKind.TemplateExpression) {
                     args.push.apply(args, map((<TemplateExpression>template).templateSpans, span => span.expression));
