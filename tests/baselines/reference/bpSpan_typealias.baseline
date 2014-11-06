@@ -44,21 +44,11 @@
 --------------------------------
 6  >    type a = m.c;
 
-    ~~~~~~~~~~~~~~~~~~                            => Pos: (68 to 85)  SpanInfo: {"start":16,"length":51}
-    >module m {
-    >        export class c {
-    >        }
-    >    }
-    >:=> (line 2, col 4) to (line 5, col 5)
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (68 to 85)  SpanInfo: undefined
 --------------------------------
 7  >    export type b = m.c;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (86 to 110)  SpanInfo: {"start":16,"length":51}
-    >module m {
-    >        export class c {
-    >        }
-    >    }
-    >:=> (line 2, col 4) to (line 5, col 5)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (86 to 110)  SpanInfo: undefined
 --------------------------------
 8  >    var x: a = new m.c();
 
