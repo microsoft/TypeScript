@@ -41,12 +41,6 @@ module ts.formatting {
             public Contains(token: SyntaxKind): boolean {
                 return this.tokens.indexOf(token) >= 0;
             }
-
-
-            public toString(): string {
-                return "[tokenRangeStart=" + SyntaxKind[this.tokens[0]] + "," +
-                 "tokenRangeEnd=" + SyntaxKind[this.tokens[this.tokens.length - 1]] + "]";
-            }
         }
 
         export class TokenValuesAccess implements ITokenAccess {
@@ -75,10 +69,6 @@ module ts.formatting {
 
             public Contains(tokenValue: SyntaxKind): boolean {
                 return tokenValue == this.token;
-            }
-
-            public toString(): string {
-                return "[singleTokenKind=" + SyntaxKind[this.token] + "]";
             }
         }
 

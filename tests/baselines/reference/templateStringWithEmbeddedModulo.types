@@ -1,0 +1,5 @@
+=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedModulo.ts ===
+var x = `abc${ 1 % 1 }def`;
+>x : string
+>1 % 1 : number
+

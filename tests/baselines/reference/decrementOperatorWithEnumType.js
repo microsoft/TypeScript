@@ -22,8 +22,8 @@ var ENUM1;
 })(ENUM1 || (ENUM1 = {}));
 ;
 // expression
-var ResultIsNumber1 = --ENUM1["A"];
+var ResultIsNumber1 = --0 /* "A" */;
 var ResultIsNumber2 = 0 /* A */--;
 // miss assignment operator
---ENUM1["A"];
+--0 /* "A" */;
 ENUM1[A]--;

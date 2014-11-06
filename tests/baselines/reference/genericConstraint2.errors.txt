@@ -1,8 +1,7 @@
 tests/cases/compiler/genericConstraint2.ts(5,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/compiler/genericConstraint2.ts(11,7): error TS2421: Class 'ComparableString' incorrectly implements interface 'Comparable<string>':
+tests/cases/compiler/genericConstraint2.ts(11,7): error TS2420: Class 'ComparableString' incorrectly implements interface 'Comparable<string>'.
   Property 'comparer' is missing in type 'ComparableString'.
-tests/cases/compiler/genericConstraint2.ts(21,17): error TS2343: Type 'ComparableString' does not satisfy the constraint 'Comparable<any>':
-  Property 'comparer' is missing in type 'ComparableString'.
+tests/cases/compiler/genericConstraint2.ts(21,17): error TS2344: Type 'ComparableString' does not satisfy the constraint 'Comparable<any>'.
 
 
 ==== tests/cases/compiler/genericConstraint2.ts (3 errors) ====
@@ -20,8 +19,8 @@ tests/cases/compiler/genericConstraint2.ts(21,17): error TS2343: Type 'Comparabl
     
     class ComparableString implements Comparable<string>{
           ~~~~~~~~~~~~~~~~
-!!! error TS2421: Class 'ComparableString' incorrectly implements interface 'Comparable<string>':
-!!! error TS2421:   Property 'comparer' is missing in type 'ComparableString'.
+!!! error TS2420: Class 'ComparableString' incorrectly implements interface 'Comparable<string>'.
+!!! error TS2420:   Property 'comparer' is missing in type 'ComparableString'.
         constructor(public currentValue: string) { }
     
         localeCompare(other) {
@@ -33,5 +32,4 @@ tests/cases/compiler/genericConstraint2.ts(21,17): error TS2343: Type 'Comparabl
     var b = new ComparableString("b");
     var c = compare<ComparableString>(a, b);
                     ~~~~~~~~~~~~~~~~
-!!! error TS2343: Type 'ComparableString' does not satisfy the constraint 'Comparable<any>':
-!!! error TS2343:   Property 'comparer' is missing in type 'ComparableString'.
+!!! error TS2344: Type 'ComparableString' does not satisfy the constraint 'Comparable<any>'.

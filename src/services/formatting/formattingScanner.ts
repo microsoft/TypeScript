@@ -36,7 +36,7 @@ module ts.formatting {
             // accumulate leading trivia and token
             if (isStarted) {
                 if (trailingTrivia) {
-                    Debug.assert(trailingTrivia.length);
+                    Debug.assert(trailingTrivia.length !== 0);
                     wasNewLine = trailingTrivia[trailingTrivia.length - 1].kind === SyntaxKind.NewLineTrivia;
                 }
                 else {

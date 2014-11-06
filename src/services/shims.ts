@@ -171,13 +171,13 @@ module ts {
     }
 
     /// TODO: delete this, it is only needed until the VS interface is updated
-    export enum LanguageVersion {
+    export const enum LanguageVersion {
         EcmaScript3 = 0,
         EcmaScript5 = 1,
         EcmaScript6 = 2,
     }
 
-    export enum ModuleGenTarget {
+    export const enum ModuleGenTarget {
         Unspecified = 0,
         Synchronous = 1,
         Asynchronous = 2,

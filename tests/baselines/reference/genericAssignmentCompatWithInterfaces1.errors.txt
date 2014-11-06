@@ -1,31 +1,19 @@
-tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts(12,5): error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>':
-  Types of property 'x' are incompatible:
-    Type 'A<number>' is not assignable to type 'Comparable<string>':
-      Types of property 'compareTo' are incompatible:
-        Type '(other: number) => number' is not assignable to type '(other: string) => number':
-          Types of parameters 'other' and 'other' are incompatible:
+tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts(12,5): error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>'.
+  Types of property 'x' are incompatible.
+    Type 'A<number>' is not assignable to type 'Comparable<string>'.
+      Types of property 'compareTo' are incompatible.
+        Type '(other: number) => number' is not assignable to type '(other: string) => number'.
+          Types of parameters 'other' and 'other' are incompatible.
             Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts(13,5): error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>':
-  Types of property 'x' are incompatible:
-    Type 'A<number>' is not assignable to type 'Comparable<string>':
-      Types of property 'compareTo' are incompatible:
-        Type '(other: number) => number' is not assignable to type '(other: string) => number':
-          Types of parameters 'other' and 'other' are incompatible:
-            Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts(16,5): error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>':
-  Types of property 'x' are incompatible:
-    Type 'A<number>' is not assignable to type 'Comparable<string>':
-      Types of property 'compareTo' are incompatible:
-        Type '(other: number) => number' is not assignable to type '(other: string) => number':
-          Types of parameters 'other' and 'other' are incompatible:
-            Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts(17,5): error TS2322: Type 'K<number>' is not assignable to type 'I<string>':
-  Types of property 'x' are incompatible:
-    Type 'A<number>' is not assignable to type 'Comparable<string>':
-      Types of property 'compareTo' are incompatible:
-        Type '(other: number) => number' is not assignable to type '(other: string) => number':
-          Types of parameters 'other' and 'other' are incompatible:
-            Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts(13,5): error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>'.
+  Types of property 'x' are incompatible.
+    Type 'A<number>' is not assignable to type 'Comparable<string>'.
+tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts(16,5): error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>'.
+  Types of property 'x' are incompatible.
+    Type 'A<number>' is not assignable to type 'Comparable<string>'.
+tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts(17,5): error TS2322: Type 'K<number>' is not assignable to type 'I<string>'.
+  Types of property 'x' are incompatible.
+    Type 'A<number>' is not assignable to type 'Comparable<string>'.
 
 
 ==== tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts (4 errors) ====
@@ -42,41 +30,29 @@ tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts(17,5): error TS23
     var z = { x: new A<number>() };
     var a1: I<string> = { x: new A<number>() };
         ~~
-!!! error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>':
-!!! error TS2322:   Types of property 'x' are incompatible:
-!!! error TS2322:     Type 'A<number>' is not assignable to type 'Comparable<string>':
-!!! error TS2322:       Types of property 'compareTo' are incompatible:
-!!! error TS2322:         Type '(other: number) => number' is not assignable to type '(other: string) => number':
-!!! error TS2322:           Types of parameters 'other' and 'other' are incompatible:
+!!! error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'A<number>' is not assignable to type 'Comparable<string>'.
+!!! error TS2322:       Types of property 'compareTo' are incompatible.
+!!! error TS2322:         Type '(other: number) => number' is not assignable to type '(other: string) => number'.
+!!! error TS2322:           Types of parameters 'other' and 'other' are incompatible.
 !!! error TS2322:             Type 'number' is not assignable to type 'string'.
     var a2: I<string> = function (): { x: A<number> } {
         ~~
-!!! error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>':
-!!! error TS2322:   Types of property 'x' are incompatible:
-!!! error TS2322:     Type 'A<number>' is not assignable to type 'Comparable<string>':
-!!! error TS2322:       Types of property 'compareTo' are incompatible:
-!!! error TS2322:         Type '(other: number) => number' is not assignable to type '(other: string) => number':
-!!! error TS2322:           Types of parameters 'other' and 'other' are incompatible:
-!!! error TS2322:             Type 'number' is not assignable to type 'string'.
+!!! error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'A<number>' is not assignable to type 'Comparable<string>'.
        var z = { x: new A<number>() }; return z;
     } ();
     var a3: I<string> = z;
         ~~
-!!! error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>':
-!!! error TS2322:   Types of property 'x' are incompatible:
-!!! error TS2322:     Type 'A<number>' is not assignable to type 'Comparable<string>':
-!!! error TS2322:       Types of property 'compareTo' are incompatible:
-!!! error TS2322:         Type '(other: number) => number' is not assignable to type '(other: string) => number':
-!!! error TS2322:           Types of parameters 'other' and 'other' are incompatible:
-!!! error TS2322:             Type 'number' is not assignable to type 'string'.
+!!! error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'A<number>' is not assignable to type 'Comparable<string>'.
     var a4: I<string> = <K<number>>z;
         ~~
-!!! error TS2322: Type 'K<number>' is not assignable to type 'I<string>':
-!!! error TS2322:   Types of property 'x' are incompatible:
-!!! error TS2322:     Type 'A<number>' is not assignable to type 'Comparable<string>':
-!!! error TS2322:       Types of property 'compareTo' are incompatible:
-!!! error TS2322:         Type '(other: number) => number' is not assignable to type '(other: string) => number':
-!!! error TS2322:           Types of parameters 'other' and 'other' are incompatible:
-!!! error TS2322:             Type 'number' is not assignable to type 'string'.
+!!! error TS2322: Type 'K<number>' is not assignable to type 'I<string>'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'A<number>' is not assignable to type 'Comparable<string>'.
      
     

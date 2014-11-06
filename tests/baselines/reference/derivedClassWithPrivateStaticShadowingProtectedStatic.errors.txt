@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingProtectedStatic.ts(13,7): error TS2418: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base':
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingProtectedStatic.ts(13,7): error TS2417: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base'.
   Property 'x' is private in type 'typeof Derived' but not in type 'typeof Base'.
 
 
@@ -17,8 +17,8 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     // should be error
     class Derived extends Base {
           ~~~~~~~
-!!! error TS2418: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base':
-!!! error TS2418:   Property 'x' is private in type 'typeof Derived' but not in type 'typeof Base'.
+!!! error TS2417: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base'.
+!!! error TS2417:   Property 'x' is private in type 'typeof Derived' but not in type 'typeof Base'.
         private static x: string; 
         private static fn(): string {
             return '';

@@ -1,5 +1,5 @@
-tests/cases/compiler/addMoreOverloadsToBaseSignature.ts(5,11): error TS2429: Interface 'Bar' incorrectly extends interface 'Foo':
-  Types of property 'f' are incompatible:
+tests/cases/compiler/addMoreOverloadsToBaseSignature.ts(5,11): error TS2430: Interface 'Bar' incorrectly extends interface 'Foo'.
+  Types of property 'f' are incompatible.
     Type '(key: string) => string' is not assignable to type '() => string'.
 
 
@@ -10,9 +10,9 @@ tests/cases/compiler/addMoreOverloadsToBaseSignature.ts(5,11): error TS2429: Int
     
     interface Bar extends Foo {
               ~~~
-!!! error TS2429: Interface 'Bar' incorrectly extends interface 'Foo':
-!!! error TS2429:   Types of property 'f' are incompatible:
-!!! error TS2429:     Type '(key: string) => string' is not assignable to type '() => string'.
+!!! error TS2430: Interface 'Bar' incorrectly extends interface 'Foo'.
+!!! error TS2430:   Types of property 'f' are incompatible.
+!!! error TS2430:     Type '(key: string) => string' is not assignable to type '() => string'.
         f(key: string): string;
     }
     

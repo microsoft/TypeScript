@@ -1,0 +1,5 @@
+=== tests/cases/conformance/es6/templates/templateStringInTypeOfES6.ts ===
+var x = typeof `abc${ 123 }def`;
+>x : string
+>typeof `abc${ 123 }def` : string
+

@@ -1,5 +1,7 @@
-tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(68,11): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(82,11): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(68,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+  Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(82,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+  Type argument candidate '{ x: number; z: Date; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
 
 
 ==== tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts (2 errors) ====
@@ -71,8 +73,9 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(82,11
         return null;
     }
     var a9a = someGenerics9('', 0, []);
-              ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+              ~~~~~~~~~~~~~
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+!!! error TS2453:   Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
     var a9a: {};
     var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
     var a9b: { a?: number; b?: string; };
@@ -87,8 +90,9 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(82,11
         z?: Date;
     }
     var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+              ~~~~~~~~~~~~~
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+!!! error TS2453:   Type argument candidate '{ x: number; z: Date; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
     var a9e: {};
     var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
     var a9f: A92;

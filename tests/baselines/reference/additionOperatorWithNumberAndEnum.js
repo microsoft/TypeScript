@@ -29,4 +29,4 @@ var r4 = b + b;
 var r5 = 0 + a;
 var r6 = 0 /* a */ + 0;
 var r7 = 0 /* a */ + 1 /* b */;
-var r8 = E['a'] + E['b'];
+var r8 = 0 /* 'a' */ + 1 /* 'b' */;

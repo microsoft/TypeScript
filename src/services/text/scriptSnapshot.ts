@@ -32,7 +32,7 @@ module TypeScript {
 
     export module ScriptSnapshot {
         class StringScriptSnapshot implements IScriptSnapshot {
-            private _lineStartPositions: number[] = null;
+            private _lineStartPositions: number[] = undefined;
 
             constructor(private text: string) {
             }

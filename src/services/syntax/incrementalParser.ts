@@ -88,8 +88,8 @@ module TypeScript.IncrementalParser {
 
         function release() {
             _scannerParserSource.release();
-            _scannerParserSource = null;
-            _oldSourceUnitCursor = null;
+            _scannerParserSource = undefined;
+            _oldSourceUnitCursor = undefined;
             _outstandingRewindPointCount = 0;
         }
 
@@ -177,13 +177,13 @@ module TypeScript.IncrementalParser {
 
             // Null out the cursor that the rewind point points to.  This way we don't try
             // to return it in 'releaseRewindPoint'.
-            rewindPoint.oldSourceUnitCursor = null;
+            rewindPoint.oldSourceUnitCursor = undefined;
 
             _scannerParserSource.rewind(rewindPoint);
         }
 
         function releaseRewindPoint(rewindPoint: IParserRewindPoint): void {
-            if (rewindPoint.oldSourceUnitCursor !== null) {
+            if (rewindPoint.oldSourceUnitCursor) {
                 returnSyntaxCursor(rewindPoint.oldSourceUnitCursor);
             }
 
@@ -220,7 +220,7 @@ module TypeScript.IncrementalParser {
 
             // If our current absolute position is in the middle of the changed range in the new text
             // then we definitely can't read from the old source unit right now.
-            if (_changeRange !== null && _changeRangeNewSpan.intersectsWithPosition(absolutePosition())) {
+            if (_changeRange && _changeRangeNewSpan.intersectsWithPosition(absolutePosition())) {
                 return false;
             }
 
@@ -235,7 +235,7 @@ module TypeScript.IncrementalParser {
                 !_oldSourceUnitCursor.isFinished();
         }
 
-        function updateTokens(nodeOrToken: ISyntaxNodeOrToken): void {
+        function updateTokenPosition(token: ISyntaxToken): void {
             // If we got a node or token, and we're past the range of edited text, then walk its
             // constituent tokens, making sure all their positions are correct.  We don't need to
             // do this for the tokens before the edited range (since their positions couldn't have 
@@ -243,14 +243,46 @@ module TypeScript.IncrementalParser {
             // edited range, as their positions will be correct when the underlying parser source 
             // creates them.
 
-            var position = absolutePosition();
-            var tokenWasMoved = isPastChangeRange() && fullStart(nodeOrToken) !== position;
-
-            if (tokenWasMoved) {
-                setTokenFullStartWalker.position = position;
-
-                visitNodeOrToken(setTokenFullStartWalker, nodeOrToken);
+            if (isPastChangeRange()) {
+                token.setFullStart(absolutePosition());
             }
+        }
+
+        function updateNodePosition(node: ISyntaxNode): void {
+            // If we got a node or token, and we're past the range of edited text, then walk its
+            // constituent tokens, making sure all their positions are correct.  We don't need to
+            // do this for the tokens before the edited range (since their positions couldn't have 
+            // been affected by the edit), and we don't need to do this for the tokens in the 
+            // edited range, as their positions will be correct when the underlying parser source 
+            // creates them.
+
+            if (isPastChangeRange()) {
+                var position = absolutePosition();
+
+                var tokens = getTokens(node);
+
+                for (var i = 0, n = tokens.length; i < n; i++) {
+                    var token = tokens[i];
+                    token.setFullStart(position);
+
+                    position += token.fullWidth();
+                }
+            }
+        }
+
+        function getTokens(node: ISyntaxNode): ISyntaxToken[] {
+            var tokens = node.__cachedTokens;
+            if (!tokens) {
+                tokens = [];
+                tokenCollectorWalker.tokens = tokens;
+
+                visitNodeOrToken(tokenCollectorWalker, node);
+
+                node.__cachedTokens = tokens;
+                tokenCollectorWalker.tokens = undefined;
+            }
+
+            return tokens;
         }
 
         function currentNode(): ISyntaxNode {
@@ -258,23 +290,23 @@ module TypeScript.IncrementalParser {
                 // Try to read a node.  If we can't then our caller will call back in and just try
                 // to get a token.
                 var node = tryGetNodeFromOldSourceUnit();
-                if (node !== null) {
+                if (node) {
                     // Make sure the positions for the tokens in this node are correct.
-                    updateTokens(node);
+                    updateNodePosition(node);
                     return node;
                 }
             }
 
             // Either we were ahead of the old text, or we were pinned.  No node can be read here.
-            return null;
+            return undefined;
         }
 
         function currentToken(): ISyntaxToken {
             if (canReadFromOldSourceUnit()) {
                 var token = tryGetTokenFromOldSourceUnit();
-                if (token !== null) {
+                if (token) {
                     // Make sure the token's position/text is correct.
-                    updateTokens(token);
+                    updateTokenPosition(token);
                     return token;
                 }
             }
@@ -354,9 +386,9 @@ module TypeScript.IncrementalParser {
             //  e) we are still in the same strict or non-strict state that the node was originally parsed in.
             while (true) {
                 var node = _oldSourceUnitCursor.currentNode();
-                if (node === null) {
+                if (node === undefined) {
                     // Couldn't even read a node, nothing to return.
-                    return null;
+                    return undefined;
                 }
 
                 if (!intersectsWithChangeRangeSpanInOriginalText(absolutePosition(), fullWidth(node))) {
@@ -395,7 +427,7 @@ module TypeScript.IncrementalParser {
             // need to make sure that if that the parser asks for a *token* we don't return it.  
             // Converted identifiers can't ever be created by the scanner, and as such, should not 
             // be returned by this source.
-            if (token !== null) {
+            if (token) {
                 if (!intersectsWithChangeRangeSpanInOriginalText(position, token.fullWidth())) {
                     // Didn't intersect with the change range.
                     if (!token.isIncrementallyUnusable() && !Scanner.isContextualToken(token)) {
@@ -417,13 +449,13 @@ module TypeScript.IncrementalParser {
             var token = _oldSourceUnitCursor.currentToken();
 
             return canReuseTokenFromOldSourceUnit(absolutePosition(), token)
-                ? token : null;
+                ? token : undefined;
         }
 
         function peekToken(n: number): ISyntaxToken {
             if (canReadFromOldSourceUnit()) {
                 var token = tryPeekTokenFromOldSourceUnit(n);
-                if (token !== null) {
+                if (token) {
                     return token;
                 }
             }
@@ -462,7 +494,7 @@ module TypeScript.IncrementalParser {
                 var interimToken = _oldSourceUnitCursor.currentToken();
 
                 if (!canReuseTokenFromOldSourceUnit(currentPosition, interimToken)) {
-                    return null;
+                    return undefined;
                 }
 
                 currentPosition += interimToken.fullWidth();
@@ -471,7 +503,7 @@ module TypeScript.IncrementalParser {
 
             var token = _oldSourceUnitCursor.currentToken();
             return canReuseTokenFromOldSourceUnit(currentPosition, token)
-                ? token : null;
+                ? token : undefined;
         }
 
         function consumeNode(node: ISyntaxNode): void {
@@ -486,7 +518,7 @@ module TypeScript.IncrementalParser {
             var _absolutePosition = absolutePosition() + fullWidth(node);
             _scannerParserSource.resetToPosition(_absolutePosition);
 
-            // Debug.assert(previousToken !== null);
+            // Debug.assert(previousToken !== undefined);
             // Debug.assert(previousToken.width() > 0);
 
             //if (!isPastChangeRange()) {
@@ -515,7 +547,7 @@ module TypeScript.IncrementalParser {
                 var _absolutePosition = absolutePosition() + currentToken.fullWidth();
                 _scannerParserSource.resetToPosition(_absolutePosition);
 
-                // Debug.assert(previousToken !== null);
+                // Debug.assert(previousToken !== undefined);
                 // Debug.assert(previousToken.width() > 0);
 
                 //if (!isPastChangeRange()) {
@@ -543,15 +575,15 @@ module TypeScript.IncrementalParser {
 
                         // Once we're past the change range, we no longer need it.  Null it out.
                         // From now on we can check if we're past the change range just by seeing
-                        // if this is null.
-                        _changeRange = null;
+                        // if this is undefined.
+                        _changeRange = undefined;
                     }
                 }
             }
         }
 
         function isPastChangeRange(): boolean {
-            return _changeRange === null;
+            return _changeRange === undefined;
         }
 
         return {
@@ -605,7 +637,7 @@ module TypeScript.IncrementalParser {
         if (syntaxCursorPoolCount > 0) {
             // If we reused an existing cursor, take it out of the pool so no one else uses it.
             syntaxCursorPoolCount--;
-            syntaxCursorPool[syntaxCursorPoolCount] = null;
+            syntaxCursorPool[syntaxCursorPoolCount] = undefined;
         }
 
         return cursor;
@@ -652,11 +684,11 @@ module TypeScript.IncrementalParser {
             for (var i = 0, n = pieces.length; i < n; i++) {
                 var piece = pieces[i];
 
-                if (piece.element === null) {
+                if (piece.element === undefined) {
                     break;
                 }
 
-                piece.element = null;
+                piece.element = undefined;
                 piece.indexInParent = -1;
             }
 
@@ -669,7 +701,7 @@ module TypeScript.IncrementalParser {
             for (var i = 0, n = other.pieces.length; i < n; i++) {
                 var piece = other.pieces[i];
 
-                if (piece.element === null) {
+                if (piece.element === undefined) {
                     break;
                 }
 
@@ -685,13 +717,13 @@ module TypeScript.IncrementalParser {
 
         function currentNodeOrToken(): ISyntaxNodeOrToken {
             if (isFinished()) {
-                return null;
+                return undefined;
             }
 
             var result = pieces[currentPieceIndex].element;
 
             // The current element must always be a node or a token.
-            // Debug.assert(result !== null);
+            // Debug.assert(result !== undefined);
             // Debug.assert(result.isNode() || result.isToken());
 
             return <ISyntaxNodeOrToken>result;
@@ -699,12 +731,16 @@ module TypeScript.IncrementalParser {
 
         function currentNode(): ISyntaxNode {
             var element = currentNodeOrToken();
-            return isNode(element) ? <ISyntaxNode>element : null;
+            return isNode(element) ? <ISyntaxNode>element : undefined;
+        }
+
+        function isEmptyList(element: ISyntaxElement) {
+            return isList(element) && (<ISyntaxNodeOrToken[]>element).length === 0;
         }
 
         function moveToFirstChild() {
             var nodeOrToken = currentNodeOrToken();
-            if (nodeOrToken === null) {
+            if (nodeOrToken === undefined) {
                 return;
             }
 
@@ -721,7 +757,7 @@ module TypeScript.IncrementalParser {
             // next sibling of the empty node.
             for (var i = 0, n = childCount(nodeOrToken); i < n; i++) {
                 var child = childAt(nodeOrToken, i);
-                if (child !== null && !isShared(child)) {
+                if (child && !isEmptyList(child)) {
                     // Great, we found a real child.  Push that.
                     pushElement(child, /*indexInParent:*/ i);
 
@@ -749,14 +785,13 @@ module TypeScript.IncrementalParser {
                 for (var i = currentPiece.indexInParent + 1, n = childCount(parent); i < n; i++) {
                     var sibling = childAt(parent, i);
 
-                    if (sibling !== null && !isShared(sibling)) {
+                    if (sibling && !isEmptyList(sibling)) {
                         // We found a good sibling that we can move to.  Just reuse our existing piece
                         // so we don't have to push/pop.
                         currentPiece.element = sibling;
                         currentPiece.indexInParent = i;
 
-                        // The sibling might have been a list.  Move to it's first child.  it must have
-                        // one since this was a non-shared element.
+                        // The sibling might have been a list.  Move to it's first child.
                         moveToFirstChildIfList();
                         return;
                     }
@@ -766,7 +801,7 @@ module TypeScript.IncrementalParser {
 
                 // Clear the data from the old piece.  We don't want to keep any elements around
                 // unintentionally.
-                currentPiece.element = null;
+                currentPiece.element = undefined;
                 currentPiece.indexInParent = -1;
 
                 // Point at the parent.  if we move past the top of the path, then we're finished.
@@ -777,7 +812,7 @@ module TypeScript.IncrementalParser {
         function moveToFirstChildIfList(): void {
             var element = pieces[currentPieceIndex].element;
 
-            if (isList(element) || isSeparatedList(element)) {
+            if (isList(element)) {
                 // We cannot ever get an empty list in our piece path.  Empty lists are 'shared' and
                 // we make sure to filter that out before pushing any children.
                 // Debug.assert(childCount(element) > 0);
@@ -787,7 +822,7 @@ module TypeScript.IncrementalParser {
         }
 
         function pushElement(element: ISyntaxElement, indexInParent: number): void {
-            // Debug.assert(element !== null);
+            // Debug.assert(element !== undefined);
             // Debug.assert(indexInParent >= 0);
             currentPieceIndex++;
 
@@ -819,8 +854,8 @@ module TypeScript.IncrementalParser {
             moveToFirstToken();
 
             var element = currentNodeOrToken();
-            // Debug.assert(element === null || element.isToken());
-            return element === null ? null : <ISyntaxToken>element;
+            // Debug.assert(element === undefined || element.isToken());
+            return <ISyntaxToken>element;
         }
 
         return {
@@ -841,21 +876,17 @@ module TypeScript.IncrementalParser {
     // A simple walker we use to hit all the tokens of a node and update their positions when they
     // are reused in a different location because of an incremental parse.
 
-    class SetTokenFullStartWalker extends SyntaxWalker {
-        public position: number;
+    class TokenCollectorWalker extends SyntaxWalker {
+        public tokens: ISyntaxToken[] = [];
 
         public visitToken(token: ISyntaxToken): void {
-            var position = this.position;
-            token.setFullStart(position);
-
-            this.position = position + token.fullWidth();
+            this.tokens.push(token);
         }
     }
 
-    var setTokenFullStartWalker = new SetTokenFullStartWalker();
+    var tokenCollectorWalker = new TokenCollectorWalker();
 
     export function parse(oldSyntaxTree: SyntaxTree, textChangeRange: TextChangeRange, newText: ISimpleText): SyntaxTree {
-        Debug.assert(oldSyntaxTree.isConcrete(), "Can only incrementally parse a concrete syntax tree.");
         if (textChangeRange.isUnchanged()) {
             return oldSyntaxTree;
         }

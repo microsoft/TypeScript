@@ -786,14 +786,123 @@ module ts {
                 }
             }
 
-            function emitLiteral(node: LiteralExpression) {
-                var text = getSourceTextOfLocalNode(node);
-                if (node.kind === SyntaxKind.StringLiteral && compilerOptions.sourceMap) {
+            function emitLiteral(node: LiteralExpression): void {
+                var text = getLiteralText();
+
+                if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
                 else {
                     write(text);
                 }
+
+                function getLiteralText() {
+                    if (compilerOptions.target < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind)) {
+                        return getTemplateLiteralAsStringLiteral(node)
+                    }
+
+                    return getSourceTextOfLocalNode(node);
+                }
+            }
+
+            function getTemplateLiteralAsStringLiteral(node: LiteralExpression): string {
+                return '"' + escapeString(node.text) + '"';
+            }
+            
+            function emitTemplateExpression(node: TemplateExpression): void {
+                // In ES6 mode and above, we can simply emit each portion of a template in order, but in
+                // ES3 & ES5 we must convert the template expression into a series of string concatenations.
+                if (compilerOptions.target >= ScriptTarget.ES6) {
+                    forEachChild(node, emit);
+                    return;
+                }
+
+                Debug.assert(node.parent.kind !== SyntaxKind.TaggedTemplateExpression);
+
+                var templateNeedsParens = isExpression(node.parent)
+                    && node.parent.kind !== SyntaxKind.ParenExpression
+                    && comparePrecedenceToBinaryPlus(node.parent) !== Comparison.LessThan;
+
+                if (templateNeedsParens) {
+                    write("(");
+                }
+
+                emitLiteral(node.head);
+
+                forEach(node.templateSpans, templateSpan => {
+                    // Check if the expression has operands and binds its operands less closely than binary '+'.
+                    // If it does, we need to wrap the expression in parentheses. Otherwise, something like
+                    //    `abc${ 1 << 2}`
+                    // becomes
+                    //    "abc" + 1 << 2 + ""
+                    // which is really
+                    //    ("abc" + 1) << (2 + "")
+                    // rather than
+                    //    "abc" + (1 << 2) + ""
+                    var needsParens = templateSpan.expression.kind !== SyntaxKind.ParenExpression
+                        && comparePrecedenceToBinaryPlus(templateSpan.expression) !== Comparison.GreaterThan;
+
+                    write(" + ");
+
+                    if (needsParens) {
+                        write("(");
+                    }
+                    emit(templateSpan.expression);
+                    if (needsParens) {
+                        write(")");
+                    }
+
+                    // Only emit if the literal is non-empty.
+                    // The binary '+' operator is left-associative, so the first string concatenation will force
+                    // the result up to this point to be a string. Emitting a '+ ""' has no semantic effect.
+                    if (templateSpan.literal.text.length !== 0) {
+                        write(" + ")
+                        emitLiteral(templateSpan.literal);
+                    }
+                });
+                
+                if (templateNeedsParens) {
+                    write(")");
+                }
+
+                /**
+                 * Returns whether the expression has lesser, greater,
+                 * or equal precedence to the binary '+' operator
+                 */
+                function comparePrecedenceToBinaryPlus(expression: Expression): Comparison {
+                    // All binary expressions have lower precedence than '+' apart from '*', '/', and '%'.
+                    // All unary operators have a higher precedence apart from yield.
+                    // Arrow functions and conditionals have a lower precedence, 
+                    // although we convert the former into regular function expressions in ES5 mode,
+                    // and in ES6 mode this function won't get called anyway.
+                    // 
+                    // TODO (drosen): Note that we need to account for the upcoming 'yield' and
+                    //                spread ('...') unary operators that are anticipated for ES6.
+                    Debug.assert(compilerOptions.target <= ScriptTarget.ES5);
+                    switch (expression.kind) {
+                        case SyntaxKind.BinaryExpression:
+                            switch ((<BinaryExpression>expression).operator) {
+                                case SyntaxKind.AsteriskToken:
+                                case SyntaxKind.SlashToken:
+                                case SyntaxKind.PercentToken:
+                                    return Comparison.GreaterThan;
+                                case SyntaxKind.PlusToken:
+                                    return Comparison.EqualTo;
+                                default:
+                                    return Comparison.LessThan;
+                            }
+                        case SyntaxKind.ConditionalExpression:
+                            return Comparison.LessThan;
+                        default:
+                            return Comparison.GreaterThan;
+                    }
+                }
+
+            }
+
+            function emitTemplateSpan(span: TemplateSpan) {
+                emit(span.expression);
+                emit(span.literal);
             }
 
             // This function specifically handles numeric/string literals for enum and accessor 'identifiers'.
@@ -922,19 +1031,29 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitPropertyAccess(node: PropertyAccess) {
+            function tryEmitConstantValue(node: PropertyAccess | IndexedAccess): boolean {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
-                    write(constantValue.toString() + " /* " + identifierToString(node.right) + " */");
+                    var propertyName = node.kind === SyntaxKind.PropertyAccess ? identifierToString((<PropertyAccess>node).right) : getTextOfNode((<IndexedAccess>node).index);
+                    write(constantValue.toString() + " /* " + propertyName + " */");
+                    return true;
                 }
-                else {
-                    emit(node.left);
-                    write(".");
-                    emit(node.right);
+                return false;
+            }
+
+            function emitPropertyAccess(node: PropertyAccess) {
+                if (tryEmitConstantValue(node)) {
+                    return;
                 }
+                emit(node.left);
+                write(".");
+                emit(node.right);
             }
 
             function emitIndexedAccess(node: IndexedAccess) {
+                if (tryEmitConstantValue(node)) {
+                    return;
+                }
                 emit(node.object);
                 write("[");
                 emit(node.index);
@@ -975,6 +1094,13 @@ module ts {
                     emitCommaList(node.arguments, /*includeTrailingComma*/ false);
                     write(")");
                 }
+            }
+
+            function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
+                Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Trying to emit a tagged template in pre-ES6 mode.");
+                emit(node.tag);
+                write(" ");
+                emit(node.template);
             }
 
             function emitParenExpression(node: ParenExpression) {
@@ -1225,6 +1351,10 @@ module ts {
                 emitToken(SyntaxKind.CloseBraceToken, node.clauses.end);
             }
 
+            function isOnSameLine(node1: Node, node2: Node) {
+                return getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node1.pos)) === getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node2.pos));
+            }
+
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
                 if (node.kind === SyntaxKind.CaseClause) {
                     write("case ");
@@ -1234,9 +1364,16 @@ module ts {
                 else {
                     write("default:");
                 }
-                increaseIndent();
-                emitLines(node.statements);
-                decreaseIndent();
+
+                if (node.statements.length === 1 && isOnSameLine(node, node.statements[0])) {
+                    write(" ");
+                    emit(node.statements[0]);
+                }
+                else {
+                    increaseIndent();
+                    emitLines(node.statements);
+                    decreaseIndent();
+                }
             }
 
             function emitThrowStatement(node: ThrowStatement) {
@@ -1760,6 +1897,11 @@ module ts {
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
+                // const enums are completely erased during compilation.
+                var isConstEnum = isConstEnumDeclaration(node);
+                if (isConstEnum && !compilerOptions.preserveConstEnums) {
+                    return;
+                }
                 emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
@@ -1777,7 +1919,7 @@ module ts {
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
-                emitEnumMemberDeclarations();
+                emitEnumMemberDeclarations(isConstEnum);
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
@@ -1800,7 +1942,7 @@ module ts {
                 }
                 emitTrailingComments(node);
 
-                function emitEnumMemberDeclarations() {
+                function emitEnumMemberDeclarations(isConstEnum: boolean) {
                     forEach(node.members, member => {
                         writeLine();
                         emitLeadingComments(member);
@@ -1811,7 +1953,7 @@ module ts {
                         write("[");
                         emitQuotedIdentifier(member.name);
                         write("] = ");
-                        if (member.initializer) {
+                        if (member.initializer && !isConstEnum) {
                             emit(member.initializer);
                         }
                         else {
@@ -1834,7 +1976,7 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (!isInstantiated(node)) {
+                if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
                 emitLeadingComments(node);
@@ -1886,7 +2028,7 @@ module ts {
                     // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
                     // - current file is not external module
                     // - import declaration is top level and target is value imported by entity name
-                    emitImportDeclaration = !isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportedViaEntityName(node);
+                    emitImportDeclaration = !isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportWithEntityName(node);
                 }
 
                 if (emitImportDeclaration) {
@@ -2085,7 +2227,15 @@ module ts {
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.RegularExpressionLiteral:
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    case SyntaxKind.TemplateHead:
+                    case SyntaxKind.TemplateMiddle:
+                    case SyntaxKind.TemplateTail:
                         return emitLiteral(<LiteralExpression>node);
+                    case SyntaxKind.TemplateExpression:
+                        return emitTemplateExpression(<TemplateExpression>node);
+                    case SyntaxKind.TemplateSpan:
+                        return emitTemplateSpan(<TemplateSpan>node);
                     case SyntaxKind.QualifiedName:
                         return emitPropertyAccess(<QualifiedName>node);
                     case SyntaxKind.ArrayLiteral:
@@ -2102,6 +2252,8 @@ module ts {
                         return emitCallExpression(<CallExpression>node);
                     case SyntaxKind.NewExpression:
                         return emitNewExpression(<NewExpression>node);
+                    case SyntaxKind.TaggedTemplateExpression:
+                        return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                     case SyntaxKind.TypeAssertion:
                         return emit((<TypeAssertion>node).operand);
                     case SyntaxKind.ParenExpression:
@@ -2566,10 +2718,39 @@ module ts {
                 }
             }
 
+            function emitTypeAliasDeclaration(node: TypeAliasDeclaration) {
+                if (resolver.isDeclarationVisible(node)) {
+                    emitJsDocComments(node);
+                    emitDeclarationFlags(node);
+                    write("type ");
+                    emitSourceTextOfNode(node.name);
+                    write(" = ");
+                    getSymbolVisibilityDiagnosticMessage = getTypeAliasDeclarationVisibilityError;
+                    resolver.writeTypeAtLocation(node.type, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                    write(";");
+                    writeLine();
+                }
+                function getTypeAliasDeclarationVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                    var diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Exported_type_alias_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics.Exported_type_alias_0_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1;
+                    return {
+                        diagnosticMessage: diagnosticMessage,
+                        errorNode: node,
+                        typeName: node.name
+                    };
+                }
+            }
+
             function emitEnumDeclaration(node: EnumDeclaration) {
                 if (resolver.isDeclarationVisible(node)) {
                     emitJsDocComments(node);
                     emitDeclarationFlags(node);
+                    if (isConstEnumDeclaration(node)) {
+                        write("const ")
+                    }
                     write("enum ");
                     emitSourceTextOfNode(node.name);
                     write(" {");
@@ -2649,7 +2830,7 @@ module ts {
                                 break;
 
                             default:
-                                Debug.fail("This is unknown parent for type parameter: " + SyntaxKind[node.parent.kind]);
+                                Debug.fail("This is unknown parent for type parameter: " + node.parent.kind);
                         }
 
                         return {
@@ -3045,7 +3226,7 @@ module ts {
                             break;
 
                         default:
-                            Debug.fail("This is unknown kind for signature: " + SyntaxKind[node.kind]);
+                            Debug.fail("This is unknown kind for signature: " + node.kind);
                     }
 
                     return {
@@ -3130,7 +3311,7 @@ module ts {
                             break;
 
                         default:
-                            Debug.fail("This is unknown parent for parameter: " + SyntaxKind[node.parent.kind]);
+                            Debug.fail("This is unknown parent for parameter: " + node.parent.kind);
                     }
 
                     return {
@@ -3163,6 +3344,8 @@ module ts {
                         return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                     case SyntaxKind.ClassDeclaration:
                         return emitClassDeclaration(<ClassDeclaration>node);
+                    case SyntaxKind.TypeAliasDeclaration:
+                        return emitTypeAliasDeclaration(<TypeAliasDeclaration>node);
                     case SyntaxKind.EnumMember:
                         return emitEnumMemberDeclaration(<EnumMember>node);
                     case SyntaxKind.EnumDeclaration:
