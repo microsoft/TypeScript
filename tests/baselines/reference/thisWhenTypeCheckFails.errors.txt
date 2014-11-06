@@ -1,4 +1,4 @@
-tests/cases/compiler/thisWhenTypeCheckFails.ts(4,17): error TS2323: Type 'void' is not assignable to type 'string'.
+tests/cases/compiler/thisWhenTypeCheckFails.ts(4,17): error TS2322: Type 'void' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/thisWhenTypeCheckFails.ts (1 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/thisWhenTypeCheckFails.ts(4,17): error TS2323: Type 'void' 
             var k = () => {
                 var s: string = this.n();
                     ~
-!!! error TS2323: Type 'void' is not assignable to type 'string'.
+!!! error TS2322: Type 'void' is not assignable to type 'string'.
             }
         }    
     }

@@ -2312,7 +2312,7 @@ module TypeScript.Parser {
             var equalsValueClause: EqualsValueClauseSyntax = undefined;
             var typeAnnotation: TypeAnnotationSyntax = undefined;
 
-            if (propertyName.fullWidth() > 0) {
+            if (fullWidth(propertyName) > 0) {
                 typeAnnotation = parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false);
 
                 if (isEqualsValueClause(/*inParameter*/ false)) {

@@ -9,9 +9,9 @@ tests/cases/compiler/protectedMembers.ts(48,1): error TS2445: Property 'sx' is p
 tests/cases/compiler/protectedMembers.ts(49,1): error TS2445: Property 'sf' is protected and only accessible within class 'C2' and its subclasses.
 tests/cases/compiler/protectedMembers.ts(68,9): error TS2446: Property 'x' is protected and only accessible through an instance of class 'C'.
 tests/cases/compiler/protectedMembers.ts(69,9): error TS2446: Property 'x' is protected and only accessible through an instance of class 'C'.
-tests/cases/compiler/protectedMembers.ts(98,1): error TS2323: Type 'B1' is not assignable to type 'A1'.
+tests/cases/compiler/protectedMembers.ts(98,1): error TS2322: Type 'B1' is not assignable to type 'A1'.
   Property 'x' is protected but type 'B1' is not a class derived from 'A1'.
-tests/cases/compiler/protectedMembers.ts(99,1): error TS2323: Type 'A1' is not assignable to type 'B1'.
+tests/cases/compiler/protectedMembers.ts(99,1): error TS2322: Type 'A1' is not assignable to type 'B1'.
   Property 'x' is protected in type 'A1' but public in type 'B1'.
 tests/cases/compiler/protectedMembers.ts(112,7): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
   Property 'x' is protected in type 'B3' but public in type 'A3'.
@@ -139,12 +139,12 @@ tests/cases/compiler/protectedMembers.ts(112,7): error TS2415: Class 'B3' incorr
     var b1: B1;
     a1 = b1;  // Error, B1 doesn't derive from A1
     ~~
-!!! error TS2323: Type 'B1' is not assignable to type 'A1'.
-!!! error TS2323:   Property 'x' is protected but type 'B1' is not a class derived from 'A1'.
+!!! error TS2322: Type 'B1' is not assignable to type 'A1'.
+!!! error TS2322:   Property 'x' is protected but type 'B1' is not a class derived from 'A1'.
     b1 = a1;  // Error, x is protected in A1 but public in B1
     ~~
-!!! error TS2323: Type 'A1' is not assignable to type 'B1'.
-!!! error TS2323:   Property 'x' is protected in type 'A1' but public in type 'B1'.
+!!! error TS2322: Type 'A1' is not assignable to type 'B1'.
+!!! error TS2322:   Property 'x' is protected in type 'A1' but public in type 'B1'.
     
     class A2 {
         protected x;

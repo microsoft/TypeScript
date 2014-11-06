@@ -1,5 +1,5 @@
-tests/cases/compiler/typeParametersShouldNotBeEqual.ts(4,5): error TS2323: Type 'U' is not assignable to type 'T'.
-tests/cases/compiler/typeParametersShouldNotBeEqual.ts(5,5): error TS2323: Type 'Object' is not assignable to type 'T'.
+tests/cases/compiler/typeParametersShouldNotBeEqual.ts(4,5): error TS2322: Type 'U' is not assignable to type 'T'.
+tests/cases/compiler/typeParametersShouldNotBeEqual.ts(5,5): error TS2322: Type 'Object' is not assignable to type 'T'.
 
 
 ==== tests/cases/compiler/typeParametersShouldNotBeEqual.ts (2 errors) ====
@@ -8,10 +8,10 @@ tests/cases/compiler/typeParametersShouldNotBeEqual.ts(5,5): error TS2323: Type 
         x = x;  // Ok
         x = y;  // Error
         ~
-!!! error TS2323: Type 'U' is not assignable to type 'T'.
+!!! error TS2322: Type 'U' is not assignable to type 'T'.
         x = z;  // Error
         ~
-!!! error TS2323: Type 'Object' is not assignable to type 'T'.
+!!! error TS2322: Type 'Object' is not assignable to type 'T'.
         z = x;  // Ok
     }
     
