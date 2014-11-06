@@ -5371,7 +5371,7 @@ module ts {
          *
          * If 'node' is a CallExpression or a NewExpression, then its argument list is returned.
          * If 'node' is a TaggedTemplateExpression, a new argument list is constructed from the substitution
-         *    expressions, where the first element of the argument list is 'undefined' to represent the "cooked" strings array.
+         *    expressions, where the first element of the argument list is the template portion for error reporting purposes.
          */
         function getEffectiveCallArguments(node: CallExpression | TaggedTemplateExpression): Expression[] {
             var args: Expression[];
