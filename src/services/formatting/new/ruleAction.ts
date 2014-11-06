@@ -16,7 +16,7 @@
 ///<reference path='formatting.ts' />
 
 module ts.formatting {
-    export enum RuleAction {
+    export const enum RuleAction {
         Ignore      = 0x00000001,
         Space       = 0x00000002,
         NewLine     = 0x00000004,

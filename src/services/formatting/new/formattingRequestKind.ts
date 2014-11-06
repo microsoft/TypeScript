@@ -16,7 +16,7 @@
 /// <reference path="formatting.ts"/>
 
 module ts.formatting {
-    export enum FormattingRequestKind {
+    export const enum FormattingRequestKind {
         FormatDocument,
         FormatSelection,
         FormatOnEnter,

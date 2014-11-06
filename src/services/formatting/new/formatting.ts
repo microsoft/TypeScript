@@ -14,11 +14,7 @@
 //
 
 ///<reference path='..\..\services.ts' />
-///<reference path='textSnapshot.ts' />
-///<reference path='textSnapshotLine.ts' />
-///<reference path='snapshotPoint.ts' />
 ///<reference path='formattingContext.ts' />
-// ///<reference path='formattingManager.ts' />
 ///<reference path='formattingRequestKind.ts' />
 ///<reference path='rule.ts' />
 ///<reference path='ruleAction.ts' />
@@ -28,12 +24,5 @@
 ///<reference path='ruleOperationContext.ts' />
 ///<reference path='rules.ts' />
 ///<reference path='rulesMap.ts' />
-///<reference path='rulesProvider.ts' />
-///<reference path='textEditInfo.ts' />
 ///<reference path='tokenRange.ts' />
 ///<reference path='tokenSpan.ts' /> 
-///<reference path='indentationNodeContext.ts' /> 
-///<reference path='indentationNodeContextPool.ts' /> 
-// ///<reference path='indentationTrackingWalker.ts' /> 
-// ///<reference path='multipleTokenIndenter.ts' /> 
-// ///<reference path='formatter.ts' /> 

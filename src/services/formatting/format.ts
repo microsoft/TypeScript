@@ -16,18 +16,22 @@ module ts.formatting {
         trailingTrivia: TextRangeWithKind[];
     }
 
+    const enum Indentation {
+        Unknown = -1
+    }
+
     interface DynamicIndentation {
-        getEffectiveIndentation(line: number, kind: SyntaxKind): number;
-        getEffectiveCommentIndentation(line: number): number;
+        getEffectiveIndentation(tokenLine: number, kind: SyntaxKind): number;
+        getEffectiveCommentIndentation(commentLine: number): number;
         getDelta(): number;
-        getBaseIndentation(): number;
-        getBaseCommentIndentation(): number;
+        getIndentation(): number;
+        getCommentIndentation(): number;
         increaseCommentIndentation(delta: number): void;
         recomputeIndentation(lineAddedByFormatting: boolean): void;
         setDelta(delta: number): number;
     }
 
-    export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[]{
+    export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[] {
         var line = sourceFile.getLineAndCharacterFromPosition(position).line;
         Debug.assert(line >= 2);
         // get the span for the previous\current line
@@ -36,11 +40,11 @@ module ts.formatting {
             pos: getStartPositionOfLine(line - 1, sourceFile),
             // get end position for the current line (end value is exclusive so add 1 to the result)
             end: getEndLinePosition(line, sourceFile) + 1
-        }        
+        }
         return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnEnter);
     }
 
-    export function formatOnSemicolon(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[]{
+    export function formatOnSemicolon(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[] {
         return formatOutermostParent(position, SyntaxKind.SemicolonToken, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnSemicolon);
     }
 
@@ -48,15 +52,15 @@ module ts.formatting {
         return formatOutermostParent(position, SyntaxKind.CloseBraceToken, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnClosingCurlyBrace);
     }
 
-    export function formatDocument(sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[]{
+    export function formatDocument(sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[] {
         var span = {
             pos: 0,
             end: sourceFile.text.length
         };
         return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatDocument);
     }
-    
-    export function formatSelection(start: number, end: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[]{
+
+    export function formatSelection(start: number, end: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[] {
         // format from the beginning of the line
         var span = {
             pos: getStartLinePositionForPosition(start, sourceFile),
@@ -65,42 +69,7 @@ module ts.formatting {
         return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatSelection);
     }
 
-    function isSomeBlock(kind: SyntaxKind): boolean {
-        switch (kind) {
-            case SyntaxKind.Block:
-            case SyntaxKind.FunctionBlock:
-            case SyntaxKind.TryBlock:
-            case SyntaxKind.CatchBlock:
-            case SyntaxKind.FinallyBlock:
-            case SyntaxKind.ModuleBlock:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    function indentChildNodes(kind: SyntaxKind): boolean {
-        if (SmartIndenter.nodeContentIsAlwaysIndented(kind)) {
-            return true;
-        }
-        switch (kind) {
-            case SyntaxKind.IfStatement:
-            case SyntaxKind.ForInStatement:
-            case SyntaxKind.ForStatement:
-            case SyntaxKind.WhileStatement:
-            case SyntaxKind.DoStatement:
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.Method:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                return true;
-                break;
-        }
-        return false;
-    }
-
-    function formatOutermostParent(position: number, expectedLastToken: SyntaxKind, sourceFile: SourceFile, options: FormatCodeOptions, rulesProvider: RulesProvider, requestKind: FormattingRequestKind): TextChange[]{
+    function formatOutermostParent(position: number, expectedLastToken: SyntaxKind, sourceFile: SourceFile, options: FormatCodeOptions, rulesProvider: RulesProvider, requestKind: FormattingRequestKind): TextChange[] {
         var parent = findOutermostParent(position, expectedLastToken, sourceFile);
         if (!parent) {
             return [];
@@ -121,9 +90,9 @@ module ts.formatting {
         // walk up and search for the parent node that ends at the same position with precedingToken
         var current = precedingToken;
         while (current &&
-               current.parent &&
-               current.parent.end === precedingToken.end &&
-               !isListElement(current.parent, current)  ) {
+            current.parent &&
+            current.parent.end === precedingToken.end &&
+            !isListElement(current.parent, current)) {
             current = current.parent;
         }
 
@@ -152,25 +121,26 @@ module ts.formatting {
         return find(sourceFile);
 
         function find(n: Node): Node {
+            if (!n) {
+                return undefined;
+            }
             var candidate = forEachChild(n, c => startEndContainsRange(c.getStart(sourceFile), c.end, range) && c);
-            return (candidate && find(candidate)) || n;
+            return find(candidate) || n;
         }
     }
 
     function prepareRangeContainsErrorFunction(errors: Diagnostic[], originalRange: TextRange): (r: TextRange) => boolean {
         if (!errors.length) {
-            // no errors - always return false
-            return r => false;
+            return rangeHasNoErrors;
         }
         else {
             // pick only errors that fall in range
             var sorted = errors
                 .filter(d => d.isParseError && (d.start >= originalRange.pos && d.start + d.length < originalRange.end))
                 .sort((e1, e2) => e1.start - e2.start);
-            
+
             if (!sorted.length) {
-                // no errors in interesting span - always return false
-                return r => false;
+                return rangeHasNoErrors;
             }
 
             var index = 0;
@@ -195,6 +165,10 @@ module ts.formatting {
                     }
                 }
             };
+
+            function rangeHasNoErrors(r: TextRange): boolean {
+                return false;
+            }
         }
     }
 
@@ -202,7 +176,7 @@ module ts.formatting {
         sourceFile: SourceFile,
         options: FormatCodeOptions,
         rulesProvider: RulesProvider,
-        requestKind: FormattingRequestKind): TextChange[]{
+        requestKind: FormattingRequestKind): TextChange[] {
 
         var rangeContainsError = prepareRangeContainsErrorFunction(sourceFile.syntacticErrors, originalRange);
 
@@ -212,7 +186,7 @@ module ts.formatting {
         var enclosingNode = findEnclosingNode(originalRange, sourceFile);
         var initialIndentation = SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, options);
 
-        var formattingScanner = getFormattingScanner(sourceFile, enclosingNode, originalRange);        
+        var formattingScanner = getFormattingScanner(sourceFile, enclosingNode, originalRange);
 
         var previousRangeHasError: boolean;
         var previousRange: TextRangeWithKind;
@@ -226,7 +200,7 @@ module ts.formatting {
 
         if (formattingScanner.isOnToken()) {
             var startLine = sourceFile.getLineAndCharacterFromPosition(enclosingNode.getStart(sourceFile)).line;
-            var delta = indentChildNodes(enclosingNode.kind) ? options.IndentSize : 0;
+            var delta = shouldIndentChildNodes(enclosingNode.kind) ? options.IndentSize : 0;
             processNode(enclosingNode, enclosingNode, startLine, initialIndentation, delta);
         }
 
@@ -263,8 +237,8 @@ module ts.formatting {
 
                     }
                 },
-                getBaseIndentation: () => indentation,
-                getBaseCommentIndentation: () => commentIndentation,
+                getIndentation: () => indentation,
+                getCommentIndentation: () => commentIndentation,
                 getDelta: () => delta,
                 recomputeIndentation: (lineAdded) => {
                     var delta = getIndentationDelta(node, lineAdded);
@@ -292,7 +266,7 @@ module ts.formatting {
             var startLinePosition = getStartPositionOfLine(nodeStartLine, sourceFile);
             var shareLine = nodeStartLine === parentStartLine;
             var column = SmartIndenter.findFirstNonWhitespaceColumn(startLinePosition, start, sourceFile, options);
-            return shareLine && start !== column? -1 : column;
+            return shareLine && start !== column ? Indentation.Unknown : column;
         }
 
         function processNode(node: Node, contextNode: Node, nodeStartLine: number, indentation: number, delta: number) {
@@ -305,8 +279,8 @@ module ts.formatting {
             var childContextNode = contextNode;
             forEachChild(
                 node,
-                child => { 
-                    processChildNode(child, undefined, nodeStartLine, /*containingList*/ undefined, /*listElementIndex*/ -1)
+                child => {
+                    processChildNode(child, Indentation.Unknown, nodeStartLine, /*containingList*/ undefined, /*listElementIndex*/ -1)
                 },
                 nodes => {
                     var listStartToken = SyntaxKind.Unknown;
@@ -317,7 +291,7 @@ module ts.formatting {
                         case SyntaxKind.FunctionExpression:
                         case SyntaxKind.Method:
                         case SyntaxKind.ArrowFunction:
-                            if ((<FunctionDeclaration>node).typeParameters === nodes) {                                
+                            if ((<FunctionDeclaration>node).typeParameters === nodes) {
                                 listStartToken = SyntaxKind.LessThanToken
                                 listEndToken = SyntaxKind.GreaterThanToken;
                             }
@@ -361,7 +335,7 @@ module ts.formatting {
                         }
                     }
 
-                    var inheritedIndentation: number = undefined;
+                    var inheritedIndentation: number = Indentation.Unknown;
                     var effectiveStartLine = tokenStartLine || nodeStartLine;
                     for (var i = 0, len = nodes.length; i < len; ++i) {
                         inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, effectiveStartLine, /*containingList*/ nodes, /*listElementIndex*/ i)
@@ -380,7 +354,7 @@ module ts.formatting {
                     }
 
                 }
-            );
+                );
 
             // this eats up last tokens in the node
             while (formattingScanner.isOnToken()) {
@@ -423,14 +397,14 @@ module ts.formatting {
                 var isChildInRange = rangeOverlapsWithStartEnd(originalRange, start, child.getEnd());
                 if (containingList) {
                     if (isChildInRange) {
-                        if (inheritedIndentation !== undefined) {
+                        if (inheritedIndentation !== Indentation.Unknown) {
                             childIndentationAmount = inheritedIndentation;
                             childDelta = 0;
                         }
                     }
                     else {
                         var actualIndentation = getListItemIndentation(containingList, listElementIndex, nodeEffectiveStartLine, options);
-                        if (actualIndentation !== -1) {
+                        if (actualIndentation !== Indentation.Unknown) {
                             inheritedIndentation = childIndentationAmount = actualIndentation;
                             childDelta = 0;
                         }
@@ -442,22 +416,20 @@ module ts.formatting {
                         // child is indented
                         childDelta = options.IndentSize;
                         if (isSomeBlock(node.kind) || node.kind === SyntaxKind.SourceFile || node.kind === SyntaxKind.CaseClause || node.kind === SyntaxKind.DefaultClause) {
-                            childIndentationAmount = nodeIndentation.getBaseIndentation() + nodeIndentation.getDelta();
+                            childIndentationAmount = nodeIndentation.getIndentation() + nodeIndentation.getDelta();
                         }
                         else {
-                            childIndentationAmount = nodeIndentation.getBaseIndentation();
+                            childIndentationAmount = nodeIndentation.getIndentation();
                         }
                     }
                     else {
                         if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStart.line, sourceFile)) {
-                            childIndentationAmount = nodeIndentation.getBaseIndentation();
+                            childIndentationAmount = nodeIndentation.getIndentation();
                         }
                         else {
-                            childIndentationAmount = nodeIndentation.getBaseIndentation() + nodeIndentation.getDelta();
+                            childIndentationAmount = nodeIndentation.getIndentation() + nodeIndentation.getDelta();
                         }
-
-
-                    }                    
+                    }
                 }
 
                 var increaseIndentation = SmartIndenter.nodeContentIsAlwaysIndented(child.kind);
@@ -482,7 +454,7 @@ module ts.formatting {
                 }
 
                 if (nodeEffectiveStartLine === childStart.line) {
-                    childIndentationAmount = nodeIndentation.getBaseIndentation();
+                    childIndentationAmount = nodeIndentation.getIndentation();
                     childDelta = Math.min(options.IndentSize, delta + childDelta);
                 }
 
@@ -521,7 +493,7 @@ module ts.formatting {
 
             var tokenStart = sourceFile.getLineAndCharacterFromPosition(currentTokenInfo.token.pos);
             if (isTokenInRange) {
-                var prevStartLine = previousRangeStartLine;                
+                var prevStartLine = previousRangeStartLine;
                 lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, contextNode, indentation);
                 if (lineAdded !== undefined) {
                     indentToken = lineAdded;
@@ -545,12 +517,12 @@ module ts.formatting {
                         if (rangeContainsRange(originalRange, triviaItem)) {
                             switch (triviaItem.kind) {
                                 case SyntaxKind.MultiLineCommentTrivia:
-                                    indentMultilineComment(triviaItem, indentation.getBaseCommentIndentation(), /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                                    indentMultilineComment(triviaItem, indentation.getCommentIndentation(), /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
                                     indentNextTokenOrTrivia = false;
                                     break;
                                 case SyntaxKind.SingleLineCommentTrivia:
                                     if (indentNextTokenOrTrivia) {
-                                        insertIndentation(triviaItem.pos, indentation.getBaseCommentIndentation(), /*lineAdded*/ false);
+                                        insertIndentation(triviaItem.pos, indentation.getCommentIndentation(), /*lineAdded*/ false);
                                         indentNextTokenOrTrivia = false;
                                     }
                                     break;
@@ -585,7 +557,7 @@ module ts.formatting {
         function processRange(range: TextRangeWithKind, rangeStart: LineAndCharacter, parent: Node, contextNode: Node, indentation: DynamicIndentation): boolean {
             var rangeHasError = rangeContainsError(range);
             var lineAdded: boolean;
-            if (!rangeHasError && !previousRangeHasError) {                
+            if (!rangeHasError && !previousRangeHasError) {
                 if (!previousRange) {
                     // trim whitespaces starting from the beginning of the span up to the current line
                     var originalStart = sourceFile.getLineAndCharacterFromPosition(originalRange.pos);
@@ -647,8 +619,8 @@ module ts.formatting {
 
                 // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
                 trimTrailingWhitespaces =
-                    (rule.Operation.Action & (RuleAction.NewLine | RuleAction.Space)) &&
-                    rule.Flag !== RuleFlags.CanDeleteNewLines;
+                (rule.Operation.Action & (RuleAction.NewLine | RuleAction.Space)) &&
+                rule.Flag !== RuleFlags.CanDeleteNewLines;
             }
             else {
                 trimTrailingWhitespaces = true;
@@ -721,8 +693,8 @@ module ts.formatting {
                 var startLinePos = getStartPositionOfLine(startLine, sourceFile);
                 var nonWhitespaceColumn =
                     i === 0
-                        ? nonWhitespaceColumnInFirstPart
-                        : SmartIndenter.findFirstNonWhitespaceColumn(parts[i].pos, parts[i].end, sourceFile, options);
+                    ? nonWhitespaceColumnInFirstPart
+                    : SmartIndenter.findFirstNonWhitespaceColumn(parts[i].pos, parts[i].end, sourceFile, options);
 
                 var newIndentation = nonWhitespaceColumn + delta;
                 if (newIndentation > 0) {
@@ -757,7 +729,7 @@ module ts.formatting {
         }
 
         function newTextChange(start: number, len: number, newText: string): TextChange {
-            return { span: new TypeScript.TextSpan(start, len), newText: newText } 
+            return { span: new TypeScript.TextSpan(start, len), newText: newText }
         }
 
         function recordDelete(start: number, len: number) {
@@ -772,10 +744,10 @@ module ts.formatting {
             }
         }
 
-        function applyRuleEdits(rule: Rule, 
-            previousRange: TextRangeWithKind, 
-            previousStartLine: number, 
-            currentRange: TextRangeWithKind, 
+        function applyRuleEdits(rule: Rule,
+            previousRange: TextRangeWithKind,
+            previousStartLine: number,
+            currentRange: TextRangeWithKind,
             currentStartLine: number): void {
 
             var between: TextRange;
@@ -816,5 +788,39 @@ module ts.formatting {
                     break;
             }
         }
+    }
+    function isSomeBlock(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.Block:
+            case SyntaxKind.FunctionBlock:
+            case SyntaxKind.TryBlock:
+            case SyntaxKind.CatchBlock:
+            case SyntaxKind.FinallyBlock:
+            case SyntaxKind.ModuleBlock:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    function shouldIndentChildNodes(kind: SyntaxKind): boolean {
+        if (SmartIndenter.nodeContentIsAlwaysIndented(kind)) {
+            return true;
+        }
+        switch (kind) {
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.Method:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
+                break;
+        }
+        return false;
     }
 }

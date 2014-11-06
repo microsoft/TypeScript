@@ -10,7 +10,7 @@ module ts.formatting {
     }
 
     const enum ScanAction{
-        Normal,
+        Scan,
         RescanGreaterThanToken,
         RescanSlashToken
     }
@@ -122,20 +122,15 @@ module ts.formatting {
 
             }
 
-            if (lastTokenInfo) {
-                if (shouldRescanGreaterThanToken(n)) {
-                    if (lastScanAction === ScanAction.RescanGreaterThanToken) {
-                        return lastTokenInfo;
-                    }
-                }
-                else if (shouldRescanSlashToken(n)) {
-                    if (lastScanAction === ScanAction.RescanSlashToken) {
-                        return lastTokenInfo;
-                    }
-                }
-                else if (lastScanAction === ScanAction.Normal) {
-                    return lastTokenInfo;
-                }
+            var expectedScanAction = 
+                shouldRescanSlashToken(n)
+                ? ScanAction.RescanGreaterThanToken
+                : shouldRescanSlashToken(n) 
+                    ? ScanAction.RescanSlashToken 
+                    : ScanAction.Scan
+
+            if (lastTokenInfo && expectedScanAction === lastScanAction) {
+                return lastTokenInfo;
             }
 
             if (scanner.getStartPos() !== savedStartPos) {
@@ -146,18 +141,18 @@ module ts.formatting {
             var currentToken = scanner.getToken();
             var endPos: number;
 
-            if (currentToken === SyntaxKind.GreaterThanToken && shouldRescanGreaterThanToken(n)) {
+            if (expectedScanAction === ScanAction.RescanGreaterThanToken && currentToken === SyntaxKind.GreaterThanToken) {
                 currentToken = scanner.reScanGreaterToken();
                 Debug.assert((<BinaryExpression>n).operator === currentToken);
                 lastScanAction = ScanAction.RescanGreaterThanToken;
             }
-            else if (n.kind === SyntaxKind.RegularExpressionLiteral && startsWithSlashToken(currentToken)) {
+            else if (expectedScanAction === ScanAction.RescanSlashToken && startsWithSlashToken(currentToken)) {
                 currentToken = scanner.reScanSlashToken();
                 Debug.assert(n.kind === currentToken);
                 lastScanAction = ScanAction.RescanSlashToken;
             }
             else {
-                lastScanAction = ScanAction.Normal;
+                lastScanAction = ScanAction.Scan;
             }
 
             endPos = scanner.getTextPos();
