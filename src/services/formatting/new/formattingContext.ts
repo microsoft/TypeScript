@@ -45,15 +45,16 @@ module ts.formatting {
             this.nextTokenParent = nextTokenParent;
             this.contextNode = commonParent;
 
-            this.contextNodeAllOnSameLine = null;
-            this.nextNodeAllOnSameLine = null;
-            this.tokensAreOnSameLine = null;
-            this.contextNodeBlockIsOnOneLine = null;
-            this.nextNodeBlockIsOnOneLine = null;
+            // drop cached results
+            this.contextNodeAllOnSameLine = undefined;
+            this.nextNodeAllOnSameLine = undefined;
+            this.tokensAreOnSameLine = undefined;
+            this.contextNodeBlockIsOnOneLine = undefined;
+            this.nextNodeBlockIsOnOneLine = undefined;
         }
 
         public ContextNodeAllOnSameLine(): boolean {
-            if (this.contextNodeAllOnSameLine === null) {
+            if (this.contextNodeAllOnSameLine === undefined) {
                 this.contextNodeAllOnSameLine = this.NodeIsOnOneLine(this.contextNode);
             }
 
@@ -61,7 +62,7 @@ module ts.formatting {
         }
 
         public NextNodeAllOnSameLine(): boolean {
-            if (this.nextNodeAllOnSameLine === null) {
+            if (this.nextNodeAllOnSameLine === undefined) {
                 this.nextNodeAllOnSameLine = this.NodeIsOnOneLine(this.nextTokenParent);
             }
 
@@ -69,11 +70,7 @@ module ts.formatting {
         }
 
         public TokensAreOnSameLine(): boolean {
-            if (this.tokensAreOnSameLine === null) {
-
-                //var startLine = this.snapshot.getLineNumberFromPosition(this.currentTokenSpan.token.pos);
-                //var endLine = this.snapshot.getLineNumberFromPosition(this.nextTokenSpan.token.pos);
-
+            if (this.tokensAreOnSameLine === undefined) {
                 var startLine = this.sourceFile.getLineAndCharacterFromPosition(this.currentTokenSpan.pos).line;
                 var endLine = this.sourceFile.getLineAndCharacterFromPosition(this.nextTokenSpan.pos).line;
                 this.tokensAreOnSameLine = (startLine == endLine);
@@ -83,7 +80,7 @@ module ts.formatting {
         }
 
         public ContextNodeBlockIsOnOneLine() {
-            if (this.contextNodeBlockIsOnOneLine === null) {
+            if (this.contextNodeBlockIsOnOneLine === undefined) {
                 this.contextNodeBlockIsOnOneLine = this.BlockIsOnOneLine(this.contextNode);
             }
 
@@ -91,7 +88,7 @@ module ts.formatting {
         }
 
         public NextNodeBlockIsOnOneLine() {
-            if (this.nextNodeBlockIsOnOneLine === null) {
+            if (this.nextNodeBlockIsOnOneLine === undefined) {
                 this.nextNodeBlockIsOnOneLine = this.BlockIsOnOneLine(this.nextTokenParent);
             }
 
@@ -101,14 +98,9 @@ module ts.formatting {
         private NodeIsOnOneLine(node: Node): boolean {
             var startLine = this.sourceFile.getLineAndCharacterFromPosition(node.getStart(this.sourceFile)).line;
             var endLine = this.sourceFile.getLineAndCharacterFromPosition(node.getEnd()).line;
-            //var startLine = this.snapshot.getLineNumberFromPosition(node.start());
-            //var endLine = this.snapshot.getLineNumberFromPosition(node.end());
-
             return startLine == endLine;
         }
 
-        // Now we know we have a block (or a fake block represented by some other kind of node with an open and close brace as children).
-        // IMPORTANT!!! This relies on the invariant that IsBlockContext must return true ONLY for nodes with open and close braces as immediate children
         private BlockIsOnOneLine(node: Node): boolean {
             var openBrace = findChildOfKind(node, SyntaxKind.OpenBraceToken, this.sourceFile);
             var closeBrace = findChildOfKind(node, SyntaxKind.CloseBraceToken, this.sourceFile);
@@ -117,12 +109,7 @@ module ts.formatting {
                 var endLine = this.sourceFile.getLineAndCharacterFromPosition(closeBrace.getStart(this.sourceFile)).line;
                 return startLine === endLine;
             }
-
-            //var block = <BlockSyntax>node.node();
-
-            //// Now check if they are on the same line
-            //return this.snapshot.getLineNumberFromPosition(end(block.openBraceToken)) === 
-            //       this.snapshot.getLineNumberFromPosition(start(block.closeBraceToken));
+            return false;
         }
     }
 }
