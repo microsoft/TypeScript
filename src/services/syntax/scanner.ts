@@ -1622,6 +1622,8 @@ module TypeScript.Scanner {
         }
 
         function consumeToken(token: ISyntaxToken): void {
+            // Debug.assert(token.fullWidth() > 0 || token.kind === SyntaxKind.EndOfFileToken);
+
             // Debug.assert(currentToken() === token);
             _absolutePosition += token.fullWidth();
 
