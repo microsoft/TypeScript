@@ -960,15 +960,14 @@ module ts {
                     if (declaration.kind === SyntaxKind.ImportDeclaration &&
                         !(declaration.flags & NodeFlags.Export) &&
                         isDeclarationVisible(declaration.parent)) {
-                        var importDeclaration = <ImportDeclaration>declaration;
-                        getNodeLinks(importDeclaration).isVisible = true;
+                        getNodeLinks(declaration).isVisible = true;
                         if (aliasesToMakeVisible) {
-                            if (!contains(aliasesToMakeVisible, importDeclaration)) {
-                                aliasesToMakeVisible.push(importDeclaration);
+                            if (!contains(aliasesToMakeVisible, declaration)) {
+                                aliasesToMakeVisible.push(<ImportDeclaration>declaration);
                             }
                         }
                         else {
-                            aliasesToMakeVisible = [importDeclaration];
+                            aliasesToMakeVisible = [<ImportDeclaration>declaration];
                         }
                         return true;
                     }
@@ -1639,7 +1638,7 @@ module ts {
                 return getTypeFromTypeNode(declaration.type);
             }
             if (declaration.kind === SyntaxKind.Parameter) {
-                var func = <FunctionLike>declaration.parent;
+                var func = <FunctionLikeDeclaration>declaration.parent;
                 // For a parameter of a set accessor, use the type of the get accessor if one is present
                 if (func.kind === SyntaxKind.SetAccessor) {
                     var getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
@@ -2507,7 +2506,7 @@ module ts {
                         returnType = getAnnotatedAccessorType(setter);
                     }
 
-                    if (!returnType && !(<FunctionLike>declaration).body) {
+                    if (!returnType && !(<FunctionLikeDeclaration>declaration).body) {
                         returnType = anyType;
                     }
                 }
@@ -2537,7 +2536,7 @@ module ts {
                         // Don't include signature if node is the implementation of an overloaded function. A node is considered
                         // an implementation node if it has a body and the previous node is of the same kind and immediately
                         // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
-                        if (i > 0 && (<FunctionLike>node).body) {
+                        if (i > 0 && (<FunctionLikeDeclaration>node).body) {
                             var previous = symbol.declarations[i - 1];
                             if (node.parent === previous.parent && node.kind === previous.kind && node.pos === previous.end) {
                                 break;
@@ -2559,7 +2558,7 @@ module ts {
                     var type = getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature));
                 }
                 else {
-                    var type = getReturnTypeFromBody(<FunctionLike>signature.declaration);
+                    var type = getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration);
                 }
                 if (signature.resolvedReturnType === resolvingType) {
                     signature.resolvedReturnType = type;
@@ -4666,7 +4665,7 @@ module ts {
 
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
-            var func = <FunctionLike>parameter.parent;
+            var func = <FunctionLikeDeclaration>parameter.parent;
             if (func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction) {
                 if (isContextSensitiveExpression(func)) {
                     var contextualSignature = getContextualSignature(func);
@@ -5727,7 +5726,7 @@ module ts {
             }
         }
 
-        function getReturnTypeFromBody(func: FunctionLike, contextualMapper?: TypeMapper): Type {
+        function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             var contextualSignature = getContextualSignature(func);
             if (func.body.kind !== SyntaxKind.FunctionBlock) {
                 var unwidenedType = checkAndMarkExpression(func.body, contextualMapper);
@@ -5805,7 +5804,7 @@ module ts {
         // An explicitly typed function whose return type isn't the Void or the Any type
         // must have at least one return statement somewhere in its body.
         // An exception to this rule is if the function implementation consists of a single 'throw' statement.
-        function checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(func: FunctionLike, returnType: Type): void {
+        function checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(func: FunctionLikeDeclaration, returnType: Type): void {
             if (!fullTypeCheck) {
                 return;
             }
@@ -6364,7 +6363,7 @@ module ts {
                     }
                 }
                 else {
-                    if (parameterDeclaration.initializer && !(<FunctionLike>parameterDeclaration.parent).body) {
+                    if (parameterDeclaration.initializer && !(<FunctionLikeDeclaration>parameterDeclaration.parent).body) {
                         error(parameterDeclaration, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
                     }
                 }
@@ -6373,7 +6372,7 @@ module ts {
             function checkReferencesInInitializer(n: Node): void {
                 if (n.kind === SyntaxKind.Identifier) {
                     var referencedSymbol = getNodeLinks(n).resolvedSymbol;
-                    // check FunctionLike.locals (stores parameters\function local variable) 
+                    // check FunctionLikeDeclaration.locals (stores parameters\function local variable) 
                     // if it contains entry with a specified name and if this entry matches the resolved symbol
                     if (referencedSymbol && referencedSymbol !== unknownSymbol && getSymbol(parameterDeclaration.parent.locals, referencedSymbol.name, SymbolFlags.Value) === referencedSymbol) {
                         if (referencedSymbol.valueDeclaration.kind === SyntaxKind.Parameter) {
@@ -6382,7 +6381,7 @@ module ts {
                                 return;
                             }
                             var enclosingOrReferencedParameter =
-                                forEach((<FunctionLike>parameterDeclaration.parent).parameters, p => p === parameterDeclaration || p === referencedSymbol.valueDeclaration ? p : undefined);
+                                forEach((<FunctionLikeDeclaration>parameterDeclaration.parent).parameters, p => p === parameterDeclaration || p === referencedSymbol.valueDeclaration ? p : undefined);
 
                             if (enclosingOrReferencedParameter === referencedSymbol.valueDeclaration) {
                                 // legal case - parameter initializer references some parameter strictly on left of current parameter declaration
@@ -6656,7 +6655,7 @@ module ts {
 
             // TypeScript 1.0 spec (April 2014): 3.7.2.2
             // Specialized signatures are not permitted in conjunction with a function body
-            if ((<FunctionLike>signatureDeclarationNode).body) {
+            if ((<FunctionLikeDeclaration>signatureDeclarationNode).body) {
                 error(signatureDeclarationNode, Diagnostics.A_signature_with_an_implementation_cannot_use_a_string_literal_type);
                 return;
             }
@@ -6707,7 +6706,7 @@ module ts {
                 return;
             }
 
-            function checkFlagAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionLike, flagsToCheck: NodeFlags, someOverloadFlags: NodeFlags, allOverloadFlags: NodeFlags): void {
+            function checkFlagAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionLikeDeclaration, flagsToCheck: NodeFlags, someOverloadFlags: NodeFlags, allOverloadFlags: NodeFlags): void {
                 // Error if some overloads have a flag that is not shared by all overloads. To find the
                 // deviations, we XOR someOverloadFlags with allOverloadFlags
                 var someButNotAllOverloadFlags = someOverloadFlags ^ allOverloadFlags;
@@ -6743,14 +6742,14 @@ module ts {
             var someNodeFlags: NodeFlags = 0;
             var allNodeFlags = flagsToCheck;
             var hasOverloads = false;
-            var bodyDeclaration: FunctionLike;
-            var lastSeenNonAmbientDeclaration: FunctionLike;
-            var previousDeclaration: FunctionLike;
+            var bodyDeclaration: FunctionLikeDeclaration;
+            var lastSeenNonAmbientDeclaration: FunctionLikeDeclaration;
+            var previousDeclaration: FunctionLikeDeclaration;
 
             var declarations = symbol.declarations;
             var isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
 
-            function reportImplementationExpectedError(node: FunctionLike): void {
+            function reportImplementationExpectedError(node: FunctionLikeDeclaration): void {
                 if (node.name && node.name.kind === SyntaxKind.Missing) {
                     return;
                 }
@@ -6766,9 +6765,9 @@ module ts {
                 });
                 if (subsequentNode) {
                     if (subsequentNode.kind === node.kind) {
-                        var errorNode: Node = (<FunctionLike>subsequentNode).name || subsequentNode;
+                        var errorNode: Node = (<FunctionLikeDeclaration>subsequentNode).name || subsequentNode;
                         // TODO(jfreeman): These are methods, so handle computed name case
-                        if (node.name && (<FunctionLike>subsequentNode).name && (<Identifier>node.name).text === (<Identifier>(<FunctionLike>subsequentNode).name).text) {
+                        if (node.name && (<FunctionLikeDeclaration>subsequentNode).name && (<Identifier>node.name).text === (<Identifier>(<FunctionLikeDeclaration>subsequentNode).name).text) {
                             // the only situation when this is possible (same kind\same name but different symbol) - mixed static and instance class members
                             Debug.assert(node.kind === SyntaxKind.Method);
                             Debug.assert((node.flags & NodeFlags.Static) !== (subsequentNode.flags & NodeFlags.Static));
@@ -6776,7 +6775,7 @@ module ts {
                             error(errorNode, diagnostic);
                             return;
                         }
-                        else if ((<FunctionLike>subsequentNode).body) {
+                        else if ((<FunctionLikeDeclaration>subsequentNode).body) {
                             error(errorNode, Diagnostics.Function_implementation_name_must_be_0, declarationNameToString(node.name));
                             return;
                         }
@@ -6797,7 +6796,7 @@ module ts {
             var duplicateFunctionDeclaration = false;
             var multipleConstructorImplementation = false;
             for (var i = 0; i < declarations.length; i++) {
-                var node = <FunctionLike>declarations[i];
+                var node = <FunctionLikeDeclaration>declarations[i];
                 var inAmbientContext = isInAmbientContext(node);
                 var inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
                 if (inAmbientContextOrInterface) {
@@ -6968,7 +6967,7 @@ module ts {
             }
         }
 
-        function checkFunctionDeclaration(node: FunctionLike): void {
+        function checkFunctionDeclaration(node: FunctionLikeDeclaration): void {
             checkSignatureDeclaration(node);
 
             var symbol = getSymbolOfNode(node);
@@ -7019,7 +7018,7 @@ module ts {
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
             // no rest parameters \ declaration context \ overload - no codegen impact
-            if (!hasRestParameters(node) || isInAmbientContext(node) || !(<FunctionLike>node).body) {
+            if (!hasRestParameters(node) || isInAmbientContext(node) || !(<FunctionLikeDeclaration>node).body) {
                 return;
             }
 
@@ -7040,7 +7039,7 @@ module ts {
                 // - function has implementation (not a signature)
                 // - function has rest parameters
                 // - context is not ambient (otherwise no codegen impact)
-                if ((<FunctionLike>node.parent).body && hasRestParameters(<FunctionLike>node.parent) && !isInAmbientContext(node)) {
+                if ((<FunctionLikeDeclaration>node.parent).body && hasRestParameters(<FunctionLikeDeclaration>node.parent) && !isInAmbientContext(node)) {
                     error(node, Diagnostics.Duplicate_identifier_i_Compiler_uses_i_to_initialize_rest_parameter);                    
                 }
                 return;
@@ -7098,7 +7097,7 @@ module ts {
                     case SyntaxKind.Method:
                     case SyntaxKind.ArrowFunction:
                     case SyntaxKind.Constructor:
-                        if (hasRestParameters(<FunctionLike>current)) {
+                        if (hasRestParameters(<FunctionLikeDeclaration>current)) {
                             error(node, Diagnostics.Expression_resolves_to_variable_declaration_i_that_compiler_uses_to_initialize_rest_parameter);
                             return;
                         }
@@ -7109,7 +7108,7 @@ module ts {
         }
 
         // TODO(jfreeman): Decide what to do for computed properties
-        function needCollisionCheckForIdentifier(node: Node, identifier: Identifier | ComputedPropertyName, name: string): boolean {
+        function needCollisionCheckForIdentifier(node: Node, identifier: DeclarationName, name: string): boolean {
             if (!(identifier && (<Identifier>identifier).text === name)) {
                 return false;
             }
@@ -7127,7 +7126,7 @@ module ts {
                 return false;
             }
 
-            if (node.kind === SyntaxKind.Parameter && !(<FunctionLike>node.parent).body) {
+            if (node.kind === SyntaxKind.Parameter && !(<FunctionLikeDeclaration>node.parent).body) {
                 // just an overload - no codegen impact
                 return false;
             }
@@ -7136,7 +7135,7 @@ module ts {
         }
         
         // TODO(jfreeman): Decide what to do for computed properties
-        function checkCollisionWithCapturedThisVariable(node: Node, name: Identifier | ComputedPropertyName): void {
+        function checkCollisionWithCapturedThisVariable(node: Node, name: DeclarationName): void {
             if (!needCollisionCheckForIdentifier(node, name, "_this")) {
                 return;
             }
@@ -7161,7 +7160,7 @@ module ts {
             }
         }
 
-        function checkCollisionWithCapturedSuperVariable(node: Node, name: Identifier | ComputedPropertyName) {
+        function checkCollisionWithCapturedSuperVariable(node: Node, name: DeclarationName) {
             if (!needCollisionCheckForIdentifier(node, name, "_super")) {
                 return;
             }
@@ -7185,7 +7184,7 @@ module ts {
         }
 
         // TODO(jfreeman): Decide what to do for computed properties
-        function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier | ComputedPropertyName) {
+        function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: DeclarationName) {
             if (!needCollisionCheckForIdentifier(node, name, "require") && !needCollisionCheckForIdentifier(node, name, "exports")) {
                 return;
             }
@@ -7490,7 +7489,7 @@ module ts {
         }
 
         // TODO(jfreeman): Decide what to do for computed properties
-        function checkTypeNameIsReserved(name: Identifier | ComputedPropertyName, message: DiagnosticMessage): void {
+        function checkTypeNameIsReserved(name: DeclarationName, message: DiagnosticMessage): void {
             // TS 1.0 spec (April 2014): 3.6.1
             // The predefined type keywords are reserved and cannot be used as names of user defined types.
             switch ((<Identifier>name).text) {
@@ -7977,7 +7976,7 @@ module ts {
             var declarations = symbol.declarations;
             for (var i = 0; i < declarations.length; i++) {
                 var declaration = declarations[i];
-                if ((declaration.kind === SyntaxKind.ClassDeclaration || (declaration.kind === SyntaxKind.FunctionDeclaration && (<FunctionLike>declaration).body)) && !isInAmbientContext(declaration)) {
+                if ((declaration.kind === SyntaxKind.ClassDeclaration || (declaration.kind === SyntaxKind.FunctionDeclaration && (<FunctionLikeDeclaration>declaration).body)) && !isInAmbientContext(declaration)) {
                     return declaration;
                 }
             }
@@ -8124,7 +8123,7 @@ module ts {
                 case SyntaxKind.ParenType:
                     return checkSourceElement((<ParenTypeNode>node).type);
                 case SyntaxKind.FunctionDeclaration:
-                    return checkFunctionDeclaration(<FunctionLike>node);
+                    return checkFunctionDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.Block:
                     return checkBlock(<Block>node);
                 case SyntaxKind.FunctionBlock:
@@ -8191,7 +8190,7 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    forEach((<FunctionLike>node).parameters, checkFunctionExpressionBodies);
+                    forEach((<FunctionLikeDeclaration>node).parameters, checkFunctionExpressionBodies);
                     checkFunctionExpressionBody(<FunctionExpression>node);
                     break;
                 case SyntaxKind.Method:
@@ -8199,7 +8198,7 @@ module ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionDeclaration:
-                    forEach((<FunctionLike>node).parameters, checkFunctionExpressionBodies);
+                    forEach((<FunctionLikeDeclaration>node).parameters, checkFunctionExpressionBodies);
                     break;
                 case SyntaxKind.WithStatement:
                     checkFunctionExpressionBodies((<WithStatement>node).expression);
@@ -8481,7 +8480,7 @@ module ts {
                         case SyntaxKind.Method:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
-                            return node === (<FunctionLike>parent).type;
+                            return node === (<FunctionLikeDeclaration>parent).type;
                         case SyntaxKind.CallSignature:
                         case SyntaxKind.ConstructSignature:
                         case SyntaxKind.IndexSignature:
@@ -8825,7 +8824,7 @@ module ts {
             return false;
         }
 
-        function isImplementationOfOverload(node: FunctionLike) {
+        function isImplementationOfOverload(node: FunctionLikeDeclaration) {
             if (node.body) {
                 var symbol = getSymbolOfNode(node);
                 var signaturesOfSymbol = getSignaturesOfSymbol(symbol);

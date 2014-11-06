@@ -80,7 +80,7 @@ module ts.NavigationBar {
                     return 1;
                 }
                 else if (n2.name) {
-                    -1;
+                    return -1;
                 }
                 else {
                     return n1.kind - n2.kind;
@@ -107,7 +107,7 @@ module ts.NavigationBar {
                         break;
 
                     case SyntaxKind.FunctionDeclaration:
-                        var functionDeclaration = <FunctionLike>node;
+                        var functionDeclaration = <FunctionLikeDeclaration>node;
                         if (isTopLevelFunctionDeclaration(functionDeclaration)) {
                             topLevelNodes.push(node);
                             addTopLevelNodes((<Block>functionDeclaration.body).statements, topLevelNodes);
@@ -117,7 +117,7 @@ module ts.NavigationBar {
             }
         }
 
-        function isTopLevelFunctionDeclaration(functionDeclaration: FunctionLike) {
+        function isTopLevelFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration) {
             if (functionDeclaration.kind === SyntaxKind.FunctionDeclaration) {
                 // A function declaration is 'top level' if it contains any function declarations 
                 // within it. 
@@ -232,7 +232,7 @@ module ts.NavigationBar {
                     return createItem(node, getTextOfNode((<PropertyDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.FunctionDeclaration:
-                    return createItem(node, getTextOfNode((<FunctionLike>node).name), ts.ScriptElementKind.functionElement);
+                    return createItem(node, getTextOfNode((<FunctionLikeDeclaration>node).name), ts.ScriptElementKind.functionElement);
 
                 case SyntaxKind.VariableDeclaration:
                     if (node.flags & NodeFlags.Const) {

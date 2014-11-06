@@ -674,7 +674,7 @@ module ts {
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.Method:
-                            var functionDeclaration = <FunctionLike>node;
+                            var functionDeclaration = <FunctionLikeDeclaration>node;
 
                             if (functionDeclaration.name && functionDeclaration.name.kind !== SyntaxKind.Missing) {
                                 var lastDeclaration = namedDeclarations.length > 0 ?
@@ -685,7 +685,7 @@ module ts {
                                 if (lastDeclaration && functionDeclaration.symbol === lastDeclaration.symbol) {
                                     // Overwrite the last declaration if it was an overload
                                     // and this one is an implementation.
-                                    if (functionDeclaration.body && !(<FunctionLike>lastDeclaration).body) {
+                                    if (functionDeclaration.body && !(<FunctionLikeDeclaration>lastDeclaration).body) {
                                         namedDeclarations[namedDeclarations.length - 1] = functionDeclaration;
                                     }
                                 }
@@ -1963,7 +1963,7 @@ module ts {
 
     function isNameOfFunctionDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
-            isAnyFunction(node.parent) && (<FunctionLike>node.parent).name === node;
+            isAnyFunction(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
     }
 
     /** Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 } */
@@ -2946,7 +2946,7 @@ module ts {
                         (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)) { // At constructor keyword of constructor declaration
                         // get the signature from the declaration and write it
                         var signature: Signature;
-                        var functionDeclaration = <FunctionLike>location.parent;
+                        var functionDeclaration = <FunctionLikeDeclaration>location.parent;
                         var allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getConstructSignatures() : type.getCallSignatures();
                         if (!typeResolver.isImplementationOfOverload(functionDeclaration)) {
                             signature = typeResolver.getSignatureFromDeclaration(functionDeclaration);
@@ -3226,7 +3226,7 @@ module ts {
                     if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
                         (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.Method))) {
                         declarations.push(d);
-                        if ((<FunctionLike>d).body) definition = d;
+                        if ((<FunctionLikeDeclaration>d).body) definition = d;
                     }
                 });
 
@@ -3473,7 +3473,7 @@ module ts {
             }
 
             function getReturnOccurrences(returnStatement: ReturnStatement): ReferenceEntry[] {
-                var func = <FunctionLike>getContainingFunction(returnStatement);
+                var func = <FunctionLikeDeclaration>getContainingFunction(returnStatement);
 
                 // If we didn't find a containing function with a block body, bail out.
                 if (!(func && hasKind(func.body, SyntaxKind.FunctionBlock))) {

@@ -88,7 +88,7 @@ module ts {
         function getDeclarationName(node: Declaration): string {
             if (node.name) {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
-                    return '"' + (<Identifier>node.name).text + '"';
+                    return '"' + (<LiteralExpression>node.name).text + '"';
                 }
                 return (<Identifier>node.name).text;
             }

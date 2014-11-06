@@ -74,7 +74,7 @@ module ts.BreakpointResolver {
                         return textSpan(node);
                     }
 
-                    if (node.parent.kind == SyntaxKind.ArrowFunction && (<FunctionLike>node.parent).body == node) {
+                    if (node.parent.kind == SyntaxKind.ArrowFunction && (<FunctionLikeDeclaration>node.parent).body == node) {
                         // If this is body of arrow function, it is allowed to have the breakpoint
                         return textSpan(node);
                     }
@@ -99,7 +99,7 @@ module ts.BreakpointResolver {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
-                        return spanInFunctionDeclaration(<FunctionLike>node);
+                        return spanInFunctionDeclaration(<FunctionLikeDeclaration>node);
 
                     case SyntaxKind.FunctionBlock:
                         return spanInFunctionBlock(<Block>node);
@@ -246,7 +246,7 @@ module ts.BreakpointResolver {
                         }
 
                         // return type of function go to previous token
-                        if (isAnyFunction(node.parent) && (<FunctionLike>node.parent).type === node) {
+                        if (isAnyFunction(node.parent) && (<FunctionLikeDeclaration>node.parent).type === node) {
                             return spanInPreviousNode(node);
                         }
 
@@ -305,7 +305,7 @@ module ts.BreakpointResolver {
                     return textSpan(parameter);
                 }
                 else {
-                    var functionDeclaration = <FunctionLike>parameter.parent;
+                    var functionDeclaration = <FunctionLikeDeclaration>parameter.parent;
                     var indexOfParameter = indexOf(functionDeclaration.parameters, parameter);
                     if (indexOfParameter) {
                         // Not a first parameter, go to previous parameter
@@ -318,12 +318,12 @@ module ts.BreakpointResolver {
                 }
             }
 
-            function canFunctionHaveSpanInWholeDeclaration(functionDeclaration: FunctionLike) {
+            function canFunctionHaveSpanInWholeDeclaration(functionDeclaration: FunctionLikeDeclaration) {
                 return !!(functionDeclaration.flags & NodeFlags.Export) ||
                     (functionDeclaration.parent.kind === SyntaxKind.ClassDeclaration && functionDeclaration.kind !== SyntaxKind.Constructor);
             }
 
-            function spanInFunctionDeclaration(functionDeclaration: FunctionLike): TypeScript.TextSpan {
+            function spanInFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration): TypeScript.TextSpan {
                 // No breakpoints in the function signature
                 if (!functionDeclaration.body) {
                     return undefined;
@@ -340,7 +340,7 @@ module ts.BreakpointResolver {
 
             function spanInFunctionBlock(block: Block): TypeScript.TextSpan {
                 var nodeForSpanInBlock = block.statements.length ? block.statements[0] : block.getLastToken();
-                if (canFunctionHaveSpanInWholeDeclaration(<FunctionLike>block.parent)) {
+                if (canFunctionHaveSpanInWholeDeclaration(<FunctionLikeDeclaration>block.parent)) {
                     return spanInNodeIfStartsOnSameLine(block.parent, nodeForSpanInBlock);
                 }
 

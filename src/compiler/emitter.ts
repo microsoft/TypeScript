@@ -909,7 +909,7 @@ module ts {
 
             // This function specifically handles numeric/string literals for enum and accessor 'identifiers'.
             // In a sense, it does not actually emit identifiers as much as it declares a name for a specific property.
-            function emitExpressionForPropertyName(node: Identifier | ComputedPropertyName) {
+            function emitExpressionForPropertyName(node: DeclarationName) {
                 if (node.kind === SyntaxKind.StringLiteral) {
                     emitLiteral(<LiteralExpression>node);
                 }
@@ -1466,7 +1466,7 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitDefaultValueAssignments(node: FunctionLike) {
+            function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
                 forEach(node.parameters, param => {
                     if (param.initializer) {
                         writeLine();
@@ -1486,7 +1486,7 @@ module ts {
                 });
             }
 
-            function emitRestParameter(node: FunctionLike) {
+            function emitRestParameter(node: FunctionLikeDeclaration) {
                 if (hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
@@ -1532,7 +1532,7 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitFunctionDeclaration(node: FunctionLike) {
+            function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
                 if (!node.body) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
@@ -1560,7 +1560,7 @@ module ts {
                 }
             }
 
-            function emitSignatureParameters(node: FunctionLike) {
+            function emitSignatureParameters(node: FunctionLikeDeclaration) {
                 increaseIndent();
                 write("(");
                 if (node) {
@@ -1570,7 +1570,7 @@ module ts {
                 decreaseIndent();
             }
 
-            function emitSignatureAndBody(node: FunctionLike) {
+            function emitSignatureAndBody(node: FunctionLikeDeclaration) {
                 emitSignatureParameters(node);
                 write(" {");
                 scopeEmitStart(node);
@@ -1668,7 +1668,7 @@ module ts {
             }
 
             // TODO(jfreeman): Account for computed property name
-            function emitMemberAccess(memberName: Identifier | ComputedPropertyName) {
+            function emitMemberAccess(memberName: DeclarationName) {
                 if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
                     write("[");
                     emitNode(memberName);
@@ -2075,11 +2075,11 @@ module ts {
             function getExternalImportDeclarations(node: SourceFile): ImportDeclaration[] {
                 var result: ImportDeclaration[] = [];
                 forEach(node.statements, stat => {
-                    if (stat.kind === SyntaxKind.ImportDeclaration) {
-                        var importDeclaration = <ImportDeclaration>stat;
-                        if (importDeclaration.externalModuleName && resolver.isReferencedImportDeclaration(importDeclaration)) {
-                            result.push(importDeclaration);
-                        }
+                    if (stat.kind === SyntaxKind.ImportDeclaration
+                        && (<ImportDeclaration>stat).externalModuleName
+                        && resolver.isReferencedImportDeclaration(<ImportDeclaration>stat)) {
+
+                        result.push(<ImportDeclaration>stat);
                     }
                 });
                 return result;
@@ -2267,7 +2267,7 @@ module ts {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
-                        return emitFunctionDeclaration(<FunctionLike>node);
+                        return emitFunctionDeclaration(<FunctionLikeDeclaration>node);
                     case SyntaxKind.PrefixOperator:
                     case SyntaxKind.PostfixOperator:
                         return emitUnaryExpression(<UnaryExpression>node);
@@ -2510,7 +2510,7 @@ module ts {
             var getSymbolVisibilityDiagnosticMessage: (symbolAccesibilityResult: SymbolAccessiblityResult) => {
                 errorNode: Node;
                 diagnosticMessage: DiagnosticMessage;
-                typeName?: Identifier | ComputedPropertyName
+                typeName?: DeclarationName
             }
 
             function createTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
@@ -3117,7 +3117,7 @@ module ts {
                 }
             }
 
-            function emitFunctionDeclaration(node: FunctionLike) {
+            function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
                 // If we are emitting Method/Constructor it isn't moduleElement and hence already determined to be emitting
                 // so no need to verify if the declaration is visible
                 if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
@@ -3336,7 +3336,7 @@ module ts {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.Method:
-                        return emitFunctionDeclaration(<FunctionLike>node);
+                        return emitFunctionDeclaration(<FunctionLikeDeclaration>node);
                     case SyntaxKind.ConstructSignature:
                         return emitConstructSignatureDeclaration(<SignatureDeclaration>node);
                     case SyntaxKind.CallSignature:

@@ -64,8 +64,8 @@ module ts {
 
     // TODO(jfreeman): Implement declarationNameToString for computed properties
     // Return display name of an identifier
-    export function declarationNameToString(identifier: Identifier | ComputedPropertyName) {
-        return identifier.kind === SyntaxKind.Missing ? "(Missing)" : getTextOfNode(identifier);
+    export function declarationNameToString(name: DeclarationName) {
+        return name.kind === SyntaxKind.Missing ? "(Missing)" : getTextOfNode(name);
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
@@ -214,11 +214,11 @@ module ts {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
-                return child((<FunctionLike>node).name) ||
-                    children((<FunctionLike>node).typeParameters) ||
-                    children((<FunctionLike>node).parameters) ||
-                    child((<FunctionLike>node).type) ||
-                    child((<FunctionLike>node).body);
+                return child((<FunctionLikeDeclaration>node).name) ||
+                    children((<FunctionLikeDeclaration>node).typeParameters) ||
+                    children((<FunctionLikeDeclaration>node).parameters) ||
+                    child((<FunctionLikeDeclaration>node).type) ||
+                    child((<FunctionLikeDeclaration>node).body);
             case SyntaxKind.TypeReference:
                 return child((<TypeReferenceNode>node).typeName) ||
                     children((<TypeReferenceNode>node).typeArguments);
@@ -1632,7 +1632,7 @@ module ts {
                 // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code 
                 // or if its FunctionBody is strict code(11.1.5).
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
-                // strict mode FunctionLike or FunctionExpression(13.1) 
+                // strict mode FunctionLikeDeclaration or FunctionExpression(13.1) 
                 if (isInStrictMode && isEvalOrArgumentsIdentifier(parameter.name)) {
                     reportInvalidUseInStrictMode(parameter.name);
                     return;
@@ -2776,7 +2776,7 @@ module ts {
             var body = parseBody(/* ignoreMissingOpenBrace */ false);
             if (name && isInStrictMode && isEvalOrArgumentsIdentifier(name)) {
                 // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
-                // Identifier of a FunctionLike or FunctionExpression or as a formal parameter name(13.1)
+                // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
                 reportInvalidUseInStrictMode(name);
             }
             return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, name, sig, body);
@@ -3442,8 +3442,8 @@ module ts {
             return node;
         }
 
-        function parseFunctionDeclaration(pos?: number, flags?: NodeFlags): FunctionLike {
-            var node = <FunctionLike>createNode(SyntaxKind.FunctionDeclaration, pos);
+        function parseFunctionDeclaration(pos?: number, flags?: NodeFlags): FunctionLikeDeclaration {
+            var node = <FunctionLikeDeclaration>createNode(SyntaxKind.FunctionDeclaration, pos);
             if (flags) node.flags = flags;
             parseExpected(SyntaxKind.FunctionKeyword);
             node.name = parseIdentifier();
@@ -3454,7 +3454,7 @@ module ts {
             node.body = parseAndCheckFunctionBody(/*isConstructor*/ false);
             if (isInStrictMode && isEvalOrArgumentsIdentifier(node.name) && node.name.kind === SyntaxKind.Identifier) {
                 // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
-                // Identifier of a FunctionLike or FunctionExpression or as a formal parameter name(13.1)
+                // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
                 reportInvalidUseInStrictMode(<Identifier>node.name);
             }
             return finishNode(node);
