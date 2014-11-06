@@ -301,34 +301,66 @@ module ts {
         type?: TypeNode;
     }
 
+    export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName;
+
     export interface Declaration extends Node {
-        name?: Identifier;
+        name?: DeclarationName;
+    }
+
+    export interface ComputedPropertyName extends Node {
+        expression: Expression;
     }
 
     export interface TypeParameterDeclaration extends Declaration {
+        name: Identifier;
         constraint?: TypeNode;
     }
 
     export interface SignatureDeclaration extends Declaration, ParsedSignature { }
 
     export interface VariableDeclaration extends Declaration {
+        name: Identifier;
         type?: TypeNode;
         initializer?: Expression;
     }
 
-    export interface PropertyDeclaration extends VariableDeclaration { }
+    export interface PropertyDeclaration extends Declaration {
+        type?: TypeNode;
+        initializer?: Expression;
+    }
 
     export interface ParameterDeclaration extends VariableDeclaration { }
 
-    export interface FunctionDeclaration extends Declaration, ParsedSignature {
+    /**
+     * Several node kinds share function-like features such as a signature,
+     * a name, and a body. These nodes should extend FunctionLikeDeclaration.
+     * Examples:
+     *  FunctionDeclaration
+     *  MethodDeclaration
+     *  ConstructorDeclaration
+     *  AccessorDeclaration
+     *  FunctionExpression
+     */
+    export interface FunctionLikeDeclaration extends Declaration, ParsedSignature {
         body?: Block | Expression;
     }
 
-    export interface MethodDeclaration extends FunctionDeclaration { }
+    export interface FunctionDeclaration extends FunctionLikeDeclaration {
+        name: Identifier;
+        body?: Block;
+    }
 
-    export interface ConstructorDeclaration extends FunctionDeclaration { }
+    export interface MethodDeclaration extends FunctionLikeDeclaration {
+        body?: Block;
+    }
 
-    export interface AccessorDeclaration extends FunctionDeclaration { }
+    export interface ConstructorDeclaration extends FunctionLikeDeclaration {
+        body?: Block;
+    }
+
+    export interface AccessorDeclaration extends FunctionLikeDeclaration {
+        body?: Block;
+    }
 
     export interface TypeNode extends Node { }
 
@@ -386,7 +418,8 @@ module ts {
         whenFalse: Expression;
     }
 
-    export interface FunctionExpression extends Expression, FunctionDeclaration {
+    export interface FunctionExpression extends Expression, FunctionLikeDeclaration {
+        name?: Identifier;
         body: Block | Expression;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
@@ -537,6 +570,7 @@ module ts {
     }
 
     export interface ClassDeclaration extends Declaration {
+        name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         baseType?: TypeReferenceNode;
         implementedTypes?: NodeArray<TypeReferenceNode>;
@@ -544,28 +578,34 @@ module ts {
     }
 
     export interface InterfaceDeclaration extends Declaration {
+        name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         baseTypes?: NodeArray<TypeReferenceNode>;
         members: NodeArray<Node>;
     }
 
     export interface TypeAliasDeclaration extends Declaration {
+        name: Identifier;
         type: TypeNode;
     }
 
     export interface EnumMember extends Declaration {
+        name: Identifier | LiteralExpression;
         initializer?: Expression;
     }
 
     export interface EnumDeclaration extends Declaration {
+        name: Identifier;
         members: NodeArray<EnumMember>;
     }
 
     export interface ModuleDeclaration extends Declaration {
+        name: Identifier | LiteralExpression;
         body: Block | ModuleDeclaration;
     }
 
     export interface ImportDeclaration extends Declaration {
+        name: Identifier;
         entityName?: EntityName;
         externalModuleName?: LiteralExpression;
     }
@@ -680,7 +720,7 @@ module ts {
         getContextualType(node: Node): Type;
         getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
-        isImplementationOfOverload(node: FunctionDeclaration): boolean;
+        isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         hasEarlyErrors(sourceFile?: SourceFile): boolean;
@@ -758,7 +798,7 @@ module ts {
 
     export interface EmitResolver {
         getProgram(): Program;
-        getLocalNameOfContainer(container: Declaration): string;
+        getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string;
         getExpressionNamePrefix(node: Identifier): string;
         getExportAssignmentName(node: SourceFile): string;
         isReferencedImportDeclaration(node: ImportDeclaration): boolean;
@@ -767,7 +807,7 @@ module ts {
         getEnumMemberValue(node: EnumMember): number;
         hasSemanticErrors(): boolean;
         isDeclarationVisible(node: Declaration): boolean;
-        isImplementationOfOverload(node: FunctionDeclaration): boolean;
+        isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;

@@ -628,7 +628,7 @@ module ts {
             if (this.documentationComment === undefined) {
                 this.documentationComment = this.declaration ? getJsDocCommentsFromDeclarations(
                     [this.declaration],
-                    this.declaration.name ? this.declaration.name.text : "",
+                    /*name*/ undefined,
                     /*canUseParsedParamTagComments*/ false) : [];
             }
 
@@ -674,7 +674,7 @@ module ts {
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.Method:
-                            var functionDeclaration = <FunctionDeclaration>node;
+                            var functionDeclaration = <FunctionLikeDeclaration>node;
 
                             if (functionDeclaration.name && functionDeclaration.name.kind !== SyntaxKind.Missing) {
                                 var lastDeclaration = namedDeclarations.length > 0 ?
@@ -685,7 +685,7 @@ module ts {
                                 if (lastDeclaration && functionDeclaration.symbol === lastDeclaration.symbol) {
                                     // Overwrite the last declaration if it was an overload
                                     // and this one is an implementation.
-                                    if (functionDeclaration.body && !(<FunctionDeclaration>lastDeclaration).body) {
+                                    if (functionDeclaration.body && !(<FunctionLikeDeclaration>lastDeclaration).body) {
                                         namedDeclarations[namedDeclarations.length - 1] = functionDeclaration;
                                     }
                                 }
@@ -1963,7 +1963,7 @@ module ts {
 
     function isNameOfFunctionDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
-            isAnyFunction(node.parent) && (<FunctionDeclaration>node.parent).name === node;
+            isAnyFunction(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
     }
 
     /** Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 } */
@@ -2658,7 +2658,8 @@ module ts {
                         return;
                     }
 
-                    existingMemberNames[m.name.text] = true;
+                    // TODO(jfreeman): Account for computed property name
+                    existingMemberNames[(<Identifier>m.name).text] = true;
                 });
 
                 var filteredMembers: Symbol[] = [];
@@ -2945,7 +2946,7 @@ module ts {
                         (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)) { // At constructor keyword of constructor declaration
                         // get the signature from the declaration and write it
                         var signature: Signature;
-                        var functionDeclaration = <FunctionDeclaration>location.parent;
+                        var functionDeclaration = <FunctionLikeDeclaration>location.parent;
                         var allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getConstructSignatures() : type.getCallSignatures();
                         if (!typeResolver.isImplementationOfOverload(functionDeclaration)) {
                             signature = typeResolver.getSignatureFromDeclaration(functionDeclaration);
@@ -3225,7 +3226,7 @@ module ts {
                     if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
                         (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.Method))) {
                         declarations.push(d);
-                        if ((<FunctionDeclaration>d).body) definition = d;
+                        if ((<FunctionLikeDeclaration>d).body) definition = d;
                     }
                 });
 
@@ -3472,7 +3473,7 @@ module ts {
             }
 
             function getReturnOccurrences(returnStatement: ReturnStatement): ReferenceEntry[] {
-                var func = <FunctionDeclaration>getContainingFunction(returnStatement);
+                var func = <FunctionLikeDeclaration>getContainingFunction(returnStatement);
 
                 // If we didn't find a containing function with a block body, bail out.
                 if (!(func && hasKind(func.body, SyntaxKind.FunctionBlock))) {
@@ -3871,7 +3872,7 @@ module ts {
 
             function getNormalizedSymbolName(symbolName: string, declarations: Declaration[]): string {
                 // Special case for function expressions, whose names are solely local to their bodies.
-                var functionExpression = forEach(declarations, d => d.kind === SyntaxKind.FunctionExpression ? d : undefined);
+                var functionExpression = forEach(declarations, d => d.kind === SyntaxKind.FunctionExpression ? <FunctionExpression>d : undefined);
 
                 if (functionExpression && functionExpression.name) {
                     var name = functionExpression.name.text;
@@ -4430,7 +4431,8 @@ module ts {
                 var declarations = sourceFile.getNamedDeclarations();
                 for (var i = 0, n = declarations.length; i < n; i++) {
                     var declaration = declarations[i];
-                    var name = declaration.name.text;
+                    // TODO(jfreeman): Skip this declaration if it has a computed name
+                    var name = (<Identifier>declaration.name).text;
                     var matchKind = getMatchKind(searchTerms, name);
                     if (matchKind !== MatchKind.none) {
                         var container = <Declaration>getContainerNode(declaration);
@@ -4441,7 +4443,8 @@ module ts {
                             matchKind: MatchKind[matchKind],
                             fileName: filename,
                             textSpan: TypeScript.TextSpan.fromBounds(declaration.getStart(), declaration.getEnd()),
-                            containerName: container.name ? container.name.text : "",
+                            // TODO(jfreeman): What should be the containerName when the container has a computed name?
+                            containerName: container.name ? (<Identifier>container.name).text : "",
                             containerKind: container.name ? getNodeKind(container) : ""
                         });
                     }

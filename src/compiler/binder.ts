@@ -84,12 +84,13 @@ module ts {
             if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
         }
 
+        // TODO(jfreeman): Implement getDeclarationName for property name
         function getDeclarationName(node: Declaration): string {
             if (node.name) {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
-                    return '"' + node.name.text + '"';
+                    return '"' + (<LiteralExpression>node.name).text + '"';
                 }
-                return node.name.text;
+                return (<Identifier>node.name).text;
             }
             switch (node.kind) {
                 case SyntaxKind.Constructor: return "__constructor";
@@ -100,7 +101,7 @@ module ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return node.name ? identifierToString(node.name) : getDeclarationName(node);
+            return node.name ? declarationNameToString(node.name) : getDeclarationName(node);
         }
 
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
