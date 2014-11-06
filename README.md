@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/Microsoft/TypeScript.svg?branch=master)](https://travis-ci.org/Microsoft/TypeScript)
 [![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/pr)](http://issuestats.com/github/microsoft/typescript)
-[![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/issue)](http://issuestats.com/github/microsoft/typescript)
+[![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/issue)](http://issuestats.com/github/microsoft/typescript)<br>
+[![Code Climate](https://codeclimate.com/github/Microsoft/TypeScript/badges/gpa.svg)](https://codeclimate.com/github/Microsoft/TypeScript)
+[![Test Coverage](https://codeclimate.com/github/Microsoft/TypeScript/badges/coverage.svg)](https://codeclimate.com/github/Microsoft/TypeScript)
 
 # TypeScript
 
