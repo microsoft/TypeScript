@@ -2784,25 +2784,24 @@ module ts {
 
             if (flags & SymbolFlags.Property) {
                 if (flags & SymbolFlags.UnionProperty) {
-                    // If any of the property includes the declaration of property - the kind is property
-                    var unionPropetyKind = forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
+                    // If union property is result of union of non method (property/accessors), it is labeled as property
+                    var unionPropertyKind = forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
                         var rootSymbolFlags = rootSymbol.getFlags();
-                        if (rootSymbolFlags & SymbolFlags.Property) {
+                        if (rootSymbolFlags & (SymbolFlags.Property | SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) {
                             return ScriptElementKind.memberVariableElement;
                         }
-                        if (rootSymbolFlags & SymbolFlags.GetAccessor) return ScriptElementKind.memberVariableElement;
-                        if (rootSymbolFlags & SymbolFlags.SetAccessor) return ScriptElementKind.memberVariableElement;
-                        Debug.assert((rootSymbolFlags & SymbolFlags.Method) !== undefined);
+                        Debug.assert(!!(rootSymbolFlags & SymbolFlags.Method));
                     });
-                    if (!unionPropetyKind) {
-                        // If this was union of all methods, make sure it has call signatures before we call it method
+                    if (!unionPropertyKind) {
+                        // If this was union of all methods, 
+                        //make sure it has call signatures before we can label it as method
                         var typeOfUnionProperty = typeInfoResolver.getTypeOfSymbol(symbol);
                         if (typeOfUnionProperty.getCallSignatures().length) {
                             return ScriptElementKind.memberFunctionElement;
                         }
                         return ScriptElementKind.memberVariableElement;
                     }
-                    return unionPropetyKind;
+                    return unionPropertyKind;
                 }
                 return ScriptElementKind.memberVariableElement;
             }
