@@ -2689,14 +2689,13 @@ module ts {
 
             var symbol = lookUp(activeCompletionSession.symbols, entryName);
             if (symbol) {
-                var type = session.typeChecker.getTypeOfSymbol(symbol);
-                Debug.assert(type !== undefined, "Could not find type for symbol");
                 var completionEntry = createCompletionEntry(symbol, session.typeChecker);
                 // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
                 //               which is permissible given that it is backwards compatible; but really we should consider
                 //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
                 //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
                 var location = getTouchingPropertyName(sourceFile, position);
+                Debug.assert(session.typeChecker.getNarrowedTypeOfSymbol(symbol, location) !== undefined, "Could not find type for symbol");
                 var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), location, session.typeChecker, location, SemanticMeaning.All);
                 return {
                     name: entryName,
@@ -2859,7 +2858,7 @@ module ts {
                     symbolKind = ScriptElementKind.memberVariableElement;
                 }
 
-                var type = typeResolver.getTypeOfSymbol(symbol);
+                var type = typeResolver.getNarrowedTypeOfSymbol(symbol, location);
                 if (type) {
                     if (location.parent && location.parent.kind === SyntaxKind.PropertyAccess) {
                         var right = (<PropertyAccess>location.parent).right;
