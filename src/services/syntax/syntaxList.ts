@@ -3,7 +3,7 @@
 interface Array<T> {
     __data: number;
 
-    kind(): TypeScript.SyntaxKind;
+    kind: TypeScript.SyntaxKind;
     parent: TypeScript.ISyntaxElement;
 }
 
@@ -36,18 +36,16 @@ module TypeScript {
 }
 
 module TypeScript.Syntax {
-    function addArrayFunction(name: string, func: Function) {
-        if (Object.defineProperty) {
-            Object.defineProperty(Array.prototype, name, { value: func, writable: true });
+    function addArrayPrototypeValue(name: string, val: any) {
+        if (Object.defineProperty && (<any>Array.prototype)[name] === undefined) {
+            Object.defineProperty(Array.prototype, name, { value: val, writable: false });
         }
         else {
-            (<any>Array.prototype)[name] = func;
+            (<any>Array.prototype)[name] = val;
         }
     }
 
-    addArrayFunction("kind", function () {
-        return SyntaxKind.List;
-    });
+    addArrayPrototypeValue("kind", SyntaxKind.List);
 
     export function list<T extends ISyntaxNodeOrToken>(nodes: T[]): T[] {
         for (var i = 0, n = nodes.length; i < n; i++) {

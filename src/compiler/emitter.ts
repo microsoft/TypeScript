@@ -86,8 +86,9 @@ module ts {
             var getAccessor: AccessorDeclaration;
             var setAccessor: AccessorDeclaration;
             forEach(node.members, (member: Declaration) => {
+                // TODO(jfreeman): Handle computed names for accessor matching
                 if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) &&
-                    member.name.text === accessor.name.text &&
+                    (<Identifier>member.name).text === (<Identifier>accessor.name).text &&
                     (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
                     if (!firstAccessor) {
                         firstAccessor = <AccessorDeclaration>member;
@@ -577,7 +578,8 @@ module ts {
                         node.kind === SyntaxKind.EnumDeclaration) {
                         // Declaration and has associated name use it
                         if ((<Declaration>node).name) {
-                            scopeName = (<Declaration>node).name.text;
+                            // TODO(jfreeman): Ask shkamat about what this name should be for source maps
+                            scopeName = (<Identifier>(<Declaration>node).name).text;
                         }
                         recordScopeNameStart(scopeName);
                     }
@@ -907,15 +909,15 @@ module ts {
 
             // This function specifically handles numeric/string literals for enum and accessor 'identifiers'.
             // In a sense, it does not actually emit identifiers as much as it declares a name for a specific property.
-            function emitQuotedIdentifier(node: Identifier) {
+            function emitExpressionForPropertyName(node: DeclarationName) {
                 if (node.kind === SyntaxKind.StringLiteral) {
-                    emitLiteral(node);
+                    emitLiteral(<LiteralExpression>node);
                 }
                 else {
                     write("\"");
 
                     if (node.kind === SyntaxKind.NumericLiteral) {
-                        write(node.text);
+                        write((<LiteralExpression>node).text);
                     }
                     else {
                         write(getSourceTextOfLocalNode(node));
@@ -1031,19 +1033,29 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitPropertyAccess(node: PropertyAccess) {
+            function tryEmitConstantValue(node: PropertyAccess | IndexedAccess): boolean {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
-                    write(constantValue.toString() + " /* " + identifierToString(node.right) + " */");
+                    var propertyName = node.kind === SyntaxKind.PropertyAccess ? declarationNameToString((<PropertyAccess>node).right) : getTextOfNode((<IndexedAccess>node).index);
+                    write(constantValue.toString() + " /* " + propertyName + " */");
+                    return true;
                 }
-                else {
-                    emit(node.left);
-                    write(".");
-                    emit(node.right);
+                return false;
+            }
+
+            function emitPropertyAccess(node: PropertyAccess) {
+                if (tryEmitConstantValue(node)) {
+                    return;
                 }
+                emit(node.left);
+                write(".");
+                emit(node.right);
             }
 
             function emitIndexedAccess(node: IndexedAccess) {
+                if (tryEmitConstantValue(node)) {
+                    return;
+                }
                 emit(node.object);
                 write("[");
                 emit(node.index);
@@ -1341,6 +1353,10 @@ module ts {
                 emitToken(SyntaxKind.CloseBraceToken, node.clauses.end);
             }
 
+            function isOnSameLine(node1: Node, node2: Node) {
+                return getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node1.pos)) === getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node2.pos));
+            }
+
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
                 if (node.kind === SyntaxKind.CaseClause) {
                     write("case ");
@@ -1350,9 +1366,16 @@ module ts {
                 else {
                     write("default:");
                 }
-                increaseIndent();
-                emitLines(node.statements);
-                decreaseIndent();
+
+                if (node.statements.length === 1 && isOnSameLine(node, node.statements[0])) {
+                    write(" ");
+                    emit(node.statements[0]);
+                }
+                else {
+                    increaseIndent();
+                    emitLines(node.statements);
+                    decreaseIndent();
+                }
             }
 
             function emitThrowStatement(node: ThrowStatement) {
@@ -1443,7 +1466,7 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitDefaultValueAssignments(node: FunctionDeclaration) {
+            function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
                 forEach(node.parameters, param => {
                     if (param.initializer) {
                         writeLine();
@@ -1463,7 +1486,7 @@ module ts {
                 });
             }
 
-            function emitRestParameter(node: FunctionDeclaration) {
+            function emitRestParameter(node: FunctionLikeDeclaration) {
                 if (hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
@@ -1509,7 +1532,7 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitFunctionDeclaration(node: FunctionDeclaration) {
+            function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
                 if (!node.body) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
@@ -1537,7 +1560,7 @@ module ts {
                 }
             }
 
-            function emitSignatureParameters(node: FunctionDeclaration) {
+            function emitSignatureParameters(node: FunctionLikeDeclaration) {
                 increaseIndent();
                 write("(");
                 if (node) {
@@ -1547,7 +1570,7 @@ module ts {
                 decreaseIndent();
             }
 
-            function emitSignatureAndBody(node: FunctionDeclaration) {
+            function emitSignatureAndBody(node: FunctionLikeDeclaration) {
                 emitSignatureParameters(node);
                 write(" {");
                 scopeEmitStart(node);
@@ -1644,7 +1667,8 @@ module ts {
                 });
             }
 
-            function emitMemberAccess(memberName: Identifier) {
+            // TODO(jfreeman): Account for computed property name
+            function emitMemberAccess(memberName: DeclarationName) {
                 if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
                     write("[");
                     emitNode(memberName);
@@ -1717,7 +1741,7 @@ module ts {
                                 write(".prototype");
                             }
                             write(", ");
-                            emitQuotedIdentifier((<AccessorDeclaration>member).name);
+                            emitExpressionForPropertyName((<AccessorDeclaration>member).name);
                             emitEnd((<AccessorDeclaration>member).name);
                             write(", {");
                             increaseIndent();
@@ -1876,6 +1900,11 @@ module ts {
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
+                // const enums are completely erased during compilation.
+                var isConstEnum = isConstEnumDeclaration(node);
+                if (isConstEnum && !compilerOptions.preserveConstEnums) {
+                    return;
+                }
                 emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
@@ -1893,7 +1922,7 @@ module ts {
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
-                emitEnumMemberDeclarations();
+                emitEnumMemberDeclarations(isConstEnum);
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
@@ -1916,7 +1945,7 @@ module ts {
                 }
                 emitTrailingComments(node);
 
-                function emitEnumMemberDeclarations() {
+                function emitEnumMemberDeclarations(isConstEnum: boolean) {
                     forEach(node.members, member => {
                         writeLine();
                         emitLeadingComments(member);
@@ -1925,16 +1954,16 @@ module ts {
                         write("[");
                         write(resolver.getLocalNameOfContainer(node));
                         write("[");
-                        emitQuotedIdentifier(member.name);
+                        emitExpressionForPropertyName(member.name);
                         write("] = ");
-                        if (member.initializer) {
+                        if (member.initializer && !isConstEnum) {
                             emit(member.initializer);
                         }
                         else {
                             write(resolver.getEnumMemberValue(member).toString());
                         }
                         write("] = ");
-                        emitQuotedIdentifier(member.name);
+                        emitExpressionForPropertyName(member.name);
                         emitEnd(member);
                         write(";");
                         emitTrailingComments(member);
@@ -1950,7 +1979,7 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (!isInstantiated(node)) {
+                if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
                 emitLeadingComments(node);
@@ -2002,7 +2031,7 @@ module ts {
                     // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
                     // - current file is not external module
                     // - import declaration is top level and target is value imported by entity name
-                    emitImportDeclaration = !isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportedViaEntityName(node);
+                    emitImportDeclaration = !isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportWithEntityName(node);
                 }
 
                 if (emitImportDeclaration) {
@@ -2046,7 +2075,10 @@ module ts {
             function getExternalImportDeclarations(node: SourceFile): ImportDeclaration[] {
                 var result: ImportDeclaration[] = [];
                 forEach(node.statements, stat => {
-                    if (stat.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>stat).externalModuleName && resolver.isReferencedImportDeclaration(stat)) {
+                    if (stat.kind === SyntaxKind.ImportDeclaration
+                        && (<ImportDeclaration>stat).externalModuleName
+                        && resolver.isReferencedImportDeclaration(<ImportDeclaration>stat)) {
+
                         result.push(<ImportDeclaration>stat);
                     }
                 });
@@ -2235,7 +2267,7 @@ module ts {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
-                        return emitFunctionDeclaration(<FunctionDeclaration>node);
+                        return emitFunctionDeclaration(<FunctionLikeDeclaration>node);
                     case SyntaxKind.PrefixOperator:
                     case SyntaxKind.PostfixOperator:
                         return emitUnaryExpression(<UnaryExpression>node);
@@ -2478,7 +2510,7 @@ module ts {
             var getSymbolVisibilityDiagnosticMessage: (symbolAccesibilityResult: SymbolAccessiblityResult) => {
                 errorNode: Node;
                 diagnosticMessage: DiagnosticMessage;
-                typeName?: Identifier
+                typeName?: DeclarationName
             }
 
             function createTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
@@ -2722,6 +2754,9 @@ module ts {
                 if (resolver.isDeclarationVisible(node)) {
                     emitJsDocComments(node);
                     emitDeclarationFlags(node);
+                    if (isConstEnumDeclaration(node)) {
+                        write("const ")
+                    }
                     write("enum ");
                     emitSourceTextOfNode(node.name);
                     write(" {");
@@ -2801,7 +2836,7 @@ module ts {
                                 break;
 
                             default:
-                                Debug.fail("This is unknown parent for type parameter: " + SyntaxKind[node.parent.kind]);
+                                Debug.fail("This is unknown parent for type parameter: " + node.parent.kind);
                         }
 
                         return {
@@ -2937,11 +2972,12 @@ module ts {
             function emitPropertyDeclaration(node: PropertyDeclaration) {
                 emitJsDocComments(node);
                 emitDeclarationFlags(node);
-                emitVariableDeclaration(node);
+                emitVariableDeclaration(<VariableDeclaration>node);
                 write(";");
                 writeLine();
             }
 
+            // TODO(jfreeman): Factor out common part of property definition, but treat name differently
             function emitVariableDeclaration(node: VariableDeclaration) {
                 // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
                 // so there is no check needed to see if declaration is visible
@@ -2969,6 +3005,7 @@ module ts {
                     }
                     // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
                     else if (node.kind === SyntaxKind.Property) {
+                        // TODO(jfreeman): Deal with computed properties in error reporting.
                         if (node.flags & NodeFlags.Static) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
@@ -3052,6 +3089,7 @@ module ts {
                         return {
                             diagnosticMessage: diagnosticMessage,
                             errorNode: <Node>node.parameters[0],
+                            // TODO(jfreeman): Investigate why we are passing node.name instead of node.parameters[0].name
                             typeName: node.name
                         };
                     }
@@ -3079,7 +3117,7 @@ module ts {
                 }
             }
 
-            function emitFunctionDeclaration(node: FunctionDeclaration) {
+            function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
                 // If we are emitting Method/Constructor it isn't moduleElement and hence already determined to be emitting
                 // so no need to verify if the declaration is visible
                 if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
@@ -3197,7 +3235,7 @@ module ts {
                             break;
 
                         default:
-                            Debug.fail("This is unknown kind for signature: " + SyntaxKind[node.kind]);
+                            Debug.fail("This is unknown kind for signature: " + node.kind);
                     }
 
                     return {
@@ -3282,7 +3320,7 @@ module ts {
                             break;
 
                         default:
-                            Debug.fail("This is unknown parent for parameter: " + SyntaxKind[node.parent.kind]);
+                            Debug.fail("This is unknown parent for parameter: " + node.parent.kind);
                     }
 
                     return {
@@ -3298,7 +3336,7 @@ module ts {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.Method:
-                        return emitFunctionDeclaration(<FunctionDeclaration>node);
+                        return emitFunctionDeclaration(<FunctionLikeDeclaration>node);
                     case SyntaxKind.ConstructSignature:
                         return emitConstructSignatureDeclaration(<SignatureDeclaration>node);
                     case SyntaxKind.CallSignature:

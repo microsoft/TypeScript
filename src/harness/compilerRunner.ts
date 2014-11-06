@@ -3,7 +3,7 @@
 /// <reference path='typeWriter.ts' />
 /// <reference path='syntacticCleaner.ts' />
 
-enum CompilerTestType {
+const enum CompilerTestType {
     Conformance,
     Regressions,
     Test262

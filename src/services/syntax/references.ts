@@ -28,7 +28,6 @@
 ///<reference path='syntaxTrivia.ts' />
 ///<reference path='syntaxTriviaList.ts' />
 ///<reference path='syntaxUtilities.ts' />
-///<reference path='syntaxUtilities.generated.ts' />
 ///<reference path='syntaxVisitor.generated.ts' />
 ///<reference path='syntaxWalker.generated.ts' />
 

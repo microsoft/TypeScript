@@ -1,4 +1,4 @@
-tests/cases/compiler/arrayAssignmentTest5.ts(23,17): error TS2323: Type 'IToken[]' is not assignable to type 'IStateToken[]'.
+tests/cases/compiler/arrayAssignmentTest5.ts(23,17): error TS2322: Type 'IToken[]' is not assignable to type 'IStateToken[]'.
   Type 'IToken' is not assignable to type 'IStateToken'.
     Property 'state' is missing in type 'IToken'.
 
@@ -28,9 +28,9 @@ tests/cases/compiler/arrayAssignmentTest5.ts(23,17): error TS2323: Type 'IToken[
                 var lineTokens:ILineTokens= this.tokenize(line, state, true);
                 var tokens:IStateToken[]= lineTokens.tokens;
                     ~~~~~~
-!!! error TS2323: Type 'IToken[]' is not assignable to type 'IStateToken[]'.
-!!! error TS2323:   Type 'IToken' is not assignable to type 'IStateToken'.
-!!! error TS2323:     Property 'state' is missing in type 'IToken'.
+!!! error TS2322: Type 'IToken[]' is not assignable to type 'IStateToken[]'.
+!!! error TS2322:   Type 'IToken' is not assignable to type 'IStateToken'.
+!!! error TS2322:     Property 'state' is missing in type 'IToken'.
                 if (tokens.length === 0) {
                     return this.onEnter(line, tokens, offset);        // <== this should produce an error since onEnter can not be called with (string, IStateToken[], offset)
                 }

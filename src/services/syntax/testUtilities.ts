@@ -9,10 +9,10 @@ module TypeScript {
         if (node1 === node2) { return true; }
         if (!node1 || !node2) { return false; }
 
-        Debug.assert(node1.kind() === TypeScript.SyntaxKind.SourceUnit || node1.parent);
-        Debug.assert(node2.kind() === TypeScript.SyntaxKind.SourceUnit || node2.parent);
+        Debug.assert(node1.kind === TypeScript.SyntaxKind.SourceUnit || node1.parent);
+        Debug.assert(node2.kind === TypeScript.SyntaxKind.SourceUnit || node2.parent);
 
-        if (node1.kind() !== node2.kind()) { return false; }
+        if (node1.kind !== node2.kind) { return false; }
         if (childCount(node1) !== childCount(node2)) { return false; }
 
         for (var i = 0, n = childCount(node1); i < n; i++) {
@@ -41,8 +41,8 @@ module TypeScript {
             return false;
         }
 
-        Debug.assert(node1.kind() === TypeScript.SyntaxKind.SourceUnit || node1.parent);
-        Debug.assert(node2.kind() === TypeScript.SyntaxKind.SourceUnit || node2.parent);
+        Debug.assert(node1.kind === TypeScript.SyntaxKind.SourceUnit || node1.parent);
+        Debug.assert(node2.kind === TypeScript.SyntaxKind.SourceUnit || node2.parent);
 
         if (TypeScript.isToken(node1)) {
             return TypeScript.isToken(node2) ? tokenStructuralEquals(<TypeScript.ISyntaxToken>node1, <TypeScript.ISyntaxToken>node2, text1, text2) : false;
@@ -63,7 +63,7 @@ module TypeScript {
         Debug.assert(token1.parent);
         Debug.assert(token2.parent);
 
-        return token1.kind() === token2.kind() &&
+        return token1.kind === token2.kind &&
             TypeScript.width(token1) === TypeScript.width(token2) &&
             token1.fullWidth() === token2.fullWidth() &&
             token1.fullStart() === token2.fullStart() &&
@@ -135,10 +135,10 @@ module TypeScript {
             return false;
         }
 
-        Debug.assert(element1.kind() === SyntaxKind.SourceUnit || element1.parent);
-        Debug.assert(element2.kind() === SyntaxKind.SourceUnit || element2.parent);
+        Debug.assert(element1.kind === SyntaxKind.SourceUnit || element1.parent);
+        Debug.assert(element2.kind === SyntaxKind.SourceUnit || element2.parent);
 
-        if (element2.kind() !== element2.kind()) {
+        if (element2.kind !== element2.kind) {
             return false;
         }
 

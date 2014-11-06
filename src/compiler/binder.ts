@@ -5,25 +5,51 @@
 
 module ts {
 
-    export function isInstantiated(node: Node): boolean {
+    export const enum ModuleInstanceState {
+        NonInstantiated = 0,
+        Instantiated    = 1,
+        ConstEnumOnly   = 2
+    }
+
+    export function getModuleInstanceState(node: Node): ModuleInstanceState {
         // A module is uninstantiated if it contains only 
         // 1. interface declarations
         if (node.kind === SyntaxKind.InterfaceDeclaration) {
-            return false;
+            return ModuleInstanceState.NonInstantiated;
         }
-        // 2. non - exported import declarations
+        // 2. const enum declarations don't make module instantiated
+        else if (node.kind === SyntaxKind.EnumDeclaration && isConstEnumDeclaration(<EnumDeclaration>node)) {
+            return ModuleInstanceState.ConstEnumOnly;
+        }
+        // 3. non - exported import declarations
         else if (node.kind === SyntaxKind.ImportDeclaration && !(node.flags & NodeFlags.Export)) {
-            return false;
+            return ModuleInstanceState.NonInstantiated;
         }
-        // 3. other uninstantiated module declarations.
-        else if (node.kind === SyntaxKind.ModuleBlock && !forEachChild(node, isInstantiated)) {
-            return false;
+        // 4. other uninstantiated module declarations.
+        else if (node.kind === SyntaxKind.ModuleBlock) {
+            var state = ModuleInstanceState.NonInstantiated;
+            forEachChild(node, n => {
+                switch (getModuleInstanceState(n)) {
+                    case ModuleInstanceState.NonInstantiated:
+                        // child is non-instantiated - continue searching
+                        return false;
+                    case ModuleInstanceState.ConstEnumOnly:
+                        // child is const enum only - record state and continue searching
+                        state = ModuleInstanceState.ConstEnumOnly;
+                        return false;
+                    case ModuleInstanceState.Instantiated:
+                        // child is instantiated - record state and stop
+                        state = ModuleInstanceState.Instantiated;
+                        return true;
+                }
+            });
+            return state;
         }
-        else if (node.kind === SyntaxKind.ModuleDeclaration && !isInstantiated((<ModuleDeclaration>node).body)) {
-            return false;
+        else if (node.kind === SyntaxKind.ModuleDeclaration) {
+            return getModuleInstanceState((<ModuleDeclaration>node).body);
         }
         else {
-            return true;
+            return ModuleInstanceState.Instantiated;
         }
     }
 
@@ -58,12 +84,13 @@ module ts {
             if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
         }
 
+        // TODO(jfreeman): Implement getDeclarationName for property name
         function getDeclarationName(node: Declaration): string {
             if (node.name) {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
-                    return '"' + node.name.text + '"';
+                    return '"' + (<LiteralExpression>node.name).text + '"';
                 }
-                return node.name.text;
+                return (<Identifier>node.name).text;
             }
             switch (node.kind) {
                 case SyntaxKind.Constructor: return "__constructor";
@@ -74,7 +101,7 @@ module ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return node.name ? identifierToString(node.name) : getDeclarationName(node);
+            return node.name ? declarationNameToString(node.name) : getDeclarationName(node);
         }
 
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
@@ -248,11 +275,22 @@ module ts {
             if (node.name.kind === SyntaxKind.StringLiteral) {
                 bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
             }
-            else if (isInstantiated(node)) {
-                bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
-            }
             else {
-                bindDeclaration(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes, /*isBlockScopeContainer*/ true);
+                var state = getModuleInstanceState(node);
+                if (state === ModuleInstanceState.NonInstantiated) {
+                    bindDeclaration(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes, /*isBlockScopeContainer*/ true);
+                }
+                else {
+                    bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
+                    if (state === ModuleInstanceState.ConstEnumOnly) {
+                        // mark value module as module that contains only enums
+                        node.symbol.constEnumOnlyModule = true;
+                    }
+                    else if (node.symbol.constEnumOnlyModule) {
+                        // const only value module was merged with instantiated module - reset flag
+                        node.symbol.constEnumOnlyModule = false;
+                    }
+                }
             }
         }
 
@@ -369,7 +407,12 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.EnumDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Enum, SymbolFlags.EnumExcludes, /*isBlockScopeContainer*/ false);
+                    if (isConstEnumDeclaration(<EnumDeclaration>node)) {
+                        bindDeclaration(<Declaration>node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes, /*isBlockScopeContainer*/ false);
+                    }
+                    else {
+                        bindDeclaration(<Declaration>node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes, /*isBlockScopeContainer*/ false);
+                    }
                     break;
                 case SyntaxKind.ModuleDeclaration:
                     bindModuleDeclaration(<ModuleDeclaration>node);
