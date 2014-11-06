@@ -353,7 +353,7 @@ module TypeScript.PrettyPrinter {
         }
 
         public visitVariableDeclarator(node: VariableDeclaratorSyntax): void {
-            this.appendToken(node.propertyName);
+            visitNodeOrToken(this, node.propertyName);
             this.appendNode(node.equalsValueClause);
         }
 
@@ -579,7 +579,7 @@ module TypeScript.PrettyPrinter {
         }
 
         public visitMethodSignature(node: MethodSignatureSyntax): void {
-            this.appendToken(node.propertyName);
+            visitNodeOrToken(this, node.propertyName);
             this.appendToken(node.questionToken);
             visitNodeOrToken(this, node.callSignature);
         }
@@ -592,7 +592,7 @@ module TypeScript.PrettyPrinter {
         }
 
         public visitPropertySignature(node: PropertySignatureSyntax): void {
-            this.appendToken(node.propertyName);
+            visitNodeOrToken(this, node.propertyName);
             this.appendToken(node.questionToken);
             this.appendNode(node.typeAnnotation);
         }
@@ -684,7 +684,7 @@ module TypeScript.PrettyPrinter {
         public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {
             this.appendSpaceList(node.modifiers);
             this.ensureSpace();
-            this.appendToken(node.propertyName);
+            visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
             this.appendBlockOrSemicolon(node.block, node.semicolonToken);
         }
@@ -694,7 +694,7 @@ module TypeScript.PrettyPrinter {
             this.ensureSpace();
             this.appendToken(node.getKeyword);
             this.ensureSpace();
-            this.appendToken(node.propertyName);
+            visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
             this.ensureSpace();
             visitNodeOrToken(this, node.block);
@@ -705,7 +705,7 @@ module TypeScript.PrettyPrinter {
             this.ensureSpace();
             this.appendToken(node.setKeyword);
             this.ensureSpace();
-            this.appendToken(node.propertyName);
+            visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature)
             this.ensureSpace();
             visitNodeOrToken(this, node.block);
@@ -895,7 +895,7 @@ module TypeScript.PrettyPrinter {
         }
 
         public visitEnumElement(node: EnumElementSyntax): void {
-            this.appendToken(node.propertyName);
+            visitNodeOrToken(this, node.propertyName);
             this.ensureSpace();
             this.appendNode(node.equalsValueClause);
         }
@@ -926,15 +926,21 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.closeBraceToken);
         }
 
+        public visitComputedPropertyName(node: ComputedPropertyNameSyntax): void {
+            this.appendToken(node.openBracketToken);
+            visitNodeOrToken(this, node.expression);
+            this.appendToken(node.closeBracketToken);
+        }
+
         public visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): void {
-            this.appendToken(node.propertyName);
+            visitNodeOrToken(this, node.propertyName);
             this.appendToken(node.colonToken);
             this.ensureSpace();
             visitNodeOrToken(this, node.expression);
         }
 
         public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
-            this.appendToken(node.propertyName);
+            visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
             this.ensureSpace();
             visitNodeOrToken(this, node.block);

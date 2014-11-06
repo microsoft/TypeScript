@@ -1,7 +1,7 @@
 tests/cases/compiler/interfaceAssignmentCompat.ts(32,18): error TS2345: Argument of type '(a: IFrenchEye, b: IFrenchEye) => number' is not assignable to parameter of type '(a: IEye, b: IEye) => number'.
 tests/cases/compiler/interfaceAssignmentCompat.ts(37,29): error TS2339: Property '_map' does not exist on type 'typeof Color'.
-tests/cases/compiler/interfaceAssignmentCompat.ts(42,13): error TS2323: Type 'IEye' is not assignable to type 'IFrenchEye'.
-tests/cases/compiler/interfaceAssignmentCompat.ts(44,9): error TS2323: Type 'IEye[]' is not assignable to type 'IFrenchEye[]'.
+tests/cases/compiler/interfaceAssignmentCompat.ts(42,13): error TS2322: Type 'IEye' is not assignable to type 'IFrenchEye'.
+tests/cases/compiler/interfaceAssignmentCompat.ts(44,9): error TS2322: Type 'IEye[]' is not assignable to type 'IFrenchEye[]'.
   Type 'IEye' is not assignable to type 'IFrenchEye'.
 
 
@@ -53,12 +53,12 @@ tests/cases/compiler/interfaceAssignmentCompat.ts(44,9): error TS2323: Type 'IEy
             for (var j=z.length=1;j>=0;j--) {
                 eeks[j]=z[j];  // nope: element assignment
                 ~~~~~~~
-!!! error TS2323: Type 'IEye' is not assignable to type 'IFrenchEye'.
+!!! error TS2322: Type 'IEye' is not assignable to type 'IFrenchEye'.
             }
             eeks=z; // nope: array assignment
             ~~~~
-!!! error TS2323: Type 'IEye[]' is not assignable to type 'IFrenchEye[]'.
-!!! error TS2323:   Type 'IEye' is not assignable to type 'IFrenchEye'.
+!!! error TS2322: Type 'IEye[]' is not assignable to type 'IFrenchEye[]'.
+!!! error TS2322:   Type 'IEye' is not assignable to type 'IFrenchEye'.
             return result;
         }
     }
