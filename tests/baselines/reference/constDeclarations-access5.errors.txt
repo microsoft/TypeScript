@@ -1,0 +1,103 @@
+tests/cases/compiler/constDeclarations_access_2.ts(4,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(5,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(6,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(7,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(8,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(9,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(10,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(11,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(12,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(13,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(14,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(15,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(17,1): error TS2449: The operand of an increment or decrement operator cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(18,1): error TS2449: The operand of an increment or decrement operator cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(19,3): error TS2449: The operand of an increment or decrement operator cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(20,3): error TS2449: The operand of an increment or decrement operator cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(22,3): error TS2449: The operand of an increment or decrement operator cannot be a constant.
+tests/cases/compiler/constDeclarations_access_2.ts(24,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
+
+
+==== tests/cases/compiler/constDeclarations_access_2.ts (18 errors) ====
+    ///<reference path='constDeclarations_access_1.ts'/>
+    import m = require('constDeclarations_access_1');
+    // Errors
+    m.x = 1;
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    m.x += 2;
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    m.x -= 3;
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    m.x *= 4;
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    m.x /= 5;
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    m.x %= 6;
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    m.x <<= 7;
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    m.x >>= 8;
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    m.x >>>= 9;
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    m.x &= 10;
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    m.x |= 11;
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    m.x ^= 12;
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    m
+    m.x++;
+    ~~~
+!!! error TS2449: The operand of an increment or decrement operator cannot be a constant.
+    m.x--;
+    ~~~
+!!! error TS2449: The operand of an increment or decrement operator cannot be a constant.
+    ++m.x;
+      ~~~
+!!! error TS2449: The operand of an increment or decrement operator cannot be a constant.
+    --m.x;
+      ~~~
+!!! error TS2449: The operand of an increment or decrement operator cannot be a constant.
+    
+    ++((m.x));
+      ~~~~~~~
+!!! error TS2449: The operand of an increment or decrement operator cannot be a constant.
+    
+    m["x"] = 0;
+    ~~~~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant.
+    
+    // OK
+    var a = m.x + 1;
+    
+    function f(v: number) { }
+    f(m.x);
+    
+    if (m.x) { }
+    
+    m.x;
+    (m.x);
+    
+    -m.x;
+    +m.x;
+    
+    m.x.toString();
+    
+==== tests/cases/compiler/constDeclarations_access_1.ts (0 errors) ====
+    
+    
+    export const x = 0;
+    

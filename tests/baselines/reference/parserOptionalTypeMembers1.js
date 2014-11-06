@@ -1,5 +1,5 @@
 //// [parserOptionalTypeMembers1.ts]
-interface PropertyDescriptor {
+interface PropertyDescriptor2 {
     configurable?: boolean;
     enumerable?: boolean;
     value?: any;

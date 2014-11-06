@@ -264,7 +264,7 @@ module Harness.LanguageService {
 
         /** Parse file given its source text */
         public parseSourceText(fileName: string, sourceText: TypeScript.IScriptSnapshot): TypeScript.SourceUnitSyntax {
-            return TypeScript.Parser.parse(fileName, TypeScript.SimpleText.fromScriptSnapshot(sourceText), ts.ScriptTarget.ES5, TypeScript.isDTSFile(fileName)).sourceUnit();
+            return TypeScript.Parser.parse(fileName, TypeScript.SimpleText.fromScriptSnapshot(sourceText), ts.ScriptTarget.Latest, TypeScript.isDTSFile(fileName)).sourceUnit();
         }
 
         /** Parse a file on disk given its fileName */

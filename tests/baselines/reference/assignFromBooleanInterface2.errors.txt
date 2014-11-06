@@ -1,5 +1,5 @@
-tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(19,1): error TS2323: Type 'Boolean' is not assignable to type 'boolean'.
-tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(20,1): error TS2323: Type 'NotBoolean' is not assignable to type 'boolean'.
+tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(19,1): error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
+tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(20,1): error TS2322: Type 'NotBoolean' is not assignable to type 'boolean'.
 
 
 ==== tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts (2 errors) ====
@@ -23,9 +23,9 @@ tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(
     
     x = a; // expected error
     ~
-!!! error TS2323: Type 'Boolean' is not assignable to type 'boolean'.
+!!! error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
     x = b; // expected error
     ~
-!!! error TS2323: Type 'NotBoolean' is not assignable to type 'boolean'.
+!!! error TS2322: Type 'NotBoolean' is not assignable to type 'boolean'.
     
     

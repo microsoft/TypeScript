@@ -2,8 +2,8 @@ tests/cases/compiler/multipleInheritance.ts(9,19): error TS1005: '{' expected.
 tests/cases/compiler/multipleInheritance.ts(9,24): error TS1005: ';' expected.
 tests/cases/compiler/multipleInheritance.ts(18,19): error TS1005: '{' expected.
 tests/cases/compiler/multipleInheritance.ts(18,24): error TS1005: ';' expected.
-tests/cases/compiler/multipleInheritance.ts(34,7): error TS2416: Class 'Baad' incorrectly extends base class 'Good':
-  Types of property 'g' are incompatible:
+tests/cases/compiler/multipleInheritance.ts(34,7): error TS2415: Class 'Baad' incorrectly extends base class 'Good'.
+  Types of property 'g' are incompatible.
     Type '(n: number) => number' is not assignable to type '() => number'.
 tests/cases/compiler/multipleInheritance.ts(35,12): error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
 
@@ -52,9 +52,9 @@ tests/cases/compiler/multipleInheritance.ts(35,12): error TS2425: Class 'Good' d
     
     class Baad extends Good {
           ~~~~
-!!! error TS2416: Class 'Baad' incorrectly extends base class 'Good':
-!!! error TS2416:   Types of property 'g' are incompatible:
-!!! error TS2416:     Type '(n: number) => number' is not assignable to type '() => number'.
+!!! error TS2415: Class 'Baad' incorrectly extends base class 'Good'.
+!!! error TS2415:   Types of property 'g' are incompatible.
+!!! error TS2415:     Type '(n: number) => number' is not assignable to type '() => number'.
         public f(): number { return 0; }
                ~
 !!! error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.

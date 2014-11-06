@@ -108,7 +108,7 @@ module ts.formatting {
         function getActualIndentationForListItemBeforeComma(commaToken: Node, sourceFile: SourceFile, options: TypeScript.FormattingOptions): number {
             // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
             var commaItemInfo = findListItemInfo(commaToken);
-            Debug.assert(commaItemInfo.listItemIndex > 0);
+            Debug.assert(commaItemInfo && commaItemInfo.listItemIndex > 0);
             // The item we're interested in is right before the comma
             return deriveActualIndentationFromList(commaItemInfo.list.getChildren(), commaItemInfo.listItemIndex - 1, sourceFile, options);
         }
@@ -175,7 +175,7 @@ module ts.formatting {
         function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: Node, childStartLine: number, sourceFile: SourceFile): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
                 var elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
-                Debug.assert(elseKeyword);
+                Debug.assert(elseKeyword !== undefined);
 
                 var elseKeywordStartLine =  getStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
                 return elseKeywordStartLine === childStartLine;
@@ -361,7 +361,7 @@ module ts.formatting {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.Method:
                 case SyntaxKind.ArrowFunction:
-                    return !(<FunctionDeclaration>n).body || isCompletedNode((<FunctionDeclaration>n).body, sourceFile);
+                    return !(<FunctionLikeDeclaration>n).body || isCompletedNode((<FunctionLikeDeclaration>n).body, sourceFile);
                 case SyntaxKind.ModuleDeclaration:
                     return (<ModuleDeclaration>n).body && isCompletedNode((<ModuleDeclaration>n).body, sourceFile);
                 case SyntaxKind.IfStatement:

@@ -14,13 +14,14 @@ module TypeScript {
             return this.currentAssertionLevel >= level;
         }
 
-        public static assert(expression: any, message: string = "", verboseDebugInfo: () => string = null): void {
+        public static assert(expression: any, message?: string, verboseDebugInfo?: () => string): void {
             if (!expression) {
                 var verboseDebugString = "";
                 if (verboseDebugInfo) {
                     verboseDebugString = "\r\nVerbose Debug Information:" + verboseDebugInfo();
                 }
 
+                message = message || "";
                 throw new Error("Debug Failure. False expression: " + message + verboseDebugString);
             }
         }

@@ -7,7 +7,7 @@ module TypeScript {
                 return true;
             }
 
-            if (array1 === null || array2 === null) {
+            if (!array1 || !array2) {
                 return false;
             }
 
@@ -71,7 +71,7 @@ module TypeScript {
                 }
             }
 
-            return null;
+            return undefined;
         }
 
         public static firstOrDefault<T>(array: T[], func: (v: T, index: number) => boolean): T {
@@ -82,7 +82,7 @@ module TypeScript {
                 }
             }
 
-            return null;
+            return undefined;
         }
 
         public static first<T>(array: T[], func?: (v: T, index: number) => boolean): T {

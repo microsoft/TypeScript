@@ -1,7 +1,7 @@
-tests/cases/compiler/stringIndexerAssignments1.ts(4,1): error TS2322: Type '{ one: string; }' is not assignable to type '{ [x: string]: string; one: string; }':
+tests/cases/compiler/stringIndexerAssignments1.ts(4,1): error TS2322: Type '{ one: string; }' is not assignable to type '{ [x: string]: string; one: string; }'.
   Index signature is missing in type '{ one: string; }'.
-tests/cases/compiler/stringIndexerAssignments1.ts(5,1): error TS2322: Type '{ one: number; two: string; }' is not assignable to type '{ [x: string]: string; one: string; }':
-  Types of property 'one' are incompatible:
+tests/cases/compiler/stringIndexerAssignments1.ts(5,1): error TS2322: Type '{ one: number; two: string; }' is not assignable to type '{ [x: string]: string; one: string; }'.
+  Types of property 'one' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
@@ -11,11 +11,11 @@ tests/cases/compiler/stringIndexerAssignments1.ts(5,1): error TS2322: Type '{ on
     var b: { one: number; two: string; };
     x = a;
     ~
-!!! error TS2322: Type '{ one: string; }' is not assignable to type '{ [x: string]: string; one: string; }':
+!!! error TS2322: Type '{ one: string; }' is not assignable to type '{ [x: string]: string; one: string; }'.
 !!! error TS2322:   Index signature is missing in type '{ one: string; }'.
     x = b; // error
     ~
-!!! error TS2322: Type '{ one: number; two: string; }' is not assignable to type '{ [x: string]: string; one: string; }':
-!!! error TS2322:   Types of property 'one' are incompatible:
+!!! error TS2322: Type '{ one: number; two: string; }' is not assignable to type '{ [x: string]: string; one: string; }'.
+!!! error TS2322:   Types of property 'one' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
     

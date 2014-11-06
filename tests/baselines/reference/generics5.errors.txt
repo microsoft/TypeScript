@@ -1,4 +1,4 @@
-tests/cases/compiler/generics5.ts(10,9): error TS2343: Type 'A' does not satisfy the constraint 'B':
+tests/cases/compiler/generics5.ts(10,9): error TS2344: Type 'A' does not satisfy the constraint 'B'.
   Property 'b' is missing in type 'A'.
 
 
@@ -14,7 +14,7 @@ tests/cases/compiler/generics5.ts(10,9): error TS2343: Type 'A' does not satisfy
     
     var v3: G<A, A>;               // Error, A not valid argument for U
             ~~~~~~~
-!!! error TS2343: Type 'A' does not satisfy the constraint 'B':
-!!! error TS2343:   Property 'b' is missing in type 'A'.
+!!! error TS2344: Type 'A' does not satisfy the constraint 'B'.
+!!! error TS2344:   Property 'b' is missing in type 'A'.
     
     

@@ -1,8 +1,8 @@
-tests/cases/compiler/derivedTypeIncompatibleSignatures.ts(21,11): error TS2429: Interface 'F' incorrectly extends interface 'E':
-  Index signatures are incompatible:
+tests/cases/compiler/derivedTypeIncompatibleSignatures.ts(21,11): error TS2430: Interface 'F' incorrectly extends interface 'E'.
+  Index signatures are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/derivedTypeIncompatibleSignatures.ts(29,11): error TS2429: Interface 'H' incorrectly extends interface 'G':
-  Index signatures are incompatible:
+tests/cases/compiler/derivedTypeIncompatibleSignatures.ts(29,11): error TS2430: Interface 'H' incorrectly extends interface 'G'.
+  Index signatures are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
@@ -29,9 +29,9 @@ tests/cases/compiler/derivedTypeIncompatibleSignatures.ts(29,11): error TS2429: 
     
     interface F extends E {
               ~
-!!! error TS2429: Interface 'F' incorrectly extends interface 'E':
-!!! error TS2429:   Index signatures are incompatible:
-!!! error TS2429:     Type 'number' is not assignable to type 'string'.
+!!! error TS2430: Interface 'F' incorrectly extends interface 'E'.
+!!! error TS2430:   Index signatures are incompatible.
+!!! error TS2430:     Type 'number' is not assignable to type 'string'.
         [a: string]: number; // Number is not a subtype of string.  Should error.
     }
     
@@ -41,8 +41,8 @@ tests/cases/compiler/derivedTypeIncompatibleSignatures.ts(29,11): error TS2429: 
     
     interface H extends G {
               ~
-!!! error TS2429: Interface 'H' incorrectly extends interface 'G':
-!!! error TS2429:   Index signatures are incompatible:
-!!! error TS2429:     Type 'number' is not assignable to type 'string'.
+!!! error TS2430: Interface 'H' incorrectly extends interface 'G'.
+!!! error TS2430:   Index signatures are incompatible.
+!!! error TS2430:     Type 'number' is not assignable to type 'string'.
         [a: number]: number; // Should error for the same reason
     }

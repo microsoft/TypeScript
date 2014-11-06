@@ -25,10 +25,10 @@ goTo.marker("dotOnNumberExrpressions1");
 verify.completionListIsEmpty();
 
 goTo.marker("dotOnNumberExrpressions2");
-verify.completionListIsEmpty();
+verify.completionListContains("toExponential");
 
 goTo.marker("dotOnNumberExrpressions3");
-verify.completionListIsEmpty();
+verify.completionListContains("toExponential");
 
 goTo.marker("dotOnNumberExrpressions4");
 verify.completionListIsEmpty();

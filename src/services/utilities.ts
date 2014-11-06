@@ -7,6 +7,15 @@ module ts {
 
     export function findListItemInfo(node: Node): ListItemInfo {
         var syntaxList = findContainingList(node);
+
+        // It is possible at this point for syntaxList to be undefined, either if
+        // node.parent had no list child, or if none of its list children contained
+        // the span of node. If this happens, return undefined. The caller should
+        // handle this case.
+        if (!syntaxList) {
+            return undefined;
+        }
+
         var children = syntaxList.getChildren();
         var index = indexOf(children, node);
 
@@ -31,13 +40,6 @@ module ts {
                 return c;
             }
         });
-
-        // syntaxList should not be undefined here. If it is, there is a problem. Find out if
-        // there at least is a child that is a list.
-        if (!syntaxList) {
-            Debug.assert(findChildOfKind(node.parent, SyntaxKind.SyntaxList),
-                "Node of kind " + SyntaxKind[node.parent.kind] + " has no list children");
-        }
 
         return syntaxList;
     }
@@ -95,11 +97,12 @@ module ts {
                 var child = current.getChildAt(i);
                 var start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile);
                 if (start <= position) {
-                    if (position < child.getEnd()) {
+                    var end = child.getEnd();
+                    if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
                         current = child;
                         continue outer;
                     }
-                    else if (includeItemAtEndPosition && child.getEnd() === position) {
+                    else if (includeItemAtEndPosition && end === position) {
                         var previousToken = findPrecedingToken(position, sourceFile, child);
                         if (previousToken && includeItemAtEndPosition(previousToken)) {
                             return previousToken;
@@ -180,7 +183,7 @@ module ts {
             for (var i = 0, len = children.length; i < len; ++i) {
                 var child = children[i];
                 if (nodeHasTokens(child)) {
-                    if (position < child.end) {
+                    if (position <= child.end) {
                         if (child.getStart(sourceFile) >= position) {
                             // actual start of the node is past the position - previous token should be at the end of previous child
                             var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
@@ -194,7 +197,7 @@ module ts {
                 }
             }
 
-            Debug.assert(startNode || n.kind === SyntaxKind.SourceFile);
+            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile);
 
             // Here we know that none of child token nodes embrace the position, 
             // the only known case is when position is at the end of the file.
@@ -229,16 +232,24 @@ module ts {
         return n.kind !== SyntaxKind.SyntaxList || n.getChildCount() !== 0;
     }
 
+    export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> {
+        if (node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.CallExpression) {
+            return (<CallExpression>node).typeArguments;
+        }
+
+        if (isAnyFunction(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
+            return (<FunctionLikeDeclaration>node).typeParameters;
+        }
+
+        return undefined;
+    }
+
     export function isToken(n: Node): boolean {
         return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
     }
 
-    function isKeyword(n: Node): boolean {
-        return n.kind >= SyntaxKind.FirstKeyword && n.kind <= SyntaxKind.LastKeyword;
-    }
-
     function isWord(n: Node): boolean {
-        return n.kind === SyntaxKind.Identifier || isKeyword(n);
+        return n.kind === SyntaxKind.Identifier || isKeyword(n.kind);
     }
 
     function isPropertyName(n: Node): boolean {
@@ -248,5 +259,12 @@ module ts {
     export var switchToForwardSlashesRegEx = /\\/g;
     export function switchToForwardSlashes(path: string) {
         return path.replace(switchToForwardSlashesRegEx, "/");
+    }
+    export function isComment(n: Node): boolean {
+        return n.kind === SyntaxKind.SingleLineCommentTrivia || n.kind === SyntaxKind.MultiLineCommentTrivia;
+    }
+
+    export function isPunctuation(n: Node): boolean {
+        return SyntaxKind.FirstPunctuation <= n.kind && n.kind <= SyntaxKind.LastPunctuation;
     }
 }

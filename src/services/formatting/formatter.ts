@@ -52,7 +52,7 @@ module TypeScript.Services.Formatting {
             rulesProvider: RulesProvider,
             formattingRequestKind: FormattingRequestKind): TextEditInfo[] {
             var walker = new Formatter(textSpan, sourceUnit, indentFirstToken, options, snapshot, rulesProvider, formattingRequestKind);
-            visitNodeOrToken(walker, sourceUnit);
+            walker.walk(sourceUnit);
             return walker.edits();
         }
 
@@ -78,7 +78,7 @@ module TypeScript.Services.Formatting {
             }
 
             // Push the token
-            var currentTokenSpan = new TokenSpan(token.kind(), position, width(token));
+            var currentTokenSpan = new TokenSpan(token.kind, position, width(token));
             if (!this.parent().hasSkippedOrMissingTokenChild()) {
                 if (this.previousTokenSpan) {
                     // Note that formatPair calls TrimWhitespaceInLineRange in between the 2 tokens

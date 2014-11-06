@@ -1,4 +1,4 @@
-tests/cases/compiler/genericArrayAssignment1.ts(4,1): error TS2322: Type 'number[]' is not assignable to type 'string[]':
+tests/cases/compiler/genericArrayAssignment1.ts(4,1): error TS2322: Type 'number[]' is not assignable to type 'string[]'.
   Type 'number' is not assignable to type 'string'.
 
 
@@ -8,5 +8,5 @@ tests/cases/compiler/genericArrayAssignment1.ts(4,1): error TS2322: Type 'number
     
     s = n;
     ~
-!!! error TS2322: Type 'number[]' is not assignable to type 'string[]':
+!!! error TS2322: Type 'number[]' is not assignable to type 'string[]'.
 !!! error TS2322:   Type 'number' is not assignable to type 'string'.

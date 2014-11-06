@@ -1,10 +1,10 @@
-tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(12,1): error TS2322: Type 'C' is not assignable to type 'A':
+tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(12,1): error TS2322: Type 'C' is not assignable to type 'A'.
   Property 'name' is missing in type 'C'.
-tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(13,1): error TS2322: Type 'typeof B' is not assignable to type 'A':
+tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(13,1): error TS2322: Type 'typeof B' is not assignable to type 'A'.
   Property 'name' is missing in type 'typeof B'.
-tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(16,5): error TS2322: Type 'C' is not assignable to type 'B':
+tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(16,5): error TS2322: Type 'C' is not assignable to type 'B'.
   Property 'name' is missing in type 'C'.
-tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(17,1): error TS2322: Type 'typeof B' is not assignable to type 'B':
+tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(17,1): error TS2322: Type 'typeof B' is not assignable to type 'B'.
   Property 'name' is missing in type 'typeof B'.
 
 
@@ -22,21 +22,21 @@ tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.
     var a: A = new B();
     a = new C(); // error name is missing
     ~
-!!! error TS2322: Type 'C' is not assignable to type 'A':
+!!! error TS2322: Type 'C' is not assignable to type 'A'.
 !!! error TS2322:   Property 'name' is missing in type 'C'.
     a = B; // error name is missing
     ~
-!!! error TS2322: Type 'typeof B' is not assignable to type 'A':
+!!! error TS2322: Type 'typeof B' is not assignable to type 'A'.
 !!! error TS2322:   Property 'name' is missing in type 'typeof B'.
     a = C;
     
     var b: B = new C(); // error name is missing
         ~
-!!! error TS2322: Type 'C' is not assignable to type 'B':
+!!! error TS2322: Type 'C' is not assignable to type 'B'.
 !!! error TS2322:   Property 'name' is missing in type 'C'.
     b = B; // error name is missing
     ~
-!!! error TS2322: Type 'typeof B' is not assignable to type 'B':
+!!! error TS2322: Type 'typeof B' is not assignable to type 'B'.
 !!! error TS2322:   Property 'name' is missing in type 'typeof B'.
     b = C;
     b = a;

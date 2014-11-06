@@ -1,26 +1,26 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(35,1): error TS2322: Type 'S2' is not assignable to type 'T':
-  Types of parameters 'x' and 'x' are incompatible:
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(35,1): error TS2322: Type 'S2' is not assignable to type 'T'.
+  Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(36,1): error TS2322: Type '(x: string) => void' is not assignable to type 'T':
-  Types of parameters 'x' and 'x' are incompatible:
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(36,1): error TS2322: Type '(x: string) => void' is not assignable to type 'T'.
+  Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(37,1): error TS2322: Type '(x: string) => number' is not assignable to type 'T':
-  Types of parameters 'x' and 'x' are incompatible:
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(37,1): error TS2322: Type '(x: string) => number' is not assignable to type 'T'.
+  Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(38,1): error TS2322: Type '(x: string) => string' is not assignable to type 'T':
-  Types of parameters 'x' and 'x' are incompatible:
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(38,1): error TS2322: Type '(x: string) => string' is not assignable to type 'T'.
+  Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(39,1): error TS2322: Type 'S2' is not assignable to type '(x: number) => void':
-  Types of parameters 'x' and 'x' are incompatible:
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(39,1): error TS2322: Type 'S2' is not assignable to type '(x: number) => void'.
+  Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(40,1): error TS2322: Type '(x: string) => void' is not assignable to type '(x: number) => void':
-  Types of parameters 'x' and 'x' are incompatible:
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(40,1): error TS2322: Type '(x: string) => void' is not assignable to type '(x: number) => void'.
+  Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(41,1): error TS2322: Type '(x: string) => number' is not assignable to type '(x: number) => void':
-  Types of parameters 'x' and 'x' are incompatible:
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(41,1): error TS2322: Type '(x: string) => number' is not assignable to type '(x: number) => void'.
+  Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(42,1): error TS2322: Type '(x: string) => string' is not assignable to type '(x: number) => void':
-  Types of parameters 'x' and 'x' are incompatible:
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts(42,1): error TS2322: Type '(x: string) => string' is not assignable to type '(x: number) => void'.
+  Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
 
 
@@ -61,42 +61,42 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     // these are errors
     t = s2;
     ~
-!!! error TS2322: Type 'S2' is not assignable to type 'T':
-!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2322: Type 'S2' is not assignable to type 'T'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     t = a3;
     ~
-!!! error TS2322: Type '(x: string) => void' is not assignable to type 'T':
-!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2322: Type '(x: string) => void' is not assignable to type 'T'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     t = (x: string) => 1;
     ~
-!!! error TS2322: Type '(x: string) => number' is not assignable to type 'T':
-!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2322: Type '(x: string) => number' is not assignable to type 'T'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     t = function (x: string) { return ''; }
     ~
-!!! error TS2322: Type '(x: string) => string' is not assignable to type 'T':
-!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2322: Type '(x: string) => string' is not assignable to type 'T'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     a = s2;
     ~
-!!! error TS2322: Type 'S2' is not assignable to type '(x: number) => void':
-!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2322: Type 'S2' is not assignable to type '(x: number) => void'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     a = a3;
     ~
-!!! error TS2322: Type '(x: string) => void' is not assignable to type '(x: number) => void':
-!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2322: Type '(x: string) => void' is not assignable to type '(x: number) => void'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     a = (x: string) => 1;
     ~
-!!! error TS2322: Type '(x: string) => number' is not assignable to type '(x: number) => void':
-!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2322: Type '(x: string) => number' is not assignable to type '(x: number) => void'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     a = function (x: string) { return ''; }
     ~
-!!! error TS2322: Type '(x: string) => string' is not assignable to type '(x: number) => void':
-!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2322: Type '(x: string) => string' is not assignable to type '(x: number) => void'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     

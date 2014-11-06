@@ -1,8 +1,8 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
-    export class ScannerUtilities {
-        public static identifierKind(str: string, start: number, length: number): SyntaxKind {
+    export module ScannerUtilities {
+        export function identifierKind(str: string, start: number, length: number): SyntaxKind {
             switch (length) {
               case 2: // do, if, in
                 switch(str.charCodeAt(start)) {

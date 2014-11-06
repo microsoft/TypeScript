@@ -73,13 +73,14 @@ module ts.NavigationBar {
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
-                    return n1.name.text.localeCompare(n2.name.text);
+                    // TODO(jfreeman): How do we sort declarations with computed names?
+                    return (<Identifier>n1.name).text.localeCompare((<Identifier>n2.name).text);
                 }
                 else if (n1.name) {
                     return 1;
                 }
                 else if (n2.name) {
-                    -1;
+                    return -1;
                 }
                 else {
                     return n1.kind - n2.kind;
@@ -106,7 +107,7 @@ module ts.NavigationBar {
                         break;
 
                     case SyntaxKind.FunctionDeclaration:
-                        var functionDeclaration = <FunctionDeclaration>node;
+                        var functionDeclaration = <FunctionLikeDeclaration>node;
                         if (isTopLevelFunctionDeclaration(functionDeclaration)) {
                             topLevelNodes.push(node);
                             addTopLevelNodes((<Block>functionDeclaration.body).statements, topLevelNodes);
@@ -116,11 +117,12 @@ module ts.NavigationBar {
             }
         }
 
-        function isTopLevelFunctionDeclaration(functionDeclaration: FunctionDeclaration) {
+        function isTopLevelFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration) {
             if (functionDeclaration.kind === SyntaxKind.FunctionDeclaration) {
                 // A function declaration is 'top level' if it contains any function declarations 
                 // within it. 
                 if (functionDeclaration.body && functionDeclaration.body.kind === SyntaxKind.FunctionBlock) {
+                    // Proper function declarations can only have identifier names
                     if (forEach((<Block>functionDeclaration.body).statements,
                         s => s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text))) {
 
@@ -230,10 +232,15 @@ module ts.NavigationBar {
                     return createItem(node, getTextOfNode((<PropertyDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.FunctionDeclaration:
-                    return createItem(node, getTextOfNode((<FunctionDeclaration>node).name), ts.ScriptElementKind.functionElement);
+                    return createItem(node, getTextOfNode((<FunctionLikeDeclaration>node).name), ts.ScriptElementKind.functionElement);
 
                 case SyntaxKind.VariableDeclaration:
-                    return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.variableElement);
+                    if (node.flags & NodeFlags.Const) {
+                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.constantElement);
+                    }
+                    else {
+                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.variableElement);
+                    }
                 
                 case SyntaxKind.Constructor:
                     return createItem(node, "constructor", ts.ScriptElementKind.constructorImplementationElement);
@@ -366,8 +373,10 @@ module ts.NavigationBar {
                     });
 
                     // Add the constructor parameters in as children of the class (for property parameters).
+                    // Note that *all* parameters will be added to the nodes array, but parameters that
+                    // are not properties will be filtered out later by createChildItem.
                     var nodes: Node[] = constructor
-                        ? constructor.parameters.concat(node.members)
+                        ? node.members.concat(constructor.parameters)
                         : node.members;
 
                     var childItems = getItemsWorker(sortNodes(nodes), createChildItem);

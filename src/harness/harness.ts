@@ -30,7 +30,7 @@ module Utils {
     var global = <any>Function("return this").call(null);
 
     // Setup some globals based on the current environment
-    export enum ExecutionEnvironment {
+    export const enum ExecutionEnvironment {
         Node,
         Browser,
         CScript
@@ -540,7 +540,7 @@ module Harness {
         }
 
         export var defaultLibFileName = 'lib.d.ts';
-        export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.ES5, /*version:*/ "0");
+        export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest, /*version:*/ "0");
 
         // Cache these between executions so we don't have to re-parse them for every test
         export var fourslashFilename = 'fourslash.ts';
@@ -693,6 +693,8 @@ module Harness {
                                     options.target = ts.ScriptTarget.ES3;
                                 } else if (setting.value.toLowerCase() === 'es5') {
                                     options.target = ts.ScriptTarget.ES5;
+                                } else if (setting.value.toLowerCase() === 'es6') {
+                                    options.target = ts.ScriptTarget.ES6;
                                 } else {
                                     throw new Error('Unknown compile target ' + setting.value);
                                 }
@@ -755,7 +757,6 @@ module Harness {
                         case 'codepage':
                         case 'createFileLog':
                         case 'filename':
-                        case 'propagateenumconstants':
                         case 'removecomments':
                         case 'watch':
                         case 'allowautomaticsemicoloninsertion':
@@ -770,7 +771,9 @@ module Harness {
                         case 'errortruncation':
                             options.noErrorTruncation = setting.value === 'false';
                             break;
-
+                        case 'preserveconstenums':
+                            options.preserveConstEnums = setting.value === 'true';
+                            break;
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
@@ -799,9 +802,11 @@ module Harness {
                 var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
                 checker.checkProgram();
 
+                var hasEarlyErrors = checker.hasEarlyErrors();
+
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
-                if (!hadParseErrors) {
+                if (!hadParseErrors && !hasEarlyErrors) {
                     emitResult = checker.emitFiles();
                 }
 
@@ -1143,7 +1148,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
